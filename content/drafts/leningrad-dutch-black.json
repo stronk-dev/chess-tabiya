@@ -344,23 +344,41 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-one-break-counting-rule-feedbackclaim-is-the-pack-s-",
         "state": "blocking",
-        "statement": "The 'one-break counting rule' feedbackClaim is the pack's strongest generalization and is authored doctrine with no source; the structural-feature vocabulary could express supporter counts on e5 and has not been asked to."
+        "statement": "The 'one-break counting rule' feedbackClaim is the pack's strongest generalization and is authored doctrine with no source; the structural-feature vocabulary could express supporter counts on e5 and has not been asked to.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-spine-s-preamble-is-the-2-c4-order-33-3-at-band-but-",
         "state": "blocking",
-        "statement": "The spine's preamble is the 2.c4 order (33.3% at band) but the finisher rows are catalogued under 2.g3 (2.0% at band): the transposition is machine-verified, but which order club opponents actually reach these tabiyas through is unquantified below the family root."
+        "statement": "The spine's preamble is the 2.c4 order (33.3% at band) but the finisher rows are catalogued under 2.g3 (2.0% at band): the transposition is machine-verified, but which order club opponents actually reach these tabiyas through is unquantified below the family root.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/1/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "which-finisher-c6-nc6-qe8-is-most-common-or-scores-best-",
         "state": "blocking",
-        "statement": "Which finisher (...c6 / ...Nc6 / ...Qe8) is most common or scores best at these bands is unquantified."
+        "statement": "Which finisher (...c6 / ...Nc6 / ...Qe8) is most common or scores best at these bands is unquantified.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/1/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -368,7 +386,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       }
     ]

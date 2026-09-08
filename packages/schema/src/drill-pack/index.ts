@@ -47,6 +47,7 @@ export {
   type FeedbackClaim,
   type FeedbackPolicy,
   type GraduationEntry,
+  type GraduationClearance,
   type FileRange,
   type FileTemplateFeature,
   type MirrorAxis,

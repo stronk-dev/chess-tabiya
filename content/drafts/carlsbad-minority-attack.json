@@ -553,43 +553,82 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-two-of-three-plans-the-minority-attack-",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (two of three plans). The minority attack and the e3-e4 central break are named as White's themes in the Carlsbad by en.wikipedia.org/wiki/Pawn_structure §Carlsbad formation and by en.wikipedia.org/wiki/Minority_attack (both CC BY-SA 4.0); the backward-c6 success condition is stated by en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority. All three are attributed in provenance.attribution. The taxonomy is no longer entirely uncited."
+        "statement": "CITED 2026-08-16 (two of three plans). The minority attack and the e3-e4 central break are named as White's themes in the Carlsbad by en.wikipedia.org/wiki/Pawn_structure §Carlsbad formation and by en.wikipedia.org/wiki/Minority_attack (both CC BY-SA 4.0); the backward-c6 success condition is stated by en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority. All three are attributed in provenance.attribution. The taxonomy is no longer entirely uncited.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "still-uncited-and-now-contradicted-in-shape-the-third-pl",
         "state": "blocking",
-        "statement": "STILL UNCITED, AND NOW CONTRADICTED IN SHAPE: the third plan class — a White kingside attack in the Carlsbad — is not what the cited source gives. en.wikipedia.org/wiki/Pawn_structure §Carlsbad formation lists \"kingside attack\" under Themes for BLACK, and gives White's third theme as \"e5 outpost, sometimes supported with f2-f4\". Either the plan class is re-cut to the outpost the source names, or a different source that states a White kingside attack in this structure has to be found. Nothing mechanical can supply a taxonomy, so this residual still has exactly one route out."
+        "statement": "STILL UNCITED, AND NOW CONTRADICTED IN SHAPE: the third plan class — a White kingside attack in the Carlsbad — is not what the cited source gives. en.wikipedia.org/wiki/Pawn_structure §Carlsbad formation lists \"kingside attack\" under Themes for BLACK, and gives White's third theme as \"e5 outpost, sometimes supported with f2-f4\". Either the plan class is re-cut to the outpost the source names, or a different source that states a White kingside attack in this structure has to be found. Nothing mechanical can supply a taxonomy, so this residual still has exactly one route out.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/2/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "all-four-feedbackclaims-need-grounding-minority-target-a",
         "state": "blocking",
-        "statement": "All four feedbackClaims need grounding: minority-target and kingside-hook are author principles with no evidence; b5-arithmetic is partly derivable from the position and could be mechanically checked; plan-tempi-nonrefundable is a hypothesis that a comparison corpus could actually test."
+        "statement": "All four feedbackClaims need grounding: minority-target and kingside-hook are author principles with no evidence; b5-arithmetic is partly derivable from the position and could be mechanically checked; plan-tempi-nonrefundable is a hypothesis that a comparison corpus could actually test.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/feedbackPolicy",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-two-concept-violation-judgments-13-f3-and-14-na4-ass",
         "state": "blocking",
-        "statement": "The two concept_violation judgments (13.f3 and 14.Na4) assert that a legal, non-losing move is a conceptual error. That is the strongest claim in the file and the least supported; it needs engine and/or corpus evidence that these moves cost something measurable."
+        "statement": "The two concept_violation judgments (13.f3 and 14.Na4) assert that a legal, non-losing move is a conceptual error. That is the strongest claim in the file and the least supported; it needs engine and/or corpus evidence that these moves cost something measurable.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-evaluative-language-in-the-b5-strike-annotation-the-",
         "state": "blocking",
-        "statement": "The evaluative language in the b5-strike annotation ('the textbook result', 'that structure outlives the middlegame') asserts endgame consequences no evidence in this repo supports."
+        "statement": "The evaluative language in the b5-strike annotation ('the textbook result', 'that structure outlives the middlegame') asserts endgame consequences no evidence in this repo supports.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "no-engine-validation-pass-has-been-run-on-any-position-i",
         "state": "blocking",
-        "statement": "No engine validation pass has been run on any position in this pack."
+        "statement": "No engine validation pass has been run on any position in this pack.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-rating-band-frequency-check-the-tabiya-is-asserted-to",
         "state": "blocking",
-        "statement": "No rating-band frequency check: the tabiya is asserted to be a position 1400-2000 players actually reach, on model knowledge alone. The Lichess explorer API could settle this cheaply."
+        "statement": "No rating-band frequency check: the tabiya is asserted to be a position 1400-2000 players actually reach, on model knowledge alone. The Lichess explorer API could settle this cheaply.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

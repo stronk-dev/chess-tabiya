@@ -360,18 +360,29 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "engine-checked-2026-08-15-7-d5-evaluates-1-82-against-0-",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15: 7...d5 evaluates -1.82 against -0.40 for the spine's 7...Be6, a cost of 1.42 at depth 22 — the timing question now has a number against it. The class was NOT hardened despite this blocker's own instruction to harden it, because rfc/archive/content-sourcing-foundation.md:772 rules that a deviation class is relative to the pack's objective and no evaluation produces one. The run is cited instead, in provenance.engineValidation. This is a live disagreement between the pack's authored plan and the repo's grounding rule, and it is left visible rather than resolved."
+        "statement": "ENGINE-CHECKED 2026-08-15: 7...d5 evaluates -1.82 against -0.40 for the spine's 7...Be6, a cost of 1.42 at depth 22 — the timing question now has a number against it. The class was NOT hardened despite this blocker's own instruction to harden it, because rfc/archive/content-sourcing-foundation.md:772 rules that a deviation class is relative to the pack's objective and no evaluation produces one. The run is cited instead, in provenance.engineValidation. This is a live disagreement between the pack's authored plan and the repo's grounding rule, and it is left visible rather than resolved.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/deviations/0",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-claim-that-be6-before-be7-is-the-canonical-order-and",
         "state": "blocking",
-        "statement": "The claim that ...Be6-before-...Be7 is the canonical order, and the whole 'prerequisite order' feedbackClaim, are standard theory rendered from model knowledge with no named source."
+        "statement": "The claim that ...Be6-before-...Be7 is the canonical order, and the whole 'prerequisite order' feedbackClaim, are standard theory rendered from model knowledge with no named source.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -379,13 +390,24 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       },
       {
         "id": "which-of-h5-be7-b5-is-actually-most-common-at-these-band",
         "state": "blocking",
-        "statement": "Which of ...h5 / ...Be7 / ...b5 is actually most common at these bands is unquantified; the explorer API could settle it below the family root and has not been queried."
+        "statement": "Which of ...h5 / ...Be7 / ...b5 is actually most common at these bands is unquantified; the explorer API could settle it below the family root and has not been queried.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
@@ -393,7 +415,13 @@
         "statement": "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and withdrawn: the p14-be6 annotation justified the move order by a bishop-mobility count that is backwards - c8 has five squares there and f8 has one. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before.",
         "resolved": {
           "at": "2026-08-15",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "pointer_authored",
+            "subject": "/spine/0/children/0/children/0/children/0/children/0/annotations/0",
+            "placeholder": "The f8 bishop has five destinations and the c8 bishop has one.",
+            "instrument": "author"
+          }
         }
       }
     ]

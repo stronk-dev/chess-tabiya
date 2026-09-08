@@ -2,7 +2,13 @@ import { createHash } from "node:crypto";
 import { readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, resolve } from "node:path";
 
-import { canonicalizeJson, digestDrillPack, type DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import {
+  canonicalizeJson,
+  digestDrillPack,
+  type DrillPackDefinition,
+  type GraduationClearance as SchemaGraduationClearance,
+  type GraduationEntry,
+} from "@chess-tabiya/schema/drill-pack";
 
 import { runExpressionCensus } from "../expression-census.js";
 import { EMITTER_GRADUATION_CLEARANCE_PLANS, type EmitterGraduationClearancePlan } from "../graduation-blocker-templates.mjs";
@@ -29,6 +35,7 @@ const MECHANICAL_KINDS = new Set([
   "pointer_equals",
   "objective_graded",
   "content_declared",
+  "referent_removed",
 ]);
 
 export interface GraduationClearance {
@@ -221,6 +228,27 @@ export function emitterGraduationClearance(pack: DrillPackDefinition, entryId: s
   }) as GraduationClearance;
 }
 
+/**
+ * Complete the registered clearance plans after an emitter has assembled the
+ * whole document.  One template captures the emitted objective payload, so its
+ * digest cannot be computed truthfully when the blocker sentence is created.
+ */
+export function attachEmitterGraduationClearances(document: unknown): DrillPackDefinition {
+  const pack = structuredClone(document) as DrillPackDefinition;
+  const blockers = pack.provenance.graduationBlockers ?? [];
+  const graduationBlockers: readonly (GraduationEntry | string)[] = blockers.map((entry): GraduationEntry | string => {
+    if (typeof entry === "string" || entry.state !== "blocking" || templatePlan(entry.id) === undefined) return entry;
+    return Object.freeze({
+      ...entry,
+      clearance: emitterGraduationClearance(pack, entry.id) as SchemaGraduationClearance,
+    });
+  });
+  return Object.freeze({
+    ...pack,
+    provenance: Object.freeze({ ...pack.provenance, graduationBlockers: Object.freeze(graduationBlockers) }),
+  });
+}
+
 function contentDeclarationPrecondition(pack: DrillPackDefinition, entryId: string, clearance: GraduationClearance, plan: EmitterGraduationClearancePlan): boolean {
   const payload = graduationContentDeclarationPayload(pack, entryId).payload as readonly { readonly value: unknown }[];
   if (plan.requireNonEmptyCollection === true && !payload.some(({ value }) => Array.isArray(value) && value.length > 0)) return false;
@@ -302,6 +330,22 @@ export function evaluateGraduationClearance(pack: DrillPackDefinition, packDiges
       const holds = declaration.declarationDigest === expected;
       return { holds, evidence: `${entryId} declaration ${holds ? "matches" : "does not match"} current content` };
     }
+    case "referent_removed": {
+      if (clearance.subject === undefined || clearance.absentIds === undefined) throw new GraduationClearanceError("GRADUATION_CLEARANCE_INVALID", "referent_removed requires subject and absentIds");
+      const pointer = resolvePointer(pack, clearance.subject);
+      const ids = new Set<string>();
+      const visit = (value: unknown): void => {
+        if (Array.isArray(value)) for (const child of value) visit(child);
+        else if (value !== null && typeof value === "object") {
+          const object = value as Record<string, unknown>;
+          if (typeof object.id === "string") ids.add(object.id);
+          for (const child of Object.values(object)) visit(child);
+        }
+      };
+      if (pointer.found) visit(pointer.value);
+      const present = clearance.absentIds.filter((id) => ids.has(id));
+      return { holds: pointer.found && present.length === 0, evidence: `${present.length} removed ids remain under ${clearance.subject}` };
+    }
   }
 }
 
@@ -351,7 +395,7 @@ export async function clearGraduationEntries(file: string, options: { readonly n
       throw new GraduationClearanceError("GRADUATION_CLEARANCE_VACUOUS", `${pack.id}/${blocking.id} already satisfies ${clearance.kind}`);
     }
     transitions.push({ id: blocking.id, from: "blocking", to: "resolved", clearance, evidence: result.evidence });
-    return { id: blocking.id, state: "resolved", statement: blocking.statement, resolved: { at, clearance, by: result.evidence } };
+    return { id: blocking.id, state: "resolved", statement: blocking.statement, resolved: { at: at.slice(0, 10), clearance, by: result.evidence } };
   });
   const nextPack = { ...pack, provenance: { ...pack.provenance, graduationBlockers: nextEntries } };
   const after = await digestDrillPack(nextPack);
@@ -366,8 +410,9 @@ export async function clearGraduationEntries(file: string, options: { readonly n
 }
 
 if (/graduation-clear\.(?:js|ts)$/u.test(process.argv[1] ?? "")) {
-  const file = process.argv[2];
-  if (file === undefined) throw new GraduationClearanceError("GRADUATION_CLEARANCE_INVALID", "pack file is required");
-  const result = await clearGraduationEntries(file, { check: process.env.CHECK === "1" });
-  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  const files = process.argv.slice(2);
+  if (files.length === 0) throw new GraduationClearanceError("GRADUATION_CLEARANCE_INVALID", "at least one pack file is required");
+  const results = [];
+  for (const file of files) results.push(await clearGraduationEntries(file, { check: process.env.CHECK === "1" }));
+  process.stdout.write(`${JSON.stringify(results.length === 1 ? results[0] : results, null, 2)}\n`);
 }

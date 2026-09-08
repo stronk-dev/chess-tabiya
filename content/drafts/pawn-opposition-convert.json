@@ -553,17 +553,32 @@
       {
         "id": "cited-2026-08-16-both-plan-classes-now-restate-named-sou",
         "state": "blocking",
-        "statement": "CITED 2026-08-16. Both plan classes now restate named sources rather than authored consensus: the opposition and its purpose from en.wikipedia.org/wiki/Opposition_(chess), and key squares plus king-leads-pawn from en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame (both CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16. Both plan classes now restate named sources rather than authored consensus: the opposition and its purpose from en.wikipedia.org/wiki/Opposition_(chess), and key squares plus king-leads-pawn from en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame (both CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-ma",
         "state": "blocking",
-        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the mapping from the general scheme to this root — which square is a key square here, and that the runtime's mechanical stand-off detection is the right grading signal for \"has the opposition\" — is authored. The tablebase settles the result, not the detector's fidelity to the concept."
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the mapping from the general scheme to this root — which square is a key square here, and that the runtime's mechanical stand-off detection is the right grading signal for \"has the opposition\" — is authored. The tablebase settles the result, not the detector's fidelity to the concept.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-human-play-evidence-for-the-difficulty-banding-of-thi",
         "state": "blocking",
-        "statement": "No human-play evidence for the difficulty banding of this on-ramp-adjacent material."
+        "statement": "No human-play evidence for the difficulty banding of this on-ramp-adjacent material.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

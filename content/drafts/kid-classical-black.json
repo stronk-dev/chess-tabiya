@@ -390,7 +390,8 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
@@ -399,18 +400,35 @@
         "statement": "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/kid-chain-arrangement.json now exists and this pack references it from the seal-and-storm plan class, which points at the black-lock-with-f4-and-storm plan. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p15-d5 onward, including the ne8-modern tip) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. The mirroring claim this blocker asserted was also checked and holds: closed-centre-chain's trigger matches none of this pack's positions. Original blocker text: \"No shape entry names the King's Indian pawn-chain arrangement (White c4/d5/e4 against Black d6/e5): closed-centre-chain's trigger is pinned to the French/Caro squares and cannot fire here, and per the mirroring law a chain entry with different plan ownership must be authored separately. Until it exists, this pack's chain teaching is inlined and non-reusable.\"",
         "resolved": {
           "at": "2026-08-15",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "shape_firing",
+            "subject": "/shapes/1",
+            "instrument": "make expression-census"
+          }
         }
       },
       {
         "id": "which-reroute-nd7-vs-ne8-is-more-common-or-scores-better",
         "state": "blocking",
-        "statement": "Which reroute (...Nd7 vs ...Ne8) is more common or scores better at these bands is unquantified; the explorer API could settle it below the family root and has not been queried."
+        "statement": "Which reroute (...Nd7 vs ...Ne8) is more common or scores better at these bands is unquantified; the explorer API could settle it below the family root and has not been queried.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-defensive-moves-are-race-moves-lost-claim-is-the-pac",
         "state": "blocking",
-        "statement": "The 'defensive moves are race moves lost' claim is the pack's strongest generalization and is pure hypothesis — no corpus measurement of tempo-vs-result in KID races exists in this repo."
+        "statement": "The 'defensive moves are race moves lost' claim is the pack's strongest generalization and is pure hypothesis — no corpus measurement of tempo-vs-result in KID races exists in this repo.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -418,7 +436,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       }
     ]

@@ -869,13 +869,19 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-dynamically-reached-leg-3-assessment-remains-authore",
         "state": "blocking",
-        "statement": "The dynamically reached leg-3 assessment remains authored: the root ledger proves the start is a win, not that every learner-produced leg-entry position preserves it."
+        "statement": "The dynamically reached leg-3 assessment remains authored: the root ledger proves the start is a win, not that every learner-produced leg-entry position preserves it.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "tablebase-provider-availability",
@@ -884,23 +890,39 @@
         "accepted": {
           "kind": "permanent_property",
           "ruling": "The runtime can offer perfect tablebase resistance only where a Syzygy provider is configured.",
-          "rulingRef": "docs/tablebase-grounding.md"
+          "rulingRef": "docs/tablebase-grounding.md#L75",
+          "unreachableBecause": "The runtime can offer perfect tablebase resistance only where a Syzygy provider is configured."
         }
       },
       {
         "id": "the-fifty-move-pressure-named-in-the-annotations-is-real",
         "state": "blocking",
-        "statement": "The fifty-move pressure named in the annotations is real arithmetic but the runtime surfaces no counter; whether a mates pack should show the halfmove clock is an open product question."
+        "statement": "The fifty-move pressure named in the annotations is real arithmetic but the runtime surfaces no counter; whether a mates pack should show the halfmove clock is an open product question.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "cited-2026-08-16-partial-the-three-phase-method-the-thre",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (partial). The three-phase method the three legs enact is stated by en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0), attributed in provenance.attribution; the leg decomposition is no longer an uncited taxonomy."
+        "statement": "CITED 2026-08-16 (partial). The three-phase method the three legs enact is stated by en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0), attributed in provenance.attribution; the leg decomposition is no longer an uncited taxonomy.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/3/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-ca",
         "state": "blocking",
-        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the causal claim that each leg begins because of what the player's own moves did in the previous one, and the structural boundary predicates that implement it, are runtime constructions with no source and no measurement. Tablebase categories remain the only mechanically grounded element."
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the causal claim that each leg begins because of what the player's own moves did in the previous one, and the structural boundary predicates that implement it, are runtime constructions with no source and no measurement. Tablebase categories remain the only mechanically grounded element.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

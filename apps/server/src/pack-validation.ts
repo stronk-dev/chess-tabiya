@@ -61,6 +61,10 @@ import {
   OBJECTIVE_ASSESSMENT_SETS,
   type TablebaseCategory,
 } from "./tablebase.js";
+import { EMITTER_GRADUATION_CLEARANCE_PLANS, type EmitterGraduationClearancePlan } from "./graduation-blocker-templates.mjs";
+import { GRADUATION_RULING_ANCHOR_ROOTS } from "./graduation-ruling-roots.mjs";
+
+export { GRADUATION_RULING_ANCHOR_ROOTS };
 
 export const INLINE_EVIDENCE_KEYS = Object.freeze([
   "engineValidation",
@@ -81,6 +85,67 @@ export interface PackValidationResult {
   readonly valid: boolean;
   readonly issues: readonly PackValidationIssue[];
   readonly document?: DrillPackDefinition;
+}
+
+function documentPointer(document: unknown, pointer: string): { readonly found: boolean; readonly value?: unknown } {
+  if (!pointer.startsWith("/") || pointer === "/") return { found: false };
+  let current: unknown = document;
+  for (const raw of pointer.slice(1).split("/")) {
+    const token = raw.replaceAll("~1", "/").replaceAll("~0", "~");
+    if (Array.isArray(current) && /^\d+$/u.test(token)) current = current[Number(token)];
+    else if (current !== null && typeof current === "object" && Object.prototype.hasOwnProperty.call(current, token)) current = (current as Record<string, unknown>)[token];
+    else return { found: false };
+  }
+  return { found: true, value: current };
+}
+
+function graduationClearanceIssues(document: Record<string, unknown>, entry: Record<string, unknown>, path: string): readonly PackValidationIssue[] {
+  const issues: PackValidationIssue[] = [];
+  const container = entry.state === "resolved" && entry.resolved !== null && typeof entry.resolved === "object"
+    ? entry.resolved as Record<string, unknown>
+    : entry;
+  const clearance = container.clearance;
+  if (clearance === null || typeof clearance !== "object" || Array.isArray(clearance)) return issues;
+  const value = clearance as Record<string, unknown>;
+  const clearancePath = entry.state === "resolved" ? `${path}/resolved/clearance` : `${path}/clearance`;
+  const kind = String(value.kind ?? "");
+  const subject = typeof value.subject === "string" ? value.subject : undefined;
+  const pointer = subject === undefined ? { found: false } : documentPointer(document, subject);
+  const issue = (code: string, suffix: string, message: string): void => { issues.push(runtimeIssue(code, `${clearancePath}${suffix}`, message)); };
+
+  if (entry.state === "blocking" && kind === "referent_removed") issue("GRADUATION_CLEARANCE_REMOVAL_ON_BLOCKING", "/kind", "referent_removed is a standing resolved predicate, not a blocking clearance");
+  if (entry.state === "resolved" && (kind === "unbuilt" || kind === "unreachable")) issue("GRADUATION_RESOLUTION_UNPROVABLE", "/kind", `${kind} has no predicate and cannot support a resolved entry`);
+
+  if (kind === "assessment_grounded") {
+    if (subject !== "/objective/grading/assessedBy") issue("GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL", "/subject", "assessment_grounded must name /objective/grading/assessedBy");
+  } else if (kind === "ledger_record") {
+    if (subject === undefined || !/^\/(?:start\/fen|spine\/(?:\d+|children)(?:\/(?:\d+|children))*\/moveUci|deviations\/\d+\/moveUci)$/u.test(subject)) issue("GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL", "/subject", "ledger_record must name a supported position or move pointer, never prose");
+  } else if (kind === "claim_bound") {
+    if (subject === undefined || !/^\/feedbackClaims\/\d+\/text$/u.test(subject)) issue("GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL", "/subject", "claim_bound must name /feedbackClaims/<index>/text");
+  } else if (kind === "shape_firing") {
+    if (subject === undefined || !/^\/(?:shapes\/\d+|planClasses\/\d+\/shapePlan)$/u.test(subject)) issue("GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL", "/subject", "shape_firing must name /shapes/<index> or /planClasses/<index>/shapePlan");
+  } else if (kind === "pointer_authored" && (!pointer.found || typeof pointer.value !== "string")) {
+    issue("GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL", "/subject", "pointer_authored must resolve to a string");
+  }
+
+  if (kind !== "content_declared" && kind !== "assessment_grounded" && subject !== undefined && !pointer.found) issue("GRADUATION_CLEARANCE_SUBJECT_UNRESOLVED", "/subject", `${subject} does not resolve in this pack`);
+  if (kind === "unbuilt" && typeof value.blockedBy === "string") {
+    const target = value.blockedBy.split("#", 1)[0]!;
+    if (!existsSync(resolve(target))) issue("GRADUATION_CLEAREDBY_UNRESOLVED", "/blockedBy", `graduation dependency does not resolve: ${value.blockedBy}`);
+  }
+
+  const plan = (EMITTER_GRADUATION_CLEARANCE_PLANS as Readonly<Record<string, EmitterGraduationClearancePlan>>)[String(entry.id ?? "")];
+  if (entry.state === "blocking" && plan !== undefined) {
+    const expected: Record<string, unknown> = { kind: plan.kind, instrument: plan.instrument };
+    if (plan.subject !== undefined) expected.subject = plan.subject;
+    if (plan.expected !== undefined) expected.expected = plan.expected;
+    if (plan.templateId !== undefined) expected.templateId = plan.templateId;
+    for (const [key, expectedValue] of Object.entries(expected)) if (value[key] !== expectedValue) issue("GRADUATION_CLEARANCE_PLAN_MISMATCH", `/${key}`, `${String(entry.id)} must retain its registered ${key}`);
+    const allowed = new Set([...Object.keys(expected), "declaration", ...(plan.captureEmittedPayload === true ? ["emittedPayloadDigest"] : [])]);
+    for (const key of Object.keys(value)) if (!allowed.has(key)) issue("GRADUATION_CLEARANCE_PLAN_MISMATCH", `/${key}`, `${String(entry.id)} adds a predicate field outside its registered plan`);
+    if (plan.captureEmittedPayload === true && typeof value.emittedPayloadDigest !== "string") issue("GRADUATION_CLEARANCE_PLAN_MISMATCH", "/emittedPayloadDigest", `${String(entry.id)} requires its emitted payload digest`);
+  }
+  return issues;
 }
 
 export interface PackShapeLookup {
@@ -1061,32 +1126,27 @@ function runtimeIssues(
     const id = String(row.id ?? "");
     if (graduationIds.has(id)) issues.push(runtimeIssue("GRADUATION_ID_DUPLICATE", `${path}/id`, `duplicate graduation entry id ${id}`));
     graduationIds.add(id);
+    issues.push(...graduationClearanceIssues(raw, row, path));
     if (row.state === "accepted" && row.accepted !== null && typeof row.accepted === "object" && !Array.isArray(row.accepted)) {
       const accepted = row.accepted as Record<string, unknown>;
       const ruling = String(accepted.ruling ?? "");
       const rulingRef = String(accepted.rulingRef ?? "");
       const match = /^(?<file>[^#]+)(?:#L(?<line>[1-9][0-9]*))?$/u.exec(rulingRef);
-      if (match?.groups?.file === undefined || rulingRef.includes("#") && match.groups.line === undefined) {
-        issues.push(runtimeIssue("GRADUATION_RULING_UNCITED", `${path}/accepted/rulingRef`, "accepted conditions require a repo-relative path or append-only #L<line> reference"));
+      if (match?.groups?.file === undefined || match.groups.line === undefined) {
+        issues.push(runtimeIssue("GRADUATION_RULING_UNANCHORED", `${path}/accepted/rulingRef`, "accepted conditions require a repo-relative #L<line> reference"));
+      } else if (!GRADUATION_RULING_ANCHOR_ROOTS.includes(match.groups.file)) {
+        issues.push(runtimeIssue("GRADUATION_RULING_UNCITED", `${path}/accepted/rulingRef`, `accepted condition cites an unregistered root: ${rulingRef}`));
       } else {
         const file = match.groups.file;
-        const line = match.groups.line === undefined ? undefined : Number(match.groups.line);
+        const line = Number(match.groups.line);
         const absolute = resolve(file);
         let cited = existsSync(absolute);
-        let contents = "";
-        if (cited) contents = readFileSync(absolute, "utf8");
-        if (line !== undefined) {
-          cited = cited && file === "planning/exploration/log.md" && contents.split(/\r?\n/u)[line - 1] !== undefined;
-        }
+        const contents = cited ? readFileSync(absolute, "utf8") : "";
+        const citedLine = contents.split(/\r?\n/u)[line - 1];
+        cited = cited && citedLine !== undefined;
         const date = /20\d\d-\d\d-\d\d/u.exec(ruling)?.[0];
-        if (accepted.kind === "owner_ruling" && (date === undefined || !contents.includes(date))) cited = false;
+        if (accepted.kind === "owner_ruling" && (date === undefined || !citedLine?.includes(date))) cited = false;
         if (!cited) issues.push(runtimeIssue("GRADUATION_RULING_UNCITED", `${path}/accepted/rulingRef`, `accepted condition citation does not resolve: ${rulingRef}`));
-      }
-    }
-    if (row.state === "blocking" && typeof row.clearedBy === "string") {
-      for (const token of row.clearedBy.match(/(?:rfc|docs|content|packages|apps)\/[A-Za-z0-9_./-]+/gu) ?? []) {
-        const file = token.replace(/[),.;:]+$/u, "");
-        if (!existsSync(resolve(file))) issues.push(runtimeWarning("GRADUATION_CLEAREDBY_UNRESOLVED", `${path}/clearedBy`, `graduation remedy path does not resolve: ${file}`));
       }
     }
   }

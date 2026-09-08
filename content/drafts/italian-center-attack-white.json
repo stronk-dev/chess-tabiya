@@ -334,28 +334,51 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-iqp-white-shape-reference-rests-on-hand-derived-pawn",
         "state": "blocking",
-        "statement": "The iqp-white shape reference rests on hand-derived pawn arithmetic; running the shipped named_structure evaluator against the walked tabiya FEN would upgrade or refute it and has not been done."
+        "statement": "The iqp-white shape reference rests on hand-derived pawn arithmetic; running the shipped named_structure evaluator against the walked tabiya FEN would upgrade or refute it and has not been done.",
+        "clearance": {
+          "kind": "shape_firing",
+          "subject": "/planClasses/1/shapePlan",
+          "instrument": "make expression-census"
+        }
       },
       {
         "id": "the-family-was-selected-over-b01-scandinavian-56-3m-game",
         "state": "blocking",
-        "statement": "The family was selected over B01 Scandinavian (56.3M games at two plies vs the Italian's 44.5M at five): the depth-incommensurability judgment is recorded in the wave log, and the Scandinavian remains the obvious next family on raw totals."
+        "statement": "The family was selected over B01 Scandinavian (56.3M games at two plies vs the Italian's 44.5M at five): the depth-incommensurability judgment is recorded in the wave log, and the Scandinavian remains the obvious next family on raw totals.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/0/moveUci",
+          "recordKind": "opening_identity",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-checked-2026-08-15-and-refuted-at-three-points-in",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15 and REFUTED at three points inside the sequence, which is three more than the blocker's own stated bar of one. 5.d4 is 0.14 below 5.d3, 6.cxd4 is 0.28 below 6.e5, and 7...Bxd2+ is 0.13 below 7...Nxe4. The differences are small, but 'the position's only good answer' is not a small claim. The feedbackClaim forcing-literacy was DELETED rather than rewritten: a replacement would be a new authored judgment this pass cannot ground. Separately, the p11-cxd4 annotation asserted that only the c-pawn can recapture on d4; Qxd4, cxd4 and Nxd4 are all legal, and the false clause was deleted."
+        "statement": "ENGINE-CHECKED 2026-08-15 and REFUTED at three points inside the sequence, which is three more than the blocker's own stated bar of one. 5.d4 is 0.14 below 5.d3, 6.cxd4 is 0.28 below 6.e5, and 7...Bxd2+ is 0.13 below 7...Nxe4. The differences are small, but 'the position's only good answer' is not a small claim. The feedbackClaim forcing-literacy was DELETED rather than rewritten: a replacement would be a new authored judgment this pass cannot ground. Separately, the p11-cxd4 annotation asserted that only the c-pawn can recapture on d4; Qxd4, cxd4 and Nxd4 are all legal, and the false clause was deleted.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/feedbackPolicy",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "whether-bd2-or-nc3-is-more-common-or-scores-better-at-th",
         "state": "blocking",
-        "statement": "Whether Bd2 or Nc3 is more common or scores better at these bands is unquantified below the family root."
+        "statement": "Whether Bd2 or Nc3 is more common or scores better at these bands is unquantified below the family root.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -363,7 +386,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       }
     ]

@@ -455,43 +455,82 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-objective-s-premise-is-uncited-that-the-base-rather-",
         "state": "blocking",
-        "statement": "THE OBJECTIVE'S PREMISE IS UNCITED. That the base rather than the head is Black's target in a d4/e5 chain is asserted by the shape library entry and by this pack. The 2026-08-16 citation pass found a source that assigns the base attack to Black (design/BACKLOG.md D270), which is why this chair exists — but that source was read for a different pack and no source was fetched for this one, so the premise is unbacked here. Fetching and quoting it is a cheap, bounded next step and is the single highest-value thing anyone could do to this file."
+        "statement": "THE OBJECTIVE'S PREMISE IS UNCITED. That the base rather than the head is Black's target in a d4/e5 chain is asserted by the shape library entry and by this pack. The 2026-08-16 citation pass found a source that assigns the base attack to Black (design/BACKLOG.md D270), which is why this chair exists — but that source was read for a different pack and no source was fetched for this one, so the premise is unbacked here. Fetching and quoting it is a cheap, bounded next step and is the single highest-value thing anyone could do to this file.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/3/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-timing-claim-is-the-pack-s-real-content-and-it-has-n",
         "state": "blocking",
-        "statement": "THE TIMING CLAIM IS THE PACK'S REAL CONTENT AND IT HAS NO INSTRUMENT. The drill contrasts striking on move seven against being unable to strike after White plays dxc5, which is a claim about the ORDER of two events inside one game. The explorer aggregates per position and cannot condition an outcome on an earlier event (design/BACKLOG.md D155). What the pack can and does state instead is the detector's own before-and-after, which is arithmetic, not evidence about which order is better."
+        "statement": "THE TIMING CLAIM IS THE PACK'S REAL CONTENT AND IT HAS NO INSTRUMENT. The drill contrasts striking on move seven against being unable to strike after White plays dxc5, which is a claim about the ORDER of two events inside one game. The explorer aggregates per position and cannot condition an outcome on an earlier event (design/BACKLOG.md D155). What the pack can and does state instead is the detector's own before-and-after, which is arithmetic, not evidence about which order is better.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/1/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-plyhorizon-of-18-and-the-fenpredicate-are-authored-w",
         "state": "blocking",
-        "statement": "THE PLYHORIZON OF 18 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates. Nothing measured says 18 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory. Read it as a proposal."
+        "statement": "THE PLYHORIZON OF 18 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates. Nothing measured says 18 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory. Read it as a proposal.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "the-fenpredicate-is-a-hand-copy-of-the-library-s-trigger",
         "state": "blocking",
-        "statement": "THE FENPREDICATE IS A HAND COPY OF THE LIBRARY'S TRIGGER and cannot be anything else: plan_signature names a plan class, not a shape trigger, and named_structure's id vocabulary does not contain this structure. If the entry's trigger changes, this pack silently disagrees with it and nothing checks that."
+        "statement": "THE FENPREDICATE IS A HAND COPY OF THE LIBRARY'S TRIGGER and cannot be anything else: plan_signature names a plan class, not a shape trigger, and named_structure's id vocabulary does not contain this structure. If the entry's trigger changes, this pack silently disagrees with it and nothing checks that.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "one-of-the-structure-s-two-black-plans-is-effectively-ab",
         "state": "blocking",
-        "statement": "ONE OF THE STRUCTURE'S TWO BLACK PLANS IS EFFECTIVELY ABSENT AT THIS BAND. The head strike f7-f6 occurs 17 times in 28420 games here. The pack authors it as a door and states the rarity, but a drill whose library entry offers two plans and whose corpus supports one is a content gap somebody should look at, not a fact to be satisfied with."
+        "statement": "ONE OF THE STRUCTURE'S TWO BLACK PLANS IS EFFECTIVELY ABSENT AT THIS BAND. The head strike f7-f6 occurs 17 times in 28420 games here. The pack authors it as a door and states the rarity, but a drill whose library entry offers two plans and whose corpus supports one is a content gap somebody should look at, not a fact to be satisfied with.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-engine-pass-the-one-concept-violation-c5-c4-rests-on-",
         "state": "blocking",
-        "statement": "NO ENGINE PASS. The one concept_violation, c5-c4, rests on two exact facts — a Black pawn on the c-file cannot satisfy a signature that requires the file clear of Black pawns, and the attacker count on d4 drops from three to two — and says nothing about whether the move costs anything. Its cost is unmeasurable and the reason is stated in the deviation."
+        "statement": "NO ENGINE PASS. The one concept_violation, c5-c4, rests on two exact facts — a Black pawn on the c-file cannot satisfy a signature that requires the file clear of Black pawns, and the attacker count on d4 drops from three to two — and says nothing about whether the move costs anything. Its cost is unmeasurable and the reason is stated in the deviation.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/1/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-pack-stops-where-the-objective-is-already-over-the-m",
         "state": "blocking",
-        "statement": "THE PACK STOPS WHERE THE OBJECTIVE IS ALREADY OVER. The main line runs four plies past the point where the structure dissolves, deliberately, so the learner plays the consequence rather than reading it. Nothing measured says four is the right number of plies for that, and nothing in the format lets the pack distinguish plies-after-success from plies-before it."
+        "statement": "THE PACK STOPS WHERE THE OBJECTIVE IS ALREADY OVER. The main line runs four plies past the point where the structure dissolves, deliberately, so the learner plays the consequence rather than reading it. Nothing measured says four is the right number of plies for that, and nothing in the format lets the pack distinguish plies-after-success from plies-before it.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       }
     ],
     "attribution": []

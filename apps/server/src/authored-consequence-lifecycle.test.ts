@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { isPackDocumentFileName } from "@chess-tabiya/schema/pack-path";
 import { describe, expect, it } from "vitest";
 
 import { validatePackDocument, type PackShapeLookup } from "./pack-validation.js";
@@ -62,7 +63,7 @@ describe("authored consequence lifecycle", () => {
   it("keeps all preserve-plan-window packs on their type-owned timing rules", () => {
     const drafts = new URL("../../../content/drafts/", import.meta.url);
     const duplicates = readdirSync(drafts)
-      .filter((name) => name.endsWith(".json") && !name.endsWith(".browser.json") && !/\.(?:evidence|job|sources)\.json$/u.test(name))
+      .filter((name) => isPackDocumentFileName(name))
       .flatMap((name) => {
         const pack = JSON.parse(readFileSync(new URL(name, drafts), "utf8")) as DrillPackDefinition;
         if (pack.objective.type !== "preserve_plan_window") return [];
@@ -75,7 +76,7 @@ describe("authored consequence lifecycle", () => {
     const drafts = new URL("../../../content/drafts/", import.meta.url);
     const registry = await ShapeRegistry.loadDefault();
     const blockers = readdirSync(drafts)
-      .filter((name) => name.endsWith(".json") && !name.endsWith(".browser.json") && !/\.(?:evidence|job|sources)\.json$/u.test(name))
+      .filter((name) => isPackDocumentFileName(name))
       .flatMap((name) => validatePackDocument(
         JSON.parse(readFileSync(new URL(name, drafts), "utf8")),
         { shapes: registry },

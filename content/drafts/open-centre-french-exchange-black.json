@@ -377,38 +377,71 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-objective-s-premise-is-uncited-that-black-s-job-in-a",
         "state": "blocking",
-        "statement": "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's job in a symmetrical open centre is to contest the file White took first is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass established that encyclopedic structure articles are theme inventories and never sequence what they list (design/BACKLOG.md D272), which is precisely the shape of this claim."
+        "statement": "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's job in a symmetrical open centre is to contest the file White took first is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass established that encyclopedic structure articles are theme inventories and never sequence what they list (design/BACKLOG.md D272), which is precisely the shape of this claim.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-timing-contrast-is-evidence-shaped-not-result-shaped",
         "state": "blocking",
-        "statement": "THE TIMING CONTRAST IS EVIDENCE-SHAPED, NOT RESULT-SHAPED, AND THAT IS A CEILING. The pack contrasts contesting the file at ply 1 against contesting it at ply 7 purely by whether the corpus can be asked about each. It cannot say the early rook scored better, because that is a per-position aggregate on two different branches, and it cannot say the plan arrived in time, because the explorer cannot condition an outcome on when something happened inside a game (design/BACKLOG.md D155). This is the sixth wave to arrive at that missing instrument."
+        "statement": "THE TIMING CONTRAST IS EVIDENCE-SHAPED, NOT RESULT-SHAPED, AND THAT IS A CEILING. The pack contrasts contesting the file at ply 1 against contesting it at ply 7 purely by whether the corpus can be asked about each. It cannot say the early rook scored better, because that is a per-position aggregate on two different branches, and it cannot say the plan arrived in time, because the explorer cannot condition an outcome on when something happened inside a game (design/BACKLOG.md D155). This is the sixth wave to arrive at that missing instrument.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/1/children/0/children/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-plyhorizon-of-16-and-the-fenpredicate-are-authored-w",
         "state": "blocking",
-        "statement": "THE PLYHORIZON OF 16 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates — and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory."
+        "statement": "THE PLYHORIZON OF 16 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates — and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory.",
+        "clearance": {
+          "kind": "shape_firing",
+          "subject": "/planClasses/1/shapePlan",
+          "instrument": "make expression-census"
+        }
       },
       {
         "id": "two-of-the-three-plan-classes-are-never-satisfied-on-thi",
         "state": "blocking",
-        "statement": "TWO OF THE THREE PLAN CLASSES ARE NEVER SATISFIED ON THIS SPINE, MEASURED. black-central-outpost is false throughout because d4 holds a White pawn on every authored position and no Black knight reaches e4; black-neutralize-and-level is false throughout because no authored line trades queens. Both are recorded rather than removed, because a plan that the structure offers and this position does not reach is a fact worth carrying."
+        "statement": "TWO OF THE THREE PLAN CLASSES ARE NEVER SATISFIED ON THIS SPINE, MEASURED. black-central-outpost is false throughout because d4 holds a White pawn on every authored position and no Black knight reaches e4; black-neutralize-and-level is false throughout because no authored line trades queens. Both are recorded rather than removed, because a plan that the structure offers and this position does not reach is a fact worth carrying.",
+        "clearance": {
+          "kind": "shape_firing",
+          "subject": "/planClasses/1/shapePlan",
+          "instrument": "make expression-census"
+        }
       },
       {
         "id": "no-engine-pass-two-deviations-turn-on-the-rxe7-exchange-",
         "state": "blocking",
-        "statement": "NO ENGINE PASS. Two deviations turn on the Rxe7 exchange and neither is priced; there is no cost field on either, because a candidate-relative centipawn loss is the only thing this repo can measure there and no engine walk was run."
+        "statement": "NO ENGINE PASS. Two deviations turn on the Rxe7 exchange and neither is priced; there is no cost field on either, because a candidate-relative centipawn loss is the only thing this repo can measure there and no engine walk was run.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/2/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-sub-floor-number-is-load-bearing-the-claim-that-the-",
         "state": "blocking",
-        "statement": "THE SUB-FLOOR NUMBER IS LOAD-BEARING. The claim that the late rook is unattested rests on a 48-game count, which is under the abstention floor. It is used only to say the corpus abstains, never as evidence about the move — but a reader who takes 48 as a measurement rather than as an absence has been misled, and nothing in the format distinguishes the two."
+        "statement": "THE SUB-FLOOR NUMBER IS LOAD-BEARING. The claim that the late rook is unattested rests on a 48-game count, which is under the abstention floor. It is used only to say the corpus abstains, never as evidence about the move — but a reader who takes 48 as a measurement rather than as an absence has been misled, and nothing in the format distinguishes the two.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       }
     ],
     "attribution": []

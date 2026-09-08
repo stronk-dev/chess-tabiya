@@ -3,6 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 
 import type { DrillPackDefinition, StructuralExpression } from "@chess-tabiya/schema/drill-pack";
+import { isPackDocumentFileName } from "@chess-tabiya/schema/pack-path";
 import type { ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { matchesStructuralExpression } from "@chess-tabiya/runtime";
@@ -58,7 +59,7 @@ function filesUnder(path: string): readonly string[] {
 }
 
 function packFiles(roots: readonly string[]): readonly string[] {
-  return roots.flatMap(filesUnder).filter((file) => file.endsWith(".json") && !/\.(?:evidence|job|sources)\.json$/u.test(file));
+  return roots.flatMap(filesUnder).filter((file) => isPackDocumentFileName(file, { includeBrowser: true }));
 }
 
 function displayPath(file: string): string {

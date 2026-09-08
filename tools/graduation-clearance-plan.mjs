@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
-import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { EMITTER_GRADUATION_CLEARANCE_PLANS, EMITTER_TEMPLATE_IDS } from "../apps/server/src/graduation-blocker-templates.mjs";
@@ -75,6 +75,7 @@ export const TEMPLATE_CLEARANCE_PLANS = EMITTER_GRADUATION_CLEARANCE_PLANS;
 const SIDECAR = /\.(?:evidence|graduation|job|sources)\.json$/u;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PROPOSAL = resolve(ROOT, "planning/graduation-clearance/migration-proposal.json");
+const AUTHOR_DECISIONS = resolve(ROOT, "planning/graduation-clearance/author-decisions.json");
 
 function files(root) {
   const result = [];
@@ -234,8 +235,36 @@ function acceptedMigration(entry) {
   };
 }
 
-function migrationRows(root) {
-  return ["content/drafts", "content/candidates"].flatMap((tier) => documents(join(root, tier)).flatMap(({ file, document }) =>
+function decisionFields(decision, prefix) {
+  return Object.fromEntries(Object.entries(decision.clearance).map(([name, value]) => [
+    `${prefix}.${name}`,
+    field("author_decision", decision.rationale, value),
+  ]));
+}
+
+function applyAuthorDecisions(rows, decisions) {
+  if (decisions === undefined) return rows;
+  if (decisions.schema !== "tabiya.graduation.clearance-author-decisions.v1" || typeof decisions.rows !== "object" || decisions.rows === null) {
+    throw new Error("Graduation author decisions have an invalid contract");
+  }
+  const required = new Set(rows.filter((row) => row.status === "requires_author").map((row) => row.key));
+  const supplied = new Set(Object.keys(decisions.rows));
+  const missing = [...required].filter((key) => !supplied.has(key));
+  const extra = [...supplied].filter((key) => !required.has(key));
+  if (missing.length > 0 || extra.length > 0) throw new Error(`Graduation author decisions do not equal the author-required rows: ${missing.length} missing / ${extra.length} extra`);
+  return rows.map((row) => {
+    if (row.status !== "requires_author") return row;
+    const decision = decisions.rows[row.key];
+    if (decision.entryId !== row.entryId || decision.state !== row.currentState || typeof decision.rationale !== "string" || decision.rationale.trim() === "") {
+      throw new Error(`Graduation author decision identity is stale: ${row.key}`);
+    }
+    const prefix = row.currentState === "resolved" ? "resolved.clearance" : "clearance";
+    return Object.freeze({ ...row, status: "ready", fields: Object.freeze(decisionFields(decision, prefix)) });
+  });
+}
+
+function migrationRows(root, decisions) {
+  const rows = ["content/drafts", "content/candidates"].flatMap((tier) => documents(join(root, tier)).flatMap(({ file, document }) =>
     document.provenance.graduationBlockers.map((entry, index) => {
       let proposal;
       if (entry.state === "accepted") proposal = acceptedMigration(entry);
@@ -251,6 +280,7 @@ function migrationRows(root) {
         ...proposal,
       });
     })));
+  return applyAuthorDecisions(rows, decisions);
 }
 
 function countStatuses(rows) {
@@ -307,11 +337,13 @@ function scanCandidates(root) {
   };
 }
 
-export function buildGraduationPlan(root = ROOT) {
+export function buildGraduationPlan(root = ROOT, options = {}) {
   const drafts = scanDrafts(join(root, "content/drafts"));
   const candidates = scanCandidates(join(root, "content/candidates"));
   const ruleSuggested = drafts.blocking.filter((row) => row.source === "rule").length;
-  const rows = migrationRows(root);
+  const includeAuthorDecisions = options.includeAuthorDecisions !== false;
+  const decisions = includeAuthorDecisions && existsSync(AUTHOR_DECISIONS) ? JSON.parse(readFileSync(AUTHOR_DECISIONS, "utf8")) : undefined;
+  const rows = migrationRows(root, decisions);
   return {
     schema: "tabiya.graduation.clearance-plan.v2",
     generatedFrom: "working-tree",
@@ -366,7 +398,7 @@ export function assertKnownPlan(plan) {
   if (new Set(plan.migration.rows.map((row) => row.key)).size !== plan.migration.entries) errors.push("migration keys are not unique");
   for (const row of plan.migration.rows) {
     if (Object.keys(row.fields).length === 0) errors.push(`migration row has no field plan: ${row.key}`);
-    if (!Object.values(row.fields).every((value) => ["derived", "requires_author", "blocked_contract"].includes(value.status) && typeof value.source === "string" && value.source !== "")) errors.push(`migration row has invalid field provenance: ${row.key}`);
+    if (!Object.values(row.fields).every((value) => ["derived", "author_decision", "requires_author", "blocked_contract"].includes(value.status) && typeof value.source === "string" && value.source !== "")) errors.push(`migration row has invalid field provenance: ${row.key}`);
   }
   if (Object.keys(plan.migration.templateContracts).sort().join("\n") !== [...EMITTER_TEMPLATE_IDS].sort().join("\n")) errors.push("template migration contracts do not equal the emitter registry");
   if (errors.length > 0) throw new Error(`Graduation plan refused:\n- ${errors.join("\n- ")}`);

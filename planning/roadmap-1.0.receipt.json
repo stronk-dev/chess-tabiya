@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:878cbf133096f16096381f1ac8ce042bc993daa8ff348334021749ac5a92b355",
+    "roadmap": "sha256:591737ac2fe88a9dcfd62d5e044a336e420078273e36d3da1c36a4acfab1b4f4",
     "workItems": "sha256:1ba9aa43894e8eef775e68523dd33b16ad27493f082c58566e356c1961afe940",
-    "workState": "sha256:7b4082e9cf02f71fac8b024c8735ac5d8fe4bd847b9c09282501d083d5d66733",
-    "rfcRegister": "sha256:205bd28f6cc5eba599ec5598522b1df4282d74618ad818d0d9a71f9999267486",
+    "workState": "sha256:81364ca13256af455611e7d50f6b63fb65f5012c592ecb82f3b3d5e269c9c08b",
+    "rfcRegister": "sha256:589eeaa0bdd34c77590acc554754656f81368fc4287b8d413951d2c7e2198bcf",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 638,
+      "todo": 626,
       "doing": 2,
-      "blocked": 1221,
-      "done": 926,
+      "blocked": 1217,
+      "done": 945,
       "refused": 109
     },
     "workItems": {
@@ -121,34 +121,35 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Complete the 232 explicit author-reviewed clearance fields, then land pack schema 0.28, emitter plan persistence and the atomic 92-document/sidecar migration; continue independent accepted foundation work while those content decisions are supplied.",
+      "nextAction": "Implement the accepted pack-population-provenance schema 0.29 contract and its citable-text evidence semantics now that typed graduation clearance, emitter persistence and the atomic corpus migration are complete.",
       "latestCheckpoint": {
         "at": "2026-09-08",
-        "summary": "Graduation clearance's accepted nine-template contract now runs in production: emitters and the planner share one immutable plan registry, the writer evaluates exact values, compiled outcome grading and digest-bound content declarations, and every plan passes false-to-true-to-stale-false real-content coverage. This is foundation only; schema 0.28, emitter persistence and the atomic corpus migration remain open behind 232 visible author-reviewed predicate fields.",
+        "summary": "Pack schema 0.28 and typed graduation clearance now cover all 92 draft and candidate documents. The atomic migration records 354 live blockers, 34 predicate-verified resolutions and 48 prior-ruling acceptances; canonical content verification re-evaluates predicates, rejects stale resolutions and refuses same-commit or uncommitted self-minted rulings. All 436 migration decisions are explicit, with zero author-required or contract-blocked fields remaining.",
         "impact": "advanced",
         "evidence": [
           "rfc/graduation-clearance.md",
-          "apps/server/src/graduation-blocker-templates.mjs",
+          "schemas/drill_pack.schema.json",
+          "apps/server/src/graduation-clearance-corpus.ts",
           "apps/server/src/sourcing/graduation-clear.ts",
-          "apps/server/src/sourcing/graduation-clear.test.ts",
           "tools/graduation-clearance-plan.mjs",
-          "docs/pack-graduation.md"
+          "planning/graduation-clearance/author-decisions.json",
+          "planning/exploration/log.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3088",
-            "digest": "sha256:240672f58c7773edc36213a5fc93ba1d49946e928c4abba962fd64b22ab1a059"
+            "id": "D3072",
+            "digest": "sha256:f6320339b69e88617ad285675a32ea73ee01e8dda5dd9fecbb523a95b51cc009"
           },
           {
             "kind": "work_state",
-            "id": "D3090",
-            "digest": "sha256:85293970da901020e55c05657c8278799fdd12b7761ba30c7422ce2ac2fe0c2d"
+            "id": "D3075",
+            "digest": "sha256:2f755f64513765a53615734c237d422bea4166dca33261fd231a9f11e43c2f82"
           },
           {
             "kind": "rfc",
             "id": "graduation-clearance.md",
-            "digest": "sha256:031888af2dca62d3024e64b59fa83c4c323728d744d8b29b999a840bcd80c8e8"
+            "digest": "sha256:2cc9c093f1873f0af12880eecde4af4cbd2c48b1dd8a56c6a394ef1964e2fb24"
           }
         ]
       },
@@ -426,19 +427,20 @@
       ],
       "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
       "latestCheckpoint": {
-        "at": "2026-09-07",
-        "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. The bounded author repair now executes all nine emitter shapes, exact registry-plan rejoin, digest-bound repository declarations and the shared fail-closed canonicalizer; the 436-entry plan remains 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
+        "at": "2026-09-08",
+        "summary": "The 436-entry graduation migration is complete with zero author-required or contract-blocked decisions, pack schema 0.28 is live, and every draft/candidate carries typed clearance. The release corpus is still held because no official pack has graduated; the next content pass must satisfy the remaining 354 explicit blockers through grounded evidence and authored content rather than bypassing them.",
         "impact": "held",
         "evidence": [
           "planning/content-era/plan.md",
-          "planning/graduation-clearance/author-repair-2026-09-07.md",
+          "planning/graduation-clearance/author-decisions.json",
+          "apps/server/src/graduation-clearance-corpus.ts",
           "rfc/graduation-clearance.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
             "id": "graduation-clearance.md",
-            "digest": "sha256:031888af2dca62d3024e64b59fa83c4c323728d744d8b29b999a840bcd80c8e8"
+            "digest": "sha256:2cc9c093f1873f0af12880eecde4af4cbd2c48b1dd8a56c6a394ef1964e2fb24"
           }
         ]
       },

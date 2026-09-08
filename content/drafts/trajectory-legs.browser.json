@@ -86,8 +86,14 @@
     "graduationBlockers": [
       {
         "id": "mechanical-acceptance-fixture-only-it-asserts-no-chess-p",
-        "state": "blocking",
-        "statement": "Mechanical acceptance fixture only; it asserts no chess phase truth."
+        "state": "accepted",
+        "statement": "Mechanical acceptance fixture only; it asserts no chess phase truth.",
+        "accepted": {
+          "kind": "out_of_scope",
+          "ruling": "The graduation-clearance owner ruling classifies this browser-only mechanical fixture as outside publishable chess content.",
+          "rulingRef": "rfc/graduation-clearance.md#L467",
+          "unreachableBecause": "The graduation-clearance owner ruling classifies this browser-only mechanical fixture as outside publishable chess content."
+        }
       }
     ]
   }

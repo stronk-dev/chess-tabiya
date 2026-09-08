@@ -68,9 +68,15 @@
     "sources": [],
     "graduationBlockers": [
       {
-        "id": "test-only-fixture",
-        "state": "blocking",
-        "statement": "Test-only fixture; never publish as authored chess content."
+      "id": "test-only-fixture",
+      "state": "accepted",
+      "statement": "Test-only fixture; never publish as authored chess content.",
+      "accepted": {
+        "kind": "out_of_scope",
+        "ruling": "The graduation-clearance owner ruling classifies browser-only mechanical fixtures as outside publishable chess content.",
+        "rulingRef": "rfc/graduation-clearance.md#L464",
+        "unreachableBecause": "The graduation-clearance owner ruling classifies browser-only mechanical fixtures as outside publishable chess content."
+      }
       }
     ]
   }

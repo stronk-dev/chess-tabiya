@@ -210,7 +210,7 @@ the pointer the function joins on.**
    earlier**, which is why "move the check" would not have been a complete answer.
 
 ```tabiya-claims
-pack-schema | lane 0.28 | $defs/graduationEntry.clearance (new, closed object); .resolved.clearance (new, required); .accepted.unreachableBecause (new, required); clearedBy (withdrawn, with its oneOf arm)
+none
 ```
 
 ## Summary

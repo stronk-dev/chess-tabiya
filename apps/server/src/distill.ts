@@ -1,10 +1,10 @@
 import { branchPath, type DrillRun } from "@chess-tabiya/runtime";
-import type { GraduationEntry } from "@chess-tabiya/schema/drill-pack";
 import type { PackRecord } from "./pack-registry.js";
 import { validatePackDocument } from "./pack-validation.js";
 import { ServerError } from "./errors.js";
 import { SourcingError } from "./sourcing/types.js";
 import { emitterGraduationBlocker } from "./graduation-blocker-templates.mjs";
+import { attachEmitterGraduationClearances } from "./sourcing/graduation-clear.js";
 
 export interface DistillProposal {
   readonly kind: "deviation";
@@ -24,6 +24,23 @@ export interface Distillation {
 }
 
 const distilledId = (nodeId: string) => `distilled-${nodeId.toLowerCase().replace(/[^a-z0-9-]+/g,"-").replace(/-+/g,"-").replace(/-$/g,"")}`;
+
+const authoredPointerBlocker = (
+  id: string,
+  statement: string,
+  subject: string,
+  placeholder: string,
+): Readonly<Record<string, unknown>> => Object.freeze({
+  id,
+  state: "blocking",
+  statement,
+  clearance: Object.freeze({
+    kind: "pointer_authored",
+    subject,
+    placeholder,
+    instrument: "make pack-check",
+  }),
+});
 
 export function assertDistilledPack(document: unknown): void {
   const validation = validatePackDocument(document);
@@ -53,7 +70,7 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
     .sort((left, right) => Number(selectedIds.has(right.id)) - Number(selectedIds.has(left.id)) || left.id.localeCompare(right.id))
     .map((node) => Object.freeze({ id: distilledId(node.id), moveUci: node.moveUci!, moveSan: node.moveSan!, children: build(node.id) }));
 
-  const blockers: GraduationEntry[] = [
+  const blockers: Record<string, unknown>[] = [
     emitterGraduationBlocker("recorded-play-needs-authoring"),
     emitterGraduationBlocker("mechanical-objective-needs-grounding"),
   ];
@@ -75,10 +92,25 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
   if (checkpoints.length === 0) {
     const deepestLearnerPly = Math.max(...learnerNodes.map((node) => node.ply));
     checkpoints.push({ id: "distilled-end", label: "Recorded consequence reached", trigger: { atPly: deepestLearnerPly }, actions: [] });
-    blockers.push({ id: "portable-checkpoint-absent", state: "blocking", statement: "No portable fired checkpoint survived; a mechanical atPly checkpoint was substituted." });
+    blockers.push(authoredPointerBlocker(
+      "portable-checkpoint-absent",
+      "No portable fired checkpoint survived; a mechanical atPly checkpoint was substituted.",
+      "/checkpoints/0/label",
+      "Recorded consequence reached",
+    ));
   }
-  if (source?.document.mode === "line" || source?.document.mode === "trajectory") blockers.push({ id: "source-mode-reduced", state: "blocking", statement: `Source mode ${source.document.mode} was reduced to an outcome seed because its authored grading structure is not carried by a run.` });
-  if (run.feedbackPolicy === "attempt_end") blockers.push({ id: "attempt-end-substituted", state: "blocking", statement: "Run-only attempt_end feedback was substituted with delayed_checkpoint for the pack draft." });
+  if (source?.document.mode === "line" || source?.document.mode === "trajectory") blockers.push(authoredPointerBlocker(
+    "source-mode-reduced",
+    `Source mode ${source.document.mode} was reduced to an outcome seed because its authored grading structure is not carried by a run.`,
+    "/mode",
+    "outcome",
+  ));
+  if (run.feedbackPolicy === "attempt_end") blockers.push(authoredPointerBlocker(
+    "attempt-end-substituted",
+    "Run-only attempt_end feedback was substituted with delayed_checkpoint for the pack draft.",
+    "/feedbackPolicy",
+    "delayed_checkpoint",
+  ));
   for (const branch of run.branches.filter((candidate) => candidate.origin === "simulated")) dropped.push(`${branch.id}: simulated branch`);
 
   const proposals: DistillProposal[] = [];
@@ -89,7 +121,7 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
   }
 
   const length = (selectedPath.at(-1)?.ply ?? root.ply) - root.ply;
-  const document = Object.freeze({
+  const document = attachEmitterGraduationClearances({
     id: input.packId, version: "0.1.0", title: input.title, mode: "outcome",
     phase: source?.document.phase ?? "middlegame",
     difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 2000, label: "Session-distilled draft", ...(length >= 2 && length <= 40 ? { branchLengthTarget: length } : {}) },

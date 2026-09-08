@@ -11,7 +11,7 @@ import { validatePackDocument } from "./pack-validation.js";
 import { checkSourcingFile } from "./sourcing/check.js";
 
 async function packFiles(root: string, includeBrowser = false): Promise<string[]> {
-  return (await readdir(root)).filter((name) => name.endsWith(".json") && !/\.(?:evidence|job|sources)\.json$/u.test(name) && (includeBrowser || !name.endsWith(".browser.json"))).map((name) => resolve(root, name));
+  return (await readdir(root)).filter((name) => name.endsWith(".json") && !/\.(?:evidence|graduation|job|sources)\.json$/u.test(name) && (includeBrowser || !name.endsWith(".browser.json"))).map((name) => resolve(root, name));
 }
 
 describe("pack graduation", () => {
@@ -156,8 +156,61 @@ describe("pack graduation", () => {
     const base = JSON.parse(await readFile("schemas/drill_pack.example.json", "utf8"));
     const legacy = structuredClone(base); legacy.provenance.graduationBlockers = ["old blocker"];
     expect(validatePackDocument(legacy).issues).toContainEqual(expect.objectContaining({ code: "GRADUATION_ENTRY_LEGACY_SHAPE", severity: "warning" }));
-    const accepted = structuredClone(base); accepted.provenance.graduationBlockers = [{ id: "false-ruling", state: "accepted", statement: "Accepted by assertion.", accepted: { kind: "owner_ruling", ruling: "Owner ruling 2026-08-16", rulingRef: "missing.md" } }];
+    const accepted = structuredClone(base); accepted.provenance.graduationBlockers = [{ id: "false-ruling", state: "accepted", statement: "Accepted by assertion.", accepted: { kind: "owner_ruling", ruling: "Owner ruling 2026-08-16", rulingRef: "missing.md#L1", unreachableBecause: "The cited ruling would make this work unreachable if it existed." } }];
     expect(validatePackDocument(accepted).issues).toContainEqual(expect.objectContaining({ code: "GRADUATION_RULING_UNCITED" }));
+    accepted.provenance.graduationBlockers[0].accepted.rulingRef = "planning/exploration/log.md";
+    expect(validatePackDocument(accepted).issues).toContainEqual(expect.objectContaining({ code: "GRADUATION_RULING_UNANCHORED" }));
+  });
+
+  it("refuses every malformed or unprovable typed clearance at its semantic boundary", async () => {
+    const base = JSON.parse(await readFile("schemas/drill_pack.example.json", "utf8"));
+    const cases: readonly [string, Record<string, unknown>][] = [
+      ["GRADUATION_CLEARANCE_PLAN_MISMATCH", {
+        id: "tablebase-opponent-not-selected",
+        state: "blocking",
+        statement: "The registered plan was altered.",
+        clearance: { kind: "pointer_equals", subject: "/feedbackPolicy", expected: "perfect_tablebase", instrument: "make pack-check" },
+      }],
+      ["GRADUATION_CLEARANCE_REMOVAL_ON_BLOCKING", {
+        id: "premature-removal",
+        state: "blocking",
+        statement: "A removed referent cannot remain a blocker.",
+        clearance: { kind: "referent_removed", subject: "/spine", absentIds: ["removed-node"] },
+      }],
+      ["GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL", {
+        id: "non-string-pointer",
+        state: "blocking",
+        statement: "An authored pointer must resolve to text.",
+        clearance: { kind: "pointer_authored", subject: "/objective", placeholder: "placeholder", instrument: "make pack-check" },
+      }],
+      ["GRADUATION_CLEARANCE_SUBJECT_UNRESOLVED", {
+        id: "missing-pointer",
+        state: "blocking",
+        statement: "A predicate cannot name a missing field.",
+        clearance: { kind: "pointer_equals", subject: "/missing", expected: true, instrument: "make pack-check" },
+      }],
+      ["GRADUATION_CLEAREDBY_UNRESOLVED", {
+        id: "missing-dependency",
+        state: "blocking",
+        statement: "A dependency must resolve in the repository.",
+        clearance: { kind: "unbuilt", subject: "/objective", blockedBy: "rfc/does-not-exist.md" },
+      }],
+      ["GRADUATION_RESOLUTION_UNPROVABLE", {
+        id: "unprovable-resolution",
+        state: "resolved",
+        statement: "A mechanism-free predicate cannot prove resolution.",
+        resolved: {
+          at: "2026-09-08",
+          by: "No executable predicate exists.",
+          clearance: { kind: "unreachable", subject: "/objective" },
+        },
+      }],
+    ];
+    for (const [code, entry] of cases) {
+      const document = structuredClone(base);
+      document.provenance.graduationBlockers = [entry];
+      expect(validatePackDocument(document).issues, code).toContainEqual(expect.objectContaining({ code }));
+    }
   });
 
   it("gates every published pack strictly and keeps draft sourcing debt from growing", async () => {
@@ -200,6 +253,35 @@ describe("pack graduation", () => {
       const invalid = await graduationReport([temporary]);
       expect(invalid.graduable).toEqual([]);
       expect(invalid.evidenceDigests).toMatchObject({ paired: 1, fresh: 0, stale: 0, invalid: 1, withheld: [pack.id] });
+    } finally {
+      await rm(temporary, { recursive: true, force: true });
+    }
+  });
+
+  it("verified reporting removes a pack whose resolved predicate no longer holds", async () => {
+    const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-resolution-"));
+    try {
+      const source = resolve("content/drafts/mate-k-q-technique.json");
+      const packPath = join(temporary, basename(source));
+      const ledgerPath = packPath.replace(/\.json$/u, ".evidence.json");
+      const manifestPath = packPath.replace(/\.json$/u, ".sources.json");
+      const pack = JSON.parse(await readFile(source, "utf8"));
+      pack.provenance.graduationBlockers = pack.provenance.graduationBlockers.filter((entry: { state: string }) => entry.state === "resolved");
+      await writeFile(packPath, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
+      await copyFile(source.replace(/\.json$/u, ".sources.json"), manifestPath);
+      const ledger = JSON.parse(await readFile(source.replace(/\.json$/u, ".evidence.json"), "utf8"));
+      ledger.packDigest = await digestDrillPack(pack);
+      await writeFile(ledgerPath, `${JSON.stringify(ledger)}\n`, "utf8");
+
+      const valid = await graduationReport([temporary], { verify: true });
+      expect(valid.verificationErrors).toEqual([]);
+      expect(valid.graduable).toEqual([pack.id]);
+
+      ledger.records = ledger.records.filter((record: { kind: string }) => record.kind !== "tablebase_result");
+      await writeFile(ledgerPath, `${JSON.stringify(ledger)}\n`, "utf8");
+      const stale = await graduationReport([temporary], { verify: true });
+      expect(stale.verificationErrors).toContainEqual(expect.stringContaining("GRADUATION_RESOLUTION_STALE"));
+      expect(stale.graduable).toEqual([]);
     } finally {
       await rm(temporary, { recursive: true, force: true });
     }

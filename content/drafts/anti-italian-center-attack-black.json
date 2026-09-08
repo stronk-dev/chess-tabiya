@@ -388,28 +388,49 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "still-untested-after-the-2026-08-15-engine-pass-the-pass",
         "state": "blocking",
-        "statement": "STILL UNTESTED after the 2026-08-15 engine pass. The pass evaluated the authored moves and the engine's own first choice at each authored position; it did not construct or evaluate a single off-beat ordering. The timing doctrine remains the pack's strongest unevidenced claim."
+        "statement": "STILL UNTESTED after the 2026-08-15 engine pass. The pass evaluated the authored moves and the engine's own first choice at each authored position; it did not construct or evaluate a single off-beat ordering. The timing doctrine remains the pack's strongest unevidenced claim.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "engine-checked-2026-08-15-and-it-does-not-equalize-6-nxe",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15, and it does not equalize: 6...Nxe4 evaluates -3.89 at depth 22, 3.98 below the spine's 6...Bb4+, and after the authored answer 7.d5 it is still -1.83. The spine's motivation stands. The sibling retreat 6...Bb6 costs 1.86, and the authored consequence 7.d5 Ne7 evaluates +1.81 for White. The classes were not hardened: hardening a class on a centipawn number is what rfc/archive/content-sourcing-foundation.md:772 forbids."
+        "statement": "ENGINE-CHECKED 2026-08-15, and it does not equalize: 6...Nxe4 evaluates -3.89 at depth 22, 3.98 below the spine's 6...Bb4+, and after the authored answer 7.d5 it is still -1.83. The spine's motivation stands. The sibling retreat 6...Bb6 costs 1.86, and the authored consequence 7.d5 Ne7 evaluates +1.81 for White. The classes were not hardened: hardening a class on a centipawn number is what rfc/archive/content-sourcing-foundation.md:772 forbids.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-iqp-white-reference-rests-on-hand-derived-census-ari",
         "state": "blocking",
-        "statement": "The iqp-white reference rests on hand-derived census arithmetic; running the shipped named_structure evaluator against the walked FEN would upgrade or refute it (same blocker as the mirrored White pack)."
+        "statement": "The iqp-white reference rests on hand-derived census arithmetic; running the shipped named_structure evaluator against the walked FEN would upgrade or refute it (same blocker as the mirrored White pack).",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/1/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "first-move-alternatives-cannot-be-deviations-in-a-follow",
         "state": "blocking",
-        "statement": "First-move alternatives cannot be deviations in a follow_theory pack, so the Two Knights lives as a sibling root branch — fourth attestation of wave-2 friction #3."
+        "statement": "First-move alternatives cannot be deviations in a follow_theory pack, so the Two Knights lives as a sibling root branch — fourth attestation of wave-2 friction #3.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/deviations/0",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -417,7 +438,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       }
     ]

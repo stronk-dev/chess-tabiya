@@ -706,23 +706,39 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-partial-the-method-the-prose-describes-",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (partial). The method the prose describes is no longer authored consensus: the three-phase drive, the W manoeuvre, the Delétang triangles and the 33-move bound are stated by en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (partial). The method the prose describes is no longer authored consensus: the three-phase drive, the W manoeuvre, the Delétang triangles and the 33-move bound are stated by en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/2/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-pl",
         "state": "blocking",
-        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the plan-class names and their boundaries are this pack's own carving, the per-ply annotations are uncited, and the corner-stalemate claim (\"nearly every quiet move is stalemate\") is asserted rather than enumerated — a mechanical stalemate count at the authored corner positions would settle it and has not been run. Tablebase categories remain the only mechanically grounded element."
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the plan-class names and their boundaries are this pack's own carving, the per-ply annotations are uncited, and the corner-stalemate claim (\"nearly every quiet move is stalemate\") is asserted rather than enumerated — a mechanical stalemate count at the authored corner positions would settle it and has not been run. Tablebase categories remain the only mechanically grounded element.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/2/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-shape-library-entry-names-the-theoretical-mate-geomet",
         "state": "blocking",
-        "statement": "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on K+B+N positions in Just Play."
+        "statement": "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on K+B+N positions in Just Play.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "tablebase-provider-availability",
@@ -731,18 +747,29 @@
         "accepted": {
           "kind": "permanent_property",
           "ruling": "The runtime can offer perfect tablebase resistance only where a Syzygy provider is configured.",
-          "rulingRef": "docs/tablebase-grounding.md"
+          "rulingRef": "docs/tablebase-grounding.md#L75",
+          "unreachableBecause": "The runtime can offer perfect tablebase resistance only where a Syzygy provider is configured."
         }
       },
       {
         "id": "the-drill-has-no-fifty-move-counter-surfaced-even-though",
         "state": "blocking",
-        "statement": "The drill has no fifty-move counter surfaced even though the annotations argue from it."
+        "statement": "The drill has no fifty-move counter surfaced even though the annotations argue from it.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "pre-existing-at-the-2026-08-16-citation-pass-found-by-ru",
         "state": "blocking",
-        "statement": "PRE-EXISTING at the 2026-08-16 citation pass, found by running digestDrillPack against the sidecar and NOT caused by that pass: this pack's evidence ledger stores a packDigest that does not match the pack document, so `checkSourcingFile` raises EVIDENCE_DIGEST_STALE (\"re-confirm evidence\") on it. The evidence in the sidecar was confirmed against a different version of this file. The citation pass did not re-stamp it, because re-stamping would erase a signal it did not create. Only three of the corpus's 32 evidence sidecars are in this state: mate-bishop-knight, mate-k-q-technique and mate-k-r-technique. Clearing this means re-running the evidence, not re-writing the digest."
+        "statement": "PRE-EXISTING at the 2026-08-16 citation pass, found by running digestDrillPack against the sidecar and NOT caused by that pass: this pack's evidence ledger stores a packDigest that does not match the pack document, so `checkSourcingFile` raises EVIDENCE_DIGEST_STALE (\"re-confirm evidence\") on it. The evidence in the sidecar was confirmed against a different version of this file. The citation pass did not re-stamp it, because re-stamping would erase a signal it did not create. Only three of the corpus's 32 evidence sidecars are in this state: mate-bishop-knight, mate-k-q-technique and mate-k-r-technique. Clearing this means re-running the evidence, not re-writing the digest.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

@@ -499,33 +499,62 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-the-bishop-pair-for-doubled-pawns-barga",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (the bishop-pair-for-doubled-pawns bargain). What each side gets from ...Bxc3, and Black's close-and-blockade answer, is stated by en.wikipedia.org/wiki/Nimzo-Indian_Defence (CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (the bishop-pair-for-doubled-pawns bargain). What each side gets from ...Bxc3, and Black's close-and-blockade answer, is stated by en.wikipedia.org/wiki/Nimzo-Indian_Defence (CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-live-after-the-2026-08-16-pass-and-the-citation-do",
         "state": "blocking",
-        "statement": "STILL LIVE after the 2026-08-16 pass, and the citation does not touch it: this pack's own corpus measurement shows the two arrangements the objective checks played in under a sixth of the games at every node measured. A source that states the structural bargain says nothing about whether these arrangements are what players reach, and no corpus measurement relating either arrangement to results at this band has been done. This blocker was never only a citation gap."
+        "statement": "STILL LIVE after the 2026-08-16 pass, and the citation does not touch it: this pack's own corpus measurement shows the two arrangements the objective checks played in under a sixth of the games at every node measured. A source that states the structural bargain says nothing about whether these arrangements are what players reach, and no corpus measurement relating either arrangement to results at this band has been done. This blocker was never only a citation gap.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
         "state": "blocking",
-        "statement": "No engine pass has been run on this pack. The single concept_violation (c4-c5) records an unmeasurable cost for exactly that reason, and the Bxf6 deviation stops at a definitional consequence for the same reason."
+        "statement": "No engine pass has been run on this pack. The single concept_violation (c4-c5) records an unmeasurable cost for exactly that reason, and the Bxf6 deviation stops at a definitional consequence for the same reason.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/4/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-spine-is-six-plies-and-its-last-node-has-109-games-a",
         "state": "blocking",
-        "statement": "The spine is six plies and its last node has 109 games. Anything a learner reaches past it is unattested at this band by this instrument."
+        "statement": "The spine is six plies and its last node has 109 games. Anything a learner reaches past it is unattested at this band by this instrument.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-shape-entry-doubled-c-pawns-carries-its-own-unground",
         "state": "blocking",
-        "statement": "The shape entry doubled-c-pawns carries its own UNGROUNDED provenance for all five of its plan descriptions, including the three this pack references. Referencing them does not launder them. Its recorded orphan status is now stale and needs an owner-side census rerun that is not this pack's to do."
+        "statement": "The shape entry doubled-c-pawns carries its own UNGROUNDED provenance for all five of its plan descriptions, including the three this pack references. Referencing them does not launder them. Its recorded orphan status is now stale and needs an owner-side census rerun that is not this pack's to do.",
+        "clearance": {
+          "kind": "shape_firing",
+          "subject": "/planClasses/1/shapePlan",
+          "instrument": "make expression-census"
+        }
       }
     ],
     "attribution": [

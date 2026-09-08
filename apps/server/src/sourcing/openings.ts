@@ -10,6 +10,7 @@ import { makeUci } from "chessops/util";
 
 import { validatePackDocument } from "../pack-validation.js";
 import { emitterGraduationBlocker } from "../graduation-blocker-templates.mjs";
+import { attachEmitterGraduationClearances } from "./graduation-clear.js";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { checkSourcingDirectory } from "./check.js";
 import { type EvidenceLedger, type SourceEntry, type SourceManifest, SourcingError } from "./types.js";
@@ -97,7 +98,7 @@ export async function emitOpeningCandidate(options: OpeningEmitOptions): Promise
   const spine = spineChain(drillMoves, options.splitPly + 1);
   const sourceUrl = `https://raw.githubusercontent.com/lichess-org/chess-openings/${CHESS_OPENINGS_COMMIT}/${selected.row.eco[0]!.toLowerCase()}.tsv`;
   const sourceString = `${selected.row.eco} ${selected.row.name}: lichess-chess-openings (${sourceUrl}) — CC0-1.0, no attribution required`;
-  const pack = {
+  const pack = attachEmitterGraduationClearances({
     id,
     version: "0.1.0",
     title: selected.row.name,
@@ -115,7 +116,7 @@ export async function emitOpeningCandidate(options: OpeningEmitOptions): Promise
       licence: "CC-BY-SA-4.0",
       graduationBlockers: [emitterGraduationBlocker("mechanical-objective-placeholder")],
     },
-  } satisfies DrillPackDefinition;
+  });
   const validation = validatePackDocument(pack);
   if (!validation.valid) throw new SourcingError("EMITTED_PACK_INVALID", validation.issues.map((value) => `${value.path} ${value.code}: ${value.message}`).join("; "));
   const source: SourceEntry = {

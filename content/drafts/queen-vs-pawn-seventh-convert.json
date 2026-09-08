@@ -477,17 +477,32 @@
       {
         "id": "cited-2026-08-16-both-the-zigzag-technique-and-the-drawn",
         "state": "blocking",
-        "statement": "CITED 2026-08-16. Both the zigzag technique and the drawn-files exception are stated by en.wikipedia.org/wiki/Queen_versus_pawn_endgame (CC BY-SA 4.0), attributed in provenance.attribution. The prose is no longer authored consensus."
+        "statement": "CITED 2026-08-16. Both the zigzag technique and the drawn-files exception are stated by en.wikipedia.org/wiki/Queen_versus_pawn_endgame (CC BY-SA 4.0), attributed in provenance.attribution. The prose is no longer authored consensus.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-cl",
         "state": "blocking",
-        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the claim about \"how little slack\" this position has is an authored reading of the tablebase margin rather than a measured margin, and the pack states no enumeration behind it."
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the claim about \"how little slack\" this position has is an authored reading of the tablebase margin rather than a measured margin, and the pack states no enumeration behind it.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-rook-pawn-drawn-file-claim-inside-the-drawn-files-pl",
         "state": "blocking",
-        "statement": "The rook-pawn drawn-file claim inside the drawn-files plan class is standard theory NOT queried here; one further tablebase query would clear it and should be made when the hold-side pack is authored."
+        "statement": "The rook-pawn drawn-file claim inside the drawn-files plan class is standard theory NOT queried here; one further tablebase query would clear it and should be made when the hold-side pack is authored.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0",
+          "blockedBy": "rfc/claim-semantic-anchors.md"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

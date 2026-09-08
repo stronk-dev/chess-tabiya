@@ -7,6 +7,7 @@ import { dirname, resolve } from "node:path";
 
 import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { isPackDocumentFileName } from "@chess-tabiya/schema/pack-path";
 import { describe, expect, it } from "vitest";
 
 import { evidenceCensus, runExpressionCensus } from "./expression-census.js";
@@ -15,7 +16,7 @@ import { checkShapeFile, formatProbeResult } from "./shape-check.js";
 import { validateShapeEntry } from "./shape-validation.js";
 
 function packFiles(): string[] {
-  return ["content/drafts", "content/packs"].flatMap((root) => readdirSync(root).filter((name) => name.endsWith(".json") && !/\.(?:evidence|job|sources)\.json$/u.test(name)).map((name) => `${root}/${name}`));
+  return ["content/drafts", "content/packs"].flatMap((root) => readdirSync(root).filter((name) => isPackDocumentFileName(name, { includeBrowser: true })).map((name) => `${root}/${name}`));
 }
 
 const witnesses = JSON.parse(readFileSync("content/witnesses/expression-witnesses.json", "utf8"));

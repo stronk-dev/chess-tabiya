@@ -420,32 +420,66 @@
       {
         "id": "cited-2026-08-16-partial-the-drive-to-edge-then-corner-m",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (partial). The drive-to-edge-then-corner method and the 19-move bound are stated by en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (partial). The drive-to-edge-then-corner method and the 19-move bound are stated by en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-ad",
         "state": "blocking",
-        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the adjacent-diagonal \"rolling wall\" formulation, the two-squares-away king placement in the final net, and \"nearly every quiet move is stalemate\" are authored prose with no consulted source. The stalemate density is mechanically checkable and was not checked."
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the adjacent-diagonal \"rolling wall\" formulation, the two-squares-away king placement in the final net, and \"nearly every quiet move is stalemate\" are authored prose with no consulted source. The stalemate density is mechanically checkable and was not checked.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
-        "state": "blocking",
-        "statement": "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced."
+        "state": "resolved",
+        "statement": "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
+        "resolved": {
+          "at": "2026-09-08",
+          "by": "assessmentGrounding = ledger_verified; 248 assessment records",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
+        }
       },
       {
         "id": "no-shape-library-entry-names-the-theoretical-mate-geomet",
         "state": "blocking",
-        "statement": "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on B+B positions in Just Play."
+        "statement": "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on B+B positions in Just Play.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "the-natural-opponent-for-a-mates-pack-is-perfect-tableba",
         "state": "blocking",
-        "statement": "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1700 stands in."
+        "statement": "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1700 stands in.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "the-fifty-move-pressure-claim-is-stated-but-the-drill-ha",
         "state": "blocking",
-        "statement": "The fifty-move pressure claim is stated but the drill has no counter surfaced; whether the runtime should show the count in mates packs is an open product question."
+        "statement": "The fifty-move pressure claim is stated but the drill has no counter surfaced; whether the runtime should show the count in mates packs is an open product question.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/claim-semantic-anchors.md"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

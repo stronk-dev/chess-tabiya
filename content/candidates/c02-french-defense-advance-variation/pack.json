@@ -30,7 +30,13 @@
       {
         "id": "mechanical-objective-placeholder",
         "state": "blocking",
-        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"
+        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
+        "clearance": {
+          "kind": "content_declared",
+          "instrument": "repository_content_declaration",
+          "templateId": "mechanical-objective-placeholder",
+          "emittedPayloadDigest": "sha256:52620feebb73e844ef3f8dd91c3706ae955dcc1e22e3b2ad133aa5bf33bd671b"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

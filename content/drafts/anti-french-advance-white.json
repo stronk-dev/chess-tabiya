@@ -376,23 +376,40 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "engine-checked-2026-08-15-4-dxc5-evaluates-0-39-against-",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15: 4.dxc5 evaluates -0.39 against +0.29 for the spine's 4.c3, a cost of 0.68 at depth 22 and the largest of the three fourth-move alternatives measured. The judgment's direction is supported; the class itself stays objective-relative and unsettled by evaluation."
+        "statement": "ENGINE-CHECKED 2026-08-15: 4.dxc5 evaluates -0.39 against +0.29 for the spine's 4.c3, a cost of 0.68 at depth 22 and the largest of the three fourth-move alternatives measured. The judgment's direction is supported; the class itself stays objective-relative and unsettled by evaluation.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-d4-attacker-defender-counts-stated-in-the-qb6-annota",
         "state": "blocking",
-        "statement": "The d4 attacker/defender counts stated in the ...Qb6 annotation are derivable from the position and were hand-counted, not machine-derived; the structural-feature vocabulary could express and check this count and has not been asked to."
+        "statement": "The d4 attacker/defender counts stated in the ...Qb6 annotation are derivable from the position and were hand-counted, not machine-derived; the structural-feature vocabulary could express and check this count and has not been asked to.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "the-their-prep-is-longer-asymmetry-claim-is-a-plausible-",
         "state": "blocking",
-        "statement": "The 'their prep is longer' asymmetry claim is a plausible hypothesis with no corpus measurement behind it."
+        "statement": "The 'their prep is longer' asymmetry claim is a plausible hypothesis with no corpus measurement behind it.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/1/children/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -400,7 +417,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       },
       {
@@ -409,7 +431,13 @@
         "statement": "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the plan class asserted three attackers on d4 after ...Qb6, and the count is two, the queen's line being blocked by Black's own c5 pawn. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before.",
         "resolved": {
           "at": "2026-08-15",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "pointer_authored",
+            "subject": "/planClasses/0/description",
+            "placeholder": "After ...Qb6, three black pieces directly attack d4.",
+            "instrument": "author"
+          }
         }
       }
     ]

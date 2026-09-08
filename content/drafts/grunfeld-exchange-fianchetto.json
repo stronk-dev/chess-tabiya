@@ -447,33 +447,60 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-the-diagonal-plan-the-g7-bishop-plus-c5",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (the diagonal plan). The g7-bishop-plus-...c5 attack on White's big centre, and White's use of that centre to attack, are stated by en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence (CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (the diagonal plan). The g7-bishop-plus-...c5 attack on White's big centre, and White's use of that centre to attack, are stated by en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence (CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-uncited-after-the-2026-08-16-pass-the-objective-gr",
         "state": "blocking",
-        "statement": "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific clearing of the long diagonal, and the cited source names the plan without stating that condition as the state worth reaching. The corpus measurement relating the diagonal's clearing to results at this band has still not been done."
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific clearing of the long diagonal, and the cited source names the plan without stating that condition as the state worth reaching. The corpus measurement relating the diagonal's clearing to results at this band has still not been done.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/4/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-timing-window-is-declared-and-the-measurement-that-de",
         "state": "blocking",
-        "statement": "No timing window is declared, and the measurement that decided it is recorded here: at the node after the learner's first move, White's two central levers are the two most-played moves (e4-e5 at 230 of 644, 35.7%; d4-d5 at 185 of 644, 28.7%). An arrival close on either would shut the window after one learner move, so any readiness set of more than one move would report too_slow on the corpus's own main line. The structure has a lever but not a race with room in it."
+        "statement": "No timing window is declared, and the measurement that decided it is recorded here: at the node after the learner's first move, White's two central levers are the two most-played moves (e4-e5 at 230 of 644, 35.7%; d4-d5 at 185 of 644, 28.7%). An arrival close on either would shut the window after one learner move, so any readiness set of more than one move would report too_slow on the corpus's own main line. The structure has a lever but not a race with room in it.",
+        "clearance": {
+          "kind": "unreachable",
+          "subject": "/planClasses/0/shapePlan"
+        }
       },
       {
         "id": "the-objective-s-achieved-signature-is-satisfied-at-none-",
         "state": "blocking",
-        "statement": "The objective's achieved signature is satisfied at none of the seven authored positions, so the spine itself never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but it means nothing in this file shows a learner what success looks like."
+        "statement": "The objective's achieved signature is satisfied at none of the seven authored positions, so the spine itself never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but it means nothing in this file shows a learner what success looks like.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "no-engine-pass-has-been-run-on-this-pack-so-the-single-c",
         "state": "blocking",
-        "statement": "No engine pass has been run on this pack, so the single concept_violation records an unmeasurable cost, and the count for that move is only an upper bound (at most 2 of 730) because the explorer returned twelve moves and it was not among them."
+        "statement": "No engine pass has been run on this pack, so the single concept_violation records an unmeasurable cost, and the count for that move is only an upper bound (at most 2 of 730) because the explorer returned twelve moves and it was not among them.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/4/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       }
     ],
     "attribution": [

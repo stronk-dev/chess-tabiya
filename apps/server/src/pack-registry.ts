@@ -9,6 +9,11 @@ import {
   type PackPhase,
   type SpineNode,
 } from "@chess-tabiya/schema/drill-pack";
+import {
+  isPackDocumentFileName,
+  isPackSidecarName,
+  PACK_SIDECAR_BASENAMES,
+} from "@chess-tabiya/schema/pack-path";
 import type { PositionEvidenceIndex } from "@chess-tabiya/runtime";
 
 import { ServerError } from "./errors.js";
@@ -19,12 +24,7 @@ import { validateLedger } from "./sourcing/ledger-validation.js";
 import { MACHINE_LABEL_EVIDENCE_KINDS, validateClaimBindings } from "./sourcing/claim-binding.js";
 import type { SourcingIssue } from "./sourcing/types.js";
 
-export const SIDECAR_BASENAMES = Object.freeze([
-  "evidence.json",
-  "sources.json",
-  "job.json",
-  "priority.json",
-] as const);
+export const SIDECAR_BASENAMES = PACK_SIDECAR_BASENAMES;
 
 export type AssessmentGrounding = "ledger_verified" | "unverified";
 
@@ -195,17 +195,11 @@ async function jsonFiles(directory: string): Promise<readonly string[]> {
 }
 
 export function isSidecarName(name: string): boolean {
-  return SIDECAR_BASENAMES.some(
-    (reserved) => name === reserved || name.endsWith(`.${reserved}`),
-  );
+  return isPackSidecarName(name);
 }
 
 export function isPackDocumentName(name: string): boolean {
-  return (
-    extname(name) === ".json" &&
-    !name.endsWith(".browser.json") &&
-    !isSidecarName(name)
-  );
+  return isPackDocumentFileName(name);
 }
 
 async function optionalJson(path: string): Promise<unknown | undefined> {

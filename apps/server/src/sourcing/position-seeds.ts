@@ -15,6 +15,7 @@ import { StockfishEvidenceExecutor } from "../evidence-queue.js";
 import { EngineSupervisor } from "../engine-supervisor.js";
 import { validatePackDocument } from "../pack-validation.js";
 import { emitterGraduationBlocker } from "../graduation-blocker-templates.mjs";
+import { attachEmitterGraduationClearances } from "./graduation-clear.js";
 import { emissionJobDigest, readJson, writeCanonicalJson } from "./canonical.js";
 import { checkSourcingDirectory } from "./check.js";
 import { SourceLock } from "./lock.js";
@@ -232,7 +233,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
       emitterGraduationBlocker("target-elo-authored"),
       emitterGraduationBlocker("authored-teaching-absent"),
     ];
-    const pack = {
+    const pack = attachEmitterGraduationClearances({
       id, version: "0.1.0", title: `Play on from Lichess puzzle ${row.puzzleId}`, mode: "outcome",
       ...(phase(row.themes) === undefined ? {} : { phase: phase(row.themes) }),
       difficulty: { minOnlineRapid: Math.max(1000, row.rating - 150), maxOnlineRapid: Math.max(1000, row.rating + 150), branchLengthTarget: plies },
@@ -248,7 +249,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
         },
       }),
       provenance: { reviewStatus: "draft", sources: [`Lichess puzzle database (${PUZZLE_DUMP_URL}, etag ${String(source.origin.kind === "http" ? source.origin.etag : null)}) — CC0-1.0; database exports may be used for any purpose`], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
-    } satisfies DrillPackDefinition;
+    });
     const validation = validatePackDocument(pack);
     if (!validation.valid) throw new SourcingError("EMITTED_PACK_INVALID", validation.issues.map((value) => `${value.path} ${value.code}: ${value.message}`).join("; "));
     const records: EvidenceRecord[] = [

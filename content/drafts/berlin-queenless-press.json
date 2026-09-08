@@ -586,38 +586,71 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-the-position-and-the-king-walk-only-tha",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (the position and the king walk only). That Black loses castling rights, that the king regroups toward c8, and the bishop-pair-against-kingside-majority imbalance are stated by en.wikipedia.org/wiki/Berlin_Defence (CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (the position and the king walk only). That Black loses castling rights, that the king regroups toward c8, and the bishop-pair-against-kingside-majority imbalance are stated by en.wikipedia.org/wiki/Berlin_Defence (CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-uncited-and-the-citation-argues-against-the-framin",
         "state": "blocking",
-        "statement": "STILL UNCITED, AND THE CITATION ARGUES AGAINST THE FRAMING: the objective wants a king-activity plan for queenless middlegames, and the one compatible source found calls this position an endgame, calls Black's king \"misplaced in the centre\", and says \"Black can hold the endgame with accurate play\". That is a source for the position, not for the plan, and its valence is the reverse of this pack's. The pack's own corpus measurement already pointed the same way in the weak sense that nobody plays it. Two independent signals now lean against this objective and the honest next step is to re-examine it, not to cite harder."
+        "statement": "STILL UNCITED, AND THE CITATION ARGUES AGAINST THE FRAMING: the objective wants a king-activity plan for queenless middlegames, and the one compatible source found calls this position an endgame, calls Black's king \"misplaced in the centre\", and says \"Black can hold the endgame with accurate play\". That is a source for the position, not for the plan, and its valence is the reverse of this pack's. The pack's own corpus measurement already pointed the same way in the weak sense that nobody plays it. Two independent signals now lean against this objective and the honest next step is to re-examine it, not to cite harder.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-objective-s-achieved-signature-is-satisfied-at-none-",
         "state": "blocking",
-        "statement": "The objective's achieved signature is satisfied at none of the eleven authored positions, so the spine never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but nothing in this file shows a learner what success looks like."
+        "statement": "The objective's achieved signature is satisfied at none of the eleven authored positions, so the spine never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but nothing in this file shows a learner what success looks like.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "no-timing-window-is-declared-the-negative-was-measured-a",
         "state": "blocking",
-        "statement": "No timing window is declared. The negative was measured and is recorded in the no-race-here feedback claim: no black pawn moves anywhere on this spine, so there is no arrival to close on; the band's first move splits three ways rather than naming one lever; and both Black plans in the referenced shape entry have null success signatures, so the library cannot say when Black's counterplay has arrived. Any deadline would have been authored out of nothing, which is the one thing the timing layer must not be used for."
+        "statement": "No timing window is declared. The negative was measured and is recorded in the no-race-here feedback claim: no black pawn moves anywhere on this spine, so there is no arrival to close on; the band's first move splits three ways rather than naming one lever; and both Black plans in the referenced shape entry have null success signatures, so the library cannot say when Black's counterplay has arrived. Any deadline would have been authored out of nothing, which is the one thing the timing layer must not be used for.",
+        "clearance": {
+          "kind": "shape_firing",
+          "subject": "/planClasses/2/shapePlan",
+          "instrument": "make expression-census"
+        }
       },
       {
         "id": "no-engine-pass-has-been-run-on-this-pack-so-no-deviation",
         "state": "blocking",
-        "statement": "No engine pass has been run on this pack, so no deviation carries a measured cost. There is also no concept_violation: the referenced entry's trigger needs both sides to keep a queenless position with a rook and a minor, and no single legal move from the start position can break that conjunction, so nothing here is off-objective by definition."
+        "statement": "No engine pass has been run on this pack, so no deviation carries a measured cost. There is also no concept_violation: the referenced entry's trigger needs both sides to keep a queenless position with a rook and a minor, and no single legal move from the start position can break that conjunction, so nothing here is off-objective by definition.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-referenced-entry-s-own-trigger-narrowing-note-applie",
         "state": "blocking",
-        "statement": "The referenced entry's own trigger-narrowing note applies to this pack: the trigger proves queenless but cannot prove the symmetry its name promises, and cannot mark the middlegame-endgame boundary. This pack inherits both limits."
+        "statement": "The referenced entry's own trigger-narrowing note applies to this pack: the trigger proves queenless but cannot prove the symmetry its name promises, and cannot mark the middlegame-endgame boundary. This pack inherits both limits.",
+        "clearance": {
+          "kind": "shape_firing",
+          "subject": "/planClasses/0/shapePlan",
+          "instrument": "make expression-census"
+        }
       }
     ],
     "attribution": [

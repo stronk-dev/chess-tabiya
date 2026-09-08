@@ -924,33 +924,62 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-leg-3-win-objective-is-the-strongest-claim-in-the-fi",
         "state": "blocking",
-        "statement": "The leg-3 'win' objective is the strongest claim in the file: an authored assessment that the minority-attack rook ending is winning in practice, with no engine pass, no tablebase applicability (fourteen units at entry), and no cited endgame source. A fixed-depth Stockfish sweep over the ending spine would bear on it directly."
+        "statement": "The leg-3 'win' objective is the strongest claim in the file: an authored assessment that the minority-attack rook ending is winning in practice, with no engine pass, no tablebase applicability (fourteen units at entry), and no cited endgame source. A fixed-depth Stockfish sweep over the ending spine would bear on it directly.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "tablebase_result",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-authored-liquidation-plies-41-54-is-one-plausible-ro",
         "state": "blocking",
-        "statement": "The authored liquidation (plies 41-54) is one plausible road, not a forced or measured one. Nothing grounds the claim that games from this middlegame actually reach rook endings at these rating bands; explorer data cannot reach positions this deep, so the instrument would have to be the Go corpus pipeline."
+        "statement": "The authored liquidation (plies 41-54) is one plausible road, not a forced or measured one. Nothing grounds the claim that games from this middlegame actually reach rook endings at these rating bands; explorer data cannot reach positions this deep, so the instrument would have to be the Go corpus pipeline.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "inherited-from-pack-b-the-three-plan-carlsbad-taxonomy-a",
         "state": "blocking",
-        "statement": "Inherited from Pack B: the three-plan Carlsbad taxonomy and every minority-attack evaluation are uncited."
+        "statement": "Inherited from Pack B: the three-plan Carlsbad taxonomy and every minority-attack evaluation are uncited.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-rook-4v3-same-side-shape-reference-relies-on-the-cen",
         "state": "blocking",
-        "statement": "The rook-4v3-same-side shape reference relies on the census gap documented in provenance; if a literal same-side-4v3 trigger ever becomes expressible, this pack's ending does not match it and the reference must be reviewed."
+        "statement": "The rook-4v3-same-side shape reference relies on the census gap documented in provenance; if a literal same-side-4v3 trigger ever becomes expressible, this pack's ending does not match it and the reference must be reviewed.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/shapes/2",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "no-rating-band-frequency-evidence-for-any-move-past-the-",
         "state": "blocking",
-        "statement": "No rating-band frequency evidence for any move past the opening leg; content/candidates/priority/priority.json has no D35 row, so even the opening's popularity is uncited here."
+        "statement": "No rating-band frequency evidence for any move past the opening leg; content/candidates/priority/priority.json has no D35 row, so even the opening's popularity is uncited here.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       }
     ]
   }

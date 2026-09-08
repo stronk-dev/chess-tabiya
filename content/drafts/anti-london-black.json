@@ -367,7 +367,8 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
@@ -376,23 +377,45 @@
         "statement": "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/london-wedge.json now exists and this pack references it from all three plan classes, as this blocker asked. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p11-c3 through p17-ne5) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. Original blocker text: \"This pack has NO shapes reference, deliberately — the same London-wedge gap recorded in the mirrored White pack's blockers. When a system-pyramid entry exists, this pack's plan classes 1 and 3 should reference its Black-side plans.\"",
         "resolved": {
           "at": "2026-08-15",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "shape_firing",
+            "subject": "/shapes/0",
+            "instrument": "make expression-census"
+          }
         }
       },
       {
         "id": "engine-checked-2026-08-15-and-not-supported-either-way-b",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15 and NOT supported either way: ...Bxg3 evaluates -0.33 against -0.28 for the spine's ...O-O, a 0.05 difference that is inside depth-22 noise and cannot carry the word 'soundest'. The doctrine is neither hardened nor refuted; the instrument simply does not distinguish the two orders, which is itself the answer to 'should it harden or fall on evidence'."
+        "statement": "ENGINE-CHECKED 2026-08-15 and NOT supported either way: ...Bxg3 evaluates -0.33 against -0.28 for the spine's ...O-O, a 0.05 difference that is inside depth-22 noise and cannot carry the word 'soundest'. The doctrine is neither hardened nor refuted; the instrument simply does not distinguish the two orders, which is itself the answer to 'should it harden or fall on evidence'.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "which-challenge-bd6-qb6-nh5-actually-scores-best-for-bla",
         "state": "blocking",
-        "statement": "Which challenge (...Bd6 / ...Qb6 / ...Nh5) actually scores best for Black at these bands is the pack's motivating question and remains unmeasured below the family root."
+        "statement": "Which challenge (...Bd6 / ...Qb6 / ...Nh5) actually scores best for Black at these bands is the pack's motivating question and remains unmeasured below the family root.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-preparation-asymmetry-claim-is-the-anti-opening-thes",
         "state": "blocking",
-        "statement": "The 'preparation asymmetry' claim is the anti-opening thesis itself — plausible, ledgered, and still unmeasured."
+        "statement": "The 'preparation asymmetry' claim is the anti-opening thesis itself — plausible, ledgered, and still unmeasured.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -400,7 +423,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       }
     ]

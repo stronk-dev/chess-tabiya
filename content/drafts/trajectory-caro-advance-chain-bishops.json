@@ -937,33 +937,61 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-central-claim-that-the-chain-s-pawn-colour-census-ma",
         "state": "blocking",
-        "statement": "The central claim - that the chain's pawn-colour census makes the single-bishop ending structurally better for Black - is exactly the kind of endgame-consequence assertion the sibling packs' blockers flag. The census itself is mechanical; the evaluation needs an engine pass or a citable endgame source, and has neither."
+        "statement": "The central claim - that the chain's pawn-colour census makes the single-bishop ending structurally better for Black - is exactly the kind of endgame-consequence assertion the sibling packs' blockers flag. The census itself is mechanical; the evaluation needs an engine pass or a citable endgame source, and has neither.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-authored-liquidation-plies-21-45-is-one-plausible-ro",
         "state": "blocking",
-        "statement": "The authored liquidation (plies 21-45) is one plausible road; nothing grounds how often 1400-2000 games from this middlegame reach any bishop ending. Explorer data cannot see this deep; the Go corpus pipeline is the instrument that could."
+        "statement": "The authored liquidation (plies 21-45) is one plausible road; nothing grounds how often 1400-2000 games from this middlegame reach any bishop ending. Explorer data cannot see this deep; the Go corpus pipeline is the instrument that could.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "5-bd3-and-the-entire-trade-toward-the-ending-plan-are-un",
         "state": "blocking",
-        "statement": "5.Bd3 and the entire trade-toward-the-ending plan are uncited model knowledge; the concept_violation on 5...Bg4 is the file's strongest uncited judgment and is engine-checkable at fixed depth."
+        "statement": "5.Bd3 and the entire trade-toward-the-ending plan are uncited model knowledge; the concept_violation on 5...Bg4 is the file's strongest uncited judgment and is engine-checkable at fixed depth.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/2/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-a5-endgame-deviation-note-raises-a-colour-complex-qu",
         "state": "blocking",
-        "statement": "The ...a5 endgame deviation note raises a colour-complex question and deliberately does not answer it; answering it honestly requires engine evidence this repo has not produced."
+        "statement": "The ...a5 endgame deviation note raises a colour-complex question and deliberately does not answer it; answering it honestly requires engine evidence this repo has not produced.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "inherited-from-the-closed-centre-chain-entry-its-trigger",
         "state": "blocking",
-        "statement": "Inherited from the closed-centre-chain entry: its trigger encodes only the d4-e5 versus d5-e6 interlock, and its plan prose is uncited Nimzowitsch-tradition doctrine."
+        "statement": "Inherited from the closed-centre-chain entry: its trigger encodes only the d4-e5 versus d5-e6 interlock, and its plan prose is uncited Nimzowitsch-tradition doctrine.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       }
     ]
   }

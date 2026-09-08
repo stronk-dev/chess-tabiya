@@ -32,8 +32,13 @@ async function fixture(source = SOURCE): Promise<{ directory: string; file: stri
     copyFile(source.replace(/\.json$/u, ".sources.json"), file.replace(/\.json$/u, ".sources.json")),
   ]);
   const pack = JSON.parse(await readFile(file, "utf8"));
-  pack.provenance.graduationBlockers = pack.provenance.graduationBlockers.map((entry: { id: string }) => entry.id.startsWith("the-syzygy-root-assessment")
-    ? { ...entry, clearance: { kind: "assessment_grounded", subject: "/objective/grading/assessedBy", instrument: "make verify-draft" } }
+  pack.provenance.graduationBlockers = pack.provenance.graduationBlockers.map((entry: { id: string; statement: string }) => entry.id.startsWith("the-syzygy-root-assessment")
+    ? {
+        id: entry.id,
+        state: "blocking",
+        statement: entry.statement,
+        clearance: { kind: "assessment_grounded", subject: "/objective/grading/assessedBy", instrument: "make verify-draft" },
+      }
     : entry);
   await writeFile(file, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
   const ledgerPath = file.replace(/\.json$/u, ".evidence.json");
@@ -186,7 +191,8 @@ describe("graduation clearance writer", () => {
       expect(result.transitions).toHaveLength(1);
       expect(result.transitions[0]).toMatchObject({ from: "blocking", to: "resolved", clearance: { kind: "assessment_grounded" } });
       expect(result.held).toHaveLength(5);
-      expect(result.held.every((entry) => entry.verdict === "no predicate")).toBe(true);
+      expect(result.held.every((entry) => entry.verdict === "no predicate" || entry.verdict === "does not hold")).toBe(true);
+      expect(result.held.some((entry) => entry.verdict === "does not hold")).toBe(true);
       const pack = JSON.parse(await readFile(file, "utf8"));
       const resolved = pack.provenance.graduationBlockers.find((entry: { id: string }) => entry.id === result.transitions[0]!.id);
       expect(resolved.resolved.clearance).toEqual(result.transitions[0]!.clearance);

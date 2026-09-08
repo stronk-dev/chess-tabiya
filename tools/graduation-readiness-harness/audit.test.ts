@@ -1,10 +1,9 @@
-// DISPOSABLE readiness audit — D642. It detects a split/return condition; it changes no product.
-import { execFileSync } from "node:child_process";
+// DISPOSABLE implementation audit — D642. It measures the landed checkpoint; it changes no product.
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { CORPUS_ROOTS, KNOWN_JUDGEMENT_RESIDUE, MECHANISM_FILES } from "./registry.js";
+import { CORPUS_ROOTS, MECHANISM_FILES } from "./registry.js";
 
 const ROOT = new URL("../../", import.meta.url).pathname;
 const OUT = new URL("./output.md", import.meta.url);
@@ -20,7 +19,7 @@ function jsonFiles(root: string): readonly string[] {
 }
 function packDocuments(root: string): readonly { readonly file: string; readonly document: any }[] {
   return jsonFiles(root).flatMap((file) => {
-    if (/\.(?:evidence|job|sources)\.json$/u.test(file)) return [];
+    if (/\.(?:evidence|graduation|job|sources)\.json$/u.test(file)) return [];
     try {
       const document = JSON.parse(source(file));
       return document?.provenance?.graduationBlockers ? [{ file, document }] : [];
@@ -39,49 +38,37 @@ function counts(root: string): Record<string, number> {
   };
 }
 
-describe("D642 graduation-clearance readiness", () => {
-  it("pins the accepted mechanism as wholly absent at pack schema 0.27", () => {
-    expect(source("rfc/README.md")).toMatch(/`graduation-clearance\.md` \| \*\*accepted/u);
-    expect(source("packages/schema/src/index.ts")).toContain('DRILL_PACK_SCHEMA_VERSION = "0.27"');
-    expect(source("Makefile")).not.toContain("graduation-clear:");
-    expect(source("schemas/drill_pack.schema.json")).not.toContain('"clearance"');
-    expect(source("apps/server/src/pack-validation.ts")).not.toContain("GRADUATION_CLEARANCE_MISSING");
+describe("D642 graduation-clearance implementation checkpoint", () => {
+  it("pins the live schema, writer, sweep and canonical content gate", () => {
+    expect(source("rfc/README.md")).toMatch(/`graduation-clearance\.md` \| \*\*implementing/u);
+    expect(source("packages/schema/src/index.ts")).toContain('DRILL_PACK_SCHEMA_VERSION = "0.28"');
+    expect(source("Makefile")).toContain("graduation-clear:");
+    expect(source("Makefile")).toContain("graduation-clearance-corpus-check:");
+    expect(source("Makefile")).toMatch(/verify-content:.*graduation-plan-check.*graduation-clearance-corpus-check/u);
+    expect(source("schemas/drill_pack.schema.json")).toContain('"graduationClearance"');
+    expect(source("apps/server/src/graduation-clearance-corpus.ts")).toContain("GRADUATION_RULING_SELF_MINTED");
   });
 
-  it("re-derives the full migration population rather than calling it a local schema edit", () => {
-    expect(counts("content/drafts")).toEqual({ documents: 56, entries: 293, blocking: 220, resolved: 30, accepted: 43 });
+  it("re-derives the migrated corpus population", () => {
+    expect(counts("content/drafts")).toEqual({ documents: 56, entries: 293, blocking: 211, resolved: 34, accepted: 48 });
     expect(counts("content/candidates")).toEqual({ documents: 36, entries: 143, blocking: 143, resolved: 0, accepted: 0 });
-    expect(KNOWN_JUDGEMENT_RESIDUE).toEqual({ draftHandTable: 17, candidateUnrecognised: 2, resolvedRemovedReferent: 1 });
+    const proposal = JSON.parse(source("planning/graduation-clearance/migration-proposal.json"));
+    expect(proposal.migration.statuses).toEqual({ ready: 436, requires_author: 0, blocked_contract: 0 });
+    expect(JSON.parse(source("planning/graduation-clearance/author-decisions.json")).decisions).toHaveLength(227);
   });
 
-  it("detects the stale withdrawn issue code inside the active acceptance criteria", () => {
-    const rfc = source("rfc/graduation-clearance.md");
-    const criteria = rfc.slice(rfc.indexOf("## Acceptance criteria"), rfc.indexOf("## Open questions"));
-    expect(rfc).toMatch(/GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE[^\n]*withdrawn/iu);
-    expect(criteria).toContain("GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE");
-    expect(criteria).toContain("GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL");
+  it("keeps every named mechanism path real", () => {
+    for (const file of MECHANISM_FILES) expect(existsSync(join(ROOT, file)), file).toBe(true);
   });
 
-  it("records why the dirty feedback stage must land before schema 0.28 starts", () => {
-    for (const file of MECHANISM_FILES.filter((file) => !file.includes("graduation-"))) {
-      expect(existsSync(join(ROOT, file)), file).toBe(true);
-    }
-    const status = execFileSync("git", ["status", "--porcelain", "--untracked-files=all"], { cwd: ROOT, encoding: "utf8" });
-    expect(status).toContain("apps/server/src/authored-feedback.ts");
-    expect(status).toContain("apps/server/src/pack-registry.ts");
-    expect(status).toContain("tools/feedback-delivery-harness/");
-  });
-
-  it("emits the build/apply split", () => {
+  it("emits the current implementation receipt", () => {
     const lines = [
-      "# D642 graduation-clearance readiness — raw output",
+      "# D642 graduation-clearance implementation — raw output",
       "",
-      "Register: accepted; pack lane: 0.28 held; implementation: absent at HEAD.",
-      "Current corpus: drafts 56 documents / 293 entries (220 blocking, 30 resolved, 43 accepted); candidates 36 pack documents / 143 blocking entries.",
-      "Known non-derived residue: 17 draft hand-table assignments + 2 unrecognised candidate entries + 1 removed-referent resolution.",
-      "Acceptance defect: criterion 13 still demands the withdrawn GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE code while criterion 17 and the normative lint table require GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL.",
-      "",
-      "Decision: do not start schema 0.28 in the dirty Feedback Stage-1 worktree. First land/recover Stage 1. Then amend the stale criterion, implement a read-only planner and mechanism, and require an explicit owner budget decision before applying the 92-document content migration and archiving the RFC.",
+      "Register: implementing; pack schema 0.28 landed; lifecycle completion remains under acceptance-criterion audit.",
+      "Current corpus: drafts 56 documents / 293 entries (211 blocking, 34 resolved, 48 accepted); candidates 36 pack documents / 143 blocking entries.",
+      "Migration proposal: 436 ready / 0 author-required / 0 contract-blocked; 227 explicit author decisions are checked in.",
+      "Canonical content verification re-runs the migration plan, all standing predicates, citation provenance and the self-minted-ruling refusal.",
       "",
       `Mechanism surface (${MECHANISM_FILES.length} named files): ${MECHANISM_FILES.join(", ")}.`,
       `Apply roots: ${CORPUS_ROOTS.join(", ")}.`,

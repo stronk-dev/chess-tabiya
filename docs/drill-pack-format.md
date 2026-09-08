@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.27; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.28; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -101,6 +101,12 @@ Version 0.27 closes the pack provenance object over its five attested keys and r
 graduation blockers with typed `blocking`, `resolved`, and `accepted` entries. Blocking entries
 fail closed; accepted entries require a resolvable ruling citation. Candidate packs use the same
 schema but are not graduation subjects. See `docs/pack-graduation.md`.
+
+Version 0.28 makes every graduation state executable rather than narrative. Blocking entries carry
+a closed clearance predicate, resolved entries retain that predicate as standing proof, and accepted
+entries explain why the condition is unreachable and cite an exact line. Emitter-owned blockers are
+joined to a nine-template registry; the corpus-wide check rejects vacuous blockers and stale
+resolutions. See `rfc/graduation-clearance.md` and run `make graduation-clearance-corpus-check`.
 
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability

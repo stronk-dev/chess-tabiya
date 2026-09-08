@@ -181,18 +181,36 @@ export interface CheckpointDefinition {
   readonly [key: string]: unknown;
 }
 
+export interface GraduationContentDeclaration {
+  readonly authority: "repository_content_declaration";
+  readonly declarationDigest: string;
+  readonly declaredAt: string;
+}
+
+export type GraduationClearance =
+  | { readonly kind: "assessment_grounded"; readonly subject: "/objective/grading/assessedBy"; readonly instrument: string }
+  | { readonly kind: "ledger_record"; readonly subject: string; readonly recordKind: "opening_identity" | "position_legality" | "explorer_frequency" | "explorer_position_census" | "tablebase_result" | "engine_eval" | "puzzle_provenance"; readonly instrument: string }
+  | { readonly kind: "claim_bound" | "shape_firing"; readonly subject: string; readonly instrument: string }
+  | { readonly kind: "pointer_authored"; readonly subject: string; readonly placeholder: string; readonly instrument: string }
+  | { readonly kind: "unbuilt"; readonly subject: string; readonly blockedBy: string }
+  | { readonly kind: "unreachable"; readonly subject: string }
+  | { readonly kind: "referent_removed"; readonly subject: string; readonly absentIds: readonly string[] }
+  | { readonly kind: "pointer_equals"; readonly subject: string; readonly expected: string | number | boolean | null; readonly instrument: string }
+  | { readonly kind: "objective_graded"; readonly subject: "/objective"; readonly instrument: "objectiveRules" }
+  | { readonly kind: "content_declared"; readonly templateId: "mechanical-objective-placeholder" | "opponent-policy-authored" | "target-elo-authored" | "authored-teaching-absent" | "recorded-play-needs-authoring" | "mechanical-objective-needs-grounding"; readonly instrument: "repository_content_declaration"; readonly emittedPayloadDigest?: string; readonly declaration?: GraduationContentDeclaration };
+
 export type GraduationEntry =
   | {
       readonly id: string;
       readonly state: "blocking";
       readonly statement: string;
-      readonly clearedBy?: string;
+      readonly clearance: GraduationClearance;
     }
   | {
       readonly id: string;
       readonly state: "resolved";
       readonly statement: string;
-      readonly resolved: { readonly at: string; readonly by: string };
+      readonly resolved: { readonly at: string; readonly by: string; readonly clearance: GraduationClearance };
     }
   | {
       readonly id: string;
@@ -202,6 +220,7 @@ export type GraduationEntry =
         readonly kind: "owner_ruling" | "permanent_property" | "out_of_scope";
         readonly ruling: string;
         readonly rulingRef: string;
+        readonly unreachableBecause: string;
       };
     };
 

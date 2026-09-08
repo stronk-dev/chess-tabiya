@@ -156,7 +156,7 @@ test("C6 fails a hand-written next-free value", () => {
 });
 
 const schemaFiles = () => [
-  { filename: "drill_pack.schema.json", id: "urn:chess-tabiya:schema:drill-pack:0.27", slug: "drill-pack", version: "0.27", digest: "aaaaaaaaaaaa" },
+  { filename: "drill_pack.schema.json", id: "urn:chess-tabiya:schema:drill-pack:0.28", slug: "drill-pack", version: "0.28", digest: "aaaaaaaaaaaa" },
   { filename: "drill_run.schema.json", id: "urn:chess-tabiya:schema:drill-run:0.17", slug: "drill-run", version: "0.17" },
   { filename: "shape_entry.schema.json", id: "urn:chess-tabiya:schema:shape-entry:0.3", slug: "shape-entry", version: "0.3" },
   { filename: "principle_entry.schema.json", id: "urn:chess-tabiya:schema:principle-entry:0.1", slug: "principle-entry", version: "0.1" },

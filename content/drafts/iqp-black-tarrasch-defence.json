@@ -417,33 +417,60 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-the-structure-not-the-move-that-the-blo",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (the structure, not the move). That the blockade of the square in front of the isolani is the pawn's central problem, and that contesting it is the owner's job, is stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Giuoco Piano - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (the structure, not the move). That the blockade of the square in front of the isolani is the pawn's central problem, and that contesting it is the owner's job, is stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Giuoco Piano - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/3/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-uncited-after-the-2026-08-16-pass-with-the-gap-now",
         "state": "blocking",
-        "statement": "STILL UNCITED after the 2026-08-16 pass, with the gap now named precisely: the cited sources say the owner must PREVENT or OUTLAST the blockade; this pack's objective grades REMOVING the blockading knight while the isolani still stands. That is a stronger and more specific claim than any consulted source makes, and a corpus measurement relating the removal to results at this band is still not done."
+        "statement": "STILL UNCITED after the 2026-08-16 pass, with the gap now named precisely: the cited sources say the owner must PREVENT or OUTLAST the blockade; this pack's objective grades REMOVING the blockading knight while the isolani still stands. That is a stronger and more specific claim than any consulted source makes, and a corpus measurement relating the removal to results at this band is still not done.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/children/0/children/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-engine-pass-has-been-run-on-this-pack-every-note-that",
         "state": "blocking",
-        "statement": "No engine pass has been run on this pack. Every note that could have carried a cost carries none for that reason."
+        "statement": "No engine pass has been run on this pack. Every note that could have carried a cost carries none for that reason.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "this-pack-declares-no-timing-window-the-measured-reason-",
         "state": "blocking",
-        "statement": "This pack declares no timing window. The measured reason is recorded in the objective summary and the first spine annotation: the blockading knight is already on d4 in the start position, so there is no arrival to race, and no other opponent lever on this spine ends a preparation. If a race is later found here, the window is the honest way to encode it."
+        "statement": "This pack declares no timing window. The measured reason is recorded in the objective summary and the first spine annotation: the blockading knight is already on d4 in the start position, so there is no arrival to race, and no other opponent lever on this spine ends a preparation. If a race is later found here, the window is the honest way to encode it.",
+        "clearance": {
+          "kind": "unreachable",
+          "subject": "/objective"
+        }
       },
       {
         "id": "the-success-condition-s-second-rule-sends-the-run-to-tra",
         "state": "blocking",
-        "statement": "The success condition's second rule sends the run to transitioned when the detector stops firing. That is a definitional state change, but calling it a transition rather than a failure is an authoring choice with no measurement behind it."
+        "statement": "The success condition's second rule sends the run to transitioned when the detector stops firing. That is a definitional state change, but calling it a transition rather than a failure is an authoring choice with no measurement behind it.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       }
     ],
     "attribution": [

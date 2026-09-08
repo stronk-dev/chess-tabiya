@@ -33,12 +33,23 @@
       {
         "id": "mechanical-objective-placeholder",
         "state": "blocking",
-        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"
+        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
+        "clearance": {
+          "kind": "content_declared",
+          "instrument": "repository_content_declaration",
+          "templateId": "mechanical-objective-placeholder",
+          "emittedPayloadDigest": "sha256:4b07da00a271f58c36726ce02c32c0611c02ecef8a5f946214778d08fdf75497"
+        }
       },
       {
         "id": "opponent-policy-authored",
         "state": "blocking",
-        "statement": "opponent mode strong_engine is an authoring choice that must be reviewed for this convert/hold/save drill"
+        "statement": "opponent mode strong_engine is an authoring choice that must be reviewed for this convert/hold/save drill",
+        "clearance": {
+          "kind": "content_declared",
+          "instrument": "repository_content_declaration",
+          "templateId": "opponent-policy-authored"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

@@ -489,23 +489,39 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "engine-checked-2026-08-15-depth-22-costs-against-the-bes",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15. Depth-22 costs against the best evaluated candidate at each position: 1...h5 0.80, 1...Na6 0.86, 1...f6 1.09, 2...f6 1.35 (the tactical_error row), 2...Qf6 0.84, 2...Bd6 0.60, 3...h6 0.42, 4...Qf6 1.19, 4...g5 2.85. Every classified move costs something measurable and none is refuted; the smallest, 3...h6 at 0.42, is also the one the CC0 name collision points at, and the engine neither sharpens nor settles that argument. The classes were left as authored."
+        "statement": "ENGINE-CHECKED 2026-08-15. Depth-22 costs against the best evaluated candidate at each position: 1...h5 0.80, 1...Na6 0.86, 1...f6 1.09, 2...f6 1.35 (the tactical_error row), 2...Qf6 0.84, 2...Bd6 0.60, 3...h6 0.42, 4...Qf6 1.19, 4...g5 2.85. Every classified move costs something measurable and none is refuted; the smallest, 3...h6 at 0.42, is also the one the CC0 name collision points at, and the engine neither sharpens nor settles that argument. The classes were left as authored.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-damiano-and-blackburne-refutation-lines-were-verifie",
         "state": "blocking",
-        "statement": "The Damiano and Blackburne refutation lines were verified LEGAL only; the material and evaluation claims riding on them ('winning material back with interest', 'simply better developed') are unevaluated prose."
+        "statement": "The Damiano and Blackburne refutation lines were verified LEGAL only; the material and evaluation claims riding on them ('winning material back with interest', 'simply better developed') are unevaluated prose.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/claim-semantic-anchors.md"
+        }
       },
       {
         "id": "the-guard-threshold-250cp-encodes-the-same-authored-band",
         "state": "blocking",
-        "statement": "The guard threshold (250cp) encodes the same authored band hypothesis as the white pack; no corpus or play-test evidence supports the number."
+        "statement": "The guard threshold (250cp) encodes the same authored band hypothesis as the white pack; no corpus or play-test evidence supports the number.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/guard",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -513,13 +529,23 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       },
       {
         "id": "corpus-checked-2026-08-15-and-not-answerable-from-repo-d",
         "state": "blocking",
-        "statement": "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played."
+        "statement": "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
@@ -527,7 +553,13 @@
         "statement": "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the ...Na6 deviation credited a knight on c6 with four central squares; the measured count is two, d4 and e5. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before.",
         "resolved": {
           "at": "2026-08-15",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "pointer_authored",
+            "subject": "/deviations/2/note",
+            "placeholder": "A knight on c6 attacks four central squares.",
+            "instrument": "author"
+          }
         }
       }
     ]

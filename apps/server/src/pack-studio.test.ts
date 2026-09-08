@@ -106,10 +106,11 @@ describe("Pack Studio", () => {
     const document = structuredClone(fixture);
     document.id = "graduation-state-pack";
     document.version = "1.0.0";
-    document.provenance = { reviewStatus: "draft", sources: ["source"], graduationBlockers: [{ id: "grounding", state: "blocking", statement: "Grounding remains." }] };
+    const clearance = { kind: "pointer_authored", subject: "/objective/summary", placeholder: fixture.objective.summary, instrument: "pack-studio test" };
+    document.provenance = { reviewStatus: "draft", sources: ["source"], graduationBlockers: [{ id: "grounding", state: "blocking", statement: "Grounding remains.", clearance }] };
     const draft = studio.create(principal, { document });
     expect(() => studio.register(draft.id, principal)).toThrow(/graduation blockers/i);
-    document.provenance.graduationBlockers = [{ id: "grounding", state: "resolved", statement: "Grounding was absent.", resolved: { at: "2026-08-16", by: "Evidence is recorded." } }];
+    document.provenance.graduationBlockers = [{ id: "grounding", state: "resolved", statement: "Grounding was absent.", resolved: { at: "2026-08-16", by: "Evidence is recorded.", clearance } }];
     const saved = studio.update(draft.id, principal, draft.digest, document);
     expect(studio.register(saved.id, principal).document.provenance).toMatchObject({ reviewStatus: "published" });
   });

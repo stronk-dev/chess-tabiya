@@ -18753,3 +18753,46 @@ The JSON editor remains the advanced document authority after a source or saved 
 it is no longer the prerequisite for beginning. Pure seed contracts cover document completeness,
 legal movement, and clone immutability. The mounted application contract traverses all four doors
 through their real client boundaries.
+
+## 2026-09-08 — Graduation clearance schema 0.28 and the full corpus migration landed
+
+The accepted foundation slice is implemented across the schema, four emitters, production writer,
+reporter and all 92 draft/candidate documents. The checked-in plan now reads 436 ready / 0
+author-required / 0 contract-blocked; 227 explicit author decisions are reviewable inputs rather
+than hidden classifier defaults. Four stale tablebase-assessment blockers re-derived to `resolved`,
+five browser-only mechanical fixtures moved to cited `out_of_scope`, and all 68 existing evidence
+ledgers were re-stamped after the atomic content rewrite.
+
+The canonical content gate now re-runs the total plan and the corpus predicates. Its current census
+is 354 blocking / 34 resolved / 48 accepted with zero errors. Resolved predicates can go stale:
+verified graduation reporting removes a pack after its supporting ledger record is deleted.
+Accepted rulings are split across the correct boundaries: runtime validates exact packaged anchors,
+while the checkout sweep uses line-level blame and rejects same-commit or uncommitted rulings as
+`GRADUATION_RULING_SELF_MINTED`. The ruling-root registry is also the packaging authority, so a new
+citable root without a Docker `COPY` fails `make schema-check`.
+
+This closes [[D404]]–[[D408]], [[D426]], [[D434]], [[D464]]–[[D467]], [[D525]] and
+[[D3072]]–[[D3075]]. It does not publish content or manufacture chess truth. The RFC remains
+implementing until its remaining acceptance-criterion/lifecycle audit is complete; schema lane 0.28
+is landed and the register now reports 0.29 as the next claimed pack lane.
+
+## 2026-09-08 — Graduation-clearance integration failures closed before commit
+
+The exact staged software gate found two boundary defects in the 0.28 wave. Recursive development
+discovery treated the new `<stem>.graduation.json` transition receipts as drill packs, so migrated
+content prevented every application route from starting. `graduation.json` is now part of the one
+shared sidecar vocabulary and its existing recursive-discovery fixture exercises the basename.
+
+Session distillation also had three literal blockers outside the nine-template emitter registry.
+They survived clearance attachment without the now-required typed predicate. The portable
+checkpoint, reduced source mode and delayed feedback substitutions now carry exact
+`pointer_authored` subjects and placeholders, keeping distilled drafts validation-clean without
+pretending those lossy transformations are reviewed chess content. This closes [[D3148]] and
+[[D3149]].
+
+The content-tier continuation found the same sidecar omission duplicated in three full-corpus test
+walkers and the expression census itself. Pack/sidecar filename classification now lives in the
+schema package and all serving/census consumers call it; the final standalone schema browser
+fixture carries the same cited `out_of_scope` ruling as the served browser fixtures. The refusal
+coverage census also found six new graduation validation codes with no direct disposition. A
+schema-valid negative matrix now makes every one fire, closing [[D3150]].

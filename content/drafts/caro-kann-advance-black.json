@@ -396,23 +396,40 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "engine-checked-2026-08-15-6-c4-evaluates-1-01-against-0-",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15: 6...c4 evaluates -1.01 against -0.20 for the spine's 6...Qb6, a cost of 0.81 at depth 22 and the largest deviation cost in this pack. What ...c4 costs is now measured. Whether it 'stops the opening's plan' is an objective-relative claim the number does not reach, so the class was left as authored."
+        "statement": "ENGINE-CHECKED 2026-08-15: 6...c4 evaluates -1.01 against -0.20 for the spine's 6...Qb6, a cost of 0.81 at depth 22 and the largest deviation cost in this pack. What ...c4 costs is now measured. Whether it 'stops the opening's plan' is an objective-relative claim the number does not reach, so the class was left as authored.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/deviations/0",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-claim-that-the-inserted-h4-h5-pawns-favour-black-in-",
         "state": "blocking",
-        "statement": "The claim that the inserted h4/h5 pawns favour Black in 'most endings' is an endgame-consequence assertion no evidence in this repo supports."
+        "statement": "The claim that the inserted h4/h5 pawns favour Black in 'most endings' is an endgame-consequence assertion no evidence in this repo supports.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-prep-ends-around-move-five-or-six-claim-is-a-hypothe",
         "state": "blocking",
-        "statement": "The 'prep ends around move five or six' claim is a hypothesis about club preparation with no corpus measurement behind it; explorer novelty-depth data could test a proxy for it."
+        "statement": "The 'prep ends around move five or six' claim is a hypothesis about club preparation with no corpus measurement behind it; explorer novelty-depth data could test a proxy for it.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -420,7 +437,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       }
     ]

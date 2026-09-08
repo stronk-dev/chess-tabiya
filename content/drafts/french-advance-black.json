@@ -345,23 +345,39 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "engine-checked-2026-08-15-5-f6-costs-0-30-and-6-cxd4-cos",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15: 5...f6 costs 0.30 and 6...cxd4 costs 0.53 at depth 22 against the best evaluated candidate at each position. Both cost something and neither is close to a blunder; the numbers support a direction, not the word 'error'. The classes were left as authored. A separate finding the blocker did not ask for: the pack's own accepted_alternative 6...c4 is the best evaluated move at its position, 0.09 ahead of the spine's 6...Nh6."
+        "statement": "ENGINE-CHECKED 2026-08-15: 5...f6 costs 0.30 and 6...cxd4 costs 0.53 at depth 22 against the best evaluated candidate at each position. Both cost something and neither is close to a blunder; the numbers support a direction, not the word 'error'. The classes were left as authored. A separate finding the blocker did not ask for: the pack's own accepted_alternative 6...c4 is the best evaluated move at its position, 0.09 ahead of the spine's 6...Nh6.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-claim-that-bxh6-hands-you-the-bishop-pair-and-the-g-",
         "state": "blocking",
-        "statement": "The claim that Bxh6 'hands you the bishop pair and the g-file for doubled pawns your structure can afford' is an uncited positional assessment."
+        "statement": "The claim that Bxh6 'hands you the bishop pair and the g-file for doubled pawns your structure can afford' is an uncited positional assessment.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-b2-c1-bishop-tie-down-mechanism-stated-for-qb6-is-st",
         "state": "blocking",
-        "statement": "The b2/c1-bishop tie-down mechanism stated for ...Qb6 is standard French doctrine rendered from model knowledge with no named source."
+        "statement": "The b2/c1-bishop tie-down mechanism stated for ...Qb6 is standard French doctrine rendered from model knowledge with no named source.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -369,7 +385,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       }
     ]

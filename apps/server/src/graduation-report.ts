@@ -6,10 +6,13 @@ import {
   type DrillPackDefinition,
 } from "@chess-tabiya/schema/drill-pack";
 
+import { auditGraduationClearanceCorpus } from "./graduation-clearance-corpus.js";
+
 interface Clearance {
-  readonly kind: "assessment_grounded" | "ledger_record" | "claim_bound" | "shape_firing" | "pointer_authored" | "unbuilt" | "unreachable" | "referent_removed";
-  readonly subject: string;
+  readonly kind: "assessment_grounded" | "ledger_record" | "claim_bound" | "shape_firing" | "pointer_authored" | "pointer_equals" | "objective_graded" | "content_declared" | "unbuilt" | "unreachable" | "referent_removed";
+  readonly subject?: string;
   readonly recordKind?: string;
+  readonly templateId?: string;
 }
 
 type Entry = string | {
@@ -34,13 +37,17 @@ const CLEARABLE_KINDS = new Set<Clearance["kind"]>([
   "claim_bound",
   "shape_firing",
   "pointer_authored",
+  "pointer_equals",
+  "objective_graded",
+  "content_declared",
 ]);
 const UNCLEARABLE_KINDS = new Set<Clearance["kind"]>(["unbuilt", "unreachable"]);
 
 function clearanceLabel(clearance: Clearance | undefined): string {
   if (clearance === undefined) return "(unspecified)";
   const kind = clearance.recordKind === undefined ? clearance.kind : `${clearance.kind}:${clearance.recordKind}`;
-  return `${kind} ${clearance.subject}`;
+  const target = clearance.subject ?? clearance.templateId ?? "registered predicate";
+  return `${kind} ${target}`;
 }
 
 function files(root: string): readonly string[] {
@@ -60,6 +67,11 @@ export interface GraduationReport {
     invalid: number;
     withheld: readonly string[];
   }>;
+  readonly verificationErrors: readonly string[];
+}
+
+export interface GraduationReportOptions {
+  readonly verify?: boolean;
 }
 
 export interface GraduationReportCommandOptions {
@@ -85,7 +97,14 @@ function evidenceDigest(packFile: string): { readonly state: "missing" | "invali
   }
 }
 
-export async function graduationReport(roots: readonly string[] = ["content/drafts", "content/candidates", "content/packs"]): Promise<GraduationReport> {
+export async function graduationReport(
+  roots: readonly string[] = ["content/drafts", "content/candidates", "content/packs"],
+  options: GraduationReportOptions = {},
+): Promise<GraduationReport> {
+  const verificationErrors = options.verify === true ? (await auditGraduationClearanceCorpus(roots)).errors : [];
+  const stalePackIds = new Set(verificationErrors
+    .filter((error) => error.includes("GRADUATION_RESOLUTION_STALE"))
+    .map((error) => error.slice(0, error.indexOf("/"))));
   const accepted: Array<{ packId: string; entry: Exclude<Entry, string> }> = [];
   const graduable: string[] = [];
   const withheld: string[] = [];
@@ -114,7 +133,7 @@ export async function graduationReport(roots: readonly string[] = ["content/draf
         else stale += 1;
       }
       const otherwiseGraduable = root !== "content/candidates" && !file.endsWith(".browser.json") && blocking.length === 0;
-      if (otherwiseGraduable && digestFresh !== false && storedDigest.state !== "invalid") graduable.push(document.id);
+      if (otherwiseGraduable && digestFresh !== false && storedDigest.state !== "invalid" && !stalePackIds.has(document.id)) graduable.push(document.id);
       if (otherwiseGraduable && (digestFresh === false || storedDigest.state === "invalid")) withheld.push(document.id);
       for (const entry of entries) {
         if (typeof entry === "string") { counts.legacy += 1; legacy += 1; continue; }
@@ -161,6 +180,7 @@ export async function graduationReport(roots: readonly string[] = ["content/draf
     legacy,
     graduable: Object.freeze(graduable),
     evidenceDigests: Object.freeze({ paired, fresh, stale, invalid, withheld: Object.freeze(withheld) }),
+    verificationErrors: Object.freeze(verificationErrors),
   });
 }
 

@@ -1625,6 +1625,14 @@ Owner ruling [[D1563]] funds the authoring board, community-author workflow, Kno
 principle provenance and official-content review instrument. The four-door chooser must not ship as
 a boardless placeholder; it is now implementation work rather than an owner fork.
 
+The 2026-09-08 graduation checkpoint lands pack schema 0.28 and applies its total migration across
+all 92 draft/candidate documents. The canonical content gate now re-derives 354 blocking, 34
+resolved and 48 accepted entries with zero errors; four stale assessment blockers cleared through
+the production writer, and verified reporting removes a pack when supporting evidence disappears.
+This closes the clearance foundation and releases pack lane 0.29, but it does **not** change the
+release outcome: zero official packs have graduated, and authored claim/theory grounding remains
+the next content-facing dependency rather than something the migration may synthesize.
+
 The 2026-09-04 concept-registry review confirms that the 199 references across 50 concept-bearing
 packs already fit the proposed 168-ID grammar and returned the identity contract on [[D2661]]–
 [[D2666]]. The first repair now specifies append-only exact revisions, sealed occurrence-backed

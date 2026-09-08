@@ -28,12 +28,12 @@ test("published hand table is complete and never becomes a silent default", () =
 
 test("planner re-derives the accepted RFC population without mutating it", () => {
   const plan = assertKnownPlan(buildGraduationPlan());
-  assert.deepEqual(plan.corpus.drafts, { documents: 56, entries: 293, states: { accepted: 43, blocking: 220, resolved: 30 } });
+  assert.deepEqual(plan.corpus.drafts, { documents: 56, entries: 293, states: { accepted: 48, blocking: 211, resolved: 34 } });
   assert.deepEqual(plan.corpus.candidates, { documents: 36, entries: 143, states: { blocking: 143 } });
-  assert.deepEqual(plan.classifier.preHandRules, { authored: 10, citation: 54, corpus: 46, engine: 37, shape: 16, tablebase: 5, unbuilt: 35 });
-  assert.deepEqual(plan.classifier.finalKinds, { assessment_grounded: 5, claim_bound: 55, ledger_record: 84, pointer_authored: 11, shape_firing: 18, unbuilt: 38, unreachable: 9 });
-  assert.equal(plan.classifier.draftRuleSuggestions, 203);
-  assert.equal(plan.classifier.draftHandTableAssignments, 17);
+  assert.deepEqual(plan.classifier.preHandRules, { authored: 10, citation: 54, corpus: 46, engine: 37, shape: 16, tablebase: 1, unbuilt: 35 });
+  assert.deepEqual(plan.classifier.finalKinds, { assessment_grounded: 1, claim_bound: 55, ledger_record: 84, pointer_authored: 11, shape_firing: 18, unbuilt: 38, unreachable: 4 });
+  assert.equal(plan.classifier.draftRuleSuggestions, 199);
+  assert.equal(plan.classifier.draftHandTableAssignments, 12);
   assert.equal(plan.classifier.candidateTemplateMatched, 141);
   assert.equal(plan.classifier.candidateUnrecognised.length, 2);
   assert.equal(EMITTER_TEMPLATE_IDS.length, 9);
@@ -46,17 +46,18 @@ test("planner re-derives the accepted RFC population without mutating it", () =>
 
 test("planner names rather than erases judgement debt", () => {
   const plan = buildGraduationPlan();
-  assert.equal(plan.judgementDebt.draftKindReview, 220);
-  assert.equal(plan.judgementDebt.draftSubjectAndPredicateFields, 220);
+  assert.equal(plan.judgementDebt.draftKindReview, 211);
+  assert.equal(plan.judgementDebt.draftSubjectAndPredicateFields, 211);
   assert.equal(plan.judgementDebt.candidateNonTemplateEntries, 2);
-  assert.equal(plan.judgementDebt.resolvedClearanceBackfills, 30);
-  assert.equal(plan.judgementDebt.acceptedUnreachabilityBackfills, 43);
+  assert.equal(plan.judgementDebt.resolvedClearanceBackfills, 34);
+  assert.equal(plan.judgementDebt.acceptedUnreachabilityBackfills, 48);
+  assert.equal(plan.judgementDebt.fixtureTransitions, 5);
 });
 
 test("migration proposal covers every entry and separates derivation, authoring, and contract blockers", () => {
   const plan = assertKnownPlan(buildGraduationPlan());
   assert.equal(plan.migration.entries, 436);
-  assert.deepEqual(plan.migration.statuses, { ready: 204, requires_author: 232, blocked_contract: 0 });
+  assert.deepEqual(plan.migration.statuses, { ready: 436, requires_author: 0, blocked_contract: 0 });
   assert.equal(plan.migration.rows.length, plan.corpus.entries);
   assert.equal(new Set(plan.migration.rows.map((row) => row.key)).size, plan.corpus.entries);
   assert.deepEqual(plan.migration.templateContracts, {

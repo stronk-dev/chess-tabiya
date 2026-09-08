@@ -4,6 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 
+import { GRADUATION_RULING_ANCHOR_ROOTS } from "../apps/server/src/graduation-ruling-roots.mjs";
+
 function required(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -95,18 +97,13 @@ required(
   !readFileSync(".dockerignore", "utf8").split(/\r?\n/u).includes("content/drafts"),
   "Production image context must include disclosed draft packs",
 );
-required(
-  readFileSync("apps/server/Dockerfile", "utf8").includes(
-    "COPY planning/exploration/log.md planning/exploration/log.md",
-  ),
-  "Production image must include the append-only ruling register used by pack admission",
-);
-required(
-  readFileSync("apps/server/Dockerfile", "utf8").includes(
-    "COPY docs/tablebase-grounding.md docs/tablebase-grounding.md",
-  ),
-  "Production image must include the permanent-property source used by pack admission",
-);
+const serverDockerfile = readFileSync("apps/server/Dockerfile", "utf8");
+for (const root of GRADUATION_RULING_ANCHOR_ROOTS) {
+  required(
+    serverDockerfile.includes(`COPY ${root} ${root}`),
+    `Production image must include the graduation-ruling source ${root}`,
+  );
+}
 required(
   readFileSync("apps/server/Dockerfile", "utf8").includes("install-stockfish-linux /opt/stockfish"),
   "Production image must install the shared Stockfish pin",
@@ -115,7 +112,6 @@ const openingCommit = "4b8622759e7ae6f93f011cc6c83a3823401ab45e";
 for (const name of ["COPYING.txt", "a.tsv", "b.tsv", "c.tsv", "d.tsv", "e.tsv"]) {
   required(existsSync(`vendor/chess-openings/${openingCommit}/${name}`), `Pinned opening source is missing ${name}`);
 }
-const serverDockerfile = readFileSync("apps/server/Dockerfile", "utf8");
 required(serverDockerfile.includes("COPY --from=build /app/apps/server/artifacts apps/server/artifacts"), "Production image must contain the compiled runtime opening catalogue");
 required(!serverDockerfile.includes("COPY vendor"), "Production image must not copy raw opening TSV inputs");
 const stockfishInstaller = readFileSync("tools/install-stockfish-linux.sh", "utf8");

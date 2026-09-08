@@ -11,7 +11,7 @@ export SF_CMD
 
 .PHONY: foundation-source-author-audit foundation-source-author-repair tablebase-census-contract tablebase-census-check phase-classifier-census phase-band-census phase-source-composition-census phase-source-composition-author-contract phase-source-composition-fresh-review phase-source-composition-author-repair endgame-technique-applicability-census endgame-method-path-contract endgame-setup-reachability-contract bot-trait-screen-contract bot-trait-screen bot-endgame-trait-screen-contract bot-endgame-trait-screen bot-human-endgame-reference-contract bot-human-endgame-reference-population bot-human-endgame-reference bot-human-endgame-reference-report
 
-.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-production test-browser-ci ci-local schema-check register-check status-parity work-index work-state work-state-sync work-item-sync work-item-check roadmap-receipt roadmap-check roadmap-progress intent-parity evidence-manifest-check semantic-evidence-check foundation-closure foundation-source-author-contract semantic-validation-closure semantic-validation-matrix semantic-validation-author-contract module-evidence-assembly module-registration-author-contract module-registration-author-contract-update module-registration-fresh-review module-registration-second-fresh-review intent-presets-author-contract intent-presets-second-author-repair intent-presets-fresh-review intent-presets-second-fresh-review presentation-binding-census evidence-presentation-author-contract evidence-presentation-second-author-repair evidence-presentation-fresh-review evidence-presentation-third-fresh-review evidence-presentation-third-author-repair evidence-presentation-fourth-fresh-review evidence-presentation-fourth-author-repair evidence-presentation-fifth-fresh-review semantic-collectors-promotion-fresh-review semantic-collectors-promotion-author-repair semantic-collectors-promotion-second-fresh-review semantic-collectors-promotion-second-author-repair semantic-collectors-promotion-tenth-fresh-review evidence-seal-audit evidence-value-authority-author-contract evidence-value-authority-route-map evidence-value-authority-route-map-update opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check longitudinal-store-author-contract longitudinal-store-fresh-review longitudinal-store-cost campaign-two-horizon-author-contract campaign-two-horizon-fresh-review campaign-two-horizon-third-fresh-review theory-drill-author-contract graduation-plan graduation-plan-update graduation-plan-check graduation-clearance-contract tactical-collector-measurement breadth-collector-measurement human-divergence-measurement option-collapse-measurement dtz-census-measurement practical-resistance-measurement promotion-race-contract assistance-register-contract assistance-register-repeat-review assistance-register-final-review assistance-register-second-fresh-review assistance-register-second-author-repair assistance-register-third-fresh-review assistance-register-third-author-repair assistance-register-fifth-fresh-review assistance-register-fourth-author-repair semantic-register-contract semantic-register-repeat-review provider-exchange-contract provider-exchange-repeat-review provider-exchange-final-review provider-exchange-fourth-review provider-exchange-fresh-review provider-exchange-author-repair provider-exchange-second-fresh-review candidate-packet-contract candidate-packet-repeat-review candidate-packet-final-review candidate-packet-fresh-review candidate-packet-second-author-repair review-evidence-author-contract bot-policy-independent-review bot-policy-author-contract bot-policy-fresh-review pack-capability-author-contract pack-capability-author-repair pack-capability-author-repair-update pack-capability-closure pack-capability-repeat-review pack-capability-fresh-review pack-capability-second-fresh-review pack-capability-third-fresh-review pack-capability-fourth-fresh-review bounded-target-contract bounded-target-census bounded-target-repeat-review bounded-target-final-review bounded-target-fresh-review bounded-target-second-author-repair bounded-target-third-author-repair review-evidence-fourth-fresh-review build verify-software verify-governance verify-rfc-evidence verify-content verify verify-awake pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk tablebase-census engine-walk up up-engines down
+.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-production test-browser-ci ci-local schema-check register-check status-parity work-index work-state work-state-sync work-item-sync work-item-check roadmap-receipt roadmap-check roadmap-progress intent-parity evidence-manifest-check semantic-evidence-check foundation-closure foundation-source-author-contract semantic-validation-closure semantic-validation-matrix semantic-validation-author-contract module-evidence-assembly module-registration-author-contract module-registration-author-contract-update module-registration-fresh-review module-registration-second-fresh-review intent-presets-author-contract intent-presets-second-author-repair intent-presets-fresh-review intent-presets-second-fresh-review presentation-binding-census evidence-presentation-author-contract evidence-presentation-second-author-repair evidence-presentation-fresh-review evidence-presentation-third-fresh-review evidence-presentation-third-author-repair evidence-presentation-fourth-fresh-review evidence-presentation-fourth-author-repair evidence-presentation-fifth-fresh-review semantic-collectors-promotion-fresh-review semantic-collectors-promotion-author-repair semantic-collectors-promotion-second-fresh-review semantic-collectors-promotion-second-author-repair semantic-collectors-promotion-tenth-fresh-review evidence-seal-audit evidence-value-authority-author-contract evidence-value-authority-route-map evidence-value-authority-route-map-update opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check longitudinal-store-author-contract longitudinal-store-fresh-review longitudinal-store-cost campaign-two-horizon-author-contract campaign-two-horizon-fresh-review campaign-two-horizon-third-fresh-review theory-drill-author-contract graduation-plan graduation-plan-update graduation-plan-check graduation-clearance-contract graduation-clearance-corpus-check tactical-collector-measurement breadth-collector-measurement human-divergence-measurement option-collapse-measurement dtz-census-measurement practical-resistance-measurement promotion-race-contract assistance-register-contract assistance-register-repeat-review assistance-register-final-review assistance-register-second-fresh-review assistance-register-second-author-repair assistance-register-third-fresh-review assistance-register-third-author-repair assistance-register-fifth-fresh-review assistance-register-fourth-author-repair semantic-register-contract semantic-register-repeat-review provider-exchange-contract provider-exchange-repeat-review provider-exchange-final-review provider-exchange-fourth-review provider-exchange-fresh-review provider-exchange-author-repair provider-exchange-second-fresh-review candidate-packet-contract candidate-packet-repeat-review candidate-packet-final-review candidate-packet-fresh-review candidate-packet-second-author-repair review-evidence-author-contract bot-policy-independent-review bot-policy-author-contract bot-policy-fresh-review pack-capability-author-contract pack-capability-author-repair pack-capability-author-repair-update pack-capability-closure pack-capability-repeat-review pack-capability-fresh-review pack-capability-second-fresh-review pack-capability-third-fresh-review pack-capability-fourth-fresh-review bounded-target-contract bounded-target-census bounded-target-repeat-review bounded-target-final-review bounded-target-fresh-review bounded-target-second-author-repair bounded-target-third-author-repair review-evidence-fourth-fresh-review build verify-software verify-governance verify-rfc-evidence verify-content verify verify-awake pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk tablebase-census engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -90,6 +90,11 @@ work-state-sync:
 	node tools/work-state.mjs --sync
 	$(MAKE) work-state
 
+.PHONY: work-state-transition
+work-state-transition:
+	@test -n "$(IDS)" -a -n "$(STATE)" || (echo "Usage: make work-state-transition IDS=D1,D2 STATE=done [OWNER=lane] [EVIDENCE=path] [EVIDENCE_KIND=path]" >&2; exit 2)
+	$(CI_NODE) tools/work-state.mjs --set="$(IDS)" --state="$(STATE)" $(if $(OWNER),--owner="$(OWNER)",) $(if $(EVIDENCE),--evidence="$(EVIDENCE)",) $(if $(EVIDENCE_KIND),--evidence-kind="$(EVIDENCE_KIND)",)
+
 work-item-sync:
 	node tools/work-item-registry.mjs --sync
 
@@ -123,12 +128,20 @@ graduation-plan-check:
 	node --test tools/graduation-clearance-plan.test.mjs
 	node tools/graduation-clearance-plan.mjs --check
 
+.PHONY: graduation-clearance-migrate
+graduation-clearance-migrate:
+	node tools/graduation-clearance-migrate.mjs
+
 .PHONY: graduation-clearance-author-repair
 graduation-clearance-author-repair:
 	./node_modules/.bin/vitest run --config tools/d3088-graduation-clearance-author-repair/vitest.config.ts --reporter=verbose
 
 graduation-clearance-contract:
-	./node_modules/.bin/vitest run apps/server/src/sourcing/graduation-clear.test.ts apps/server/src/graduation-report.test.ts
+	./node_modules/.bin/vitest run apps/server/src/sourcing/graduation-clear.test.ts apps/server/src/graduation-report.test.ts apps/server/src/graduation-clearance-corpus.test.ts
+
+graduation-clearance-corpus-check:
+	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-clearance-corpus.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-clearance-corpus.js
+	node apps/server/dist/graduation-clearance-corpus.js
 
 evidence-manifest-check:
 	./node_modules/.bin/esbuild apps/server/src/evidence-manifest-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/evidence-manifest-check.js
@@ -1440,7 +1453,7 @@ feedback-binding-audit:
 capability-watch-check:
 	$(CI_NODE) tools/capability-watch-harness/check.mjs design/research/capability-watch.json planning/platform-alignment/capability-watch/results.json
 
-verify-content: test-content
+verify-content: test-content graduation-plan-check graduation-clearance-corpus-check
 
 verify: verify-software verify-governance verify-content
 verify: export ENGINES_REQUIRED := 1
@@ -1652,21 +1665,21 @@ sourcing-check:
 	node apps/server/dist/sourcing-check.js "$(abspath $(if $(FILE),$(FILE),$(DIR)))" $(if $(FILE),file,directory)
 
 graduation-report:
-	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --outfile=dist/graduation-report.js
+	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-report.js
 	node apps/server/dist/graduation-report.js
 
 graduation-report-update:
-	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --outfile=dist/graduation-report.js
+	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-report.js
 	UPDATE_ACCEPTED=1 node apps/server/dist/graduation-report.js
 
 graduation-clear:
-	@test -n "$(FILE)" || (echo "Usage: make graduation-clear FILE=<path-to-pack.json> [CHECK=1]" >&2; exit 2)
+	@test -n "$(FILE)$(FILES)" || (echo "Usage: make graduation-clear FILE=<path-to-pack.json> or FILES='<paths...>' [CHECK=1]" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/graduation-clear.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-clear.js
-	CHECK="$(CHECK)" node apps/server/dist/graduation-clear.js "$(abspath $(FILE))"
+	CHECK="$(CHECK)" node apps/server/dist/graduation-clear.js $(if $(FILES),$(FILES),"$(abspath $(FILE))")
 
 verify-draft:
 	@test -n "$(FILE)$(FILES)" || (echo "Usage: make verify-draft FILE=<path-to-pack.json> [OFFLINE=1] or FILES='<paths...>'" >&2; exit 2)
-	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/verify-draft.ts --bundle --platform=node --format=esm --outfile=dist/verify-draft.js
+	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/verify-draft.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/verify-draft.js
 	OFFLINE="$(OFFLINE)" node apps/server/dist/verify-draft.js $(if $(FILES),$(FILES),"$(abspath $(FILE))")
 
 tablebase-walk:

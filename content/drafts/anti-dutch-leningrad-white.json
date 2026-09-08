@@ -366,28 +366,50 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "first-move-alternatives-2-bf4-2-e4-cannot-be-deviations-",
         "state": "blocking",
-        "statement": "First-move alternatives (2.Bf4, 2.e4) cannot be deviations in a follow_theory pack — no spine node precedes ply 1 — so they are sibling root branches. Third attestation of wave-2 friction #3; the format should bless the idiom or grow a start-anchor."
+        "statement": "First-move alternatives (2.Bf4, 2.e4) cannot be deviations in a follow_theory pack — no spine node precedes ply 1 — so they are sibling root branches. Third attestation of wave-2 friction #3; the format should bless the idiom or grow a start-anchor.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/deviations/0",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "the-trade-the-g7-bishop-plan-is-a-hands-off-declaration-",
         "state": "blocking",
-        "statement": "The trade-the-g7-bishop plan is a hands-off declaration: the authored spine never begins Be3/Qd2/Bh6, so the shapePlan reference names a target the drill does not reach (wave-2 friction #5 pattern, noted honestly)."
+        "statement": "The trade-the-g7-bishop plan is a hands-off declaration: the authored spine never begins Be3/Qd2/Bh6, so the shapePlan reference names a target the drill does not reach (wave-2 friction #5 pattern, noted honestly).",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/2/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "engine-checked-2026-08-15-for-the-comparison-not-for-the",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15 for the comparison, not for the claim. The two authored plans are within a tenth of a pawn of each other and of the engine's preference: 8.d5 is 0.08 below 8.Qb3 and 8.Rb1 is 0.15 below, so the pack's 'both are authored, the comparison is the drill' framing survives. The 'hole on d6' assertion is a structural claim no evaluation addresses and it stays ungrounded. The pass also refuted this pack's third plan: deviation #2's authored walked line 8.e4 fxe4 9.Nxe4 drops a piece (-3.11), and the line was removed rather than replaced."
+        "statement": "ENGINE-CHECKED 2026-08-15 for the comparison, not for the claim. The two authored plans are within a tenth of a pawn of each other and of the engine's preference: 8.d5 is 0.08 below 8.Qb3 and 8.Rb1 is 0.15 below, so the pack's 'both are authored, the comparison is the drill' framing survives. The 'hole on d6' assertion is a structural claim no evaluation addresses and it stays ungrounded. The pass also refuted this pack's third plan: deviation #2's authored walked line 8.e4 fxe4 9.Nxe4 drops a piece (-3.11), and the line was removed rather than replaced.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/deviations/0",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "whether-d5-or-rb1-is-more-common-or-scores-better-at-the",
         "state": "blocking",
-        "statement": "Whether d5 or Rb1 is more common or scores better at these bands is unquantified below the family root."
+        "statement": "Whether d5 or Rb1 is more common or scores better at these bands is unquantified below the family root.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/1/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -395,7 +417,12 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       },
       {
@@ -404,7 +431,13 @@
         "statement": "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the p5-g3 annotation said ...f5 stopped guarding e4 and d5; a pawn on f5 guards e4, and d5 was never guarded by a black f-pawn at all. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before.",
         "resolved": {
           "at": "2026-08-15",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "pointer_authored",
+            "subject": "/spine/0/children/0/children/0/annotations/0",
+            "placeholder": "The f5 pawn stopped guarding e4 and d5.",
+            "instrument": "author"
+          }
         }
       }
     ]

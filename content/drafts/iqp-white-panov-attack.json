@@ -430,33 +430,62 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-the-structural-half-the-iqp-owner-s-pla",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (the structural half). The IQP owner's plan set — the d5 break, the e5 outpost, piece activity and the kingside attack — and the defender's blockade-and-trade answer are stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Queen's Gambit - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (the structural half). The IQP owner's plan set — the d5 break, the e5 outpost, piece activity and the kingside attack — and the defender's blockade-and-trade answer are stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Queen's Gambit - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-uncited-after-the-2026-08-16-pass-the-objective-gr",
         "state": "blocking",
-        "statement": "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific arrangement — Re1 and Be4 completed before ...Nce7 — and no consulted source names it. The cited sources supply the plan family, not this move order, and a corpus measurement relating the arrangement's completion to results at this band is still not done."
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific arrangement — Re1 and Be4 completed before ...Nce7 — and no consulted source names it. The cited sources supply the plan family, not this move order, and a corpus measurement relating the arrangement's completion to results at this band is still not done.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
         "state": "blocking",
-        "statement": "No engine pass has been run on this pack. The single concept_violation (d4-d5 on the ...Nf6 branch) records an unmeasurable cost for exactly that reason."
+        "statement": "No engine pass has been run on this pack. The single concept_violation (d4-d5 on the ...Nf6 branch) records an unmeasurable cost for exactly that reason.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/5/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-timing-window-s-numbers-are-authored-a-luxury-budget",
         "state": "blocking",
-        "statement": "The timing window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds."
+        "statement": "The timing window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "the-band-s-data-is-thin-past-ply-four-12-games-after-nce",
         "state": "blocking",
-        "statement": "The band's data is thin past ply four: 12 games after ...Nce7 and 4 after h4. The last two spine moves are the most-played moves of a handful of games, and no measurement in this repo says they are representative."
+        "statement": "The band's data is thin past ply four: 12 games after ...Nce7 and 4 after h4. The last two spine moves are the most-played moves of a handful of games, and no measurement in this repo says they are representative.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       }
     ],
     "attribution": [

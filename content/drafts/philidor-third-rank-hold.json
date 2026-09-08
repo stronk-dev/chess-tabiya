@@ -505,17 +505,32 @@
       {
         "id": "cited-2026-08-16-the-third-rank-fence-and-drop-and-check",
         "state": "blocking",
-        "statement": "CITED 2026-08-16. The third-rank-fence and drop-and-check-behind plans, and the king-on-the-path premise, restate the scheme stated at en.wikipedia.org/wiki/Philidor_position (CC BY-SA 4.0), attributed in provenance.attribution. This is the pack's foundational claim and it is no longer uncited."
+        "statement": "CITED 2026-08-16. The third-rank-fence and drop-and-check-behind plans, and the king-on-the-path premise, restate the scheme stated at en.wikipedia.org/wiki/Philidor_position (CC BY-SA 4.0), attributed in provenance.attribution. This is the pack's foundational claim and it is no longer uncited.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0",
+          "blockedBy": "rfc/claim-semantic-anchors.md"
+        }
       },
       {
         "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-de",
         "state": "blocking",
-        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the deviation classifications and the per-move timing penalties are graded judgments, not restatements of the cited scheme; the tablebase settles category, not the cost the pack assigns to being one move early."
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the deviation classifications and the per-move timing penalties are graded judgments, not restatements of the cited scheme; the tablebase settles category, not the cost the pack assigns to being one move early.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/3/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-practical-difficulty-judgments-fence-easier-than-ear",
         "state": "blocking",
-        "statement": "The practical-difficulty judgments (fence easier than early rear-checking; side checks fragile) are exactly the save/resist-adjacent judgments design/04 §7 says need human-play evidence; none exists here."
+        "statement": "The practical-difficulty judgments (fence easier than early rear-checking; side checks fragile) are exactly the save/resist-adjacent judgments design/04 §7 says need human-play evidence; none exists here.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

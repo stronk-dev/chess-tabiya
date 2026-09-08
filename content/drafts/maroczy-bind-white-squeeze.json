@@ -460,28 +460,51 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-the-restraint-half-what-the-bind-restra",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (the restraint half). What the bind restrains and what Black's freeing breaks are (...b5, ...f5, ...d5) is stated by en.wikipedia.org/wiki/Mar%C3%B3czy_Bind and by en.wikipedia.org/wiki/Pawn_structure §Maróczy Bind (both CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (the restraint half). What the bind restrains and what Black's freeing breaks are (...b5, ...f5, ...d5) is stated by en.wikipedia.org/wiki/Mar%C3%B3czy_Bind and by en.wikipedia.org/wiki/Pawn_structure §Maróczy Bind (both CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/4/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-uncited-after-the-2026-08-16-pass-the-order-that-t",
         "state": "blocking",
-        "statement": "STILL UNCITED after the 2026-08-16 pass: the ORDER — that the arrangement must be complete before the lever — is the objective's actual content and neither cited source sequences the themes it lists. This is a timing claim; per design/04 §7 and the D155 finding, the instrument that could settle it is a game-level corpus, which does not exist at HEAD. Corpus measurement relating arrangement completion to results at this band is still not done."
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the ORDER — that the arrangement must be complete before the lever — is the objective's actual content and neither cited source sequences the themes it lists. This is a timing claim; per design/04 §7 and the D155 finding, the instrument that could settle it is a game-level corpus, which does not exist at HEAD. Corpus measurement relating arrangement completion to results at this band is still not done.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "an-engine-pass-has-been-run-see-engine-pass-in-sources-a",
         "state": "blocking",
-        "statement": "An engine pass has been run (see ENGINE PASS in sources) and the deviation costs are now measured rather than declared unmeasurable. What it does not do is ground the objective's premise, any deviation class, or the timing window's thresholds — a fixed-depth score is a measurement of a position, not of a plan."
+        "statement": "An engine pass has been run (see ENGINE PASS in sources) and the deviation costs are now measured rather than declared unmeasurable. What it does not do is ground the objective's premise, any deviation class, or the timing window's thresholds — a fixed-depth score is a measurement of a position, not of a plan.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/4/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-timing-window-s-numbers-are-authored-a-luxury-budget",
         "state": "blocking",
-        "statement": "The timing window's numbers are authored: a luxury budget of one and a deadline of five learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds."
+        "statement": "The timing window's numbers are authored: a luxury budget of one and a deadline of five learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       }
     ],
     "attribution": [

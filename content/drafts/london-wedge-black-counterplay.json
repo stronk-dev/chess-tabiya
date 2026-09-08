@@ -589,43 +589,80 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "the-objective-s-premise-is-uncited-that-black-s-counterp",
         "state": "blocking",
-        "statement": "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's counterplay against a London wedge runs down the c-file is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass found that Wikipedia's structure articles are theme inventories which never sequence or prioritise what they list (design/BACKLOG.md D272); no source was sought for this pack and none is claimed."
+        "statement": "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's counterplay against a London wedge runs down the c-file is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass found that Wikipedia's structure articles are theme inventories which never sequence or prioritise what they list (design/BACKLOG.md D272); no source was sought for this pack and none is claimed.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/3/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-plyhorizon-of-16-and-the-two-fenpredicates-are-autho",
         "state": "blocking",
-        "statement": "THE PLYHORIZON OF 16 AND THE TWO FENPREDICATES ARE AUTHORED, NOT MEASURED. What is measured is the corpus census that motivated them - 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, and 0 of 47 packs use fenPredicates - and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap, and nothing measured says a structure-keyed grant is better for a learner than a move-keyed one. This is the first pack in the corpus to try it and it should be read as a proposal."
+        "statement": "THE PLYHORIZON OF 16 AND THE TWO FENPREDICATES ARE AUTHORED, NOT MEASURED. What is measured is the corpus census that motivated them - 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, and 0 of 47 packs use fenPredicates - and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap, and nothing measured says a structure-keyed grant is better for a learner than a move-keyed one. This is the first pack in the corpus to try it and it should be read as a proposal.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/4/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "both-boundary-predicates-and-the-clamp-checkpoint-are-ha",
         "state": "blocking",
-        "statement": "BOTH BOUNDARY PREDICATES AND THE CLAMP CHECKPOINT ARE HAND COPIES, AND THE CHECKER BOTH DEMANDS AND REFUSES THE ALTERNATIVE. pack-check raises PLAN_SIGNATURE_INLINED on the copied expressions and tells the author to use plan_signature instead; substituting plan_signature into either fenPredicate makes the same checker raise ERROR START_POSITION_UNRUNNABLE and the pack stops passing. The construct works in the objective's success condition, where this pack uses it, and nowhere else this pack needed it. So two of three warnings cannot be cleared by any edit to this file, and the copies stay - which means if the london-wedge entry's trigger or its c-file plan signature changes, this pack silently disagrees with the library and nothing checks that. That is the re-authoring design/04 section 0a warns about, arriving through a validator instruction that the runtime does not honour."
+        "statement": "BOTH BOUNDARY PREDICATES AND THE CLAMP CHECKPOINT ARE HAND COPIES, AND THE CHECKER BOTH DEMANDS AND REFUSES THE ALTERNATIVE. pack-check raises PLAN_SIGNATURE_INLINED on the copied expressions and tells the author to use plan_signature instead; substituting plan_signature into either fenPredicate makes the same checker raise ERROR START_POSITION_UNRUNNABLE and the pack stops passing. The construct works in the objective's success condition, where this pack uses it, and nowhere else this pack needed it. So two of three warnings cannot be cleared by any edit to this file, and the copies stay - which means if the london-wedge entry's trigger or its c-file plan signature changes, this pack silently disagrees with the library and nothing checks that. That is the re-authoring design/04 section 0a warns about, arriving through a validator instruction that the runtime does not honour.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/4/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "correction-after-d347-the-preceding-boundary-predicate-b",
         "state": "blocking",
-        "statement": "CORRECTION AFTER D347: the preceding boundary-predicate blocker records the state when this pack was authored. The checker/runtime disagreement is closed; plan_signature is now legal at both boundary and checkpoint sites. The hand copies remain content debt, not a format impossibility."
+        "statement": "CORRECTION AFTER D347: the preceding boundary-predicate blocker records the state when this pack was authored. The checker/runtime disagreement is closed; plan_signature is now legal at both boundary and checkpoint sites. The hand copies remain content debt, not a format impossibility.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       },
       {
         "id": "one-plan-class-is-listed-and-never-satisfied-black-fianc",
         "state": "blocking",
-        "statement": "ONE PLAN CLASS IS LISTED AND NEVER SATISFIED. black-fianchetto-the-light-bishop's signature is false at every authored position because the d5 pawn never leaves. That is recorded as a measurement rather than fixed by extending the spine, because the corpus has no data past ply 6 on any of these branches to extend it honestly with."
+        "statement": "ONE PLAN CLASS IS LISTED AND NEVER SATISFIED. black-fianchetto-the-light-bishop's signature is false at every authored position because the d5 pawn never leaves. That is recorded as a measurement rather than fixed by extending the spine, because the corpus has no data past ply 6 on any of these branches to extend it honestly with.",
+        "clearance": {
+          "kind": "shape_firing",
+          "subject": "/planClasses/2/shapePlan",
+          "instrument": "make expression-census"
+        }
       },
       {
         "id": "no-engine-pass-the-single-concept-violation-bd7-rests-on",
         "state": "blocking",
-        "statement": "NO ENGINE PASS. The single concept_violation (Bd7) rests on a legal-move enumeration, which is exact for what it claims - the bishop cannot reach f5 or g4 - and says nothing about whether Bd7 costs anything. Its cost is unmeasurable and the reason is stated in the deviation."
+        "statement": "NO ENGINE PASS. The single concept_violation (Bd7) rests on a legal-move enumeration, which is exact for what it claims - the bishop cannot reach f5 or g4 - and says nothing about whether Bd7 costs anything. Its cost is unmeasurable and the reason is stated in the deviation.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/3/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-corpus-instrument-reaches-the-comparison-the-pack-is-",
         "state": "blocking",
-        "statement": "NO CORPUS INSTRUMENT REACHES THE COMPARISON THE PACK IS REALLY ABOUT. The drill asks whether taking the file before the clamp lands is worth it, which is a claim about the ORDER of two events in one game. The explorer aggregates per position and cannot condition an outcome on an earlier event (design/BACKLOG.md D155); this is the fifth wave to arrive at that missing instrument."
+        "statement": "NO CORPUS INSTRUMENT REACHES THE COMPARISON THE PACK IS REALLY ABOUT. The drill asks whether taking the file before the clamp lands is worth it, which is a claim about the ORDER of two events in one game. The explorer aggregates per position and cannot condition an outcome on an earlier event (design/BACKLOG.md D155); this is the fifth wave to arrive at that missing instrument.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       }
     ],
     "attribution": []

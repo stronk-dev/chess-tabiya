@@ -1,0 +1,2553 @@
+{
+  "schema": "tabiya.graduation.clearance-author-decisions.v1",
+  "authority": "owner-delegated predicate classification under D3033; records no new chess claim",
+  "reviewedAt": "2026-09-08",
+  "rows": {
+    "content/drafts/anti-caro-advance-early-c5.json#/provenance/graduationBlockers/1": {
+      "entryId": "resolved-in-v0-2-0-kept-for-the-record-earlier-versions-",
+      "state": "resolved",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/shapes/0",
+        "instrument": "make expression-census"
+      },
+      "rationale": "The exact reusable shape newly referenced by this pack is the standing, reversible resolution predicate; a plan success signature would measure a different claim."
+    },
+    "content/drafts/anti-caro-advance-early-c5.json#/provenance/graduationBlockers/2": {
+      "entryId": "engine-checked-2026-08-15-partly-settled-and-partly-dest",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-caro-advance-early-c5.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-claim-that-dxc5-is-the-critical-test-of-3-c5-is-stan",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/anti-caro-advance.json#/provenance/graduationBlockers/1": {
+      "entryId": "every-feedbackclaim-needs-a-citable-source-a-named-book-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/feedbackPolicy",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-caro-advance.json#/provenance/graduationBlockers/2": {
+      "entryId": "engine-checked-2026-08-15-castling-costs-nothing-the-eng",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-caro-advance.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-frequency-claims-about-what-players-in-this-rating-b",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/anti-dutch-leningrad-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "first-move-alternatives-2-bf4-2-e4-cannot-be-deviations-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-dutch-leningrad-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-trade-the-g7-bishop-plan-is-a-hands-off-declaration-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/2/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-dutch-leningrad-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "engine-checked-2026-08-15-for-the-comparison-not-for-the",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-dutch-leningrad-white.json#/provenance/graduationBlockers/4": {
+      "entryId": "whether-d5-or-rb1-is-more-common-or-scores-better-at-the",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/1/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/anti-dutch-leningrad-white.json#/provenance/graduationBlockers/6": {
+      "entryId": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
+      "state": "resolved",
+      "clearance": {
+        "kind": "pointer_authored",
+        "subject": "/spine/0/children/0/children/0/annotations/0",
+        "placeholder": "The f5 pawn stopped guarding e4 and d5.",
+        "instrument": "author"
+      },
+      "rationale": "The historical incorrect sentence is the placeholder; the corrected current string differs and restoring the old text makes the predicate fail."
+    },
+    "content/drafts/anti-french-advance-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-4-dxc5-evaluates-0-39-against-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-french-advance-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-d4-attacker-defender-counts-stated-in-the-qb6-annota",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-french-advance-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-their-prep-is-longer-asymmetry-claim-is-a-plausible-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/1/children/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/anti-french-advance-white.json#/provenance/graduationBlockers/5": {
+      "entryId": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
+      "state": "resolved",
+      "clearance": {
+        "kind": "pointer_authored",
+        "subject": "/planClasses/0/description",
+        "placeholder": "After ...Qb6, three black pieces directly attack d4.",
+        "instrument": "author"
+      },
+      "rationale": "The historical incorrect sentence is the placeholder; the corrected current string differs and restoring the old text makes the predicate fail."
+    },
+    "content/drafts/anti-italian-center-attack-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-untested-after-the-2026-08-15-engine-pass-the-pass",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-italian-center-attack-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "engine-checked-2026-08-15-and-it-does-not-equalize-6-nxe",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-italian-center-attack-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-iqp-white-reference-rests-on-hand-derived-census-ari",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/1/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-italian-center-attack-black.json#/provenance/graduationBlockers/4": {
+      "entryId": "first-move-alternatives-cannot-be-deviations-in-a-follow",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-kid-classical-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-and-confirmed-literally-after-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-kid-classical-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-shape-reference-is-white-side-aspirational-white-tra",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-kid-classical-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "shape-entry-authored-2026-08-15-this-blocker-is-supersed",
+      "state": "resolved",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/shapes/1",
+        "instrument": "make expression-census"
+      },
+      "rationale": "The exact reusable shape newly referenced by this pack is the standing, reversible resolution predicate; a plan success signature would measure a different claim."
+    },
+    "content/drafts/anti-kid-classical-white.json#/provenance/graduationBlockers/4": {
+      "entryId": "whether-9-ne1-or-9-b4-is-more-common-or-scores-better-at",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/3/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/anti-london-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "shape-entry-authored-2026-08-15-this-blocker-is-supersed",
+      "state": "resolved",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/shapes/0",
+        "instrument": "make expression-census"
+      },
+      "rationale": "The exact reusable shape newly referenced by this pack is the standing, reversible resolution predicate; a plan success signature would measure a different claim."
+    },
+    "content/drafts/anti-london-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "engine-checked-2026-08-15-and-not-supported-either-way-b",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-london-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "which-challenge-bd6-qb6-nh5-actually-scores-best-for-bla",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/anti-london-black.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-preparation-asymmetry-claim-is-the-anti-opening-thes",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/anti-scandinavian-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "no-shapes-reference-deliberately-and-a-shape-entry-is-he",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-scandinavian-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-pack-s-thesis-that-6-h3-is-the-move-to-drill-rests-o",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-scandinavian-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "deviation-classes-are-agent-authored-and-objective-relat",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-scandinavian-white.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-h3-line-s-band-evidence-stops-at-13-plies-25-245-gam",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-scandinavian-white.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-machine-readable-evidence-slot-exists-for-an-opening-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-sicilian-najdorf-english-attack.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-and-the-8-qd2-claim-is-refuted",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/anti-sicilian-najdorf-english-attack.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-claim-that-ng4-is-black-s-standing-resource-against-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/2/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/anti-sicilian-najdorf-english-attack.json#/provenance/graduationBlockers/4": {
+      "entryId": "popularity-claims-below-the-1-e4-c5-root-which-6th-moves",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/berlin-queenless-press.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-position-and-the-king-walk-only-tha",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/berlin-queenless-press.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-and-the-citation-argues-against-the-framin",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/berlin-queenless-press.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-objective-s-achieved-signature-is-satisfied-at-none-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/berlin-queenless-press.json#/provenance/graduationBlockers/4": {
+      "entryId": "no-timing-window-is-declared-the-negative-was-measured-a",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/2/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/berlin-queenless-press.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-so-no-deviation",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/berlin-queenless-press.json#/provenance/graduationBlockers/6": {
+      "entryId": "the-referenced-entry-s-own-trigger-narrowing-note-applie",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/0/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/carlsbad-minority-attack.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-two-of-three-plans-the-minority-attack-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/carlsbad-minority-attack.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-and-now-contradicted-in-shape-the-third-pl",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/2/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/carlsbad-minority-attack.json#/provenance/graduationBlockers/3": {
+      "entryId": "all-four-feedbackclaims-need-grounding-minority-target-a",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/feedbackPolicy",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/carlsbad-minority-attack.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-two-concept-violation-judgments-13-f3-and-14-na4-ass",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/carlsbad-minority-attack.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-evaluative-language-in-the-b5-strike-annotation-the-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/carlsbad-minority-attack.json#/provenance/graduationBlockers/6": {
+      "entryId": "no-engine-validation-pass-has-been-run-on-any-position-i",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/carlsbad-minority-attack.json#/provenance/graduationBlockers/7": {
+      "entryId": "no-rating-band-frequency-check-the-tabiya-is-asserted-to",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/caro-kann-advance-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-6-c4-evaluates-1-01-against-0-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/caro-kann-advance-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-claim-that-the-inserted-h4-h5-pawns-favour-black-in-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/caro-kann-advance-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-prep-ends-around-move-five-or-six-claim-is-a-hypothe",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/closed-centre-chain-black-base-strike.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-objective-s-premise-is-uncited-that-the-base-rather-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/3/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/closed-centre-chain-black-base-strike.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-timing-claim-is-the-pack-s-real-content-and-it-has-n",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/1/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/closed-centre-chain-black-base-strike.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-plyhorizon-of-18-and-the-fenpredicate-are-authored-w",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/closed-centre-chain-black-base-strike.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-fenpredicate-is-a-hand-copy-of-the-library-s-trigger",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/closed-centre-chain-black-base-strike.json#/provenance/graduationBlockers/5": {
+      "entryId": "one-of-the-structure-s-two-black-plans-is-effectively-ab",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/closed-centre-chain-black-base-strike.json#/provenance/graduationBlockers/6": {
+      "entryId": "no-engine-pass-the-one-concept-violation-c5-c4-rests-on-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/1/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/closed-centre-chain-black-base-strike.json#/provenance/graduationBlockers/7": {
+      "entryId": "the-pack-stops-where-the-objective-is-already-over-the-m",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/conversion-up-a-piece.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-root-authored-assessment-win-is-the-pack-s-load-bear",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/8/moveUci",
+        "recordKind": "tablebase_result",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/conversion-up-a-piece.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-claim-that-the-pawn-ending-after-any-nd5-exd5-give-b",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/4/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/conversion-up-a-piece.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-win-objective-resolves-at-terminal-play-against-huma",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/conversion-up-a-piece.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-guard-threshold-200cp-encodes-the-authored-claim-tha",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/guard",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/conversion-up-a-piece.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-engine-validation-pass-has-been-run-on-any-position-i",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/8/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/dragon-yugoslav-race.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-arrangement-s-components-not-its-de",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/dragon-yugoslav-race.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-after-the-2026-08-16-pass-the-deadline-thi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/dragon-yugoslav-race.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-window-s-numbers-are-authored-a-luxury-budget-of-one",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/dragon-yugoslav-race.json#/provenance/graduationBlockers/4": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-so-no-deviation",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/dragon-yugoslav-race.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-shape-entry-this-pack-references-encodes-only-the-wh",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/0/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/french-advance-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-5-f6-costs-0-30-and-6-cxd4-cos",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/french-advance-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-claim-that-bxh6-hands-you-the-bishop-pair-and-the-g-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/french-advance-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-b2-c1-bishop-tie-down-mechanism-stated-for-qb6-is-st",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/french-advance-chain-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-black-s-side-of-it-that-c5-attacks-the-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/french-advance-chain-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-and-the-citation-leans-against-it-the-prem",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/french-advance-chain-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-every-deviation",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/french-advance-chain-white.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-shape-entry-closed-centre-chain-carries-its-own-ungr",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/french-advance-chain-white.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-f6-absence-is-measured-against-the-explorer-s-twelve",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/grunfeld-exchange-fianchetto.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-diagonal-plan-the-g7-bishop-plus-c5",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/grunfeld-exchange-fianchetto.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-after-the-2026-08-16-pass-the-objective-gr",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/4/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/grunfeld-exchange-fianchetto.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-timing-window-is-declared-and-the-measurement-that-de",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unreachable",
+        "subject": "/planClasses/0/shapePlan"
+      },
+      "originalKind": "unreachable",
+      "rationale": "The pointer names the existing document node whose asserted condition is permanently outside the product's evidence route."
+    },
+    "content/drafts/grunfeld-exchange-fianchetto.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-objective-s-achieved-signature-is-satisfied-at-none-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/grunfeld-exchange-fianchetto.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-so-the-single-c",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/4/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/iqp-black-tarrasch-defence.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-structure-not-the-move-that-the-blo",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/3/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/iqp-black-tarrasch-defence.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-after-the-2026-08-16-pass-with-the-gap-now",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/iqp-black-tarrasch-defence.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-every-note-that",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/iqp-black-tarrasch-defence.json#/provenance/graduationBlockers/4": {
+      "entryId": "this-pack-declares-no-timing-window-the-measured-reason-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unreachable",
+        "subject": "/objective"
+      },
+      "originalKind": "unreachable",
+      "rationale": "The pointer names the existing document node whose asserted condition is permanently outside the product's evidence route."
+    },
+    "content/drafts/iqp-black-tarrasch-defence.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-success-condition-s-second-rule-sends-the-run-to-tra",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/iqp-white-panov-attack.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-structural-half-the-iqp-owner-s-pla",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/iqp-white-panov-attack.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-after-the-2026-08-16-pass-the-objective-gr",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/iqp-white-panov-attack.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/5/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/iqp-white-panov-attack.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-timing-window-s-numbers-are-authored-a-luxury-budget",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/iqp-white-panov-attack.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-band-s-data-is-thin-past-ply-four-12-games-after-nce",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/italian-center-attack-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-iqp-white-shape-reference-rests-on-hand-derived-pawn",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/1/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/italian-center-attack-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-family-was-selected-over-b01-scandinavian-56-3m-game",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/0/moveUci",
+        "recordKind": "opening_identity",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/italian-center-attack-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "engine-checked-2026-08-15-and-refuted-at-three-points-in",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/feedbackPolicy",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/italian-center-attack-white.json#/provenance/graduationBlockers/4": {
+      "entryId": "whether-bd2-or-nc3-is-more-common-or-scores-better-at-th",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/kid-classical-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "shape-entry-authored-2026-08-15-this-blocker-is-supersed",
+      "state": "resolved",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/shapes/1",
+        "instrument": "make expression-census"
+      },
+      "rationale": "The exact reusable shape newly referenced by this pack is the standing, reversible resolution predicate; a plan success signature would measure a different claim."
+    },
+    "content/drafts/kid-classical-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "which-reroute-nd7-vs-ne8-is-more-common-or-scores-better",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/kid-classical-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-defensive-moves-are-race-moves-lost-claim-is-the-pac",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/kid-mar-del-plata-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-plan-not-the-timing-white-s-c4-c5-q",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/kid-mar-del-plata-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-after-the-2026-08-16-pass-the-objective-gr",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/6/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/kid-mar-del-plata-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-window-s-thresholds-are-authored-the-budget-of-one-t",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/kid-mar-del-plata-white.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-readiness-set-is-a-proper-subset-of-the-shape-entry-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/kid-mar-del-plata-white.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/3/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/kid-mar-del-plata-white.json#/provenance/graduationBlockers/6": {
+      "entryId": "the-shape-entry-kid-chain-arrangement-carries-its-own-un",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/0/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/leningrad-dutch-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-one-break-counting-rule-feedbackclaim-is-the-pack-s-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/leningrad-dutch-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-spine-s-preamble-is-the-2-c4-order-33-3-at-band-but-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/1/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/leningrad-dutch-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "which-finisher-c6-nc6-qe8-is-most-common-or-scores-best-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/1/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/london-system-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "shape-entry-authored-2026-08-15-this-blocker-is-supersed",
+      "state": "resolved",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/shapes/0",
+        "instrument": "make expression-census"
+      },
+      "rationale": "The exact reusable shape newly referenced by this pack is the standing, reversible resolution predicate; a plan success signature would measure a different claim."
+    },
+    "content/drafts/london-system-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-order-is-the-theory-claim-that-londons-fail-by-const",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/1/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/london-system-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-spine-drills-the-3-c5-row-while-3-e6-is-the-more-com",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/london-wedge-black-counterplay.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-objective-s-premise-is-uncited-that-black-s-counterp",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/3/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/london-wedge-black-counterplay.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-plyhorizon-of-16-and-the-two-fenpredicates-are-autho",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/4/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/london-wedge-black-counterplay.json#/provenance/graduationBlockers/3": {
+      "entryId": "both-boundary-predicates-and-the-clamp-checkpoint-are-ha",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/4/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/london-wedge-black-counterplay.json#/provenance/graduationBlockers/4": {
+      "entryId": "correction-after-d347-the-preceding-boundary-predicate-b",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/london-wedge-black-counterplay.json#/provenance/graduationBlockers/5": {
+      "entryId": "one-plan-class-is-listed-and-never-satisfied-black-fianc",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/2/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/london-wedge-black-counterplay.json#/provenance/graduationBlockers/6": {
+      "entryId": "no-engine-pass-the-single-concept-violation-bd7-rests-on",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/3/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/london-wedge-black-counterplay.json#/provenance/graduationBlockers/7": {
+      "entryId": "no-corpus-instrument-reaches-the-comparison-the-pack-is-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/lucena-bridge-convert.json#/provenance/graduationBlockers/0": {
+      "entryId": "prose-explanations-are-authored-consensus-without-a-cita",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/lucena-bridge-convert.json#/provenance/graduationBlockers/1": {
+      "entryId": "no-engine-pass-and-no-human-play-maia-corpus-evidence-on",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/maroczy-bind-white-squeeze.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-restraint-half-what-the-bind-restra",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/4/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/maroczy-bind-white-squeeze.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-after-the-2026-08-16-pass-the-order-that-t",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/maroczy-bind-white-squeeze.json#/provenance/graduationBlockers/3": {
+      "entryId": "an-engine-pass-has-been-run-see-engine-pass-in-sources-a",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/4/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/maroczy-bind-white-squeeze.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-timing-window-s-numbers-are-authored-a-luxury-budget",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-bishop-knight.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-partial-the-method-the-prose-describes-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/2/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-bishop-knight.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-pl",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/2/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-bishop-knight.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-shape-library-entry-names-the-theoretical-mate-geomet",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-bishop-knight.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-drill-has-no-fifty-move-counter-surfaced-even-though",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-bishop-knight.json#/provenance/graduationBlockers/6": {
+      "entryId": "pre-existing-at-the-2026-08-16-citation-pass-found-by-ru",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-k-q-technique.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-partial-the-shrink-the-box-plan-and-the",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-k-q-technique.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-gi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-k-q-technique.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+      "state": "resolved",
+      "clearance": {
+        "kind": "assessment_grounded",
+        "subject": "/objective/grading/assessedBy",
+        "instrument": "make verify-draft"
+      },
+      "rationale": "The production writer resolved this named first-run debt from the manifest-linked root assessment record; the same assessment predicate remains its standing proof."
+    },
+    "content/drafts/mate-k-q-technique.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-shape-library-entry-names-the-theoretical-mate-boxes-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-k-q-technique.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-natural-opponent-for-a-mates-pack-is-perfect-tableba",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-k-q-technique.json#/provenance/graduationBlockers/5": {
+      "entryId": "pre-existing-at-the-2026-08-16-citation-pass-found-by-ru",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-k-r-technique.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-partial-the-cut-and-fence-and-oppositio",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/2/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-k-r-technique.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-te",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-k-r-technique.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+      "state": "resolved",
+      "clearance": {
+        "kind": "assessment_grounded",
+        "subject": "/objective/grading/assessedBy",
+        "instrument": "make verify-draft"
+      },
+      "rationale": "The production writer resolved this named first-run debt from the manifest-linked root assessment record; the same assessment predicate remains its standing proof."
+    },
+    "content/drafts/mate-k-r-technique.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-shape-library-entry-names-the-theoretical-mate-boxes-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-k-r-technique.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-natural-opponent-for-a-mates-pack-is-perfect-tableba",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-k-r-technique.json#/provenance/graduationBlockers/5": {
+      "entryId": "pre-existing-at-the-2026-08-16-citation-pass-found-by-ru",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-two-bishops.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-partial-the-drive-to-edge-then-corner-m",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-two-bishops.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-ad",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/mate-two-bishops.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+      "state": "resolved",
+      "clearance": {
+        "kind": "assessment_grounded",
+        "subject": "/objective/grading/assessedBy",
+        "instrument": "make verify-draft"
+      },
+      "rationale": "The production writer resolved this named first-run debt from the manifest-linked root assessment record; the same assessment predicate remains its standing proof."
+    },
+    "content/drafts/mate-two-bishops.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-shape-library-entry-names-the-theoretical-mate-geomet",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-two-bishops.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-natural-opponent-for-a-mates-pack-is-perfect-tableba",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/mate-two-bishops.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-fifty-move-pressure-claim-is-stated-but-the-drill-ha",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/claim-semantic-anchors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/najdorf-english-attack-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-7-d5-evaluates-1-82-against-0-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/najdorf-english-attack-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-claim-that-be6-before-be7-is-the-canonical-order-and",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/najdorf-english-attack-black.json#/provenance/graduationBlockers/4": {
+      "entryId": "which-of-h5-be7-b5-is-actually-most-common-at-these-band",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/najdorf-english-attack-black.json#/provenance/graduationBlockers/5": {
+      "entryId": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
+      "state": "resolved",
+      "clearance": {
+        "kind": "pointer_authored",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/annotations/0",
+        "placeholder": "The f8 bishop has five destinations and the c8 bishop has one.",
+        "instrument": "author"
+      },
+      "rationale": "The historical incorrect sentence is the placeholder; the corrected current string differs and restoring the old text makes the predicate fail."
+    },
+    "content/drafts/nimzo-doubled-c-pawns.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-bishop-pair-for-doubled-pawns-barga",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/nimzo-doubled-c-pawns.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-live-after-the-2026-08-16-pass-and-the-citation-do",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/nimzo-doubled-c-pawns.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/4/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/nimzo-doubled-c-pawns.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-spine-is-six-plies-and-its-last-node-has-109-games-a",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/nimzo-doubled-c-pawns.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-shape-entry-doubled-c-pawns-carries-its-own-unground",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/1/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/open-centre-french-exchange-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-objective-s-premise-is-uncited-that-black-s-job-in-a",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/open-centre-french-exchange-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-timing-contrast-is-evidence-shaped-not-result-shaped",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/1/children/0/children/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/open-centre-french-exchange-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-plyhorizon-of-16-and-the-fenpredicate-are-authored-w",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/1/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/open-centre-french-exchange-black.json#/provenance/graduationBlockers/4": {
+      "entryId": "two-of-the-three-plan-classes-are-never-satisfied-on-thi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "shape_firing",
+        "subject": "/planClasses/1/shapePlan",
+        "instrument": "make expression-census"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "The selected shape or shape-plan is the exact reusable structural referent named by the blocker; the corpus census decides whether it fires."
+    },
+    "content/drafts/open-centre-french-exchange-black.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-engine-pass-two-deviations-turn-on-the-rxe7-exchange-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/2/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/open-centre-french-exchange-black.json#/provenance/graduationBlockers/6": {
+      "entryId": "the-sub-floor-number-is-load-bearing-the-claim-that-the-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/open-centre-ruy-exchange.json#/provenance/graduationBlockers/1": {
+      "entryId": "cited-2026-08-16-the-trade-into-a-better-structure-premi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/open-centre-ruy-exchange.json#/provenance/graduationBlockers/2": {
+      "entryId": "still-uncited-after-the-2026-08-16-pass-the-cited-source",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/open-centre-ruy-exchange.json#/provenance/graduationBlockers/3": {
+      "entryId": "no-engine-pass-has-been-run-on-this-pack-no-deviation-ca",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/5/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/open-centre-ruy-exchange.json#/provenance/graduationBlockers/4": {
+      "entryId": "this-pack-declares-no-timing-window-the-measured-reason-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unreachable",
+        "subject": "/objective"
+      },
+      "originalKind": "unreachable",
+      "rationale": "The pointer names the existing document node whose asserted condition is permanently outside the product's evidence route."
+    },
+    "content/drafts/open-centre-ruy-exchange.json#/provenance/graduationBlockers/5": {
+      "entryId": "the-shape-entry-this-pack-references-fires-on-only-three",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opening-principles-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-depth-22-costs-against-the-bes",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opening-principles-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-damiano-and-blackburne-refutation-lines-were-verifie",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/claim-semantic-anchors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opening-principles-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-guard-threshold-250cp-encodes-the-same-authored-band",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/guard",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opening-principles-black.json#/provenance/graduationBlockers/5": {
+      "entryId": "corpus-checked-2026-08-15-and-not-answerable-from-repo-d",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opening-principles-black.json#/provenance/graduationBlockers/6": {
+      "entryId": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
+      "state": "resolved",
+      "clearance": {
+        "kind": "pointer_authored",
+        "subject": "/deviations/2/note",
+        "placeholder": "A knight on c6 attacks four central squares.",
+        "instrument": "author"
+      },
+      "rationale": "The historical incorrect sentence is the placeholder; the corrected current string differs and restoring the old text makes the predicate fail."
+    },
+    "content/drafts/opening-principles-white.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-depth-22-costs-against-the-bes",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opening-principles-white.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-material-arithmetic-behind-the-three-tactical-error-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/8/moveUci",
+        "recordKind": "position_legality",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/opening-principles-white.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-guard-threshold-250cp-encodes-the-claim-that-piece-l",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/deviations/7/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/opening-principles-white.json#/provenance/graduationBlockers/5": {
+      "entryId": "corpus-checked-2026-08-15-and-not-answerable-from-repo-d",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opening-principles-white.json#/provenance/graduationBlockers/6": {
+      "entryId": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
+      "state": "resolved",
+      "clearance": {
+        "kind": "pointer_authored",
+        "subject": "/deviations/2/note",
+        "placeholder": "A knight on h3 attacks two central squares while a knight on f3 attacks four.",
+        "instrument": "author"
+      },
+      "rationale": "The historical incorrect sentence is the placeholder; the corrected current string differs and restoring the old text makes the predicate fail."
+    },
+    "content/drafts/opponent-intent-early-queen.json#/provenance/graduationBlockers/1": {
+      "entryId": "engine-checked-2026-08-15-and-all-three-rankings-are-rep",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/guard",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opponent-intent-early-queen.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-4-d5-note-claims-both-exd5-and-bxd5-keep-the-attack-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/claim-semantic-anchors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opponent-intent-early-queen.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-intent-capture-checkpoints-have-no-format-slot-for-t",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0",
+        "blockedBy": "rfc/claim-semantic-anchors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opponent-intent-early-queen.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-guard-threshold-150cp-encodes-an-authored-claim-that",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/guard",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opponent-intent-early-queen.json#/provenance/graduationBlockers/6": {
+      "entryId": "corpus-checked-2026-08-15-and-not-answerable-from-repo-d",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opposite-bishops-fortress-hold.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-the-fortress-on-your-colour-plan-and-th",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/opposite-bishops-fortress-hold.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-se",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0",
+        "blockedBy": "rfc/claim-semantic-anchors.md"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/opposite-bishops-fortress-hold.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-general-fortress-recognition-skill-this-pack-gesture",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/moveUci",
+        "recordKind": "opening_identity",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/pawn-breakthrough-convert.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-partial-and-the-smaller-half-the-premis",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/pawn-breakthrough-convert.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-and-not-for-want-of-looking-the-breakthro",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/pawn-breakthrough-convert.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-famous-3v3-sibling-root-a5b5c5-vs-a7b7c7-is-eight-pi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/pawn-opposition-convert.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-both-plan-classes-now-restate-named-sou",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/pawn-opposition-convert.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-ma",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/pawn-opposition-convert.json#/provenance/graduationBlockers/2": {
+      "entryId": "no-human-play-evidence-for-the-difficulty-banding-of-thi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/philidor-passive-rook-convert.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-partial-the-passive-defence-loses-premi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/2/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/philidor-passive-rook-convert.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-and-no",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/philidor-passive-rook-convert.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+      "state": "resolved",
+      "clearance": {
+        "kind": "assessment_grounded",
+        "subject": "/objective/grading/assessedBy",
+        "instrument": "make verify-draft"
+      },
+      "rationale": "The production writer resolved this named first-run debt from the manifest-linked root assessment record; the same assessment predicate remains its standing proof."
+    },
+    "content/drafts/philidor-passive-rook-convert.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-variants-rule-has-no-encoding-the-sibling-link-to-ph",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/philidor-passive-rook-convert.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-philidor-shape-entry-has-no-plan-for-the-back-rank-s",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/1/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/philidor-passive-rook-convert.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-human-play-evidence-on-how-often-defenders-actually-p",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/philidor-third-rank-hold.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-the-third-rank-fence-and-drop-and-check",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0",
+        "blockedBy": "rfc/claim-semantic-anchors.md"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/philidor-third-rank-hold.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-de",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/3/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/philidor-third-rank-hold.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-practical-difficulty-judgments-fence-easier-than-ear",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/queen-vs-pawn-seventh-convert.json#/provenance/graduationBlockers/0": {
+      "entryId": "cited-2026-08-16-both-the-zigzag-technique-and-the-drawn",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/queen-vs-pawn-seventh-convert.json#/provenance/graduationBlockers/1": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-cl",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/queen-vs-pawn-seventh-convert.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-rook-pawn-drawn-file-claim-inside-the-drawn-files-pl",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0",
+        "blockedBy": "rfc/claim-semantic-anchors.md"
+      },
+      "originalKind": "assessment_grounded",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/rook-4v3-same-side.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-load-bearing-claim-that-this-material-is-a-theoretic",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/rook-4v3-same-side.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-w-ra8-w-ra7-line-asserts-that-1-rd2-concedes-a-pawn-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "explorer_position_census",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/rook-4v3-same-side.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-deviation-classes-split-into-two-halves-with-differe",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/rook-4v3-same-side.json#/provenance/graduationBlockers/5": {
+      "entryId": "practical-difficulty-judgments-which-defensive-scheme-a-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/rook-4v3-same-side.json#/provenance/graduationBlockers/6": {
+      "entryId": "the-still-holding-checkpoint-uses-a-materialbalance-trig",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0/shapePlan",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "shape_firing",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/scandinavian-mainline-black.json#/provenance/graduationBlockers/1": {
+      "entryId": "no-shapes-reference-deliberately-and-a-third-shape-entry",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/planClasses/0",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/scandinavian-mainline-black.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-spine-drills-5-bg4-53-7-at-band-although-the-engine-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/breadth-collectors.md"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/scandinavian-mainline-black.json#/provenance/graduationBlockers/3": {
+      "entryId": "deviation-classes-are-agent-authored-and-objective-relat",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/deviations/0",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/scandinavian-mainline-black.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-pack-s-central-corpus-claim-that-black-s-56-7-and-58",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unreachable",
+        "subject": "/objective"
+      },
+      "originalKind": "unreachable",
+      "rationale": "The pointer names the existing document node whose asserted condition is permanently outside the product's evidence route."
+    },
+    "content/drafts/trajectory-caro-advance-chain-bishops.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-central-claim-that-the-chain-s-pawn-colour-census-ma",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/trajectory-caro-advance-chain-bishops.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-authored-liquidation-plies-21-45-is-one-plausible-ro",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/trajectory-caro-advance-chain-bishops.json#/provenance/graduationBlockers/3": {
+      "entryId": "5-bd3-and-the-entire-trade-toward-the-ending-plan-are-un",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/2/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/trajectory-caro-advance-chain-bishops.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-a5-endgame-deviation-note-raises-a-colour-complex-qu",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "engine_eval",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/trajectory-caro-advance-chain-bishops.json#/provenance/graduationBlockers/5": {
+      "entryId": "inherited-from-the-closed-centre-chain-entry-its-trigger",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/trajectory-mate-bishop-knight.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-dynamically-reached-leg-3-assessment-remains-authore",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "pointer_authored",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/trajectory-mate-bishop-knight.json#/provenance/graduationBlockers/3": {
+      "entryId": "the-fifty-move-pressure-named-in-the-annotations-is-real",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/pack-training-forms.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/trajectory-mate-bishop-knight.json#/provenance/graduationBlockers/4": {
+      "entryId": "cited-2026-08-16-partial-the-three-phase-method-the-thre",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/3/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/trajectory-mate-bishop-knight.json#/provenance/graduationBlockers/5": {
+      "entryId": "still-unbacked-after-the-2026-08-16-citation-pass-the-ca",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/0/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/trajectory-qgd-exchange-minority.json#/provenance/graduationBlockers/1": {
+      "entryId": "the-leg-3-win-objective-is-the-strongest-claim-in-the-fi",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "tablebase_result",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/trajectory-qgd-exchange-minority.json#/provenance/graduationBlockers/2": {
+      "entryId": "the-authored-liquidation-plies-41-54-is-one-plausible-ro",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/drafts/trajectory-qgd-exchange-minority.json#/provenance/graduationBlockers/3": {
+      "entryId": "inherited-from-pack-b-the-three-plan-carlsbad-taxonomy-a",
+      "state": "blocking",
+      "clearance": {
+        "kind": "claim_bound",
+        "subject": "/feedbackClaims/1/text",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "claim_bound",
+      "rationale": "The selected feedback claim is the closest exact prose referent named by the blocker; the binding validator is the deciding authority."
+    },
+    "content/drafts/trajectory-qgd-exchange-minority.json#/provenance/graduationBlockers/4": {
+      "entryId": "the-rook-4v3-same-side-shape-reference-relies-on-the-cen",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/shapes/2",
+        "blockedBy": "rfc/semantic-collectors.md"
+      },
+      "originalKind": "unbuilt",
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/drafts/trajectory-qgd-exchange-minority.json#/provenance/graduationBlockers/5": {
+      "entryId": "no-rating-band-frequency-evidence-for-any-move-past-the-",
+      "state": "blocking",
+      "clearance": {
+        "kind": "ledger_record",
+        "subject": "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci",
+        "recordKind": "explorer_frequency",
+        "instrument": "make sourcing-check"
+      },
+      "originalKind": "ledger_record",
+      "rationale": "The blocker asks for this evidence family at the closest exact position/move referent not already supported in the current ledger."
+    },
+    "content/candidates/onramp-00008/pack.json#/provenance/graduationBlockers/3": {
+      "entryId": "immediate-blunder-guard-is-not-selectable-defect-d8-dela",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/assistance-config-register.md"
+      },
+      "originalKind": null,
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    },
+    "content/candidates/onramp-0000d/pack.json#/provenance/graduationBlockers/3": {
+      "entryId": "immediate-blunder-guard-is-not-selectable-defect-d8-dela",
+      "state": "blocking",
+      "clearance": {
+        "kind": "unbuilt",
+        "subject": "/objective",
+        "blockedBy": "rfc/assistance-config-register.md"
+      },
+      "originalKind": null,
+      "rationale": "Conservative author ratchet: the statement needs a predicate or producer the accepted clearance vocabulary cannot yet express; it is not weakened into an unrelated clearable condition."
+    }
+  }
+}

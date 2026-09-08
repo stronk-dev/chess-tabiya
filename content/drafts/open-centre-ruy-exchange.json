@@ -388,33 +388,60 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-the-trade-into-a-better-structure-premi",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (the trade-into-a-better-structure premise). That White plays this variation to reach a favourable endgame off Black's doubled c-pawns is stated by en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation (CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (the trade-into-a-better-structure premise). That White plays this variation to reach a favourable endgame off Black's doubled c-pawns is stated by en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation (CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-uncited-after-the-2026-08-16-pass-the-cited-source",
         "state": "blocking",
-        "statement": "STILL UNCITED after the 2026-08-16 pass: the cited source's target is an ENDGAME with a healthy kingside majority; this pack's objective is the queenless middlegame with the open file, which the source does not name as a goal. The inherited UNGROUNDED provenance of the open-centre entry is untouched, and no corpus measurement relating the queen trade to results at this band has been done."
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the cited source's target is an ENDGAME with a healthy kingside majority; this pack's objective is the queenless middlegame with the open file, which the source does not name as a goal. The inherited UNGROUNDED provenance of the open-centre entry is untouched, and no corpus measurement relating the queen trade to results at this band has been done.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-engine-pass-has-been-run-on-this-pack-no-deviation-ca",
         "state": "blocking",
-        "statement": "No engine pass has been run on this pack. No deviation carries a cost for that reason."
+        "statement": "No engine pass has been run on this pack. No deviation carries a cost for that reason.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/deviations/5/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "this-pack-declares-no-timing-window-the-measured-reason-",
         "state": "blocking",
-        "statement": "This pack declares no timing window. The measured reason: the only candidate race is Black's queen trade against White's occupation of the open file, and the corpus shows the recapture is forced (269 of 269), so there is no opponent lever whose arrival ends a preparation. A window here would be an invention."
+        "statement": "This pack declares no timing window. The measured reason: the only candidate race is Black's queen trade against White's occupation of the open file, and the corpus shows the recapture is forced (269 of 269), so there is no opponent lever whose arrival ends a preparation. A window here would be an invention.",
+        "clearance": {
+          "kind": "unreachable",
+          "subject": "/objective"
+        }
       },
       {
         "id": "the-shape-entry-this-pack-references-fires-on-only-three",
         "state": "blocking",
-        "statement": "The shape entry this pack references fires on only three of its ten authored positions, because the entry's trigger requires both queens. Whether an entry that stops describing the position after three plies is the right library hook for this tabiya is an open question this pack surfaces and does not settle."
+        "statement": "The shape entry this pack references fires on only three of its ten authored positions, because the entry's trigger requires both queens. Whether an entry that stops describing the position after three plies is the right library hook for this tabiya is an open question this pack surfaces and does not settle.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       }
     ],
     "attribution": [

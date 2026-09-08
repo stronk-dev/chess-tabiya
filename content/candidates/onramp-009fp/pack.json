@@ -38,27 +38,53 @@
       {
         "id": "outcome-ungraded",
         "state": "blocking",
-        "statement": "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act."
+        "statement": "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act.",
+        "clearance": {
+          "kind": "objective_graded",
+          "instrument": "objectiveRules",
+          "subject": "/objective"
+        }
       },
       {
         "id": "start-assessment-absent",
         "state": "blocking",
-        "statement": "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it."
+        "statement": "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it.",
+        "clearance": {
+          "kind": "assessment_grounded",
+          "instrument": "make sourcing-check",
+          "subject": "/objective/grading/assessedBy"
+        }
       },
       {
         "id": "mechanical-objective-placeholder",
         "state": "blocking",
-        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"
+        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
+        "clearance": {
+          "kind": "content_declared",
+          "instrument": "repository_content_declaration",
+          "templateId": "mechanical-objective-placeholder",
+          "emittedPayloadDigest": "sha256:f1783d14197e4b7784940e65d3ca10758fc2d72c4b395320560fa95e3d552e0b"
+        }
       },
       {
         "id": "target-elo-authored",
         "state": "blocking",
-        "statement": "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim"
+        "statement": "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim",
+        "clearance": {
+          "kind": "content_declared",
+          "instrument": "repository_content_declaration",
+          "templateId": "target-elo-authored"
+        }
       },
       {
         "id": "authored-teaching-absent",
         "state": "blocking",
-        "statement": "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata."
+        "statement": "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata.",
+        "clearance": {
+          "kind": "content_declared",
+          "instrument": "repository_content_declaration",
+          "templateId": "authored-teaching-absent"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

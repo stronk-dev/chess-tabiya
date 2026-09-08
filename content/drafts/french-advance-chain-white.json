@@ -428,33 +428,62 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "cited-2026-08-16-black-s-side-of-it-that-c5-attacks-the-",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (Black's side of it). That ...c5 attacks the chain at its base, and that ...Qb6 loads the pressure on d4, is stated by en.wikipedia.org/wiki/French_Defence and en.wikipedia.org/wiki/Pawn_structure §e5-chain (both CC BY-SA 4.0), attributed in provenance.attribution. The structure the objective is about is no longer uncited."
+        "statement": "CITED 2026-08-16 (Black's side of it). That ...c5 attacks the chain at its base, and that ...Qb6 loads the pressure on d4, is stated by en.wikipedia.org/wiki/French_Defence and en.wikipedia.org/wiki/Pawn_structure §e5-chain (both CC BY-SA 4.0), attributed in provenance.attribution. The structure the objective is about is no longer uncited.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-uncited-and-the-citation-leans-against-it-the-prem",
         "state": "blocking",
-        "statement": "STILL UNCITED, AND THE CITATION LEANS AGAINST IT: the premise is that holding the base census is WHITE'S plan here, and the cited sources give White's theme in the e5-chain as a kingside mating attack with f2-f4-f5, mentioning d4 defence only as the target of Black's play. No consulted CC-BY-SA source states base-holding as White's plan. The corpus measurement relating the census to results at this band is also still not done."
+        "statement": "STILL UNCITED, AND THE CITATION LEANS AGAINST IT: the premise is that holding the base census is WHITE'S plan here, and the cited sources give White's theme in the e5-chain as a kingside mating attack with f2-f4-f5, mentioning d4 defence only as the target of Black's play. No consulted CC-BY-SA source states base-holding as White's plan. The corpus measurement relating the census to results at this band is also still not done.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_position_census",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "no-engine-pass-has-been-run-on-this-pack-every-deviation",
         "state": "blocking",
-        "statement": "No engine pass has been run on this pack. Every deviation note therefore stops at an arithmetic consequence and none of them prices the resulting position."
+        "statement": "No engine pass has been run on this pack. Every deviation note therefore stops at an arithmetic consequence and none of them prices the resulting position.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "engine_eval",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-shape-entry-closed-centre-chain-carries-its-own-ungr",
         "state": "blocking",
-        "statement": "The shape entry closed-centre-chain carries its own UNGROUNDED provenance for all four of its plan descriptions, including the two this pack references. Referencing them does not launder them."
+        "statement": "The shape entry closed-centre-chain carries its own UNGROUNDED provenance for all four of its plan descriptions, including the two this pack references. Referencing them does not launder them.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0/shapePlan",
+          "blockedBy": "rfc/semantic-collectors.md"
+        }
       },
       {
         "id": "the-f6-absence-is-measured-against-the-explorer-s-twelve",
         "state": "blocking",
-        "statement": "The ...f6 absence is measured against the explorer's twelve-move response cap, not against a full move distribution. At the 164-game node three games are outside the returned list, so the ceiling of three is an upper bound, not a count."
+        "statement": "The ...f6 absence is measured against the explorer's twelve-move response cap, not against a full move distribution. At the 164-game node three games are outside the returned list, so the ceiling of three is an upper bound, not a count.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       }
     ],
     "attribution": [

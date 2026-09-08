@@ -398,17 +398,32 @@
       {
         "id": "cited-2026-08-16-partial-and-the-smaller-half-the-premis",
         "state": "blocking",
-        "statement": "CITED 2026-08-16 (partial, and the smaller half). The premise that a majority with distant kings is where a breakthrough works is stated by en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority (CC BY-SA 4.0), attributed in provenance.attribution."
+        "statement": "CITED 2026-08-16 (partial, and the smaller half). The premise that a majority with distant kings is where a breakthrough works is stated by en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority (CC BY-SA 4.0), attributed in provenance.attribution.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/1/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "still-unbacked-and-not-for-want-of-looking-the-breakthro",
         "state": "blocking",
-        "statement": "STILL UNBACKED, AND NOT FOR WANT OF LOOKING: the breakthrough mechanism itself — sacrifice into the majority so one runner emerges — has no compatible cited source. The 2026-08-16 pass checked Wikipedia's Breakthrough (chess) title (404), Passed pawn (piece sacrifices only) and Wikibooks' Chess/The Endgame/Pawn Endings (no breakthrough section). The order claim (\"the wrong first pawn seals the front\") IS tablebase-grounded in this pack; the general technique it instantiates is not, and the compatible-source shelf appears genuinely empty for it."
+        "statement": "STILL UNBACKED, AND NOT FOR WANT OF LOOKING: the breakthrough mechanism itself — sacrifice into the majority so one runner emerges — has no compatible cited source. The 2026-08-16 pass checked Wikipedia's Breakthrough (chess) title (404), Passed pawn (piece sacrifices only) and Wikibooks' Chess/The Endgame/Pawn Endings (no breakthrough section). The order claim (\"the wrong first pawn seals the front\") IS tablebase-grounded in this pack; the general technique it instantiates is not, and the compatible-source shelf appears genuinely empty for it.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/0/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "the-famous-3v3-sibling-root-a5b5c5-vs-a7b7c7-is-eight-pi",
         "state": "blocking",
-        "statement": "The famous 3v3 sibling root (a5b5c5 vs a7b7c7) is eight pieces and outside tablebase range; a pack for it would need the Stockfish authoring substitute of docs/content-sourcing.md and is deliberately not smuggled in here."
+        "statement": "The famous 3v3 sibling root (a5b5c5 vs a7b7c7) is eight pieces and outside tablebase range; a pack for it would need the Stockfish authoring substitute of docs/content-sourcing.md and is deliberately not smuggled in here.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/pack-training-forms.md"
+        }
       }
     ],
     "licence": "CC-BY-SA-4.0",

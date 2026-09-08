@@ -451,28 +451,49 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "engine-checked-2026-08-15-and-all-three-rankings-are-rep",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15 and all three rankings are reproduced exactly at depth 22, in Black's favour throughout. After 2.Qh5: ...Nc6 +0.42 > ...d6 +0.37 > ...Qe7 +0.08. After 3.Bc4: ...g6 +0.37 > ...Qe7 +0.12 > ...Qf6 -0.21. After 4.Qf3: ...Nf6 +0.39 > ...Qe7 +0.19 > ...Qf6 +0.14. This is the strongest confirmation the pass produced anywhere in the opening corpus. The punishments are confirmed too: 2...g6 -4.60, and 3...Nf6, 3...d6 and 4...Nd4 all evaluate as forced mate for White. The one row the pass does NOT support is 2...Nf6, classed tactical_error at a measured cost of 0.20 — below this pack's own 150-centipawn guard, which therefore cannot fire on it. The class was left as authored and the contradiction recorded in the deviation note."
+        "statement": "ENGINE-CHECKED 2026-08-15 and all three rankings are reproduced exactly at depth 22, in Black's favour throughout. After 2.Qh5: ...Nc6 +0.42 > ...d6 +0.37 > ...Qe7 +0.08. After 3.Bc4: ...g6 +0.37 > ...Qe7 +0.12 > ...Qf6 -0.21. After 4.Qf3: ...Nf6 +0.39 > ...Qe7 +0.19 > ...Qf6 +0.14. This is the strongest confirmation the pass produced anywhere in the opening corpus. The punishments are confirmed too: 2...g6 -4.60, and 3...Nf6, 3...d6 and 4...Nd4 all evaluate as forced mate for White. The one row the pass does NOT support is 2...Nf6, classed tactical_error at a measured cost of 0.20 — below this pack's own 150-centipawn guard, which therefore cannot fire on it. The class was left as authored and the contradiction recorded in the deviation note.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/guard",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-4-d5-note-claims-both-exd5-and-bxd5-keep-the-attack-",
         "state": "blocking",
-        "statement": "The 4...d5 note claims both exd5 and Bxd5 keep the attack and win material; only the LEGALITY of those captures was verified, not the evaluation or the follow-ups."
+        "statement": "The 4...d5 note claims both exd5 and Bxd5 keep the attack and win material; only the LEGALITY of those captures was verified, not the evaluation or the follow-ups.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/claim-semantic-anchors.md"
+        }
       },
       {
         "id": "the-intent-capture-checkpoints-have-no-format-slot-for-t",
         "state": "blocking",
-        "statement": "The intent_capture checkpoints have no format slot for the validated answer: the pack knows (by attack arithmetic) which plan class each White move serves, and can say so only in annotations. If the interaction ever grades intent, these claims need mechanical grounding via direct_attack_count expressions, which the format has but this draft does not yet encode."
+        "statement": "The intent_capture checkpoints have no format slot for the validated answer: the pack knows (by attack arithmetic) which plan class each White move serves, and can say so only in annotations. If the interaction ever grades intent, these claims need mechanical grounding via direct_attack_count expressions, which the format has but this draft does not yet encode.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/planClasses/0",
+          "blockedBy": "rfc/claim-semantic-anchors.md"
+        }
       },
       {
         "id": "the-guard-threshold-150cp-encodes-an-authored-claim-that",
         "state": "blocking",
-        "statement": "The guard threshold (150cp) encodes an authored claim that every materially-costly move here is a misread; no play-test evidence supports the number."
+        "statement": "The guard threshold (150cp) encodes an authored claim that every materially-costly move here is a misread; no play-test evidence supports the number.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/guard",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -480,13 +501,23 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       },
       {
         "id": "corpus-checked-2026-08-15-and-not-answerable-from-repo-d",
         "state": "blocking",
-        "statement": "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played."
+        "statement": "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/objective",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       }
     ]
   }

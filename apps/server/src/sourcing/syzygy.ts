@@ -7,6 +7,7 @@ import { parseFen } from "chessops/fen";
 
 import { validatePackDocument } from "../pack-validation.js";
 import { emitterGraduationBlocker } from "../graduation-blocker-templates.mjs";
+import { attachEmitterGraduationClearances } from "./graduation-clear.js";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { SourcingHttpClient } from "./http.js";
 import { ingestLocalFile } from "./inputs.js";
@@ -172,7 +173,7 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
       emitterGraduationBlocker("opponent-policy-authored", { opponent: options.opponent }),
       ...(pieces <= 7 ? [emitterGraduationBlocker("tablebase-opponent-not-selected", { opponent: options.opponent })] : []),
     ];
-    const pack = {
+    const pack = attachEmitterGraduationClearances({
       id,
       version: "0.1.0",
       title: input.label,
@@ -185,7 +186,7 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
       opponentPolicy: options.opponent === "strong_engine" ? { mode: "strong_engine" } : { mode: "human_common", targetElo: options.targetElo ?? 1800, seedMode: "per_branch" },
       feedbackPolicy: "delayed_checkpoint",
       provenance: { reviewStatus: "draft", sources: provenanceSources, licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
-    } satisfies DrillPackDefinition;
+    });
     const validation = validatePackDocument(pack);
     if (!validation.valid) throw new SourcingError("EMITTED_PACK_INVALID", validation.issues.map((value) => `${value.path} ${value.code}: ${value.message}`).join("; "));
     const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: sourceEntries };

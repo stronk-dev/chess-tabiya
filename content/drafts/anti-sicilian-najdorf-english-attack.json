@@ -474,18 +474,29 @@
         "accepted": {
           "kind": "owner_ruling",
           "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
-          "rulingRef": "planning/exploration/log.md#L1231"
+          "rulingRef": "planning/exploration/log.md#L1231",
+          "unreachableBecause": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist."
         }
       },
       {
         "id": "engine-checked-2026-08-15-and-the-8-qd2-claim-is-refuted",
         "state": "blocking",
-        "statement": "ENGINE-CHECKED 2026-08-15 and the 8.Qd2 claim is REFUTED. After 8.Qd2 Ng4 White evaluates +1.08 at depth 22, up from +0.40 before it: the claimed open door costs Black, not White. Worse for the pack's central thesis, 8.Qd2 is itself the highest-scoring eighth move measured (+0.40), ahead of the spine's 8.f3 (+0.31). The deviation note's mechanism was deleted and the contrary number recorded in its place; the class was left as authored because it is a claim about this pack's objective (the move order), which no evaluation settles. The other judgment survives its check: 7.Nf5 evaluates -0.69 against +0.42 for the spine's 7.Nb3, a cost of 1.11."
+        "statement": "ENGINE-CHECKED 2026-08-15 and the 8.Qd2 claim is REFUTED. After 8.Qd2 Ng4 White evaluates +1.08 at depth 22, up from +0.40 before it: the claimed open door costs Black, not White. Worse for the pack's central thesis, 8.Qd2 is itself the highest-scoring eighth move measured (+0.40), ahead of the spine's 8.f3 (+0.31). The deviation note's mechanism was deleted and the contrary number recorded in its place; the class was left as authored because it is a claim about this pack's objective (the move order), which no evaluation settles. The other judgment survives its check: 7.Nf5 evaluates -0.69 against +0.42 for the spine's 7.Nb3, a cost of 1.11.",
+        "clearance": {
+          "kind": "unbuilt",
+          "subject": "/deviations/0",
+          "blockedBy": "rfc/breadth-collectors.md"
+        }
       },
       {
         "id": "the-claim-that-ng4-is-black-s-standing-resource-against-",
         "state": "blocking",
-        "statement": "The claim that ...Ng4 is 'Black's standing resource' against a bishop on e3 without f3, and the entire move-order thesis, is standard theory rendered from model knowledge with no named source. A citable book/course reference (any Najdorf or English Attack monograph) would clear it; none is cited."
+        "statement": "The claim that ...Ng4 is 'Black's standing resource' against a bishop on e3 without f3, and the entire move-order thesis, is standard theory rendered from model knowledge with no named source. A citable book/course reference (any Najdorf or English Attack monograph) would clear it; none is cited.",
+        "clearance": {
+          "kind": "claim_bound",
+          "subject": "/feedbackClaims/2/text",
+          "instrument": "make sourcing-check"
+        }
       },
       {
         "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
@@ -493,13 +504,24 @@
         "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
         "resolved": {
           "at": "2026-08-16",
-          "by": "The recorded work was completed; the original statement remains as history."
+          "by": "The recorded work was completed; the original statement remains as history.",
+          "clearance": {
+            "kind": "assessment_grounded",
+            "subject": "/objective/grading/assessedBy",
+            "instrument": "make verify-draft"
+          }
         }
       },
       {
         "id": "popularity-claims-below-the-1-e4-c5-root-which-6th-moves",
         "state": "blocking",
-        "statement": "Popularity claims below the 1.e4 c5 root (which 6th moves club players actually face) are asserted only implicitly; the explorer API could quantify them and has not been queried below the family root."
+        "statement": "Popularity claims below the 1.e4 c5 root (which 6th moves club players actually face) are asserted only implicitly; the explorer API could quantify them and has not been queried below the family root.",
+        "clearance": {
+          "kind": "ledger_record",
+          "subject": "/spine/0/children/0/moveUci",
+          "recordKind": "explorer_frequency",
+          "instrument": "make sourcing-check"
+        }
       }
     ]
   }
