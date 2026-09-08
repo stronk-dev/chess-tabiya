@@ -1091,8 +1091,18 @@ describe("Layer 3 screens", () => {
   });
 
   it("renders aligned dual-board comparison with absent-side dimming and strips", async () => {
-    const run = branchedRun();
-    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
+    const base = branchedRun();
+    const comparison = compareBranches(base, base.branches.map((branch) => branch.id));
+    const outcomeNodeId = Object.values(comparison.rows.at(-1)!.nodes)[0]!.id;
+    const run: DrillRun = Object.freeze({
+      ...base,
+      events: Object.freeze([...base.events, Object.freeze({
+        seq: base.events.at(-1)!.seq + 1,
+        type: "outcome.reached" as const,
+        at,
+        data: Object.freeze({ nodeId: outcomeNodeId, outcome: "win" as const }),
+      })]),
+    });
     const component = mount(CompareView, {
       target: target(),
       props: {
@@ -1115,6 +1125,8 @@ describe("Layer 3 screens", () => {
     expect(comparisonStatus.querySelector("button, [tabindex]")).toBeNull();
     expect(document.activeElement?.id).toBe("compare-title");
     expect(document.body.textContent).toContain("Line ended");
+    expect(document.body.textContent).toContain("Game won.");
+    expect(document.body.textContent).not.toContain("The recorded outcome is win");
     expect(document.querySelector(".boards article.absent")).not.toBeNull();
     expect(document.body.textContent).toContain("main");
     expect(document.body.textContent).toContain("This attempt reached the objective.");

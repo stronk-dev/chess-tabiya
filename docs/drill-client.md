@@ -410,7 +410,9 @@ The grounded path/position summary appears once before the boards. The zero row
 is named as the shared fork; ordinary comparison navigation calls each later
 synchronized row a consequence step. Board and decision distances use
 learner-facing turn counts from the rehearsal start or shared fork. Internal ply
-offsets and preview/simulation identity remain evidence/runtime detail.
+offsets and preview/simulation identity remain evidence/runtime detail. A
+terminal position uses the same exhaustive learner-relative `Game won`, `Game
+lost`, or `Game drawn` vocabulary as the other run surfaces.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
 or terminal sheets. It keeps four facts separate: a concise root assessment,

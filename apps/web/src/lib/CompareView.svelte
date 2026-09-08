@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, materialBalanceAt, packAbsentEvidenceRef, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
+  import { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, materialBalanceAt, packAbsentEvidenceRef, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry, type RunOutcome } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
@@ -18,6 +18,7 @@
   import { learnerMoveLabel } from "./learner-move-label.js";
   import { comparisonStepAnnouncement, comparisonStepLabel, rehearsalStepLabel, rehearsalTurnCount } from "./chronology-copy.js";
   import { resistanceModeLabel, resistanceSentences } from "./outcome-presentation.js";
+  import { runOutcomeLabel } from "./run-copy.js";
   import { comparisonNode, evidencePayloads } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
 
@@ -137,7 +138,7 @@
     const pawns = entry.score.value / 100;
     return `${pawns >= 0 ? "+" : ""}${pawns.toFixed(2)}`;
   }
-  function outcomeAt(nodeId: string): string | undefined {
+  function outcomeAt(nodeId: string): RunOutcome | undefined {
     const event = [...run.events]
       .reverse()
       .find(
@@ -257,7 +258,7 @@
         {#if group.columns.length === 1 && run.branches.find((branch) => branch.id === group.branchIds[0])?.intent}<p class="branch-intent">Intent: {run.branches.find((branch) => branch.id === group.branchIds[0])?.intent}</p>{/if}
         {#if group.node}
           {@const outcome = outcomeAt(group.node.id)}
-          <p class="cell-state">{objectiveStateLabel(group.node.objectiveState)}{outcome === undefined ? "" : ` ${outcome === "checkmate" ? "The game ended in checkmate." : `The recorded outcome is ${outcome.replaceAll("_", " ")}.`}`}</p>
+          <p class="cell-state">{objectiveStateLabel(group.node.objectiveState)}{outcome === undefined ? "" : ` ${runOutcomeLabel(outcome)}.`}</p>
           {#if zoom === "mid" || zoom === "near"}
             <dl>
               <div><dt>Last move</dt><dd>{group.node.moveSan ?? "No move"}</dd></div>

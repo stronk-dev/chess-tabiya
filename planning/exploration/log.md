@@ -19010,3 +19010,16 @@ earned arm cannot render the free sentence. `make verify-software` passes 188 fi
 plus performance, schema, semantic manifests, production builds, and rating isolation. `make
 test-browser` passes all 64 required desktop/mobile journeys with one explicitly optional Maia
 latency measurement skipped.
+
+## 2026-09-08 — Learner-relative terminal outcomes in Compare ([[D3168]])
+
+Compare widened the closed `win | loss | draw` run outcome to `string`, tested an unreachable
+`checkmate` value, and otherwise exposed the storage token in “The recorded outcome is win.” The
+position card now preserves `RunOutcome` and uses the existing exhaustive learner-copy authority,
+so terminal comparison states say `Game won`, `Game lost`, or `Game drawn` consistently with the
+rest of the run.
+
+The mounted Compare fixture reaches an actual terminal row, requires `Game won`, and refuses the
+old raw sentence. `make verify-software` passes 188 files / 1,176 tests plus performance, schema,
+semantic manifests, production builds, and rating isolation. `make test-browser` passes all 64
+required desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.

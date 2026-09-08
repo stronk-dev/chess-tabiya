@@ -25911,6 +25911,15 @@
       "uxItems": [],
       "evidence": "docs/drill-client.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3168",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4f857fcfead6992d7505314fcdb91935832c2b00d2978214ab0ac2ccda708d63",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/CompareView.svelte",
+      "evidenceKind": "path"
     }
   ]
 }
