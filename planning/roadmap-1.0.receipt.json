@@ -3,7 +3,7 @@
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
     "roadmap": "sha256:878cbf133096f16096381f1ac8ce042bc993daa8ff348334021749ac5a92b355",
-    "workItems": "sha256:702a58c830ea053761a2ca0642960ff56462f13f2732011d2a4fc93c3b598dbb",
+    "workItems": "sha256:5a5da0641e7cd0ffee1e0c09fb2525a7c1ea228bc7201a99f9d22515b16a4f19",
     "workState": "sha256:7b4082e9cf02f71fac8b024c8735ac5d8fe4bd847b9c09282501d083d5d66733",
     "rfcRegister": "sha256:205bd28f6cc5eba599ec5598522b1df4282d74618ad818d0d9a71f9999267486",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
@@ -37,10 +37,10 @@
       "refused": 109
     },
     "workItems": {
-      "queued": 121,
+      "queued": 120,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 243,
+      "completed": 244,
       "retired": 24
     },
     "dimensionStates": {
@@ -793,10 +793,10 @@
       "owner": "content-and-theory",
       "rfcCount": 6,
       "workItems": {
-        "queued": 17,
+        "queued": 16,
         "blocked_owner": 1,
         "blocked_rfc": 6,
-        "completed": 19,
+        "completed": 20,
         "retired": 1
       },
       "routes": {

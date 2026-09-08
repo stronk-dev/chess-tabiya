@@ -95,7 +95,8 @@ the current editor bytes and opens a real run; the server—not the author—cho
 random seed, and per-run policy configuration. Invalid drafts name their blocking validation
 issues instead of offering an inert action. Withdrawal makes mutable bytes read-only while earlier
 private playtests keep resolving their exact digest. Studio remains an intentionally low-level
-authoring instrument rather than a visual chess-content editor.
+authoring instrument: structured controls edit the same visible JSON rather than hiding or
+replacing the document authority.
 
 While a mutable pack is selected, the client debounces the editor buffer for 300 ms and sends those
 unsaved bytes to `POST /packs/drafts/:id/lint`. Superseded responses cannot replace newer results,
@@ -144,3 +145,12 @@ server-derived. Migration 10 stores `shape_drafts` and `registered_shapes`, and 
 deletion withdraws mutable drafts while retaining published bytes and attribution.
 Create, save, lint/probe, and register failures all render through one visible alert path; lint
 results replace the selected draft's displayed validation instead of leaving the saved result stale.
+
+The structural expression builder edits both the shape trigger and every non-null plan success
+signature. It covers the complete schema vocabulary: all 18 position-feature leaves, nested
+all/any/not groups, mirroring, file and square quantifiers, piece occupancy, and registered plan
+signatures. New structural plan checks can be created without hand-writing JSON; deliberately
+uncheckable plans retain their separate required-reason workflow. The builder consumes the schema
+package's exported feature-kind list, and its permanent set-equality test fails when the grammar
+gains a leaf without a constructor. Every edit rewrites the visible unsaved JSON buffer, so normal
+lint, save, probe, and registration continue to validate the exact same bytes.

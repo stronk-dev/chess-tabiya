@@ -2772,17 +2772,21 @@
     {
       "id": "AUT-a25",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§9 G2",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "A structured expression builder over the 18-leaf grammar with the JSON alongside",
       "legacyRoute": "none",
       "note": "the grammar sync test is the contract",
-      "sourceDigest": "sha256:32d30bfd45782b340003f5b3b9f9c8e50b980f1eaef0f98ceeea23701cf30947"
+      "sourceDigest": "sha256:32d30bfd45782b340003f5b3b9f9c8e50b980f1eaef0f98ceeea23701cf30947",
+      "completion": {
+        "completedOn": "2026-09-08",
+        "evidence": "Shape Studio now edits triggers and plan success signatures through a recursive builder covering every exported 18-feature leaf plus all/any/not, mirroring, quantified ranges, piece occupancy and plan-signature references; the raw JSON remains visible and authoritative, with pure grammar-parity and mounted production-shell tests."
+      }
     },
     {
       "id": "AUT-a26",

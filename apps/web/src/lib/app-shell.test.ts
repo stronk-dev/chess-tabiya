@@ -1486,6 +1486,46 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("authors recursive shape triggers and plan checks without hand-editing JSON", async () => {
+    history.replaceState(null, "", "/create");
+    const shapeDraft: ShapeDraft = {
+      id: "shape-builder-draft",
+      shapeId: "builder-shape",
+      document: {
+        id: "builder-shape",
+        trigger: { kind: "feature", feature: { kind: "named_structure", id: "carlsbad" } },
+        plans: [{ id: "prepare-break", label: "Prepare the break", success: { note: "One position can certify this." } }],
+        provenance: { licence: "CC-BY-SA-4.0", sources: ["original"], attribution: [] },
+      },
+      digest,
+      state: "draft",
+      validation: { valid: false, issues: [] },
+    };
+    const shapeApi: DrillClientApi = { ...api(), async packDrafts() { return []; }, async shapeDrafts() { return [shapeDraft]; } };
+    const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("builder-shape · draft"));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
+    await vi.waitFor(() => expect(document.querySelector("#signature-editor-title")?.textContent).toBe("Structural expression builder"));
+
+    const triggerKind = document.querySelector<HTMLSelectElement>(".trigger-expression .expression-node > label select")!;
+    triggerKind.value = "all";
+    triggerKind.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+    [...document.querySelectorAll<HTMLButtonElement>(".trigger-expression button")].find((button) => button.textContent === "Add condition")!.click();
+    await tick();
+
+    [...document.querySelectorAll<HTMLButtonElement>(".signature-list article button")].find((button) => button.textContent === "Add structural check")!.click();
+    await tick();
+
+    const bytes = JSON.parse(document.querySelector<HTMLTextAreaElement>("#shape-studio-json")!.value);
+    expect(bytes.trigger.kind).toBe("all");
+    expect(bytes.trigger.of).toHaveLength(2);
+    expect(bytes.plans[0].success.signature).toEqual({ kind: "feature", feature: { kind: "named_structure", id: "carlsbad" } });
+    expect(document.body.textContent).toContain("The Shape JSON above stays live");
+    await unmount(component);
+  });
+
   it("shows live vocabulary usage and unavailable policies to pack authors", async () => {
     history.replaceState(null, "", "/create");
     const studioApi: DrillClientApi = {

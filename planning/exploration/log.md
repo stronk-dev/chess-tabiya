@@ -18707,3 +18707,18 @@ The runtime fixture crosses the dangerous boundary directly: an early irreversib
 must remain behind a later generic moment, while a moment carrying both outcome and
 irreversibility must stay first. Story rendering remains chronological and the irreversibility fact
 remains inspectable; only the bounded selection order changed.
+
+## 2026-09-08 — Shape Studio authors the complete structural-expression grammar
+
+AUT-a25 is complete. Shape authors no longer have to hand-write nested predicate JSON for a trigger
+or plan success check: one recursive editor covers all 18 schema-exported structural feature leaves,
+all/any/not groups, mirroring, file and square quantification, piece occupancy, and registered plan
+signatures. Missing plan checks can enter the structured path directly, while the existing explicit
+null-signature refusal remains separate and still requires its reason.
+
+The visible Shape JSON remains the source of truth and updates on every structured edit, so lint,
+probe, save, and registration consume identical bytes. The pure contract test is set-equal to
+`STRUCTURAL_FEATURE_KINDS` and constructs every expression branch; the mounted `/create` journey
+changes a trigger into a two-child conjunction and adds a plan signature without touching the JSON
+textarea. `make typecheck` passes with zero Svelte diagnostics and `make test-software` passes 1,156
+tests across 185 files.
