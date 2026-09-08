@@ -66,7 +66,7 @@ export interface PackRecord {
 }
 
 function objectiveSummary(document: DrillPackDefinition): string {
-  return document.objective.summary?.trim() || document.objective.type.replaceAll("_", " ");
+  return document.objective.summary.trim();
 }
 
 function consequenceHorizon(document: DrillPackDefinition): PackSummary["consequenceHorizon"] {
@@ -141,8 +141,9 @@ export function projectPackDocument(
     spine: raw.mode === "line" ? [] : (document.spine ?? []).map(projectSpineNode),
     checkpoints: document.checkpoints.map((checkpoint) => ({
       id: checkpoint.id,
-      label:
-        typeof checkpoint.label === "string" ? checkpoint.label : checkpoint.id,
+      ...(typeof checkpoint.label === "string" && checkpoint.label.trim() !== ""
+        ? { label: checkpoint.label }
+        : {}),
       actions: Array.isArray(checkpoint.actions) ? checkpoint.actions : [],
       ...(checkpoint.interaction?.type === "prediction" ? {
         interaction: {

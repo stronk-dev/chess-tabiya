@@ -34,7 +34,7 @@ const pack = {
   mode: "opening",
   feedbackPolicy: "delayed_checkpoint",
   start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
-  objective: { type: "play_until_checkpoint" },
+  objective: { type: "play_until_checkpoint", summary: "Reach the next checkpoint." },
   checkpoints: [{ id: "reveal", trigger: { atPly: 1 } }],
   provenance: { reviewStatus: "schema_example" },
 } as unknown as DrillPackDefinition;

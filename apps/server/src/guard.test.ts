@@ -43,7 +43,7 @@ const tunedPack = (fen: string, guard: NonNullable<DrillPackDefinition["guard"]>
   id: "guard-pack",
   start: { fen, side: "white" },
   checkpoints: [],
-  objective: { type: "play_until_checkpoint" },
+  objective: { type: "play_until_checkpoint", summary: "Reach the next checkpoint." },
   opponentPolicy: { mode: "human_common" },
   guard,
 } as unknown as DrillPackDefinition);

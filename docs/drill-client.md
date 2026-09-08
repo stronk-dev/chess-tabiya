@@ -45,10 +45,9 @@ or `Community publication`, with publisher attribution when present. An
 unknown future value renders neutral copy rather than exposing a wire token.
 Home phase starters reuse the same phase vocabulary, and live-session cards
 reuse the shared objective-progress vocabulary rather than printing
-`ObjectiveState` values. Inside a run, a non-empty authored objective summary remains the
-learner's task. If a schema-valid pack omits that optional summary, the client translates every
-closed objective type into an exhaustive task sentence; storage identifiers never become fallback
-copy.
+`ObjectiveState` values. Inside a run, the schema-required authored objective summary remains the
+learner's task. The TypeScript pack contract requires the same field, so neither the catalogue nor
+the client invents learner copy from an objective storage identifier.
 
 Classroom assignments reuse this pack projection rather than defining a second
 content format. Learn renders assigned packs before the ordinary catalogue; starting one

@@ -183,33 +183,32 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
-  it("renders a schema-valid objective without exposing its storage name", async () => {
-    const run = createRun({
-      id: "objective-copy-run",
+  it("renders an unresolved checkpoint without exposing its storage id", async () => {
+    let run = createRun({
+      id: "checkpoint-copy-run",
       packId: pack.id,
-      packDigest: `sha256:${"0".repeat(64)}`,
+      packDigest: `sha256:${"1".repeat(64)}`,
       policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
       startFen: pack.start.fen,
-      seed: 0,
+      seed: 1,
       createdAt: at,
     });
-    const withoutSummary: DrillPackDefinition = {
-      ...pack,
-      objective: { type: "follow_theory" },
-    };
+    run = commitMove(run, "c1e3", { at }).run;
+    run = reachCheckpoint(run, "internal-stop", at).run;
+    const withoutLabel = { ...pack, checkpoints: [{ id: "internal-stop", trigger: { atPly: 1 } }] } as DrillPackDefinition;
+    const checkpoint = latestCheckpoint(withoutLabel, run);
     const component = mount(DrillScreen, { target: target(), props: {
-      pack: withoutSummary,
+      pack: withoutLabel,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      checkpoint,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
       onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
       onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
     await tick();
 
-    expect(document.querySelector(".objective-line")?.textContent).toContain("Stay with the opening theory");
-    expect(document.querySelector(".objective-copy")?.textContent).toContain("Stay with the opening theory");
-    expect(document.body.textContent).not.toContain("follow_theory");
-    expect(document.body.textContent).not.toContain("follow theory");
+    expect(document.querySelector('[role="dialog"] h2')?.textContent).toBe("Recorded checkpoint");
+    expect(document.body.textContent).not.toContain("internal-stop");
     await unmount(component);
   });
 

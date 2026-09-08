@@ -199,6 +199,35 @@ describe("drill-client pack registry", () => {
     );
   });
 
+  it("preserves an absent checkpoint label instead of exposing its storage id", async () => {
+    const checkpoints = structuredClone(fixture.checkpoints).map((checkpoint) => {
+      if (checkpoint.id !== "plan-commitment") return checkpoint;
+      const { label: _label, ...withoutLabel } = checkpoint;
+      return withoutLabel;
+    });
+    const document = pack({
+      id: "copy-fallback-pack",
+      checkpoints,
+    });
+    const environment = await setup(document);
+    stores.push(environment.storage);
+
+    const list = await request(environment.handler, "GET", "/packs", undefined, "");
+    expect(await list.json()).toEqual([
+      expect.objectContaining({
+        id: "copy-fallback-pack",
+        objectiveSummary: document.objective.summary,
+      }),
+    ]);
+
+    const detail = await request(environment.handler, "GET", "/packs/copy-fallback-pack", undefined, "");
+    const projected = (await detail.json() as { checkpoints: readonly Record<string, unknown>[] }).checkpoints;
+    expect(projected.find((checkpoint) => checkpoint.id === "plan-commitment")).toEqual({
+      id: "plan-commitment",
+      actions: fixture.checkpoints[0]?.actions ?? [],
+    });
+  });
+
   // This is a real-corpus integration contract. Its assertions, not Vitest's
   // generic unit-test timeout, define success; catalogue latency is measured
   // independently in the isolated performance tier.

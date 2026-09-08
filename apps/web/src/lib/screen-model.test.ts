@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { OBJECTIVE_TYPES, type DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   commitMove,
   compareBranches,
@@ -69,30 +69,22 @@ describe("screen view models", () => {
     });
   });
 
-  it("translates every objective type when authored summary copy is absent", () => {
-    const labels = OBJECTIVE_TYPES.map((type) => packObjective({
-      ...pack,
-      objective: { type },
-    }));
+  it("does not promote a missing checkpoint label into its storage id", () => {
+    let missing = createRun({
+      id: "missing-checkpoint-copy",
+      packId: pack.id,
+      packDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: pack.start.fen,
+      seed: 3,
+      createdAt: at,
+    });
+    missing = commitMove(missing, "c1e3", { at }).run;
+    missing = reachCheckpoint(missing, "internal-stop", at).run;
+    const withoutLabel = { ...pack, checkpoints: [{ id: "internal-stop", trigger: { atPly: 1 } }] } as DrillPackDefinition;
 
-    expect(labels).toEqual([
-      "Reach the target structure",
-      "Keep the plan available",
-      "Play the intended pawn break",
-      "Stop the opponent's plan",
-      "Reach the intended endgame",
-      "Win the position",
-      "Hold the position",
-      "Save the position",
-      "Offer the toughest resistance",
-      "Reach the next checkpoint",
-      "Stay with the opening theory",
-      "Complete the rehearsal sequence",
-    ]);
-    for (const type of OBJECTIVE_TYPES) {
-      expect(labels).not.toContain(type);
-      expect(labels).not.toContain(type.replaceAll("_", " "));
-    }
+    expect(latestCheckpoint(withoutLabel, missing)?.label).toBe("Recorded checkpoint");
+    expect(latestCheckpoint(withoutLabel, missing)?.label).not.toBe("internal-stop");
   });
 
   it("models immutable branches and aligned compare positions", () => {

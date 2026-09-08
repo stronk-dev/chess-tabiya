@@ -2,7 +2,6 @@ import {
   CHECKPOINT_ACTIONS,
   type CheckpointAction,
   type DrillPackDefinition,
-  type ObjectiveType,
 } from "@chess-tabiya/schema/drill-pack";
 import {
   branchPaths,
@@ -64,21 +63,6 @@ const TERMINAL_STATES: ReadonlySet<ObjectiveState> = new Set([
   "transitioned",
 ]);
 
-const OBJECTIVE_TYPE_LABELS: Readonly<Record<ObjectiveType, string>> = Object.freeze({
-  reach_structure: "Reach the target structure",
-  preserve_plan_window: "Keep the plan available",
-  execute_break: "Play the intended pawn break",
-  prevent_opponent_plan: "Stop the opponent's plan",
-  transition_to_endgame: "Reach the intended endgame",
-  win: "Win the position",
-  hold: "Hold the position",
-  save: "Save the position",
-  resist: "Offer the toughest resistance",
-  play_until_checkpoint: "Reach the next checkpoint",
-  follow_theory: "Stay with the opening theory",
-  run_trajectory: "Complete the rehearsal sequence",
-});
-
 export function recognizedCheckpointActions(
   actions: readonly string[],
 ): Readonly<Record<CheckpointAction, boolean>> {
@@ -99,10 +83,7 @@ export function packStartSide(pack: DrillPackDefinition): "white" | "black" {
 }
 
 export function packObjective(pack: DrillPackDefinition): string {
-  const summary = pack.objective.summary;
-  return typeof summary === "string" && summary.trim() !== ""
-    ? summary
-    : OBJECTIVE_TYPE_LABELS[pack.objective.type];
+  return pack.objective.summary;
 }
 
 export function difficultyBand(value: unknown): string {
@@ -223,7 +204,7 @@ export function latestCheckpoint(
     label:
       typeof label === "string" && label.trim() !== ""
         ? label
-        : event.data.checkpointId,
+        : "Recorded checkpoint",
     eventSeq: event.seq,
     nodeId: event.data.nodeId,
     actions: Array.isArray(actions)

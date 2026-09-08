@@ -239,7 +239,7 @@ export interface DrillPackDefinition {
   };
   readonly objective: {
     readonly type: ObjectiveType;
-    readonly summary?: string;
+    readonly summary: string;
     readonly grading?: ObjectiveGrading;
     readonly successConditions?: readonly SuccessCondition[];
     readonly [key: string]: unknown;

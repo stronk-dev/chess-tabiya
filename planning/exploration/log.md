@@ -19094,3 +19094,18 @@ refuses the id. The mounted keyboard rewind-picker path requires the authored �
 label and refuses `plan-commitment`. `make verify-software` passes 188 files / 1,180 tests including
 production builds and semantic manifests; `make test-browser` passes all 64 required desktop/mobile
 journeys with one explicitly optional Maia measurement skipped.
+
+## 2026-09-08 — Authored pack copy has one authority; D3172 retracted ([[D3174]])
+
+The canonical server gate falsified D3172's premise: JSON Schema has always required
+`objective.summary`, while the TypeScript definition incorrectly marked it optional. The earlier
+fallback and its green client fixtures therefore exercised an object the pack validator refuses;
+the append-only D3172 entry above is retained as history, and its ledger disposition is retracted.
+The TypeScript contract now matches JSON Schema, the catalogue and client render the required
+authored summary directly, and the unreachable enum-to-prose vocabulary has been deleted.
+
+Checkpoint labels have a different contract: their absence is valid. The server previously filled
+that absence with `checkpoint.id`, making the client's neutral unresolved-label path unreachable
+for real API data. The projection now preserves absence, while the active checkpoint view uses
+“Recorded checkpoint” rather than leaking the storage id. Server projection, view-model, and
+mounted-dialog fixtures cover that valid negative path.
