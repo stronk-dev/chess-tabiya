@@ -19063,3 +19063,19 @@ The first use reconciles ATR-a10: commit `3e6fe2e2` removed the on-ramp's false 
 claim on 2026-08-16 and its production-emitter fixture has refused `your rating` ever since. `make
 verify-software` passes 188 files / 1,177 tests plus performance, schema, semantic manifests,
 production builds, and rating isolation.
+
+## 2026-09-08 — Objective fallbacks explain the learner's task ([[D3172]])
+
+`objective.summary` is optional in the shipped schema, but the ordinary run previously handled its
+absence by replacing underscores in the storage enum. All twelve valid types can therefore enter
+the client while phrases such as `follow theory`, `run trajectory`, and `prevent opponent plan`
+appeared in both prominent objective regions. The client now preserves authored summaries and uses
+one type-exhaustive fallback vocabulary for their absence. Adding an objective type cannot compile
+until its learner task is named.
+
+A twelve-kind unit fixture refuses both raw and underscore-normalized enum values. A mounted
+schema-valid `follow_theory` run requires “Stay with the opening theory” in the board strip and
+companion identity and refuses both storage forms from the document. `make verify-software` passes
+188 files / 1,179 tests including production builds and semantic manifests; `make test-browser`
+passes all 64 required desktop/mobile journeys with one explicitly optional Maia measurement
+skipped.

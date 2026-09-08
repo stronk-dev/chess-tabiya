@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { OBJECTIVE_TYPES, type DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   commitMove,
   compareBranches,
@@ -67,6 +67,32 @@ describe("screen view models", () => {
       id: "plan-commitment",
       label: "Choose the setup",
     });
+  });
+
+  it("translates every objective type when authored summary copy is absent", () => {
+    const labels = OBJECTIVE_TYPES.map((type) => packObjective({
+      ...pack,
+      objective: { type },
+    }));
+
+    expect(labels).toEqual([
+      "Reach the target structure",
+      "Keep the plan available",
+      "Play the intended pawn break",
+      "Stop the opponent's plan",
+      "Reach the intended endgame",
+      "Win the position",
+      "Hold the position",
+      "Save the position",
+      "Offer the toughest resistance",
+      "Reach the next checkpoint",
+      "Stay with the opening theory",
+      "Complete the rehearsal sequence",
+    ]);
+    for (const type of OBJECTIVE_TYPES) {
+      expect(labels).not.toContain(type);
+      expect(labels).not.toContain(type.replaceAll("_", " "));
+    }
   });
 
   it("models immutable branches and aligned compare positions", () => {

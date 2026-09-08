@@ -25947,6 +25947,15 @@
       "uxItems": [],
       "evidence": "Makefile",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3172",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:88b852d0e2172256cdea2ef20c189429ad75dca0b86c4da98006e73ddd4297ad",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/screen-model.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

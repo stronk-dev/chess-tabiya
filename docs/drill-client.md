@@ -45,7 +45,10 @@ or `Community publication`, with publisher attribution when present. An
 unknown future value renders neutral copy rather than exposing a wire token.
 Home phase starters reuse the same phase vocabulary, and live-session cards
 reuse the shared objective-progress vocabulary rather than printing
-`ObjectiveState` values.
+`ObjectiveState` values. Inside a run, a non-empty authored objective summary remains the
+learner's task. If a schema-valid pack omits that optional summary, the client translates every
+closed objective type into an exhaustive task sentence; storage identifiers never become fallback
+copy.
 
 Classroom assignments reuse this pack projection rather than defining a second
 content format. Learn renders assigned packs before the ordinary catalogue; starting one

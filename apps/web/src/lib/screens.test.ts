@@ -183,6 +183,36 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("renders a schema-valid objective without exposing its storage name", async () => {
+    const run = createRun({
+      id: "objective-copy-run",
+      packId: pack.id,
+      packDigest: `sha256:${"0".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: pack.start.fen,
+      seed: 0,
+      createdAt: at,
+    });
+    const withoutSummary: DrillPackDefinition = {
+      ...pack,
+      objective: { type: "follow_theory" },
+    };
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack: withoutSummary,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
+      onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
+      onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+
+    expect(document.querySelector(".objective-line")?.textContent).toContain("Stay with the opening theory");
+    expect(document.querySelector(".objective-copy")?.textContent).toContain("Stay with the opening theory");
+    expect(document.body.textContent).not.toContain("follow_theory");
+    expect(document.body.textContent).not.toContain("follow theory");
+    await unmount(component);
+  });
+
   it("keeps objective-change evidence detail out of ordinary Support copy", async () => {
     const component = mount(WhyBanner, {
       target: target(),
