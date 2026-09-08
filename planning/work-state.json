@@ -25974,6 +25974,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/pack-registry.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3175",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:41fd05e7bf32d9fde1b495cb919a7ebedd3a05362c97c66b0c73a1f4658f92c2",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/CheckpointSheet.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

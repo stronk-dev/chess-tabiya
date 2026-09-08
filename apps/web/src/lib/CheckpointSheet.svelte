@@ -95,7 +95,7 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="checkpoint-title" aria-describedby="checkpoint-boundary-note" use:modalBoundary>
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
-    <p id="checkpoint-boundary-note">You reached a semantic boundary. Choose an action below to leave this checkpoint; Escape does not dismiss it.</p>
+    <p id="checkpoint-boundary-note">This drill paused here so you can choose what to do next. Choose an action below to continue; Escape does not dismiss this checkpoint.</p>
     {#if checkpoint.interaction?.type === "prediction" && node}
       <section class="prediction" aria-labelledby="prediction-title">
         <h3 id="prediction-title">Predict the opponent's reply</h3>

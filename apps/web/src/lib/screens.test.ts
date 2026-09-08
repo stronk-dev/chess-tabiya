@@ -1367,7 +1367,9 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain(
       "Reach this checkpoint on at least two branches before comparing.",
     );
-    expect(document.body.textContent).toContain("Escape does not dismiss it.");
+    expect(document.body.textContent).toContain("This drill paused here so you can choose what to do next.");
+    expect(document.body.textContent).toContain("Escape does not dismiss this checkpoint.");
+    expect(document.body.textContent).not.toContain("semantic boundary");
     await unmount(component);
   });
 

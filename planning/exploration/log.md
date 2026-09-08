@@ -19109,3 +19109,13 @@ that absence with `checkpoint.id`, making the client's neutral unresolved-label 
 for real API data. The projection now preserves absence, while the active checkpoint view uses
 “Recorded checkpoint” rather than leaking the storage id. Server projection, view-model, and
 mounted-dialog fixtures cover that valid negative path.
+
+## 2026-09-08 — Checkpoints explain the learner's choice ([[D3175]])
+
+The primary checkpoint dialog described its interruption as a “semantic boundary,” an internal
+architecture term that gave a chess player no reason for the pause. It now says that the drill
+paused so the learner can choose what to do next, while retaining the explicit notice that Escape
+does not dismiss the checkpoint. The mounted disabled-comparison fixture requires the actionable
+copy and refuses the internal term. `make verify-software` passes 188 files / 1,181 tests and
+production builds; `make test-browser` passes all 64 required desktop/mobile journeys with the one
+explicitly optional Maia measurement skipped.
