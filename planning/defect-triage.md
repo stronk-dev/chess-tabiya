@@ -114,7 +114,7 @@ citation check out of runtime validation into the authoring CLI, or (b) refuse t
 evidence root is absent and say so. Both are one-line, both are decisions.
 
 **NEEDS-RFC in disguise — D467 and half of D470.** D467 is currently owned by
-`rfc/graduation-clearance.md` (accepted 2026-08-16, second author round), which already splits it
+`rfc/archive/graduation-clearance.md` (accepted 2026-08-16, second author round), which already splits it
 into two rules. Do not take it standalone. D470's *"where does inline engine evidence go"* half is a
 format question; only the wording of the 20 provenance strings and the one dangling citation are
 batch-ready.
@@ -483,7 +483,7 @@ blocks the D126 ruling, measured), D157 (a check for a pack quoting no populatio
 (no `sourceGame` provenance axis), D348 (`shape_trigger` expression leaf), D368/D386/D391/D392
 (measurement records — owned by `rfc/measurement-records.md`), D399 (no principle- or threat-shaped
 `OBJECTIVE_TYPES` member), D404/D405/D407/D408/D425/D426/D427/D434/D435/D436/D464/D465/D466/D467
-(all owned by `rfc/graduation-clearance.md`), D470-format-half, D195, D106-refusal-half, D430-removal-half.
+(all owned by `rfc/archive/graduation-clearance.md`), D470-format-half, D195, D106-refusal-half, D430-removal-half.
 
 **Runtime / API**: D183 (adding a `DrillRunEvent` member), D216 (a token `Principal` variant), D233
 (a server-owned selection receipt — the row says so explicitly: *"requires an RFC/API lane"*), D313
@@ -640,7 +640,7 @@ does not, it is 7b. I have not tried to split 60 claims by that test — that sp
 task and it is cheap (grep `provenance.sources` for an explorer rationale per pack).
 
 **Blocked, and say so**: job 5's D406 needs `blocking → resolved` to have a writer, which
-[[D466]] says does not exist and `rfc/graduation-clearance.md` is adding as `make graduation-clear`.
+[[D466]] says does not exist and `rfc/archive/graduation-clearance.md` is adding as `make graduation-clear`.
 Do not hand-edit those four entries.
 
 **Also in 7a but not a job**: D149, D121, D152 shipped the authoring instruments this wave needs —

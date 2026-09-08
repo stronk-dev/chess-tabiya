@@ -472,7 +472,7 @@ run event union **16** (`runtime/src/types.ts:288-303`) · shape entries **25** 
 | Precedent | Read-only? | Population | Result shape | Failure channel |
 |---|---|---|---|---|
 | `verifyDraft` (`apps/server/src/sourcing/verify-draft.ts:323`) | **NO — it writes** (`:210`, `:316-319`: pack, ledger, manifest, job) | one `FILE` | `{ pack, ledger, manifest, warnings: readonly string[], paths: {ledger, manifest, job} }` (`:44-50`) | **thrown `SourcingError`** — there is no `valid`/`issues` field. 9 throw sites. Soft failures go to `warnings` |
-| `clearGraduationEntries` (`rfc/graduation-clearance.md:2357-2360`) | **specified, unbuilt** — `check?: boolean` is the dry-run | one `FILE` + a shared census | `GraduationTransitionResult` → `<stem>.graduation.json`, `schema: "tabiya.graduation.transition.v1"`, with `transitions[]` **and `held[]`** | **all-or-nothing** (§6.5 step 6): *"If any predicate evaluation raises, the command writes nothing and exits non-zero"* |
+| `clearGraduationEntries` (`rfc/archive/graduation-clearance.md:2357-2360`) | **specified, unbuilt** — `check?: boolean` is the dry-run | one `FILE` + a shared census | `GraduationTransitionResult` → `<stem>.graduation.json`, `schema: "tabiya.graduation.transition.v1"`, with `transitions[]` **and `held[]`** | **all-or-nothing** (§6.5 step 6): *"If any predicate evaluation raises, the command writes nothing and exits non-zero"* |
 | `make graduation-plan` (`Makefile:33`, `tools/graduation-clearance-plan.mjs`) | **YES — genuinely.** Imports only `readdirSync, readFileSync, statSync` (`:3`) | whole corpus, **no `FILE` argument** | `schema: "tabiya.graduation.clearance-plan.v1"`, `mode: "read_only"`, with `hold`, `corpus`, `classifier`, `judgementDebt` | `assertKnownPlan` **throws** when the population drifts (`:192-198`) |
 
 The RFC states the separation of powers explicitly (`graduation-clearance.md:2445-2449`):
@@ -710,7 +710,7 @@ F3 must **define** its population, not inherit the number.
 
 | Lane | Claimant | RFC status | Free? |
 |---|---|---|---|
-| 0.28 | `graduation-clearance.md` | **accepted** 2026-08-17 (`rfc/graduation-clearance.md:3`); re-affirmed *"**Verdict: keep 0.28.**"* at `:2537` | held |
+| 0.28 | `graduation-clearance.md` | **accepted** 2026-08-17 (`rfc/archive/graduation-clearance.md:3`); re-affirmed *"**Verdict: keep 0.28.**"* at `:2537` | held |
 | 0.29 | `pack-population-provenance.md` | **draft** (`rfc/pack-population-provenance.md:3`) — claim **live** in the register (`rfc/README.md:112`, counted among the 9) | held |
 | 0.30 | — | reserved prospectively for `shape-layer-parity`, **which does not exist as a file at HEAD** | **free** |
 

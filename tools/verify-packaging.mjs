@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 
 import { GRADUATION_RULING_ANCHOR_ROOTS } from "../apps/server/src/graduation-ruling-roots.mjs";
+import { missingGraduationRulingCopies } from "./graduation-ruling-packaging.mjs";
 
 function required(condition, message) {
   if (!condition) throw new Error(message);
@@ -98,11 +99,8 @@ required(
   "Production image context must include disclosed draft packs",
 );
 const serverDockerfile = readFileSync("apps/server/Dockerfile", "utf8");
-for (const root of GRADUATION_RULING_ANCHOR_ROOTS) {
-  required(
-    serverDockerfile.includes(`COPY ${root} ${root}`),
-    `Production image must include the graduation-ruling source ${root}`,
-  );
+for (const root of missingGraduationRulingCopies(GRADUATION_RULING_ANCHOR_ROOTS, serverDockerfile)) {
+  required(false, `Production image must include the graduation-ruling source ${root}`);
 }
 required(
   readFileSync("apps/server/Dockerfile", "utf8").includes("install-stockfish-linux /opt/stockfish"),

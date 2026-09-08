@@ -1,6 +1,12 @@
 # RFC: Graduation clearance — how a blocker stops blocking
 
-- **Status:** **implementing 2026-09-05.** The writer and read-only planning checkpoint shipped in
+- **Status:** **implemented 2026-09-08.** Pack schema 0.28, the atomic 92-document migration,
+  the production evaluator/writer, the corpus audit, and the packaging boundary are complete.
+  `make graduation-clearance-acceptance` is green at archival; the exact 1–26 receipt is
+  `planning/archive/graduation-clearance/completion-audit-2026-09-08.md`. The remaining
+  354 honest blockers and zero-graduated-pack publication outcome are re-homed to [[D409]] and
+  are not unfinished mechanism work.
+  **Superseded lifecycle history follows and is retained as history.** The writer and read-only planning checkpoint shipped in
   `bcb706e0` and was hardened in `ec52f61d`; the nine-template registry and all four emitter
   migrations shipped in `7918b582`. Pack schema 0.28 and its Gate-F-held corpus application remain.
   **Returned again at the 0.28 migration boundary by fresh independent review on 2026-09-07
@@ -13,7 +19,9 @@
   re-executed and independently attacked at the registry join, declaration identity, staleness,
   precondition and shared-canonical refusal boundaries. [[D3088]]–[[D3091]] are discharged and
   schema-0.28 production implementation resumes; authored chess truth, claim binding, publication
-  and premature archival remain held.
+  and premature publication remain held. The complete 1–26 acceptance audit is recorded at
+  `planning/archive/graduation-clearance/completion-audit-2026-09-08.md`; the official-content
+  outcome is re-homed to [[D409]] rather than keeping the finished mechanism active.
   `make graduation-clearance-author-repair` now executes the nine registered emitter shapes through
   the complete false → true → false contract, rejects pack-side plan weakening, and shares the
   production RFC-8785 serializer. [[D3090]] is resolved on the narrow process-authority option:
@@ -134,7 +142,7 @@
   resolve `planning/` and `docs/` against `process.cwd()` inside a validator that ships in an image
   containing neither.**
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/graduation-clearance/` (once implementing)
+- **Planning:** `planning/archive/graduation-clearance/`
 
 ## Implementation review — 2026-08-16, and where each blocker is now answered
 
@@ -2692,7 +2700,7 @@ re-checked against HEAD after those edits and all eighteen are byte-unchanged:**
 measurement above was taken at the tree it is cited against.** The one live consequence is §3.2b's:
 `docs/tablebase-grounding.md` is under uncommitted edit **again**, so the three `permanent_property`
 anchors must still be chosen at landing rather than inherited from any round of this document.
-**This RFC edits `rfc/graduation-clearance.md` and nothing else.**
+**This RFC edits `rfc/archive/graduation-clearance.md` and nothing else.**
 
 **[author round 2] Applied a fourth time, and the tree is moving *under this round* rather than
 between rounds.** At the moment this section was last re-checked, `rfc/feedback-delivery.md` and
@@ -2703,7 +2711,7 @@ HEAD `6722130`**: `packages/schema/`, `schemas/`, `apps/server/src/`, `content/`
 `.dockerignore`, `.github/`, `tools/` and `rfc/README.md` show no working-tree modification `[V]`,
 and `DRILL_PACK_SCHEMA_VERSION` `"0.27"` / `DRILL_RUN_SCHEMA_VERSION` `"0.17"`
 (`packages/schema/src/index.ts:1–2`) and `STORAGE_VERSION` **23** (`storage.ts:407`) re-read identical
-after every measurement above `[V]`. **This RFC edits `rfc/graduation-clearance.md` and nothing
+after every measurement above `[V]`. **This RFC edits `rfc/archive/graduation-clearance.md` and nothing
 else.**
 
 **[author round] Applied a third time, and the tree had moved again.** **Eleven** commits landed
@@ -2950,12 +2958,13 @@ RFC do is call a convention a mechanism.**
     the sweep's admission codes fire in verify mode is the load-bearing clause, and criterion 12(a)
     already asserts it. **A criterion an RFC can withdraw because the tree caught up is the return loop
     working; a criterion silently dropped is not, which is why this row stays and is struck.**
-17. **[author round 3 — [[D503]], §1.2c] Every kind's `subject` grammar is asserted, and asserted
-    against the shipped enforcer rather than against a literal.** Five assertions, one per mechanical
-    kind: a `claim_bound` clearance with `subject: "/objective/grading/assessedBy"` raises
-    `GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL`; a `shape_firing` clearance on a document with no
-    `shapes` key raises it; an `assessment_grounded` clearance on any subject but
-    `/objective/grading/assessedBy` raises it; a `ledger_record` clearance on `/feedbackClaims/0/text`
+17. **[author round 3 — [[D503]], §1.2c; implementation correction [[D3153]]] Every kind's
+    `subject` grammar is asserted against its first shipped enforcer rather than against a literal.**
+    Five assertions, one per mechanical kind: `claim_bound` outside
+    `/feedbackClaims/<index>/text` and `shape_firing` outside `/shapes/<index>` or
+    `/planClasses/<index>/shapePlan` raise schema-level `SCHEMA_PATTERN`; `assessment_grounded` on
+    any subject but `/objective/grading/assessedBy` raises schema-level `SCHEMA_CONST`. Schema 0.28
+    rejects those three documents before the corresponding runtime lint can run. A `ledger_record` clearance on `/feedbackClaims/0/text`
     raises it (the withdrawn `…_UNSUPPORTABLE` case, preserved); and a `pointer_authored` clearance
     whose subject resolves to a non-string raises it. **Non-vacuity is established first, in the shape
     criterion 13 established:** the test asserts that `validateClaimBindings` really does raise

@@ -92,7 +92,7 @@
         "accepted": {
           "kind": "out_of_scope",
           "ruling": "The graduation-clearance owner ruling classifies this browser-only mechanical fixture as outside publishable chess content.",
-          "rulingRef": "rfc/graduation-clearance.md#L464",
+          "rulingRef": "rfc/archive/graduation-clearance.md#L472",
           "unreachableBecause": "The graduation-clearance owner ruling classifies this browser-only mechanical fixture as outside publishable chess content."
         }
       }

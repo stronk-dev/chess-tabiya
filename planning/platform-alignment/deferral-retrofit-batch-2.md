@@ -38,7 +38,7 @@ that §4.1 never counted — 39 of those from three RFCs drafted after the inven
 > **Batch 1's "nearly all real for active RFCs" prediction did NOT hold — 10%, not "nearly all."
 > §8.2 explains why the 44% that produced it was a property of one document, not of activeness.**
 
-**The single most important finding is a deadline.** `rfc/graduation-clearance.md` is `accepted`,
+**The single most important finding is a deadline.** `rfc/archive/graduation-clearance.md` is `accepted`,
 its read-only planner **already landed** (`execution-queue.md:19`, `bafe62e`), it carries **three
 live untracked obligations** — and its `## Discharges` section (`:2961-2963`) contains the single
 word **`none`**. [[D1201]] is exact about what happens next: `rfc-lifecycle-completion` §4's gate

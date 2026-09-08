@@ -530,7 +530,7 @@ abstention checks."*
    never withhold a claim — which is why it has survived.
    **`planning/content-wave-work-order.md:570` is binding: *"Until [`make graduation-clear`] lands,
    do not hand-edit graduation entries — including the 26 stale candidate ledgers."*** The clearance
-   writer is specified (`rfc/graduation-clearance.md` §6.5, `:137-140`) and **unbuilt**. **None of the
+   writer is specified (`rfc/archive/graduation-clearance.md` §6.5, `:137-140`) and **unbuilt**. **None of the
    8 covering documents is an `onramp-*` candidate**, so the pilot never touches this population —
    but a step-4 authoring run **must not** be allowed to restamp a candidate ledger as a side effect.
 

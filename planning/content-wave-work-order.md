@@ -494,7 +494,7 @@ claim.
 | **1** | **A — provenance repair** | nothing; run today | nothing. It touches 20 pack documents and their sidecars; **do not run concurrently with any other pack-byte job** |
 | **2** | **D — denominator convergence** | nothing; code only | `rfc/shared-resource-registers.md` (draft) proposes `make register-check` over a different join. Different targets; no lane conflict |
 | **3** | **C — engine pass** | job A, because A already re-runs `verify-draft` on both packs | overlaps job A on `anti-scandinavian-white` and `scandinavian-mainline-black`. **Fold C into A's run** rather than re-running the engine twice |
-| **4** | **B — tablebase census** | [[D522]]'s promotion fix landing first, and a new `make tablebase-census` | `rfc/graduation-clearance.md` claims pack schema **0.28** and adds `make graduation-clear`; job B adds records, not schema — no lane conflict, but both will re-stamp digests |
+| **4** | **B — tablebase census** | [[D522]]'s promotion fix landing first, and a new `make tablebase-census` | `rfc/archive/graduation-clearance.md` claims pack schema **0.28** and adds `make graduation-clear`; job B adds records, not schema — no lane conflict, but both will re-stamp digests |
 | **5** | **E — explorer wave** | 60 authored decisions | **This is `feedback-delivery` stage 2** |
 
 **The collision that actually matters.** `rfc/feedback-delivery.md` is **accepted** and lands in two
@@ -504,7 +504,7 @@ landed owner ruling ([[D462]]) requires to happen before anyone plays."* Jobs A�
 resolving D476. **Job E cannot**, and commissioning it is an owner act, not an implementer's.
 
 **A status disagreement to resolve before touching `graduation-clearance`'s lane.** [[D503]] 🐞
-records that the RFC was *"returned under its own buildability clause"*. But `rfc/graduation-clearance.md`'s
+records that the RFC was *"returned under its own buildability clause"*. But `rfc/archive/graduation-clearance.md`'s
 own status line reads **"accepted 2026-08-16 by claude as register owner"**, and `rfc/README.md:12`
 also reads accepted. **Three documents, two answers.** This is a fresh instance of [[D477]] 🐞
 (*"no status-parity check between an RFC's body and `rfc/README.md` — it has blocked an implementer
@@ -573,7 +573,7 @@ claim-slots in §1.
 | Real explorer readings | **available** | `ExplorerClient` → `explorer.lichess.org`; 43 cached artefacts already under `content/sources/lichess-explorer/` |
 | A serving app that can answer a tablebase probe | **NOT available under `make up`** | `make up-engines` (`ENGINE_MODE=maia`) wires `LichessTablebaseSource`. Required only to *demonstrate* the wave's result, never to run it. [[D509]] |
 | A record writer for legal-successor censuses | **does not exist** | new `make tablebase-census`, modelled on `verifySyzygyDraft`. [[D526]] |
-| A `blocking → resolved` writer | **does not exist** | `make graduation-clear`, specified in `rfc/graduation-clearance.md` §6.5 against [[D466]]. **Until it lands, do not hand-edit graduation entries** — including the 26 stale candidate ledgers |
+| A `blocking → resolved` writer | **does not exist** | `make graduation-clear`, specified in `rfc/archive/graduation-clearance.md` §6.5 against [[D466]]. **Until it lands, do not hand-edit graduation entries** — including the 26 stale candidate ledgers |
 | A promotion-correct successor enumerator in `claim-binding.ts` | **broken** | code fix, own commit, before job B. [[D522]] |
 
 **One more thing that does not exist and should be said plainly.** All **220** blocking graduation

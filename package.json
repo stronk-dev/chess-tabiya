@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r --if-present build",
-    "schema:check": "node --test tools/verify-scaffold.test.mjs tools/ci-local.test.mjs && node tools/verify-scaffold.mjs && node tools/verify-packaging.mjs && lefthook validate",
+    "schema:check": "node --test tools/verify-scaffold.test.mjs tools/ci-local.test.mjs tools/graduation-ruling-packaging.test.mjs && node tools/verify-scaffold.mjs && node tools/verify-packaging.mjs && lefthook validate",
     "test": "vitest run",
     "test:software": "vitest run --config vitest.software.config.ts",
     "test:performance": "vitest run --config vitest.performance.config.ts",

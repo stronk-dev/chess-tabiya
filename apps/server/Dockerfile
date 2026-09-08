@@ -45,7 +45,7 @@ COPY --from=build /app/schemas schemas
 COPY --from=build /app/content content
 COPY planning/exploration/log.md planning/exploration/log.md
 COPY docs/tablebase-grounding.md docs/tablebase-grounding.md
-COPY rfc/graduation-clearance.md rfc/graduation-clearance.md
+COPY rfc/archive/graduation-clearance.md rfc/archive/graduation-clearance.md
 
 RUN mkdir -p /data && chown node:node /data
 USER node

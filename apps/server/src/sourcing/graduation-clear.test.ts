@@ -184,6 +184,21 @@ describe("graduation clearance writer", () => {
     expect(() => createGraduationContentDeclaration(pack, "target-elo-authored", "yesterday")).toThrow(/RFC 3339/u);
   });
 
+  it("reopens a removed-referent resolution when either named id returns", async () => {
+    const pack = JSON.parse(await readFile(SOURCE, "utf8"));
+    const ledger = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".evidence.json"), "utf8"));
+    const manifest = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".sources.json"), "utf8"));
+    const clearance = {
+      kind: "referent_removed" as const,
+      subject: "/spine",
+      absentIds: ["bxc5-recoup", "bxc5-trade"],
+    };
+
+    expect(evaluateGraduationClearance(pack, await digestDrillPack(pack), ledger, manifest, "removed-referent", clearance, { subjects: [] })?.holds).toBe(true);
+    pack.spine.push({ ...structuredClone(pack.spine[0]), id: "bxc5-recoup" });
+    expect(evaluateGraduationClearance(pack, await digestDrillPack(pack), ledger, manifest, "removed-referent", clearance, { subjects: [] })?.holds).toBe(false);
+  });
+
   it.each(FIRST_RUN_SOURCES)("resolves only the named first-run assessment entry in %s and records the digest transition", async (source) => {
     const { directory, file } = await fixture(source);
     try {

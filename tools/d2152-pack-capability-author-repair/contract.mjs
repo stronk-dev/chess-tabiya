@@ -70,7 +70,7 @@ function sealedTransition(input) {
   assert.equal(sourceSha, output.legacy.schemaSha256);
   assert.deepEqual(output.stages.map((stage) => stage.lane), ["0.28", "0.29", "0.30"]);
   assert.deepEqual(output.stages.map((stage) => stage.owner), [
-    "rfc/graduation-clearance.md",
+    "rfc/archive/graduation-clearance.md",
     "rfc/pack-population-provenance.md",
     "rfc/pack-capability-contract.md",
   ]);

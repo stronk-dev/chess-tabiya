@@ -18831,3 +18831,18 @@ but this commissioned content-wave gate was outside required verification and si
 old location. The alias now follows the package's public subpath source, and a direct-import fixture
 makes that dependency explicit. The canonical target passes four files and six tests, including the
 Stage-2 per-claim accounting and owner-use tripwire. No content or graduation state changed.
+
+## 2026-09-08 — Graduation-clearance lifecycle completed ([[D3152]], [[D3153]])
+
+The schema-0.28 clearance mechanism is frozen after `make graduation-clearance-acceptance`
+composed the packaging, migration-plan, production writer/report and checkout-corpus boundaries.
+The final audit reads 92 documents / 354 blocking / 34 resolved / 48 accepted / 0 errors. A pure
+Docker-copy set check and omitted-root negative close criterion 15(b); criterion 17 now names the
+first reachable enforcer for all five subject grammars instead of demanding runtime codes hidden by
+stronger schema constants/patterns. Removed-referent reinsertion and `unbuilt` resolution/
+acceptance negatives are permanent production fixtures.
+
+The RFC and its migration planning are archived. [[D409]] is re-homed to
+`planning/content-era/plan.md`: reducing the 354 honest blockers and graduating official packs is
+content work, not unfinished clearance machinery. Authored chess truth, claim binding and
+publication remain held; no pack was promoted by this closeout.

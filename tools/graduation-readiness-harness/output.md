@@ -1,6 +1,6 @@
 # D642 graduation-clearance implementation — raw output
 
-Register: implementing; pack schema 0.28 landed; lifecycle completion remains under acceptance-criterion audit.
+Register: archived and implemented; pack schema 0.28 and criteria 1-26 landed.
 Current corpus: drafts 56 documents / 293 entries (211 blocking, 34 resolved, 48 accepted); candidates 36 pack documents / 143 blocking entries.
 Migration proposal: 436 ready / 0 author-required / 0 contract-blocked; 227 explicit author decisions are checked in.
 Canonical content verification re-runs the migration plan, all standing predicates, citation provenance and the self-minted-ruling refusal.

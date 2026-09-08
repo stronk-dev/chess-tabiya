@@ -190,7 +190,7 @@ sentences already bind — §3.2a shows 63–83 of the 98 also need (b).
 
 1. **The `blocking → resolved` writer — [[D466]], does not exist at HEAD** (verified: no
    `graduation-clear` target in `Makefile`, no `clearGraduationEntries` symbol in the tree).
-   Spec is already pinned to buildability in `rfc/graduation-clearance.md` §6.5
+   Spec is already pinned to buildability in `rfc/archive/graduation-clearance.md` §6.5
    (`:2356-2420`): **`make graduation-clear FILE=<pack.json>` →
    `apps/server/src/sourcing/graduation-clear.ts` exporting
    `clearGraduationEntries(file: string, options?: { readonly now?: () => Date; readonly census?:

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9d6b62a82eae4201eb49e0b00c1c496dd5db9f1958a6286db1e8a269744f124e",
+    "roadmap": "sha256:80c36f8a736adf2f5ed6322fc6413afec4a37b05265aa90853ad82b5ebc34993",
     "workItems": "sha256:1ba9aa43894e8eef775e68523dd33b16ad27493f082c58566e356c1961afe940",
-    "workState": "sha256:7bba4240c4a24cb5a33b5ebee217ae8e8dedcaedca7ab9e4b5e5aaa803c78f7e",
-    "rfcRegister": "sha256:e7fbbbd5affe23a92dee6efcbab75d8fefec79308164ed65a2662dffd5056c68",
+    "workState": "sha256:d624b81d718a98c0b451eb28d49e35cac2f4feedde53d741f6171457fea9322e",
+    "rfcRegister": "sha256:b5037d7ebd86b0f4d8736ca4e6ee65a357fd493062e6f9bb23535619dffee05e",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -18,11 +18,11 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 72,
+    "assignedRfcs": 71,
     "activeRfcLifecycle": {
       "draft": 58,
       "accepted": 0,
-      "implementing": 7,
+      "implementing": 6,
       "awaiting": 7,
       "implemented": 0,
       "superseded": 0,
@@ -33,7 +33,7 @@
       "todo": 621,
       "doing": 2,
       "blocked": 1217,
-      "done": 951,
+      "done": 953,
       "refused": 109
     },
     "workItems": {
@@ -422,15 +422,15 @@
         "impact": "held",
         "evidence": [
           "planning/content-era/plan.md",
-          "planning/graduation-clearance/author-decisions.json",
+          "planning/archive/graduation-clearance/author-decisions.json",
           "apps/server/src/graduation-clearance-corpus.ts",
-          "rfc/graduation-clearance.md"
+          "rfc/archive/graduation-clearance.md"
         ],
         "anchors": [
           {
-            "kind": "rfc",
-            "id": "graduation-clearance.md",
-            "digest": "sha256:2cc9c093f1873f0af12880eecde4af4cbd2c48b1dd8a56c6a394ef1964e2fb24"
+            "kind": "work_state",
+            "id": "D409",
+            "digest": "sha256:7c2a85bcf19ef39daa00bb868838572ee428f52431e1bca2a021ce854ebe3765"
           }
         ]
       },
@@ -783,7 +783,7 @@
       "name": "Theory, library, authoring, packs, provenance, and graduation",
       "release": "core",
       "owner": "content-and-theory",
-      "rfcCount": 6,
+      "rfcCount": 5,
       "workItems": {
         "queued": 14,
         "blocked_owner": 1,

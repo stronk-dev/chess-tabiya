@@ -106,7 +106,7 @@ Version 0.28 makes every graduation state executable rather than narrative. Bloc
 a closed clearance predicate, resolved entries retain that predicate as standing proof, and accepted
 entries explain why the condition is unreachable and cite an exact line. Emitter-owned blockers are
 joined to a nine-template registry; the corpus-wide check rejects vacuous blockers and stale
-resolutions. See `rfc/graduation-clearance.md` and run `make graduation-clearance-corpus-check`.
+resolutions. See `rfc/archive/graduation-clearance.md` and run `make graduation-clearance-corpus-check`.
 
 Version 0.29 makes population provenance explicit without duplicating population data into the
 pack. Optional `provenance.corpusEvidence` is a closed declaration: `ledger`, an explicit

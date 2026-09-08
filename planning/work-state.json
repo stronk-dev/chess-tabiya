@@ -3158,7 +3158,7 @@
       "id": "D409",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1a91609868267e60103e0bb22a67188faf2ff0673720173019b5b71ea0ff4efc",
+      "sourceDigest": "sha256:7c2a85bcf19ef39daa00bb868838572ee428f52431e1bca2a021ce854ebe3765",
       "uxItems": [],
       "owner": "content-and-theory"
     },
@@ -3376,7 +3376,7 @@
       "id": "D434",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:6079a4e084ee0c21af65c41aaa499b35a18d51e8b8dcfa4882335500f941f9e0",
+      "sourceDigest": "sha256:e3456c3649bca8710d63c2d8064716ebabf936d6b391a755954926998b40498e",
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
@@ -18988,7 +18988,7 @@
       "id": "D2397",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:1efb6cb4d767484aec94d46b612ceb466d7eb66c1ed23b88493264f15b6503a0",
+      "sourceDigest": "sha256:c0476d9c02c570fd93c8514566b5284097430e685a00b59f56275e29cd27a877",
       "uxItems": [],
       "evidence": "planning/evidence-foundation-ux/shared-candidate-packet-fifth-author-repair-2026-08-31.md",
       "evidenceKind": "path"
@@ -25032,9 +25032,9 @@
       "id": "D3071",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:1408f37725ccda1a5d5c918529966ed92105081013a83c4a0b2687d765885917",
+      "sourceDigest": "sha256:d7ad253de35697e227e392e5338de45e93637400f06371bc0b2b8dfbcc3e2be3",
       "uxItems": [],
-      "evidence": "planning/graduation-clearance/migration-proposal.json",
+      "evidence": "planning/archive/graduation-clearance/migration-proposal.json",
       "evidenceKind": "path"
     },
     {
@@ -25191,7 +25191,7 @@
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:240672f58c7773edc36213a5fc93ba1d49946e928c4abba962fd64b22ab1a059",
       "uxItems": [],
-      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidence": "planning/archive/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
       "evidenceKind": "path"
     },
     {
@@ -25200,7 +25200,7 @@
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:b0272f4c84307a72367bac34e4bc6cea84acf2894feebd6c2c2869141048d51c",
       "uxItems": [],
-      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidence": "planning/archive/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
       "evidenceKind": "path"
     },
     {
@@ -25209,7 +25209,7 @@
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:85293970da901020e55c05657c8278799fdd12b7761ba30c7422ce2ac2fe0c2d",
       "uxItems": [],
-      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidence": "planning/archive/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
       "evidenceKind": "path"
     },
     {
@@ -25218,7 +25218,7 @@
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:6cea3b22d0eacc4fcf7d21c850e9d62ee98c184854deb2cb9a4bf4686ee7ad78",
       "uxItems": [],
-      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidence": "planning/archive/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
       "evidenceKind": "path"
     },
     {
@@ -25762,6 +25762,24 @@
       "sourceDigest": "sha256:ba20be9cd1295b90901459dc05236bfa2c50e6847bb4e37414f345a2d45b084b",
       "uxItems": [],
       "evidence": "tools/feedback-delivery-harness/config-resolution.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3152",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:973a62f0165a5fc0b691bb0ccbc88cd050edcc4c773eaf7694db833c994a304c",
+      "uxItems": [],
+      "evidence": "planning/archive/graduation-clearance/completion-audit-2026-09-08.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3153",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c333a67fe535a8c78b500fd3dcbce7cb83b085e51077753fc603e7e0ba405e0c",
+      "uxItems": [],
+      "evidence": "planning/archive/graduation-clearance/completion-audit-2026-09-08.md",
       "evidenceKind": "path"
     }
   ]

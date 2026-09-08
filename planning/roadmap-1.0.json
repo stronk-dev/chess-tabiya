@@ -141,7 +141,6 @@
       "release": "core",
       "owner": "content-and-theory",
       "rfcs": [
-        "graduation-clearance.md",
         "pack-population-provenance.md",
         "concept-registry.md",
         "theory-knowledge-pipeline.md",
@@ -451,8 +450,8 @@
           "at": "2026-09-08",
           "summary": "The 436-entry graduation migration is complete with zero author-required or contract-blocked decisions, pack schema 0.28 is live, and every draft/candidate carries typed clearance. The release corpus is still held because no official pack has graduated; the next content pass must satisfy the remaining 354 explicit blockers through grounded evidence and authored content rather than bypassing them.",
           "impact": "held",
-          "evidence": ["planning/content-era/plan.md", "planning/graduation-clearance/author-decisions.json", "apps/server/src/graduation-clearance-corpus.ts", "rfc/graduation-clearance.md"],
-          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:2cc9c093f1873f0af12880eecde4af4cbd2c48b1dd8a56c6a394ef1964e2fb24"}]
+          "evidence": ["planning/content-era/plan.md", "planning/archive/graduation-clearance/author-decisions.json", "apps/server/src/graduation-clearance-corpus.ts", "rfc/archive/graduation-clearance.md"],
+          "anchors": [{"kind": "work_state", "id": "D409", "digest": "sha256:7c2a85bcf19ef39daa00bb868838572ee428f52431e1bca2a021ce854ebe3765"}]
         },
         "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
       },

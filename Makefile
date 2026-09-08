@@ -143,6 +143,9 @@ graduation-clearance-corpus-check:
 	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-clearance-corpus.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-clearance-corpus.js
 	node apps/server/dist/graduation-clearance-corpus.js
 
+.PHONY: graduation-clearance-acceptance
+graduation-clearance-acceptance: schema-check graduation-plan-check graduation-clearance-contract graduation-clearance-corpus-check
+
 evidence-manifest-check:
 	./node_modules/.bin/esbuild apps/server/src/evidence-manifest-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/evidence-manifest-check.js
 	node apps/server/dist/evidence-manifest-check.js
@@ -1453,7 +1456,7 @@ feedback-binding-audit:
 capability-watch-check:
 	$(CI_NODE) tools/capability-watch-harness/check.mjs design/research/capability-watch.json planning/platform-alignment/capability-watch/results.json
 
-verify-content: test-content graduation-plan-check graduation-clearance-corpus-check
+verify-content: test-content graduation-clearance-corpus-check
 
 verify: verify-software verify-governance verify-content
 verify: export ENGINES_REQUIRED := 1

@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { buildGraduationPlan } from "./graduation-clearance-plan.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const OUTPUT = resolve(ROOT, "planning/graduation-clearance/author-decisions.json");
+const OUTPUT = resolve(ROOT, "planning/archive/graduation-clearance/author-decisions.json");
 const TOKEN_STOP = new Set(["about", "after", "again", "against", "author", "authored", "because", "before", "black", "blocker", "cannot", "claim", "does", "entry", "from", "into", "pack", "still", "that", "their", "there", "these", "this", "those", "until", "what", "when", "where", "which", "white", "with"]);
 
 const RESOLVED_POINTERS = Object.freeze({

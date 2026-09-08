@@ -379,7 +379,7 @@ Feeds Gate F clause 7, amended 2026-08-23 to *"measured and ruled per release"* 
 | Backfill `provenance.attribution` | **25 packs** | — | same |
 | Version stamp `0.1.0` → `0.2.0` | **47 packs** | — | same |
 | Graduation-entry migration plan | 92 documents / 436 entries; 203 rule suggestions, 141 recognised emitter entries, 30 resolved + 43 accepted backfill, 5 fixture transitions, **0 unclassified** | **`make graduation-plan`** | **ships and runs clean** |
-| Graduation-entry apply | same population | **`make graduation-clear`** | **SPECIFIED AND UNBUILT** (`rfc/graduation-clearance.md` §6.5; `planning/codex-queue.md:192-193`: *"genuinely does not exist at HEAD"*) |
+| Graduation-entry apply | same population | **`make graduation-clear`** | **SPECIFIED AND UNBUILT** (`rfc/archive/graduation-clearance.md` §6.5; `planning/codex-queue.md:192-193`: *"genuinely does not exist at HEAD"*) |
 | Validation / census / report | 50 packs | `make pack-check`, `make expression-census`, `make graduation-report`, `make verify-draft`, `make sourcing-check` | all ship |
 
 **Mechanical total: 79 field-level pack edits + a 436-entry migration.** The blocking gap is one

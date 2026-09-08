@@ -211,12 +211,75 @@ describe("pack graduation", () => {
           clearance: { kind: "unreachable", subject: "/objective" },
         },
       }],
+      ["GRADUATION_RESOLUTION_UNPROVABLE", {
+        id: "unfinished-resolution",
+        state: "resolved",
+        statement: "Unbuilt work cannot be treated as resolved.",
+        resolved: {
+          at: "2026-09-08",
+          by: "The dependency is still outstanding.",
+          clearance: { kind: "unbuilt", subject: "/objective", blockedBy: "design/BACKLOG.md" },
+        },
+      }],
+      ["GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL", {
+        id: "ledger-points-at-prose",
+        state: "blocking",
+        statement: "Ledger records cannot support prose directly.",
+        clearance: { kind: "ledger_record", recordKind: "engine_eval", subject: "/feedbackClaims/0/text", instrument: "make engine-walk" },
+      }],
     ];
     for (const [code, entry] of cases) {
       const document = structuredClone(base);
       document.provenance.graduationBlockers = [entry];
       expect(validatePackDocument(document).issues, code).toContainEqual(expect.objectContaining({ code }));
     }
+
+    const wrongAssessmentSubject = structuredClone(base);
+    wrongAssessmentSubject.provenance.graduationBlockers = [{
+      id: "wrong-assessment-subject",
+      state: "blocking",
+      statement: "Assessment grounding has one fixed subject.",
+      clearance: { kind: "assessment_grounded", subject: "/objective", instrument: "make verify-draft" },
+    }];
+    expect(validatePackDocument(wrongAssessmentSubject).issues).toContainEqual(expect.objectContaining({
+      code: "SCHEMA_CONST",
+      path: "/provenance/graduationBlockers/0/clearance/subject",
+    }));
+
+    for (const clearance of [
+      { kind: "claim_bound", subject: "/objective/summary", instrument: "make sourcing-check" },
+      { kind: "shape_firing", subject: "/start/fen", instrument: "make expression-census" },
+    ]) {
+      const wrongPattern = structuredClone(base);
+      wrongPattern.provenance.graduationBlockers = [{
+        id: `wrong-${clearance.kind}-subject`,
+        state: "blocking",
+        statement: "The subject must stay inside its schema-owned grammar.",
+        clearance,
+      }];
+      expect(validatePackDocument(wrongPattern).issues, clearance.kind).toContainEqual(expect.objectContaining({
+        code: "SCHEMA_PATTERN",
+        path: "/provenance/graduationBlockers/0/clearance/subject",
+      }));
+    }
+
+    const acceptedUnbuilt = structuredClone(base);
+    acceptedUnbuilt.provenance.graduationBlockers = [{
+      id: "accepted-unbuilt",
+      state: "accepted",
+      statement: "Unbuilt work cannot enter the acceptance branch.",
+      clearance: { kind: "unbuilt", subject: "/objective", blockedBy: "design/BACKLOG.md" },
+      accepted: {
+        kind: "out_of_scope",
+        ruling: "Fixture only.",
+        rulingRef: "rfc/archive/graduation-clearance.md#L1",
+        unreachableBecause: "This malformed fixture must fail before citation admission.",
+      },
+    }];
+    expect(validatePackDocument(acceptedUnbuilt).issues).toContainEqual(expect.objectContaining({
+      code: "SCHEMA_NOT",
+      path: "/provenance/graduationBlockers/0",
+    }));
   });
 
   it("gates every published pack strictly and keeps draft sourcing debt from growing", async () => {

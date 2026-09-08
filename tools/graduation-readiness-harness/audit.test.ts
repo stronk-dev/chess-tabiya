@@ -40,11 +40,11 @@ function counts(root: string): Record<string, number> {
 
 describe("D642 graduation-clearance implementation checkpoint", () => {
   it("pins the live schema, writer, sweep and canonical content gate", () => {
-    expect(source("rfc/README.md")).toMatch(/`graduation-clearance\.md` \| \*\*implementing/u);
+    expect(source("rfc/README.md")).toMatch(/`archive\/graduation-clearance\.md` \| implemented 2026-09-08/u);
     expect(source("packages/schema/src/index.ts")).toContain('DRILL_PACK_SCHEMA_VERSION = "0.28"');
     expect(source("Makefile")).toContain("graduation-clear:");
     expect(source("Makefile")).toContain("graduation-clearance-corpus-check:");
-    expect(source("Makefile")).toMatch(/verify-content:.*graduation-plan-check.*graduation-clearance-corpus-check/u);
+    expect(source("Makefile")).toMatch(/verify-content:.*graduation-clearance-corpus-check/u);
     expect(source("schemas/drill_pack.schema.json")).toContain('"graduationClearance"');
     expect(source("apps/server/src/graduation-clearance-corpus.ts")).toContain("GRADUATION_RULING_SELF_MINTED");
   });
@@ -52,9 +52,9 @@ describe("D642 graduation-clearance implementation checkpoint", () => {
   it("re-derives the migrated corpus population", () => {
     expect(counts("content/drafts")).toEqual({ documents: 56, entries: 293, blocking: 211, resolved: 34, accepted: 48 });
     expect(counts("content/candidates")).toEqual({ documents: 36, entries: 143, blocking: 143, resolved: 0, accepted: 0 });
-    const proposal = JSON.parse(source("planning/graduation-clearance/migration-proposal.json"));
+    const proposal = JSON.parse(source("planning/archive/graduation-clearance/migration-proposal.json"));
     expect(proposal.migration.statuses).toEqual({ ready: 436, requires_author: 0, blocked_contract: 0 });
-    expect(JSON.parse(source("planning/graduation-clearance/author-decisions.json")).decisions).toHaveLength(227);
+    expect(JSON.parse(source("planning/archive/graduation-clearance/author-decisions.json")).decisions).toHaveLength(227);
   });
 
   it("keeps every named mechanism path real", () => {
@@ -65,7 +65,7 @@ describe("D642 graduation-clearance implementation checkpoint", () => {
     const lines = [
       "# D642 graduation-clearance implementation — raw output",
       "",
-      "Register: implementing; pack schema 0.28 landed; lifecycle completion remains under acceptance-criterion audit.",
+      "Register: archived and implemented; pack schema 0.28 and criteria 1-26 landed.",
       "Current corpus: drafts 56 documents / 293 entries (211 blocking, 34 resolved, 48 accepted); candidates 36 pack documents / 143 blocking entries.",
       "Migration proposal: 436 ready / 0 author-required / 0 contract-blocked; 227 explicit author decisions are checked in.",
       "Canonical content verification re-runs the migration plan, all standing predicates, citation provenance and the self-minted-ruling refusal.",

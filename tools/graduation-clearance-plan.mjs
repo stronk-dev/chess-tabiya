@@ -74,8 +74,8 @@ export const TEMPLATE_CLEARANCE_PLANS = EMITTER_GRADUATION_CLEARANCE_PLANS;
 
 const SIDECAR = /\.(?:evidence|graduation|job|sources)\.json$/u;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const PROPOSAL = resolve(ROOT, "planning/graduation-clearance/migration-proposal.json");
-const AUTHOR_DECISIONS = resolve(ROOT, "planning/graduation-clearance/author-decisions.json");
+const PROPOSAL = resolve(ROOT, "planning/archive/graduation-clearance/migration-proposal.json");
+const AUTHOR_DECISIONS = resolve(ROOT, "planning/archive/graduation-clearance/author-decisions.json");
 
 function files(root) {
   const result = [];

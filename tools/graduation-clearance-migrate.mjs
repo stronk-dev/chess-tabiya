@@ -14,11 +14,11 @@ const serverRequire = createRequire(resolve(ROOT, "apps/server/package.json"));
 const Ajv2020 = serverRequire("ajv/dist/2020").default;
 const addFormats = serverRequire("ajv-formats").default;
 const STAGE_C = Object.freeze({
-  "content/drafts/immediate-guard.browser.json": 463,
-  "content/drafts/outcome-hold.browser.json": 464,
-  "content/drafts/outcome-resist.browser.json": 465,
-  "content/drafts/stated-reasoning.browser.json": 466,
-  "content/drafts/trajectory-legs.browser.json": 467,
+  "content/drafts/immediate-guard.browser.json": 471,
+  "content/drafts/outcome-hold.browser.json": 472,
+  "content/drafts/outcome-resist.browser.json": 473,
+  "content/drafts/stated-reasoning.browser.json": 474,
+  "content/drafts/trajectory-legs.browser.json": 475,
 });
 
 function readJson(path) { return JSON.parse(readFileSync(path, "utf8")); }
@@ -70,7 +70,7 @@ function migrate() {
       accepted: {
         kind: "out_of_scope",
         ruling: "The graduation-clearance owner ruling classifies this browser-only mechanical fixture as outside publishable chess content.",
-        rulingRef: `rfc/graduation-clearance.md#L${line}`,
+        rulingRef: `rfc/archive/graduation-clearance.md#L${line}`,
         unreachableBecause: source.statement,
       },
     }];

@@ -9,6 +9,12 @@ authoring is production work, not a system to be spec'd. Design source:
 and (b) **the contracts four RFC attempts could not honestly define**. A pack
 that ships content but yields no contract input has half-failed.
 
+**Open publication outcome ([[D409]]).** The typed clearance foundation is complete, but the
+official shelf remains empty: the current audit reports 354 blocking entries across the 92
+draft/candidate documents. Reducing that population through grounded evidence and authored chess
+content belongs to this programme; it is not a surviving implementation obligation of the frozen
+clearance mechanism.
+
 ## 1. Instrumented authoring cost (Q7 / K10)
 
 One number per pack is useless — it says "expensive" without saying what to fix.

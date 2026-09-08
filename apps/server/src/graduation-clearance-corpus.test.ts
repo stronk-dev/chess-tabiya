@@ -17,19 +17,19 @@ describe("graduation ruling admission sweep", () => {
     git(root, "init", "--quiet");
     git(root, "config", "user.email", "fixture@tabiya.invalid");
     git(root, "config", "user.name", "Tabiya fixture");
-    mkdirSync(resolve(root, "rfc"));
-    const rulingFile = resolve(root, "rfc/graduation-clearance.md");
+    mkdirSync(resolve(root, "rfc/archive"), { recursive: true });
+    const rulingFile = resolve(root, "rfc/archive/graduation-clearance.md");
     writeFileSync(rulingFile, "", "utf8");
-    git(root, "add", "rfc/graduation-clearance.md");
+    git(root, "add", "rfc/archive/graduation-clearance.md");
     git(root, "commit", "--quiet", "-m", "base");
     writeFileSync(rulingFile, "\nfixture ruling\n", "utf8");
 
-    const ref = "rfc/graduation-clearance.md#L2";
+    const ref = "rfc/archive/graduation-clearance.md#L2";
     const current = git(root, "rev-parse", "HEAD");
     expect(auditGraduationRulingLine(root, ref, "fixture ruling", "out_of_scope", current))
       .toContainEqual(expect.stringContaining("GRADUATION_RULING_SELF_MINTED"));
 
-    git(root, "add", "rfc/graduation-clearance.md");
+    git(root, "add", "rfc/archive/graduation-clearance.md");
     git(root, "commit", "--quiet", "-m", "ruling");
     const rulingCommit = git(root, "rev-parse", "HEAD");
     expect(auditGraduationRulingLine(root, ref, "fixture ruling", "out_of_scope", rulingCommit))

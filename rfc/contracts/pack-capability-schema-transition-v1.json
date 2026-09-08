@@ -382,7 +382,7 @@
   "stages": [
     {
       "lane": "0.28",
-      "owner": "rfc/graduation-clearance.md",
+      "owner": "rfc/archive/graduation-clearance.md",
       "source": {
         "schemaId": "urn:chess-tabiya:schema:drill-pack:0.27",
         "schemaSha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0"

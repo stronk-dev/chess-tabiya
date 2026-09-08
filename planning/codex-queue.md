@@ -675,7 +675,7 @@ byte moves:
 
 - **Step 1 — build the `blocking → resolved` writer.** It genuinely does not exist at HEAD (no
   `graduation-clear` target, no `clearGraduationEntries` symbol). The spec is pinned in the
-  accepted `rfc/graduation-clearance.md` §6.5: exact signature, modeled on the shipped
+  accepted `rfc/archive/graduation-clearance.md` §6.5: exact signature, modeled on the shipped
   `verifyDraft`, **mandatory `digestDrillPack` re-stamp**, cached-census rule. The 26 stale
   digests must NOT be bulk-fixed — their re-stamps ride this writer's step-4 application.
 - **Step 2 — the criterion-21(b) per-claim reason lister and the criterion-23 log-trip
@@ -1166,7 +1166,7 @@ explicitly refused** — one code name with two silent behaviours is the defect,
 **[[D469]] closed alongside it:** both image jobs now depend on an engine-required `make verify`
 release job, so no image is built or pushed from a corpus that fails the repository gate.
 
-## 0b. `rfc/graduation-clearance.md` — RETURNED ON [[D503]]
+## 0b. `rfc/archive/graduation-clearance.md` — RETURNED ON [[D503]]
 
 **You returned this once and you were right to.** The first acceptance was granted on the wrong
 test — its four author-call open questions were closed, and **none of the four blockers you
