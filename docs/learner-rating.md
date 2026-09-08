@@ -44,7 +44,10 @@ not shown and never leaks an interval-only pseudo-cell.
 The authenticated shell exposes the learner's measured record at `/rating`. It renders only the
 server-shaped publication: no point estimate appears when the server abstains, every visible
 estimate carries its interval and disclosures, marks name the recorded win event rather than a
-level, and game history reports outcomes without grading moves. Classroom standings render beside
+level, and game history reports outcomes without grading moves. Internal publication states,
+void reasons, lifecycle states, and lowercase side identifiers do not become UI copy: the screen
+names whether it is still gathering games, measured within the ladder, or beyond that ladder, and
+explains why a game was not rated in learner language. Classroom standings render beside
 their classroom on `/live`. Publication requires a separate confirmation that repeats the
 unwitnessed-games limitation; record and rating visibility are independent, and withdrawal is
 immediate. The client preserves server ordering and derives no rank, percentile or praise copy.

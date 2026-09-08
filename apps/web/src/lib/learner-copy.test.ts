@@ -10,10 +10,14 @@ import {
 } from "./chronology-copy.js";
 import {
   attemptVerdictLabel,
+  chessSideLabel,
   corpusPopulationLabel,
   publishedBandInterval,
   publishedBandLabel,
+  ratedGameResultLabel,
+  ratingPublicationStateLabel,
   recordedEvaluationTrajectory,
+  repertoireGapStateLabel,
   storyMomentLabel,
   storyOutcomeLabel,
 } from "./learner-copy.js";
@@ -86,5 +90,23 @@ describe("learner-facing domain copy", () => {
       ratedGames: 8,
       abandonedGames: 0,
     })).toBe("band 1389 to above band 2200");
+  });
+
+  it("translates repertoire and rating storage states into learner actions", () => {
+    expect(repertoireGapStateLabel("open")).toBe("No rehearsal yet");
+    expect(repertoireGapStateLabel("addressed")).toBe("Rehearsal played — choose your answer");
+    expect(repertoireGapStateLabel("answered")).toBe("Repertoire answer chosen");
+    expect(ratingPublicationStateLabel("provisional")).toBe("Still gathering games");
+    expect(ratingPublicationStateLabel("published")).toBe("Measured within the ladder");
+    expect(ratingPublicationStateLabel("bounded")).toBe("Outside the measured ladder");
+  });
+
+  it("renders rated-game history without lifecycle or wire identifiers", () => {
+    expect(chessSideLabel("white")).toBe("White");
+    expect(chessSideLabel("black")).toBe("Black");
+    expect(ratedGameResultLabel({ state: "sealed", voidReason: null, result: "win" })).toBe("Won");
+    expect(ratedGameResultLabel({ state: "sealed", voidReason: null, result: null })).toBe("Result pending");
+    expect(ratedGameResultLabel({ state: "voided", voidReason: "engine_changed", result: null })).toBe("Not rated — opponent changed");
+    expect(ratedGameResultLabel({ state: "voided", voidReason: null, result: null })).toBe("Not rated");
   });
 });

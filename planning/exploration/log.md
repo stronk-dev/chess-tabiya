@@ -18962,3 +18962,19 @@ broad ARIA label and then an option/list ambiguity); both locators were narrowed
 boundaries. `make verify-software` passes 188 files / 1,173 tests, performance, schema, manifests,
 production builds and rating isolation. The final `make test-browser` passes all 64 required
 desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-08 — Learn and Rating vocabulary boundary ([[D3164]])
+
+Two ordinary learner surfaces still printed internal lifecycle states after the broader chronology
+and Live cleanups. Learn exposed `open`, `addressed`, and `answered` beside each repertoire gap;
+Rating exposed its publication state, lowercase side, and underscore-normalized void reason.
+One exhaustive typed copy authority now translates each closed union into the learner consequence.
+
+The existing mounted repertoire journey was strengthened rather than replaced: it observes the
+copy change through import, scan, entry, a played move, return, explicit repertoire choice, rescan,
+and deletion. The mounted rating fixture binds the measured status, side, and result. The first
+software run caught an overbroad negative assertion that banned an ordinary English word inside a
+server disclosure; the oracle was narrowed to the exact status field rather than weakening the
+surface. `make verify-software` passes 188 files / 1,175 tests plus performance, schema, semantic
+manifests, production builds, and rating isolation. `make test-browser` passes all 64 required
+desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.

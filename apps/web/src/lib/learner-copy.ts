@@ -1,6 +1,6 @@
 import type { PublishedBandValue, RatingPublication } from "@chess-tabiya/runtime/rating";
 
-import type { CorpusPopulation, ProgressAttempt } from "./api.js";
+import type { CorpusPopulation, ProgressAttempt, RatedGameHistoryItem, RepertoireGap } from "./api.js";
 
 const STORY_MOMENT_LABELS = Object.freeze({
   irreversibility: "Irreversible change",
@@ -22,6 +22,49 @@ export function attemptVerdictLabel(verdict: ProgressAttempt["verdict"]): string
   if (verdict === "stable") return "Objective held";
   if (verdict === "unstable") return "Objective not held";
   return "Objective unresolved";
+}
+
+const REPERTOIRE_GAP_STATE_LABELS = Object.freeze({
+  open: "No rehearsal yet",
+  addressed: "Rehearsal played — choose your answer",
+  answered: "Repertoire answer chosen",
+} satisfies Record<RepertoireGap["state"], string>);
+
+export function repertoireGapStateLabel(state: RepertoireGap["state"]): string {
+  return REPERTOIRE_GAP_STATE_LABELS[state];
+}
+
+const RATING_PUBLICATION_STATE_LABELS = Object.freeze({
+  provisional: "Still gathering games",
+  published: "Measured within the ladder",
+  bounded: "Outside the measured ladder",
+} satisfies Record<RatingPublication["state"], string>);
+
+export function ratingPublicationStateLabel(state: RatingPublication["state"]): string {
+  return RATING_PUBLICATION_STATE_LABELS[state];
+}
+
+const RATED_GAME_VOID_REASON_LABELS = Object.freeze({
+  rewound: "rewound during play",
+  forked: "branched during play",
+  assistance: "assistance used",
+  engine_changed: "opponent changed",
+  calibration_retired: "rating calibration retired",
+  abandoned: "game abandoned",
+} satisfies Record<NonNullable<RatedGameHistoryItem["voidReason"]>, string>);
+
+export function ratedGameResultLabel(game: Pick<RatedGameHistoryItem, "state" | "voidReason" | "result">): string {
+  if (game.state === "voided") {
+    return `Not rated${game.voidReason === null ? "" : ` — ${RATED_GAME_VOID_REASON_LABELS[game.voidReason]}`}`;
+  }
+  if (game.result === "win") return "Won";
+  if (game.result === "loss") return "Lost";
+  if (game.result === "draw") return "Drawn";
+  return "Result pending";
+}
+
+export function chessSideLabel(side: "white" | "black"): string {
+  return side === "white" ? "White" : "Black";
 }
 
 function signedPawns(centipawns: number): string {

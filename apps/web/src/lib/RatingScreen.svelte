@@ -5,11 +5,16 @@
   import type {
     DrillClientApi,
     LearnerMark,
-    RatedGameHistoryItem,
     RatingHistoryPage,
     RatingView,
   } from "./api.js";
-  import { publishedBandInterval, publishedBandLabel } from "./learner-copy.js";
+  import {
+    chessSideLabel,
+    publishedBandInterval,
+    publishedBandLabel,
+    ratedGameResultLabel,
+    ratingPublicationStateLabel,
+  } from "./learner-copy.js";
 
   interface Props {
     api: DrillClientApi;
@@ -43,11 +48,6 @@
     } finally {
       loading = false;
     }
-  }
-
-  function gameResult(game: RatedGameHistoryItem): string {
-    if (game.state === "voided") return game.voidReason === null ? "voided" : `voided: ${game.voidReason.replaceAll("_", " ")}`;
-    return game.result ?? "sealed";
   }
 
   function readableDate(value: string | null): string {
@@ -123,7 +123,7 @@
           <p class="interval">{publishedBandInterval(publication)}</p>
         </div>
         <dl>
-          <div><dt>State</dt><dd>{publication.state}</dd></div>
+          <div><dt>Status</dt><dd>{ratingPublicationStateLabel(publication.state)}</dd></div>
           <div><dt>Rated games</dt><dd>{publication.ratedGames}</dd></div>
           <div><dt>Abandoned</dt><dd>{publication.abandonedGames}</dd></div>
         </dl>
@@ -146,7 +146,7 @@
       {#if history?.games.length}
         <div class="table-scroll"><table>
           <thead><tr><th>Date</th><th>Opponent</th><th>Side</th><th>Result</th></tr></thead>
-          <tbody>{#each [...history.games].reverse() as game}<tr><td>{readableDate(game.sealedAt ?? game.startedAt)}</td><td>Band {game.opponentBand}</td><td>{game.learnerSide}</td><td>{gameResult(game)}</td></tr>{/each}</tbody>
+          <tbody>{#each [...history.games].reverse() as game}<tr><td>{readableDate(game.sealedAt ?? game.startedAt)}</td><td>Band {game.opponentBand}</td><td>{chessSideLabel(game.learnerSide)}</td><td>{ratedGameResultLabel(game)}</td></tr>{/each}</tbody>
         </table></div>
       {:else}
         <p>No rated-game result has been recorded. Rated campaign games will appear here after they reach a chess-rules result.</p>

@@ -11,7 +11,7 @@
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
-  import { attemptVerdictLabel, corpusPopulationLabel } from "./lib/learner-copy.js";
+  import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, repertoireGapStateLabel } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
@@ -1714,7 +1714,7 @@
           {#each repertoires as repertoire}
             {@const page=repertoirePages[repertoire.id]}
             <article class="repertoire-card">
-              <div><h3>{repertoire.name}</h3><p>{repertoire.side} · {repertoire.targetElo} band · cover replies seen at least 1 in {repertoire.coverageDenominator} games</p></div>
+              <div><h3>{repertoire.name}</h3><p>{chessSideLabel(repertoire.side)} · {repertoire.targetElo} band · cover replies seen at least 1 in {repertoire.coverageDenominator} games</p></div>
               <div class="row-actions"><button type="button" onclick={()=>void scanRepertoire(repertoire.id)}>{page?.status==="ready"?"Rescan":"Scan gaps"}</button><button type="button" onclick={()=>repertoireDeleteIntent=repertoire.id}>Delete repertoire</button></div>
               {#if repertoireDeleteIntent===repertoire.id}<aside class="consent-card" aria-label={`Delete ${repertoire.name}`}><h4>Delete {repertoire.name}?</h4><p>Its imported moves, scan results, and repertoire links will be removed. Rehearsal runs already created from gaps stay in your saved run history.</p><div class="row-actions"><button type="button" disabled={repertoireMutationBusy} onclick={()=>void deleteRepertoire(repertoire.id)}>{repertoireMutationBusy?"Deleting…":"Confirm deletion"}</button><button type="button" disabled={repertoireMutationBusy} onclick={()=>repertoireDeleteIntent=undefined}>Cancel</button></div></aside>{/if}
               {#if page?.status==="pending"}<p>Scanning…</p>{/if}
@@ -1727,7 +1727,7 @@
                   {#if page.scan.unreachedKeys>0}<p class="honest">{page.scan.unreachedKeys} repertoire {page.scan.unreachedKeys===1?"position was":"positions were"} not reached within this scan.</p>{/if}
                   {#each page.scan.gaps as gap,index}
                     <div class="gap-row">
-                      <div><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {gap.state}</span>
+                      <div><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {repertoireGapStateLabel(gap.state)}</span>
                         {#if gap.firstMoves.length>0}<div class="gap-answer"><span>Moves you tried:</span>{#each gap.firstMoves as move}{#if gap.answer?.moveUci===move.moveUci}<strong>Current repertoire answer: {move.moveSan}</strong>{:else}<button type="button" disabled={repertoireAnswerBusy!==undefined} aria-describedby={repertoireAnswerBusy!==undefined?`gap-answer-status-${gap.key}`:undefined} onclick={()=>void chooseRepertoireAnswer(repertoire.id,gap.key,move.moveUci,repertoire.digest)}>{repertoireAnswerBusy===`${repertoire.id}:${gap.key}:${move.moveUci}`?"Saving…":`Use ${move.moveSan} as my repertoire answer`}</button>{/if}{/each}</div>{/if}
                         {#if repertoireAnswerBusy!==undefined}<span id={`gap-answer-status-${gap.key}`} class="honest">Finish saving the current repertoire choice first.</span>{/if}
                         {#if repertoireAnswerErrors[gap.key]}<p role="alert">{repertoireAnswerErrors[gap.key]}</p>{/if}
@@ -1736,7 +1736,7 @@
                     </div>
                   {:else}<p>No ranked gaps above this bound.</p>{/each}
                   {#if page.scan.gaps[0]&&!repertoireEntry(page.scan.gaps[0].runId).available}<p id={`gap-resistance-${repertoire.id}`} class="honest">{repertoireEntry(page.scan.gaps[0].runId).reason}</p>{/if}
-                  {#if page.scan.alternateGaps.length>0}<h4>Behind alternate repertoire answers</h4>{#each page.scan.alternateGaps as gap}<p>{gap.replySan||"First move"} after {gap.line.join(" ")} · frequency deliberately unranked · {gap.state}</p>{/each}{/if}
+                  {#if page.scan.alternateGaps.length>0}<h4>Behind alternate repertoire answers</h4>{#each page.scan.alternateGaps as gap}<p>{gap.replySan||"First move"} after {gap.line.join(" ")} · frequency deliberately unranked · {repertoireGapStateLabel(gap.state)}</p>{/each}{/if}
                   {#if page.scan.unknown.length>0}<h4>Where the corpus abstained</h4>{#each page.scan.unknown as entry}<p>{entry.line.join(" ")||"Root position"}: {entry.detail}. You reach this position in about 1 in {entry.gamesUntilPosition} games; frequency beyond it is unknown.</p>{/each}{/if}
                 </div>
               {/if}

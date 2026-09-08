@@ -42,6 +42,11 @@ selected repertoire band. If it is unavailable but Stockfish is present, the act
 names Stockfish before the learner selects it; when neither opponent is available the
 control is disabled with the reason. A linked run always remains reopenable.
 
+The wire states remain `open`, `addressed`, and `answered`, but Learn does not expose
+those storage terms. It describes the learner consequence instead: no rehearsal yet,
+rehearsal played with an answer still to choose, or repertoire answer chosen. The side
+is likewise rendered as White or Black rather than passed through as an identifier.
+
 Repertoires are private to their owner. Foreign reads are indistinguishable from
 missing data. Study fetches are credential-free and serialized with ordinary Lichess
 imports; corpus requests contain position and population but no learner identity.

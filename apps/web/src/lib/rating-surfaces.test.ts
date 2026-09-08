@@ -39,8 +39,12 @@ describe("learner rating surfaces", () => {
     } as unknown as DrillClientApi } });
     await vi.waitFor(() => expect(document.querySelector("h2")?.textContent).toContain("band 1548"));
     expect(document.body.textContent).toContain("band 1410 to band 1690");
+    expect(document.body.textContent).toContain("Measured within the ladder");
     expect(document.body.textContent).toContain("Beat band 1800 on");
     expect(document.body.textContent).toContain("Band 1800");
+    expect(document.body.textContent).toContain("Black");
+    expect(document.body.textContent).toContain("Drawn");
+    expect(document.querySelector(".rating-card dd")?.textContent).toBe("Measured within the ladder");
     expect(document.body.textContent).toContain("not FIDE, Lichess, or Chess.com");
     expect(document.body.textContent).not.toContain("improved");
     await unmount(component);

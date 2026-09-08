@@ -25875,6 +25875,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/live-copy.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3164",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8e1fbc6dae597eea669587b9cda29e5627b03150908b34e66b3e25d4630eb730",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/learner-copy.ts",
+      "evidenceKind": "path"
     }
   ]
 }
