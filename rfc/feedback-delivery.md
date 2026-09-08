@@ -738,7 +738,7 @@ A claim has no anchor (§1.1c). Three routes exist and two are refused:
   authored or ledger-recorded basis.**
 - **Refused for now: require an authored anchor.** Adding `at` to `$defs/feedbackClaim` is a
   pack-schema change (**the next free lane is `0.29`; `0.28` is claimed and held by
-  `rfc/graduation-clearance.md` — see §5.1**) *and* a **196-claim** authoring wave, and it would deliver **zero** claims until
+  `rfc/archive/graduation-clearance.md` — see §5.1**) *and* a **196-claim** authoring wave, and it would deliver **zero** claims until
   that wave completes. Q8's verdict is that the remedy is delivery, not authoring; spending a
   schema number and an authoring wave to deliver nothing today is the opposite trade. **This
   refusal is now much closer than it was** — see §2.2c's accepted cost and Open question 4.
@@ -1831,7 +1831,7 @@ class of drift this morning.)*
   landed or been claimed since** — 0.23 `engine-leverage`, 0.24 `vocabulary-wiring`, 0.25
   `archive/format-surface.md`, **0.26 `archive/claim-backing.md`**, 0.27 `archive/pack-graduation.md`
   — and **`0.29` is the next free lane; `0.28` is claimed and held by
-  `rfc/graduation-clearance.md`**. §2.1 and Open question 4 are corrected to say so. This RFC claims
+  `rfc/archive/graduation-clearance.md`**. §2.1 and Open question 4 are corrected to say so. This RFC claims
   none of them and is unaffected by their landing order.
   *(Corrected at this pass: the previous revision wrote **"0.28 is the next free lane, currently held
   by `graduation-clearance`"**, which is self-contradictory — a held lane is not free — and it is
@@ -2118,7 +2118,7 @@ is **still zero** — `authored-feedback`, `AuthoredFeedbackItem`, `feedbackClai
 `CompareView`, `StripEntry`, `boundClaimIds` and `claimBackings` occur zero times in it. What
 changed is not a collision but an **instrument**: §1.2(c) adopts its census as criterion 2's
 corroborating derivation of the claim denominator, and records that C8 gives `derived_feature` and
-`hypothesis` their first consumers. `rfc/graduation-clearance.md` — **returned to author at
+`hypothesis` their first consumers. `rfc/archive/graduation-clearance.md` — **returned to author at
 `8c389f0`** on [[D464]]–[[D467]] and now through a second author round; it **still holds pack lane
 0.28**, and it still reads `boundClaimIds`/`claimBackings` read-only as empty on unverified packs,
 which agrees with §3.3's fail-closed fallbacks. `rfc/opponent-contracts.md` — implemented at
@@ -2712,7 +2712,7 @@ used as-is.
    lines gets nothing, and **17 of 50 packs' exhaustion depends on the opponent policy** rather than
    on the learner. An anchor makes delivery incremental instead. Three candidates, none taken here:
    - **an authored `at` on `$defs/feedbackClaim`** — the next free pack lane, **`0.29`** at HEAD
-     (`0.28` is claimed and held by `rfc/graduation-clearance.md`; §5.1), plus a **196-claim**
+     (`0.28` is claimed and held by `rfc/archive/graduation-clearance.md`; §5.1), plus a **196-claim**
      wave. *The `$def` is now
      `additionalProperties: false`, so this can no longer be smuggled in unversioned — which is
      D112's closure working as intended.*

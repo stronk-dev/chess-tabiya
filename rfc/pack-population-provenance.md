@@ -10,8 +10,8 @@
   2026-08-12 (*"owner chose immediate RFCs"*). Routed here as **RFC-5** by
   `planning/rfc-drafting-queue.md` §2.5, which records the gate as PASSES with one carve-out (Open questions, Q1).
 - **Depends on:** `rfc/archive/shared-resource-registers.md` (implemented — the `evidence-kinds`
-  register and this RFC's live member claim now exist); `rfc/graduation-clearance.md` (accepted — holds pack
-  lane 0.28)
+  register and this RFC's live member claim now exist); `rfc/archive/graduation-clearance.md`
+  (implemented — shipped pack lane 0.28)
 - **Parent / amends:** — (extends `rfc/archive/pack-graduation.md`'s `$defs/provenance` and
   `rfc/archive/claim-backing.md`'s evidence-ledger vocabulary)
 - **Supersedes / superseded by:** —
@@ -534,8 +534,8 @@ This RFC claims **pack schema 0.29** and one `EVIDENCE_KINDS` member.
 
 Verified at the symbol at `451bb44`: `DRILL_PACK_SCHEMA_VERSION` is `"0.27"`
 (`packages/schema/src/index.ts`); `schemas/drill_pack.schema.json` `$id` is
-`urn:chess-tabiya:schema:drill-pack:0.27`; `rfc/README.md` records **0.28 claimed and held by
-`graduation-clearance`** and **0.29 as the next free lane**. No run-schema lane (`drill_run.schema.json`
+`urn:chess-tabiya:schema:drill-pack:0.27`; `rfc/README.md` records **0.28 implemented by
+`graduation-clearance`** and **0.29 as this RFC's live claimed lane**. No run-schema lane (`drill_run.schema.json`
 is 0.17), no shape-entry lane (`shape_entry.schema.json` is 0.3), no principle-entry lane
 (`principle_entry.schema.json` is 0.1), and **no migration position** — `STORAGE_VERSION` is **25**
 at HEAD 2026-08-23 (`apps/server/src/storage.ts:631`; it was 23 at `451bb44`) and nothing here
@@ -546,11 +546,11 @@ touches stored runs, so the claim is unaffected by the two migrations landed sin
 ### §8a — Two seams closed by amendment at acceptance (cross-review 2026-08-23)
 
 **Seam 1 — the eighth `EVIDENCE_KINDS` member forces a fourth pack-schema change in this same lane.**
-`graduation-clearance` (accepted, lane 0.28) does **not** restate the evidence-kind enum; it reuses
+`graduation-clearance` (implemented, lane 0.28) does **not** restate the evidence-kind enum; it reuses
 the shipped one, and says why in terms: the enum is reused *"so that a kind added to
 `EVIDENCE_KINDS` cannot silently become unexpressible in a clearance"*, with
 `GRADUATION_CLEARANCE_RECORDKIND_UNKNOWN` as the guard and **"criterion 13 asserts the two lists are
-the same list"** (`rfc/graduation-clearance.md:646`, read at the symbol). Adding `citable_text` as
+the same list"** (`rfc/archive/graduation-clearance.md:646`, read at the symbol). Adding `citable_text` as
 the eighth kind therefore makes it **unexpressible in a clearance** unless
 `$defs/graduationEntry.clearance.recordKind` gains it in the same lane — and criterion 13 turns red
 the moment this RFC lands without it. The `tabiya-claims` block declared **three** pack-schema
@@ -591,7 +591,7 @@ the seven kinds and adds no member, while this one adds `citable_text`. Under RF
 `evidence-kinds` register's claim form is `members <name>…`, not a version — two claims on
 *different* members are not a collision, so this claim does not contest anything.
 
-**Landing order.** Behind `graduation-clearance` (holds 0.28). Behind
+**Landing order.** After implemented `graduation-clearance` (shipped 0.28). Behind
 `rfc/archive/shared-resource-registers.md`, which has created the `evidence-kinds` register and
 records this document's member claim — closing [[D499]] without adding a numeric vocabulary version.
 

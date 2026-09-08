@@ -1200,7 +1200,7 @@ a boss is a `position` session, so the ruling adds no pack field, no `authoredBo
 no boss flag (§5.3a). `DRILL_PACK_SCHEMA_VERSION` reads **"0.27"** at this round
 (`packages/schema/src/index.ts`) `[V]`, unmoved. *The cross-review's note that 0.28 is "unclaimed"
 is now stale in the other direction: `opponent-contracts` did release it (D385), and
-`rfc/graduation-clearance.md` has since **claimed and kept** 0.28 for `$defs/graduationEntry` —
+`rfc/archive/graduation-clearance.md` has since **implemented** 0.28 for `$defs/graduationEntry` —
 its §7 verdict reads "**keep 0.28**" `[V]`.* This RFC claims no pack lane, releases none, and
 contests `graduation-clearance`'s not at all.
 

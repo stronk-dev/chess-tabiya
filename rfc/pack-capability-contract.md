@@ -16,7 +16,7 @@
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
 - **Exploration gate:** O6.1 approved as [[D995]] and O6.2 ruled as [[D996]]; `planning/platform-alignment/theory-drill/o5-o6-handoff.md:96` reads verbatim `O6.1 + O6.2 approved → F3 may draft` (line corrected from `:100`, a code fence, by cross-review 2026-08-23)
 - **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions)
-  and `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5).
+  and `rfc/archive/graduation-clearance.md` (implemented — shipped lane 0.28, the planner precedent in its §6.5).
   The `rfc/provider-health-degradation.md` dependency left with §5.2 on 2026-09-06 and is now the
   successor's. **Followed by, never imports:** draft `rfc/claim-semantic-anchors.md`, which may
   adopt F3's generic identity only after F3 is accepted.
