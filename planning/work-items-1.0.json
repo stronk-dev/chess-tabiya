@@ -1619,16 +1619,20 @@
     {
       "id": "ATR-a17",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§3.4",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "**Drop `irreversibility` to last** — a 79.9% false-positive rate on a shipped, unasked marker, reproduced by two harnesses",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:72a3acedc8c0a9e29b66d7e73eb52464689c1a3d667ab1da85ce41ab66fb6cd6"
+      "sourceDigest": "sha256:72a3acedc8c0a9e29b66d7e73eb52464689c1a3d667ab1da85ce41ab66fb6cd6",
+      "completion": {
+        "completedOn": "2026-09-08",
+        "evidence": "rankStoryMoments makes the closed family order executable and selects an irreversibility-only moment after every stronger or generic recorded family"
+      }
     },
     {
       "id": "ATR-a18",

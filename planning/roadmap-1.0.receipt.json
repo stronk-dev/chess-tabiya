@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:6e4f712abc1aab09432ab2f3c9671c5d30350d7c07286db51b98383bc10e036f",
-    "workItems": "sha256:7b98e9f1ac232192996945cbd8b4b72e3d7f0f05739c4a187d2110f5811e16e7",
+    "roadmap": "sha256:878cbf133096f16096381f1ac8ce042bc993daa8ff348334021749ac5a92b355",
+    "workItems": "sha256:702a58c830ea053761a2ca0642960ff56462f13f2732011d2a4fc93c3b598dbb",
     "workState": "sha256:7b4082e9cf02f71fac8b024c8735ac5d8fe4bd847b9c09282501d083d5d66733",
     "rfcRegister": "sha256:205bd28f6cc5eba599ec5598522b1df4282d74618ad818d0d9a71f9999267486",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
@@ -37,10 +37,10 @@
       "refused": 109
     },
     "workItems": {
-      "queued": 122,
+      "queued": 121,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 242,
+      "completed": 243,
       "retired": 24
     },
     "dimensionStates": {
@@ -382,7 +382,7 @@
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-09-08",
-        "summary": "The in-run Support doorway names its selected help style while keeping raw evidence-channel controls behind Advanced; related-rehearsal return doors speak titles and legal SAN; saved-run chrome resolves titles plus shared objective-progress language; and Story now presents its evidence-selected moments in chronology without implying a quality ranking while long explanation copy scrolls beside, and cannot resize, its fixed desktop board. Account shows exact data-retention effects before destructive intent. Full route-level journeys still wait on evidence modules, preset activation, durable state and production API closure.",
+        "summary": "The in-run Support doorway names its selected help style while keeping raw evidence-channel controls behind Advanced; related-rehearsal return doors speak titles and legal SAN; saved-run chrome resolves titles plus shared objective-progress language; and Story now presents its evidence-selected moments in chronology without implying a quality ranking, keeps long copy beside a fixed desktop board, and prevents irreversibility-only noise from crowding out other recorded families. Account shows exact data-retention effects before destructive intent. Full route-level journeys still wait on evidence modules, preset activation, durable state and production API closure.",
         "impact": "advanced",
         "evidence": [
           "planning/ux-implementation-index.md",
@@ -734,10 +734,10 @@
       "owner": "review-and-return",
       "rfcCount": 5,
       "workItems": {
-        "queued": 14,
+        "queued": 13,
         "blocked_owner": 4,
         "blocked_rfc": 25,
-        "completed": 20,
+        "completed": 21,
         "retired": 4
       },
       "routes": {

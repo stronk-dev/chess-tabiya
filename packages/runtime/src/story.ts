@@ -33,6 +33,17 @@ export interface StoryMomentSelection { readonly moments: readonly StoryMoment[]
 export interface StoryTitleInput { readonly side: "white" | "black"; readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: RunOutcome | "1-0" | "0-1" | "1/2-1/2" | "*" }; readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
 export const STORY_MATE_CP = 1000;
 export const STORY_PIVOT_CP = 150;
+const STORY_MOMENT_PRIORITY: Readonly<Record<StoryMomentKind, number>> = Object.freeze({
+  outcome: 0,
+  eval_pivot: 1,
+  last_level: 2,
+  phase_change: 3,
+  endgame_entry: 4,
+  shape_span: 6,
+  human_divergence: 7,
+  option_collapse: 7,
+  irreversibility: 8,
+});
 const ref = (id: string) => ({ id, version: 1 } as const);
 const storyEvidence = (kind: "eval_shift" | "last_level" | "title", values: Readonly<Record<string, unknown>>): DeclaredEvidence<unknown> => declareStoryDerivedEvidence(kind, Object.freeze({ ...values }));
 
@@ -112,6 +123,19 @@ export function selectedStoryMoments(
   limit = 8,
 ): readonly StoryMoment[] {
   return storyMomentSelection(story, limit).moments;
+}
+
+/** Ranks only for bounded selection. Irreversibility alone is deliberately the final family. */
+export function rankStoryMoments(moments: readonly StoryMoment[]): readonly string[] {
+  const priority = (moment: StoryMoment): number => moment.kinds.length === 0
+    ? 7
+    : Math.min(...moment.kinds.map((kind) => STORY_MOMENT_PRIORITY[kind]));
+  return Object.freeze([...moments]
+    .sort((left, right) => priority(left) - priority(right)
+      || Math.abs((right.evalAfter?.centipawns ?? 0) - (right.evalBefore?.centipawns ?? 0))
+        - Math.abs((left.evalAfter?.centipawns ?? 0) - (left.evalBefore?.centipawns ?? 0))
+      || left.ply - right.ply)
+    .map((moment) => moment.nodeId));
 }
 
 const STORY_SOURCE_LABELS = Object.freeze({
@@ -237,8 +261,7 @@ export function storyMoments(
       ...(value.endgame === undefined ? {} : { endgame: value.endgame }),
     })];
   }).sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId));
-  const priority = (moment: StoryMoment): number => moment.kinds.includes("outcome") ? 0 : moment.kinds.includes("eval_pivot") ? 1 : moment.kinds.includes("last_level") ? 2 : moment.kinds.includes("phase_change") ? 3 : moment.kinds.includes("endgame_entry") ? 4 : moment.kinds.includes("irreversibility") ? 5 : moment.kinds.includes("shape_span") ? 6 : 7;
-  const rank = [...moments].sort((left, right) => priority(left) - priority(right) || Math.abs((right.evalAfter?.centipawns ?? 0) - (right.evalBefore?.centipawns ?? 0)) - Math.abs((left.evalAfter?.centipawns ?? 0) - (left.evalBefore?.centipawns ?? 0)) || left.ply - right.ply).map((moment) => moment.nodeId);
+  const rank = rankStoryMoments(moments);
   const rankEvidence = declareStoryDerivedEvidence("rank", Object.freeze({ rank: Object.freeze(rank) }));
   const renderedRank = reviewStoryEvidence([rankEvidence]);
   const admittedRank = (renderedRank.items[0]!.evidence.payload as { readonly rank: readonly string[] }).rank;

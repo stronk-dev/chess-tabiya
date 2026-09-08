@@ -18694,3 +18694,16 @@ The served imported-game journey switches to the 1280×720 floor, injects enough
 to force overflow, and proves that the detail region scrolls while the board rectangle remains
 byte-for-byte unchanged and inside the stage. This closes the board-column half of the field rule
 with interaction-state evidence rather than a CSS-token assertion.
+
+## 2026-09-08 — Irreversibility-only Story moments select last
+
+The queued ATR-a17 Review selector correction is implemented as the named
+`rankStoryMoments` runtime primitive. Its closed family table puts an irreversibility-only moment
+after shape, phase, evaluation, outcome and other recorded families. A co-located stronger signal
+still wins—the rule suppresses noisy selection pressure, not evidence attached to a genuinely
+important moment.
+
+The runtime fixture crosses the dangerous boundary directly: an early irreversibility-only moment
+must remain behind a later generic moment, while a moment carrying both outcome and
+irreversibility must stay first. Story rendering remains chronological and the irreversibility fact
+remains inspectable; only the bounded selection order changed.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, PRIMARY_EVIDENCE_MANIFEST, renderReviewStoryEvidence, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment } from "./index.js";
+import { attachEvidence, commitMove, createRun, PRIMARY_EVIDENCE_MANIFEST, rankStoryMoments, renderReviewStoryEvidence, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment, type StoryMomentKind } from "./index.js";
 
 if (false) {
   // @ts-expect-error review story rendering consumes only a compiled evidence view.
@@ -68,5 +68,26 @@ describe("grounded game story", () => {
       moments: [{ nodeId: "early" }, { nodeId: "middle" }, { nodeId: "late" }],
     });
     expect(() => selectedStoryMoments({ moments, rank: [] }, -1)).toThrow(/non-negative/u);
+  });
+
+  it("selects an irreversibility-only moment after every other story family", () => {
+    const moment = (nodeId: string, ply: number, kinds: readonly StoryMomentKind[]): StoryMoment => ({
+      nodeId, entryNodeId: nodeId, ply, san: null, fen: "8/8/8/8/8/8/8/8 w - - 0 1",
+      kinds, sentences: [], evidence: [], phase: "endgame",
+    });
+    const moments = [
+      moment("irreversible", 1, ["irreversibility"]),
+      moment("generic", 2, []),
+      moment("shape", 3, ["shape_span"]),
+      moment("collapse", 4, ["option_collapse"]),
+      moment("outcome-and-irreversible", 5, ["irreversibility", "outcome"]),
+    ];
+    expect(rankStoryMoments(moments)).toEqual([
+      "outcome-and-irreversible",
+      "shape",
+      "generic",
+      "collapse",
+      "irreversible",
+    ]);
   });
 });

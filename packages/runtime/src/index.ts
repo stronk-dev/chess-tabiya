@@ -102,7 +102,7 @@ export {
 } from "./transition.js";
 export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { STORY_MATE_CP, STORY_PIVOT_CP, renderReviewStoryEvidence, reviewStoryTitle, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryMomentSelection, type StoryProjection, type StoryTitleInput } from "./story.js";
+export { STORY_MATE_CP, STORY_PIVOT_CP, rankStoryMoments, renderReviewStoryEvidence, reviewStoryTitle, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryMomentSelection, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {
   voiceCheck,
   renderRecordedReading,
