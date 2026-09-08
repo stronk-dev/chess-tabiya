@@ -17,7 +17,8 @@ count as blocking. Published documents with a blocking entry are invalid. Candid
 the typed blocking form, but candidates never appear in the graduable set.
 
 `make graduation-report` reports each catalogue root separately, lists every pack and every
-blocking condition, writes the grouped accepted-condition audit page at
+blocking condition, and prints every authored `timingWindows[].note` verbatim beneath its pack so
+reviewers do not approve a widened but invisible teaching field. It writes the grouped accepted-condition audit page at
 `content/accepted-conditions.md`, and refuses a nonzero legacy count. `make graduation-report` is
 read-only; use the deliberately named `make graduation-report-update` only when a reviewed pack
 change is meant to refresh the checked-in accepted-conditions page.

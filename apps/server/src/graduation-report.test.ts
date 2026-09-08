@@ -84,6 +84,41 @@ describe("pack graduation", () => {
     }
   });
 
+  it("prints every authored timing-window note verbatim", async () => {
+    const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-timing-notes-"));
+    try {
+      const document = JSON.parse(await readFile("schemas/drill_pack.example.json", "utf8"));
+      document.id = "timing-note-report-fixture";
+      document.timingWindows = [
+        {
+          id: "first-window",
+          label: "First window",
+          opens: { onTrigger: { atStart: true } },
+          closes: [{ kind: "deadline", afterLearnerMoves: 2 }],
+          readiness: { mode: "any", of: [{ moveUci: "e2e4" }] },
+          luxuryMoveBudget: 0,
+          note: "Keep this exact authored note: 17/23, **including punctuation**.",
+        },
+        {
+          id: "second-window",
+          label: "Second window",
+          opens: { onTrigger: { atStart: true } },
+          closes: [{ kind: "deadline", afterLearnerMoves: 3 }],
+          readiness: { mode: "any", of: [{ moveUci: "d2d4" }] },
+          luxuryMoveBudget: 1,
+          note: "A second independent note must not be collapsed into the first.",
+        },
+      ];
+      await writeFile(join(temporary, "fixture.json"), `${JSON.stringify(document, null, 2)}\n`);
+
+      const report = await graduationReport([temporary]);
+      expect(report.text).toContain("**timing window first-window** — Keep this exact authored note: 17/23, **including punctuation**.");
+      expect(report.text).toContain("**timing window second-window** — A second independent note must not be collapsed into the first.");
+    } finally {
+      await rm(temporary, { recursive: true, force: true });
+    }
+  });
+
   it("resolves one moved pack from either catalogue root and refuses a stale duplicate", async () => {
     const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-"));
     const drafts = join(temporary, "drafts");

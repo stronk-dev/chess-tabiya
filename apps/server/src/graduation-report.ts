@@ -1,7 +1,10 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, resolve } from "node:path";
 
-import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
+import {
+  digestDrillPack,
+  type DrillPackDefinition,
+} from "@chess-tabiya/schema/drill-pack";
 
 interface Clearance {
   readonly kind: "assessment_grounded" | "ledger_record" | "claim_bound" | "shape_firing" | "pointer_authored" | "unbuilt" | "unreachable" | "referent_removed";
@@ -18,6 +21,12 @@ type Entry = string | {
   readonly resolved?: { readonly clearance?: Clearance };
   readonly accepted?: { readonly kind: string; readonly ruling: string; readonly rulingRef: string; readonly unreachableBecause?: string };
 };
+
+interface GraduationReportDocument {
+  readonly id: string;
+  readonly timingWindows?: DrillPackDefinition["timingWindows"];
+  readonly provenance?: { readonly graduationBlockers?: Entry[] };
+}
 
 const CLEARABLE_KINDS = new Set<Clearance["kind"]>([
   "assessment_grounded",
@@ -87,7 +96,10 @@ export async function graduationReport(roots: readonly string[] = ["content/draf
   let legacy = 0;
   const sections: string[] = [];
   for (const root of roots) {
-    const documents = files(root).map((file) => ({ file, document: JSON.parse(readFileSync(file, "utf8")) as { id: string; provenance?: { graduationBlockers?: Entry[] } } }));
+    const documents = files(root).map((file) => ({
+      file,
+      document: JSON.parse(readFileSync(file, "utf8")) as GraduationReportDocument,
+    }));
     const counts = { blocking: 0, resolved: 0, accepted: 0, legacy: 0, clearable: 0, unclearable: 0, unspecified: 0 };
     const documentLines: string[] = [];
     for (const { file, document } of documents) {
@@ -121,6 +133,11 @@ export async function graduationReport(roots: readonly string[] = ["content/draf
       };
       const digestState = storedDigest.state === "missing" ? "no evidence ledger" : storedDigest.state === "invalid" ? "evidence ledger INVALID" : digestFresh ? "evidence digest fresh" : "evidence digest STALE";
       documentLines.push(`- **${document.id}** — blocking ${stateCounts.blocking}; resolved ${stateCounts.resolved}; accepted ${stateCounts.accepted}; ${digestState}`);
+      for (const window of document.timingWindows ?? []) {
+        if (window.note !== undefined) {
+          documentLines.push(`  - **timing window ${window.id}** — ${window.note}`);
+        }
+      }
       for (const entry of blocking) {
         if (typeof entry === "string") documentLines.push(`  - **legacy** — ${entry}`);
         else documentLines.push(`  - **${entry.id}** — ${entry.statement}; clears via ${clearanceLabel(entry.clearance)}`);

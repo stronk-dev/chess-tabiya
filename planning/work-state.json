@@ -8992,11 +8992,12 @@
     },
     {
       "id": "D1113",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c5fa510bc6b8b0bd5ada57877db2b3217aa5490d8e86a98235fabd1dbd18d94c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f7d2ad7bcb241688d23dbd7d7b378f9300a0a6261b9d20e60531be9e46b9d718",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/graduation-report.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1114",

@@ -18616,3 +18616,14 @@ private by default until the public projection deliberately admits it.
 
 `make typecheck` and the canonical loopback-enabled `make test-software` pass: 184 files and 1,148
 tests. D230 closes.
+
+## 2026-09-08 — Graduation reports expose authored timing-window evidence
+
+The author-facing graduation report now prints every `timingWindows[].note` verbatim beneath its
+pack. A permanent two-window fixture proves that distinct notes, numbers and punctuation survive
+the report path without being collapsed or rewritten. This gives the previously constrained but
+unread field a real review consumer and closes `pack-population-provenance` criterion 9 / D1113;
+the held schema 0.29 migration and authored corpus-population discharges remain open.
+
+The canonical `make test-software` gate passes with 184 files and 1,148 tests, and the real
+`make graduation-report` walk completes over all catalogue roots.
