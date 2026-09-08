@@ -18558,3 +18558,19 @@ changes therefore cannot rotate the token or invalidate their own population ari
 records the required contract amendment; no ad-hoc digest widening or reusable concurrency token
 was shipped. `make typecheck`, 184 software files / 1,146 tests, and the full browser suite (63
 passed, one optional Maia latency measurement skipped) pass. D3145 closes with D3146 live.
+
+## 2026-09-08 — Checkpoints visibly pause the board and the unreachable sweep closes
+
+The last two product routes from the unreachable-mechanism sweep had already gained a complete
+learner path under D313, but D1141 still called them uncallable. Its record now closes against the
+mounted simulation action, typed transport and scratch/promotion integration evidence; the one
+remaining metrics route retains its explicit operator-only disposition. D485 was partly stale for
+the same reason, but its original interaction finding remained live: a checkpoint trapped focus
+correctly while leaving the board looking playable behind it.
+
+The run screen now disables both move and mark input while a required checkpoint is open, marks
+the semantic grid read-only, and places a visible **Board paused** explanation on the board itself.
+The checkpoint still owns focus and the learner is told exactly which action restores play. The
+mounted screen regression and real keyboard browser journey bind the visible explanation,
+description relationship, read-only state and dialog focus boundary. All 1,146 software tests and
+the 19-test desktop/mobile browser matrix pass. D485 and D1141 close.

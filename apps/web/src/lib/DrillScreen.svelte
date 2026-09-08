@@ -1137,18 +1137,19 @@
     <div class="workspace" class:evidence-active={compactTab === "evidence"}>
       <section class="position-column" class:outcome={grading !== undefined || pack?.objective.type === "follow_theory"}>
         <div class="board-slot">
-          <div class="board-frame" class:previewing={previewNodeId !== undefined}>
+          <div class="board-frame" class:previewing={previewNodeId !== undefined} class:checkpoint-paused={checkpoint !== undefined}>
             {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
               <Chessboard
                 fen={displayedNode.fen}
                 startSide={boardSide ?? startSide}
                 lastMove={displayedNode.moveUci}
-                disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
+                disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined || checkpoint !== undefined}
                 showDests={effectiveLighting !== "off"}
                 highlightMoves={effectiveLighting !== "off"}
                 overlays={boardOverlays}
                 marks={displayedMarks}
-                drawingEnabled={previewNodeId === undefined}
+                drawingEnabled={previewNodeId === undefined && checkpoint === undefined}
+                describedBy={checkpoint !== undefined ? "checkpoint-board-paused" : undefined}
                 onMarksChange={changedMarks}
                 onSelect={(square) => selectedSquare = square}
                 onExitGrid={() => regionElement?.focus()}
@@ -1162,6 +1163,12 @@
                 onFocusRestored={() => boardFocusRequested = false}
                 onMove={boardMove}
               />
+            {#if checkpoint !== undefined}
+              <div class="checkpoint-pause" id="checkpoint-board-paused">
+                <strong>Board paused</strong>
+                <span>Choose a checkpoint action to continue.</span>
+              </div>
+            {/if}
           </div>
         </div>
         <div class="timeline-strip">
@@ -1901,6 +1908,38 @@
   .board-frame.previewing {
     opacity: 0.82;
     outline: 3px solid var(--warning);
+  }
+
+  .board-frame.checkpoint-paused {
+    outline: 3px solid var(--accent);
+  }
+
+  .checkpoint-pause {
+    position: absolute;
+    z-index: 5;
+    inset: 50% auto auto 50%;
+    width: min(20rem, calc(100% - 2rem));
+    transform: translate(-50%, -50%);
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 65%, var(--line));
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--panel) 92%, transparent);
+    box-shadow: var(--shadow);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .checkpoint-pause strong {
+    color: var(--accent);
+    font: 700 0.72rem ui-monospace, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .checkpoint-pause span {
+    font-size: 0.78rem;
   }
 
   .preview-label {

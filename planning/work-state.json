@@ -3806,11 +3806,12 @@
     },
     {
       "id": "D485",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:595c4bf1ebb4bfa066c78d6cc8c84427e968d7da5d57c657aa086b8364525dba",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cadb41d7f3c4ea5b43a9adc38b11906429c390fc3f081c8b55990bee937e6336",
       "uxItems": [],
-      "owner": "coordinator"
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     },
     {
       "id": "D486",
@@ -9072,11 +9073,12 @@
     },
     {
       "id": "D1141",
-      "state": "todo",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:50e2f159cff773635d0334a38af94d99aeb533b8252c0ac401c065087a4306da",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d90354d9c04efc77984a54212200d52701242cb5ccc70ee8283dabcdc48fcfdf",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "apps/web/src/lib/SimulationPreview.svelte",
+      "evidenceKind": "path"
     },
     {
       "id": "D1142",

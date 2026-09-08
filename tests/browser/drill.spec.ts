@@ -2085,6 +2085,10 @@ test("@matrix the semantic board remains complete and yields focus to a checkpoi
   await expect(checkpoint).toBeVisible();
   expect(await checkpoint.evaluate((element) => element.contains(document.activeElement))).toBe(true);
   expect(await grid.evaluate((element) => element.closest("[inert]") !== null)).toBe(true);
+  await expect(page.getByText("Board paused", { exact: true })).toBeVisible();
+  await expect(page.getByText("Choose a checkpoint action to continue.", { exact: true })).toBeVisible();
+  await expect(grid).toHaveAttribute("aria-readonly", "true");
+  await expect(grid).toHaveAttribute("aria-describedby", "checkpoint-board-paused");
   await expect(grid).toHaveAttribute("aria-activedescendant", /-square-e3$/u);
   expect(await grid.evaluate((element) => {
     const id = element.getAttribute("aria-activedescendant");

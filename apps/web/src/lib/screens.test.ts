@@ -982,6 +982,12 @@ describe("Layer 3 screens", () => {
       "Critical race resolved",
     );
     expect(document.activeElement?.textContent).toBe("Critical race resolved");
+    const pausedBoard = document.querySelector<HTMLElement>(".board-frame.checkpoint-paused")!;
+    expect(pausedBoard.textContent).toContain("Board paused");
+    expect(pausedBoard.textContent).toContain("Choose a checkpoint action to continue.");
+    const pausedGrid = pausedBoard.querySelector<HTMLElement>("[data-board-input-grid]")!;
+    expect(pausedGrid.getAttribute("aria-readonly")).toBe("true");
+    expect(pausedGrid.getAttribute("aria-describedby")).toBe("checkpoint-board-paused");
     expect(document.body.textContent).toContain("Authored setup explanation.");
     expect(document.body.textContent).not.toContain(
       "Earlier occurrence must stay out of this sheet.",
