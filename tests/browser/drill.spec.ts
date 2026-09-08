@@ -1080,6 +1080,9 @@ async function clickMove(page: Page, from: string, to: string): Promise<void> {
   const box = await board.boundingBox();
   if (box === null) throw new Error("Chessground board has no bounding box");
   const origin = squarePoint(box, from);
+  const submitted = page.waitForResponse(
+    (response) => response.request().method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(response.url()).pathname),
+  );
   await page.mouse.click(origin.x, origin.y);
   await board.evaluate(
     (element) =>
@@ -1091,6 +1094,10 @@ async function clickMove(page: Page, from: string, to: string): Promise<void> {
   if (selectedBox === null) throw new Error("Chessground board has no selected bounding box");
   const destination = squarePoint(selectedBox, to);
   await page.mouse.click(destination.x, destination.y);
+  const response = await submitted;
+  expect(response.ok()).toBe(true);
+  expect(response.request().postDataJSON()).toMatchObject({ uci: `${from}${to}` });
+  await expect(page.locator(".input-status")).toContainText("Move committed:");
 }
 
 async function liveClickMove(
@@ -1467,17 +1474,18 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
   await expect(page.locator(".group-marker")).toHaveCount(3);
   await expect(page.getByText("Fixed resistance: within this group, the same position always receives the same reply.")).toBeVisible();
 
-  // The captured seed is the first learner ply. Play one more learner decision
-  // in each member; the ordinary opponent loop lands between them.
-  await clickMove(page, "d1", "d2");
-  if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
+  // Each seed starts at ply three in this four-ply pack. Creating or entering a
+  // member runs its opponent reply, so rotate only after resolving that member's
+  // checkpoint; attempting another learner move would be a terminal-run error.
+  await expect(page.locator(".rail li.active strong")).toHaveText("f3");
+  await expect(page.getByText("Board paused", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
   await page.getByRole("button", { name: "Next member" }).click();
+  await expect(page.locator(".rail li.active strong")).toHaveText("h3");
   await page.getByLabel("Advance").selectOption("lockstep");
-  const activeBeforeLockstep = await page.locator(".rail li.active strong").textContent();
-  await move(page, "f2", "f3");
-  if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
+  await clickMove(page, "f2", "f3");
+  await expect(page.locator(".rail li.active strong")).toHaveText("a3");
   await expect(page.locator(".rail li.active .group-marker")).toBeVisible();
-  await expect(page.locator(".rail li.active strong")).not.toHaveText(activeBeforeLockstep ?? "");
   await clickMove(page, "d1", "d2");
   if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
 

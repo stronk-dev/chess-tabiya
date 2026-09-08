@@ -78,6 +78,7 @@
   import { repertoireEntryDecision } from "./lib/repertoire-entry.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
+  import { loadAssistance } from "./lib/assistance-preference.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
   import { importFailureCopy } from "./lib/import-presentation.js";
 
@@ -101,12 +102,12 @@
   const router = untrack(() => routerProp ?? new HistoryRouter());
   const storage = untrack(() => storageProp);
   const FIRST_REHEARSAL_RUN_KEY = "tabiya.first-rehearsal.v1.run";
-  function firstRehearsalStorage(): KeyValueStorage | undefined {
+  function applicationStorage(): KeyValueStorage | undefined {
     if (storage !== undefined) return storage;
     try { return globalThis.localStorage; } catch { return undefined; }
   }
   function storedFirstRehearsalRunId(): string | undefined {
-    const value = firstRehearsalStorage()?.getItem(FIRST_REHEARSAL_RUN_KEY);
+    const value = applicationStorage()?.getItem(FIRST_REHEARSAL_RUN_KEY);
     return value === null || value === undefined || value === "" ? undefined : value;
   }
   let firstRehearsalRunId: string | undefined = $state(storedFirstRehearsalRunId());
@@ -122,7 +123,7 @@
     onRunStarted: ({ runId }) => {
       if (startingFirstRehearsal) {
         firstRehearsalRunId = runId;
-        firstRehearsalStorage()?.setItem(FIRST_REHEARSAL_RUN_KEY, runId);
+        applicationStorage()?.setItem(FIRST_REHEARSAL_RUN_KEY, runId);
       }
       router.navigate(routePath({ name: "run", runId }));
     },
@@ -446,7 +447,7 @@
 
   function completeFirstRehearsal(): void {
     firstRehearsalRunId = undefined;
-    firstRehearsalStorage()?.setItem(FIRST_REHEARSAL_RUN_KEY, "");
+    applicationStorage()?.setItem(FIRST_REHEARSAL_RUN_KEY, "");
   }
 
   function focusPrimaryNavigation(): void {
@@ -1611,7 +1612,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<GameStoryScreen {story} shares={storyShares} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : async () => { const created = await api.shareStory!(storyRunId, story!.branchId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); return created; }} onRevoke={api.revokeStoryShare === undefined ? undefined : async (tokenId) => { await api.revokeStoryShare!(storyRunId, tokenId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); }} onVoice={capabilities?.providers.llm === "external" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<GameStoryScreen {story} shares={storyShares} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : async () => { const created = await api.shareStory!(storyRunId, story!.branchId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); return created; }} onRevoke={api.revokeStoryShare === undefined ? undefined : async (tokenId) => { await api.revokeStoryShare!(storyRunId, tokenId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); }} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

@@ -119,6 +119,10 @@ test("Settings exposes independent persisted pickers and inherited contrast disc
 test("Settings native controls share the token-driven application baseline", async ({ page }) => {
   await register(page);
   await page.goto("/settings");
+  await expect(page.locator("select").first()).toBeVisible();
+  await expect(page.locator('input[type="checkbox"]').first()).toBeVisible();
+  await expect(page.locator('input[type="password"]').first()).toBeVisible();
+  await expect(page.locator("button").first()).toBeVisible();
   const result = await page.evaluate(() => {
     const select = document.querySelector<HTMLSelectElement>("select");
     const checkbox = document.querySelector<HTMLInputElement>('input[type="checkbox"]');

@@ -959,11 +959,12 @@
     },
     {
       "id": "D104",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:17a1327bd2a1838951246ae32b74ec6509fe1820f74766b3583ee166e677f712",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:868bf200858590e0a0aef0e80c15ae22fc3d0ec991a1192069142adaf52f228d",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "tests/browser/drill.spec.ts binds clickMove to the successful mutation response and visible committed status",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D105",
@@ -5110,11 +5111,12 @@
     },
     {
       "id": "D636",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a0fb88d5dd5fbb5cd7d7ddba08745b7daa77b720e01af3822f3741f2214ac1b4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2e484478180292183704c9d3944b5448e71eec9979ffbb31929d32908539707f",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "apps/web/src/lib/app-shell.test.ts proves imported Story narration follows the imported assistance profile",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D637",
@@ -25819,6 +25821,24 @@
       "uxItems": [],
       "evidence": "Closeout evidence is recorded in the corresponding ledger rows and planning/exploration/log.md",
       "evidenceKind": "closeout-prose"
+    },
+    {
+      "id": "D3158",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:intent-presets.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:053db76a54dfaff07db446db1880e1e73a0eafcff377f9cd5db7ae5124fe35b2",
+      "uxItems": []
+    },
+    {
+      "id": "D3159",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bb66b52b5e597c8f647133c5eb62a73b14824df265ab7ef16a532ca8216d1182",
+      "uxItems": [],
+      "evidence": "tests/browser/theme.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

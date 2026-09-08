@@ -18881,3 +18881,30 @@ journeys with one optional Maia measurement skipped. Its six packs × five viewp
 modes complete all 150 cells in 48.8 seconds on the final run. [[D217]] was reconciled in the same
 closeout: root-relative branch-mark remapping and its PGN regression had already shipped in
 `acebb918a`; only the ledger and work-state row remained stale.
+
+## 2026-09-08 — Story voice obeys its workflow and the branch journey owns its commit ([[D104]], [[D636]])
+
+The imported-game Story no longer treats external-provider availability as permission to narrate.
+It loads the imported workflow's assistance profile and offers provider rendering only after an
+explicit persona-voice selection. The application-level regression exercises both sides: the
+authored default has no narration action; the same story with a persisted persona choice renders
+the action and sends the exact story-scoped request.
+
+The served-Najdorf flake is closed at its missing boundary rather than by retrying it. The shared
+`clickMove` journey helper now waits for the exact successful mutation response and the visible
+commit status before the test reads branch state. This is the same request-versus-application-state
+class exposed by [[D3156]], applied to the older branch walkthrough. The separate Academy mismatch
+is now [[D3158]]: its Guided identity and silent primitive defaults cannot be reconciled honestly
+until the intent-preset compiler owns activation.
+
+## 2026-09-08 — Browser journeys wait for the state they inspect ([[D3159]])
+
+The stricter move boundary exposed that the branch-group journey had silently attempted a move on
+an objective-terminal member. The journey now resolves that member, rotates to a live member, and
+proves two accepted commits plus lockstep rotation before comparison. The Settings style contract
+likewise waits for every asynchronously mounted native-control family before sampling it; it does
+not widen a timeout or add a retry.
+
+The canonical `make test-browser` gate passes 64 journeys with the explicitly optional Maia
+measurement skipped. This final run covers desktop and mobile composition, every permanent board
+input mode, the corrected branch-group mutation boundary, and the mounted Settings controls.

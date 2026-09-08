@@ -235,6 +235,10 @@ Lucena/Philidor/Vancura evidence even when no forward detector produced a timeli
 renderings and speech requests retain the requested `reading` or `marker` scope, and a returned
 rendering is shown only while its source node remains the position displayed on the board.
 
+The imported-game Story follows the imported workflow's voice preference. An available external
+provider does not itself expose narration: the learner must have selected persona voice for that
+workflow, while the authored default keeps recorded evidence and deterministic rendering only.
+
 Rules-derived explanations remain visible because they are engine-free facts
 from the objective machine. Evidence references have runtime constructors and
 the v1 grammar `rules:<fact>`, `pack:<checkpointId>`, and `engine:<jobId>`.
@@ -541,9 +545,9 @@ the next rendered frame and once again after layout settles. The browser gate
 hit-tests the authored source, remeasures after selection and asserts the exact
 outgoing UCI for every served endgame at desktop, tablet and phone projections;
 resting containment or merely observing some legal move is not accepted as
-interaction correctness. Each input cell waits for both the successful mutation response and the
-visible committed status before navigating to the next run, so late responses cannot make the
-matrix validate the wrong application state.
+interaction correctness. Move-submitting browser helpers wait for both the successful mutation
+response and the visible committed status before asserting later state or navigating to the next
+run, so late responses cannot make a journey validate the wrong application state.
 
 Selection state is one authoritative Chessboard output: pointer selection and deselection report
 the settled Chessground square, keyboard cancellation reports absence, and commit, preview, rewind

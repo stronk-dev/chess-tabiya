@@ -3,7 +3,7 @@
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { commitMove, createRun } from "@chess-tabiya/runtime";
+import { SILENT_ASSISTANCE, commitMove, createRun } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -26,7 +26,9 @@ import type {
   PackSummary,
   RunSummary,
   ShapeDraft,
+  GameStory,
 } from "./api.js";
+import { saveAssistance } from "./assistance-preference.js";
 import { HistoryRouter } from "./router.js";
 import { WriterSession, type KeyValueStorage } from "./writer-session.js";
 
@@ -201,6 +203,47 @@ afterEach(() => {
 });
 
 describe("application shell", () => {
+  it("offers imported-story narration only after persona voice is selected", async () => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const story: GameStory = {
+      ready: true,
+      pendingEvidence: 0,
+      branchId: "main",
+      side: "white",
+      source: { kind: "pgn_paste", headers: { White: "Ada", Black: "Mina" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
+      outcome: { kind: "unfinished" },
+      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: ["A recorded moment."], evidence: [], phase: "opening" }],
+      rank: ["moment-1"],
+    };
+    const voice = vi.fn(async () => ({ text: "Grounded narration.", source: "provider" as const, scope: "story" as const }));
+    const storyApi: DrillClientApi = {
+      ...api(),
+      async capabilities() { return { ...capabilities, providers: { ...capabilities.providers, llm: "external" } }; },
+      async story() { return story; },
+      voice,
+    };
+
+    const authoredStorage = new MemoryStorage();
+    const authored = mount(App, { target: target(), props: { api: storyApi, router: new HistoryRouter(window), storage: authoredStorage } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Ada – Mina"));
+    expect([...document.querySelectorAll("button")].some((button) => button.textContent === "Narrate grounded moment")).toBe(false);
+    await unmount(authored);
+    document.body.replaceChildren();
+
+    const personaStorage = new MemoryStorage();
+    saveAssistance("imported", { ...SILENT_ASSISTANCE, voice: "persona" }, personaStorage);
+    const persona = mount(App, { target: target(), props: { api: storyApi, router: new HistoryRouter(window), storage: personaStorage } });
+    const narrate = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Narrate grounded moment");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    narrate.click();
+    await vi.waitFor(() => expect(voice).toHaveBeenCalledWith("route-run", "moment-1", "story"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Grounded narration."));
+    await unmount(persona);
+  });
+
   it("turns an empty Home into a direct rehearsal start instead of an empty resume card", async () => {
     const emptyApi: DrillClientApi = { ...api(), async runs() { return []; } };
     const component = mount(App, {
