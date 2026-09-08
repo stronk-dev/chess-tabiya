@@ -1,5 +1,6 @@
 <script lang="ts">
   import HonestControl from "./HonestControl.svelte";
+  import { rehearsalStepLabel } from "./learner-copy.js";
   import type { TimelineEntry } from "./screen-model.js";
 
   interface Props {
@@ -72,7 +73,7 @@
           data-timeline-node={entry.nodeId}
           class:preview={previewNodeId === entry.nodeId}
           aria-current={activeNodeId === entry.nodeId ? "step" : undefined}
-          aria-label={`Ply ${entry.ply}: ${entry.moveSan}${
+          aria-label={`${rehearsalStepLabel(entry.ply)}: ${entry.moveSan}${
             entry.checkpointIds.length > 0 ? `, checkpoint ${entry.checkpointIds.join(", ")}` : ""
           }`}
           onclick={() => onPreview(entry.nodeId)}

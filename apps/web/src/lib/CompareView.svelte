@@ -16,6 +16,7 @@
   } from "./compare-geometry.js";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { learnerMoveLabel } from "./learner-move-label.js";
+  import { rehearsalStepLabel } from "./learner-copy.js";
   import { resistanceModeLabel, resistanceSentences } from "./outcome-presentation.js";
   import { comparisonNode, evidencePayloads } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
@@ -181,9 +182,9 @@
     return shared.length === 0 ? "The chess positions are different at this ply." : `${shared.map((group) => group.join(" and ")).join("; ")} have re-converged; the other positions differ.`;
   }
   function theorySentence(entry: LineMembershipEntry): string {
-    if (entry.verdict === "on_line") return `Ply ${entry.ply}: stayed on the authored line${entry.insideBoundary ? "" : " beyond its feedback boundary"}.`;
-    if (entry.verdict === "classified_deviation") return `Ply ${entry.ply}: the authored pack classifies this as ${entry.deviationClass?.replaceAll("_", " ") ?? "a deviation"}.`;
-    return `Ply ${entry.ply}: the authored line does not classify this move.`;
+    if (entry.verdict === "on_line") return `${rehearsalStepLabel(entry.ply)}: stayed on the authored line${entry.insideBoundary ? "" : " beyond its feedback boundary"}.`;
+    if (entry.verdict === "classified_deviation") return `${rehearsalStepLabel(entry.ply)}: the authored pack classifies this as ${entry.deviationClass?.replaceAll("_", " ") ?? "a deviation"}.`;
+    return `${rehearsalStepLabel(entry.ply)}: the authored line does not classify this move.`;
   }
   function openInspector(event: MouseEvent): void {
     inspectorInvoker = event.currentTarget as HTMLButtonElement;

@@ -1,6 +1,7 @@
 import type { DrillRun } from "@chess-tabiya/runtime";
 
 import type { AuthoredFeedbackItem } from "./api.js";
+import { rehearsalStepLabel } from "./learner-copy.js";
 import { learnerMoveLabel } from "./learner-move-label.js";
 
 export const UNKNOWN_THEORY_NOTE =
@@ -15,10 +16,10 @@ export function theoryVerdictSentence(
     "the recorded move",
   );
   if (item.verdict === "on_line") {
-    return `Ply ${item.anchor.ply}, ${san}: on the authored line.`;
+    return `${rehearsalStepLabel(item.anchor.ply)}, ${san}: on the authored line.`;
   }
   if (item.verdict === "classified_deviation") {
-    return `Ply ${item.anchor.ply}, ${san}: the pack has authored commentary about this alternative.`;
+    return `${rehearsalStepLabel(item.anchor.ply)}, ${san}: the pack has authored commentary about this alternative.`;
   }
-  return `Ply ${item.anchor.ply}, ${san}: this pack has no statement about this move.`;
+  return `${rehearsalStepLabel(item.anchor.ply)}, ${san}: this pack has no statement about this move.`;
 }

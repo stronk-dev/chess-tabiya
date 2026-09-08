@@ -25839,6 +25839,24 @@
       "uxItems": [],
       "evidence": "tests/browser/theme.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3160",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:d29fb5d37286fe36dbaa9d399323767769f41323479c07a5cc82f8f57a073c62",
+      "uxItems": [],
+      "ruling": "design/BACKLOG.md",
+      "rulingKind": "source-row"
+    },
+    {
+      "id": "D3161",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:358d9ac83f4c5722734b909873bcd390e85b0c02f9fda6c3e76ca6a75f4bca62",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/learner-copy.ts",
+      "evidenceKind": "path"
     }
   ]
 }

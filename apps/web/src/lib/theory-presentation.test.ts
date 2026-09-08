@@ -24,7 +24,7 @@ function item(deviationMistakes?: readonly string[]): Extract<AuthoredFeedbackIt
 describe("theory verdict presentation", () => {
   it("keeps classifier and mistake tokens out of learner copy", () => {
     expect(theoryVerdictSentence(item(["timing", "plan"]), run)).toBe(
-      "Ply 8, Qd2: the pack has authored commentary about this alternative.",
+      "Rehearsal step 8, Qd2: the pack has authored commentary about this alternative.",
     );
     const sentence = theoryVerdictSentence(item(["tactical", "plan", "timing"]), run);
     expect(sentence).not.toMatch(/concept_violation|plan|timing|tactical/u);
@@ -32,13 +32,13 @@ describe("theory verdict presentation", () => {
 
   it("renders absence without a placeholder", () => {
     expect(theoryVerdictSentence(item(), run)).toBe(
-      "Ply 8, Qd2: the pack has authored commentary about this alternative.",
+      "Rehearsal step 8, Qd2: the pack has authored commentary about this alternative.",
     );
   });
 
   it("does not expose the UCI anchor when the run lacks SAN", () => {
     expect(theoryVerdictSentence(item(), { nodes: [{ id: "n1", moveSan: null }] } as unknown as DrillRun)).toBe(
-      "Ply 8, the recorded move: the pack has authored commentary about this alternative.",
+      "Rehearsal step 8, the recorded move: the pack has authored commentary about this alternative.",
     );
   });
 });

@@ -2,7 +2,7 @@
   import { reviewStoryTitle, storyEvidenceSourceLabels, storyMomentSelection } from "@chess-tabiya/runtime";
   import type { GameStory, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
-  import { recordedEvaluationTrajectory, storyMomentLabel, storyOutcomeLabel, storyReentryCopy } from "./learner-copy.js";
+  import { recordedEvaluationTrajectory, storyMomentLabel, storyMoveLabel, storyOutcomeLabel, storyReentryCopy } from "./learner-copy.js";
   import { storyCardDocument } from "./story-card.js";
 
   interface Props {
@@ -110,7 +110,7 @@
     <section class="stage" aria-label="Selected story moment">
       <div class="board"><Chessboard fen={selected.fen} startSide={story.side} disabled={true} onMove={() => {}} /></div>
       <article class="moment-detail">
-        <p class="eyebrow">Ply {selected.ply}{selected.san ? ` · ${selected.san}` : ""}</p>
+        <p class="eyebrow">{storyMoveLabel(selected.ply)}{selected.san ? ` · ${selected.san}` : ""}</p>
         <h2>{selected.kinds.map(storyMomentLabel).join(" + ")}</h2>
         {#each selected.sentences as sentence}<p>{sentence}</p>{/each}
         <p class="provenance">Sources: {sourceLabels.join(" · ") || "recorded story"}</p>
@@ -128,7 +128,7 @@
     {#if selection.shown < selection.total}<p id="story-moment-budget" class="selection-budget">Showing {selection.shown} of {selection.total} recorded moments selected for this story.</p>{/if}
     <ul class="rail" aria-label="Game story moments" aria-describedby={selection.shown < selection.total ? "story-moment-order story-moment-budget" : "story-moment-order"}>
       {#each selectedMoments as moment}
-        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectedId = moment.nodeId}><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>ply {moment.ply}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
+        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectedId = moment.nodeId}><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>{storyMoveLabel(moment.ply).toLocaleLowerCase()}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
       {/each}
     </ul>
   </div>

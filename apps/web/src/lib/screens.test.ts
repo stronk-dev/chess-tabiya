@@ -317,7 +317,7 @@ describe("Layer 3 screens", () => {
 
     chessground.configs.at(-1)!.drawable!.onChange!([{ orig: "a1", dest: "h8", brush: "red" }]);
     await tick();
-    const earlier = document.querySelector<HTMLButtonElement>('.timeline button[aria-label^="Ply 1:"]')!;
+    const earlier = document.querySelector<HTMLButtonElement>('.timeline button[aria-label^="Rehearsal step 1:"]')!;
     earlier.click();
     await tick();
     vi.advanceTimersByTime(400);
@@ -447,7 +447,7 @@ describe("Layer 3 screens", () => {
     revoice.click();
     await vi.waitFor(() => expect(onVoice).toHaveBeenCalledWith(run.activeCursor.nodeId, "reading"));
     await vi.waitFor(() => expect(document.querySelector('[aria-label="Current-position evidence rendering"]')?.textContent).toContain("rook and pawn versus rook"));
-    document.querySelector<HTMLButtonElement>('.timeline button[aria-label^="Ply 1:"]')!.click();
+    document.querySelector<HTMLButtonElement>('.timeline button[aria-label^="Rehearsal step 1:"]')!.click();
     await tick();
     expect(document.querySelector('[aria-label="Current-position evidence rendering"]')?.textContent).not.toContain("rook and pawn versus rook");
     await unmount(component);

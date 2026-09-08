@@ -1571,14 +1571,14 @@ test("Line Drill crosses a cap on-line, continues, and renders unknown honestly"
   await expect(page.getByText("Active line 2 plies")).toBeVisible();
   await move(page, "f2", "f3");
   await expect(page.getByRole("heading", { name: "The authored support cap is crossed" })).toBeVisible();
-  await expect(page.getByText("Ply 1, Be3: on the authored line.")).toBeVisible();
-  await expect(page.getByText("Ply 2, e6: on the authored line.")).toBeVisible();
+  await expect(page.getByText("Rehearsal step 1, Be3: on the authored line.")).toBeVisible();
+  await expect(page.getByText("Rehearsal step 2, e6: on the authored line.")).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByText("Active line 4 plies")).toBeVisible();
 
   await move(page, "a2", "a3");
   await expect(page.getByRole("heading", { name: "The pack is silent here" })).toBeVisible();
-  await expect(page.getByText("Ply 5, a3: this pack has no statement about this move.")).toBeVisible();
+  await expect(page.getByText("Rehearsal step 5, a3: this pack has no statement about this move.")).toBeVisible();
   await expect(page.getByText("Unknown is not a judgement", { exact: false })).toBeVisible();
   await expect(page.getByRole("dialog").getByText("Resistance played: Authored theory replies", { exact: false })).toBeVisible();
   await expect(page.getByText("predate policy recording", { exact: false })).toHaveCount(0);
@@ -1624,7 +1624,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await move(page, "f1", "e2");
   await expect(page.getByRole("heading", { name: "Choose your plan before the break lands" })).toBeVisible();
   await expect(spectator.getByText("Active line 4 plies")).toBeVisible({ timeout: 4_000 });
-  await spectator.getByRole("button", { name: /^Ply 4:/ }).click();
+  await spectator.getByRole("button", { name: /^Rehearsal step 4:/ }).click();
   await expect(spectator.getByText("Your attempt is kept. Going back makes a second one.")).toBeVisible();
   const rewind = spectator.getByRole("button", { name: /^Rewind to preview/ });
   await expect(rewind).toBeDisabled();
@@ -1800,7 +1800,7 @@ test("selected-square support clears with the visible selection and displayed po
   const b5 = squarePoint(movedBox, "b5");
   await page.mouse.click(b5.x, b5.y);
   await expect(selectedSight).toBeVisible();
-  await page.getByRole("button", { name: /^Ply 1:/u }).click();
+  await page.getByRole("button", { name: /^Rehearsal step 1:/u }).click();
   await expect(page.getByText("Preview", { exact: true })).toBeVisible();
   await expect(selectedSight).toHaveCount(0);
 });

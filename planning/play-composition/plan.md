@@ -66,9 +66,13 @@ remain in their owning RFCs.
     24px squares or larger, and scroll the drill region vertically without horizontal overflow.
     Browser fixtures cover 375×667, 844×390 and 320×256 and preserve one truthful selected region.
 18. Related-rehearsal chrome resolves the sibling document at run load, names the rehearsal by
-    title and renders `root_after_move` as legality-checked SAN against the sibling's start FEN.
-    Missing or stale responses fail to neutral copy; a served-corpus browser journey refuses the
-    pack id and UCI at the real App/API boundary.
+   title and renders `root_after_move` as legality-checked SAN against the sibling's start FEN.
+   Missing or stale responses fail to neutral copy; a served-corpus browser journey refuses the
+   pack id and UCI at the real App/API boundary.
+19. Ordinary chronology no longer exposes the runtime's raw ply counter. Timeline,
+   checkpoint/terminal theory, Compare and pivotal details use one run-relative rehearsal-step
+   label; Story uses whole-game move numbers. Exact ply remains available only in Advanced
+   Inspector and authoring diagnostics.
 
 ## Remaining before archive
 

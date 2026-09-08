@@ -18908,3 +18908,20 @@ not widen a timeout or add a retry.
 The canonical `make test-browser` gate passes 64 journeys with the explicitly optional Maia
 measurement skipped. This final run covers desktop and mobile composition, every permanent board
 input mode, the corrected branch-group mutation boundary, and the mounted Settings controls.
+
+## 2026-09-08 — Ordinary chronology stops exposing runtime ply vocabulary ([[D3160]], [[D3161]])
+
+The accessibility queue was re-derived before implementation. Its proposed public-route focus
+repair was stale: unauthenticated Tabiya renders one public landing rather than the authenticated
+route bodies, while signed-in route focus and titles are already covered end to end. [[D3160]] is
+therefore refused instead of adding a focus side effect to data refresh.
+
+One real vocabulary leak remained across the accepted play composition. Timeline,
+checkpoint/terminal theory, Compare and pivotal details now call their run-relative counter a
+rehearsal step; Story consistently converts the same internal half-move count to a whole-game move
+number. Raw ply survives only where exact implementation data is deliberately requested in
+Advanced Inspector or Create.
+
+`make verify-software` passes 187 files / 1,169 tests plus performance, schema, manifest and build
+checks. `make test-browser` passes 64 desktop/mobile journeys with one explicitly optional Maia
+latency measurement skipped.

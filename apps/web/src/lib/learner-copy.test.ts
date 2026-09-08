@@ -6,7 +6,9 @@ import {
   publishedBandInterval,
   publishedBandLabel,
   recordedEvaluationTrajectory,
+  rehearsalStepLabel,
   storyReentryCopy,
+  storyMoveLabel,
   storyMomentLabel,
   storyOutcomeLabel,
 } from "./learner-copy.js";
@@ -27,6 +29,8 @@ describe("learner-facing domain copy", () => {
   });
 
   it("frames story re-entry from recorded outcome and ply without exposing an evaluation", () => {
+    expect(rehearsalStepLabel(8)).toBe("Rehearsal step 8");
+    expect(storyMoveLabel(17)).toBe("Move 9");
     expect(storyReentryCopy("white", "0-1", 17)).toBe(
       "You lost this game. Pick it up at move 9 and play the consequence another way.",
     );

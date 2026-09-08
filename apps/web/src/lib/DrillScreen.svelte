@@ -56,6 +56,7 @@
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
   import { rehearsalGuideStep } from "./rehearsal-guide.js";
+  import { rehearsalStepLabel } from "./learner-copy.js";
   import SimulationPreview from "./SimulationPreview.svelte";
 
   type RewindTarget =
@@ -1567,7 +1568,7 @@
           {#if openPivotalNodeId === undefined}
             <p class="honest">Open a timeline moment before inspecting its full evidence.</p>
           {:else}
-            <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · ply {openPivotalNode?.ply ?? 0}</p>
+            <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · {rehearsalStepLabel(openPivotalNode?.ply ?? 0).toLocaleLowerCase()}</p>
             {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
             {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this evidence</button>{/if}
