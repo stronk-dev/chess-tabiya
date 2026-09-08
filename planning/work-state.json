@@ -26019,6 +26019,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/session-controller.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3180",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:99359e918eb97e66cc70e2543e66a8a960683406b83e1cf11340846d003e66f2",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/viewport-support.ts",
+      "evidenceKind": "path"
     }
   ]
 }

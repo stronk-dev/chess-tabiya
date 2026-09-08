@@ -562,9 +562,10 @@ Timeline.
 The compact reflow journey additionally mounts at 375×667, 844×390 and 320×256.
 It requires a 352px, 560px and 304px board respectively, no horizontal overflow,
 an explicit vertical scroller when the composed chrome is taller than the viewport,
-and unchanged board geometry while Support, Branches, or Actions opens. The run is
-refused only below 320×256, where 24px chess-square targets would require horizontal
-scrolling.
+and unchanged board geometry while Support, Branches, or Actions opens. The run is refused only
+below 320×256, where the implementation cannot preserve its target and overflow invariants. That
+refusal keeps the numeric reason inside the tested geometry authority; the learner sees a plain
+resize-or-rotate instruction and a Return to Play action.
 
 Selection can reveal a structural caption and move the rendered board without
 resizing it. The Chessground wrapper therefore refreshes its cached bounds on

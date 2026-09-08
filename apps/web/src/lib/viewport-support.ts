@@ -18,6 +18,6 @@ export function runViewportSupport(width: number, height: number): RunViewportSu
     height,
     reason: supported
       ? null
-      : `The run board needs at least ${MINIMUM_RUN_VIEWPORT.width} × ${MINIMUM_RUN_VIEWPORT.height} CSS pixels. Below that, 24-pixel chess-square targets cannot fit without horizontal scrolling. Enlarge the window or rotate the device.`,
+      : "There is not enough room to show a playable board. Make the window a little larger or rotate your device, then reopen the rehearsal.",
   });
 }

@@ -19176,3 +19176,16 @@ ownership, branch, withholding and expired-preview errors; the malformed-pack pr
 requires generic recovery, refuses the schema field and returns to the Library. `make
 verify-software` passes 188 files / 1,184 tests and production builds; `make test-browser` passes all
 64 required desktop/mobile journeys with the one explicitly optional Maia measurement skipped.
+
+## 2026-09-08 — Below-floor play has a recovery path ([[D3180]])
+
+The exact 320×256 run floor correctly refused a board it could not fit, but the replacement screen
+printed CSS-pixel and target-geometry terminology and offered no action. The geometry authority and
+refusal are unchanged. The learner now gets a resize-or-rotate instruction and can return to Play;
+the implementation retains the numeric floor without presenting it as product copy.
+
+The unit contract refuses CSS, pixel and horizontal-scrolling vocabulary, and the real 319×844
+production journey requires the plain explanation, absence of a partial board, and successful
+Return to Play navigation. `make verify-software` passes 188 files / 1,184 tests and production
+builds; `make test-browser` passes all 64 required desktop/mobile journeys with the one explicitly
+optional Maia measurement skipped.

@@ -1105,9 +1105,10 @@
 
 {#if !viewportSupport.supported}
   <section class="viewport-refusal" role="alert" aria-labelledby="viewport-refusal-title">
-    <p>Run viewport unavailable</p>
-    <h1 id="viewport-refusal-title">The chessboard cannot fit honestly here.</h1>
+    <p>More room needed</p>
+    <h1 id="viewport-refusal-title">This screen is too small for a playable board.</h1>
     <p>{viewportSupport.reason}</p>
+    <button type="button" onclick={onStop}>Return to Play</button>
   </section>
 {:else if comparison}
   <CompareView
@@ -1728,7 +1729,8 @@
   }
   .viewport-refusal p:first-child { color: var(--ink); font: 700 .68rem ui-monospace, monospace; text-transform: uppercase; }
   .viewport-refusal h1 { margin: .35rem 0; font: 500 1.6rem/1.1 var(--display-font); }
-  .viewport-refusal p:last-child { margin: 0; color: var(--muted); line-height: 1.45; }
+  .viewport-refusal p { color: var(--muted); line-height: 1.45; }
+  .viewport-refusal button { padding: .65rem .8rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--accent); color: var(--on-accent); }
 
   .drill {
     --topbar-h: 56px;

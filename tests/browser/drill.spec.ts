@@ -2675,7 +2675,10 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   }
 
   await page.setViewportSize({ width: 319, height: 844 });
-  await expect(page.getByRole("alert")).toContainText("needs at least 320 × 256 CSS pixels");
-  await expect(page.getByRole("alert")).toContainText("24-pixel chess-square targets cannot fit without horizontal scrolling");
+  await expect(page.getByRole("alert")).toContainText("This screen is too small for a playable board");
+  await expect(page.getByRole("alert")).toContainText("Make the window a little larger or rotate your device");
+  await expect(page.getByRole("alert")).not.toContainText("CSS pixels");
   await expect(page.locator('[aria-label="Chessboard"]')).toHaveCount(0);
+  await page.getByRole("button", { name: "Return to Play" }).click();
+  await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
 });
