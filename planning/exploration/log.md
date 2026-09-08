@@ -19037,3 +19037,16 @@ name. The mounted queen-exchange journey reaches `Irreversible change and Phase 
 the production path. `make verify-software` passes 188 files / 1,177 tests plus performance, schema,
 semantic manifests, production builds, and rating isolation. `make test-browser` passes all 64
 required desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-08 — Authored previews keep node identity internal ([[D3170]])
+
+The authored-line preview correctly disclosed when its bounded simulation stopped early, but did so
+by printing the exact `truncatedAt` runtime identifier as a “drill node”. The card now retains the
+useful limit—this preview stops before a later authored position—without exposing transport identity
+the learner cannot act on. The identifier remains available in the typed API record.
+
+The mounted simulation fixture supplies a sentinel node id, requires the boundedness disclosure,
+and refuses both the sentinel and “drill node” from rendered copy. `make verify-software` passes 188
+files / 1,177 tests plus performance, schema, semantic manifests, production builds, and rating
+isolation. `make test-browser` passes all 64 required desktop/mobile journeys with one explicitly
+optional Maia latency measurement skipped.

@@ -25929,6 +25929,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/Timeline.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3170",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:17f4ef4e924e6845596fdd5027b6eb18a192ffd336b83c4b8b2da5dd9761f842",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/SimulationPreview.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

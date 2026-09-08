@@ -274,7 +274,7 @@ describe("Layer 3 screens", () => {
       simulationId: "simulation-one",
       comparison: { machineFeedback: "available", forkNodeId: run.activeCursor.nodeId, columns: [], rows: [], objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, consequences: {} },
       branches: [
-        { index: 0, label: "f3", leafFen: run.nodes.at(-1)!.fen, plies: 2 },
+        { index: 0, label: "f3", leafFen: run.nodes.at(-1)!.fen, plies: 2, truncatedAt: "internal-authored-node-4" },
         { index: 1, label: "Be2", leafFen: run.nodes.at(-1)!.fen, plies: 1 },
       ],
     };
@@ -293,6 +293,9 @@ describe("Layer 3 screens", () => {
     expect(dialog.textContent).toContain("These are demonstrations from the drill, not moves added to your attempt");
     expect(dialog.textContent).toContain("f3");
     expect(dialog.textContent).toContain("Be2");
+    expect(dialog.textContent).toContain("This preview stops before a later authored position.");
+    expect(dialog.textContent).not.toContain("internal-authored-node-4");
+    expect(dialog.textContent).not.toContain("drill node");
     expect(dialog.querySelectorAll(":scope > .line-grid > article > .board")).toHaveLength(2);
     const enter = [...dialog.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Enter this line")!;
     enter.click();

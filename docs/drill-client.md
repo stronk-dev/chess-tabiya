@@ -445,6 +445,10 @@ and controls subsequent group replies. The branch rail marks membership while
 the group panel presents learner-facing candidate-source and resistance summaries plus Overview,
 Summary, and Boards semantic-zoom bands. It never ranks candidates.
 
+Authored-line previews disclose when a demonstration stops before a later authored
+position, while keeping the internal truncation node identifier in the runtime/API
+record rather than showing it to the learner.
+
 On a phone, opening the hand-picked creator from the modal Actions drawer closes
 that drawer before asking for board gestures, so the board cannot remain inert
 while candidate capture is active. The completed candidate cards, header and

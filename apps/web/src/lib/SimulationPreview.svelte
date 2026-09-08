@@ -49,7 +49,7 @@
           <div class="board" aria-label={`Final position after ${branch.label}`}>
             <Chessboard fen={branch.leafFen} {startSide} disabled showDests={false} highlightMoves={false} onMove={() => false} />
           </div>
-          {#if branch.truncatedAt !== undefined}<p class="honest">This preview stops before the drill node {branch.truncatedAt}.</p>{/if}
+          {#if branch.truncatedAt !== undefined}<p class="honest">This preview stops before a later authored position.</p>{/if}
           {#if branch.subvariationsSkipped !== undefined}<p class="honest">{branch.subvariationsSkipped} nested {branch.subvariationsSkipped === 1 ? "alternative is" : "alternatives are"} available deeper in the line.</p>{/if}
           <button class="enter" type="button" disabled={busy} onclick={() => void onEnter(branch.index)}>Enter this line</button>
         </article>
