@@ -349,7 +349,7 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await page.getByRole("button", { name: "Return to play" }).click();
   const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
   expect(after.events).toHaveLength(before.events.length);
-  await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);
+  await expect(page.getByText("Commentary opens at a checkpoint", { exact: true })).toHaveCount(0);
 });
 
 test("Just Play states its selected human-model rung and low-material limit", async ({ page }) => {
@@ -1525,7 +1525,7 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
 
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByText("Active line 1 turn")).toBeVisible();
-  await expect(page.getByText("Authored commentary withheld until checkpoints", { exact: true })).toBeVisible();
+  await expect(page.getByText("Commentary opens at a checkpoint", { exact: true })).toBeVisible();
   await move(page, "g1", "f3");
   await expect(page.getByText("Active line 3 turns")).toBeVisible();
   await move(page, "f1", "e2");
@@ -1609,7 +1609,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
 
   await spectator.goto(`/play/run/${encodeURIComponent(runId)}`);
   await expect(spectator.getByLabel("Chessboard")).toBeVisible();
-  await expect(spectator.getByText("Read-only follower", { exact: true })).toBeVisible();
+  await expect(spectator.getByText("Watching", { exact: true })).toBeVisible();
   const reviewAccess = spectator.getByRole("complementary", { name: "Review access" });
   await expect(reviewAccess).toContainText("Review tools open after this attempt reaches its recorded outcome");
   await expect(reviewAccess).toContainText("Read access remains available now");

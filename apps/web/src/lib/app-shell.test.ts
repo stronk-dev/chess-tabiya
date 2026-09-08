@@ -346,7 +346,7 @@ describe("application shell", () => {
     });
 
     await vi.waitFor(() => expect(document.querySelector("main.drill")).not.toBeNull());
-    expect(document.body.textContent).toContain("Read-only follower");
+    expect(document.body.textContent).toContain("Watching");
     expect(location.search).toBe("");
     expectDisabledControlsExplained();
 
@@ -498,7 +498,7 @@ describe("application shell", () => {
 
     await vi.waitFor(() => expect(document.querySelector("main.drill")).not.toBeNull());
     expect(location.pathname).toBe("/play/run/route-run");
-    expect(document.body.textContent).toContain("Read-only follower");
+    expect(document.body.textContent).toContain("Watching");
     expect(document.body.textContent).toContain(pack.title as string);
     expect(storage.values.size).toBe(0);
     expectDisabledControlsExplained();
@@ -562,7 +562,8 @@ describe("application shell", () => {
       .click();
     await vi.waitFor(() => expect(document.querySelector("main.drill")).not.toBeNull());
     expect(location.pathname).toBe("/play/run/route-run");
-    expect(document.body.textContent).toContain("Writer");
+    expect(document.body.textContent).toContain("Your move");
+    expect(document.body.textContent).not.toContain("Writer");
     router.navigate("/");
     await vi.waitFor(() =>
       expect(document.body.textContent).toContain("You hold the board"),

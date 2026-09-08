@@ -385,6 +385,10 @@ describe("Layer 3 screens", () => {
     expect(groupButton.disabled).toBe(true);
     expect(document.getElementById(forkButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
     expect(document.getElementById(groupButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
+    expect(document.body.textContent).toContain("Watching");
+    expect(document.body.textContent).toContain("moves and rewinds happen there");
+    expect(document.body.textContent).not.toContain("Read-only follower");
+    expect(document.body.textContent).not.toContain("Another browser owns");
 
     document.querySelector<HTMLButtonElement>(".timeline ol button")!.click();
     await tick();
@@ -1110,7 +1114,7 @@ describe("Layer 3 screens", () => {
       "Earlier occurrence must stay out of this sheet.",
     );
     expect(document.body.textContent).toContain(
-      "Authored commentary withheld until checkpoints",
+      "Commentary opens at a checkpoint",
     );
     expect(document.querySelectorAll(".timeline .authored-marker")).toHaveLength(1);
 

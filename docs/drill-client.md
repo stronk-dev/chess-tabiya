@@ -170,6 +170,8 @@ mounted run. The ordinary topbar Support menu opens the workflow's Support regio
 evidence-channel switches remain available through **Advanced support controls** in the explicit
 Inspector and update the same profile immediately. They do not render as the ordinary play menu.
 The topbar names the workflow's selected help style rather than a provider or evidence channel.
+Its play status is likewise learner-facing: **Your move**, **Updating**, or **Watching** replace
+writer/follower protocol roles, and withheld authored material states when commentary opens.
 The first row of Support always repeats that style's exact declared promise—for example,
 **Theory only** states that it provides cited theory with no evaluation, candidates, or line.
 This makes intentional silence distinguishable from missing or broken analysis. The label and
@@ -270,7 +272,8 @@ requests do not.
 a run-scoped `localStorage` key. `peek()` is non-minting, and observing a run
 owned by another writer leaves storage untouched. On load, the client compares
 the stored identity with `activeWriterId` and enters writer or read-only mode
-before the first mutation. Read-only followers may inspect timeline positions,
+before the first mutation. The visible state is **Watching**, with the banner explaining that moves
+and rewinds happen on the other browser. Read-only instances may inspect timeline positions,
 but Fork, Branch group, and rewind confirmation are disabled with an attributed
 reason; their keyboard shortcuts are inert. A later `NOT_ACTIVE_WRITER` response
 remains a defensive demotion path; lease transfer is still unsupported.

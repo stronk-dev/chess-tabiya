@@ -1125,16 +1125,16 @@
   <main class="drill" class:compact={compactViewport} class:reflow={reflowViewport} tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
-      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}. ${run.opponentPolicy.mode === "human_common" ? HUMAN_MODEL_RUNG_DISCLAIMER : ""} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer, thinking" : "Writer, your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Authored commentary withheld until checkpoints" : ""}`} />
+      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}. ${run.opponentPolicy.mode === "human_common" ? HUMAN_MODEL_RUNG_DISCLAIMER : ""} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Watching" : busy ? "Updating" : "Your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Commentary opens at a checkpoint" : ""}`} />
       <div class="status visually-hidden-on-phone" aria-hidden="true">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
         <span>{opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}</span>
         <span>{consequenceHorizon(pack)}</span>
         <span class:readonly={snapshot.access === "read_only"}>
-          {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer · thinking…" : "Writer · your move"}
+          {snapshot.access === "read_only" ? "Watching" : busy ? "Updating…" : "Your move"}
         </span>
         {#if authoredFeedback?.hasWithheldAuthoredContent}
-          <span>Authored commentary withheld until checkpoints</span>
+          <span>Commentary opens at a checkpoint</span>
         {/if}
       </div>
       <div class="topbar-actions">
@@ -1156,7 +1156,7 @@
     {#if error}<p class="error" role="alert">{error}</p>{/if}
     {#if snapshot.access === "read_only"}
       <p class="readonly-banner" role="status">
-        {snapshot.withheld ? "The host is ahead; evidence is withheld until this run discloses." : "Another browser owns this run. You can follow its events, but this view cannot move or rewind."}
+        {snapshot.withheld ? "The latest moves are still arriving. Help will appear only when this run reaches a reveal point." : "This run is open on another browser. You can follow along, but moves and rewinds happen there."}
       </p>
     {/if}
 

@@ -25992,6 +25992,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/session-controller.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3177",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:118871689492e301ff4b6fc97be53d6d87ca07c6234a5b05bdddd0d9605feace",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

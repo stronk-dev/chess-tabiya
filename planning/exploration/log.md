@@ -19134,3 +19134,16 @@ integration fixture now requires the learner copy while retaining its no-create/
 assertions. `make verify-software` passes 188 files / 1,182 tests and production builds; `make
 test-browser` passes all 64 required desktop/mobile journeys with the one explicitly optional Maia
 measurement skipped.
+
+## 2026-09-08 — Run chrome names the state, not the protocol role ([[D3177]])
+
+The ordinary run header exposed ownership internals as “Writer” and “Read-only follower,” while
+withheld authored material and the spectator banner spoke in host/evidence/view vocabulary. The
+same states now say **Your move**, **Updating**, or **Watching**; commentary says when it opens; and
+the spectator banner says that moves and rewinds happen on the other browser. Writer authority,
+read-only controls and disclosure timing are unchanged.
+
+Component assertions cover writer, read-only and withheld states and refuse the displaced role
+terms. Production browser journeys cover the withheld-content and spectator paths. `make
+verify-software` passes 188 files / 1,182 tests and production builds; `make test-browser` passes
+all 64 required desktop/mobile journeys with the one explicitly optional Maia measurement skipped.
