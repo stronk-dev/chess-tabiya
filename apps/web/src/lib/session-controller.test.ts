@@ -458,6 +458,24 @@ describe("DrillSessionController", () => {
     );
   });
 
+  it("turns opponent failures into recovery choices without exposing provider ids", () => {
+    const unsupported = sessionErrorMessage(new ApiError(
+      422,
+      "POLICY_MODE_UNSUPPORTED",
+      "theory_strict is unavailable for trajectory leg internal-leg-id",
+    ));
+    const unavailable = sessionErrorMessage(new ApiError(
+      503,
+      "ENGINE_UNAVAILABLE",
+      "Engine unavailable: maia-1900-internal",
+    ));
+
+    expect(unsupported).toBe("This opponent is not available here. Choose another opponent or another drill.");
+    expect(unsupported).not.toMatch(/theory_strict|trajectory|internal-leg-id/u);
+    expect(unavailable).toBe("The opponent could not move right now. Try again, or choose another opponent.");
+    expect(unavailable).not.toMatch(/engine|maia-1900-internal/ui);
+  });
+
   it("routes resume failures through the same recovery copy as in-session mutations", async () => {
     const environment = controller();
     vi.spyOn(environment.api, "events").mockRejectedValueOnce(
@@ -659,7 +677,10 @@ describe("DrillSessionController", () => {
 
     await environment.controller.startPack(blackToMovePack.id);
 
-    expect(environment.controller.state.error).toBe("theory_strict is unavailable");
+    expect(environment.controller.state.error).toBe(
+      "This opponent is not available here. Choose another opponent or another drill.",
+    );
+    expect(environment.controller.state.error).not.toContain("theory_strict");
     expect(api.created).toBeUndefined();
     expect(api.selected).toBeUndefined();
   });

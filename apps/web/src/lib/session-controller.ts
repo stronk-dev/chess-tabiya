@@ -80,6 +80,12 @@ export function sessionErrorMessage(error: unknown): string {
   if (error instanceof ApiError && error.code === "MATCH_LIVE") {
     return "Pause the live match before rewinding, branching, or revealing feedback.";
   }
+  if (error instanceof ApiError && error.code === "POLICY_MODE_UNSUPPORTED") {
+    return "This opponent is not available here. Choose another opponent or another drill.";
+  }
+  if (error instanceof ApiError && error.code === "ENGINE_UNAVAILABLE") {
+    return "The opponent could not move right now. Try again, or choose another opponent.";
+  }
   return error instanceof Error ? error.message : String(error);
 }
 

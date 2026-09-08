@@ -25983,6 +25983,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/CheckpointSheet.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3176",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0d5628cdedcba4852d5141e10fd02304fb245b04f9b6a66beb6ed139807052b4",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/session-controller.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -19119,3 +19119,18 @@ does not dismiss the checkpoint. The mounted disabled-comparison fixture require
 copy and refuses the internal term. `make verify-software` passes 188 files / 1,181 tests and
 production builds; `make test-browser` passes all 64 required desktop/mobile journeys with the one
 explicitly optional Maia measurement skipped.
+
+## 2026-09-08 — Opponent failures offer recovery without protocol ids ([[D3176]])
+
+The session error boundary previously translated completed-run and live-match conflicts but passed
+typed opponent-policy and engine-availability messages through verbatim. Those server strings can
+name internal policy, engine and trajectory-leg identities in the primary board alert. The two
+known opponent failure codes now render fixed recovery choices: choose another opponent or drill,
+or retry when the opponent could not move. Selection integrity is unchanged—an unavailable authored
+mode is still refused rather than silently substituted.
+
+The unit table refuses raw policy, engine and leg identities, and the existing authored-mode
+integration fixture now requires the learner copy while retaining its no-create/no-select
+assertions. `make verify-software` passes 188 files / 1,182 tests and production builds; `make
+test-browser` passes all 64 required desktop/mobile journeys with the one explicitly optional Maia
+measurement skipped.
