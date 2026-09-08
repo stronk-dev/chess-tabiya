@@ -18672,3 +18672,12 @@ browser journey asserts the default Quiet identity and promise. Workspace typech
 1,150-test software tier pass. This is honest preset identity, not premature preset activation:
 the module compiler, automatic workflow defaults and the five module-dependent composition states
 remain open.
+
+## 2026-09-08 — Story stops presenting evidence selection as a ranking
+
+The queued ATR-a21 Review correction is implemented without changing the internal deterministic
+selector. The Story rail is now an unnumbered list rendered in game chronology, and a permanent
+region sentence says that these are moments the game left evidence about—not a ranking of the
+learner's play. The old numbered-card affordance is absent, and no surface copy claims educational
+value. Component coverage checks the list semantics, accessible description and forbidden copy;
+the imported-game browser journey checks the explanation at the served route.

@@ -16,7 +16,7 @@
   }
   let { story, onEnter, onExport, onVoice, shares = [], onShare, onRevoke }: Props = $props();
   const selection = $derived(storyMomentSelection(story));
-  const ranked = $derived(selection.moments);
+  const selectedMoments = $derived(selection.moments);
   let selectedId = $state<string | undefined>();
   let voiceText = $state<string | undefined>();
   let shareUrl = $state<string | undefined>();
@@ -24,7 +24,7 @@
   let shareBusy = $state(false);
   let shareStatus = $state<string | undefined>();
   let shareError = $state<string | undefined>();
-  const selected = $derived(ranked.find((moment) => moment.nodeId === selectedId) ?? ranked[0]);
+  const selected = $derived(selectedMoments.find((moment) => moment.nodeId === selectedId) ?? selectedMoments[0]);
   const imported = $derived(story.source.kind === "native" ? undefined : story.source);
   const title = $derived(reviewStoryTitle(story));
   const sourceLabels = $derived(selected === undefined ? [] : storyEvidenceSourceLabels(selected));
@@ -124,15 +124,16 @@
     </section>
   {:else}<p>No grounded moments were detected in this game.</p>{/if}
   <div class="rail-region">
+    <p id="story-moment-order" class="moment-order">These are the moments this game left evidence about, in game order. This is not a ranking of your play.</p>
     {#if selection.shown < selection.total}<p id="story-moment-budget" class="selection-budget">Showing {selection.shown} of {selection.total} recorded moments selected for this story.</p>{/if}
-    <ol class="rail" aria-label="Game story moments" aria-describedby={selection.shown < selection.total ? "story-moment-budget" : undefined}>
-      {#each ranked as moment, index}
-        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectedId = moment.nodeId}><span>{index + 1}</span><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>ply {moment.ply}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
+    <ul class="rail" aria-label="Game story moments" aria-describedby={selection.shown < selection.total ? "story-moment-order story-moment-budget" : "story-moment-order"}>
+      {#each selectedMoments as moment}
+        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectedId = moment.nodeId}><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>ply {moment.ply}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
       {/each}
-    </ol>
+    </ul>
   </div>
 </main>
 
 <style>
-  .story{height:100%;min-height:0;display:grid;grid-template-rows:auto auto auto minmax(0,1fr) auto;gap:.75rem;padding:1rem;overflow:hidden}.story header{display:flex;justify-content:space-between;align-items:start;gap:1rem}.story h1,.story h2,.story p{margin:.15rem 0}.eyebrow{text-transform:uppercase;letter-spacing:.09em;font-size:.75rem}.actions{display:flex;gap:.5rem;align-items:center}.pending{padding:.55rem .75rem;border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:.5rem}.share-management{display:grid;gap:.55rem;padding:.75rem;border:1px solid color-mix(in srgb,var(--ink) 25%,transparent);border-radius:.6rem;background:var(--panel)}.share-management h2{font-size:1rem}.share-management ul{display:grid;gap:.4rem;margin:.25rem 0 0;padding:0;list-style:none}.share-management li{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:.4rem;border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}.stage{min-height:0;display:grid;grid-template-columns:minmax(16rem,min(52vh,42vw)) minmax(18rem,1fr);gap:1.25rem;align-items:center;overflow:auto}.board{width:min(52vh,42vw);max-width:100%;justify-self:center}.stage article{max-width:44rem}.evaluation{font-variant-numeric:tabular-nums}.provenance{color:var(--muted);font-size:.85rem}.reentry-frame{max-width:42rem;margin-top:.8rem!important;padding:.75rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--panel));line-height:1.45}.rail-region{min-width:0}.selection-budget{color:var(--muted);font-size:.85rem;padding-inline:.25rem}.rail{display:flex;gap:.5rem;overflow-x:auto;list-style:none;padding:.25rem;margin:0}.rail button{min-width:10rem;display:grid;grid-template-columns:auto 1fr;gap:.1rem .45rem;text-align:left;padding:.6rem;border:1px solid color-mix(in srgb,var(--ink) 25%,transparent);border-radius:.5rem;background:var(--panel)}.rail button.active{border-color:var(--ink)}.rail small{grid-column:2}.primary{margin-top:.75rem}@media(max-width:760px){.story{overflow:auto;height:auto}.stage{grid-template-columns:1fr;overflow:visible}.board{width:min(80vw,55vh)}header{flex-direction:column}.share-management li{align-items:start;flex-direction:column}}
+  .story{height:100%;min-height:0;display:grid;grid-template-rows:auto auto auto minmax(0,1fr) auto;gap:.75rem;padding:1rem;overflow:hidden}.story header{display:flex;justify-content:space-between;align-items:start;gap:1rem}.story h1,.story h2,.story p{margin:.15rem 0}.eyebrow{text-transform:uppercase;letter-spacing:.09em;font-size:.75rem}.actions{display:flex;gap:.5rem;align-items:center}.pending{padding:.55rem .75rem;border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:.5rem}.share-management{display:grid;gap:.55rem;padding:.75rem;border:1px solid color-mix(in srgb,var(--ink) 25%,transparent);border-radius:.6rem;background:var(--panel)}.share-management h2{font-size:1rem}.share-management ul{display:grid;gap:.4rem;margin:.25rem 0 0;padding:0;list-style:none}.share-management li{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:.4rem;border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}.stage{min-height:0;display:grid;grid-template-columns:minmax(16rem,min(52vh,42vw)) minmax(18rem,1fr);gap:1.25rem;align-items:center;overflow:auto}.board{width:min(52vh,42vw);max-width:100%;justify-self:center}.stage article{max-width:44rem}.evaluation{font-variant-numeric:tabular-nums}.provenance{color:var(--muted);font-size:.85rem}.reentry-frame{max-width:42rem;margin-top:.8rem!important;padding:.75rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--panel));line-height:1.45}.rail-region{min-width:0}.moment-order,.selection-budget{color:var(--muted);font-size:.85rem;padding-inline:.25rem}.rail{display:flex;gap:.5rem;overflow-x:auto;list-style:none;padding:.25rem;margin:0}.rail button{min-width:10rem;display:grid;gap:.1rem;text-align:left;padding:.6rem;border:1px solid color-mix(in srgb,var(--ink) 25%,transparent);border-radius:.5rem;background:var(--panel)}.rail button.active{border-color:var(--ink)}.primary{margin-top:.75rem}@media(max-width:760px){.story{overflow:auto;height:auto}.stage{grid-template-columns:1fr;overflow:visible}.board{width:min(80vw,55vh)}header{flex-direction:column}.share-management li{align-items:start;flex-direction:column}}
 </style>

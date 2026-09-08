@@ -101,11 +101,16 @@ describe("game story screen", () => {
       props: { story, onEnter: vi.fn(), onExport: vi.fn() },
     });
 
-    const rail = document.querySelector<HTMLOListElement>(".rail")!;
+    const rail = document.querySelector<HTMLUListElement>(".rail")!;
     const budget = document.querySelector<HTMLElement>("#story-moment-budget")!;
+    const explanation = document.querySelector<HTMLElement>("#story-moment-order")!;
     expect(rail.querySelectorAll("li")).toHaveLength(8);
     expect(budget.textContent).toBe("Showing 8 of 9 recorded moments selected for this story.");
-    expect(rail.getAttribute("aria-describedby")).toBe(budget.id);
+    expect(explanation.textContent).toBe("These are the moments this game left evidence about, in game order. This is not a ranking of your play.");
+    expect(rail.getAttribute("aria-describedby")).toBe(`${explanation.id} ${budget.id}`);
+    expect(rail.tagName).toBe("UL");
+    expect(rail.querySelectorAll("button > span")).toHaveLength(0);
+    expect(document.body.textContent).not.toContain("educational value");
     await unmount(component);
   });
 });

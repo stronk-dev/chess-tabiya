@@ -1688,16 +1688,20 @@
     {
       "id": "ATR-a21",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§3.7",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "Order is never shown as a rank; a permanent region line says *\"these are the moments this game left evidence about… not a ranking\"*; *\"educational value\"* never appears in copy",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:27c373aaee0fe160cbc9f637f1c23cb710ea3a2ce4b820fe9ebc5b2564f50c06"
+      "sourceDigest": "sha256:27c373aaee0fe160cbc9f637f1c23cb710ea3a2ce4b820fe9ebc5b2564f50c06",
+      "completion": {
+        "completedOn": "2026-09-08",
+        "evidence": "GameStoryScreen renders evidence-selected moments in game chronology through an unnumbered list, permanently explains that the list is not a ranking, and component plus served-browser contracts refuse the old affordance"
+      }
     },
     {
       "id": "ATR-a22",
