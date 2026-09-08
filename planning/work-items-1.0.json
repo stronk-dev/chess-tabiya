@@ -1572,16 +1572,20 @@
     {
       "id": "ATR-a14",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§3.2",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "Adopt the two field layout invariants verbatim: nothing grows in the board column; regions scroll, the board does not",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:101b97c5051c8856c62c29dcbef77e1549af9cc1b95dd58a7e64a51ade990463"
+      "sourceDigest": "sha256:101b97c5051c8856c62c29dcbef77e1549af9cc1b95dd58a7e64a51ade990463",
+      "completion": {
+        "completedOn": "2026-09-08",
+        "evidence": "Story uses a fixed desktop board field and an independently scrolling moment-detail region; the browser probe proves long copy cannot move or resize the board"
+      }
     },
     {
       "id": "ATR-a15",

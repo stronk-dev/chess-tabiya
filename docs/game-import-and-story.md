@@ -70,6 +70,11 @@ lost**, or **Game drawn** from the declared learner side and identifies whether 
 PGN result or a board-terminal result. `1-0`, `0-1`, `recorded_result`, and `board_terminal` remain
 wire/export values; an unfinished import says that no final result was recorded.
 
+On desktop, the selected-position board owns a fixed square field. Longer evidence, narration, or
+return copy scrolls inside the adjacent moment-detail region; it cannot enlarge or resize the board
+column. The chronological moment rail owns its own horizontal overflow. On narrow screens the same
+regions stack into the route's normal vertical reading order.
+
 After persistence, the server enqueues one evaluation job per mainline node,
 including the root. An 80-ply game therefore requests 81 jobs; the 300-ply import
 cap bounds the pass at 301. The pass is idempotent-completing: story reads inspect

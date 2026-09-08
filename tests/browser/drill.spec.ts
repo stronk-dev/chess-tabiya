@@ -198,6 +198,34 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   await expect(page.getByText("grounded story", { exact: false })).toBeVisible();
   await expect(page.getByText("These are the moments this game left evidence about, in game order. This is not a ranking of your play.")).toBeVisible();
   await expect(page.getByText(/You won this game\. Pick it up at move \d+ and test another continuation\./)).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 720 });
+  const storyLayout = await page.evaluate(() => {
+    const stage = document.querySelector<HTMLElement>(".stage")!;
+    const detail = document.querySelector<HTMLElement>(".moment-detail")!;
+    const board = document.querySelector<HTMLElement>('.stage [aria-label="Chessboard"]')!;
+    const before = board.getBoundingClientRect();
+    const filler = document.createElement("p");
+    filler.dataset.storyLayoutProbe = "true";
+    filler.textContent = "Grounded explanation region. ".repeat(300);
+    detail.append(filler);
+    const after = board.getBoundingClientRect();
+    const stageBounds = stage.getBoundingClientRect();
+    const result = {
+      stageOverflowY: getComputedStyle(stage).overflowY,
+      detailOverflowY: getComputedStyle(detail).overflowY,
+      detailScrolls: detail.scrollHeight > detail.clientHeight,
+      before: { x: before.x, y: before.y, width: before.width, height: before.height },
+      after: { x: after.x, y: after.y, width: after.width, height: after.height },
+      boardInsideStage: after.top >= stageBounds.top - 1 && after.bottom <= stageBounds.bottom + 1,
+    };
+    filler.remove();
+    return result;
+  });
+  expect(storyLayout.stageOverflowY).toBe("hidden");
+  expect(storyLayout.detailOverflowY).toBe("auto");
+  expect(storyLayout.detailScrolls).toBe(true);
+  expect(storyLayout.after).toEqual(storyLayout.before);
+  expect(storyLayout.boardInsideStage).toBe(true);
   const enter = page.getByRole("button", { name: "Pick it up from here" });
   await expect(enter).toBeEnabled({ timeout: 15_000 });
   const runId = page.url().split("/").at(-1)!;

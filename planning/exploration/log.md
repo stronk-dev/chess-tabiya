@@ -18681,3 +18681,16 @@ region sentence says that these are moments the game left evidence about—not a
 learner's play. The old numbered-card affordance is absent, and no surface copy claims educational
 value. Component coverage checks the list semantics, accessible description and forbidden copy;
 the imported-game browser journey checks the explanation at the served route.
+
+## 2026-09-08 — Story gives overflow to its explanation region, not its board
+
+The queued ATR-a14 after-run layout invariant is implemented on the Story field. At desktop and
+tablet widths, the selected-position board now occupies a fixed square cell while evidence,
+narration and return copy scroll independently in the adjacent moment-detail region. The stage
+itself clips overflow rather than turning the board and explanation into one shared scroller. On
+narrow screens the two regions deliberately return to the route's stacked reading flow.
+
+The served imported-game journey switches to the 1280×720 floor, injects enough explanation copy
+to force overflow, and proves that the detail region scrolls while the board rectangle remains
+byte-for-byte unchanged and inside the stage. This closes the board-column half of the field rule
+with interaction-state evidence rather than a CSS-token assertion.
