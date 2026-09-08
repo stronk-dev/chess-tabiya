@@ -404,8 +404,11 @@ grounding. When `machineFeedback` is withheld, the server removes the machine
 fields and the inspector admits none of the trajectory, sparkline, summary score,
 or machine consumer. Engine arrows, move recommendations, and human-frequency
 overlays remain absent; the fork arrows are only moves the learner already played.
-Ordinary comparison navigation calls each synchronized step a position; internal
-ply offsets and preview/simulation identity remain evidence/runtime detail.
+The grounded path/position summary appears once before the boards. Ordinary
+comparison navigation calls each synchronized row a consequence step; board and
+decision distances use learner-facing turn counts from the rehearsal start or
+shared fork. Internal ply offsets and preview/simulation identity remain
+evidence/runtime detail.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
 or terminal sheets. It keeps four facts separate: a concise root assessment,

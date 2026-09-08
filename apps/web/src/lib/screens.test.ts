@@ -1108,9 +1108,9 @@ describe("Layer 3 screens", () => {
     });
     await tick();
 
-    expect(document.body.textContent).toContain("Position 2 / 2");
+    expect(document.body.textContent).toContain("Consequence step 2 / 2");
     const comparisonStatus = document.querySelector<HTMLElement>('[data-status-announcement]')!;
-    expect(comparisonStatus.textContent).toBe("Comparison position 2 of 2");
+    expect(comparisonStatus.textContent).toBe("Comparison consequence step 2 of 2");
     expect(document.querySelector(".boards")?.getAttribute("aria-live")).toBeNull();
     expect(comparisonStatus.querySelector("button, [tabindex]")).toBeNull();
     expect(document.activeElement?.id).toBe("compare-title");
@@ -1124,6 +1124,9 @@ describe("Layer 3 screens", () => {
       "Checkpoint not reached on this branch: Critical race resolved.",
     );
     expect(document.body.textContent).toContain("Where the attempts split");
+    expect(document.querySelector(".alignment")).toBeNull();
+    expect(document.body.textContent).not.toContain(" at +");
+    expect(document.body.textContent).toContain("from the shared fork");
     expect(document.body.textContent).toContain("Intent: Test Black's expansion");
     expect(document.body.textContent).toContain("Change the practical resistance, not the recorded attempts.");
     expect(document.body.textContent).not.toContain("Recorded differences by branch");

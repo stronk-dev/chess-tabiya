@@ -25884,6 +25884,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/learner-copy.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3165",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f2d2c4148bfaeaf92406a87aee39237b9269a55cb6a8724284c10e9f4b241c2f",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/CompareView.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

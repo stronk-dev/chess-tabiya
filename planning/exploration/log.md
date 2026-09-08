@@ -18978,3 +18978,19 @@ server disclosure; the oracle was narrowed to the exact status field rather than
 surface. `make verify-software` passes 188 files / 1,175 tests plus performance, schema, semantic
 manifests, production builds, and rating isolation. `make test-browser` passes all 64 required
 desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-08 — Compare summary and chronology boundary ([[D3165]])
+
+The comparison hierarchy had been repaired to put its grounded summary before the boards, but an
+adjacent alignment aside still repeated the same two sentences. The ordinary result also exposed
+relative `+N` offsets, a generic position ordinal, and a bare absolute turn number. The duplicate
+aside is removed. Synchronized rows now name consequence steps, board cards state turns from the
+rehearsal start, and branch decisions state turn distance from the shared fork. Raw objective,
+structural, and engine records remain behind the explicit Inspector.
+
+The mounted comparison contract refuses a reintroduced alignment block or `at +` token and pins
+the visible and announced consequence-step language. `make verify-software` passes 188 files /
+1,175 tests plus performance, schema, semantic manifests, production builds, and rating isolation.
+`make test-browser` passes all 64 required desktop/mobile journeys with one explicitly optional
+Maia latency measurement skipped, including the desktop rewind/branch/compare flow and compact
+comparison composition.
