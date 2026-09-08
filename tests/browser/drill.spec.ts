@@ -340,6 +340,8 @@ test("Just Play states its selected human-model rung and low-material limit", as
 test("Just Play explicitly reveals evidence and the next move closes the window", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.locator("details.assistance-control summary")).toHaveAttribute("aria-label", "Support style: Quiet");
+  await expect(page.getByLabel("Active support promise")).toContainText("no chess guidance appears unless you ask");
   const reveal = page.getByRole("button", { name: "Show support for this position" });
   await expect(reveal).toBeEnabled();
   await page.getByRole("button", { name: "Inspector" }).click();

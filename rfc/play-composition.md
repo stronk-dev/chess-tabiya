@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. Same-day checkpoints move the individual evidence switches behind Advanced and make related-rehearsal chrome resolve a human title plus legal SAN instead of pack-id/UCI internals. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, preset-driven defaults, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
+- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. Same-day checkpoints move the individual evidence switches behind Advanced and make related-rehearsal chrome resolve a human title plus legal SAN instead of pack-id/UCI internals. The 2026-09-08 preset-identity checkpoint makes the selected help style and its exact declared promise visible without claiming that the still-draft preset compiler is active. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, preset-driven activation/defaults, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
@@ -738,6 +738,13 @@ document's to rewrite). Rows proposed by the cross-review, from head+1, NOT writ
 
 ## Changelog
 
+- 2026-09-08: preset-identity checkpoint. The run topbar shows the per-workflow selected help
+  style as a learner-facing pill, and Support begins with the exact
+  `presetDeclaration(preset).promise` sentence. It follows both initial persisted state and storage
+  changes while keeping individual producer/channel controls in Advanced; the Just Play browser
+  journey verifies the default Quiet identity and promise at the served application boundary. This closes INR-a3's
+  silence-is-indistinguishable-from-breakage defect; it does not claim the still-draft preset
+  compiler, module activation or automatic defaults.
 - 2026-09-07: related-rehearsal vocabulary checkpoint. A run resolves its declared sibling pack
   through the existing pack API. The companion link renders the sibling's title, and a
   `root_after_move` relation renders legality-checked SAN against the sibling's authoritative start

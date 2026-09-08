@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, liveMarkers, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, renderEndgameReading, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type RunMark } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, liveMarkers, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presetDeclaration, renderEndgameReading, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -49,7 +49,7 @@
     resistanceSummary,
   } from "./outcome-presentation.js";
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
-  import { assistanceKey, assistanceProfile, loadAssistance, saveAssistance, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
+  import { assistanceKey, assistanceProfile, loadAssistance, loadWorkflowPreset, saveAssistance, workflowKey, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
@@ -209,6 +209,7 @@
   let openShapeId: string | undefined = $state();
   let inspectedShapeId: string | undefined = $state();
   let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
+  let workflowPreset: PresetId = $state("quiet");
   let assistanceMenuOpen = $state(false);
   let openPivotalNodeId: string | undefined = $state();
   let pivotalDialogOpen = $state(false);
@@ -535,6 +536,7 @@
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
   let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
+  let activePreset = $derived(presetDeclaration(workflowPreset));
   let assistanceContext = $derived({ sessionKind: run.sessionKind, workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
@@ -552,8 +554,12 @@
   }
 
   function refreshAssistancePreference(event: StorageEvent): void {
-    if (event.key !== null && event.key !== assistanceKey(activeAssistanceProfile)) return;
-    assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
+    if (event.key === null || event.key === assistanceKey(activeAssistanceProfile)) {
+      assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
+    }
+    if (event.key === null || event.key === workflowKey(activeAssistanceProfile)) {
+      workflowPreset = loadWorkflowPreset(activeAssistanceProfile, preferenceStorage());
+    }
   }
 
   function setAssistance<Key extends keyof Omit<AssistanceConfig, "version">>(key: Key, value: AssistanceConfig[Key]): void {
@@ -1000,6 +1006,7 @@
     globalThis.addEventListener("storage", refreshAssistancePreference);
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
     assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
+    workflowPreset = loadWorkflowPreset(activeAssistanceProfile, preferenceStorage());
     if (onLoadMarks !== undefined) void onLoadMarks().then((marks)=>ownMarks=marks);
     try { const saved=globalThis.localStorage?.getItem(`tabiya:mark-scope:${run.id}`);if(saved==="branch")markScope="branch"; } catch { /* local preference only */ }
     try {
@@ -1027,6 +1034,7 @@
     if (loadedAssistanceProfile === activeAssistanceProfile) return;
     loadedAssistanceProfile = activeAssistanceProfile;
     assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
+    workflowPreset = loadWorkflowPreset(activeAssistanceProfile, preferenceStorage());
   });
 
   $effect(() => {
@@ -1115,8 +1123,9 @@
       <div class="topbar-actions">
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
         <details class="assistance-control" bind:open={assistanceMenuOpen}>
-          <summary>Support</summary>
+          <summary aria-label={`Support style: ${activePreset.label}`}><span class="preset-pill">{activePreset.label}</span></summary>
           <div class="support-menu">
+            <p class="preset-menu-promise">{activePreset.promise}</p>
             <p>Open the help available in this workflow. This does not reveal a move. Temporary position help must be opened explicitly and closes after your next move.</p>
             <button type="button" onclick={(event) => { assistanceMenuOpen = false; openAssistance(event); }}>Open support</button>
             <button type="button" onclick={openAdvancedSupport}>Advanced support controls</button>
@@ -1235,6 +1244,10 @@
 
         <div class="companion-scroll">
           <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
+            <footer class="preset-disclosure" aria-label="Active support promise">
+              <strong>{activePreset.label}</strong>
+              <span>{activePreset.promise}</span>
+            </footer>
             {#if guide}
               <section class="rehearsal-guide" aria-labelledby="rehearsal-guide-title">
                 <StatusAnnouncement message={`First rehearsal, step ${guide.ordinal} of 4. ${guide.title}. ${guide.body.join(" ")}`} />
@@ -1860,9 +1873,15 @@
   .support-empty-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
   .evidence-reveal button, .support-empty-actions button { justify-self:start; padding:.5rem .65rem; border:1px solid var(--line); border-radius:.6rem; background:var(--paper); color:inherit; }
   .evidence-reveal button:not(:disabled), .support-empty-actions button.primary:not(:disabled) { border-color:var(--accent); color:var(--accent); }
-  .assistance-control summary { cursor:pointer; }
   .support-menu { position:absolute; top:calc(100% + .4rem); right:0; z-index:4; display:grid; width:min(19rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
   .support-menu p { margin:0; color:var(--muted); font-size:.75rem; }
+  .assistance-control summary { list-style: none; cursor: pointer; }
+  .assistance-control summary::-webkit-details-marker { display: none; }
+  .preset-pill { display:inline-flex; align-items:center; min-height:2rem; padding:0 .7rem; border:1px solid var(--accent); border-radius:999px; color:var(--accent); font-size:.72rem; font-weight:700; white-space:nowrap; }
+  .preset-menu-promise { padding-bottom:.45rem; border-bottom:1px solid var(--line); color:var(--ink) !important; }
+  .preset-disclosure { position:sticky; top:0; z-index:2; display:grid; grid-template-columns:auto minmax(0,1fr); gap:.5rem; align-items:baseline; margin:-.65rem -.65rem 0; padding:.55rem .65rem; border-bottom:1px solid var(--line); background:var(--panel); }
+  .preset-disclosure strong { color:var(--accent); font-size:.72rem; }
+  .preset-disclosure span { min-width:0; color:var(--muted); font-size:.72rem; line-height:1.35; }
   .assistance-grid { display:grid; gap:.55rem; }
   .assistance-grid label { display:flex; gap:.4rem; align-items:center; }
   .assistance-grid .honest { color:var(--muted); font-size:.68rem; }

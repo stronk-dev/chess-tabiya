@@ -5597,17 +5597,21 @@
     {
       "id": "INR-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§1.4",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "The preset pill and a **mandatory, always-visible** disclosure footer rendering `presetDeclaration(preset).promise`",
       "legacyRoute": "wave3 #8",
       "note": "[[D1435]]/[[D1457]]; all eight reads ship",
-      "sourceDigest": "sha256:892f958751453c4afbce444aeb5c757247008d873ee1a2fef1a3347519471cb6"
+      "sourceDigest": "sha256:892f958751453c4afbce444aeb5c757247008d873ee1a2fef1a3347519471cb6",
+      "completion": {
+        "completedOn": "2026-09-08",
+        "evidence": "DrillScreen renders the workflow preset label in the topbar and its exact declared promise as the sticky first row of Support; component and production-browser contracts cover initial state plus storage-event preference changes"
+      }
     },
     {
       "id": "INR-a4",

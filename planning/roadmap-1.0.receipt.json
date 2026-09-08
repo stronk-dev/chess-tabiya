@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:110bfa5214b68d043a4eaea32f8cf75b84b5e8e347a41c2ebeea81f2cdff0d46",
-    "workItems": "sha256:31fd065560bfe2d1cdc97799eb02b1497aea917480fad369b7c918d6dc14cc4f",
+    "roadmap": "sha256:86d49a38c92ba6c678d2cc56d1384a7ef95fa19f91316d6e9758f6bd684a21db",
+    "workItems": "sha256:424839db500e8ee9222d436804bbe519203e0db30662f9deedb4ec09b8eea941",
     "workState": "sha256:7b4082e9cf02f71fac8b024c8735ac5d8fe4bd847b9c09282501d083d5d66733",
-    "rfcRegister": "sha256:9e63ac31caff6559050a19af247f964f2a308d329708d73616bbf5aa7423e1cb",
+    "rfcRegister": "sha256:205bd28f6cc5eba599ec5598522b1df4282d74618ad818d0d9a71f9999267486",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -37,10 +37,10 @@
       "refused": 109
     },
     "workItems": {
-      "queued": 125,
+      "queued": 124,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 239,
+      "completed": 240,
       "retired": 24
     },
     "dimensionStates": {
@@ -217,18 +217,20 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell and completed related-rehearsal vocabulary path, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+      "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
-        "at": "2026-09-07",
-        "summary": "The stable board reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play opens Support without exposing individual evidence switches; related rehearsals resolve title and legal SAN; and catalogue/live cards translate phase, publication and objective wire states through shared learner-copy boundaries. Advanced controls remain available through the explicit Inspector.",
+        "at": "2026-09-08",
+        "summary": "The stable board reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play now names the selected help style and keeps its exact promise visible in Support, so intentional silence is not confused with missing analysis. Individual evidence switches remain available only through the explicit Advanced inspector; full preset activation and module delivery remain open.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/play-composition.ts",
           "apps/web/src/lib/viewport-support.ts",
           "apps/web/src/lib/DrillScreen.svelte",
+          "apps/web/src/lib/screens.test.ts",
           "apps/web/src/lib/pack-catalog.ts",
           "tests/browser/drill.spec.ts",
           "docs/drill-client.md",
+          "planning/work-items-1.0.json",
           "rfc/play-composition.md",
           "rfc/README.md"
         ],
@@ -241,7 +243,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:2584fcb3f47535662d294ac9d442e432a97ad70dd537ce389929285e9b4fa628"
+            "digest": "sha256:f033afe4a51cdcb48eaf1178ee01f47b78e6445d4a04ae1662d6e09db6c683ab"
           }
         ]
       },
@@ -392,7 +394,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:2584fcb3f47535662d294ac9d442e432a97ad70dd537ce389929285e9b4fa628"
+            "digest": "sha256:f033afe4a51cdcb48eaf1178ee01f47b78e6445d4a04ae1662d6e09db6c683ab"
           }
         ]
       },
@@ -668,10 +670,10 @@
       "owner": "assistance-and-presentation",
       "rfcCount": 6,
       "workItems": {
-        "queued": 7,
+        "queued": 6,
         "blocked_owner": 3,
         "blocked_rfc": 24,
-        "completed": 37,
+        "completed": 38,
         "retired": 0
       },
       "routes": {

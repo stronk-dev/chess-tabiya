@@ -167,6 +167,12 @@ and listens for browser `storage` events so a Settings change from another tab u
 mounted run. The ordinary topbar Support menu opens the workflow's Support region; individual
 evidence-channel switches remain available through **Advanced support controls** in the explicit
 Inspector and update the same profile immediately. They do not render as the ordinary play menu.
+The topbar names the workflow's selected help style rather than a provider or evidence channel.
+The first row of Support always repeats that style's exact declared promise—for example,
+**Theory only** states that it provides cited theory with no evaluation, candidates, or line.
+This makes intentional silence distinguishable from missing or broken analysis. The label and
+promise follow per-workflow preference changes; they do not move individual evidence controls out
+of Advanced.
 The Settings copy of those advanced preferences consumes both the workflow module ceiling and
 `permittedAssistance`. A Match / Arena profile, whose ceiling is rules-only, keeps all nine saved
 values but disables their controls and binds each one to the visible reason that optional support

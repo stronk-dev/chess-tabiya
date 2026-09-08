@@ -18656,3 +18656,19 @@ collections remain blocking. `make graduation-plan-check`, workspace typecheck, 
 software tier and the 178-test content tier pass. This is foundation implementation only: no pack
 schema, pack content, declaration, claim binding, publication state or authored chess judgement
 changed. Schema 0.28 and the atomic migration remain next.
+
+## 2026-09-08 — The run names its selected help style and keeps the promise visible
+
+The unblocked INR-a3 play-composition slice is implemented. The topbar's Support control now names
+the persisted per-workflow preset as a learner-facing pill, while the Support region begins with
+that preset declaration's exact promise. Quiet therefore states that it is intentionally quiet;
+Theory only states that it excludes evaluations, candidates and lines; and Support states that it
+never supplies the best move. Storage events refresh both the technical assistance profile and the
+workflow preset in an already-mounted run.
+
+The component contract covers initial persisted selection, a cross-tab preset change and the
+continued absence of individual evidence switches from ordinary Support; the served Just Play
+browser journey asserts the default Quiet identity and promise. Workspace typecheck and the
+1,150-test software tier pass. This is honest preset identity, not premature preset activation:
+the module compiler, automatic workflow defaults and the five module-dependent composition states
+remain open.

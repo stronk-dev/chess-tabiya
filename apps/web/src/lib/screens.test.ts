@@ -49,7 +49,7 @@ import type {
   RegisterKeyboardRegion,
 } from "./keyboard.js";
 import { latestCheckpoint } from "./screen-model.js";
-import { assistanceKey } from "./assistance-preference.js";
+import { assistanceKey, workflowKey } from "./assistance-preference.js";
 import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
@@ -444,6 +444,44 @@ describe("Layer 3 screens", () => {
     expect(document.getElementById("run-support-region")?.classList.contains("compact-active")).toBe(true);
     expect(tabs[0]?.getAttribute("aria-pressed")).toBe("true");
     expect(tabs[2]?.getAttribute("aria-pressed")).toBe("false");
+    await unmount(component);
+  });
+
+  it("keeps the selected help style and its promise visible without exposing evidence switches", async () => {
+    const run = createRun({
+      id: "support-preset-identity",
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"6".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const preferences = new Map<string, string>([
+      [workflowKey("position"), JSON.stringify({ version: 1, preset: "support" })],
+    ]);
+    const assistanceStorage = {
+      getItem: (key: string) => preferences.get(key) ?? null,
+      setItem: (key: string, value: string) => { preferences.set(key, value); },
+    };
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+
+    const selector = document.querySelector<HTMLDetailsElement>("details.assistance-control")!;
+    expect(selector.querySelector("summary")?.getAttribute("aria-label")).toBe("Support style: Support");
+    expect(selector.querySelector(".preset-pill")?.textContent).toBe("Support");
+    const promise = "Staged-move risk warnings, on request, before you commit. Never the best move.";
+    expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain(promise);
+    expect(selector.querySelectorAll('input[type="checkbox"]')).toHaveLength(0);
+
+    preferences.set(workflowKey("position"), JSON.stringify({ version: 1, preset: "theory_only" }));
+    globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowKey("position") }));
+    await tick();
+    expect(selector.querySelector("summary")?.getAttribute("aria-label")).toBe("Support style: Theory only");
+    expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain("no evaluation, no candidates, no line");
     await unmount(component);
   });
 
