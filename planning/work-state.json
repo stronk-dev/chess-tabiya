@@ -26010,6 +26010,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/AssistanceSettings.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3179",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a759dbb9fc0c7860b6e6daa4d911a55996f8b52ac34783cc6acc453359c0e1b4",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/session-controller.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -207,9 +207,11 @@ opponent turns, and the ordinary board/timeline/branch/compare/export surfaces r
 Its move result describes the learner mutation boundary, not the entire consequence request: if
 the learner move commits and the subsequent opponent request fails, the board keeps the committed
 position while the controller retains the provider error. A failure before the learner mutation
-still reports that no move was committed. Known opponent-policy and engine-availability failures
-cross a learner-copy boundary before reaching the board alert: they offer retry, another opponent,
-or another drill without exposing policy, engine, or trajectory-leg identifiers.
+still reports that no move was committed. All controller failures cross a learner-copy boundary
+before reaching the board alert. Common run, ownership, move, branch, withholding, analysis, voice,
+preview and compatibility states have fixed recovery instructions. Unknown API failures are reduced
+to a status-based recovery class, and unknown local invariant failures use one generic message;
+neither path exposes server text, schema fields, provider diagnostics or run identifiers.
 The pack-less objective region states the same absence as a product promise: nothing is authored
 about the position, so Tabiya reads it as play creates recorded moments worth returning to.
 

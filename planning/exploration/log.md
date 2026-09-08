@@ -19161,3 +19161,18 @@ Exhaustive typed label maps make a newly added provider or surface a compile-tim
 the shell fixture requires both the learner labels and the closed disclosure. `make verify-software`
 passes 188 files / 1,182 tests and production builds; `make test-browser` passes all 64 required
 desktop/mobile journeys with the one explicitly optional Maia measurement skipped.
+
+## 2026-09-08 — Run failures end in learner recovery copy ([[D3179]])
+
+The session controller translated four error codes and rendered every other server or local error
+message in the primary board alert. Because move, rewind, branch, group, analysis, return,
+simulation, comparison, start and resume all share that boundary, malformed content and provider
+failures could expose schema fields, node/branch identities and backend diagnostics during play.
+
+Common run states now have fixed recovery instructions; unknown API failures are reduced to their
+HTTP recovery class and unknown local failures use one generic message. The return value that says
+whether a learner move committed is unchanged. Unit negatives cover typed unknown, local invariant,
+ownership, branch, withholding and expired-preview errors; the malformed-pack production journey
+requires generic recovery, refuses the schema field and returns to the Library. `make
+verify-software` passes 188 files / 1,184 tests and production builds; `make test-browser` passes all
+64 required desktop/mobile journeys with the one explicitly optional Maia measurement skipped.

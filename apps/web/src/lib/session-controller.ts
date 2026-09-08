@@ -73,20 +73,42 @@ type StatePatch = {
 
 const TERMINAL_STATES = new Set(["achieved", "failed", "transitioned"]);
 
+const RUN_ERROR_MESSAGES: Readonly<Record<string, string>> = Object.freeze({
+  RUN_TERMINATED: "This attempt is complete. Rewind to an earlier move to try another branch.",
+  MATCH_LIVE: "Pause the live match before rewinding, branching, or revealing feedback.",
+  POLICY_MODE_UNSUPPORTED: "This opponent is not available here. Choose another opponent or another drill.",
+  UNSUPPORTED_OPPONENT_POLICY: "This opponent is not available here. Choose another opponent or another drill.",
+  ENGINE_UNAVAILABLE: "The opponent could not move right now. Try again, or choose another opponent.",
+  NOT_ACTIVE_WRITER: "This run is active in another browser. Reopen it to watch or take control.",
+  ILLEGAL_MOVE: "That move is not available from the position now shown. Check the board and try again.",
+  MOVE_NOT_IN_RESPONSE: "That move is not available from the position now shown. Check the board and try again.",
+  UNKNOWN_BRANCH: "That saved line changed or is no longer available. Reopen the run and try again.",
+  UNKNOWN_GROUP: "That branch group changed or is no longer available. Reopen the run and try again.",
+  ASSISTANCE_WITHHELD: "Help is not available at this point. Continue to the next checkpoint or finish the attempt.",
+  FEEDBACK_WITHHELD: "Help is not available at this point. Continue to the next checkpoint or finish the attempt.",
+  ENGINE_EVAL_UNAVAILABLE: "A calculation is not available right now. You can keep playing without it or try again.",
+  EVIDENCE_UNAVAILABLE: "That support is not available right now. You can keep playing without it or try again.",
+  CORPUS_UNAVAILABLE: "Human-game statistics are not available right now. You can keep playing without them.",
+  TTS_UNAVAILABLE: "Spoken guidance is not available right now. The written guidance is unchanged.",
+  VOICE_UNAVAILABLE: "Narrated guidance is not available right now. The grounded written guidance is unchanged.",
+  SIMULATION_EXPIRED: "That preview has expired. Open the authored-line preview again.",
+  RUN_NOT_FOUND: "This rehearsal is no longer available. Return to Play and choose another.",
+  STORY_UNAVAILABLE: "This game's story is not ready yet. Return to the run or try again later.",
+  UNSUPPORTED_RUN_SCHEMA: "This run was created by an incompatible Tabiya version. Update this deployment before reopening it.",
+});
+
 export function sessionErrorMessage(error: unknown): string {
-  if ((error instanceof ApiError && error.code === "RUN_TERMINATED") || (error instanceof Error && /Run is terminal at node:/u.test(error.message))) {
-    return "This attempt is complete. Rewind to an earlier move to try another branch.";
+  if (error instanceof ApiError) {
+    const known = RUN_ERROR_MESSAGES[error.code];
+    if (known !== undefined) return known;
+    if (error.status === 401 || error.status === 403) return "Your access to this run has changed. Sign in again or reopen it.";
+    if (error.status === 404) return "This rehearsal is no longer available. Return to Play and choose another.";
+    if (error.status === 409) return "This run changed before that action finished. Reopen it and try again.";
+    if (error.status >= 500) return "Tabiya could not complete that action right now. Try again; your recorded line is unchanged.";
+    return "That action could not be completed. Check the current position and try again.";
   }
-  if (error instanceof ApiError && error.code === "MATCH_LIVE") {
-    return "Pause the live match before rewinding, branching, or revealing feedback.";
-  }
-  if (error instanceof ApiError && error.code === "POLICY_MODE_UNSUPPORTED") {
-    return "This opponent is not available here. Choose another opponent or another drill.";
-  }
-  if (error instanceof ApiError && error.code === "ENGINE_UNAVAILABLE") {
-    return "The opponent could not move right now. Try again, or choose another opponent.";
-  }
-  return error instanceof Error ? error.message : String(error);
+  if (error instanceof Error && /Run is terminal at node:/u.test(error.message)) return RUN_ERROR_MESSAGES.RUN_TERMINATED!;
+  return "Tabiya could not complete that action. Try again; your recorded line is unchanged.";
 }
 
 function browserStorage(): KeyValueStorage {

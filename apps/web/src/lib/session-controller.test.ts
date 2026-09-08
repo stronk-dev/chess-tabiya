@@ -476,6 +476,38 @@ describe("DrillSessionController", () => {
     expect(unavailable).not.toMatch(/engine|maia-1900-internal/ui);
   });
 
+  it("never sends unrecognized server or invariant diagnostics to the run alert", () => {
+    const conflict = sessionErrorMessage(new ApiError(
+      409,
+      "NEW_CONFLICT_KIND",
+      "branch internal-branch-id failed schema run@0.17",
+    ));
+    const unavailable = sessionErrorMessage(new ApiError(
+      503,
+      "NEW_PROVIDER_KIND",
+      "provider secret-engine-id failed at node internal-node-id",
+    ));
+    const localInvariant = sessionErrorMessage(new TypeError("Pack run is missing its pack id internal-pack-id"));
+
+    expect(conflict).toBe("This run changed before that action finished. Reopen it and try again.");
+    expect(unavailable).toBe("Tabiya could not complete that action right now. Try again; your recorded line is unchanged.");
+    expect(localInvariant).toBe("Tabiya could not complete that action. Try again; your recorded line is unchanged.");
+    expect([conflict, unavailable, localInvariant].join(" ")).not.toMatch(/internal-|schema|provider|node id|branch id/ui);
+  });
+
+  it("gives common run failures specific recovery without echoing their identifiers", () => {
+    const staleWriter = sessionErrorMessage(new ApiError(409, "NOT_ACTIVE_WRITER", "writer device-secret lost lease"));
+    const missingBranch = sessionErrorMessage(new ApiError(404, "UNKNOWN_BRANCH", "branch opaque-branch-id was not found"));
+    const withheld = sessionErrorMessage(new ApiError(403, "ASSISTANCE_WITHHELD", "evidence projection private-id withheld"));
+    const expired = sessionErrorMessage(new ApiError(409, "SIMULATION_EXPIRED", "simulation opaque-simulation-id expired"));
+
+    expect(staleWriter).toContain("another browser");
+    expect(missingBranch).toContain("saved line");
+    expect(withheld).toContain("next checkpoint");
+    expect(expired).toContain("preview has expired");
+    expect([staleWriter, missingBranch, withheld, expired].join(" ")).not.toMatch(/device-secret|opaque-|projection|simulation-id/ui);
+  });
+
   it("routes resume failures through the same recovery copy as in-session mutations", async () => {
     const environment = controller();
     vi.spyOn(environment.api, "events").mockRejectedValueOnce(
@@ -522,7 +554,7 @@ describe("DrillSessionController", () => {
     expect(await environment.controller.move("c1e3")).toBe(false);
     expect(environment.controller.state).toMatchObject({
       busy: false,
-      error: "network refused the move",
+      error: "Tabiya could not complete that action. Try again; your recorded line is unchanged.",
     });
   });
 
@@ -536,7 +568,7 @@ describe("DrillSessionController", () => {
     expect(api.requiredRun().nodes.at(-1)).toMatchObject({ moveUci: "f2f3", actor: "user" });
     expect(environment.controller.state).toMatchObject({
       busy: false,
-      error: "opponent unavailable",
+      error: "Tabiya could not complete that action. Try again; your recorded line is unchanged.",
       runState: { run: { activeCursor: { nodeId: api.requiredRun().activeCursor.nodeId } } },
     });
   });

@@ -900,7 +900,8 @@ test("library exposes phase honestly and survives a malformed pack response", as
     has: page.getByText("Najdorf: choose a setup and cross the theory boundary", { exact: true }),
   });
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
-  await expect(page.getByRole("alert")).toContainText("did not declare start.side");
+  await expect(page.getByRole("alert")).toHaveText("Tabiya could not complete that action right now. Try again; your recorded line is unchanged.");
+  await expect(page.getByRole("alert")).not.toContainText("start.side");
   await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
   expect(pageErrors).toEqual([]);
 });
