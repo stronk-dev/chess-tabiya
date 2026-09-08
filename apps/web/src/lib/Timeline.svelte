@@ -42,7 +42,13 @@
   }: Props = $props();
 
   let rootMarkers = $derived(shapeMarkers.filter((marker) => marker.nodeId === rootNodeId));
-  let rootPivotal = $derived(pivotalMarkers.some((marker) => marker.nodeId === rootNodeId));
+  let rootPivotal = $derived(pivotalMarkers.filter((marker) => marker.nodeId === rootNodeId));
+  function pivotalLabel(markers: readonly { readonly label: string }[]): string {
+    return markers.map((marker) => marker.label).join(" and ");
+  }
+  function pivotalAt(nodeId: string): readonly { readonly nodeId: string; readonly label: string }[] {
+    return pivotalMarkers.filter((marker) => marker.nodeId === nodeId);
+  }
   function branchesAt(nodeId: string | undefined) {
     if (nodeId === undefined) return [];
     const rows = branches.filter((branch) => branch.forkNodeId === nodeId);
@@ -57,13 +63,13 @@
     <span>{rehearsalTurnCount(entries.length)}</span>
   </div>
   <ol>
-    {#if rootNodeId !== undefined && (rootMarkers.length > 0 || rootPivotal || branchesAt(rootNodeId).length > 0)}
+    {#if rootNodeId !== undefined && (rootMarkers.length > 0 || rootPivotal.length > 0 || branchesAt(rootNodeId).length > 0)}
       <li>
         <button type="button" aria-label="Start position" tabindex={previewNodeId === rootNodeId || (previewNodeId === undefined && activeNodeId === rootNodeId) ? 0 : -1} data-timeline-node={rootNodeId} class:preview={previewNodeId === rootNodeId} onclick={() => onPreview(rootNodeId)}>
           <span class="ply">0</span><span>Start</span>
         </button>
         {#each rootMarkers as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
-        {#if rootPivotal}<button class="pivotal-marker" type="button" aria-label={`Open pivotal marker at ${rehearsalStepLabel(0).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(rootNodeId)}><span aria-hidden="true"></span></button>{/if}
+        {#if rootPivotal.length > 0}<button class="pivotal-marker" type="button" aria-label={`Open ${pivotalLabel(rootPivotal)} at ${rehearsalStepLabel(0).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(rootNodeId)}><span aria-hidden="true"></span></button>{/if}
         {#if branchesAt(rootNodeId).length > 0}<div class="branch-links" aria-label="Branches from the start">{#each branchesAt(rootNodeId) as branch}<button type="button" onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>
     {/if}
@@ -93,7 +99,7 @@
           {/if}
         </button>
         {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
-        {#if pivotalMarkers.some((marker) => marker.nodeId === entry.nodeId)}<button class="pivotal-marker" type="button" aria-label={`Open pivotal marker at ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(entry.nodeId)}><span aria-hidden="true"></span></button>{/if}
+        {#if pivotalAt(entry.nodeId).length > 0}<button class="pivotal-marker" type="button" aria-label={`Open ${pivotalLabel(pivotalAt(entry.nodeId))} at ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(entry.nodeId)}><span aria-hidden="true"></span></button>{/if}
         {#if branchesAt(entry.nodeId).length > 0}<div class="branch-links" aria-label={`Branches from ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`}>{#each branchesAt(entry.nodeId) as branch}<button type="button" onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>
     {/each}

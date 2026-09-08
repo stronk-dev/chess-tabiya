@@ -452,7 +452,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
   await move(page, "d1", "d8");
-  const marker = page.getByRole("button", { name: "Open pivotal marker at rehearsal step 1" });
+  const marker = page.getByRole("button", { name: "Open Irreversible change and Phase transition at rehearsal step 1" });
   await expect(marker).toBeVisible();
   await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
@@ -473,7 +473,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await expect(momentEvidence).toContainText("material-census convention");
   await page.getByLabel("Passive pivotal markers").uncheck();
   await page.getByRole("button", { name: "Return to play" }).click();
-  await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Open (?:Irreversible change|Phase transition)/ })).toHaveCount(0);
 });
 
 test("endgame evidence is inspectable without a pivotal marker", async ({ page }) => {

@@ -53,6 +53,7 @@
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
+  import { storyMomentLabel } from "./learner-copy.js";
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
   import { rehearsalGuideStep } from "./rehearsal-guide.js";
@@ -546,7 +547,7 @@
   let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
   let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
   let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(liveMarkers(run, run.activeCursor.branchId, assistanceContext)) : []);
-  let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: marker.kind.replaceAll("_", " ") })));
+  let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
   let openPivotalNode = $derived(openPivotalNodeId === undefined ? undefined : run.nodes.find((node) => node.id === openPivotalNodeId));
   function preferenceStorage(): PreferenceStorage | undefined {

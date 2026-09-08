@@ -20,6 +20,25 @@ function target(): HTMLElement {
 afterEach(() => document.body.replaceChildren());
 
 describe("timeline rewind timing", () => {
+  it("announces the detected moment instead of a generic pivotal marker", async () => {
+    const component = mount(Timeline, { target: target(), props: {
+      entries,
+      activeNodeId: "checkpoint-1",
+      onPreview: vi.fn(),
+      onConfirm: vi.fn(),
+      rewindPolicy: "free",
+      pivotalMarkers: Object.freeze([
+        Object.freeze({ nodeId: "move-1", label: "Irreversible change" }),
+        Object.freeze({ nodeId: "move-1", label: "Phase transition" }),
+      ]),
+    } });
+    await tick();
+
+    expect(document.querySelector('[aria-label="Open Irreversible change and Phase transition at rehearsal step 1"]')).not.toBeNull();
+    expect(document.querySelector('[aria-label*="Open pivotal marker"]')).toBeNull();
+    await unmount(component);
+  });
+
   it("keeps arbitrary history inspectable without presenting it as an undo point", async () => {
     const onConfirm = vi.fn();
     const component = mount(Timeline, { target: target(), props: {

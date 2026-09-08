@@ -19023,3 +19023,17 @@ The mounted Compare fixture reaches an actual terminal row, requires `Game won`,
 old raw sentence. `make verify-software` passes 188 files / 1,176 tests plus performance, schema,
 semantic manifests, production builds, and rating isolation. `make test-browser` passes all 64
 required desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-08 — Pivotal markers name their detected moments ([[D3169]])
+
+The runtime already carried a closed pivotal-kind vocabulary and the web client already had an
+exhaustive learner label for every kind. `DrillScreen` instead normalized the enum mechanically,
+then `Timeline` accepted that label and discarded it: every marker was announced only as “Open
+pivotal marker”. The timeline now receives exhaustive labels and names every admitted moment at
+the node in the marker's accessible name.
+
+A component fixture proves two simultaneous moments are both announced and refuses the old generic
+name. The mounted queen-exchange journey reaches `Irreversible change and Phase transition` through
+the production path. `make verify-software` passes 188 files / 1,177 tests plus performance, schema,
+semantic manifests, production builds, and rating isolation. `make test-browser` passes all 64
+required desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.

@@ -431,6 +431,11 @@ markers (including a ply-0 root row) open an attributed detection-and-plans pane
 emitting events or changing feedback disclosure. Pack runs evaluate referenced entries;
 Just Play evaluates the served catalogue.
 
+Passive pivotal markers use the exhaustive learner moment vocabulary in their accessible
+names. A node with multiple admitted moments names each one—for example, `Irreversible
+change and Phase transition`—rather than exposing an enum or a generic marker with no clue
+about what was detected.
+
 ## Branch groups
 
 At a decision point the drill can capture two through eight legal candidate
