@@ -8995,7 +8995,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:c5fa510bc6b8b0bd5ada57877db2b3217aa5490d8e86a98235fabd1dbd18d94c",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "owner": "evidence-foundation"
     },
     {
       "id": "D1114",
@@ -25167,39 +25167,39 @@
     },
     {
       "id": "D3088",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:1ab6649bb1fb05cfaf230f6b9e06a7cd49b859659f0030fb6cc329d57dd43c6d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:240672f58c7773edc36213a5fc93ba1d49946e928c4abba962fd64b22ab1a059",
       "uxItems": [],
-      "owner": "content-and-theory",
-      "blocker": "rfc:graduation-clearance.md"
+      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3089",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:8ec588d981678cb9e6c9e80e261d5cdad94c40ee903cd6d6961205fdc2161c11",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b0272f4c84307a72367bac34e4bc6cea84acf2894feebd6c2c2869141048d51c",
       "uxItems": [],
-      "owner": "content-and-theory",
-      "blocker": "rfc:graduation-clearance.md"
+      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3090",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:eebdaf612434be52f7092c85b3c59d542da55713491f74df9c83cb4c4410cc34",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:85293970da901020e55c05657c8278799fdd12b7761ba30c7422ce2ac2fe0c2d",
       "uxItems": [],
-      "owner": "content-and-theory",
-      "blocker": "rfc:graduation-clearance.md"
+      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3091",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:c4482518445a5b6569cc66e08001036a40ab367d49279df7288ca42fe1007de2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6cea3b22d0eacc4fcf7d21c850e9d62ee98c184854deb2cb9a4bf4686ee7ad78",
       "uxItems": [],
-      "owner": "content-and-theory",
-      "blocker": "rfc:graduation-clearance.md"
+      "evidence": "planning/graduation-clearance/second-fresh-independent-buildability-review-2026-09-08.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3092",

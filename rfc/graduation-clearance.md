@@ -9,7 +9,11 @@
   receipt cannot prove a human actor/time, and the planner does not use the shared RFC-8785
   authority it claims. The shipped writer and template registry remain valid;
   no corpus entry has been migrated under the returned contract.
-  **Bounded author repair completed 2026-09-07; awaiting a genuinely fresh review.**
+  **Second fresh independent buildability review PASSED 2026-09-08.** The bounded repair was
+  re-executed and independently attacked at the registry join, declaration identity, staleness,
+  precondition and shared-canonical refusal boundaries. [[D3088]]–[[D3091]] are discharged and
+  schema-0.28 production implementation resumes; authored chess truth, claim binding, publication
+  and premature archival remain held.
   `make graduation-clearance-author-repair` now executes the nine registered emitter shapes through
   the complete false → true → false contract, rejects pack-side plan weakening, and shares the
   production RFC-8785 serializer. [[D3090]] is resolved on the narrow process-authority option:
