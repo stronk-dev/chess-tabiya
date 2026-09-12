@@ -26130,6 +26130,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/JustPlayStarter.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3192",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ab8c9d4f0dfcbc34752b4a4ac7ba846e8b563718adc9d821d308d772aade530d",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

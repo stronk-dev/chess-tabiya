@@ -19321,3 +19321,13 @@ the implementing run surface exposes only the selected promise and the complete 
 per-channel controls. The preset compiler and selector are still draft work under [[D484]]. The
 card now names the Advanced control that actually exists instead of presenting unimplemented work
 as a next step. The canonical `make test-software` gate passes 188 files / 1,184 tests.
+
+## 2026-09-13 — Inspector retains attached evidence payloads ([[D3192]])
+
+DrillScreen previously rendered current-position, guard and terminal evidence references without
+the run's already-recorded ref-to-payload map. Compare used the same exported authority correctly,
+but the Inspector downgraded exact attached engine and tablebase results to a generic pending line.
+All three Inspector paths now derive from one `evidencePayloads(run)` map. Ordinary play remains
+free of raw values; the explicit Inspector gains the detail it promises. `make test-software`
+passes 188 files / 1,184 tests, and `make test-browser` passes all 64 required desktop/mobile
+journeys with the one explicitly optional Maia latency measurement skipped.

@@ -30,6 +30,7 @@
   import {
     activeNode,
     branchCards,
+    evidencePayloads,
     packObjective,
     packStartSide,
     timelineBranchCards,
@@ -315,9 +316,10 @@
   let phoneSheetModal = $derived(viewportSupport.width > 0 && compactViewport && sheetOpen);
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
+  let runEvidencePayloads = $derived(evidencePayloads(run));
   let recordedEngineEvidence = $derived(
     currentNode.evidenceRefs
-      .map((reference) => renderEvidenceRef(reference, pack))
+      .map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads))
       .filter((sentence) => sentence.sourceLabel === "Engine"),
   );
   let analysisUnavailableReason = $derived.by(() => {
@@ -421,7 +423,7 @@
   );
   let guardGrounds = $derived(
     guardEvent?.type === "feedback.generated"
-      ? guardEvent.data.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack))
+      ? guardEvent.data.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads))
       : [],
   );
   let guardRewindNodeId = $derived.by(() => {
@@ -493,7 +495,7 @@
         ),
   );
   let terminalEvidence = $derived(
-    currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack)),
+    currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads)),
   );
   let cards = $derived(branchCards(run));
   let timelineCards = $derived(timelineBranchCards(run));

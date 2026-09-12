@@ -907,7 +907,9 @@ describe("Layer 3 screens", () => {
     const inspect = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Inspect analysis details"))!;
     inspect.click();
     await tick();
-    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Engine evidence recorded");
+    const attachedEvidence = document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent;
+    expect(attachedEvidence).toContain("eval evidence recorded");
+    expect(attachedEvidence).not.toContain("details are pending");
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Return to play")!.click();
     await tick();
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!.click();
