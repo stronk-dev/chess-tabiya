@@ -19224,3 +19224,14 @@ and source vocabulary remains available in Advanced Inspector.
 run caught one stale classroom-consent assertion; after the real journey was corrected to reject
 the old phrase, `make test-browser` passes all 64 required desktop/mobile journeys with the one
 explicitly optional Maia measurement skipped.
+
+## 2026-09-13 — Game Story speaks as a review ([[D3183]])
+
+The chronological Story no longer tells a learner that the game “left evidence,” waits for a
+“recorded evidence pass,” or offers to “Narrate grounded moment.” It names moments the game review
+can explain, waits for review preparation and offers “Explain this moment.” The evidence selection,
+grounding, chronology, return point and no-ranking boundary are unchanged.
+
+`make verify-software` passes 188 files / 1,184 tests and the production build;
+`make test-browser` passes all 64 required desktop/mobile journeys with the one explicitly optional
+Maia measurement skipped.

@@ -118,8 +118,8 @@ stronger grounded signal such as an outcome or evaluation pivot, the stronger fa
 selection. Irreversibility remains available as evidence, but its high-volume marker cannot crowd a
 shape, phase, outcome, or other recorded moment out of the bounded Story.
 The client never presents this internal selection order as a rank: cards appear in game chronology
-without position numbers, and the region permanently states that these are moments the game left
-evidence about rather than a ranking of the learner's play. No copy claims educational value.
+without position numbers, and the region permanently states that these are moments the game review
+can explain rather than a ranking of the learner's play. No copy claims educational value.
 Optional story voice uses the existing evidence-packet checker and deterministic
 fallback. It may phrase the packet but cannot add chess claims.
 

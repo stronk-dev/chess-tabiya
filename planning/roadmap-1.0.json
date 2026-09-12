@@ -431,11 +431,11 @@
         "dependsOn": ["stable-board-and-presets", "production-api-closure"],
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
-          "at": "2026-09-08",
-          "summary": "The in-run Support doorway names its selected help style while keeping raw evidence-channel controls behind Advanced; related-rehearsal return doors speak titles and legal SAN; saved-run chrome resolves titles plus shared objective-progress language; and Story now presents its evidence-selected moments in chronology without implying a quality ranking, keeps long copy beside a fixed desktop board, and prevents irreversibility-only noise from crowding out other recorded families. Account shows exact data-retention effects before destructive intent. Full route-level journeys still wait on evidence modules, preset activation, durable state and production API closure.",
+          "at": "2026-09-13",
+          "summary": "The shipped Game Story now presents explainable review moments in game order, waits for review preparation and offers to explain a selected moment without exposing evidence-job terminology. Its grounding, chronological selection, no-ranking boundary, fixed board and return point remain intact. Full Review, module presets, durable state and the remaining route-level journeys are still foundation-blocked.",
           "impact": "advanced",
-          "evidence": ["planning/ux-implementation-index.md", "planning/work-items-1.0.json", "rfc/play-composition.md", "apps/web/src/lib/AssistanceSettings.svelte", "apps/web/src/lib/GameStoryScreen.svelte", "apps/web/src/lib/game-story-screen.test.ts", "tests/browser/drill.spec.ts", "docs/account-data-lifecycle.md", "docs/game-import-and-story.md"],
-          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:bbaaa789bace5896789d1e3d513f6d75a2abcb64fd81b1cc1bac332455df101f"}]
+          "evidence": ["apps/web/src/lib/GameStoryScreen.svelte", "apps/web/src/lib/game-story-screen.test.ts", "apps/web/src/lib/app-shell.test.ts", "tests/browser/drill.spec.ts", "docs/game-import-and-story.md"],
+          "anchors": [{"kind": "work_state", "id": "D3183", "digest": "sha256:63363b5d60f9d02da0af131a263d3b0c66ae992838672e0b7d2ae65dc82d6eee"}]
         },
         "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
       },

@@ -227,7 +227,7 @@ describe("application shell", () => {
     const authoredStorage = new MemoryStorage();
     const authored = mount(App, { target: target(), props: { api: storyApi, router: new HistoryRouter(window), storage: authoredStorage } });
     await vi.waitFor(() => expect(document.body.textContent).toContain("Ada – Mina"));
-    expect([...document.querySelectorAll("button")].some((button) => button.textContent === "Narrate grounded moment")).toBe(false);
+    expect([...document.querySelectorAll("button")].some((button) => button.textContent === "Explain this moment")).toBe(false);
     await unmount(authored);
     document.body.replaceChildren();
 
@@ -235,7 +235,7 @@ describe("application shell", () => {
     saveAssistance("imported", { ...SILENT_ASSISTANCE, voice: "persona" }, personaStorage);
     const persona = mount(App, { target: target(), props: { api: storyApi, router: new HistoryRouter(window), storage: personaStorage } });
     const narrate = await vi.waitFor(() => {
-      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Narrate grounded moment");
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Explain this moment");
       expect(button).toBeDefined();
       return button!;
     });

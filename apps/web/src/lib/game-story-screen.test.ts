@@ -106,7 +106,8 @@ describe("game story screen", () => {
     const explanation = document.querySelector<HTMLElement>("#story-moment-order")!;
     expect(rail.querySelectorAll("li")).toHaveLength(8);
     expect(budget.textContent).toBe("Showing 8 of 9 recorded moments selected for this story.");
-    expect(explanation.textContent).toBe("These are the moments this game left evidence about, in game order. This is not a ranking of your play.");
+    expect(explanation.textContent).toBe("These are the moments the game review can explain, in game order. This is not a ranking of your play.");
+    expect(document.body.textContent).not.toMatch(/recorded evidence pass|left evidence about|narrate grounded moment/i);
     expect(rail.getAttribute("aria-describedby")).toBe(`${explanation.id} ${budget.id}`);
     expect(rail.tagName).toBe("UL");
     expect(rail.querySelectorAll("button > span")).toHaveLength(0);

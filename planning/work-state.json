@@ -26047,6 +26047,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/DrillScreen.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3183",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:63363b5d60f9d02da0af131a263d3b0c66ae992838672e0b7d2ae65dc82d6eee",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/GameStoryScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

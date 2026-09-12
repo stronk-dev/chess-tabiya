@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e87aeadcd7e542e559754c4cc12c11b1a7e625782d7aef50bb3b9fd16f97b267",
+    "roadmap": "sha256:2c52f77ba0ff760088688451fce4c1723059be115ad9944a79f210187c62daf8",
     "workItems": "sha256:6414fda6fb36428ae0afbf6554e983aa8c441b00b49e69f3f920c02e52315729",
-    "workState": "sha256:2bed88bd9b80c72e2a9f83da72311904fca77033b2148a336225eb28ec4aecef",
+    "workState": "sha256:72bdd15db5416f22d142d0fd77e0ff32094d62f02c05164394875dfee0fc56d0",
     "rfcRegister": "sha256:1a9bf01ec214c40bab7ec0a0149954900854a0a196635df94ca5d539a093e235",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -33,7 +33,7 @@
       "todo": 617,
       "doing": 0,
       "blocked": 1219,
-      "done": 984,
+      "done": 985,
       "refused": 111
     },
     "workItems": {
@@ -369,25 +369,21 @@
       ],
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-09-08",
-        "summary": "The in-run Support doorway names its selected help style while keeping raw evidence-channel controls behind Advanced; related-rehearsal return doors speak titles and legal SAN; saved-run chrome resolves titles plus shared objective-progress language; and Story now presents its evidence-selected moments in chronology without implying a quality ranking, keeps long copy beside a fixed desktop board, and prevents irreversibility-only noise from crowding out other recorded families. Account shows exact data-retention effects before destructive intent. Full route-level journeys still wait on evidence modules, preset activation, durable state and production API closure.",
+        "at": "2026-09-13",
+        "summary": "The shipped Game Story now presents explainable review moments in game order, waits for review preparation and offers to explain a selected moment without exposing evidence-job terminology. Its grounding, chronological selection, no-ranking boundary, fixed board and return point remain intact. Full Review, module presets, durable state and the remaining route-level journeys are still foundation-blocked.",
         "impact": "advanced",
         "evidence": [
-          "planning/ux-implementation-index.md",
-          "planning/work-items-1.0.json",
-          "rfc/play-composition.md",
-          "apps/web/src/lib/AssistanceSettings.svelte",
           "apps/web/src/lib/GameStoryScreen.svelte",
           "apps/web/src/lib/game-story-screen.test.ts",
+          "apps/web/src/lib/app-shell.test.ts",
           "tests/browser/drill.spec.ts",
-          "docs/account-data-lifecycle.md",
           "docs/game-import-and-story.md"
         ],
         "anchors": [
           {
-            "kind": "rfc",
-            "id": "play-composition.md",
-            "digest": "sha256:bbaaa789bace5896789d1e3d513f6d75a2abcb64fd81b1cc1bac332455df101f"
+            "kind": "work_state",
+            "id": "D3183",
+            "digest": "sha256:63363b5d60f9d02da0af131a263d3b0c66ae992838672e0b7d2ae65dc82d6eee"
           }
         ]
       },

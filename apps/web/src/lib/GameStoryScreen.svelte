@@ -119,13 +119,13 @@
         {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">{recordedEvaluationTrajectory(selected.evalBefore.centipawns, selected.evalAfter.centipawns)}</p>{/if}
         <p class="reentry-frame">{storyReentryCopy(story.side, story.outcome.result, selected.ply)}</p>
         <button class="primary" type="button" disabled={!story.ready} aria-describedby={!story.ready ? "story-pending-reason" : undefined} onclick={() => onEnter(selected.entryNodeId)}>Pick it up from here</button>
-        {#if onVoice}<button type="button" onclick={async () => voiceText = await onVoice!(selected.nodeId)}>Narrate grounded moment</button>{/if}
-        {#if !story.ready}<span id="story-pending-reason" class="visually-hidden">Wait for the recorded evidence pass to finish.</span>{/if}
+        {#if onVoice}<button type="button" onclick={async () => voiceText = await onVoice!(selected.nodeId)}>Explain this moment</button>{/if}
+        {#if !story.ready}<span id="story-pending-reason" class="visually-hidden">Wait for the game review to finish preparing this moment.</span>{/if}
       </article>
     </section>
   {:else}<p>No grounded moments were detected in this game.</p>{/if}
   <div class="rail-region">
-    <p id="story-moment-order" class="moment-order">These are the moments this game left evidence about, in game order. This is not a ranking of your play.</p>
+    <p id="story-moment-order" class="moment-order">These are the moments the game review can explain, in game order. This is not a ranking of your play.</p>
     {#if selection.shown < selection.total}<p id="story-moment-budget" class="selection-budget">Showing {selection.shown} of {selection.total} recorded moments selected for this story.</p>{/if}
     <ul class="rail" aria-label="Game story moments" aria-describedby={selection.shown < selection.total ? "story-moment-order story-moment-budget" : "story-moment-order"}>
       {#each selectedMoments as moment}
