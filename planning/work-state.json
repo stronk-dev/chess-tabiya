@@ -26139,6 +26139,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/DrillScreen.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3193",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5ed9ce36f0fad64f6c7814ac7a264afb552001f534927a283cc59f88d21d8536",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/evidence-sentences.ts",
+      "evidenceKind": "path"
     }
   ]
 }

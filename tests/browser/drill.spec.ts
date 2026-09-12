@@ -926,7 +926,7 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   await expect(terminal.getByText("Engine evidence recorded", { exact: false })).toHaveCount(0);
   await terminal.getByRole("button", { name: /Inspect analysis details/ }).click();
   const terminalEvidence = page.getByRole("region", { name: "Evidence attached to this position" });
-  await expect(terminalEvidence.getByText("eval evidence recorded", { exact: false })).toBeVisible({ timeout: 5_000 });
+  await expect(terminalEvidence.getByText("Recorded engine evaluation:", { exact: false })).toBeVisible({ timeout: 5_000 });
   await expect(terminalEvidence).not.toContainText("details are pending");
   await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("dialog", { name: "You lost." })).toBeVisible();

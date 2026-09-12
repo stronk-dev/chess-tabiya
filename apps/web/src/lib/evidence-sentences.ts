@@ -18,7 +18,7 @@ import {
   type TheoryEvidenceFact,
 } from "@chess-tabiya/runtime";
 
-import { evidenceKindLabel, type StagedEvidence } from "./api.js";
+import type { StagedEvidence } from "./api.js";
 
 export interface EvidenceSentence {
   readonly reference: string;
@@ -141,6 +141,86 @@ export function evidencePayloadTable(
   return table;
 }
 
+function finiteNumber(value: unknown): number | undefined {
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+
+function nonEmptyString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() !== "" ? value : undefined;
+}
+
+function signedPawns(centipawns: number): string {
+  const pawns = centipawns / 100;
+  return `${pawns >= 0 ? "+" : ""}${pawns.toFixed(2)}`;
+}
+
+function evidenceProvenance(payload: EvidencePayload): readonly string[] {
+  const values = payload.values;
+  const engineName = nonEmptyString(values.engineName);
+  const engineVersion = nonEmptyString(values.engineVersion);
+  const engineId = nonEmptyString(values.engineId);
+  const modelId = nonEmptyString(values.modelId);
+  const source = engineName === undefined
+    ? engineId ?? modelId
+    : `${engineName}${engineVersion === undefined ? "" : ` ${engineVersion}`}`;
+  const depth = finiteNumber(values.depth);
+  const requestedDepth = finiteNumber(values.requestedDepth);
+  const requestedMovetimeMs = finiteNumber(values.requestedMovetimeMs);
+  return Object.freeze([
+    ...(source === undefined ? [] : [`source ${source}`]),
+    ...(depth !== undefined
+      ? [`depth ${depth}`]
+      : requestedDepth !== undefined
+        ? [`requested depth ${requestedDepth}`]
+        : requestedMovetimeMs !== undefined
+          ? [`${requestedMovetimeMs} ms search`]
+          : []),
+  ]);
+}
+
+function withProvenance(statement: string, payload: EvidencePayload): string {
+  const provenance = evidenceProvenance(payload);
+  return `${statement}${provenance.length === 0 ? "" : `; ${provenance.join("; ")}`}.`;
+}
+
+function renderEnginePayload(payload: EvidencePayload): string {
+  const values = payload.values;
+  const source = payload.source === "human_model_predicted" ? "human-model" : "engine";
+  if (payload.kind === "eval") {
+    const centipawns = finiteNumber(values.centipawns);
+    const mateIn = finiteNumber(values.mateIn);
+    if (centipawns !== undefined) {
+      const perspective = values.perspective === "black" ? "Black" : "White";
+      return withProvenance(
+        `Recorded ${source} evaluation: ${signedPawns(centipawns)} pawns from ${perspective}'s perspective`,
+        payload,
+      );
+    }
+    if (mateIn !== undefined) {
+      const side = mateIn > 0 ? "White" : mateIn < 0 ? "Black" : "neither side";
+      const reading = mateIn === 0 ? "mate score 0" : `mate in ${Math.abs(mateIn)} for ${side}`;
+      return withProvenance(`Recorded ${source} evaluation: ${reading}`, payload);
+    }
+    return withProvenance(`Recorded ${source} evaluation; numeric score unavailable`, payload);
+  }
+  if (payload.kind === "wdl") {
+    const win = finiteNumber(values.win);
+    const draw = finiteNumber(values.draw);
+    const loss = finiteNumber(values.loss);
+    const reading = win === undefined || draw === undefined || loss === undefined
+      ? "W/D/L values unavailable"
+      : `W/D/L ${win}/${draw}/${loss}`;
+    return withProvenance(`Recorded ${source} distribution: ${reading}`, payload);
+  }
+  const moves = Array.isArray(values.movesUci)
+    ? values.movesUci.filter((move): move is string => typeof move === "string")
+    : Array.isArray(values.moves)
+      ? values.moves.filter((move): move is string => typeof move === "string")
+      : [];
+  const reading = moves.length === 0 ? "moves unavailable" : moves.join(" ");
+  return withProvenance(`Recorded ${source} line: ${reading}`, payload);
+}
+
 function resolveEvidenceSentence(
   reference: string,
   pack?: DrillPackDefinition,
@@ -160,7 +240,7 @@ function resolveEvidenceSentence(
     }
     return Object.freeze({
       reference,
-      text: `${evidenceKindLabel(payload.kind)} evidence recorded.`,
+      text: renderEnginePayload(payload),
       sourceLabel:
         payload.source === "engine_validated" ? "Engine" : "Human model",
       payload,

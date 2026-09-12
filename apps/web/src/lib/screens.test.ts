@@ -908,7 +908,7 @@ describe("Layer 3 screens", () => {
     inspect.click();
     await tick();
     const attachedEvidence = document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent;
-    expect(attachedEvidence).toContain("eval evidence recorded");
+    expect(attachedEvidence).toContain("Recorded engine evaluation: +0.00 pawns from White's perspective.");
     expect(attachedEvidence).not.toContain("details are pending");
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Return to play")!.click();
     await tick();
@@ -1327,10 +1327,10 @@ describe("Layer 3 screens", () => {
     } });
     await tick();
 
-    expect(document.body.textContent).not.toContain("eval evidence recorded.");
+    expect(document.body.textContent).not.toContain("Recorded engine evaluation:");
     document.querySelector<HTMLButtonElement>(".header-actions button")!.click();
     await tick();
-    expect(document.body.textContent).toContain("eval evidence recorded.");
+    expect(document.body.textContent).toContain("Recorded engine evaluation: +0.12 pawns from White's perspective.");
     expect(document.body.textContent).not.toContain("details are pending");
     await unmount(component);
   });

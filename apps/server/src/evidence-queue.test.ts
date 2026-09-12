@@ -126,6 +126,7 @@ describe("evidence job queue", () => {
         bestMoveUci: "e2e4",
         requestedMovetimeMs: 40,
         mateIn: 3,
+        perspective: "white",
         depth: 15,
       },
     });

@@ -68,7 +68,13 @@ describe("evidence sentence contract", () => {
         payload: {
           kind: "eval" as const,
           source: "engine_validated" as const,
-          values: { centipawns: 18 },
+          values: {
+            centipawns: 18,
+            perspective: "white",
+            engineName: "Stockfish",
+            engineVersion: "18",
+            depth: 17,
+          },
         },
       },
       {
@@ -83,18 +89,39 @@ describe("evidence sentence contract", () => {
           values: { win: 0.2, draw: 0.5, loss: 0.3 },
         },
       },
+      {
+        seq: 3,
+        jobId: "evidence-job-3",
+        runId: "run-a",
+        nodeId: "node-a",
+        evidenceRefs: ["engine:evidence-job-3"] as const,
+        payload: {
+          kind: "bestline" as const,
+          source: "engine_validated" as const,
+          values: {
+            movesUci: ["e2e4", "e7e5", "g1f3"],
+            engineId: "stockfish-analysis",
+            requestedDepth: 19,
+          },
+        },
+      },
     ];
     const payloads = evidencePayloadTable(results);
 
     expect(renderEvidenceRef("engine:evidence-job-1", pack, payloads)).toMatchObject({
-      text: "eval evidence recorded.",
+      text: "Recorded engine evaluation: +0.18 pawns from White's perspective; source Stockfish 18; depth 17.",
       sourceLabel: "Engine",
-      payload: { values: { centipawns: 18 } },
+      payload: { values: { centipawns: 18, perspective: "white" } },
     });
     expect(renderEvidenceRef("engine:evidence-job-2", pack, payloads)).toMatchObject({
-      text: "wdl evidence recorded.",
+      text: "Recorded human-model distribution: W/D/L 0.2/0.5/0.3.",
       sourceLabel: "Human model",
       payload: { values: { win: 0.2, draw: 0.5, loss: 0.3 } },
+    });
+    expect(renderEvidenceRef("engine:evidence-job-3", pack, payloads)).toMatchObject({
+      text: "Recorded engine line: e2e4 e7e5 g1f3; source stockfish-analysis; requested depth 19.",
+      sourceLabel: "Engine",
+      payload: { values: { movesUci: ["e2e4", "e7e5", "g1f3"] } },
     });
   });
 

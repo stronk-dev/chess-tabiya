@@ -19331,3 +19331,14 @@ All three Inspector paths now derive from one `evidencePayloads(run)` map. Ordin
 free of raw values; the explicit Inspector gains the detail it promises. `make test-software`
 passes 188 files / 1,184 tests, and `make test-browser` passes all 64 required desktop/mobile
 journeys with the one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Inspector renders recorded engine operands ([[D3193]])
+
+The prior payload-retention fix exposed a second loss at the final consumer: evaluation, mate, WDL
+and principal-variation payloads all collapsed to a kind-only “evidence recorded” sentence. The
+explicit Inspector now renders their recorded operands with available engine/model identity and
+search bound. Live evaluation production records its White perspective instead of requiring a
+client assumption. These facts remain behind Inspector; ordinary play still receives no raw score,
+line or distribution and no renderer grades or prescribes a move. `make test-software` passes 188
+files / 1,184 tests, and `make test-browser` passes all 64 required journeys with the one explicitly
+optional Maia latency measurement skipped.

@@ -409,6 +409,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
           ...(score[1] === "cp"
             ? { centipawns: whitePerspectiveScore(Number(score[2]), job.fen) }
             : { mateIn: whitePerspectiveScore(Number(score[2]), job.fen) }),
+          perspective: "white",
           ...(bestMove === undefined || bestMove === "(none)" ? {} : { bestMoveUci: normalizeInboundMove(job.fen, bestMove, "engine_bestmove").moveUci }),
           ...(depthValue(line) === undefined ? {} : { depth: depthValue(line) }),
         }),
