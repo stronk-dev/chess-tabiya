@@ -26111,6 +26111,15 @@
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3190",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:be8109f9b5f699dcb016be6f557008ad75cb143d576d8112ac76ed0ff9af240e",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

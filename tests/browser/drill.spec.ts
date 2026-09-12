@@ -2649,6 +2649,10 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
     await expect(page.getByRole("alert")).toHaveCount(0);
     const board = page.getByLabel("Chessboard");
     await expect(board).toBeVisible();
+    await expect.poll(
+      async () => (await board.boundingBox())?.width,
+      { message: `${viewport.width}x${viewport.height}: board did not settle to the viewport geometry` },
+    ).toBe(playBoardEdge(viewport.width, viewport.height));
     const boardBox = await board.boundingBox();
     expect(boardBox).not.toBeNull();
     expect(boardBox!.width).toBe(playBoardEdge(viewport.width, viewport.height));

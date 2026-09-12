@@ -19291,3 +19291,12 @@ in-run labels still used by real journeys; those journeys now exercise the share
 guidance selector. The final `make verify-software` passes 188 files / 1,184 tests and the production
 build; the final `make test-browser` passes all 64 required desktop/mobile journeys with one
 explicitly optional Maia measurement skipped.
+
+## 2026-09-13 — Compact viewport matrix waits for rendered geometry ([[D3190]])
+
+The canonical responsive matrix exposed a test race at the 844×390 → 320×256 transition: the
+last loop sampled the board synchronously and could observe the prior 560px edge before Svelte's
+resize reaction committed. The earlier shared viewport assertion already used the correct
+eventual-geometry contract. The late loop now polls for the exact same `playBoardEdge` value before
+checking containment. The geometry threshold and timeout are unchanged, so genuinely stale or wrong
+product geometry still fails.
