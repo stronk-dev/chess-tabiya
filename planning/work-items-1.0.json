@@ -392,10 +392,10 @@
     {
       "id": "A11-a29",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.8 surf-*",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
@@ -403,7 +403,11 @@
       "legacyRoute": "none",
       "note": "the pattern beneath them: **seven surfaces have no width media query and no RFC or dossier specifies their composition**",
       "tournamentReady": true,
-      "sourceDigest": "sha256:c0cf92f7355077e15581a3f897fc263b40207443a751d19af64a307199b6eeac"
+      "sourceDigest": "sha256:c0cf92f7355077e15581a3f897fc263b40207443a751d19af64a307199b6eeac",
+      "completion": {
+        "completedOn": "2026-09-13",
+        "evidence": "tests/browser/accessibility.spec.ts+tests/browser/drill.spec.ts+D3190"
+      }
     },
     {
       "id": "A11-a3",
@@ -8518,7 +8522,7 @@
     {
       "id": "TCH-a23",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "professional",
       "owner": "professional-workflows",
       "assignment": "capability:professional",
@@ -8527,8 +8531,7 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Give `abandoned` its own third toggle — a **conduct signal** currently rides the control labelled *\"Show my record\"*",
       "legacyRoute": "ledger",
-      "note": "[[D1482]]; needs no ruling",
-      "tournamentReady": true,
+      "note": "[[D1482]]; needs no owner ruling, but the third consent toggle requires a learner-rating amendment covering storage, service projection, API operations, migration, and the web control",
       "sourceDigest": "sha256:73fa4efe1cb0e63657e8323c190f7e454b24b67c062064ca17a9d188e4368e76"
     },
     {

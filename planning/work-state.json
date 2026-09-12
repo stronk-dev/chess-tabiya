@@ -11370,14 +11370,15 @@
     },
     {
       "id": "D1482",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:7090b555785f69e4b1d19c6c17668ee2fb49eea2ec7ebf241c29655da1f2ac76",
       "uxItems": [
         "TCH-a23",
         "TCH-a24"
       ],
-      "state": "todo",
-      "owner": "professional-workflows"
+      "owner": "professional-workflows",
+      "blocker": "rfc:learner-rating.md"
     },
     {
       "id": "D1483",

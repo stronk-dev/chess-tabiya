@@ -19300,3 +19300,16 @@ resize reaction committed. The earlier shared viewport assertion already used th
 eventual-geometry contract. The late loop now polls for the exact same `playBoardEdge` value before
 checking containment. The geometry threshold and timeout are unchanged, so genuinely stale or wrong
 product geometry still fails.
+
+The successful rerun closes the aggregate A11-a29 inventory against current product evidence: the
+19-test matrix covers the authenticated shell and non-run routes, all permanent run regions and
+interaction states, Compare, checkpoint/terminal overlays, shape detail, Inspector, Story, rating,
+Live/list/overlay, Create, Library, Appearance, Assistance, cohort standing and branch groups at
+desktop, tablet, real mobile-device and 320×256 reflow projections. The original seven-surface
+"no media query" snapshot no longer describes HEAD.
+
+The same reconciliation removed a false executable from the professional queue. TCH-a23 needs no
+new product ruling, but it is not a checkbox-only client change: a distinct abandonment consent
+requires a stored field, projection, API operations and migration under `learner-rating.md` before
+the web control can be truthful. The UX item and [[D1482]] now wait on that RFC amendment instead
+of inviting a surface that cannot persist its promise.
