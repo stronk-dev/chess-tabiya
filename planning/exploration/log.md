@@ -19203,3 +19203,12 @@ copy while retaining opposite boolean results and the saved learner node. The ma
 production journey requires the corresponding server-failure copy. `make verify-software` passes
 188 files / 1,184 tests and production builds; `make test-browser` passes all 64 required
 desktop/mobile journeys with the one explicitly optional Maia measurement skipped.
+
+## 2026-09-12 — Wave-C module amendment passes fresh review ([[D3129]])
+
+The fresh review joined `learner-modules` §4.12 to the compiled evidence catalogue, production
+semantic constructors and literal module-binding plan. The twelve-member population and 26-pair
+delta are exact; only seven observed named events reach Nudge and Review, while all five
+candidate/operand facts remain Inspector-only. The requirements image still reports every
+operation dependency blocked, so the amendment grants eligibility without claiming execution.
+[[D3129]] closes; [[D921]] now waits only on owner acceptance.

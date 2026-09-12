@@ -106,3 +106,11 @@ proactive modules until a typed disclosure contract can prevent candidate leakag
 The requirements-only module image regenerates from 127/224 to 132/229. Every row remains
 dependency-blocked. `make wave-c-module-amendment` passes the existing assembly and register author
 contracts plus five exact boundary controls. Fresh review still gates acceptance and D921 closeout.
+
+## 2026-09-12 — D921 Wave-C amendment fresh review passed
+
+The independent pass re-derived the twelve projections from the compiled evidence manifest and
+production constructors, checked the 26 literal consumer pairs, and verified that the five
+candidate/operand projections remain Inspector-only. It also confirmed that the implementation
+draft still calls every pair dependency-blocked, so eligibility does not masquerade as a running
+recorded-path assembler. No technical return remains; owner acceptance is the final amendment gate.

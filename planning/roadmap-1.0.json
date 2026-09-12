@@ -350,16 +350,16 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Freshly review the D921 Wave-C module amendment, then the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
+        "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
         "latestCheckpoint": {
-          "at": "2026-09-07",
-          "summary": "D921's false dependency cycle is removed and the twelve shipped Wave-C projections now have a literal 26-pair module contract: every primitive reaches Full Inspector, while only seven observed named tactics reach Post-commit Nudge and Review Map. The generated implementation image derives 132 projection requirements and 229 module pairs without admitting placeholders or making any dependency-blocked row executable.",
+          "at": "2026-09-12",
+          "summary": "The D921 Wave-C amendment passed fresh independent buildability review. Its twelve compiled projections form exactly 26 module pairs: every primitive reaches Full Inspector, only seven observed named tactics reach Post-commit Nudge and Review Map, and no candidate-time predicate leaks into proactive Support. The requirements-only implementation image remains honestly blocked on its source operations.",
           "impact": "advanced",
-          "evidence": ["planning/learner-modules/wave-c-module-amendment-2026-09-07.md", "tools/d3129-wave-c-module-amendment/contract.test.mjs", "rfc/learner-modules.md", "rfc/module-registration.md"],
+          "evidence": ["planning/learner-modules/wave-c-module-amendment-fresh-review-2026-09-12.md", "tools/d3129-wave-c-module-amendment/contract.test.mjs", "rfc/learner-modules.md", "rfc/module-registration.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D921", "digest": "sha256:1fc9abaa8374d95429f25d553b04af6a1f5762ccf9464d32a7d907c2103e2548"},
-            {"kind": "work_state", "id": "D3129", "digest": "sha256:9a9d82ab03a717dc14f580f8afebbb573efcad0ea62fff3530a19c85acdbda86"},
-            {"kind": "rfc", "id": "learner-modules.md", "digest": "sha256:fc30412fc2c71aec3d9a4fd40df1a8ffc303f932b44bd37e95c30d40af21be18"},
+            {"kind": "work_state", "id": "D921", "digest": "sha256:2adadc124f484a22979ee0133cd06f55dd7f93989fabb87453a3aa4fa7c37c73"},
+            {"kind": "work_state", "id": "D3129", "digest": "sha256:dcfe730febb02954664c258ec5bddaa85bd04e2801124f235893e777f98934e4"},
+            {"kind": "rfc", "id": "learner-modules.md", "digest": "sha256:68132f47c846c0faa0df246e05d7504a3ca67eb7d620ef8ccfe5248a573c5afe"},
             {"kind": "rfc", "id": "module-registration.md", "digest": "sha256:d337fe08ad2fc4a56e0afa2e0edc0a984d2f91639b17eb67a316d25419a6cf77"}
           ]
         },

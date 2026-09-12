@@ -7551,12 +7551,13 @@
     },
     {
       "id": "D921",
-      "state": "doing",
+      "state": "blocked",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:1fc9abaa8374d95429f25d553b04af6a1f5762ccf9464d32a7d907c2103e2548",
+      "sourceDigest": "sha256:2adadc124f484a22979ee0133cd06f55dd7f93989fabb87453a3aa4fa7c37c73",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "since": "2026-09-07"
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Accept-the-reviewed-26-pair-Wave-C-amendment"
     },
     {
       "id": "D922",
@@ -25561,12 +25562,12 @@
     },
     {
       "id": "D3129",
-      "state": "doing",
-      "owner": "assistance-and-presentation",
-      "since": "2026-09-07",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9a9d82ab03a717dc14f580f8afebbb573efcad0ea62fff3530a19c85acdbda86",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dcfe730febb02954664c258ec5bddaa85bd04e2801124f235893e777f98934e4",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/wave-c-module-amendment-fresh-review-2026-09-12.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3130",
