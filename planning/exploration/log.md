@@ -19248,3 +19248,17 @@ return door are false.
 `make review-evidence-fifth-fresh-review` retains all predecessor controls and passes six new
 source-bound counterexamples. The RFC returns for bounded repair; no production Review compiler or
 mistake-derived deck is authorised from this image.
+
+## 2026-09-13 — Review evidence compiler fifth author repair ([[D3184]]–[[D3189]])
+
+The bounded author model now accounts for every adapter source within a family, derives exact
+node/incoming-edge/window invocations, preserves started cancellation attempts, constructs its
+subject from parsed server-local run/import authorities, executes each adapter payload parser and
+keeps the decision, evidence and consequence-stop nodes distinct through Story. The first retained
+predecessor run rejected a changed public constructor signature; the repaired contract keeps the
+caller input at run/branch ids and closes over storage authority.
+
+`make review-evidence-fifth-author-repair` retains every predecessor return and repair and passes
+all six fifth-author groups. This is an authoring checkpoint only: another genuinely fresh review,
+owner acceptance of D921 and the named provider/path/presentation dependencies still precede any
+production Review compiler or mistake-derived deck.

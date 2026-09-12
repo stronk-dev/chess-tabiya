@@ -26059,51 +26059,57 @@
     },
     {
       "id": "D3184",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:41b22c43c4aa93896be1f27769fb3ca51f55b054462abc647304036ffa0bb140",
+      "state": "blocked",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:cdfebe0250d47e91157797244c8813bf6696465aaf6be4e0757642deb80ffb6b",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
     },
     {
       "id": "D3185",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0f7370ab99739c69fbf00da30895d025cc1369b60c5bb562abf2226a8a33fce7",
+      "state": "blocked",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:e8bbeeca46d6535786e2505dd81daf447a9b86a754a51893b59427a4294e4f5e",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
     },
     {
       "id": "D3186",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7c58b28bda0e65b8ff118e5ed31a741376568c126992b947ee8bcf2e9bc5f3c4",
+      "state": "blocked",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:db9d664f81eef3326b29864b29f441c57e59b7d1e0d1c042e80c11590088614a",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
     },
     {
       "id": "D3187",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d4266245daafd4d346f09e75be2f42a8e6afd7868a4aab311c4ccba9ad55d849",
+      "state": "blocked",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:e025765edb53ca17c8a035d3e9d7f1e0e953016949a3649a15487463c56fbd21",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
     },
     {
       "id": "D3188",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8e552ea8fd3f7caf98ec7cd1ff1015c5aa99db33bec6dc4ded5553e73bd29907",
+      "state": "blocked",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:c53150152b2af19cf5199dafd5faed665f3155c8c7e9cd4c113c3e114e22f5f2",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
     },
     {
       "id": "D3189",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7dd87cd8fa54dd267a4fb656abb6a7b52547f452c84a6074b778cf50bd904dc7",
+      "state": "blocked",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:3be8d6b3906e3a5e6cd15a3c228d3e4bab02d629ff7334571c31f8c228e22880",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
     }
   ]
 }

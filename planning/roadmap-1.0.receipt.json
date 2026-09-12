@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8110d6ce6b04fcd69f7741fdb6979db8d0b2a1fd9bc6d4df7cdc7141df156c89",
+    "roadmap": "sha256:a9fadebd0f0f266c026bcfa33ce7e904c6f9f31a109d1b429568d6ae09a2b3cd",
     "workItems": "sha256:6414fda6fb36428ae0afbf6554e983aa8c441b00b49e69f3f920c02e52315729",
-    "workState": "sha256:7c3361e87d1aecfe8f45eabcaaf130612a0845321ae068937ad1ac49867c39f7",
-    "rfcRegister": "sha256:41e6465ca94f64f19f351ec6cb2fe7079e122a9577555c5e5a0c26bc4b8938b5",
+    "workState": "sha256:e037c46a0a237260a1765f68333004f20eaae3cf3ebb1fe2eafe255f396434ce",
+    "rfcRegister": "sha256:d50068b17810dddf7e3a072f378127a44637171cb13030146c38512fc32602c3",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -30,9 +30,9 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 623,
+      "todo": 617,
       "doing": 0,
-      "blocked": 1219,
+      "blocked": 1225,
       "done": 985,
       "refused": 111
     },
@@ -163,23 +163,23 @@
       "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
         "at": "2026-09-13",
-        "summary": "The fifth fresh Review-compiler review prevents a false foundation crossing: the proposed packet still miscounts multi-projection families, ignores node/edge/window grain, permits infinite retry through cancellation, accepts an inexact recorded prefix, seals unparsed payloads and re-enters after the decision. Six source-bound counterexamples now pin the required repair before Review or mistake-return decks can consume the evidence spine.",
-        "impact": "regressed",
+        "summary": "The fifth Review-compiler return is repaired as a composed authoring boundary: multi-adapter families retain every source, node/edge/window grain drives invocation planning, started cancellations count toward retry exhaustion, parsed storage authority binds the complete prefix, adapter payload parsers execute, and Story keeps decision/evidence/stop identities distinct. The retained predecessor chain caught and corrected a public-signature regression; fresh independent review and declared dependencies still gate production.",
+        "impact": "advanced",
         "evidence": [
-          "planning/evidence-foundation-ux/review-evidence-compiler-fifth-fresh-independent-buildability-review-2026-09-13.md",
-          "tools/d3184-review-evidence-fifth-fresh-review/contract.test.mjs",
+          "planning/evidence-foundation-ux/review-evidence-compiler-fifth-author-repair-2026-09-13.md",
+          "tools/d3184-review-evidence-fifth-author-repair/contract.test.mts",
           "rfc/review-evidence-compiler.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
             "id": "D3184",
-            "digest": "sha256:41b22c43c4aa93896be1f27769fb3ca51f55b054462abc647304036ffa0bb140"
+            "digest": "sha256:cdfebe0250d47e91157797244c8813bf6696465aaf6be4e0757642deb80ffb6b"
           },
           {
             "kind": "rfc",
             "id": "review-evidence-compiler.md",
-            "digest": "sha256:360a1599133d3a817cae384d029628140e6caef950f06e63408149f1db5223bf"
+            "digest": "sha256:41d6a1849ceab0a2d26c476113986fd362821eb396d33df146ea55c5766a8020"
           }
         ]
       },

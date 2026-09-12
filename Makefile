@@ -1333,6 +1333,11 @@ review-evidence-fourth-author-repair: review-evidence-third-author-repair
 review-evidence-fifth-fresh-review: review-evidence-fourth-author-repair
 	node --test tools/d3184-review-evidence-fifth-fresh-review/contract.test.mjs
 
+.PHONY: review-evidence-fifth-author-repair
+review-evidence-fifth-author-repair: review-evidence-fifth-fresh-review
+	./node_modules/.bin/vitest run --config tools/d3184-review-evidence-fifth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d3184-review-evidence-fifth-author-repair/tsconfig.json
+
 module-registration-second-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2164-module-registration-second-fresh-review/vitest.config.ts
 

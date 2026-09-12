@@ -1,14 +1,13 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — **RETURNED BY THE FIFTH FRESH REVIEW 2026-09-13 on
-  [[D3184]]–[[D3189]].** The fourth repair's retained typed evidence, complete packet/Story fields,
-  shared canonicalization and concurrent completion survive. Its executable model still folds only
-  one adapter per family, ignores adapter grain, erases started cancellation attempts, accepts a
-  non-contiguous/off-branch/unparsed prefix, never executes the declared payload parsers and
-  re-enters Story at the evidence node rather than the decision. `make
-  review-evidence-fifth-fresh-review` retains the predecessor chain and passes six source-bound
-  counterexamples. Production remains unauthorized pending bounded repair, another fresh review
-  and the declared dependencies.
+- **Status:** draft — **FIFTH AUTHOR REPAIR COMPLETE 2026-09-13 on
+  [[D3184]]–[[D3189]].** The bounded model now preserves every adapter state inside a family,
+  derives node/incoming-edge slots and scheduling windows, retains started cancellations against
+  the retry ceiling, derives a contiguous path-bound subject from parsed storage authorities,
+  executes the registry's payload parsers and carries distinct decision/evidence/stop identities.
+  `make review-evidence-fifth-author-repair` retains the full return chain and passes six repair
+  groups. Production remains unauthorized pending another genuinely fresh review and the declared
+  dependencies.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -274,7 +273,7 @@ type ReviewSourceFamily =
   | "engine_eval" | "engine_wdl" | "tablebase" | "semantic"
   | "opening" | "human_model" | "human_corpus" | "authored" | "recorded";
 
-type ReviewNodeFamilyState =
+type ReviewAdapterState =
   | { readonly kind: "available"; readonly itemCount: number }
   | { readonly kind: "honest_empty"; readonly reason: "no_observation" | "outside_domain" }
   | { readonly kind: "not_requested" }
@@ -285,20 +284,38 @@ type ReviewNodeFamilyState =
       "legacy_provenance_missing" | "input_abstained" |
       "attempt_history_capacity" };
 
+interface ReviewNodeFamilyState {
+  readonly itemCount: number;
+  readonly sources: readonly {
+    readonly adapterId: ReviewPacketSourceAdapterId;
+    readonly invocationId: string;
+    readonly grain: "node" | "incoming_edge";
+    readonly state: ReviewAdapterState;
+  }[];
+}
+
 interface ReviewRunFamilyState {
   readonly nodeCount: number;
+  readonly applicableSourceCount: number;
   readonly availableNodeCount: number;
   readonly itemCount: number;
-  readonly honestEmptyNodeCount: number;
-  readonly notRequestedNodeCount: number;
+  readonly sourceCounts: {
+    readonly available: number;
+    readonly honestEmpty: number;
+    readonly notRequested: number;
+    readonly notYetScheduled: number;
+    readonly pending: number;
+    readonly unavailable: number;
+  };
   readonly progress: {
-    readonly notYetScheduledNodeCount: number;
-    readonly pendingNodeCount: number;
+    readonly notYetScheduledSourceCount: number;
+    readonly pendingSourceCount: number;
     readonly pendingJobCount: number;
     readonly retryingJobCount: number;
   };
   readonly unavailable: readonly {
-    readonly reason: Extract<ReviewNodeFamilyState, { readonly kind: "unavailable" }>["reason"];
+    readonly reason: Extract<ReviewAdapterState, { readonly kind: "unavailable" }>["reason"];
+    readonly sourceCount: number;
     readonly nodeCount: number;
   }[];
 }
@@ -354,9 +371,8 @@ interface ReviewEvidenceInput {
 }
 
 interface ReviewPrefixAuthorizationInput {
-  readonly run: DrillRun;
+  readonly runId: string;
   readonly branchId: string;
-  readonly importedRecord: ImportedGameRecord | null;
 }
 
 interface ReviewEvidencePacket {
@@ -373,8 +389,9 @@ type ReviewScoreReceipt =
       readonly distance: number; readonly unit: "moves" };
 
 interface ReviewStoryMoment {
-  readonly nodeId: string;
-  readonly entryNodeId: string;
+  readonly decisionNodeId: string;
+  readonly evidenceNodeId: string;
+  readonly stopNodeId: string;
   readonly ply: number;
   readonly san: string | null;
   readonly fen: string;
@@ -427,13 +444,17 @@ adapter output: either one projection-typed `ReviewPacketDeclaredEvidence` or on
 absence. Callers cannot put an arbitrary `DeclaredEvidence<unknown>`, prose, family string or
 absence assertion into `ReviewEvidenceInput`.
 
-`authorizeReviewRecordedPrefix(input: ReviewPrefixAuthorizationInput)` is the sole constructor for
-`ReviewRecordedPrefixReceipt`. It invokes the exact `recordedSemanticPath` authority, takes the
-event head from the highest contiguous event sequence, hashes the canonical event prefix and
-ordered path, derives `learnerSide` from `run.start.side`, and derives the outcome from the exact
-on-path `outcome.reached` event or the storage-owned `ImportedGameRecord`. It rejects a record whose
-`runId` differs, whose result disagrees with the parsed source authority, or which is supplied for a
-non-imported run. A caller supplies none of the receipt fields.
+`authorizeReviewRecordedPrefix(input: ReviewPrefixAuthorizationInput)` is the sole
+constructor for `ReviewRecordedPrefixReceipt`. It closes over the server-local storage authority,
+which loads the run and any import record from their production stores and returns only their
+parser-sealed images; neither a
+route nor the compiler caller may supply those objects. The constructor invokes the exact
+`recordedSemanticPath` authority, rejects any event sequence that is not contiguous through the
+head, hashes the canonical event prefix **and complete ordered path**, derives `learnerSide` from
+the stored run, and derives the outcome from an exact on-path `outcome.reached` event or the
+storage-owned parsed `ImportedGameRecord`. It rejects a record whose `runId` differs, whose result
+disagrees with its parsed source result or on-path terminal, or which is present for a non-imported
+run. A caller supplies only the run and branch ids.
 `assertReviewRecordedPrefixReceipt` replays that derivation; same run/branch ids with a
 different head, path, learner side, imported-result digest or outcome fail.
 
@@ -477,15 +498,18 @@ strictly positive and equals that family's items at the node;
 zero successful items is `honest_empty`, never `available: 0`. One unavailable family never makes
 the packet unavailable.
 
-`foldReviewFamilyState(nodes)` is the only node-to-prefix aggregation. For each family it counts
-each node exactly once into `available`, `honest_empty`, `not_requested`, `not_yet_scheduled`,
-`pending` or `unavailable`; the six node counts must sum to `nodeCount`. `itemCount` is the sum of
-positive available item counts. `pendingJobCount` is the sum of positive pending job counts and
-`retryingJobCount` is a non-negative subset of it. Unavailable reasons are grouped by literal
-reason and sorted lexically; every reason count is positive. Shuffled nodes produce identical
-bytes. Any zero/negative/non-safe count, a retry count above pending jobs, an available node with
-no matching item, an unavailable entry with zero nodes, or a total mismatch fails packet
-construction.
+`foldReviewFamilyState(nodes)` is the only node-to-prefix aggregation. A node/family retains one
+source row for **every applicable adapter invocation**, sorted by adapter and invocation identity;
+this is not a mutually exclusive family enum. Its `itemCount` is the sum of every available source
+row at that node, so an available semantic item and an unavailable sibling adapter both survive.
+For each family the six `sourceCounts` sum to `applicableSourceCount`, while
+`availableNodeCount` separately counts nodes with at least one item and may overlap degraded nodes.
+`itemCount` is the sum of positive available item counts. Progress counts source slots and jobs
+separately; `retryingJobCount` is a non-negative subset of pending jobs. Unavailable reasons group
+both exact source count and distinct node count and sort lexically. Shuffled nodes and source rows
+produce identical bytes. Any missing/duplicate adapter slot, zero/negative/non-safe count, retry
+count above pending jobs, available source with no matching item, empty unavailable group or
+source-count total mismatch fails packet construction.
 
 `foldReviewCompletion(families)` produces two independent fields. `progress` is `settled` exactly
 when all four progress counts are zero, otherwise `progressive` with their positive aggregate
@@ -506,7 +530,11 @@ canonical FENs, the complete nested `PresentationReceipt`s, subject digest and n
 it never calls `declareEvidence`, asserts a process seal or accepts `DeclaredEvidence` in JSON.
 Unknown keys fail instead of becoming an accidental evidence channel.
 
-`ReviewStoryMoment` is server-only and carries the exact sealed components. Its wire counterpart
+`ReviewStoryMoment` is server-only and carries the exact sealed components. Its
+`decisionNodeId` is the parent of the exact recorded edge whose landing node is `evidenceNodeId`;
+`stopNodeId` is the same node or a later node on that subject path selected by the bounded
+consequence window. A root occurrence, off-path endpoint, stop before evidence, missing recorded
+edge or independently supplied retry point fails construction. Its wire counterpart
 contains the closed presentation receipt produced from those same components, never a parallel
 sentence or source-label array. The title is likewise the `derived.story.title@1` component receipt,
 not a free string. `projectPublicReviewStory(receipt)` may drop family/progress/provider metadata and
@@ -566,6 +594,13 @@ Success retains its delivery digest until the durable evidence attachment commit
 the slot because that durable delivery becomes the reconstruction authority. Non-retryable failure
 and retry exhaustion remain terminal and retained.
 
+Attempt count increments only when the owner invokes the one-shot `start()` immediately before
+provider work. Cancelling a never-started reservation restores any previously retained attempts
+and terminal outcome; it may delete the key only when the identity has never started in this
+application lifetime. Cancelling after `start()` settles a typed retryable cancellation while
+retaining the incremented count. Reacquisition may resume from that count, and the exact ceiling
+returns `retry_exhausted` without another provider call.
+
 The store has exactly `maxTerminalAttemptOutcomes` slots for its application lifetime and **does
 not evict or expire individual terminal entries**. It never forgets an exhausted identity in order
 to make room. `size` is always at most the configured maximum and every retained value has a fixed
@@ -599,14 +634,19 @@ inputs to the web UI.
 No “collect all evidence” reflection or free-text family tag is permitted. The runtime exports one
 literal `REVIEW_PACKET_SOURCE_PROJECTION_IDS` list at exact versions and one
 `REVIEW_PACKET_SOURCE_ADAPTERS` map. The two key sets are equal, and every adapter declares its
-single `ReviewSourceFamily`. The list is itself set-equal to the manifest's accepted Review packet
-input bindings; adding an input without an adapter or an adapter without a binding fails startup
-and verification.
+single `ReviewSourceFamily`, executable exact payload parser and grain (`node` or
+`incoming_edge`). Parser names are not metadata strings. The list is itself set-equal to the
+manifest's accepted Review packet input bindings; adding an input without an adapter or an adapter
+without a binding fails startup and verification.
 
-An adapter returns only sealed declared evidence plus one family state; it may not return prose or
-an unregistered object. Local sequence adapters receive the exact ordered branch and can therefore
-compute the landed Wave-C recorded events at their declared horizons. Provider adapters read
-durable attached events/jobs. Opening, human and tablebase adapters retain their native abstention.
+An adapter returns only evidence constructed by its registered parser plus one adapter state; it
+may not return prose, an unparsed payload or an unregistered object.
+`reviewPacketSourcePlan` creates node slots for node adapters and incoming-edge slots only for
+non-root nodes, retaining exact from/to identities. Each slot carries the coordinator-derived
+scheduling-window index; the window bounds work admission but never changes evidence grain or
+identity. Local sequence adapters receive the exact ordered branch and can therefore compute the
+landed Wave-C recorded events at their declared horizons. Provider adapters read durable attached
+events/jobs. Opening, human and tablebase adapters retain their native abstention.
 The learner-modules/Wave-C eligibility amendment must land literal ids before this list can be
 accepted; placeholder forecast ids are forbidden by D921.
 
@@ -643,6 +683,11 @@ forgeable evidence lookalike. `STORY_MATE_CP` and every mate→cp clamp are dele
   tiebreak changes live output; one who keeps it verbatim breaks the type. Both are wrong;
 - ties use ply then node id (HEAD reaches the same result through a stable sort over the
   ply/node-id-ordered moment list at `story.ts:181`, so this is a statement of existing behavior);
+- every selected moment derives `decisionNodeId` from the parent of its exact recorded evidence
+  edge and derives `stopNodeId` from the bounded consequence endpoint. `rank` references the
+  occurrence identity carried by all three ids; repeated positions or equal evidence digests do
+  not collapse distinct decisions. Retry always forks at `decisionNodeId`, presentation anchors
+  the observation at `evidenceNodeId`, and replay stops at `stopNodeId`;
 - the public shared story receives only the same compiled/selected server items as the authorized
   Story consumer through its narrow receipt. Raw packet rows, F1 seals, provider deliveries and
   absence internals do not leak into either JSON shape.
@@ -862,12 +907,14 @@ work.
     move or after authority, v1 substitution, repeated-position substitution, refuted,
     budget-exhausted and horizon-ineligible proofs do not link. The v2 exact adapter drops every
     undeclared payload key.
-11. **Partial packet and total fold:** every node-family discriminant, including
+11. **Partial packet and total fold:** every adapter-source discriminant, including
     `not_yet_scheduled`, retrying, retry-exhausted and attempt-history-capacity, has a positive
-    fixture. The node counts sum exactly to the path population, available item totals match packet
-    items, unavailable reasons are canonical and shuffled input produces identical aggregates.
-    Provider-off plus successful local/eval evidence still renders available items while retaining
-    the unavailable family.
+    fixture. Every applicable adapter invocation appears exactly once; family source counts sum to
+    the adapter-slot population, available node counts are derived separately, and available item
+    totals match packet items. Two sibling adapters in one family—one available and one
+    unavailable—both survive with exact item/source counts. Unavailable reasons are canonical and
+    shuffled input produces identical aggregates. Provider-off plus successful local/eval evidence
+    still renders available items while retaining the unavailable source.
 12. **Production idempotence:** import completion and repeated actual `RunService.story()` calls
     reach only `ReviewEvidenceCoordinator.ensureBranch` and `ProviderExchangeScheduler.get`.
     Concurrent identical requests coalesce; different FEN, engine version, bound or command digest
@@ -875,7 +922,10 @@ work.
     `enqueueProducer` or a private Stockfish executor.
 13. **Bounded progressive completion and attempt truth:** a synthetic legal long game never exceeds
     configured per-run outstanding, window, attempt, tracked-run or terminal-outcome bounds;
-    queued/active eviction cancellation publishes no partial item. Completion callbacks eventually
+    queued/active eviction cancellation publishes no partial item. Cancelling before the first
+    provider start consumes zero attempts without erasing older attempts; cancelling after start
+    consumes and retains exactly one attempt. Repeating started cancellation reaches the same retry
+    ceiling as retryable failure and makes no further provider call. Completion callbacks eventually
     cover every node without another page read. Exhaust one request, churn more branches than
     `maxTrackedRuns`, reread the first branch and prove zero new provider calls plus the same
     `retry_exhausted` result and bounded store size. Fill the terminal store, prove an unseen request
@@ -887,14 +937,20 @@ work.
     byte-identical and every impossible count combination fails. Deprecated `ready` and
     `pendingEvidence`, while temporarily present, are generated summaries and changing them cannot
     alter web rendering or re-entry eligibility.
-15. **Determinism:** shuffled events, items and provider completion order produce byte-identical
-    packet, server receipt and digests for equal terminal inputs.
+15. **Determinism and prefix authority:** parser-sealed storage records are the only run/import
+    inputs. Gapped event sequences, path-only mutation, forged or mismatched import results,
+    sibling-branch terminal outcomes and incomplete path hashes fail or remain outside the selected
+    outcome as appropriate. Shuffled items and provider completion order produce byte-identical
+    packet, server receipt and digests for equal authoritative terminal inputs.
 16. **Manifest/adapter closure:** the shared WDL-bearing source; five Review projections
     (`eval_point`, `wdl_white`, `wdl_point`, `eval_delta`, `mate_transition`); and forced-mate v2
     compile with literal inputs/operands and dispositions. Every Review derivation is
     `reported` and never more exact than `measured`; changing one to `confidence: exact` fails the
     real `EVIDENCE_DERIVATION_WIDENS` guard. Packet ids, adapters and bindings are non-empty
-    set-equal, and raw eval/WDL cannot become Review prose.
+    set-equal. Every adapter carries an executable exact payload parser, crossed/unknown payloads
+    fail before evidence authority, and raw eval/WDL cannot become Review prose. The source plan
+    emits node slots at nodes, incoming-edge slots only after the root, and explicit bounded window
+    indices without changing evidence identity.
 17. **Closed process/wire termination:** `ReviewEvidenceInput`, registry-derived source inputs,
     `createReviewEvidencePacket` and `assertReviewEvidencePacket` are typechecked as the only public
     compiler ABI. `compileReviewEvidence` is consumed by `renderReviewStoryReceipt(packet)` on the
@@ -905,7 +961,9 @@ work.
     fail. Public share is a strict narrower projection of the same selected component receipts.
 18. **Story compatibility:** cp pivot, mate transition, learner-relative last-level and public
     share render through sealed components without raw UCI, provider ids as prose, duplicate facts,
-    caller-owned strings or cross-type arithmetic.
+    caller-owned strings or cross-type arithmetic. Each moment carries a path-valid decision,
+    evidence and bounded stop identity; retry re-enters at the decision, and root/off-path/reversed
+    consequence fixtures fail.
     Sign-mirrored White/Black learner scores give the same last-level result. `phase_change` still
     precedes `endgame_entry`, and mate-typed moments use ply/node order rather than a fake magnitude.
 19. **Performance:** compiling and server-rendering 661 fixed positions is below 50 ms p95 on the CI
@@ -947,8 +1005,37 @@ name them as strings. [[D3189]] requires separate decision, evidence and stop id
 and Review receipts. Repair in that dependency order, retain the six counterexamples, and obtain
 another genuinely fresh review before acceptance.
 
+## Fifth author repair (2026-09-13)
+
+The six returned seams are repaired as one executable boundary:
+
+1. [[D3184]] — node/family state retains every applicable adapter invocation. Available items sum
+   across siblings while simultaneous unavailable state remains visible; source totals and node
+   coverage are distinct invariants.
+2. [[D3185]] — the registry declares executable grain, and the plan emits node slots at every node,
+   incoming-edge slots only after the root, exact edge endpoints and coordinator-derived window
+   indices.
+3. [[D3186]] — the attempt store increments at provider start, restores prior history after a
+   zero-start cancellation and retains every started cancellation until the retry ceiling.
+4. [[D3187]] — the public prefix input carries only run/branch ids. A server-local parsed storage
+   authority supplies run/import records; contiguity, complete ordered path, on-path terminal and
+   source-result agreement are part of the receipt derivation and digest.
+5. [[D3188]] — adapter parsers are callable registry authorities. Available payloads receive
+   evidence authority only after the exact parser succeeds; crossed and unknown-key inputs fail.
+6. [[D3189]] — Story carries separate decision, evidence and bounded stop nodes. Re-entry forks at
+   the parent decision rather than the post-move evidence node, and reversed/root endpoints fail.
+
+`make review-evidence-fifth-author-repair` retains every predecessor return and repair, then passes
+six source-bound repair groups under the repository TypeScript runtime. Production remains
+unauthorized until another genuinely fresh review and all declared dependencies land.
+
 ## Changelog
 
+- 2026-09-13 fifth author repair ([[D3184]]–[[D3189]]): multi-adapter family accounting,
+  grain-aware source planning, durable started-cancellation attempts, storage-derived prefix
+  authority, executable payload parsers and distinct decision/evidence/stop Story identities now
+  execute together. `make review-evidence-fifth-author-repair` retains the complete predecessor
+  chain and passes all six repair groups; fresh review and dependencies still gate production.
 - 2026-09-13 fifth fresh independent review ([[D3184]]–[[D3189]]): returned the fourth author
   model on multi-adapter family accounting, grain-aware invocation planning, cancellation attempt
   retention, exact prefix authority, executable payload parsers and decision/evidence/stop Story
