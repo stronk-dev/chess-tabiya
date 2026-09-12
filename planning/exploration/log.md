@@ -19313,3 +19313,11 @@ new product ruling, but it is not a checkbox-only client change: a distinct aban
 requires a stored field, projection, API operations and migration under `learner-rating.md` before
 the web control can be truthful. The UX item and [[D1482]] now wait on that RFC amendment instead
 of inviting a surface that cannot persist its promise.
+
+## 2026-09-13 — Just Play stops promising an absent preset selector ([[D3191]])
+
+The Just Play start card said the learner could change the help style after the board opened, but
+the implementing run surface exposes only the selected promise and the complete Advanced
+per-channel controls. The preset compiler and selector are still draft work under [[D484]]. The
+card now names the Advanced control that actually exists instead of presenting unimplemented work
+as a next step. The canonical `make test-software` gate passes 188 files / 1,184 tests.

@@ -68,7 +68,7 @@
         <h3 id="starting-support-title">{startingSupport.label}</h3>
         <p>{startingSupport.promise}</p>
       </div>
-      <p class="support-next-step">Change the help style from <strong>Support</strong> after the board opens.</p>
+      <p class="support-next-step">Fine-tune individual help channels from <strong>Advanced support controls</strong> after the board opens.</p>
     </section>
     <div class="start-options">
       <label>Your side
