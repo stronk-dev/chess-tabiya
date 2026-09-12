@@ -352,15 +352,13 @@
         "dependsOn": ["foundation-contracts"],
         "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
         "latestCheckpoint": {
-          "at": "2026-09-12",
-          "summary": "The D921 Wave-C amendment passed fresh independent buildability review. Its twelve compiled projections form exactly 26 module pairs: every primitive reaches Full Inspector, only seven observed named tactics reach Post-commit Nudge and Review Map, and no candidate-time predicate leaks into proactive Support. The requirements-only implementation image remains honestly blocked on its source operations.",
-          "impact": "advanced",
-          "evidence": ["planning/learner-modules/wave-c-module-amendment-fresh-review-2026-09-12.md", "tools/d3129-wave-c-module-amendment/contract.test.mjs", "rfc/learner-modules.md", "rfc/module-registration.md"],
+          "at": "2026-09-13",
+          "summary": "The fifth fresh Review-compiler review prevents a false foundation crossing: the proposed packet still miscounts multi-projection families, ignores node/edge/window grain, permits infinite retry through cancellation, accepts an inexact recorded prefix, seals unparsed payloads and re-enters after the decision. Six source-bound counterexamples now pin the required repair before Review or mistake-return decks can consume the evidence spine.",
+          "impact": "regressed",
+          "evidence": ["planning/evidence-foundation-ux/review-evidence-compiler-fifth-fresh-independent-buildability-review-2026-09-13.md", "tools/d3184-review-evidence-fifth-fresh-review/contract.test.mjs", "rfc/review-evidence-compiler.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D921", "digest": "sha256:2adadc124f484a22979ee0133cd06f55dd7f93989fabb87453a3aa4fa7c37c73"},
-            {"kind": "work_state", "id": "D3129", "digest": "sha256:dcfe730febb02954664c258ec5bddaa85bd04e2801124f235893e777f98934e4"},
-            {"kind": "rfc", "id": "learner-modules.md", "digest": "sha256:68132f47c846c0faa0df246e05d7504a3ca67eb7d620ef8ccfe5248a573c5afe"},
-            {"kind": "rfc", "id": "module-registration.md", "digest": "sha256:d337fe08ad2fc4a56e0afa2e0edc0a984d2f91639b17eb67a316d25419a6cf77"}
+            {"kind": "work_state", "id": "D3184", "digest": "sha256:41b22c43c4aa93896be1f27769fb3ca51f55b054462abc647304036ffa0bb140"},
+            {"kind": "rfc", "id": "review-evidence-compiler.md", "digest": "sha256:360a1599133d3a817cae384d029628140e6caef950f06e63408149f1db5223bf"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

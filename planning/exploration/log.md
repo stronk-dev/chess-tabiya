@@ -19235,3 +19235,16 @@ grounding, chronology, return point and no-ranking boundary are unchanged.
 `make verify-software` passes 188 files / 1,184 tests and the production build;
 `make test-browser` passes all 64 required desktop/mobile journeys with the one explicitly optional
 Maia measurement skipped.
+
+## 2026-09-13 — Review evidence compiler fifth fresh return ([[D3184]]–[[D3189]])
+
+The fourth author model retains typed items and complete packet/Story fields but still cannot be
+built against the real Review population. It counts only one adapter per family, ignores declared
+node/edge/window grain, erases started cancellation attempts, accepts non-contiguous and off-branch
+prefixes, treats parser names as inert strings and gives every Story moment its evidence node as the
+retry entry. Those failures would make a packet look complete while its counts, lifecycle and
+return door are false.
+
+`make review-evidence-fifth-fresh-review` retains all predecessor controls and passes six new
+source-bound counterexamples. The RFC returns for bounded repair; no production Review compiler or
+mistake-derived deck is authorised from this image.

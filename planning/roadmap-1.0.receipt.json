@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2c52f77ba0ff760088688451fce4c1723059be115ad9944a79f210187c62daf8",
+    "roadmap": "sha256:8110d6ce6b04fcd69f7741fdb6979db8d0b2a1fd9bc6d4df7cdc7141df156c89",
     "workItems": "sha256:6414fda6fb36428ae0afbf6554e983aa8c441b00b49e69f3f920c02e52315729",
-    "workState": "sha256:72bdd15db5416f22d142d0fd77e0ff32094d62f02c05164394875dfee0fc56d0",
-    "rfcRegister": "sha256:1a9bf01ec214c40bab7ec0a0149954900854a0a196635df94ca5d539a093e235",
+    "workState": "sha256:7c3361e87d1aecfe8f45eabcaaf130612a0845321ae068937ad1ac49867c39f7",
+    "rfcRegister": "sha256:41e6465ca94f64f19f351ec6cb2fe7079e122a9577555c5e5a0c26bc4b8938b5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 617,
+      "todo": 623,
       "doing": 0,
       "blocked": 1219,
       "done": 985,
@@ -162,35 +162,24 @@
       ],
       "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
-        "at": "2026-09-12",
-        "summary": "The D921 Wave-C amendment passed fresh independent buildability review. Its twelve compiled projections form exactly 26 module pairs: every primitive reaches Full Inspector, only seven observed named tactics reach Post-commit Nudge and Review Map, and no candidate-time predicate leaks into proactive Support. The requirements-only implementation image remains honestly blocked on its source operations.",
-        "impact": "advanced",
+        "at": "2026-09-13",
+        "summary": "The fifth fresh Review-compiler review prevents a false foundation crossing: the proposed packet still miscounts multi-projection families, ignores node/edge/window grain, permits infinite retry through cancellation, accepts an inexact recorded prefix, seals unparsed payloads and re-enters after the decision. Six source-bound counterexamples now pin the required repair before Review or mistake-return decks can consume the evidence spine.",
+        "impact": "regressed",
         "evidence": [
-          "planning/learner-modules/wave-c-module-amendment-fresh-review-2026-09-12.md",
-          "tools/d3129-wave-c-module-amendment/contract.test.mjs",
-          "rfc/learner-modules.md",
-          "rfc/module-registration.md"
+          "planning/evidence-foundation-ux/review-evidence-compiler-fifth-fresh-independent-buildability-review-2026-09-13.md",
+          "tools/d3184-review-evidence-fifth-fresh-review/contract.test.mjs",
+          "rfc/review-evidence-compiler.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D921",
-            "digest": "sha256:2adadc124f484a22979ee0133cd06f55dd7f93989fabb87453a3aa4fa7c37c73"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3129",
-            "digest": "sha256:dcfe730febb02954664c258ec5bddaa85bd04e2801124f235893e777f98934e4"
+            "id": "D3184",
+            "digest": "sha256:41b22c43c4aa93896be1f27769fb3ca51f55b054462abc647304036ffa0bb140"
           },
           {
             "kind": "rfc",
-            "id": "learner-modules.md",
-            "digest": "sha256:68132f47c846c0faa0df246e05d7504a3ca67eb7d620ef8ccfe5248a573c5afe"
-          },
-          {
-            "kind": "rfc",
-            "id": "module-registration.md",
-            "digest": "sha256:d337fe08ad2fc4a56e0afa2e0edc0a984d2f91639b17eb67a316d25419a6cf77"
+            "id": "review-evidence-compiler.md",
+            "digest": "sha256:360a1599133d3a817cae384d029628140e6caef950f06e63408149f1db5223bf"
           }
         ]
       },

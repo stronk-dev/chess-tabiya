@@ -1,13 +1,14 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — **FOURTH AUTHOR REPAIR COMPLETE 2026-09-07 on
-  [[D3109]]–[[D3115]].** The executable model now derives prefixes from sealed run/path/import
-  authorities, compiles a literal projection/adapter relation against manifest eligibility,
-  retains sealed typed evidence in complete node packets, carries the orthogonal completion fold
-  into the complete Story wire, uses the shared RFC-8785 serializer and executes bounded
-  retry/cancel/success-release transitions. `make review-evidence-fourth-author-repair` retains all
-  predecessor controls and passes six repair groups plus repository TypeScript. No production
-  implementation is authorised before another fresh review and the declared dependencies land.
+- **Status:** draft — **RETURNED BY THE FIFTH FRESH REVIEW 2026-09-13 on
+  [[D3184]]–[[D3189]].** The fourth repair's retained typed evidence, complete packet/Story fields,
+  shared canonicalization and concurrent completion survive. Its executable model still folds only
+  one adapter per family, ignores adapter grain, erases started cancellation attempts, accepts a
+  non-contiguous/off-branch/unparsed prefix, never executes the declared payload parsers and
+  re-enters Story at the evidence node rather than the decision. `make
+  review-evidence-fifth-fresh-review` retains the predecessor chain and passes six source-bound
+  counterexamples. Production remains unauthorized pending bounded repair, another fresh review
+  and the declared dependencies.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -935,8 +936,25 @@ No owner question blocks buildability review. This RFC deliberately does not cho
 Review Map quotas or priority because C4 measured source overlap and stability, not usefulness.
 The existing Story order is preserved only as a labelled compatibility convention.
 
+## Fifth fresh return — bounded repair required
+
+The fifth fresh buildability review returns this RFC on six executable defects. [[D3184]] requires
+family folding over every adapter result rather than the first result in a family. [[D3185]]
+requires a grain-aware node/edge/window source plan. [[D3186]] requires started cancellations to
+retain their attempt count. [[D3187]] requires a contiguous, path-bound prefix derived from parsed
+run and import authorities. [[D3188]] requires adapters to execute their payload parsers rather than
+name them as strings. [[D3189]] requires separate decision, evidence and stop identities in Story
+and Review receipts. Repair in that dependency order, retain the six counterexamples, and obtain
+another genuinely fresh review before acceptance.
+
 ## Changelog
 
+- 2026-09-13 fifth fresh independent review ([[D3184]]–[[D3189]]): returned the fourth author
+  model on multi-adapter family accounting, grain-aware invocation planning, cancellation attempt
+  retention, exact prefix authority, executable payload parsers and decision/evidence/stop Story
+  identity. `make review-evidence-fifth-fresh-review` retains the predecessor chain and passes all
+  six new counterexamples. Exact receipt:
+  `planning/evidence-foundation-ux/review-evidence-compiler-fifth-fresh-independent-buildability-review-2026-09-13.md`.
 - 2026-09-07 fourth author repair ([[D3109]]–[[D3115]]): exact recorded-prefix derivation, literal
   projection adapters, retained typed evidence and complete node packets, retained completion and
   complete Story wire, shared fail-closed canonicalization and bounded retry/cancel/success-release
