@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f8c5c214e1af94877385cca29c5ffeac0f5a457b77ecf01d68f3cc63e68fdc9c",
-    "workItems": "sha256:3743b1340d22f291052acc1e92945087ee59e6ec001812ab71d584a6a4377eb3",
-    "workState": "sha256:7580ea015a8c2fef482854a26a1347fab3c02b2f832ac759a6dec3285a7ed506",
+    "roadmap": "sha256:eba65de03e2a98de652e6b75ad17ed95f8d9960375d564211d66f6258b9ff3a0",
+    "workItems": "sha256:2ce7aec0a77ce981c96d44de1ac958bf90fbb3adc16988981641098db5f36ec1",
+    "workState": "sha256:388aab457a8cfa018be87d073a3c94ae645521ab44a54a985dfe23677a17a904",
     "rfcRegister": "sha256:d50068b17810dddf7e3a072f378127a44637171cb13030146c38512fc32602c3",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -37,10 +37,10 @@
       "refused": 111
     },
     "workItems": {
-      "queued": 115,
+      "queued": 114,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 249,
+      "completed": 250,
       "retired": 24
     },
     "dimensionStates": {
@@ -200,13 +200,16 @@
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-13",
-        "summary": "The stable board and one-expanded companion remain proven across 64 required desktop/mobile journeys. Just Play now names the actual Quiet default and its registry promise before a run, while every primitive switch remains reachable only through the in-run Advanced support surface. Ordinary calculation, consequence, unavailable-highlighting, terminal and classroom-sharing actions describe what the learner gets rather than evidence plumbing. Compiler-backed preset activation, module delivery and five emitter-dependent matrix states remain open.",
+        "summary": "The stable board and one-expanded companion remain proven across 64 required desktop/mobile journeys. Just Play names the actual Quiet default and its registry promise before a run. Settings and in-run Advanced now share one ceiling-aware nine-field control component, so every primitive remains reachable without a second vocabulary or silently omitted fields. Ordinary actions describe what the learner gets rather than evidence plumbing. Compiler-backed preset activation, module delivery and five emitter-dependent matrix states remain open.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/JustPlayStarter.svelte",
+          "apps/web/src/lib/AssistanceControlFields.svelte",
+          "apps/web/src/lib/AssistanceSettings.svelte",
           "apps/web/src/lib/DrillScreen.svelte",
           "apps/web/src/lib/TerminalSheet.svelte",
           "apps/web/src/lib/screens.test.ts",
+          "apps/web/src/lib/assistance-preference.test.ts",
           "apps/web/src/lib/terminal-sheet.test.ts",
           "tests/browser/drill.spec.ts",
           "planning/work-items-1.0.json",
@@ -214,6 +217,11 @@
           "rfc/play-composition.md"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D582",
+            "digest": "sha256:d4e23b55e4eb8ec07cd8e3c88c29c5c8e3688f066472f3fef07d193badf45ec6"
+          },
           {
             "kind": "work_state",
             "id": "D494",
@@ -656,10 +664,10 @@
       "owner": "assistance-and-presentation",
       "rfcCount": 6,
       "workItems": {
-        "queued": 6,
+        "queued": 5,
         "blocked_owner": 3,
         "blocked_rfc": 24,
-        "completed": 38,
+        "completed": 39,
         "retired": 0
       },
       "routes": {

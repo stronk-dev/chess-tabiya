@@ -8075,16 +8075,20 @@
     {
       "id": "SET-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§5.2c",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "A second, divergent copy of the assistance panel ships in-run with different labels",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:4f9bf2662230d476067267b4984f3a20784bddc30917418e0a188239daafb28d"
+      "sourceDigest": "sha256:4f9bf2662230d476067267b4984f3a20784bddc30917418e0a188239daafb28d",
+      "completion": {
+        "completedOn": "2026-09-13",
+        "evidence": "apps/web/src/lib/AssistanceControlFields.svelte+apps/web/src/lib/AssistanceSettings.svelte+apps/web/src/lib/DrillScreen.svelte+tests/browser/drill.spec.ts"
+      }
     },
     {
       "id": "SET-b1",

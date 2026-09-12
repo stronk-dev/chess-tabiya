@@ -5,6 +5,7 @@
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
 
+  import AssistanceControlFields from "./AssistanceControlFields.svelte";
   import BranchRail from "./BranchRail.svelte";
   import CheckpointSheet from "./CheckpointSheet.svelte";
   import Chessboard from "./Chessboard.svelte";
@@ -572,10 +573,11 @@
     }
   }
 
-  function setAssistance<Key extends keyof Omit<AssistanceConfig, "version">>(key: Key, value: AssistanceConfig[Key]): void {
-    assistance = Object.freeze({ ...assistance, [key]: value });
-    saveAssistance(activeAssistanceProfile, assistance, preferenceStorage());
-    if (key === "markers" && value === "off") {
+  function setAssistanceConfig(value: AssistanceConfig): void {
+    const markersClosed = assistance.markers === "live" && value.markers === "off";
+    assistance = value;
+    saveAssistance(activeAssistanceProfile, value, preferenceStorage());
+    if (markersClosed) {
       openPivotalNodeId = undefined;
       pivotalDialogOpen = false;
     }
@@ -1537,18 +1539,20 @@
           <h3>Advanced support controls</h3>
           <p class="honest">These controls change individual evidence channels. Ordinary play uses the workflow's support defaults.</p>
           <div class="assistance-grid">
-            <label><input type="checkbox" checked={assistance.markers === "live"} onchange={(event) => setAssistance("markers", event.currentTarget.checked ? "live" : "off")} /> Passive pivotal markers</label>
-            <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
-            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move-model evidence</label>
-            {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            <AssistanceControlFields
+              config={assistance}
+              permissions={assistancePermission}
+              {capabilities}
+              lockedReasonId="advanced-support-locked"
+              externalVoiceReasonId="advanced-support-external-voice-unavailable"
+              {speechAvailable}
+              onChange={setAssistanceConfig}
+            />
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Load human move-model evidence</button>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
-            {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Human-game corpus evidence</label>{/if}
-            {#if capabilities?.providers.corpus !== "none" && assistancePermission.corpus === "locked_off"}<span id="corpus-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
             {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Load human-game corpus evidence</button>{/if}
-            {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
-            {#if speechAvailable}<label><input type="checkbox" checked={assistance.spoken === "browser"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "browser" : "off")} /> Speak opened guidance</label>{/if}
-            {#if capabilities?.providers.tts === "external"}<label><input type="checkbox" checked={assistance.spoken === "provider"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "provider" : "off")} /> Use configured speech provider</label>{/if}
+            {#if assistancePermission.humanSplit === "locked_off" || assistancePermission.corpus === "locked_off"}<span id="advanced-support-locked" class="honest">Requested evidence is available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            {#if capabilities?.providers.llm !== "external"}<span id="advanced-support-external-voice-unavailable" class="honest">External voice is unavailable from this deployment.</span>{/if}
             {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
         </section>
@@ -1936,7 +1940,6 @@
   .preset-disclosure strong { color:var(--accent); font-size:.72rem; }
   .preset-disclosure span { min-width:0; color:var(--muted); font-size:.72rem; line-height:1.35; }
   .assistance-grid { display:grid; gap:.55rem; }
-  .assistance-grid label { display:flex; gap:.4rem; align-items:center; }
   .assistance-grid .honest { color:var(--muted); font-size:.68rem; }
   .guidance-panel { max-height:min(38rem,calc(100dvh - 2rem)); overflow:auto; }
   .guidance-sentence { color:var(--ink)!important; font:400 .85rem/1.45 var(--display-font)!important; text-transform:none!important; }

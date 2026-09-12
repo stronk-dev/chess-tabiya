@@ -596,8 +596,15 @@ describe("Layer 3 screens", () => {
       .click();
     await tick();
     expect(menu.open).toBe(false);
-    expect(document.querySelector('[aria-label="Advanced support controls"]')).not.toBeNull();
-    expect(document.querySelectorAll('.inspector-surface .assistance-grid input[type="checkbox"]').length).toBeGreaterThan(0);
+    const advanced = document.querySelector<HTMLElement>('[aria-label="Advanced support controls"]')!;
+    expect(advanced).not.toBeNull();
+    const fieldLabels = [...advanced.querySelectorAll(".assistance-fields label")].map((label) => label.textContent?.trim() ?? "");
+    expect(fieldLabels).toHaveLength(9);
+    for (const label of ["Board lighting", "Arrows", "Passive markers", "Named-pattern guidance", "Human move split on request", "Corpus counts on request", "External voice", "Spoken guidance", "Ambient presence"]) {
+      expect(fieldLabels.some((value) => value.startsWith(label)), label).toBe(true);
+    }
+    expect(advanced.querySelectorAll('.assistance-fields input[type="checkbox"]')).toHaveLength(6);
+    expect(advanced.querySelectorAll(".assistance-fields select")).toHaveLength(3);
     await unmount(component);
   });
 

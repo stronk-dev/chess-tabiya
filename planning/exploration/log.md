@@ -19275,3 +19275,19 @@ preset compiler's real activation semantics explicitly open.
 `make verify-software` passes 188 files / 1,184 tests and the production build. `make test-browser`
 passes all 64 required desktop/mobile journeys with the one explicitly optional Maia measurement
 skipped.
+
+## 2026-09-13 — One Advanced assistance control surface (SET-a9 / [[D582]])
+
+Settings and the in-run Inspector no longer maintain divergent assistance forms. One shared
+component renders all nine v4 fields with the same labels, workflow permissions and provider
+availability in both places. This restores board lighting, arrows and ambient presence to in-run
+Advanced, preserves the request actions in their owning run surface, and keeps the complete
+primitive layer available without exposing it in the ordinary Support menu. The preset compiler
+and its learner-facing activation hierarchy remain open.
+
+The first `make verify-software` run caught an unexplained disabled provider option; unavailable
+provider choices are now absent rather than greyed. The first browser run then caught both old
+in-run labels still used by real journeys; those journeys now exercise the shared labels and spoken
+guidance selector. The final `make verify-software` passes 188 files / 1,184 tests and the production
+build; the final `make test-browser` passes all 64 required desktop/mobile journeys with one
+explicitly optional Maia measurement skipped.

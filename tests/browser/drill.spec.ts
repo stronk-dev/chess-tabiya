@@ -446,8 +446,8 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toHaveCount(0);
 
   await openAdvancedSupport(page);
-  await page.getByLabel("Passive pivotal markers").check();
-  await page.getByLabel("Speak opened guidance").check();
+  await page.getByLabel("Passive markers").check();
+  await page.getByLabel("Spoken guidance").selectOption("browser");
   await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
@@ -471,7 +471,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   const momentEvidence = page.getByRole("region", { name: "Recorded moment evidence" });
   await expect(momentEvidence).toContainText("middlegame → endgame, detected by Tabiya's phase bands.");
   await expect(momentEvidence).toContainText("material-census convention");
-  await page.getByLabel("Passive pivotal markers").uncheck();
+  await page.getByLabel("Passive markers").uncheck();
   await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("button", { name: /Open (?:Irreversible change|Phase transition)/ })).toHaveCount(0);
 });
@@ -491,7 +491,7 @@ test("endgame evidence is inspectable without a pivotal marker", async ({ page }
 test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await openAdvancedSupport(page);
-  await page.getByLabel("Passive pivotal markers").check();
+  await page.getByLabel("Passive markers").check();
   await page.getByRole("button", { name: "Return to play" }).click();
   await move(page, "e2", "e4");
   await expect(page.getByText("Active line 2 turns")).toBeVisible();
@@ -503,7 +503,7 @@ test("runtime corpus counts stay silent until reveal and render population facts
   expect(reveal.ok()).toBe(true);
   await page.reload();
   await openAdvancedSupport(page);
-  await page.getByLabel("Human-game corpus evidence").check();
+  await page.getByLabel("Corpus counts on request").check();
   await page.getByRole("button", { name: "Load human-game corpus evidence" }).click();
   const corpus = page.getByRole("region", { name: "Corpus evidence" });
   await expect(corpus).toContainText("Lichess explorer — rating buckets 1400; speeds blitz,rapid,classical");

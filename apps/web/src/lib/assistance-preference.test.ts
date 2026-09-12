@@ -87,6 +87,7 @@ describe("assistance preference", () => {
     const legends = [...document.querySelectorAll("fieldset legend")].map((element) => element.textContent?.trim());
     expect(legends).toEqual(["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp", "Campaign"]);
     expect(document.querySelectorAll('input[type="checkbox"]')).toHaveLength(ASSISTANCE_PROFILES.length * 6);
+    expect(document.querySelectorAll(".assistance-fields select")).toHaveLength(ASSISTANCE_PROFILES.length * 3);
     for (const fieldset of document.querySelectorAll("fieldset")) {
       const match = fieldset.querySelector("legend")?.textContent === "Match / Arena";
       const control = [...fieldset.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')]
