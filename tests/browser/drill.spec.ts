@@ -556,7 +556,8 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
   const prompt = page.getByRole("region", { name: "Consequence to review" });
   await expect(prompt).toBeVisible();
   await expect(prompt).not.toContainText("The material balance changed on this path.");
-  await prompt.getByRole("button", { name: "Inspect recorded grounds" }).click();
+  await expect(prompt).not.toContainText(/recorded grounds|disclosed evidence|projection|packet/i);
+  await prompt.getByRole("button", { name: "Inspect what changed" }).click();
   const guardEvidence = page.getByRole("region", { name: "Post-commit guard evidence" });
   await expect(guardEvidence).toContainText("The material balance changed on this path.");
   await page.getByRole("button", { name: "Return to play" }).click();
@@ -843,7 +844,8 @@ test("a completed assigned attempt offers hand-in inside the outcome sheet", asy
   await handIn.getByRole("button", { name: "Review sharing" }).click();
   const consent = terminal.getByRole("complementary", { name: "Share this completed attempt?" });
   await expect(consent).toContainText("will be able to read this run for up to 90 days");
-  await expect(consent).toContainText("evidence or reveals you opened during it");
+  await expect(consent).toContainText("any help you opened during it");
+  await expect(consent).not.toContainText("evidence or reveals");
   await expect(consent).toContainText("cannot undo what a teacher already saw");
   await consent.getByRole("button", { name: "Confirm sharing" }).click();
   await expect(handIn).toHaveCount(0);
@@ -922,7 +924,7 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   await expect(page.getByText("Terminal browser fixture commentary.")).toBeVisible();
   const terminal = page.getByRole("dialog", { name: "You lost." });
   await expect(terminal.getByText("Engine evidence recorded", { exact: false })).toHaveCount(0);
-  await terminal.getByRole("button", { name: /Inspect recorded evidence/ }).click();
+  await terminal.getByRole("button", { name: /Inspect analysis details/ }).click();
   const terminalEvidence = page.getByRole("region", { name: "Evidence attached to this position" });
   await expect(terminalEvidence.getByText("Engine evidence recorded", { exact: false })).toBeVisible({ timeout: 5_000 });
   await page.getByRole("button", { name: "Return to play" }).click();

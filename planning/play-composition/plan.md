@@ -76,15 +76,20 @@ remain in their owning RFCs.
    attempts, live walls and resistance summaries. The copy authority is isolated from learner
    rating, and exact ply remains available only in internal fields, Advanced Inspector and
    authoring diagnostics.
+20. Ordinary Support no longer asks learners to reason about the evidence pipeline. Calculation
+    names its optional continuation and non-prescriptive limit; the consequence guard offers to
+    inspect what changed; unavailable lighting names extra highlights; and terminal/classroom copy
+    names analysis details and opened help. Advanced Inspector retains exact source and projection
+    vocabulary.
 
 ## Remaining before archive
 
 1. Compile and seat the eleven learner modules once their collector dependencies land; extend the
    shipped one-expanded structural queue with the declared module seats and fact-count badges rather
    than treating Support/Branches/Actions as final module composition.
-2. Remove the remaining ordinary-surface vocabulary leaks named by §5. Related-pack title/SAN
-   chrome is complete; phase, compare, tablebase and voice families still need their compiled
-   module renderers.
+2. Remove the remaining ordinary-surface vocabulary leaks named by §5. Related-pack title/SAN and
+   the ordinary Support/terminal evidence-pipeline copy are complete; phase, compare, tablebase and
+   voice families still need their compiled module renderers.
 3. Complete the five module-dependent acceptance states in the 7×16 matrix ([[D1834]]). States 1,
    2, 4, 7, 8, 10, 11, 12, 14, 15 and 16 now retain 77/112 successful screenshots. States 3, 5,
    6, 9 and 13 wait on accepted producer/module emission; do not count blocked cells as screenshots.

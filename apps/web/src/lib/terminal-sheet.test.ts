@@ -51,7 +51,8 @@ describe("terminal assignment hand-in", () => {
     expect(onSubmitAssignment).not.toHaveBeenCalled();
     await vi.waitFor(() => expect(document.body.textContent).toContain("Share this completed attempt?"));
     expect(document.body.textContent).toContain("@coach, @assistant will be able to read this run for up to 90 days");
-    expect(document.body.textContent).toContain("evidence or reveals you opened during it");
+    expect(document.body.textContent).toContain("any help you opened during it");
+    expect(document.body.textContent).not.toContain("evidence or reveals");
     expect(document.body.textContent).toContain("cannot undo what a teacher already saw");
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Cancel")!.click();
     await vi.waitFor(() => expect(document.body.textContent).not.toContain("Share this completed attempt?"));

@@ -775,7 +775,7 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
-  it("offers calculated evidence from Support without requiring a branch group", async () => {
+  it("offers an optional calculation from Support without exposing evidence-pipeline copy", async () => {
     const run = branchedRun();
     const onAnalyzeMissing = vi.fn(async () => true);
     const capabilities = {
@@ -793,7 +793,9 @@ describe("Layer 3 screens", () => {
 
     expect(document.querySelector(".group-panel")).toBeNull();
     const module = document.querySelector<HTMLElement>('.analysis-request[aria-labelledby="analysis-request-title"]')!;
-    expect(module.textContent).toContain("recorded evidence—not a lesson, a grade, or a move you must play");
+    expect(module.textContent).toContain("one concrete continuation");
+    expect(module.textContent).toContain("does not grade your move or tell you what you must play");
+    expect(module.textContent).not.toMatch(/recorded evidence|projection|provider|packet/i);
     expect(module.textContent).toContain("A recorded calculation is available for this position.");
     const request = [...module.querySelectorAll<HTMLButtonElement>("button")]
       .find((button) => button.textContent === "Calculate this position")!;
@@ -895,7 +897,7 @@ describe("Layer 3 screens", () => {
     expect(primaryActions.map((button) => button.textContent)).toEqual(["Play it again from here", "Schedule a retry from here"]);
     expect(document.querySelector('[role="dialog"]')?.textContent).not.toMatch(/accuracy|grade count|rating movement|great move/i);
     expect(document.querySelector('[role="dialog"]')?.textContent).not.toContain("Engine evidence recorded");
-    const inspect = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Inspect recorded evidence"))!;
+    const inspect = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Inspect analysis details"))!;
     inspect.click();
     await tick();
     expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Engine evidence recorded");

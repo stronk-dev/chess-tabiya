@@ -19212,3 +19212,15 @@ delta are exact; only seven observed named events reach Nudge and Review, while 
 candidate/operand facts remain Inspector-only. The requirements image still reports every
 operation dependency blocked, so the amendment grants eligibility without claiming execution.
 [[D3129]] closes; [[D921]] now waits only on owner acceptance.
+
+## 2026-09-12 — Ordinary Support names learner actions, not evidence plumbing ([[D3182]])
+
+Calculation now offers one optional concrete continuation and states that it neither grades nor
+prescribes. The consequence guard offers to inspect what changed, unavailable lighting names extra
+highlights, and terminal/classroom sharing names analysis details and opened help. Exact evidence
+and source vocabulary remains available in Advanced Inspector.
+
+`make verify-software` passes 188 files / 1,184 tests and the production build. The first browser
+run caught one stale classroom-consent assertion; after the real journey was corrected to reject
+the old phrase, `make test-browser` passes all 64 required desktop/mobile journeys with the one
+explicitly optional Maia measurement skipped.

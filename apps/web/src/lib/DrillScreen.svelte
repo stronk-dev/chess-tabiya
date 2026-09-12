@@ -1296,7 +1296,7 @@
             <section class="analysis-request" aria-labelledby="analysis-request-title">
               <p>Deeper analysis</p>
               <h2 id="analysis-request-title">Calculate this position</h2>
-              <p>Ask for one calculated line when structural sight is not enough. The result is recorded evidence—not a lesson, a grade, or a move you must play.</p>
+              <p>Ask for one concrete continuation when the position is unclear. It stays optional: this does not grade your move or tell you what you must play.</p>
               <div class="analysis-request-actions">
                 <HonestControl
                   disabled={analysisUnavailableReason !== undefined}
@@ -1317,20 +1317,20 @@
             </section>
             {#if guardEvent?.type === "feedback.generated"}
               <section class="guard-prompt" aria-label="Consequence to review">
-                <StatusAnnouncement message="The consequence exposed something concrete. Your played line stays preserved. Play on, rewind, or inspect the recorded grounds." />
+                <StatusAnnouncement message="The consequence exposed something concrete. Your played line stays preserved. Play on, rewind, or inspect what changed." />
                 <div>
                   <strong>The consequence exposed something concrete.</strong>
                   <p>Your played line stays preserved.</p>
                 </div>
                 <div class="guard-actions">
                   <button type="button" onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
-                  {#if guardGrounds.length > 0}<button type="button" onclick={() => (inspectorOpen = true)}>Inspect recorded grounds</button>{/if}
+                  {#if guardGrounds.length > 0}<button type="button" onclick={() => (inspectorOpen = true)}>Inspect what changed</button>{/if}
                   <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>Rewind</button>
                 </div>
               </section>
             {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
-            {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
+            {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No extra highlights are available here; basic board guidance remains available.</p>{/if}
             {#if rawStructure.structures.length === 0 && !firings.some((firing) => firing.openEnded && firing.lastNodeId === currentNode.id)}
               <section class="support-empty" aria-labelledby="support-empty-title">
                 <p>Position pattern</p>

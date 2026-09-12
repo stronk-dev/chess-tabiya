@@ -174,7 +174,7 @@
           <aside class="submission-confirm" aria-labelledby="terminal-submission-confirm-title">
             <h3 id="terminal-submission-confirm-title">Share this completed attempt?</h3>
             <p>{selectedAssignment.teacherHandles.length > 0 ? `${selectedAssignment.teacherHandles.map((handle) => `@${handle}`).join(", ")} will be able to read this run for up to 90 days.` : "No active teacher is available to receive this run."}</p>
-            <p>They receive this run only, including its moves and the evidence or reveals you opened during it. They do not gain access to your other runs. You can stop future access after sharing, but that cannot undo what a teacher already saw.</p>
+            <p>They receive this run only, including its moves and any help you opened during it. They do not gain access to your other runs. You can stop future access after sharing, but that cannot undo what a teacher already saw.</p>
             <div class="actions">
               <button type="button" disabled={submissionBusy || selectedAssignment.teacherHandles.length === 0} aria-describedby={selectedAssignment.teacherHandles.length === 0 ? "terminal-submission-no-teacher" : undefined} onclick={() => void submitAssignment()}>{submissionBusy ? "Sharing…" : "Confirm sharing"}</button>
               <button type="button" disabled={submissionBusy} onclick={() => { selectedAssignmentId = undefined; submissionError = undefined; }}>Cancel</button>
@@ -188,7 +188,7 @@
 
     <div class="actions" aria-label="More completed-attempt actions">
       {#if onFlip}<button type="button" onclick={onFlip}>Replay this as {run.start.side === "white" ? "Black" : "White"}</button>{/if}
-      {#if evidence.length > 0 && onInspectEvidence}<button type="button" onclick={onInspectEvidence}>Inspect recorded evidence <span aria-hidden="true">({evidence.length})</span></button>{/if}
+      {#if evidence.length > 0 && onInspectEvidence}<button type="button" onclick={onInspectEvidence}>Inspect analysis details <span aria-hidden="true">({evidence.length})</span></button>{/if}
       <button type="button" onclick={onStop}>Stop session</button>
     </div>
   </div>

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:14a5a597236c2919b9e2f2b9af9b1c3e758ee598ef4e391a9331c3ef7e6fd442",
+    "roadmap": "sha256:e87aeadcd7e542e559754c4cc12c11b1a7e625782d7aef50bb3b9fd16f97b267",
     "workItems": "sha256:6414fda6fb36428ae0afbf6554e983aa8c441b00b49e69f3f920c02e52315729",
-    "workState": "sha256:02502d95218df05525a21d2a10255733fefe125392801a1a854178a29ce63627",
-    "rfcRegister": "sha256:2b0dadf17361e3e13270e734e1146ff97249586cc88380f1c66e0ea569538c92",
+    "workState": "sha256:2bed88bd9b80c72e2a9f83da72311904fca77033b2148a336225eb28ec4aecef",
+    "rfcRegister": "sha256:1a9bf01ec214c40bab7ec0a0149954900854a0a196635df94ca5d539a093e235",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -33,7 +33,7 @@
       "todo": 617,
       "doing": 0,
       "blocked": 1219,
-      "done": 983,
+      "done": 984,
       "refused": 111
     },
     "workItems": {
@@ -210,31 +210,28 @@
       ],
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
-        "at": "2026-09-08",
-        "summary": "The stable board reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play now names the selected help style and keeps its exact promise visible in Support, so intentional silence is not confused with missing analysis. Individual evidence switches remain available only through the explicit Advanced inspector; full preset activation and module delivery remain open.",
+        "at": "2026-09-12",
+        "summary": "The stable board and one-expanded companion remain proven across 64 required desktop/mobile journeys. Ordinary calculation, consequence, unavailable-highlighting, terminal and classroom-sharing actions now describe what the learner gets and can do rather than exposing evidence-pipeline terminology; exact sources and projections remain in Advanced Inspector. Full preset activation, module delivery and five emitter-dependent matrix states remain open.",
         "impact": "advanced",
         "evidence": [
-          "apps/web/src/lib/play-composition.ts",
-          "apps/web/src/lib/viewport-support.ts",
           "apps/web/src/lib/DrillScreen.svelte",
+          "apps/web/src/lib/TerminalSheet.svelte",
           "apps/web/src/lib/screens.test.ts",
-          "apps/web/src/lib/pack-catalog.ts",
+          "apps/web/src/lib/terminal-sheet.test.ts",
           "tests/browser/drill.spec.ts",
-          "docs/drill-client.md",
-          "planning/work-items-1.0.json",
-          "rfc/play-composition.md",
-          "rfc/README.md"
+          "planning/play-composition/plan.md",
+          "rfc/play-composition.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D1493",
-            "digest": "sha256:f966d65301b42b98fbc5feb65bcf637d350fa8c22448cd87e2f5b7127c752981"
+            "id": "D3182",
+            "digest": "sha256:6f1c41374f185f9925763d27b1c796bddea8970633484862a78071456cf69fce"
           },
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:f033afe4a51cdcb48eaf1178ee01f47b78e6445d4a04ae1662d6e09db6c683ab"
+            "digest": "sha256:bbaaa789bace5896789d1e3d513f6d75a2abcb64fd81b1cc1bac332455df101f"
           }
         ]
       },
@@ -390,7 +387,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:f033afe4a51cdcb48eaf1178ee01f47b78e6445d4a04ae1662d6e09db6c683ab"
+            "digest": "sha256:bbaaa789bace5896789d1e3d513f6d75a2abcb64fd81b1cc1bac332455df101f"
           }
         ]
       },
