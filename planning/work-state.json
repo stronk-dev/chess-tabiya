@@ -3815,7 +3815,7 @@
     {
       "id": "D484",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0e8ca88809a20b07aa6faf7638e2b7e5b50c72205521893b61bb5be5bd8c661f",
+      "sourceDigest": "sha256:75290238970c3d1d1752eeff1018135bc9393c2fbc529490755d2c15a34c685a",
       "uxItems": [
         "A11-a11",
         "ARR-a18",
@@ -3905,13 +3905,14 @@
     },
     {
       "id": "D494",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:05be5e4078adeac8106feefad9d5ee3dfc703a98ce0e67ec4e12f4ebf16d1f03",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:731bb8c42b6d3b8627bfe4d38d94857539cdb7259e6ae8d22fbc61dc50be9754",
       "uxItems": [
         "ARR-a3"
       ],
-      "owner": "evidence-foundation"
+      "evidence": "apps/web/src/lib/JustPlayStarter.svelte",
+      "evidenceKind": "path"
     },
     {
       "id": "D495",

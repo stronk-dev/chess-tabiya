@@ -980,6 +980,12 @@ describe("Layer 3 screens", () => {
   it("starts Just Play with a named Maia rung and keeps strong-engine play distinct", async () => {
     const onStart = vi.fn();
     const component = mount(JustPlayStarter, { target: target(), props: { onStart } });
+    const startingSupport = document.querySelector<HTMLElement>(".starting-support")!;
+    expect(startingSupport.textContent).toContain("Starting support");
+    expect(startingSupport.textContent).toContain("Quiet");
+    expect(startingSupport.textContent).toContain("no chess guidance appears unless you ask");
+    expect(startingSupport.textContent).toContain("after the board opens");
+    expect(startingSupport.querySelectorAll("input, select, button")).toHaveLength(0);
     const radios = document.querySelectorAll<HTMLInputElement>('input[name="opponent"]');
     expect(document.querySelector(".ladder")?.contains(radios[4]!)).toBe(false);
     expect(document.querySelector(".engine-choice")?.contains(radios[4]!)).toBe(true);

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { presetDeclaration } from "@chess-tabiya/runtime";
   import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
 
   interface StartInput {
@@ -13,6 +14,7 @@
   let opponent: "1000" | "1400" | "1800" | "2200" | "engine" = $state("1400");
   let fen = $state("");
   let positionOpen = $state(false);
+  const startingSupport = presetDeclaration("quiet");
   const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const bands = Object.freeze([
     { value: "1000", name: "First rung", detail: "More familiar human choices" },
@@ -60,6 +62,14 @@
         </label>
       </section>
     </fieldset>
+    <section class="starting-support" aria-labelledby="starting-support-title">
+      <div>
+        <p class="eyebrow">Starting support</p>
+        <h3 id="starting-support-title">{startingSupport.label}</h3>
+        <p>{startingSupport.promise}</p>
+      </div>
+      <p class="support-next-step">Change the help style from <strong>Support</strong> after the board opens.</p>
+    </section>
     <div class="start-options">
       <label>Your side
         <select bind:value={side}><option value="white">White</option><option value="black">Black</option></select>
@@ -90,6 +100,10 @@
   .opponent-grid small,.engine-choice small { color: var(--muted); line-height: 1.3; }
   .opponent-grid b,.engine-choice b { align-self: end; color: var(--accent); font: 700 1rem ui-monospace, monospace; }
   .honest { margin: .6rem 0 0; color: var(--muted); font-size: .75rem; }
+  .starting-support { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: center; padding: .85rem 1rem; border: 1px solid var(--line); border-radius: .9rem; background: color-mix(in srgb, var(--accent) 6%, var(--paper)); }
+  .starting-support h3 { margin: .15rem 0 .25rem; font: 600 1.15rem var(--display-font); }
+  .starting-support div > p:last-child, .support-next-step { margin: 0; color: var(--muted); line-height: 1.4; }
+  .support-next-step { max-width: 21rem; font-size: .78rem; text-align: right; }
   .start-options { display: grid; grid-template-columns: minmax(8rem, .35fr) auto minmax(18rem, 1fr) auto; gap: .6rem; align-items: end; }
   .start-options label { display: grid; gap: .3rem; font-size: .78rem; }
   select, input, button { min-height: 2.75rem; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); font: inherit; }
@@ -98,5 +112,5 @@
   button { cursor: pointer; }
   button:disabled { opacity: .5; cursor: wait; }
   @media (max-width: 65rem) { .opponent-grid { grid-template-columns: repeat(2, 1fr); } .start-options { grid-template-columns: 1fr 1fr; } .fen { grid-column: 1 / -1; } }
-  @media (max-width: 35rem) { .opponent-grid, .start-options { grid-template-columns: 1fr; } .fen { grid-column: auto; } }
+  @media (max-width: 35rem) { .opponent-grid, .start-options, .starting-support { grid-template-columns: 1fr; } .fen { grid-column: auto; } .support-next-step { max-width: none; text-align: left; } }
 </style>

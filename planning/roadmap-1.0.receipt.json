@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a9fadebd0f0f266c026bcfa33ce7e904c6f9f31a109d1b429568d6ae09a2b3cd",
-    "workItems": "sha256:6414fda6fb36428ae0afbf6554e983aa8c441b00b49e69f3f920c02e52315729",
-    "workState": "sha256:e037c46a0a237260a1765f68333004f20eaae3cf3ebb1fe2eafe255f396434ce",
+    "roadmap": "sha256:f8c5c214e1af94877385cca29c5ffeac0f5a457b77ecf01d68f3cc63e68fdc9c",
+    "workItems": "sha256:3743b1340d22f291052acc1e92945087ee59e6ec001812ab71d584a6a4377eb3",
+    "workState": "sha256:7580ea015a8c2fef482854a26a1347fab3c02b2f832ac759a6dec3285a7ed506",
     "rfcRegister": "sha256:d50068b17810dddf7e3a072f378127a44637171cb13030146c38512fc32602c3",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -30,17 +30,17 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 617,
+      "todo": 616,
       "doing": 0,
       "blocked": 1225,
-      "done": 985,
+      "done": 986,
       "refused": 111
     },
     "workItems": {
-      "queued": 117,
+      "queued": 115,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 247,
+      "completed": 249,
       "retired": 24
     },
     "dimensionStates": {
@@ -199,19 +199,26 @@
       ],
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
-        "at": "2026-09-12",
-        "summary": "The stable board and one-expanded companion remain proven across 64 required desktop/mobile journeys. Ordinary calculation, consequence, unavailable-highlighting, terminal and classroom-sharing actions now describe what the learner gets and can do rather than exposing evidence-pipeline terminology; exact sources and projections remain in Advanced Inspector. Full preset activation, module delivery and five emitter-dependent matrix states remain open.",
+        "at": "2026-09-13",
+        "summary": "The stable board and one-expanded companion remain proven across 64 required desktop/mobile journeys. Just Play now names the actual Quiet default and its registry promise before a run, while every primitive switch remains reachable only through the in-run Advanced support surface. Ordinary calculation, consequence, unavailable-highlighting, terminal and classroom-sharing actions describe what the learner gets rather than evidence plumbing. Compiler-backed preset activation, module delivery and five emitter-dependent matrix states remain open.",
         "impact": "advanced",
         "evidence": [
+          "apps/web/src/lib/JustPlayStarter.svelte",
           "apps/web/src/lib/DrillScreen.svelte",
           "apps/web/src/lib/TerminalSheet.svelte",
           "apps/web/src/lib/screens.test.ts",
           "apps/web/src/lib/terminal-sheet.test.ts",
           "tests/browser/drill.spec.ts",
+          "planning/work-items-1.0.json",
           "planning/play-composition/plan.md",
           "rfc/play-composition.md"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D494",
+            "digest": "sha256:731bb8c42b6d3b8627bfe4d38d94857539cdb7259e6ae8d22fbc61dc50be9754"
+          },
           {
             "kind": "work_state",
             "id": "D3182",
@@ -590,10 +597,10 @@
       "owner": "core-loop",
       "rfcCount": 2,
       "workItems": {
-        "queued": 7,
+        "queued": 5,
         "blocked_owner": 15,
         "blocked_rfc": 12,
-        "completed": 46,
+        "completed": 48,
         "retired": 4
       },
       "routes": {

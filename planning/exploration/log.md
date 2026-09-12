@@ -19262,3 +19262,16 @@ caller input at run/branch ids and closes over storage authority.
 all six fifth-author groups. This is an authoring checkpoint only: another genuinely fresh review,
 owner acceptance of D921 and the named provider/path/presentation dependencies still precede any
 production Review compiler or mistake-derived deck.
+
+## 2026-09-13 — Just Play names its actual support default ([[D494]])
+
+Just Play no longer applies the Quiet support posture as unexplained emptiness. The start form names
+**Quiet**, renders the exact promise from the runtime preset registry, and points to the ordinary
+in-run Support control without presenting an inert pre-run selector. The existing Support menu keeps
+all individual evidence and channel switches out of the ordinary path and opens the complete matrix
+as Advanced. This closes ARR-a18 and reconciles the already-shipped ARR-a19 while leaving the draft
+preset compiler's real activation semantics explicitly open.
+
+`make verify-software` passes 188 files / 1,184 tests and the production build. `make test-browser`
+passes all 64 required desktop/mobile journeys with the one explicitly optional Maia measurement
+skipped.

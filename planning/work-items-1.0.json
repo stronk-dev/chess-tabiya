@@ -1024,32 +1024,40 @@
     {
       "id": "ARR-a18",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§7.3 E2",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Name the default preset instead of letting it be encountered as emptiness — the default does not move, the learner chooses it",
       "legacyRoute": "none",
       "note": "resolves [[D484]]'s standing sentence at the arrival surface",
-      "sourceDigest": "sha256:36ccf674ba1ab03369b1f21c67189f8518c0cbd5b01784793999042e50ca683f"
+      "sourceDigest": "sha256:36ccf674ba1ab03369b1f21c67189f8518c0cbd5b01784793999042e50ca683f",
+      "completion": {
+        "completedOn": "2026-09-13",
+        "evidence": "apps/web/src/lib/JustPlayStarter.svelte+apps/web/src/lib/DrillScreen.svelte+apps/web/src/lib/screens.test.ts"
+      }
     },
     {
       "id": "ARR-a19",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§7.3 E3",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "The 72-control grid becomes Advanced, reachable from the preset menu. Nothing is removed",
       "legacyRoute": "lane",
       "note": "ux-work-lane Pass E; already ruled by `design/05` §The config on O4",
-      "sourceDigest": "sha256:8ded4a514fe6515e861f3e0f8495ab20755455f89a680aaa7fb0c911fa18ea4c"
+      "sourceDigest": "sha256:8ded4a514fe6515e861f3e0f8495ab20755455f89a680aaa7fb0c911fa18ea4c",
+      "completion": {
+        "completedOn": "2026-09-13",
+        "evidence": "apps/web/src/lib/JustPlayStarter.svelte+apps/web/src/lib/DrillScreen.svelte+apps/web/src/lib/screens.test.ts"
+      }
     },
     {
       "id": "ARR-a2",
