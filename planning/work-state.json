@@ -26646,7 +26646,25 @@
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:a540f22621597c45a6fc68c913be073be028917334f97e8a934cd4747d4b1cba",
       "uxItems": [],
-      "evidence": "apps/web/src/lib/reasoning-review-response.ts",
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3249",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:acff8c4fb8168d89bc2bad90b152996ec98fa9dd6dc8fc37c989b6e82f6cffca",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/TerminalSheet.svelte",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3250",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:acbbf018e11ff7d40c40995f81b0053d83710862d3cb5589d8ec4d66fa9b8ef3",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
     }
   ]

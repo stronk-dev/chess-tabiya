@@ -20056,3 +20056,25 @@ now run as five viewport-named cases, each with a fresh desktop/touch context an
 budget. No retry or aggregate timeout increase was added. The complete `make test-browser` run now
 passes 68 required journeys in three minutes with one explicitly optional Maia latency probe
 skipped; every isolated endgame case completes in 10.2–10.9 seconds.
+
+## 2026-09-14 — Terminal actions retain rejection, retry and departure truth ([[D3249]])
+
+The completed-attempt sheet now preserves the controller's boolean result for both retry
+scheduling and assignment hand-in. A rejected mutation keeps the exact terminal action visible
+behind bounded retry copy instead of disappearing as silence or success; assignment selection
+cannot change while its request is pending, duplicate clicks are refused and a departed sheet
+cannot publish a late settlement. The application and drill-screen boundaries no longer erase
+`submitAssignedRun`'s boolean result. Mounted falsifiers cover explicit rejection, thrown private
+diagnostics, duplicate input and teardown; `make verify-software` passes 199 files / 1,318 tests.
+
+## 2026-09-14 — Browser matrix failures identify one projection and input mode ([[D3250]])
+
+The full browser gate reproduced the remaining coupled failure class: 30 layout navigations shared
+one default timeout, while each permanent-input case still bundled all five modes. Layout now has
+one named case per projection and input has one named case per projection and mode, retaining all
+30 geometry and 150 interaction cells without retries. A manually interrupted local run briefly
+left a reused web-server lifecycle whose later disappearance produced `ERR_CONNECTION_REFUSED`;
+a clean lifecycle proved that cascade was runner state, not twenty product regressions. The clean
+tier runs pass: smoke 40 with one optional Maia latency probe skipped, matrix 47, content 5. The
+complete canonical `make test-browser` run passes 92 required journeys in three minutes with the
+same optional Maia probe skipped.

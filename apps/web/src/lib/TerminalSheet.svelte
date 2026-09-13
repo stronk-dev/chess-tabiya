@@ -47,7 +47,7 @@
     scheduleUnavailableReason?: string | undefined;
     onScheduleReturn?: (() => boolean | void | Promise<boolean | void>) | undefined;
     assignmentOffers?: readonly AssignmentSubmissionOffer[] | undefined;
-    onSubmitAssignment?: ((assignmentId: string) => Promise<void>) | undefined;
+    onSubmitAssignment?: ((assignmentId: string) => Promise<boolean | void>) | undefined;
     repertoireAnswerOffer?: RepertoireAnswerOffer | undefined;
     repertoireAnswerBusy?: string | undefined;
     repertoireAnswerError?: string | undefined;
@@ -64,6 +64,8 @@
   let returnError: string | undefined = $state();
   let flipBusy = $state(false);
   let flipError: string | undefined = $state();
+  let submissionRequest = 0;
+  let returnRequest = 0;
   let flipRequest = 0;
   let mounted = true;
   let selectedAssignment = $derived(assignmentOffers.find((assignment) => assignment.id === selectedAssignmentId));
@@ -71,15 +73,24 @@
 
   async function submitAssignment(): Promise<void> {
     if (selectedAssignment === undefined || onSubmitAssignment === undefined || submissionBusy) return;
+    const assignment = selectedAssignment;
+    const request = ++submissionRequest;
     submissionBusy = true;
     submissionError = undefined;
     try {
-      await onSubmitAssignment(selectedAssignment.id);
+      const accepted = await onSubmitAssignment(assignment.id);
+      if (!mounted || request !== submissionRequest || selectedAssignmentId !== assignment.id) return;
+      if (accepted === false) {
+        submissionError = "This run could not be shared. Nothing changed; review the recipients and try again.";
+        return;
+      }
       selectedAssignmentId = undefined;
-    } catch (error) {
-      submissionError = error instanceof Error ? error.message : String(error);
+    } catch {
+      if (mounted && request === submissionRequest && selectedAssignmentId === assignment.id) {
+        submissionError = "This run could not be shared. Nothing changed; review the recipients and try again.";
+      }
     } finally {
-      submissionBusy = false;
+      if (mounted && request === submissionRequest) submissionBusy = false;
     }
   }
 
@@ -101,20 +112,28 @@
 
   onDestroy(() => {
     mounted = false;
+    submissionRequest += 1;
+    returnRequest += 1;
     flipRequest += 1;
   });
 
   async function scheduleReturn(): Promise<void> {
     if (!canScheduleReturn || onScheduleReturn === undefined || returnBusy || returnScheduled) return;
+    const request = ++returnRequest;
     returnBusy = true;
     returnError = undefined;
     try {
       const accepted = await onScheduleReturn();
-      if (accepted !== false) returnScheduled = true;
-    } catch (error) {
-      returnError = error instanceof Error ? error.message : String(error);
+      if (!mounted || request !== returnRequest) return;
+      if (accepted === false) {
+        returnError = "This retry could not be added. The completed attempt is unchanged; try again.";
+        return;
+      }
+      returnScheduled = true;
+    } catch {
+      if (mounted && request === returnRequest) returnError = "This retry could not be added. The completed attempt is unchanged; try again.";
     } finally {
-      returnBusy = false;
+      if (mounted && request === returnRequest) returnBusy = false;
     }
   }
 </script>
@@ -196,7 +215,7 @@
           <article>
             <p><strong>{assignment.classroomName}</strong> · assigned by @{assignment.assignedByHandle}</p>
             {#if assignment.note}<p>Teacher note: {assignment.note}</p>{/if}
-            {#if selectedAssignmentId !== assignment.id}<button type="button" onclick={() => { selectedAssignmentId = assignment.id; submissionError = undefined; }}>Review sharing</button>{/if}
+            {#if selectedAssignmentId !== assignment.id}<button type="button" disabled={submissionBusy} aria-describedby={submissionBusy ? "terminal-submission-busy" : undefined} onclick={() => { selectedAssignmentId = assignment.id; submissionError = undefined; }}>Review sharing</button>{/if}
           </article>
         {/each}
         {#if selectedAssignment}
@@ -205,9 +224,10 @@
             <p>{selectedAssignment.teacherHandles.length > 0 ? `${selectedAssignment.teacherHandles.map((handle) => `@${handle}`).join(", ")} will be able to read this run for up to 90 days.` : "No active teacher is available to receive this run."}</p>
             <p>They receive this run only, including its moves and any help you opened during it. They do not gain access to your other runs. You can stop future access after sharing, but that cannot undo what a teacher already saw.</p>
             <div class="actions">
-              <button type="button" disabled={submissionBusy || selectedAssignment.teacherHandles.length === 0} aria-describedby={selectedAssignment.teacherHandles.length === 0 ? "terminal-submission-no-teacher" : undefined} onclick={() => void submitAssignment()}>{submissionBusy ? "Sharing…" : "Confirm sharing"}</button>
-              <button type="button" disabled={submissionBusy} onclick={() => { selectedAssignmentId = undefined; submissionError = undefined; }}>Cancel</button>
+              <button type="button" disabled={submissionBusy || selectedAssignment.teacherHandles.length === 0} aria-describedby={submissionBusy ? "terminal-submission-busy" : selectedAssignment.teacherHandles.length === 0 ? "terminal-submission-no-teacher" : undefined} onclick={() => void submitAssignment()}>{submissionBusy ? "Sharing…" : "Confirm sharing"}</button>
+              <button type="button" disabled={submissionBusy} aria-describedby={submissionBusy ? "terminal-submission-busy" : undefined} onclick={() => { selectedAssignmentId = undefined; submissionError = undefined; }}>Cancel</button>
             </div>
+            {#if submissionBusy}<p id="terminal-submission-busy" role="status">Sharing this completed attempt. Keep this result open until the request finishes.</p>{/if}
             {#if selectedAssignment.teacherHandles.length === 0}<p id="terminal-submission-no-teacher">An active teacher must be present before this run can be shared.</p>{/if}
             {#if submissionError}<p role="alert">{submissionError}</p>{/if}
           </aside>

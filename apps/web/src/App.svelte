@@ -2550,7 +2550,7 @@
         onSelectPack={(packId) => controller.startPack(packId)}
         onFirstRehearsalComplete={completeFirstRehearsal}
         assignmentOffers={completedAssignmentOffers}
-        onSubmitAssignment={async(assignmentId)=>{await submitAssignedRun(assignmentId,session.runState!.run.id);}}
+        onSubmitAssignment={(assignmentId)=>submitAssignedRun(assignmentId,session.runState!.run.id)}
         repertoireAnswerOffer={activeRepertoireGap}
         {repertoireAnswerBusy}
         repertoireAnswerError={activeRepertoireGap===undefined?undefined:repertoireAnswerErrors[activeRepertoireGap.gap.key]}

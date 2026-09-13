@@ -140,7 +140,7 @@
     onSelectPack?: ((packId: string) => void | Promise<void>) | undefined;
     onFirstRehearsalComplete?: (() => void) | undefined;
     assignmentOffers?: readonly AssignmentSubmissionOffer[] | undefined;
-    onSubmitAssignment?: ((assignmentId: string) => Promise<void>) | undefined;
+    onSubmitAssignment?: ((assignmentId: string) => Promise<boolean | void>) | undefined;
     repertoireAnswerOffer?: RepertoireAnswerOffer | undefined;
     repertoireAnswerBusy?: string | undefined;
     repertoireAnswerError?: string | undefined;

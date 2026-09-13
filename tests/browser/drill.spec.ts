@@ -2064,33 +2064,32 @@ test("an opponent reply visibly animates on the stable board instance", async ({
   });
 });
 
-test("@matrix served endgame packs keep the board above the timeline at supported desktop projections", async ({
-  page,
-}) => {
-  // This is a layout corpus, not a provider test. The packaged mock correctly
-  // withholds an empty tablebase capability; admit the perfect-play pack here
-  // without ever requesting an opponent move so all six authored layouts run.
-  await enableEndgamePolicies(page);
-  const projections = [
-    { width: 1280, height: 720 },
-    { width: 1366, height: 768 },
-    { width: 1440, height: 900 },
-    { width: 1440, height: 1000 },
-    { width: 768, height: 1024 },
-  ] as const;
+const ENDGAME_LAYOUT_PROJECTIONS = [
+  { width: 1280, height: 720 },
+  { width: 1366, height: 768 },
+  { width: 1440, height: 900 },
+  { width: 1440, height: 1000 },
+  { width: 768, height: 1024 },
+] as const;
 
-  for (const viewport of projections) {
+for (const viewport of ENDGAME_LAYOUT_PROJECTIONS) {
+  test(`@matrix served endgame packs keep the board above the timeline at ${viewport.width}×${viewport.height}`, async ({ page }) => {
+    test.setTimeout(60_000);
+    // This is a layout corpus, not a provider test. The packaged mock correctly
+    // withholds an empty tablebase capability; admit the perfect-play pack here
+    // without ever requesting an opponent move so every authored layout runs.
+    await enableEndgamePolicies(page);
     await page.setViewportSize(viewport);
     for (const title of ENDGAME_VIEWPORT_PACKS) {
       await page.goto("/play");
       const card = page.getByRole("article").filter({ hasText: title });
       await expect(card, `${title} should be served`).toHaveCount(1);
-  await card.getByRole("button", { name: /Rehearse this position/ }).click();
+      await card.getByRole("button", { name: /Rehearse this position/ }).click();
       await expect(page.getByLabel("Chessboard")).toBeVisible();
       await assertRunViewport(page, viewport);
     }
-  }
-});
+  });
+}
 
 test("@content a served related rehearsal names its source and the move in SAN", async ({ page }) => {
   await enableEndgamePolicies(page);
@@ -2107,21 +2106,23 @@ test("@content a served related rehearsal names its source and the move in SAN",
 });
 
 for (const viewport of ENDGAME_INPUT_PROJECTIONS) {
-  test(`@matrix served endgame packs submit exact permanent-input moves at ${viewport.width}×${viewport.height}`, async ({
-    page, browser,
-  }) => {
-    test.setTimeout(90_000);
-    await enableEndgamePolicies(page);
-    const modes: readonly BoardInputMode[] = ["click", "drag", "touch", "keyboard", "text"];
-    await page.setViewportSize(viewport);
-    const touchContext = await browser.newContext({ viewport, hasTouch: true, isMobile: true });
-    try {
-      const touchPage = await touchContext.newPage();
-      await enableEndgamePolicies(touchPage);
-      await register(touchPage);
-      for (const pack of ENDGAME_INTERACTION_PACKS) {
-        for (const mode of modes) {
-          const inputPage = mode === "touch" ? touchPage : page;
+  for (const mode of ["click", "drag", "touch", "keyboard", "text"] as const satisfies readonly BoardInputMode[]) {
+    test(`@matrix served endgame packs submit exact ${mode} moves at ${viewport.width}×${viewport.height}`, async ({
+      page, browser,
+    }) => {
+      test.setTimeout(60_000);
+      await enableEndgamePolicies(page);
+      await page.setViewportSize(viewport);
+      const touchContext = mode === "touch"
+        ? await browser.newContext({ viewport, hasTouch: true, isMobile: true })
+        : undefined;
+      try {
+        const inputPage = touchContext === undefined ? page : await touchContext.newPage();
+        if (touchContext !== undefined) {
+          await enableEndgamePolicies(inputPage);
+          await register(inputPage);
+        }
+        for (const pack of ENDGAME_INTERACTION_PACKS) {
           await inputPage.goto("/play");
           await inputPage
             .getByRole("article")
@@ -2130,11 +2131,11 @@ for (const viewport of ENDGAME_INPUT_PROJECTIONS) {
             .click();
           await liveInputMove(inputPage, pack.uci, pack.orientation, mode);
         }
+      } finally {
+        await touchContext?.close();
       }
-    } finally {
-      await touchContext.close();
-    }
-  });
+    });
+  }
 }
 
 test("@matrix the semantic board remains complete and yields focus to a checkpoint after a keyboard move", async ({ page }) => {

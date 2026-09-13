@@ -6,6 +6,25 @@ import { describe, expect, it, vi } from "vitest";
 
 import TerminalSheet from "./TerminalSheet.svelte";
 
+function deferred<T>(): { readonly promise: Promise<T>; readonly resolve: (value: T) => void; readonly reject: (reason?: unknown) => void } {
+  let resolve!: (value: T) => void;
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((resolvePromise, rejectPromise) => { resolve = resolvePromise; reject = rejectPromise; });
+  return { promise, resolve, reject };
+}
+
+function terminalRun(id: string) {
+  return createRun({
+    id,
+    packId: "assigned-pack",
+    packDigest: `sha256:${"1".repeat(64)}`,
+    startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    seed: 1,
+    createdAt: "2026-08-27T12:00:00.000Z",
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+  });
+}
+
 function target(): HTMLElement {
   document.body.innerHTML = "";
   return document.body;
@@ -104,6 +123,80 @@ describe("terminal assignment hand-in", () => {
     confirm.click();
     await vi.waitFor(() => expect(onSubmitAssignment).toHaveBeenCalledWith("assignment-one"));
     await unmount(component);
+  });
+
+  it("keeps failed return and sharing intents visible with bounded, single-flight outcomes", async () => {
+    const schedule = deferred<boolean>();
+    const share = deferred<boolean>();
+    const onScheduleReturn = vi.fn(() => schedule.promise);
+    const onSubmitAssignment = vi.fn(() => share.promise);
+    const component = mount(TerminalSheet, {
+      target: target(),
+      props: {
+        outcome: "loss", authoredItems: [], evidence: [], canRewind: false,
+        onRewind: () => undefined, onStop: () => undefined, run: terminalRun("terminal-failure-run"),
+        canScheduleReturn: true, onScheduleReturn,
+        assignmentOffers: [{ id: "assignment-one", classroomName: "Endgame study", assignedByHandle: "coach", teacherHandles: ["coach"], note: null }],
+        onSubmitAssignment,
+      },
+    });
+    const retry = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Schedule a retry from here")!;
+    retry.click(); retry.click();
+    expect(onScheduleReturn).toHaveBeenCalledTimes(1);
+    schedule.resolve(false);
+    await vi.waitFor(() => expect(document.body.textContent).toContain("retry could not be added"));
+    expect(document.body.textContent).toContain("Schedule a retry from here");
+
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Review sharing")!.click();
+    const confirm = await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm sharing");
+      expect(candidate).toBeDefined();
+      return candidate!;
+    });
+    confirm.click(); confirm.click();
+    expect(onSubmitAssignment).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Sharing this completed attempt"));
+    share.resolve(false);
+    await vi.waitFor(() => expect(document.body.textContent).toContain("run could not be shared"));
+    expect(document.body.textContent).toContain("Share this completed attempt?");
+    expect(document.body.textContent).not.toContain("private");
+    await unmount(component);
+  });
+
+  it("contains thrown and departed terminal-action settlements", async () => {
+    const late = deferred<boolean>();
+    const onSubmitAssignment = vi.fn()
+      .mockRejectedValueOnce(new Error("private classroom storage trace"))
+      .mockImplementationOnce(() => late.promise);
+    const props = {
+      outcome: "loss" as const, authoredItems: [], evidence: [], canRewind: false,
+      onRewind: () => undefined, onStop: () => undefined, run: terminalRun("terminal-departed-run"),
+      assignmentOffers: [{ id: "assignment-one", classroomName: "Endgame study", assignedByHandle: "coach", teacherHandles: ["coach"], note: null }],
+      onSubmitAssignment,
+    };
+    const component = mount(TerminalSheet, { target: target(), props });
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Review sharing")!.click();
+    (await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm sharing");
+      expect(candidate).toBeDefined();
+      return candidate!;
+    })).click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("run could not be shared"));
+    expect(document.body.textContent).not.toContain("private classroom storage trace");
+    await unmount(component);
+
+    const departedComponent = mount(TerminalSheet, { target: target(), props });
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Review sharing")!.click();
+    (await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm sharing");
+      expect(candidate).toBeDefined();
+      return candidate!;
+    })).click();
+    await vi.waitFor(() => expect(onSubmitAssignment).toHaveBeenCalledTimes(2));
+    await unmount(departedComponent);
+    late.reject(new Error("private late settlement"));
+    await Promise.resolve();
+    expect(document.body.textContent).not.toContain("private late settlement");
   });
 
   it("keeps repertoire adoption explicit on the completed attempt", async () => {
