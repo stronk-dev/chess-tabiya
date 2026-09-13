@@ -63,8 +63,8 @@
     startError = undefined;
     try {
       await onStart(Number(selectedBand) as 1000 | 1400 | 1800 | 2200, selectedSide);
-    } catch (cause) {
-      startError = cause instanceof Error ? cause.message : String(cause);
+    } catch {
+      startError = "The rated game could not be opened. Check your connection and try again; Review keeps any game that was already saved.";
       starting = false;
     }
   }

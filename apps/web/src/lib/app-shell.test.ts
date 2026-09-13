@@ -1614,6 +1614,71 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("persists rated-game authority only after creation and never navigates from a departed Rating screen", async () => {
+    history.replaceState(null, "", "/rating");
+    const storage = new MemoryStorage();
+    const pendingGame = deferred<Awaited<ReturnType<NonNullable<DrillClientApi["createRatedGame"]>>>>();
+    let requestedRunId = "";
+    const createRatedGame = vi.fn((input: Parameters<NonNullable<DrillClientApi["createRatedGame"]>>[0]) => {
+      requestedRunId = input.id;
+      return pendingGame.promise;
+    });
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), createRatedGame }, router, storage },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Start rated game"));
+    document.querySelector<HTMLButtonElement>("button[type=submit]")!.click();
+    await vi.waitFor(() => expect(createRatedGame).toHaveBeenCalledTimes(1));
+    expect(storage.values.size).toBe(0);
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    pendingGame.resolve({ ...run, id: requestedRunId });
+    await tick();
+    await Promise.resolve();
+    expect(window.location.pathname).toBe("/");
+    expect(storage.values.get(writerStorageKey(requestedRunId))).toBeTruthy();
+    await unmount(component);
+  });
+
+  it("does not persist rated-game authority when creation fails", async () => {
+    history.replaceState(null, "", "/rating");
+    const storage = new MemoryStorage();
+    const createRatedGame = vi.fn(async () => { throw new Error("private provider failure"); });
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), createRatedGame }, router: new HistoryRouter(window), storage },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Start rated game"));
+    const start = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Start rated game")!;
+    start.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The rated game could not be opened."));
+    expect(document.body.textContent).not.toContain("private provider failure");
+    expect(storage.values.size).toBe(0);
+    expect(start.disabled).toBe(false);
+    await unmount(component);
+  });
+
+  it("refuses a crossed rated-game response without claiming its run", async () => {
+    history.replaceState(null, "", "/rating");
+    const storage = new MemoryStorage();
+    const createRatedGame = vi.fn(async () => ({ ...run, id: "crossed-rated-run" }));
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), createRatedGame }, router: new HistoryRouter(window), storage },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Start rated game"));
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Start rated game")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The rated game could not be opened."));
+    expect(storage.values.size).toBe(0);
+    expect(window.location.pathname).toBe("/rating");
+    await unmount(component);
+  });
+
   it("expands recorded attempts into honestly labelled related rehearsals", async () => {
     history.replaceState(null, "", "/learn");
     const base = api();

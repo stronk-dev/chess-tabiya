@@ -19806,3 +19806,17 @@ leave-return-duplicate falsifiers pass. Sequential canonical verification passes
 verify-software` is green across 188 files / 1,233 tests plus type, performance, schema, manifest
 and production-build checks; `make test-browser` passes all 64 required journeys with one
 explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Rated-game creation retains its initiating subject ([[D3230]])
+
+The guided Rating card already blocked a second click, but the shell persisted a writer before
+the server's atomic run-plus-rating creation succeeded, trusted the returned run identity, and
+navigated after the learner left the screen. It also allowed provider diagnostics to become its
+error copy. Creation now captures exact band, side, run, provisional writer and route generation;
+persists the writer only after a matching successful response; and publishes navigation only to
+the still-current Rating route. A rejected create leaves no authority, a crossed response is
+refused, and valid success after departure preserves the run without pulling the learner back.
+All failure copy is bounded and retryable. The three lifecycle falsifiers pass. Sequential
+canonical verification passes: `make verify-software` is green across 188 files / 1,236 tests plus
+type, performance, schema, manifest and production-build checks; `make test-browser` passes all 64
+required journeys with one explicitly optional Maia latency measurement skipped.

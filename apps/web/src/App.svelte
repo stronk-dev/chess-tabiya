@@ -1051,8 +1051,9 @@
 
   async function startRatedGame(band: 1000 | 1400 | 1800 | 2200, side: "white" | "black"): Promise<void> {
     if (api.createRatedGame === undefined) throw new Error("Rated games are unavailable");
+    const generation = loadGeneration;
     const runId = `rated-${crypto.randomUUID()}`;
-    const writer = WriterSession.claimFor(runId, storage);
+    const writer = WriterSession.observe(runId, storage);
     const run = await api.createRatedGame({
       id: runId,
       start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
@@ -1061,7 +1062,11 @@
       policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
       seed: Math.floor(Math.random() * 2_147_483_647),
     }, writer.writerId);
-    navigate(routePath({ name: "run", runId: run.id }));
+    if (run.id !== runId) throw new Error("Rated-game response did not match its requested run");
+    WriterSession.claimFor(runId, storage, () => writer.writerId);
+    if (generation === loadGeneration && route.name === "rating") {
+      navigate(routePath({ name: "run", runId: run.id }));
+    }
   }
 
   async function enterStoryMoment(runId: string, nodeId: string): Promise<void> {

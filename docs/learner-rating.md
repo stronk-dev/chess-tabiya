@@ -58,6 +58,12 @@ fixed engine policy and start-position details stay behind the workflow. The car
 of choice that a Maia band is not an external chess rating and that rewind or live assistance
 voids only the rating contribution, not the saved game.
 
+Creation is single-flight and retains the exact band, side, requested run, provisional writer and
+Rating-route generation across the request. The client stores no writer claim until the server's
+atomic run-plus-rating creation succeeds, refuses a response for a different run, and navigates
+only while the initiating Rating screen is still current. Failure re-enables the same guided card
+with bounded retry copy rather than exposing provider diagnostics.
+
 Ratings remain selection input only and must never alter evidence rendering, return
 recommendations, or milestones. Rated campaign entry and the RFC's remaining validation arms are
 not supplied by these reading surfaces.
