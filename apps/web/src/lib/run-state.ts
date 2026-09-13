@@ -14,6 +14,7 @@ import {
   type PlayerMoveRequest,
   type PredictionRequest,
   type PredictionResult,
+  type SelectMoveRequest,
   type CreateGroupRequest,
   type CreateGroupResult,
   type RewindRequest,
@@ -228,11 +229,11 @@ export class RunStateStore {
     )) as Promise<CreateGroupResult>;
   }
 
-  groupReply(groupId: string) {
+  groupReply(groupId: string, request: SelectMoveRequest) {
     if (this.#snapshot.access === "read_only") {
       throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
     }
-    return this.#api.groupReply(this.#session.runId, groupId, this.#session.writerId);
+    return this.#api.groupReply(this.#session.runId, groupId, this.#session.writerId, request);
   }
 
   async analysis(nodeIds: readonly string[]) {

@@ -804,9 +804,10 @@ export class DrillSessionController {
     const group = groupsFromEvents(run).find((candidate: BranchGroup) =>
       candidate.members.some((member) => member.branchId === run.activeCursor.branchId),
     );
+    const request = this.#selectionRequest();
     const selection = group === undefined
-      ? await this.#api.selectMove(this.#selectionRequest())
-      : (await store.groupReply(group.groupId)).selection;
+      ? await this.#api.selectMove(request)
+      : (await store.groupReply(group.groupId, request)).selection;
     if (
       this.#store !== store ||
       !this.#attachmentIsCurrent(generation)

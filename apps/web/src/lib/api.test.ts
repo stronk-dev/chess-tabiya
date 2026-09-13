@@ -231,6 +231,7 @@ describe("DrillApi", () => {
         });
       }
       if (url.endsWith("/group-reply")) return json({ selection, reusedFromNodeId: null });
+      if (url.endsWith("/prediction")) return json({ selection, run, emitted: [] });
       if (url.endsWith("/analysis")) return json({ jobs: [{ id: "analysis-one" }] }, { status: 202 });
       if (url.endsWith("/schedule")) return json({
         schedule: { id: "schedule-one", sessionKind: "pack", packId: run.packId, kind: "blocked", variant: null, dueAt: "2026-08-12T20:00:00.000Z", sourceRunId: run.id },
@@ -272,12 +273,19 @@ describe("DrillApi", () => {
     await api.createRun(createInput, "writer-one");
     await expect(api.runPage(20, 5)).resolves.toEqual({ runs: [], selection: { shown: 5, total: 12 } });
     await api.runs(20, 5);
-    await expect(api.selectMove({
+    const selectionRequest = {
       startFen: run.nodes[0]!.fen,
       historyUci: ["a2a3"],
       policy: { mode: "human_common", policyConfigDigest: run.packDigest! },
       seed: 7,
-    })).resolves.toMatchObject({ policyModeApplied: "human_common" });
+    };
+    await expect(api.selectMove(selectionRequest)).resolves.toMatchObject({ policyModeApplied: "human_common" });
+    await expect(api.prediction(run.id, {
+      ...selectionRequest,
+      checkpointId: "prediction-one",
+      nodeId: run.nodes[0]!.id,
+      predictedUci: "h2g2",
+    }, "writer-one")).resolves.toMatchObject({ selection: { moveUci: "h2g2" } });
     await api.humanSplit(run.id, run.nodes[0]!.id);
     await api.voice(run.id, run.nodes[0]!.id, "reading");
     await api.move(run.id, { uci: "a2a3" }, "writer-one");
@@ -289,7 +297,7 @@ describe("DrillApi", () => {
       "writer-one",
     );
     await api.createGroup(run.id, { source: "hand_picked", candidates: ["a2a3", "b2b3"] }, "writer-one");
-    await api.groupReply(run.id, "group-one", "writer-one");
+    await api.groupReply(run.id, "group-one", "writer-one", selectionRequest);
     await api.analysis(run.id, [run.nodes[0]!.id], "writer-one");
     await api.scheduleReturn(run.id, { nodeId: run.nodes[0]!.id, kind: "blocked" }, "writer-one");
     const simulation = await api.simulate(run.id, "writer-one");
@@ -323,6 +331,7 @@ describe("DrillApi", () => {
       "/runs",
       "/runs",
       "/select-move",
+      "/runs/run%20%2F%20one/prediction",
       "/runs/run%20%2F%20one/human-split",
       "/runs/run%20%2F%20one/voice",
       "/runs/run%20%2F%20one/moves",

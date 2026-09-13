@@ -30,6 +30,7 @@ import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./co
 import { parseCapabilities } from "./capability-response.js";
 import { parseEvidencePage } from "./evidence-page-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
+import { parseGroupReplyResult, parsePredictionResult } from "./opponent-path-response.js";
 import { parseOpponentSelection } from "./opponent-selection-response.js";
 import { parsePackDocument } from "./pack-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
@@ -841,7 +842,7 @@ export interface RunApi {
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult>;
   recordReasoning(runId: string, input: { readonly nodeId: string; readonly checkpointEventSeq: number; readonly transcript?: ReasoningTranscript; readonly skipped?: true }, writerId: string): Promise<MutationResult & { readonly reasoning: ReasoningPage }>;
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult>;
-  groupReply(runId: string, groupId: string, writerId: string): Promise<GroupReplyResult>;
+  groupReply(runId: string, groupId: string, writerId: string, request: SelectMoveRequest): Promise<GroupReplyResult>;
   analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }>;
   scheduleReturn?(runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }, writerId: string): Promise<ScheduledReturnResult>;
   simulate?(runId: string, writerId: string): Promise<SimulationResult>;
@@ -1300,7 +1301,7 @@ export class DrillApi implements DrillClientApi {
   distillRun(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>{return this.#json(`/runs/${encoded(runId)}/distill`,{method:"POST",body:input});}
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {
-    return this.#json(`/runs/${encoded(runId)}/prediction`, { method: "POST", writerId, body: input });
+    return this.#json<unknown>(`/runs/${encoded(runId)}/prediction`, { method: "POST", writerId, body: input }).then((value) => parsePredictionResult(value, input));
   }
 
   recordReasoning(runId: string, input: { readonly nodeId: string; readonly checkpointEventSeq: number; readonly transcript?: ReasoningTranscript; readonly skipped?: true }, writerId: string): Promise<MutationResult & { readonly reasoning: ReasoningPage }> {
@@ -1311,8 +1312,8 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/group`, { method: "POST", writerId, body: input });
   }
 
-  groupReply(runId: string, groupId: string, writerId: string): Promise<GroupReplyResult> {
-    return this.#json(`/runs/${encoded(runId)}/group-reply`, { method: "POST", writerId, body: { groupId } });
+  groupReply(runId: string, groupId: string, writerId: string, request: SelectMoveRequest): Promise<GroupReplyResult> {
+    return this.#json<unknown>(`/runs/${encoded(runId)}/group-reply`, { method: "POST", writerId, body: { groupId } }).then((value) => parseGroupReplyResult(value, request));
   }
 
   analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {

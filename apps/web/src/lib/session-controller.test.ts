@@ -291,9 +291,9 @@ class FakeApi implements DrillClientApi {
     this.run = next; this.writerIds.push(writerId);
     return { group: { ...next.events.at(-1)!.data, createdAtSeq: next.events.at(-1)!.seq }, run: next, emitted: next.events.slice(before), comparison: compareBranches(next, members.map((member) => member.branchId)) } as import("./api.js").CreateGroupResult;
   }
-  async groupReply(): Promise<import("./api.js").GroupReplyResult> {
+  async groupReply(_runId: string, _groupId: string, _writerId: string, request: SelectMoveRequest): Promise<import("./api.js").GroupReplyResult> {
     this.groupReplyCalls += 1;
-    return { selection: await this.selectMove({ startFen: "", historyUci: [], policy: { mode: "human_common", policyConfigDigest: digest }, seed: 1 }), reusedFromNodeId: null };
+    return { selection: await this.selectMove(request), reusedFromNodeId: null };
   }
   async analysis(_runId: string, nodeIds: readonly string[]): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {
     return { jobs: nodeIds.map((_, index) => ({ id: `analysis-${index + 1}` })) };

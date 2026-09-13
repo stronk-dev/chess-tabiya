@@ -20229,3 +20229,18 @@ caller's watermark rather than moving it backward. `make verify-software` passes
 tests plus types, performance, schema, manifest, packaging and production builds. The complete
 `make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
 skipped.
+
+## 2026-09-14 — Alternate opponent paths share one selection authority ([[D3260]])
+
+Prediction checkpoints and branch-group replies no longer cast their returned selections before
+appending them to a run. Both public envelopes are exact, and each selection is admitted through the
+same legal-position, requested-policy, candidate-arithmetic and engine-identity authority as normal
+opponent play. A fixed group may still reuse the server's prior selection, but the client validates
+that selection against the current transposed position and refuses an empty or malformed reuse node
+identity before it can reach the board.
+
+Prediction keeps its mutation payload attached to the existing event projection, so response events
+must still extend the local run exactly while its adjacent selection is independently checked. The
+full `make verify-software` gate passes 209 files / 1,420 tests plus types, performance, schema,
+manifest, packaging and production builds. The complete `make test-browser` gate passes 92 required
+journeys, including the branch-group loop, with one explicitly optional Maia latency probe skipped.
