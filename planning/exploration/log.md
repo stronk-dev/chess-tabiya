@@ -19385,3 +19385,15 @@ matrix and exposes the reason. D1478's Compare path leads with the fork decision
 narrative while engine trajectories and raw detector output remain in Inspector. Those rows are now
 terminal with their production evidence. This does not close preset activation, Review Map/module
 delivery, individual honest-empty evidence producers or the browsable theory catalogue.
+
+## 2026-09-13 — Review Story stops exposing shape catalogue keys ([[D3196]])
+
+The registered shape-firing renderer previously put an internal entry id such as
+`carlsbad-minority-attack` directly on the learner's Game Story card and described the detector as
+a “recorded catalogue trigger.” The exact id remains sealed in the evidence payload, while the one
+Review Story renderer now validates and converts it to stable learner copy: “Recognized position
+pattern: Carlsbad minority attack.” The regression exercises the compiled `review.story@1` consumer
+view and refuses the raw key, the internal trigger phrase and the developer-facing “Shape” prefix.
+`make test-software` passes 188 files / 1,185 tests, `make test-browser` passes all 64 required
+desktop/mobile journeys with the one explicitly optional Maia latency measurement skipped, and
+`make verify-software` passes the full software contract.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, PRIMARY_EVIDENCE_MANIFEST, rankStoryMoments, renderReviewStoryEvidence, renderStoryEvaluationTrajectory, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment, type StoryMomentKind } from "./index.js";
+import { attachEvidence, commitMove, createRun, declareShapeFiringEvidence, evidenceForConsumer, PRIMARY_EVIDENCE_MANIFEST, rankStoryMoments, renderReviewStoryEvidence, renderStoryEvaluationTrajectory, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment, type StoryMomentKind } from "./index.js";
 
 if (false) {
   // @ts-expect-error review story rendering consumes only a compiled evidence view.
@@ -57,6 +57,19 @@ describe("grounded game story", () => {
     const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find((projection) => projection.id === "derived.story.title" && projection.version === 1);
     expect(declaration?.semantics).toContain("learner-relative");
     expect(declaration?.semantics).not.toContain("White-relative");
+  });
+
+  it("renders shape firings as learner labels without exposing catalogue keys", () => {
+    const declared = declareShapeFiringEvidence([{
+      entryId: "carlsbad-minority-attack",
+      firstNodeId: "n1",
+      lastNodeId: "n2",
+      openEnded: false,
+    }]);
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "review.story", version: 1 }, declared);
+    const sentences = renderReviewStoryEvidence(view).items.flatMap((item) => item.sentences);
+    expect(sentences).toEqual(["Recognized position pattern: Carlsbad minority attack."]);
+    expect(sentences.join(" ")).not.toMatch(/carlsbad-minority-attack|catalogue trigger|\bShape\b/u);
   });
 
   it("selects by rank before restoring chronology", () => {

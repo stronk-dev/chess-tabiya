@@ -80,9 +80,30 @@ function renderStoryEvalShift(evidence: DeclaredEvidence<unknown>): readonly str
   return Object.freeze([renderStoryEvaluationChange(payload.after, payload.delta as number)]);
 }
 
+const SHAPE_LABEL_TOKENS: Readonly<Record<string, string>> = Object.freeze({
+  iqp: "IQP",
+  kid: "King's Indian",
+});
+
+function learnerShapeLabel(entryId: string): string {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(entryId)) {
+    throw new TypeError("Story shape firing omitted a valid catalogue identity");
+  }
+  const words = entryId.split("-").map((word) => SHAPE_LABEL_TOKENS[word] ?? word);
+  const first = words[0]!;
+  words[0] = SHAPE_LABEL_TOKENS[first.toLowerCase()] ?? `${first[0]!.toUpperCase()}${first.slice(1)}`;
+  return words.join(" ");
+}
+
+function renderStoryShapeFiring(evidence: DeclaredEvidence<unknown>): readonly string[] {
+  const entryId = (evidence.payload as { readonly entryId?: unknown }).entryId;
+  if (typeof entryId !== "string") throw new TypeError("Story shape firing omitted its catalogue identity");
+  return Object.freeze([`Recognized position pattern: ${learnerShapeLabel(entryId)}.`]);
+}
+
 const REVIEW_STORY_RENDERERS: EvidenceRendererRegistry = Object.freeze({
   "rules.pivotal.marker@1": (evidence) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]),
-  "theory.shapes.firing@1": (evidence) => { const firing = evidence.payload as { readonly entryId: string }; return Object.freeze([`Shape ${firing.entryId} begins here under its recorded catalogue trigger.`]); },
+  "theory.shapes.firing@1": renderStoryShapeFiring,
   "run.record.consequence@1": renderRecordedOutcome,
   "run.record.imported_result@1": renderRecordedOutcome,
   "rules.endgame.reading@1": (evidence) => renderEndgameReading(evidence.payload as EndgameReading),
