@@ -46,6 +46,12 @@ The production operation validates the ply and normalizes the FEN once, then rea
 maps. Individual endpoint and membership methods remain available for consumers that need only one
 projection.
 
+The required performance test keeps catalogue load below 250 ms wall time and production lookup
+work below 50 µs CPU time per position at the p95 of bounded batches over all 6,991 recorded sample
+positions. CPU time deliberately excludes periods when a shared CI runner has descheduled the Node
+process while retaining parsing, lookup, allocation and garbage-collection work. Browser arrival
+and perceived-operation tests separately enforce user-visible wall latency.
+
 ## Honesty boundaries
 
 - Exact endpoint absence does not mean “out of book.”

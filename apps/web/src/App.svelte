@@ -738,6 +738,8 @@
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
       } else if (next.name === "live") {
+        liveCreateBusy=false;
+        liveCreateError=undefined;
         const loaded=await Promise.all([api.liveSessions?.()??Promise.resolve([]),initialRunPage(),api.classrooms?.()??Promise.resolve([]),api.packs()]);
         if(generation!==loadGeneration)return;
         [liveSessions,classrooms,packs]=[loaded[0],loaded[2],loaded[3]];runs=loaded[1].runs;runSelection=loaded[1].selection;
@@ -745,6 +747,13 @@
         const refresh=++liveRefreshGeneration;
         liveReclaimIntent=false;
         liveReclaimError=undefined;
+        liveReclaimBusy=false;
+        liveMemberBusy=false;
+        liveMemberError=undefined;
+        liveVoteBusyChoice=undefined;
+        liveVoteCloseBusy=false;
+        liveVoteError=undefined;
+        liveVoteStatus=undefined;
         const loaded=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
         if(generation!==loadGeneration||refresh!==liveRefreshGeneration)return;
         [liveDetail,liveJournal]=loaded;
@@ -1331,14 +1340,16 @@
   }
   async function createLive(run:RunSummary):Promise<void>{
     if(liveCreateDisabledReason(run)!==undefined)return;
+    const generation=loadGeneration;
+    const input={runId:run.id,kind:liveKind,title:liveTitle.trim(),boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="rotation"?{rotationHandles:liveRotationMembers()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})};
     liveCreateBusy=true;
     liveCreateError=undefined;
     try{
       if(api.createLiveSession===undefined)throw new Error("Live session creation is unavailable.");
-      const created=await api.createLiveSession({runId:run.id,kind:liveKind,title:liveTitle.trim(),boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="rotation"?{rotationHandles:liveRotationMembers()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})});
-      navigate(routePath({name:"live-session",sessionId:created.id}));
-    }catch(error){liveCreateError=error instanceof Error?error.message:String(error);}
-    finally{liveCreateBusy=false;}
+      const created=await api.createLiveSession(input);
+      if(generation===loadGeneration&&route.name==="live")navigate(routePath({name:"live-session",sessionId:created.id}));
+    }catch(error){if(generation===loadGeneration&&route.name==="live")liveCreateError=error instanceof Error?error.message:String(error);}
+    finally{if(generation===loadGeneration&&route.name==="live")liveCreateBusy=false;}
   }
   async function createClassroom():Promise<void>{if(!classroomName.trim()||api.createClassroom===undefined)return;await api.createClassroom(classroomName.trim());classroomName="";classrooms=await (api.classrooms?.()??Promise.resolve([]));}
   async function openClassroom(id:string):Promise<void>{classroomDetail=await api.classroom?.(id);}
@@ -1348,56 +1359,89 @@
   async function submitAssignedRun(assignmentId:string,runId:string):Promise<void>{await api.submitAssignment?.(assignmentId,runId);assignedPacks=await (api.assignments?.()??Promise.resolve([]));}
   async function withdrawAssignedRun(assignmentId:string,runId:string):Promise<void>{await api.withdrawSubmission?.(assignmentId,runId);assignedPacks=await (api.assignments?.()??Promise.resolve([]));}
   function liveWriterId(runId:string):string|undefined{return WriterSession.peek(runId,storage)?.writerId;}
-  async function submitLiveProposal():Promise<void>{if(!liveDetail||!liveMoveChoices.some((choice)=>choice.uci===liveProposalMove))return;await api.proposeMove?.(liveDetail.session.id,liveDetail.activeNodeId,liveProposalMove);liveDetail=await api.liveSession?.(liveDetail.session.id);liveProposalMove="";}
+  function liveSessionIsCurrent(detail:LiveSessionDetail,generation:number):boolean{return generation===loadGeneration&&route.name==="live-session"&&route.sessionId===detail.session.id&&liveDetail?.session.id===detail.session.id;}
+  function activeLiveSessionIsCurrent(detail:LiveSessionDetail,generation:number):boolean{return generation===loadGeneration&&activeLiveDetail?.session.id===detail.session.id&&((route.name==="run"&&route.runId===detail.session.runId)||(route.name==="live-overlay"&&route.runId===detail.session.runId));}
+  async function refreshCurrentLiveSession(detail:LiveSessionDetail,generation:number):Promise<LiveSessionDetail|undefined>{
+    if(!liveSessionIsCurrent(detail,generation)||api.liveSession===undefined)return undefined;
+    const refresh=++liveRefreshGeneration;
+    const next=await api.liveSession(detail.session.id);
+    if(next!==undefined&&next.session.id===detail.session.id&&liveSessionIsCurrent(detail,generation)&&refresh===liveRefreshGeneration)liveDetail=next;
+    return next;
+  }
+  async function refreshCurrentActiveLiveSession(detail:LiveSessionDetail,generation:number):Promise<LiveSessionDetail|undefined>{
+    if(!activeLiveSessionIsCurrent(detail,generation)||api.liveSession===undefined)return undefined;
+    const refresh=++liveRefreshGeneration;
+    const next=await api.liveSession(detail.session.id);
+    if(next!==undefined&&next.session.id===detail.session.id&&activeLiveSessionIsCurrent(detail,generation)&&refresh===liveRefreshGeneration){
+      activeLiveDetail=next;
+      controller.setMatchMode(next?.match===undefined?undefined:next.match.pausedAt===null?"live":"paused");
+    }
+    return next;
+  }
+  async function submitLiveProposal():Promise<void>{
+    const detail=liveDetail;const generation=loadGeneration;const move=liveProposalMove;
+    if(detail===undefined||api.proposeMove===undefined||!liveMoveChoices.some((choice)=>choice.uci===move))return;
+    await api.proposeMove(detail.session.id,detail.activeNodeId,move);
+    await refreshCurrentLiveSession(detail,generation);
+    if(liveSessionIsCurrent(detail,generation)&&liveProposalMove===move)liveProposalMove="";
+  }
   async function updateLiveMember(handle:string,operation:{readonly op:"grant";readonly role:"participant"|"spectator"}|{readonly op:"revoke"}):Promise<void>{
-    if(!liveDetail||liveMemberBusy)return;
-    const writer=liveWriterId(liveDetail.session.runId);
+    const detail=liveDetail;const generation=loadGeneration;
+    if(detail===undefined||liveMemberBusy)return;
+    const writer=liveWriterId(detail.session.runId);
     if(writer===undefined)return;
     liveMemberBusy=true;
     liveMemberError=undefined;
     try{
       if(api.updateGrants===undefined)throw new Error("Session access controls are unavailable.");
-      await api.updateGrants(liveDetail.session.runId,operation.op==="grant"?{op:"grant",handle,role:operation.role}:{op:"revoke",handle},writer);
-      liveDetail=await api.liveSession?.(liveDetail.session.id);
-      if(handle===liveMemberHandle)liveMemberHandle="";
-    }catch(error){liveMemberError=error instanceof Error?error.message:String(error);}
-    finally{liveMemberBusy=false;}
+      await api.updateGrants(detail.session.runId,operation.op==="grant"?{op:"grant",handle,role:operation.role}:{op:"revoke",handle},writer);
+      await refreshCurrentLiveSession(detail,generation);
+      if(liveSessionIsCurrent(detail,generation)&&handle===liveMemberHandle)liveMemberHandle="";
+    }catch(error){if(liveSessionIsCurrent(detail,generation))liveMemberError=error instanceof Error?error.message:String(error);}
+    finally{if(liveSessionIsCurrent(detail,generation))liveMemberBusy=false;}
   }
   async function resolveLiveProposal(proposalId:string,op:"apply"|"decline"):Promise<void>{
-    if(!liveDetail)return;
+    const detail=liveDetail;const generation=loadGeneration;
+    if(detail===undefined)return;
     liveProposalError=undefined;
     try{
       if(api.resolveProposal===undefined)throw new Error("Proposal resolution is unavailable.");
-      const writer=WriterSession.claimFor(liveDetail.session.runId,storage);
+      const writer=WriterSession.claimFor(detail.session.runId,storage);
       if(op==="apply"){
         if(api.claimLease===undefined)throw new Error("Board possession is unavailable.");
-        await api.claimLease(liveDetail.session.runId,writer.writerId);
+        await api.claimLease(detail.session.runId,writer.writerId);
       }
-      await api.resolveProposal(liveDetail.session.id,proposalId,op,writer.writerId);
-      liveDetail=await api.liveSession?.(liveDetail.session.id);
-    }catch(error){liveProposalError=error instanceof Error?error.message:String(error);}
+      if(!liveSessionIsCurrent(detail,generation))return;
+      await api.resolveProposal(detail.session.id,proposalId,op,writer.writerId);
+      await refreshCurrentLiveSession(detail,generation);
+    }catch(error){if(liveSessionIsCurrent(detail,generation))liveProposalError=error instanceof Error?error.message:String(error);}
   }
-  async function offerLiveBoard():Promise<void>{if(!liveDetail||!liveOfferHandle)return;const writer=liveWriterId(liveDetail.session.runId);if(!writer)return;await api.boardControl?.(liveDetail.session.id,writer,"offer",liveOfferHandle);liveDetail=await api.liveSession?.(liveDetail.session.id);}
-  async function advanceLiveRotation():Promise<void>{if(!liveDetail)return;const writer=liveWriterId(liveDetail.session.runId);if(!writer)return;await api.boardControl?.(liveDetail.session.id,writer,"advance");liveDetail=await api.liveSession?.(liveDetail.session.id);}
+  async function offerLiveBoard():Promise<void>{const detail=liveDetail;const generation=loadGeneration;const handle=liveOfferHandle;if(detail===undefined||!handle||api.boardControl===undefined)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;await api.boardControl(detail.session.id,writer,"offer",handle);await refreshCurrentLiveSession(detail,generation);}
+  async function advanceLiveRotation():Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||api.boardControl===undefined)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;await api.boardControl(detail.session.id,writer,"advance");await refreshCurrentLiveSession(detail,generation);}
   async function confirmLiveReclaim():Promise<void>{
-    if(!liveDetail||liveReclaimBusy)return;
+    const detail=liveDetail;const generation=loadGeneration;
+    if(detail===undefined||liveReclaimBusy)return;
     liveReclaimBusy=true;
     liveReclaimError=undefined;
     try{
       if(api.boardControl===undefined)throw new Error("Board possession is unavailable.");
-      const writer=WriterSession.claimFor(liveDetail.session.runId,storage);
-      await api.boardControl(liveDetail.session.id,writer.writerId,"reclaim");
-      [liveDetail,liveJournal]=await Promise.all([api.liveSession?.(liveDetail.session.id),api.sessionJournal?.(liveDetail.session.id).then((page)=>page.entries)??Promise.resolve([])]);
-      liveReclaimIntent=false;
-    }catch(error){liveReclaimError=error instanceof Error?error.message:String(error);}
-    finally{liveReclaimBusy=false;}
+      const writer=WriterSession.claimFor(detail.session.runId,storage);
+      await api.boardControl(detail.session.id,writer.writerId,"reclaim");
+      if(!liveSessionIsCurrent(detail,generation))return;
+      const refresh=++liveRefreshGeneration;
+      const [nextDetail,nextJournal]=await Promise.all([api.liveSession?.(detail.session.id),api.sessionJournal?.(detail.session.id).then((page)=>page.entries)??Promise.resolve([])]);
+      if(nextDetail!==undefined&&nextDetail.session.id===detail.session.id&&liveSessionIsCurrent(detail,generation)&&refresh===liveRefreshGeneration){liveDetail=nextDetail;liveJournal=nextJournal;}
+      if(liveSessionIsCurrent(detail,generation))liveReclaimIntent=false;
+    }catch(error){if(liveSessionIsCurrent(detail,generation))liveReclaimError=error instanceof Error?error.message:String(error);}
+    finally{if(liveSessionIsCurrent(detail,generation))liveReclaimBusy=false;}
   }
   function setLiveVoteMove(index:number,moveUci:string):void{const previous=liveVoteOptions[index]!;const previousDefault=liveMoveChoices.find((choice)=>choice.uci===previous.moveUci)?.san??previous.moveUci;const nextDefault=liveMoveChoices.find((choice)=>choice.uci===moveUci)?.san??"";liveVoteOptions=liveVoteOptions.map((option,candidate)=>candidate===index?{moveUci,label:previous.label===""||previous.label===previousDefault?nextDefault:previous.label}:option);}
   function setLiveVoteLabel(index:number,label:string):void{liveVoteOptions=liveVoteOptions.map((option,candidate)=>candidate===index?{...option,label}:option);}
   function liveVoteReady():boolean{const moves=liveVoteOptions.map((option)=>option.moveUci);return liveVoteOptions.length>=MIN_LIVE_VOTE_OPTIONS&&liveVoteOptions.length<=MAX_LIVE_VOTE_OPTIONS&&new Set(moves).size===moves.length&&liveVoteOptions.every((option)=>liveMoveChoices.some((choice)=>choice.uci===option.moveUci)&&option.label.trim().length>0)&&liveVotePrompt.trim().length>0&&liveVoteDuration>=MIN_LIVE_VOTE_SECONDS&&liveVoteDuration<=MAX_LIVE_VOTE_SECONDS;}
-  async function openLiveVote():Promise<void>{if(!liveDetail||!liveVoteReady())return;await api.openVote?.(liveDetail.session.id,{nodeId:liveDetail.activeNodeId,prompt:liveVotePrompt,options:liveVoteOptions,durationSeconds:liveVoteDuration});liveDetail=await api.liveSession?.(liveDetail.session.id);}
+  async function openLiveVote():Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||!liveVoteReady()||api.openVote===undefined)return;const input={nodeId:detail.activeNodeId,prompt:liveVotePrompt,options:liveVoteOptions,durationSeconds:liveVoteDuration};await api.openVote(detail.session.id,input);await refreshCurrentLiveSession(detail,generation);}
   async function castLiveVote(choiceUci:string):Promise<void>{
     const detail=liveDetail;
+    const generation=loadGeneration;
     const vote=detail?.vote;
     if(detail===undefined||vote===undefined||vote.window.state!=="open"||liveVoteBusyChoice!==undefined)return;
     liveVoteBusyChoice=choiceUci;
@@ -1406,14 +1450,17 @@
     try{
       if(api.castVote===undefined)throw new Error("Voting is unavailable.");
       const tally=await api.castVote(detail.session.id,vote.window.id,choiceUci);
-      liveDetail={...detail,vote:tally};
+      if(!liveSessionIsCurrent(detail,generation))return;
+      ++liveRefreshGeneration;
+      liveDetail={...liveDetail!,vote:tally};
       const option=tally.window.options.find((candidate)=>candidate.moveUci===choiceUci);
       liveVoteStatus=`Vote recorded for ${option?.label??choiceUci}. You can change it while the vote is open.`;
-    }catch(error){liveVoteError=error instanceof Error?error.message:String(error);}
-    finally{liveVoteBusyChoice=undefined;}
+    }catch(error){if(liveSessionIsCurrent(detail,generation))liveVoteError=error instanceof Error?error.message:String(error);}
+    finally{if(liveSessionIsCurrent(detail,generation))liveVoteBusyChoice=undefined;}
   }
   async function closeLiveVote():Promise<void>{
     const detail=liveDetail;
+    const generation=loadGeneration;
     const vote=detail?.vote;
     if(detail===undefined||vote===undefined||vote.window.state!=="open"||liveVoteCloseBusy)return;
     liveVoteCloseBusy=true;
@@ -1422,36 +1469,40 @@
     try{
       if(api.closeVote===undefined)throw new Error("Vote closing is unavailable.");
       const tally=await api.closeVote(detail.session.id,vote.window.id,liveVoteAppliedMove||undefined);
-      liveDetail={...detail,vote:tally};
+      if(!liveSessionIsCurrent(detail,generation))return;
+      ++liveRefreshGeneration;
+      liveDetail={...liveDetail!,vote:tally};
       const applied=tally.window.options.find((option)=>option.moveUci===tally.window.appliedOptionUci);
       liveVoteStatus=applied===undefined?"Vote closed. No move was recorded as applied.":`Vote closed. Recorded ${applied.label} as applied; no move was played.`;
-    }catch(error){liveVoteError=error instanceof Error?error.message:String(error);}
-    finally{liveVoteCloseBusy=false;}
+    }catch(error){if(liveSessionIsCurrent(detail,generation))liveVoteError=error instanceof Error?error.message:String(error);}
+    finally{if(liveSessionIsCurrent(detail,generation))liveVoteCloseBusy=false;}
   }
-  async function inviteLiveParticipant():Promise<void>{if(!liveDetail||(!liveInviteHandle&&!liveInviteUrl))return;await api.inviteToSession?.(liveDetail.session.id,{...(liveDetail.session.kind==="match"?{leg:liveInviteLeg}:{}),...(liveInviteHandle?{handle:liveInviteHandle}:{}),...(liveInviteUrl?{externalChallengeUrl:liveInviteUrl}:{})});liveDetail=await api.liveSession?.(liveDetail.session.id);liveInviteHandle="";liveInviteUrl="";}
-  async function importLiveArenaLeg():Promise<void>{if(!liveDetail||!liveArenaPgn)return;const writer=liveWriterId(liveDetail.session.runId);if(!writer)return;await api.importArenaLeg?.(liveDetail.session.id,liveArenaLeg,liveArenaPgn,writer);liveDetail=await api.liveSession?.(liveDetail.session.id);liveArenaPgn="";}
+  async function inviteLiveParticipant():Promise<void>{const detail=liveDetail;const generation=loadGeneration;const handle=liveInviteHandle;const url=liveInviteUrl;if(detail===undefined||(!handle&&!url)||api.inviteToSession===undefined)return;await api.inviteToSession(detail.session.id,{...(detail.session.kind==="match"?{leg:liveInviteLeg}:{}),...(handle?{handle}:{}),...(url?{externalChallengeUrl:url}:{})});await refreshCurrentLiveSession(detail,generation);if(liveSessionIsCurrent(detail,generation)&&liveInviteHandle===handle&&liveInviteUrl===url){liveInviteHandle="";liveInviteUrl="";}}
+  async function importLiveArenaLeg():Promise<void>{const detail=liveDetail;const generation=loadGeneration;const pgn=liveArenaPgn;const leg=liveArenaLeg;if(detail===undefined||!pgn||api.importArenaLeg===undefined)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;await api.importArenaLeg(detail.session.id,leg,pgn,writer);await refreshCurrentLiveSession(detail,generation);if(liveSessionIsCurrent(detail,generation)&&liveArenaPgn===pgn)liveArenaPgn="";}
   function moveAuthorHandle(learnerId:string|null):string{return liveDetail?.grants.find((grant)=>grant.learnerId===learnerId)?.handle??"former member";}
   function liveMoveLabel(moveUci:string,nodeId:string):string{return nodeId===liveDetail?.activeNodeId?liveMoveChoices.find((choice)=>choice.uci===moveUci)?.san??"Legal move":"Move from an earlier position";}
   function journalActorLabel(learnerId:string|null):string{return learnerId===null?"System":`@${moveAuthorHandle(learnerId)}`;}
-  async function operateMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{if(!liveDetail)return;let writerId:string|undefined;if(op==="resume"){const writer=WriterSession.claimFor(liveDetail.session.runId,storage);await api.claimLease?.(liveDetail.session.runId,writer.writerId);writerId=writer.writerId;}await api.matchOperation?.(liveDetail.session.id,op,writerId);liveDetail=await api.liveSession?.(liveDetail.session.id);}
+  async function operateMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||api.matchOperation===undefined)return;let writerId:string|undefined;if(op==="resume"){const writer=WriterSession.claimFor(detail.session.runId,storage);await api.claimLease?.(detail.session.runId,writer.writerId);writerId=writer.writerId;if(!liveSessionIsCurrent(detail,generation))return;}await api.matchOperation(detail.session.id,op,writerId);await refreshCurrentLiveSession(detail,generation);}
   async function operateActiveMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{
-    if(!activeLiveDetail)return;
-    const runId=activeLiveDetail.session.runId;
+    const detail=activeLiveDetail;const generation=loadGeneration;
+    if(detail===undefined||api.matchOperation===undefined)return;
+    const runId=detail.session.runId;
     if(op==="resume"&&session.runState?.access==="read_only")await controller.claimLease();
-    await api.matchOperation?.(activeLiveDetail.session.id,op,op==="resume"?liveWriterId(activeLiveDetail.session.runId):undefined);
-    activeLiveDetail=await api.liveSession?.(activeLiveDetail.session.id);
-    controller.setMatchMode(activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused");
-    if(op==="resume")await controller.resume(runId,{matchMode:"live"});
+    if(!activeLiveSessionIsCurrent(detail,generation))return;
+    await api.matchOperation(detail.session.id,op,op==="resume"?liveWriterId(runId):undefined);
+    await refreshCurrentActiveLiveSession(detail,generation);
+    if(op==="resume"&&activeLiveSessionIsCurrent(detail,generation))await controller.resume(runId,{matchMode:"live"});
   }
-  async function mintJoinLink():Promise<void>{if(!liveDetail)return;const result=await api.mintSessionLink?.(liveDetail.session.id,{matchSlot:liveJoinSlot,invitedRole:"participant",...(liveJoinHandle?{invitedHandle:liveJoinHandle}:{})});if(result)liveJoinUrl=result.url;}
+  async function mintJoinLink():Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||api.mintSessionLink===undefined)return;const handle=liveJoinHandle;const result=await api.mintSessionLink(detail.session.id,{matchSlot:liveJoinSlot,invitedRole:"participant",...(handle?{invitedHandle:handle}:{})});if(liveSessionIsCurrent(detail,generation))liveJoinUrl=result.url;}
   async function mintWatchLink():Promise<void>{
-    if(!liveDetail)return;
+    const detail=liveDetail;const generation=loadGeneration;
+    if(detail===undefined)return;
     liveWatchError=undefined;
     try{
       if(api.mintSessionLink===undefined)throw new Error("Viewer links are unavailable.");
-      const result=await api.mintSessionLink(liveDetail.session.id,{invitedRole:"spectator"});
-      liveWatchUrl=result.url;
-    }catch(error){liveWatchError=error instanceof Error?error.message:String(error);}
+      const result=await api.mintSessionLink(detail.session.id,{invitedRole:"spectator"});
+      if(liveSessionIsCurrent(detail,generation))liveWatchUrl=result.url;
+    }catch(error){if(liveSessionIsCurrent(detail,generation))liveWatchError=error instanceof Error?error.message:String(error);}
   }
 
   onMount(() => {

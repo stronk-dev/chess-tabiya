@@ -1195,6 +1195,86 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("does not publish an old live mutation into a newly opened session", async () => {
+    history.replaceState(null, "", "/live/session/session-old");
+    const voteWindow = {
+      id: "vote-old",
+      sessionId: "session-old",
+      nodeId: "node-old",
+      prompt: "Which continuation?",
+      options: [
+        { moveUci: "e2e4", label: "Claim the centre" },
+        { moveUci: "g1f3", label: "Develop first" },
+      ],
+      opensAt: "2026-09-13T12:00:00.000Z",
+      closesAt: "2026-09-13T12:01:00.000Z",
+      state: "open" as const,
+      appliedOptionUci: null,
+    };
+    const detailFor = (sessionId: string, title: string, withVote: boolean): LiveSessionDetail => ({
+      session: {
+        id: sessionId,
+        runId: `run-${sessionId}`,
+        kind: "stream",
+        title,
+        boardControl: "host_directed",
+        rotationCursor: 0,
+        createdBy: "learner-host",
+        createdAt: "2026-09-13T11:00:00.000Z",
+      },
+      role: "spectator",
+      activeNodeId: withVote ? "node-old" : "node-current",
+      activeFen: INITIAL_FEN,
+      leaseHeldBy: { learnerId: "learner-host", handle: "host" },
+      grants: [
+        { learnerId: "learner-host", handle: "host", role: "host", grantedAt: "2026-09-13T11:00:00.000Z" },
+        { learnerId: "learner-viewer", handle: "viewer", role: "spectator", grantedAt: "2026-09-13T11:01:00.000Z" },
+      ],
+      moveAuthorship: [],
+      proposals: [],
+      ...(withVote ? { vote: { window: voteWindow, tally: voteWindow.options.map((option) => ({ ...option, count: 0 })), total: 0, relayed: 0 } } : {}),
+      invitations: [],
+      legs: [],
+      marks: [],
+    });
+    const oldDetail = detailFor("session-old", "Departed session", true);
+    const currentDetail = detailFor("session-current", "Current session", false);
+    const pendingVote = deferred<NonNullable<LiveSessionDetail["vote"]>>();
+    const castVote = vi.fn(() => pendingVote.promise);
+    const liveApi: DrillClientApi = {
+      ...api(),
+      async session() { return { id: "learner-viewer", handle: "viewer", createdAt: "2026-09-13T10:00:00.000Z" }; },
+      async liveSession(sessionId) { return sessionId === "session-old" ? oldDetail : currentDetail; },
+      async sessionJournal() { return { entries: [], nextSeq: 0 }; },
+      castVote,
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: liveApi, router, storage: new MemoryStorage() } });
+    const voteButton = await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll<HTMLButtonElement>("button")]
+        .find((button) => button.textContent?.includes("Vote for Claim the centre"));
+      expect(candidate).toBeDefined();
+      return candidate!;
+    });
+    voteButton.click();
+    await vi.waitFor(() => expect(castVote).toHaveBeenCalledWith("session-old", "vote-old", "e2e4"));
+
+    router.navigate("/live/session/session-current");
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Current session"));
+    pendingVote.resolve({
+      window: voteWindow,
+      tally: voteWindow.options.map((option) => ({ ...option, count: option.moveUci === "e2e4" ? 1 : 0 })),
+      total: 1,
+      relayed: 0,
+    });
+    await tick();
+    await Promise.resolve();
+    expect(document.body.textContent).toContain("Current session");
+    expect(document.body.textContent).not.toContain("Departed session");
+    expect(document.body.textContent).not.toContain("Vote recorded for Claim the centre");
+    await unmount(component);
+  });
+
   it("makes assignment sharing an identified, bounded consent step", async () => {
     history.replaceState(null, "", "/learn");
     const assignment: AssignedPack = {

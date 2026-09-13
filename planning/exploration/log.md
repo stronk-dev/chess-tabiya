@@ -19738,3 +19738,27 @@ copy. Crossed-route and post-unmount falsifiers pass. Sequential canonical verif
 `make verify-software` is green across 188 files / 1,226 tests plus type, performance, schema,
 manifest and production-build checks; `make test-browser` passes all 64 required journeys with one
 explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Live mutations retain their initiating session ([[D3225]])
+
+The Live action family repeatedly read `liveDetail` or `activeLiveDetail` after awaiting a mutation,
+so navigation or polling could make an operation against one session refresh, clear or overwrite a
+different one. Session creation, proposal, grant, board control, reclaim, vote, invitation, arena
+and match operations now retain immutable session/run/node/vote/form subjects and route generation.
+Post-mutation detail and journal reads share the polling sequence, missing or wrong-subject reads
+retain the last good projection, and vote tallies merge into the newest same-session snapshot. A
+held vote from one session resolving after another opens is inert. Sequential canonical
+verification passes: `make verify-software` is green across 188 files / 1,227 tests plus type,
+performance, schema, manifest and production-build checks; `make test-browser` passes all 64
+required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Opening lookup performance excludes runner suspension ([[D3226]])
+
+The required opening microbenchmark still used wall time for 100-call batches. Identical bytes
+passed and then reported 55–70 µs while the host was visibly descheduled; in the same interval the
+three-minute browser suite took 29 minutes and unrelated pointer/navigation operations timed out.
+The original 50 µs p95 production-work budget remains. Batches now use Node process CPU time, which
+retains catalogue work and GC but excludes intervals when the process cannot execute. Browser
+arrival and perceived-operation gates continue to own wall latency. Three consecutive canonical
+`make test-performance` runs pass, followed by green `make verify-software` and all 64 required
+browser journeys.

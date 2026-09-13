@@ -62,6 +62,14 @@ the screen's token, clipboard, status and error completion. A successful
 create or revoke remains successful if only the secondary link-list refresh
 is unavailable.
 
+Live mutations use immutable subjects as well. Session creation, proposals,
+access grants, board handoff/reclaim, votes, invitations, arena imports and
+match operations capture the exact session, run, node or vote plus submitted
+form values before awaiting. Their detail/journal refreshes join the polling
+sequence and publish only to the same route and session. Vote responses merge
+into the newest same-session projection, so they cannot restore stale grants,
+marks or match state.
+
 The shell top bar keeps the primary routes and current run/access context visible on ordinary
 application routes. A live `/play/run/:runId` is a focused full-viewport composition and replaces
 that global chrome with its own fixed run topbar; its Tabiya control exits back to Play, where the
