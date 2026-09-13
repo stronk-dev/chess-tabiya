@@ -19884,3 +19884,15 @@ Single-flight, bounded-error and malformed-response falsifiers pass. Sequential 
 verification passes: `make verify-software` is green across 193 files / 1,262 tests plus type,
 performance, schema, manifest and production-build checks; `make test-browser` passes all 64
 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Run distillation retains source and destination ([[D3236]])
+
+The completed-run form previously accepted programmatic duplicate submissions, rendered provider
+diagnostics, trusted any returned draft and navigated after its source run was left. It now captures
+the exact run, branch, title, requested pack and route generation; exposes one pending action;
+validates both draft-record and document identity; preserves retry input behind bounded copy; and
+makes departed settlement inert. Duplicate, failure/retry, crossed-response and departed-route
+falsifiers pass. Sequential canonical verification passes: `make verify-software` is green across
+194 files / 1,268 tests plus type, performance, schema, manifest and production-build checks;
+`make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
+measurement skipped.

@@ -26531,6 +26531,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/auth-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3236",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:17e7c5eeee25052892fa076e2baaac47304c8a780ff29879843336852138493d",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/distill-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

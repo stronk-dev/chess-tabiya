@@ -15,6 +15,7 @@
   import { packPhaseCopy } from "./lib/pack-catalog.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
+  import { validDistilledDraft } from "./lib/distill-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
@@ -189,6 +190,7 @@
   let distillDraftRunId: string | undefined = $state();
   let distillDraftBusy = $state(false);
   let distillDraftError: string | undefined = $state();
+  let distillGeneration = 0;
   let liveSessions: readonly LiveSessionSummary[] = $state([]);
   let classrooms: readonly ClassroomSummary[] = $state([]);
   let classroomDetail: ClassroomDetail | undefined = $state();
@@ -1209,21 +1211,32 @@
   function recommendationPacks(item:ProgressRecommendation):readonly PackSummary[]{return item.kind==="shape_encounter"?item.packIds.flatMap((packId)=>{const pack=packs.find((candidate)=>candidate.id===packId);return pack===undefined?[]:[pack];}):[];}
   async function distillActiveRun(title: string): Promise<void> {
     const run = session.runState?.run;
-    if (run === undefined || distillDraftRunId !== run.id) return;
+    if (distillDraftBusy || run === undefined || distillDraftRunId !== run.id) return;
+    const action = ++distillGeneration;
+    const generation = loadGeneration;
+    const runId = run.id;
+    const branchId = run.activeCursor.branchId;
+    const packId = `distilled-${runId}`;
     distillDraftError = undefined;
     distillDraftBusy = true;
     try {
       if (api.distillRun === undefined) throw new Error("Session distillation is unavailable.");
-      const result = await api.distillRun(run.id, { packId: `distilled-${run.id}`, title, branchId: run.activeCursor.branchId });
+      const result = await api.distillRun(runId, { packId, title, branchId });
+      if (!appMounted || action !== distillGeneration || generation !== loadGeneration
+        || route.name !== "run" || route.runId !== runId || distillDraftRunId !== runId) return;
+      if (!validDistilledDraft(result, packId)) throw new Error("Invalid distillation response");
       drafts = [result.draft, ...drafts.filter((item) => item.id !== result.draft.id)];
       selectedDraftId = result.draft.id;
       studioJson = JSON.stringify(result.draft.document, null, 2);
       distillDraftRunId = undefined;
       navigate("/create");
-    } catch (error) {
-      distillDraftError = error instanceof Error ? error.message : String(error);
+    } catch {
+      if (appMounted && action === distillGeneration && generation === loadGeneration
+        && route.name === "run" && route.runId === runId && distillDraftRunId === runId) {
+        distillDraftError = "The draft could not be created. Your completed run is unchanged; try again.";
+      }
     } finally {
-      distillDraftBusy = false;
+      if (appMounted && action === distillGeneration) distillDraftBusy = false;
     }
   }
 
@@ -1905,6 +1918,7 @@
   onDestroy(() => {
     appMounted = false;
     authGeneration += 1;
+    distillGeneration += 1;
     themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();

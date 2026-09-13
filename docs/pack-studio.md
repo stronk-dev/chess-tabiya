@@ -140,6 +140,12 @@ navigates to a draft that was not created.
 The distillation emitter validates the completed document before returning it
 and refuses `EMITTED_PACK_INVALID`, matching every other pack emitter.
 
+The completed-run client action retains the exact source run, active branch, entered title,
+requested pack id and initiating route. It is single-flight, leaves the title available after a
+bounded failure, and accepts only a draft-state response whose record and document both identify
+the requested pack. A valid server-side completion after the learner leaves the source run remains
+saved, but cannot alter the local Studio projection or navigate away from the learner's new route.
+
 ## Publication posture introduced in pack format 0.8
 
 Format 0.8 narrowed `reviewStatus` to `schema_example | draft | published` and removed the

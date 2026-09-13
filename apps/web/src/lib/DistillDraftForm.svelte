@@ -10,13 +10,14 @@
   let title = $state("");
 </script>
 
-<form aria-label="Name distilled draft" onsubmit={(event) => { event.preventDefault(); void onSubmit(title.trim()); }}>
+<form aria-label="Name distilled draft" aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onSubmit(title.trim()); }}>
   <label for="distilled-draft-title">Draft title</label>
-  <input id="distilled-draft-title" required maxlength="120" bind:value={title} placeholder="What does this rehearsal teach?" />
+  <input id="distilled-draft-title" required maxlength="120" disabled={busy} bind:value={title} placeholder="What does this rehearsal teach?" />
   <div class="actions">
-    <button type="submit" disabled={busy || title.trim().length === 0}>{busy ? "Creating…" : "Create blocked draft"}</button>
-    <button type="button" disabled={busy} onclick={onCancel}>Cancel</button>
+    <button type="submit" disabled={busy || title.trim().length === 0} aria-describedby={busy ? "distill-submit-busy" : title.trim().length === 0 ? "distill-title-required" : undefined}>{busy ? "Creating…" : "Create blocked draft"}</button>
+    <button type="button" disabled={busy} aria-describedby={busy ? "distill-submit-busy" : undefined} onclick={onCancel}>Cancel</button>
   </div>
+  {#if busy}<p id="distill-submit-busy" class="visually-hidden" role="status">Creating this draft from the retained run.</p>{:else if title.trim().length === 0}<p id="distill-title-required" class="visually-hidden">Enter a title before creating the draft.</p>{/if}
   {#if error}<p role="alert">{error}</p>{/if}
 </form>
 

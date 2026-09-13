@@ -889,7 +889,7 @@ describe("application shell", () => {
     await unmount(component);
   });
 
-  it("sends the author's title when distilling a completed run", async () => {
+  it("retains one distillation request and ignores its settlement after leaving the run", async () => {
     const terminalRun = commitMove(createRun({
       id: "distill-run",
       session: {
@@ -909,12 +909,16 @@ describe("application shell", () => {
     const draft: PackDraft = {
       id: "distilled-draft",
       packId: "distilled-distill-run",
-      document: pack,
+      document: { ...pack, id: "distilled-distill-run" },
       digest,
       state: "draft",
       validation: { valid: false, issues: [] },
     };
-    const distillRun = vi.fn(async () => ({ draft, proposals: [], dropped: [] }));
+    const first = deferred<{ draft: PackDraft; proposals: readonly Record<string, unknown>[]; dropped: readonly string[] }>();
+    const second = deferred<{ draft: PackDraft; proposals: readonly Record<string, unknown>[]; dropped: readonly string[] }>();
+    const distillRun = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockImplementationOnce(() => second.promise);
     const base = api();
     const distillApi: DrillClientApi = {
       ...base,
@@ -945,9 +949,10 @@ describe("application shell", () => {
       async packDrafts() { return []; },
     };
     history.replaceState(null, "", "/play/run/distill-run");
+    const router = new HistoryRouter(window);
     const component = mount(App, {
       target: target(),
-      props: { api: distillApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+      props: { api: distillApi, router, storage: new MemoryStorage() },
     });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("Distill to draft"));
@@ -959,13 +964,31 @@ describe("application shell", () => {
     document.querySelector<HTMLFormElement>("form[aria-label='Name distilled draft']")!.dispatchEvent(
       new SubmitEvent("submit", { bubbles: true, cancelable: true }),
     );
+    document.querySelector<HTMLFormElement>("form[aria-label='Name distilled draft']")!.dispatchEvent(
+      new SubmitEvent("submit", { bubbles: true, cancelable: true }),
+    );
 
     await vi.waitFor(() => expect(distillRun).toHaveBeenCalledWith("distill-run", {
       packId: "distilled-distill-run",
       title: "My mating-net branches",
       branchId: terminalRun.activeCursor.branchId,
     }));
-    await vi.waitFor(() => expect(location.pathname).toBe("/create"));
+    expect(distillRun).toHaveBeenCalledTimes(1);
+    first.reject(new Error("private distillation worker trace"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The draft could not be created."));
+    expect(document.body.textContent).not.toContain("private distillation worker trace");
+    expect(input.value).toBe("  My mating-net branches  ");
+
+    document.querySelector<HTMLFormElement>("form[aria-label='Name distilled draft']")!.dispatchEvent(
+      new SubmitEvent("submit", { bubbles: true, cancelable: true }),
+    );
+    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledTimes(2));
+    router.navigate("/review");
+    await vi.waitFor(() => expect(location.pathname).toBe("/review"));
+    second.resolve({ draft, proposals: [], dropped: [] });
+    await tick();
+    await Promise.resolve();
+    expect(location.pathname).toBe("/review");
     await unmount(component);
   });
 
