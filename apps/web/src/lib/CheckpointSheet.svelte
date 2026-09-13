@@ -34,6 +34,8 @@
     shapes?: readonly ShapeEntryView[];
     continuing?: boolean;
     continueError?: string | undefined;
+    comparing?: boolean;
+    compareError?: string | undefined;
   }
 
   let {
@@ -57,6 +59,8 @@
     shapes = [],
     continuing = false,
     continueError,
+    comparing = false,
+    compareError,
   }: Props = $props();
   let heading: HTMLHeadingElement;
   let candidates = $state("");
@@ -187,28 +191,30 @@
     {/if}
     {#if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
     <div class="actions">
-      <button class="primary" type="button" disabled={continuing} aria-describedby={continuing ? "checkpoint-continue-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
-      <button type="button" disabled={continuing} aria-describedby={continuing ? "checkpoint-continue-busy" : undefined} onclick={onRewind}>Rewind here</button>
+      <button class="primary" type="button" disabled={continuing || comparing} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
+      <button type="button" disabled={continuing || comparing} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : undefined} onclick={onRewind}>Rewind here</button>
       {#if recognizedActions.compare_branches}
         <HonestControl
-          disabled={!canCompare || continuing}
+          disabled={!canCompare || continuing || comparing}
           reasonId="checkpoint-compare-unavailable"
-          reason={continuing ? "Wait for this continuation to finish." : "Reach this checkpoint on at least two branches before comparing."}
+          reason={continuing ? "Wait for this continuation to finish." : comparing ? "Wait for this comparison to finish." : "Reach this checkpoint on at least two branches before comparing."}
         >
           {#snippet children(describedBy)}
             <button
               type="button"
-              disabled={!canCompare || continuing}
-              aria-describedby={describedBy}
+              disabled={!canCompare || continuing || comparing}
+              aria-describedby={comparing ? "checkpoint-compare-busy" : compareError !== undefined ? "checkpoint-compare-error" : describedBy}
               onclick={onCompare}
-            >Compare</button>
+            >{comparing ? "Opening comparison…" : compareError !== undefined ? "Try comparison again" : "Compare"}</button>
           {/snippet}
         </HonestControl>
       {/if}
-      <button type="button" onclick={onStop}>Stop session</button>
+      <button type="button" disabled={continuing || comparing} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : undefined} onclick={onStop}>Stop session</button>
     </div>
     {#if continuing}<p id="checkpoint-continue-busy" role="status">Continuing from this checkpoint.</p>{/if}
+    {#if comparing}<p id="checkpoint-compare-busy" role="status">Preparing the selected branch comparison. This checkpoint remains open.</p>{/if}
     {#if continueError}<p role="alert">{continueError}</p>{/if}
+    {#if compareError}<p id="checkpoint-compare-error" role="alert">{compareError}</p>{/if}
     {/if}
   </div>
 </div>

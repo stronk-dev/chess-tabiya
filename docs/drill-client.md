@@ -422,6 +422,10 @@ duplicate submission. A known failure leaves the exact preview mounted, says tha
 unchanged, and turns the selected action into a retry; only success dismisses the preview.
 
 The comparison screen consumes the server/runtime `BranchComparison` payload.
+Opening it is single-flight and bound to the exact run and branch leaves selected. The client
+validates that every returned column names the requested leaf and discards a crossed population.
+A checkpoint remains mounted until a valid comparison exists; rejection leaves its actions intact
+and presents the same bounded retry lifecycle used by the ordinary run and branch-group entries.
 It leads with one fork board carrying every recorded candidate arrow, then lists
 the move, actor and the learner's recorded intent for each attempt. Its synchronized
 stepper positions the deeper per-branch boards on the aligned pair; an absent

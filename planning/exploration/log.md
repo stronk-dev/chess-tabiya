@@ -19595,3 +19595,17 @@ gates ran sequentially because the production build and browser server share `di
 verify-software` passes 188 files / 1,207 tests plus type, performance, schema, manifest and
 production-build checks, followed by `make test-browser` with all 64 required journeys green and one
 explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Compare retains its checkpoint and retry surfaces ([[D3214]])
+
+The comparison controller previously cleared the active checkpoint before evidence polling or the
+comparison request succeeded. Rejection therefore removed the modal and the actions needed to try
+again. Compare now returns explicit success/failure, retains the checkpoint until a validated
+comparison exists, and admits only an exact response over the requested run and branch leaves.
+Missing, duplicate, changed or mismatched branch populations fail closed. Checkpoint, ordinary run
+and branch-group entries share one single-flight request lifecycle; the visible source exposes
+pending and bounded retry copy without provider diagnostics. Controller rejection and malformed
+response fixtures plus mounted checkpoint/run-action failure and duplicate tests bind the repair.
+Sequential canonical verification passes: `make verify-software` is green across 188 files / 1,210
+tests, type, performance, schema, manifest and production build; `make test-browser` passes all 64
+required journeys with one explicitly optional Maia latency measurement skipped.

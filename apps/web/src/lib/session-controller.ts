@@ -1,6 +1,7 @@
 import type { DrillPackDefinition, ShapeReference } from "@chess-tabiya/schema/drill-pack";
 import {
   historyFrom,
+  branchPath,
   groupsFromEvents,
   projectRun,
   trajectoryPolicyAt,
@@ -600,8 +601,15 @@ export class DrillSessionController {
     }
   }
 
-  async compare(branchIds: readonly string[]): Promise<void> {
-    this.#patch({ busy: true, error: undefined, checkpoint: undefined });
+  async compare(branchIds: readonly string[]): Promise<boolean> {
+    if (this.#state.busy || branchIds.length < 2 || new Set(branchIds).size !== branchIds.length) return false;
+    const source = this.#requiredRun().run;
+    const requestedLeaves = branchIds.map((branchId) => ({
+      branchId,
+      leafNodeId: branchPath(source, branchId).at(-1)?.id,
+    }));
+    if (requestedLeaves.some((entry) => entry.leafNodeId === undefined)) return false;
+    this.#patch({ busy: true, error: undefined });
     try {
       const store = this.#requiredStore();
       // Comparison is a committed/review surface. Drain any ready evidence before the
@@ -609,14 +617,32 @@ export class DrillSessionController {
       // empty strips while the normal evidence poll attaches the same results one tick later.
       await store.pollEvidence();
       const run = store.snapshot.run;
+      const stillCurrent = run.id === source.id && requestedLeaves.every((entry) =>
+        branchPath(run, entry.branchId).at(-1)?.id === entry.leafNodeId,
+      );
+      if (!stillCurrent) throw new Error("Comparison source changed");
       const comparison = await this.#api.compare(run.id, branchIds);
+      if (
+        comparison.columns.length !== requestedLeaves.length ||
+        requestedLeaves.some((entry) => !comparison.columns.some((column) =>
+          column.branchId === entry.branchId && column.leafNodeId === entry.leafNodeId,
+        ))
+      ) throw new Error("Comparison response did not match its request");
+      const current = this.#state.runState?.run;
+      if (
+        current?.id !== source.id ||
+        !requestedLeaves.every((entry) => branchPath(current, entry.branchId).at(-1)?.id === entry.leafNodeId)
+      ) throw new Error("Comparison source changed");
       this.#patch({
         busy: false,
+        checkpoint: undefined,
         comparison,
         comparisonBranchIds: Object.freeze([...branchIds]),
       });
+      return true;
     } catch (error) {
       this.#fail(error);
+      return false;
     }
   }
 

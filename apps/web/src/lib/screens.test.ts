@@ -821,6 +821,75 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("keeps checkpoint comparison single-flight and retryable inside the checkpoint", async () => {
+    const run = branchedRun();
+    const checkpoint = latestCheckpoint(pack, run)!;
+    const first = deferred<boolean>();
+    const onCompare = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      checkpoint,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare,
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    const sheet = document.querySelector<HTMLElement>('[aria-labelledby="checkpoint-title"]')!;
+    const compareButton = [...sheet.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Compare")!;
+
+    compareButton.click();
+    compareButton.click();
+    await tick();
+    expect(onCompare).toHaveBeenCalledOnce();
+    expect([...sheet.querySelectorAll<HTMLButtonElement>(".actions button")].every((button) => button.disabled)).toBe(true);
+    expect(sheet.querySelector("#checkpoint-compare-busy")?.textContent).toContain("checkpoint remains open");
+
+    first.resolve(false);
+    await vi.waitFor(() => expect(sheet.querySelector("#checkpoint-compare-error")?.textContent).toContain("branches are unchanged"));
+    expect(compareButton.disabled).toBe(false);
+    expect(compareButton.textContent).toContain("Try comparison again");
+    expect(document.querySelector('[aria-labelledby="checkpoint-title"]')).toBe(sheet);
+
+    compareButton.click();
+    await vi.waitFor(() => expect(onCompare).toHaveBeenCalledTimes(2));
+    await unmount(component);
+  });
+
+  it("keeps run-action comparison single-flight and retryable at its invoker", async () => {
+    const run = branchedRun();
+    const first = deferred<boolean>();
+    const onCompare = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare,
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    const compareButton = document.querySelector<HTMLButtonElement>('button[aria-label="Compare branches"]')!;
+
+    compareButton.click();
+    compareButton.click();
+    await tick();
+    expect(onCompare).toHaveBeenCalledOnce();
+    expect(compareButton.disabled).toBe(true);
+    expect(document.querySelector("#drill-compare-opening")?.textContent).toContain("Preparing the selected branch comparison");
+
+    first.resolve(false);
+    await vi.waitFor(() => expect(document.querySelector("#drill-compare-error")?.textContent).toContain("branches are unchanged"));
+    expect(compareButton.disabled).toBe(false);
+    expect(compareButton.textContent).toContain("Try comparison again");
+
+    compareButton.click();
+    await vi.waitFor(() => expect(onCompare).toHaveBeenCalledTimes(2));
+    await unmount(component);
+  });
+
   it("keeps pivotal markers off by default, passive when enabled, and removable again", async () => {
     const initial = createRun({ id: "pivotal-ui", session: { kind: "position", start: { fen: "r3k2r/ppppqppp/2nbbn2/8/8/2NBBN2/PPPPQPPP/R3K2R w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
     const child = { ...initial.nodes[0]!, id: "pivotal-ui:node:1", parentId: initial.nodes[0]!.id, fen: "4k2r/8/8/8/8/8/RP6/4K3 b - - 0 1", transposeKey: "4k2r/8/8/8/8/8/RP6/4K3 b - -", moveUci: "a2a3", moveSan: "a3", ply: 1, actor: "user" as const };
@@ -2135,7 +2204,11 @@ describe("Layer 3 screens", () => {
     const onRewind = vi.fn();
     const onFork = vi.fn();
     const onSwitchBranch = vi.fn();
-    const onCompare = vi.fn();
+    const firstCompare = deferred<boolean>();
+    const secondCompare = deferred<boolean>();
+    const onCompare = vi.fn()
+      .mockImplementationOnce(() => firstCompare.promise)
+      .mockImplementationOnce(() => secondCompare.promise);
     const onCloseCompare = vi.fn();
     const onExport = vi.fn();
     const component = mount(DrillScreen, {
@@ -2196,6 +2269,10 @@ describe("Layer 3 screens", () => {
       run.activeCursor.branchId,
       run.branches[0]!.id,
     ]);
+    firstCompare.resolve(true);
+    await firstCompare.promise;
+    await Promise.resolve();
+    await tick();
     const compareCalls = onCompare.mock.calls.length;
     const contenteditable = document.createElement("div");
     contenteditable.contentEditable = "true";
@@ -2217,6 +2294,7 @@ describe("Layer 3 screens", () => {
     Object.defineProperty(compareFromButton, "composedPath", { value: () => [ordinaryButton, main] });
     expect(regionKeyboard?.(compareFromButton)).toBe(true);
     expect(onCompare).toHaveBeenCalledTimes(compareCalls + 1);
+    secondCompare.resolve(true);
 
     const timelineButton = document.querySelector<HTMLButtonElement>(".timeline [data-timeline-node][tabindex='0']")!;
     timelineButton.focus();

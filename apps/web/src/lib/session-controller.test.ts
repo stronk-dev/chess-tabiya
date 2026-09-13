@@ -820,6 +820,33 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.runState?.run.branches).toHaveLength(1);
   });
 
+  it("retains a checkpoint until an exact branch comparison succeeds", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    await environment.controller.fork("checkpoint branch", "compare from the same decision");
+    await environment.controller.move("c1e3");
+    const checkpoint = environment.controller.state.checkpoint!;
+    const branches = environment.controller.state.runState!.run.branches.map((branch) => branch.id);
+    const honest = await api.compare(api.requiredRun().id, branches);
+    vi.spyOn(api, "compare")
+      .mockRejectedValueOnce(new Error("private comparison provider detail"))
+      .mockResolvedValueOnce({ ...honest, columns: honest.columns.slice(0, 1) });
+
+    expect(await environment.controller.compare(branches)).toBe(false);
+    expect(environment.controller.state.checkpoint).toEqual(checkpoint);
+    expect(environment.controller.state.comparison).toBeUndefined();
+    expect(environment.controller.state.error).not.toContain("private comparison provider detail");
+
+    expect(await environment.controller.compare(branches)).toBe(false);
+    expect(environment.controller.state.checkpoint).toEqual(checkpoint);
+    expect(environment.controller.state.comparison).toBeUndefined();
+
+    expect(await environment.controller.compare(branches)).toBe(true);
+    expect(environment.controller.state.checkpoint).toBeUndefined();
+    expect(environment.controller.state.comparison?.columns.map((column) => column.branchId)).toEqual(branches);
+  });
+
   it("retains an authored-line simulation and returns explicit failure for safe retry", async () => {
     const api = new FakeApi();
     const simulationApi = Object.assign(api, {

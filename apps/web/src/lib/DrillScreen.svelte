@@ -111,7 +111,7 @@
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => boolean | void | Promise<boolean | void>;
     onSwitchBranch: (leafNodeId: string, branchId: string) => void | Promise<void>;
-    onCompare: (branchIds: readonly string[]) => void | Promise<void>;
+    onCompare: (branchIds: readonly string[]) => boolean | void | Promise<boolean | void>;
     onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
     onCloseCompare: () => void;
     onReplayResistance?: ((input: { readonly fen: string; readonly side: "white" | "black"; readonly targetElo: 1000 | 1400 | 1800 | 2200 }) => void | Promise<void>) | undefined;
@@ -297,6 +297,9 @@
   let foldedBranchIds: string[] = $state([]);
   let pinnedExpanded: string[] = $state([]);
   let compareLimitNotice: string | undefined = $state();
+  let compareBusy = $state(false);
+  let compareError: string | undefined = $state();
+  let compareRequest = 0;
   let viewportSupport: RunViewportSupport = $state({ supported: true, width: 0, height: 0, reason: null });
   let ownMarks: readonly RunMark[] = $state([]);
   let markScope: "position" | "branch" = $state("position");
@@ -1039,9 +1042,26 @@
     shapeInvoker = undefined;
   }
 
-  function openCompare(): void {
-    const ids = selectedCompareIds();
-    if (ids !== undefined) void onCompare(ids);
+  async function openCompare(requestedIds?: readonly string[]): Promise<void> {
+    if (compareBusy) return;
+    const ids = requestedIds ?? selectedCompareIds();
+    if (ids === undefined) return;
+    const population = branchClassificationIdentity();
+    const request = ++compareRequest;
+    compareBusy = true;
+    compareError = undefined;
+    try {
+      const accepted = await onCompare(ids);
+      if (accepted === false && request === compareRequest) {
+        compareError = population === branchClassificationIdentity()
+          ? "The comparison did not open. Your branches are unchanged, so you can try again."
+          : "The branches changed before comparison was ready. Review them and try again.";
+      }
+    } catch {
+      if (request === compareRequest) compareError = "The comparison did not open. Your branches are unchanged, so you can try again.";
+    } finally {
+      if (request === compareRequest) compareBusy = false;
+    }
   }
 
   function closeCompare(): void {
@@ -1412,6 +1432,7 @@
     forkRequest += 1;
     checkpointContinueRequest += 1;
     simulationRequest += 1;
+    compareRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1757,7 +1778,7 @@
             advanceMode={groupPreference(activeGroup.groupId)}
             onAdvanceMode={(mode) => setGroupPreference(activeGroup!.groupId, mode)}
             onEnter={switchRunBranch}
-            onCompare={() => onCompare(activeGroup!.members.map((member) => member.branchId))}
+            onCompare={() => openCompare(activeGroup!.members.map((member) => member.branchId))}
             onAnalyze={(nodeIds) => { void onAnalyzeMissing?.(nodeIds); }}
           />
           <button class="next-member" type="button" onclick={() => void nextGroupMember(activeGroup!)}>Next member</button>
@@ -1811,13 +1832,15 @@
             {#snippet children(describedBy)}
               <button
                 type="button"
-                disabled={cards.length < 2}
+                disabled={cards.length < 2 || compareBusy}
                 aria-label="Compare branches"
-                aria-describedby={describedBy}
-                onclick={(event) => { compareInvoker = invoker(event); openCompare(); }}
-              >Compare <kbd>Alt+C</kbd></button>
+                aria-describedby={compareBusy ? "drill-compare-opening" : compareError !== undefined ? "drill-compare-error" : describedBy}
+                onclick={(event) => { compareInvoker = invoker(event); void openCompare(); }}
+              >{compareBusy ? "Opening comparison…" : compareError !== undefined ? "Try comparison again" : "Compare"} <kbd>Alt+C</kbd></button>
             {/snippet}
           </HonestControl>
+          {#if compareBusy}<span id="drill-compare-opening" class="action-state" role="status">Preparing the selected branch comparison.</span>{/if}
+          {#if compareError !== undefined}<span id="drill-compare-error" class="action-state error" role="alert">{compareError}</span>{/if}
           {#if pack !== undefined}
             <HonestControl
               disabled={!canWrite || simulationChoiceCount < 2 || onSimulate === undefined}
@@ -1901,6 +1924,8 @@
     continueError={checkpointContinueError?.eventSeq === checkpoint.eventSeq ? checkpointContinueError.text : undefined}
     onRewind={() => rewindRun({ nodeId: checkpoint.nodeId })}
     onCompare={openCompare}
+    comparing={compareBusy}
+    {compareError}
     {onStop}
   />
 {/if}
