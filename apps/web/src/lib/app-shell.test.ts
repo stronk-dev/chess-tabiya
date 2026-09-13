@@ -50,6 +50,26 @@ const run = createRun({
   createdAt: "2026-08-11T20:00:00.000Z",
 });
 
+function completedPositionRun(id: string) {
+  let completed = createRun({
+    id,
+    session: {
+      kind: "position",
+      start: { fen: INITIAL_FEN, side: "white" },
+      feedbackPolicy: "attempt_end",
+      opponentPolicy: { mode: "human_common", targetElo: 1800 },
+    },
+    sessionDigest: `sha256:${"b".repeat(64)}`,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+    seed: 23,
+    createdAt: "2026-09-13T11:30:00.000Z",
+  });
+  for (const move of ["f2f3", "e7e5", "g2g4", "d8h4"] as const) {
+    completed = commitMove(completed, move, { at: "2026-09-13T11:31:00.000Z" }).run;
+  }
+  return completed;
+}
+
 const packSummary: PackSummary = {
   id: pack.id,
   version: pack.version,
@@ -1676,6 +1696,75 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(document.body.textContent).toContain("The rated game could not be opened."));
     expect(storage.values.size).toBe(0);
     expect(window.location.pathname).toBe("/rating");
+    await unmount(component);
+  });
+
+  it("does not navigate when a valid opposite-side replay finishes after leaving its run", async () => {
+    const source = completedPositionRun("flip-source-run");
+    const derived = createRun({
+      id: "flip-derived-run",
+      session: {
+        kind: "position",
+        start: { fen: source.nodes[0]!.fen, side: "black" },
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common", targetElo: 1800 },
+      },
+      sessionDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: source.policyConfig,
+      seed: 29,
+      createdAt: "2026-09-13T11:32:00.000Z",
+    });
+    const pendingFlip = deferred<Awaited<ReturnType<NonNullable<DrillClientApi["flipRun"]>>>>();
+    const flipRun = vi.fn(() => pendingFlip.promise);
+    const storage = new MemoryStorage();
+    WriterSession.claimFor(source.id, storage, () => "writer-source");
+    const routedApi: DrillClientApi = {
+      ...api(),
+      events: async () => ({ events: source.events, nextSeq: source.events.at(-1)!.seq }),
+      graph: async () => ({
+        id: source.id,
+        viewer: {
+          role: "host",
+          mayWrite: true,
+          holdsLease: true,
+          leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
+          seatedInContest: false,
+          reviewing: false,
+          reviewRail: "not_applicable",
+        },
+        nodes: source.nodes,
+        branches: source.branches,
+        activeCursor: source.activeCursor,
+      }),
+      flipRun,
+    };
+    history.replaceState(null, "", `/play/run/${source.id}`);
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: routedApi, router, storage } });
+
+    const replay = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Replay this as Black");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    replay.click();
+    await vi.waitFor(() => expect(flipRun).toHaveBeenCalledWith(source.id, source.nodes[0]!.id));
+    router.navigate("/play");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/play"));
+    pendingFlip.resolve({
+      run: derived,
+      writerId: "writer-derived",
+      derivation: {
+        derivedRunId: derived.id,
+        sourceRunId: source.id,
+        sourceBranchId: source.nodes[0]!.branchId,
+        sourceNodeId: source.nodes[0]!.id,
+        kind: "flip_sides",
+        createdAt: "2026-09-13T11:32:00.000Z",
+      },
+    });
+    await vi.waitFor(() => expect(storage.values.get(writerStorageKey(derived.id))).toBe("writer-derived"));
+    expect(window.location.pathname).toBe("/play");
     await unmount(component);
   });
 

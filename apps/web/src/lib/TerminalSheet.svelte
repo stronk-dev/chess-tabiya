@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { modalBoundary } from "./modal-boundary.js";
 
   import type { RunOutcome } from "@chess-tabiya/runtime";
@@ -62,6 +62,10 @@
   let returnBusy = $state(false);
   let returnScheduled = $state(false);
   let returnError: string | undefined = $state();
+  let flipBusy = $state(false);
+  let flipError: string | undefined = $state();
+  let flipRequest = 0;
+  let mounted = true;
   let selectedAssignment = $derived(assignmentOffers.find((assignment) => assignment.id === selectedAssignmentId));
   onMount(() => heading?.focus());
 
@@ -78,6 +82,27 @@
       submissionBusy = false;
     }
   }
+
+  async function replayOppositeSide(): Promise<void> {
+    if (onFlip === undefined || flipBusy) return;
+    const request = ++flipRequest;
+    flipBusy = true;
+    flipError = undefined;
+    try {
+      await onFlip();
+    } catch {
+      if (mounted && request === flipRequest) {
+        flipError = "The opposite-side replay could not be opened. This completed game is unchanged; try again.";
+      }
+    } finally {
+      if (mounted && request === flipRequest) flipBusy = false;
+    }
+  }
+
+  onDestroy(() => {
+    mounted = false;
+    flipRequest += 1;
+  });
 
   async function scheduleReturn(): Promise<void> {
     if (!canScheduleReturn || onScheduleReturn === undefined || returnBusy || returnScheduled) return;
@@ -191,10 +216,12 @@
     {/if}
 
     <div class="actions" aria-label="More completed-attempt actions">
-      {#if onFlip}<button type="button" disabled={rewinding} onclick={onFlip}>Replay this as {run.start.side === "white" ? "Black" : "White"}</button>{/if}
+      {#if onFlip}<button type="button" disabled={rewinding || flipBusy} aria-describedby={flipBusy ? "terminal-flip-busy" : undefined} onclick={() => void replayOppositeSide()}>{flipBusy ? "Opening opposite-side replay…" : `Replay this as ${run.start.side === "white" ? "Black" : "White"}`}</button>{/if}
       {#if evidence.length > 0 && onInspectEvidence}<button type="button" onclick={onInspectEvidence}>Inspect analysis details <span aria-hidden="true">({evidence.length})</span></button>{/if}
       <button type="button" disabled={rewinding} onclick={onStop}>Stop session</button>
     </div>
+    {#if flipBusy}<p id="terminal-flip-busy" role="status">Creating a separate replay. The completed game stays unchanged.</p>{/if}
+    {#if flipError}<p role="alert">{flipError}</p>{/if}
   </div>
 </div>
 

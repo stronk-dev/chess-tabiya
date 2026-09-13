@@ -12,6 +12,44 @@ function target(): HTMLElement {
 }
 
 describe("terminal assignment hand-in", () => {
+  it("keeps opposite-side replay single-flight and presents a bounded retry", async () => {
+    let rejectFlip!: (reason?: unknown) => void;
+    const onFlip = vi.fn(() => new Promise<void>((_resolve, reject) => { rejectFlip = reject; }));
+    const component = mount(TerminalSheet, {
+      target: target(),
+      props: {
+        outcome: "win",
+        authoredItems: [],
+        evidence: [],
+        canRewind: true,
+        onRewind: () => undefined,
+        onStop: () => undefined,
+        run: createRun({
+          id: "terminal-flip-run",
+          packId: "flip-pack",
+          packDigest: `sha256:${"0".repeat(64)}`,
+          startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          seed: 7,
+          createdAt: "2026-09-13T11:00:00.000Z",
+          policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+        }),
+        onFlip,
+      },
+    });
+
+    const replay = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Replay this as Black")!;
+    replay.click();
+    replay.click();
+    await vi.waitFor(() => expect(onFlip).toHaveBeenCalledTimes(1));
+    expect(replay.disabled).toBe(true);
+    expect(document.body.textContent).toContain("The completed game stays unchanged.");
+    rejectFlip(new Error("private flip failure"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The opposite-side replay could not be opened."));
+    expect(document.body.textContent).not.toContain("private flip failure");
+    expect(replay.disabled).toBe(false);
+    await unmount(component);
+  });
+
   it("keeps the post-outcome offer inside the terminal ritual and confirms consent", async () => {
     const onSubmitAssignment = vi.fn(async () => undefined);
     const component = mount(TerminalSheet, {

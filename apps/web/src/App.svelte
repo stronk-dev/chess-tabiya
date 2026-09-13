@@ -82,6 +82,7 @@
   import { loadAssistance } from "./lib/assistance-preference.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
   import { importFailureCopy } from "./lib/import-presentation.js";
+  import { assertFlipResponse } from "./lib/flip-response.js";
   import {
     arenaLegState,
     classroomRoleLabel,
@@ -1086,9 +1087,19 @@
 
   async function flipRun(runId: string, nodeId: string): Promise<void> {
     if (api.flipRun === undefined) throw new Error("Opposite-side replay is unavailable");
+    const generation = loadGeneration;
+    const sourceRun = session.runState?.run;
+    const sourceNode = sourceRun?.id === runId
+      ? sourceRun.nodes.find((candidate) => candidate.id === nodeId)
+      : undefined;
+    if (sourceNode === undefined) throw new Error("Opposite-side replay source is unavailable");
+    const subject = { runId, nodeId, branchId: sourceNode.branchId };
     const result = await api.flipRun(runId, nodeId);
+    assertFlipResponse(result, subject);
     WriterSession.claimFor(result.run.id, storage, () => result.writerId);
-    navigate(routePath({ name: "run", runId: result.run.id }));
+    if (generation === loadGeneration && route.name === "run" && route.runId === runId) {
+      navigate(routePath({ name: "run", runId: result.run.id }));
+    }
   }
 
   function repertoireRouteIsCurrent(generation:number):boolean{return generation===loadGeneration;}

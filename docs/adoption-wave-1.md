@@ -104,6 +104,13 @@ loop, branch, comparison, and export machinery. A live human match may impose a
 stricter refusal on flip because a private engine-facing copy would bypass its
 mutual disclosure boundary.
 
+The terminal replay action is single-flight and keeps the completed source visible while the
+server creates its separate run. The client captures the exact source run, node, branch and route;
+validates those identities against the returned derivation and derived run before persisting its
+writer; and navigates only if that source run is still current. A failed or crossed response leaves
+the source untouched and offers bounded retry copy without provider diagnostics. Valid completion
+after departure preserves the derived run but cannot pull the learner back to it.
+
 ## Verification
 
 The implementation is covered by storage migration tests, native story and

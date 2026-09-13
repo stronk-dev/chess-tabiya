@@ -19820,3 +19820,16 @@ All failure copy is bounded and retryable. The three lifecycle falsifiers pass. 
 canonical verification passes: `make verify-software` is green across 188 files / 1,236 tests plus
 type, performance, schema, manifest and production-build checks; `make test-browser` passes all 64
 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Opposite-side replay owns its client lifecycle ([[D3231]])
+
+The server already created a flipped run and its derivation atomically, but the terminal client
+could submit twice, left rejection unhandled, trusted a returned tuple before storing its writer,
+and navigated after its source run was no longer current. Replay is now single-flight with visible
+pending and bounded retry states. The shell captures source run, node, branch and route; validates
+all four derivation identities plus the derived run; persists authority only after validation; and
+makes valid completion after departure inert. A five-way response matrix, a mounted duplicate and
+failure path, and a departed-route path all pass. Sequential canonical verification passes: `make
+verify-software` is green across 189 files / 1,243 tests plus type, performance, schema, manifest
+and production-build checks; `make test-browser` passes all 64 required journeys with one
+explicitly optional Maia latency measurement skipped.
