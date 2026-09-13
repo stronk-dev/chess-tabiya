@@ -19922,3 +19922,18 @@ bounded-failure, crossed-response, partial-success and existing happy-path falsi
 Sequential canonical verification passes: `make verify-software` is green across 195 files / 1,278
 tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
 passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Shape Studio mutations retain exact authoring state ([[D3239]])
+
+Create, save, manual probe and registration previously read mutable selection, JSON and FEN across
+awaits, admitted duplicates, trusted typed-but-unchecked responses, exposed provider diagnostics and
+could publish after Create was left. They now share one pending owner that captures the exact draft,
+digest, editor bytes, probe and route generation. Runtime guards refuse crossed draft, validation and
+publication projections; manual probing invalidates older automatic lint; and departed settlements
+cannot alter the next view. Registration saves and validates the visible bytes before publishing
+their returned digest, records successful publication locally, and reports a secondary list-refresh
+failure as stale projection rather than failed registration. Duplicate, bounded-failure,
+crossed-response, partial-success and departure falsifiers pass. Sequential canonical verification
+passes: `make verify-software` is green across 196 files / 1,293 tests plus type, performance, schema,
+manifest and production-build checks; `make test-browser` passes all 64 required journeys with one
+explicitly optional Maia latency measurement skipped.

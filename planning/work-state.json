@@ -26558,6 +26558,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/App.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3239",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8b45df661d2e2a20324abbad973c459161087b5ffcd6b185efc2f7ccfb3fb998",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/shape-draft-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

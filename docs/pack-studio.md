@@ -189,6 +189,17 @@ deletion withdraws mutable drafts while retaining published bytes and attributio
 Create, save, lint/probe, and register failures all render through one visible alert path; lint
 results replace the selected draft's displayed validation instead of leaving the saved result stale.
 
+Those four actions share one retained lifecycle in the browser. While one is pending, the draft
+selector and complete shape editor are fixed to the captured draft, JSON and probe FEN; duplicate
+submissions are ignored and settlements from a departed Create route cannot update the next view.
+Draft, validation and registered-summary responses are checked at runtime for exact shape identity
+and usable structure. A manual probe invalidates any older automatic lint generation before it can
+publish. Registration first saves the exact visible JSON through the draft's optimistic-lock digest,
+requires the returned saved document to remain validation-clean, and publishes that returned digest.
+A successful publication is recorded locally before the draft list refresh, so refresh failure is
+reported as a stale projection rather than as failed registration. Transport and provider details
+remain behind bounded author-facing retry copy.
+
 The structural expression builder edits both the shape trigger and every non-null plan success
 signature. It covers the complete schema vocabulary: all 18 position-feature leaves, nested
 all/any/not groups, mirroring, file and square quantifiers, piece occupancy, and registered plan

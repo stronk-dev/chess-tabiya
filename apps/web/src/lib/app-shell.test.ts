@@ -2504,10 +2504,12 @@ describe("application shell", () => {
 
   it("shows every rejected shape action instead of dropping the promise", async () => {
     history.replaceState(null, "", "/create");
+    let rejectSave = true;
+    let rejectProbe = false;
     const shapeDraft: ShapeDraft = {
       id: "shape-draft-one",
       shapeId: "shape-one",
-      document: { id: "shape-one" },
+      document: { id: "shape-one", version: "1.0.0" },
       digest,
       state: "draft",
       validation: { valid: true, issues: [] },
@@ -2517,23 +2519,109 @@ describe("application shell", () => {
       async packDrafts() { return []; },
       async shapeDrafts() { return [shapeDraft]; },
       async createShapeDraft() { throw new Error("create shape failed"); },
-      async updateShapeDraft() { throw new Error("save shape failed"); },
-      async lintShapeDraft() { throw new Error("lint shape failed"); },
+      async updateShapeDraft() {
+        if (rejectSave) throw new Error("save shape failed");
+        return shapeDraft;
+      },
+      async lintShapeDraft() {
+        if (rejectProbe) throw new Error("lint shape failed");
+        return shapeDraft.validation;
+      },
       async registerShapeDraft() { throw new Error("register shape failed"); },
     };
     const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("What are you starting from?"));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
-    for (const [label, message] of [
-      ["Create shape draft", "create shape failed"],
-      ["Save shape", "save shape failed"],
-      ["Lint + probe", "lint shape failed"],
-      ["Register community shape", "register shape failed"],
+    await vi.waitFor(() => expect([...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Register community shape")?.disabled).toBe(false));
+    for (const [label, message, prepare] of [
+      ["Create shape draft", "The shape draft could not be created. Check the JSON and try again.", () => {}],
+      ["Save shape", "This shape could not be saved. Your editor bytes are unchanged; try again.", () => {}],
+      ["Lint + probe", "The shape probe could not finish. Your editor bytes and FEN are unchanged; try again.", () => { rejectProbe = true; }],
+      ["Register community shape", "The shape was saved, but could not be registered. Resolve any publication blocker and try registration again.", () => { rejectSave = false; }],
     ] as const) {
+      prepare();
       [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === label)!.click();
       await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe(message));
     }
+    await unmount(component);
+  });
+
+  it("keeps Shape Studio creation single-flight and inert across a route generation", async () => {
+    history.replaceState(null, "", "/create");
+    const pending = deferred<ShapeDraft>();
+    const shapeDraft: ShapeDraft = {
+      id: "shape-draft-one",
+      shapeId: "shape-one",
+      document: { id: "shape-one", version: "1.0.0" },
+      digest,
+      state: "draft",
+      validation: { valid: true, issues: [] },
+    };
+    const createShapeDraft = vi.fn(() => pending.promise);
+    const shapeApi: DrillClientApi = {
+      ...api(),
+      async packDrafts() { return []; },
+      async shapeDrafts() { return [shapeDraft]; },
+      createShapeDraft,
+      async lintShapeDraft() { return shapeDraft.validation; },
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: shapeApi, router, storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("shape-one · draft"));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
+    const create = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Create shape draft")!;
+    create.click();
+    create.click();
+    await vi.waitFor(() => expect(createShapeDraft).toHaveBeenCalledTimes(1));
+    expect(document.querySelector<HTMLFieldSetElement>(".shape-editor-fields")?.getAttribute("aria-busy")).toBe("true");
+    expect(document.querySelector<HTMLTextAreaElement>("#shape-studio-json")?.disabled).toBe(true);
+
+    router.navigate("/review");
+    pending.resolve({ ...shapeDraft, id: "departed-shape-draft", document: { ...shapeDraft.document as Record<string, unknown>, name: "Departed mutation" } });
+    await tick();
+    router.navigate("/create");
+    await vi.waitFor(() => expect(document.querySelector("aside[aria-label='Your shape drafts'] button")).not.toBeNull());
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
+    expect(document.querySelector<HTMLTextAreaElement>("#shape-studio-json")?.value).not.toContain("Departed mutation");
+    await unmount(component);
+  });
+
+  it("retains successful shape registration when the secondary list refresh fails", async () => {
+    history.replaceState(null, "", "/create");
+    let listCalls = 0;
+    const shapeDraft: ShapeDraft = {
+      id: "shape-draft-one",
+      shapeId: "shape-one",
+      document: { id: "shape-one", version: "1.0.0" },
+      digest,
+      state: "draft",
+      validation: { valid: true, issues: [] },
+    };
+    const shapeApi: DrillClientApi = {
+      ...api(),
+      async packDrafts() { return []; },
+      async shapeDrafts() {
+        listCalls += 1;
+        if (listCalls > 1) throw new Error("refresh failed");
+        return [shapeDraft];
+      },
+      async updateShapeDraft() { return shapeDraft; },
+      async lintShapeDraft() { return shapeDraft.validation; },
+      async registerShapeDraft() {
+        return { id: "shape-one", version: "1.0.0", digest, name: "Shape one", phases: ["middlegame"], licence: "CC-BY-SA-4.0", channel: "community", usedByPacks: 0 };
+      },
+    };
+    const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("shape-one · draft"));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
+    const register = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Register community shape")!;
+    await vi.waitFor(() => expect(register.disabled).toBe(false));
+    register.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("shape-one · registered"));
+    expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("The shape was registered, but the draft list could not refresh. Reload Create to see its current state.");
     await unmount(component);
   });
 

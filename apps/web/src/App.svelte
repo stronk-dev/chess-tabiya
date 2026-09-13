@@ -17,6 +17,7 @@
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
   import { validDistilledDraft } from "./lib/distill-response.js";
   import { validPackDraftIdentity } from "./lib/pack-draft-response.js";
+  import { validRegisteredShapeIdentity, validShapeDraftIdentity, validShapeValidation } from "./lib/shape-draft-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
@@ -192,6 +193,10 @@
   let shapeLintGeneration = 0;
   let selectedShapeCorpusMatch: ShapeCorpusMatch | undefined = $state();
   let shapeActionError: string | undefined = $state();
+  let shapeMutationBusy: { readonly kind: "create" | "save" | "probe" | "register"; readonly draftId?: string } | undefined = $state();
+  let shapeMutationGeneration = 0;
+  let selectedShapeDraft = $derived(shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId));
+  let selectedShapeRegistrationBlock = $derived(shapeRegistrationBlockReason(selectedShapeDraft));
   let distillDraftRunId: string | undefined = $state();
   let distillDraftBusy = $state(false);
   let distillDraftError: string | undefined = $state();
@@ -476,16 +481,17 @@
       shapeLintState = "checking";
       try {
         const validation = await api.lintShapeDraft!(draftId, document, probeFen);
+        if (!validShapeValidation(validation)) throw new Error("Invalid shape validation response");
         if (generation !== shapeLintGeneration) return;
         shapeBufferValidation = validation;
         shapeProbeResult = validation.probeMatches;
         const current = selectedShapeCorpusMatch;
         if (current !== undefined && !validation.corpusPreview?.matches.some((match) => match.packId === current.packId && match.ply === current.ply && match.fen === current.fen)) selectedShapeCorpusMatch = undefined;
         shapeLintState = "ready";
-      } catch (error) {
+      } catch {
         if (generation !== shapeLintGeneration) return;
         shapeLintState = "error";
-        shapeLintError = `Shape validation failed: ${error instanceof Error ? error.message : String(error)}`;
+        shapeLintError = "Shape validation could not finish. Your editor bytes are unchanged; try again.";
       }
     })(), 300);
     return () => {
@@ -1689,43 +1695,144 @@
   }
 
 
+  function shapeActionIsCurrent(action: number, generation: number): boolean {
+    return appMounted && action === shapeMutationGeneration && generation === loadGeneration && route.name === "create";
+  }
+
+  function shapeRegistrationBlockReason(draft: ShapeDraft | undefined): string | undefined {
+    if (draft === undefined) return "Select or create a shape draft first.";
+    if (draft.state !== "draft") return `This shape is ${draft.state} and cannot be registered.`;
+    if (shapeLintState !== "ready" || !shapeBufferValidation?.valid) return "Resolve the current validation issues before registering.";
+    return undefined;
+  }
+
+  function publishSavedShapeDraft(saved: ShapeDraft, draftId: string, sourceJson: string): void {
+    shapeDrafts = shapeDrafts.map((candidate) => candidate.id === draftId ? saved : candidate);
+    if (selectedShapeDraftId === draftId && shapeStudioJson === sourceJson) {
+      shapeBufferValidation = saved.validation;
+    }
+  }
+
   async function createShapeDraft(): Promise<void> {
+    if (shapeMutationBusy !== undefined) return;
+    const action = ++shapeMutationGeneration;
+    const generation = loadGeneration;
+    const sourceJson = shapeStudioJson;
+    const selection = selectedShapeDraftId;
+    shapeMutationBusy = { kind: "create" };
     shapeActionError = undefined;
     try {
-      if (api.createShapeDraft === undefined) throw new Error("Shape draft creation is unavailable.");
-      const draft = await api.createShapeDraft(JSON.parse(shapeStudioJson));
-      shapeDrafts = [draft, ...shapeDrafts]; selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2);
-    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
+      const document = JSON.parse(sourceJson) as unknown;
+      const expectedShapeId = typeof document === "object" && document !== null && "id" in document && typeof document.id === "string" ? document.id : "";
+      if (api.createShapeDraft === undefined || expectedShapeId === "") throw new Error("Shape draft creation is unavailable");
+      const draft = await api.createShapeDraft(document);
+      if (!validShapeDraftIdentity(draft, expectedShapeId)) throw new Error("Invalid shape draft response");
+      if (shapeActionIsCurrent(action, generation)) {
+        shapeDrafts = [draft, ...shapeDrafts.filter((candidate) => candidate.id !== draft.id)];
+        if (selectedShapeDraftId === selection && shapeStudioJson === sourceJson) {
+          selectedShapeDraftId = draft.id;
+          shapeStudioJson = JSON.stringify(draft.document, null, 2);
+          shapeBufferValidation = draft.validation;
+        }
+      }
+    } catch {
+      if (shapeActionIsCurrent(action, generation)) shapeActionError = "The shape draft could not be created. Check the JSON and try again.";
+    } finally {
+      if (appMounted && action === shapeMutationGeneration) shapeMutationBusy = undefined;
+    }
   }
+
   async function saveShapeDraft(): Promise<void> {
-    const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId); if (draft === undefined) return;
+    if (shapeMutationBusy !== undefined) return;
+    const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId);
+    if (draft === undefined || draft.state !== "draft") return;
+    const action = ++shapeMutationGeneration;
+    const generation = loadGeneration;
+    const sourceJson = shapeStudioJson;
+    shapeMutationBusy = { kind: "save", draftId: draft.id };
     shapeActionError = undefined;
     try {
-      if (api.updateShapeDraft === undefined) throw new Error("Shape draft saving is unavailable.");
-      const saved = await api.updateShapeDraft(draft.id, draft.digest, JSON.parse(shapeStudioJson));
-      shapeDrafts = shapeDrafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
-    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
+      if (api.updateShapeDraft === undefined) throw new Error("Shape draft saving is unavailable");
+      const saved = await api.updateShapeDraft(draft.id, draft.digest, JSON.parse(sourceJson));
+      if (!validShapeDraftIdentity(saved, draft.shapeId) || saved.id !== draft.id) throw new Error("Invalid saved shape response");
+      if (shapeActionIsCurrent(action, generation)) publishSavedShapeDraft(saved, draft.id, sourceJson);
+    } catch {
+      if (shapeActionIsCurrent(action, generation)) shapeActionError = "This shape could not be saved. Your editor bytes are unchanged; try again.";
+    } finally {
+      if (appMounted && action === shapeMutationGeneration) shapeMutationBusy = undefined;
+    }
   }
+
   async function lintShapeDraft(): Promise<void> {
-    const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId); if (draft === undefined) return;
+    if (shapeMutationBusy !== undefined) return;
+    const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId);
+    if (draft === undefined || draft.state !== "draft") return;
+    const action = ++shapeMutationGeneration;
+    const generation = loadGeneration;
+    const sourceJson = shapeStudioJson;
+    const probeFen = shapeProbeFen;
+    shapeLintGeneration += 1;
+    shapeMutationBusy = { kind: "probe", draftId: draft.id };
     shapeActionError = undefined;
     shapeProbeResult = undefined;
     try {
-      if (api.lintShapeDraft === undefined) throw new Error("Shape validation is unavailable.");
-      const validation = await api.lintShapeDraft(draft.id, JSON.parse(shapeStudioJson), shapeProbeFen);
-      shapeDrafts = shapeDrafts.map((candidate) => candidate.id === draft.id ? { ...candidate, validation } : candidate);
-      shapeBufferValidation = validation;
-      shapeProbeResult = validation.probeMatches;
-    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
+      if (api.lintShapeDraft === undefined) throw new Error("Shape validation is unavailable");
+      const validation = await api.lintShapeDraft(draft.id, JSON.parse(sourceJson), probeFen);
+      if (!validShapeValidation(validation)) throw new Error("Invalid shape validation response");
+      if (shapeActionIsCurrent(action, generation) && selectedShapeDraftId === draft.id && shapeStudioJson === sourceJson && shapeProbeFen === probeFen) {
+        shapeDrafts = shapeDrafts.map((candidate) => candidate.id === draft.id ? { ...candidate, validation } : candidate);
+        shapeBufferValidation = validation;
+        shapeProbeResult = validation.probeMatches;
+        shapeLintState = "ready";
+        const current = selectedShapeCorpusMatch;
+        if (current !== undefined && !validation.corpusPreview?.matches.some((match) => match.packId === current.packId && match.ply === current.ply && match.fen === current.fen)) selectedShapeCorpusMatch = undefined;
+      }
+    } catch {
+      if (shapeActionIsCurrent(action, generation)) shapeActionError = "The shape probe could not finish. Your editor bytes and FEN are unchanged; try again.";
+    } finally {
+      if (appMounted && action === shapeMutationGeneration) shapeMutationBusy = undefined;
+    }
   }
+
   async function registerShapeDraft(): Promise<void> {
-    if (selectedShapeDraftId === undefined) return;
+    if (shapeMutationBusy !== undefined) return;
+    const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId);
+    if (shapeRegistrationBlockReason(draft) !== undefined || draft === undefined || api.updateShapeDraft === undefined || api.registerShapeDraft === undefined) return;
+    const action = ++shapeMutationGeneration;
+    const generation = loadGeneration;
+    const sourceJson = shapeStudioJson;
+    shapeMutationBusy = { kind: "register", draftId: draft.id };
     shapeActionError = undefined;
+    let saved: ShapeDraft | undefined;
+    let registered = false;
     try {
-      if (api.registerShapeDraft === undefined) throw new Error("Shape registration is unavailable.");
-      await api.registerShapeDraft(selectedShapeDraftId);
-      shapeDrafts = await (api.shapeDrafts?.() ?? Promise.resolve([]));
-    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
+      saved = await api.updateShapeDraft(draft.id, draft.digest, JSON.parse(sourceJson));
+      if (!validShapeDraftIdentity(saved, draft.shapeId) || saved.id !== draft.id || !saved.validation.valid) throw new Error("Invalid saved shape response");
+      if (shapeActionIsCurrent(action, generation)) publishSavedShapeDraft(saved, draft.id, sourceJson);
+      const summary = await api.registerShapeDraft(saved.id);
+      registered = true;
+      if (!validRegisteredShapeIdentity(summary, saved)) throw new Error("Invalid registered shape response");
+      if (!shapeActionIsCurrent(action, generation)) return;
+      shapeDrafts = shapeDrafts.map((candidate) => candidate.id === draft.id ? { ...candidate, state: "registered" } : candidate);
+      if (api.shapeDrafts !== undefined) {
+        try {
+          const refreshed = await api.shapeDrafts();
+          if (shapeActionIsCurrent(action, generation)) shapeDrafts = refreshed;
+        } catch {
+          if (shapeActionIsCurrent(action, generation)) shapeActionError = "The shape was registered, but the draft list could not refresh. Reload Create to see its current state.";
+        }
+      }
+    } catch {
+      if (shapeActionIsCurrent(action, generation)) {
+        shapeActionError = registered
+          ? "The shape was registered, but its response could not be matched. Reload Create before acting on it again."
+          : saved === undefined
+            ? "This shape could not be saved for registration. Your editor bytes remain here; try again."
+            : "The shape was saved, but could not be registered. Resolve any publication blocker and try registration again.";
+      }
+    } finally {
+      if (appMounted && action === shapeMutationGeneration) shapeMutationBusy = undefined;
+    }
   }
 
   function liveRotationMembers():readonly string[]{return [...new Set(liveRotationHandles.split(",").map((handle)=>handle.trim()).filter(Boolean))];}
@@ -2048,6 +2155,7 @@
     distillGeneration += 1;
     createSeedGeneration += 1;
     studioMutationGeneration += 1;
+    shapeMutationGeneration += 1;
     themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
@@ -2568,18 +2676,22 @@
       <div class="studio-grid">
         <aside aria-label="Your shape drafts">
           <h3>Your shape drafts</h3>
-          {#each shapeDrafts as draft}<button type="button" onclick={() => { selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); shapeActionError = undefined; }}>{draft.shapeId} · {draft.state}</button>{:else}<p>No shape drafts yet.</p>{/each}
+          {#each shapeDrafts as draft}<button type="button" disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} onclick={() => { selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); shapeActionError = undefined; }}>{draft.shapeId} · {draft.state}</button>{:else}<p>No shape drafts yet.</p>{/each}
         </aside>
         <section>
-          <label for="shape-studio-json">Shape JSON</label><textarea id="shape-studio-json" bind:value={shapeStudioJson} spellcheck="false"></textarea>
-          <ShapePlanSignatureEditor documentJson={shapeStudioJson} onDocumentJson={(documentJson) => shapeStudioJson = documentJson} />
-          <label>Probe FEN <input bind:value={shapeProbeFen} placeholder="Optional position to test the trigger" /></label>
-          <div class="row-actions">
-            <button type="button" onclick={() => void createShapeDraft()}>Create shape draft</button>
-            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void saveShapeDraft()}>Save shape</button>
-            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void lintShapeDraft()}>Lint + probe</button>
-            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : "shape-publication-retention"} onclick={() => void registerShapeDraft()}>Register community shape</button>
-          </div>
+          <fieldset class="shape-editor-fields" inert={shapeMutationBusy !== undefined} aria-busy={shapeMutationBusy !== undefined}>
+            <legend>Shape definition</legend>
+            <label for="shape-studio-json">Shape JSON</label><textarea id="shape-studio-json" bind:value={shapeStudioJson} disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} spellcheck="false"></textarea>
+            <ShapePlanSignatureEditor documentJson={shapeStudioJson} onDocumentJson={(documentJson) => shapeStudioJson = documentJson} />
+            <label>Probe FEN <input bind:value={shapeProbeFen} disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} placeholder="Optional position to test the trigger" /></label>
+            <div class="row-actions">
+              <button type="button" disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} onclick={() => void createShapeDraft()}>Create shape draft</button>
+              <button type="button" disabled={shapeMutationBusy !== undefined || selectedShapeDraft?.state !== "draft"} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : selectedShapeDraft?.state !== "draft" ? "shape-selection-required" : undefined} onclick={() => void saveShapeDraft()}>Save shape</button>
+              <button type="button" disabled={shapeMutationBusy !== undefined || selectedShapeDraft?.state !== "draft"} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : selectedShapeDraft?.state !== "draft" ? "shape-selection-required" : undefined} onclick={() => void lintShapeDraft()}>Lint + probe</button>
+              <button type="button" disabled={shapeMutationBusy !== undefined || selectedShapeRegistrationBlock !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : selectedShapeRegistrationBlock !== undefined ? "shape-register-disabled" : "shape-publication-retention"} onclick={() => void registerShapeDraft()}>Register community shape</button>
+            </div>
+          </fieldset>
+          {#if shapeMutationBusy !== undefined}<p id="shape-action-busy" role="status">{shapeMutationBusy.kind === "register" ? "Registering the retained shape draft…" : shapeMutationBusy.kind === "probe" ? "Checking the retained shape bytes and FEN…" : shapeMutationBusy.kind === "save" ? "Saving the retained shape draft…" : "Creating one draft from these retained bytes…"}</p>{/if}
           {#if shapeProbeResult !== undefined}<p role="status">Probe trigger: {shapeProbeResult ? "matches" : "does not match"}</p>{/if}
           <section class="shape-corpus-preview" aria-labelledby="shape-corpus-preview-title">
             <h3 id="shape-corpus-preview-title">Served-position preview</h3>
@@ -2610,6 +2722,7 @@
           </section>
           {#if shapeActionError}<p role="alert">{shapeActionError}</p>{/if}
           {#if !selectedShapeDraftId}<p id="shape-selection-required" class="honest">Select or create a shape draft first.</p>{/if}
+          {#if selectedShapeRegistrationBlock}<p id="shape-register-disabled" class="honest">{selectedShapeRegistrationBlock}</p>{/if}
           {#if selectedShapeDraftId}<p id="shape-publication-retention" class="honest">Registration publishes immutable shape bytes, authored prose, licence, and attribution. They remain available with “deleted account” attribution if you later delete your account.</p>{/if}
           {#if selectedShapeDraftId}{@const selectedShape=shapeDrafts.find((candidate)=>candidate.id===selectedShapeDraftId)}{@const displayedShapeValidation=shapeBufferValidation ?? selectedShape?.validation}{#if displayedShapeValidation}<ul>{#each displayedShapeValidation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}{/if}
         </section>
@@ -2940,6 +3053,8 @@
   .pack-studio-grid { grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr) minmax(16rem, 22rem); }
   .studio-grid aside { display: grid; align-content: start; gap: 0.5rem; overflow: auto; }
   .studio-grid section { display: grid; gap: 0.5rem; min-width: 0; }
+  .shape-editor-fields { display: grid; gap: 0.5rem; min-width: 0; margin: 0; padding: 0; border: 0; }
+  .shape-editor-fields > legend { font-weight: 700; margin-bottom: 0.25rem; }
   .studio-grid textarea { width: 100%; min-height: 42vh; padding: 0.8rem; font: 0.8rem/1.4 ui-monospace, monospace; }
   .validation-summary, .validation-sections > section { padding: 0.8rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); }
   .validation-summary h3, .validation-sections h3 { margin: 0; font: 600 1rem var(--display-font); }
