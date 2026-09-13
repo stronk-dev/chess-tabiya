@@ -49,21 +49,60 @@ export interface VoiceEvidenceView {
 export interface VoiceProvider { render(view: VoiceEvidenceView, persona: string, deterministicText: string, scope: VoiceScope): Promise<string>; }
 
 const one = (sentence: string): readonly string[] => Object.freeze([sentence]);
+
+function recordedTurnCount(value: unknown): string {
+  if (!Number.isSafeInteger(value) || (value as number) < 0) throw new TypeError("Recorded comparison count must be a non-negative integer");
+  return `${String(value)} recorded ${(value as number) === 1 ? "turn" : "turns"}`;
+}
+
+function consequenceStep(value: unknown): string {
+  if (!Number.isSafeInteger(value) || (value as number) < 0) throw new TypeError("Recorded comparison step must be a non-negative integer");
+  return (value as number) === 0 ? "the shared position" : `consequence step ${String(value)}`;
+}
+
+function objectiveStateCopy(value: unknown): string {
+  switch (value) {
+    case "active": return "In progress";
+    case "preserved": return "Objective held";
+    case "degraded": return "Objective weakened";
+    case "failed": return "Objective missed";
+    case "achieved": return "Objective reached";
+    case "transitioned": return "Next phase reached";
+    default: throw new TypeError("Recorded comparison omitted a known objective state");
+  }
+}
+
+function learnerOutcomeCopy(value: unknown): string {
+  switch (value) {
+    case "win": return "You won this line.";
+    case "loss": return "You lost this line.";
+    case "draw": return "You drew this line.";
+    default: throw new TypeError("Recorded comparison omitted a known learner outcome");
+  }
+}
+
 function renderRunRecord(evidence: DeclaredEvidence<unknown>): readonly string[] {
   const payload = evidence.payload as Readonly<Record<string, unknown>>;
-  if (evidence.projection.id === "run.record.fork") return one(`The recorded branches share ${String(payload.sharedPly)} plies through the fork.`);
-  if (evidence.projection.id === "run.record.move") return one(payload.moveSan === null ? `Branch at offset ${String(payload.offset)} has no recorded move past the fork.` : `Branch at offset ${String(payload.offset)} begins with recorded move ${String(payload.moveSan)}.`);
-  if (evidence.projection.id === "run.record.checkpoint_hit") return one(`Checkpoint ${String(payload.checkpointId)} was reached. Source: recorded checkpoint event.`);
-  if (evidence.projection.id === "run.record.objective_transition") return one(`The recorded objective changed from ${String(payload.from)} to ${String(payload.to)}. Source: recorded objective event.`);
+  if (evidence.projection.id === "run.record.fork") return one(`The continuations share ${recordedTurnCount(payload.sharedPly)} before they separate.`);
+  if (evidence.projection.id === "run.record.move") {
+    const where = consequenceStep(payload.offset);
+    if (payload.moveSan === null) return one(`No move was recorded at ${where}.`);
+    if (typeof payload.moveSan !== "string" || payload.moveSan.length === 0) throw new TypeError("Recorded comparison move omitted SAN");
+    return one(`The recorded move at ${where} is ${payload.moveSan}.`);
+  }
+  if (evidence.projection.id === "run.record.checkpoint_hit") return one(`An authored checkpoint was reached at ${consequenceStep(payload.plyOffset)}.`);
+  if (evidence.projection.id === "run.record.objective_transition") return one(`The recorded objective changed from “${objectiveStateCopy(payload.from)}” to “${objectiveStateCopy(payload.to)}.”`);
   if (evidence.projection.id === "run.record.imported_result") return one(`The PGN records the game result as ${String(payload.result)}; the board is not terminal here.`);
-  if (payload.context === "story") return one(`Board-terminal result for the learner: ${String(payload.outcome)}.`);
-  return one(payload.terminal === true ? `The recorded branch ends at a board-terminal position with learner result ${String(payload.outcome)}.` : `The recorded branch reaches ${String(payload.plies)} plies with objective state ${String(payload.objectiveState)}.`);
+  if (payload.terminal === true) return one(learnerOutcomeCopy(payload.outcome));
+  return one(`This continuation stops after ${recordedTurnCount(payload.plies)}. ${objectiveStateCopy(payload.objectiveState)}.`);
 }
 function renderCompareDerived(evidence: DeclaredEvidence<unknown>): readonly string[] {
   const payload = evidence.payload as Readonly<Record<string, unknown>>;
   if (evidence.projection.id === "derived.compare.structure_delta") return one(`${renderStructuralObservationChange(payload.observation as Parameters<typeof renderStructuralObservationChange>[0])} Source: Tabiya structural detector.`);
-  const delta = Number(payload.delta);
-  return one(`Recorded engine evidence changed by ${delta >= 0 ? "+" : ""}${delta} cp at offset ${String(payload.plyOffset)}.`);
+  if (!Number.isSafeInteger(payload.delta)) throw new TypeError("Recorded comparison evaluation omitted a safe centipawn delta");
+  const delta = payload.delta as number;
+  const pawns = `${delta >= 0 ? "+" : "−"}${(Math.abs(delta) / 100).toFixed(2)}`;
+  return one(`Recorded evaluation change at ${consequenceStep(payload.plyOffset)}: ${pawns} pawns on the stored scale.`);
 }
 function renderStoryDerived(evidence: DeclaredEvidence<unknown>): readonly string[] {
   const payload = evidence.payload as Readonly<Record<string, unknown>>;

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, declareCompareDerivedEvidence, declarePhaseReadingEvidence, declareShapeFiringEvidence, declareStoryDerivedEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, declareCompareDerivedEvidence, declarePhaseReadingEvidence, declareRunRecordEvidence, declareShapeFiringEvidence, declareStoryDerivedEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import type { SquareName } from "chessops/types";
 import * as ts from "typescript";
@@ -68,6 +68,25 @@ describe("adaptive guidance server seams", () => {
     const rendered = voiceEvidenceView(fixturePacket(), "compare", [evidence], false).rendered;
     expect(rendered.items[0]!.sentences).toEqual(["White isolated pawn appeared on the d-file. Source: Tabiya structural detector."]);
     expect(rendered.items[0]!.sentences.join(" ")).not.toContain("isolated_pawn");
+  });
+  it("voices comparison records in learner units without protocol vocabulary", () => {
+    const evidence = [
+      declareRunRecordEvidence("fork", { context: "compare", forkNodeId: "n0", sharedPly: 4 }),
+      declareRunRecordEvidence("move", { context: "compare", offset: 1, moveSan: "Nf3" }),
+      declareRunRecordEvidence("checkpoint_hit", { context: "compare", checkpointId: "reply-seen", plyOffset: 2 }),
+      declareRunRecordEvidence("objective_transition", { context: "compare", from: "active", to: "preserved" }),
+      declareRunRecordEvidence("consequence", { context: "compare", terminal: false, plies: 3, objectiveState: "preserved" }),
+      declareCompareDerivedEvidence("eval_delta", { delta: -165, plyOffset: 2 }),
+    ];
+    const rendered = voiceEvidenceView(fixturePacket(), "compare", evidence, false).rendered;
+    const text = rendered.items.flatMap((item) => item.sentences).join(" ");
+    expect(text).toContain("The continuations share 4 recorded turns before they separate.");
+    expect(text).toContain("The recorded move at consequence step 1 is Nf3.");
+    expect(text).toContain("An authored checkpoint was reached at consequence step 2.");
+    expect(text).toContain("The recorded objective changed from “In progress” to “Objective held.”");
+    expect(text).toContain("This continuation stops after 3 recorded turns. Objective held.");
+    expect(text).toContain("Recorded evaluation change at consequence step 2: −1.65 pawns on the stored scale.");
+    expect(text).not.toMatch(/\bcp\b|\bplies\b|\boffset\b|reply-seen|\b(active|preserved)\b/u);
   });
   it("voices Story evaluation changes in learner-oriented pawn units", () => {
     const evidence = declareStoryDerivedEvidence("eval_shift", {

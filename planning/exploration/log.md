@@ -19407,3 +19407,14 @@ The shape-firing runtime now owns the validated learner renderer, and both `revi
 `guidance.voice_story@1` call it over their admitted evidence items. A server-boundary fixture
 asserts the provider view contains “Recognized position pattern: Carlsbad minority attack” and
 refuses the storage key and trigger vocabulary. `make test-software` passes 188 files / 1,185 tests.
+
+## 2026-09-13 — Compare voice stops making the provider translate protocol copy ([[D3198]])
+
+`guidance.voice_compare@1` admitted exact evidence but rendered centipawns, ply offsets, checkpoint
+ids and raw objective-state enums into both the external-provider request and its deterministic
+fallback. The renderer now validates those operands and presents recorded turns, consequence
+steps, SAN, signed pawn units on the stored scale, and learner objective/outcome labels. A complete
+fixture covers fork, move, checkpoint, objective transition, non-terminal consequence and engine
+delta together, and rejects `cp`, `plies`, `offset`, the checkpoint storage key and both raw state
+enums. This is a consumer-boundary repair only: [[D2140]] still owns the draft discriminated
+`run.record.consequence@1` operand contract. `make test-software` passes 188 files / 1,185 tests.
