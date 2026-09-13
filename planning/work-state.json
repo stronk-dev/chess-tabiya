@@ -4339,11 +4339,12 @@
     },
     {
       "id": "D546",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:66e83fc587694a4d4b21eb360b0a069c40c830acaabccc605c476d14b3e486f8",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d815e1b7e180d3083721a741cd3ad8335e0ff3c2b95abd19ef1cd4e1c17ee8b0",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D547",
@@ -11165,13 +11166,14 @@
     },
     {
       "id": "D1462",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d12d79e5fe94b2b4ab1ebc74b30dfa8c9e573b629263145f40730065a7e9adc3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fbc6096292737d8c3fb985de3662ec64deba8aef1a71cf9a8bf4f840c56fdf43",
       "uxItems": [
         "SET-a7"
       ],
-      "state": "todo",
-      "owner": "assistance-and-presentation"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1463",
@@ -11329,13 +11331,14 @@
     },
     {
       "id": "D1478",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2bef09ff9f999cf1718e06cc33d49a032f80b809114b22ff92fbbdd57a672561",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:77607b4cd1063ceb5219994556cd2fe0e642808f211a87ccf1a142f84fcbd767",
       "uxItems": [
         "ATR-a11"
       ],
-      "owner": "review-and-return"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1479",

@@ -19374,3 +19374,14 @@ treated `prospective` references as if the pack contained the shape. Both joins 
 and proves the recommendation remains while only the present-referenced pack is offered. The
 broader browsable theory catalogue remains open under [[D695]] and AUT-a20. `make test-software`
 passes 188 files / 1,184 tests.
+
+## 2026-09-13 — Three shipped foundation closures leave the false-open queue
+
+The live 1.0 registry already marked SET-a7 and ATR-a11 complete, and the implementation confirmed
+all three underlying contracts, while their ledger rows still advertised work. D546's exact
+producer/projection/consumer manifest has been compiled and negatively checked since 2026-08-21.
+D1462's Settings path now calls the same permission compiler as a run, disables the full Match/Arena
+matrix and exposes the reason. D1478's Compare path leads with the fork decision and grounded
+narrative while engine trajectories and raw detector output remain in Inspector. Those rows are now
+terminal with their production evidence. This does not close preset activation, Review Map/module
+delivery, individual honest-empty evidence producers or the browsable theory catalogue.
