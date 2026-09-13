@@ -15,6 +15,7 @@
     ratedGameResultLabel,
     ratingPublicationStateLabel,
   } from "./learner-copy.js";
+  import { assertLearnerMarks, assertRatingHistory, assertRatingView } from "./rating-response.js";
 
   interface Props {
     api: DrillClientApi;
@@ -31,22 +32,37 @@
   let starting = $state(false);
   let selectedBand: "1000" | "1400" | "1800" | "2200" = $state("1400");
   let selectedSide: "white" | "black" = $state("white");
+  let loadGeneration = 0;
+  let attached = false;
 
-  onMount(() => { void load(); });
+  onMount(() => {
+    attached = true;
+    void load();
+    return () => { attached = false; loadGeneration += 1; };
+  });
 
   async function load(): Promise<void> {
+    const generation = ++loadGeneration;
     loading = true;
     error = undefined;
     try {
-      [ratingView, history, marks] = await Promise.all([
+      const [nextRating, nextHistory, nextMarks] = await Promise.all([
         api.rating?.() ?? Promise.resolve({ disclosures: [] }),
         api.ratingHistory?.() ?? Promise.resolve({ periods: [], games: [] }),
         api.learnerMarks?.() ?? Promise.resolve([]),
       ]);
-    } catch (cause) {
-      error = cause instanceof Error ? cause.message : String(cause);
+      assertRatingView(nextRating);
+      assertRatingHistory(nextHistory);
+      assertLearnerMarks(nextMarks);
+      if (!attached || generation !== loadGeneration) return;
+      ratingView = nextRating;
+      history = nextHistory;
+      marks = nextMarks;
+    } catch {
+      if (!attached || generation !== loadGeneration) return;
+      error = "Your rated-game record could not be loaded. Nothing has been changed; try again.";
     } finally {
-      loading = false;
+      if (attached && generation === loadGeneration) loading = false;
     }
   }
 

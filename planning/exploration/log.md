@@ -20023,3 +20023,16 @@ failure→retry paths plus a rejected request after navigation. `make verify-sof
 across 197 files / 1,308 tests plus type, performance, schema, manifest and production-build
 checks; `make test-browser` passes all 64 required journeys with one optional Maia latency
 measurement skipped.
+
+## 2026-09-14 — Rating and classroom standing retain validated response truth ([[D3246]])
+
+Rating publication, history, marks and cohort standing now cross one runtime validator before any
+learner-facing projection is replaced. The boundary checks publication lifecycle combinations,
+timestamps, unique identities, terminal game states, result arithmetic, mark-to-band mapping and
+the requested classroom while retaining provisional-rating suppression. Initial failures use fixed
+copy and never masquerade as an empty standing; retry generations and component teardown make late
+settlements inert. Standing mutations are single-flight and distinguish a rejected mutation from a
+committed mutation whose secondary refresh failed, retaining the last good view in the latter case.
+`make verify-software` passes 198 files / 1,313 tests plus type, performance, schema, manifest and
+production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
+optional Maia latency measurement skipped.

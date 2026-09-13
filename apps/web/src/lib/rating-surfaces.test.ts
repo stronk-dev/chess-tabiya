@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import CohortStanding from "./CohortStanding.svelte";
 import RatingScreen from "./RatingScreen.svelte";
-import type { CohortStandingView, DrillClientApi, RatingView } from "./api.js";
+import { ApiError, type CohortStandingView, type DrillClientApi, type RatingView } from "./api.js";
 
 function target(): HTMLElement {
   const element = document.createElement("div");
@@ -72,6 +72,22 @@ describe("learner rating surfaces", () => {
     expect(document.body.textContent).not.toContain("provisional");
     await unmount(component);
   });
+
+  it("refuses malformed records behind bounded retry copy", async () => {
+    let reads = 0;
+    const component = mount(RatingScreen, { target: target(), props: { api: {
+      rating: async () => ++reads === 1 ? { rating: { state: "published" }, disclosures: ["private storage trace"] } : { rating: null, disclosures: [] },
+      ratingHistory: async () => ({ periods: [], games: [] }),
+      learnerMarks: async () => [],
+    } as unknown as DrillClientApi } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("rated-game record could not be loaded"));
+    expect(document.body.textContent).not.toContain("private storage trace");
+    expect(document.body.textContent).not.toContain("No rated-game result has been recorded");
+    document.querySelector<HTMLButtonElement>(".error button")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("No rated-game result has been recorded"));
+    expect(reads).toBe(2);
+    await unmount(component);
+  });
 });
 
 describe("classroom standing surface", () => {
@@ -120,6 +136,53 @@ describe("classroom standing surface", () => {
     const publish = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Publish my record")!;
     publish.click();
     await vi.waitFor(() => expect(update).toHaveBeenCalledWith("class-one", { op: "publish" }));
+    await unmount(component);
+  });
+
+  it("does not turn a failed read into an empty standing and separates committed refresh failure", async () => {
+    const view: CohortStandingView = {
+      standing: { classroomId: "class-one", openedByLearnerId: "teacher", windowFrom: "2026-08-01T00:00:00.000Z", windowTo: null, openedAt: "2026-08-01T00:00:00.000Z", closedAt: null },
+      limitation: "These games were played alone against a bot and nobody witnessed them.",
+      entries: [],
+    };
+    let reads = 0;
+    let failAfterMutation = false;
+    const update = vi.fn(async () => { failAfterMutation = true; });
+    const component = mount(CohortStanding, { target: target(), props: {
+      api: {
+        cohortStanding: async () => {
+          reads += 1;
+          if (reads === 1) throw new Error("private database topology");
+          if (failAfterMutation) throw new Error("private replica lag");
+          return view;
+        },
+        updateCohortStanding: update,
+      } as unknown as DrillClientApi,
+      classroomId: "class-one", learnerId: "learner-a", role: "learner",
+    } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("standing could not be loaded"));
+    expect(document.body.textContent).not.toContain("private database topology");
+    expect(document.body.textContent).not.toContain("No standing is open");
+    document.querySelector<HTMLButtonElement>(".error button")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Join this standing"));
+    document.querySelector<HTMLButtonElement>("button")!.click();
+    await tick();
+    const publish = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Publish my record")!;
+    publish.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("change was saved, but the standing could not refresh"));
+    expect(update).toHaveBeenCalledTimes(1);
+    expect(document.body.textContent).not.toContain("private replica lag");
+    expect(document.body.textContent).not.toContain("previous settings are unchanged");
+    await unmount(component);
+  });
+
+  it("treats the typed absence as absence only after a successful read", async () => {
+    const component = mount(CohortStanding, { target: target(), props: {
+      api: { cohortStanding: async () => { throw new ApiError(404, "RUN_NOT_FOUND", "private missing row"); } } as unknown as DrillClientApi,
+      classroomId: "class-one", learnerId: "teacher", role: "teacher",
+    } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("No standing is open"));
+    expect(document.body.textContent).not.toContain("private missing row");
     await unmount(component);
   });
 });

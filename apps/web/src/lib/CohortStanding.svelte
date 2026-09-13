@@ -3,6 +3,7 @@
 
   import { ApiError, type CohortStandingEntry, type CohortStandingView, type DrillClientApi } from "./api.js";
   import { publishedBandInterval, publishedBandLabel } from "./learner-copy.js";
+  import { assertCohortStanding } from "./rating-response.js";
 
   interface Props {
     api: DrillClientApi;
@@ -16,43 +17,83 @@
   let loading = $state(true);
   let actionPending = $state(false);
   let error: string | undefined = $state();
+  let notice: string | undefined = $state();
+  let settled = $state(false);
+  let missing = $state(false);
   let confirmingPublish = $state(false);
   let windowFrom = $state(new Date().toISOString().slice(0, 16));
   let windowTo = $state("");
+  let loadGeneration = 0;
+  let actionGeneration = 0;
+  let attached = false;
 
   let ownEntry = $derived(view?.entries.find((entry) => entry.learnerId === learnerId));
 
-  onMount(() => { void load(); });
+  onMount(() => {
+    attached = true;
+    void load();
+    return () => {
+      attached = false;
+      loadGeneration += 1;
+      actionGeneration += 1;
+    };
+  });
 
-  async function load(): Promise<void> {
+  async function load(): Promise<"loaded" | "missing" | "failed" | "departed"> {
+    const generation = ++loadGeneration;
     loading = true;
     error = undefined;
     try {
-      view = await api.cohortStanding?.(classroomId);
-      if (view) {
-        windowFrom = new Date(view.standing.windowFrom).toISOString().slice(0, 16);
-        windowTo = view.standing.windowTo === null ? "" : new Date(view.standing.windowTo).toISOString().slice(0, 16);
-      }
+      if (api.cohortStanding === undefined) throw new TypeError("standing unavailable");
+      const next = await api.cohortStanding(classroomId);
+      assertCohortStanding(next, classroomId);
+      if (!attached || generation !== loadGeneration) return "departed";
+      view = next;
+      missing = false;
+      settled = true;
+      windowFrom = new Date(next.standing.windowFrom).toISOString().slice(0, 16);
+      windowTo = next.standing.windowTo === null ? "" : new Date(next.standing.windowTo).toISOString().slice(0, 16);
+      return "loaded";
     } catch (cause) {
-      if (cause instanceof ApiError && cause.code === "RUN_NOT_FOUND") view = undefined;
-      else error = cause instanceof Error ? cause.message : String(cause);
+      if (!attached || generation !== loadGeneration) return "departed";
+      if (cause instanceof ApiError && cause.code === "RUN_NOT_FOUND") {
+        view = undefined;
+        missing = true;
+        settled = true;
+        return "missing";
+      }
+      error = "This classroom standing could not be loaded. Nothing has been changed; try again.";
+      return "failed";
     } finally {
-      loading = false;
+      if (attached && generation === loadGeneration) loading = false;
     }
   }
 
   async function mutate(input: Parameters<NonNullable<DrillClientApi["updateCohortStanding"]>>[1]): Promise<void> {
-    if (api.updateCohortStanding === undefined) return;
+    if (actionPending) return;
+    if (api.updateCohortStanding === undefined) {
+      error = "This classroom standing cannot be changed from this deployment.";
+      return;
+    }
+    const generation = ++actionGeneration;
     actionPending = true;
     error = undefined;
+    notice = undefined;
     try {
       await api.updateCohortStanding(classroomId, input);
+      if (!attached || generation !== actionGeneration) return;
       confirmingPublish = false;
-      await load();
-    } catch (cause) {
-      error = cause instanceof Error ? cause.message : String(cause);
+      const refresh = await load();
+      if (!attached || generation !== actionGeneration || refresh === "departed") return;
+      if (refresh === "failed") {
+        error = undefined;
+        notice = "Your change was saved, but the standing could not refresh. Reload it before making another change.";
+      }
+    } catch {
+      if (!attached || generation !== actionGeneration) return;
+      error = "The standing could not be changed. Your previous settings are unchanged; try again.";
     } finally {
-      actionPending = false;
+      if (attached && generation === actionGeneration) actionPending = false;
     }
   }
 
@@ -67,10 +108,12 @@
   <p class="honest">Learners choose whether to publish their own result record to this classroom. Teachers can open and manage the window, but they never publish or appear in the standing.</p>
 
   {#if loading}
-    <p role="status">Loading standing…</p>
-  {:else}
-    {#if error}<p role="alert" class="error">{error}</p>{/if}
-    {#if !view}
+    <p role="status">{settled ? "Refreshing standing…" : "Loading standing…"}</p>
+  {/if}
+  {#if error}<div role="alert" class="error"><p>{error}</p>{#if !settled || view !== undefined}<button type="button" disabled={loading || actionPending} onclick={() => void load()}>Try again</button>{/if}</div>{/if}
+  {#if notice}<p role="status" class="notice">{notice}</p>{/if}
+  {#if settled && !loading}
+    {#if !view && missing}
       <p>No standing is open for this classroom.</p>
       {#if role === "teacher"}
         <div class="window-form">
@@ -80,7 +123,7 @@
           {#if !windowFrom}<span id="standing-window-required" class="honest">Choose when the result window begins.</span>{/if}
         </div>
       {/if}
-    {:else}
+    {:else if view}
       <p class="limitation">{view.limitation}</p>
       <p class="window">Results from {new Date(view.standing.windowFrom).toLocaleString()}{view.standing.windowTo ? ` through ${new Date(view.standing.windowTo).toLocaleString()}` : " onward"}.</p>
 

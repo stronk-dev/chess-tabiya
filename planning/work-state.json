@@ -26621,6 +26621,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/App.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3246",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f1d632748aaa6ca53c29d890115a640696f18d6ead71bdbaae03e4d0f6f5249f",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/rating-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }
