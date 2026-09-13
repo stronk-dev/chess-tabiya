@@ -15,6 +15,22 @@ export interface ShapeFiring {
   readonly openEnded: boolean;
 }
 
+const SHAPE_LABEL_TOKENS: Readonly<Record<string, string>> = Object.freeze({
+  iqp: "IQP",
+  kid: "King's Indian",
+});
+
+/** Renders an exact shape firing as learner copy while retaining the catalogue id in evidence. */
+export function renderShapeFiring(firing: Pick<ShapeFiring, "entryId">): readonly string[] {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(firing.entryId)) {
+    throw new TypeError("Shape firing omitted a valid catalogue identity");
+  }
+  const words = firing.entryId.split("-").map((word) => SHAPE_LABEL_TOKENS[word] ?? word);
+  const first = words[0]!;
+  words[0] = SHAPE_LABEL_TOKENS[first.toLowerCase()] ?? `${first[0]!.toUpperCase()}${first.slice(1)}`;
+  return Object.freeze([`Recognized position pattern: ${words.join(" ")}.`]);
+}
+
 export function shapeFirings(
   entries: readonly ShapeTriggerSource[],
   path: readonly { readonly id: string; readonly fen: string }[],

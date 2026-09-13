@@ -19397,3 +19397,13 @@ view and refuses the raw key, the internal trigger phrase and the developer-faci
 `make test-software` passes 188 files / 1,185 tests, `make test-browser` passes all 64 required
 desktop/mobile journeys with the one explicitly optional Maia latency measurement skipped, and
 `make verify-software` passes the full software contract.
+
+## 2026-09-13 — Shape-firing copy has one authority through external voice ([[D3197]])
+
+The Game Story repair exposed an adjacent second renderer in the server voice assembly. It still
+turned `theory.shapes.firing@1` into a raw catalogue id and internal trigger phrase, so an external
+provider and deterministic narration could receive the leak after the visible Story card was fixed.
+The shape-firing runtime now owns the validated learner renderer, and both `review.story@1` and
+`guidance.voice_story@1` call it over their admitted evidence items. A server-boundary fixture
+asserts the provider view contains “Recognized position pattern: Carlsbad minority attack” and
+refuses the storage key and trigger vocabulary. `make test-software` passes 188 files / 1,185 tests.

@@ -2,7 +2,7 @@ import { branchPath } from "./branch-path.js";
 import { endgameReading, renderEndgameReading, type EndgameReading } from "./endgame.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
 import { pivotalMarkers, renderPivotalMarker, type PivotalKind } from "./pivotal.js";
-import { shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
+import { renderShapeFiring, shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, Node, RunOutcome } from "./types.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, renderEvidenceItems, type ConsumerEvidenceView, type DeclaredEvidence, type EvidenceRendererRegistry, type RenderedEvidenceView } from "./evidence-contract.js";
 import { declareEndgameReadingEvidence, declarePivotalMarkerEvidence, declareRunRecordEvidence, declareShapeFiringSourceEvidence, declareStoryDerivedEvidence } from "./evidence-source-adapters.js";
@@ -80,30 +80,9 @@ function renderStoryEvalShift(evidence: DeclaredEvidence<unknown>): readonly str
   return Object.freeze([renderStoryEvaluationChange(payload.after, payload.delta as number)]);
 }
 
-const SHAPE_LABEL_TOKENS: Readonly<Record<string, string>> = Object.freeze({
-  iqp: "IQP",
-  kid: "King's Indian",
-});
-
-function learnerShapeLabel(entryId: string): string {
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(entryId)) {
-    throw new TypeError("Story shape firing omitted a valid catalogue identity");
-  }
-  const words = entryId.split("-").map((word) => SHAPE_LABEL_TOKENS[word] ?? word);
-  const first = words[0]!;
-  words[0] = SHAPE_LABEL_TOKENS[first.toLowerCase()] ?? `${first[0]!.toUpperCase()}${first.slice(1)}`;
-  return words.join(" ");
-}
-
-function renderStoryShapeFiring(evidence: DeclaredEvidence<unknown>): readonly string[] {
-  const entryId = (evidence.payload as { readonly entryId?: unknown }).entryId;
-  if (typeof entryId !== "string") throw new TypeError("Story shape firing omitted its catalogue identity");
-  return Object.freeze([`Recognized position pattern: ${learnerShapeLabel(entryId)}.`]);
-}
-
 const REVIEW_STORY_RENDERERS: EvidenceRendererRegistry = Object.freeze({
   "rules.pivotal.marker@1": (evidence) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]),
-  "theory.shapes.firing@1": renderStoryShapeFiring,
+  "theory.shapes.firing@1": (evidence) => renderShapeFiring(evidence.payload as Parameters<typeof renderShapeFiring>[0]),
   "run.record.consequence@1": renderRecordedOutcome,
   "run.record.imported_result@1": renderRecordedOutcome,
   "rules.endgame.reading@1": (evidence) => renderEndgameReading(evidence.payload as EndgameReading),

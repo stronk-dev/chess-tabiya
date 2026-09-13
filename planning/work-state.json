@@ -26180,6 +26180,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/story.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3197",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a33b18f36fd1dc0714bb7f4fb7c7a6249b11edcccce21ce9ebc31894c26d0531",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/shape-firing.ts",
+      "evidenceKind": "path"
     }
   ]
 }
