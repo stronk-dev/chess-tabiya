@@ -19937,3 +19937,18 @@ crossed-response, partial-success and departure falsifiers pass. Sequential cano
 passes: `make verify-software` is green across 196 files / 1,293 tests plus type, performance, schema,
 manifest and production-build checks; `make test-browser` passes all 64 required journeys with one
 explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Live-session host actions share one retained lifecycle ([[D3240]])
+
+Ten live-session mutations previously admitted duplicate or crossed requests, read mutable values
+after initiation, exposed provider diagnostics, and conflated a committed mutation with a failed
+secondary refresh. Proposal submit/resolve, board offer/rotation, vote opening, participant
+invitation, Arena import, match operation, and friend/watch-link creation now capture exact input
+under one announced single-flight owner. Session refreshes validate both session and run identity;
+bounded failures retain retry input; partial success is named; malformed link results are refused;
+and departed settlements cannot publish. The browser-shell falsifier crosses duplicate, mutation
+failure and retry, committed-with-refresh-failure, exact input, accessibility linkage and route
+departure. Sequential canonical verification passes: `make verify-software` is green across 196
+files / 1,294 tests plus type, performance, schema, manifest and production-build checks;
+`make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
+measurement skipped.

@@ -142,6 +142,20 @@ journal entry commit atomically.
 
 ## HTTP and browser surfaces
 
+The session studio owns proposal submission and resolution, board offers and rotation advances,
+vote opening, invitations, Arena imports, match operations, and friend/watch-link creation through
+one retained action lifecycle. Each action captures its session, target, and mutable form values
+before the request; a second action cannot start until the first settles. Related controls become
+disabled and reference one announced pending state. Provider diagnostics never become learner
+copy, failed mutations keep their inputs for retry, and successful mutations clear only the exact
+submitted input.
+
+Session refreshes must return the initiating session id and run id. A primary mutation that commits
+but cannot refresh is reported as committed with a stale view, rather than falsely reported as a
+failed mutation. Link responses must contain a usable URL. Responses that settle after navigation,
+unmount, or a different session load cannot publish into the visible route. These guarantees apply
+in addition to the server's authorization and transaction boundaries; they do not replace them.
+
 `/sessions` lists and creates sessions. Each summary includes the active FEN, recorded
 objective state, side to move, mainline ply count, pause state, lease holder,
 last-move time, and match players, allowing the `/live` simul wall to poll all granted

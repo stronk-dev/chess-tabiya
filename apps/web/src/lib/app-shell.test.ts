@@ -1381,6 +1381,108 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("owns a live-session invitation through duplicate, failure, retry, and partial-refresh states", async () => {
+    history.replaceState(null, "", "/live/session/invite-session");
+    const detail: LiveSessionDetail = {
+      session: {
+        id: "invite-session",
+        runId: "invite-run",
+        kind: "academy",
+        title: "Invitation workshop",
+        boardControl: "host_directed",
+        handoffLearnerId: "learner-host",
+        rotationCursor: 0,
+        createdBy: "learner-host",
+        createdAt: "2026-09-13T20:00:00.000Z",
+      },
+      role: "host",
+      activeNodeId: "node-one",
+      activeFen: INITIAL_FEN,
+      leaseHeldBy: { learnerId: "learner-host", handle: "coach" },
+      grants: [{ learnerId: "learner-host", handle: "coach", role: "host", grantedAt: "2026-09-13T20:00:00.000Z" }],
+      moveAuthorship: [],
+      proposals: [],
+      invitations: [],
+      legs: [],
+      marks: [],
+    };
+    const firstInvitation = deferred<Awaited<ReturnType<NonNullable<DrillClientApi["inviteToSession"]>>>>();
+    const invitation = {
+      id: "invitation-one",
+      sessionId: detail.session.id,
+      leg: null,
+      invitedHandle: "student",
+      invitedRole: "participant" as const,
+      externalChallengeUrl: null,
+      state: "open" as const,
+      createdAt: "2026-09-13T20:01:00.000Z",
+    };
+    const pendingWatchLink = deferred<{ readonly id: string; readonly token: string; readonly url: string }>();
+    let invitationAttempts = 0;
+    const inviteToSession = vi.fn(() => ++invitationAttempts === 1 ? firstInvitation.promise : Promise.resolve(invitation));
+    let detailReads = 0;
+    const liveApi: DrillClientApi = {
+      ...api(),
+      async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-09-13T19:00:00.000Z" }; },
+      async liveSession() {
+        if (++detailReads === 1) return detail;
+        throw new Error("private provider refresh detail");
+      },
+      async sessionJournal() { return { entries: [], nextSeq: 0 }; },
+      inviteToSession,
+      mintSessionLink: vi.fn(() => pendingWatchLink.promise),
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: liveApi, router, storage: new MemoryStorage() },
+    });
+
+    const input = await vi.waitFor(() => {
+      const label = [...document.querySelectorAll("label")].find((candidate) => candidate.textContent?.includes("Tabiya handle"));
+      expect(label).toBeDefined();
+      return label!.querySelector<HTMLInputElement>("input")!;
+    });
+    input.value = "  student  ";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Create invitation")!;
+    await vi.waitFor(() => expect(button.disabled).toBe(false));
+    button.click();
+    button.click();
+    await vi.waitFor(() => expect(inviteToSession).toHaveBeenCalledTimes(1));
+    expect(inviteToSession).toHaveBeenCalledWith("invite-session", { handle: "student" });
+    expect(button.disabled).toBe(true);
+    expect(button.getAttribute("aria-describedby")).toBe("live-session-action-busy");
+    expect(input.disabled).toBe(true);
+    expect(input.value).toBe("  student  ");
+    expect(document.getElementById("live-session-action-busy")?.textContent).toContain("Updating this session");
+
+    firstInvitation.reject(new Error("private provider mutation detail"));
+    await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("The invitation could not be created. Your participant details remain here; check them and try again."));
+    expect(document.body.textContent).not.toContain("private provider mutation detail");
+    expect(input.value).toBe("  student  ");
+    expect(button.disabled).toBe(false);
+
+    button.click();
+    await vi.waitFor(() => expect(inviteToSession).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("The invitation was created, but this session could not refresh. Reload it to see the invitation."));
+    expect(document.body.textContent).not.toContain("private provider refresh detail");
+    expect(input.value).toBe("");
+    expect(button.disabled).toBe(true);
+    expect(button.getAttribute("aria-describedby")).toBe("invite-disabled");
+
+    const watch = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Create watch link")!;
+    watch.click();
+    await vi.waitFor(() => expect(watch.disabled).toBe(true));
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    pendingWatchLink.resolve({ id: "departed-link", token: "secret", url: "/shared/must-not-render" });
+    await tick();
+    await Promise.resolve();
+    expect(document.body.textContent).not.toContain("must-not-render");
+    await unmount(component);
+  });
+
   it("lets a live-session host identify and resolve a learner proposal", async () => {
     history.replaceState(null, "", "/live/session/session-one");
     const storage = new MemoryStorage();

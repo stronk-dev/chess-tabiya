@@ -233,7 +233,6 @@
   let liveScheduledFor = $state("");
   let liveProposalMove = $state("");
   let liveMoveFormNodeId: string | undefined = $state();
-  let liveProposalError: string | undefined = $state();
   let liveMemberHandle = $state("");
   let liveMemberRole: "participant" | "spectator" = $state("participant");
   let liveMemberBusy = $state(false);
@@ -261,7 +260,9 @@
   let liveJoinSlot: "white" | "black" = $state("black");
   let liveJoinUrl = $state("");
   let liveWatchUrl = $state("");
-  let liveWatchError: string | undefined = $state();
+  let liveSessionActionBusy: { readonly kind: "propose" | "resolve-proposal" | "offer-board" | "advance-rotation" | "open-vote" | "invite" | "import-leg" | "match" | "friend-link" | "watch-link"; readonly sessionId: string; readonly target?: string } | undefined = $state();
+  let liveSessionActionError: string | undefined = $state();
+  let liveSessionActionGeneration = 0;
   let liveAudiencePreview = $state(false);
   let liveOverlayCopyStatus: string | undefined = $state();
   let importPgn = $state("");
@@ -804,6 +805,8 @@
         [liveSessions,classrooms,packs]=[loaded[0],loaded[2],loaded[3]];runs=loaded[1].runs;runSelection=loaded[1].selection;
       } else if (next.name === "live-session") {
         const refresh=++liveRefreshGeneration;
+        if(liveDetail?.session.id!==next.sessionId)liveSessionActionError=undefined;
+        if(liveSessionActionBusy!==undefined&&liveSessionActionBusy.sessionId!==next.sessionId){++liveSessionActionGeneration;liveSessionActionBusy=undefined;}
         liveReclaimIntent=false;
         liveReclaimError=undefined;
         liveReclaimBusy=false;
@@ -1973,8 +1976,53 @@
     if(!liveSessionIsCurrent(detail,generation)||api.liveSession===undefined)return undefined;
     const refresh=++liveRefreshGeneration;
     const next=await api.liveSession(detail.session.id);
-    if(next!==undefined&&next.session.id===detail.session.id&&liveSessionIsCurrent(detail,generation)&&refresh===liveRefreshGeneration)liveDetail=next;
+    if(next.session.id!==detail.session.id||next.session.runId!==detail.session.runId)throw new Error("Crossed live-session response");
+    if(liveSessionIsCurrent(detail,generation)&&refresh===liveRefreshGeneration)liveDetail=next;
     return next;
+  }
+
+  interface LiveSessionActionOptions<T> {
+    readonly failure: string;
+    readonly refreshFailure?: string;
+    readonly completionFailure?: string;
+    readonly refresh?: boolean;
+    readonly onCommitted?: (result: T) => void;
+  }
+
+  function liveSessionActionIsCurrent(detail:LiveSessionDetail,generation:number,action:number):boolean {
+    return appMounted&&action===liveSessionActionGeneration&&liveSessionIsCurrent(detail,generation);
+  }
+
+  async function runLiveSessionAction<T>(
+    detail:LiveSessionDetail,
+    descriptor:NonNullable<typeof liveSessionActionBusy>,
+    work:()=>Promise<T>,
+    options:LiveSessionActionOptions<T>,
+  ):Promise<boolean>{
+    if(liveSessionActionBusy!==undefined)return false;
+    const generation=loadGeneration;
+    const action=++liveSessionActionGeneration;
+    liveSessionActionBusy=descriptor;
+    liveSessionActionError=undefined;
+    try{
+      let result:T;
+      try{result=await work();}
+      catch{if(liveSessionActionIsCurrent(detail,generation,action))liveSessionActionError=options.failure;return false;}
+      if(!liveSessionActionIsCurrent(detail,generation,action))return true;
+      try{options.onCommitted?.(result);}
+      catch{if(liveSessionActionIsCurrent(detail,generation,action))liveSessionActionError=options.completionFailure??"The action finished, but its response could not be matched. Reload this session before acting again.";return true;}
+      if(options.refresh!==false){
+        try{await refreshCurrentLiveSession(detail,generation);}
+        catch{if(liveSessionActionIsCurrent(detail,generation,action))liveSessionActionError=options.refreshFailure??"The action finished, but this session could not refresh. Reload it to see the current state.";}
+      }
+      return true;
+    }finally{
+      finishLiveSessionAction(detail,action);
+    }
+  }
+
+  function finishLiveSessionAction(detail:LiveSessionDetail,action:number):void {
+    if(appMounted&&action===liveSessionActionGeneration&&liveSessionActionBusy?.sessionId===detail.session.id)liveSessionActionBusy=undefined;
   }
   async function refreshCurrentActiveLiveSession(detail:LiveSessionDetail,generation:number):Promise<LiveSessionDetail|undefined>{
     if(!activeLiveSessionIsCurrent(detail,generation)||api.liveSession===undefined)return undefined;
@@ -1987,11 +2035,16 @@
     return next;
   }
   async function submitLiveProposal():Promise<void>{
-    const detail=liveDetail;const generation=loadGeneration;const move=liveProposalMove;
-    if(detail===undefined||api.proposeMove===undefined||!liveMoveChoices.some((choice)=>choice.uci===move))return;
-    await api.proposeMove(detail.session.id,detail.activeNodeId,move);
-    await refreshCurrentLiveSession(detail,generation);
-    if(liveSessionIsCurrent(detail,generation)&&liveProposalMove===move)liveProposalMove="";
+    const detail=liveDetail;const move=liveProposalMove;const nodeId=detail?.activeNodeId;
+    if(detail===undefined||nodeId===undefined||!liveMoveChoices.some((choice)=>choice.uci===move))return;
+    await runLiveSessionAction(detail,{kind:"propose",sessionId:detail.session.id,target:`${nodeId}:${move}`},async()=>{
+      if(api.proposeMove===undefined)throw new Error("unavailable");
+      return api.proposeMove(detail.session.id,nodeId,move);
+    },{
+      failure:"That proposal could not be sent. Your selected move remains here; try again.",
+      refreshFailure:"The proposal was sent, but this session could not refresh. Reload it to see the proposal.",
+      onCommitted:()=>{if(liveProposalMove===move)liveProposalMove="";},
+    });
   }
   async function updateLiveMember(handle:string,operation:{readonly op:"grant";readonly role:"participant"|"spectator"}|{readonly op:"revoke"}):Promise<void>{
     const detail=liveDetail;const generation=loadGeneration;
@@ -2009,23 +2062,29 @@
     finally{if(liveSessionIsCurrent(detail,generation))liveMemberBusy=false;}
   }
   async function resolveLiveProposal(proposalId:string,op:"apply"|"decline"):Promise<void>{
-    const detail=liveDetail;const generation=loadGeneration;
+    const detail=liveDetail;
     if(detail===undefined)return;
-    liveProposalError=undefined;
-    try{
-      if(api.resolveProposal===undefined)throw new Error("Proposal resolution is unavailable.");
+    await runLiveSessionAction(detail,{kind:"resolve-proposal",sessionId:detail.session.id,target:`${proposalId}:${op}`},async()=>{
+      if(api.resolveProposal===undefined)throw new Error("unavailable");
       const writer=WriterSession.claimFor(detail.session.runId,storage);
       if(op==="apply"){
-        if(api.claimLease===undefined)throw new Error("Board possession is unavailable.");
+        if(api.claimLease===undefined)throw new Error("unavailable");
         await api.claimLease(detail.session.runId,writer.writerId);
       }
-      if(!liveSessionIsCurrent(detail,generation))return;
-      await api.resolveProposal(detail.session.id,proposalId,op,writer.writerId);
-      await refreshCurrentLiveSession(detail,generation);
-    }catch(error){if(liveSessionIsCurrent(detail,generation))liveProposalError=error instanceof Error?error.message:String(error);}
+      return api.resolveProposal(detail.session.id,proposalId,op,writer.writerId);
+    },{
+      failure:op==="apply"?"The proposal could not be played. Reload the session before trying again; board possession may have changed.":"The proposal could not be declined. It remains open; try again.",
+      refreshFailure:`The proposal was ${op==="apply"?"played":"declined"}, but this session could not refresh. Reload it to see the current state.`,
+    });
   }
-  async function offerLiveBoard():Promise<void>{const detail=liveDetail;const generation=loadGeneration;const handle=liveOfferHandle;if(detail===undefined||!handle||api.boardControl===undefined)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;await api.boardControl(detail.session.id,writer,"offer",handle);await refreshCurrentLiveSession(detail,generation);}
-  async function advanceLiveRotation():Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||api.boardControl===undefined)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;await api.boardControl(detail.session.id,writer,"advance");await refreshCurrentLiveSession(detail,generation);}
+  async function offerLiveBoard():Promise<void>{
+    const detail=liveDetail;const handle=liveOfferHandle.trim();if(detail===undefined||!handle)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;
+    await runLiveSessionAction(detail,{kind:"offer-board",sessionId:detail.session.id,target:handle},async()=>{if(api.boardControl===undefined)throw new Error("unavailable");return api.boardControl(detail.session.id,writer,"offer",handle);},{failure:"The board could not be offered. Possession is unchanged; check the handle and try again.",refreshFailure:"The board was offered, but this session could not refresh. Reload it before changing possession again.",onCommitted:()=>{if(liveOfferHandle.trim()===handle)liveOfferHandle="";}});
+  }
+  async function advanceLiveRotation():Promise<void>{
+    const detail=liveDetail;if(detail===undefined)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;
+    await runLiveSessionAction(detail,{kind:"advance-rotation",sessionId:detail.session.id},async()=>{if(api.boardControl===undefined)throw new Error("unavailable");return api.boardControl(detail.session.id,writer,"advance");},{failure:"The rotation could not advance. Its order is unchanged; try again.",refreshFailure:"The rotation advanced, but this session could not refresh. Reload it before advancing again."});
+  }
   async function confirmLiveReclaim():Promise<void>{
     const detail=liveDetail;const generation=loadGeneration;
     if(detail===undefined||liveReclaimBusy)return;
@@ -2046,7 +2105,11 @@
   function setLiveVoteMove(index:number,moveUci:string):void{const previous=liveVoteOptions[index]!;const previousDefault=liveMoveChoices.find((choice)=>choice.uci===previous.moveUci)?.san??previous.moveUci;const nextDefault=liveMoveChoices.find((choice)=>choice.uci===moveUci)?.san??"";liveVoteOptions=liveVoteOptions.map((option,candidate)=>candidate===index?{moveUci,label:previous.label===""||previous.label===previousDefault?nextDefault:previous.label}:option);}
   function setLiveVoteLabel(index:number,label:string):void{liveVoteOptions=liveVoteOptions.map((option,candidate)=>candidate===index?{...option,label}:option);}
   function liveVoteReady():boolean{const moves=liveVoteOptions.map((option)=>option.moveUci);return liveVoteOptions.length>=MIN_LIVE_VOTE_OPTIONS&&liveVoteOptions.length<=MAX_LIVE_VOTE_OPTIONS&&new Set(moves).size===moves.length&&liveVoteOptions.every((option)=>liveMoveChoices.some((choice)=>choice.uci===option.moveUci)&&option.label.trim().length>0)&&liveVotePrompt.trim().length>0&&liveVoteDuration>=MIN_LIVE_VOTE_SECONDS&&liveVoteDuration<=MAX_LIVE_VOTE_SECONDS;}
-  async function openLiveVote():Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||!liveVoteReady()||api.openVote===undefined)return;const input={nodeId:detail.activeNodeId,prompt:liveVotePrompt,options:liveVoteOptions,durationSeconds:liveVoteDuration};await api.openVote(detail.session.id,input);await refreshCurrentLiveSession(detail,generation);}
+  async function openLiveVote():Promise<void>{
+    const detail=liveDetail;if(detail===undefined||!liveVoteReady())return;
+    const input={nodeId:detail.activeNodeId,prompt:liveVotePrompt.trim(),options:liveVoteOptions.map((option)=>({...option,label:option.label.trim()})),durationSeconds:liveVoteDuration};
+    await runLiveSessionAction(detail,{kind:"open-vote",sessionId:detail.session.id,target:detail.activeNodeId},async()=>{if(api.openVote===undefined)throw new Error("unavailable");return api.openVote(detail.session.id,input);},{failure:"The vote could not be opened. Your prompt and options remain here; try again.",refreshFailure:"The vote opened, but this session could not refresh. Reload it to see the live tally."});
+  }
   async function castLiveVote(choiceUci:string):Promise<void>{
     const detail=liveDetail;
     const generation=loadGeneration;
@@ -2085,12 +2148,31 @@
     }catch(error){if(liveSessionIsCurrent(detail,generation))liveVoteError=error instanceof Error?error.message:String(error);}
     finally{if(liveSessionIsCurrent(detail,generation))liveVoteCloseBusy=false;}
   }
-  async function inviteLiveParticipant():Promise<void>{const detail=liveDetail;const generation=loadGeneration;const handle=liveInviteHandle;const url=liveInviteUrl;if(detail===undefined||(!handle&&!url)||api.inviteToSession===undefined)return;await api.inviteToSession(detail.session.id,{...(detail.session.kind==="match"?{leg:liveInviteLeg}:{}),...(handle?{handle}:{}),...(url?{externalChallengeUrl:url}:{})});await refreshCurrentLiveSession(detail,generation);if(liveSessionIsCurrent(detail,generation)&&liveInviteHandle===handle&&liveInviteUrl===url){liveInviteHandle="";liveInviteUrl="";}}
-  async function importLiveArenaLeg():Promise<void>{const detail=liveDetail;const generation=loadGeneration;const pgn=liveArenaPgn;const leg=liveArenaLeg;if(detail===undefined||!pgn||api.importArenaLeg===undefined)return;const writer=liveWriterId(detail.session.runId);if(!writer)return;await api.importArenaLeg(detail.session.id,leg,pgn,writer);await refreshCurrentLiveSession(detail,generation);if(liveSessionIsCurrent(detail,generation)&&liveArenaPgn===pgn)liveArenaPgn="";}
+  async function inviteLiveParticipant():Promise<void>{
+    const detail=liveDetail;const handle=liveInviteHandle.trim();const url=liveInviteUrl.trim();const leg=liveInviteLeg;if(detail===undefined||(!handle&&!url))return;
+    await runLiveSessionAction(detail,{kind:"invite",sessionId:detail.session.id,target:`${leg}:${handle}:${url}`},async()=>{if(api.inviteToSession===undefined)throw new Error("unavailable");return api.inviteToSession(detail.session.id,{...(detail.session.kind==="match"?{leg}:{}),...(handle?{handle}:{}),...(url?{externalChallengeUrl:url}:{})});},{failure:"The invitation could not be created. Your participant details remain here; check them and try again.",refreshFailure:"The invitation was created, but this session could not refresh. Reload it to see the invitation.",onCommitted:()=>{if(liveInviteHandle.trim()===handle&&liveInviteUrl.trim()===url){liveInviteHandle="";liveInviteUrl="";}}});
+  }
+  async function importLiveArenaLeg():Promise<void>{
+    const detail=liveDetail;const pgn=liveArenaPgn;const leg=liveArenaLeg;if(detail===undefined||!pgn.trim())return;const writer=liveWriterId(detail.session.runId);if(!writer)return;
+    await runLiveSessionAction(detail,{kind:"import-leg",sessionId:detail.session.id,target:String(leg)},async()=>{if(api.importArenaLeg===undefined)throw new Error("unavailable");return api.importArenaLeg(detail.session.id,leg,pgn,writer);},{failure:"That Arena leg could not be imported. The PGN remains here; check it and try again.",refreshFailure:"The Arena leg was imported, but this session could not refresh. Reload it to see the recorded leg.",onCommitted:()=>{if(liveArenaPgn===pgn)liveArenaPgn="";}});
+  }
   function moveAuthorHandle(learnerId:string|null):string{return liveDetail?.grants.find((grant)=>grant.learnerId===learnerId)?.handle??"former member";}
   function liveMoveLabel(moveUci:string,nodeId:string):string{return nodeId===liveDetail?.activeNodeId?liveMoveChoices.find((choice)=>choice.uci===moveUci)?.san??"Legal move":"Move from an earlier position";}
   function journalActorLabel(learnerId:string|null):string{return learnerId===null?"System":`@${moveAuthorHandle(learnerId)}`;}
-  async function operateMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||api.matchOperation===undefined)return;let writerId:string|undefined;if(op==="resume"){const writer=WriterSession.claimFor(detail.session.runId,storage);await api.claimLease?.(detail.session.runId,writer.writerId);writerId=writer.writerId;if(!liveSessionIsCurrent(detail,generation))return;}await api.matchOperation(detail.session.id,op,writerId);await refreshCurrentLiveSession(detail,generation);}
+  async function operateMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{
+    const detail=liveDetail;if(detail===undefined)return;
+    await runLiveSessionAction(detail,{kind:"match",sessionId:detail.session.id,target:op},async()=>{
+      if(api.matchOperation===undefined)throw new Error("unavailable");
+      let writerId:string|undefined;
+      if(op==="resume"){
+        const writer=WriterSession.claimFor(detail.session.runId,storage);
+        if(api.claimLease===undefined)throw new Error("unavailable");
+        await api.claimLease(detail.session.runId,writer.writerId);
+        writerId=writer.writerId;
+      }
+      return api.matchOperation(detail.session.id,op,writerId);
+    },{failure:"The match action could not finish. Reload before trying again; board possession may have changed.",refreshFailure:"The match action finished, but this session could not refresh. Reload it to see the main-line state."});
+  }
   async function operateActiveMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{
     const detail=activeLiveDetail;const generation=loadGeneration;
     if(detail===undefined||api.matchOperation===undefined)return;
@@ -2101,16 +2183,14 @@
     await refreshCurrentActiveLiveSession(detail,generation);
     if(op==="resume"&&activeLiveSessionIsCurrent(detail,generation))await controller.resume(runId,{matchMode:"live"});
   }
-  async function mintJoinLink():Promise<void>{const detail=liveDetail;const generation=loadGeneration;if(detail===undefined||api.mintSessionLink===undefined)return;const handle=liveJoinHandle;const result=await api.mintSessionLink(detail.session.id,{matchSlot:liveJoinSlot,invitedRole:"participant",...(handle?{invitedHandle:handle}:{})});if(liveSessionIsCurrent(detail,generation))liveJoinUrl=result.url;}
+  async function mintJoinLink():Promise<void>{
+    const detail=liveDetail;const handle=liveJoinHandle.trim();const slot=liveJoinSlot;if(detail===undefined)return;
+    await runLiveSessionAction(detail,{kind:"friend-link",sessionId:detail.session.id,target:`${slot}:${handle}`},async()=>{if(api.mintSessionLink===undefined)throw new Error("unavailable");return api.mintSessionLink(detail.session.id,{matchSlot:slot,invitedRole:"participant",...(handle?{invitedHandle:handle}:{})});},{failure:"The friend link could not be created. Check the seat and try again.",completionFailure:"A friend link may have been created, but its response could not be matched. Reload before minting another.",refresh:false,onCommitted:(result)=>{if(typeof result.url!=="string"||result.url.trim()==="")throw new Error("invalid");liveJoinUrl=result.url;}});
+  }
   async function mintWatchLink():Promise<void>{
-    const detail=liveDetail;const generation=loadGeneration;
+    const detail=liveDetail;
     if(detail===undefined)return;
-    liveWatchError=undefined;
-    try{
-      if(api.mintSessionLink===undefined)throw new Error("Viewer links are unavailable.");
-      const result=await api.mintSessionLink(detail.session.id,{invitedRole:"spectator"});
-      if(liveSessionIsCurrent(detail,generation))liveWatchUrl=result.url;
-    }catch(error){if(liveSessionIsCurrent(detail,generation))liveWatchError=error instanceof Error?error.message:String(error);}
+    await runLiveSessionAction(detail,{kind:"watch-link",sessionId:detail.session.id},async()=>{if(api.mintSessionLink===undefined)throw new Error("unavailable");return api.mintSessionLink(detail.session.id,{invitedRole:"spectator"});},{failure:"The watch link could not be created. Nothing was shown; try again.",completionFailure:"A watch link may have been created, but its response could not be matched. Reload before minting another.",refresh:false,onCommitted:(result)=>{if(typeof result.url!=="string"||result.url.trim()==="")throw new Error("invalid");liveWatchUrl=result.url;}});
   }
 
   onMount(() => {
@@ -2156,6 +2236,7 @@
     createSeedGeneration += 1;
     studioMutationGeneration += 1;
     shapeMutationGeneration += 1;
+    liveSessionActionGeneration += 1;
     themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
@@ -2784,15 +2865,17 @@
   {:else if route.name === "live-session"}
     <main class="shell-view" aria-labelledby="session-title">
       {#if liveDetail}<p class="eyebrow">Live / {liveKindLabel(liveDetail.session.kind)}</p><h1 id="session-title">{liveDetail.session.title}</h1>{#if liveDetail.classroom}<p class="session-context">Classroom: <strong>{liveDetail.classroom.name}</strong></p>{/if}<p>{liveBoardControlLabel(liveDetail.session.boardControl)} · your role: {liveRoleLabel(liveDetail.role)}</p><p class="session-purpose">{liveSessionPurpose(liveDetail.session.kind)}</p>
-        {#if liveDetail.match}<section aria-labelledby="match-state-title"><h2 id="match-state-title">Match board</h2><p>{liveDetail.match.pausedAt ? "Paused for rehearsal" : liveDetail.match.pauseProposedBy ? "Pause proposed" : "Live — evidence and rehearsal are withheld"}</p><div class="row-actions">{#if liveDetail.match.pausedAt}<button type="button" onclick={()=>void operateMatch("resume")}>Resume main line</button>{:else}<button type="button" onclick={()=>void operateMatch("propose_pause")}>Propose pause</button>{#if liveDetail.match.pauseProposedBy}<button type="button" onclick={()=>void operateMatch("accept_pause")}>Accept pause</button>{/if}{#if liveDetail.role==="host"}<button type="button" onclick={()=>void operateMatch("pause")}>Coach pause</button>{/if}{/if}</div>{#if liveDetail.role==="host"}<div class="row-actions"><label>Open seat <select bind:value={liveJoinSlot}><option value="white">White</option><option value="black">Black</option></select></label><label>Optional handle<input bind:value={liveJoinHandle}/></label><button type="button" onclick={()=>void mintJoinLink()}>Create friend link</button></div>{#if liveJoinUrl}<p role="status">Friend link: <code>{liveJoinUrl}</code></p>{/if}{/if}</section>{/if}
+        {#if liveSessionActionBusy}<p id="live-session-action-busy" role="status">Updating this session…</p>{/if}
+        {#if liveSessionActionError}<p role="alert">{liveSessionActionError}</p>{/if}
+        {#if liveDetail.match}<section aria-labelledby="match-state-title"><h2 id="match-state-title">Match board</h2><p>{liveDetail.match.pausedAt ? "Paused for rehearsal" : liveDetail.match.pauseProposedBy ? "Pause proposed" : "Live — evidence and rehearsal are withheld"}</p><div class="row-actions">{#if liveDetail.match.pausedAt}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("resume")}>Resume main line</button>{:else}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("propose_pause")}>Propose pause</button>{#if liveDetail.match.pauseProposedBy}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("accept_pause")}>Accept pause</button>{/if}{#if liveDetail.role==="host"}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("pause")}>Coach pause</button>{/if}{/if}</div>{#if liveDetail.role==="host"}<div class="row-actions"><label>Open seat <select bind:value={liveJoinSlot} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}><option value="white">White</option><option value="black">Black</option></select></label><label>Optional handle<input bind:value={liveJoinHandle} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label><button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void mintJoinLink()}>Create friend link</button></div>{#if liveJoinUrl}<p role="status">Friend link: <code>{liveJoinUrl}</code></p>{/if}{/if}</section>{/if}
         <div class="studio-grid">
           <section>
             <h2>Members</h2>
             <p>@{liveDetail.leaseHeldBy.handle} holds the board.</p>
             <ul>{#each liveDetail.grants as grant}<li>@{grant.handle} — {liveRoleLabel(grant.role)}</li>{/each}</ul>
             {#if liveDetail.role === "host"}
-              <label>Offer board to handle <input bind:value={liveOfferHandle}/></label>
-              <button type="button" disabled={!liveOfferHandle||!liveWriterId(liveDetail.session.runId)} aria-describedby={!liveWriterId(liveDetail.session.runId)?"offer-readonly":undefined} onclick={()=>void offerLiveBoard()}>Offer board</button>
+              <label>Offer board to handle <input bind:value={liveOfferHandle} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label>
+              <button type="button" disabled={!liveOfferHandle||!liveWriterId(liveDetail.session.runId)||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveWriterId(liveDetail.session.runId)?"offer-readonly":undefined} onclick={()=>void offerLiveBoard()}>Offer board</button>
               {#if !liveWriterId(liveDetail.session.runId)}<p id="offer-readonly" class="honest">Open the shared board on this device before offering possession.</p>{/if}
               {#if liveDetail.leaseHeldBy.learnerId !== learner?.id}
                 <div class="coach-interrupt"><p class="honest">A vote or proposal preserves the learner's turn. Taking the board ends it.</p><button type="button" onclick={()=>{liveReclaimError=undefined;liveReclaimIntent=true;}}>Take back board…</button>{#if liveReclaimIntent}<aside class="deletion-card" aria-labelledby="reclaim-title"><h3 id="reclaim-title">Take the board from @{liveDetail.leaseHeldBy.handle}?</h3><p>You become the only person who can move. @{liveDetail.leaseHeldBy.handle}'s current line stays in the branch rail, but their attempt-in-progress ends as an active learning turn.</p><p class="honest">Prefer a vote or proposal when a nudge is enough. Nothing in the learner's line is deleted.</p><div class="row-actions"><button type="button" disabled={liveReclaimBusy} onclick={()=>void confirmLiveReclaim()}>{liveReclaimBusy?"Taking board…":"Confirm — take the board"}</button><button type="button" disabled={liveReclaimBusy} onclick={()=>{liveReclaimIntent=false;liveReclaimError=undefined;}}>Cancel</button></div></aside>{/if}{#if liveReclaimError}<p role="alert">{liveReclaimError}</p>{/if}</div>
@@ -2804,19 +2887,18 @@
             {#if markAttribution(liveDetail)}<p class="honest">{markAttribution(liveDetail)}</p>{:else}<p>No relayed marks at this position.</p>{/if}
             <h2>Proposals</h2>
             {#if liveDetail.role !== "spectator"}
-              <div class="row-actions"><label>Move <select bind:value={liveProposalMove}><option value="">Choose a legal move</option>{#each liveMoveChoices as choice}<option value={choice.uci}>{choice.san}</option>{/each}</select></label><button type="button" disabled={!liveMoveChoices.some((choice)=>choice.uci===liveProposalMove)} aria-describedby={!liveProposalMove?"proposal-disabled":undefined} onclick={()=>void submitLiveProposal()}>Propose</button></div>
+              <div class="row-actions"><label>Move <select bind:value={liveProposalMove} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}><option value="">Choose a legal move</option>{#each liveMoveChoices as choice}<option value={choice.uci}>{choice.san}</option>{/each}</select></label><button type="button" disabled={!liveMoveChoices.some((choice)=>choice.uci===liveProposalMove)||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveProposalMove?"proposal-disabled":undefined} onclick={()=>void submitLiveProposal()}>Propose</button></div>
               {#if !liveProposalMove}<p id="proposal-disabled" class="honest">Choose a legal move from the active position.</p>{/if}
             {/if}
-            <ul aria-label="Move proposals">{#each liveDetail.proposals as proposal}<li><strong>{liveMoveLabel(proposal.moveUci, proposal.nodeId)}</strong> · proposed by @{moveAuthorHandle(proposal.proposedBy)} · {proposalStateLabel(proposal.status)}{#if liveDetail.role==="host"&&proposal.status==="open"}<div class="row-actions"><button type="button" onclick={()=>void resolveLiveProposal(proposal.id,"apply")}>Play proposal</button><button type="button" onclick={()=>void resolveLiveProposal(proposal.id,"decline")}>Decline</button></div>{/if}</li>{:else}<li>No proposals yet.</li>{/each}</ul>
-            {#if liveProposalError}<p role="alert">{liveProposalError}</p>{/if}
+            <ul aria-label="Move proposals">{#each liveDetail.proposals as proposal}<li><strong>{liveMoveLabel(proposal.moveUci, proposal.nodeId)}</strong> · proposed by @{moveAuthorHandle(proposal.proposedBy)} · {proposalStateLabel(proposal.status)}{#if liveDetail.role==="host"&&proposal.status==="open"}<div class="row-actions"><button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void resolveLiveProposal(proposal.id,"apply")}>Play proposal</button><button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void resolveLiveProposal(proposal.id,"decline")}>Decline</button></div>{/if}</li>{:else}<li>No proposals yet.</li>{/each}</ul>
           </section>
           <section>
             <h2>Vote</h2>
             {#if liveDetail.role === "host"}
               <div class="vote-editor">
-                <label>Prompt<input maxlength="120" bind:value={liveVotePrompt}/></label>
-                {#each liveVoteOptions as option,index}<div class="row-actions"><label>Move <select value={option.moveUci} onchange={(event)=>setLiveVoteMove(index,event.currentTarget.value)}><option value="">Choose a legal move</option>{#each liveMoveChoices as choice}<option value={choice.uci}>{choice.san}</option>{/each}</select></label><label>Audience label<input maxlength="40" value={option.label} oninput={(event)=>setLiveVoteLabel(index,event.currentTarget.value)}/></label><button type="button" disabled={liveVoteOptions.length<=MIN_LIVE_VOTE_OPTIONS} onclick={()=>liveVoteOptions=liveVoteOptions.filter((_,candidate)=>candidate!==index)}>Remove</button></div>{/each}
-                <div class="row-actions"><button type="button" disabled={liveVoteOptions.length>=MAX_LIVE_VOTE_OPTIONS} onclick={()=>liveVoteOptions=[...liveVoteOptions,{moveUci:"",label:""}]}>Add option</button><label>Duration (seconds)<input type="number" min={MIN_LIVE_VOTE_SECONDS} max={MAX_LIVE_VOTE_SECONDS} bind:value={liveVoteDuration}/></label><button type="button" disabled={!liveVoteReady()} aria-describedby={!liveVoteReady()?"vote-disabled":undefined} onclick={()=>void openLiveVote()}>Open vote</button></div>
+                <label>Prompt<input maxlength="120" bind:value={liveVotePrompt} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label>
+                {#each liveVoteOptions as option,index}<div class="row-actions"><label>Move <select value={option.moveUci} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onchange={(event)=>setLiveVoteMove(index,event.currentTarget.value)}><option value="">Choose a legal move</option>{#each liveMoveChoices as choice}<option value={choice.uci}>{choice.san}</option>{/each}</select></label><label>Audience label<input maxlength="40" value={option.label} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} oninput={(event)=>setLiveVoteLabel(index,event.currentTarget.value)}/></label><button type="button" disabled={liveVoteOptions.length<=MIN_LIVE_VOTE_OPTIONS||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>liveVoteOptions=liveVoteOptions.filter((_,candidate)=>candidate!==index)}>Remove</button></div>{/each}
+                <div class="row-actions"><button type="button" disabled={liveVoteOptions.length>=MAX_LIVE_VOTE_OPTIONS||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>liveVoteOptions=[...liveVoteOptions,{moveUci:"",label:""}]}>Add option</button><label>Duration (seconds)<input type="number" min={MIN_LIVE_VOTE_SECONDS} max={MAX_LIVE_VOTE_SECONDS} bind:value={liveVoteDuration} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label><button type="button" disabled={!liveVoteReady()||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveVoteReady()?"vote-disabled":undefined} onclick={()=>void openLiveVote()}>Open vote</button></div>
               </div>
               {#if !liveVoteReady()}<p id="vote-disabled" class="honest">Choose two to eight different legal moves, give each an audience label, and set a duration from 15 seconds to 10 minutes.</p>{/if}
             {/if}
@@ -2825,9 +2907,9 @@
             <ol>{#each liveJournal as entry}<li>{sessionJournalLabel(entry.kind)} · {journalActorLabel(entry.actorLearnerId)} · {readableDate(entry.at)}</li>{/each}</ol>
           </section>
         </div>
-        {#if liveDetail.role==="host"}<section aria-labelledby="invite-title"><h2 id="invite-title">Invitations</h2><aside class="deletion-card" aria-labelledby="watch-link-title"><h3 id="watch-link-title">Invite someone to watch</h3><p>Create a single-use viewer link for this session. The viewer signs in as themselves and cannot move the board.</p><button type="button" onclick={()=>void mintWatchLink()}>Create watch link</button>{#if liveWatchUrl}<p role="status">Watch link: <code>{liveWatchUrl}</code></p><p class="honest">Single use · expires after 14 days · grants spectator access only.</p>{/if}{#if liveWatchError}<p role="alert">{liveWatchError}</p>{/if}</aside><h3>Invite a participant</h3>{#if liveDetail.session.kind==="match"}<p class="honest">Either player may propose a coaching pause. Rehearsal opens only after the other player accepts; the played main line remains intact.</p>{/if}<div class="row-actions">{#if liveDetail.session.kind==="match"}<label>Leg <select bind:value={liveInviteLeg}><option value={1}>1</option><option value={2}>2</option></select></label>{/if}<label>Tabiya handle<input bind:value={liveInviteHandle} placeholder="training-partner"/></label><label>External challenge URL<input type="url" bind:value={liveInviteUrl} placeholder="https://lichess.org/…"/></label><button type="button" disabled={!liveInviteHandle&&!liveInviteUrl} aria-describedby={!liveInviteHandle&&!liveInviteUrl?"invite-disabled":undefined} onclick={()=>void inviteLiveParticipant()}>Create invitation</button></div>{#if !liveInviteHandle&&!liveInviteUrl}<p id="invite-disabled" class="honest">Enter a local handle, an external HTTPS challenge, or both.</p>{/if}<ul>{#each liveDetail.invitations as invitation}<li>{invitation.leg===null?"Session":`Leg ${invitation.leg}`} · {invitation.invitedHandle?`@${invitation.invitedHandle}`:invitation.externalChallengeUrl} · {invitationStateLabel(invitation.state)}</li>{:else}<li>No invitations yet.</li>{/each}</ul></section>{/if}
-        {#if liveDetail.session.kind==="match"&&!liveDetail.match}<section aria-labelledby="arena-title"><h2 id="arena-title">Position Arena legs</h2><p class="honest">Import one mainline PGN per leg. Its starting position must exactly match this run.</p>{#if liveDetail.role==="host"}<label>Leg <select bind:value={liveArenaLeg}><option value={1}>1</option><option value={2}>2</option></select></label><label>PGN<textarea rows="8" bind:value={liveArenaPgn} placeholder={'[SetUp "1"]\n[FEN "…"]\n\n1. …'}></textarea></label><button type="button" disabled={!liveArenaPgn||!liveWriterId(liveDetail.session.runId)} aria-describedby={!liveWriterId(liveDetail.session.runId)?"arena-readonly":undefined} onclick={()=>void importLiveArenaLeg()}>Import leg</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="arena-readonly" class="honest">Open the shared board on this device before importing a leg.</p>{/if}{/if}<ol>{#each liveDetail.legs as leg}<li>Leg {leg.leg}: {arenaLegState(leg.branchId, leg.result)}</li>{/each}</ol></section>{/if}
-        {#if liveDetail.session.boardControl==="rotation"&&liveDetail.session.rotation}<section aria-labelledby="rotation-title"><h2 id="rotation-title">Rotation order</h2><ol>{#each liveDetail.session.rotation as learnerId,index}<li><strong>{index===liveDetail.session.rotationCursor?"Current: ":""}</strong>@{liveDetail.grants.find((grant)=>grant.learnerId===learnerId)?.handle??"former member"}</li>{/each}</ol>{#if liveDetail.role==="host"}<button type="button" disabled={!liveWriterId(liveDetail.session.runId)} aria-describedby={!liveWriterId(liveDetail.session.runId)?"rotation-readonly":undefined} onclick={()=>void advanceLiveRotation()}>Advance rotation</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="rotation-readonly" class="honest">Open the shared board on this device before advancing the turn.</p>{/if}{/if}</section>{/if}
+        {#if liveDetail.role==="host"}<section aria-labelledby="invite-title"><h2 id="invite-title">Invitations</h2><aside class="deletion-card" aria-labelledby="watch-link-title"><h3 id="watch-link-title">Invite someone to watch</h3><p>Create a single-use viewer link for this session. The viewer signs in as themselves and cannot move the board.</p><button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void mintWatchLink()}>Create watch link</button>{#if liveWatchUrl}<p role="status">Watch link: <code>{liveWatchUrl}</code></p><p class="honest">Single use · expires after 14 days · grants spectator access only.</p>{/if}</aside><h3>Invite a participant</h3>{#if liveDetail.session.kind==="match"}<p class="honest">Either player may propose a coaching pause. Rehearsal opens only after the other player accepts; the played main line remains intact.</p>{/if}<div class="row-actions">{#if liveDetail.session.kind==="match"}<label>Leg <select bind:value={liveInviteLeg} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}><option value={1}>1</option><option value={2}>2</option></select></label>{/if}<label>Tabiya handle<input bind:value={liveInviteHandle} placeholder="training-partner" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label><label>External challenge URL<input type="url" bind:value={liveInviteUrl} placeholder="https://lichess.org/…" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label><button type="button" disabled={(!liveInviteHandle&&!liveInviteUrl)||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveInviteHandle&&!liveInviteUrl?"invite-disabled":undefined} onclick={()=>void inviteLiveParticipant()}>Create invitation</button></div>{#if !liveInviteHandle&&!liveInviteUrl}<p id="invite-disabled" class="honest">Enter a local handle, an external HTTPS challenge, or both.</p>{/if}<ul>{#each liveDetail.invitations as invitation}<li>{invitation.leg===null?"Session":`Leg ${invitation.leg}`} · {invitation.invitedHandle?`@${invitation.invitedHandle}`:invitation.externalChallengeUrl} · {invitationStateLabel(invitation.state)}</li>{:else}<li>No invitations yet.</li>{/each}</ul></section>{/if}
+        {#if liveDetail.session.kind==="match"&&!liveDetail.match}<section aria-labelledby="arena-title"><h2 id="arena-title">Position Arena legs</h2><p class="honest">Import one mainline PGN per leg. Its starting position must exactly match this run.</p>{#if liveDetail.role==="host"}<label>Leg <select bind:value={liveArenaLeg} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}><option value={1}>1</option><option value={2}>2</option></select></label><label>PGN<textarea rows="8" bind:value={liveArenaPgn} placeholder={'[SetUp "1"]\n[FEN "…"]\n\n1. …'} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}></textarea></label><button type="button" disabled={!liveArenaPgn||!liveWriterId(liveDetail.session.runId)||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveWriterId(liveDetail.session.runId)?"arena-readonly":undefined} onclick={()=>void importLiveArenaLeg()}>Import leg</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="arena-readonly" class="honest">Open the shared board on this device before importing a leg.</p>{/if}{/if}<ol>{#each liveDetail.legs as leg}<li>Leg {leg.leg}: {arenaLegState(leg.branchId, leg.result)}</li>{/each}</ol></section>{/if}
+        {#if liveDetail.session.boardControl==="rotation"&&liveDetail.session.rotation}<section aria-labelledby="rotation-title"><h2 id="rotation-title">Rotation order</h2><ol>{#each liveDetail.session.rotation as learnerId,index}<li><strong>{index===liveDetail.session.rotationCursor?"Current: ":""}</strong>@{liveDetail.grants.find((grant)=>grant.learnerId===learnerId)?.handle??"former member"}</li>{/each}</ol>{#if liveDetail.role==="host"}<button type="button" disabled={!liveWriterId(liveDetail.session.runId)||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveWriterId(liveDetail.session.runId)?"rotation-readonly":undefined} onclick={()=>void advanceLiveRotation()}>Advance rotation</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="rotation-readonly" class="honest">Open the shared board on this device before advancing the turn.</p>{/if}{/if}</section>{/if}
         {#if liveDetail.role==="host"}
           <section aria-labelledby="session-access-title">
             <h2 id="session-access-title">Session access</h2>
