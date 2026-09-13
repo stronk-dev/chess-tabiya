@@ -29,6 +29,7 @@ import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parsePackDocument } from "./pack-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
+import { parseShapeDocument } from "./shape-response.js";
 
 export interface PackSummary {
   readonly id: string;
@@ -1065,9 +1066,9 @@ export class DrillApi implements DrillClientApi {
 
   async shape(shapeId: string): Promise<ShapeDocument> {
     const response = await this.#response(`/shapes/${encoded(shapeId)}`);
-    const document = (await response.json()) as ShapeEntryView;
+    const document = parseShapeDocument(await response.json(), shapeId);
     const digest = response.headers.get("x-shape-digest");
-    if (digest === null || digest === "") {
+    if (digest === null || !/^sha256:[a-f0-9]{64}$/u.test(digest)) {
       throw new ApiError(502, "INVALID_RESPONSE", "Shape response omitted its digest");
     }
     return Object.freeze({ document, digest });

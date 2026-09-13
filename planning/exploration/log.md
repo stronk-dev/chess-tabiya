@@ -20149,3 +20149,18 @@ instead of misclassifying local validation as a server outage. `make verify-soft
 1,360 tests plus types, performance, schema, manifest, packaging and production builds. The complete
 `make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
 skipped.
+
+## 2026-09-14 — Full shape documents become finite guidance inputs ([[D3255]])
+
+`DrillApi.shape()` no longer casts arbitrary JSON into the named-structure guidance shown by Inspector.
+One exact parser now binds the requested shape, semantic version, phases, both-side plan inventory,
+authored text, provenance, publication ownership and canonical digest. Its recursive expression parser
+covers every declared combinator, structural feature, piece and range while refusing unknown or extra
+operands, duplicate identities, malformed URIs and crossed subjects. Accepted documents are deeply
+frozen before entering session state.
+
+This closes a direct evidence-to-UX trust gap: a response can no longer invent a feature kind or pair
+unrelated prose with a valid shape id and have the client render it as structural guidance.
+`make verify-software` passes 204 files / 1,371 tests plus types, performance, schema, manifest, packaging and
+production builds. The complete `make test-browser` gate passes 92 required journeys with one explicitly
+optional Maia latency probe skipped.
