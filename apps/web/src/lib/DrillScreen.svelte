@@ -230,6 +230,10 @@
   let voiceBusy: { readonly nodeId: string; readonly scope: VoicePage["scope"] } | undefined = $state();
   let voiceError: { readonly nodeId: string; readonly scope: VoicePage["scope"]; readonly text: string } | undefined = $state();
   let voiceRequest = 0;
+  let speechBusyNodeId: string | undefined = $state();
+  let speechError: { readonly nodeId: string; readonly text: string } | undefined = $state();
+  let speechRequest = 0;
+  let spokenAudio: { readonly nodeId: string; readonly audio: HTMLAudioElement; readonly url: string } | undefined;
   let forkLabel = $state("");
   let forkIntent = $state("");
   let groupOpen = $state(false);
@@ -561,6 +565,13 @@
     const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
     return decision?.parentId ?? displayedNode.id;
   })());
+  $effect(() => {
+    if (spokenAudio !== undefined && spokenAudio.nodeId !== displayedNode.id) {
+      spokenAudio.audio.pause();
+      URL.revokeObjectURL(spokenAudio.url);
+      spokenAudio = undefined;
+    }
+  });
   let displayedMarkKey = $derived(markScope === "position" ? displayedNode.transposeKey : `${run.activeCursor.branchId}:${displayedNode.id}`);
   let displayedMarks = $derived(ownMarks.filter((mark) => mark.scope === markScope && mark.scopeKey === displayedMarkKey).map((mark) => ({ orig:mark.orig as import("@lichess-org/chessground/types").Key,...(mark.dest===undefined?{}:{dest:mark.dest as import("@lichess-org/chessground/types").Key}),brush:mark.brush })));
   let rawStructure = $derived(structuralReading(displayedNode.fen));
@@ -702,20 +713,51 @@
     }
   }
 
-  function speakSentences(sentences: readonly string[], scope: VoicePage["scope"] = "reading"): void {
+  async function speakSentences(sentences: readonly string[], scope: VoicePage["scope"] = "reading"): Promise<void> {
     if (sentences.length === 0 || assistance.spoken === "off") return;
     if (assistance.spoken === "provider" && onSpeech !== undefined) {
-      void onSpeech(displayedNode.id, scope).then((blob) => {
+      const nodeId = displayedNode.id;
+      const request = ++speechRequest;
+      speechBusyNodeId = nodeId;
+      speechError = undefined;
+      if (spokenAudio !== undefined) {
+        spokenAudio.audio.pause();
+        URL.revokeObjectURL(spokenAudio.url);
+        spokenAudio = undefined;
+      }
+      try {
+        const blob = await onSpeech(nodeId, scope);
+        if (request !== speechRequest || displayedNode.id !== nodeId) return;
         const url = URL.createObjectURL(blob);
         const audio = new Audio(url);
-        audio.addEventListener("ended", () => URL.revokeObjectURL(url), { once: true });
-        void audio.play();
-      });
+        spokenAudio = { nodeId, audio, url };
+        audio.addEventListener("ended", () => {
+          URL.revokeObjectURL(url);
+          if (spokenAudio?.audio === audio) spokenAudio = undefined;
+        }, { once: true });
+        try {
+          await audio.play();
+        } catch {
+          URL.revokeObjectURL(url);
+          if (spokenAudio?.audio === audio) spokenAudio = undefined;
+          throw new Error("speech playback failed");
+        }
+      } catch {
+        if (request === speechRequest && displayedNode.id === nodeId) {
+          speechError = { nodeId, text: "Spoken guidance is unavailable right now. Try again." };
+        }
+      } finally {
+        if (request === speechRequest) speechBusyNodeId = undefined;
+      }
       return;
     }
     if (assistance.spoken !== "browser" || !speechAvailable) return;
-    globalThis.speechSynthesis.cancel();
-    globalThis.speechSynthesis.speak(new SpeechSynthesisUtterance(sentences.join(" ")));
+    try {
+      globalThis.speechSynthesis.cancel();
+      globalThis.speechSynthesis.speak(new SpeechSynthesisUtterance(sentences.join(" ")));
+    } catch {
+      speechError = { nodeId: displayedNode.id, text: "Spoken guidance is unavailable right now. Try again." };
+    }
   }
 
   function openPivotalMarker(nodeId: string): void {
@@ -1130,6 +1172,10 @@
     unregisterKeyboard?.();
     if (replayTimer !== undefined) clearInterval(replayTimer);
     if (markTimer !== undefined) clearTimeout(markTimer);
+    if (spokenAudio !== undefined) {
+      spokenAudio.audio.pause();
+      URL.revokeObjectURL(spokenAudio.url);
+    }
   });
 
   let loadedAssistanceProfile: AssistanceProfile | undefined;
@@ -1704,8 +1750,10 @@
           {:else}
             {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.spoken !== "off"}
-              <button type="button" onclick={() => speakSentences(renderEndgameReading(endgame), "reading")}>Speak current-position endgame evidence</button>
+              <button type="button" disabled={speechBusyNodeId === displayedNode.id} onclick={() => void speakSentences(renderEndgameReading(endgame), "reading")}>{speechBusyNodeId === displayedNode.id ? "Preparing spoken guidance…" : "Speak current-position endgame evidence"}</button>
             {/if}
+            {#if speechBusyNodeId === displayedNode.id}<p role="status">Preparing spoken guidance for this position…</p>{/if}
+            {#if speechError?.nodeId === displayedNode.id}<p role="alert">{speechError.text}</p>{/if}
           {/if}
         </section>
         <section aria-label="Named structure evidence" data-evidence-consumer="inspector.shape_trigger">

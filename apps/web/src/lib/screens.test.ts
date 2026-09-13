@@ -546,6 +546,36 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("recovers spoken endgame guidance when the external voice service fails", async () => {
+    const run = createRun({
+      id: "spoken-endgame-recovery",
+      session: { kind: "position", start: { fen: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"8".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const onSpeech = vi.fn().mockRejectedValue(new Error("tts endpoint detail"));
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "none", tts: "external", tablebase: "none" } } as Capabilities,
+      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "provider", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      onSpeech,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Inspector")!.click();
+    await tick();
+    const section = document.querySelector<HTMLElement>("[aria-label='Current-position endgame evidence']")!;
+    const speak = section.querySelector<HTMLButtonElement>("button")!;
+    speak.click();
+    await vi.waitFor(() => expect(section.querySelector("[role='alert']")?.textContent).toBe("Spoken guidance is unavailable right now. Try again."));
+    expect(section.textContent).not.toContain("tts endpoint detail");
+    expect(speak.disabled).toBe(false);
+    expect(onSpeech).toHaveBeenCalledWith(run.activeCursor.nodeId, "reading");
+    await unmount(component);
+  });
+
   it("opens the Support companion from ambient presence", async () => {
     const run = createRun({
       id: "ambient-assistance",

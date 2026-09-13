@@ -19474,3 +19474,14 @@ failure and explicit refusal both restore the action with position-scoped retry 
 diagnostics remain out of learner text. `make test-software` passes 188 files / 1,190 tests and
 `make test-browser` passes all 64 required production journeys with the one explicitly optional
 Maia latency measurement skipped.
+
+## 2026-09-13 — Spoken guidance follows its position lifecycle ([[D3204]])
+
+External TTS previously played every returned blob even after the board moved, leaked its object URL
+when playback failed, and let provider rejection escape without learner feedback. Speech requests
+now retain their node and sequence; stale blobs are discarded before audio construction, active
+audio stops on a position change, and replacement, playback failure, completion and component
+teardown all revoke the URL. External and browser synthesis failures end in position-scoped retry
+copy without provider diagnostics. `make test-software` passes 188 files / 1,191 tests and `make
+test-browser` passes all 64 required production journeys with the one explicitly optional Maia
+latency measurement skipped.
