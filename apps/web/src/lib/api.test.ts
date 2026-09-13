@@ -242,7 +242,7 @@ describe("DrillApi", () => {
         return json({ items: [], hasWithheldAuthoredContent: true });
       }
       if (url.includes("/evidence") && init?.method !== "POST") {
-        return json({ results: [], nextSeq: 0 });
+        return json({ results: [], nextSeq: 2 });
       }
       if (url.includes("/pgn")) {
         return new Response("[Event \"Tabiya\"]\n", {

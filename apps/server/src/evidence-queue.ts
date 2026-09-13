@@ -154,11 +154,12 @@ export class EvidenceJobQueue implements JobObserver {
   }
 
   page(runId: string, sinceSeq = 0): EvidencePage {
+    const nextSeq = Math.max(sinceSeq, this.#nextSeq.get(runId) ?? 0);
     return Object.freeze({
       results: Object.freeze(
         (this.#staged.get(runId) ?? []).filter((result) => result.seq > sinceSeq),
       ),
-      nextSeq: this.#nextSeq.get(runId) ?? 0,
+      nextSeq,
     });
   }
 

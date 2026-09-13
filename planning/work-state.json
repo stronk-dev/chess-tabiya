@@ -26738,6 +26738,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/opponent-selection-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3259",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:395cffe38988d3f85d460caba43fbaad373ff6484303262ae42da6b53ebeac40",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/evidence-page-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

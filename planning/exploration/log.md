@@ -20214,3 +20214,18 @@ illegal `Kh1`; the fixture now exercises the real `Ka3 Kg2` sequence instead of 
 `make verify-software` passes 207 files / 1,406 tests plus types, performance, schema, manifest,
 packaging and production builds. The complete `make test-browser` gate passes 92 required journeys
 with one explicitly optional Maia latency probe skipped.
+
+## 2026-09-14 — Evidence polling exposes only authoritative apply receipts ([[D3259]])
+
+The evidence polling route no longer sends staged engine/tablebase payloads, evidence references or
+objective proposals to a browser that used only their sequence numbers. The server now projects its
+private queue to ordered `{seq}` receipts. The client admits only the exact public page shape and
+refuses duplicates, disorder, values outside the requested cursor window, and a regressing watermark;
+accepted pages are deeply frozen before either polling consumer can apply them.
+
+The first software run caught the API fixture returning `nextSeq: 0` after a request from `sinceSeq: 2`.
+That exposed the corresponding empty-page behavior in the server queue, which now preserves the
+caller's watermark rather than moving it backward. `make verify-software` passes 208 files / 1,413
+tests plus types, performance, schema, manifest, packaging and production builds. The complete
+`make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
+skipped.

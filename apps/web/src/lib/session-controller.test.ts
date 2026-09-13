@@ -1163,13 +1163,8 @@ describe("DrillSessionController", () => {
     vi.spyOn(api, "evidence").mockImplementation(async () => {
       callOrder.push("evidence");
       return {
-        results: pendingNodes.map((nodeId, index) => ({
+        results: pendingNodes.map((_nodeId, index) => ({
           seq: index + 1,
-          jobId: `compare-evidence-${index + 1}`,
-          runId: api.requiredRun().id,
-          nodeId,
-          evidenceRefs: [`engine:compare-${index + 1}`],
-          payload: { kind: "eval" as const, source: "engine_validated" as const, values: { centipawns: index * 12 } },
         })),
         nextSeq: pendingNodes.length,
       };

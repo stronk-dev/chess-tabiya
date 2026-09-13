@@ -422,15 +422,9 @@ describe("evidence staging and writer application", () => {
       "",
     );
     expect(stagedResponse.status).toBe(200);
-    const staged = (await stagedResponse.json()) as {
-      results: { seq: number; payload: EvidencePayload }[];
-      nextSeq: number;
-    };
+    const staged = (await stagedResponse.json()) as { results: { seq: number }[]; nextSeq: number };
     expect(staged).toMatchObject({ nextSeq: 1 });
-    expect(staged.results[0]).toMatchObject({
-      seq: 1,
-      payload: { kind: "eval", source: "engine_validated" },
-    });
+    expect(staged.results[0]).toEqual({ seq: 1 });
     const caughtUp = await request(
       handler,
       "GET",
@@ -439,6 +433,9 @@ describe("evidence staging and writer application", () => {
       "",
     );
     expect(await caughtUp.json()).toEqual({ results: [], nextSeq: 1 });
+
+    const ahead = await request(handler, "GET", "/runs/apply-run/evidence?sinceSeq=9", undefined, "");
+    expect(await ahead.json()).toEqual({ results: [], nextSeq: 9 });
 
     const forbidden = await request(
       handler,

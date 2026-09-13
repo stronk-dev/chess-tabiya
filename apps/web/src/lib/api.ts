@@ -28,6 +28,7 @@ import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parseCapabilities } from "./capability-response.js";
+import { parseEvidencePage } from "./evidence-page-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
 import { parseOpponentSelection } from "./opponent-selection-response.js";
 import { parsePackDocument } from "./pack-response.js";
@@ -182,7 +183,7 @@ export interface StagedEvidence {
 }
 
 export interface EvidencePage {
-  readonly results: readonly StagedEvidence[];
+  readonly results: readonly { readonly seq: number }[];
   readonly nextSeq: number;
 }
 
@@ -1438,7 +1439,7 @@ export class DrillApi implements DrillClientApi {
   }
 
   evidence(runId: string, sinceSeq = 0): Promise<EvidencePage> {
-    return this.#json(`/runs/${encoded(runId)}/evidence?sinceSeq=${sinceSeq}`);
+    return this.#json<unknown>(`/runs/${encoded(runId)}/evidence?sinceSeq=${sinceSeq}`).then((value) => parseEvidencePage(value, sinceSeq));
   }
 
   async marks(runId: string): Promise<readonly RunMark[]> {

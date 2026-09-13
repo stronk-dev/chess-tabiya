@@ -1341,7 +1341,8 @@ export function createRestHandler(
         return json(200, service.events(route.runId, principal, parseSinceSeq(url)));
       }
       if (request.method === "GET" && route.action === "evidence") {
-        return json(200, service.evidence(route.runId, principal, parseSinceSeq(url)));
+        const page = service.evidence(route.runId, principal, parseSinceSeq(url));
+        return json(200, { results: page.results.map((result) => Object.freeze({ seq: result.seq })), nextSeq: page.nextSeq });
       }
       if (request.method === "GET" && route.action === "authored-feedback") {
         return json(200, service.authoredFeedback(route.runId, principal));

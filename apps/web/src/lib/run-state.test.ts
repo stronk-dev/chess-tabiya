@@ -165,15 +165,6 @@ class FakeApi implements RunApi {
       results: [
         {
           seq: 1,
-          jobId: "evidence-job-1",
-          runId: this.serverRun.id,
-          nodeId: this.serverRun.activeCursor.nodeId,
-          evidenceRefs: ["engine:evidence-job-1"],
-          payload: {
-            kind: "eval",
-            source: "engine_validated",
-            values: { centipawns: 12 },
-          },
         },
       ],
       nextSeq: 1,
