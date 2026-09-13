@@ -19350,3 +19350,15 @@ solving it: stored WDL tuples do not retain a stable perspective, as D927 alread
 tuple remains inspectable, but its sentence now says that perspective was not retained. It does not
 assign old rows a White, learner or side-to-move meaning. D927 and the returned Review/provider
 contracts continue to own normalization. `make test-software` passes 188 files / 1,184 tests.
+
+## 2026-09-13 — Story evaluation copy returns to one learner-facing authority ([[D3195]])
+
+The completed ATR-a2 requirement had regressed through two independent renderers: runtime Story
+and server voice preparation printed raw centipawn integers. The separate visible trajectory did
+convert to pawns, but labelled values that `storyMoments` had already oriented to the learner as
+White-relative. A single runtime formatter now owns both the signed pawn-unit change and trajectory;
+the deterministic Story renderer, provider-bound Story renderer and mounted screen all consume it.
+Negative fixtures reject raw `cp` at both evidence-delivery boundaries and reject the false White
+label on the visible card. `make test-software` passes 188 files / 1,183 tests, and
+`make test-browser` passes all 64 required journeys with the one explicitly optional Maia latency
+measurement skipped.

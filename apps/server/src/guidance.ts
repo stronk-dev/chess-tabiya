@@ -19,6 +19,7 @@ import {
   renderPhaseReading,
   renderPivotalMarker,
   renderRecordedReading,
+  renderStoryEvaluationChange,
   renderStructuralObservationChange,
   renderEvidenceItems,
   structuralReading,
@@ -30,6 +31,7 @@ import {
   type Node,
   type PositionEvidenceIndex,
   type RenderedEvidenceView,
+  type StoryEvaluation,
   type ConsumerEvidenceView,
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition, PackPhase } from "@chess-tabiya/schema/drill-pack";
@@ -66,9 +68,7 @@ function renderStoryDerived(evidence: DeclaredEvidence<unknown>): readonly strin
   const payload = evidence.payload as Readonly<Record<string, unknown>>;
   if (evidence.projection.id === "derived.story.last_level") return one("The last recorded moment within a pawn of level — Tabiya's recorded-evaluation convention.");
   if (evidence.projection.id === "derived.story.title") return one(String(payload.title));
-  const after = payload.after as { readonly engineId?: unknown; readonly requestedMovetimeMs?: unknown };
-  const delta = Number(payload.delta);
-  return one(`The recorded evaluation moved ${delta >= 0 ? "+" : ""}${delta} cp across this move (${String(after.engineId)}${after.requestedMovetimeMs === undefined ? "" : `, ${String(after.requestedMovetimeMs)} ms`}).`);
+  return one(renderStoryEvaluationChange(payload.after as StoryEvaluation, payload.delta as number));
 }
 const RENDERERS = Object.freeze({
   "rules.phase.reading@1": (evidence: DeclaredEvidence<unknown>) => Object.freeze([renderPhaseReading(evidence.payload as ReturnType<typeof classifyPhase>)]),

@@ -18,7 +18,6 @@ import {
   publishedBandLabel,
   ratedGameResultLabel,
   ratingPublicationStateLabel,
-  recordedEvaluationTrajectory,
   repertoireGapStateLabel,
   storyMomentLabel,
   storyOutcomeLabel,
@@ -31,12 +30,6 @@ describe("learner-facing domain copy", () => {
     expect(attemptVerdictLabel("stable")).toBe("Objective held");
     expect(attemptVerdictLabel("unstable")).toBe("Objective not held");
     expect(attemptVerdictLabel("open")).toBe("Objective unresolved");
-  });
-
-  it("renders recorded evaluations in pawn units and names their perspective", () => {
-    expect(recordedEvaluationTrajectory(267, -34)).toBe(
-      "Recorded evaluation from White's side: +2.67 → −0.34 pawns",
-    );
   });
 
   it("frames story re-entry from recorded outcome and ply without exposing an evaluation", () => {

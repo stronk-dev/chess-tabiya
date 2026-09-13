@@ -67,15 +67,6 @@ export function chessSideLabel(side: "white" | "black"): string {
   return side === "white" ? "White" : "Black";
 }
 
-function signedPawns(centipawns: number): string {
-  const pawns = centipawns / 100;
-  return `${pawns >= 0 ? "+" : "−"}${Math.abs(pawns).toFixed(2)}`;
-}
-
-export function recordedEvaluationTrajectory(beforeCentipawns: number, afterCentipawns: number): string {
-  return `Recorded evaluation from White's side: ${signedPawns(beforeCentipawns)} → ${signedPawns(afterCentipawns)} pawns`;
-}
-
 type StoryResult = "1-0" | "0-1" | "1/2-1/2" | "*" | "win" | "loss" | "draw";
 type StoryOutcome = {
   readonly kind: "board_terminal" | "recorded_result" | "unfinished";

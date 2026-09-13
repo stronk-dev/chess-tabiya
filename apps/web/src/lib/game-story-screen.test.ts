@@ -38,6 +38,8 @@ describe("game story screen", () => {
         kinds: ["eval_pivot"],
         sentences: ["A recorded moment."],
         evidence: [],
+        evalBefore: { centipawns: -25, engineId: "sf", requestedMovetimeMs: 100 },
+        evalAfter: { centipawns: 240, engineId: "sf", requestedMovetimeMs: 100 },
         phase: "opening",
       }],
       rank: ["moment-one"],
@@ -51,6 +53,8 @@ describe("game story screen", () => {
     expect(grid).not.toBeNull();
     expect(grid.querySelectorAll("[role=gridcell]")).toHaveLength(64);
     expect([...grid.querySelectorAll<HTMLElement>("[role=gridcell]")].some((cell) => cell.id === grid.getAttribute("aria-activedescendant"))).toBe(true);
+    expect(document.querySelector(".evaluation")?.textContent).toBe("Recorded evaluation from the learner's side: −0.25 → +2.40 pawns.");
+    expect(document.querySelector(".evaluation")?.textContent).not.toMatch(/\b(?:cp|White)\b/u);
     await unmount(component);
   });
 

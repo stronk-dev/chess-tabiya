@@ -55,10 +55,29 @@ function renderRecordedOutcome(evidence: DeclaredEvidence<unknown>): readonly st
   return Object.freeze([`Board-terminal result for the learner: ${String(payload.outcome)}.`]);
 }
 
+function signedStoryPawns(centipawns: number): string {
+  if (!Number.isSafeInteger(centipawns)) throw new TypeError("Story evaluation must be a safe centipawn integer");
+  const pawns = centipawns / 100;
+  return `${pawns >= 0 ? "+" : "−"}${Math.abs(pawns).toFixed(2)}`;
+}
+
+/** Renders the learner-oriented operands stored by Story without leaking centipawn protocol units. */
+export function renderStoryEvaluationChange(after: StoryEvaluation, deltaCentipawns: number): string {
+  if (typeof after.engineId !== "string" || after.engineId.length === 0) throw new TypeError("Story evaluation omitted its engine identity");
+  const delta = signedStoryPawns(deltaCentipawns);
+  const search = after.requestedMovetimeMs === undefined ? "" : `, ${after.requestedMovetimeMs} ms`;
+  return `Recorded evaluation change from the learner's side: ${delta} pawns across this move (${after.engineId}${search}).`;
+}
+
+/** Renders the two learner-oriented Story readings used by the visible trajectory. */
+export function renderStoryEvaluationTrajectory(beforeCentipawns: number, afterCentipawns: number): string {
+  return `Recorded evaluation from the learner's side: ${signedStoryPawns(beforeCentipawns)} → ${signedStoryPawns(afterCentipawns)} pawns.`;
+}
+
 function renderStoryEvalShift(evidence: DeclaredEvidence<unknown>): readonly string[] {
   const payload = evidence.payload as { readonly after?: StoryEvaluation; readonly delta?: unknown };
-  if (payload.after === undefined || typeof payload.delta !== "number") throw new TypeError("Story evaluation shift omitted structured operands");
-  return Object.freeze([`The recorded evaluation moved ${payload.delta >= 0 ? "+" : ""}${payload.delta} cp across this move (${payload.after.engineId}${payload.after.requestedMovetimeMs === undefined ? "" : `, ${payload.after.requestedMovetimeMs} ms`}).`]);
+  if (payload.after === undefined || !Number.isSafeInteger(payload.delta)) throw new TypeError("Story evaluation shift omitted structured operands");
+  return Object.freeze([renderStoryEvaluationChange(payload.after, payload.delta as number)]);
 }
 
 const REVIEW_STORY_RENDERERS: EvidenceRendererRegistry = Object.freeze({

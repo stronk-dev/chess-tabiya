@@ -1692,7 +1692,11 @@
       "sourceHeading": "",
       "summary": "Story evaluations name White's perspective and render pawn units rather than raw centipawn integers",
       "note": "implemented 2026-08-24; copy regression",
-      "sourceDigest": "sha256:26d7f244c5a4faff500ca4d7da93ca9cd54c9e5f47f7f3f22a748bd457cbf78e"
+      "sourceDigest": "sha256:26d7f244c5a4faff500ca4d7da93ca9cd54c9e5f47f7f3f22a748bd457cbf78e",
+      "completion": {
+        "completedOn": "2026-09-13",
+        "evidence": "packages/runtime/src/story.ts"
+      }
     },
     {
       "id": "ATR-a20",

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, declareCompareDerivedEvidence, declarePhaseReadingEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, declareCompareDerivedEvidence, declarePhaseReadingEvidence, declareStoryDerivedEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import type { SquareName } from "chessops/types";
 import * as ts from "typescript";
@@ -68,6 +68,17 @@ describe("adaptive guidance server seams", () => {
     const rendered = voiceEvidenceView(fixturePacket(), "compare", [evidence], false).rendered;
     expect(rendered.items[0]!.sentences).toEqual(["White isolated pawn appeared on the d-file. Source: Tabiya structural detector."]);
     expect(rendered.items[0]!.sentences.join(" ")).not.toContain("isolated_pawn");
+  });
+  it("voices Story evaluation changes in learner-oriented pawn units", () => {
+    const evidence = declareStoryDerivedEvidence("eval_shift", {
+      before: { centipawns: -25, engineId: "sf", requestedMovetimeMs: 100 },
+      after: { centipawns: 240, engineId: "sf", requestedMovetimeMs: 100 },
+      delta: 265,
+    });
+    const rendered = voiceEvidenceView(fixturePacket(), "story", [evidence], false).rendered;
+    const sentence = rendered.items.find((item) => item.evidence.projection.id === "derived.story.eval_shift")?.sentences[0];
+    expect(sentence).toBe("Recorded evaluation change from the learner's side: +2.65 pawns across this move (sf, 100 ms).");
+    expect(sentence).not.toMatch(/\bcp\b/u);
   });
   it("rejects bare recorded readings at the deterministic consumer boundary", () => {
     if (false) {

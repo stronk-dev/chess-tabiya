@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { reviewStoryTitle, storyEvidenceSourceLabels, storyMomentSelection } from "@chess-tabiya/runtime";
+  import { renderStoryEvaluationTrajectory, reviewStoryTitle, storyEvidenceSourceLabels, storyMomentSelection } from "@chess-tabiya/runtime";
   import type { GameStory, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
   import { storyMoveLabel, storyReentryCopy } from "./chronology-copy.js";
-  import { recordedEvaluationTrajectory, storyMomentLabel, storyOutcomeLabel } from "./learner-copy.js";
+  import { storyMomentLabel, storyOutcomeLabel } from "./learner-copy.js";
   import { storyCardDocument } from "./story-card.js";
 
   interface Props {
@@ -116,7 +116,7 @@
         {#each selected.sentences as sentence}<p>{sentence}</p>{/each}
         <p class="provenance">Sources: {sourceLabels.join(" · ") || "recorded story"}</p>
         {#if voiceText}<p class="voice">{voiceText}</p>{/if}
-        {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">{recordedEvaluationTrajectory(selected.evalBefore.centipawns, selected.evalAfter.centipawns)}</p>{/if}
+        {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">{renderStoryEvaluationTrajectory(selected.evalBefore.centipawns, selected.evalAfter.centipawns)}</p>{/if}
         <p class="reentry-frame">{storyReentryCopy(story.side, story.outcome.result, selected.ply)}</p>
         <button class="primary" type="button" disabled={!story.ready} aria-describedby={!story.ready ? "story-pending-reason" : undefined} onclick={() => onEnter(selected.entryNodeId)}>Pick it up from here</button>
         {#if onVoice}<button type="button" onclick={async () => voiceText = await onVoice!(selected.nodeId)}>Explain this moment</button>{/if}
