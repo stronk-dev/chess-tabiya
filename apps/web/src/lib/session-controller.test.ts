@@ -136,12 +136,15 @@ class ManualScheduler implements PollScheduler {
 function deferred<T>(): {
   readonly promise: Promise<T>;
   readonly resolve: (value: T) => void;
+  readonly reject: (reason?: unknown) => void;
 } {
   let resolve!: (value: T) => void;
-  const promise = new Promise<T>((resolvePromise) => {
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((resolvePromise, rejectPromise) => {
     resolve = resolvePromise;
+    reject = rejectPromise;
   });
-  return { promise, resolve };
+  return { promise, resolve, reject };
 }
 
 class FakeApi implements DrillClientApi {
@@ -936,6 +939,51 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.busy).toBe(false);
     expect(environment.controller.state.error).toBeDefined();
     expect(environment.controller.state.error).not.toContain("Analysis response");
+  });
+
+  it("does not let an old analysis settlement write into a replacement run", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    const oldNodeId = environment.controller.state.runState!.run.activeCursor.nodeId;
+    const analysis = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    vi.spyOn(api, "analysis").mockReturnValueOnce(analysis.promise);
+    const analyzing = environment.controller.analyzeMissingEvidence([oldNodeId]);
+
+    const replacement = createRun({
+      id: "replacement-run",
+      session: { kind: "pack", packId: pack.id, packDigest: digest, start: pack.start, feedbackPolicy: "delayed_checkpoint", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: digest,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 31,
+      createdAt: at,
+    });
+    api.run = replacement;
+    await environment.controller.resume(replacement.id);
+    expect(environment.controller.state.runState?.run.id).toBe(replacement.id);
+
+    analysis.resolve({ jobs: [{ id: "stale-analysis" }] });
+    expect(await analyzing).toBe(false);
+    expect(environment.controller.state).toMatchObject({
+      busy: false,
+      runState: { run: { id: replacement.id } },
+    });
+    expect(environment.controller.state.error).toBeUndefined();
+  });
+
+  it("suppresses a mutation failure that arrives after session teardown", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    const reveal = deferred<MutationResult>();
+    vi.spyOn(api, "reveal").mockReturnValueOnce(reveal.promise);
+
+    const revealing = environment.controller.reveal();
+    environment.controller.stopSession();
+    reveal.reject(new Error("obsolete reveal failed"));
+    await revealing;
+
+    expect(environment.controller.state).toEqual({ busy: false });
   });
 
   it("uses one exclusive gate across move, checkpoint, branch, group, and return mutations", async () => {

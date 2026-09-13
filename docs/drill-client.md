@@ -744,6 +744,14 @@ announce navigation. Lease takeover may resume only while its exact source store
 is still attached. Feedback and reasoning refreshes likewise verify their run
 and checkpoint before publishing.
 
+Every asynchronous in-run action captures the exact attached store and that
+attachment's generation before it begins. A completion from a replaced or
+stopped run is inert: it cannot clear the replacement's pending state, publish
+an obsolete error or overlay, continue an opponent turn, or make a calling
+surface treat stale work as successful. This applies uniformly to moves,
+checkpoint interactions, disclosure, rewinds, forks and groups, evidence jobs,
+return scheduling, simulations, branch entry, and comparison.
+
 ## Line Drill recall and verdict delivery
 
 For `mode: line`, `GET /packs/:id` keeps the `spine` key but projects an empty

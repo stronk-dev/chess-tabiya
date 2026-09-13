@@ -72,6 +72,11 @@ type StatePatch = {
   [Key in keyof DrillSessionState]?: DrillSessionState[Key] | undefined;
 };
 
+interface SessionOperation {
+  readonly store: RunStateStore;
+  readonly attachmentGeneration: number;
+}
+
 const TERMINAL_STATES = new Set(["achieved", "failed", "transitioned"]);
 
 const RUN_ERROR_MESSAGES: Readonly<Record<string, string>> = Object.freeze({
@@ -403,20 +408,25 @@ export class DrillSessionController {
 
   async move(uci: string): Promise<boolean> {
     if (this.#state.busy) return false;
-    const store = this.#requiredStore();
+    const operation = this.#sessionOperation();
+    const store = operation.store;
     let learnerMoveCommitted = false;
     this.#patch({ busy: true, error: undefined });
     try {
       const result = await store.move({ uci });
       learnerMoveCommitted = true;
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       if (this.#captureCheckpoint(result.emitted)) {
         await this.#refreshAuthoredFeedback();
+        if (!this.#sessionOperationIsCurrent(operation)) return false;
         await this.#refreshReasoning();
+        if (!this.#sessionOperationIsCurrent(operation)) return false;
         this.#patch({ busy: false });
         return true;
       }
       if (this.#hasOutcome(result.emitted)) {
         await this.#refreshAuthoredFeedback();
+        if (!this.#sessionOperationIsCurrent(operation)) return false;
         this.#patch({ busy: false });
         return true;
       }
@@ -424,9 +434,11 @@ export class DrillSessionController {
         store.follow();
       }
       await this.#playOpponentIfNeeded();
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({ busy: false });
       return true;
     } catch (error) {
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#fail(error);
       return learnerMoveCommitted;
     }
@@ -434,12 +446,13 @@ export class DrillSessionController {
 
   async reveal(): Promise<void> {
     if (this.#state.busy) return;
+    const operation = this.#sessionOperation();
     this.#patch({ busy: true, error: undefined });
     try {
-      await this.#requiredStore().reveal();
-      this.#patch({ busy: false });
+      await operation.store.reveal();
+      if (this.#sessionOperationIsCurrent(operation)) this.#patch({ busy: false });
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
     }
   }
 
@@ -462,6 +475,7 @@ export class DrillSessionController {
 
   async continueCheckpoint(): Promise<boolean> {
     if (this.#state.busy) return false;
+    const operation = this.#sessionOperation();
     const checkpoint = this.#state.checkpoint;
     const previousDismissedCheckpointSeq = this.#dismissedCheckpointSeq;
     if (checkpoint !== undefined) {
@@ -470,93 +484,109 @@ export class DrillSessionController {
     this.#patch({ reasoning: undefined, busy: true });
     try {
       await this.#playOpponentIfNeeded(true);
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({
         busy: false,
         ...(this.#state.checkpoint?.eventSeq === checkpoint?.eventSeq ? { checkpoint: undefined } : {}),
       });
       return true;
     } catch (error) {
-      this.#dismissedCheckpointSeq = previousDismissedCheckpointSeq;
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) {
+        this.#dismissedCheckpointSeq = previousDismissedCheckpointSeq;
+        this.#fail(error);
+      }
       return false;
     }
   }
 
   async recordPrediction(predictedUci: string): Promise<void> {
     if (this.#state.busy) return;
+    const operation = this.#sessionOperation();
     const checkpoint = this.#state.checkpoint;
     if (checkpoint?.interaction?.type !== "prediction") throw new Error("No prediction checkpoint is active");
     this.#patch({ busy: true, error: undefined });
     try {
       const request = this.#selectionRequest();
-      const result = await this.#requiredStore().prediction({
+      const result = await operation.store.prediction({
         ...request,
         checkpointId: checkpoint.id,
         nodeId: checkpoint.nodeId,
         predictedUci,
       });
+      if (!this.#sessionOperationIsCurrent(operation)) return;
       this.#dismissedCheckpointSeq = checkpoint.eventSeq;
       this.#patch({ checkpoint: undefined });
-      await this.#requiredStore().appendOpponentPly(result.selection);
-      this.#patch({ busy: false });
+      await operation.store.appendOpponentPly(result.selection);
+      if (this.#sessionOperationIsCurrent(operation)) this.#patch({ busy: false });
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
     }
   }
 
   async recordReasoning(input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }): Promise<void> {
     if (this.#state.busy) return;
+    const operation = this.#sessionOperation();
     const checkpoint = this.#state.checkpoint;
     if (checkpoint?.interaction?.type !== "stated_reasoning") throw new Error("No stated-reasoning checkpoint is active");
     this.#patch({ busy: true, error: undefined });
     try {
-      const result = await this.#requiredStore().recordReasoning({ nodeId: checkpoint.nodeId, checkpointEventSeq: checkpoint.eventSeq, ...input });
+      const result = await operation.store.recordReasoning({ nodeId: checkpoint.nodeId, checkpointEventSeq: checkpoint.eventSeq, ...input });
+      if (!this.#sessionOperationIsCurrent(operation)) return;
       this.#patch({ busy: false, reasoning: result.reasoning });
       await this.#refreshAuthoredFeedback();
-    } catch (error) { this.#fail(error); }
+    } catch (error) {
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
+    }
   }
 
   async rewind(target: { readonly nodeId: string; readonly branchId?: string } | { readonly checkpointId: string; readonly branchId?: never }): Promise<boolean> {
     if (this.#state.busy) return false;
+    const operation = this.#sessionOperation();
     this.#patch({ busy: true, error: undefined });
     try {
-      await this.#requiredStore().rewind(target);
+      await operation.store.rewind(target);
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({ busy: false, checkpoint: undefined, comparison: undefined, comparisonBranchIds: undefined });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
 
   async fork(label?: string, intent?: string): Promise<boolean> {
     if (this.#state.busy) return false;
+    const operation = this.#sessionOperation();
     const run = this.#requiredRun();
     this.#patch({ busy: true, error: undefined });
     try {
-      await this.#requiredStore().fork({
+      await operation.store.fork({
         nodeId: run.run.activeCursor.nodeId,
         ...(label === undefined || label.trim() === "" ? {} : { label }),
         ...(intent === undefined || intent.trim() === "" ? {} : { intent }),
       });
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({ busy: false });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
 
   async createGroup(input: CreateGroupRequest): Promise<CreateGroupResult | undefined> {
     if (this.#state.busy) return undefined;
+    const operation = this.#sessionOperation();
     this.#patch({ busy: true, error: undefined });
     try {
-      const result = await this.#requiredStore().createGroup(input);
+      const result = await operation.store.createGroup(input);
+      if (!this.#sessionOperationIsCurrent(operation)) return undefined;
       await this.#playOpponentIfNeeded();
+      if (!this.#sessionOperationIsCurrent(operation)) return undefined;
       this.#patch({ busy: false });
       return result;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return undefined;
     }
   }
@@ -568,11 +598,13 @@ export class DrillSessionController {
       nodeIds.length > 16 ||
       new Set(nodeIds).size !== nodeIds.length
     ) return false;
+    const operation = this.#sessionOperation();
     const source = this.#requiredRun().run;
     if (nodeIds.some((nodeId) => !source.nodes.some((node) => node.id === nodeId))) return false;
     this.#patch({ busy: true, error: undefined });
     try {
-      const result = await this.#requiredStore().analysis(nodeIds);
+      const result = await operation.store.analysis(nodeIds);
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       const current = this.#state.runState?.run;
       if (
         current?.id !== source.id ||
@@ -586,20 +618,22 @@ export class DrillSessionController {
       this.#patch({ busy: false });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
 
   async scheduleReturn(nodeId: string): Promise<boolean> {
     if (this.#state.busy) return false;
+    const operation = this.#sessionOperation();
     this.#patch({ busy: true, error: undefined });
     try {
-      await this.#requiredStore().scheduleReturn({ nodeId, kind: "blocked" });
+      await operation.store.scheduleReturn({ nodeId, kind: "blocked" });
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({ busy: false });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
@@ -609,9 +643,11 @@ export class DrillSessionController {
     const sourceRunId = this.#state.runState?.run.id;
     const sourceNodeId = this.#state.runState?.run.activeCursor.nodeId;
     if (sourceRunId === undefined || sourceNodeId === undefined) return false;
+    const operation = this.#sessionOperation();
     this.#patch({ busy: true, error: undefined });
     try {
-      const simulation = await this.#requiredStore().simulate();
+      const simulation = await operation.store.simulate();
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       if (
         this.#state.runState?.run.id !== sourceRunId ||
         this.#state.runState.run.activeCursor.nodeId !== sourceNodeId
@@ -625,7 +661,7 @@ export class DrillSessionController {
       this.#patch({ busy: false, simulation });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
@@ -638,32 +674,37 @@ export class DrillSessionController {
     if (this.#state.busy) return false;
     const simulation = this.#state.simulation;
     if (simulation === undefined) return false;
+    const operation = this.#sessionOperation();
     this.#patch({ busy: true, error: undefined });
     try {
-      await this.#requiredStore().enterSimulation(simulation.simulationId, branchIndex);
+      await operation.store.enterSimulation(simulation.simulationId, branchIndex);
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({ busy: false, simulation: undefined, comparison: undefined, comparisonBranchIds: undefined });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
 
   async switchBranch(leafNodeId: string, branchId: string): Promise<boolean> {
     if (!await this.rewind({ nodeId: leafNodeId, branchId })) return false;
+    const operation = this.#sessionOperation();
     this.#patch({ busy: true });
     try {
       await this.#playOpponentIfNeeded();
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({ busy: false });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
 
   async compare(branchIds: readonly string[]): Promise<boolean> {
     if (this.#state.busy || branchIds.length < 2 || new Set(branchIds).size !== branchIds.length) return false;
+    const operation = this.#sessionOperation();
     const source = this.#requiredRun().run;
     const requestedLeaves = branchIds.map((branchId) => ({
       branchId,
@@ -672,17 +713,19 @@ export class DrillSessionController {
     if (requestedLeaves.some((entry) => entry.leafNodeId === undefined)) return false;
     this.#patch({ busy: true, error: undefined });
     try {
-      const store = this.#requiredStore();
+      const store = operation.store;
       // Comparison is a committed/review surface. Drain any ready evidence before the
       // server snapshots the branches; otherwise the comparison can permanently capture
       // empty strips while the normal evidence poll attaches the same results one tick later.
       await store.pollEvidence();
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       const run = store.snapshot.run;
       const stillCurrent = run.id === source.id && requestedLeaves.every((entry) =>
         branchPath(run, entry.branchId).at(-1)?.id === entry.leafNodeId,
       );
       if (!stillCurrent) throw new Error("Comparison source changed");
       const comparison = await this.#api.compare(run.id, branchIds);
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
       if (
         comparison.columns.length !== requestedLeaves.length ||
         requestedLeaves.some((entry) => !comparison.columns.some((column) =>
@@ -702,7 +745,7 @@ export class DrillSessionController {
       });
       return true;
     } catch (error) {
-      this.#fail(error);
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
   }
@@ -737,6 +780,7 @@ export class DrillSessionController {
   }
 
   async #playOpponentIfNeeded(ignoreCheckpoint = false, attachmentGeneration?: number): Promise<void> {
+    const generation = attachmentGeneration ?? this.#attachmentGeneration;
     if (this.#projectionOnly || this.#matchMode !== undefined) return;
     const pack = this.#state.pack;
     const capabilities = this.#capabilities;
@@ -765,12 +809,12 @@ export class DrillSessionController {
       : (await store.groupReply(group.groupId)).selection;
     if (
       this.#store !== store ||
-      (attachmentGeneration !== undefined && !this.#attachmentIsCurrent(attachmentGeneration))
+      !this.#attachmentIsCurrent(generation)
     ) return;
     const result = await store.appendOpponentPly(selection);
     if (
       this.#store !== store ||
-      (attachmentGeneration !== undefined && !this.#attachmentIsCurrent(attachmentGeneration))
+      !this.#attachmentIsCurrent(generation)
     ) return;
     if (this.#captureCheckpoint(result.emitted)) {
       await this.#refreshAuthoredFeedback();
@@ -876,6 +920,7 @@ export class DrillSessionController {
     digest: string | undefined,
     shapes: readonly ShapeEntryView[],
   ): void {
+    const attachmentGeneration = this.#attachmentGeneration;
     this.#unsubscribeStore?.();
     this.#store?.stop();
     this.#store = store;
@@ -897,7 +942,9 @@ export class DrillSessionController {
       );
       if (revealSeq <= this.#lastFollowerRevealSeq) return;
       this.#lastFollowerRevealSeq = revealSeq;
-      void this.#refreshAuthoredFeedback().catch((error: unknown) => this.#fail(error));
+      void this.#refreshAuthoredFeedback().catch((error: unknown) => {
+        if (this.#store === store && this.#attachmentIsCurrent(attachmentGeneration)) this.#fail(error);
+      });
     });
     this.#subscribingStore = undefined;
     store.start();
@@ -924,6 +971,17 @@ export class DrillSessionController {
   #requiredStore(): RunStateStore {
     if (this.#store === undefined) throw new Error("No drill run is active");
     return this.#store;
+  }
+
+  #sessionOperation(): SessionOperation {
+    return Object.freeze({
+      store: this.#requiredStore(),
+      attachmentGeneration: this.#attachmentGeneration,
+    });
+  }
+
+  #sessionOperationIsCurrent(operation: SessionOperation): boolean {
+    return this.#store === operation.store && this.#attachmentIsCurrent(operation.attachmentGeneration);
   }
 
   #requiredPack(): DrillPackDefinition {

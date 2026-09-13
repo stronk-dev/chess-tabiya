@@ -19686,3 +19686,16 @@ stop-during-start falsifier proves no run or navigation callback survives teardo
 canonical verification passes: `make verify-software` is green across 188 files / 1,220 tests plus
 type, performance, schema, manifest and production-build checks; `make test-browser` passes all 64
 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — In-run completions cannot cross a session boundary ([[D3221]])
+
+The shared mutation gate prevented concurrent operations inside one run but did not invalidate an
+operation when the entire session was stopped or replaced. Every asynchronous run action now
+captures the exact `RunStateStore` and attachment generation before issuing work. A stale success
+or failure is inert: it cannot clear the replacement's pending state, publish an obsolete error or
+overlay, continue an opponent turn, or report completion to an unmounted caller. A held analysis
+resolved after a replacement run proves success cannot cross the boundary; a rejected reveal after
+explicit stop proves failure cannot recreate session state. Sequential canonical verification
+passes: `make verify-software` is green across 188 files / 1,222 tests plus type, performance,
+schema, manifest and production-build checks; `make test-browser` passes all 64 required journeys
+with one explicitly optional Maia latency measurement skipped.
