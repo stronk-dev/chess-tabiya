@@ -515,7 +515,10 @@ Sequential advance is the default; lockstep is an optional local preference.
 Switching a group member follows the ordinary rewind contract and requests an
 opponent reply when the new cursor is on the opponent's turn. Evidence removed
 by rewind is shown as absent and can be explicitly re-requested through the
-analysis route. Compare group opens the existing N-way view with all member
+analysis route. That request is bound to the exact run and missing-node set,
+single-flight at both screen and controller boundaries, and leaves the group
+visible with bounded retry copy when admission fails; group entry and comparison
+wait while the request settles. Compare group opens the existing N-way view with all member
 branches selected, and export uses the ordinary variation-preserving PGN path.
 The complete persistence and resistance rules are in `branch-groups.md`.
 

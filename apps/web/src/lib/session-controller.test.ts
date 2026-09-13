@@ -292,7 +292,9 @@ class FakeApi implements DrillClientApi {
     this.groupReplyCalls += 1;
     return { selection: await this.selectMove({ startFen: "", historyUci: [], policy: { mode: "human_common", policyConfigDigest: digest }, seed: 1 }), reusedFromNodeId: null };
   }
-  async analysis(): Promise<{ readonly jobs: readonly { readonly id: string }[] }> { return { jobs: [] }; }
+  async analysis(_runId: string, nodeIds: readonly string[]): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {
+    return { jobs: nodeIds.map((_, index) => ({ id: `analysis-${index + 1}` })) };
+  }
 
   async duplicateRun(sourceRunId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun> {
     this.duplicateRequests.push({ sourceRunId, ...input, writerId });
@@ -839,8 +841,30 @@ describe("DrillSessionController", () => {
     expect(await environment.controller.switchBranch(branches[1]!.forkNodeId, branches[0]!.id)).toBe(false);
     expect(selection).not.toHaveBeenCalled();
 
-    analysis.resolve({ jobs: [] });
+    analysis.resolve({ jobs: [{ id: "analysis-1" }] });
     expect(await analyzing).toBe(true);
+  });
+
+  it("keeps one exact analysis request in flight and refuses malformed acknowledgement", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    const nodeId = environment.controller.state.runState!.run.activeCursor.nodeId;
+    const first = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    const analysis = vi.spyOn(api, "analysis").mockReturnValueOnce(first.promise);
+
+    const pending = environment.controller.analyzeMissingEvidence([nodeId]);
+    expect(environment.controller.state.busy).toBe(true);
+    expect(await environment.controller.analyzeMissingEvidence([nodeId])).toBe(false);
+    expect(analysis).toHaveBeenCalledTimes(1);
+    first.resolve({ jobs: [{ id: "analysis-1" }] });
+    expect(await pending).toBe(true);
+
+    analysis.mockResolvedValueOnce({ jobs: [] });
+    expect(await environment.controller.analyzeMissingEvidence([nodeId])).toBe(false);
+    expect(environment.controller.state.busy).toBe(false);
+    expect(environment.controller.state.error).toBeDefined();
+    expect(environment.controller.state.error).not.toContain("Analysis response");
   });
 
   it("returns an explicit failed fork result instead of collapsing it into void", async () => {

@@ -523,10 +523,27 @@ export class DrillSessionController {
   }
 
   async analyzeMissingEvidence(nodeIds: readonly string[]): Promise<boolean> {
-    if (nodeIds.length === 0) return false;
+    if (
+      this.#state.busy ||
+      nodeIds.length === 0 ||
+      nodeIds.length > 16 ||
+      new Set(nodeIds).size !== nodeIds.length
+    ) return false;
+    const source = this.#requiredRun().run;
+    if (nodeIds.some((nodeId) => !source.nodes.some((node) => node.id === nodeId))) return false;
     this.#patch({ busy: true, error: undefined });
     try {
-      await this.#requiredStore().analysis(nodeIds);
+      const result = await this.#requiredStore().analysis(nodeIds);
+      const current = this.#state.runState?.run;
+      if (
+        current?.id !== source.id ||
+        nodeIds.some((nodeId) => !current.nodes.some((node) => node.id === nodeId)) ||
+        result.jobs.length !== nodeIds.length ||
+        result.jobs.some((job) => job.id.length === 0) ||
+        new Set(result.jobs.map((job) => job.id)).size !== result.jobs.length
+      ) {
+        throw new TypeError("Analysis response did not match the requested positions");
+      }
       this.#patch({ busy: false });
       return true;
     } catch (error) {

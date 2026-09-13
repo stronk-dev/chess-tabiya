@@ -19646,3 +19646,17 @@ disabled alternatives and successful retry. Sequential canonical verification pa
 verify-software` is green across 188 files / 1,215 tests plus type, performance, schema, manifest
 and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-13 — Branch-group analysis owns admission and retry ([[D3218]])
+
+The branch-group “Prepare missing comparisons” action previously bypassed the calculation
+lifecycle used elsewhere on the same screen: it fired an optional callback, exposed no pending or
+failure state and could be activated again while another run action was active. The request is now
+bound to the exact run, group and missing-node set. Its pending state blocks duplicate preparation,
+group entry and comparison; refusal keeps the group visible with bounded retry copy and no provider
+diagnostics. The controller independently refuses busy, duplicate, invalid and unknown-node inputs
+and rejects malformed job acknowledgements. Controller single-flight/malformed-response and mounted
+group pending/failure/retry regressions bind both boundaries. Sequential canonical verification
+passes: `make verify-software` is green across 188 files / 1,217 tests plus type, performance,
+schema, manifest and production-build checks; `make test-browser` passes all 64 required journeys
+with one explicitly optional Maia latency measurement skipped.

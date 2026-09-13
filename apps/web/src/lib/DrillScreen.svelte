@@ -319,6 +319,9 @@
   let analysisRequestedNodeId: string | undefined = $state();
   let analysisRequestError: { readonly nodeId: string; readonly text: string } | undefined = $state();
   let analysisRequest = 0;
+  let groupAnalysisBusy: { readonly runId: string; readonly groupId: string; readonly nodeKey: string } | undefined = $state();
+  let groupAnalysisError: { readonly runId: string; readonly groupId: string; readonly nodeKey: string; readonly text: string } | undefined = $state();
+  let groupAnalysisRequest = 0;
   let simulationOpening: number | undefined = $state();
   let simulationOpenError: { readonly runId: string; readonly nodeId: string } | undefined = $state();
   let simulationRequest = 0;
@@ -428,6 +431,42 @@
       if (request !== analysisRequest) return;
       if (analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
       analysisRequestError = { nodeId, text: "The calculation is unavailable right now. Try again." };
+    }
+  }
+
+  function analysisNodeKey(nodeIds: readonly string[]): string {
+    return [...nodeIds].sort().join("\u001f");
+  }
+
+  function missingGroupNodeIds(group: BranchGroup): readonly string[] {
+    return group.members
+      .map((member) => branchPath(run, member.branchId).at(-1)!)
+      .filter((node) => node.evidenceRefs.length === 0)
+      .map((node) => node.id);
+  }
+
+  async function requestGroupAnalysis(group: BranchGroup, nodeIds: readonly string[]): Promise<boolean> {
+    if (onAnalyzeMissing === undefined || busy || groupAnalysisBusy !== undefined || nodeIds.length === 0) return false;
+    const target = { runId: run.id, groupId: group.groupId, nodeKey: analysisNodeKey(nodeIds) };
+    const request = ++groupAnalysisRequest;
+    groupAnalysisBusy = target;
+    groupAnalysisError = undefined;
+    try {
+      const accepted = await onAnalyzeMissing(nodeIds);
+      if (request !== groupAnalysisRequest) return false;
+      if (run.id !== target.runId || activeGroup?.groupId !== target.groupId) return false;
+      if (accepted === false) {
+        groupAnalysisError = { ...target, text: "The comparisons were not prepared. This group is unchanged; try again." };
+        return false;
+      }
+      return true;
+    } catch {
+      if (request === groupAnalysisRequest && run.id === target.runId && activeGroup?.groupId === target.groupId) {
+        groupAnalysisError = { ...target, text: "The comparisons are unavailable right now. This group is unchanged; try again." };
+      }
+      return false;
+    } finally {
+      if (request === groupAnalysisRequest) groupAnalysisBusy = undefined;
     }
   }
   let simulationInvoker = $state<HTMLElement>();
@@ -1489,6 +1528,8 @@
     compareRequest += 1;
     rewindRequest += 1;
     branchSwitchRequest += 1;
+    analysisRequest += 1;
+    groupAnalysisRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1844,9 +1885,11 @@
             onEnter={switchRunBranch}
             entering={branchSwitchBusy !== undefined}
             onCompare={() => openCompare(activeGroup!.members.map((member) => member.branchId))}
-            onAnalyze={(nodeIds) => { void onAnalyzeMissing?.(nodeIds); }}
+            onAnalyze={(nodeIds) => requestGroupAnalysis(activeGroup!, nodeIds)}
+            analysisBusy={groupAnalysisBusy?.runId === run.id && groupAnalysisBusy.groupId === activeGroup.groupId && groupAnalysisBusy.nodeKey === analysisNodeKey(missingGroupNodeIds(activeGroup))}
+            analysisError={groupAnalysisError?.runId === run.id && groupAnalysisError.groupId === activeGroup.groupId && groupAnalysisError.nodeKey === analysisNodeKey(missingGroupNodeIds(activeGroup)) ? groupAnalysisError.text : undefined}
           />
-          <button class="next-member" type="button" disabled={branchSwitchBusy !== undefined} aria-describedby={branchSwitchBusy !== undefined ? "branch-switch-status" : undefined} onclick={() => void nextGroupMember(activeGroup!)}>Next member</button>
+          <button class="next-member" type="button" disabled={branchSwitchBusy !== undefined || groupAnalysisBusy !== undefined} aria-describedby={branchSwitchBusy !== undefined ? "branch-switch-status" : groupAnalysisBusy !== undefined ? "group-analysis-status" : undefined} onclick={() => void nextGroupMember(activeGroup!)}>Next member</button>
         {/if}
         <BranchRail
           branches={cards}

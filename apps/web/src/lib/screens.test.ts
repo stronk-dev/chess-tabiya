@@ -4,6 +4,7 @@ import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
+  appendEvents,
   attachEvidence,
   commitMove,
   compareBranches,
@@ -142,6 +143,25 @@ function branchedRun(): DrillRun {
   run = reachCheckpoint(run, "timing-window", at).run;
   run = transitionObjective(run, "achieved", ["pack:timing-window"], at).run;
   return run;
+}
+
+function groupedRun(): DrillRun {
+  const run = branchedRun();
+  const [main, alternative] = run.branches;
+  return appendEvents(run, [{
+    type: "group.created",
+    at,
+    data: {
+      groupId: `${run.id}:group:1`,
+      sourceNodeId: alternative!.forkNodeId,
+      source: "hand_picked",
+      resistance: "fixed",
+      members: [
+        { branchId: main!.id, seedMoveUci: "e7e6" },
+        { branchId: alternative!.id, seedMoveUci: "b7b5" },
+      ],
+    },
+  }]);
 }
 
 function nestedForkRun(): DrillRun {
@@ -1541,6 +1561,47 @@ describe("Layer 3 screens", () => {
     await vi.waitFor(() => expect(module.querySelector("[role='alert']")?.textContent).toBe("The calculation did not start. Try again."));
     expect(request.disabled).toBe(false);
     expect(onAnalyzeMissing).toHaveBeenCalledTimes(2);
+    await unmount(component);
+  });
+
+  it("keeps branch-group comparison preparation single-flight and retryable", async () => {
+    const run = groupedRun();
+    const first = deferred<boolean>();
+    const onAnalyzeMissing = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onAnalyzeMissing, registerKeyboardRegion,
+    } });
+    await tick();
+
+    const panel = document.querySelector<HTMLElement>(".group-panel")!;
+    const prepare = panel.querySelector<HTMLButtonElement>("button.analysis")!;
+    const expectedNodeId = run.nodes.filter((node) => node.branchId === run.branches[0]!.id).at(-1)!.id;
+    prepare.click();
+    prepare.click();
+    await tick();
+    expect(onAnalyzeMissing).toHaveBeenCalledTimes(1);
+    expect(onAnalyzeMissing).toHaveBeenCalledWith([expectedNodeId]);
+    expect(prepare.disabled).toBe(true);
+    expect(prepare.textContent).toContain("Preparing comparison");
+    expect(panel.querySelector("#group-analysis-status")?.textContent).toContain("The group stays here");
+    expect([...panel.querySelectorAll<HTMLButtonElement>(".cell-heading")].every((button) => button.disabled)).toBe(true);
+
+    first.resolve(false);
+    await first.promise;
+    await tick();
+    expect(panel.querySelector('[role="alert"]')?.textContent).toContain("This group is unchanged; try again");
+    expect(panel.textContent).not.toContain("provider transport detail");
+    expect(prepare.disabled).toBe(false);
+    expect(prepare.textContent).toContain("Try preparing comparisons");
+
+    prepare.click();
+    await vi.waitFor(() => expect(onAnalyzeMissing).toHaveBeenCalledTimes(2));
     await unmount(component);
   });
 
