@@ -131,15 +131,7 @@ describe("engine capabilities", () => {
           { mode: "human_external", reason: expect.any(String) },
         ],
         feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
-        tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"],
-        tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"],
-        tempoDefaults: { outpaced: "failed" },
         guardBasis: ["rules", "engine"],
-        costBasis: ["material", "engine", "tablebase"],
-        capabilityDispositions: expect.arrayContaining([
-          expect.objectContaining({ instrument: "Stockfish", capability: "score cp / mate" }),
-          expect.objectContaining({ instrument: "Maia", capability: "policy mass" }),
-        ]),
         recordedReadingKinds: [
           { kind: "opening_identity", disposition: "refused", reason: expect.any(String) },
           { kind: "position_legality", disposition: "refused", reason: expect.any(String) },
@@ -156,7 +148,6 @@ describe("engine capabilities", () => {
         policyProfiles: {
           strong_engine: {
             movetimeMs: 100,
-            nodes: 50_000,
             threads: 1,
             hashMb: 16,
             multiPv: 1,

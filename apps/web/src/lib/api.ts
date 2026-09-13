@@ -27,6 +27,7 @@ import type {
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
+import { parseCapabilities } from "./capability-response.js";
 import { parsePackDocument } from "./pack-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
 import { parseShapeDocument } from "./shape-response.js";
@@ -1041,7 +1042,7 @@ export class DrillApi implements DrillClientApi {
   }
 
   capabilities(): Promise<Capabilities> {
-    return this.#json("/capabilities");
+    return this.#json<unknown>("/capabilities").then(parseCapabilities);
   }
 
   packs(): Promise<readonly PackSummary[]> {

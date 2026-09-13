@@ -27,7 +27,7 @@ import {
 } from "@chess-tabiya/runtime";
 
 import { ServerError } from "./errors.js";
-import type { CapabilitiesProvider } from "./capabilities.js";
+import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
 import { openingIdentityAt, type OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import type { TtsProvider } from "./external-tts.js";
 import { projectPackDocument } from "./pack-registry.js";
@@ -957,7 +957,7 @@ export function createRestHandler(
             { details: { engineId: "capabilities", retryAfterMs: 0 } },
           );
         }
-        return json(200, await capabilities.get());
+        return json(200, projectClientCapabilities(await capabilities.get()));
       }
       if (url.pathname === "/opening-identity") {
         if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });

@@ -130,6 +130,12 @@ describe("DrillApi", () => {
         return json({
           engines: [],
           policyModes: ["human_common"],
+          unsupportedPolicyModes: [],
+          feedbackPolicies: ["delayed_checkpoint"],
+          guardBasis: ["rules"],
+          recordedReadingKinds: [],
+          assessmentCategories: ["win"],
+          objectiveAssessmentSets: { win: ["win"], hold: ["win"], save: ["win"], resist: ["win"] },
           runSchemaVersion: "0.6",
           policyProfiles: {
             strong_engine: {
@@ -138,8 +144,19 @@ describe("DrillApi", () => {
               hashMb: 16,
               multiPv: 1,
             },
+            human_common: {
+              elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } },
+              resistance: {
+                basis: "measured", metric: "dtz_percentile", scope: "fixture",
+                corpus: { dossier: "fixture", positions: 1, probes: 1, measuredAt: "2026-08-16" },
+                bands: [1500], bandConditioned: false,
+                dtzPercentile: { min: 0.5, max: 0.5, uniformBaseline: 0.5 },
+                slowestLosingRate: { min: 0.5, max: 0.5, uniformBaseline: 0.5 },
+                fastestLosingRate: { value: 0.5, uniformBaseline: 0.5 },
+              },
+            },
           },
-          providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none" },
+          providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },
           surfaces: {
             play: "available",
             review: "available",
@@ -148,6 +165,12 @@ describe("DrillApi", () => {
             create: "available",
             justPlay: "unavailable-here",
             fromPosition: "unavailable-here",
+          },
+          evidenceManifest: {
+            digest: "a".repeat(64),
+            counts: { producers: 0, projections: 0, consumers: 0, bindings: 0, semanticEvents: 0, eligibility: 0, reasons: 0, selectionPolicies: 0 },
+            availability: [],
+            bindings: [],
           },
         });
       }

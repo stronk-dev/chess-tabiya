@@ -20164,3 +20164,19 @@ unrelated prose with a valid shape id and have the client render it as structura
 `make verify-software` passes 204 files / 1,371 tests plus types, performance, schema, manifest, packaging and
 production builds. The complete `make test-browser` gate passes 92 required journeys with one explicitly
 optional Maia latency probe skipped.
+
+## 2026-09-14 — Capability and evidence availability cross one public authority ([[D3256]])
+
+The `/capabilities` response now has an explicit reduced server projection instead of serializing the
+entire internal capability object. Tempo experiments, cost bases and capability-disposition planning no
+longer cross the product boundary. The public response retains what real consumers need: engine
+identity, selectable policies, provider and surface availability, measured human-resistance parameters,
+assessment vocabularies and the compiled evidence producer-to-consumer manifest.
+
+`DrillApi.capabilities()` now validates that complete projection before engine ids enter run
+attestation or policy modes steer opponent selection. It checks unique identities, closed vocabularies,
+Elo windows, bounded measured rates, manifest counts, producer availability and unique binding edges;
+crossed arithmetic and server-only additions fail closed. `make verify-software` passes 205 files /
+1,379 tests plus types, performance, schema, manifest, packaging and production builds. The complete
+`make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
+skipped.

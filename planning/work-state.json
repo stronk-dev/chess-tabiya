@@ -26711,6 +26711,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/shape-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3256",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:512a550394b4736dd74dee13ffccfbf6fd0f521956ace811871e8b72f9dd3977",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/capability-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

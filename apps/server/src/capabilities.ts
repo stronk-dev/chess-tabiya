@@ -104,6 +104,52 @@ export interface Capabilities {
   readonly evidenceManifest: EvidenceManifestCapabilities;
 }
 
+export type ClientCapabilities = Omit<Pick<Capabilities,
+  | "engines"
+  | "policyModes"
+  | "unsupportedPolicyModes"
+  | "feedbackPolicies"
+  | "guardBasis"
+  | "recordedReadingKinds"
+  | "assessmentCategories"
+  | "objectiveAssessmentSets"
+  | "runSchemaVersion"
+  | "providers"
+  | "surfaces"
+  | "evidenceManifest"
+>, "policyProfiles"> & {
+  readonly policyProfiles: {
+    readonly strong_engine: Omit<StrongEngineProfile, "nodes">;
+    readonly human_common: Capabilities["policyProfiles"]["human_common"];
+  };
+};
+
+export function projectClientCapabilities(value: Capabilities): ClientCapabilities {
+  return Object.freeze({
+    engines: value.engines,
+    policyModes: value.policyModes,
+    unsupportedPolicyModes: value.unsupportedPolicyModes,
+    feedbackPolicies: value.feedbackPolicies,
+    guardBasis: value.guardBasis,
+    recordedReadingKinds: value.recordedReadingKinds,
+    assessmentCategories: value.assessmentCategories,
+    objectiveAssessmentSets: value.objectiveAssessmentSets,
+    runSchemaVersion: value.runSchemaVersion,
+    policyProfiles: Object.freeze({
+      strong_engine: Object.freeze({
+        movetimeMs: value.policyProfiles.strong_engine.movetimeMs,
+        threads: value.policyProfiles.strong_engine.threads,
+        hashMb: value.policyProfiles.strong_engine.hashMb,
+        multiPv: value.policyProfiles.strong_engine.multiPv,
+      }),
+      human_common: value.policyProfiles.human_common,
+    }),
+    providers: value.providers,
+    surfaces: value.surfaces,
+    evidenceManifest: value.evidenceManifest,
+  });
+}
+
 export type CapabilityDispositionKind = "reached" | "refused" | "unmeasured" | "impossible";
 export interface CapabilityDisposition {
   readonly instrument: string;
