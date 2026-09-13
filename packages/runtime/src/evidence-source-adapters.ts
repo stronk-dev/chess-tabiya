@@ -247,6 +247,38 @@ export function declareStoryDerivedEvidence<T extends object>(kind: "eval_shift"
   return exactObject("derived.story", `derived.story.${kind}`, payload, keys);
 }
 
+/** Rehydrates only the finite evidence vocabulary admitted by the Review Story JSON boundary. */
+export function declareSerializedReviewStoryEvidence(value: unknown): DeclaredEvidence<unknown> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) throw new TypeError("Serialized Story evidence must be an object");
+  const item = value as Record<string, unknown>;
+  if (Object.keys(item).some((key) => !["producer", "projection", "payload"].includes(key)) || !("payload" in item)) {
+    throw new TypeError("Serialized Story evidence has an open shape");
+  }
+  const versioned = (candidate: unknown, label: string): { readonly id: string; readonly version: number } => {
+    if (typeof candidate !== "object" || candidate === null || Array.isArray(candidate)) throw new TypeError(`Serialized Story ${label} is invalid`);
+    const record = candidate as Record<string, unknown>;
+    if (Object.keys(record).some((key) => key !== "id" && key !== "version")
+      || typeof record.id !== "string"
+      || record.version !== 1) throw new TypeError(`Serialized Story ${label} is invalid`);
+    return { id: record.id, version: record.version };
+  };
+  const producer = versioned(item.producer, "producer");
+  const projection = versioned(item.projection, "projection");
+  if (typeof item.payload !== "object" || item.payload === null || Array.isArray(item.payload)) throw new TypeError("Serialized Story payload must be an object");
+  const payload = item.payload;
+  const key = `${producer.id}:${projection.id}`;
+  if (key === "rules.pivotal:rules.pivotal.marker") return declarePivotalMarkerEvidence(payload);
+  if (key === "theory.shapes:theory.shapes.firing") return declareShapeFiringSourceEvidence(payload);
+  if (key === "run.record:run.record.consequence") return declareRunRecordEvidence("consequence", payload);
+  if (key === "run.record:run.record.imported_result") return declareRunRecordEvidence("imported_result", payload);
+  if (key === "rules.endgame:rules.endgame.reading") return declareEndgameReadingEvidence(payload);
+  if (key === "derived.story:derived.story.eval_shift") return declareStoryDerivedEvidence("eval_shift", payload);
+  if (key === "derived.story:derived.story.last_level") return declareStoryDerivedEvidence("last_level", payload);
+  if (key === "derived.story:derived.story.rank") return declareStoryDerivedEvidence("rank", payload);
+  if (key === "derived.story:derived.story.title") return declareStoryDerivedEvidence("title", payload);
+  throw new TypeError(`Serialized Story evidence ${key} is not an exact Review adapter`);
+}
+
 export function declareStructuralSemanticSourceEvidence<T extends object>(family: string, payload: T): DeclaredEvidence<T> {
   const allowed = new Set(["backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "king_opposition", "king_zone", "line_blockers", "open_file", "passed_pawn", "piece_count", "direct_attack_count"]);
   if (!allowed.has(family)) throw new TypeError(`Unsupported structural semantic family ${family}`);

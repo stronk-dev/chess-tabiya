@@ -226,7 +226,7 @@
         {#if explanation?.nodeId === selected.nodeId}<p class="voice">{explanation.text}</p>{/if}
         {#if explanationError?.nodeId === selected.nodeId}<p class="voice-error" role="alert">{explanationError.text}</p>{/if}
         {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">{renderStoryEvaluationTrajectory(selected.evalBefore.centipawns, selected.evalAfter.centipawns)}</p>{/if}
-        <p class="reentry-frame">{storyReentryCopy(story.side, story.outcome.result, selected.ply)}</p>
+        <p class="reentry-frame">{storyReentryCopy(story.side, "result" in story.outcome ? story.outcome.result : undefined, selected.ply)}</p>
         <button class="primary" type="button" disabled={!story.ready || enteringNodeId !== undefined} aria-describedby={!story.ready ? "story-pending-reason" : enteringNodeId !== undefined ? "story-entry-busy" : undefined} onclick={() => void enterMoment(selected.entryNodeId)}>{enteringNodeId === selected.entryNodeId ? "Opening rehearsal…" : "Pick it up from here"}</button>
         {#if enteringNodeId !== undefined}<span id="story-entry-busy" role="status">Opening one rehearsal from this recorded moment.</span>{/if}
         {#if entryError?.nodeId === selected.entryNodeId}<p role="alert">{entryError.text}</p>{/if}

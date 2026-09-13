@@ -34,12 +34,26 @@ describe("adoption wave server contracts", () => {
     const { storage, service } = await terminalRun();
     const run = storage.read("native")!.run;
     const story = service.story("native", principal);
-    expect(story).toMatchObject({ source: { kind: "native" }, outcome: { kind: "board_terminal", result: "loss" }, branchId: run.activeCursor.branchId });
+    expect(story).toMatchObject({ runId: "native", source: { kind: "native" }, outcome: { kind: "board_terminal", result: "loss" }, branchId: run.activeCursor.branchId });
     expect(story.moments.some((moment) => moment.kinds.includes("human_divergence"))).toBe(true);
     const share = service.share("native", principal, story.branchId);
+    expect(share).toMatchObject({
+      scope: "story_read",
+      runId: "native",
+      branchId: story.branchId,
+      revokedAt: null,
+    });
     const stored = storage.publicTokens("native", principal.learnerId)[0]!;
     expect(stored.tokenHash).toBe(createHash("sha256").update(share.token).digest("hex"));
     expect(JSON.stringify(stored)).not.toContain(share.token);
+    expect(service.shares("native", principal)).toEqual([{
+      id: share.id,
+      scope: "story_read",
+      runId: "native",
+      branchId: story.branchId,
+      createdAt: share.createdAt,
+      revokedAt: null,
+    }]);
     const card = service.publicStory(share.token);
     expect(card).toMatchObject({ title: expect.any(String), outcome: { kind: "board_terminal" } });
     expect(card.productLink).toBe("/play");
@@ -51,7 +65,14 @@ describe("adoption wave server contracts", () => {
     expect(milestones.map((item) => item.kind)).toContain("first_attempt");
     expect(new Set(milestones.map((item) => item.kind)).size).toBe(milestones.length);
     expect(milestones.map((item) => item.sentence).join(" ")).not.toMatch(/%|score|streak|rating|ranking/i);
-    service.revokeShare("native", principal, share.id);
+    expect(service.revokeShare("native", principal, share.id, "2026-09-13T12:00:00.000Z")).toEqual({
+      revoked: true,
+      runId: "native",
+      tokenId: share.id,
+      revokedAt: "2026-09-13T12:00:00.000Z",
+    });
+    expect(() => service.revokeShare("native", principal, share.id)).toThrowError(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
+    expect(() => service.revokeShare("native", principal, "share-missing")).toThrowError(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
     expect(() => service.publicStory(share.token)).toThrowError(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
   });
 

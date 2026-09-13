@@ -243,13 +243,14 @@ describe("application shell", () => {
   it("offers imported-story narration only after persona voice is selected", async () => {
     history.replaceState(null, "", "/review/game/route-run");
     const story: GameStory = {
+      runId: "route-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",
       side: "white",
       source: { kind: "pgn_paste", headers: { White: "Ada", Black: "Mina" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
       outcome: { kind: "unfinished" },
-      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: ["A recorded moment."], evidence: [], phase: "opening" }],
+      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [], evidence: [], phase: "opening" }],
       rank: ["moment-1"],
     };
     const voice = vi.fn(async () => ({ text: "Grounded narration.", source: "provider" as const, scope: "story" as const }));
@@ -281,17 +282,87 @@ describe("application shell", () => {
     await unmount(persona);
   });
 
+  it("keeps a crossed Story document and share receipt out of the route, then retries the same game", async () => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const valid: GameStory = {
+      runId: "route-run",
+      ready: true,
+      pendingEvidence: 0,
+      branchId: "main",
+      side: "white",
+      source: { kind: "native" },
+      outcome: { kind: "unfinished" },
+      moments: [{
+        nodeId: "moment-1",
+        entryNodeId: "entry-1",
+        ply: 1,
+        san: "e4",
+        fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+        kinds: ["eval_pivot"],
+        sentences: [],
+        evidence: [],
+        phase: "opening",
+      }],
+      rank: ["moment-1"],
+    };
+    let storyReads = 0;
+    const shareStory = vi.fn(async () => ({
+      id: "crossed-share",
+      token: "crossed-token",
+      url: "/shared/crossed-token",
+      scope: "story_read" as const,
+      runId: "another-run",
+      branchId: "main",
+      createdAt: "2026-09-13T12:00:00.000Z",
+      revokedAt: null,
+    }));
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: {
+          ...api(),
+          async story() {
+            storyReads += 1;
+            return storyReads === 1 ? { ...valid, runId: "another-run" } : valid;
+          },
+          async storyShares() { return []; },
+          shareStory,
+        },
+        router: new HistoryRouter(window),
+        storage: new MemoryStorage(),
+      },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This page could not be loaded. Check your connection and try again."));
+    expect(location.pathname).toBe("/review/game/route-run");
+    expect(document.body.textContent).not.toContain("Story of this run");
+    [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Try again")!
+      .click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Story of this run"));
+    expect(storyReads).toBe(2);
+
+    [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Share story")!
+      .click();
+    await vi.waitFor(() => expect(document.querySelector(".share-management [role='alert']")?.textContent).toContain("could not be created"));
+    expect(document.body.textContent).not.toContain("/shared/crossed-token");
+    expect(shareStory).toHaveBeenCalledWith("route-run", "main");
+    await unmount(component);
+  });
+
   it("keeps the newest Story poll when an older refresh resolves last", async () => {
     vi.useFakeTimers();
     history.replaceState(null, "", "/review/game/route-run");
     const storyWith = (white: string, ready: boolean): GameStory => ({
+      runId: "route-run",
       ready,
       pendingEvidence: ready ? 0 : 1,
       branchId: "main",
       side: "white",
       source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
       outcome: { kind: "unfinished" },
-      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [white], evidence: [], phase: "opening" }],
+      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [], evidence: [], phase: "opening" }],
       rank: ["moment-1"],
     });
     const older = deferred<GameStory>();
@@ -332,16 +403,17 @@ describe("application shell", () => {
   it("does not publish a departed Story share into the next game", async () => {
     history.replaceState(null, "", "/review/game/route-run");
     const storyWith = (runId: string, white: string): GameStory => ({
+      runId,
       ready: true,
       pendingEvidence: 0,
       branchId: `branch-${runId}`,
       side: "white",
       source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
       outcome: { kind: "unfinished" },
-      moments: [{ nodeId: `moment-${runId}`, entryNodeId: `entry-${runId}`, ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [white], evidence: [], phase: "opening" }],
+      moments: [{ nodeId: `moment-${runId}`, entryNodeId: `entry-${runId}`, ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [], evidence: [], phase: "opening" }],
       rank: [`moment-${runId}`],
     });
-    const oldShare = deferred<{ readonly id: string; readonly token: string; readonly url: string }>();
+    const oldShare = deferred<import("./api.js").CreatedStoryShare>();
     const storyShares = vi.fn(async (runId: string) => runId === "other-run" ? [{
       id: "other-share", scope: "story_read" as const, runId, branchId: "branch-other-run",
       createdAt: "2026-09-13T10:00:00.000Z", revokedAt: null,
@@ -352,7 +424,9 @@ describe("application shell", () => {
       async story(runId) { return storyWith(runId, runId === "route-run" ? "Old game" : "Current game"); },
       storyShares,
       shareStory,
-      async revokeStoryShare() {},
+      async revokeStoryShare(runId, tokenId) {
+        return { revoked: true, runId, tokenId, revokedAt: "2026-09-13T10:05:00.000Z" };
+      },
     };
     const router = new HistoryRouter(window);
     const component = mount(App, { target: target(), props: { api: storyApi, router, storage: new MemoryStorage() } });
@@ -364,7 +438,16 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(document.body.textContent).toContain("Current game – Black"));
     expect(document.querySelectorAll("[aria-label='Story share links'] li")).toHaveLength(1);
 
-    oldShare.resolve({ id: "departed-share", token: "departed-token", url: "/stories/departed" });
+    oldShare.resolve({
+      id: "departed-share",
+      token: "departed-token",
+      url: "/shared/departed-token",
+      scope: "story_read",
+      runId: "route-run",
+      branchId: "branch-route-run",
+      createdAt: "2026-09-13T10:00:00.000Z",
+      revokedAt: null,
+    });
     await tick();
     await Promise.resolve();
     expect(storyShares.mock.calls.map(([runId]) => runId)).toEqual(["route-run", "other-run"]);
@@ -378,6 +461,7 @@ describe("application shell", () => {
     history.replaceState(null, "", "/review/game/route-run");
     const storage = new MemoryStorage();
     const story: GameStory = {
+      runId: "route-run",
       ready: true,
       pendingEvidence: 0,
       branchId: run.branches[0]!.id,
@@ -391,7 +475,7 @@ describe("application shell", () => {
         san: null,
         fen: run.nodes[0]!.fen,
         kinds: ["eval_pivot"],
-        sentences: ["A recorded moment."],
+        sentences: [],
         evidence: [],
         phase: "opening",
       }],
@@ -437,6 +521,7 @@ describe("application shell", () => {
       at: "2026-09-13T13:11:00.000Z",
     });
     const story: GameStory = {
+      runId: "route-run",
       ready: true,
       pendingEvidence: 0,
       branchId: run.branches[0]!.id,
@@ -450,7 +535,7 @@ describe("application shell", () => {
         san: null,
         fen: run.nodes[0]!.fen,
         kinds: ["eval_pivot"],
-        sentences: ["A recorded moment."],
+        sentences: [],
         evidence: [],
         phase: "opening",
       }],

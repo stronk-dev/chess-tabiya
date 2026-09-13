@@ -911,6 +911,7 @@ export class RunService {
     });
     const terminal = branchOutcome !== undefined;
     return Object.freeze({
+      runId,
       ready: pass.ready,
       pendingEvidence: pass.pending,
       branchId,
@@ -930,10 +931,10 @@ export class RunService {
     this.story(runId,principal,branchId);
     if(this.#storage.createPublicToken===undefined)throw new ServerError("STORAGE_FAILURE","Public token storage is unavailable");
     const token=randomBytes(32).toString("base64url"),record:PublicTokenRecord={id:`share-${randomUUID()}`,tokenHash:createHash("sha256").update(token).digest("hex"),scope:"story_read",runId,branchId,createdBy:principal.learnerId,createdAt:at,revokedAt:null};
-    this.#storage.createPublicToken(record); return Object.freeze({id:record.id,token,url:`/shared/${token}`});
+    this.#storage.createPublicToken(record); return Object.freeze({id:record.id,token,url:`/shared/${token}`,scope:record.scope,runId:record.runId,branchId:record.branchId,createdAt:record.createdAt,revokedAt:record.revokedAt});
   }
-  shares(runId:string,principal:Principal){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may list shares");return this.#storage.publicTokens?.(runId,principal.learnerId).map(({tokenHash,...record})=>record)??[];}
-  revokeShare(runId:string,principal:Principal,tokenId:string,at=new Date().toISOString()){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may revoke shares");this.#storage.revokePublicToken?.(runId,tokenId,principal.learnerId,at);}
+  shares(runId:string,principal:Principal){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may list shares");return this.#storage.publicTokens?.(runId,principal.learnerId).map(({tokenHash:_tokenHash,createdBy:_createdBy,...record})=>record)??[];}
+  revokeShare(runId:string,principal:Principal,tokenId:string,at=new Date().toISOString()){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may revoke shares");if(this.#storage.revokePublicToken?.(runId,tokenId,principal.learnerId,at)!==true)throw new ServerError("RUN_NOT_FOUND","Story share not found");return Object.freeze({revoked:true as const,runId,tokenId,revokedAt:at});}
   publicStory(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record?.scope!=="story_read")throw new ServerError("RUN_NOT_FOUND","Shared story not found");const learner=this.#storage.learnerById(record.createdBy);if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const story=this.story(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId),selection=storyMomentSelection(story);return Object.freeze({title:reviewStoryTitle(story),outcome:story.outcome,selection:Object.freeze({shown:selection.shown,total:selection.total}),moments:selection.moments.map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,sentences:moment.sentences})),productLink:"/play"});}
 
   async flip(runId:string,principal:Principal,nodeId:string,resistance?:"human_common"|"strong_engine"){

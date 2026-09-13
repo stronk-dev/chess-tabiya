@@ -5,7 +5,7 @@ import { pivotalMarkers, renderPivotalMarker, type PivotalKind } from "./pivotal
 import { renderShapeFiring, shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, Node, RunOutcome } from "./types.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, renderEvidenceItems, type ConsumerEvidenceView, type DeclaredEvidence, type EvidenceRendererRegistry, type RenderedEvidenceView } from "./evidence-contract.js";
-import { declareEndgameReadingEvidence, declarePivotalMarkerEvidence, declareRunRecordEvidence, declareShapeFiringSourceEvidence, declareStoryDerivedEvidence } from "./evidence-source-adapters.js";
+import { declareEndgameReadingEvidence, declarePivotalMarkerEvidence, declareRunRecordEvidence, declareSerializedReviewStoryEvidence, declareShapeFiringSourceEvidence, declareStoryDerivedEvidence } from "./evidence-source-adapters.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 
 export type StoryMomentKind = PivotalKind | "eval_pivot" | "last_level" | "endgame_entry" | "shape_span" | "outcome";
@@ -96,6 +96,16 @@ export function renderReviewStoryEvidence(view: ConsumerEvidenceView<unknown>): 
   assertConsumerEvidenceView(view);
   if (view.consumer.id !== "review.story" || view.consumer.version !== 1) throw new TypeError("Expected review.story@1 consumer view");
   return renderEvidenceItems(view, REVIEW_STORY_RENDERERS);
+}
+
+/** Rebuilds and renders the exact review-story evidence carried across a JSON boundary. */
+export function renderSerializedReviewStoryEvidence(values: readonly unknown[]): readonly string[] {
+  if (!Array.isArray(values)) throw new TypeError("Serialized Story evidence must be an array");
+  const declared = values.map(declareSerializedReviewStoryEvidence);
+  const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "review.story", version: 1 }, declared);
+  if (view.items.length !== declared.length) throw new TypeError("Serialized Story evidence is not admitted by review.story@1");
+  const rendered = renderReviewStoryEvidence(view);
+  return Object.freeze([...new Set(rendered.items.flatMap((item) => item.sentences))]);
 }
 
 function reviewStoryEvidence(declared: readonly DeclaredEvidence<unknown>[]): RenderedEvidenceView<unknown> {

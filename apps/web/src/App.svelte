@@ -60,6 +60,7 @@
     type BoardControl,
     type GameStory,
     type StoryShare,
+    type CreatedStoryShare,
     type ProgressMilestone,
     type RunDerivationPage,
     type RepertoireSummary,
@@ -82,6 +83,7 @@
   import { assertStoryForkResponse, assertStoryRewindResponse } from "./lib/story-reentry-response.js";
   import { assertRunDeletionPreview } from "./lib/run-deletion-preview.js";
   import { assertRunPageResponse, legacyRunPage } from "./lib/run-page-response.js";
+  import { assertCreatedStoryShare, assertGameStoryResponse, assertRevokedStoryShare, assertStoryShares } from "./lib/story-response.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -789,6 +791,7 @@
           api.storyShares?.(next.runId) ?? Promise.resolve([]),
         ]);
         if (generation !== loadGeneration) return;
+        assertStoryShares(loaded[2],next.runId);
         if(refresh===storyRefreshGeneration){
           story = loaded[0];
           if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
@@ -1014,18 +1017,23 @@
   async function fetchStory(runId: string, allowReveal: boolean): Promise<GameStory> {
     if (api.story === undefined) throw new Error("Game stories are unavailable");
     const writer = WriterSession.peek(runId, storage);
+    const readStory = async (): Promise<GameStory> => {
+      const value = await api.story!(runId);
+      assertGameStoryResponse(value, { runId });
+      return value;
+    };
     let nextStory: GameStory;
     try {
-      nextStory = await api.story(runId);
+      nextStory = await readStory();
     } catch (error) {
       if (!(allowReveal && error instanceof ApiError && error.code === "ASSISTANCE_WITHHELD" && writer !== undefined)) throw error;
       await api.reveal(runId, writer.writerId);
-      nextStory = await api.story(runId);
+      nextStory = await readStory();
     }
     if (writer !== undefined && !nextStory.ready) {
       const page = await api.evidence(runId, 0);
       for (const result of page.results) await api.applyEvidence(runId, result.seq, writer.writerId);
-      nextStory = await api.story(runId);
+      nextStory = await readStory();
     }
     return nextStory;
   }
@@ -1050,14 +1058,16 @@
   async function refreshStoryShares(runId: string, generation: number, refresh: number): Promise<void> {
     if (!storyRouteIsCurrent(runId, generation) || refresh !== storyShareGeneration || api.storyShares === undefined) return;
     const nextShares = await api.storyShares(runId);
+    assertStoryShares(nextShares,runId);
     if (storyRouteIsCurrent(runId, generation) && refresh === storyShareGeneration) storyShares = nextShares;
   }
 
-  async function createStoryShare(runId: string, branchId: string): Promise<{ readonly id: string; readonly token: string; readonly url: string }> {
+  async function createStoryShare(runId: string, branchId: string): Promise<CreatedStoryShare> {
     if (api.shareStory === undefined) throw new Error("Story sharing is unavailable");
     const generation = loadGeneration;
     const refresh = ++storyShareGeneration;
     const created = await api.shareStory(runId, branchId);
+    assertCreatedStoryShare(created,{runId,branchId});
     if (storyRouteIsCurrent(runId, generation) && refresh === storyShareGeneration) {
       try { await refreshStoryShares(runId, generation, refresh); } catch { /* The created URL remains authoritative even if its list projection cannot refresh. */ }
     }
@@ -1068,7 +1078,8 @@
     if (api.revokeStoryShare === undefined) throw new Error("Story share revocation is unavailable");
     const generation = loadGeneration;
     const refresh = ++storyShareGeneration;
-    await api.revokeStoryShare(runId, tokenId);
+    const revoked = await api.revokeStoryShare(runId, tokenId);
+    assertRevokedStoryShare(revoked,{runId,tokenId});
     if (storyRouteIsCurrent(runId, generation) && refresh === storyShareGeneration) {
       try { await refreshStoryShares(runId, generation, refresh); } catch { /* Revocation succeeded; a stale list must not turn it into a false failure. */ }
     }

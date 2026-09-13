@@ -37,6 +37,7 @@ describe("game story screen", () => {
 
   it("uses the shared semantic board for a selected story moment", async () => {
     const story: GameStory = {
+      runId: "story-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",
@@ -74,6 +75,7 @@ describe("game story screen", () => {
 
   it("frames a recorded result from the learner's side instead of printing wire values", async () => {
     const story: GameStory = {
+      runId: "story-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",
@@ -105,6 +107,7 @@ describe("game story screen", () => {
   it("states the selected and total moment counts when the story rail is bounded", async () => {
     const moments = Array.from({ length: 9 }, (_, index) => moment(index + 1));
     const story: GameStory = {
+      runId: "story-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",
@@ -136,6 +139,7 @@ describe("game story screen", () => {
   it("never carries a completed explanation onto another story moment", async () => {
     const moments = [moment(1), moment(2)];
     const story: GameStory = {
+      runId: "story-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",
@@ -167,6 +171,7 @@ describe("game story screen", () => {
   it("discards an in-flight explanation when the learner changes moments", async () => {
     const moments = [moment(1), moment(2)];
     const story: GameStory = {
+      runId: "story-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",
@@ -201,6 +206,7 @@ describe("game story screen", () => {
   it("recovers Story actions without duplicate requests or provider diagnostics", async () => {
     const moments = [moment(1)];
     const story: GameStory = {
+      runId: "story-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",
@@ -285,6 +291,7 @@ describe("game story screen", () => {
   it("invalidates share presentation when the Story unmounts", async () => {
     const moments = [moment(1)];
     const story: GameStory = {
+      runId: "story-run",
       ready: true,
       pendingEvidence: 0,
       branchId: "main",

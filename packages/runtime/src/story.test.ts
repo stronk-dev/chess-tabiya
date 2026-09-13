@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, declareShapeFiringEvidence, evidenceForConsumer, PRIMARY_EVIDENCE_MANIFEST, rankStoryMoments, renderReviewStoryEvidence, renderStoryEvaluationTrajectory, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment, type StoryMomentKind } from "./index.js";
+import { attachEvidence, commitMove, createRun, declareShapeFiringEvidence, evidenceForConsumer, PRIMARY_EVIDENCE_MANIFEST, rankStoryMoments, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationTrajectory, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment, type StoryMomentKind } from "./index.js";
 
 if (false) {
   // @ts-expect-error review story rendering consumes only a compiled evidence view.
@@ -27,6 +27,7 @@ describe("grounded game story", () => {
     const pivot = story.moments.find((moment) => moment.kinds.includes("eval_pivot"));
     expect(pivot?.sentences).toContain("Recorded evaluation change from the learner's side: +2.65 pawns across this move (sf, 100 ms).");
     expect(pivot?.sentences.join(" ")).not.toMatch(/\bcp\b/u);
+    expect(renderSerializedReviewStoryEvidence(JSON.parse(JSON.stringify(pivot!.evidence)) as unknown[])).toEqual(pivot!.sentences);
     expect(renderStoryEvaluationTrajectory(pivot!.evalBefore!.centipawns, pivot!.evalAfter!.centipawns)).toBe(
       "Recorded evaluation from the learner's side: −0.25 → +2.40 pawns.",
     );

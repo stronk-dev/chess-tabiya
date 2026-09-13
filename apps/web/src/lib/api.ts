@@ -554,16 +554,23 @@ export interface ImportGameRequest {
   readonly source: { readonly kind: "pgn"; readonly pgn: string } | { readonly kind: "lichess"; readonly url: string };
 }
 export interface GameStory {
+  readonly runId: string;
   readonly ready: boolean;
   readonly pendingEvidence: number;
   readonly branchId: string;
   readonly side: "white" | "black";
   readonly source: { readonly kind: "native" } | { readonly kind: ImportedGameRecord["sourceKind"]; readonly url?: string; readonly headers: Readonly<Record<string, string>>; readonly result: ImportedGameRecord["result"]; readonly importedAt: string };
-  readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: ImportedGameRecord["result"] };
+  readonly outcome:
+    | { readonly kind: "board_terminal"; readonly result: "win" | "loss" | "draw" }
+    | { readonly kind: "recorded_result"; readonly result: Exclude<ImportedGameRecord["result"], "*"> }
+    | { readonly kind: "unfinished" };
   readonly moments: readonly StoryMoment[];
   readonly rank: readonly string[];
+  readonly evidence?: StoryMoment["evidence"];
 }
 export interface StoryShare { readonly id: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdAt: string; readonly revokedAt: string | null; }
+export interface CreatedStoryShare extends Omit<StoryShare, "revokedAt"> { readonly token: string; readonly url: string; readonly revokedAt: null; }
+export interface RevokedStoryShare { readonly revoked: true; readonly runId: string; readonly tokenId: string; readonly revokedAt: string; }
 export interface RunDerivation { readonly derivedRunId: string; readonly sourceRunId: string; readonly sourceBranchId: string; readonly sourceNodeId: string; readonly kind: "flip_sides"; readonly createdAt: string; }
 export interface RunDerivationPage { readonly source: RunDerivation | null; readonly derived: readonly RunDerivation[]; }
 export interface ProgressMilestone { readonly kind: "first_attempt" | "first_stable" | "first_objective_achieved" | "first_win" | "first_scheduled_return" | "ten_attempts_one_root" | "first_flip_sides"; readonly occurredAt: string; readonly sentence: string; readonly link: { readonly runId: string; readonly branchId: string }; }
@@ -875,9 +882,9 @@ export interface DrillClientApi extends RunApi {
   importGame?(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }>;
   importRecord?(runId: string): Promise<ImportedGameRecord>;
   story?(runId: string, branchId?: string): Promise<GameStory>;
-  shareStory?(runId: string, branchId: string): Promise<{ readonly id: string; readonly token: string; readonly url: string }>;
+  shareStory?(runId: string, branchId: string): Promise<CreatedStoryShare>;
   storyShares?(runId: string): Promise<readonly StoryShare[]>;
-  revokeStoryShare?(runId: string, tokenId: string): Promise<void>;
+  revokeStoryShare?(runId: string, tokenId: string): Promise<RevokedStoryShare>;
   flipRun?(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }>;
   runDerivations?(runId: string): Promise<RunDerivationPage>;
   milestones?(): Promise<readonly ProgressMilestone[]>;
@@ -1093,9 +1100,9 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/story${query}`);
   }
 
-  shareStory(runId: string, branchId: string): Promise<{ readonly id: string; readonly token: string; readonly url: string }> { return this.#json(`/runs/${encoded(runId)}/share`, { method: "POST", body: { branchId } }); }
+  shareStory(runId: string, branchId: string): Promise<CreatedStoryShare> { return this.#json(`/runs/${encoded(runId)}/share`, { method: "POST", body: { branchId } }); }
   async storyShares(runId: string): Promise<readonly StoryShare[]> { const body = await this.#json<{ readonly shares: readonly StoryShare[] }>(`/runs/${encoded(runId)}/share`); return body.shares; }
-  async revokeStoryShare(runId: string, tokenId: string): Promise<void> { await this.#json(`/runs/${encoded(runId)}/share/${encoded(tokenId)}`, { method: "DELETE" }); }
+  revokeStoryShare(runId: string, tokenId: string): Promise<RevokedStoryShare> { return this.#json(`/runs/${encoded(runId)}/share/${encoded(tokenId)}`, { method: "DELETE" }); }
   flipRun(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }> { return this.#json(`/runs/${encoded(runId)}/flip`, { method: "POST", body: { nodeId, ...(resistance === undefined ? {} : { resistance }) } }); }
   async runDerivations(runId: string): Promise<RunDerivationPage> { const body = await this.#json<{ readonly derivations: RunDerivationPage }>(`/runs/${encoded(runId)}/derivations`); return body.derivations; }
   async milestones(): Promise<readonly ProgressMilestone[]> { const body = await this.#json<{ readonly milestones: readonly ProgressMilestone[] }>("/progress/milestones"); return body.milestones; }

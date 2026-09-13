@@ -362,7 +362,7 @@ export interface RunStorage {
   createPublicToken?(record: PublicTokenRecord): void;
   publicTokens?(runId: string, creatorId: string): readonly Extract<PublicTokenRecord, { scope: "story_read" }>[];
   publicTokenByHash?(tokenHash: string): PublicTokenRecord | undefined;
-  revokePublicToken?(runId: string, tokenId: string, creatorId: string, at: string): void;
+  revokePublicToken?(runId: string, tokenId: string, creatorId: string, at: string): boolean;
   createDerivedRun?(run: DrillRun, lease: LeaseHolder, title: string, derivation: RunDerivation): void;
   derivationFor?(runId: string): RunDerivation | undefined;
   derivationsFrom?(runId: string): readonly RunDerivation[];
@@ -1936,8 +1936,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     return this.#publicToken(row);
   }
 
-  revokePublicToken(runId:string,tokenId:string,creatorId:string,at:string):void{
-    this.#database.prepare("UPDATE public_tokens SET revoked_at=? WHERE id=? AND run_id=? AND created_by=? AND revoked_at IS NULL").run(at,tokenId,runId,creatorId);
+  revokePublicToken(runId:string,tokenId:string,creatorId:string,at:string):boolean{
+    const result=this.#database.prepare("UPDATE public_tokens SET revoked_at=? WHERE id=? AND run_id=? AND created_by=? AND revoked_at IS NULL").run(at,tokenId,runId,creatorId);
+    return result.changes === 1;
   }
 
   createSessionJoinToken(record:Extract<PublicTokenRecord,{scope:"session_join"}>):void{

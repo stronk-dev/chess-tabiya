@@ -1305,8 +1305,9 @@ export function createRestHandler(
       const shareDelete = /^\/runs\/([^/]+)\/share\/([^/]+)$/.exec(url.pathname);
       if (request.method === "DELETE" && shareDelete !== null) {
         const principal = authenticate();
-        service.revokeShare(decodeURIComponent(shareDelete[1]!), principal, decodeURIComponent(shareDelete[2]!));
-        return json(200, { revoked: true });
+        const runId = decodeURIComponent(shareDelete[1]!);
+        const tokenId = decodeURIComponent(shareDelete[2]!);
+        return json(200, service.revokeShare(runId, principal, tokenId));
       }
       const route = parseRunRoute(url.pathname);
       if (!route) {

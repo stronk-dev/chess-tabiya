@@ -20078,3 +20078,23 @@ a clean lifecycle proved that cascade was runner state, not twenty product regre
 tier runs pass: smoke 40 with one optional Maia latency probe skipped, matrix 47, content 5. The
 complete canonical `make test-browser` run passes 92 required journeys in three minutes with the
 same optional Maia probe skipped.
+
+## 2026-09-14 — Review Story and sharing cross one exact trust boundary ([[D3251]])
+
+The Review route no longer treats an untyped JSON document as board, narrative, evidence and share
+authority. Story responses now carry the requested run identity and are checked as a closed document:
+run and optional branch, legal positions, ordered unique moments, exact rank set, readiness arithmetic,
+source/outcome variants, evaluation pairs, endgame readings and declared producer/projection identities.
+Each visible sentence is re-rendered locally through a finite nine-projection Review adapter and must
+equal the transmitted projection, so arbitrary network prose cannot become a grounded Story. The first
+adapter implementation intentionally failed the generic-construction closure; replacing it with the
+finite exact-adapter switch kept F1's evidence seal intact.
+
+Story share creation, listing and revocation now return subject-bearing receipts bound to the exact run,
+branch and token. Revoking a missing or already-revoked token fails instead of reporting success. The
+first complete browser run found that the share-list projection still exposed internal `createdBy`; the
+closed client validator refused it, leaving the created URL valid but the management list absent. The
+server now projects only the public contract and the real terminal-to-public-card journey passes.
+`make verify-software` is green across 200 files / 1,325 tests plus type, performance, schema, manifest,
+packaging and production-build checks. The full `make test-browser` gate passes 92 required journeys in
+three minutes with one explicitly optional Maia latency measurement skipped.

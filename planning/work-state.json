@@ -26666,6 +26666,15 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3251",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f4a97c0a5b114cc6da17d82b46ffb62dbc61c7d5493110c728d92f1a1f671a91",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/story-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }
