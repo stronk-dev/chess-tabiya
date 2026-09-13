@@ -19,9 +19,11 @@
     onRestore?: (branchId: string) => void;
     onRestoreAll?: () => void;
     onClassify?: (() => void | Promise<void>) | undefined;
+    classificationBusy?: boolean;
+    classificationError?: string | undefined;
   }
 
-  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere, groupOrdinals = {}, decidedness = {}, collapsedBranchIds = new Set(), foldedBranchIds = [], compareLimitNotice, onFold, onRestore, onRestoreAll, onClassify }: Props =
+  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere, groupOrdinals = {}, decidedness = {}, collapsedBranchIds = new Set(), foldedBranchIds = [], compareLimitNotice, onFold, onRestore, onRestoreAll, onClassify, classificationBusy = false, classificationError }: Props =
     $props();
   let folded = $derived(new Set(foldedBranchIds));
   let visible = $derived(branches.filter((branch) => !folded.has(branch.id) && !collapsedBranchIds.has(branch.id)));
@@ -73,7 +75,16 @@
       <button type="button" onclick={() => onCompareAllHere(branches.find((branch) => branch.id === activeBranchId)?.forkNodeId ?? "")}>Compare all forked here</button>
       {#if compareLimitNotice}<span class="reason" role="status" aria-live="polite" aria-atomic="true">{compareLimitNotice}</span>{/if}
     {/if}
-    {#if onClassify && unclassified > 0}<button type="button" onclick={() => onClassify?.()}>Classify remaining</button>{/if}
+    {#if onClassify && unclassified > 0}
+      <button
+        type="button"
+        disabled={classificationBusy}
+        aria-describedby={classificationBusy ? "branch-classification-busy" : undefined}
+        onclick={() => onClassify?.()}
+      >{classificationBusy ? "Checking branches…" : "Classify remaining"}</button>
+      {#if classificationBusy}<span id="branch-classification-busy" class="reason" role="status">Checking the current branch positions.</span>{/if}
+      {#if classificationError}<span class="reason" role="alert">{classificationError}</span>{/if}
+    {/if}
     {#if settled.length > 0}
       <details><summary>Settled outcomes ({settled.length})</summary><ul>{#each settled as branch}{@const fact = decidedness[branch.id]}<li><button type="button" onclick={() => onRestore?.(branch.id)}>{branch.label}</button>{#if fact?.state === "decided"}<span>{renderCollapseExplanation(branch.id, fact, branch.leafPly).text}</span>{/if}</li>{/each}</ul></details>
     {/if}

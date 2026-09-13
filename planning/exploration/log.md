@@ -19520,3 +19520,15 @@ different selected moment or complete after teardown. Backend, filesystem and de
 render. The regression drives duplicate, failure and retry behavior across all five actions. `make
 verify-software` passes 188 files / 1,196 tests and the production build; `make test-browser` passes
 all 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Branch classification is population-bound and recoverable ([[D3208]])
+
+The branch rail previously allowed repeated classification submissions, leaked rejection into an
+unhandled promise, and merged a completed response without proving that the run's branch leaves
+were still the ones submitted. Classification now has one request identity over the exact run,
+branch ids and leaf nodes. A population change invalidates in-flight work and clears prior facts;
+returned ids outside the bounded request are refused at the merge. Pending work disables the
+action, while rejection and a changed population restore an explicit safe retry without provider
+diagnostics. `make verify-software` passes 188 files / 1,197 tests plus type, performance, schema,
+manifest and production-build checks; `make test-browser` passes all 64 required journeys with one
+explicitly optional Maia latency measurement skipped.

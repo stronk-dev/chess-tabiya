@@ -279,6 +279,10 @@
   let companionInvoker = $state<HTMLElement>();
   let companionElement = $state<HTMLElement>();
   let decidedness: Readonly<Record<string, Decidedness>> = $state({});
+  let classificationBusy = $state(false);
+  let classificationError: string | undefined = $state();
+  let classificationRequest = 0;
+  let classificationPopulation: string | undefined;
   let foldedBranchIds: string[] = $state([]);
   let pinnedExpanded: string[] = $state([]);
   let compareLimitNotice: string | undefined = $state();
@@ -1029,10 +1033,36 @@
     persistFolded(foldedBranchIds.filter((id) => id !== branchId));
     pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
   }
+
+  function branchClassificationIdentity(): string {
+    return `${run.id}:${cards.map((card) => `${card.id}:${card.leafNodeId}`).join("|")}`;
+  }
+
   async function classifyRemaining(): Promise<void> {
-    if (onClassifyBranches === undefined) return;
+    if (onClassifyBranches === undefined || classificationBusy) return;
     const ids = cards.filter((card) => decidedness[card.id]?.state !== "decided").slice(0, MAX_COMPARISON_BRANCHES).map((card) => card.id);
-    if (ids.length > 0) decidedness = Object.freeze({ ...decidedness, ...(await onClassifyBranches(ids)) });
+    if (ids.length === 0) return;
+    const population = branchClassificationIdentity();
+    const request = ++classificationRequest;
+    classificationBusy = true;
+    classificationError = undefined;
+    try {
+      const result = await onClassifyBranches(ids);
+      if (request !== classificationRequest) return;
+      if (population !== branchClassificationIdentity()) {
+        classificationError = "The branches changed while they were being checked. Classify them again.";
+        return;
+      }
+      const requested = new Set(ids);
+      const admitted = Object.fromEntries(Object.entries(result).filter(([id]) => requested.has(id)));
+      decidedness = Object.freeze({ ...decidedness, ...admitted });
+    } catch {
+      if (request === classificationRequest) {
+        classificationError = "Branch status is unavailable right now. Try again.";
+      }
+    } finally {
+      if (request === classificationRequest) classificationBusy = false;
+    }
   }
   async function switchVisibleBranch(nodeId: string, branchId: string): Promise<void> {
     pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
@@ -1301,6 +1331,16 @@
       boardMoveAnnouncement = undefined;
       boardFocusRequested = false;
     }
+  });
+
+  $effect(() => {
+    const population = branchClassificationIdentity();
+    if (classificationPopulation === population) return;
+    classificationPopulation = population;
+    classificationRequest += 1;
+    classificationBusy = false;
+    classificationError = undefined;
+    decidedness = Object.freeze({});
   });
 
   $effect(() => {
@@ -1636,6 +1676,8 @@
           onRestore={restoreBranch}
           onRestoreAll={() => persistFolded([])}
           onClassify={onClassifyBranches === undefined ? undefined : classifyRemaining}
+          {classificationBusy}
+          {classificationError}
         />
           </section>
 

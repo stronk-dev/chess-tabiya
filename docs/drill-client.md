@@ -384,7 +384,10 @@ The drill screen composes three regions:
 - a right branch rail with branch label, first divergent move, optional intent,
   live learner-facing objective-progress chip, branch switching, and compare selection. A switch carries
   both the leaf node and branch id, so an empty fork or another shared-node state remains
-  observable and selects the intended branch rather than whichever branch the node implies.
+  observable and selects the intended branch rather than whichever branch the node implies. Branch
+  classification is single-flight and bound to the exact run, branch ids, and leaf nodes submitted.
+  Changing that population clears prior classifications and invalidates an in-flight response; a
+  failed or changed-population request leaves the rail open with a safe, explicit retry.
 
 The designated first rehearsal adds no fourth region. Its narration occupies the existing Support
 seat beside the board (or the existing compact sheet) and derives its step only from committed run

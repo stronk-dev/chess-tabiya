@@ -1553,6 +1553,47 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("keeps branch classification single-flight and recoverable without leaking failures", async () => {
+    const run = branchedRun();
+    const first = deferred<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>>();
+    const onClassifyBranches = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockImplementationOnce((branchIds: readonly string[]) => Promise.resolve(Object.freeze(Object.fromEntries(branchIds.map((branchId) => [branchId, Object.freeze({
+        state: "decided" as const,
+        ground: Object.freeze({ kind: "terminal_outcome" as const, outcome: "draw" as const, nodeId: run.activeCursor.nodeId }),
+        admitted: true,
+        shortfall: false,
+      })])))));
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onClassifyBranches,
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+
+    const classify = [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Classify remaining")!;
+    classify.click();
+    await tick();
+    expect(classify.disabled).toBe(true);
+    expect(classify.textContent).toContain("Checking branches");
+    classify.click();
+    expect(onClassifyBranches).toHaveBeenCalledTimes(1);
+
+    first.reject(new Error("private tablebase provider detail"));
+    await vi.waitFor(() => expect(document.querySelector(".rail-actions [role='alert']")?.textContent).toBe("Branch status is unavailable right now. Try again."));
+    expect(document.querySelector(".rail-actions")?.textContent).not.toContain("private tablebase provider detail");
+    expect(classify.disabled).toBe(false);
+
+    classify.click();
+    await vi.waitFor(() => expect(onClassifyBranches).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.body.textContent).not.toContain("Classify remaining"));
+    expect(document.querySelector(".rail-actions [role='alert']")).toBeNull();
+    await unmount(component);
+  });
+
   it("recovers comparison narration and resistance replay without duplicate actions", async () => {
     const run = branchedRun();
     const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
