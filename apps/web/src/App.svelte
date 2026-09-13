@@ -266,6 +266,8 @@
   let unsubscribeController: (() => void) | undefined;
   let unsubscribeRouter: (() => void) | undefined;
   let loadGeneration = 0;
+  let liveRefreshGeneration = 0;
+  let storyRefreshGeneration = 0;
   let livePoll: ReturnType<typeof setInterval> | undefined;
   let storyPoll: ReturnType<typeof setInterval> | undefined;
   let autoClaimingMatch = false;
@@ -673,14 +675,17 @@
         if (generation !== loadGeneration) return;
         runs = page.runs; runSelection = page.selection;
       } else if (next.name === "story") {
+        const refresh=++storyRefreshGeneration;
         const loaded = await Promise.all([
           fetchStory(next.runId, true),
           api.capabilities(),
           api.storyShares?.(next.runId) ?? Promise.resolve([]),
         ]);
         if (generation !== loadGeneration) return;
-        story = loaded[0];
-        if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+        if(refresh===storyRefreshGeneration){
+          story = loaded[0];
+          if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+        }
         capabilities = loaded[1];
         storyShares = loaded[2];
       } else if (next.name === "play") {
@@ -735,20 +740,23 @@
         if(generation!==loadGeneration)return;
         [liveSessions,classrooms,packs]=[loaded[0],loaded[2],loaded[3]];runs=loaded[1].runs;runSelection=loaded[1].selection;
       } else if (next.name === "live-session") {
+        const refresh=++liveRefreshGeneration;
         liveReclaimIntent=false;
         liveReclaimError=undefined;
         const loaded=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
-        if(generation!==loadGeneration)return;
+        if(generation!==loadGeneration||refresh!==liveRefreshGeneration)return;
         [liveDetail,liveJournal]=loaded;
       } else if (next.name === "live-overlay") {
+        const refresh=++liveRefreshGeneration;
         const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
         const nextLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
         if(generation!==loadGeneration)return;
-        activeLiveDetail=nextLiveDetail;
-        const matchMode=nextLiveDetail?.match===undefined?undefined:nextLiveDetail.match.pausedAt===null?"live":"paused";
+        if(refresh===liveRefreshGeneration)activeLiveDetail=nextLiveDetail;
+        const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{projectionOnly:true,...(matchMode===undefined?{}:{matchMode})});
         if(generation!==loadGeneration)return;
       } else if (next.name === "run") {
+        const refresh=++liveRefreshGeneration;
         const [relatedSessions,nextAssignments,nextRepertoires,nextCapabilities]=await Promise.all([
           api.liveSessions?.()??Promise.resolve([]),
           api.assignments?.()??Promise.resolve([]),
@@ -763,8 +771,8 @@
         repertoires=nextRepertoires;
         capabilities=nextCapabilities;
         repertoirePages=nextRepertoirePages;
-        activeLiveDetail=nextLiveDetail;
-        const matchMode=nextLiveDetail?.match===undefined?undefined:nextLiveDetail.match.pausedAt===null?"live":"paused";
+        if(refresh===liveRefreshGeneration)activeLiveDetail=nextLiveDetail;
+        const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
         if(generation!==loadGeneration)return;
         const relation = session.pack?.variantOf;
@@ -845,17 +853,18 @@
     if(next.name!=="live-session"&&next.name!=="live-overlay"&&next.name!=="run")return;
     livePoll=setInterval(()=>void (async()=>{
       const generation=loadGeneration;
+      const refresh=++liveRefreshGeneration;
       const sessionId=next.name==="live-session"?next.sessionId:activeLiveDetail?.session.id;
       if(sessionId===undefined)return;
       const detail=await api.liveSession?.(sessionId);
-      if(generation!==loadGeneration)return;
+      if(generation!==loadGeneration||refresh!==liveRefreshGeneration)return;
       if(detail!==undefined){if(next.name==="live-session")liveDetail=detail;else activeLiveDetail=detail;controller.setMatchMode(detail.match===undefined?undefined:detail.match.pausedAt===null?"live":"paused");}
       if(next.name==="live-session"){
         const journal=(await api.sessionJournal?.(sessionId)??{entries:[],nextSeq:0}).entries;
-        if(generation!==loadGeneration)return;
+        if(generation!==loadGeneration||refresh!==liveRefreshGeneration)return;
         liveJournal=journal;
       }
-    })(),2_000);
+    })().catch(()=>{}),2_000);
   }
 
   function syncStoryPolling(next: AppRoute): void {
@@ -885,10 +894,15 @@
 
   async function refreshStory(runId: string, allowReveal: boolean): Promise<void> {
     const generation=loadGeneration;
-    const nextStory=await fetchStory(runId,allowReveal);
-    if(generation!==loadGeneration||route.name!=="story"||route.runId!==runId)return;
-    story=nextStory;
-    if (story?.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+    const refresh=++storyRefreshGeneration;
+    try{
+      const nextStory=await fetchStory(runId,allowReveal);
+      if(generation!==loadGeneration||refresh!==storyRefreshGeneration||route.name!=="story"||route.runId!==runId)return;
+      story=nextStory;
+      if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+    }catch{
+      // Background refresh retains the last good Story. Initial load failures use routeError.
+    }
   }
 
   async function importGame(): Promise<void> {

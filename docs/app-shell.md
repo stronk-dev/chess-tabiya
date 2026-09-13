@@ -48,6 +48,12 @@ current. Pagination and live/Story polling retain the same boundary. A response
 from a closed route cannot overwrite the current screen even when it resolves
 last; stale failures cannot become the current route error either.
 
+Background live and Story refreshes also carry a resource-local request
+sequence. Overlapping polls are latest-request-wins within the route, so an
+older snapshot cannot regress a newer one. Refresh failures retain the last
+good projection and are contained by the polling boundary; initial-load
+failures still use the route's visible error path.
+
 The shell top bar keeps the primary routes and current run/access context visible on ordinary
 application routes. A live `/play/run/:runId` is a focused full-viewport composition and replaces
 that global chrome with its own fixed run topbar; its Tabiya control exits back to Play, where the

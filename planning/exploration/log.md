@@ -19712,3 +19712,16 @@ Library's current population. Sequential canonical verification passes: `make ve
 green across 188 files / 1,223 tests plus type, performance, schema, manifest and production-build
 checks; `make test-browser` passes all 64 required journeys with one explicitly optional Maia
 latency measurement skipped.
+
+## 2026-09-13 — Background projections refresh monotonically ([[D3223]])
+
+Route generation prevents a poll from crossing screens but did not order two overlapping polls on
+the same screen. Story and live refreshes now own resource-local latest-request sequences in
+addition to route identity. An older completion cannot regress a newer Story, live detail, match
+mode or journal; rejected background refreshes retain the last good projection instead of becoming
+unhandled promises, while initial-load failure still uses the visible route error path. A mounted
+Story test starts two polls, resolves the newer ready snapshot first and proves the older response
+cannot replace it. Sequential canonical verification passes: `make verify-software` is green
+across 188 files / 1,224 tests plus type, performance, schema, manifest and production-build
+checks; `make test-browser` passes all 64 required journeys with one explicitly optional Maia
+latency measurement skipped.

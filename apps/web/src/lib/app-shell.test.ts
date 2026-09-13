@@ -254,6 +254,54 @@ describe("application shell", () => {
     await unmount(persona);
   });
 
+  it("keeps the newest Story poll when an older refresh resolves last", async () => {
+    vi.useFakeTimers();
+    history.replaceState(null, "", "/review/game/route-run");
+    const storyWith = (white: string, ready: boolean): GameStory => ({
+      ready,
+      pendingEvidence: ready ? 0 : 1,
+      branchId: "main",
+      side: "white",
+      source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
+      outcome: { kind: "unfinished" },
+      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [white], evidence: [], phase: "opening" }],
+      rank: ["moment-1"],
+    });
+    const older = deferred<GameStory>();
+    const newer = deferred<GameStory>();
+    let storyCalls = 0;
+    const storyApi: DrillClientApi = {
+      ...api(),
+      async story() {
+        storyCalls += 1;
+        if (storyCalls === 1) return storyWith("Initial", false);
+        if (storyCalls === 2) return older.promise;
+        return newer.promise;
+      },
+    };
+    const component = mount(App, { target: target(), props: { api: storyApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.advanceTimersByTimeAsync(0);
+    await tick();
+    expect(document.body.textContent).toContain("Initial – Black");
+
+    await vi.advanceTimersByTimeAsync(1_000);
+    expect(storyCalls).toBe(2);
+    await vi.advanceTimersByTimeAsync(1_000);
+    expect(storyCalls).toBe(3);
+    newer.resolve(storyWith("Newer", true));
+    await vi.advanceTimersByTimeAsync(0);
+    await tick();
+    expect(document.body.textContent).toContain("Newer – Black");
+
+    older.resolve(storyWith("Older", true));
+    await vi.advanceTimersByTimeAsync(0);
+    await tick();
+    expect(document.body.textContent).toContain("Newer – Black");
+    expect(document.body.textContent).not.toContain("Older – Black");
+    await unmount(component);
+    vi.useRealTimers();
+  });
+
   it("turns an empty Home into a direct rehearsal start instead of an empty resume card", async () => {
     const emptyApi: DrillClientApi = { ...api(), async runs() { return []; } };
     const component = mount(App, {
