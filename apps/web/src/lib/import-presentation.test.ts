@@ -23,7 +23,9 @@ describe("import failure presentation", () => {
     expect(importFailureCopy({ code: "IMPORT_SOURCE_UNSUPPORTED", message: "raw" })).toContain("not supported");
   });
 
-  it("does not erase an unknown typed failure", () => {
-    expect(importFailureCopy({ code: "STORAGE_FAILURE", message: "Import storage is unavailable" })).toBe("Import storage is unavailable");
+  it("does not expose an unknown typed failure", () => {
+    const copy = importFailureCopy({ code: "STORAGE_FAILURE", message: "private storage detail" });
+    expect(copy).toBe("The game could not be imported. Nothing was stored; try again.");
+    expect(copy).not.toContain("private storage detail");
   });
 });

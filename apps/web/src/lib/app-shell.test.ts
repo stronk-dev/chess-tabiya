@@ -32,7 +32,7 @@ import type {
 } from "./api.js";
 import { saveAssistance } from "./assistance-preference.js";
 import { HistoryRouter } from "./router.js";
-import { WriterSession, type KeyValueStorage } from "./writer-session.js";
+import { WriterSession, writerStorageKey, type KeyValueStorage } from "./writer-session.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -1540,6 +1540,77 @@ describe("application shell", () => {
     await tick();
     await Promise.resolve();
     expect(window.location.pathname).toBe("/");
+    await unmount(component);
+  });
+
+  it("retries Story preparation without importing the game twice", async () => {
+    history.replaceState(null, "", "/review");
+    const storage = new MemoryStorage();
+    const reveal = vi.fn(async () => ({} as never));
+    reveal.mockRejectedValueOnce(new Error("private reveal failure"));
+    const importGame = vi.fn(async (input: Parameters<NonNullable<DrillClientApi["importGame"]>>[0]) => ({
+      run: { ...run, id: input.id }, importRecord: {} as never, evidencePass: { jobs: 0 },
+    }));
+    const importApi: DrillClientApi = { ...api(), importGame, reveal };
+    const component = mount(App, { target: target(), props: { api: importApi, router: new HistoryRouter(window), storage } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Import one game"));
+    const pgn = document.querySelector<HTMLTextAreaElement>("textarea[placeholder='[Event …]']")!;
+    pgn.value = `[Event "Retry"]\n[Result "*"]\n\n1. e4 *`;
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    const build = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Build game story")!;
+    await vi.waitFor(() => expect(build.disabled).toBe(false));
+    build.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The game is saved, but its Story could not be prepared."));
+    expect(document.body.textContent).not.toContain("private reveal failure");
+    expect(importGame).toHaveBeenCalledTimes(1);
+    const retry = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Finish Story setup")!;
+    retry.click();
+    await vi.waitFor(() => expect(reveal).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(window.location.pathname).toMatch(/^\/review\/game\/import-/u));
+    expect(importGame).toHaveBeenCalledTimes(1);
+    await unmount(component);
+  });
+
+  it("does not navigate or permit a duplicate when an import crosses a Review departure", async () => {
+    history.replaceState(null, "", "/review");
+    const storage = new MemoryStorage();
+    const pendingImport = deferred<Awaited<ReturnType<NonNullable<DrillClientApi["importGame"]>>>>();
+    let requestedRunId = "";
+    const importGame = vi.fn((input: Parameters<NonNullable<DrillClientApi["importGame"]>>[0]) => { requestedRunId=input.id;return pendingImport.promise; });
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: { ...api(), importGame, reveal: vi.fn(async () => ({} as never)) },
+        router,
+        storage,
+      },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Import one game"));
+    const pgn = document.querySelector<HTMLTextAreaElement>("textarea[placeholder='[Event …]']")!;
+    pgn.value = `[Event "Departed"]\n[Result "*"]\n\n1. d4 *`;
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    const build = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Build game story")!;
+    await vi.waitFor(() => expect(build.disabled).toBe(false));
+    build.click();
+    await vi.waitFor(() => expect(importGame).toHaveBeenCalledTimes(1));
+    expect(storage.values.size).toBe(0);
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    router.navigate("/review");
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Import one game"));
+    const inFlight = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Preparing…")!;
+    expect(inFlight.disabled).toBe(true);
+    inFlight.click();
+    expect(importGame).toHaveBeenCalledTimes(1);
+    pendingImport.resolve({ run: { ...run, id: requestedRunId }, importRecord: {} as never, evidencePass: { jobs: 0 } });
+    await vi.waitFor(() => expect(inFlight.textContent).toBe("Build game story"));
+    expect(inFlight.disabled).toBe(true);
+    expect(window.location.pathname).toBe("/review");
+    expect(document.body.textContent).toContain("The game is saved and its Story is ready.");
+    expect(storage.values.get(writerStorageKey(requestedRunId))).toBeTruthy();
     await unmount(component);
   });
 

@@ -248,6 +248,10 @@
   let importUrl = $state("");
   let importSide: "white" | "black" = $state("white");
   let importError: string | undefined = $state();
+  let importNotice: string | undefined = $state();
+  let importBusy = $state(false);
+  let importPreparation: { readonly runId: string; readonly writerId: string } | undefined = $state();
+  let importGeneration = 0;
   let story: GameStory | undefined = $state();
   let storyShares: readonly StoryShare[] = $state([]);
   let capabilities: Capabilities | undefined = $state();
@@ -687,6 +691,7 @@
         runs = loaded[0].runs;
         runSelection = loaded[0].selection;
       } else if (next.name === "review") {
+        if (!importBusy) importError = undefined;
         const page = await initialRunPage();
         if (generation !== loadGeneration) return;
         runs = page.runs; runSelection = page.selection;
@@ -978,22 +983,70 @@
   }
 
   async function importGame(): Promise<void> {
+    if (importBusy) return;
+    const generation = loadGeneration;
+    const action = ++importGeneration;
+    const pending = importPreparation;
+    const stillOwnsReview = (): boolean => action === importGeneration
+      && generation === loadGeneration
+      && route.name === "review";
+    importBusy = true;
     importError = undefined;
+    importNotice = undefined;
+    if (pending !== undefined) {
+      try {
+        await api.reveal(pending.runId, pending.writerId);
+        if (action === importGeneration) importPreparation = undefined;
+        if (stillOwnsReview()) navigate(routePath({ name: "story", runId: pending.runId }));
+      } catch {
+        if (stillOwnsReview()) importError = "The game is saved, but its Story could not be prepared. Try finishing Story setup again.";
+      } finally {
+        if (action === importGeneration) importBusy = false;
+      }
+      return;
+    }
+    const source = importUrl.trim() === ""
+      ? { kind: "pgn" as const, pgn: importPgn }
+      : { kind: "lichess" as const, url: importUrl };
+    const side = importSide;
     try {
       if (api.importGame === undefined) throw new Error("Game import is unavailable");
       const runId = `import-${crypto.randomUUID()}`;
-      const writer = WriterSession.claimFor(runId, storage);
-      await api.importGame({
+      const writer = WriterSession.observe(runId, storage);
+      const result=await api.importGame({
         id: runId,
-        side: importSide,
+        side,
         opponentPolicy: { mode: "human_common", targetElo: 1800 },
         policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
         seed: Math.floor(Math.random() * 2_147_483_647),
-        source: importUrl.trim() === "" ? { kind: "pgn", pgn: importPgn } : { kind: "lichess", url: importUrl },
+        source,
       }, writer.writerId);
-      await api.reveal(runId, writer.writerId);
-      navigate(routePath({ name: "story", runId }));
-    } catch (error) { importError = importFailureCopy(error); }
+      if (result.run.id !== runId) {
+        WriterSession.claimFor(runId, storage, () => writer.writerId);
+        if (stillOwnsReview()) importError = "The game was imported, but its response could not be matched. Reload Review to find the saved game.";
+        return;
+      }
+      WriterSession.claimFor(runId, storage, () => writer.writerId);
+      if (action === importGeneration) importPreparation = { runId, writerId: writer.writerId };
+      try {
+        await api.reveal(runId, writer.writerId);
+      } catch {
+        if (stillOwnsReview()) importError = "The game is saved, but its Story could not be prepared. Try finishing Story setup again.";
+        return;
+      }
+      if (action === importGeneration) importPreparation = undefined;
+      if (action === importGeneration && source.kind === "pgn" && importPgn === source.pgn) importPgn = "";
+      if (action === importGeneration && source.kind === "lichess" && importUrl === source.url) importUrl = "";
+      if (stillOwnsReview()) {
+        navigate(routePath({ name: "story", runId }));
+      } else if (action === importGeneration) {
+        importNotice = "The game is saved and its Story is ready. It will appear in Review history after the page reloads.";
+      }
+    } catch (error) {
+      if (stillOwnsReview()) importError = importFailureCopy(error);
+    } finally {
+      if (action === importGeneration) importBusy = false;
+    }
   }
 
   async function startRatedGame(band: 1000 | 1400 | 1800 | 2200, side: "white" | "black"): Promise<void> {
@@ -2000,12 +2053,14 @@
       <p>Open a run to replay, branch, compare, or export it. Import one finished game when you want its moments to become rehearsal doors.</p>
       <form class="import-game" onsubmit={(event) => { event.preventDefault(); void importGame(); }}>
         <h2>Import one game</h2>
-        <label>Lichess game URL <input type="url" placeholder="https://lichess.org/abcdefgh" bind:value={importUrl} /></label>
+        <label>Lichess game URL <input type="url" placeholder="https://lichess.org/abcdefgh" disabled={importBusy||importPreparation!==undefined} bind:value={importUrl} /></label>
         <span>or paste PGN</span>
-        <label>PGN <textarea rows="6" placeholder="[Event …]" bind:value={importPgn}></textarea></label>
-        <label>Your side <select bind:value={importSide}><option value="white">White</option><option value="black">Black</option></select></label>
+        <label>PGN <textarea rows="6" placeholder="[Event …]" disabled={importBusy||importPreparation!==undefined} bind:value={importPgn}></textarea></label>
+        <label>Your side <select disabled={importBusy||importPreparation!==undefined} bind:value={importSide}><option value="white">White</option><option value="black">Black</option></select></label>
         <p id="import-storage-disclosure" class="honest">Import keeps the original PGN verbatim—including player names, tags, comments, and move annotations—alongside its parsed main line and the rehearsal branches you add. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
-        <button class="primary" type="submit" aria-describedby="import-storage-disclosure import-source-guidance" disabled={importUrl.trim() === "" && importPgn.trim() === ""}>Build game story</button>
+        {#if importPreparation}<p role="status">The game is saved. Finish preparing its Story without importing a duplicate.</p>{/if}
+        <button class="primary" type="submit" aria-describedby="import-storage-disclosure import-source-guidance" disabled={importBusy||(importPreparation===undefined&&importUrl.trim()===""&&importPgn.trim()==="")}>{importBusy?"Preparing…":importPreparation?"Finish Story setup":"Build game story"}</button>
+        {#if importNotice}<p role="status">{importNotice}</p>{/if}
         {#if importError}<p role="alert">{importError}</p>{/if}
         <p id="import-source-guidance" class="honest">Chess.com: export one completed game's PGN and paste it here. Export the game, not an analysis tree with variations. Tabiya never links or mines your account.</p>
       </form>

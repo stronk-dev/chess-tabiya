@@ -19791,3 +19791,18 @@ and a held gap entry resolved after navigating Home cannot pull the learner back
 Sequential canonical verification passes: `make verify-software` is green across 188 files / 1,231
 tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
 passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Game import separates saved truth from Story preparation ([[D3229]])
+
+Review previously persisted a writer before the import existed, admitted duplicate submissions,
+and treated failed Story preparation as failed storage. A retry therefore created another run,
+while a response completing after navigation could pull the learner back into the old game. The
+client now captures immutable source, side, run, writer and route identities; retains its
+single-flight guard across leave-and-return navigation; and persists the writer only after the
+server confirms storage. Saved-but-unprepared is a distinct visible state whose retry prepares the
+same run. Late success preserves navigation and newer input while leaving truthful saved/ready
+status, and provider diagnostics never become learner copy. Partial-success and
+leave-return-duplicate falsifiers pass. Sequential canonical verification passes: `make
+verify-software` is green across 188 files / 1,233 tests plus type, performance, schema, manifest
+and production-build checks; `make test-browser` passes all 64 required journeys with one
+explicitly optional Maia latency measurement skipped.

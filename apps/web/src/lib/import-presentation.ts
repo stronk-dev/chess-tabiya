@@ -26,7 +26,7 @@ export function importFailureCopy(value: unknown): string {
     if (/invalid starting position/iu.test(message)) return "The PGN's starting position is invalid or incomplete.";
     if (/illegal PGN move:/iu.test(message)) return `A recorded move is illegal from the PGN's position (${message.replace(/^.*illegal PGN move:\s*/iu, "")}).`;
     if (/could not be parsed/iu.test(message)) return "The text is not a readable PGN. Export one completed game and paste the full headers plus moves.";
-    return `The PGN was refused: ${message}`;
+    return "The PGN was refused because it does not meet the single-game import contract.";
   }
-  return message;
+  return "The game could not be imported. Nothing was stored; try again.";
 }

@@ -157,6 +157,17 @@ run or Library. Import currently admits Standard and From Position games only. T
 raw Variant allow-list runs before chessops constructs a position, so an explicit
 Chess960 PGN—with or without setup FEN—refuses without persisting a run; rules-aware
 variant support remains a separate contract.
+
+The Review import form owns the storage and Story-preparation phases separately. It
+captures the submitted source, side, route generation, run id, and provisional writer
+identity before the request; disables duplicate submissions while either phase is in
+flight; and persists the writer claim only after the server confirms the imported run.
+If Story preparation fails after storage, Review says that the game is already saved
+and retries only preparation for that run, so retry cannot create a duplicate import.
+A response that completes after the learner leaves Review may finish server work but
+cannot navigate, clear newer form input, or publish its error into another route.
+Provider and storage diagnostics never become learner-facing copy.
+
 Boards use the learner's declared orientation. Re-entry is browser-tested
 end to end: paste, derive, reveal, select, branch, play, and export.
 
