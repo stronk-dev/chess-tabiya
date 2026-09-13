@@ -867,6 +867,46 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.error).not.toContain("Analysis response");
   });
 
+  it("uses one exclusive gate across move, checkpoint, branch, group, and return mutations", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    const nodeId = environment.controller.state.runState!.run.activeCursor.nodeId;
+    const first = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    vi.spyOn(api, "analysis").mockReturnValueOnce(first.promise);
+    const move = vi.spyOn(api, "move");
+    const fork = vi.spyOn(api, "fork");
+    const createGroup = vi.spyOn(api, "createGroup");
+    const scheduleReturn = vi.spyOn(api, "scheduleReturn");
+    const reveal = vi.spyOn(api, "reveal");
+    const prediction = vi.spyOn(api, "prediction");
+    const reasoning = vi.spyOn(api, "recordReasoning");
+
+    const pending = environment.controller.analyzeMissingEvidence([nodeId]);
+    expect(environment.controller.state.busy).toBe(true);
+    expect(await environment.controller.move("c1e3")).toBe(false);
+    expect(await environment.controller.continueCheckpoint()).toBe(false);
+    expect(await environment.controller.fork("crossed", "must not persist")).toBe(false);
+    expect(await environment.controller.createGroup({ source: "hand_picked", candidates: ["c1e3", "f2f3"] })).toBeUndefined();
+    expect(await environment.controller.scheduleReturn(nodeId)).toBe(false);
+    await environment.controller.reveal();
+    await environment.controller.recordPrediction("e7e6");
+    await environment.controller.recordReasoning({ skipped: true });
+
+    expect(move).not.toHaveBeenCalled();
+    expect(fork).not.toHaveBeenCalled();
+    expect(createGroup).not.toHaveBeenCalled();
+    expect(scheduleReturn).not.toHaveBeenCalled();
+    expect(reveal).not.toHaveBeenCalled();
+    expect(prediction).not.toHaveBeenCalled();
+    expect(reasoning).not.toHaveBeenCalled();
+    expect(environment.controller.state.busy).toBe(true);
+
+    first.resolve({ jobs: [{ id: "analysis-1" }] });
+    expect(await pending).toBe(true);
+    expect(environment.controller.state.busy).toBe(false);
+  });
+
   it("returns an explicit failed fork result instead of collapsing it into void", async () => {
     const api = new FakeApi();
     const environment = controller(api);

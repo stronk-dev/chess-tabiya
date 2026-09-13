@@ -373,6 +373,7 @@ export class DrillSessionController {
   }
 
   async move(uci: string): Promise<boolean> {
+    if (this.#state.busy) return false;
     const store = this.#requiredStore();
     let learnerMoveCommitted = false;
     this.#patch({ busy: true, error: undefined });
@@ -403,6 +404,7 @@ export class DrillSessionController {
   }
 
   async reveal(): Promise<void> {
+    if (this.#state.busy) return;
     this.#patch({ busy: true, error: undefined });
     try {
       await this.#requiredStore().reveal();
@@ -427,6 +429,7 @@ export class DrillSessionController {
   }
 
   async continueCheckpoint(): Promise<boolean> {
+    if (this.#state.busy) return false;
     const checkpoint = this.#state.checkpoint;
     const previousDismissedCheckpointSeq = this.#dismissedCheckpointSeq;
     if (checkpoint !== undefined) {
@@ -448,6 +451,7 @@ export class DrillSessionController {
   }
 
   async recordPrediction(predictedUci: string): Promise<void> {
+    if (this.#state.busy) return;
     const checkpoint = this.#state.checkpoint;
     if (checkpoint?.interaction?.type !== "prediction") throw new Error("No prediction checkpoint is active");
     this.#patch({ busy: true, error: undefined });
@@ -469,6 +473,7 @@ export class DrillSessionController {
   }
 
   async recordReasoning(input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }): Promise<void> {
+    if (this.#state.busy) return;
     const checkpoint = this.#state.checkpoint;
     if (checkpoint?.interaction?.type !== "stated_reasoning") throw new Error("No stated-reasoning checkpoint is active");
     this.#patch({ busy: true, error: undefined });
@@ -493,6 +498,7 @@ export class DrillSessionController {
   }
 
   async fork(label?: string, intent?: string): Promise<boolean> {
+    if (this.#state.busy) return false;
     const run = this.#requiredRun();
     this.#patch({ busy: true, error: undefined });
     try {
@@ -510,6 +516,7 @@ export class DrillSessionController {
   }
 
   async createGroup(input: CreateGroupRequest): Promise<CreateGroupResult | undefined> {
+    if (this.#state.busy) return undefined;
     this.#patch({ busy: true, error: undefined });
     try {
       const result = await this.#requiredStore().createGroup(input);
@@ -553,6 +560,7 @@ export class DrillSessionController {
   }
 
   async scheduleReturn(nodeId: string): Promise<boolean> {
+    if (this.#state.busy) return false;
     this.#patch({ busy: true, error: undefined });
     try {
       await this.#requiredStore().scheduleReturn({ nodeId, kind: "blocked" });
@@ -595,6 +603,7 @@ export class DrillSessionController {
   }
 
   async enterSimulation(branchIndex: number): Promise<boolean> {
+    if (this.#state.busy) return false;
     const simulation = this.#state.simulation;
     if (simulation === undefined) return false;
     this.#patch({ busy: true, error: undefined });

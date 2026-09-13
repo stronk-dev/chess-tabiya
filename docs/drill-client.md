@@ -397,6 +397,11 @@ The drill screen composes three regions:
   Changing that population clears prior classifications and invalidates an in-flight response; a
   failed or changed-population request leaves the rail open with a safe, explicit retry.
 
+Every in-run mutation acquires the controller's same synchronous exclusive gate before touching
+the run store or API. Board moves, disclosure, checkpoint interactions, forks, groups, analysis,
+return scheduling, rewinds, simulations, branch switches and comparisons therefore cannot race a
+second entry surface even when the individual controls are activated in the same browser turn.
+
 The designated first rehearsal adds no fourth region. Its narration occupies the existing Support
 seat beside the board (or the existing compact sheet) and derives its step only from committed run
 events. It cannot offer rewind before a checkpoint, segment, guard, or outcome boundary; after the

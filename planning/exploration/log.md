@@ -19660,3 +19660,16 @@ group pending/failure/retry regressions bind both boundaries. Sequential canonic
 passes: `make verify-software` is green across 188 files / 1,217 tests plus type, performance,
 schema, manifest and production-build checks; `make test-browser` passes all 64 required journeys
 with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — In-run mutations share one exclusive controller gate ([[D3219]])
+
+The session controller's `busy` field was only a display signal for most operations. Rewind,
+comparison, simulation and analysis refused an occupied controller, while move, disclosure,
+checkpoint interactions, fork, group creation, return scheduling and simulation entry overwrote
+the flag and started a second request. Every in-run mutation now checks the same synchronous gate
+before touching store or API state. A held-analysis regression crosses the move, checkpoint,
+branch, group, return, reveal, prediction and reasoning entry paths and proves that none issues a
+second request or disturbs the first operation. Sequential canonical verification passes: `make
+verify-software` is green across 188 files / 1,218 tests plus type, performance, schema, manifest
+and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
+optional Maia latency measurement skipped.
