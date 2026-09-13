@@ -19981,3 +19981,18 @@ failure, retry, malformed vote identity, unchanged stale tally and crossed match
 Sequential canonical verification passes: `make verify-software` is green across 196 files / 1,297
 tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
 passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-14 — Live creation retains its complete workflow identity ([[D3243]])
+
+The Live entry point no longer exposes server diagnostics or trusts any returned session id. One
+request captures the chosen run, workflow, title, handoff policy, classroom, schedule and optional
+rotation/match setup; every visible input freezes against one announced pending state and duplicate
+submission is refused. Rejection retains the form with bounded retry copy. A resolved session is
+validated against the request plus creation identity before navigation; a crossed response is an
+uncertain completion that keeps the learner on Live and blocks duplicate creation until the route
+is reopened. Departed settlement remains inert. The mounted falsifier crosses pending mutation,
+duplicate click, raw-provider rejection, retry, exact-input retention, crossed success and the
+no-navigation/no-duplicate boundary. Sequential canonical verification passes: `make
+verify-software` is green across 196 files / 1,297 tests plus type, performance, schema, manifest
+and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
+optional Maia latency measurement skipped.

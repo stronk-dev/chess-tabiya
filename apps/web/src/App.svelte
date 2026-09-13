@@ -51,6 +51,7 @@
     type ShapeDraft,
     type ShapeSummary,
     type PrincipleSummary,
+    type LiveSession,
     type LiveSessionSummary,
     type LiveSessionDetail,
     type VoteTally,
@@ -230,6 +231,7 @@
   let liveRotationHandles = $state("");
   let liveCreateBusy = $state(false);
   let liveCreateError: string | undefined = $state();
+  let liveCreateUncertain = $state(false);
   let liveClassroomId = $state("");
   let liveScheduledFor = $state("");
   let liveProposalMove = $state("");
@@ -851,6 +853,7 @@
         classroomActionError=undefined;
         liveCreateBusy=false;
         liveCreateError=undefined;
+        liveCreateUncertain=false;
         const loaded=await Promise.all([api.liveSessions?.()??Promise.resolve([]),initialRunPage(),api.classrooms?.()??Promise.resolve([]),api.packs()]);
         if(generation!==loadGeneration)return;
         [liveSessions,classrooms,packs]=[loaded[0],loaded[2],loaded[3]];runs=loaded[1].runs;runSelection=loaded[1].selection;
@@ -1895,19 +1898,30 @@
     if(liveBoardControl==="rotation"&&liveRotationMembers().length===0)return "Add at least one handle to the rotation.";
     if(liveBoardControl==="match"&&!liveMatchWhite.trim()&&!liveMatchBlack.trim())return "Name at least one player; the other seat may stay open for a friend link.";
     if(liveCreateBusy)return "Another session is being created.";
+    if(liveCreateUncertain)return "Reload or reopen Live before creating another session.";
     return undefined;
+  }
+  type LiveCreateInput=Parameters<NonNullable<DrillClientApi["createLiveSession"]>>[0];
+  function assertCreatedLiveSession(created:LiveSession,input:LiveCreateInput):void{
+    const requestedRotation=input.rotationHandles;
+    const validRotation=requestedRotation===undefined||created.rotation?.length===requestedRotation.length;
+    if(created.id.trim()===""||created.runId!==input.runId||created.kind!==input.kind||created.title!==input.title||created.boardControl!==(input.boardControl??"host_directed")||created.classroomId!==input.classroomId||created.scheduledFor!==input.scheduledFor||created.closedAt!==undefined||created.createdBy.trim()===""||!Number.isInteger(created.rotationCursor)||created.rotationCursor<0||!Number.isFinite(Date.parse(created.createdAt))||!validRotation)throw new Error("Crossed live-session creation response");
   }
   async function createLive(run:RunSummary):Promise<void>{
     if(liveCreateDisabledReason(run)!==undefined)return;
     const generation=loadGeneration;
-    const input={runId:run.id,kind:liveKind,title:liveTitle.trim(),boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="rotation"?{rotationHandles:liveRotationMembers()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})};
+    const input:LiveCreateInput={runId:run.id,kind:liveKind,title:liveTitle.trim(),boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="rotation"?{rotationHandles:liveRotationMembers()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})};
     liveCreateBusy=true;
     liveCreateError=undefined;
+    liveCreateUncertain=false;
     try{
       if(api.createLiveSession===undefined)throw new Error("Live session creation is unavailable.");
       const created=await api.createLiveSession(input);
-      if(generation===loadGeneration&&route.name==="live")navigate(routePath({name:"live-session",sessionId:created.id}));
-    }catch(error){if(generation===loadGeneration&&route.name==="live")liveCreateError=error instanceof Error?error.message:String(error);}
+      if(generation!==loadGeneration||route.name!=="live")return;
+      try{assertCreatedLiveSession(created,input);}
+      catch{liveCreateUncertain=true;liveCreateError="A session may have been created, but its response could not be matched. Reload or reopen Live before creating another.";return;}
+      navigate(routePath({name:"live-session",sessionId:created.id}));
+    }catch{if(generation===loadGeneration&&route.name==="live")liveCreateError="This session could not be created. Your setup is unchanged; check it and try again.";}
     finally{if(generation===loadGeneration&&route.name==="live")liveCreateBusy=false;}
   }
   function classroomRouteIsCurrent(generation:number):boolean{return generation===loadGeneration&&route.name==="live";}
@@ -2916,25 +2930,25 @@
         {/if}
       </section>
       <div class="row-actions">
-        <label>Session title <input maxlength="120" bind:value={liveTitle}/></label>
-        <label>What do you want to do? <select value={selectedLiveWorkflow()} onchange={(event)=>chooseLiveWorkflow(event.currentTarget.value as LiveWorkflow)}>{#each LIVE_WORKFLOWS as workflow}<option value={workflow.id}>{workflow.label}</option>{/each}</select></label>
+        <label>Session title <input maxlength="120" bind:value={liveTitle} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}/></label>
+        <label>What do you want to do? <select value={selectedLiveWorkflow()} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined} onchange={(event)=>chooseLiveWorkflow(event.currentTarget.value as LiveWorkflow)}>{#each LIVE_WORKFLOWS as workflow}<option value={workflow.id}>{workflow.label}</option>{/each}</select></label>
         <p class="session-purpose">{liveWorkflowOption(selectedLiveWorkflow()).summary}</p>
-        <details><summary>Advanced board handoff</summary><label>Board <select value={liveBoardControl} onchange={(event)=>liveBoardControl=event.currentTarget.value as BoardControl}>{#each liveBoardControlOptions(liveKind) as option}<option value={option.id}>{option.label}</option>{/each}</select></label><p class="honest">The workflow above chooses a useful default. Change handoff only when the group needs free claim or a named rotation.</p></details>
-        <label>Classroom (optional) <select bind:value={liveClassroomId}><option value="">None</option>{#each classrooms.filter((item)=>item.memberRole==="teacher"&&item.memberState==="active") as classroom}<option value={classroom.id}>{classroom.name}</option>{/each}</select></label>
-        <label>Schedule (optional) <input type="datetime-local" bind:value={liveScheduledFor}/></label>
+        <details><summary>Advanced board handoff</summary><label>Board <select value={liveBoardControl} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined} onchange={(event)=>liveBoardControl=event.currentTarget.value as BoardControl}>{#each liveBoardControlOptions(liveKind) as option}<option value={option.id}>{option.label}</option>{/each}</select></label><p class="honest">The workflow above chooses a useful default. Change handoff only when the group needs free claim or a named rotation.</p></details>
+        <label>Classroom (optional) <select bind:value={liveClassroomId} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}><option value="">None</option>{#each classrooms.filter((item)=>item.memberRole==="teacher"&&item.memberState==="active") as classroom}<option value={classroom.id}>{classroom.name}</option>{/each}</select></label>
+        <label>Schedule (optional) <input type="datetime-local" bind:value={liveScheduledFor} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}/></label>
         {#if liveBoardControl==="rotation"}
-          <label>Rotation handles <input bind:value={liveRotationHandles} placeholder="coach, student-one, student-two"/></label>
+          <label>Rotation handles <input bind:value={liveRotationHandles} placeholder="coach, student-one, student-two" disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}/></label>
           <p id="live-rotation-required" class="honest">Comma-separated handles in turn order. Each person must already have participant access to the run.</p>
         {/if}
         {#if liveBoardControl==="match"}
-          <label>White handle<input bind:value={liveMatchWhite} placeholder="student-white"/></label>
-          <label>Black handle<input bind:value={liveMatchBlack} placeholder="or leave one seat open"/></label>
+          <label>White handle<input bind:value={liveMatchWhite} placeholder="student-white" disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}/></label>
+          <label>Black handle<input bind:value={liveMatchBlack} placeholder="or leave one seat open" disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}/></label>
           <p id="live-match-required" class="honest">Name at least one player; the other seat may stay open for a friend link.</p>
         {/if}
         {#if !liveTitle.trim()}<p id="live-title-required" class="honest">Give the session a title viewers will recognize.</p>{/if}
       </div>
       <section><h2>Your sessions</h2><p class="honest">Wall cards show rules facts and the pack's recorded objective state; they are never ordered or labelled by engine evaluation.</p><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{liveKindLabel(item.kind)} · {liveBoardControlLabel(item.boardControl)}</p>{#if item.classroom}<p>Classroom: <strong>{item.classroom.name}</strong></p>{/if}<p><strong>{liveTurnLabel(item)}</strong>{item.board.pausedAt ? ` · paused since ${readableDate(item.board.pausedAt)}` : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>Objective: {objectiveStateLabel(item.board.objectiveState)}</p><p>{item.board.lastMoveAt ? `Last move ${readableDate(item.board.lastMoveAt)}` : "No move committed yet"}</p><p>@{item.board.leaseHeldBy.handle} holds the board · {rehearsalTurnCount(item.board.plyCount)}</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
-      <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledReason=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{runSessionKindLabel(item.sessionKind)} · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledReason!==undefined} aria-describedby={disabledReason===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if disabledReason}<span id={`live-disabled-${item.id}`} class="honest">{disabledReason}</span>{/if}</article>{/each}</div>{#if runSelection.shown<runSelection.total}<p id="live-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs.</p><button type="button" disabled={runPageBusy} aria-describedby="live-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more source runs"}</button>{/if}{#if runPageError}<p role="alert">{runPageError}</p>{/if}{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
+      <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledReason=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{runSessionKindLabel(item.sessionKind)} · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledReason!==undefined} aria-describedby={liveCreateBusy?"live-create-busy":disabledReason===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if disabledReason&&!liveCreateBusy}<span id={`live-disabled-${item.id}`} class="honest">{disabledReason}</span>{/if}</article>{/each}</div>{#if runSelection.shown<runSelection.total}<p id="live-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs.</p><button type="button" disabled={runPageBusy} aria-describedby="live-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more source runs"}</button>{/if}{#if runPageError}<p role="alert">{runPageError}</p>{/if}{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
       <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>
     </main>
   {:else if route.name === "live-session"}

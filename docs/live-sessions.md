@@ -15,6 +15,14 @@ workflow supplies a valid `kind` and board-control default. The raw handoff prim
 **Advanced board handoff** for groups that need free claim or a named rotation; the `match` control
 is absent from Academy and Stream because the server rejects that combination.
 
+Creation retains one exact run and complete visible setup. While the request is pending, every
+setup control is disabled and linked to the announced state, so an older intent cannot navigate
+away from newer form values. A rejection keeps the setup with bounded retry copy. A resolved
+session must match the requested run, workflow kind, title, board policy, classroom, schedule and
+rotation cardinality and carry a valid creation identity before the browser opens it. A mismatched
+response is treated as an uncertain completion and creation remains blocked until Live is reopened,
+preventing an accidental duplicate session.
+
 Native matches require an untouched position run. Run listings expose `recordedMoveCount`, derived
 at query time from `snapshot_json.nodes` rather than copied into the denormalized summary, so this
 adds no storage migration and no second count authority. The client disables a non-position or

@@ -1349,7 +1349,7 @@ describe("application shell", () => {
     await unmount(component);
   });
 
-  it("collects a named rotation, explains incomplete setup, and renders creation failures", async () => {
+  it("retains one exact Live creation through duplicate, failure, retry, and crossed response", async () => {
     history.replaceState(null, "", "/live");
     const createdSession = {
       id: "rotation-session",
@@ -1362,9 +1362,10 @@ describe("application shell", () => {
       createdBy: "learner-host",
       createdAt: "2026-08-27T11:00:00.000Z",
     };
+    const firstCreation = deferred<typeof createdSession>();
     const createLiveSession = vi.fn()
-      .mockRejectedValueOnce(new Error("Rotation learner student needs write access"))
-      .mockResolvedValueOnce(createdSession);
+      .mockImplementationOnce(() => firstCreation.promise)
+      .mockResolvedValueOnce({ ...createdSession, runId: "crossed-run" });
     const liveApi: DrillClientApi = {
       ...api(),
       async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-08-27T10:00:00.000Z" }; },
@@ -1404,16 +1405,37 @@ describe("application shell", () => {
     handles.value = "coach, student, coach";
     handles.dispatchEvent(new Event("input", { bubbles: true }));
     await vi.waitFor(() => expect(createButton()?.disabled).toBe(false));
-    createButton()!.click();
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Rotation learner student needs write access"));
+    const create = createButton()!;
+    create.click();
+    create.click();
+    await vi.waitFor(() => expect(createLiveSession).toHaveBeenCalledTimes(1));
     expect(createLiveSession).toHaveBeenNthCalledWith(1, expect.objectContaining({
       runId: run.id,
       title: "Tuesday relay",
       boardControl: "rotation",
       rotationHandles: ["coach", "student"],
     }));
-    createButton()!.click();
+    expect(create.disabled).toBe(true);
+    expect(create.getAttribute("aria-describedby")).toBe("live-create-busy");
+    expect(title.disabled).toBe(true);
+    expect(board.disabled).toBe(true);
+    expect(handles.disabled).toBe(true);
+    expect(document.getElementById("live-create-busy")?.textContent).toContain("Creating the session");
+
+    firstCreation.reject(new Error("private session provider failure"));
+    await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("This session could not be created. Your setup is unchanged; check it and try again."));
+    expect(document.body.textContent).not.toContain("private session provider failure");
+    expect(title.value).toBe("Tuesday relay");
+    expect(handles.value).toBe("coach, student, coach");
+    expect(create.disabled).toBe(false);
+
+    create.click();
     await vi.waitFor(() => expect(createLiveSession).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("A session may have been created, but its response could not be matched. Reload or reopen Live before creating another."));
+    expect(window.location.pathname).toBe("/live");
+    expect(document.body.textContent).not.toContain("crossed-run");
+    expect(create.disabled).toBe(true);
+    expect(document.getElementById(`live-disabled-${run.id}`)?.textContent).toContain("Reload or reopen Live");
     await unmount(component);
   });
 
