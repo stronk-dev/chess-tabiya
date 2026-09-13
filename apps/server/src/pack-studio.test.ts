@@ -25,6 +25,18 @@ describe("Pack Studio", () => {
     return { storage, registry, principles, studio: new PackStudio(storage, registry, undefined, principles) };
   }
 
+  it("publishes catalogue summaries in deterministic identity order", async () => {
+    const later = structuredClone(fixture);
+    later.id = "z-pack";
+    const earlier = structuredClone(fixture);
+    earlier.id = "a-pack";
+    const registry = await PackRegistry.fromDocuments([
+      { source: "later", value: later },
+      { source: "earlier", value: earlier },
+    ]);
+    expect(registry.list().map((pack) => pack.id)).toEqual(["a-pack", "z-pack"]);
+  });
+
   it("stores invalid drafts, enforces optimistic concurrency, and publishes an immutable community version", async () => {
     const { studio, registry } = await setup();
     const invalid = structuredClone(fixture);

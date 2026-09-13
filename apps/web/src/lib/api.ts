@@ -26,6 +26,7 @@ import type {
 } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
+import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
 
 export interface PackSummary {
@@ -1042,7 +1043,7 @@ export class DrillApi implements DrillClientApi {
   }
 
   packs(): Promise<readonly PackSummary[]> {
-    return this.#json("/packs");
+    return this.#json<unknown>("/packs").then(parsePackCatalog);
   }
 
   async pack(packId: string): Promise<PackDocument> {
@@ -1060,13 +1061,11 @@ export class DrillApi implements DrillClientApi {
   }
 
   async shapes(): Promise<readonly ShapeSummary[]> {
-    const body = await this.#json<{ readonly shapes: readonly ShapeSummary[] }>("/shapes");
-    return body.shapes;
+    return parseShapeCatalog(await this.#json<unknown>("/shapes"));
   }
 
   async principles(): Promise<readonly PrincipleSummary[]> {
-    const body = await this.#json<{ readonly principles: readonly PrincipleSummary[] }>("/principles");
-    return body.principles;
+    return parsePrincipleCatalog(await this.#json<unknown>("/principles"));
   }
 
   async shape(shapeId: string): Promise<ShapeDocument> {

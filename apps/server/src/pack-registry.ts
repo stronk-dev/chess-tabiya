@@ -382,7 +382,7 @@ export class PackRegistry {
   }
 
   list(): readonly PackSummary[] {
-    return freeze([...this.#records.values()].map((record) => record.summary));
+    return freeze([...this.#records.values()].map((record) => record.summary).sort((left, right) => left.id.localeCompare(right.id)));
   }
 
   get(packId: string): PackRecord | undefined {

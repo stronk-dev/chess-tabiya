@@ -890,6 +890,9 @@ test("library exposes phase honestly and survives a malformed pack response", as
       mode: "plan",
       phase: null,
       difficulty: null,
+      objectiveSummary: "A valid summary whose authored phase is absent.",
+      consequenceHorizon: null,
+      concepts: [],
       reviewStatus: "schema_example",
       channel: "official",
     });

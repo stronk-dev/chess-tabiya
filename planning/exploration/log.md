@@ -20115,3 +20115,20 @@ models those two arms explicitly and the fixture retains both. No timeout, retry
 changed. `make verify-software` passes 201 files / 1,328 tests plus type, performance, schema,
 manifest, packaging and production-build checks. The complete `make test-browser` gate passes 92
 required journeys in three minutes with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-14 — Shared content catalogue responses become finite ([[D3253]])
+
+Pack, shape and principle lists now cross one client response authority before they can drive public
+acquisition, Play, Learn, Live or Create. The parser checks exact projections, ascending unique ids,
+schema versions, digests, closed phase/channel/status vocabularies, rating-window and horizon arithmetic,
+usage counts and publisher ownership. Network-only keys and malformed or duplicate rows fail the route's
+existing bounded retry state rather than becoming learner content.
+
+The first complete browser attempt failed every catalogue-dependent route and exposed a producer defect:
+shape and principle registries sorted their lists, while `PackRegistry.list()` retained filesystem and
+insertion order. The server now publishes pack summaries in deterministic id order and a reversed-input
+fixture pins that contract. A pre-existing browser fixture was also incomplete as a summary; filling its
+required summary fields preserves the intended honest `phase: null` case while its separately malformed
+full-pack response still fails closed. `make verify-software` passes 202 files / 1,346 tests plus types,
+performance, schema, manifest, packaging and production builds. The complete `make test-browser` gate
+passes 92 required journeys with one explicitly optional Maia latency probe skipped.
