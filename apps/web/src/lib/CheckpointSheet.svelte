@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   import HonestControl from "./HonestControl.svelte";
   import { recognizedCheckpointActions, type CheckpointNotice } from "./screen-model.js";
@@ -12,6 +12,7 @@
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
   import { claimProvenance } from "./claim-presentation.js";
   import { modalBoundary } from "./modal-boundary.js";
+  import { reasoningProposalSentence, verifiedReasoningProposals, type VerifiedReasoningProposal } from "./reasoning-review-response.js";
 
   interface Props {
     checkpoint: CheckpointNotice;
@@ -73,9 +74,11 @@
   let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
   let currentReasoning = $derived(reasoning?.occurrences.find((item) => item.checkpointEventSeq === checkpoint.eventSeq));
   let previousReasoning = $derived(reasoning?.previous ?? (reasoning?.occurrences.filter((item) => item.eventSeq !== currentReasoning?.eventSeq).at(-1) ?? null));
-  let review = $state<ReasoningReviewPage | undefined>();
+  let review = $state<{ readonly checkpointEventSeq: number; readonly proposals: readonly VerifiedReasoningProposal[] } | undefined>();
   let reviewBusy = $state(false);
   let reviewError = $state<string | undefined>();
+  let reviewRequest = 0;
+  let mounted = true;
 
   function matchedWords(detection: import("@chess-tabiya/runtime").ReasoningDetection): string {
     if (!currentReasoning?.transcript || !detection.match) return "";
@@ -88,19 +91,30 @@
   }
 
   async function requestReasoningReview(): Promise<void> {
-    if (onReasoningReview === undefined || currentReasoning === undefined) return;
+    if (onReasoningReview === undefined || currentReasoning?.transcript === null || currentReasoning?.transcript === undefined || currentReasoning.keyPoints === undefined || currentReasoning.detections === undefined || reviewBusy) return;
+    const request = ++reviewRequest;
+    const checkpointEventSeq = currentReasoning.checkpointEventSeq;
+    const transcript = currentReasoning.transcript;
+    const keyPoints = currentReasoning.keyPoints;
+    const detections = currentReasoning.detections;
     reviewBusy = true;
     reviewError = undefined;
     try {
-      review = await onReasoningReview(currentReasoning.checkpointEventSeq);
-    } catch (error) {
-      reviewError = error instanceof Error ? error.message : String(error);
+      const response = await onReasoningReview(checkpointEventSeq);
+      const proposals = verifiedReasoningProposals(response, transcript, keyPoints, detections);
+      if (!mounted || request !== reviewRequest || currentReasoning?.checkpointEventSeq !== checkpointEventSeq) return;
+      review = Object.freeze({ checkpointEventSeq, proposals });
+    } catch {
+      if (mounted && request === reviewRequest && currentReasoning?.checkpointEventSeq === checkpointEventSeq) {
+        reviewError = "Your words could not be checked right now. Nothing was added or graded; try again.";
+      }
     } finally {
-      reviewBusy = false;
+      if (mounted && request === reviewRequest) reviewBusy = false;
     }
   }
 
   onMount(() => heading?.focus());
+  onDestroy(() => { mounted = false; reviewRequest += 1; });
 </script>
 
 <div class="backdrop">
@@ -145,7 +159,7 @@
             <section aria-label="The author's points"><h4>The author's points</h4>
               {#if currentReasoning.keyPoints && currentReasoning.detections}
                 <p class="honesty">{reasoning?.honestySentence}</p>
-                <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : "Not detected in your words."}</p>{#each review?.proposals.filter((proposal) => proposal.keyPointId === point.id) ?? [] as proposal}<p class="proposal">{proposal.text}</p>{/each}<small>{point.attribution}</small></li>{/each}</ul>
+                <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : "Not detected in your words."}</p>{#each review?.checkpointEventSeq === currentReasoning.checkpointEventSeq ? review.proposals.filter((proposal) => proposal.keyPointId === point.id) : [] as proposal}<p class="proposal">{reasoningProposalSentence(proposal, point.label)}</p>{/each}<small>{point.attribution}</small></li>{/each}</ul>
                 {#if onReasoningReview !== undefined}
                   <button type="button" disabled={reviewBusy} onclick={() => void requestReasoningReview()}>{reviewBusy ? "Checking your exact words…" : "Check for another possible mention"}</button>
                   <p class="honesty">The configured language model may select your exact words. It cannot add a detection or grade your reasoning.</p>

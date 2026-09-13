@@ -123,6 +123,14 @@ const ENDGAME_INTERACTION_PACKS = [
   { title: ENDGAME_VIEWPORT_PACKS[5], uci: "e4c4", orientation: "white" },
 ] as const;
 
+const ENDGAME_INPUT_PROJECTIONS = [
+  { width: 1440, height: 1000 },
+  { width: 1366, height: 768 },
+  { width: 1280, height: 720 },
+  { width: 768, height: 1024 },
+  { width: 390, height: 844 },
+] as const;
+
 test.beforeEach(async ({ page }) => register(page));
 
 test("an anonymous visitor understands the product, browses positions, and keeps the chosen rehearsal through registration", async ({ page }) => {
@@ -2098,41 +2106,36 @@ test("@content a served related rehearsal names its source and the move in SAN",
   await expect(relation).not.toContainText("philidor-third-rank-hold");
 });
 
-test("@matrix served endgame packs submit the exact drawn move through every permanent input projection", async ({
-  page, browser,
-}) => {
-  test.setTimeout(180_000);
-  await enableEndgamePolicies(page);
-  const projections = [
-    { width: 1440, height: 1000 },
-    { width: 1366, height: 768 },
-    { width: 1280, height: 720 },
-    { width: 768, height: 1024 },
-    { width: 390, height: 844 },
-  ] as const;
-  const modes: readonly BoardInputMode[] = ["click", "drag", "touch", "keyboard", "text"];
-
-  for (const viewport of projections) {
+for (const viewport of ENDGAME_INPUT_PROJECTIONS) {
+  test(`@matrix served endgame packs submit exact permanent-input moves at ${viewport.width}×${viewport.height}`, async ({
+    page, browser,
+  }) => {
+    test.setTimeout(90_000);
+    await enableEndgamePolicies(page);
+    const modes: readonly BoardInputMode[] = ["click", "drag", "touch", "keyboard", "text"];
     await page.setViewportSize(viewport);
     const touchContext = await browser.newContext({ viewport, hasTouch: true, isMobile: true });
-    const touchPage = await touchContext.newPage();
-    await enableEndgamePolicies(touchPage);
-    await register(touchPage);
-    for (const pack of ENDGAME_INTERACTION_PACKS) {
-      for (const mode of modes) {
-        const inputPage = mode === "touch" ? touchPage : page;
-        await inputPage.goto("/play");
-        await inputPage
-          .getByRole("article")
-          .filter({ hasText: pack.title })
-    .getByRole("button", { name: /Rehearse this position/ })
-          .click();
-        await liveInputMove(inputPage, pack.uci, pack.orientation, mode);
+    try {
+      const touchPage = await touchContext.newPage();
+      await enableEndgamePolicies(touchPage);
+      await register(touchPage);
+      for (const pack of ENDGAME_INTERACTION_PACKS) {
+        for (const mode of modes) {
+          const inputPage = mode === "touch" ? touchPage : page;
+          await inputPage.goto("/play");
+          await inputPage
+            .getByRole("article")
+            .filter({ hasText: pack.title })
+            .getByRole("button", { name: /Rehearse this position/ })
+            .click();
+          await liveInputMove(inputPage, pack.uci, pack.orientation, mode);
+        }
       }
+    } finally {
+      await touchContext.close();
     }
-    await touchContext.close();
-  }
-});
+  });
+}
 
 test("@matrix the semantic board remains complete and yields focus to a checkpoint after a keyboard move", async ({ page }) => {
   await page.goto("/play");

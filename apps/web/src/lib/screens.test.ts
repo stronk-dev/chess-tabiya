@@ -2296,7 +2296,7 @@ describe("Layer 3 screens", () => {
       proposals: [{
         keyPointId: "improve-piece",
         quotation: "I would improve the knight",
-        text: "Possible mention, proposed by the configured language model and not a detection: you wrote \"I would improve the knight\" — the author's point \"Improve the worst piece\".",
+        text: "This provider-authored sentence must never render or grade the learner.",
       }],
     }));
     const component = mount(CheckpointSheet, {
@@ -2344,7 +2344,61 @@ describe("Layer 3 screens", () => {
     await tick();
     expect(document.body.textContent).toContain("Possible mention, proposed by the configured language model and not a detection");
     expect(document.body.textContent).toContain("I would improve the knight");
+    expect(document.body.textContent).not.toContain("provider-authored sentence");
+    expect(document.body.textContent).not.toContain("grade the learner");
     await unmount(component);
+  });
+
+  it("binds reasoning review to one checkpoint and contains malformed, duplicate, and departed settlements", async () => {
+    const first = deferred<import("./api.js").ReasoningReviewPage>();
+    const departed = deferred<import("./api.js").ReasoningReviewPage>();
+    const onReasoningReview = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce({ provider: "external", proposals: [{ keyPointId: "improve-piece", quotation: "improve the knight", text: "private provider prose" }] })
+      .mockImplementationOnce(() => departed.promise);
+    const props = {
+      run: branchedRun(),
+      checkpoint: { id: "reasoning-checkpoint", label: "State the plan", nodeId: "node-1", eventSeq: 12, actions: [], interaction: { type: "stated_reasoning" as const } },
+      reasoning: {
+        checkpointId: "reasoning-checkpoint",
+        occurrences: [{
+          eventSeq: 13, checkpointEventSeq: 12, branchId: "main", skipped: false,
+          transcript: { candidates: ["Ne5"], plan: "I would improve the knight", fears: "" },
+          detections: [{ keyPointId: "improve-piece", status: "not_detected" as const }],
+          keyPoints: [{ id: "improve-piece", label: "Improve the worst piece", ground: { kind: "claim" as const, claimId: "piece-activity" }, attribution: "Authored claim: piece activity" }],
+        }],
+        previous: null,
+        absenceSentence: "No earlier attempt has stated reasoning at this checkpoint.",
+        honestySentence: "Detected means literal phrase overlap, not correctness.",
+      },
+      onReasoningReview,
+      canCompare: false,
+      onContinue: vi.fn(), onRewind: vi.fn(), onCompare: vi.fn(), onStop: vi.fn(),
+    };
+    const component = mount(CheckpointSheet, { target: target(), props });
+    await tick();
+    const reviewButton = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("another possible mention"))!;
+    reviewButton.click();
+    reviewButton.click();
+    expect(onReasoningReview).toHaveBeenCalledTimes(1);
+    first.resolve({ provider: "external", proposals: [{ keyPointId: "improve-piece", quotation: "invented phrase", text: "private provider failure" }] });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Your words could not be checked right now"));
+    expect(document.body.textContent).not.toContain("invented phrase");
+    expect(document.body.textContent).not.toContain("private provider failure");
+    reviewButton.click();
+    await vi.waitFor(() => expect(onReasoningReview).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("the author's point “Improve the worst piece”"));
+    expect(document.body.textContent).not.toContain("private provider prose");
+    await unmount(component);
+
+    const departedComponent = mount(CheckpointSheet, { target: target(), props });
+    await tick();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("another possible mention"))!.click();
+    await vi.waitFor(() => expect(onReasoningReview).toHaveBeenCalledTimes(3));
+    await unmount(departedComponent);
+    departed.reject(new Error("private late provider failure"));
+    await tick();
+    expect(document.body.textContent).not.toContain("private late provider failure");
   });
 
   it("maps every keyboard command and keeps modal focus accessible", async () => {

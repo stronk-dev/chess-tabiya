@@ -20036,3 +20036,23 @@ committed mutation whose secondary refresh failed, retaining the last good view 
 `make verify-software` passes 198 files / 1,313 tests plus type, performance, schema, manifest and
 production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-14 — External reasoning review is quotation-only at the client boundary ([[D3247]])
+
+The stated-reasoning checkpoint no longer renders the external provider's `text` field. A closed
+client validator accepts only unique quotations that occur literally in the retained learner
+transcript, address a current authored key point and remain `not_detected` under the deterministic
+matcher. Product-owned fixed copy then renders that relation, so an external response cannot add a
+grade or coaching claim. The request is single-flight and checkpoint-bound; malformed, crossed and
+departed settlements cannot publish, and failures use bounded learner copy. `make verify-software`
+passes 199 files / 1,316 tests plus the complete build and contract family.
+
+## 2026-09-14 — The 150-cell permanent-input matrix has bounded failure domains ([[D3248]])
+
+The required browser gate exposed its own structural flake: five viewports, six served endgame
+packs and five permanent input modes shared one 180-second test, so host slowdown timed out the
+whole matrix after the captured UI had already committed the last visible move. The same 150 cells
+now run as five viewport-named cases, each with a fresh desktop/touch context and its own bounded
+budget. No retry or aggregate timeout increase was added. The complete `make test-browser` run now
+passes 68 required journeys in three minutes with one explicitly optional Maia latency probe
+skipped; every isolated endgame case completes in 10.2–10.9 seconds.

@@ -26630,6 +26630,24 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/rating-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3247",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:388078502f22af7f81eea99b59b148255b454008981afeaae219bb3052fcf5a9",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/reasoning-review-response.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3248",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a540f22621597c45a6fc68c913be073be028917334f97e8a934cd4747d4b1cba",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/reasoning-review-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }
