@@ -19833,3 +19833,16 @@ failure path, and a departed-route path all pass. Sequential canonical verificat
 verify-software` is green across 189 files / 1,243 tests plus type, performance, schema, manifest
 and production-build checks; `make test-browser` passes all 64 required journeys with one
 explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Story re-entry retains one subject across all three mutations ([[D3232]])
+
+The visible Story control already prevented duplicate entry, but its shell persisted writer
+authority before the lease succeeded, trusted both mutation responses, and navigated after the
+initiating Story had been left. Re-entry now captures exact run, entry node and route generation;
+observes a provisional writer until the lease is confirmed; validates the rewind event and the
+created `story-reentry` branch against that subject; and publishes navigation only to the still-
+current Story. Lease failure leaves storage untouched, crossed stage responses are refused, and a
+valid departed completion preserves its server-side rehearsal without reopening the old game.
+Sequential canonical verification passes: `make verify-software` is green across 190 files / 1,248
+tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
+passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.

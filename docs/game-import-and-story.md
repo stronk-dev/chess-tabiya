@@ -140,6 +140,13 @@ is opened on a different device. The learner then plays through
 the ordinary opponent, evidence, structural-reading, rewind, comparison, and
 branch-group machinery.
 
+That three-stage action owns one retained subject. The client observes a provisional writer
+without storing it, persists that writer only after the server confirms the lease, and validates
+that both the rewind and the new `story-reentry` branch describe the requested run and entry node.
+A response completing after the learner leaves the Story may finish the requested server mutation,
+but it cannot navigate from the learner's newer route. Lease rejection leaves no local writer claim,
+and every failure returns to the same bounded, retryable Story action without provider diagnostics.
+
 Before that action, the selected moment frames the return from only the recorded game result,
 the learner's declared side, and the exact ply. It says whether the learner won, lost, drew, or
 has no recorded result and invites them to pick the game up at that move. It never reveals or

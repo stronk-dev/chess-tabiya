@@ -73,6 +73,7 @@
     type DrillSessionState,
   } from "./lib/session-controller.js";
   import { WriterSession, type KeyValueStorage } from "./lib/writer-session.js";
+  import { assertStoryForkResponse, assertStoryRewindResponse } from "./lib/story-reentry-response.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -1071,12 +1072,19 @@
   }
 
   async function enterStoryMoment(runId: string, nodeId: string): Promise<void> {
-    const writer = WriterSession.claimFor(runId, storage);
+    const generation = loadGeneration;
+    const subject = { runId, nodeId };
+    const writer = WriterSession.observe(runId, storage);
     if (api.claimLease === undefined) throw new Error("Taking this game board is unavailable");
     await api.claimLease(runId, writer.writerId);
-    await api.rewind(runId, { nodeId }, writer.writerId);
-    await api.fork(runId, { nodeId, label: "story-reentry", intent: "Play a different continuation from this story moment" }, writer.writerId);
-    navigate(routePath({ name: "run", runId }));
+    WriterSession.claimFor(runId, storage, () => writer.writerId);
+    const rewindResult = await api.rewind(runId, { nodeId }, writer.writerId);
+    assertStoryRewindResponse(rewindResult, subject);
+    const forkResult = await api.fork(runId, { nodeId, label: "story-reentry", intent: "Play a different continuation from this story moment" }, writer.writerId);
+    assertStoryForkResponse(forkResult, subject);
+    if (generation === loadGeneration && route.name === "story" && route.runId === runId) {
+      navigate(routePath({ name: "run", runId }));
+    }
   }
 
   async function exportStory(runId: string): Promise<void> {

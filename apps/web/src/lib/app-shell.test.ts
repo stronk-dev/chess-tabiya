@@ -3,7 +3,7 @@
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { SILENT_ASSISTANCE, commitMove, createRun } from "@chess-tabiya/runtime";
+import { SILENT_ASSISTANCE, commitMove, createRun, fork as forkRun, rewind as rewindRun } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -366,6 +366,123 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("Current game – Black");
     expect(document.body.textContent).not.toContain("/stories/departed");
     expect(document.querySelectorAll("[aria-label='Story share links'] li")).toHaveLength(1);
+    await unmount(component);
+  });
+
+  it("does not persist Story writer authority when taking the lease fails", async () => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const storage = new MemoryStorage();
+    const story: GameStory = {
+      ready: true,
+      pendingEvidence: 0,
+      branchId: run.branches[0]!.id,
+      side: "white",
+      source: { kind: "native" },
+      outcome: { kind: "unfinished" },
+      moments: [{
+        nodeId: run.nodes[0]!.id,
+        entryNodeId: run.nodes[0]!.id,
+        ply: 0,
+        san: null,
+        fen: run.nodes[0]!.fen,
+        kinds: ["eval_pivot"],
+        sentences: ["A recorded moment."],
+        evidence: [],
+        phase: "opening",
+      }],
+      rank: [run.nodes[0]!.id],
+    };
+    const rewind = vi.fn();
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: {
+          ...api(),
+          async story() { return story; },
+          async claimLease() { throw new Error("private lease holder detail"); },
+          rewind,
+        },
+        router: new HistoryRouter(window),
+        storage,
+      },
+    });
+
+    const enter = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Pick it up from here");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    enter.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The story is still here; try again."));
+    expect(document.body.textContent).not.toContain("private lease holder detail");
+    expect(storage.values.size).toBe(0);
+    expect(rewind).not.toHaveBeenCalled();
+    expect(enter.disabled).toBe(false);
+    await unmount(component);
+  });
+
+  it("finishes a valid Story re-entry without navigating after leaving that Story", async () => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const storage = new MemoryStorage();
+    const pendingRewind = deferred<ReturnType<typeof rewindRun>>();
+    const rewound = rewindRun(run, run.nodes[0]!.id, "2026-09-13T13:10:00.000Z");
+    const branched = forkRun(rewound.run, run.nodes[0]!.id, {
+      label: "story-reentry",
+      intent: "Play a different continuation from this story moment",
+      at: "2026-09-13T13:11:00.000Z",
+    });
+    const story: GameStory = {
+      ready: true,
+      pendingEvidence: 0,
+      branchId: run.branches[0]!.id,
+      side: "white",
+      source: { kind: "native" },
+      outcome: { kind: "unfinished" },
+      moments: [{
+        nodeId: run.nodes[0]!.id,
+        entryNodeId: run.nodes[0]!.id,
+        ply: 0,
+        san: null,
+        fen: run.nodes[0]!.fen,
+        kinds: ["eval_pivot"],
+        sentences: ["A recorded moment."],
+        evidence: [],
+        phase: "opening",
+      }],
+      rank: [run.nodes[0]!.id],
+    };
+    const claimLease = vi.fn(async () => undefined);
+    const rewind = vi.fn(() => pendingRewind.promise);
+    const fork = vi.fn(async () => branched);
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: { ...api(), async story() { return story; }, claimLease, rewind, fork },
+        router,
+        storage,
+      },
+    });
+
+    const enter = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Pick it up from here");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    enter.click();
+    await vi.waitFor(() => expect(rewind).toHaveBeenCalledTimes(1));
+    const writerId = storage.values.get(writerStorageKey(run.id));
+    expect(writerId).toBeTruthy();
+    expect(claimLease).toHaveBeenCalledWith(run.id, writerId);
+    router.navigate("/review");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/review"));
+    pendingRewind.resolve(rewound);
+    await vi.waitFor(() => expect(fork).toHaveBeenCalledWith(
+      run.id,
+      { nodeId: run.nodes[0]!.id, label: "story-reentry", intent: "Play a different continuation from this story moment" },
+      writerId,
+    ));
+    expect(window.location.pathname).toBe("/review");
     await unmount(component);
   });
 
