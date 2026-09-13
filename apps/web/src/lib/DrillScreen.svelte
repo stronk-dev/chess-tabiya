@@ -110,7 +110,7 @@
     onReveal?: (() => void | Promise<void>) | undefined;
     onRewind: (target: RewindTarget) => boolean | void | Promise<boolean | void>;
     onFork: (label?: string, intent?: string) => boolean | void | Promise<boolean | void>;
-    onSwitchBranch: (leafNodeId: string, branchId: string) => void | Promise<void>;
+    onSwitchBranch: (leafNodeId: string, branchId: string) => boolean | void | Promise<boolean | void>;
     onCompare: (branchIds: readonly string[]) => boolean | void | Promise<boolean | void>;
     onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
     onCloseCompare: () => void;
@@ -303,6 +303,9 @@
   let rewindBusy = $state(false);
   let rewindFailure: { readonly targetKey: string; readonly text: string } | undefined = $state();
   let rewindRequest = 0;
+  let branchSwitchBusy: { readonly branchId: string; readonly label: string } | undefined = $state();
+  let branchSwitchError: string | undefined = $state();
+  let branchSwitchRequest = 0;
   let viewportSupport: RunViewportSupport = $state({ supported: true, width: 0, height: 0, reason: null });
   let ownMarks: readonly RunMark[] = $state([]);
   let markScope: "position" | "branch" = $state("position");
@@ -1148,10 +1151,9 @@
       if (request === classificationRequest) classificationBusy = false;
     }
   }
-  async function switchVisibleBranch(nodeId: string, branchId: string): Promise<void> {
+  async function switchVisibleBranch(nodeId: string, branchId: string): Promise<boolean> {
     pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
-    selectedSquare = undefined;
-    await onSwitchBranch(nodeId, branchId);
+    return switchRunBranch(nodeId, branchId);
   }
 
   function preview(nodeId: string): void {
@@ -1196,9 +1198,31 @@
     mainElement?.querySelector<HTMLElement>("[data-board-input-grid]")?.focus();
   }
 
-  async function switchRunBranch(nodeId: string, branchId: string): Promise<void> {
+  async function switchRunBranch(nodeId: string, branchId: string): Promise<boolean> {
+    if (branchSwitchBusy !== undefined) return false;
+    const label = cards.find((card) => card.id === branchId)?.label ?? "selected branch";
+    const request = ++branchSwitchRequest;
+    branchSwitchBusy = { branchId, label };
+    branchSwitchError = undefined;
     selectedSquare = undefined;
-    await onSwitchBranch(nodeId, branchId);
+    try {
+      const accepted = await onSwitchBranch(nodeId, branchId);
+      if (request !== branchSwitchRequest) return false;
+      if (accepted === false) {
+        branchSwitchError = run.activeCursor.branchId === branchId
+          ? `${label} opened, but its next reply did not finish. Try opening this branch again.`
+          : `${label} did not open. Your current branch is unchanged; try again.`;
+        return false;
+      }
+      return true;
+    } catch {
+      if (request === branchSwitchRequest) {
+        branchSwitchError = `${label} did not open. Your current branch is unchanged; try again.`;
+      }
+      return false;
+    } finally {
+      if (request === branchSwitchRequest) branchSwitchBusy = undefined;
+    }
   }
 
   async function confirmPreview(nodeId = previewNodeId): Promise<void> {
@@ -1464,6 +1488,7 @@
     simulationRequest += 1;
     compareRequest += 1;
     rewindRequest += 1;
+    branchSwitchRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1603,7 +1628,9 @@
       </div>
     </header>
 
-    {#if error}<p class="error" role="alert">{error}</p>{/if}
+    {#if error && branchSwitchError === undefined}<p class="error" role="alert">{error}</p>{/if}
+    {#if branchSwitchBusy}<p id="branch-switch-status" class="operation-status" role="status">Opening {branchSwitchBusy.label}. Other branch navigation waits until it finishes.</p>{/if}
+    {#if branchSwitchError}<p class="error" role="alert">{branchSwitchError}</p>{/if}
     {#if snapshot.access === "read_only"}
       <p class="readonly-banner" role="status">
         {snapshot.withheld ? "The latest moves are still arriving. Help will appear only when this run reaches a reveal point." : "This run is open on another browser. You can follow along, but moves and rewinds happen there."}
@@ -1668,6 +1695,7 @@
             onOpenPivotal={openPivotalMarker}
             branches={timelineCards}
             onOpenBranch={switchVisibleBranch}
+            openingBranch={branchSwitchBusy !== undefined}
           />
         </div>
         <button class="objective-line" type="button" onclick={() => (objectiveOpen = true)} title={objectiveSentence}>
@@ -1814,16 +1842,18 @@
             advanceMode={groupPreference(activeGroup.groupId)}
             onAdvanceMode={(mode) => setGroupPreference(activeGroup!.groupId, mode)}
             onEnter={switchRunBranch}
+            entering={branchSwitchBusy !== undefined}
             onCompare={() => openCompare(activeGroup!.members.map((member) => member.branchId))}
             onAnalyze={(nodeIds) => { void onAnalyzeMissing?.(nodeIds); }}
           />
-          <button class="next-member" type="button" onclick={() => void nextGroupMember(activeGroup!)}>Next member</button>
+          <button class="next-member" type="button" disabled={branchSwitchBusy !== undefined} aria-describedby={branchSwitchBusy !== undefined ? "branch-switch-status" : undefined} onclick={() => void nextGroupMember(activeGroup!)}>Next member</button>
         {/if}
         <BranchRail
           branches={cards}
           activeBranchId={run.activeCursor.branchId}
           {compareIds}
           onSwitch={switchVisibleBranch}
+          switching={branchSwitchBusy !== undefined}
           onToggleCompare={toggleCompare}
           onCompareAllHere={compareAllHere}
           {groupOrdinals}
@@ -2308,6 +2338,7 @@
   .topbar-actions { position:relative; justify-self:end; display:flex; align-items:center; gap:.55rem; }
 
   .error,
+  .operation-status,
   .readonly-banner {
     position: absolute;
     z-index: 12;
@@ -2322,6 +2353,11 @@
 
   .error {
     background: color-mix(in srgb, var(--danger) 12%, var(--panel));
+    color: var(--ink);
+  }
+
+  .operation-status {
+    background: color-mix(in srgb, var(--accent) 12%, var(--panel));
     color: var(--ink);
   }
 

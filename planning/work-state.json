@@ -26360,6 +26360,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/Chessboard.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3217",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c29130db4e1aefb6412141f729bdae6aef982d09b1015e8d59a76ab53e74958a",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/session-controller.ts",
+      "evidenceKind": "path"
     }
   ]
 }

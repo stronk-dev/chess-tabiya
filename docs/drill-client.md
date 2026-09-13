@@ -389,8 +389,11 @@ The drill screen composes three regions:
 - a right branch rail with branch label, first divergent move, optional intent,
   live learner-facing objective-progress chip, branch switching, and compare selection. A switch carries
   both the leaf node and branch id, so an empty fork or another shared-node state remains
-  observable and selects the intended branch rather than whichever branch the node implies. Branch
-  classification is single-flight and bound to the exact run, branch ids, and leaf nodes submitted.
+  observable and selects the intended branch rather than whichever branch the node implies. Every
+  branch entry shares one target-named, single-flight lifecycle: conflicting branch navigation is
+  disabled while the rewind and any required opponent reply finish, a refused rewind cannot start
+  a reply on the unchanged branch, and failure leaves the current branch intact with an explicit
+  retry. Branch classification is single-flight and bound to the exact run, branch ids, and leaf nodes submitted.
   Changing that population clears prior classifications and invalidates an in-flight response; a
   failed or changed-population request leaves the rail open with a safe, explicit retry.
 

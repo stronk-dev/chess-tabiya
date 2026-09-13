@@ -7,7 +7,8 @@
     branches: readonly BranchCard[];
     activeBranchId: string;
     compareIds: readonly string[];
-    onSwitch: (nodeId: string, branchId: string) => void | Promise<void>;
+    onSwitch: (nodeId: string, branchId: string) => boolean | void | Promise<boolean | void>;
+    switching?: boolean;
     onToggleCompare: (branchId: string) => void;
     onCompareAllHere?: (forkNodeId: string) => void;
     groupOrdinals?: Readonly<Record<string, number>>;
@@ -23,7 +24,7 @@
     classificationError?: string | undefined;
   }
 
-  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere, groupOrdinals = {}, decidedness = {}, collapsedBranchIds = new Set(), foldedBranchIds = [], compareLimitNotice, onFold, onRestore, onRestoreAll, onClassify, classificationBusy = false, classificationError }: Props =
+  let { branches, activeBranchId, compareIds, onSwitch, switching = false, onToggleCompare, onCompareAllHere, groupOrdinals = {}, decidedness = {}, collapsedBranchIds = new Set(), foldedBranchIds = [], compareLimitNotice, onFold, onRestore, onRestoreAll, onClassify, classificationBusy = false, classificationError }: Props =
     $props();
   let folded = $derived(new Set(foldedBranchIds));
   let visible = $derived(branches.filter((branch) => !folded.has(branch.id) && !collapsedBranchIds.has(branch.id)));
@@ -43,6 +44,8 @@
         <button
           class="branch-card"
           type="button"
+          disabled={switching}
+          aria-describedby={switching ? "branch-switch-status" : undefined}
           onclick={() => onSwitch(branch.leafNodeId, branch.id)}
           aria-label={`Switch to branch ${index + 1}: ${branch.label}`}
           aria-current={branch.id === activeBranchId ? "true" : undefined}

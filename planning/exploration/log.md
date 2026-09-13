@@ -19632,3 +19632,17 @@ controller replacement while visual configuration refreshes independently. Seque
 verification passes: `make verify-software` is green across 188 files / 1,213 tests and the real
 150-cell served-endgame input matrix passes inside `make test-browser`, with all 64 required
 journeys green and one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Branch switching refuses races and keeps a visible retry ([[D3217]])
+
+Branch switching previously discarded the rewind operation's explicit failure result and could
+request an opponent reply after a busy controller refused to change branches. The controller now
+returns explicit success/failure and stops immediately after a refused rewind. Timeline links,
+branch cards, group cells, next-member and numeric shortcuts share one target-named, single-flight
+lifecycle; pending state disables conflicting navigation without entering layout flow, and failure
+keeps the current branch with bounded retry copy. A controller busy-refusal regression proves that
+opponent selection never runs, while a mounted cross-entry regression proves duplicate refusal,
+disabled alternatives and successful retry. Sequential canonical verification passes: `make
+verify-software` is green across 188 files / 1,215 tests plus type, performance, schema, manifest
+and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
+optional Maia latency measurement skipped.

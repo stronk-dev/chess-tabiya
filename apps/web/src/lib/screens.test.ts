@@ -2436,4 +2436,49 @@ describe("Layer 3 screens", () => {
     expect(document.activeElement).toBe(helpButton);
     await unmount(component);
   });
+
+  it("shares one branch-switch lifecycle across every branch entry and keeps a failed target retryable", async () => {
+    const run = branchedRun();
+    const first = deferred<boolean>();
+    const onSwitchBranch = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, {
+      target: target(),
+      props: {
+        pack,
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+        onMove: vi.fn(),
+        onRewind: vi.fn(),
+        onFork: vi.fn(),
+        onSwitchBranch,
+        onCompare: vi.fn(),
+        onCloseCompare: vi.fn(),
+        onContinueCheckpoint: vi.fn(),
+        onExport: vi.fn(),
+        onStop: vi.fn(),
+        registerKeyboardRegion,
+      },
+    });
+    await tick();
+    const targetBranch = run.branches.find((branch) => branch.id !== run.activeCursor.branchId)!;
+    const branchButton = document.querySelector<HTMLButtonElement>(`.branch-card[aria-label*="${targetBranch.label}"]`)!;
+
+    branchButton.click();
+    branchButton.click();
+    await tick();
+    expect(onSwitchBranch).toHaveBeenCalledTimes(1);
+    expect(document.querySelector("#branch-switch-status")?.textContent).toContain(`Opening ${targetBranch.label}`);
+    expect([...document.querySelectorAll<HTMLButtonElement>(".branch-card, .branch-links button")].every((button) => button.disabled)).toBe(true);
+
+    first.resolve(false);
+    await first.promise;
+    await tick();
+    expect(document.querySelector('[role="alert"]')?.textContent).toContain(`${targetBranch.label} did not open`);
+    expect(branchButton.disabled).toBe(false);
+
+    branchButton.click();
+    await vi.waitFor(() => expect(onSwitchBranch).toHaveBeenCalledTimes(2));
+    await unmount(component);
+  });
 });

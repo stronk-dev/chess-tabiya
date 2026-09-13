@@ -133,6 +133,17 @@ class ManualScheduler implements PollScheduler {
   }
 }
 
+function deferred<T>(): {
+  readonly promise: Promise<T>;
+  readonly resolve: (value: T) => void;
+} {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((resolvePromise) => {
+    resolve = resolvePromise;
+  });
+  return { promise, resolve };
+}
+
 class FakeApi implements DrillClientApi {
   run: DrillRun | undefined;
   async branchDecidedness(): Promise<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>> { return {}; }
@@ -790,7 +801,7 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.comparison).toBeDefined();
     environment.controller.closeCompare();
     expect(environment.controller.state.comparison).toBeUndefined();
-    await environment.controller.switchBranch(branches[1]!.forkNodeId, branches[0]!.id);
+    expect(await environment.controller.switchBranch(branches[1]!.forkNodeId, branches[0]!.id)).toBe(true);
     expect(environment.controller.state.runState?.run.activeCursor).toEqual({
       nodeId: branches[1]!.forkNodeId,
       branchId: branches[0]!.id,
@@ -805,6 +816,31 @@ describe("DrillSessionController", () => {
 
     environment.controller.stopSession();
     expect(environment.controller.state).toEqual({ busy: false });
+  });
+
+  it("does not select an opponent reply when a busy controller refuses a branch switch", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    await environment.controller.move("c1e3");
+    await environment.controller.continueCheckpoint();
+    await environment.controller.continueCheckpoint();
+    await environment.controller.fork("second look", "test intent");
+    const branches = environment.controller.state.runState!.run.branches;
+    const analysis = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    vi.spyOn(api, "analysis").mockReturnValueOnce(analysis.promise);
+    const selection = vi.spyOn(api, "selectMove");
+    selection.mockClear();
+
+    const analyzing = environment.controller.analyzeMissingEvidence([
+      environment.controller.state.runState!.run.activeCursor.nodeId,
+    ]);
+    expect(environment.controller.state.busy).toBe(true);
+    expect(await environment.controller.switchBranch(branches[1]!.forkNodeId, branches[0]!.id)).toBe(false);
+    expect(selection).not.toHaveBeenCalled();
+
+    analysis.resolve({ jobs: [] });
+    expect(await analyzing).toBe(true);
   });
 
   it("returns an explicit failed fork result instead of collapsing it into void", async () => {

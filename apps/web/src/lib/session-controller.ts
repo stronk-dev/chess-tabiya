@@ -591,16 +591,16 @@ export class DrillSessionController {
     }
   }
 
-  async switchBranch(leafNodeId: string, branchId: string): Promise<void> {
-    await this.rewind({ nodeId: leafNodeId, branchId });
-    if (this.#state.error === undefined) {
-      this.#patch({ busy: true });
-      try {
-        await this.#playOpponentIfNeeded();
-        this.#patch({ busy: false });
-      } catch (error) {
-        this.#fail(error);
-      }
+  async switchBranch(leafNodeId: string, branchId: string): Promise<boolean> {
+    if (!await this.rewind({ nodeId: leafNodeId, branchId })) return false;
+    this.#patch({ busy: true });
+    try {
+      await this.#playOpponentIfNeeded();
+      this.#patch({ busy: false });
+      return true;
+    } catch (error) {
+      this.#fail(error);
+      return false;
     }
   }
 

@@ -15,12 +15,13 @@
     startSide: StartSide;
     advanceMode: AdvanceMode;
     onAdvanceMode: (mode: AdvanceMode) => void;
-    onEnter: (leafNodeId: string, branchId: string) => void | Promise<void>;
+    onEnter: (leafNodeId: string, branchId: string) => boolean | void | Promise<boolean | void>;
+    entering?: boolean;
     onCompare: () => void | Promise<void>;
     onAnalyze: (nodeIds: readonly string[]) => void | Promise<void>;
   }
 
-  let { run, group, startSide, advanceMode, onAdvanceMode, onEnter, onCompare, onAnalyze }: Props = $props();
+  let { run, group, startSide, advanceMode, onAdvanceMode, onEnter, entering = false, onCompare, onAnalyze }: Props = $props();
   let zoom: ZoomBand = $state("mid");
 
   let cells = $derived(group.members.map((member, index) => {
@@ -78,14 +79,14 @@
         <button type="button" aria-pressed={zoom === "mid"} onclick={() => (zoom = "mid")}>Summary</button>
         <button type="button" aria-pressed={zoom === "near"} onclick={() => (zoom = "near")}>Boards</button>
       </div>
-      <button type="button" onclick={onCompare}>Compare group</button>
+      <button type="button" disabled={entering} aria-describedby={entering ? "branch-switch-status" : undefined} onclick={onCompare}>Compare group</button>
     </div>
   </header>
 
   <div class="canvas" data-zoom={zoom} style={`--members:${group.members.length}`}>
     {#each cells as cell}
       <article data-group-member={cell.member.branchId} class:active={cell.member.branchId === run.activeCursor.branchId}>
-        <button class="cell-heading" type="button" onclick={() => onEnter(cell.leaf.id, cell.member.branchId)}>
+        <button class="cell-heading" type="button" disabled={entering} aria-describedby={entering ? "branch-switch-status" : undefined} onclick={() => onEnter(cell.leaf.id, cell.member.branchId)}>
           <strong>{cell.branch.label}</strong>
           <span>{objectiveStateLabel(cell.leaf.objectiveState)}{cell.outcome === undefined ? "" : ` · ${runOutcomeLabel(cell.outcome)}`}</span>
         </button>
@@ -106,7 +107,7 @@
   </div>
 
   {#if missingNodeIds.length > 0}
-    <button class="analysis" type="button" onclick={() => onAnalyze(missingNodeIds)}>Prepare missing comparisons</button>
+    <button class="analysis" type="button" disabled={entering} aria-describedby={entering ? "branch-switch-status" : undefined} onclick={() => onAnalyze(missingNodeIds)}>Prepare missing comparisons</button>
   {/if}
 </section>
 

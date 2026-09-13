@@ -20,7 +20,8 @@
     pivotalMarkers?: readonly { readonly nodeId: string; readonly label: string }[];
     onOpenPivotal?: (nodeId: string) => void;
     branches?: readonly { readonly id: string; readonly label: string; readonly forkNodeId: string; readonly leafNodeId: string }[];
-    onOpenBranch?: (leafNodeId: string, branchId: string) => void | Promise<void>;
+    onOpenBranch?: (leafNodeId: string, branchId: string) => boolean | void | Promise<boolean | void>;
+    openingBranch?: boolean;
     confirming?: boolean;
     confirmError?: string | undefined;
   }
@@ -43,6 +44,7 @@
     onOpenPivotal = () => {},
     branches = [],
     onOpenBranch = () => {},
+    openingBranch = false,
     confirming = false,
     confirmError,
   }: Props = $props();
@@ -81,7 +83,7 @@
         </button>
         {#each rootMarkers as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
         {#if rootPivotal.length > 0}<button class="pivotal-marker" type="button" aria-label={`Open ${pivotalLabel(rootPivotal)} at ${rehearsalStepLabel(0).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(rootNodeId)}><span aria-hidden="true"></span></button>{/if}
-        {#if branchesAt(rootNodeId).length > 0}<div class="branch-links" aria-label="Branches from the start">{#each branchesAt(rootNodeId) as branch}<button type="button" onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
+        {#if branchesAt(rootNodeId).length > 0}<div class="branch-links" aria-label="Branches from the start">{#each branchesAt(rootNodeId) as branch}<button type="button" disabled={openingBranch} aria-describedby={openingBranch ? "branch-switch-status" : undefined} onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>
     {/if}
     {#each entries as entry}
@@ -111,7 +113,7 @@
         </button>
         {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
         {#if pivotalAt(entry.nodeId).length > 0}<button class="pivotal-marker" type="button" aria-label={`Open ${pivotalLabel(pivotalAt(entry.nodeId))} at ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(entry.nodeId)}><span aria-hidden="true"></span></button>{/if}
-        {#if branchesAt(entry.nodeId).length > 0}<div class="branch-links" aria-label={`Branches from ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`}>{#each branchesAt(entry.nodeId) as branch}<button type="button" onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
+        {#if branchesAt(entry.nodeId).length > 0}<div class="branch-links" aria-label={`Branches from ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`}>{#each branchesAt(entry.nodeId) as branch}<button type="button" disabled={openingBranch} aria-describedby={openingBranch ? "branch-switch-status" : undefined} onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>
     {/each}
   </ol>
