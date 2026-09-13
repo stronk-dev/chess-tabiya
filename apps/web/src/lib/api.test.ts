@@ -364,7 +364,7 @@ describe("DrillApi", () => {
   });
 
   it("preserves recommendation selection counts", async () => {
-    const page = { recommendations: [], selection: { shown: 10, total: 23 } };
+    const page = { recommendations: [], selection: { shown: 0, total: 23 } };
     const api = new DrillApi("http://tabiya.test", async () => json(page));
 
     await expect(api.recommendations()).resolves.toEqual(page);

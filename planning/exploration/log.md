@@ -20098,3 +20098,20 @@ server now projects only the public contract and the real terminal-to-public-car
 `make verify-software` is green across 200 files / 1,325 tests plus type, performance, schema, manifest,
 packaging and production-build checks. The full `make test-browser` gate passes 92 required journeys in
 three minutes with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-14 — Learn progress responses retain only validated learner state ([[D3252]])
+
+The Learn route no longer publishes five families directly from `DrillApi.#json<T>`. Attempt history,
+due returns, milestones, recommendations and related attempts now cross one finite client authority
+that checks closed shapes, unique and nested identities, lifecycle combinations, canonical UTC time,
+ordering, cardinality and selection arithmetic before any route state changes. Progress and schedule
+REST projections now omit learner ids, root keys, storage lifecycle fields and other server-only bytes.
+Milestone and recommendation sentences are product-owned renderings over validated kinds and operands;
+an arbitrary response string cannot become grounded learner feedback.
+
+The first complete browser run rejected a real production row: a created but unplayed run is
+intentionally uncountable with `attemptNo: 0`, while countable attempts start at one. The parser now
+models those two arms explicitly and the fixture retains both. No timeout, retry or browser budget was
+changed. `make verify-software` passes 201 files / 1,328 tests plus type, performance, schema,
+manifest, packaging and production-build checks. The complete `make test-browser` gate passes 92
+required journeys in three minutes with one explicitly optional Maia latency measurement skipped.

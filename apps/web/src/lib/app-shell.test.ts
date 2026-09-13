@@ -2798,7 +2798,6 @@ describe("application shell", () => {
             runCount: 1,
             runIds: [run.id],
             packIds: [pack.id],
-            sentence: "You recorded this shape in one preserved run.",
           }],
           selection: { shown: 1, total: 4 },
         };

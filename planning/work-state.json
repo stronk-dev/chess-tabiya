@@ -26675,6 +26675,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/story-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3252",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:98c843b17cc9c3ae195f38e401538a914c19cabae03e027660b9bc556f4c0a22",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/progress-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

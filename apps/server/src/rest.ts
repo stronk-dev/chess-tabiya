@@ -1041,7 +1041,12 @@ export function createRestHandler(
         const principal = authenticate();
         const repertoirePage = repertoires?.recommendations(principal) ?? Object.freeze({ recommendations: Object.freeze([]), total: 0 });
         const shapePage = service.shapeRecommendations(principal);
-        const recommendations = Object.freeze([...repertoirePage.recommendations, ...shapePage.recommendations]);
+        const recommendations = Object.freeze([...repertoirePage.recommendations, ...shapePage.recommendations].map((raw) => {
+          const item = raw as Record<string, unknown>;
+          return item.kind === "repertoire_gap"
+            ? Object.freeze({ kind: "repertoire_gap", repertoireId: item.repertoireId, repertoireName: item.repertoireName, gapKey: item.gapKey, replySan: item.replySan, line: item.line, gamesUntilSeen: item.gamesUntilSeen })
+            : Object.freeze({ kind: "shape_encounter", shapeId: item.shapeId, shapeName: item.shapeName, runCount: item.runCount, runIds: item.runIds, packIds: item.packIds });
+        }));
         return json(200, { recommendations, selection: Object.freeze({ shown: recommendations.length, total: repertoirePage.total + shapePage.total }) });
       }
       const repertoireRoute=/^\/repertoires\/([^/]+)(?:\/(scan|gaps|answers))?(?:\/(enter))?$/.exec(url.pathname);
@@ -1206,11 +1211,18 @@ export function createRestHandler(
         return json(200, service.runPage(principal, limit, offset));
       }
       if (request.method === "GET" && url.pathname === "/progress") {
-        return json(200, { attempts: service.progress(authenticate()) });
+        return json(200, { attempts: service.progress(authenticate()).map((item) => Object.freeze({
+          runId: item.runId, branchId: item.branchId, packId: item.packId, branchLabel: item.branchLabel,
+          attemptNo: item.attemptNo, countable: item.countable, graded: item.graded, verdict: item.verdict,
+          result: item.result, userPlyCount: item.userPlyCount, origin: item.origin, endedAt: item.endedAt,
+        })) });
       }
       if (request.method === "GET" && url.pathname === "/progress/due") {
         return json(200, {
-          schedules: service.due(authenticate(), url.searchParams.get("at") ?? undefined),
+          schedules: service.due(authenticate(), url.searchParams.get("at") ?? undefined).map((item) => Object.freeze({
+            id: item.id, sessionKind: item.sessionKind, packId: item.packId, kind: item.kind,
+            variant: item.variant, dueAt: item.dueAt, sourceRunId: item.sourceRunId,
+          })),
         });
       }
       if (request.method === "GET" && url.pathname === "/progress/related") {
@@ -1224,7 +1236,7 @@ export function createRestHandler(
         return json(200, service.progressMetrics(authenticate()));
       }
       if (request.method === "GET" && url.pathname === "/progress/milestones") {
-        return json(200, { milestones: service.milestones(authenticate()) });
+        return json(200, { milestones: service.milestones(authenticate()).map((item) => Object.freeze({ kind: item.kind, occurredAt: item.occurredAt, link: item.link })) });
       }
       const scheduleRoute = /^\/progress\/schedules\/([^/]+)$/.exec(url.pathname);
       if (request.method === "POST" && scheduleRoute !== null) {

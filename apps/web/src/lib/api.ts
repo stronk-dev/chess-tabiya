@@ -26,6 +26,8 @@ import type {
 } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
+import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
+
 export interface PackSummary {
   readonly id: string;
   readonly version: string;
@@ -528,7 +530,7 @@ export interface RepertoireSummary {readonly id:string;readonly name:string;read
 export interface RepertoireView extends RepertoireSummary {readonly rootFen:string;readonly sourceKind:"pgn_paste"|"lichess_study";readonly sourceUrl:string|null;readonly licenceNote:string;readonly moves:readonly {readonly positionKey:string;readonly moveUci:string;readonly moveSan:string;readonly representativeFen:string;readonly rank:number;readonly origin:"imported"|"chosen_from_attempt"}[]}
 export interface RepertoireGap {readonly key:string;readonly representativeFen:string;readonly replySan:string;readonly replyUci:string;readonly line:readonly string[];readonly mass?:number;readonly gamesUntilSeen?:number;readonly state:"open"|"addressed"|"answered";readonly runId:string|null;readonly firstMoves:readonly {readonly moveUci:string;readonly moveSan:string}[];readonly answer:{readonly moveUci:string;readonly moveSan:string}|null}
 export interface RepertoireGapPage {readonly status:"pending"|"never_scanned"|"ready";readonly stale?:boolean;readonly repertoire:RepertoireSummary;readonly scan:null|{readonly scannedAt:string;readonly population:CorpusPopulation;readonly gaps:readonly RepertoireGap[];readonly alternateGaps:readonly RepertoireGap[];readonly unknown:readonly {readonly key:string;readonly line:readonly string[];readonly reason:string;readonly detail:string;readonly gamesUntilPosition:number}[];readonly uncoveredMass:number;readonly truncated:boolean;readonly sourceFailures:number;readonly queriesUsed:number;readonly unreachedKeys:number;readonly guard:string;readonly partiality:string|null}}
-export type ProgressRecommendation = {readonly kind:"repertoire_gap";readonly repertoireId:string;readonly repertoireName:string;readonly gapKey:string;readonly sentence:string}|{readonly kind:"shape_encounter";readonly shapeId:string;readonly shapeName:string;readonly runCount:number;readonly runIds:readonly string[];readonly packIds:readonly string[];readonly sentence:string};
+export type ProgressRecommendation = {readonly kind:"repertoire_gap";readonly repertoireId:string;readonly repertoireName:string;readonly gapKey:string;readonly replySan:string;readonly line:readonly string[];readonly gamesUntilSeen:number}|{readonly kind:"shape_encounter";readonly shapeId:string;readonly shapeName:string;readonly runCount:number;readonly runIds:readonly string[];readonly packIds:readonly string[]};
 export interface ProgressRecommendationPage { readonly recommendations: readonly ProgressRecommendation[]; readonly selection: { readonly shown: number; readonly total: number }; }
 export interface DistillResult {readonly draft:PackDraft;readonly proposals:readonly Record<string,unknown>[];readonly dropped:readonly string[]}
 
@@ -1105,7 +1107,7 @@ export class DrillApi implements DrillClientApi {
   revokeStoryShare(runId: string, tokenId: string): Promise<RevokedStoryShare> { return this.#json(`/runs/${encoded(runId)}/share/${encoded(tokenId)}`, { method: "DELETE" }); }
   flipRun(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }> { return this.#json(`/runs/${encoded(runId)}/flip`, { method: "POST", body: { nodeId, ...(resistance === undefined ? {} : { resistance }) } }); }
   async runDerivations(runId: string): Promise<RunDerivationPage> { const body = await this.#json<{ readonly derivations: RunDerivationPage }>(`/runs/${encoded(runId)}/derivations`); return body.derivations; }
-  async milestones(): Promise<readonly ProgressMilestone[]> { const body = await this.#json<{ readonly milestones: readonly ProgressMilestone[] }>("/progress/milestones"); return body.milestones; }
+  async milestones(): Promise<readonly ProgressMilestone[]> { return parseProgressMilestones(await this.#json<unknown>("/progress/milestones")); }
   async repertoires():Promise<readonly RepertoireSummary[]>{const body=await this.#json<{readonly repertoires:readonly RepertoireSummary[]}>("/repertoires");return body.repertoires;}
   async createRepertoire(input:{readonly name:string;readonly side:"white"|"black";readonly targetElo:number;readonly coverageDenominator:number;readonly source:{readonly kind:"pgn";readonly pgn:string}|{readonly kind:"lichess_study";readonly url:string}}):Promise<RepertoireView>{const body=await this.#json<{readonly repertoire:RepertoireView}>("/repertoires",{method:"POST",body:input});return body.repertoire;}
   async deleteRepertoire(id:string):Promise<void>{await this.#json(`/repertoires/${encoded(id)}`,{method:"DELETE"});}
@@ -1127,19 +1129,16 @@ export class DrillApi implements DrillClientApi {
   }
 
   async progress(): Promise<readonly ProgressAttempt[]> {
-    const body = await this.#json<{ readonly attempts: readonly ProgressAttempt[] }>("/progress");
-    return body.attempts;
+    return parseProgressAttempts(await this.#json<unknown>("/progress"));
   }
 
   async dueProgress(): Promise<readonly ProgressSchedule[]> {
-    const body = await this.#json<{ readonly schedules: readonly ProgressSchedule[] }>("/progress/due");
-    return body.schedules;
+    return parseProgressSchedules(await this.#json<unknown>("/progress/due"));
   }
 
   async relatedProgress(runId: string, nodeId: string): Promise<readonly RelatedProgressAttempt[]> {
     const query = new URLSearchParams({ runId, nodeId });
-    const body = await this.#json<{ readonly related: readonly RelatedProgressAttempt[] }>(`/progress/related?${query}`);
-    return body.related;
+    return parseRelatedProgress(await this.#json<unknown>(`/progress/related?${query}`), runId);
   }
 
   async dismissSchedule(scheduleId: string): Promise<void> {
@@ -1298,7 +1297,7 @@ export class DrillApi implements DrillClientApi {
     return response.blob();
   }
 
-  recommendations():Promise<ProgressRecommendationPage>{return this.#json<ProgressRecommendationPage>("/progress/recommendations");}
+  recommendations():Promise<ProgressRecommendationPage>{return this.#json<unknown>("/progress/recommendations").then(parseProgressRecommendations);}
   distillRun(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>{return this.#json(`/runs/${encoded(runId)}/distill`,{method:"POST",body:input});}
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {

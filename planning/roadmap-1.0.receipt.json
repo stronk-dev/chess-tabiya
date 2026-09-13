@@ -4,12 +4,12 @@
   "sourceDigests": {
     "roadmap": "sha256:eba65de03e2a98de652e6b75ad17ed95f8d9960375d564211d66f6258b9ff3a0",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:d542dc61cab5cffcf4990cb42e1ac40da569b82538b4df3becd07be3ed6fcf44",
+    "workState": "sha256:bf027956791b6ba4ad2da2dd5e7fb4b15d4470a24e25adcc2cfed27ade1fa2c6",
     "rfcRegister": "sha256:d50068b17810dddf7e3a072f378127a44637171cb13030146c38512fc32602c3",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
-    "rest": "sha256:b8af927e13254c9669ffbcc5257f897d70369de7c4754477a0c823a394bd07a3"
+    "rest": "sha256:a7624490d19646aa072560b9c4fbbe19815096895f1567d37fd331354aa068ef"
   },
   "summary": {
     "capabilities": 14,
@@ -33,7 +33,7 @@
       "todo": 610,
       "doing": 0,
       "blocked": 1226,
-      "done": 1053,
+      "done": 1054,
       "refused": 111
     },
     "workItems": {
