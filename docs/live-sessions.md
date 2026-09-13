@@ -142,19 +142,25 @@ journal entry commit atomically.
 
 ## HTTP and browser surfaces
 
-The session studio owns proposal submission and resolution, board offers and rotation advances,
-vote opening, invitations, Arena imports, match operations, and friend/watch-link creation through
-one retained action lifecycle. Each action captures its session, target, and mutable form values
-before the request; a second action cannot start until the first settles. Related controls become
-disabled and reference one announced pending state. Provider diagnostics never become learner
-copy, failed mutations keep their inputs for retry, and successful mutations clear only the exact
-submitted input.
+The session studio owns proposal submission and resolution, member access, board offers, confirmed
+reclaim and rotation advances, vote opening/casting/closing, invitations, Arena imports, match
+operations, and friend/watch-link creation through one retained action lifecycle. Each action
+captures its session, target, and mutable form values before the request; a second studio action
+cannot start until the first settles. Related controls become disabled and reference one announced
+pending state. Provider diagnostics never become learner copy, failed mutations keep their inputs
+for retry, and successful mutations clear only the exact submitted input. A returned vote tally is
+published only when its session, window, node, ordered options, state, applied option, counts, total
+and relayed subtotal match the action that requested it.
 
 Session refreshes must return the initiating session id and run id. A primary mutation that commits
 but cannot refresh is reported as committed with a stale view, rather than falsely reported as a
 failed mutation. Link responses must contain a usable URL. Responses that settle after navigation,
 unmount, or a different session load cannot publish into the visible route. These guarantees apply
 in addition to the server's authorization and transaction boundaries; they do not replace them.
+The compact match rail inside a run owns the same guarantees with a separate exact session/run
+action identity, so its pause/resume controls cannot overlap and a response for another run cannot
+replace the visible match. A committed match operation followed by a failed refresh is named as a
+stale view rather than presented as a failed operation.
 
 `/sessions` lists and creates sessions. Each summary includes the active FEN, recorded
 objective state, side to move, mainline ply count, pause state, lease holder,

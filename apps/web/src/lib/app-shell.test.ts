@@ -855,6 +855,96 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("owns the in-run match rail through duplicate, failure, retry, and crossed-refresh states", async () => {
+    history.replaceState(null, "", "/play/run/route-run");
+    const match = {
+      sessionId: "match-session",
+      whiteLearnerId: "learner-white",
+      blackLearnerId: "learner-black",
+      pausedAt: null,
+      pauseProposedBy: null,
+    };
+    const detail: LiveSessionDetail = {
+      session: {
+        id: "match-session",
+        runId: run.id,
+        kind: "match",
+        title: "Position Arena",
+        boardControl: "host_directed",
+        rotationCursor: 0,
+        createdBy: "learner-host",
+        createdAt: "2026-09-13T22:00:00.000Z",
+      },
+      role: "host",
+      activeNodeId: run.activeCursor.nodeId,
+      activeFen: pack.start.fen,
+      leaseHeldBy: { learnerId: "learner-white", handle: "white" },
+      grants: [{ learnerId: "learner-host", handle: "coach", role: "host", grantedAt: "2026-09-13T22:00:00.000Z" }],
+      moveAuthorship: [],
+      proposals: [],
+      invitations: [],
+      legs: [],
+      match,
+      marks: [],
+    };
+    const summary: LiveSessionSummary = {
+      ...detail.session,
+      board: {
+        activeFen: detail.activeFen,
+        objectiveState: "active",
+        sideToMove: "white",
+        plyCount: 0,
+        pausedAt: null,
+        leaseHeldBy: detail.leaseHeldBy,
+        lastMoveAt: null,
+      },
+      match,
+    };
+    const firstAction = deferred<typeof match>();
+    let actionAttempts = 0;
+    const matchOperation = vi.fn(() => ++actionAttempts === 1 ? firstAction.promise : Promise.resolve(match));
+    let detailReads = 0;
+    const matchApi: DrillClientApi = {
+      ...api(),
+      async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-09-13T21:00:00.000Z" }; },
+      async liveSessions() { return [summary]; },
+      async liveSession() {
+        detailReads += 1;
+        return detailReads === 1 ? detail : { ...detail, session: { ...detail.session, runId: "crossed-run" } };
+      },
+      matchOperation,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: matchApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    const pause = await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Pause for coaching");
+      expect(candidate).toBeDefined();
+      return candidate!;
+    });
+    pause.click();
+    pause.click();
+    await vi.waitFor(() => expect(matchOperation).toHaveBeenCalledTimes(1));
+    expect(matchOperation).toHaveBeenCalledWith("match-session", "pause", undefined);
+    expect(pause.disabled).toBe(true);
+    expect(pause.getAttribute("aria-describedby")).toBe("active-match-action-busy");
+    expect(document.getElementById("active-match-action-busy")?.textContent).toContain("Updating the match");
+
+    firstAction.reject(new Error("private match provider failure"));
+    await vi.waitFor(() => expect(document.querySelector("aside[aria-label='Live session rail']")?.textContent).toContain("The match action could not finish."));
+    expect(document.body.textContent).not.toContain("private match provider failure");
+    expect(pause.disabled).toBe(false);
+
+    pause.click();
+    await vi.waitFor(() => expect(matchOperation).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector("aside[aria-label='Live session rail']")?.textContent).toContain("The match action finished, but the board could not refresh."));
+    expect(document.body.textContent).not.toContain("crossed-run");
+    expect(pause.disabled).toBe(false);
+    await unmount(component);
+  });
+
   it("states why a spectator's submitted review rail is closed", async () => {
     const base = api();
     const spectatorApi: DrillClientApi = {
@@ -1671,12 +1761,23 @@ describe("application shell", () => {
       legs: [],
       marks: [],
     };
-    const castVote = vi.fn(async (_sessionId: string, _windowId: string, choiceUci: string) => ({
+    const firstVote = deferred<NonNullable<LiveSessionDetail["vote"]>>();
+    let voteAttempts = 0;
+    const validTally = (choiceUci: string): NonNullable<LiveSessionDetail["vote"]> => ({
       window: voteWindow,
       tally: voteWindow.options.map((option) => ({ ...option, count: option.moveUci === choiceUci ? 1 : 0 })),
       total: 1,
       relayed: 0,
-    }));
+    });
+    const castVote = vi.fn((_sessionId: string, _windowId: string, choiceUci: string) => {
+      voteAttempts += 1;
+      if (voteAttempts === 1) return firstVote.promise;
+      if (voteAttempts === 2) return Promise.resolve({
+        ...validTally(choiceUci),
+        window: { ...voteWindow, sessionId: "crossed-session" },
+      });
+      return Promise.resolve(validTally(choiceUci));
+    });
     const liveApi: DrillClientApi = {
       ...api(),
       async session() { return { id: "learner-viewer", handle: "viewer", createdAt: "2026-08-27T10:00:00.000Z" }; },
@@ -1697,8 +1798,26 @@ describe("application shell", () => {
     });
     expect(document.querySelector("[aria-label='Which continuation?']")).not.toBeNull();
     centreVote.click();
+    centreVote.click();
     await vi.waitFor(() => expect(castVote).toHaveBeenCalledWith("session-vote", "vote-one", "e2e4"));
+    expect(castVote).toHaveBeenCalledTimes(1);
     expect(castVote.mock.calls[0]).toHaveLength(3);
+    expect(centreVote.disabled).toBe(true);
+    expect(centreVote.getAttribute("aria-describedby")).toBe("live-session-action-busy");
+    expect(document.getElementById("live-session-action-busy")?.textContent).toContain("Updating this session");
+
+    firstVote.reject(new Error("private vote provider failure"));
+    await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("Your vote could not be recorded. The tally is unchanged; try again."));
+    expect(document.body.textContent).not.toContain("private vote provider failure");
+    expect(document.body.textContent).toContain("Claim the centre · 0");
+
+    centreVote.click();
+    await vi.waitFor(() => expect(castVote).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("Your vote may have been recorded, but its tally could not be matched. Reload before voting again."));
+    expect(document.body.textContent).toContain("Claim the centre · 0");
+
+    centreVote.click();
+    await vi.waitFor(() => expect(castVote).toHaveBeenCalledTimes(3));
     await vi.waitFor(() => expect(document.body.textContent).toContain("Vote recorded for Claim the centre"));
     expect(document.body.textContent).toContain("Claim the centre · 1");
     expect(document.body.textContent).toContain("1 vote, all from signed-in members");

@@ -19967,3 +19967,17 @@ success-only removal and departure. Sequential canonical verification passes: `m
 verify-software` is green across 196 files / 1,296 tests plus type, performance, schema, manifest
 and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-13 — Every Live mutation retains action and response truth ([[D3242]])
+
+The remaining member-access, confirmed-reclaim and vote cast/close paths now use the session
+studio's retained single-flight owner instead of independent busy/error islands. Returned vote
+tallies must match the initiating session, window, node, ordered options, state and applied option,
+and their counts, total and relayed subtotal must agree before any tally is shown. The in-run match
+rail separately captures exact session/run action identity, refuses duplicate actions, bounds
+provider failures, distinguishes a committed operation whose refresh failed, and suppresses
+crossed or departed settlements. Mounted falsifiers exercise duplicate submission, raw-provider
+failure, retry, malformed vote identity, unchanged stale tally and crossed match refresh.
+Sequential canonical verification passes: `make verify-software` is green across 196 files / 1,297
+tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
+passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
