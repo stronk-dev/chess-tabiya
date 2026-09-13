@@ -17,10 +17,11 @@
     loading?: boolean;
     error?: string | undefined;
     actionLabel?: string;
+    onRetry?: (() => void) | undefined;
     onSelect: (packId: string) => void | Promise<void>;
   }
 
-  let { packs, loading = false, error, actionLabel = "Rehearse this position", onSelect }: Props = $props();
+  let { packs, loading = false, error, actionLabel = "Rehearse this position", onRetry, onSelect }: Props = $props();
   let phase: PackPhaseFilter = $state("all");
   let band: PackBandFilter = $state("all");
   let search = $state("");
@@ -69,8 +70,9 @@
     </label>
   </section>
 
-  {#if error}<p class="error" role="alert">{error}</p>{/if}
-  {#if loading}
+  {#if error}
+    <div class="error"><p role="alert">{error}</p>{#if onRetry}<button type="button" onclick={onRetry}>Try again</button>{/if}</div>
+  {:else if loading}
     <p class="loading" role="status" aria-live="polite" aria-atomic="true">Loading rehearsal packs…</p>
   {:else}
     <p class="result-count" role="status" aria-live="polite" aria-atomic="true">{visible.length} {visible.length === 1 ? "position" : "positions"}</p>
@@ -128,6 +130,7 @@
   .empty { grid-column: 1 / -1; padding: 2rem; border: 1px dashed var(--line); border-radius: 1rem; text-align: center; }
   .empty h2 { margin-inline: auto; }
   .empty button { padding: .65rem .8rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); }
-  .error { color: var(--ink); }
+  .error { display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;color:var(--ink); }
+  .error p{margin:0}.error button{padding:.65rem .8rem;border:1px solid var(--line);border-radius:.6rem;background:var(--paper);color:var(--ink)}
   @media (max-width: 50rem) { .catalogue-controls { grid-template-columns: 1fr; } .phase-tabs { grid-column: 1; overflow-x: auto; flex-wrap: nowrap; } .phase-tabs button { white-space: nowrap; } }
 </style>

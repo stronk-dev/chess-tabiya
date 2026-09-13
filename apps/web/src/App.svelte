@@ -141,6 +141,8 @@
   const MIN_LIVE_VOTE_SECONDS = 15;
   const MAX_LIVE_VOTE_SECONDS = 600;
 
+  class LearnerRouteError extends Error {}
+
   const controller = new DrillSessionController(api, {
     ...(storage === undefined ? {} : { storage }),
     onRunStarted: ({ runId }) => {
@@ -716,7 +718,7 @@
       assertRunPageResponse(page, { limit, offset: 0 });
       return page;
     } catch {
-      throw new Error("Saved games could not be loaded. Reload this page to try again.");
+      throw new LearnerRouteError("Saved games could not be loaded. Reload this page to try again.");
     }
   }
 
@@ -922,7 +924,9 @@
       }
     } catch (error) {
       if (generation === loadGeneration) {
-        routeError = error instanceof Error ? error.message : String(error);
+        routeError = error instanceof LearnerRouteError
+          ? error.message
+          : "This page could not be loaded. Check your connection and try again.";
       }
     } finally {
       if (generation === loadGeneration) {
@@ -952,8 +956,8 @@
       const loaded = await Promise.all([api.packs(), api.capabilities()]);
       if (generation !== loadGeneration) return;
       [packs, capabilities] = loaded;
-    } catch (error) {
-      if (generation === loadGeneration) routeError = error instanceof Error ? error.message : String(error);
+    } catch {
+      if (generation === loadGeneration) routeError = "Rehearsal positions could not be loaded. Check your connection and try again.";
     } finally {
       if (generation === loadGeneration) {
         routeHasLoaded = true;
@@ -965,6 +969,10 @@
   function loadVisibleRoute(next: AppRoute): void {
     if (learner === undefined) void loadPublicRoute(next);
     else void loadRoute(next);
+  }
+
+  function retryVisibleRoute(): void {
+    if (!routeLoading) loadVisibleRoute(route);
   }
 
   function startRouter(): void {
@@ -2386,6 +2394,7 @@
       loading={routeLoading}
       error={routeError}
       actionLabel="Choose this rehearsal"
+      onRetry={retryVisibleRoute}
       onSelect={choosePublicPack}
     />
   </div>
@@ -2401,7 +2410,7 @@
   {#if routeLoading}
     <main class="shell-view" aria-busy="true"><p>Loading Tabiya…</p></main>
   {:else if routeError}
-    <main class="shell-view"><h1>Something interrupted the route.</h1><p role="alert">{routeError}</p></main>
+    <main class="shell-view"><h1>This page is temporarily unavailable.</h1><p role="alert">{routeError}</p><button class="primary" type="button" onclick={retryVisibleRoute}>Try again</button></main>
   {:else if route.name === "home"}
     <main class="shell-view home" aria-labelledby="home-title">
       <p class="eyebrow">Tabiya / play the consequence</p>

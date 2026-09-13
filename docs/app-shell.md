@@ -47,6 +47,12 @@ capabilities locally, and publishes only if that route generation remains
 current. Pagination and live/Story polling retain the same boundary. A response
 from a closed route cannot overwrite the current screen even when it resolves
 last; stale failures cannot become the current route error either.
+Initial route failures expose only fixed learner copy, never provider or storage diagnostics.
+The requested route remains current and offers one visible retry; starting that retry replaces the
+error with the normal pending state and cannot be duplicated from the old error screen. The public
+catalogue follows the same contract and does not turn a failed request into an empty library. A
+small internal error brand is the only way a more contextual, already-bounded message may cross
+the route boundary.
 
 Background live and Story refreshes also carry a resource-local request
 sequence. Overlapping polls are latest-request-wins within the route, so an

@@ -20010,3 +20010,16 @@ crossed response, retry and departure; focused response tests falsify malformed 
 denominators, duplicates and no-progress pages. `make verify-software` is green across 197 files /
 1,306 tests plus type, performance, schema, manifest and production-build checks; `make
 test-browser` passes all 64 required journeys with one optional Maia latency measurement skipped.
+
+## 2026-09-14 — Route failures retain a recoverable learner boundary ([[D3245]])
+
+Initial authenticated routes and the public catalogue no longer publish arbitrary thrown values.
+Both retain the requested route behind fixed learner copy and one visible retry, which replaces the
+error with normal loading and cannot be re-fired from the old screen. The public catalogue no
+longer represents provider failure as a zero-result library. An internal brand preserves only
+explicitly bounded contextual errors, while private diagnostics remain outside the presentation
+boundary and departed settlement remains inert. Mounted tests exercise both public and signed-in
+failure→retry paths plus a rejected request after navigation. `make verify-software` is green
+across 197 files / 1,308 tests plus type, performance, schema, manifest and production-build
+checks; `make test-browser` passes all 64 required journeys with one optional Maia latency
+measurement skipped.

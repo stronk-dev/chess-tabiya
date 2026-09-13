@@ -782,6 +782,73 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("bounds a public catalogue failure and retries the same route", async () => {
+    history.replaceState(null, "", "/play");
+    let packReads = 0;
+    const publicApi: DrillClientApi = {
+      ...api(),
+      async session() { throw new Error("AUTH_REQUIRED"); },
+      async packs() {
+        packReads += 1;
+        if (packReads === 1) throw new Error("private catalogue topology");
+        return [packSummary];
+      },
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: publicApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Rehearsal positions could not be loaded. Check your connection and try again."));
+    expect(document.body.textContent).not.toContain("private catalogue topology");
+    expect(document.body.textContent).not.toContain("No positions match those filters.");
+    const retry = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Try again")!;
+    retry.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain(packSummary.title));
+    expect(packReads).toBe(2);
+    await unmount(component);
+  });
+
+  it("bounds an authenticated route failure, retries it, and ignores a departed failure", async () => {
+    history.replaceState(null, "", "/library");
+    let packReads = 0;
+    const departedReview = deferred<RunPage>();
+    const routeApi: DrillClientApi = {
+      ...api(),
+      async packs() {
+        packReads += 1;
+        if (packReads === 1) throw new Error("private library topology");
+        return [packSummary];
+      },
+      async runPage(_limit = 50, offset = 0) {
+        if (location.pathname === "/review") return departedReview.promise;
+        return { runs: [runSummary], selection: { shown: offset + 1, total: offset + 1 } };
+      },
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: routeApi, router, storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This page could not be loaded. Check your connection and try again."));
+    expect(document.body.textContent).not.toContain("private library topology");
+    const retry = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Try again")!;
+    retry.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Packs and run artifacts"));
+
+    router.navigate("/review");
+    await vi.waitFor(() => expect(location.pathname).toBe("/review"));
+    router.navigate("/play");
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Choose the game you want to understand."));
+    departedReview.reject(new Error("departed private failure"));
+    await tick();
+    await Promise.resolve();
+    expect(document.body.textContent).not.toContain("departed private failure");
+    expect(document.body.textContent).not.toContain("This page is temporarily unavailable.");
+    await unmount(component);
+  });
+
   it("keeps authentication single-flight and replaces provider diagnostics with retry copy", async () => {
     const pendingLogin = deferred<Learner>();
     let loginCalls = 0;
