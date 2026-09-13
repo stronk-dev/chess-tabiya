@@ -489,6 +489,63 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("binds concurrent revoicing to the requested moment, position, and scope", async () => {
+    const root = createRun({
+      id: "scoped-revoice",
+      session: { kind: "position", start: { fen: "4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"9".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const pivotal = commitMove(root, "e2e7").run;
+    const run = commitMove(pivotal, "e8e7").run;
+    let resolveMarker!: (page: VoicePage) => void;
+    let resolveReading!: (page: VoicePage) => void;
+    const markerResponse = new Promise<VoicePage>((resolve) => { resolveMarker = resolve; });
+    const readingResponse = new Promise<VoicePage>((resolve) => { resolveReading = resolve; });
+    const onVoice = vi.fn((_nodeId: string, scope: VoicePage["scope"]) => {
+      if (onVoice.mock.calls.length === 1) return markerResponse;
+      if (onVoice.mock.calls.length === 2) return readingResponse;
+      return Promise.resolve({ text: "crossed-scope payload", source: "provider" as const, scope: scope === "reading" ? "marker" as const : "reading" as const });
+    });
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
+      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      onVoice,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click();
+    await tick();
+    document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click();
+    await tick();
+
+    const markerSection = document.querySelector<HTMLElement>("[aria-label='Recorded moment evidence']")!;
+    const readingSection = document.querySelector<HTMLElement>("[aria-label='Current-position evidence rendering']")!;
+    markerSection.querySelector<HTMLButtonElement>("button")!.click();
+    readingSection.querySelector<HTMLButtonElement>("button")!.click();
+    await tick();
+    expect(onVoice.mock.calls[0]).toEqual([pivotal.activeCursor.nodeId, "marker"]);
+    expect(onVoice.mock.calls[1]).toEqual([run.activeCursor.nodeId, "reading"]);
+
+    resolveReading({ text: "Current-position explanation.", source: "provider", scope: "reading" });
+    await readingResponse;
+    await tick();
+    expect(readingSection.textContent).toContain("Current-position explanation.");
+    resolveMarker({ text: "Late marker explanation.", source: "provider", scope: "marker" });
+    await markerResponse;
+    await tick();
+    expect(markerSection.textContent).not.toContain("Late marker explanation.");
+    expect(readingSection.textContent).toContain("Current-position explanation.");
+
+    readingSection.querySelector<HTMLButtonElement>("button")!.click();
+    await vi.waitFor(() => expect(readingSection.querySelector("[role='alert']")?.textContent).toContain("no longer matches this view"));
+    expect(readingSection.textContent).not.toContain("crossed-scope payload");
+    await unmount(component);
+  });
+
   it("opens the Support companion from ambient presence", async () => {
     const run = createRun({
       id: "ambient-assistance",

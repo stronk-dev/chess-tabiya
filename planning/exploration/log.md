@@ -19451,3 +19451,15 @@ position-scoped loading state; crossed, failed and stale responses end in bounde
 instead of leaking their payload. `make test-software` passes 188 files / 1,188 tests and `make
 test-browser` passes all 64 required production journeys with the one explicitly optional Maia
 latency measurement skipped.
+
+## 2026-09-13 — Revoicing retains node, scope and request identity ([[D3202]])
+
+The Inspector's marker revoice action previously requested the currently displayed board node,
+even when the opened pivotal marker belonged to a past position. Marker and current-position calls
+also shared one unsequenced response slot, trusted the provider's returned scope and let rejection
+escape. Revoicing now keys each call by the marker or displayed node it actually describes, its
+scope and a monotonically newer request. Late and crossed responses cannot render; provider failure
+gets a scoped retry message. The regression opens a past pivotal moment while a later position is
+active, races both narration scopes, and returns a wrong-scope payload. `make test-software` passes
+188 files / 1,189 tests and `make test-browser` passes all 64 required production journeys with the
+one explicitly optional Maia latency measurement skipped.

@@ -227,6 +227,9 @@
   let corpusRequest = 0;
   let voicePage: VoicePage | undefined = $state();
   let voiceNodeId: string | undefined = $state();
+  let voiceBusy: { readonly nodeId: string; readonly scope: VoicePage["scope"] } | undefined = $state();
+  let voiceError: { readonly nodeId: string; readonly scope: VoicePage["scope"]; readonly text: string } | undefined = $state();
+  let voiceRequest = 0;
   let forkLabel = $state("");
   let forkIntent = $state("");
   let groupOpen = $state(false);
@@ -658,13 +661,31 @@
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
     if (onVoice === undefined) return;
-    const nodeId = displayedNode.id;
+    const nodeId = scope === "marker" ? openPivotalNodeId : displayedNode.id;
+    if (nodeId === undefined) return;
+    const request = ++voiceRequest;
     voicePage = undefined;
     voiceNodeId = undefined;
-    const page = await onVoice(nodeId, scope);
-    if (displayedNode.id !== nodeId) return;
-    voicePage = page;
-    voiceNodeId = nodeId;
+    voiceBusy = { nodeId, scope };
+    voiceError = undefined;
+    try {
+      const page = await onVoice(nodeId, scope);
+      const currentNodeId = scope === "marker" ? openPivotalNodeId : displayedNode.id;
+      if (request !== voiceRequest || currentNodeId !== nodeId) return;
+      if (page.scope !== scope) {
+        voiceError = { nodeId, scope, text: "That explanation no longer matches this view. Try again." };
+        return;
+      }
+      voicePage = page;
+      voiceNodeId = nodeId;
+    } catch {
+      const currentNodeId = scope === "marker" ? openPivotalNodeId : displayedNode.id;
+      if (request === voiceRequest && currentNodeId === nodeId) {
+        voiceError = { nodeId, scope, text: "This explanation is unavailable right now. Try again." };
+      }
+    } finally {
+      if (request === voiceRequest) voiceBusy = undefined;
+    }
   }
 
   function speakSentences(sentences: readonly string[], scope: VoicePage["scope"] = "reading"): void {
@@ -684,7 +705,7 @@
   }
 
   function openPivotalMarker(nodeId: string): void {
-    openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined; voiceNodeId = undefined;
+    openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined; voiceNodeId = undefined; voiceError = undefined; voiceRequest += 1; voiceBusy = undefined;
     pivotalDialogOpen = true;
   }
 
@@ -1639,19 +1660,23 @@
             <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · {rehearsalStepLabel(openPivotalNode?.ply ?? 0).toLocaleLowerCase()}</p>
             {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
             {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
-            {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this evidence</button>{/if}
-            {#if voiceNodeId === displayedNode.id && voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
-            {#if voiceNodeId === displayedNode.id && voicePage?.scope === "marker"}<p class="guidance-sentence">{voicePage.text}</p>{/if}
+            {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
+            {#if voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"}<p role="status">Preparing an explanation of this moment…</p>{/if}
+            {#if voiceError?.nodeId === openPivotalNodeId && voiceError.scope === "marker"}<p role="alert">{voiceError.text}</p>{/if}
+            {#if voiceNodeId === openPivotalNodeId && voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
+            {#if voiceNodeId === openPivotalNodeId && voicePage?.scope === "marker"}<p class="guidance-sentence">{voicePage.text}</p>{/if}
           {/if}
         </section>
         <section aria-label="Current-position evidence rendering" data-evidence-consumer="inspector.current_position_voice">
           <h3>Current-position rendering</h3>
           <p class="honest">Render the evidence attached to the position now on the board. This does not require a pivotal marker.</p>
           {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}
-            <button type="button" onclick={() => void requestVoice("reading")}>Revoice current-position evidence</button>
+            <button type="button" disabled={voiceBusy?.nodeId === displayedNode.id && voiceBusy.scope === "reading"} onclick={() => void requestVoice("reading")}>{voiceBusy?.nodeId === displayedNode.id && voiceBusy.scope === "reading" ? "Explaining this position…" : "Revoice current-position evidence"}</button>
           {:else}
             <p class="honest">External rewording is not enabled for this workflow.</p>
           {/if}
+          {#if voiceBusy?.nodeId === displayedNode.id && voiceBusy.scope === "reading"}<p role="status">Preparing an explanation of this position…</p>{/if}
+          {#if voiceError?.nodeId === displayedNode.id && voiceError.scope === "reading"}<p role="alert">{voiceError.text}</p>{/if}
           {#if voiceNodeId === displayedNode.id && voicePage?.scope === "reading"}
             {#if voicePage.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
             <p class="guidance-sentence">{voicePage.text}</p>
