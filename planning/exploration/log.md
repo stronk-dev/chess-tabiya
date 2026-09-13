@@ -19609,3 +19609,26 @@ response fixtures plus mounted checkpoint/run-action failure and duplicate tests
 Sequential canonical verification passes: `make verify-software` is green across 188 files / 1,210
 tests, type, performance, schema, manifest and production build; `make test-browser` passes all 64
 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Rewind retains its source and retry ([[D3215]])
+
+Rewind previously cleared checkpoint and comparison state before the durable mutation completed,
+while Timeline dismissed its preview without knowing whether the mutation succeeded. The controller
+now returns explicit success/failure and clears overlays only on success. Timeline, checkpoint and
+terminal surfaces own one pending request, block conflicting actions, preserve the exact target on
+rejection and render bounded retry copy; guard and support entry points share the same pending gate.
+Controller retention and mounted source-surface regressions bind the lifecycle. `make
+verify-software` passes 188 files / 1,213 tests plus type, performance, schema, manifest and
+production-build checks; the subsequent `make test-browser` passes all 64 required journeys with
+one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Evidence refresh no longer breaks touch input ([[D3216]])
+
+The served endgame matrix caught a queen `e4→c4` touch gesture stranded at 768×1024: the destination
+became active, the piece stayed put and no mutation request was emitted. Trace evidence showed that
+selected-square evidence and overlay refreshes shared the effect that called `replacePosition`, so
+presentation changes reset the input controller between touch taps. Position identity now gates
+controller replacement while visual configuration refreshes independently. Sequential canonical
+verification passes: `make verify-software` is green across 188 files / 1,213 tests and the real
+150-cell served-endgame input matrix passes inside `make test-browser`, with all 64 required
+journeys green and one explicitly optional Maia latency measurement skipped.

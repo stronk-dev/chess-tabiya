@@ -335,7 +335,12 @@ board waiting on the other side keeps the text form disabled with a visible
 reason. A caller may also attach an exact visible description to both the
 graphical and semantic projections. Live overlay uses that boundary for
 relayed marks, so host-drawn arrows and circles remain bound to their visible
-author attribution for non-visual board navigation.
+author attribution for non-visual board navigation. Position replacement is
+keyed only by the authoritative FEN and input-policy identity. Selected-square
+evidence, system overlays, learner marks and other presentation changes may
+refresh Chessground without resetting the controller's in-flight origin; this
+keeps a two-tap touch move intact while evidence lighting reacts to the first
+square.
 
 ## Evidence sentences
 
@@ -400,7 +405,11 @@ confirmation. The Timeline caller must declare whether that confirmation is free
 earned rewind; the ordinary drill declares and renders the free policy, while a future Campaign
 composition cannot inherit it implicitly. Checkpoint markers and the rewind picker resolve the
 pack's authored checkpoint labels; an unresolved historical reference is described neutrally and
-never exposes its storage id through the accessible name.
+never exposes its storage id through the accessible name. Rewind is one single-flight mutation
+shared by Timeline, checkpoint, terminal, guard and support entry points. Its source target,
+checkpoint and comparison remain mounted until the durable mutation succeeds. Failure returns an
+explicit false result and leaves bounded retry copy on the invoking surface; conflicting actions
+stay disabled only while the request is pending.
 
 The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never

@@ -479,13 +479,16 @@ export class DrillSessionController {
     } catch (error) { this.#fail(error); }
   }
 
-  async rewind(target: { readonly nodeId: string; readonly branchId?: string } | { readonly checkpointId: string; readonly branchId?: never }): Promise<void> {
-    this.#patch({ busy: true, checkpoint: undefined, comparison: undefined });
+  async rewind(target: { readonly nodeId: string; readonly branchId?: string } | { readonly checkpointId: string; readonly branchId?: never }): Promise<boolean> {
+    if (this.#state.busy) return false;
+    this.#patch({ busy: true, error: undefined });
     try {
       await this.#requiredStore().rewind(target);
-      this.#patch({ busy: false, comparisonBranchIds: undefined });
+      this.#patch({ busy: false, checkpoint: undefined, comparison: undefined, comparisonBranchIds: undefined });
+      return true;
     } catch (error) {
       this.#fail(error);
+      return false;
     }
   }
 

@@ -847,6 +847,31 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.comparison?.columns.map((column) => column.branchId)).toEqual(branches);
   });
 
+  it("retains checkpoint and comparison overlays until rewind succeeds", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    await environment.controller.fork("rewind branch", "preserve the source surface");
+    await environment.controller.move("c1e3");
+    const checkpoint = environment.controller.state.checkpoint!;
+    const rootNodeId = environment.controller.state.runState!.run.nodes[0]!.id;
+    const rewind = vi.spyOn(api, "rewind").mockRejectedValueOnce(new Error("private rewind storage detail"));
+
+    expect(await environment.controller.rewind({ nodeId: rootNodeId })).toBe(false);
+    expect(environment.controller.state.checkpoint).toEqual(checkpoint);
+    expect(environment.controller.state.error).not.toContain("private rewind storage detail");
+
+    const branches = environment.controller.state.runState!.run.branches.map((branch) => branch.id);
+    expect(await environment.controller.compare(branches)).toBe(true);
+    const comparison = environment.controller.state.comparison;
+    rewind.mockRejectedValueOnce(new Error("second private rewind detail"));
+
+    expect(await environment.controller.rewind({ nodeId: rootNodeId })).toBe(false);
+    expect(environment.controller.state.comparison).toEqual(comparison);
+    expect(await environment.controller.rewind({ nodeId: rootNodeId })).toBe(true);
+    expect(environment.controller.state.comparison).toBeUndefined();
+  });
+
   it("retains an authored-line simulation and returns explicit failure for safe retry", async () => {
     const api = new FakeApi();
     const simulationApi = Object.assign(api, {

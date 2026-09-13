@@ -108,7 +108,7 @@
     firstRehearsal?: boolean | undefined;
     onMove: (uci: string) => boolean | void | Promise<boolean | void>;
     onReveal?: (() => void | Promise<void>) | undefined;
-    onRewind: (target: RewindTarget) => void | Promise<void>;
+    onRewind: (target: RewindTarget) => boolean | void | Promise<boolean | void>;
     onFork: (label?: string, intent?: string) => boolean | void | Promise<boolean | void>;
     onSwitchBranch: (leafNodeId: string, branchId: string) => void | Promise<void>;
     onCompare: (branchIds: readonly string[]) => boolean | void | Promise<boolean | void>;
@@ -300,6 +300,9 @@
   let compareBusy = $state(false);
   let compareError: string | undefined = $state();
   let compareRequest = 0;
+  let rewindBusy = $state(false);
+  let rewindFailure: { readonly targetKey: string; readonly text: string } | undefined = $state();
+  let rewindRequest = 0;
   let viewportSupport: RunViewportSupport = $state({ supported: true, width: 0, height: 0, reason: null });
   let ownMarks: readonly RunMark[] = $state([]);
   let markScope: "position" | "branch" = $state("position");
@@ -1156,9 +1159,37 @@
     previewNodeId = previewNodeId === nodeId ? undefined : nodeId;
   }
 
-  async function rewindRun(target: RewindTarget): Promise<void> {
+  function rewindTargetKey(target: RewindTarget): string {
+    return "nodeId" in target
+      ? `node:${target.nodeId}:${target.branchId ?? "active"}`
+      : `checkpoint:${target.checkpointId}`;
+  }
+
+  function rewindErrorFor(target: RewindTarget | undefined): string | undefined {
+    if (target === undefined || rewindFailure?.targetKey !== rewindTargetKey(target)) return undefined;
+    return rewindFailure.text;
+  }
+
+  async function rewindRun(target: RewindTarget): Promise<boolean> {
+    if (rewindBusy) return false;
+    const request = ++rewindRequest;
+    const targetKey = rewindTargetKey(target);
+    rewindBusy = true;
+    rewindFailure = undefined;
     selectedSquare = undefined;
-    await onRewind(target);
+    try {
+      const accepted = await onRewind(target);
+      if (accepted === false) {
+        if (request === rewindRequest) rewindFailure = { targetKey, text: "The rewind did not finish. Your current attempt and target are unchanged, so you can try again." };
+        return false;
+      }
+      return true;
+    } catch {
+      if (request === rewindRequest) rewindFailure = { targetKey, text: "The rewind did not finish. Your current attempt and target are unchanged, so you can try again." };
+      return false;
+    } finally {
+      if (request === rewindRequest) rewindBusy = false;
+    }
   }
 
   function focusBoardFromSupport(): void {
@@ -1172,8 +1203,7 @@
 
   async function confirmPreview(nodeId = previewNodeId): Promise<void> {
     if (!canWrite || nodeId === undefined) return;
-    previewNodeId = undefined;
-    await rewindRun({ nodeId });
+    if (await rewindRun({ nodeId })) previewNodeId = undefined;
   }
 
   async function rewindFirstRehearsal(): Promise<void> {
@@ -1433,6 +1463,7 @@
     checkpointContinueRequest += 1;
     simulationRequest += 1;
     compareRequest += 1;
+    rewindRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1623,6 +1654,8 @@
             {previewNodeId}
             onPreview={preview}
             onConfirm={confirmPreview}
+            confirming={rewindBusy}
+            confirmError={previewNodeId === undefined ? undefined : rewindErrorFor({ nodeId: previewNodeId })}
             rewindPolicy="free"
             canConfirm={canWrite}
             rewindableNodeIds={timelineRewindNodeIds}
@@ -1698,7 +1731,8 @@
                 <h2 id="rehearsal-guide-title">{guide.title}</h2>
                 {#each guide.body as sentence}<p class="guide-body">{sentence}</p>{/each}
                 {#if guide.rewindNodeId !== undefined}
-                  <button class="primary" type="button" disabled={!canWrite || busy} onclick={() => void rewindFirstRehearsal()}>Go back to the decision</button>
+                  <button class="primary" type="button" disabled={!canWrite || busy || rewindBusy} onclick={() => void rewindFirstRehearsal()}>{rewindBusy ? "Going back…" : "Go back to the decision"}</button>
+                  {#if rewindErrorFor({ nodeId: guide.rewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guide.rewindNodeId })}</p>{/if}
                 {:else if guide.compareBranchIds !== undefined}
                   <button class="primary" type="button" disabled={guide.compareBranchIds.length < 2 || busy} onclick={() => void compareFirstRehearsal()}>Compare both attempts</button>
                 {/if}
@@ -1742,10 +1776,11 @@
                   <p>Your played line stays preserved.</p>
                 </div>
                 <div class="guard-actions">
-                  <button type="button" onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
+                  <button type="button" disabled={rewindBusy} onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
                   {#if guardGrounds.length > 0}<button type="button" onclick={() => (inspectorOpen = true)}>Inspect what changed</button>{/if}
-                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>Rewind</button>
+                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined || rewindBusy} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>{rewindBusy ? "Rewinding…" : guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId }) !== undefined ? "Try rewind again" : "Rewind"}</button>
                 </div>
+                {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
               </section>
             {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
@@ -1756,11 +1791,12 @@
                 <h2 id="support-empty-title">Nothing recognizes this structure yet</h2>
                 <p>That is not a dead end. Play it and see what the consequence exposes, or return to an earlier decision and try another idea.</p>
                 <div class="support-empty-actions">
-                  <button class="primary" type="button" disabled={busy || !canWrite || terminalEvent !== undefined} aria-describedby={busy || !canWrite || terminalEvent !== undefined ? "support-keep-playing-disabled" : undefined} onclick={focusBoardFromSupport}>Keep playing</button>
-                  {#if busy || !canWrite || terminalEvent !== undefined}<span id="support-keep-playing-disabled" class="honest">{!canWrite ? "This read-only view cannot play a move." : terminalEvent !== undefined ? "This line has ended; rewind to keep exploring." : "Wait for the current move to finish."}</span>{/if}
+                  <button class="primary" type="button" disabled={busy || rewindBusy || !canWrite || terminalEvent !== undefined} aria-describedby={busy || rewindBusy || !canWrite || terminalEvent !== undefined ? "support-keep-playing-disabled" : undefined} onclick={focusBoardFromSupport}>Keep playing</button>
+                  {#if busy || rewindBusy || !canWrite || terminalEvent !== undefined}<span id="support-keep-playing-disabled" class="honest">{!canWrite ? "This read-only view cannot play a move." : terminalEvent !== undefined ? "This line has ended; rewind to keep exploring." : rewindBusy ? "Wait for this rewind to finish." : "Wait for the current move to finish."}</span>{/if}
                   {#if previousSupportRewindNodeId !== undefined}
-                    <button type="button" disabled={busy || !canWrite} aria-describedby={busy || !canWrite ? "support-rewind-disabled" : undefined} onclick={() => void rewindRun({ nodeId: previousSupportRewindNodeId! })}>Rewind to a decision</button>
-                    {#if busy || !canWrite}<span id="support-rewind-disabled" class="honest">{!canWrite ? "This read-only view cannot rewind the run." : "Wait for the current move to finish."}</span>{/if}
+                    <button type="button" disabled={busy || rewindBusy || !canWrite} aria-describedby={busy || rewindBusy || !canWrite ? "support-rewind-disabled" : undefined} onclick={() => void rewindRun({ nodeId: previousSupportRewindNodeId! })}>{rewindBusy ? "Rewinding…" : "Rewind to a decision"}</button>
+                    {#if busy || rewindBusy || !canWrite}<span id="support-rewind-disabled" class="honest">{!canWrite ? "This read-only view cannot rewind the run." : rewindBusy ? "Wait for this rewind to finish." : "Wait for the current move to finish."}</span>{/if}
+                    {#if rewindErrorFor({ nodeId: previousSupportRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: previousSupportRewindNodeId })}</p>{/if}
                   {/if}
                 </div>
               </section>
@@ -1923,6 +1959,8 @@
     continuing={checkpointContinueBusy}
     continueError={checkpointContinueError?.eventSeq === checkpoint.eventSeq ? checkpointContinueError.text : undefined}
     onRewind={() => rewindRun({ nodeId: checkpoint.nodeId })}
+    rewinding={rewindBusy}
+    rewindError={rewindErrorFor({ nodeId: checkpoint.nodeId })}
     onCompare={openCompare}
     comparing={compareBusy}
     {compareError}
@@ -1942,6 +1980,8 @@
     grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)}
     canRewind={snapshot.access === "writer" && currentNode.parentId !== null}
     onRewind={() => currentNode.parentId === null ? undefined : rewindRun({ nodeId: currentNode.parentId })}
+    rewinding={rewindBusy}
+    rewindError={currentNode.parentId === null ? undefined : rewindErrorFor({ nodeId: currentNode.parentId })}
     {onStory}
     onFlip={onFlip === undefined ? undefined : () => onFlip(run.nodes[0]!.id)}
     onInspectEvidence={() => (inspectorOpen = true)}

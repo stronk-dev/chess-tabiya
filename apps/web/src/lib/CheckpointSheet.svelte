@@ -17,7 +17,7 @@
     checkpoint: CheckpointNotice;
     canCompare: boolean;
     onContinue: () => void | Promise<void>;
-    onRewind: () => void | Promise<void>;
+    onRewind: () => boolean | void | Promise<boolean | void>;
     onCompare: () => void | Promise<void>;
     onStop: () => void;
     authoredItems?: readonly AuthoredFeedbackItem[];
@@ -36,6 +36,8 @@
     continueError?: string | undefined;
     comparing?: boolean;
     compareError?: string | undefined;
+    rewinding?: boolean;
+    rewindError?: string | undefined;
   }
 
   let {
@@ -61,6 +63,8 @@
     continueError,
     comparing = false,
     compareError,
+    rewinding = false,
+    rewindError,
   }: Props = $props();
   let heading: HTMLHeadingElement;
   let candidates = $state("");
@@ -191,30 +195,32 @@
     {/if}
     {#if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
     <div class="actions">
-      <button class="primary" type="button" disabled={continuing || comparing} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
-      <button type="button" disabled={continuing || comparing} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : undefined} onclick={onRewind}>Rewind here</button>
+      <button class="primary" type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
+      <button type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : rewindError !== undefined ? "checkpoint-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try rewind again" : "Rewind here"}</button>
       {#if recognizedActions.compare_branches}
         <HonestControl
-          disabled={!canCompare || continuing || comparing}
+          disabled={!canCompare || continuing || comparing || rewinding}
           reasonId="checkpoint-compare-unavailable"
-          reason={continuing ? "Wait for this continuation to finish." : comparing ? "Wait for this comparison to finish." : "Reach this checkpoint on at least two branches before comparing."}
+          reason={continuing ? "Wait for this continuation to finish." : comparing ? "Wait for this comparison to finish." : rewinding ? "Wait for this rewind to finish." : "Reach this checkpoint on at least two branches before comparing."}
         >
           {#snippet children(describedBy)}
             <button
               type="button"
-              disabled={!canCompare || continuing || comparing}
-              aria-describedby={comparing ? "checkpoint-compare-busy" : compareError !== undefined ? "checkpoint-compare-error" : describedBy}
+              disabled={!canCompare || continuing || comparing || rewinding}
+              aria-describedby={comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : compareError !== undefined ? "checkpoint-compare-error" : describedBy}
               onclick={onCompare}
             >{comparing ? "Opening comparison…" : compareError !== undefined ? "Try comparison again" : "Compare"}</button>
           {/snippet}
         </HonestControl>
       {/if}
-      <button type="button" disabled={continuing || comparing} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : undefined} onclick={onStop}>Stop session</button>
+      <button type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined} onclick={onStop}>Stop session</button>
     </div>
     {#if continuing}<p id="checkpoint-continue-busy" role="status">Continuing from this checkpoint.</p>{/if}
     {#if comparing}<p id="checkpoint-compare-busy" role="status">Preparing the selected branch comparison. This checkpoint remains open.</p>{/if}
+    {#if rewinding}<p id="checkpoint-rewind-busy" role="status">Rewinding from this checkpoint. It remains open until the run changes.</p>{/if}
     {#if continueError}<p role="alert">{continueError}</p>{/if}
     {#if compareError}<p id="checkpoint-compare-error" role="alert">{compareError}</p>{/if}
+    {#if rewindError}<p id="checkpoint-rewind-error" role="alert">{rewindError}</p>{/if}
     {/if}
   </div>
 </div>

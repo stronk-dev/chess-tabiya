@@ -31,7 +31,9 @@
     authoredItems: readonly AuthoredFeedbackItem[];
     evidence: readonly EvidenceSentence[];
     canRewind: boolean;
-    onRewind: () => void | Promise<void>;
+    onRewind: () => boolean | void | Promise<boolean | void>;
+    rewinding?: boolean;
+    rewindError?: string | undefined;
     onStop: () => void;
     assessment?: string | undefined;
     resistance?: readonly string[];
@@ -52,7 +54,7 @@
     onChooseRepertoireAnswer?: ((repertoireId:string,gapKey:string,moveUci:string,ifMatch:string)=>Promise<void>) | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer }: Props = $props();
   let heading: HTMLHeadingElement;
   let selectedAssignmentId: string | undefined = $state();
   let submissionBusy = $state(false);
@@ -110,19 +112,21 @@
         <p>Your completed attempt stays saved. Rewinds are free in rehearsals; going back creates another branch without replacing this one.</p>
       </div>
       <div class="primary-actions">
-        <button class="primary" type="button" disabled={!canRewind} onclick={onRewind}>Play it again from here</button>
+        <button class="primary" type="button" disabled={!canRewind || rewinding} aria-describedby={rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>
         <HonestControl
-          disabled={!canScheduleReturn || returnBusy || returnScheduled}
+          disabled={!canScheduleReturn || returnBusy || returnScheduled || rewinding}
           reasonId="terminal-schedule-unavailable"
-          reason={returnScheduled ? "This position is now in your return queue." : returnBusy ? "Saving this return…" : scheduleUnavailableReason}
+          reason={returnScheduled ? "This position is now in your return queue." : returnBusy ? "Saving this return…" : rewinding ? "Wait for this rewind to finish." : scheduleUnavailableReason}
         >
           {#snippet children(describedBy)}
-            <button type="button" disabled={!canScheduleReturn || returnBusy || returnScheduled} aria-describedby={describedBy} onclick={() => void scheduleReturn()}>{returnScheduled ? "Added to return queue" : returnBusy ? "Saving return…" : "Schedule a retry from here"}</button>
+            <button type="button" disabled={!canScheduleReturn || returnBusy || returnScheduled || rewinding} aria-describedby={describedBy} onclick={() => void scheduleReturn()}>{returnScheduled ? "Added to return queue" : returnBusy ? "Saving return…" : "Schedule a retry from here"}</button>
           {/snippet}
         </HonestControl>
-        {#if onStory}<button type="button" onclick={onStory}>Review the whole game</button>{/if}
+        {#if onStory}<button type="button" disabled={rewinding} onclick={onStory}>Review the whole game</button>{/if}
       </div>
       {#if returnError}<p role="alert">{returnError}</p>{/if}
+      {#if rewinding}<p id="terminal-rewind-busy" role="status">Rewinding from this result. The completed attempt remains open until the run changes.</p>{/if}
+      {#if rewindError}<p id="terminal-rewind-error" role="alert">{rewindError}</p>{/if}
     </section>
 
     {#if authoredItems.length > 0}
@@ -187,9 +191,9 @@
     {/if}
 
     <div class="actions" aria-label="More completed-attempt actions">
-      {#if onFlip}<button type="button" onclick={onFlip}>Replay this as {run.start.side === "white" ? "Black" : "White"}</button>{/if}
+      {#if onFlip}<button type="button" disabled={rewinding} onclick={onFlip}>Replay this as {run.start.side === "white" ? "Black" : "White"}</button>{/if}
       {#if evidence.length > 0 && onInspectEvidence}<button type="button" onclick={onInspectEvidence}>Inspect analysis details <span aria-hidden="true">({evidence.length})</span></button>{/if}
-      <button type="button" onclick={onStop}>Stop session</button>
+      <button type="button" disabled={rewinding} onclick={onStop}>Stop session</button>
     </div>
   </div>
 </div>

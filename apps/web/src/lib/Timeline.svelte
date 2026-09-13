@@ -21,6 +21,8 @@
     onOpenPivotal?: (nodeId: string) => void;
     branches?: readonly { readonly id: string; readonly label: string; readonly forkNodeId: string; readonly leafNodeId: string }[];
     onOpenBranch?: (leafNodeId: string, branchId: string) => void | Promise<void>;
+    confirming?: boolean;
+    confirmError?: string | undefined;
   }
 
   let {
@@ -41,6 +43,8 @@
     onOpenPivotal = () => {},
     branches = [],
     onOpenBranch = () => {},
+    confirming = false,
+    confirmError,
   }: Props = $props();
 
   let rootMarkers = $derived(shapeMarkers.filter((marker) => marker.nodeId === rootNodeId));
@@ -115,21 +119,23 @@
     <div class="rewind-offer">
       <span>{rewindPolicy === "free" ? "Rewinding here costs nothing." : "This uses one earned rewind."} Your attempt is kept. Going back makes a second one.</span>
       <HonestControl
-        disabled={!canConfirm}
+        disabled={!canConfirm || confirming}
         reasonId="timeline-rewind-readonly"
-        reason="This read-only view can inspect earlier positions but cannot rewind the shared run."
+        reason={confirming ? "Wait for this rewind to finish." : "This read-only view can inspect earlier positions but cannot rewind the shared run."}
       >
         {#snippet children(describedBy)}
           <button
             class="confirm"
             type="button"
-            disabled={!canConfirm}
+            disabled={!canConfirm || confirming}
             aria-label="Rewind to preview"
-            aria-describedby={describedBy}
+            aria-describedby={confirming ? "timeline-rewind-busy" : confirmError !== undefined ? "timeline-rewind-error" : describedBy}
             onclick={() => onConfirm(previewNodeId)}
-          >Rewind to preview <kbd>Enter</kbd></button>
+          >{confirming ? "Rewinding…" : confirmError !== undefined ? "Try rewind again" : "Rewind to preview"} <kbd>Enter</kbd></button>
         {/snippet}
       </HonestControl>
+      {#if confirming}<span id="timeline-rewind-busy" role="status">Rewinding to this preview. The target remains selected.</span>{/if}
+      {#if confirmError}<span id="timeline-rewind-error" role="alert">{confirmError}</span>{/if}
     </div>
   {:else if previewNodeId}
     <p class="preview-only">Preview only. Rewind is offered when a consequence closes.</p>

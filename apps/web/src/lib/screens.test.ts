@@ -821,6 +821,78 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("keeps a failed timeline rewind on its selected preview for retry", async () => {
+    const run = branchedRun();
+    const first = deferred<boolean>();
+    const onRewind = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind, onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    document.querySelector<HTMLButtonElement>(".timeline ol button")!.click();
+    await tick();
+    const timeline = document.querySelector<HTMLElement>(".timeline")!;
+    const rewindButton = timeline.querySelector<HTMLButtonElement>('button[aria-label="Rewind to preview"]')!;
+
+    rewindButton.click();
+    rewindButton.click();
+    await tick();
+    expect(onRewind).toHaveBeenCalledOnce();
+    expect(rewindButton.disabled).toBe(true);
+    expect(timeline.querySelector("#timeline-rewind-busy")?.textContent).toContain("target remains selected");
+
+    first.resolve(false);
+    await vi.waitFor(() => expect(timeline.querySelector("#timeline-rewind-error")?.textContent).toContain("target are unchanged"));
+    expect(timeline.querySelector(".preview")).not.toBeNull();
+    expect(rewindButton.disabled).toBe(false);
+    expect(rewindButton.textContent).toContain("Try rewind again");
+
+    rewindButton.click();
+    await vi.waitFor(() => expect(onRewind).toHaveBeenCalledTimes(2));
+    await unmount(component);
+  });
+
+  it("keeps a failed checkpoint rewind visible and retryable", async () => {
+    const run = branchedRun();
+    const checkpoint = latestCheckpoint(pack, run)!;
+    const first = deferred<boolean>();
+    const onRewind = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      checkpoint,
+      onMove: vi.fn(), onRewind, onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    const sheet = document.querySelector<HTMLElement>('[aria-labelledby="checkpoint-title"]')!;
+    const rewindButton = [...sheet.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Rewind here")!;
+
+    rewindButton.click();
+    rewindButton.click();
+    await tick();
+    expect(onRewind).toHaveBeenCalledOnce();
+    expect([...sheet.querySelectorAll<HTMLButtonElement>(".actions button")].every((button) => button.disabled)).toBe(true);
+    expect(sheet.querySelector("#checkpoint-rewind-busy")?.textContent).toContain("remains open");
+
+    first.resolve(false);
+    await vi.waitFor(() => expect(sheet.querySelector("#checkpoint-rewind-error")?.textContent).toContain("target are unchanged"));
+    expect(document.querySelector('[aria-labelledby="checkpoint-title"]')).toBe(sheet);
+    expect(rewindButton.textContent).toContain("Try rewind again");
+
+    rewindButton.click();
+    await vi.waitFor(() => expect(onRewind).toHaveBeenCalledTimes(2));
+    await unmount(component);
+  });
+
   it("keeps checkpoint comparison single-flight and retryable inside the checkpoint", async () => {
     const run = branchedRun();
     const checkpoint = latestCheckpoint(pack, run)!;
@@ -1507,7 +1579,10 @@ describe("Layer 3 screens", () => {
       at,
     ).run;
     const outcome = run.events.find((event) => event.type === "outcome.reached")!;
-    const onRewind = vi.fn();
+    const rewindAttempt = deferred<boolean>();
+    const onRewind = vi.fn()
+      .mockImplementationOnce(() => rewindAttempt.promise)
+      .mockResolvedValueOnce(true);
     const onScheduleReturn = vi.fn(async () => true);
     const component = mount(DrillScreen, {
       target: target(),
@@ -1568,9 +1643,21 @@ describe("Layer 3 screens", () => {
     expect(attachedEvidence).not.toContain("details are pending");
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Return to play")!.click();
     await tick();
-    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!.click();
+    const terminalRewind = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!;
+    terminalRewind.click();
     expect(onRewind).toHaveBeenCalledWith({ nodeId: run.nodes[0]!.id });
-    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Schedule a retry from here")!.click();
+    await tick();
+    expect(terminalRewind.disabled).toBe(true);
+    expect(terminalRewind.textContent).toContain("Rewinding");
+    expect(document.querySelector("#terminal-rewind-busy")?.textContent).toContain("completed attempt remains open");
+    rewindAttempt.resolve(false);
+    await vi.waitFor(() => expect(document.querySelector("#terminal-rewind-error")?.textContent).toContain("target are unchanged"));
+    expect(terminalRewind.textContent).toContain("Try this rewind again");
+    terminalRewind.click();
+    await vi.waitFor(() => expect(onRewind).toHaveBeenCalledTimes(2));
+    const scheduleReturn = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Schedule a retry from here")!;
+    await vi.waitFor(() => expect(scheduleReturn.disabled).toBe(false));
+    scheduleReturn.click();
     await vi.waitFor(() => expect(onScheduleReturn).toHaveBeenCalledOnce());
     await vi.waitFor(() => expect(document.body.textContent).toContain("Added to return queue"));
     await unmount(component);

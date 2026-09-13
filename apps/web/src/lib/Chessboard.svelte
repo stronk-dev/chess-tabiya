@@ -126,6 +126,7 @@
   let boardState = $derived(boardModel(fen, startSide, lastMove));
   let inputDisabled = $derived(disabled || boardState.turnColor !== startSide);
   let inputPosition = $derived(boardInputPosition(fen, startSide, inputDisabled, showDests, lastMove));
+  let appliedInputIdentity = "";
   let semanticRows = $derived(semanticBoardRows(inputPosition, inputState, semanticBoardId));
   let boardLabel = $derived.by(() => {
     const moveNumber = fen.trim().split(/\s+/u)[5] ?? "unknown";
@@ -322,6 +323,7 @@
   });
 
   $effect(() => {
+    const inputIdentity = JSON.stringify([fen, startSide, lastMove, inputDisabled, showDests, resetToken]);
     fen;
     startSide;
     lastMove;
@@ -334,8 +336,14 @@
     selectedSquare;
     resetToken;
     onMarksChange;
-    inputState = controller.replacePosition(inputPosition);
-    escapeArmed = false;
+    // Selection drives evidence overlays, but neither it nor another visual
+    // configuration change is a new chess position. Resetting the shared
+    // controller here used to erase the origin between two touch taps.
+    if (inputIdentity !== appliedInputIdentity) {
+      appliedInputIdentity = inputIdentity;
+      inputState = controller.replacePosition(inputPosition);
+      escapeArmed = false;
+    }
     board?.set(config());
     // Objective/checkpoint banners can move the board without resizing it.
     // Chessground caches DOM bounds, so redraw after layout settles or the

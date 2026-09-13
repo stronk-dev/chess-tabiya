@@ -26342,6 +26342,24 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/session-controller.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3215",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dee47300aa6907124869372e57cd095ab21a8e1e99f2ea07e382a4cbede21e39",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/Chessboard.svelte",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3216",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:eecf7d7b3fb742b16eb57f420e48a245dd6b7d72dce569a7d0506e46282ad794",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/Chessboard.svelte",
+      "evidenceKind": "path"
     }
   ]
 }
