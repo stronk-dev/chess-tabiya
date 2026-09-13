@@ -247,6 +247,12 @@ The imported-game Story follows the imported workflow's voice preference. An ava
 provider does not itself expose narration: the learner must have selected persona voice for that
 workflow, while the authored default keeps recorded evidence and deterministic rendering only.
 
+Story export, re-entry, public-link creation/revocation and card download are single-flight actions
+with visible pending and retry states. Failures preserve the Story and its selected moment; a failed
+revocation explicitly leaves the link's public state uncertain rather than claiming success. Server,
+filesystem and image-decoder diagnostics never render. Changing the selected moment or leaving the
+screen invalidates unfinished card/UI completion.
+
 Rules-derived explanations remain visible because they are engine-free facts
 from the objective machine. Evidence references have runtime constructors and
 the v1 grammar `rules:<fact>`, `pack:<checkpointId>`, and `engine:<jobId>`.

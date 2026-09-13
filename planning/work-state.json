@@ -26270,6 +26270,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/CompareView.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3207",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e1a47de54379bb8d17571ebfabd0580ce952a7698a2a317cd161f2513d2e57f4",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/GameStoryScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

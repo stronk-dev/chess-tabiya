@@ -1,6 +1,7 @@
 <script lang="ts">
   import { renderStoryEvaluationTrajectory, reviewStoryTitle, storyEvidenceSourceLabels, storyMomentSelection } from "@chess-tabiya/runtime";
   import type { GameStory, StoryShare } from "./api.js";
+  import { onDestroy } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import { storyMoveLabel, storyReentryCopy } from "./chronology-copy.js";
   import { storyMomentLabel, storyOutcomeLabel } from "./learner-copy.js";
@@ -28,14 +29,28 @@
   let shareBusy = $state(false);
   let shareStatus = $state<string | undefined>();
   let shareError = $state<string | undefined>();
+  let exportBusy = $state(false);
+  let exportError = $state<string | undefined>();
+  let enteringNodeId = $state<string | undefined>();
+  let entryError = $state<{ readonly nodeId: string; readonly text: string } | undefined>();
+  let cardBusy = $state(false);
+  let cardError = $state<string | undefined>();
+  let exportRequest = 0;
+  let entryRequest = 0;
+  let cardRequest = 0;
+  let mounted = true;
   const selected = $derived(selectedMoments.find((moment) => moment.nodeId === selectedId) ?? selectedMoments[0]);
   const imported = $derived(story.source.kind === "native" ? undefined : story.source);
   const title = $derived(reviewStoryTitle(story));
   const sourceLabels = $derived(selected === undefined ? [] : storyEvidenceSourceLabels(selected));
 
   function selectMoment(nodeId: string): void {
+    if (enteringNodeId !== undefined) return;
     selectedId = nodeId;
     explanationRequest += 1;
+    cardRequest += 1;
+    cardBusy = false;
+    cardError = undefined;
     explainingNodeId = undefined;
     explanationError = undefined;
   }
@@ -58,11 +73,60 @@
   }
 
   async function downloadCard(): Promise<void> {
-    if (selected === undefined) return;
-    const card = storyCardDocument(title, selected);
-    const image = new Image(); image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(card.svg)}`; await image.decode();
-    const canvas = document.createElement("canvas"); canvas.width = card.width; canvas.height = card.height; canvas.getContext("2d")!.drawImage(image, 0, 0);
-    const anchor = document.createElement("a"); anchor.download = "tabiya-story.png"; anchor.href = canvas.toDataURL("image/png"); anchor.click();
+    if (selected === undefined || cardBusy) return;
+    const request = ++cardRequest;
+    const moment = selected;
+    cardBusy = true;
+    cardError = undefined;
+    try {
+      const card = storyCardDocument(title, moment);
+      const image = new Image();
+      image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(card.svg)}`;
+      await image.decode();
+      if (!mounted || request !== cardRequest || selected?.nodeId !== moment.nodeId) return;
+      const canvas = document.createElement("canvas");
+      canvas.width = card.width;
+      canvas.height = card.height;
+      const context = canvas.getContext("2d");
+      if (context === null) throw new Error("canvas unavailable");
+      context.drawImage(image, 0, 0);
+      const anchor = document.createElement("a");
+      anchor.download = "tabiya-story.png";
+      anchor.href = canvas.toDataURL("image/png");
+      anchor.click();
+    } catch {
+      if (mounted && request === cardRequest) cardError = "The story card could not be prepared. Try again.";
+    } finally {
+      if (mounted && request === cardRequest) cardBusy = false;
+    }
+  }
+
+  async function exportStory(): Promise<void> {
+    if (exportBusy) return;
+    const request = ++exportRequest;
+    exportBusy = true;
+    exportError = undefined;
+    try {
+      await onExport();
+    } catch {
+      if (mounted && request === exportRequest) exportError = "The game export could not be prepared. Try again.";
+    } finally {
+      if (mounted && request === exportRequest) exportBusy = false;
+    }
+  }
+
+  async function enterMoment(nodeId: string): Promise<void> {
+    if (enteringNodeId !== undefined) return;
+    const request = ++entryRequest;
+    enteringNodeId = nodeId;
+    entryError = undefined;
+    try {
+      await onEnter(nodeId);
+    } catch {
+      if (mounted && request === entryRequest) entryError = { nodeId, text: "This rehearsal could not be opened. The story is still here; try again." };
+    } finally {
+      if (mounted && request === entryRequest) enteringNodeId = undefined;
+    }
   }
 
   function readableDate(value: string): string {
@@ -87,8 +151,8 @@
       } catch {
         shareStatus = "Public story link created. Copy the visible URL manually; clipboard access was unavailable.";
       }
-    } catch (error) {
-      shareError = error instanceof Error ? error.message : String(error);
+    } catch {
+      shareError = "The public story link could not be created. Try again.";
     } finally {
       shareBusy = false;
     }
@@ -105,29 +169,40 @@
         shareUrl = undefined;
       }
       shareStatus = "Future reads through that public link are blocked. Copies already saved elsewhere cannot be recalled.";
-    } catch (error) {
-      shareError = error instanceof Error ? error.message : String(error);
+    } catch {
+      shareError = "That public link could not be revoked. It may still be public; try again.";
     } finally {
       shareBusy = false;
     }
   }
+  onDestroy(() => {
+    mounted = false;
+    explanationRequest += 1;
+    exportRequest += 1;
+    entryRequest += 1;
+    cardRequest += 1;
+  });
 </script>
 
 <main class="story" aria-labelledby="story-title" data-evidence-consumer="review.story">
   <header>
     <div><p class="eyebrow">{imported ? "Imported game" : "Played run"} / grounded story</p><h1 id="story-title">{imported ? `${imported.headers.White ?? "White"} – ${imported.headers.Black ?? "Black"}` : "Story of this run"}</h1><p>{storyOutcomeLabel(story.side, story.outcome)}</p></div>
-    <div class="actions"><button type="button" onclick={() => onExport()}>Export game + branches</button>{#if onShare}<button type="button" disabled={shareBusy} aria-describedby="story-share-lifetime" onclick={() => void createShare()}>Share story</button>{/if}<a href="/review">Back to review</a></div>
+    <div class="actions"><button type="button" disabled={exportBusy} aria-describedby={exportBusy ? "story-export-busy" : undefined} onclick={() => void exportStory()}>{exportBusy ? "Preparing export…" : "Export game + branches"}</button>{#if onShare}<button type="button" disabled={shareBusy} aria-describedby="story-share-lifetime" onclick={() => void createShare()}>Share story</button>{/if}<a href="/review">Back to review</a></div>
   </header>
+  {#if exportBusy}<p id="story-export-busy" role="status">Preparing the recorded game and its branches.</p>{/if}
+  {#if exportError}<p role="alert">{exportError}</p>{/if}
   {#if onShare}
     <section class="share-management" aria-labelledby="story-share-title">
       <div><h2 id="story-share-title">Public story links</h2><p id="story-share-lifetime">A public story link does not expire. Anyone with it can read the bounded story until you revoke the link or delete your account. Revoking blocks future reads; it cannot erase copies someone already saved.</p></div>
-      {#if shareUrl}<p class="pending">New public story: <a href={shareUrl}>{shareUrl}</a> <button type="button" onclick={() => void downloadCard()}>Download card PNG</button></p>{/if}
+      {#if shareUrl}<p class="pending">New public story: <a href={shareUrl}>{shareUrl}</a> <button type="button" disabled={cardBusy} aria-describedby={cardBusy ? "story-card-busy" : undefined} onclick={() => void downloadCard()}>{cardBusy ? "Preparing card…" : "Download card PNG"}</button></p>{/if}
+      {#if cardBusy}<p id="story-card-busy" role="status">Preparing the selected story moment as an image.</p>{/if}
+      {#if cardError}<p role="alert">{cardError}</p>{/if}
       {#if shareStatus}<p role="status" aria-live="polite" aria-atomic="true">{shareStatus}</p>{/if}
       {#if shareError}<p role="alert">{shareError}</p>{/if}
       {#if shares.length > 0}
         <ul aria-label="Story share links">
           {#each shares as share}
-            <li><span>Created {readableDate(share.createdAt)} · {share.revokedAt === null ? "public" : `revoked ${readableDate(share.revokedAt)}`}</span>{#if share.revokedAt === null && onRevoke}<button type="button" disabled={shareBusy} onclick={() => void revokeShare(share.id)}>Revoke this link</button>{/if}</li>
+            <li><span>Created {readableDate(share.createdAt)} · {share.revokedAt === null ? "public" : `revoked ${readableDate(share.revokedAt)}`}</span>{#if share.revokedAt === null && onRevoke}<button type="button" disabled={shareBusy} aria-describedby={shareBusy ? "story-share-lifetime" : undefined} onclick={() => void revokeShare(share.id)}>Revoke this link</button>{/if}</li>
           {/each}
         </ul>
       {:else}<p>No public story links yet.</p>{/if}
@@ -146,7 +221,9 @@
         {#if explanationError?.nodeId === selected.nodeId}<p class="voice-error" role="alert">{explanationError.text}</p>{/if}
         {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">{renderStoryEvaluationTrajectory(selected.evalBefore.centipawns, selected.evalAfter.centipawns)}</p>{/if}
         <p class="reentry-frame">{storyReentryCopy(story.side, story.outcome.result, selected.ply)}</p>
-        <button class="primary" type="button" disabled={!story.ready} aria-describedby={!story.ready ? "story-pending-reason" : undefined} onclick={() => onEnter(selected.entryNodeId)}>Pick it up from here</button>
+        <button class="primary" type="button" disabled={!story.ready || enteringNodeId !== undefined} aria-describedby={!story.ready ? "story-pending-reason" : enteringNodeId !== undefined ? "story-entry-busy" : undefined} onclick={() => void enterMoment(selected.entryNodeId)}>{enteringNodeId === selected.entryNodeId ? "Opening rehearsal…" : "Pick it up from here"}</button>
+        {#if enteringNodeId !== undefined}<span id="story-entry-busy" role="status">Opening one rehearsal from this recorded moment.</span>{/if}
+        {#if entryError?.nodeId === selected.entryNodeId}<p role="alert">{entryError.text}</p>{/if}
         {#if onVoice}<button type="button" disabled={explainingNodeId === selected.nodeId} onclick={() => void explainMoment(selected.nodeId)}>{explainingNodeId === selected.nodeId ? "Explaining…" : "Explain this moment"}</button>{/if}
         {#if !story.ready}<span id="story-pending-reason" class="visually-hidden">Wait for the game review to finish preparing this moment.</span>{/if}
       </article>
@@ -157,7 +234,7 @@
     {#if selection.shown < selection.total}<p id="story-moment-budget" class="selection-budget">Showing {selection.shown} of {selection.total} recorded moments selected for this story.</p>{/if}
     <ul class="rail" aria-label="Game story moments" aria-describedby={selection.shown < selection.total ? "story-moment-order story-moment-budget" : "story-moment-order"}>
       {#each selectedMoments as moment}
-        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectMoment(moment.nodeId)}><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>{storyMoveLabel(moment.ply).toLocaleLowerCase()}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
+        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} disabled={enteringNodeId !== undefined} aria-describedby={enteringNodeId !== undefined ? "story-entry-busy" : undefined} onclick={() => selectMoment(moment.nodeId)}><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>{storyMoveLabel(moment.ply).toLocaleLowerCase()}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
       {/each}
     </ul>
   </div>

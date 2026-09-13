@@ -19508,3 +19508,15 @@ learner-facing failure. A replay failure explicitly says the recorded comparison
 regression drives pending, duplicate, rejected and retry-success states for both actions. `make
 verify-software` passes 188 files / 1,195 tests and the production build; `make test-browser` passes
 all 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Story actions preserve truth and recover safely ([[D3207]])
+
+The shipped Story surface previously printed raw share/revoke errors and gave export, re-entry and
+card generation no pending or failure state. Repeated actions could duplicate side effects. Export,
+re-entry, share creation, revocation and card generation now fence duplicate activation, expose
+pending work and recover with action-specific copy. Re-entry failure says the Story remains;
+revocation failure says the link may remain public; unfinished card generation cannot download a
+different selected moment or complete after teardown. Backend, filesystem and decoder details never
+render. The regression drives duplicate, failure and retry behavior across all five actions. `make
+verify-software` passes 188 files / 1,196 tests and the production build; `make test-browser` passes
+all 64 required journeys with one explicitly optional Maia latency measurement skipped.
