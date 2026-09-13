@@ -19846,3 +19846,16 @@ valid departed completion preserves its server-side rehearsal without reopening 
 Sequential canonical verification passes: `make verify-software` is green across 190 files / 1,248
 tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
 passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Library artifacts retain their run through download and deletion ([[D3233]])
+
+Library previously accepted duplicate PGN requests, surfaced raw failures, trusted any deletion
+preview, and read the mutable `runDeletion` selection after confirmation returned. A late response
+could therefore download after departure or remove a newer Library projection. Download, preview
+and confirmation now capture exact run, digest, request and route generation; expose one pending
+operation; validate preview scope; preserve bounded retry state; and make departed presentation
+inert. Successful deletion still clears the exact run's browser-local keys. Crossed-preview,
+duplicate, failure/retry and leave-return falsifiers pass. Sequential canonical verification
+passes: `make verify-software` is green across 191 files / 1,254 tests plus type, performance,
+schema, manifest and production-build checks; `make test-browser` passes all 64 required journeys
+with one explicitly optional Maia latency measurement skipped.

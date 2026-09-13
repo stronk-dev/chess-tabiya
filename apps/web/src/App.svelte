@@ -74,6 +74,7 @@
   } from "./lib/session-controller.js";
   import { WriterSession, type KeyValueStorage } from "./lib/writer-session.js";
   import { assertStoryForkResponse, assertStoryRewindResponse } from "./lib/story-reentry-response.js";
+  import { assertRunDeletionPreview } from "./lib/run-deletion-preview.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -150,7 +151,11 @@
   let runs: readonly RunSummary[] = $state([]);
   let runDeletion = $state<{ readonly run: RunSummary; readonly preview: DeletionPreview } | undefined>();
   let runDeletionError = $state<string | undefined>();
-  let runArtifactError = $state<string | undefined>();
+  let runDeletionBusy: { readonly kind: "preview" | "confirm"; readonly runId: string } | undefined = $state();
+  let runDeletionGeneration = 0;
+  let runArtifactError: { readonly runId: string; readonly text: string } | undefined = $state();
+  let runArtifactBusyId: string | undefined = $state();
+  let runArtifactGeneration = 0;
   let attempts: readonly ProgressAttempt[] = $state([]);
   let dueSchedules: readonly ProgressSchedule[] = $state([]);
   let returnActionError: string | undefined = $state();
@@ -1296,23 +1301,57 @@
   }
 
   async function reviewRunDeletion(run: RunSummary): Promise<void> {
+    if (runDeletionBusy !== undefined) return;
+    const generation = loadGeneration;
+    const action = ++runDeletionGeneration;
+    const subject = run;
+    runDeletionBusy = { kind: "preview", runId: subject.id };
     runDeletionError = undefined;
     try {
       if (api.runDeletionPreview === undefined) throw new Error("Run deletion is unavailable.");
-      runDeletion = { run, preview: await api.runDeletionPreview(run.id) };
-    } catch (error) { runDeletionError = error instanceof Error ? error.message : String(error); }
+      const preview = await api.runDeletionPreview(subject.id);
+      assertRunDeletionPreview(preview, subject.id);
+      if (generation === loadGeneration && action === runDeletionGeneration && route.name === "library") {
+        runDeletion = { run: subject, preview };
+      }
+    } catch {
+      if (generation === loadGeneration && action === runDeletionGeneration && route.name === "library") {
+        runDeletionError = "The deletion effects could not be loaded. The game is unchanged; try again.";
+      }
+    } finally {
+      if (action === runDeletionGeneration) runDeletionBusy = undefined;
+    }
   }
 
   async function confirmRunDeletion(): Promise<void> {
-    if (runDeletion === undefined || api.deleteRun === undefined) return;
+    if (runDeletion === undefined || api.deleteRun === undefined || runDeletionBusy !== undefined) return;
+    const generation = loadGeneration;
+    const action = ++runDeletionGeneration;
+    const subject = runDeletion;
+    runDeletionBusy = { kind: "confirm", runId: subject.run.id };
     runDeletionError = undefined;
     try {
-      await api.deleteRun(runDeletion.run.id, runDeletion.preview.digest);
-      try { clearRunLocalData(globalThis.localStorage, runDeletion.run.id); } catch { /* storage can be unavailable */ }
-      runs = runs.filter((run) => run.id !== runDeletion!.run.id);
-      runSelection = { shown: runs.length, total: Math.max(0, runSelection.total - 1) };
-      runDeletion = undefined;
-    } catch (error) { runDeletionError = error instanceof Error ? error.message : String(error); }
+      await api.deleteRun(subject.run.id, subject.preview.digest);
+      try { clearRunLocalData(globalThis.localStorage, subject.run.id); } catch { /* storage can be unavailable */ }
+      if (generation === loadGeneration && action === runDeletionGeneration && route.name === "library") {
+        runs = runs.filter((candidate) => candidate.id !== subject.run.id);
+        runSelection = { shown: runs.length, total: Math.max(0, runSelection.total - 1) };
+        runDeletion = undefined;
+      }
+    } catch {
+      if (generation === loadGeneration && action === runDeletionGeneration && route.name === "library" && runDeletion?.run.id === subject.run.id) {
+        runDeletionError = "This game could not be deleted. It is unchanged; review the effects and try again.";
+      }
+    } finally {
+      if (action === runDeletionGeneration) runDeletionBusy = undefined;
+    }
+  }
+
+  function cancelRunDeletion(): void {
+    if (runDeletionBusy !== undefined) return;
+    runDeletionGeneration += 1;
+    runDeletion = undefined;
+    runDeletionError = undefined;
   }
 
   function savePgn(download: { readonly text: string; readonly filename: string }): void {
@@ -1333,11 +1372,22 @@
   }
 
   async function exportRunPgn(runId: string): Promise<void> {
+    if (runArtifactBusyId !== undefined) return;
+    const generation = loadGeneration;
+    const action = ++runArtifactGeneration;
+    runArtifactBusyId = runId;
     runArtifactError = undefined;
     try {
-      savePgn(await api.pgn(runId));
-    } catch (error) {
-      runArtifactError = error instanceof Error ? error.message : String(error);
+      const download = await api.pgn(runId);
+      if (generation === loadGeneration && action === runArtifactGeneration && route.name === "library") {
+        savePgn(download);
+      }
+    } catch {
+      if (generation === loadGeneration && action === runArtifactGeneration && route.name === "library") {
+        runArtifactError = { runId, text: "This PGN could not be prepared. The game is unchanged; try the download again." };
+      }
+    } finally {
+      if (action === runArtifactGeneration) runArtifactBusyId = undefined;
     }
   }
 
@@ -2560,10 +2610,12 @@
       <section><h2>My games</h2>
         <p>Download a game as standard PGN for chess tools, or open it to choose particular branches.</p>
         <p class="honest">Deleting a run removes Tabiya's live copy immediately. Shared runs may remain as read-only history for collaborators, and deployment backups may retain an older copy until their configured retention period ends.</p>
-        <ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{runTitle(run)}</button> <small>{run.branchCount} branches</small> <button type="button" onclick={() => void exportRunPgn(run.id)}>Download PGN</button> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No saved games yet.</li>{/each}</ul>
+        <ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{runTitle(run)}</button> <small>{run.branchCount} branches</small> <button type="button" disabled={runArtifactBusyId !== undefined} aria-describedby={runArtifactBusyId !== undefined ? "library-artifact-busy" : undefined} onclick={() => void exportRunPgn(run.id)}>{runArtifactBusyId === run.id ? "Preparing PGN…" : "Download PGN"}</button> {#if run.viewerRole === "host"}<button type="button" disabled={runDeletionBusy !== undefined} aria-describedby={runDeletionBusy !== undefined ? "library-deletion-busy" : undefined} onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No saved games yet.</li>{/each}</ul>
+        {#if runArtifactBusyId !== undefined}<p id="library-artifact-busy" role="status">Preparing one game download.</p>{/if}
+        {#if runDeletionBusy !== undefined}<p id="library-deletion-busy" role="status">{runDeletionBusy.kind === "preview" ? "Loading the deletion effects…" : "Deleting this game…"}</p>{/if}
         {#if runSelection.shown<runSelection.total}<p id="library-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved games and rehearsals.</p><button type="button" disabled={runPageBusy} aria-describedby="library-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more"}</button>{/if}
         {#if runPageError}<p role="alert">{runPageError}</p>{/if}
-        {#if runArtifactError}<p role="alert">{runArtifactError}</p>{/if}
+        {#if runArtifactError}<p role="alert">{runArtifactError.text}</p>{/if}
         {#if runDeletion}
           <aside class="deletion-card">
             <StatusAnnouncement message={`Deletion effects loaded for ${runTitle(runDeletion.run)}. Review the listed permanent, retained, and revoked records before confirming.`} />
@@ -2572,7 +2624,7 @@
             {#each runDeletion.preview.tombstone as effect}<p>{effect.label}</p>{/each}
             {#each runDeletion.preview.revoke as effect}<p>{effect.label}</p>{/each}
             <p class="honest">{runDeletion.preview.backupNotice}</p>
-            <div class="row-actions"><button type="button" onclick={() => void confirmRunDeletion()}>Confirm deletion</button><button type="button" onclick={() => runDeletion = undefined}>Cancel</button></div>
+            <div class="row-actions"><button type="button" disabled={runDeletionBusy !== undefined} aria-describedby={runDeletionBusy !== undefined ? "library-deletion-busy" : undefined} onclick={() => void confirmRunDeletion()}>{runDeletionBusy?.kind === "confirm" ? "Deleting…" : "Confirm deletion"}</button><button type="button" disabled={runDeletionBusy !== undefined} aria-describedby={runDeletionBusy !== undefined ? "library-deletion-busy" : undefined} onclick={cancelRunDeletion}>Cancel</button></div>
           </aside>
         {/if}
         {#if runDeletionError}<p role="alert">{runDeletionError}</p>{/if}

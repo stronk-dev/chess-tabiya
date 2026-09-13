@@ -37,6 +37,13 @@ Account region states that boundary before download and links to Library, where
 each visible game can be downloaded directly as standard PGN without opening the
 run. Branch-selective export remains available inside the run.
 
+Each Library artifact action retains the run that initiated it. PGN preparation, deletion-preview
+loading, and deletion confirmation are single-flight and visibly pending. A preview must carry the
+requested run scope and a usable digest before the confirmation can appear; the confirmation keeps
+that exact run/digest pair across its await. Provider diagnostics never become learner copy.
+Finishing after Library is left cannot trigger a late download or mutate a newly loaded Library
+projection, while a successful deletion still clears addressable browser-local run data.
+
 Stored run text is not silently dropped. A valid document is emitted as parsed JSON;
 invalid stored JSON uses a lossless raw UTF-8 arm with a typed diagnostic.
 

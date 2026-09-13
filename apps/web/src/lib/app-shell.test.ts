@@ -29,6 +29,7 @@ import type {
   RunSummary,
   ShapeDraft,
   GameStory,
+  DeletionPreview,
 } from "./api.js";
 import { saveAssistance } from "./assistance-preference.js";
 import { HistoryRouter } from "./router.js";
@@ -200,10 +201,12 @@ function target(): HTMLElement {
 function deferred<T>(): {
   readonly promise: Promise<T>;
   readonly resolve: (value: T) => void;
+  readonly reject: (reason?: unknown) => void;
 } {
   let resolve!: (value: T) => void;
-  const promise = new Promise<T>((resolvePromise) => { resolve = resolvePromise; });
-  return { promise, resolve };
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((resolvePromise, rejectPromise) => { resolve = resolvePromise; reject = rejectPromise; });
+  return { promise, resolve, reject };
 }
 
 function key(value: string, options: KeyboardEventInit = {}): KeyboardEvent {
@@ -483,6 +486,163 @@ describe("application shell", () => {
       writerId,
     ));
     expect(window.location.pathname).toBe("/review");
+    await unmount(component);
+  });
+
+  it("owns one Library PGN download and keeps provider failures out of learner copy", async () => {
+    history.replaceState(null, "", "/library");
+    const failed = deferred<{ readonly filename: string; readonly text: string }>();
+    const pgn = vi.fn()
+      .mockImplementationOnce(() => failed.promise)
+      .mockResolvedValueOnce({ filename: "route-run.pgn", text: "[Event \"Tabiya\"]\n" });
+    const createObjectURL = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:library-export");
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), pgn }, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    const download = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Download PGN");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    download.click();
+    await vi.waitFor(() => expect(download.textContent).toBe("Preparing PGN…"));
+    download.click();
+    expect(pgn).toHaveBeenCalledTimes(1);
+    failed.reject(new Error("private PGN storage detail"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This PGN could not be prepared."));
+    expect(document.body.textContent).not.toContain("private PGN storage detail");
+    expect(download.disabled).toBe(false);
+
+    download.click();
+    await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1));
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    click.mockRestore();
+    createObjectURL.mockRestore();
+    await unmount(component);
+  });
+
+  it("does not start a Library download after the learner leaves", async () => {
+    history.replaceState(null, "", "/library");
+    const pending = deferred<{ readonly filename: string; readonly text: string }>();
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), pgn: vi.fn(() => pending.promise) }, router, storage: new MemoryStorage() },
+    });
+
+    const download = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Download PGN");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    download.click();
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    pending.resolve({ filename: "departed.pgn", text: "[Event \"Departed\"]\n" });
+    await tick();
+    await Promise.resolve();
+    expect(click).not.toHaveBeenCalled();
+    click.mockRestore();
+    await unmount(component);
+  });
+
+  it("binds Library deletion preview and confirmation to one run and bounded retry state", async () => {
+    history.replaceState(null, "", "/library");
+    const preview: DeletionPreview = {
+      version: 1,
+      scope: { kind: "run", runId: runSummary.id },
+      digest,
+      hardDelete: [{ kind: "run", count: 1, objectIds: [runSummary.id], label: "This private run is permanently deleted" }],
+      tombstone: [], revoke: [], retainedPublished: [],
+      backupNotice: "Live data is removed immediately.",
+    };
+    const runDeletionPreview = vi.fn()
+      .mockResolvedValueOnce({ ...preview, scope: { kind: "run", runId: "crossed-run" } })
+      .mockResolvedValueOnce(preview);
+    const failedDelete = deferred<void>();
+    const deleteRun = vi.fn()
+      .mockImplementationOnce(() => failedDelete.promise)
+      .mockResolvedValueOnce(undefined);
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), runDeletionPreview, deleteRun }, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    const deleteButton = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Delete this run");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    deleteButton.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The deletion effects could not be loaded."));
+    expect(document.body.textContent).not.toContain("crossed-run");
+    deleteButton.click();
+    const confirm = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Confirm deletion");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    confirm.click();
+    await vi.waitFor(() => expect(confirm.textContent).toBe("Deleting…"));
+    confirm.click();
+    expect(deleteRun).toHaveBeenCalledTimes(1);
+    expect(deleteRun).toHaveBeenCalledWith(runSummary.id, digest);
+    failedDelete.reject(new Error("private deletion database detail"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This game could not be deleted."));
+    expect(document.body.textContent).not.toContain("private deletion database detail");
+    expect(document.body.textContent).toContain("This private run is permanently deleted");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Confirm deletion")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("No saved games yet."));
+    expect(deleteRun).toHaveBeenCalledTimes(2);
+    await unmount(component);
+  });
+
+  it("does not remove a newly loaded Library projection when an old deletion settles", async () => {
+    history.replaceState(null, "", "/library");
+    const preview: DeletionPreview = {
+      version: 1,
+      scope: { kind: "run", runId: runSummary.id },
+      digest,
+      hardDelete: [], tombstone: [], revoke: [], retainedPublished: [],
+      backupNotice: "Live data is removed immediately.",
+    };
+    const pendingDelete = deferred<void>();
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: { ...api(), async runDeletionPreview() { return preview; }, deleteRun: vi.fn(() => pendingDelete.promise) },
+        router,
+        storage: new MemoryStorage(),
+      },
+    });
+
+    const deleteButton = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Delete this run");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    deleteButton.click();
+    const confirm = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Confirm deletion");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    confirm.click();
+    await vi.waitFor(() => expect(confirm.textContent).toBe("Deleting…"));
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    router.navigate("/library");
+    await vi.waitFor(() => expect(document.body.textContent).toContain(String(pack.title)));
+    pendingDelete.resolve();
+    await tick();
+    await Promise.resolve();
+    expect(window.location.pathname).toBe("/library");
+    expect(document.body.textContent).toContain(String(pack.title));
     await unmount(component);
   });
 
