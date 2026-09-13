@@ -66,6 +66,25 @@
     | { readonly nodeId: string; readonly branchId?: string }
     | { readonly checkpointId: string; readonly branchId?: never };
 
+  interface MarkSaveInput {
+    readonly nodeId: string;
+    readonly branchId: string;
+    readonly scope: "position" | "branch";
+    readonly shapes: readonly Pick<RunMark, "brush" | "orig" | "dest">[];
+  }
+
+  interface MarkRescopeInput {
+    readonly nodeId: string;
+    readonly branchId: string;
+    readonly fromScope: "position" | "branch";
+    readonly toScope: "position" | "branch";
+  }
+
+  type FailedMarkOperation =
+    | { readonly kind: "load"; readonly runId: string; readonly nodeId: string }
+    | { readonly kind: "save"; readonly runId: string; readonly input: MarkSaveInput }
+    | { readonly kind: "rescope"; readonly runId: string; readonly input: MarkRescopeInput };
+
   interface Props {
     pack?: DrillPackDefinition | undefined;
     relatedPack?: DrillPackDefinition | undefined;
@@ -102,8 +121,8 @@
     onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
     onLoadMarks?: (() => Promise<readonly RunMark[]>) | undefined;
-    onSaveMarks?: ((input: { readonly nodeId:string;readonly branchId:string;readonly scope:"position"|"branch";readonly shapes:readonly Pick<RunMark,"brush"|"orig"|"dest">[] }) => Promise<readonly RunMark[]>) | undefined;
-    onRescopeMarks?: ((input:{readonly nodeId:string;readonly branchId:string;readonly fromScope:"position"|"branch";readonly toScope:"position"|"branch"})=>Promise<readonly RunMark[]>)|undefined;
+    onSaveMarks?: ((input: MarkSaveInput) => Promise<readonly RunMark[]>) | undefined;
+    onRescopeMarks?: ((input: MarkRescopeInput) => Promise<readonly RunMark[]>) | undefined;
     onStop: () => void;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
@@ -267,6 +286,11 @@
   let ownMarks: readonly RunMark[] = $state([]);
   let markScope: "position" | "branch" = $state("position");
   let markTimer: ReturnType<typeof setTimeout> | undefined;
+  let markRequest = 0;
+  let loadedMarksRunId: string | undefined;
+  let markBusy: { readonly request: number; readonly kind: FailedMarkOperation["kind"] } | undefined = $state();
+  let markError: { readonly text: string; readonly retryLabel: string } | undefined = $state();
+  let failedMarkOperation: FailedMarkOperation | undefined = $state();
   let guideOpenedForRunId: string | undefined = $state();
   let analysisRequestedNodeId: string | undefined = $state();
   let analysisRequestError: { readonly nodeId: string; readonly text: string } | undefined = $state();
@@ -409,11 +433,85 @@
     return checkpointLabels[checkpointId] ?? "Recorded checkpoint";
   }
 
+  async function loadMarks(): Promise<void> {
+    if (onLoadMarks === undefined) return;
+    const runId = run.id;
+    const nodeId = displayedNode.id;
+    const request = ++markRequest;
+    markBusy = { request, kind: "load" };
+    markError = undefined;
+    failedMarkOperation = undefined;
+    try {
+      const marks = await onLoadMarks();
+      if (request !== markRequest || run.id !== runId) return;
+      ownMarks = marks;
+      markBusy = undefined;
+    } catch {
+      if (request !== markRequest || run.id !== runId) return;
+      markBusy = undefined;
+      markError = { text: "Saved board marks are unavailable right now.", retryLabel: "Retry loading marks" };
+      failedMarkOperation = { kind: "load", runId, nodeId };
+    }
+  }
+
+  async function persistMarks(input: MarkSaveInput, runId: string, request = ++markRequest): Promise<void> {
+    if (onSaveMarks === undefined || request !== markRequest || run.id !== runId) return;
+    markBusy = { request, kind: "save" };
+    markError = undefined;
+    failedMarkOperation = undefined;
+    try {
+      const marks = await onSaveMarks(input);
+      if (request !== markRequest || run.id !== runId) return;
+      ownMarks = marks;
+      markBusy = undefined;
+    } catch {
+      if (request !== markRequest || run.id !== runId) return;
+      markBusy = undefined;
+      markError = { text: "These board marks were not saved. They remain visible on this screen.", retryLabel: "Retry saving marks" };
+      failedMarkOperation = { kind: "save", runId, input };
+    }
+  }
+
+  async function rescopeMarks(input: MarkRescopeInput, runId: string, request = ++markRequest): Promise<void> {
+    if (onRescopeMarks === undefined || request !== markRequest || run.id !== runId) return;
+    markBusy = { request, kind: "rescope" };
+    markError = undefined;
+    failedMarkOperation = undefined;
+    try {
+      const marks = await onRescopeMarks(input);
+      if (request !== markRequest || run.id !== runId) return;
+      ownMarks = marks;
+      markBusy = undefined;
+      if (displayedNode.id === input.nodeId && run.activeCursor.branchId === input.branchId) {
+        markScope = input.toScope;
+        try { globalThis.localStorage?.setItem(`tabiya:mark-scope:${run.id}`, markScope); } catch { /* local preference only */ }
+      }
+    } catch {
+      if (request !== markRequest || run.id !== runId) return;
+      markBusy = undefined;
+      markError = { text: "Those board marks could not be moved to the other scope.", retryLabel: "Retry moving marks" };
+      failedMarkOperation = { kind: "rescope", runId, input };
+    }
+  }
+
+  function retryMarkOperation(): void {
+    const failed = failedMarkOperation;
+    if (failed === undefined || failed.runId !== run.id) return;
+    if (failed.kind === "load") {
+      void loadMarks();
+    } else if (failed.kind === "save") {
+      void persistMarks(failed.input, failed.runId);
+    } else {
+      void rescopeMarks(failed.input, failed.runId);
+    }
+  }
+
   function changedMarks(shapes: readonly DrawShape[]): void {
     if (onSaveMarks === undefined || previewNodeId !== undefined) return;
     if (markTimer !== undefined) clearTimeout(markTimer);
     const nodeId = displayedNode.id;
     const branchId = run.activeCursor.branchId;
+    const runId = run.id;
     const scope = markScope;
     const scopeKey = displayedMarkKey;
     const persistable: readonly Pick<RunMark,"brush"|"orig"|"dest">[] = shapes.slice(0,64).flatMap((shape) =>
@@ -425,20 +523,30 @@
       ...ownMarks.filter((mark) => mark.scope !== scope || mark.scopeKey !== scopeKey),
       ...persistable.map((shape) => ({ ...shape, scope, scopeKey, at })),
     ];
+    const request = ++markRequest;
+    markBusy = { request, kind: "save" };
+    markError = undefined;
+    failedMarkOperation = undefined;
     markTimer = setTimeout(() => {
-      void onSaveMarks({ nodeId, branchId, scope, shapes: persistable }).then((marks)=>ownMarks=marks);
-    },400);
+      void persistMarks({ nodeId, branchId, scope, shapes: persistable }, runId, request);
+    }, 400);
   }
 
   function setMarkScope(event: Event): void {
+    if (markBusy !== undefined) return;
     markScope = (event.currentTarget as HTMLSelectElement).value as "position" | "branch";
     try { globalThis.localStorage?.setItem(`tabiya:mark-scope:${run.id}`, markScope); } catch { /* local preference only */ }
   }
 
-  function rescopeVisibleMarks():void{
-    if(onRescopeMarks===undefined||displayedMarks.length===0)return;
-    const toScope=markScope==="position"?"branch":"position";
-    void onRescopeMarks({nodeId:displayedNode.id,branchId:run.activeCursor.branchId,fromScope:markScope,toScope}).then((marks)=>{ownMarks=marks;markScope=toScope;try{globalThis.localStorage?.setItem(`tabiya:mark-scope:${run.id}`,markScope);}catch{/* local preference only */}});
+  function rescopeVisibleMarks(): void {
+    if (onRescopeMarks === undefined || displayedMarks.length === 0 || markBusy !== undefined) return;
+    const input: MarkRescopeInput = {
+      nodeId: displayedNode.id,
+      branchId: run.activeCursor.branchId,
+      fromScope: markScope,
+      toScope: markScope === "position" ? "branch" : "position",
+    };
+    void rescopeMarks(input, run.id);
   }
   let guardEvent = $derived(
     [...run.events].reverse().find(
@@ -1152,7 +1260,6 @@
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
     assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
     workflowPreset = loadWorkflowPreset(activeAssistanceProfile, preferenceStorage());
-    if (onLoadMarks !== undefined) void onLoadMarks().then((marks)=>ownMarks=marks);
     try { const saved=globalThis.localStorage?.getItem(`tabiya:mark-scope:${run.id}`);if(saved==="branch")markScope="branch"; } catch { /* local preference only */ }
     try {
       const stored = JSON.parse(globalThis.localStorage?.getItem(`tabiya:branch-fold:v1:${run.id}`) ?? "[]");
@@ -1172,6 +1279,7 @@
     unregisterKeyboard?.();
     if (replayTimer !== undefined) clearInterval(replayTimer);
     if (markTimer !== undefined) clearTimeout(markTimer);
+    markRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1193,6 +1301,21 @@
       boardMoveAnnouncement = undefined;
       boardFocusRequested = false;
     }
+  });
+
+  $effect(() => {
+    if (loadedMarksRunId === run.id) return;
+    loadedMarksRunId = run.id;
+    if (markTimer !== undefined) {
+      clearTimeout(markTimer);
+      markTimer = undefined;
+    }
+    markRequest += 1;
+    ownMarks = [];
+    markBusy = undefined;
+    markError = undefined;
+    failedMarkOperation = undefined;
+    void loadMarks();
   });
 
   $effect(() => {
@@ -1518,10 +1641,16 @@
 
           <section class="companion-section action-seat" class:compact-active={compactTab === "timeline"} aria-label="Run actions">
         <div class="mark-controls" aria-label="Board marks">
-          <label>Marks stay with <select value={markScope} onchange={setMarkScope}><option value="position">this position</option><option value="branch">this line</option></select></label>
+          <label>Marks stay with <select value={markScope} disabled={markBusy !== undefined} onchange={setMarkScope}><option value="position">this position</option><option value="branch">this line</option></select></label>
           <span>{displayedMarks.length}/64 marks</span>
-          <button type="button" disabled={displayedMarks.length===0||onRescopeMarks===undefined} aria-describedby={displayedMarks.length===0||onRescopeMarks===undefined?"rescope-marks-disabled":undefined} onclick={rescopeVisibleMarks}>Move marks to the other scope</button>
-          {#if displayedMarks.length===0||onRescopeMarks===undefined}<span id="rescope-marks-disabled">Draw a mark before moving it to another scope.</span>{/if}
+          <button type="button" disabled={displayedMarks.length === 0 || onRescopeMarks === undefined || markBusy !== undefined} aria-describedby={displayedMarks.length === 0 || onRescopeMarks === undefined ? "rescope-marks-disabled" : undefined} onclick={rescopeVisibleMarks}>{markBusy?.kind === "rescope" ? "Moving marks…" : "Move marks to the other scope"}</button>
+          {#if displayedMarks.length === 0 || onRescopeMarks === undefined}<span id="rescope-marks-disabled">Draw a mark before moving it to another scope.</span>{/if}
+          {#if markBusy?.kind === "load"}<span role="status">Loading saved marks…</span>{/if}
+          {#if markBusy?.kind === "save"}<span role="status">Saving marks…</span>{/if}
+          {#if markError !== undefined}
+            <span role="alert">{markError.text}</span>
+            <button type="button" onclick={retryMarkOperation}>{markError.retryLabel}</button>
+          {/if}
         </div>
         <div class="quick-actions" aria-label="Run actions">
           <HonestControl disabled={!canWrite} reasonId="drill-fork-readonly" reason="This read-only view cannot create a branch.">

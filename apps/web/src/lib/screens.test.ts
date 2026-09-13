@@ -14,6 +14,7 @@ import {
   rewind,
   transitionObjective,
   type DrillRun,
+  type RunMark,
 } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -63,6 +64,20 @@ const registerKeyboardRegion: RegisterKeyboardRegion = (_element, handler) => {
     if (regionKeyboard === handler) regionKeyboard = undefined;
   };
 };
+
+function deferred<T>(): {
+  readonly promise: Promise<T>;
+  readonly resolve: (value: T) => void;
+  readonly reject: (reason?: unknown) => void;
+} {
+  let resolve!: (value: T) => void;
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((resolvePromise, rejectPromise) => {
+    resolve = resolvePromise;
+    reject = rejectPromise;
+  });
+  return { promise, resolve, reject };
+}
 
 function expectDisabledControlsExplained(): void {
   for (const control of document.querySelectorAll<HTMLElement>(
@@ -362,6 +377,136 @@ describe("Layer 3 screens", () => {
     expect(chessground.configs).toHaveLength(1);
     await unmount(component);
     vi.useRealTimers();
+  });
+
+  it("keeps the newest board marks when an older save response arrives last", async () => {
+    vi.useFakeTimers();
+    const run = branchedRun();
+    const first = deferred<readonly RunMark[]>();
+    const second = deferred<readonly RunMark[]>();
+    const onSaveMarks = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockImplementationOnce(() => second.promise);
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
+      onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
+      onExport: vi.fn(), onStop: vi.fn(), onLoadMarks: async () => [], onSaveMarks,
+      registerKeyboardRegion,
+    } });
+    await tick();
+
+    const scopeKey = run.nodes.at(-1)!.transposeKey;
+    const oneMark: readonly RunMark[] = [
+      { scope: "position", scopeKey, brush: "red", orig: "a1", dest: "h8", at },
+    ];
+    const twoMarks: readonly RunMark[] = [
+      ...oneMark,
+      { scope: "position", scopeKey, brush: "blue", orig: "b1", dest: "b8", at },
+    ];
+    chessground.configs.at(-1)!.drawable!.onChange!([{ orig: "a1", dest: "h8", brush: "red" }]);
+    vi.advanceTimersByTime(400);
+    await tick();
+    chessground.configs.at(-1)!.drawable!.onChange!([
+      { orig: "a1", dest: "h8", brush: "red" },
+      { orig: "b1", dest: "b8", brush: "blue" },
+    ]);
+    vi.advanceTimersByTime(400);
+    await tick();
+
+    second.resolve(twoMarks);
+    await tick();
+    first.resolve(oneMark);
+    await tick();
+    expect(document.querySelector('[aria-label="Board marks"]')?.textContent).toContain("2/64 marks");
+    expect(onSaveMarks).toHaveBeenCalledTimes(2);
+
+    await unmount(component);
+    vi.useRealTimers();
+  });
+
+  it("keeps failed optimistic marks visible and retries without exposing provider errors", async () => {
+    vi.useFakeTimers();
+    const run = branchedRun();
+    const persisted: readonly RunMark[] = [
+      { scope: "position", scopeKey: run.nodes.at(-1)!.transposeKey, brush: "green", orig: "c1", dest: "c8", at },
+    ];
+    const onSaveMarks = vi.fn()
+      .mockRejectedValueOnce(new Error("sqlite write failed at /private/data"))
+      .mockResolvedValueOnce(persisted);
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
+      onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
+      onExport: vi.fn(), onStop: vi.fn(), onLoadMarks: async () => [], onSaveMarks,
+      registerKeyboardRegion,
+    } });
+    await tick();
+
+    chessground.configs.at(-1)!.drawable!.onChange!([{ orig: "c1", dest: "c8", brush: "green" }]);
+    await vi.advanceTimersByTimeAsync(400);
+    await tick();
+    const alert = document.querySelector<HTMLElement>('[aria-label="Board marks"] [role="alert"]')!;
+    expect(alert.textContent).toContain("remain visible on this screen");
+    expect(alert.textContent).not.toContain("sqlite");
+    expect(document.querySelector('[aria-label="Board marks"]')?.textContent).toContain("1/64 marks");
+
+    [...document.querySelectorAll<HTMLButtonElement>('[aria-label="Board marks"] button')]
+      .find((button) => button.textContent === "Retry saving marks")!
+      .click();
+    await Promise.resolve();
+    await tick();
+    expect(onSaveMarks).toHaveBeenCalledTimes(2);
+    expect(document.querySelector('[aria-label="Board marks"] [role="alert"]')).toBeNull();
+    expect(document.querySelector('[aria-label="Board marks"]')?.textContent).toContain("1/64 marks");
+
+    await unmount(component);
+    vi.useRealTimers();
+  });
+
+  it("recovers mark loading and rescoping through the same visible persistence state", async () => {
+    const run = branchedRun();
+    const node = run.nodes.at(-1)!;
+    const positionMark: RunMark = {
+      scope: "position", scopeKey: node.transposeKey, brush: "yellow", orig: "d4", at,
+    };
+    const branchMark: RunMark = {
+      ...positionMark, scope: "branch", scopeKey: `${run.activeCursor.branchId}:${node.id}`,
+    };
+    const onLoadMarks = vi.fn()
+      .mockRejectedValueOnce(new Error("private load detail"))
+      .mockResolvedValueOnce([positionMark]);
+    const onRescopeMarks = vi.fn()
+      .mockRejectedValueOnce(new Error("private rescope detail"))
+      .mockResolvedValueOnce([branchMark]);
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
+      onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
+      onExport: vi.fn(), onStop: vi.fn(), onLoadMarks, onSaveMarks: vi.fn(), onRescopeMarks,
+      registerKeyboardRegion,
+    } });
+    const markControls = document.querySelector<HTMLElement>('[aria-label="Board marks"]')!;
+    await vi.waitFor(() => expect(markControls.querySelector('[role="alert"]')?.textContent).toContain("Saved board marks are unavailable"));
+    expect(markControls.textContent).not.toContain("private load detail");
+    [...markControls.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Retry loading marks")!
+      .click();
+    await vi.waitFor(() => expect(markControls.textContent).toContain("1/64 marks"));
+
+    [...markControls.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Move marks to the other scope")!
+      .click();
+    await vi.waitFor(() => expect(markControls.querySelector('[role="alert"]')?.textContent).toContain("could not be moved"));
+    expect(markControls.textContent).not.toContain("private rescope detail");
+    [...markControls.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Retry moving marks")!
+      .click();
+    await vi.waitFor(() => expect(onRescopeMarks).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(markControls.querySelector<HTMLSelectElement>("select")?.value).toBe("branch"));
+    expect(markControls.textContent).toContain("1/64 marks");
+
+    await unmount(component);
   });
 
   it("keeps read-only followers on inspect-only controls without write errors", async () => {

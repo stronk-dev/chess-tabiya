@@ -19485,3 +19485,15 @@ teardown all revoke the URL. External and browser synthesis failures end in posi
 copy without provider diagnostics. `make test-software` passes 188 files / 1,191 tests and `make
 test-browser` passes all 64 required production journeys with the one explicitly optional Maia
 latency measurement skipped.
+
+## 2026-09-13 — Board-mark persistence is ordered and recoverable ([[D3205]])
+
+The drill previously let mount-time load, debounced replacement and rescope responses overwrite the
+same local mark set without request identity; the oldest response could therefore erase the newest
+gesture, and rejection escaped without a retry or learner-visible persistence state. All three
+operations now share one run-scoped sequence. A new gesture invalidates older reads/writes, changing
+runs cancels pending work and reloads the new set, and a response can change scope only while its
+original position and branch remain visible. Failed optimistic marks stay on screen with a safe
+retry and no provider diagnostics. `make verify-software` passes 188 files / 1,194 tests and the
+production build; `make test-browser` passes all 64 required journeys with one explicitly optional
+Maia latency measurement skipped.

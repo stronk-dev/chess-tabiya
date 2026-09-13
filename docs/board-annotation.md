@@ -11,6 +11,12 @@ Each mark has one of two scopes:
 
 The server stores marks in `run_marks`, separately from `DrillRun`. Reads and writes are principal-scoped: anyone allowed to read a run may maintain their own marks, but cannot read or mutate another learner's private set.
 
+The drill keeps a newly drawn mark visible while it is saved. Loading, replacing and moving marks
+between position and branch scope share one run-scoped request order, so an older response cannot
+roll back a newer gesture or alter the scope selected for a later position. A failed save leaves the
+optimistic marks on screen, states that they are not yet stored and offers a retry; provider details
+never become learner copy. Switching runs cancels pending mark work and loads the new run's set.
+
 PGN export includes only the requester's marks and always states the filter with `TabiyaMarks: own (N); other authors' marks are not exported`. It never reveals how many marks another author has.
 
 In a live session, a mark is relayed only when its author held the board lease when it was written and the session is not a match. Relay is shared across viewers and attributed to the author. Match-seat and spectator sketches remain private.
