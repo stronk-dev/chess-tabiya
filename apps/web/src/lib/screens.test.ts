@@ -686,6 +686,44 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("keeps a failed checkpoint continuation open for a single-flight retry", async () => {
+    const run = branchedRun();
+    const checkpoint = latestCheckpoint(pack, run)!;
+    const first = deferred<boolean>();
+    const onContinueCheckpoint = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      checkpoint,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint, onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    const sheet = document.querySelector<HTMLElement>('[aria-labelledby="checkpoint-title"]')!;
+    const continueButton = [...sheet.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Continue")!;
+    const rewindButton = [...sheet.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Rewind here")!;
+    continueButton.click();
+    await tick();
+    expect(continueButton.disabled).toBe(true);
+    expect(rewindButton.disabled).toBe(true);
+    continueButton.click();
+    expect(onContinueCheckpoint).toHaveBeenCalledTimes(1);
+
+    first.resolve(false);
+    await vi.waitFor(() => expect(sheet.querySelector("[role='alert']")?.textContent).toContain("position is unchanged"));
+    expect(continueButton.disabled).toBe(false);
+    expect(document.querySelector('[aria-labelledby="checkpoint-title"]')).toBe(sheet);
+
+    continueButton.click();
+    await vi.waitFor(() => expect(onContinueCheckpoint).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(sheet.querySelector("[role='alert']")).toBeNull());
+    await unmount(component);
+  });
+
   it("keeps pivotal markers off by default, passive when enabled, and removable again", async () => {
     const initial = createRun({ id: "pivotal-ui", session: { kind: "position", start: { fen: "r3k2r/ppppqppp/2nbbn2/8/8/2NBBN2/PPPPQPPP/R3K2R w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
     const child = { ...initial.nodes[0]!, id: "pivotal-ui:node:1", parentId: initial.nodes[0]!.id, fen: "4k2r/8/8/8/8/8/RP6/4K3 b - - 0 1", transposeKey: "4k2r/8/8/8/8/8/RP6/4K3 b - -", moveUci: "a2a3", moveSan: "a3", ply: 1, actor: "user" as const };

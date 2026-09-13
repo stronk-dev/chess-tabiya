@@ -115,7 +115,7 @@
     onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
     onCloseCompare: () => void;
     onReplayResistance?: ((input: { readonly fen: string; readonly side: "white" | "black"; readonly targetElo: 1000 | 1400 | 1800 | 2200 }) => void | Promise<void>) | undefined;
-    onContinueCheckpoint: () => void | Promise<void>;
+    onContinueCheckpoint: () => boolean | void | Promise<boolean | void>;
     onPrediction?: (uci: string) => void | Promise<void>;
     onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
     onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
@@ -223,6 +223,9 @@
   let groupInvoker: HTMLElement | undefined;
   let forkOpen = $state(false);
   let checkpointPickerOpen = $state(false);
+  let checkpointContinueBusy = $state(false);
+  let checkpointContinueError: { readonly eventSeq: number; readonly text: string } | undefined = $state();
+  let checkpointContinueRequest = 0;
   let replaying = $state(false);
   let structuralOpen = $state(false);
   let transitionOpen = $state(false);
@@ -1241,9 +1244,27 @@
   }
 
   async function continueFromCheckpoint(): Promise<void> {
-    await onContinueCheckpoint();
-    await tick();
-    mainElement?.focus();
+    if (checkpointContinueBusy || checkpoint === undefined) return;
+    const checkpointEventSeq = checkpoint.eventSeq;
+    const request = ++checkpointContinueRequest;
+    checkpointContinueBusy = true;
+    checkpointContinueError = undefined;
+    try {
+      const continued = await onContinueCheckpoint();
+      if (request !== checkpointContinueRequest) return;
+      if (continued === false) {
+        checkpointContinueError = { eventSeq: checkpointEventSeq, text: "This checkpoint did not continue. Your position is unchanged; try again." };
+        return;
+      }
+      await tick();
+      mainElement?.focus();
+    } catch {
+      if (request === checkpointContinueRequest) {
+        checkpointContinueError = { eventSeq: checkpointEventSeq, text: "This checkpoint did not continue. Your position is unchanged; try again." };
+      }
+    } finally {
+      if (request === checkpointContinueRequest) checkpointContinueBusy = false;
+    }
   }
 
   function keyboard(event: KeyboardEvent): boolean {
@@ -1370,6 +1391,7 @@
     markRequest += 1;
     groupRequest += 1;
     forkRequest += 1;
+    checkpointContinueRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1848,6 +1870,8 @@
     resolution={checkpointResolution}
     canCompare={cards.length >= 2}
     onContinue={continueFromCheckpoint}
+    continuing={checkpointContinueBusy}
+    continueError={checkpointContinueError?.eventSeq === checkpoint.eventSeq ? checkpointContinueError.text : undefined}
     onRewind={() => rewindRun({ nodeId: checkpoint.nodeId })}
     onCompare={openCompare}
     {onStop}

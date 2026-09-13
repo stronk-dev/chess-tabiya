@@ -425,17 +425,24 @@ export class DrillSessionController {
     this.#matchMode = mode;
   }
 
-  async continueCheckpoint(): Promise<void> {
+  async continueCheckpoint(): Promise<boolean> {
     const checkpoint = this.#state.checkpoint;
+    const previousDismissedCheckpointSeq = this.#dismissedCheckpointSeq;
     if (checkpoint !== undefined) {
       this.#dismissedCheckpointSeq = checkpoint.eventSeq;
     }
-    this.#patch({ checkpoint: undefined, reasoning: undefined, busy: true });
+    this.#patch({ reasoning: undefined, busy: true });
     try {
-      await this.#playOpponentIfNeeded();
-      this.#patch({ busy: false });
+      await this.#playOpponentIfNeeded(true);
+      this.#patch({
+        busy: false,
+        ...(this.#state.checkpoint?.eventSeq === checkpoint?.eventSeq ? { checkpoint: undefined } : {}),
+      });
+      return true;
     } catch (error) {
+      this.#dismissedCheckpointSeq = previousDismissedCheckpointSeq;
       this.#fail(error);
+      return false;
     }
   }
 
@@ -622,13 +629,13 @@ export class DrillSessionController {
     this.#subscribers.clear();
   }
 
-  async #playOpponentIfNeeded(): Promise<void> {
+  async #playOpponentIfNeeded(ignoreCheckpoint = false): Promise<void> {
     if (this.#projectionOnly || this.#matchMode !== undefined) return;
     const pack = this.#state.pack;
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");
     const runState = this.#requiredRun();
-    if (runState.access === "read_only" || this.#state.checkpoint !== undefined) {
+    if (runState.access === "read_only" || (!ignoreCheckpoint && this.#state.checkpoint !== undefined)) {
       return;
     }
     const run = runState.run;

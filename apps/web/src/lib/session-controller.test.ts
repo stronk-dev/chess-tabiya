@@ -746,6 +746,24 @@ describe("DrillSessionController", () => {
     expect(new Set(environment.api.writerIds).size).toBe(1);
   });
 
+  it("restores the checkpoint and dismissal cursor when continuation fails", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    await environment.controller.move("c1e3");
+    const checkpoint = environment.controller.state.checkpoint!;
+    vi.spyOn(api, "selectMove").mockRejectedValueOnce(new Error("private opponent provider detail"));
+
+    expect(await environment.controller.continueCheckpoint()).toBe(false);
+    expect(environment.controller.state.checkpoint).toEqual(checkpoint);
+    expect(environment.controller.state.error).not.toContain("private opponent provider detail");
+    expect(environment.controller.state.runState?.run.events.some((event) => event.type === "opponent.move_selected")).toBe(false);
+
+    expect(await environment.controller.continueCheckpoint()).toBe(true);
+    expect(environment.controller.state.checkpoint).toMatchObject({ id: "predict-reply" });
+    expect(environment.controller.state.runState?.run.events.some((event) => event.type === "opponent.move_selected")).toBe(true);
+  });
+
   it("uses the run session digest rather than the pack digest for opponent selection", async () => {
     const api = new FakeApi();
     const sessionDigest = `sha256:${"9".repeat(64)}`;

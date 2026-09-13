@@ -406,7 +406,11 @@ The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never
 shown bare: `screen-model.ts` rejects an empty evidence-ref set before
 `WhyBanner.svelte` renders a deterministic learner summary. Exact source labels
-and evidence sentences remain available in Inspector's Objective change section.
+and evidence sentences remain available in Inspector's Objective change section. Continuing is
+single-flight and the sheet remains mounted while the
+opponent turn is requested. If that request fails, the controller restores its dismissal cursor and
+returns explicit failure; the same checkpoint then presents a safe retry while its position remains
+unchanged. Rewind and Compare cannot race an in-flight continuation.
 
 The comparison screen consumes the server/runtime `BranchComparison` payload.
 It leads with one fork board carrying every recorded candidate arrow, then lists

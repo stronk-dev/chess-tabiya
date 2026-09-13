@@ -32,6 +32,8 @@
     onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     reasoning?: ReasoningPage;
     shapes?: readonly ShapeEntryView[];
+    continuing?: boolean;
+    continueError?: string | undefined;
   }
 
   let {
@@ -53,6 +55,8 @@
     onReasoningReview,
     reasoning,
     shapes = [],
+    continuing = false,
+    continueError,
   }: Props = $props();
   let heading: HTMLHeadingElement;
   let candidates = $state("");
@@ -183,18 +187,18 @@
     {/if}
     {#if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
     <div class="actions">
-      <button class="primary" type="button" onclick={onContinue}>Continue</button>
-      <button type="button" onclick={onRewind}>Rewind here</button>
+      <button class="primary" type="button" disabled={continuing} aria-describedby={continuing ? "checkpoint-continue-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
+      <button type="button" disabled={continuing} aria-describedby={continuing ? "checkpoint-continue-busy" : undefined} onclick={onRewind}>Rewind here</button>
       {#if recognizedActions.compare_branches}
         <HonestControl
-          disabled={!canCompare}
+          disabled={!canCompare || continuing}
           reasonId="checkpoint-compare-unavailable"
-          reason="Reach this checkpoint on at least two branches before comparing."
+          reason={continuing ? "Wait for this continuation to finish." : "Reach this checkpoint on at least two branches before comparing."}
         >
           {#snippet children(describedBy)}
             <button
               type="button"
-              disabled={!canCompare}
+              disabled={!canCompare || continuing}
               aria-describedby={describedBy}
               onclick={onCompare}
             >Compare</button>
@@ -203,6 +207,8 @@
       {/if}
       <button type="button" onclick={onStop}>Stop session</button>
     </div>
+    {#if continuing}<p id="checkpoint-continue-busy" role="status">Continuing from this checkpoint.</p>{/if}
+    {#if continueError}<p role="alert">{continueError}</p>{/if}
     {/if}
   </div>
 </div>

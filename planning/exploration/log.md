@@ -19557,3 +19557,16 @@ and teardown invalidate local completion. Separate regressions bind the real con
 and the pending/failure/retry UI lifecycle. `make verify-software` passes 188 files / 1,201 tests
 plus type, performance, schema, manifest and production-build checks; `make test-browser` passes all
 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Checkpoint continuation retains its retry surface ([[D3211]])
+
+Continue previously advanced the session's dismissal cursor and removed the checkpoint sheet before
+requesting the opponent turn. Provider failure left only a generic run error and the checkpoint
+could not be retried. The controller now keeps the checkpoint mounted during work, returns explicit
+success/failure and restores the prior dismissal cursor on failure; a newly reached later checkpoint
+is retained rather than cleared with the old one. The sheet exposes a single-flight pending state,
+blocks Continue/Rewind/Compare races and presents safe retry copy against the unchanged position.
+Controller rollback and mounted pending/failure/retry regressions cover both halves. `make
+verify-software` passes 188 files / 1,203 tests plus type, performance, schema, manifest and
+production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
+optional Maia latency measurement skipped.
