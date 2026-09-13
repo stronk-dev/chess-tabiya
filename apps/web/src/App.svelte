@@ -334,6 +334,10 @@
   let runPageBusy=$state(false);
   let runPageError:string|undefined=$state();
   let relatedAttempts: Record<string, { readonly status: "loading" | "loaded" | "error"; readonly items: readonly RelatedProgressAttempt[]; readonly message?: string }> = $state({});
+  const relatedAttemptGenerations = new Map<string, number>();
+  let scheduleDismissBusy: string | undefined = $state();
+  let scheduleDismissErrors: Record<string, string> = $state({});
+  let scheduleDismissGeneration = 0;
 
   let activeRepertoireGap = $derived.by(() => {
     const runId=session.runState?.run.id;
@@ -616,26 +620,73 @@
     return "Same idea in this pack";
   }
 
+  function relatedAttemptRequestIsCurrent(key:string,generation:number,action:number):boolean {
+    return appMounted&&route.name==="learn"&&generation===loadGeneration&&relatedAttemptGenerations.get(key)===action;
+  }
+
+  function validRelatedProgress(value:unknown):value is readonly RelatedProgressAttempt[] {
+    return Array.isArray(value)&&value.length<=3&&value.every((item)=>{
+      if(typeof item!=="object"||item===null)return false;
+      const candidate=item as Partial<RelatedProgressAttempt>;
+      return (candidate.relation==="same_position"||candidate.relation==="same_pack"||candidate.relation==="same_concept_in_pack")
+        &&typeof candidate.runId==="string"&&candidate.runId.length>0
+        &&typeof candidate.branchId==="string"&&candidate.branchId.length>0
+        &&Number.isInteger(candidate.attemptCount)&&candidate.attemptCount!==undefined&&candidate.attemptCount>=0;
+    });
+  }
+
   async function toggleRelatedAttempts(attempt: ProgressAttempt): Promise<void> {
     const key = relatedAttemptKey(attempt);
-    if (relatedAttempts[key] !== undefined) {
+    const existing=relatedAttempts[key];
+    if (existing?.status === "loading" || existing?.status === "loaded") {
+      relatedAttemptGenerations.set(key,(relatedAttemptGenerations.get(key)??0)+1);
       const { [key]: _closed, ...remaining } = relatedAttempts;
       relatedAttempts = remaining;
       return;
     }
+    const generation=loadGeneration;
+    const action=(relatedAttemptGenerations.get(key)??0)+1;
+    relatedAttemptGenerations.set(key,action);
     relatedAttempts = { ...relatedAttempts, [key]: { status: "loading", items: [] } };
     try {
       if (api.relatedProgress === undefined) throw new Error("Related attempts are unavailable");
       const graph = await api.graph(attempt.runId);
+      if(!relatedAttemptRequestIsCurrent(key,generation,action))return;
+      if(graph.id!==attempt.runId)throw new Error("Crossed run graph");
       const branch = graph.branches.find((candidate) => candidate.id === attempt.branchId);
       if (branch === undefined) throw new Error("The recorded branch is no longer available");
       const items = await api.relatedProgress(attempt.runId, branch.forkNodeId);
+      if(!validRelatedProgress(items))throw new Error("Invalid related-attempt response");
+      if(!relatedAttemptRequestIsCurrent(key,generation,action))return;
       relatedAttempts = { ...relatedAttempts, [key]: { status: "loaded", items } };
-    } catch (error) {
+    } catch {
+      if(!relatedAttemptRequestIsCurrent(key,generation,action))return;
       relatedAttempts = {
         ...relatedAttempts,
-        [key]: { status: "error", items: [], message: error instanceof Error ? error.message : String(error) },
+        [key]: { status: "error", items: [], message: "Related attempts could not be loaded. This attempt is unchanged; try again." },
       };
+    }
+  }
+
+  async function dismissDueSchedule(schedule:ProgressSchedule):Promise<void>{
+    if(scheduleDismissBusy!==undefined)return;
+    const generation=loadGeneration;
+    const action=++scheduleDismissGeneration;
+    scheduleDismissBusy=schedule.id;
+    const { [schedule.id]: _previous, ...remainingErrors }=scheduleDismissErrors;
+    scheduleDismissErrors=remainingErrors;
+    try{
+      if(api.dismissSchedule===undefined)throw new Error("unavailable");
+      await api.dismissSchedule(schedule.id);
+      if(generation===loadGeneration&&route.name==="learn"&&action===scheduleDismissGeneration){
+        dueSchedules=dueSchedules.filter((item)=>item.id!==schedule.id);
+      }
+    }catch{
+      if(generation===loadGeneration&&route.name==="learn"&&action===scheduleDismissGeneration){
+        scheduleDismissErrors={...scheduleDismissErrors,[schedule.id]:"This return could not be dismissed. It remains in your queue; try again."};
+      }
+    }finally{
+      if(action===scheduleDismissGeneration&&scheduleDismissBusy===schedule.id)scheduleDismissBusy=undefined;
     }
   }
 
@@ -748,6 +799,9 @@
         if (generation !== loadGeneration) return;
         capabilities = nextCapabilities;
       } else if (next.name === "learn") {
+        scheduleDismissGeneration += 1;
+        scheduleDismissBusy=undefined;
+        scheduleDismissErrors={};
         assignmentBusy = undefined;
         assignmentActionError = undefined;
         repertoireMutationBusy=undefined;
@@ -2237,6 +2291,7 @@
     studioMutationGeneration += 1;
     shapeMutationGeneration += 1;
     liveSessionActionGeneration += 1;
+    scheduleDismissGeneration += 1;
     themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
@@ -2513,6 +2568,7 @@
     <main class="shell-view" aria-labelledby="learn-title">
       <p class="eyebrow">Learn / return loop</p>
       <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      {#if session.busy}<p id="return-action-busy" role="status">Starting your rehearsal…</p>{/if}
       {#if returnActionError ?? session.error}<p role="alert">{returnActionError ?? session.error}</p>{/if}
       <section aria-labelledby="assigned-title">
         <h2 id="assigned-title">Assigned</h2>
@@ -2609,11 +2665,13 @@
                 <p>{schedule.kind === "blocked" ? "Repeat the blocked attempt" : "Try a varied repetition"} · {readableDate(schedule.dueAt)}</p>
               </div>
               <div class="row-actions">
-                <button class="primary" type="button" disabled={session.busy || (schedule.packId === null && schedule.sourceRunId === null)} aria-describedby={schedule.packId === null && schedule.sourceRunId === null ? `due-source-missing-${schedule.id}` : undefined} onclick={() => void startDueSchedule(schedule)}>Start due attempt</button>
+                <button class="primary" type="button" disabled={session.busy||scheduleDismissBusy!==undefined||(schedule.packId===null&&schedule.sourceRunId===null)} aria-describedby={session.busy?"return-action-busy":scheduleDismissBusy!==undefined?`schedule-dismiss-busy-${scheduleDismissBusy}`:schedule.packId===null&&schedule.sourceRunId===null?`due-source-missing-${schedule.id}`:undefined} onclick={() => void startDueSchedule(schedule)}>Start due attempt</button>
                 {#if schedule.packId === null && schedule.sourceRunId === null}<span id={`due-source-missing-${schedule.id}`} class="honest">This position return has no surviving source run.</span>{/if}
                 {#if schedule.sourceRunId}<button type="button" onclick={() => navigate(routePath({ name: "run", runId: schedule.sourceRunId! }))}>Open source</button>{/if}
-                <button type="button" onclick={async () => { await api.dismissSchedule?.(schedule.id); dueSchedules = dueSchedules.filter((item) => item.id !== schedule.id); }}>Dismiss</button>
+                <button type="button" disabled={session.busy||scheduleDismissBusy!==undefined} aria-describedby={session.busy?"return-action-busy":scheduleDismissBusy!==undefined?`schedule-dismiss-busy-${scheduleDismissBusy}`:undefined} onclick={()=>void dismissDueSchedule(schedule)}>Dismiss</button>
               </div>
+              {#if scheduleDismissBusy===schedule.id}<p id={`schedule-dismiss-busy-${schedule.id}`} role="status">Dismissing this return…</p>{/if}
+              {#if scheduleDismissErrors[schedule.id]}<p role="alert">{scheduleDismissErrors[schedule.id]}</p>{/if}
             </article>
           {:else}<p>Nothing is due yet. Played attempts create this queue.</p>{/each}
         </div>
@@ -2630,9 +2688,9 @@
                   <p>{attempt.graded ? attemptVerdictLabel(attempt.verdict) : "Not graded"} · {learnerMoveCount(attempt.userPlyCount)} · {readableDate(attempt.endedAt)}</p>
                 </div>
                 <div class="row-actions">
-                  <button type="button" aria-expanded={related !== undefined} onclick={() => void toggleRelatedAttempts(attempt)}>{related === undefined ? "Related attempts" : "Hide related"}</button>
+                  <button type="button" aria-expanded={related !== undefined} onclick={() => void toggleRelatedAttempts(attempt)}>{related===undefined?"Related attempts":related.status==="error"?"Retry related attempts":related.status==="loading"?"Cancel related search":"Hide related"}</button>
                   <button type="button" onclick={() => navigate(routePath({ name: "run", runId: attempt.runId }))}>Open run</button>
-                  <button type="button" disabled={session.busy} onclick={() => void retryAttempt(attempt)}>Try this again</button>
+                  <button type="button" disabled={session.busy} aria-describedby={session.busy?"return-action-busy":undefined} onclick={() => void retryAttempt(attempt)}>Try this again</button>
                 </div>
               </div>
               {#if related?.status === "loading"}<p role="status">Finding your nearest related attempts…</p>

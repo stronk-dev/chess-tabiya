@@ -55,6 +55,16 @@ id. *Try this again* creates a separately owned run from a recorded attempt and 
 source. At an attempt's terminal sheet, *Schedule a retry from here* writes an immediate blocked
 return for the exact terminal node; the button reports read-only/unavailable states and confirms
 when the position entered the queue.
+
+Learn owns related-attempt lookup and due dismissal as retained client actions. Closing a pending
+related lookup invalidates its request, so a late result cannot reopen it; a failed lookup stays open
+as an explicit retry and never exposes provider diagnostics. The client verifies the requested run
+graph and the bounded three-item related projection before rendering it. Dismissal captures one
+schedule id, refuses duplicates, removes the card only after server success, keeps a failed card for
+retry, and cannot mutate a newly loaded Learn route after departure. Due and retry starts continue
+through the run controller's single-flight lifecycle and now expose its pending state to assistive
+technology while their controls are disabled.
+
 It deliberately presents no mastery percentage: the stored data is an attempt history and
 a return queue, not proof of mastery. It also lists derived event-shaped milestones linking
 to preserved runs. Those record firsts and one explicit attempt-count event; they never add

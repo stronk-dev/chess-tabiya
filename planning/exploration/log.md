@@ -19952,3 +19952,18 @@ departure. Sequential canonical verification passes: `make verify-software` is g
 files / 1,294 tests plus type, performance, schema, manifest and production-build checks;
 `make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
 measurement skipped.
+
+## 2026-09-13 — Learn retains related lookup and due-dismissal truth ([[D3241]])
+
+Related-attempt expansion previously reopened after cancellation when a late response settled and
+rendered provider failures verbatim; due dismissal was an inline mutation that removed a schedule
+even when its request failed. Related lookups now retain per-attempt request identity, verify the
+requested graph and bounded response at runtime, offer direct cancellation/retry, bound failure
+copy and ignore stale or departed results. Due dismissal captures one schedule, refuses duplicates,
+removes only after success, retains failure for retry and cannot mutate a newly loaded Learn route.
+The existing controller-owned due/retry start state is now announced and referenced by disabled
+controls. Two mounted falsifiers cross cancellation, late success, failure, retry, duplicate,
+success-only removal and departure. Sequential canonical verification passes: `make
+verify-software` is green across 196 files / 1,296 tests plus type, performance, schema, manifest
+and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
+optional Maia latency measurement skipped.

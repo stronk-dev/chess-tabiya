@@ -2314,6 +2314,61 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("cancels, retries, and bounds a related-attempt lookup without reopening stale results", async () => {
+    history.replaceState(null, "", "/learn");
+    const attempt = {
+      runId: run.id,
+      branchId: run.branches[0]!.id,
+      packId: pack.id,
+      branchLabel: "main",
+      attemptNo: 1,
+      countable: true,
+      graded: true,
+      verdict: "stable" as const,
+      result: null,
+      userPlyCount: 3,
+      origin: "fresh" as const,
+      endedAt: "2026-09-13T21:00:00.000Z",
+    };
+    const firstLookup = deferred<readonly { readonly relation: "same_position"; readonly runId: string; readonly branchId: string; readonly attemptCount: number }[]>();
+    const relatedProgress = vi.fn()
+      .mockImplementationOnce(() => firstLookup.promise)
+      .mockRejectedValueOnce(new Error("private related query detail"))
+      .mockResolvedValueOnce([{ relation: "same_position" as const, runId: "related-run", branchId: "main", attemptCount: 2 }]);
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: { ...api(), async progress() { return [attempt]; }, relatedProgress },
+        router: new HistoryRouter(window),
+        storage: new MemoryStorage(),
+      },
+    });
+
+    const relatedButton = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Related attempts");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    relatedButton.click();
+    await vi.waitFor(() => expect(relatedButton.textContent).toBe("Cancel related search"));
+    relatedButton.click();
+    await vi.waitFor(() => expect(relatedButton.textContent).toBe("Related attempts"));
+    firstLookup.resolve([{ relation: "same_position", runId: "stale-related-run", branchId: "main", attemptCount: 9 }]);
+    await tick();
+    await Promise.resolve();
+    expect(document.body.textContent).not.toContain("9 attempts on that material");
+    expect(relatedButton.textContent).toBe("Related attempts");
+
+    relatedButton.click();
+    await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("Related attempts could not be loaded. This attempt is unchanged; try again."));
+    expect(document.body.textContent).not.toContain("private related query detail");
+    expect(relatedButton.textContent).toBe("Retry related attempts");
+    relatedButton.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Same position · 2 attempts on that material"));
+    expect(relatedProgress).toHaveBeenCalledTimes(3);
+    await unmount(component);
+  });
+
   it("starts a due return directly instead of sending the learner back to its source", async () => {
     history.replaceState(null, "", "/learn");
     const schedule = {
@@ -2357,6 +2412,71 @@ describe("application shell", () => {
       expect.objectContaining({ intent: { origin: "fresh", scheduleId: schedule.id } }),
       expect.any(String),
     ));
+    await unmount(component);
+  });
+
+  it("dismisses a due return only after success and ignores a settlement from a departed Learn route", async () => {
+    history.replaceState(null, "", "/learn");
+    const retrySchedule = {
+      id: "schedule-retry",
+      sessionKind: "pack" as const,
+      packId: pack.id,
+      kind: "blocked" as const,
+      variant: null,
+      dueAt: "2026-09-13T21:10:00.000Z",
+      sourceRunId: run.id,
+    };
+    const departedSchedule = { ...retrySchedule, id: "schedule-departed", dueAt: "2026-09-13T21:20:00.000Z" };
+    const firstDismiss = deferred<void>();
+    const departedDismiss = deferred<void>();
+    const dismissSchedule = vi.fn()
+      .mockImplementationOnce(() => firstDismiss.promise)
+      .mockResolvedValueOnce(undefined)
+      .mockImplementationOnce(() => departedDismiss.promise);
+    let dueReads = 0;
+    const learnApi: DrillClientApi = {
+      ...api(),
+      async dueProgress() { return ++dueReads === 1 ? [retrySchedule, departedSchedule] : [departedSchedule]; },
+      dismissSchedule,
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: learnApi, router, storage: new MemoryStorage() },
+    });
+    const dueLabel=(value:string)=>new Date(value).toLocaleString();
+    const dismissFor = (scheduleId:string):HTMLButtonElement => {
+      const article=[...document.querySelectorAll<HTMLElement>("article")].find((candidate)=>candidate.querySelector(`#schedule-dismiss-busy-${scheduleId}`)!==null||candidate.textContent?.includes(scheduleId==="schedule-retry"?dueLabel(retrySchedule.dueAt):dueLabel(departedSchedule.dueAt)));
+      return [...(article?.querySelectorAll<HTMLButtonElement>("button")??[])].find((candidate)=>candidate.textContent==="Dismiss")!;
+    };
+
+    await vi.waitFor(() => expect([...document.querySelectorAll<HTMLButtonElement>("button")].filter((candidate) => candidate.textContent === "Dismiss")).toHaveLength(2));
+    let dismiss = dismissFor(retrySchedule.id);
+    dismiss.click();
+    dismiss.click();
+    await vi.waitFor(() => expect(dismissSchedule).toHaveBeenCalledTimes(1));
+    await vi.waitFor(() => expect(dismiss.disabled).toBe(true));
+    expect(dismiss.getAttribute("aria-describedby")).toBe(`schedule-dismiss-busy-${retrySchedule.id}`);
+    firstDismiss.reject(new Error("private dismissal detail"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This return could not be dismissed. It remains in your queue; try again."));
+    expect(document.body.textContent).not.toContain("private dismissal detail");
+    expect(document.body.textContent).toContain(dueLabel(retrySchedule.dueAt));
+
+    dismiss.click();
+    await vi.waitFor(() => expect(dismissSchedule).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.body.textContent).not.toContain(dueLabel(retrySchedule.dueAt)));
+
+    dismiss = dismissFor(departedSchedule.id);
+    dismiss.click();
+    await vi.waitFor(() => expect(dismissSchedule).toHaveBeenCalledTimes(3));
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    router.navigate("/learn");
+    await vi.waitFor(() => expect(document.body.textContent).toContain(dueLabel(departedSchedule.dueAt)));
+    departedDismiss.resolve();
+    await tick();
+    await Promise.resolve();
+    expect(document.body.textContent).toContain(dueLabel(departedSchedule.dueAt));
     await unmount(component);
   });
 
