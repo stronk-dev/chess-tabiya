@@ -281,4 +281,39 @@ describe("game story screen", () => {
 
     await unmount(component);
   });
+
+  it("invalidates share presentation when the Story unmounts", async () => {
+    const moments = [moment(1)];
+    const story: GameStory = {
+      ready: true,
+      pendingEvidence: 0,
+      branchId: "main",
+      side: "white",
+      source: { kind: "native" },
+      outcome: { kind: "unfinished" },
+      moments,
+      rank: [moments[0]!.nodeId],
+    };
+    const pending = deferred<{ readonly id: string; readonly url: string }>();
+    const writeText = vi.fn(async () => undefined);
+    const clipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, "clipboard");
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    const component = mount(GameStoryScreen, {
+      target: document.body,
+      props: { story, onEnter: vi.fn(), onExport: vi.fn(), onShare: () => pending.promise },
+    });
+
+    [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Share story")!
+      .click();
+    await tick();
+    await unmount(component);
+    pending.resolve({ id: "late-share", url: "/stories/late" });
+    await Promise.resolve();
+    await tick();
+    expect(writeText).not.toHaveBeenCalled();
+
+    if (clipboardDescriptor === undefined) Reflect.deleteProperty(navigator, "clipboard");
+    else Object.defineProperty(navigator, "clipboard", clipboardDescriptor);
+  });
 });

@@ -19725,3 +19725,16 @@ cannot replace it. Sequential canonical verification passes: `make verify-softwa
 across 188 files / 1,224 tests plus type, performance, schema, manifest and production-build
 checks; `make test-browser` passes all 64 required journeys with one explicitly optional Maia
 latency measurement skipped.
+
+## 2026-09-13 — Story-share completion cannot cross games ([[D3224]])
+
+The app shell formerly awaited create/revoke and then wrote the global `storyShares` projection
+without proving the Story route still named that run. Share creation, revocation and their list
+refresh now capture the exact run, branch, route generation and a resource-local request sequence.
+A departed or superseded operation may complete server-side but cannot publish into another game.
+The Story screen also invalidates token, clipboard, status and error completion on teardown.
+Secondary list-refresh failure no longer turns an already successful mutation into false failure
+copy. Crossed-route and post-unmount falsifiers pass. Sequential canonical verification passes:
+`make verify-software` is green across 188 files / 1,226 tests plus type, performance, schema,
+manifest and production-build checks; `make test-browser` passes all 64 required journeys with one
+explicitly optional Maia latency measurement skipped.

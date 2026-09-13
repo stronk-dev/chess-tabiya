@@ -302,6 +302,51 @@ describe("application shell", () => {
     vi.useRealTimers();
   });
 
+  it("does not publish a departed Story share into the next game", async () => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const storyWith = (runId: string, white: string): GameStory => ({
+      ready: true,
+      pendingEvidence: 0,
+      branchId: `branch-${runId}`,
+      side: "white",
+      source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
+      outcome: { kind: "unfinished" },
+      moments: [{ nodeId: `moment-${runId}`, entryNodeId: `entry-${runId}`, ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [white], evidence: [], phase: "opening" }],
+      rank: [`moment-${runId}`],
+    });
+    const oldShare = deferred<{ readonly id: string; readonly token: string; readonly url: string }>();
+    const storyShares = vi.fn(async (runId: string) => runId === "other-run" ? [{
+      id: "other-share", scope: "story_read" as const, runId, branchId: "branch-other-run",
+      createdAt: "2026-09-13T10:00:00.000Z", revokedAt: null,
+    }] : []);
+    const shareStory = vi.fn(() => oldShare.promise);
+    const storyApi: DrillClientApi = {
+      ...api(),
+      async story(runId) { return storyWith(runId, runId === "route-run" ? "Old game" : "Current game"); },
+      storyShares,
+      shareStory,
+      async revokeStoryShare() {},
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: storyApi, router, storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Old game – Black"));
+
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Share story")!.click();
+    await vi.waitFor(() => expect(shareStory).toHaveBeenCalledWith("route-run", "branch-route-run"));
+    router.navigate("/review/game/other-run");
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Current game – Black"));
+    expect(document.querySelectorAll("[aria-label='Story share links'] li")).toHaveLength(1);
+
+    oldShare.resolve({ id: "departed-share", token: "departed-token", url: "/stories/departed" });
+    await tick();
+    await Promise.resolve();
+    expect(storyShares.mock.calls.map(([runId]) => runId)).toEqual(["route-run", "other-run"]);
+    expect(document.body.textContent).toContain("Current game – Black");
+    expect(document.body.textContent).not.toContain("/stories/departed");
+    expect(document.querySelectorAll("[aria-label='Story share links'] li")).toHaveLength(1);
+    await unmount(component);
+  });
+
   it("turns an empty Home into a direct rehearsal start instead of an empty resume card", async () => {
     const emptyApi: DrillClientApi = { ...api(), async runs() { return []; } };
     const component = mount(App, {

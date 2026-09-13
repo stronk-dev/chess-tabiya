@@ -268,6 +268,7 @@
   let loadGeneration = 0;
   let liveRefreshGeneration = 0;
   let storyRefreshGeneration = 0;
+  let storyShareGeneration = 0;
   let livePoll: ReturnType<typeof setInterval> | undefined;
   let storyPoll: ReturnType<typeof setInterval> | undefined;
   let autoClaimingMatch = false;
@@ -676,6 +677,7 @@
         runs = page.runs; runSelection = page.selection;
       } else if (next.name === "story") {
         const refresh=++storyRefreshGeneration;
+        const shareRefresh=++storyShareGeneration;
         const loaded = await Promise.all([
           fetchStory(next.runId, true),
           api.capabilities(),
@@ -687,7 +689,7 @@
           if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
         }
         capabilities = loaded[1];
-        storyShares = loaded[2];
+        if(shareRefresh===storyShareGeneration)storyShares = loaded[2];
       } else if (next.name === "play") {
         const nextPacks = await api.packs();
         if (generation !== loadGeneration) return;
@@ -902,6 +904,37 @@
       if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
     }catch{
       // Background refresh retains the last good Story. Initial load failures use routeError.
+    }
+  }
+
+  function storyRouteIsCurrent(runId: string, generation: number): boolean {
+    return generation === loadGeneration && route.name === "story" && route.runId === runId;
+  }
+
+  async function refreshStoryShares(runId: string, generation: number, refresh: number): Promise<void> {
+    if (!storyRouteIsCurrent(runId, generation) || refresh !== storyShareGeneration || api.storyShares === undefined) return;
+    const nextShares = await api.storyShares(runId);
+    if (storyRouteIsCurrent(runId, generation) && refresh === storyShareGeneration) storyShares = nextShares;
+  }
+
+  async function createStoryShare(runId: string, branchId: string): Promise<{ readonly id: string; readonly token: string; readonly url: string }> {
+    if (api.shareStory === undefined) throw new Error("Story sharing is unavailable");
+    const generation = loadGeneration;
+    const refresh = ++storyShareGeneration;
+    const created = await api.shareStory(runId, branchId);
+    if (storyRouteIsCurrent(runId, generation) && refresh === storyShareGeneration) {
+      try { await refreshStoryShares(runId, generation, refresh); } catch { /* The created URL remains authoritative even if its list projection cannot refresh. */ }
+    }
+    return created;
+  }
+
+  async function revokeStoryShare(runId: string, tokenId: string): Promise<void> {
+    if (api.revokeStoryShare === undefined) throw new Error("Story share revocation is unavailable");
+    const generation = loadGeneration;
+    const refresh = ++storyShareGeneration;
+    await api.revokeStoryShare(runId, tokenId);
+    if (storyRouteIsCurrent(runId, generation) && refresh === storyShareGeneration) {
+      try { await refreshStoryShares(runId, generation, refresh); } catch { /* Revocation succeeded; a stale list must not turn it into a false failure. */ }
     }
   }
 
@@ -1699,7 +1732,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<GameStoryScreen {story} shares={storyShares} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : async () => { const created = await api.shareStory!(storyRunId, story!.branchId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); return created; }} onRevoke={api.revokeStoryShare === undefined ? undefined : async (tokenId) => { await api.revokeStoryShare!(storyRunId, tokenId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); }} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<GameStoryScreen {story} shares={storyShares} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

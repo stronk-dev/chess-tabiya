@@ -54,6 +54,14 @@ older snapshot cannot regress a newer one. Refresh failures retain the last
 good projection and are contained by the polling boundary; initial-load
 failures still use the route's visible error path.
 
+Story sharing follows that same lifetime instead of treating the shell's
+mutable Story fields as request authority. Create and revoke capture the exact
+run, branch and route generation, and link-list refreshes are
+latest-request-wins. Leaving the Story invalidates both shell publication and
+the screen's token, clipboard, status and error completion. A successful
+create or revoke remains successful if only the secondary link-list refresh
+is unavailable.
+
 The shell top bar keeps the primary routes and current run/access context visible on ordinary
 application routes. A live `/play/run/:runId` is a focused full-viewport composition and replaces
 that global chrome with its own fixed run topbar; its Tabiya control exits back to Play, where the

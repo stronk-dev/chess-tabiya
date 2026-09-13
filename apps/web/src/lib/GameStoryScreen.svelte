@@ -38,6 +38,7 @@
   let exportRequest = 0;
   let entryRequest = 0;
   let cardRequest = 0;
+  let shareRequest = 0;
   let mounted = true;
   const selected = $derived(selectedMoments.find((moment) => moment.nodeId === selectedId) ?? selectedMoments[0]);
   const imported = $derived(story.source.kind === "native" ? undefined : story.source);
@@ -136,43 +137,47 @@
 
   async function createShare(): Promise<void> {
     if (onShare === undefined || shareBusy) return;
+    const request = ++shareRequest;
     shareBusy = true;
     shareError = undefined;
     shareStatus = undefined;
     try {
       const created = await onShare();
+      if (!mounted || request !== shareRequest) return;
       createdShareId = created.id;
       shareUrl = created.url;
       const absolute = new URL(created.url, location.href).href;
       try {
         if (navigator.clipboard === undefined) throw new Error("Clipboard unavailable");
         await navigator.clipboard.writeText(absolute);
-        shareStatus = "Public story link created and copied.";
+        if (mounted && request === shareRequest) shareStatus = "Public story link created and copied.";
       } catch {
-        shareStatus = "Public story link created. Copy the visible URL manually; clipboard access was unavailable.";
+        if (mounted && request === shareRequest) shareStatus = "Public story link created. Copy the visible URL manually; clipboard access was unavailable.";
       }
     } catch {
-      shareError = "The public story link could not be created. Try again.";
+      if (mounted && request === shareRequest) shareError = "The public story link could not be created. Try again.";
     } finally {
-      shareBusy = false;
+      if (mounted && request === shareRequest) shareBusy = false;
     }
   }
 
   async function revokeShare(tokenId: string): Promise<void> {
     if (onRevoke === undefined || shareBusy) return;
+    const request = ++shareRequest;
     shareBusy = true;
     shareError = undefined;
     try {
       await onRevoke(tokenId);
+      if (!mounted || request !== shareRequest) return;
       if (createdShareId === tokenId) {
         createdShareId = undefined;
         shareUrl = undefined;
       }
       shareStatus = "Future reads through that public link are blocked. Copies already saved elsewhere cannot be recalled.";
     } catch {
-      shareError = "That public link could not be revoked. It may still be public; try again.";
+      if (mounted && request === shareRequest) shareError = "That public link could not be revoked. It may still be public; try again.";
     } finally {
-      shareBusy = false;
+      if (mounted && request === shareRequest) shareBusy = false;
     }
   }
   onDestroy(() => {
@@ -181,6 +186,7 @@
     exportRequest += 1;
     entryRequest += 1;
     cardRequest += 1;
+    shareRequest += 1;
   });
 </script>
 
