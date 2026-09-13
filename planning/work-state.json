@@ -26324,6 +26324,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/SimulationPreview.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3213",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:67446b65dccd1aca5ebc9d8aa31797e7fce2e6b2c002b603bc3b126f4a1c5af1",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

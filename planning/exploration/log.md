@@ -19582,3 +19582,16 @@ storage diagnostics; only success dismisses it. Controller retention and mounted
 pending/failure/retry regressions cover both layers. `make verify-software` passes 188 files / 1,205
 tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
 passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Authored-line preview creation is source-bound ([[D3213]])
+
+Preview creation previously collapsed success and failure to `void`, accepted concurrent calls and
+installed a returned scratch result without rechecking its source run/position. The controller now
+returns explicit success/failure, refuses a second in-flight request, and discards a response after
+its run or active position changes. The visible action owns pending, duplicate and rejection states;
+failure restores a bounded position-scoped retry without provider diagnostics. Rejection,
+single-flight, closed-source and mounted failure/retry regressions bind the workflow. The canonical
+gates ran sequentially because the production build and browser server share `dist`: `make
+verify-software` passes 188 files / 1,207 tests plus type, performance, schema, manifest and
+production-build checks, followed by `make test-browser` with all 64 required journeys green and one
+explicitly optional Maia latency measurement skipped.

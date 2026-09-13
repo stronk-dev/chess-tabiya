@@ -402,6 +402,50 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("makes authored-line preview creation single-flight and retryable at its action", async () => {
+    let run = createRun({
+      id: "simulation-open-retry-ui",
+      packId: pack.id,
+      packDigest: `sha256:${"8".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: pack.start.fen,
+      seed: 8,
+      createdAt: at,
+    });
+    run = commitMove(run, "c1e3", { actor: "system", at }).run;
+    run = commitMove(run, "e7e6", { actor: "system", at }).run;
+    let settle!: (accepted: boolean) => void;
+    const onSimulate = vi.fn(() => new Promise<boolean>((resolve) => { settle = resolve; }));
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onSimulate, registerKeyboardRegion,
+    } });
+    await tick();
+    const preview = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Preview authored lines")!;
+
+    preview.click();
+    preview.click();
+    await tick();
+    expect(onSimulate).toHaveBeenCalledOnce();
+    expect(preview.disabled).toBe(true);
+    expect(document.querySelector("#drill-simulation-opening")?.textContent).toContain("Preparing scratch lines");
+
+    settle(false);
+    await vi.waitFor(() => expect(document.querySelector("#drill-simulation-error")?.textContent).toContain("preview did not open"));
+    expect(preview.disabled).toBe(false);
+    expect(preview.textContent).toContain("Try authored lines again");
+
+    preview.click();
+    await tick();
+    expect(onSimulate).toHaveBeenCalledTimes(2);
+    settle(true);
+    await tick();
+    await unmount(component);
+  });
+
   it("keeps a drawn mark in parent state and saves it against the node where the gesture began", async () => {
     vi.useFakeTimers();
     const run = branchedRun();

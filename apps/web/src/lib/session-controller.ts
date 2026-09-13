@@ -543,13 +543,29 @@ export class DrillSessionController {
     }
   }
 
-  async simulateAuthoredLines(): Promise<void> {
+  async simulateAuthoredLines(): Promise<boolean> {
+    if (this.#state.busy) return false;
+    const sourceRunId = this.#state.runState?.run.id;
+    const sourceNodeId = this.#state.runState?.run.activeCursor.nodeId;
+    if (sourceRunId === undefined || sourceNodeId === undefined) return false;
     this.#patch({ busy: true, error: undefined });
     try {
       const simulation = await this.#requiredStore().simulate();
+      if (
+        this.#state.runState?.run.id !== sourceRunId ||
+        this.#state.runState.run.activeCursor.nodeId !== sourceNodeId
+      ) {
+        this.#patch({
+          busy: false,
+          error: "This run changed before the preview was ready. Check the current position and try again.",
+        });
+        return false;
+      }
       this.#patch({ busy: false, simulation });
+      return true;
     } catch (error) {
       this.#fail(error);
+      return false;
     }
   }
 

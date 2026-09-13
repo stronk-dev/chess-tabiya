@@ -131,7 +131,7 @@
     onSpeech?: (nodeId: string, scope: VoicePage["scope"]) => Promise<Blob>;
     onCreateGroup?: (input: CreateGroupRequest) => CreateGroupResult | undefined | Promise<CreateGroupResult | undefined>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => boolean | void | Promise<boolean | void>;
-    onSimulate?: (() => void | Promise<void>) | undefined;
+    onSimulate?: (() => boolean | Promise<boolean>) | undefined;
     onEnterSimulation?: ((branchIndex: number) => boolean | Promise<boolean>) | undefined;
     onCloseSimulation?: (() => void) | undefined;
     onStory?: (() => void) | undefined;
@@ -310,6 +310,9 @@
   let analysisRequestedNodeId: string | undefined = $state();
   let analysisRequestError: { readonly nodeId: string; readonly text: string } | undefined = $state();
   let analysisRequest = 0;
+  let simulationOpening: number | undefined = $state();
+  let simulationOpenError: { readonly runId: string; readonly nodeId: string } | undefined = $state();
+  let simulationRequest = 0;
 
   function measureViewport(): void {
     viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
@@ -434,8 +437,24 @@
     return spineNodeId === undefined ? 0 : findSpineNode(pack.spine ?? [], spineNodeId)?.children.length ?? 0;
   });
   async function openSimulation(event: Event): Promise<void> {
+    if (onSimulate === undefined || simulationOpening !== undefined) return;
     simulationInvoker = invoker(event);
-    await onSimulate?.();
+    const runId = run.id;
+    const nodeId = currentNode.id;
+    const request = ++simulationRequest;
+    simulationOpening = request;
+    simulationOpenError = undefined;
+    try {
+      if (!await onSimulate() && request === simulationRequest && run.id === runId && currentNode.id === nodeId) {
+        simulationOpenError = { runId, nodeId };
+      }
+    } catch {
+      if (request === simulationRequest && run.id === runId && currentNode.id === nodeId) {
+        simulationOpenError = { runId, nodeId };
+      }
+    } finally {
+      if (simulationOpening === request) simulationOpening = undefined;
+    }
   }
   function closeSimulation(): void {
     onCloseSimulation?.();
@@ -1392,6 +1411,7 @@
     groupRequest += 1;
     forkRequest += 1;
     checkpointContinueRequest += 1;
+    simulationRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1805,9 +1825,16 @@
               reason={!canWrite ? "This read-only view cannot preview authored lines." : "This position needs at least two authored continuations before it can be previewed side by side."}
             >
               {#snippet children(describedBy)}
-                <button type="button" disabled={!canWrite || simulationChoiceCount < 2 || onSimulate === undefined} aria-describedby={describedBy} onclick={(event) => void openSimulation(event)}>Preview authored lines</button>
+                <button
+                  type="button"
+                  disabled={!canWrite || simulationChoiceCount < 2 || onSimulate === undefined || simulationOpening !== undefined}
+                  aria-describedby={simulationOpening !== undefined ? "drill-simulation-opening" : simulationOpenError?.runId === run.id && simulationOpenError.nodeId === currentNode.id ? "drill-simulation-error" : describedBy}
+                  onclick={(event) => void openSimulation(event)}
+                >{simulationOpening !== undefined ? "Opening authored lines…" : simulationOpenError?.runId === run.id && simulationOpenError.nodeId === currentNode.id ? "Try authored lines again" : "Preview authored lines"}</button>
               {/snippet}
             </HonestControl>
+            {#if simulationOpening !== undefined}<span id="drill-simulation-opening" class="action-state" role="status">Preparing scratch lines from this position.</span>{/if}
+            {#if simulationOpenError?.runId === run.id && simulationOpenError.nodeId === currentNode.id}<span id="drill-simulation-error" class="action-state error" role="alert">The preview did not open. Check this position and try again.</span>{/if}
           {/if}
           <button type="button" aria-label={replaying ? "Pause replay" : "Replay"} aria-pressed={replaying} onclick={toggleReplay}>
             {replaying ? "Pause" : "Replay"} <kbd>Space</kbd>
@@ -2444,6 +2471,8 @@
     grid-template-columns: repeat(2, minmax(7rem, 1fr));
     gap: 0.45rem;
   }
+  .quick-actions .action-state { grid-column:1/-1;margin:0;color:var(--muted);font-size:.7rem;line-height:1.35 }
+  .quick-actions .action-state.error { color:var(--danger) }
 
   .rail-stack{min-width:0;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden;border-left:1px solid var(--line);background:var(--panel)}
   .companion-scroll { min-height: 0; display: grid; padding: .65rem; overflow: hidden; }

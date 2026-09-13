@@ -823,18 +823,23 @@ describe("DrillSessionController", () => {
   it("retains an authored-line simulation and returns explicit failure for safe retry", async () => {
     const api = new FakeApi();
     const simulationApi = Object.assign(api, {
-      simulate: vi.fn(async (): Promise<import("./api.js").SimulationResult> => ({
-        simulationId: "simulation-retry",
-        comparison: { machineFeedback: "available", forkNodeId: api.requiredRun().activeCursor.nodeId, columns: [], rows: [], objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, consequences: {} },
-        branches: [{ index: 0, label: "f3", leafFen: api.requiredRun().nodes.at(-1)!.fen, plies: 2 }],
-      })),
+      simulate: vi.fn()
+        .mockRejectedValueOnce(new Error("private simulation provider detail"))
+        .mockImplementationOnce(async (): Promise<import("./api.js").SimulationResult> => ({
+          simulationId: "simulation-retry",
+          comparison: { machineFeedback: "available", forkNodeId: api.requiredRun().activeCursor.nodeId, columns: [], rows: [], objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, consequences: {} },
+          branches: [{ index: 0, label: "f3", leafFen: api.requiredRun().nodes.at(-1)!.fen, plies: 2 }],
+        })),
       enterSimulation: vi.fn()
         .mockRejectedValueOnce(new Error("private simulation storage detail"))
         .mockImplementationOnce(async (): Promise<MutationResult> => ({ run: api.requiredRun(), emitted: [] })),
     });
     const environment = controller(simulationApi);
     await environment.controller.startPack(pack.id);
-    await environment.controller.simulateAuthoredLines();
+    expect(await environment.controller.simulateAuthoredLines()).toBe(false);
+    expect(environment.controller.state.simulation).toBeUndefined();
+    expect(environment.controller.state.error).not.toContain("private simulation provider detail");
+    expect(await environment.controller.simulateAuthoredLines()).toBe(true);
     const simulation = environment.controller.state.simulation;
 
     expect(await environment.controller.enterSimulation(0)).toBe(false);
@@ -845,6 +850,30 @@ describe("DrillSessionController", () => {
     expect(await environment.controller.enterSimulation(0)).toBe(true);
     expect(environment.controller.state.simulation).toBeUndefined();
     expect(simulationApi.enterSimulation).toHaveBeenCalledTimes(2);
+  });
+
+  it("discards a scratch simulation when its source run closes before the response", async () => {
+    const api = new FakeApi();
+    let settle!: (result: import("./api.js").SimulationResult) => void;
+    const simulationApi = Object.assign(api, {
+      simulate: vi.fn(() => new Promise<import("./api.js").SimulationResult>((resolve) => { settle = resolve; })),
+    });
+    const environment = controller(simulationApi);
+    await environment.controller.startPack(pack.id);
+    const pending = environment.controller.simulateAuthoredLines();
+    expect(await environment.controller.simulateAuthoredLines()).toBe(false);
+    expect(simulationApi.simulate).toHaveBeenCalledOnce();
+
+    const source = api.requiredRun();
+    environment.controller.stopSession();
+    settle({
+      simulationId: "stale-simulation",
+      comparison: { machineFeedback: "available", forkNodeId: source.activeCursor.nodeId, columns: [], rows: [], objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, consequences: {} },
+      branches: [{ index: 0, label: "f3", leafFen: source.nodes.at(-1)!.fen, plies: 2 }],
+    });
+
+    expect(await pending).toBe(false);
+    expect(environment.controller.state.simulation).toBeUndefined();
   });
 
   it("drains ready branch evidence before taking the comparison snapshot", async () => {
