@@ -26720,6 +26720,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/capability-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3257",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e30adf5ff95fb8f00f288888e23c65175e5fe515407ae1fef07ee6e9bcc27886",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/human-evidence-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

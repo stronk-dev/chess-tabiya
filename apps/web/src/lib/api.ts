@@ -28,6 +28,7 @@ import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parseCapabilities } from "./capability-response.js";
+import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
 import { parsePackDocument } from "./pack-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
 import { parseShapeDocument } from "./shape-response.js";
@@ -1275,10 +1276,10 @@ export class DrillApi implements DrillClientApi {
   }
 
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage> {
-    return this.#json(`/runs/${encoded(runId)}/human-split?nodeId=${encoded(nodeId)}`);
+    return this.#json<unknown>(`/runs/${encoded(runId)}/human-split?nodeId=${encoded(nodeId)}`).then((value) => parseHumanSplitPage(value, nodeId));
   }
 
-  corpus(runId: string, nodeId: string): Promise<CorpusPage> { return this.#json(`/runs/${encoded(runId)}/corpus?nodeId=${encoded(nodeId)}`); }
+  corpus(runId: string, nodeId: string): Promise<CorpusPage> { return this.#json<unknown>(`/runs/${encoded(runId)}/corpus?nodeId=${encoded(nodeId)}`).then((value) => parseCorpusPage(value, nodeId)); }
 
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
     return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } });

@@ -20180,3 +20180,20 @@ crossed arithmetic and server-only additions fail closed. `make verify-software`
 1,379 tests plus types, performance, schema, manifest, packaging and production builds. The complete
 `make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
 skipped.
+
+## 2026-09-14 — Human-model and corpus facts cross finite response authorities ([[D3257]])
+
+The two interactive human-evidence routes no longer cast arbitrary JSON immediately before declaring
+it as trusted Maia or Lichess evidence. `DrillApi` now binds each response to the requested node and
+admits it through one closed parser. Maia engine identity, candidate identity and order, float32 policy
+mass, per-mille WDL, concession ratios and off-window abstention semantics are checked together.
+Lichess population bands, speeds and windows are canonical, while aggregate and per-move outcome
+counts, rounded shares and published order must reconcile exactly.
+
+The first complete browser pass rejected a false validator assumption: Explorer's history metadata can
+name the latest recorded month outside the current count-query window. The authority now validates the
+month's canonical shape without pretending it is a filtered count, retaining the real 2019-04 fixture.
+Both accepted response trees are deeply frozen before evidence adapters can brand them. `make
+verify-software` passes 206 files / 1,393 tests plus types, performance, schema, manifest, packaging and
+production builds. The complete `make test-browser` gate passes 92 required journeys with one
+explicitly optional Maia latency probe skipped.
