@@ -26261,6 +26261,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/DrillScreen.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3206",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:45cbdca4cd0c5829b15d8ab393bd00cb6a45c40e7b1cc5621a9f07f4b9750fb8",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/CompareView.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

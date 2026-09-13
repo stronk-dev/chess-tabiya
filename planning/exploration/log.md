@@ -19497,3 +19497,14 @@ original position and branch remain visible. Failed optimistic marks stay on scr
 retry and no provider diagnostics. `make verify-software` passes 188 files / 1,194 tests and the
 production build; `make test-browser` passes all 64 required journeys with one explicitly optional
 Maia latency measurement skipped.
+
+## 2026-09-13 — Compare actions are single-flight and recoverable ([[D3206]])
+
+Compare previously fired both external narration and resistance replay without pending state or a
+failure path. Repeated replay clicks could create multiple runs; crossed narration could render an
+older response; either rejection escaped. Both operations now own request identity, disable their
+controls while active, invalidate on component teardown and restore a retryable action after safe
+learner-facing failure. A replay failure explicitly says the recorded comparison remains. The
+regression drives pending, duplicate, rejected and retry-success states for both actions. `make
+verify-software` passes 188 files / 1,195 tests and the production build; `make test-browser` passes
+all 64 required journeys with one explicitly optional Maia latency measurement skipped.

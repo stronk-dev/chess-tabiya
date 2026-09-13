@@ -621,6 +621,11 @@ The learner chooses one of the calibrated Maia rungs; no suggestion changes it s
 does not equate it with FIDE or platform ratings, and the applied rung remains in the new run's
 visible and announced status.
 
+Comparison revoice and replay creation are single-flight actions. Their controls state pending
+work, reject duplicate submission and recover with a retryable message that preserves the existing
+comparison. A response from an older narration request or an unmounted comparison cannot render,
+and transport/provider details never become learner copy.
+
 Just Play uses the same honest opponent vocabulary before and during a run. Its human-like ladder
 has four explicit Tabiya rungs; the strong engine is a separate engine-test family, not a fifth
 rung. Every current human-model opponent surface states verbatim that these numbers are not FIDE,

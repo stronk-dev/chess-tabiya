@@ -2,7 +2,7 @@
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, materialBalanceAt, packAbsentEvidenceRef, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry, type RunOutcome } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
   import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
@@ -40,6 +40,13 @@
   let inspectorOpen = $state(false);
   let inspectorInvoker: HTMLButtonElement | undefined;
   let personaText = $state<string | undefined>();
+  let personaBusy = $state(false);
+  let personaError = $state<string | undefined>();
+  let personaRequest = 0;
+  let replayBusy = $state(false);
+  let replayError = $state<string | undefined>();
+  let replayRequest = 0;
+  let mounted = true;
   // Comparison identity is fixed for this mounted screen; the learner owns later changes.
   // svelte-ignore state_referenced_locally
   let replayBand: 1000 | 1400 | 1800 | 2200 = $state(
@@ -198,7 +205,43 @@
   function inspectorKeydown(event: KeyboardEvent): void {
     if (event.key === "Escape") closeInspector();
   }
+  async function requestPersonaVoice(): Promise<void> {
+    if (onVoice === undefined || personaBusy) return;
+    const request = ++personaRequest;
+    personaBusy = true;
+    personaError = undefined;
+    try {
+      const text = await onVoice();
+      if (!mounted || request !== personaRequest) return;
+      personaText = text;
+    } catch {
+      if (!mounted || request !== personaRequest) return;
+      personaError = "The comparison explanation is unavailable right now. Try again.";
+    } finally {
+      if (mounted && request === personaRequest) personaBusy = false;
+    }
+  }
+  async function startResistanceReplay(): Promise<void> {
+    if (onReplayResistance === undefined || replayBusy) return;
+    const request = ++replayRequest;
+    const targetElo = Number(replayBand) as 1000 | 1400 | 1800 | 2200;
+    replayBusy = true;
+    replayError = undefined;
+    try {
+      await onReplayResistance(targetElo);
+    } catch {
+      if (!mounted || request !== replayRequest) return;
+      replayError = "The new replay could not start. Your comparison is still here; try again.";
+    } finally {
+      if (mounted && request === replayRequest) replayBusy = false;
+    }
+  }
   onMount(() => heading?.focus());
+  onDestroy(() => {
+    mounted = false;
+    personaRequest += 1;
+    replayRequest += 1;
+  });
 </script>
 
 <section class="compare" aria-labelledby="compare-title">
@@ -287,8 +330,10 @@
   {#if onReplayResistance}
     <section class="replay-resistance" aria-labelledby="replay-resistance-title">
       <div><p class="eyebrow">Try the same decision again</p><h3 id="replay-resistance-title">Change the practical resistance, not the recorded attempts.</h3><p>Your comparison stays saved. You choose the next rung; Tabiya never changes it silently.</p></div>
-      <label>Human-like rung <select bind:value={replayBand}><option value={1000}>First rung · 1000</option><option value={1400}>Steady · 1400</option><option value={1800}>Testing · 1800</option><option value={2200}>Top measured rung · 2200</option></select></label>
-      <button type="button" onclick={() => void onReplayResistance?.(Number(replayBand) as 1000 | 1400 | 1800 | 2200)}>Start a new replay</button>
+      <label>Human-like rung <select bind:value={replayBand} disabled={replayBusy}><option value={1000}>First rung · 1000</option><option value={1400}>Steady · 1400</option><option value={1800}>Testing · 1800</option><option value={2200}>Top measured rung · 2200</option></select></label>
+      <button type="button" disabled={replayBusy} aria-describedby={replayBusy ? "comparison-replay-busy" : undefined} onclick={() => void startResistanceReplay()}>{replayBusy ? "Starting replay…" : "Start a new replay"}</button>
+      {#if replayBusy}<span id="comparison-replay-busy" role="status">Starting one replay with the selected resistance.</span>{/if}
+      {#if replayError}<p role="alert">{replayError}</p>{/if}
       <small>{HUMAN_MODEL_RUNG_DISCLAIMER}</small>
     </section>
   {/if}
@@ -320,7 +365,9 @@
         <p class="inspector-intro">Raw evaluations, source labels, objective-state records and detector output stay here. They are evidence for deliberate analysis, not the comparison summary.</p>
         <section aria-label="Recorded comparison narrative">
           {#each narrative.groups as group}<div>{#each group.sentences as sentence}<p>{sentence}</p>{/each}</div>{/each}
-          {#if onVoice}<button type="button" onclick={() => void onVoice().then((text) => personaText = text)}>Revoice grounded comparison</button>{/if}
+          {#if onVoice}<button type="button" disabled={personaBusy} aria-describedby={personaBusy ? "comparison-voice-busy" : undefined} onclick={() => void requestPersonaVoice()}>{personaBusy ? "Explaining comparison…" : "Revoice grounded comparison"}</button>{/if}
+          {#if personaBusy}<span id="comparison-voice-busy" role="status">Preparing this comparison explanation.</span>{/if}
+          {#if personaError}<p role="alert">{personaError}</p>{/if}
           {#if personaText}<p>{personaText}</p>{/if}
         </section>
         {#if comparison.machineFeedback === "available"}

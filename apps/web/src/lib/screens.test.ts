@@ -1553,6 +1553,56 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("recovers comparison narration and resistance replay without duplicate actions", async () => {
+    const run = branchedRun();
+    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
+    const voiceFailure = deferred<string>();
+    const replayFailure = deferred<void>();
+    const onVoice = vi.fn()
+      .mockImplementationOnce(() => voiceFailure.promise)
+      .mockResolvedValueOnce("The recorded branches differ after the shared decision.");
+    const onReplayResistance = vi.fn()
+      .mockImplementationOnce(() => replayFailure.promise)
+      .mockResolvedValueOnce(undefined);
+    const component = mount(CompareView, { target: target(), props: {
+      run, pack, comparison, startSide: "white", step: 0,
+      onStep: vi.fn(), onClose: vi.fn(), onVoice, onReplayResistance,
+    } });
+    await tick();
+
+    const replay = [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Start a new replay")!;
+    replay.click();
+    await tick();
+    expect(replay.disabled).toBe(true);
+    replay.click();
+    expect(onReplayResistance).toHaveBeenCalledTimes(1);
+    replayFailure.reject(new Error("private replay transport detail"));
+    await vi.waitFor(() => expect(document.querySelector(".replay-resistance [role='alert']")?.textContent).toContain("comparison is still here"));
+    expect(document.querySelector(".replay-resistance")?.textContent).not.toContain("private replay transport detail");
+    replay.click();
+    await vi.waitFor(() => expect(onReplayResistance).toHaveBeenCalledTimes(2));
+
+    document.querySelector<HTMLButtonElement>(".header-actions button")!.click();
+    await tick();
+    const inspector = document.querySelector<HTMLElement>(".comparison-inspector")!;
+    const voice = [...inspector.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Revoice grounded comparison")!;
+    voice.click();
+    await tick();
+    expect(voice.disabled).toBe(true);
+    voice.click();
+    expect(onVoice).toHaveBeenCalledTimes(1);
+    voiceFailure.reject(new Error("private voice provider detail"));
+    await vi.waitFor(() => expect(inspector.querySelector("[role='alert']")?.textContent).toContain("unavailable right now"));
+    expect(inspector.textContent).not.toContain("private voice provider detail");
+    voice.click();
+    await vi.waitFor(() => expect(onVoice).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(inspector.textContent).toContain("The recorded branches differ after the shared decision."));
+
+    await unmount(component);
+  });
+
   it("renders no machine score through any summary field while comparison feedback is withheld", async () => {
     const run = branchedRun();
     const full = compareBranches(run, run.branches.map((branch) => branch.id));
