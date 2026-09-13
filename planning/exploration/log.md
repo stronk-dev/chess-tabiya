@@ -19699,3 +19699,16 @@ explicit stop proves failure cannot recreate session state. Sequential canonical
 passes: `make verify-software` is green across 188 files / 1,222 tests plus type, performance,
 schema, manifest and production-build checks; `make test-browser` passes all 64 required journeys
 with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Route data cannot arrive on the wrong screen ([[D3222]])
+
+`loadGeneration` previously protected route errors, focus and the loading flag while successful
+loads assigned shared screen state before checking it. Authenticated/public route loaders now stage
+packs, runs, progress, repertoire pages, capabilities, live state, Story and derivations locally
+and admit them only under the exact generation that requested them. Pagination uses the same
+boundary, and live/Story polling checks it after each await. A mounted Play request held across a
+newer Library navigation proves that resolving the old pack population last cannot replace the
+Library's current population. Sequential canonical verification passes: `make verify-software` is
+green across 188 files / 1,223 tests plus type, performance, schema, manifest and production-build
+checks; `make test-browser` passes all 64 required journeys with one explicitly optional Maia
+latency measurement skipped.

@@ -618,20 +618,22 @@
 
   async function loadMoreRuns(): Promise<void> {
     if (runPageBusy || runs.length >= runSelection.total) return;
+    const generation=loadGeneration;
     runPageBusy = true;
     runPageError = undefined;
     try {
       const page = api.runPage === undefined
         ? { runs: await api.runs(50, runs.length), selection: { shown: runs.length, total: runs.length } }
         : await api.runPage(50, runs.length);
+      if(generation!==loadGeneration)return;
       const byId = new Map(runs.map((run) => [run.id, run]));
       for (const run of page.runs) byId.set(run.id, run);
       runs = [...byId.values()];
       runSelection = { shown: runs.length, total: page.selection.total };
     } catch (error) {
-      runPageError = error instanceof Error ? error.message : String(error);
+      if(generation===loadGeneration)runPageError = error instanceof Error ? error.message : String(error);
     } finally {
-      runPageBusy = false;
+      if(generation===loadGeneration)runPageBusy = false;
     }
   }
 
@@ -646,6 +648,7 @@
     routeLoading = true;
     routeError = undefined;
     runPageError = undefined;
+    runPageBusy = false;
     relatedPack = undefined;
     if (
       next.name !== "run" ||
@@ -661,25 +664,37 @@
           api.dueProgress?.() ?? Promise.resolve([]),
           api.assignments?.() ?? Promise.resolve([]),
         ]);
+        if (generation !== loadGeneration) return;
         [packs, dueSchedules, assignedPacks] = [loaded[1], loaded[2], loaded[3]];
         runs = loaded[0].runs;
         runSelection = loaded[0].selection;
       } else if (next.name === "review") {
-        const page = await initialRunPage(); runs = page.runs; runSelection = page.selection;
+        const page = await initialRunPage();
+        if (generation !== loadGeneration) return;
+        runs = page.runs; runSelection = page.selection;
       } else if (next.name === "story") {
         const loaded = await Promise.all([
-          refreshStory(next.runId, true),
+          fetchStory(next.runId, true),
           api.capabilities(),
           api.storyShares?.(next.runId) ?? Promise.resolve([]),
         ]);
+        if (generation !== loadGeneration) return;
+        story = loaded[0];
+        if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
         capabilities = loaded[1];
         storyShares = loaded[2];
       } else if (next.name === "play") {
-        packs = await api.packs();
+        const nextPacks = await api.packs();
+        if (generation !== loadGeneration) return;
+        packs = nextPacks;
       } else if (next.name === "library") {
-        const loaded = await Promise.all([api.packs(), initialRunPage()]); packs = loaded[0]; runs = loaded[1].runs; runSelection = loaded[1].selection;
+        const loaded = await Promise.all([api.packs(), initialRunPage()]);
+        if (generation !== loadGeneration) return;
+        packs = loaded[0]; runs = loaded[1].runs; runSelection = loaded[1].selection;
       } else if (next.name === "settings") {
-        capabilities = await api.capabilities();
+        const nextCapabilities = await api.capabilities();
+        if (generation !== loadGeneration) return;
+        capabilities = nextCapabilities;
       } else if (next.name === "learn") {
         relatedAttempts = {};
         const loaded = await Promise.all([
@@ -693,12 +708,14 @@
           api.packs(),
           api.capabilities(),
         ]);
+        const nextRepertoirePages = await loadRepertoirePages(loaded[3]);
+        if (generation !== loadGeneration) return;
         [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs, capabilities] = [loaded[0], loaded[1], loaded[2], loaded[3], loaded[5], loaded[7], loaded[8]];
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
         recommendations = loaded[4].recommendations;
         recommendationSelection = loaded[4].selection;
-        repertoirePages=await loadRepertoirePages(repertoires);
+        repertoirePages=nextRepertoirePages;
       } else if (next.name === "create") {
         const loaded = await Promise.all([
           api.packDrafts?.() ?? Promise.resolve([]),
@@ -709,21 +726,28 @@
           api.packs(),
           initialRunPage(),
         ]);
+        if (generation !== loadGeneration) return;
         [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities, packs] = loaded;
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
       } else if (next.name === "live") {
         const loaded=await Promise.all([api.liveSessions?.()??Promise.resolve([]),initialRunPage(),api.classrooms?.()??Promise.resolve([]),api.packs()]);
+        if(generation!==loadGeneration)return;
         [liveSessions,classrooms,packs]=[loaded[0],loaded[2],loaded[3]];runs=loaded[1].runs;runSelection=loaded[1].selection;
       } else if (next.name === "live-session") {
         liveReclaimIntent=false;
         liveReclaimError=undefined;
-        [liveDetail,liveJournal]=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
+        const loaded=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
+        if(generation!==loadGeneration)return;
+        [liveDetail,liveJournal]=loaded;
       } else if (next.name === "live-overlay") {
         const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
-        activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
-        const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
+        const nextLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
+        if(generation!==loadGeneration)return;
+        activeLiveDetail=nextLiveDetail;
+        const matchMode=nextLiveDetail?.match===undefined?undefined:nextLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{projectionOnly:true,...(matchMode===undefined?{}:{matchMode})});
+        if(generation!==loadGeneration)return;
       } else if (next.name === "run") {
         const [relatedSessions,nextAssignments,nextRepertoires,nextCapabilities]=await Promise.all([
           api.liveSessions?.()??Promise.resolve([]),
@@ -731,14 +755,18 @@
           api.repertoires?.()??Promise.resolve([]),
           api.capabilities(),
         ]);
+        const nextRepertoirePages=await loadRepertoirePages(nextRepertoires);
+        const related=relatedSessions.find((item)=>item.runId===next.runId);
+        const nextLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
+        if(generation!==loadGeneration)return;
         assignedPacks=nextAssignments;
         repertoires=nextRepertoires;
         capabilities=nextCapabilities;
-        repertoirePages=await loadRepertoirePages(repertoires);
-        const related=relatedSessions.find((item)=>item.runId===next.runId);
-        activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
-        const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
+        repertoirePages=nextRepertoirePages;
+        activeLiveDetail=nextLiveDetail;
+        const matchMode=nextLiveDetail?.match===undefined?undefined:nextLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
+        if(generation!==loadGeneration)return;
         const relation = session.pack?.variantOf;
         if (relation !== undefined) {
           try {
@@ -750,7 +778,9 @@
             if (generation === loadGeneration) relatedPack = undefined;
           }
         }
-        derivations = await (api.runDerivations?.(next.runId) ?? Promise.resolve(undefined));
+        const nextDerivations = await (api.runDerivations?.(next.runId) ?? Promise.resolve(undefined));
+        if(generation!==loadGeneration)return;
+        derivations = nextDerivations;
       }
     } catch (error) {
       if (generation === loadGeneration) {
@@ -781,7 +811,9 @@
     if (livePoll !== undefined) { clearInterval(livePoll); livePoll = undefined; }
     if (storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
     try {
-      [packs, capabilities] = await Promise.all([api.packs(), api.capabilities()]);
+      const loaded = await Promise.all([api.packs(), api.capabilities()]);
+      if (generation !== loadGeneration) return;
+      [packs, capabilities] = loaded;
     } catch (error) {
       if (generation === loadGeneration) routeError = error instanceof Error ? error.message : String(error);
     } finally {
@@ -812,10 +844,17 @@
     if(livePoll!==undefined){clearInterval(livePoll);livePoll=undefined;}
     if(next.name!=="live-session"&&next.name!=="live-overlay"&&next.name!=="run")return;
     livePoll=setInterval(()=>void (async()=>{
+      const generation=loadGeneration;
       const sessionId=next.name==="live-session"?next.sessionId:activeLiveDetail?.session.id;
       if(sessionId===undefined)return;
-      const detail=await api.liveSession?.(sessionId);if(detail!==undefined){if(next.name==="live-session")liveDetail=detail;else activeLiveDetail=detail;controller.setMatchMode(detail.match===undefined?undefined:detail.match.pausedAt===null?"live":"paused");}
-      if(next.name==="live-session")liveJournal=(await api.sessionJournal?.(sessionId)??{entries:[],nextSeq:0}).entries;
+      const detail=await api.liveSession?.(sessionId);
+      if(generation!==loadGeneration)return;
+      if(detail!==undefined){if(next.name==="live-session")liveDetail=detail;else activeLiveDetail=detail;controller.setMatchMode(detail.match===undefined?undefined:detail.match.pausedAt===null?"live":"paused");}
+      if(next.name==="live-session"){
+        const journal=(await api.sessionJournal?.(sessionId)??{entries:[],nextSeq:0}).entries;
+        if(generation!==loadGeneration)return;
+        liveJournal=journal;
+      }
     })(),2_000);
   }
 
@@ -825,21 +864,30 @@
     storyPoll = setInterval(() => void refreshStory(next.runId, false), 1_000);
   }
 
-  async function refreshStory(runId: string, allowReveal: boolean): Promise<void> {
+  async function fetchStory(runId: string, allowReveal: boolean): Promise<GameStory> {
     if (api.story === undefined) throw new Error("Game stories are unavailable");
     const writer = WriterSession.peek(runId, storage);
+    let nextStory: GameStory;
     try {
-      story = await api.story(runId);
+      nextStory = await api.story(runId);
     } catch (error) {
       if (!(allowReveal && error instanceof ApiError && error.code === "ASSISTANCE_WITHHELD" && writer !== undefined)) throw error;
       await api.reveal(runId, writer.writerId);
-      story = await api.story(runId);
+      nextStory = await api.story(runId);
     }
-    if (writer !== undefined && story !== undefined && !story.ready) {
+    if (writer !== undefined && !nextStory.ready) {
       const page = await api.evidence(runId, 0);
       for (const result of page.results) await api.applyEvidence(runId, result.seq, writer.writerId);
-      story = await api.story(runId);
+      nextStory = await api.story(runId);
     }
+    return nextStory;
+  }
+
+  async function refreshStory(runId: string, allowReveal: boolean): Promise<void> {
+    const generation=loadGeneration;
+    const nextStory=await fetchStory(runId,allowReveal);
+    if(generation!==loadGeneration||route.name!=="story"||route.runId!==runId)return;
+    story=nextStory;
     if (story?.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
   }
 

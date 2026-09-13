@@ -175,6 +175,15 @@ function target(): HTMLElement {
   return element;
 }
 
+function deferred<T>(): {
+  readonly promise: Promise<T>;
+  readonly resolve: (value: T) => void;
+} {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((resolvePromise) => { resolve = resolvePromise; });
+  return { promise, resolve };
+}
+
 function key(value: string, options: KeyboardEventInit = {}): KeyboardEvent {
   const event = new KeyboardEvent("keydown", {
     key: value,
@@ -531,6 +540,41 @@ describe("application shell", () => {
     expect(document.querySelector(".item-list")?.textContent).toContain("Objective weakened");
     expect(document.querySelector(".item-list")?.textContent).not.toContain(pack.id);
     expect(document.querySelector(".item-list")?.textContent).not.toContain("degraded");
+    await unmount(component);
+  });
+
+  it("does not let an older route response overwrite the current screen", async () => {
+    const slowPlay = deferred<readonly PackSummary[]>();
+    const oldPack = { ...packSummary, id: "old-route-pack", title: "Old route pack" };
+    const currentPack = { ...packSummary, id: "current-library-pack", title: "Current library pack" };
+    let packCalls = 0;
+    const routedApi: DrillClientApi = {
+      ...api(),
+      async packs() {
+        packCalls += 1;
+        if (packCalls === 2) return slowPlay.promise;
+        if (packCalls === 3) return [currentPack];
+        return [packSummary];
+      },
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: routedApi, router, storage: new MemoryStorage() },
+    });
+    await vi.waitFor(() => expect(packCalls).toBe(1));
+
+    router.navigate("/play");
+    await vi.waitFor(() => expect(packCalls).toBe(2));
+    router.navigate("/library");
+    await vi.waitFor(() => expect(document.body.textContent).toContain(currentPack.title));
+
+    slowPlay.resolve([oldPack]);
+    await tick();
+    await Promise.resolve();
+    expect(document.body.textContent).toContain(currentPack.title);
+    expect(document.body.textContent).not.toContain(oldPack.title);
+    expect(location.pathname).toBe("/library");
     await unmount(component);
   });
 

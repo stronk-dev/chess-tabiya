@@ -26405,6 +26405,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/session-controller.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3222",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dbc1f32a758a94d43ba88c7dfc1c81d4c09952e72b4c96aedbb1973f6964bbee",
+      "uxItems": [],
+      "evidence": "apps/web/src/App.svelte",
+      "evidenceKind": "path"
     }
   ]
 }
