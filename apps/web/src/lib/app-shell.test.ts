@@ -2358,6 +2358,76 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("keeps Studio save single-flight and replaces storage diagnostics with retry copy", async () => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "save-lifecycle-draft", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const first = deferred<PackDraft>();
+    const second = deferred<PackDraft>();
+    const updatePackDraft = vi.fn((_draftId: string, _digest: string, _document: unknown) => first.promise);
+    updatePackDraft.mockImplementationOnce(() => first.promise).mockImplementationOnce(() => second.promise);
+    const studioApi: DrillClientApi = {
+      ...api(),
+      async packDrafts() { return [draft]; },
+      async lintPackDraft() { return draft.validation; },
+      updatePackDraft,
+    };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    const save = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Save");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    save.click();
+    save.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await vi.waitFor(() => expect(updatePackDraft).toHaveBeenCalledTimes(1));
+    expect(document.body.textContent).toContain("Saving the retained draft…");
+    first.reject(new Error("private optimistic-lock database trace"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This draft could not be saved."));
+    expect(document.body.textContent).not.toContain("private optimistic-lock database trace");
+    expect(document.querySelector<HTMLTextAreaElement>("#studio-json")!.disabled).toBe(false);
+
+    save.click();
+    await vi.waitFor(() => expect(updatePackDraft).toHaveBeenCalledTimes(2));
+    second.resolve({ ...draft, digest: `sha256:${"b".repeat(64)}` });
+    await vi.waitFor(() => expect(document.body.textContent).not.toContain("Saving the retained draft…"));
+    await unmount(component);
+  });
+
+  it("keeps successful registration distinct from a failed draft-list refresh", async () => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "register-lifecycle-draft", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    let listCalls = 0;
+    const registerPackDraft = vi.fn(async () => ({ ...packSummary, id: pack.id, reviewStatus: "published" as const, channel: "community" as const }));
+    const studioApi: DrillClientApi = {
+      ...api(),
+      async packDrafts() {
+        listCalls += 1;
+        if (listCalls > 1) throw new Error("private refresh trace");
+        return [draft];
+      },
+      async lintPackDraft() { return draft.validation; },
+      registerPackDraft,
+    };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    const register = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Register community pack")!;
+      expect(button.disabled).toBe(false);
+      return button;
+    });
+    register.click();
+    await vi.waitFor(() => expect(registerPackDraft).toHaveBeenCalledTimes(1));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The pack was registered, but the draft list could not refresh."));
+    expect(document.body.textContent).not.toContain("private refresh trace");
+    expect(document.body.textContent).toContain(`${pack.id} · registered`);
+    await unmount(component);
+  });
+
   it("shows graduation conditions from the current unsaved Studio bytes", async () => {
     history.replaceState(null, "", "/create");
     const documentWithConditions = structuredClone(pack) as unknown as Record<string, unknown>;

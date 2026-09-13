@@ -168,6 +168,8 @@
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
   let studioActionError: string | undefined = $state();
+  let studioMutationBusy: { readonly kind: "create" | "save" | "playtest" | "register" | "withdraw"; readonly draftId?: string } | undefined = $state();
+  let studioMutationGeneration = 0;
   let packBufferValidation: PackValidation | undefined = $state();
   let packLintState: "idle" | "waiting" | "checking" | "ready" | "invalid_json" | "error" | "unavailable" = $state("idle");
   let packLintError: string | undefined = $state();
@@ -1433,16 +1435,154 @@
   }
 
   async function createDraft(): Promise<void> {
+    if (studioMutationBusy !== undefined) return;
+    const action = ++studioMutationGeneration;
+    const generation = loadGeneration;
+    const sourceJson = studioJson;
+    const selection = selectedDraftId;
+    studioMutationBusy = { kind: "create" };
     studioActionError = undefined;
     try {
-      const document = JSON.parse(studioJson) as unknown;
-      const draft = await api.createPackDraft?.(document);
-      if (draft !== undefined) {
-        drafts = [draft, ...drafts];
-        selectedDraftId = draft.id;
-        studioJson = JSON.stringify(draft.document, null, 2);
+      const document = JSON.parse(sourceJson) as unknown;
+      const expectedPackId = typeof document === "object" && document !== null && "id" in document && typeof document.id === "string" ? document.id : "";
+      if (api.createPackDraft === undefined || expectedPackId === "") throw new Error("Pack draft creation is unavailable");
+      const draft = await api.createPackDraft(document);
+      if (!validPackDraftIdentity(draft, expectedPackId)) throw new Error("Invalid pack draft response");
+      if (appMounted && action === studioMutationGeneration && generation === loadGeneration && route.name === "create") {
+        drafts = [draft, ...drafts.filter((candidate) => candidate.id !== draft.id)];
+        if (selectedDraftId === selection && studioJson === sourceJson) {
+          selectedDraftId = draft.id;
+          studioJson = JSON.stringify(draft.document, null, 2);
+        }
       }
-    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
+    } catch {
+      if (appMounted && action === studioMutationGeneration && generation === loadGeneration && route.name === "create") {
+        studioActionError = "The draft could not be created. Check the JSON and try again.";
+      }
+    } finally {
+      if (appMounted && action === studioMutationGeneration) studioMutationBusy = undefined;
+    }
+  }
+
+  function studioActionIsCurrent(action: number, generation: number): boolean {
+    return appMounted && action === studioMutationGeneration && generation === loadGeneration && route.name === "create";
+  }
+
+  function publishSavedDraft(saved: PackDraft, draftId: string, sourceJson: string): void {
+    drafts = drafts.map((candidate) => candidate.id === draftId ? saved : candidate);
+    if (selectedDraftId === draftId && studioJson === sourceJson) {
+      studioJson = JSON.stringify(saved.document, null, 2);
+    }
+  }
+
+  async function saveDraft(): Promise<void> {
+    if (studioMutationBusy !== undefined) return;
+    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
+    if (draft === undefined || draft.state !== "draft") return;
+    const action = ++studioMutationGeneration;
+    const generation = loadGeneration;
+    const sourceJson = studioJson;
+    studioMutationBusy = { kind: "save", draftId: draft.id };
+    studioActionError = undefined;
+    try {
+      if (api.updatePackDraft === undefined) throw new Error("Pack draft saving is unavailable");
+      const saved = await api.updatePackDraft(draft.id, draft.digest, JSON.parse(sourceJson));
+      if (!validPackDraftIdentity(saved, draft.packId) || saved.id !== draft.id) throw new Error("Invalid saved draft response");
+      if (studioActionIsCurrent(action, generation)) publishSavedDraft(saved, draft.id, sourceJson);
+    } catch {
+      if (studioActionIsCurrent(action, generation)) studioActionError = "This draft could not be saved. Your editor bytes are unchanged; try again.";
+    } finally {
+      if (appMounted && action === studioMutationGeneration) studioMutationBusy = undefined;
+    }
+  }
+
+  async function playtestDraft(): Promise<void> {
+    if (studioMutationBusy !== undefined) return;
+    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
+    if (draft === undefined || draft.state !== "draft") return;
+    const action = ++studioMutationGeneration;
+    const generation = loadGeneration;
+    const sourceJson = studioJson;
+    studioMutationBusy = { kind: "playtest", draftId: draft.id };
+    studioActionError = undefined;
+    let saved = false;
+    try {
+      if (api.updatePackDraft === undefined || api.playtestPackDraft === undefined) throw new Error("Pack playtesting is unavailable");
+      const updated = await api.updatePackDraft(draft.id, draft.digest, JSON.parse(sourceJson));
+      if (!validPackDraftIdentity(updated, draft.packId) || updated.id !== draft.id) throw new Error("Invalid saved draft response");
+      saved = true;
+      if (studioActionIsCurrent(action, generation)) publishSavedDraft(updated, draft.id, sourceJson);
+      if (!updated.validation.valid) throw new Error("Saved draft is not valid for playtesting");
+      const writerId = `writer-${crypto.randomUUID()}`;
+      const result = await api.playtestPackDraft(updated.id, writerId);
+      if (result.run.id.trim() === "") throw new Error("Invalid playtest run response");
+      WriterSession.claimFor(result.run.id, storage, () => writerId);
+      if (result.url !== routePath({ name: "run", runId: result.run.id })) throw new Error("Invalid playtest route response");
+      if (studioActionIsCurrent(action, generation)) navigate(result.url);
+    } catch {
+      if (studioActionIsCurrent(action, generation)) {
+        studioActionError = saved
+          ? "The draft was saved, but its playtest could not be opened. Try starting the playtest again."
+          : "The draft could not be saved for playtesting. Your editor bytes remain here; try again.";
+      }
+    } finally {
+      if (appMounted && action === studioMutationGeneration) studioMutationBusy = undefined;
+    }
+  }
+
+  async function withdrawDraft(draftId: string): Promise<void> {
+    if (studioMutationBusy !== undefined) return;
+    const draft = drafts.find((candidate) => candidate.id === draftId);
+    if (draft === undefined || draft.state !== "draft" || api.withdrawPackDraft === undefined) return;
+    const action = ++studioMutationGeneration;
+    const generation = loadGeneration;
+    studioMutationBusy = { kind: "withdraw", draftId };
+    studioActionError = undefined;
+    try {
+      await api.withdrawPackDraft(draftId);
+      if (studioActionIsCurrent(action, generation)) {
+        drafts = drafts.map((candidate) => candidate.id === draftId ? { ...candidate, state: "withdrawn" } : candidate);
+        if (withdrawConfirmId === draftId) withdrawConfirmId = undefined;
+      }
+    } catch {
+      if (studioActionIsCurrent(action, generation)) studioActionError = "This draft could not be withdrawn. Nothing changed; try again.";
+    } finally {
+      if (appMounted && action === studioMutationGeneration) studioMutationBusy = undefined;
+    }
+  }
+
+  async function registerDraft(): Promise<void> {
+    if (studioMutationBusy !== undefined) return;
+    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
+    if (draft === undefined || registrationBlockReason(draft) !== undefined || api.registerPackDraft === undefined) return;
+    const action = ++studioMutationGeneration;
+    const generation = loadGeneration;
+    studioMutationBusy = { kind: "register", draftId: draft.id };
+    studioActionError = undefined;
+    let registered = false;
+    try {
+      const summary = await api.registerPackDraft(draft.id);
+      registered = true;
+      if (summary.id !== draft.packId) throw new Error("Invalid registered pack response");
+      if (!studioActionIsCurrent(action, generation)) return;
+      drafts = drafts.map((candidate) => candidate.id === draft.id ? { ...candidate, state: "registered" } : candidate);
+      if (api.packDrafts !== undefined) {
+        try {
+          const refreshed = await api.packDrafts();
+          if (studioActionIsCurrent(action, generation)) drafts = refreshed;
+        } catch {
+          if (studioActionIsCurrent(action, generation)) studioActionError = "The pack was registered, but the draft list could not refresh. Reload Create to see its current state.";
+        }
+      }
+    } catch {
+      if (studioActionIsCurrent(action, generation)) {
+        studioActionError = registered
+          ? "The pack was registered, but its response could not be matched. Reload Create before acting on it again."
+          : "This pack could not be registered. The draft remains private; check its blockers and try again.";
+      }
+    } finally {
+      if (appMounted && action === studioMutationGeneration) studioMutationBusy = undefined;
+    }
   }
 
   async function openSeedDraft(expectedPackId: string, work: () => Promise<PackDraft>): Promise<boolean> {
@@ -1534,44 +1674,6 @@
     });
   }
 
-  async function persistSelectedDraft(): Promise<PackDraft | undefined> {
-    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
-    if (draft === undefined || draft.state !== "draft") return undefined;
-    const saved = await api.updatePackDraft?.(draft.id, draft.digest, JSON.parse(studioJson));
-    if (saved !== undefined) drafts = drafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
-    return saved;
-  }
-
-  async function saveDraft(): Promise<void> {
-    studioActionError = undefined;
-    try { await persistSelectedDraft(); }
-    catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
-  }
-
-  async function playtestDraft(): Promise<void> {
-    studioActionError = undefined;
-    try {
-      const draft = await persistSelectedDraft();
-      if (draft === undefined) throw new Error("Select a mutable draft before playtesting");
-      if (!draft.validation.valid) throw new Error("Fix the validation errors before playtesting");
-      if (api.playtestPackDraft === undefined) throw new Error("Pack playtesting is unavailable");
-      const writerId = `writer-${crypto.randomUUID()}`;
-      const result = await api.playtestPackDraft(draft.id, writerId);
-      WriterSession.claimFor(result.run.id, storage, () => writerId);
-      navigate(result.url);
-    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
-  }
-
-  async function withdrawDraft(draftId: string): Promise<void> {
-    const draft = drafts.find((candidate) => candidate.id === draftId);
-    if (draft === undefined || api.withdrawPackDraft === undefined) return;
-    studioActionError = undefined;
-    try {
-      await api.withdrawPackDraft(draft.id);
-      drafts = drafts.map((candidate) => candidate.id === draft.id ? { ...candidate, state: "withdrawn" } : candidate);
-      withdrawConfirmId = undefined;
-    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
-  }
 
   function registrationBlockReason(draft: PackDraft | undefined): string | undefined {
     if (draft === undefined) return "Select a draft first.";
@@ -1586,15 +1688,6 @@
     return undefined;
   }
 
-  async function registerDraft(): Promise<void> {
-    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
-    if (draft === undefined) return;
-    studioActionError = undefined;
-    try {
-      await api.registerPackDraft?.(draft.id);
-      drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
-    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
-  }
 
   async function createShapeDraft(): Promise<void> {
     shapeActionError = undefined;
@@ -1954,6 +2047,7 @@
     authGeneration += 1;
     distillGeneration += 1;
     createSeedGeneration += 1;
+    studioMutationGeneration += 1;
     themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
@@ -2376,7 +2470,7 @@
       <aside class="resume-drafts" aria-label="Your drafts">
         <h2 id="resume-drafts-title">Resume one of your drafts</h2>
         <div class="row-actions">
-          {#each drafts as draft}<button type="button" onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>{draft.packId} · {draft.state}</button>{:else}<p>No saved pack drafts yet.</p>{/each}
+          {#each drafts as draft}<button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>{draft.packId} · {draft.state}</button>{:else}<p>No saved pack drafts yet.</p>{/each}
         </div>
       </aside>
       {/if}
@@ -2387,26 +2481,27 @@
         <aside aria-label="Your drafts">
           <h2>Your drafts</h2>
           {#each drafts as draft}
-            <button type="button" onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>
+            <button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>
               {draft.packId} · {draft.state}
             </button>
           {:else}<p>No database drafts yet. Paste a v{DRILL_PACK_SCHEMA_VERSION} pack to begin.</p>{/each}
         </aside>
         <section>
           <label for="studio-json">Pack JSON</label>
-          <textarea id="studio-json" bind:value={studioJson} spellcheck="false"></textarea>
+          <textarea id="studio-json" bind:value={studioJson} disabled={studioMutationBusy !== undefined} spellcheck="false"></textarea>
           <div class="row-actions">
-            <button type="button" onclick={() => void createDraft()}>Create draft</button>
-            <button type="button" disabled={selectedPackDraft?.state !== "draft"} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => void saveDraft()}>Save</button>
-            <button class="primary" type="button" disabled={selectedPackDraft?.state !== "draft" || packLintState !== "ready" || !packBufferValidation?.valid} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : packLintState !== "ready" || !packBufferValidation?.valid ? "playtest-disabled" : undefined} onclick={() => void playtestDraft()}>Save &amp; playtest</button>
-            <button type="button" disabled={selectedPackRegistrationBlock !== undefined} aria-describedby={selectedPackRegistrationBlock !== undefined ? "register-disabled" : "pack-publication-retention"} onclick={() => void registerDraft()}>Register community pack</button>
-            <button type="button" disabled={selectedPackDraft?.state !== "draft"} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => { if (selectedPackDraft) withdrawConfirmId = selectedPackDraft.id; }}>Withdraw…</button>
+            <button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => void createDraft()}>Create draft</button>
+            <button type="button" disabled={studioMutationBusy !== undefined || selectedPackDraft?.state !== "draft"} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => void saveDraft()}>Save</button>
+            <button class="primary" type="button" disabled={studioMutationBusy !== undefined || selectedPackDraft?.state !== "draft" || packLintState !== "ready" || !packBufferValidation?.valid} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : packLintState !== "ready" || !packBufferValidation?.valid ? "playtest-disabled" : undefined} onclick={() => void playtestDraft()}>Save &amp; playtest</button>
+            <button type="button" disabled={studioMutationBusy !== undefined || selectedPackRegistrationBlock !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : selectedPackRegistrationBlock !== undefined ? "register-disabled" : "pack-publication-retention"} onclick={() => void registerDraft()}>Register community pack</button>
+            <button type="button" disabled={studioMutationBusy !== undefined || selectedPackDraft?.state !== "draft"} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => { if (selectedPackDraft) withdrawConfirmId = selectedPackDraft.id; }}>Withdraw…</button>
           </div>
+          {#if studioMutationBusy !== undefined}<p id="studio-action-busy" role="status">{studioMutationBusy.kind === "playtest" ? "Saving the retained draft and starting its playtest…" : studioMutationBusy.kind === "register" ? "Registering the retained draft…" : studioMutationBusy.kind === "withdraw" ? "Withdrawing the retained draft…" : studioMutationBusy.kind === "save" ? "Saving the retained draft…" : "Creating one draft from these retained bytes…"}</p>{/if}
           {#if selectedPackDraft?.state !== "draft"}<p id="draft-action-disabled" class="honest">{selectedPackDraft ? `This draft is ${selectedPackDraft.state}; its saved bytes remain read-only.` : "Select or create a draft first."}</p>{/if}
           {#if selectedPackDraft?.state === "draft" && (packLintState !== "ready" || !packBufferValidation?.valid)}<p id="playtest-disabled" class="honest">{packLintState === "waiting" ? "Waiting for you to pause typing…" : packLintState === "checking" ? "Checking these unsaved bytes…" : packLintState === "unavailable" ? "Live validation is unavailable; saving remains possible." : "Fix the listed validation errors before the real run can start."}</p>{/if}
           {#if selectedPackRegistrationBlock !== undefined}<p id="register-disabled" class="honest">{selectedPackRegistrationBlock}</p>{/if}
           {#if selectedPackDraft}<p id="pack-publication-retention" class="honest">Playtesting stays private and preserves the tested bytes. Registration publishes immutable document bytes, authored prose, licence, and attribution; those remain available with “deleted account” attribution if you later delete your account.</p>{/if}
-          {#if selectedPackDraft && withdrawConfirmId === selectedPackDraft.id}<aside class="deletion-card"><h3>Withdraw this draft?</h3><p>It becomes read-only and cannot be registered. Existing private playtest runs keep their exact tested bytes.</p><div class="row-actions"><button type="button" onclick={() => void withdrawDraft(selectedPackDraft.id)}>Confirm withdrawal</button><button type="button" onclick={() => withdrawConfirmId = undefined}>Cancel</button></div></aside>{/if}
+          {#if selectedPackDraft && withdrawConfirmId === selectedPackDraft.id}<aside class="deletion-card"><h3>Withdraw this draft?</h3><p>It becomes read-only and cannot be registered. Existing private playtest runs keep their exact tested bytes.</p><div class="row-actions"><button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => void withdrawDraft(selectedPackDraft.id)}>Confirm withdrawal</button><button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => withdrawConfirmId = undefined}>Cancel</button></div></aside>{/if}
           {#if studioActionError}<p role="alert">{studioActionError}</p>{/if}
           {#if packLintError}<p role="alert">{packLintError}</p>{/if}
           <section class="validation-summary" aria-labelledby="required-pack-fields">

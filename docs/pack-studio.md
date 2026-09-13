@@ -167,6 +167,18 @@ authority only after the game is stored under the requested run id. If distillat
 saved run and exact destination remain a resumable preparation; retry distills that run again
 without importing a duplicate game. The seed controls and setup board remain fixed while an action
 is pending.
+
+## Editor mutation lifecycle
+
+Create, save, save-and-playtest, registration and withdrawal share one pending owner. Each action
+retains the selected draft, optimistic-lock digest, editor bytes and Create-route generation; the
+editor and draft selector remain fixed until settlement. Draft responses must preserve both record
+and document identity. Playtest persists the returned draft before creating a run, validates the
+run's own route, and stores writer authority before current-route navigation. Registration validates
+the published pack identity and records successful registration locally before attempting a
+secondary draft-list refresh. A failed refresh is therefore reported as stale projection, never as
+failed publication. Provider diagnostics do not render, and departed settlements cannot replace
+the current editor or route.
 ## Shape-entry authoring
 
 Shape-entry authoring extends the pack workflow described above. Shape drafts use

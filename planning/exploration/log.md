@@ -19909,3 +19909,16 @@ partial-success, newer-selection and departed-route falsifiers pass. Sequential 
 verification passes: `make verify-software` is green across 195 files / 1,276 tests plus type,
 performance, schema, manifest and production-build checks; `make test-browser` passes all 64
 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Pack Studio editor mutations share one retained lifecycle ([[D3238]])
+
+Create, save, save-and-playtest, registration and withdrawal previously read mutable selection and
+buffer state across awaits, admitted programmatic duplicates, exposed provider diagnostics and
+trusted crossed responses. They now capture exact draft, digest, bytes and route; share one pending
+owner; validate draft, playtest-run and registered-pack identities; preserve newer selection; and
+make departed presentation inert. Playtest distinguishes saved-draft success from run-start failure,
+and registration distinguishes publication success from list-refresh failure. Duplicate,
+bounded-failure, crossed-response, partial-success and existing happy-path falsifiers pass.
+Sequential canonical verification passes: `make verify-software` is green across 195 files / 1,278
+tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
+passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
