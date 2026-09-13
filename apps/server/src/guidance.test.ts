@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, declareCompareDerivedEvidence, declarePhaseReadingEvidence, declareRunRecordEvidence, declareShapeFiringEvidence, declareStoryDerivedEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, declareAuthoredClaimEvidence, declareCompareDerivedEvidence, declareNamedStructureEvidence, declarePackPhaseEvidence, declarePhaseReadingEvidence, declareRunRecordEvidence, declareShapeFiringEvidence, declareStoryDerivedEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import type { SquareName } from "chessops/types";
 import * as ts from "typescript";
@@ -63,6 +63,21 @@ function voiceAssemblyCensus(sourceText: string): readonly { readonly name: stri
 }
 
 describe("adaptive guidance server seams", () => {
+  it("renders base guidance without reveal keys or detector plumbing", () => {
+    const evidence = [
+      declarePhaseReadingEvidence(classifyPhase(FEN)),
+      declarePackPhaseEvidence("middlegame"),
+      declareNamedStructureEvidence({ name: "Isolated queen's pawn", provenanceNote: "rules.structural:iqp-v1" }),
+      declareAuthoredClaimEvidence({ id: "claim-one", text: "Keep the pawn protected.", attribution: "authored:checkpoint:17" }),
+    ];
+    const rendered = voiceEvidenceView(fixturePacket(), "reading", evidence, false).rendered;
+    const text = rendered.items.flatMap((item) => item.sentences).join(" ");
+    expect(text).toContain("Current position: Opening.");
+    expect(text).toContain("Rehearsal focus: Middlegame.");
+    expect(text).toContain("Recognized position structure: Isolated queen's pawn.");
+    expect(text).toContain("Authored guidance: Keep the pawn protected.");
+    expect(text).not.toMatch(/authored:|checkpoint:17|rules\.structural|phase bands|provenance|pack declares/iu);
+  });
   it("voices compare structure operands instead of raw detector ids", () => {
     const evidence = declareCompareDerivedEvidence("structure_delta", { observation: { kind: "isolated_pawn", color: "white", file: "d", squares: [] } });
     const rendered = voiceEvidenceView(fixturePacket(), "compare", [evidence], false).rendered;

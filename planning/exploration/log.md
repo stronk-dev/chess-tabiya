@@ -19418,3 +19418,13 @@ fixture covers fork, move, checkpoint, objective transition, non-terminal conseq
 delta together, and rejects `cp`, `plies`, `offset`, the checkpoint storage key and both raw state
 enums. This is a consumer-boundary repair only: [[D2140]] still owns the draft discriminated
 `run.record.consequence@1` operand contract. `make test-software` passes 188 files / 1,185 tests.
+
+## 2026-09-13 — Base narrated guidance separates prose from provenance ([[D3199]])
+
+The base voice consumer previously appended `authored:<reveal-kind>:<event-seq>` to authored chess
+text, named internal phase bands, and concatenated a structure detector's provenance note. Those
+operands remain intact in each sealed evidence item and therefore remain available to Inspector and
+the external provider. The deterministic/provider-facing sentences now name the current phase,
+authored rehearsal focus, recognized structure and authored guidance in plain language. The
+four-family fixture rejects reveal keys, event ids, detector paths, phase-band wording and
+provenance labels. `make test-software` passes 188 files / 1,185 tests.

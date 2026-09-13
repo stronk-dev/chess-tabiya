@@ -16,7 +16,6 @@ import {
   matchesStructuralExpression,
   pivotalMarkers,
   renderEndgameReading,
-  renderPhaseReading,
   renderPivotalMarker,
   renderRecordedReading,
   renderShapeFiring,
@@ -49,6 +48,34 @@ export interface VoiceEvidenceView {
 export interface VoiceProvider { render(view: VoiceEvidenceView, persona: string, deterministicText: string, scope: VoiceScope): Promise<string>; }
 
 const one = (sentence: string): readonly string[] => Object.freeze([sentence]);
+
+function phaseCopy(value: unknown): string {
+  switch (value) {
+    case "opening": return "Opening";
+    case "middlegame": return "Middlegame";
+    case "endgame": return "Endgame";
+    case "cross_phase": return "Transition between phases";
+    case "unclear": return "Phase not clear";
+    default: throw new TypeError("Guidance evidence omitted a known chess phase");
+  }
+}
+
+function renderGuidancePhase(evidence: DeclaredEvidence<unknown>): readonly string[] {
+  const phase = (evidence.payload as { readonly phase?: unknown }).phase;
+  return one(`Current position: ${phaseCopy(phase)}.`);
+}
+
+function renderGuidanceStructure(evidence: DeclaredEvidence<unknown>): readonly string[] {
+  const name = (evidence.payload as { readonly name?: unknown }).name;
+  if (typeof name !== "string" || name.trim() === "") throw new TypeError("Named-structure evidence omitted its learner label");
+  return one(`Recognized position structure: ${name}.`);
+}
+
+function renderGuidanceClaim(evidence: DeclaredEvidence<unknown>): readonly string[] {
+  const text = (evidence.payload as { readonly text?: unknown }).text;
+  if (typeof text !== "string" || text.trim() === "") throw new TypeError("Authored guidance evidence omitted its text");
+  return one(`Authored guidance: ${text}`);
+}
 
 function recordedTurnCount(value: unknown): string {
   if (!Number.isSafeInteger(value) || (value as number) < 0) throw new TypeError("Recorded comparison count must be a non-negative integer");
@@ -111,12 +138,12 @@ function renderStoryDerived(evidence: DeclaredEvidence<unknown>): readonly strin
   return one(renderStoryEvaluationChange(payload.after as StoryEvaluation, payload.delta as number));
 }
 const RENDERERS = Object.freeze({
-  "rules.phase.reading@1": (evidence: DeclaredEvidence<unknown>) => Object.freeze([renderPhaseReading(evidence.payload as ReturnType<typeof classifyPhase>)]),
-  "pack.authored.phase@1": (evidence: DeclaredEvidence<unknown>) => Object.freeze([`This pack declares: ${String(evidence.payload)}.`]),
-  "rules.structural.reading.named_structure@1": (evidence: DeclaredEvidence<unknown>) => { const item = evidence.payload as { readonly name: string; readonly provenanceNote: string }; return Object.freeze([`Detected structure: ${item.name}. ${item.provenanceNote}`]); },
+  "rules.phase.reading@1": renderGuidancePhase,
+  "pack.authored.phase@1": (evidence: DeclaredEvidence<unknown>) => one(`Rehearsal focus: ${phaseCopy(evidence.payload)}.`),
+  "rules.structural.reading.named_structure@1": renderGuidanceStructure,
   "rules.pivotal.marker@1": (evidence: DeclaredEvidence<unknown>) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]),
   "rules.endgame.reading@1": (evidence: DeclaredEvidence<unknown>) => renderEndgameReading(evidence.payload as Parameters<typeof renderEndgameReading>[0]),
-  "pack.authored.claim@1": (evidence: DeclaredEvidence<unknown>) => { const item = evidence.payload as { readonly text: string; readonly attribution: string }; return Object.freeze([`${item.text} (${item.attribution})`]); },
+  "pack.authored.claim@1": renderGuidanceClaim,
   "theory.shapes.firing@1": (evidence: DeclaredEvidence<unknown>) => renderShapeFiring(evidence.payload as Parameters<typeof renderShapeFiring>[0]),
   "run.record.fork@1": renderRunRecord,
   "run.record.move@1": renderRunRecord,
