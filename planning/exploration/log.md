@@ -19872,3 +19872,15 @@ Crossed-preview, duplicate, failure and departed-export falsifiers pass. Sequent
 verification passes: `make verify-software` is green across 192 files / 1,257 tests plus type,
 performance, schema, manifest and production-build checks; `make test-browser` passes all 64
 required journeys with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Public account access retains one exact submission ([[D3235]])
+
+Registration and sign-in previously accepted duplicate submissions, rendered provider diagnostics,
+and read mutable mode, credentials and selected-pack state after the request. Account access now
+captures those values and the initiating route, exposes one pending operation, validates the returned
+learner identity, preserves retry input, and makes stale or departed settlements inert. Only the
+captured rehearsal can start, and only while the learner remains on the initiating route.
+Single-flight, bounded-error and malformed-response falsifiers pass. Sequential canonical
+verification passes: `make verify-software` is green across 193 files / 1,262 tests plus type,
+performance, schema, manifest and production-build checks; `make test-browser` passes all 64
+required journeys with one explicitly optional Maia latency measurement skipped.

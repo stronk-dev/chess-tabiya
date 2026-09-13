@@ -14,6 +14,7 @@
   import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, repertoireGapStateLabel } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
+  import { validAuthenticatedLearner } from "./lib/auth-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
@@ -272,8 +273,11 @@
   let authHandle = $state("");
   let authPassword = $state("");
   let authRegister = $state(false);
+  let authBusy = $state(false);
   let pendingPackId: string | undefined = $state();
   let authNotice: string | undefined = $state();
+  let authGeneration = 0;
+  let appMounted = true;
   let routerStarted = false;
   const onUnauthenticated = (): void => {
     controller.stopSession();
@@ -1224,26 +1228,44 @@
   }
 
   async function authenticate(): Promise<void> {
+    if (authBusy) return;
+    const action = ++authGeneration;
+    const registering = authRegister;
+    const handle = authHandle;
+    const password = authPassword;
+    const selectedPackId = pendingPackId;
+    const requestedRoute = router.route.name === "not-found" ? router.route.pathname : routePath(router.route);
+    authBusy = true;
     authError = undefined;
     try {
-      const method = authRegister ? api.register : api.login;
+      const method = registering ? api.register : api.login;
       if (method === undefined) throw new Error("Authentication is not available");
-      learner = authRegister
-        ? await method.call(api, authHandle, authPassword)
-        : await method.call(api, authHandle, authPassword);
-      authPassword = "";
+      const authenticated = await method.call(api, handle, password);
+      if (!appMounted || action !== authGeneration) return;
+      if (!validAuthenticatedLearner(authenticated)) throw new Error("Invalid authentication response");
+      learner = authenticated;
+      if (authPassword === password) authPassword = "";
       authNotice = undefined;
-      const selectedPackId = pendingPackId;
-      pendingPackId = undefined;
+      if (pendingPackId === selectedPackId) pendingPackId = undefined;
       if (!routerStarted) startRouter();
       else {
         await loadRoute(router.route);
+        if (!appMounted || action !== authGeneration) return;
         syncLivePolling(router.route);
         syncStoryPolling(router.route);
       }
-      if (selectedPackId !== undefined) await controller.startPack(selectedPackId);
-    } catch (error) {
-      authError = error instanceof Error ? error.message : String(error);
+      const currentRoute = router.route.name === "not-found" ? router.route.pathname : routePath(router.route);
+      if (selectedPackId !== undefined && currentRoute === requestedRoute) {
+        await controller.startPack(selectedPackId);
+      }
+    } catch {
+      if (appMounted && action === authGeneration && learner === undefined) {
+        authError = registering
+          ? "Your account could not be created. Check the handle and password, then try again."
+          : "You could not be signed in. Check the handle and password, then try again.";
+      }
+    } finally {
+      if (appMounted && action === authGeneration) authBusy = false;
     }
   }
 
@@ -1276,6 +1298,7 @@
   }
 
   function choosePublicPack(packId: string): void {
+    if (authBusy) return;
     pendingPackId = packId;
     authRegister = true;
     authError = undefined;
@@ -1880,6 +1903,8 @@
   });
 
   onDestroy(() => {
+    appMounted = false;
+    authGeneration += 1;
     themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
@@ -1917,13 +1942,14 @@
       <p class="eyebrow">Keep your rehearsals</p>
       <h2 id="auth-title">{authRegister ? "Create your learner account." : "Return to your rehearsals."}</h2>
       {#if authNotice}<p class="auth-notice" role="status" aria-live="polite" aria-atomic="true">{authNotice}</p>{/if}
-      <form onsubmit={(event) => { event.preventDefault(); void authenticate(); }}>
-        <label>Handle <input autocomplete="username" bind:value={authHandle} required /></label>
-        <label>Password <input type="password" autocomplete={authRegister ? "new-password" : "current-password"} bind:value={authPassword} minlength="10" maxlength="256" required /></label>
-        <button class="primary" type="submit" aria-describedby={authRegister ? "registration-data-disclosure registration-password-warning" : undefined}>{authRegister ? "Register" : "Sign in"}</button>
+      <form aria-busy={authBusy} onsubmit={(event) => { event.preventDefault(); void authenticate(); }}>
+        <label>Handle <input autocomplete="username" bind:value={authHandle} disabled={authBusy} required /></label>
+        <label>Password <input type="password" autocomplete={authRegister ? "new-password" : "current-password"} bind:value={authPassword} disabled={authBusy} minlength="10" maxlength="256" required /></label>
+        <button class="primary" type="submit" disabled={authBusy} aria-describedby={authRegister ? `registration-data-disclosure registration-password-warning${authBusy ? " auth-submit-busy" : ""}` : authBusy ? "auth-submit-busy" : undefined}>{authBusy ? authRegister ? "Creating account…" : "Signing in…" : authRegister ? "Register" : "Sign in"}</button>
       </form>
+      {#if authBusy}<p id="auth-submit-busy" role="status" aria-live="polite">{authRegister ? "Creating your account…" : "Signing you in…"}</p>{/if}
       {#if authError}<p role="alert">{authError}</p>{/if}
-      <button type="button" onclick={() => { authRegister = !authRegister; authError = undefined; }}>
+      <button type="button" disabled={authBusy} aria-describedby={authBusy ? "auth-submit-busy" : undefined} onclick={() => { authRegister = !authRegister; authError = undefined; }}>
         {authRegister ? "Use an existing account" : "Create an account"}
       </button>
       {#if authRegister}<p id="registration-data-disclosure" class="honest">Creating an account keeps the games and rehearsals you save, your learning progress, and anything you author or publish. After you confirm your password, Account settings lets you download your record and preview what deletion removes, anonymizes, or keeps as shared or published history.</p>{/if}

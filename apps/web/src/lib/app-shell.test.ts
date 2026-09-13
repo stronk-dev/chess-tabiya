@@ -30,6 +30,7 @@ import type {
   ShapeDraft,
   GameStory,
   DeletionPreview,
+  Learner,
 } from "./api.js";
 import { saveAssistance } from "./assistance-preference.js";
 import { HistoryRouter } from "./router.js";
@@ -777,6 +778,46 @@ describe("application shell", () => {
     expect(createCalls).toBe(1);
     expect(packCalls).toBeGreaterThanOrEqual(2);
     expect(document.body.textContent).not.toContain("AUTH_REQUIRED");
+    await unmount(component);
+  });
+
+  it("keeps authentication single-flight and replaces provider diagnostics with retry copy", async () => {
+    const pendingLogin = deferred<Learner>();
+    let loginCalls = 0;
+    const authApi: DrillClientApi = {
+      ...api(),
+      async session() { throw new Error("AUTH_REQUIRED"); },
+      async login() {
+        loginCalls += 1;
+        return pendingLogin.promise;
+      },
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: authApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Return to your rehearsals."));
+    const form = document.querySelector<HTMLFormElement>(".auth-gate form")!;
+    const inputs = document.querySelectorAll<HTMLInputElement>(".auth-gate input");
+    inputs[0]!.value = "returning_learner";
+    inputs[0]!.dispatchEvent(new Event("input", { bubbles: true }));
+    inputs[1]!.value = "private-password";
+    inputs[1]!.dispatchEvent(new Event("input", { bubbles: true }));
+    form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+
+    await vi.waitFor(() => expect(loginCalls).toBe(1));
+    expect(document.body.textContent).toContain("Signing you in…");
+    expect(inputs[0]!.disabled).toBe(true);
+    expect(inputs[1]!.disabled).toBe(true);
+    pendingLogin.reject(new Error("private authentication database detail"));
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("You could not be signed in."));
+    expect(document.body.textContent).not.toContain("private authentication database detail");
+    expect(inputs[0]!.disabled).toBe(false);
+    expect(inputs[1]!.disabled).toBe(false);
+    expect(inputs[1]!.value).toBe("private-password");
     await unmount(component);
   });
 

@@ -368,3 +368,13 @@ Current intentional boundaries:
 - lease transfer is absent; and
 - read-only offline shell caching and native mobile packaging remain deferred;
   offline writes are deliberately absent.
+
+## Account-access action lifecycle
+
+Public registration and sign-in retain the exact mode, credentials, selected rehearsal and
+initiating route for one request. While that request is pending, the form, mode switch and public
+pack selection cannot create a second or mutate its subject. Authentication responses must carry a
+usable learner identity before the shell accepts them. Provider diagnostics never render; a failed
+request preserves the submitted fields and offers bounded retry copy. A completion after component
+destruction is inert, and a route change after authentication prevents the earlier public selection
+from unexpectedly starting a rehearsal.
