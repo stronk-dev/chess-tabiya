@@ -19463,3 +19463,14 @@ gets a scoped retry message. The regression opens a past pivotal moment while a 
 active, races both narration scopes, and returns a wrong-scope payload. `make test-software` passes
 188 files / 1,189 tests and `make test-browser` passes all 64 required production journeys with the
 one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Optional calculation requests recover from failure ([[D3203]])
+
+The Support calculation action set its pending node before calling the evidence job boundary but
+cleared it only when the callback returned literal `false`. A thrown request therefore left the
+button permanently disabled as “Preparing calculation…”, and a late refusal could clear a newer
+request's state. Requests now carry a sequence identity and only clear their own node. Transport
+failure and explicit refusal both restore the action with position-scoped retry copy, while provider
+diagnostics remain out of learner text. `make test-software` passes 188 files / 1,190 tests and
+`make test-browser` passes all 64 required production journeys with the one explicitly optional
+Maia latency measurement skipped.

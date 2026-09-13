@@ -265,6 +265,8 @@
   let markTimer: ReturnType<typeof setTimeout> | undefined;
   let guideOpenedForRunId: string | undefined = $state();
   let analysisRequestedNodeId: string | undefined = $state();
+  let analysisRequestError: { readonly nodeId: string; readonly text: string } | undefined = $state();
+  let analysisRequest = 0;
 
   function measureViewport(): void {
     viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
@@ -349,9 +351,21 @@
   async function requestCurrentAnalysis(): Promise<void> {
     if (analysisUnavailableReason !== undefined || onAnalyzeMissing === undefined) return;
     const nodeId = currentNode.id;
+    const request = ++analysisRequest;
     analysisRequestedNodeId = nodeId;
-    const accepted = await onAnalyzeMissing([nodeId]);
-    if (accepted === false) analysisRequestedNodeId = undefined;
+    analysisRequestError = undefined;
+    try {
+      const accepted = await onAnalyzeMissing([nodeId]);
+      if (request !== analysisRequest) return;
+      if (accepted === false) {
+        if (analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
+        analysisRequestError = { nodeId, text: "The calculation did not start. Try again." };
+      }
+    } catch {
+      if (request !== analysisRequest) return;
+      if (analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
+      analysisRequestError = { nodeId, text: "The calculation is unavailable right now. Try again." };
+    }
   }
   let simulationInvoker = $state<HTMLElement>();
   function findSpineNode(nodes: NonNullable<DrillPackDefinition["spine"]>, id: string): NonNullable<DrillPackDefinition["spine"]>[number] | undefined {
@@ -1385,6 +1399,7 @@
                   <button type="button" onclick={() => (inspectorOpen = true)}>Inspect recorded calculation</button>
                 {/if}
               </div>
+              {#if analysisRequestError?.nodeId === currentNode.id}<p class="analysis-error" role="alert">{analysisRequestError.text}</p>{/if}
               {#if recordedEngineEvidence.length > 0}<p class="analysis-ready" role="status">A recorded calculation is available for this position.</p>{/if}
             </section>
             {#if guardEvent?.type === "feedback.generated"}

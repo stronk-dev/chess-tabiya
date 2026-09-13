@@ -928,6 +928,36 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("recovers the Support calculation control after rejection or refusal", async () => {
+    const run = branchedRun();
+    const onAnalyzeMissing = vi.fn()
+      .mockRejectedValueOnce(new Error("provider transport detail"))
+      .mockResolvedValueOnce(false);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      capabilities: { providers: { opponent: "mock", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onAnalyzeMissing, registerKeyboardRegion,
+    } });
+    await tick();
+
+    const module = document.querySelector<HTMLElement>('.analysis-request[aria-labelledby="analysis-request-title"]')!;
+    const request = [...module.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Calculate this position")!;
+    request.click();
+    await vi.waitFor(() => expect(module.querySelector("[role='alert']")?.textContent).toBe("The calculation is unavailable right now. Try again."));
+    expect(module.textContent).not.toContain("provider transport detail");
+    expect(request.disabled).toBe(false);
+
+    request.click();
+    await vi.waitFor(() => expect(module.querySelector("[role='alert']")?.textContent).toBe("The calculation did not start. Try again."));
+    expect(request.disabled).toBe(false);
+    expect(onAnalyzeMissing).toHaveBeenCalledTimes(2);
+    await unmount(component);
+  });
+
   it("presents terminal authored commentary and recorded engine evidence", async () => {
     const terminalPack = {
       ...pack,
