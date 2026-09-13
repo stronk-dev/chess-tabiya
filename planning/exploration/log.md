@@ -19439,3 +19439,15 @@ the matching selected node may render the response. Provider failure produces a 
 message instead of an unhandled rejection. `make test-software` passes 188 files / 1,187 tests and
 `make test-browser` passes all 64 required production journeys with the one explicitly optional
 Maia latency measurement skipped.
+
+## 2026-09-13 — Inspector evidence pages retain their query position ([[D3201]])
+
+The human-model and Lichess-corpus request paths previously stored their last response at screen
+scope and rendered it without checking the page's returned `nodeId`. A response for another node,
+or a response that completed after the board changed, could therefore appear under the current
+position. Each request now retains its exact query node and sequence, validates the returned
+identity, and renders only while that query remains current. Refresh replaces old content with a
+position-scoped loading state; crossed, failed and stale responses end in bounded retry or silence
+instead of leaking their payload. `make test-software` passes 188 files / 1,188 tests and `make
+test-browser` passes all 64 required production journeys with the one explicitly optional Maia
+latency measurement skipped.

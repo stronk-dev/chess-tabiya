@@ -659,6 +659,61 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("refuses human-model and corpus pages returned for a different position", async () => {
+    const run = revealFeedback(createRun({
+      id: "crossed-inspector-evidence",
+      session: {
+        kind: "position",
+        start: { fen: "4k3/8/8/8/8/8/P7/4K3 w - - 0 1", side: "white" },
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common", targetElo: 1500 },
+      },
+      sessionDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    }), at).run;
+    const wrongNodeId = `${run.activeCursor.nodeId}:other`;
+    const onHumanSplit = vi.fn(async () => ({
+      nodeId: wrongNodeId,
+      engine: { id: "maia", name: "Maia", version: "3", seedHonored: false, eloHonored: false },
+      targetElo: 1500,
+      candidates: [{ moveUci: "e1e2", mass: .4, rank: 1 }],
+    }));
+    const onCorpus = vi.fn(async () => ({
+      nodeId: wrongNodeId,
+      committedMoveSan: null,
+      result: {
+        kind: "abstention" as const,
+        reason: "no_data_at_band" as const,
+        detail: "crossed response detail",
+        population: { source: "lichess-explorer" as const, ratings: [1600], speeds: ["rapid"], since: "2020-01", until: "2026-09" },
+      },
+    }));
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "on_request", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "none" } } as Capabilities,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onHumanSplit, onCorpus, registerKeyboardRegion,
+    } });
+    await tick();
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
+    await tick();
+
+    const humanSection = document.querySelector<HTMLElement>("[aria-label='Human-model evidence']")!;
+    humanSection.querySelector<HTMLButtonElement>("button")!.click();
+    await vi.waitFor(() => expect(humanSection.querySelector("[role='alert']")?.textContent).toContain("no longer match this position"));
+    expect(humanSection.textContent).not.toContain("Ke2 40%");
+
+    const corpusSection = document.querySelector<HTMLElement>("[aria-label='Corpus evidence']")!;
+    corpusSection.querySelector<HTMLButtonElement>("button")!.click();
+    await vi.waitFor(() => expect(corpusSection.querySelector("[role='alert']")?.textContent).toContain("no longer match this position"));
+    expect(corpusSection.textContent).not.toContain("crossed response detail");
+    await unmount(component);
+  });
+
   it("renders only live-admitted irreversibility markers", async () => {
     const config = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
     const session = (fen: string) => ({ kind: "position" as const, start: { fen, side: "white" as const }, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } });

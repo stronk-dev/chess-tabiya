@@ -219,6 +219,12 @@
   let pivotalDialogOpen = $state(false);
   let humanSplit: HumanSplitPage | undefined = $state();
   let corpusPage: CorpusPage | undefined = $state();
+  let humanSplitBusyNodeId: string | undefined = $state();
+  let corpusBusyNodeId: string | undefined = $state();
+  let humanSplitError: { readonly nodeId: string; readonly text: string } | undefined = $state();
+  let corpusError: { readonly nodeId: string; readonly text: string } | undefined = $state();
+  let humanSplitRequest = 0;
+  let corpusRequest = 0;
   let voicePage: VoicePage | undefined = $state();
   let voiceNodeId: string | undefined = $state();
   let forkLabel = $state("");
@@ -534,6 +540,10 @@
       ? currentNode
       : (run.nodes.find((node) => node.id === previewNodeId) ?? currentNode),
   );
+  let corpusQueryNodeId = $derived((() => {
+    const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
+    return decision?.parentId ?? displayedNode.id;
+  })());
   let displayedMarkKey = $derived(markScope === "position" ? displayedNode.transposeKey : `${run.activeCursor.branchId}:${displayedNode.id}`);
   let displayedMarks = $derived(ownMarks.filter((mark) => mark.scope === markScope && mark.scopeKey === displayedMarkKey).map((mark) => ({ orig:mark.orig as import("@lichess-org/chessground/types").Key,...(mark.dest===undefined?{}:{dest:mark.dest as import("@lichess-org/chessground/types").Key}),brush:mark.brush })));
   let rawStructure = $derived(structuralReading(displayedNode.fen));
@@ -586,14 +596,51 @@
   }
 
   async function requestHumanSplit(): Promise<void> {
-    if (onHumanSplit !== undefined) humanSplit = humanSplitEvidence(await onHumanSplit(displayedNode.id));
+    if (onHumanSplit === undefined) return;
+    const nodeId = displayedNode.id;
+    const request = ++humanSplitRequest;
+    humanSplitBusyNodeId = nodeId;
+    humanSplitError = undefined;
+    if (humanSplit?.nodeId === nodeId) humanSplit = undefined;
+    try {
+      const page = await onHumanSplit(nodeId);
+      if (request !== humanSplitRequest || displayedNode.id !== nodeId) return;
+      if (page.nodeId !== nodeId) {
+        humanSplitError = { nodeId, text: "Those move choices no longer match this position. Load them again." };
+        return;
+      }
+      humanSplit = humanSplitEvidence(page);
+    } catch {
+      if (request === humanSplitRequest && displayedNode.id === nodeId) {
+        humanSplitError = { nodeId, text: "Human move choices are unavailable right now. Try again." };
+      }
+    } finally {
+      if (request === humanSplitRequest) humanSplitBusyNodeId = undefined;
+    }
   }
 
   async function requestCorpus(): Promise<void> {
     if (onCorpus === undefined) return;
-    const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
-    const queryNode = decision?.parentId ?? displayedNode.id;
-    corpusPage = corpusEvidence(await onCorpus(queryNode));
+    const nodeId = corpusQueryNodeId;
+    const request = ++corpusRequest;
+    corpusBusyNodeId = nodeId;
+    corpusError = undefined;
+    if (corpusPage?.nodeId === nodeId) corpusPage = undefined;
+    try {
+      const page = await onCorpus(nodeId);
+      if (request !== corpusRequest || corpusQueryNodeId !== nodeId) return;
+      if (page.nodeId !== nodeId) {
+        corpusError = { nodeId, text: "Those game counts no longer match this position. Load them again." };
+        return;
+      }
+      corpusPage = corpusEvidence(page);
+    } catch {
+      if (request === corpusRequest && corpusQueryNodeId === nodeId) {
+        corpusError = { nodeId, text: "Human game counts are unavailable right now. Try again." };
+      }
+    } finally {
+      if (request === corpusRequest) corpusBusyNodeId = undefined;
+    }
   }
 
   function humanCandidateSentence(page: HumanSplitPage, candidate: HumanSplitPage["candidates"][number]): string {
@@ -1550,9 +1597,9 @@
               {speechAvailable}
               onChange={setAssistanceConfig}
             />
-            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Load human move-model evidence</button>{/if}
+            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" disabled={humanSplitBusyNodeId === displayedNode.id} onclick={() => void requestHumanSplit()}>{humanSplitBusyNodeId === displayedNode.id ? "Loading human move choices…" : "Load human move-model evidence"}</button>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
-            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Load human-game corpus evidence</button>{/if}
+            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading human game counts…" : "Load human-game corpus evidence"}</button>{/if}
             {#if assistancePermission.humanSplit === "locked_off" || assistancePermission.corpus === "locked_off"}<span id="advanced-support-locked" class="honest">Requested evidence is available only after this run opens feedback, and never to participants or spectators.</span>{/if}
             {#if capabilities?.providers.llm !== "external"}<span id="advanced-support-external-voice-unavailable" class="honest">External voice is unavailable from this deployment.</span>{/if}
             {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
@@ -1568,17 +1615,21 @@
         </section>
         <section aria-label="Human-model evidence" data-evidence-consumer="inspector.human_split">
           <h3>Human move model</h3>
-          {#if assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Load model candidates</button>{/if}
-          {#if humanSplit}
+          {#if assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" disabled={humanSplitBusyNodeId === displayedNode.id} onclick={() => void requestHumanSplit()}>{humanSplitBusyNodeId === displayedNode.id ? "Loading move choices…" : "Load model candidates"}</button>{/if}
+          {#if humanSplitBusyNodeId === displayedNode.id}<p role="status">Loading human move choices for this position…</p>{/if}
+          {#if humanSplitError?.nodeId === displayedNode.id}<p role="alert">{humanSplitError.text}</p>{/if}
+          {#if humanSplit?.nodeId === displayedNode.id}
             <p class="honest">{humanModelBandSentence(humanSplit)}</p>
             <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
             <p class="guidance-sentence">{humanCandidateSentences(humanSplit).join(" · ")}</p>
-          {:else}<p class="honest">No human-model page loaded.</p>{/if}
+          {:else if humanSplitBusyNodeId !== displayedNode.id && humanSplitError?.nodeId !== displayedNode.id}<p class="honest">No human-model page loaded for this position.</p>{/if}
         </section>
         <section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">
           <h3>Human corpus</h3>
-          {#if assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Load corpus counts</button>{/if}
-          {#if corpusPage}{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{:else}<p class="honest">No corpus page loaded.</p>{/if}
+          {#if assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading game counts…" : "Load corpus counts"}</button>{/if}
+          {#if corpusBusyNodeId === corpusQueryNodeId}<p role="status">Loading human game counts for this position…</p>{/if}
+          {#if corpusError?.nodeId === corpusQueryNodeId}<p role="alert">{corpusError.text}</p>{/if}
+          {#if corpusPage?.nodeId === corpusQueryNodeId}{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{:else if corpusBusyNodeId !== corpusQueryNodeId && corpusError?.nodeId !== corpusQueryNodeId}<p class="honest">No corpus page loaded for this position.</p>{/if}
         </section>
         <section aria-label="Recorded moment evidence" data-evidence-consumer="inspector.pivotal_marker">
           <h3>Recorded moment</h3>
