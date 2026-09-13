@@ -5613,23 +5613,25 @@
     },
     {
       "id": "D692",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7ddbf52d039822bb33ba158f1f05cd5e2707c84dafc10c147cfc07317359931f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c498570e150eef6bc96550d51e6f930f7a4e7a0acf5fb6ec4e208f655c876666",
       "uxItems": [
         "AUT-a20"
       ],
-      "state": "todo",
-      "owner": "content-and-theory"
+      "evidence": "apps/server/src/service.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D693",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:705ab517695f9961fa4a9b6a08402c18fb1f5b9b72740faeed7d56371c83bc14",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3c54d584378c5c339d395cabbe22bf1f539ed8fd543e71a2ecda0385662f49a4",
       "uxItems": [
         "AUT-c6"
       ],
-      "state": "todo",
-      "owner": "content-and-theory"
+      "evidence": "apps/server/src/service.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D694",

@@ -19362,3 +19362,15 @@ Negative fixtures reject raw `cp` at both evidence-delivery boundaries and rejec
 label on the visible card. `make test-software` passes 188 files / 1,183 tests, and
 `make test-browser` passes all 64 required journeys with the one explicitly optional Maia latency
 measurement skipped.
+
+## 2026-09-13 — Shape recommendations preserve teaching relation ([[D692]], [[D693]])
+
+The previously reported exact-pack handoff was already live: Learn resolves returned pack ids to
+served titles and starts the selected pack directly, with a mounted negative fixture for an unknown
+id. Its ledger row had never received that completion and is now reconciled. The adjacent semantic
+defect still reproduced: both the prior-attempt suppression set and the returned rehearsal set
+treated `prospective` references as if the pack contained the shape. Both joins now require
+`relation: present`. A service-level fixture plays a prospective-referenced pack, detects the shape,
+and proves the recommendation remains while only the present-referenced pack is offered. The
+broader browsable theory catalogue remains open under [[D695]] and AUT-a20. `make test-software`
+passes 188 files / 1,184 tests.

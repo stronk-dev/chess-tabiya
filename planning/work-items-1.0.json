@@ -3146,16 +3146,20 @@
     {
       "id": "AUT-c6",
       "sourceState": "blocked_rfc",
-      "state": "blocked_rfc",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "authoring §10.5 H3",
       "sourceHeading": "Selection (F2/F5), `rfc/tactical-collectors.md`, `rfc/theming.md`, `rfc/play-composition.md` and others",
       "summary": "The *\"packs that rehearse this\"* door is computed server-side and needs [[D693]]'s relation fix, excluding prospective links",
       "legacyRoute": "ledger",
-      "sourceDigest": "sha256:62235dd06610b75da0787c0099f0fba1c31017842b1c8eeb79a57a84b02a8025"
+      "sourceDigest": "sha256:62235dd06610b75da0787c0099f0fba1c31017842b1c8eeb79a57a84b02a8025",
+      "completion": {
+        "completedOn": "2026-09-13",
+        "evidence": "apps/server/src/service.ts"
+      }
     },
     {
       "id": "AUT-d1",

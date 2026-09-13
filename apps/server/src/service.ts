@@ -1144,7 +1144,9 @@ export class RunService {
     const attemptedShapes = new Set<string>();
     for (const attempt of this.#progress.progress(principal.learnerId)) {
       if (!attempt.countable || attempt.packId === null) continue;
-      for (const shape of normalizeShapeReferences(this.#packRegistry.get(attempt.packId)?.document.shapes)) attemptedShapes.add(shape.shape);
+      for (const shape of normalizeShapeReferences(this.#packRegistry.get(attempt.packId)?.document.shapes)) {
+        if (shape.relation === "present") attemptedShapes.add(shape.shape);
+      }
     }
     const triggers = this.#shapes.list().map((summary) => ({ id: summary.id, trigger: this.#shapes!.required(summary.id).document.trigger }));
     const encountered = new Map<string, Set<string>>();
@@ -1159,7 +1161,7 @@ export class RunService {
     }
     const eligible = [...encountered].filter(([id]) => !attemptedShapes.has(id)).map(([id, runIds]) => {
       const shape = this.#shapes!.required(id).summary;
-      const packIds = this.#packRegistry!.list().filter((pack) => normalizeShapeReferences(this.#packRegistry!.get(pack.id)?.document.shapes).some((shape) => shape.shape === id)).map((pack) => pack.id).sort();
+      const packIds = this.#packRegistry!.list().filter((pack) => normalizeShapeReferences(this.#packRegistry!.get(pack.id)?.document.shapes).some((shape) => shape.shape === id && shape.relation === "present")).map((pack) => pack.id).sort();
       return Object.freeze({ kind: "shape_encounter" as const, shapeId: id, shapeName: shape.name, runCount: runIds.size, runIds: Object.freeze([...runIds].sort()), packIds: Object.freeze(packIds), sentence: `You met ${shape.name} in ${runIds.size} of your preserved runs and have no countable attempt recorded in any pack that names it.` });
     }).sort((left, right) => right.runCount - left.runCount || left.shapeId.localeCompare(right.shapeId));
     return Object.freeze({ recommendations: Object.freeze(eligible.slice(0, 10)), total: eligible.length });

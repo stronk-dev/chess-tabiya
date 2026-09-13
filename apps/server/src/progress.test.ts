@@ -3,16 +3,18 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { automaticScheduleDecision, projectAttempts, type AttemptRow } from "./progress.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
+import type { PackRegistry } from "./pack-registry.js";
+import type { ShapeRegistry } from "./shape-registry.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-13T12:00:00.000Z";
 
-function run(id = "progress-run") {
+function run(id = "progress-run", packId = "progress-pack") {
   return createRun({
     id,
-    packId: "progress-pack",
+    packId,
     packDigest: `sha256:${"a".repeat(64)}`,
     startFen: FEN,
     policyConfig: {
@@ -202,6 +204,41 @@ describe("return and progression projection", () => {
       countable: false,
       origin: "duplicate",
       derivedFromRunId: created.id,
+    });
+  });
+
+  it("recommends only packs where an encountered shape is present", () => {
+    const storage = new SQLiteRunStorage();
+    stores.push(storage);
+    const played = commitMove(run("prospective-attempt", "prospective-pack"), "e2e4", { at }).run;
+    storage.create(played, "writer-a", "Prospective reference");
+    const projected = projectAttempts({ run: played, learnerId: "__legacy" });
+    storage.upsertAttempts(projected.attempts, projected.conceptTags);
+
+    const trigger = { kind: "pieceOnSquare", square: "e1", piece: { color: "white", role: "king" } } as const;
+    const shapeRegistry = {
+      list: () => [{ id: "encountered-shape" }],
+      required: () => ({
+        document: { trigger },
+        summary: { id: "encountered-shape", name: "Encountered shape" },
+      }),
+    } as unknown as ShapeRegistry;
+    const documents = new Map<string, { readonly shapes: readonly unknown[] }>([
+      ["present-pack", { shapes: [{ shape: "encountered-shape", relation: "present" }] }],
+      ["prospective-pack", { shapes: [{ shape: "encountered-shape", relation: "prospective" }] }],
+    ]);
+    const packRegistry = {
+      list: () => [...documents.keys()].map((id) => ({ id })),
+      get: (id: string) => {
+        const document = documents.get(id);
+        return document === undefined ? undefined : { document };
+      },
+    } as unknown as PackRegistry;
+    const service = new RunService(storage, { progressStorage: storage, packRegistry, shapeRegistry });
+
+    expect(service.shapeRecommendations({ learnerId: "__legacy", handle: "__legacy" })).toMatchObject({
+      total: 1,
+      recommendations: [{ shapeId: "encountered-shape", packIds: ["present-pack"] }],
     });
   });
 });
