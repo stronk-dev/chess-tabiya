@@ -193,6 +193,13 @@
   let assignmentPackId = $state("");
   let assignmentNote = $state("");
   let assignmentDueAt = $state("");
+  let classroomBusy: string | undefined = $state();
+  let classroomActionError: string | undefined = $state();
+  let assignmentBusy: string | undefined = $state();
+  let assignmentActionError: string | undefined = $state();
+  let classroomDetailGeneration = 0;
+  let classroomActionGeneration = 0;
+  let assignmentActionGeneration = 0;
   let liveDetail: LiveSessionDetail | undefined = $state();
   let activeLiveDetail: LiveSessionDetail | undefined = $state();
   let liveJournal: readonly SessionJournalEntry[] = $state([]);
@@ -512,7 +519,7 @@
   function assignmentSubmissions(assignmentId:string,learnerId:string){return classroomDetail?.submissions.filter((submission)=>submission.assignmentId===assignmentId&&submission.learnerId===learnerId)??[];}
   function chooseAssignmentRun(assignmentId:string,runId:string):void{assignmentRunSelection={...assignmentRunSelection,[assignmentId]:runId};}
   function prepareAssignedRun(assignmentId:string):void{const runId=assignmentRunSelection[assignmentId];if(runId)submissionIntent={assignmentId,runId};}
-  async function confirmAssignedRun():Promise<void>{if(!submissionIntent)return;await submitAssignedRun(submissionIntent.assignmentId,submissionIntent.runId);submissionIntent=undefined;}
+  async function confirmAssignedRun():Promise<void>{const intent=submissionIntent;if(!intent)return;const submitted=await submitAssignedRun(intent.assignmentId,intent.runId);if(submitted&&submissionIntent?.assignmentId===intent.assignmentId&&submissionIntent.runId===intent.runId)submissionIntent=undefined;}
   function reviewRailCopy(state: NonNullable<typeof session.viewer>["reviewRail"]): string {
     if (state === "open") return "This submitted attempt is complete. You receive the same disclosed evidence, human-model split, corpus and narration rail as its learner.";
     if (state === "closed_incomplete") return "Review tools open after this attempt reaches its recorded outcome. Read access remains available now.";
@@ -703,6 +710,8 @@
         if (generation !== loadGeneration) return;
         capabilities = nextCapabilities;
       } else if (next.name === "learn") {
+        assignmentBusy = undefined;
+        assignmentActionError = undefined;
         relatedAttempts = {};
         const loaded = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
@@ -738,6 +747,11 @@
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
       } else if (next.name === "live") {
+        ++classroomDetailGeneration;
+        ++classroomActionGeneration;
+        classroomDetail=undefined;
+        classroomBusy=undefined;
+        classroomActionError=undefined;
         liveCreateBusy=false;
         liveCreateError=undefined;
         const loaded=await Promise.all([api.liveSessions?.()??Promise.resolve([]),initialRunPage(),api.classrooms?.()??Promise.resolve([]),api.packs()]);
@@ -1351,13 +1365,111 @@
     }catch(error){if(generation===loadGeneration&&route.name==="live")liveCreateError=error instanceof Error?error.message:String(error);}
     finally{if(generation===loadGeneration&&route.name==="live")liveCreateBusy=false;}
   }
-  async function createClassroom():Promise<void>{if(!classroomName.trim()||api.createClassroom===undefined)return;await api.createClassroom(classroomName.trim());classroomName="";classrooms=await (api.classrooms?.()??Promise.resolve([]));}
-  async function openClassroom(id:string):Promise<void>{classroomDetail=await api.classroom?.(id);}
-  async function respondClassroom(id:string,op:"accept"|"decline"|"leave"):Promise<void>{await api.respondClassroomInvite?.(id,op);classrooms=await (api.classrooms?.()??Promise.resolve([]));classroomDetail=undefined;}
-  async function inviteClassroom():Promise<void>{if(!classroomDetail||!classroomInviteHandle.trim())return;await api.inviteClassroomMember?.(classroomDetail.classroom.id,classroomInviteHandle.trim(),classroomInviteRole);classroomInviteHandle="";await openClassroom(classroomDetail.classroom.id);}
-  async function assignClassroomPack():Promise<void>{if(!classroomDetail||!assignmentPackId)return;await api.createAssignment?.(classroomDetail.classroom.id,{packId:assignmentPackId,...(assignmentNote.trim()?{note:assignmentNote}:{}),...(assignmentDueAt?{dueAt:new Date(assignmentDueAt).toISOString()}: {})});assignmentNote="";assignmentDueAt="";await openClassroom(classroomDetail.classroom.id);}
-  async function submitAssignedRun(assignmentId:string,runId:string):Promise<void>{await api.submitAssignment?.(assignmentId,runId);assignedPacks=await (api.assignments?.()??Promise.resolve([]));}
-  async function withdrawAssignedRun(assignmentId:string,runId:string):Promise<void>{await api.withdrawSubmission?.(assignmentId,runId);assignedPacks=await (api.assignments?.()??Promise.resolve([]));}
+  function classroomRouteIsCurrent(generation:number):boolean{return generation===loadGeneration&&route.name==="live";}
+  function classroomIsCurrent(id:string,generation:number):boolean{return classroomRouteIsCurrent(generation)&&classroomDetail?.classroom.id===id;}
+  async function createClassroom():Promise<void>{
+    const name=classroomName.trim();
+    if(!name||classroomBusy!==undefined)return;
+    const generation=loadGeneration;const action=++classroomActionGeneration;
+    classroomBusy="create";classroomActionError=undefined;
+    try{
+      if(api.createClassroom===undefined)throw new Error("unavailable");
+      await api.createClassroom(name);
+      if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration&&classroomName.trim()===name)classroomName="";
+    }catch{if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomActionError="The classroom could not be created. Check the name and try again.";}
+    if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration&&classroomActionError===undefined){
+      try{const next=await (api.classrooms?.()??Promise.resolve([]));if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classrooms=next;}
+      catch{if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomActionError="The classroom was created, but the list could not refresh. Reload to see it.";}
+    }
+    if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomBusy=undefined;
+  }
+  async function openClassroom(id:string):Promise<void>{
+    if(classroomBusy!==undefined&&!classroomBusy.startsWith("open:"))return;
+    const generation=loadGeneration;const request=++classroomDetailGeneration;
+    classroomBusy=`open:${id}`;classroomActionError=undefined;
+    try{
+      if(api.classroom===undefined)throw new Error("unavailable");
+      const next=await api.classroom(id);
+      if(classroomRouteIsCurrent(generation)&&request===classroomDetailGeneration&&next.classroom.id===id)classroomDetail=next;
+    }catch{if(classroomRouteIsCurrent(generation)&&request===classroomDetailGeneration)classroomActionError="That classroom could not be opened. Try again.";}
+    finally{if(classroomRouteIsCurrent(generation)&&request===classroomDetailGeneration)classroomBusy=undefined;}
+  }
+  async function respondClassroom(id:string,op:"accept"|"decline"|"leave"):Promise<void>{
+    if(classroomBusy!==undefined)return;
+    const generation=loadGeneration;const action=++classroomActionGeneration;
+    classroomBusy=`respond:${id}`;classroomActionError=undefined;
+    try{
+      if(api.respondClassroomInvite===undefined)throw new Error("unavailable");
+      await api.respondClassroomInvite(id,op);
+      if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration&&classroomDetail?.classroom.id===id)classroomDetail=undefined;
+    }catch{if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomActionError=`The classroom ${op} action did not finish. Try again.`;}
+    if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration&&classroomActionError===undefined){
+      try{const next=await (api.classrooms?.()??Promise.resolve([]));if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classrooms=next;}
+      catch{if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomActionError=`The classroom ${op} action finished, but the list could not refresh. Reload to see the current state.`;}
+    }
+    if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomBusy=undefined;
+  }
+  async function inviteClassroom():Promise<void>{
+    const detail=classroomDetail;const handle=classroomInviteHandle.trim();const role=classroomInviteRole;
+    if(detail===undefined||!handle||classroomBusy!==undefined)return;
+    const id=detail.classroom.id;const generation=loadGeneration;const action=++classroomActionGeneration;
+    classroomBusy=`invite:${id}`;classroomActionError=undefined;
+    try{
+      if(api.inviteClassroomMember===undefined||api.classroom===undefined)throw new Error("unavailable");
+      await api.inviteClassroomMember(id,handle,role);
+      if(!classroomIsCurrent(id,generation)||action!==classroomActionGeneration)return;
+      if(classroomInviteHandle.trim()===handle)classroomInviteHandle="";
+    }catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The invitation could not be sent. Check the handle and try again.";}
+    if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&classroomActionError===undefined){
+      try{const next=await api.classroom!(id);if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&next.classroom.id===id)classroomDetail=next;}
+      catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The invitation was sent, but the classroom could not refresh. Reload to see the new member.";}
+    }
+    if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomBusy=undefined;
+  }
+  async function assignClassroomPack():Promise<void>{
+    const detail=classroomDetail;const packId=assignmentPackId;const note=assignmentNote;const dueAt=assignmentDueAt;
+    if(detail===undefined||!packId||classroomBusy!==undefined)return;
+    const id=detail.classroom.id;const generation=loadGeneration;const action=++classroomActionGeneration;
+    classroomBusy=`assign:${id}`;classroomActionError=undefined;
+    try{
+      if(api.createAssignment===undefined||api.classroom===undefined)throw new Error("unavailable");
+      await api.createAssignment(id,{packId,...(note.trim()?{note}:{}),...(dueAt?{dueAt:new Date(dueAt).toISOString()}: {})});
+      if(!classroomIsCurrent(id,generation)||action!==classroomActionGeneration)return;
+      if(assignmentPackId===packId)assignmentPackId="";if(assignmentNote===note)assignmentNote="";if(assignmentDueAt===dueAt)assignmentDueAt="";
+    }catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The pack could not be assigned. Keep these details and try again.";}
+    if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&classroomActionError===undefined){
+      try{const next=await api.classroom!(id);if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&next.classroom.id===id)classroomDetail=next;}
+      catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The pack was assigned, but the classroom could not refresh. Reload to see the assignment.";}
+    }
+    if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomBusy=undefined;
+  }
+  async function submitAssignedRun(assignmentId:string,runId:string):Promise<boolean>{
+    if(assignmentBusy!==undefined)return false;
+    const generation=loadGeneration;const action=++assignmentActionGeneration;
+    assignmentBusy=`submit:${assignmentId}:${runId}`;assignmentActionError=undefined;
+    try{
+      if(api.submitAssignment===undefined)throw new Error("unavailable");
+      await api.submitAssignment(assignmentId,runId);
+    }catch{if(generation===loadGeneration&&action===assignmentActionGeneration){assignmentActionError="This run could not be shared. Nothing changed; try again.";assignmentBusy=undefined;}return false;}
+    if(generation!==loadGeneration||action!==assignmentActionGeneration)return true;
+    try{const next=await (api.assignments?.()??Promise.resolve([]));if(generation===loadGeneration&&action===assignmentActionGeneration)assignedPacks=next;}
+    catch{if(generation===loadGeneration&&action===assignmentActionGeneration)assignmentActionError="The run was shared, but the assignment list could not refresh. Reload to see the current state.";}
+    finally{if(generation===loadGeneration&&action===assignmentActionGeneration)assignmentBusy=undefined;}
+    return true;
+  }
+  async function withdrawAssignedRun(assignmentId:string,runId:string):Promise<void>{
+    if(assignmentBusy!==undefined)return;
+    const generation=loadGeneration;const action=++assignmentActionGeneration;
+    assignmentBusy=`withdraw:${assignmentId}:${runId}`;assignmentActionError=undefined;
+    try{
+      if(api.withdrawSubmission===undefined)throw new Error("unavailable");
+      await api.withdrawSubmission(assignmentId,runId);
+    }catch{if(generation===loadGeneration&&action===assignmentActionGeneration){assignmentActionError="Teacher access could not be revoked. Nothing changed; try again.";assignmentBusy=undefined;}return;}
+    if(generation!==loadGeneration||action!==assignmentActionGeneration)return;
+    try{const next=await (api.assignments?.()??Promise.resolve([]));if(generation===loadGeneration&&action===assignmentActionGeneration)assignedPacks=next;}
+    catch{if(generation===loadGeneration&&action===assignmentActionGeneration)assignmentActionError="Teacher access was revoked, but the assignment list could not refresh. Reload to see the current state.";}
+    finally{if(generation===loadGeneration&&action===assignmentActionGeneration)assignmentBusy=undefined;}
+  }
   function liveWriterId(runId:string):string|undefined{return WriterSession.peek(runId,storage)?.writerId;}
   function liveSessionIsCurrent(detail:LiveSessionDetail,generation:number):boolean{return generation===loadGeneration&&route.name==="live-session"&&route.sessionId===detail.session.id&&liveDetail?.session.id===detail.session.id;}
   function activeLiveSessionIsCurrent(detail:LiveSessionDetail,generation:number):boolean{return generation===loadGeneration&&activeLiveDetail?.session.id===detail.session.id&&((route.name==="run"&&route.runId===detail.session.runId)||(route.name==="live-overlay"&&route.runId===detail.session.runId));}
@@ -1751,7 +1863,7 @@
         onSelectPack={(packId) => controller.startPack(packId)}
         onFirstRehearsalComplete={completeFirstRehearsal}
         assignmentOffers={completedAssignmentOffers}
-        onSubmitAssignment={(assignmentId)=>submitAssignedRun(assignmentId,session.runState!.run.id)}
+        onSubmitAssignment={async(assignmentId)=>{await submitAssignedRun(assignmentId,session.runState!.run.id);}}
         repertoireAnswerOffer={activeRepertoireGap}
         {repertoireAnswerBusy}
         repertoireAnswerError={activeRepertoireGap===undefined?undefined:repertoireAnswerErrors[activeRepertoireGap.gap.key]}
@@ -1826,13 +1938,14 @@
                 <h3>{packTitle(assignment.packId)}</h3>
                 <p>{assignment.classroomName} · assigned by @{assignment.assignedByHandle}{assignment.dueAt ? ` · due ${readableDate(assignment.dueAt)}` : ""}{isOverdue(assignment.dueAt) ? " · overdue" : ""}</p>
                 {#if assignment.note}<blockquote><p>{assignment.note}</p><footer>— @{assignment.assignedByHandle}, your teacher</footer></blockquote>{/if}
-                {#each assignment.submissions as submission}<div class="submission-record"><p>{submission.withdrawnAt ? "Submission withdrawn" : `Submitted ${readableDate(submission.submittedAt)} · access until ${readableDate(submission.accessExpiresAt)}`}</p>{#if !submission.withdrawnAt}<p>{submission.grantedTeacherHandles.length>0?`Currently shared with ${submission.grantedTeacherHandles.map((handle)=>`@${handle}`).join(", ")}.`:"No teacher currently holds access."}</p><button type="button" onclick={()=>void withdrawAssignedRun(assignment.id,submission.runId)}>Stop future teacher access</button><p class="honest">Revoking stops future reads. It cannot undo what a teacher already saw.</p>{/if}</div>{/each}
+                {#each assignment.submissions as submission}<div class="submission-record"><p>{submission.withdrawnAt ? "Submission withdrawn" : `Submitted ${readableDate(submission.submittedAt)} · access until ${readableDate(submission.accessExpiresAt)}`}</p>{#if !submission.withdrawnAt}<p>{submission.grantedTeacherHandles.length>0?`Currently shared with ${submission.grantedTeacherHandles.map((handle)=>`@${handle}`).join(", ")}.`:"No teacher currently holds access."}</p><button type="button" disabled={assignmentBusy!==undefined} onclick={()=>void withdrawAssignedRun(assignment.id,submission.runId)}>{assignmentBusy===`withdraw:${assignment.id}:${submission.runId}`?"Revoking…":"Stop future teacher access"}</button><p class="honest">Revoking stops future reads. It cannot undo what a teacher already saw.</p>{/if}</div>{/each}
               </div>
               <div class="row-actions"><button type="button" onclick={()=>void controller.startPack(assignment.packId)}>Start pack</button>{#if eligibleRuns.length>0}<label>Completed run <select value={assignmentRunSelection[assignment.id]??""} onchange={(event)=>chooseAssignmentRun(assignment.id,event.currentTarget.value)}><option value="">Choose a run</option>{#each eligibleRuns as run}<option value={run.id}>{runTitle(run)} · {readableDate(run.updatedAt)} · {run.branchCount} {run.branchCount===1?"branch":"branches"}</option>{/each}</select></label><button type="button" disabled={!assignmentRunSelection[assignment.id]} aria-describedby={!assignmentRunSelection[assignment.id]?`submission-run-required-${assignment.id}`:undefined} onclick={()=>prepareAssignedRun(assignment.id)}>Share with teachers</button>{#if !assignmentRunSelection[assignment.id]}<p id={`submission-run-required-${assignment.id}`} class="honest">Choose one of your runs of this pack.</p>{/if}{:else}<p class="honest">Play this assignment before sharing an attempt.</p>{/if}</div>
             </article>
           {:else}<p>No open assignments.</p>{/each}
         </div>
-        {#if submissionIntent}{@const assignment=assignedPacks.find((candidate)=>candidate.id===submissionIntent!.assignmentId)}{@const run=runs.find((candidate)=>candidate.id===submissionIntent!.runId)}{#if assignment&&run}<aside class="consent-card" aria-labelledby="submission-confirm-title"><h3 id="submission-confirm-title">Share {runTitle(run)}?</h3><p>{assignment.teacherHandles.length>0?`${assignment.teacherHandles.map((handle)=>`@${handle}`).join(", ")} will be able to read this run for up to 90 days.`:"No active teacher is available to receive this run."}</p><p class="honest">They receive this run only, including its moves and the evidence or reveals already recorded in it. They do not gain access to your other runs.</p><div class="row-actions"><button type="button" disabled={assignment.teacherHandles.length===0} aria-describedby={assignment.teacherHandles.length===0?"submission-no-teacher":undefined} onclick={()=>void confirmAssignedRun()}>Confirm sharing</button><button type="button" onclick={()=>submissionIntent=undefined}>Cancel</button></div>{#if assignment.teacherHandles.length===0}<p id="submission-no-teacher" class="honest">An active teacher must be present before this run can be shared.</p>{/if}</aside>{/if}{/if}
+        {#if submissionIntent}{@const assignment=assignedPacks.find((candidate)=>candidate.id===submissionIntent!.assignmentId)}{@const run=runs.find((candidate)=>candidate.id===submissionIntent!.runId)}{#if assignment&&run}<aside class="consent-card" aria-labelledby="submission-confirm-title"><h3 id="submission-confirm-title">Share {runTitle(run)}?</h3><p>{assignment.teacherHandles.length>0?`${assignment.teacherHandles.map((handle)=>`@${handle}`).join(", ")} will be able to read this run for up to 90 days.`:"No active teacher is available to receive this run."}</p><p class="honest">They receive this run only, including its moves and the evidence or reveals already recorded in it. They do not gain access to your other runs.</p><div class="row-actions"><button type="button" disabled={assignment.teacherHandles.length===0||assignmentBusy!==undefined} aria-describedby={assignment.teacherHandles.length===0?"submission-no-teacher":undefined} onclick={()=>void confirmAssignedRun()}>{assignmentBusy===`submit:${assignment.id}:${run.id}`?"Sharing…":"Confirm sharing"}</button><button type="button" disabled={assignmentBusy!==undefined} onclick={()=>submissionIntent=undefined}>Cancel</button></div>{#if assignment.teacherHandles.length===0}<p id="submission-no-teacher" class="honest">An active teacher must be present before this run can be shared.</p>{/if}</aside>{/if}{/if}
+        {#if assignmentActionError}<p role="alert">{assignmentActionError}</p>{/if}
         {#if runSelection.shown<runSelection.total}<p id="assigned-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs when matching completed assignments.</p><button type="button" disabled={runPageBusy} aria-describedby="assigned-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more saved runs"}</button>{/if}
         {#if runPageError}<p role="alert">{runPageError}</p>{/if}
       </section>
@@ -2110,22 +2223,23 @@
       <section aria-labelledby="classrooms-title">
         <h2 id="classrooms-title">Classrooms</h2>
         <p>A classroom lets a teacher assign packs to you and schedule sessions. It does not let them see your runs — you share an attempt one at a time, and you can take it back.</p>
-        <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void createClassroom();}}><label>New classroom <input required bind:value={classroomName} /></label><button type="submit">Create</button></form>
+        <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void createClassroom();}}><label>New classroom <input required disabled={classroomBusy!==undefined} bind:value={classroomName} /></label><button type="submit" disabled={classroomBusy!==undefined}>{classroomBusy==="create"?"Creating…":"Create"}</button></form>
+        {#if classroomActionError}<p role="alert">{classroomActionError}</p>{/if}
         <div class="item-list">
           {#each classrooms as classroom}
             <article><div><h3>{classroom.name}</h3><p>{classroomRoleLabel(classroom.memberRole)} · {classroomStateLabel(classroom.memberState)}{classroom.archivedAt ? " · archived read-only" : ""}</p>{#if classroom.memberState==="invited"}<p>{classroom.invitation?.invitedBy ? `Invited by @${classroom.invitation.invitedBy.handle}` : "Invited by a classroom teacher"}{classroom.invitation ? ` · ${readableDate(classroom.invitation.invitedAt)}` : ""}</p>{#if classroom.memberRole==="teacher"}<p class="honest">Accepting makes you a classroom teacher: you can invite members, assign packs, and schedule sessions. It does not grant access to anyone's runs; learners share attempts one at a time and can withdraw them.</p>{:else}<p class="honest">Accepting lets teachers assign packs to you and schedule sessions. It does not let them see your runs; you share attempts one at a time and can withdraw them.</p>{/if}<p id={`classroom-retention-${classroom.id}`} class="honest">Accepting keeps your membership as shared classroom history. If other active members remain when you delete your account, that history can stay read-only with your identity removed.</p>{/if}</div>
-              {#if classroom.memberState==="invited"}<div class="row-actions"><button type="button" aria-describedby={`classroom-retention-${classroom.id}`} onclick={()=>void respondClassroom(classroom.id,"accept")}>Accept</button><button type="button" onclick={()=>void respondClassroom(classroom.id,"decline")}>Decline</button></div>{:else}<button type="button" onclick={()=>void openClassroom(classroom.id)}>Open</button>{/if}
+              {#if classroom.memberState==="invited"}<div class="row-actions"><button type="button" disabled={classroomBusy!==undefined} aria-describedby={`classroom-retention-${classroom.id}`} onclick={()=>void respondClassroom(classroom.id,"accept")}>{classroomBusy===`respond:${classroom.id}`?"Working…":"Accept"}</button><button type="button" disabled={classroomBusy!==undefined} onclick={()=>void respondClassroom(classroom.id,"decline")}>Decline</button></div>{:else}<button type="button" disabled={classroomBusy!==undefined&&!classroomBusy.startsWith("open:")} onclick={()=>void openClassroom(classroom.id)}>{classroomBusy===`open:${classroom.id}`?"Opening…":"Open"}</button>{/if}
             </article>
           {:else}<p>No classrooms yet.</p>{/each}
         </div>
         {#if classroomDetail}
           <article class="classroom-detail">
-            <div class="row-actions"><h3>{classroomDetail.classroom.name}{classroomDetail.classroom.archivedAt ? " · archived" : ""}</h3>{#if !classroomDetail.classroom.archivedAt}<button type="button" onclick={()=>void respondClassroom(classroomDetail!.classroom.id,"leave")}>Leave</button>{/if}</div>
+            <div class="row-actions"><h3>{classroomDetail.classroom.name}{classroomDetail.classroom.archivedAt ? " · archived" : ""}</h3>{#if !classroomDetail.classroom.archivedAt}<button type="button" disabled={classroomBusy!==undefined} onclick={()=>void respondClassroom(classroomDetail!.classroom.id,"leave")}>{classroomBusy===`respond:${classroomDetail.classroom.id}`?"Leaving…":"Leave"}</button>{/if}</div>
             {#if classroomDetail.classroom.archivedAt}<p class="honest">This classroom remains as read-only shared history. Membership, assignments, submissions, and scheduling cannot be changed.</p>{/if}
             <h4>Members</h4><ul>{#each classroomDetail.members as member}<li>@{member.handle} — {classroomRoleLabel(member.memberRole)}, {classroomStateLabel(member.state)}</li>{/each}</ul>
             {#if classroomDetail.membership.memberRole==="teacher" && !classroomDetail.classroom.archivedAt}
-              <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void inviteClassroom();}}><label>Invite handle <input required bind:value={classroomInviteHandle}/></label><label>Role <select bind:value={classroomInviteRole}><option value="learner">Learner</option><option value="teacher">Teacher</option></select></label><button type="submit">Invite</button></form>
-              <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void assignClassroomPack();}}><label>Pack <select required bind:value={assignmentPackId}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title}</option>{/each}</select></label><label>Teacher note <input bind:value={assignmentNote}/></label><label>Due <input type="datetime-local" bind:value={assignmentDueAt}/></label><button type="submit">Assign</button></form>
+              <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void inviteClassroom();}}><label>Invite handle <input required disabled={classroomBusy!==undefined} bind:value={classroomInviteHandle}/></label><label>Role <select disabled={classroomBusy!==undefined} bind:value={classroomInviteRole}><option value="learner">Learner</option><option value="teacher">Teacher</option></select></label><button type="submit" disabled={classroomBusy!==undefined}>{classroomBusy===`invite:${classroomDetail.classroom.id}`?"Inviting…":"Invite"}</button></form>
+              <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void assignClassroomPack();}}><label>Pack <select required disabled={classroomBusy!==undefined} bind:value={assignmentPackId}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title}</option>{/each}</select></label><label>Teacher note <input disabled={classroomBusy!==undefined} bind:value={assignmentNote}/></label><label>Due <input type="datetime-local" disabled={classroomBusy!==undefined} bind:value={assignmentDueAt}/></label><button type="submit" disabled={classroomBusy!==undefined}>{classroomBusy===`assign:${classroomDetail.classroom.id}`?"Assigning…":"Assign"}</button></form>
             {/if}
             <h4>Assignments and submissions</h4><div class="item-list assignment-grid">{#each classroomDetail.assignments as assignment}<article><div><h5>{packTitle(assignment.packId)}</h5><p>Assigned by @{classroomMemberHandle(assignment.assignedBy)} · {readableDate(assignment.createdAt)}{assignment.dueAt?` · due ${readableDate(assignment.dueAt)}`:""}{isOverdue(assignment.dueAt)&&!assignment.withdrawnAt?" · overdue":""}{assignment.withdrawnAt?" · withdrawn":""}</p>{#if assignment.note}<blockquote><p>{assignment.note}</p><footer>— @{classroomMemberHandle(assignment.assignedBy)}, teacher note</footer></blockquote>{/if}</div>{#if classroomDetail.membership.memberRole==="teacher"}<ul aria-label={`Submission status for ${packTitle(assignment.packId)}`}>{#each classroomDetail.members.filter((member)=>member.memberRole==="learner"&&member.state==="active") as member}{@const submissions=assignmentSubmissions(assignment.id,member.learnerId)}<li><strong>@{member.handle}</strong>{#if submissions.length===0} — not submitted{:else}<ul>{#each submissions as submission}<li>{submission.withdrawnAt?`Withdrawn ${readableDate(submission.withdrawnAt)}`:`Submitted ${readableDate(submission.submittedAt)}`} · {submission.access==="available"?"access available":"access revoked or expired"}{#if submission.access==="available"} <button type="button" onclick={()=>navigate(routePath({name:"run",runId:submission.runId}))}>Review @{member.handle}'s run</button>{/if}</li>{/each}</ul>{/if}</li>{:else}<li>No active learners.</li>{/each}</ul>{/if}</article>{:else}<p>No assignments.</p>{/each}</div>
             {#if learner}<CohortStanding {api} classroomId={classroomDetail.classroom.id} learnerId={learner.id} role={classroomDetail.membership.memberRole} />{/if}

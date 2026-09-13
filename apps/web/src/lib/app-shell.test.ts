@@ -1410,6 +1410,72 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("keeps the latest classroom when detail requests resolve out of order", async () => {
+    history.replaceState(null, "", "/live");
+    const pendingFirst = deferred<ClassroomDetail>();
+    const pendingSecond = deferred<ClassroomDetail>();
+    const classroomDetail = (id: string, name: string): ClassroomDetail => ({
+      classroom: { id, ownerLearnerId: "learner-test", name, createdAt: "2026-09-13T12:00:00.000Z", archivedAt: null },
+      membership: { classroomId: id, learnerId: "learner-test", handle: "coach", memberRole: "teacher", state: "active", invitedBy: null, invitedAt: "2026-09-13T12:00:00.000Z", joinedAt: "2026-09-13T12:00:00.000Z", leftAt: null },
+      members: [], assignments: [], submissions: [], upcomingSessions: [],
+    });
+    const classroomApi: DrillClientApi = {
+      ...api(),
+      async classrooms() {
+        return [
+          { ...classroomDetail("classroom-first", "First classroom").classroom, memberRole: "teacher" as const, memberState: "active" as const },
+          { ...classroomDetail("classroom-second", "Second classroom").classroom, memberRole: "teacher" as const, memberState: "active" as const },
+        ];
+      },
+      classroom(id) { return id === "classroom-first" ? pendingFirst.promise : pendingSecond.promise; },
+    };
+    const component = mount(App, { target: target(), props: { api: classroomApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Second classroom"));
+    const classroomCards = [...document.querySelectorAll<HTMLElement>("[aria-labelledby='classrooms-title'] .item-list > article")];
+    classroomCards[0]!.querySelector<HTMLButtonElement>("button")!.click();
+    classroomCards[1]!.querySelector<HTMLButtonElement>("button")!.click();
+    pendingSecond.resolve(classroomDetail("classroom-second", "Second classroom"));
+    await vi.waitFor(() => expect(document.querySelector(".classroom-detail h3")?.textContent).toBe("Second classroom"));
+    pendingFirst.resolve(classroomDetail("classroom-first", "First classroom"));
+    await tick();
+    await Promise.resolve();
+    expect(document.querySelector(".classroom-detail h3")?.textContent).toBe("Second classroom");
+    await unmount(component);
+  });
+
+  it("retains assignment consent with a bounded retry after sharing fails", async () => {
+    history.replaceState(null, "", "/learn");
+    const assignment: AssignedPack = {
+      id: "assignment-retry", classroomId: "classroom-one", packId: pack.id, assignedBy: "teacher-one",
+      note: null, dueAt: null, createdAt: "2026-09-13T12:00:00.000Z", withdrawnAt: null,
+      classroomName: "Retry group", assignedByHandle: "coach", teacherHandles: ["coach"], submissions: [],
+    };
+    const submitAssignment = vi.fn()
+      .mockRejectedValueOnce(new Error("private provider detail"))
+      .mockResolvedValueOnce({ assignmentId: assignment.id, learnerId: "learner-test", runId: runSummary.id, grantedLearnerIds: ["teacher-one"], submittedAt: "2026-09-13T12:00:00.000Z", accessExpiresAt: "2026-12-12T12:00:00.000Z", withdrawnAt: null });
+    const assignedApi: DrillClientApi = { ...api(), async assignments() { return [assignment]; }, submitAssignment };
+    const component = mount(App, { target: target(), props: { api: assignedApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Retry group"));
+    const runSelect = [...document.querySelectorAll<HTMLSelectElement>("select")].find((select) => select.parentElement?.textContent?.includes("Completed run"))!;
+    runSelect.value = runSummary.id;
+    runSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    const share = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Share with teachers")!;
+    await vi.waitFor(() => expect(share.disabled).toBe(false));
+    share.click();
+    await vi.waitFor(() => expect([...document.querySelectorAll<HTMLButtonElement>("button")].some((button) => button.textContent === "Confirm sharing")).toBe(true));
+    const confirm = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm sharing")!;
+    confirm.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This run could not be shared. Nothing changed; try again."));
+    expect(document.body.textContent).not.toContain("private provider detail");
+    expect(document.querySelector("#submission-confirm-title")?.textContent).toContain(runSummary.title);
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm sharing")!.click();
+    await vi.waitFor(() => expect(submitAssignment).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector("#submission-confirm-title")).toBeNull());
+    await unmount(component);
+  });
+
   it("expands recorded attempts into honestly labelled related rehearsals", async () => {
     history.replaceState(null, "", "/learn");
     const base = api();

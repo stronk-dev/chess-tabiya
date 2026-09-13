@@ -19762,3 +19762,18 @@ retains catalogue work and GC but excludes intervals when the process cannot exe
 arrival and perceived-operation gates continue to own wall latency. Three consecutive canonical
 `make test-performance` runs pass, followed by green `make verify-software` and all 64 required
 browser journeys.
+
+## 2026-09-13 — Classroom actions retain their initiating subject ([[D3227]])
+
+Classroom detail, membership, invitation, assignment and submission operations previously awaited
+against global mutable screen state. A slower classroom read could replace the classroom opened
+after it, an invite or assignment could refresh a different classroom, and departed Learn/Live
+work could clear new input or overwrite the destination route. Every action now captures its exact
+route generation and classroom/assignment/run/form subject; detail reads are latest-request-wins,
+pending state is visible, and failed sharing retains the consent card for retry without transport
+diagnostics. Mutation truth is separate from projection refresh, so a completed write is never
+reported as failed merely because its follow-up list read failed. Crossed-classroom and rejected-
+sharing falsifiers pass. Sequential canonical verification passes: `make verify-software` is green
+across 188 files / 1,229 tests plus type, performance, schema, manifest and production-build checks;
+`make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
+measurement skipped.

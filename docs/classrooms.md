@@ -46,6 +46,15 @@ every teacher whose current run grant still resolves and offers revocation; the 
 from live authorization state rather than copied from the original submission. This deliberately
 uses the `/learn` card that survives the compact floor instead of adding a fourth in-run tab.
 
+Classroom and assignment actions retain the route, classroom, assignment, run, and literal form
+values that initiated them. Classroom detail reads are latest-request-wins, so a slower earlier
+classroom cannot replace the one opened afterward. A mutation may still finish after navigation,
+but its completion cannot clear a newer form or publish into another screen. Controls expose their
+pending operation, failures keep retry inputs or consent mounted, and learner copy does not expose
+transport diagnostics. Mutation success and list/detail refresh are separate facts: when only the
+secondary refresh fails, the UI says the action finished and asks for a reload instead of claiming
+that the mutation failed.
+
 ## Consent, expiry, and revocation
 
 A learner may submit only a run they host whose `packId` matches the assignment. The
