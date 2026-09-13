@@ -65,10 +65,14 @@ describe("Pack Studio", () => {
     const forged = structuredClone(fixture);
     forged.provenance.channel = "official";
     forged.provenance.reviewedBy = "World champion";
+    forged.provenance.graduationBlockers = [{ state: "blocking", statement: "Server-only authoring state" }];
     const projected = projectPackDocument(forged, "unverified", "community", "author") as any;
     expect(projected.channel).toBe("community");
     expect(projected.provenance.channel).toBeUndefined();
     expect(projected.provenance.reviewedBy).toBeUndefined();
+    expect(projected.provenance.graduationBlockers).toBeUndefined();
+    forged.variantOf = null;
+    expect(projectPackDocument(forged, "unverified", "community", "author")).not.toHaveProperty("variantOf");
 
     const officialCollision = structuredClone(fixture);
     officialCollision.provenance.reviewStatus = "draft";

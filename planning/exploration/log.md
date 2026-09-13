@@ -20132,3 +20132,20 @@ required summary fields preserves the intended honest `phase: null` case while i
 full-pack response still fails closed. `make verify-software` passes 202 files / 1,346 tests plus types,
 performance, schema, manifest, packaging and production builds. The complete `make test-browser` gate
 passes 92 required journeys with one explicitly optional Maia latency probe skipped.
+
+## 2026-09-14 — Full pack documents become finite learner projections ([[D3254]])
+
+`DrillApi.pack()` no longer checks one field and casts the remaining response. One exact parser now
+validates the deliberately reduced learner document: requested identity and digest, legal start
+position, ordered SAN history, objective grading, opponent and feedback policies, answer-withholding,
+recursive spine and checkpoint identities, shape relations, trajectory legs and variant links. The
+server projection also withholds author-only graduation blockers.
+
+The first complete browser run found a producer mismatch rather than prompting a weaker client: the
+server emitted a normalized `variantOf: null` even though its public contract permits either a relation
+object or omission. The projection now omits null, a server fixture pins it, and the real Carlsbad pack
+opens normally. The malformed-response journey now expects the existing client-contract failure copy
+instead of misclassifying local validation as a server outage. `make verify-software` passes 203 files /
+1,360 tests plus types, performance, schema, manifest, packaging and production builds. The complete
+`make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
+skipped.

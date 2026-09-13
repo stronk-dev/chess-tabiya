@@ -27,6 +27,7 @@ import type {
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
+import { parsePackDocument } from "./pack-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
 
 export interface PackSummary {
@@ -1048,15 +1049,9 @@ export class DrillApi implements DrillClientApi {
 
   async pack(packId: string): Promise<PackDocument> {
     const response = await this.#response(`/packs/${encoded(packId)}`);
-    const document = (await response.json()) as DrillPackDefinition;
+    const document = parsePackDocument(await response.json(), packId);
     const digest = response.headers.get("x-pack-digest");
-    if (digest === null || digest === "") {
-      throw new ApiError(502, "INVALID_RESPONSE", "Pack response omitted its digest");
-    }
-    const side = (document as { readonly start?: { readonly side?: unknown } }).start?.side;
-    if (side !== "white" && side !== "black") {
-      throw new ApiError(502, "INVALID_RESPONSE", `Pack ${packId} did not declare start.side`);
-    }
+    if (digest === null || !/^sha256:[a-f0-9]{64}$/u.test(digest)) throw new ApiError(502, "INVALID_RESPONSE", "Pack response omitted a valid digest");
     return Object.freeze({ document, digest });
   }
 

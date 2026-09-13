@@ -156,7 +156,14 @@ describe("DrillApi", () => {
       if (url.endsWith("/principles")) return json({ principles: [] });
       if (url.endsWith("/packs/pack-one")) {
         return json(
-          { id: "pack-one", version: "0.2", start: { fen: run.nodes[0]!.fen, side: "white" } },
+          {
+            id: "pack-one", version: "0.29", title: "Pack one", mode: "plan", phase: "middlegame",
+            provenance: { reviewStatus: "draft", sources: [] }, channel: "official",
+            start: { fen: run.nodes[0]!.fen, side: "white" },
+            objective: { type: "play_until_checkpoint", summary: "Play the consequence." },
+            feedbackPolicy: "delayed_checkpoint", opponentPolicy: { mode: "human_common" },
+            spine: [], checkpoints: [],
+          },
           { headers: { "x-pack-digest": run.packDigest! } },
         );
       }

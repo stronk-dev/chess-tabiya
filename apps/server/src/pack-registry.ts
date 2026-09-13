@@ -113,7 +113,6 @@ export function projectPackDocument(
         reviewStatus: source.reviewStatus,
         ...(Array.isArray(source.sources) ? { sources: source.sources } : {}),
         ...(typeof source.licence === "string" ? { licence: source.licence } : {}),
-        ...(Array.isArray(source.graduationBlockers) ? { graduationBlockers: source.graduationBlockers } : {}),
       };
     })(),
     channel,
@@ -137,7 +136,7 @@ export function projectPackDocument(
     feedbackPolicy: raw.feedbackPolicy,
     opponentPolicy: raw.opponentPolicy,
     ...(document.shapes === undefined ? {} : { shapes: document.shapes }),
-    ...(document.variantOf === undefined ? {} : { variantOf: document.variantOf }),
+    ...(document.variantOf == null ? {} : { variantOf: document.variantOf }),
     spine: raw.mode === "line" ? [] : (document.spine ?? []).map(projectSpineNode),
     checkpoints: document.checkpoints.map((checkpoint) => ({
       id: checkpoint.id,
