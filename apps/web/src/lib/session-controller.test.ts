@@ -789,6 +789,19 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state).toEqual({ busy: false });
   });
 
+  it("returns an explicit failed fork result instead of collapsing it into void", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    vi.spyOn(api, "fork").mockRejectedValueOnce(new Error("private fork storage detail"));
+
+    expect(await environment.controller.fork("second look", "test intent")).toBe(false);
+    expect(environment.controller.state.busy).toBe(false);
+    expect(environment.controller.state.error).toBeDefined();
+    expect(environment.controller.state.error).not.toContain("private fork storage detail");
+    expect(environment.controller.state.runState?.run.branches).toHaveLength(1);
+  });
+
   it("drains ready branch evidence before taking the comparison snapshot", async () => {
     const api = new FakeApi();
     const environment = controller(api);

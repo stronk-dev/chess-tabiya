@@ -481,7 +481,7 @@ export class DrillSessionController {
     }
   }
 
-  async fork(label?: string, intent?: string): Promise<void> {
+  async fork(label?: string, intent?: string): Promise<boolean> {
     const run = this.#requiredRun();
     this.#patch({ busy: true, error: undefined });
     try {
@@ -491,8 +491,10 @@ export class DrillSessionController {
         ...(intent === undefined || intent.trim() === "" ? {} : { intent }),
       });
       this.#patch({ busy: false });
+      return true;
     } catch (error) {
       this.#fail(error);
+      return false;
     }
   }
 

@@ -641,6 +641,51 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("keeps fork intent for a single-flight retry after creation fails", async () => {
+    const run = branchedRun();
+    const first = deferred<boolean>();
+    const onFork = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(true);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork, onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.getAttribute("aria-label") === "Fork branch")!
+      .click();
+    await tick();
+    const dialog = document.querySelector<HTMLElement>('[aria-labelledby="fork-title"]')!;
+    const intent = dialog.querySelector<HTMLTextAreaElement>("textarea")!;
+    const label = dialog.querySelector<HTMLInputElement>("input")!;
+    intent.value = "Keep the knight and challenge the centre";
+    intent.dispatchEvent(new Event("input", { bubbles: true }));
+    label.value = "Knight plan";
+    label.dispatchEvent(new Event("input", { bubbles: true }));
+    const create = dialog.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    create.click();
+    await tick();
+    expect(create.disabled).toBe(true);
+    expect(create.textContent).toContain("Creating branch");
+    create.click();
+    expect(onFork).toHaveBeenCalledTimes(1);
+
+    first.resolve(false);
+    await vi.waitFor(() => expect(dialog.querySelector("[role='alert']")?.textContent).toContain("name and intent are still here"));
+    expect(intent.value).toBe("Keep the knight and challenge the centre");
+    expect(label.value).toBe("Knight plan");
+    expect(create.disabled).toBe(false);
+
+    create.click();
+    await vi.waitFor(() => expect(onFork).toHaveBeenCalledTimes(2));
+    expect(onFork).toHaveBeenLastCalledWith("Knight plan", "Keep the knight and challenge the centre");
+    await vi.waitFor(() => expect(document.querySelector('[aria-labelledby="fork-title"]')).toBeNull());
+    await unmount(component);
+  });
+
   it("keeps pivotal markers off by default, passive when enabled, and removable again", async () => {
     const initial = createRun({ id: "pivotal-ui", session: { kind: "position", start: { fen: "r3k2r/ppppqppp/2nbbn2/8/8/2NBBN2/PPPPQPPP/R3K2R w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
     const child = { ...initial.nodes[0]!, id: "pivotal-ui:node:1", parentId: initial.nodes[0]!.id, fen: "4k2r/8/8/8/8/8/RP6/4K3 b - - 0 1", transposeKey: "4k2r/8/8/8/8/8/RP6/4K3 b - -", moveUci: "a2a3", moveSan: "a3", ply: 1, actor: "user" as const };

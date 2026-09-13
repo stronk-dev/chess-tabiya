@@ -618,7 +618,10 @@ absent, ordinary surfaces replace the runtime's `alt-N` label with the first pla
 that intent. Explicit learner names remain unchanged. The branch rail and Timeline use the same
 projection. Timeline derives each real fork group from runtime branch identity, including the
 parent continuation, so a non-root fork does not disappear merely because the original branch was
-created at the run root.
+created at the run root. Fork submission is single-flight. The production session controller
+returns an explicit success bit instead of collapsing failure into `void`; on known failure the
+dialog stays open with its label and intent intact, safe retry copy, and no server diagnostics.
+Success alone clears the fields and moves focus back into the run.
 
 The catalogue states the consequence horizon before a pack starts. An explicit authored boundary
 wins; otherwise the server derives the greatest authored leg/spine depth, and a missing boundary is

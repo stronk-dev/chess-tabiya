@@ -19545,3 +19545,15 @@ is handled alongside thrown failures without exposing diagnostics. `make verify-
 188 files / 1,199 tests plus type, performance, schema, manifest and production-build checks;
 `make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
 measurement skipped.
+
+## 2026-09-13 — Fork creation preserves learner intent through failure ([[D3210]])
+
+Fork submission previously closed its dialog before the mutation, while the production session
+controller mapped both success and failure to `void`. A failed fork therefore looked successful,
+destroyed the learner's label and intent, and switched panels. The controller now returns an
+explicit success bit. Submission is single-flight; only success clears and closes the form, while
+known failure retains both authored fields with safe retry copy and no storage diagnostics. Cancel
+and teardown invalidate local completion. Separate regressions bind the real controller failure arm
+and the pending/failure/retry UI lifecycle. `make verify-software` passes 188 files / 1,201 tests
+plus type, performance, schema, manifest and production-build checks; `make test-browser` passes all
+64 required journeys with one explicitly optional Maia latency measurement skipped.

@@ -109,7 +109,7 @@
     onMove: (uci: string) => boolean | void | Promise<boolean | void>;
     onReveal?: (() => void | Promise<void>) | undefined;
     onRewind: (target: RewindTarget) => void | Promise<void>;
-    onFork: (label?: string, intent?: string) => void | Promise<void>;
+    onFork: (label?: string, intent?: string) => boolean | void | Promise<boolean | void>;
     onSwitchBranch: (leafNodeId: string, branchId: string) => void | Promise<void>;
     onCompare: (branchIds: readonly string[]) => void | Promise<void>;
     onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
@@ -255,6 +255,9 @@
   let spokenAudio: { readonly nodeId: string; readonly audio: HTMLAudioElement; readonly url: string } | undefined;
   let forkLabel = $state("");
   let forkIntent = $state("");
+  let forkBusy = $state(false);
+  let forkError: string | undefined = $state();
+  let forkRequest = 0;
   let groupOpen = $state(false);
   let groupSource: CreateGroupRequest["source"] = $state("hand_picked");
   let groupResistance: "fixed" | "per_branch" = $state("fixed");
@@ -1030,6 +1033,9 @@
   }
 
   function closeFork(): void {
+    forkRequest += 1;
+    forkBusy = false;
+    forkError = undefined;
     forkOpen = false;
     restoreFocus(forkInvoker);
   }
@@ -1207,13 +1213,31 @@
   }
 
   async function submitFork(): Promise<void> {
-    if (!canWrite) return;
-    forkOpen = false;
-    await onFork(forkLabel, forkIntent);
-    forkLabel = "";
-    forkIntent = "";
-    compactTab = "branches";
-    sheetOpen = !compactViewport;
+    if (!canWrite || forkBusy) return;
+    const request = ++forkRequest;
+    forkBusy = true;
+    forkError = undefined;
+    try {
+      const created = await onFork(forkLabel, forkIntent);
+      if (request !== forkRequest) return;
+      if (created === false) {
+        forkError = "The branch was not created. Your name and intent are still here; try again.";
+        return;
+      }
+      forkOpen = false;
+      forkLabel = "";
+      forkIntent = "";
+      compactTab = "branches";
+      sheetOpen = !compactViewport;
+      restoreFocus(compactViewport ? mainElement : forkInvoker);
+      forkInvoker = undefined;
+    } catch {
+      if (request === forkRequest) {
+        forkError = "The branch was not created. Your name and intent are still here; try again.";
+      }
+    } finally {
+      if (request === forkRequest) forkBusy = false;
+    }
   }
 
   async function continueFromCheckpoint(): Promise<void> {
@@ -1271,6 +1295,7 @@
       event.preventDefault();
       if (!canWrite) return true;
       forkInvoker = keyboardInvoker(event);
+      forkError = undefined;
       forkOpen = true;
       void tick().then(() => forkIntentInput?.focus());
       return true;
@@ -1344,6 +1369,7 @@
     if (markTimer !== undefined) clearTimeout(markTimer);
     markRequest += 1;
     groupRequest += 1;
+    forkRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1730,7 +1756,7 @@
         </div>
         <div class="quick-actions" aria-label="Run actions">
           <HonestControl disabled={!canWrite} reasonId="drill-fork-readonly" reason="This read-only view cannot create a branch.">
-            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-label="Fork branch" aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
+            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-label="Fork branch" aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkError = undefined; forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
           </HonestControl>
           <HonestControl disabled={!canWrite} reasonId="drill-group-readonly" reason="This read-only view cannot create a branch group.">
             {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={openGroupCreator}>Branch group</button>{/snippet}
@@ -2024,9 +2050,11 @@
       <form class="modal" onsubmit={(event) => { event.preventDefault(); void submitFork(); }}>
         <p>Branch from here</p>
         <h2 id="fork-title">Name the experiment.</h2>
-        <label>What are you trying? <textarea bind:this={forkIntentInput} bind:value={forkIntent} placeholder="For example: keep the knight and challenge the centre"></textarea></label>
-        <label>Short name <input bind:value={forkLabel} placeholder="Optional — the move and intent name it automatically" /></label>
-        <div><button type="button" onclick={closeFork}>Cancel</button><button class="primary" type="submit">Create branch</button></div>
+        <label>What are you trying? <textarea bind:this={forkIntentInput} bind:value={forkIntent} disabled={forkBusy} aria-describedby={forkBusy ? "fork-create-busy" : undefined} placeholder="For example: keep the knight and challenge the centre"></textarea></label>
+        <label>Short name <input bind:value={forkLabel} disabled={forkBusy} aria-describedby={forkBusy ? "fork-create-busy" : undefined} placeholder="Optional — the move and intent name it automatically" /></label>
+        <div><button type="button" onclick={closeFork}>Cancel</button><button class="primary" type="submit" disabled={forkBusy} aria-describedby={forkBusy ? "fork-create-busy" : undefined}>{forkBusy ? "Creating branch…" : "Create branch"}</button></div>
+        {#if forkBusy}<span id="fork-create-busy" role="status">Creating this branch from the current position.</span>{/if}
+        {#if forkError}<span role="alert">{forkError}</span>{/if}
       </form>
     </div>
   </div>
