@@ -153,6 +153,20 @@ typed `reviewers` property. Because provenance remains open for historical metad
 `reviewers` arrays still parse but have no trust-bearing consumer. Published packs require
 sources; Studio alone writes the published state. This is historical provenance behavior, not the
 current format number shown by the editor.
+
+## Seed-door action lifecycle
+
+Position, finished-game, played-run and existing-pack seed doors share one single-flight action.
+Each captures its exact source, requested pack id, current editor selection and Create-route
+generation. Studio accepts only a mutable draft whose record and document both identify that
+requested pack. A completion can add its exact draft without overwriting a selection made in the
+meantime, and cannot publish after Create is left. Failures use bounded source-checking copy.
+
+The finished-game door observes a provisional writer while import is pending and persists that
+authority only after the game is stored under the requested run id. If distillation then fails, the
+saved run and exact destination remain a resumable preparation; retry distills that run again
+without importing a duplicate game. The seed controls and setup board remain fixed while an action
+is pending.
 ## Shape-entry authoring
 
 Shape-entry authoring extends the pack workflow described above. Shape drafts use

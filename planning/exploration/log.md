@@ -19896,3 +19896,16 @@ falsifiers pass. Sequential canonical verification passes: `make verify-software
 194 files / 1,268 tests plus type, performance, schema, manifest and production-build checks;
 `make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
 measurement skipped.
+
+## 2026-09-13 — Studio seed doors retain their source and destination ([[D3237]])
+
+The four seed doors previously trusted any returned draft, exposed provider diagnostics, could
+overwrite a newer editor selection or publish after Create was left, and claimed a game-import
+writer before storage succeeded. They now share one single-flight action that captures source,
+destination, selection and route; validates draft record plus document identity; bounds failure
+copy; and refuses stale presentation. The game door persists authority after storage and retains a
+saved-but-undistilled preparation, so retry does not import the game twice. Duplicate, crossed,
+partial-success, newer-selection and departed-route falsifiers pass. Sequential canonical
+verification passes: `make verify-software` is green across 195 files / 1,276 tests plus type,
+performance, schema, manifest and production-build checks; `make test-browser` passes all 64
+required journeys with one explicitly optional Maia latency measurement skipped.

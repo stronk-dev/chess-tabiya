@@ -2467,6 +2467,106 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("keeps a seed request single-flight and does not publish it after Create is left", async () => {
+    history.replaceState(null, "", "/create");
+    const first = deferred<PackDraft>();
+    const second = deferred<PackDraft>();
+    const requested: unknown[] = [];
+    const createPackDraft = vi.fn((document: unknown) => {
+      requested.push(document);
+      return requested.length === 1 ? first.promise : second.promise;
+    });
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), createPackDraft }, router, storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("What are you starting from?"));
+    [...document.querySelectorAll<HTMLButtonElement>(".seed-doors button")].find((button) => button.textContent?.includes("Position"))!.click();
+    await tick();
+    const form = document.querySelector<HTMLFormElement>(".seed-chooser form")!;
+    const title = form.querySelector<HTMLInputElement>('input[placeholder="What consequence will this rehearse?"]')!;
+    title.value = "Retained position";
+    title.dispatchEvent(new Event("input", { bubbles: true }));
+    form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(createPackDraft).toHaveBeenCalledTimes(1));
+    expect(title.disabled).toBe(true);
+    first.reject(new Error("private pack writer trace"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This draft could not be created."));
+    expect(document.body.textContent).not.toContain("private pack writer trace");
+
+    form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(createPackDraft).toHaveBeenCalledTimes(2));
+    const secondDocument = requested[1] as DrillPackDefinition;
+    router.navigate("/review");
+    await vi.waitFor(() => expect(location.pathname).toBe("/review"));
+    second.resolve({
+      id: "departed-position-draft",
+      packId: secondDocument.id,
+      document: secondDocument,
+      digest,
+      state: "draft",
+      validation: { valid: false, issues: [] },
+    });
+    await tick();
+    await Promise.resolve();
+    expect(location.pathname).toBe("/review");
+    expect(document.querySelector("#pack-studio-editor")).toBeNull();
+    await unmount(component);
+  });
+
+  it("resumes game-to-draft preparation without importing the saved game twice", async () => {
+    history.replaceState(null, "", "/create");
+    const pendingImport = deferred<Awaited<ReturnType<NonNullable<DrillClientApi["importGame"]>>>>();
+    const firstDistill = deferred<Awaited<ReturnType<NonNullable<DrillClientApi["distillRun"]>>>>();
+    const secondDistill = deferred<Awaited<ReturnType<NonNullable<DrillClientApi["distillRun"]>>>>();
+    const importGame = vi.fn((_input: Parameters<NonNullable<DrillClientApi["importGame"]>>[0], _writerId: string) => pendingImport.promise);
+    const distillRun = vi.fn((_runId: string, _input: Parameters<NonNullable<DrillClientApi["distillRun"]>>[1]) => firstDistill.promise);
+    distillRun.mockImplementationOnce(() => firstDistill.promise).mockImplementationOnce(() => secondDistill.promise);
+    const storage = new MemoryStorage();
+    const component = mount(App, {
+      target: target(),
+      props: { api: { ...api(), importGame, distillRun }, router: new HistoryRouter(window), storage },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("What are you starting from?"));
+    [...document.querySelectorAll<HTMLButtonElement>(".seed-doors button")].find((button) => button.textContent?.includes("Finished game"))!.click();
+    await tick();
+    const form = document.querySelector<HTMLFormElement>(".seed-chooser form")!;
+    const title = form.querySelector<HTMLInputElement>('input[placeholder="What should this game\'s rehearsal teach?"]')!;
+    title.value = "Saved game lesson";
+    title.dispatchEvent(new Event("input", { bubbles: true }));
+    const pgn = form.querySelector<HTMLTextAreaElement>("textarea")!;
+    pgn.value = "1. e4 e5 2. Nf3 Nc6";
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(importGame).toHaveBeenCalledTimes(1));
+    const [request, writerId] = importGame.mock.calls[0]!;
+    expect(storage.getItem(writerStorageKey(request.id))).toBeNull();
+    pendingImport.resolve({ run: { ...run, id: request.id }, importRecord: {} as never, evidencePass: { jobs: 0 } });
+    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledTimes(1));
+    expect(storage.getItem(writerStorageKey(request.id))).toContain(writerId);
+    firstDistill.reject(new Error("private distillation trace"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The game is saved, but its draft could not be prepared."));
+    expect(document.body.textContent).not.toContain("private distillation trace");
+
+    form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledTimes(2));
+    expect(importGame).toHaveBeenCalledTimes(1);
+    const [retryRunId, retryInput] = distillRun.mock.calls[1]!;
+    expect(retryRunId).toBe(request.id);
+    const draftDocument = { ...pack, id: retryInput.packId, title: retryInput.title };
+    secondDistill.resolve({
+      draft: { id: "prepared-game-draft", packId: retryInput.packId, document: draftDocument, digest, state: "draft", validation: { valid: false, issues: [] } },
+      proposals: [],
+      dropped: [],
+    });
+    await vi.waitFor(() => expect(document.querySelector("#pack-studio-editor")).not.toBeNull());
+    await unmount(component);
+  });
+
   it("opens Create on four working seed doors instead of a raw pack textarea", async () => {
     history.replaceState(null, "", "/create");
     const createdDocuments: unknown[] = [];
@@ -2487,7 +2587,7 @@ describe("application shell", () => {
       proposals: [],
       dropped: [],
     }));
-    const importGame = vi.fn(async () => ({ run, importRecord: {} as never, evidencePass: { jobs: 0 } }));
+    const importGame = vi.fn(async (input: { readonly id: string }) => ({ run: { ...run, id: input.id }, importRecord: {} as never, evidencePass: { jobs: 0 } }));
     const exportPack = vi.fn(async () => ({ document: pack, digest }));
     const studioApi: DrillClientApi = { ...api(), createPackDraft, distillRun, importGame, exportPack };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
@@ -2526,7 +2626,8 @@ describe("application shell", () => {
     pgn.dispatchEvent(new Event("input", { bubbles: true }));
     gameForm.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
     await vi.waitFor(() => expect(importGame).toHaveBeenCalledTimes(1));
-    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledWith(run.id, expect.objectContaining({ title: "Game lesson", branchId: run.activeCursor.branchId })));
+    const [gameImportRequest] = importGame.mock.calls[0]!;
+    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledWith(gameImportRequest.id, expect.objectContaining({ title: "Game lesson", branchId: run.activeCursor.branchId })));
 
     await backToDoors();
     [...document.querySelectorAll<HTMLButtonElement>(".seed-doors button")].find((button) => button.textContent?.includes("Run you played"))!.click();

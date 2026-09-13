@@ -9,6 +9,7 @@
     runs: readonly RunSummary[];
     busy?: boolean;
     error?: string | undefined;
+    savedGamePending?: boolean;
     onPosition: (input: { readonly title: string; readonly fen: string; readonly side: "white" | "black" }) => void | Promise<void>;
     onGame: (input: { readonly title: string; readonly side: "white" | "black"; readonly pgn: string; readonly url: string }) => void | Promise<void>;
     onRun: (input: { readonly runId: string; readonly title: string }) => void | Promise<void>;
@@ -16,7 +17,7 @@
     onClearError: () => void;
   }
 
-  let { packs, runs, busy = false, error, onPosition, onGame, onRun, onPack, onClearError }: Props = $props();
+  let { packs, runs, busy = false, error, savedGamePending = false, onPosition, onGame, onRun, onPack, onClearError }: Props = $props();
   let door: Door | undefined = $state();
   let title = $state("");
   let fen = $state(INITIAL_POSITION_FEN);
@@ -29,6 +30,7 @@
   let turn = $derived(positionTurn(fen));
 
   function choose(value: Door): void {
+    if (busy) return;
     door = value;
     onClearError();
   }
@@ -46,55 +48,57 @@
 <section class="seed-chooser" aria-labelledby="seed-chooser-title">
   <div class="seed-heading">
     <div><p class="eyebrow">Start with real chess</p><h2 id="seed-chooser-title">What are you starting from?</h2></div>
-    {#if door}<button type="button" disabled={busy} onclick={returnToChoices}>Back to four choices</button>{/if}
+    {#if door}<button type="button" disabled={busy} aria-describedby={busy ? "seed-action-busy" : undefined} onclick={returnToChoices}>Back to four choices</button>{/if}
   </div>
 
   {#if door === undefined}
     <div class="seed-doors">
-      <button type="button" onclick={() => choose("position")}><strong>Position</strong><span>Paste a FEN or play legal moves on a board.</span></button>
-      <button type="button" onclick={() => choose("game")}><strong>Finished game</strong><span>Import PGN or a Lichess game, then distill its recorded line.</span></button>
-      <button type="button" onclick={() => choose("run")}><strong>Run you played</strong><span>Turn one preserved attempt into an editable draft.</span></button>
-      <button type="button" onclick={() => choose("pack")}><strong>Existing pack</strong><span>Copy a served pack with fresh review debt and a new identity.</span></button>
+      <button type="button" disabled={busy} aria-describedby={busy ? "seed-action-busy" : undefined} onclick={() => choose("position")}><strong>Position</strong><span>Paste a FEN or play legal moves on a board.</span></button>
+      <button type="button" disabled={busy} aria-describedby={busy ? "seed-action-busy" : undefined} onclick={() => choose("game")}><strong>Finished game</strong><span>Import PGN or a Lichess game, then distill its recorded line.</span></button>
+      <button type="button" disabled={busy} aria-describedby={busy ? "seed-action-busy" : undefined} onclick={() => choose("run")}><strong>Run you played</strong><span>Turn one preserved attempt into an editable draft.</span></button>
+      <button type="button" disabled={busy} aria-describedby={busy ? "seed-action-busy" : undefined} onclick={() => choose("pack")}><strong>Existing pack</strong><span>Copy a served pack with fresh review debt and a new identity.</span></button>
     </div>
   {:else if door === "position"}
-    <form onsubmit={(event) => { event.preventDefault(); void onPosition({ title: title.trim(), fen: fen.trim(), side }); }}>
+    <form aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onPosition({ title: title.trim(), fen: fen.trim(), side }); }}>
       <div class="seed-fields">
-        <label>Draft title<input required maxlength="120" bind:value={title} placeholder="What consequence will this rehearse?" /></label>
-        <label>Learner side<select bind:value={side}><option value="white">White</option><option value="black">Black</option></select></label>
-        <label class="fen-field">Starting FEN<input required bind:value={fen} aria-invalid={turn === undefined} /></label>
+        <label>Draft title<input required maxlength="120" disabled={busy} bind:value={title} placeholder="What consequence will this rehearse?" /></label>
+        <label>Learner side<select disabled={busy} bind:value={side}><option value="white">White</option><option value="black">Black</option></select></label>
+        <label class="fen-field">Starting FEN<input required disabled={busy} bind:value={fen} aria-invalid={turn === undefined} /></label>
       </div>
       {#if turn}
-        <div class="seed-board"><Chessboard {fen} startSide={turn} showDests highlightMoves onMove={moveOnSeedBoard} /></div>
+        <div class="seed-board"><Chessboard {fen} startSide={turn} showDests highlightMoves disabled={busy} onMove={moveOnSeedBoard} /></div>
         <p class="honest">Move pieces legally to advance the seed position. The learner side is separate from whose turn it is on this setup board.</p>
       {:else}<p role="alert">Enter a legal FEN before using the board.</p>{/if}
-      <button class="primary" type="submit" disabled={busy || title.trim() === "" || turn === undefined}>{busy ? "Creating…" : "Create ten-field draft"}</button>
+      <button class="primary" type="submit" disabled={busy || title.trim() === "" || turn === undefined} aria-describedby={busy ? "seed-action-busy" : undefined}>{busy ? "Creating…" : "Create ten-field draft"}</button>
     </form>
   {:else if door === "game"}
-    <form onsubmit={(event) => { event.preventDefault(); void onGame({ title: title.trim(), side, pgn, url: url.trim() }); }}>
-      <label>Draft title<input required maxlength="120" bind:value={title} placeholder="What should this game's rehearsal teach?" /></label>
-      <label>Lichess game URL<input type="url" bind:value={url} placeholder="https://lichess.org/abcdefgh" /></label>
+    <form aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onGame({ title: title.trim(), side, pgn, url: url.trim() }); }}>
+      <label>Draft title<input required maxlength="120" disabled={busy} bind:value={title} placeholder="What should this game's rehearsal teach?" /></label>
+      <label>Lichess game URL<input type="url" disabled={busy} bind:value={url} placeholder="https://lichess.org/abcdefgh" /></label>
       <span>or paste one completed game</span>
-      <label>PGN<textarea rows="7" bind:value={pgn} placeholder="[Event …]"></textarea></label>
-      <label>Your side<select bind:value={side}><option value="white">White</option><option value="black">Black</option></select></label>
+      <label>PGN<textarea rows="7" disabled={busy} bind:value={pgn} placeholder="[Event …]"></textarea></label>
+      <label>Your side<select disabled={busy} bind:value={side}><option value="white">White</option><option value="black">Black</option></select></label>
       <p class="honest">The imported game stays private. Distillation copies recorded moves only and leaves grading, claims, and theory as explicit author work.</p>
-      <button class="primary" type="submit" disabled={busy || title.trim() === "" || (url === "" && pgn.trim() === "")}>{busy ? "Importing and distilling…" : "Import game to draft"}</button>
+      {#if savedGamePending}<p class="honest">The game is already saved. Finish preparing its draft without importing it again.</p>{/if}
+      <button class="primary" type="submit" disabled={busy || (!savedGamePending && (title.trim() === "" || (url === "" && pgn.trim() === "")))} aria-describedby={busy ? "seed-action-busy" : undefined}>{busy ? "Importing and distilling…" : savedGamePending ? "Finish saved game draft" : "Import game to draft"}</button>
     </form>
   {:else if door === "run"}
-    <form onsubmit={(event) => { event.preventDefault(); void onRun({ runId: selectedRunId, title: runTitle.trim() }); }}>
-      <label>Played run<select required value={selectedRunId} onchange={(event) => selectedRunId = event.currentTarget.value}><option value="">Choose a run</option>{#each runs as run}<option value={run.id}>{run.title} · {run.recordedMoveCount} moves</option>{/each}</select></label>
-      <label>Draft title<input required maxlength="120" bind:value={runTitle} placeholder="What does this rehearsal teach?" /></label>
+    <form aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onRun({ runId: selectedRunId, title: runTitle.trim() }); }}>
+      <label>Played run<select required disabled={busy} value={selectedRunId} onchange={(event) => selectedRunId = event.currentTarget.value}><option value="">Choose a run</option>{#each runs as run}<option value={run.id}>{run.title} · {run.recordedMoveCount} moves</option>{/each}</select></label>
+      <label>Draft title<input required maxlength="120" disabled={busy} bind:value={runTitle} placeholder="What does this rehearsal teach?" /></label>
       <p class="honest">The source run stays unchanged. The draft preserves its recorded branch and declares the human judgments still owed.</p>
-      <button class="primary" type="submit" disabled={busy || selectedRunId === "" || runTitle.trim() === ""}>{busy ? "Distilling…" : "Distill selected run"}</button>
+      <button class="primary" type="submit" disabled={busy || selectedRunId === "" || runTitle.trim() === ""} aria-describedby={busy ? "seed-action-busy" : undefined}>{busy ? "Distilling…" : "Distill selected run"}</button>
       {#if runs.length === 0}<p>No saved runs are available yet. Play or import a game first.</p>{/if}
     </form>
   {:else}
-    <form onsubmit={(event) => { event.preventDefault(); void onPack(selectedPackId); }}>
-      <label>Served pack<select required value={selectedPackId} onchange={(event) => selectedPackId = event.currentTarget.value}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title} · {pack.channel}</option>{/each}</select></label>
+    <form aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onPack(selectedPackId); }}>
+      <label>Served pack<select required disabled={busy} value={selectedPackId} onchange={(event) => selectedPackId = event.currentTarget.value}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title} · {pack.channel}</option>{/each}</select></label>
       <p class="honest">Copying preserves the source bytes for inspection, assigns a new draft id and version, and adds a blocker requiring review of every inherited move and claim.</p>
-      <button class="primary" type="submit" disabled={busy || selectedPackId === ""}>{busy ? "Copying…" : "Copy into a new draft"}</button>
+      <button class="primary" type="submit" disabled={busy || selectedPackId === ""} aria-describedby={busy ? "seed-action-busy" : undefined}>{busy ? "Copying…" : "Copy into a new draft"}</button>
       {#if packs.length === 0}<p>No served packs are available in this deployment.</p>{/if}
     </form>
   {/if}
+  {#if busy}<p id="seed-action-busy" role="status">Creating one draft from the retained source…</p>{/if}
   {#if error}<p role="alert">{error}</p>{/if}
 </section>
 

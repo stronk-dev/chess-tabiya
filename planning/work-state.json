@@ -26540,6 +26540,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/distill-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3237",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:af27441cd1c22ecd6888a9a0c301227c2fd13e9e46fc99d3d270b5cb82810f88",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/pack-draft-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

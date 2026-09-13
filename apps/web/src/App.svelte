@@ -16,6 +16,7 @@
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
   import { validDistilledDraft } from "./lib/distill-response.js";
+  import { validPackDraftIdentity } from "./lib/pack-draft-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
@@ -28,7 +29,7 @@
   import ShapePlanSignatureEditor from "./lib/ShapePlanSignatureEditor.svelte";
   import PackVocabularyEditor from "./lib/PackVocabularyEditor.svelte";
   import CreateSeedChooser from "./lib/CreateSeedChooser.svelte";
-  import { clonePackForAuthoring, positionPackScaffold } from "./lib/pack-authoring-seeds.js";
+  import { authoringSlug, clonePackForAuthoring, positionPackScaffold } from "./lib/pack-authoring-seeds.js";
   import { ThemeController } from "./lib/theme/controller.js";
   import { provideTheme } from "./lib/theme/context.js";
   import {
@@ -174,6 +175,8 @@
   let withdrawConfirmId: string | undefined = $state();
   let createSeedBusy = $state(false);
   let createSeedError: string | undefined = $state();
+  let createSeedPreparation: { readonly runId: string; readonly writerId: string; readonly packId: string; readonly title: string; readonly branchId: string } | undefined = $state();
+  let createSeedGeneration = 0;
   let shapeDrafts: readonly ShapeDraft[] = $state([]);
   let authoringShapes: readonly ShapeSummary[] = $state([]);
   let authoringPrinciples: readonly PrincipleSummary[] = $state([]);
@@ -1442,37 +1445,60 @@
     } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
   }
 
-  async function openSeedDraft(action: () => Promise<PackDraft>): Promise<void> {
+  async function openSeedDraft(expectedPackId: string, work: () => Promise<PackDraft>): Promise<boolean> {
+    if (createSeedBusy) return false;
+    const action = ++createSeedGeneration;
+    const generation = loadGeneration;
+    const selection = selectedDraftId;
     createSeedBusy = true;
     createSeedError = undefined;
     try {
-      const draft = await action();
+      const draft = await work();
+      if (!validPackDraftIdentity(draft, expectedPackId)) throw new Error("Invalid pack draft response");
+      if (!appMounted || action !== createSeedGeneration) return false;
+      if (generation !== loadGeneration || route.name !== "create") return true;
       drafts = [draft, ...drafts.filter((candidate) => candidate.id !== draft.id)];
-      selectedDraftId = draft.id;
-      studioJson = JSON.stringify(draft.document, null, 2);
-      await tick();
-      document.getElementById("pack-studio-editor")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    } catch (error) {
-      createSeedError = error instanceof Error ? error.message : String(error);
+      if (selectedDraftId === selection) {
+        selectedDraftId = draft.id;
+        studioJson = JSON.stringify(draft.document, null, 2);
+        await tick();
+        if (generation === loadGeneration && route.name === "create" && selectedDraftId === draft.id) {
+          document.getElementById("pack-studio-editor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+      return true;
+    } catch {
+      if (appMounted && action === createSeedGeneration && generation === loadGeneration && route.name === "create") {
+        createSeedError = createSeedPreparation === undefined
+          ? "This draft could not be created. Check the source and try again."
+          : "The game is saved, but its draft could not be prepared. Try finishing draft setup again.";
+      }
+      return false;
     } finally {
-      createSeedBusy = false;
+      if (appMounted && action === createSeedGeneration) createSeedBusy = false;
     }
   }
 
   function seedSuffix(): string { return crypto.randomUUID().slice(0, 8); }
 
   async function createPositionSeed(input: { readonly title: string; readonly fen: string; readonly side: "white" | "black" }): Promise<void> {
-    await openSeedDraft(async () => {
+    const document = positionPackScaffold({ ...input, suffix: seedSuffix() });
+    await openSeedDraft(document.id, async () => {
       if (api.createPackDraft === undefined) throw new Error("Pack draft creation is unavailable.");
-      return api.createPackDraft(positionPackScaffold({ ...input, suffix: seedSuffix() }));
+      return api.createPackDraft(document);
     });
   }
 
   async function createGameSeed(input: { readonly title: string; readonly side: "white" | "black"; readonly pgn: string; readonly url: string }): Promise<void> {
-    await openSeedDraft(async () => {
+    const existing = createSeedPreparation;
+    const requestedPackId = existing?.packId ?? `distilled-${seedSuffix()}`;
+    const completed = await openSeedDraft(requestedPackId, async () => {
       if (api.importGame === undefined || api.distillRun === undefined) throw new Error("Game import and distillation are unavailable.");
+      if (existing !== undefined) {
+        return (await api.distillRun(existing.runId, { packId: existing.packId, title: existing.title, branchId: existing.branchId })).draft;
+      }
       const runId = `author-import-${crypto.randomUUID()}`;
-      const writer = WriterSession.claimFor(runId, storage);
+      const writer = WriterSession.observe(runId, storage);
       const imported = await api.importGame({
         id: runId,
         side: input.side,
@@ -1481,22 +1507,30 @@
         seed: Math.floor(Math.random() * 2_147_483_647),
         source: input.url === "" ? { kind: "pgn", pgn: input.pgn } : { kind: "lichess", url: input.url },
       }, writer.writerId);
-      return (await api.distillRun(imported.run.id, { packId: `distilled-${seedSuffix()}`, title: input.title, branchId: imported.run.activeCursor.branchId })).draft;
+      WriterSession.claimFor(runId, storage, () => writer.writerId);
+      if (imported.run.id !== runId) throw new Error("Imported run response did not match its request");
+      createSeedPreparation = { runId, writerId: writer.writerId, packId: requestedPackId, title: input.title, branchId: imported.run.activeCursor.branchId };
+      return (await api.distillRun(runId, { packId: requestedPackId, title: input.title, branchId: imported.run.activeCursor.branchId })).draft;
     });
+    if (completed && createSeedPreparation?.packId === requestedPackId) createSeedPreparation = undefined;
   }
 
   async function createRunSeed(input: { readonly runId: string; readonly title: string }): Promise<void> {
-    await openSeedDraft(async () => {
+    const packId = `distilled-${seedSuffix()}`;
+    await openSeedDraft(packId, async () => {
       if (api.distillRun === undefined) throw new Error("Session distillation is unavailable.");
-      return (await api.distillRun(input.runId, { packId: `distilled-${seedSuffix()}`, title: input.title })).draft;
+      return (await api.distillRun(input.runId, { packId, title: input.title })).draft;
     });
   }
 
   async function createPackSeed(packId: string): Promise<void> {
-    await openSeedDraft(async () => {
+    const suffix = seedSuffix();
+    const expectedPackId = `${authoringSlug(packId)}-copy-${authoringSlug(suffix)}`;
+    await openSeedDraft(expectedPackId, async () => {
       if (api.exportPack === undefined || api.createPackDraft === undefined) throw new Error("Pack copying is unavailable.");
       const exported = await api.exportPack(packId);
-      return api.createPackDraft(clonePackForAuthoring(exported.document, seedSuffix()));
+      const document = clonePackForAuthoring(exported.document, suffix);
+      return api.createPackDraft(document);
     });
   }
 
@@ -1919,6 +1953,7 @@
     appMounted = false;
     authGeneration += 1;
     distillGeneration += 1;
+    createSeedGeneration += 1;
     themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
@@ -2336,7 +2371,7 @@
     <main class="shell-view studio" aria-labelledby="create-title">
       <p class="eyebrow">Create / Pack Studio</p>
       <h1 id="create-title">Author against the real validator.</h1>
-      <CreateSeedChooser {packs} {runs} busy={createSeedBusy} error={createSeedError} onPosition={createPositionSeed} onGame={createGameSeed} onRun={createRunSeed} onPack={createPackSeed} onClearError={() => createSeedError = undefined} />
+      <CreateSeedChooser {packs} {runs} busy={createSeedBusy} error={createSeedError} savedGamePending={createSeedPreparation !== undefined} onPosition={createPositionSeed} onGame={createGameSeed} onRun={createRunSeed} onPack={createPackSeed} onClearError={() => createSeedError = undefined} />
       {#if !selectedDraftId}
       <aside class="resume-drafts" aria-label="Your drafts">
         <h2 id="resume-drafts-title">Resume one of your drafts</h2>
