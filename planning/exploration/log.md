@@ -19428,3 +19428,14 @@ the external provider. The deterministic/provider-facing sentences now name the 
 authored rehearsal focus, recognized structure and authored guidance in plain language. The
 four-family fixture rejects reveal keys, event ids, detector paths, phase-band wording and
 provenance labels. `make test-software` passes 188 files / 1,185 tests.
+
+## 2026-09-13 — Story explanations stay with their grounded moment ([[D3200]])
+
+The Review Story screen previously kept one explanation string for the whole page. Selecting a
+second moment therefore displayed the first moment's narration beneath a different board, and a
+slow provider response could recreate the mismatch after the selection changed. Explanation state
+now carries its requested node identity, changing moments invalidates the active request, and only
+the matching selected node may render the response. Provider failure produces a bounded retry
+message instead of an unhandled rejection. `make test-software` passes 188 files / 1,187 tests and
+`make test-browser` passes all 64 required production journeys with the one explicitly optional
+Maia latency measurement skipped.

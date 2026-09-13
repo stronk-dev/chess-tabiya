@@ -19,7 +19,10 @@
   const selection = $derived(storyMomentSelection(story));
   const selectedMoments = $derived(selection.moments);
   let selectedId = $state<string | undefined>();
-  let voiceText = $state<string | undefined>();
+  let explanation = $state<{ readonly nodeId: string; readonly text: string } | undefined>();
+  let explanationError = $state<{ readonly nodeId: string; readonly text: string } | undefined>();
+  let explainingNodeId = $state<string | undefined>();
+  let explanationRequest = 0;
   let shareUrl = $state<string | undefined>();
   let createdShareId = $state<string | undefined>();
   let shareBusy = $state(false);
@@ -29,6 +32,30 @@
   const imported = $derived(story.source.kind === "native" ? undefined : story.source);
   const title = $derived(reviewStoryTitle(story));
   const sourceLabels = $derived(selected === undefined ? [] : storyEvidenceSourceLabels(selected));
+
+  function selectMoment(nodeId: string): void {
+    selectedId = nodeId;
+    explanationRequest += 1;
+    explainingNodeId = undefined;
+    explanationError = undefined;
+  }
+
+  async function explainMoment(nodeId: string): Promise<void> {
+    if (onVoice === undefined) return;
+    const request = ++explanationRequest;
+    explainingNodeId = nodeId;
+    explanationError = undefined;
+    try {
+      const text = await onVoice(nodeId);
+      if (request === explanationRequest) explanation = { nodeId, text };
+    } catch {
+      if (request === explanationRequest) {
+        explanationError = { nodeId, text: "This explanation is unavailable right now. Try again." };
+      }
+    } finally {
+      if (request === explanationRequest) explainingNodeId = undefined;
+    }
+  }
 
   async function downloadCard(): Promise<void> {
     if (selected === undefined) return;
@@ -115,11 +142,12 @@
         <h2>{selected.kinds.map(storyMomentLabel).join(" + ")}</h2>
         {#each selected.sentences as sentence}<p>{sentence}</p>{/each}
         <p class="provenance">Sources: {sourceLabels.join(" · ") || "recorded story"}</p>
-        {#if voiceText}<p class="voice">{voiceText}</p>{/if}
+        {#if explanation?.nodeId === selected.nodeId}<p class="voice">{explanation.text}</p>{/if}
+        {#if explanationError?.nodeId === selected.nodeId}<p class="voice-error" role="alert">{explanationError.text}</p>{/if}
         {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">{renderStoryEvaluationTrajectory(selected.evalBefore.centipawns, selected.evalAfter.centipawns)}</p>{/if}
         <p class="reentry-frame">{storyReentryCopy(story.side, story.outcome.result, selected.ply)}</p>
         <button class="primary" type="button" disabled={!story.ready} aria-describedby={!story.ready ? "story-pending-reason" : undefined} onclick={() => onEnter(selected.entryNodeId)}>Pick it up from here</button>
-        {#if onVoice}<button type="button" onclick={async () => voiceText = await onVoice!(selected.nodeId)}>Explain this moment</button>{/if}
+        {#if onVoice}<button type="button" disabled={explainingNodeId === selected.nodeId} onclick={() => void explainMoment(selected.nodeId)}>{explainingNodeId === selected.nodeId ? "Explaining…" : "Explain this moment"}</button>{/if}
         {#if !story.ready}<span id="story-pending-reason" class="visually-hidden">Wait for the game review to finish preparing this moment.</span>{/if}
       </article>
     </section>
@@ -129,7 +157,7 @@
     {#if selection.shown < selection.total}<p id="story-moment-budget" class="selection-budget">Showing {selection.shown} of {selection.total} recorded moments selected for this story.</p>{/if}
     <ul class="rail" aria-label="Game story moments" aria-describedby={selection.shown < selection.total ? "story-moment-order story-moment-budget" : "story-moment-order"}>
       {#each selectedMoments as moment}
-        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectedId = moment.nodeId}><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>{storyMoveLabel(moment.ply).toLocaleLowerCase()}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
+        <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectMoment(moment.nodeId)}><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>{storyMoveLabel(moment.ply).toLocaleLowerCase()}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
       {/each}
     </ul>
   </div>

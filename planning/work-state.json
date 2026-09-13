@@ -26207,6 +26207,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/guidance.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3200",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6d3441c065a6d3ecfaa50eb57a763a1f7c43c03a561e59d8cd68184cb7706568",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/GameStoryScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

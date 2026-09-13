@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 
-import { mount, unmount } from "svelte";
+import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import GameStoryScreen from "./GameStoryScreen.svelte";
@@ -116,6 +116,71 @@ describe("game story screen", () => {
     expect(rail.tagName).toBe("UL");
     expect(rail.querySelectorAll("button > span")).toHaveLength(0);
     expect(document.body.textContent).not.toContain("educational value");
+    await unmount(component);
+  });
+
+  it("never carries a completed explanation onto another story moment", async () => {
+    const moments = [moment(1), moment(2)];
+    const story: GameStory = {
+      ready: true,
+      pendingEvidence: 0,
+      branchId: "main",
+      side: "white",
+      source: { kind: "native" },
+      outcome: { kind: "unfinished" },
+      moments,
+      rank: moments.map((item) => item.nodeId),
+    };
+    const component = mount(GameStoryScreen, {
+      target: document.body,
+      props: { story, onEnter: vi.fn(), onExport: vi.fn(), onVoice: vi.fn().mockResolvedValue("Explanation for the first moment.") },
+    });
+
+    const explain = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Explain this moment")!;
+    explain.click();
+    await tick();
+    await Promise.resolve();
+    await tick();
+    expect(document.querySelector(".voice")?.textContent).toBe("Explanation for the first moment.");
+
+    document.querySelectorAll<HTMLButtonElement>(".rail button")[1]!.click();
+    await tick();
+    expect(document.querySelector(".voice")).toBeNull();
+    expect(document.querySelector(".moment-detail")?.textContent).not.toContain("Explanation for the first moment.");
+    await unmount(component);
+  });
+
+  it("discards an in-flight explanation when the learner changes moments", async () => {
+    const moments = [moment(1), moment(2)];
+    const story: GameStory = {
+      ready: true,
+      pendingEvidence: 0,
+      branchId: "main",
+      side: "white",
+      source: { kind: "native" },
+      outcome: { kind: "unfinished" },
+      moments,
+      rank: moments.map((item) => item.nodeId),
+    };
+    let resolveVoice!: (text: string) => void;
+    const voice = new Promise<string>((resolve) => { resolveVoice = resolve; });
+    const component = mount(GameStoryScreen, {
+      target: document.body,
+      props: { story, onEnter: vi.fn(), onExport: vi.fn(), onVoice: vi.fn().mockReturnValue(voice) },
+    });
+
+    const explain = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Explain this moment")!;
+    explain.click();
+    await tick();
+    expect(explain.textContent).toBe("Explaining…");
+
+    document.querySelectorAll<HTMLButtonElement>(".rail button")[1]!.click();
+    await tick();
+    resolveVoice("Late explanation for the first moment.");
+    await voice;
+    await tick();
+    expect(document.querySelector(".voice")).toBeNull();
+    expect(document.querySelector(".moment-detail")?.textContent).not.toContain("Late explanation for the first moment.");
     await unmount(component);
   });
 });
