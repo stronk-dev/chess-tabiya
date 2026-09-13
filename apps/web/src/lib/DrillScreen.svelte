@@ -132,7 +132,7 @@
     onCreateGroup?: (input: CreateGroupRequest) => CreateGroupResult | undefined | Promise<CreateGroupResult | undefined>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => boolean | void | Promise<boolean | void>;
     onSimulate?: (() => void | Promise<void>) | undefined;
-    onEnterSimulation?: ((branchIndex: number) => void | Promise<void>) | undefined;
+    onEnterSimulation?: ((branchIndex: number) => boolean | Promise<boolean>) | undefined;
     onCloseSimulation?: (() => void) | undefined;
     onStory?: (() => void) | undefined;
     onScheduleReturn?: (() => boolean | void | Promise<boolean | void>) | undefined;

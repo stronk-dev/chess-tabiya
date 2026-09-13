@@ -322,7 +322,7 @@ describe("Layer 3 screens", () => {
         { index: 1, label: "Be2", leafFen: run.nodes.at(-1)!.fen, plies: 1 },
       ],
     };
-    const onEnterSimulation = vi.fn();
+    const onEnterSimulation = vi.fn(async () => true);
     const onCloseSimulation = vi.fn();
     component = mount(DrillScreen, { target: target(), props: {
       pack,
@@ -341,11 +341,64 @@ describe("Layer 3 screens", () => {
     expect(dialog.textContent).not.toContain("internal-authored-node-4");
     expect(dialog.textContent).not.toContain("drill node");
     expect(dialog.querySelectorAll(":scope > .line-grid > article > .board")).toHaveLength(2);
+    dialog.querySelector<HTMLButtonElement>('button[aria-label="Close authored line preview"]')!.click();
+    expect(onCloseSimulation).toHaveBeenCalledOnce();
     const enter = [...dialog.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Enter this line")!;
     enter.click();
     expect(onEnterSimulation).toHaveBeenCalledWith(0);
-    dialog.querySelector<HTMLButtonElement>('button[aria-label="Close authored line preview"]')!.click();
-    expect(onCloseSimulation).toHaveBeenCalledOnce();
+    await unmount(component);
+  });
+
+  it("keeps an authored-line preview actionable when entry fails", async () => {
+    let run = createRun({
+      id: "simulation-retry-ui",
+      packId: pack.id,
+      packDigest: `sha256:${"8".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: pack.start.fen,
+      seed: 8,
+      createdAt: at,
+    });
+    run = commitMove(run, "c1e3", { actor: "system", at }).run;
+    const simulation: SimulationResult = {
+      simulationId: "simulation-retry",
+      comparison: { machineFeedback: "available", forkNodeId: run.activeCursor.nodeId, columns: [], rows: [], objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, consequences: {} },
+      branches: [{ index: 0, label: "f3", leafFen: run.nodes.at(-1)!.fen, plies: 2 }],
+    };
+    let settle!: (accepted: boolean) => void;
+    const onEnterSimulation = vi.fn(() => new Promise<boolean>((resolve) => { settle = resolve; }));
+    const onCloseSimulation = vi.fn();
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      simulation,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onEnterSimulation, onCloseSimulation, registerKeyboardRegion,
+    } });
+    await tick();
+    const dialog = document.querySelector<HTMLElement>('[aria-labelledby="simulation-title"]')!;
+    const enter = [...dialog.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Enter this line")!;
+    const close = dialog.querySelector<HTMLButtonElement>('button[aria-label="Close authored line preview"]')!;
+
+    enter.click();
+    enter.click();
+    await tick();
+    expect(onEnterSimulation).toHaveBeenCalledOnce();
+    expect(enter.disabled).toBe(true);
+    expect(close.disabled).toBe(true);
+    expect(dialog.querySelector('[role="status"]')?.textContent).toContain("preview will close only after the run has changed");
+
+    settle(false);
+    await vi.waitFor(() => expect(dialog.querySelector('[role="alert"]')?.textContent).toContain("run and this preview are unchanged"));
+    expect(enter.disabled).toBe(false);
+    expect(enter.textContent).toContain("Try this line again");
+
+    enter.click();
+    await tick();
+    expect(onEnterSimulation).toHaveBeenCalledTimes(2);
+    settle(true);
+    await tick();
     await unmount(component);
   });
 

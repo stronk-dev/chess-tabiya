@@ -9,14 +9,34 @@
     simulation: SimulationResult;
     startSide: StartSide;
     busy?: boolean;
-    onEnter: (branchIndex: number) => void | Promise<void>;
+    onEnter: (branchIndex: number) => boolean | Promise<boolean>;
     onClose: () => void;
   }
 
   let { simulation, startSide, busy = false, onEnter, onClose }: Props = $props();
+  let entering = $state<number>();
+  let entryError = $state<number>();
+  let locked = $derived(busy || entering !== undefined);
 
   function keydown(event: KeyboardEvent): void {
-    if (event.key === "Escape") onClose();
+    if (event.key === "Escape" && !locked) onClose();
+  }
+
+  function requestClose(): void {
+    if (!locked) onClose();
+  }
+
+  async function enter(branchIndex: number): Promise<void> {
+    if (locked) return;
+    entering = branchIndex;
+    entryError = undefined;
+    try {
+      if (!await onEnter(branchIndex)) entryError = branchIndex;
+    } catch {
+      entryError = branchIndex;
+    } finally {
+      entering = undefined;
+    }
   }
 </script>
 
@@ -36,9 +56,11 @@
         <p>Authored consequences</p>
         <h2 id="simulation-title">Where these lines lead</h2>
       </div>
-      <button type="button" aria-label="Close authored line preview" onclick={onClose}>Close</button>
+      <button type="button" aria-label="Close authored line preview" disabled={locked} aria-describedby={entering === undefined ? undefined : "simulation-entry-status"} onclick={requestClose}>Close</button>
     </header>
     <p id="simulation-note" class="note">These are demonstrations from the drill, not moves added to your attempt. Choose one only when you want to step into that line.</p>
+    {#if entering !== undefined}<p id="simulation-entry-status" class="entry-state" role="status">Entering this authored line. The preview will close only after the run has changed.</p>{/if}
+    {#if entryError !== undefined}<p id="simulation-entry-error" class="entry-state error" role="alert">That line was not entered. Your run and this preview are unchanged, so you can try again.</p>{/if}
     <div class="line-grid">
       {#each simulation.branches as branch, index}
         <article>
@@ -51,7 +73,13 @@
           </div>
           {#if branch.truncatedAt !== undefined}<p class="honest">This preview stops before a later authored position.</p>{/if}
           {#if branch.subvariationsSkipped !== undefined}<p class="honest">{branch.subvariationsSkipped} nested {branch.subvariationsSkipped === 1 ? "alternative is" : "alternatives are"} available deeper in the line.</p>{/if}
-          <button class="enter" type="button" disabled={busy} onclick={() => void onEnter(branch.index)}>Enter this line</button>
+          <button
+            class="enter"
+            type="button"
+            disabled={locked}
+            aria-describedby={entering !== undefined ? "simulation-entry-status" : entryError === branch.index ? "simulation-entry-error" : undefined}
+            onclick={() => void enter(branch.index)}
+          >{entering === branch.index ? "Entering this line…" : entryError === branch.index ? "Try this line again" : "Enter this line"}</button>
         </article>
       {/each}
     </div>
@@ -61,7 +89,7 @@
 <style>
   .backdrop{position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:clamp(.5rem,2vw,1.5rem);background:var(--scrim);backdrop-filter:blur(7px)}
   .preview{width:min(76rem,100%);max-height:calc(100dvh - 1rem);overflow:auto;display:grid;gap:1rem;padding:clamp(1rem,2vw,1.5rem);border:1px solid var(--line);border-radius:1.2rem;background:var(--panel);box-shadow:0 1.5rem 5rem color-mix(in srgb,var(--ink) 24%,transparent)}
-  header,.line-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}header p,h2,h3,.line-heading p,.note,.honest{margin:0}header>div>p{color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}h2{margin-top:.25rem;font:500 clamp(1.5rem,3vw,2.25rem)/1 var(--display-font)}header button{min-width:2.75rem;min-height:2.75rem}.note{max-width:62ch;color:var(--muted)}
+  header,.line-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}header p,h2,h3,.line-heading p,.note,.honest,.entry-state{margin:0}header>div>p{color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}h2{margin-top:.25rem;font:500 clamp(1.5rem,3vw,2.25rem)/1 var(--display-font)}header button{min-width:2.75rem;min-height:2.75rem}.note{max-width:62ch;color:var(--muted)}.entry-state{padding:.7rem .8rem;border:1px solid var(--line);border-radius:.65rem;background:var(--paper);color:var(--muted)}.entry-state.error{border-color:var(--danger);color:var(--danger)}
   .line-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr));gap:1rem;align-items:start}article{min-width:0;display:grid;gap:.75rem;padding:.8rem;border:1px solid var(--line);border-radius:.9rem;background:var(--paper)}.line-heading{justify-content:flex-start}.line-heading>span{display:grid;place-items:center;width:1.8rem;aspect-ratio:1;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700}.line-heading h3{font:600 1rem/1.2 var(--display-font)}.line-heading p,.honest{margin-top:.15rem;color:var(--muted);font-size:.78rem}.board{width:100%;max-width:22rem;aspect-ratio:1;justify-self:center;overflow:hidden;border-radius:.35rem}.enter{width:100%;min-height:2.75rem;border-color:var(--accent);background:var(--accent);color:var(--on-accent);font-weight:700}
   @media(max-width:40rem){.backdrop{padding:0}.preview{max-height:100dvh;height:100dvh;border:0;border-radius:0}.line-grid{grid-template-columns:1fr}.board{max-width:min(22rem,72vw)}}
 </style>

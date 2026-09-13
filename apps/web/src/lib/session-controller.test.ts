@@ -820,6 +820,33 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.runState?.run.branches).toHaveLength(1);
   });
 
+  it("retains an authored-line simulation and returns explicit failure for safe retry", async () => {
+    const api = new FakeApi();
+    const simulationApi = Object.assign(api, {
+      simulate: vi.fn(async (): Promise<import("./api.js").SimulationResult> => ({
+        simulationId: "simulation-retry",
+        comparison: { machineFeedback: "available", forkNodeId: api.requiredRun().activeCursor.nodeId, columns: [], rows: [], objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, consequences: {} },
+        branches: [{ index: 0, label: "f3", leafFen: api.requiredRun().nodes.at(-1)!.fen, plies: 2 }],
+      })),
+      enterSimulation: vi.fn()
+        .mockRejectedValueOnce(new Error("private simulation storage detail"))
+        .mockImplementationOnce(async (): Promise<MutationResult> => ({ run: api.requiredRun(), emitted: [] })),
+    });
+    const environment = controller(simulationApi);
+    await environment.controller.startPack(pack.id);
+    await environment.controller.simulateAuthoredLines();
+    const simulation = environment.controller.state.simulation;
+
+    expect(await environment.controller.enterSimulation(0)).toBe(false);
+    expect(environment.controller.state.simulation).toEqual(simulation);
+    expect(environment.controller.state.error).toBeDefined();
+    expect(environment.controller.state.error).not.toContain("private simulation storage detail");
+
+    expect(await environment.controller.enterSimulation(0)).toBe(true);
+    expect(environment.controller.state.simulation).toBeUndefined();
+    expect(simulationApi.enterSimulation).toHaveBeenCalledTimes(2);
+  });
+
   it("drains ready branch evidence before taking the comparison snapshot", async () => {
     const api = new FakeApi();
     const environment = controller(api);

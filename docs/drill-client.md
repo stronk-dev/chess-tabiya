@@ -412,6 +412,12 @@ opponent turn is requested. If that request fails, the controller restores its d
 returns explicit failure; the same checkpoint then presents a safe retry while its position remains
 unchanged. Rewind and Compare cannot race an in-flight continuation.
 
+Authored-line simulation remains an explicitly scratch preview until the learner chooses a line.
+Entry returns a success bit through the session controller. While that durable mutation is pending,
+the preview identifies the operation, disables every entry and its close action, and refuses a
+duplicate submission. A known failure leaves the exact preview mounted, says that the run is
+unchanged, and turns the selected action into a retry; only success dismisses the preview.
+
 The comparison screen consumes the server/runtime `BranchComparison` payload.
 It leads with one fork board carrying every recorded candidate arrow, then lists
 the move, actor and the learner's recorded intent for each attempt. Its synchronized

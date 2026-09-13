@@ -19570,3 +19570,15 @@ Controller rollback and mounted pending/failure/retry regressions cover both hal
 verify-software` passes 188 files / 1,203 tests plus type, performance, schema, manifest and
 production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-13 — Authored-line entry retains its retry surface ([[D3212]])
+
+Simulation entry previously caught a failed durable mutation in the session controller but returned
+no outcome to the still-visible preview. Its generic error therefore rendered behind the modal, and
+the modal had no owned pending, duplicate-submission or retry state. Entry now returns explicit
+success/failure. The preview keeps the exact authored choices mounted on failure, identifies the
+pending operation, disables entry and close races, and exposes a safe retry without provider or
+storage diagnostics; only success dismisses it. Controller retention and mounted
+pending/failure/retry regressions cover both layers. `make verify-software` passes 188 files / 1,205
+tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
+passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.

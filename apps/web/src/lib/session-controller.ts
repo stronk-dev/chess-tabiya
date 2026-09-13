@@ -557,15 +557,17 @@ export class DrillSessionController {
     this.#patch({ simulation: undefined });
   }
 
-  async enterSimulation(branchIndex: number): Promise<void> {
+  async enterSimulation(branchIndex: number): Promise<boolean> {
     const simulation = this.#state.simulation;
-    if (simulation === undefined) return;
+    if (simulation === undefined) return false;
     this.#patch({ busy: true, error: undefined });
     try {
       await this.#requiredStore().enterSimulation(simulation.simulationId, branchIndex);
       this.#patch({ busy: false, simulation: undefined, comparison: undefined, comparisonBranchIds: undefined });
+      return true;
     } catch (error) {
       this.#fail(error);
+      return false;
     }
   }
 

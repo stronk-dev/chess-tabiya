@@ -26315,6 +26315,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/session-controller.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3212",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:419789cec1ba32f1b2ddf34c4c66747eaa5aca1c64e87dc0b722c1180a77ad47",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/SimulationPreview.svelte",
+      "evidenceKind": "path"
     }
   ]
 }
