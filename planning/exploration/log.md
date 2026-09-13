@@ -19673,3 +19673,16 @@ second request or disturbs the first operation. Sequential canonical verificatio
 verify-software` is green across 188 files / 1,218 tests plus type, performance, schema, manifest
 and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-13 — Run attachment is last-request-wins ([[D3220]])
+
+The app shell already invalidated obsolete route loads, but the session controller could still
+publish an older run after a newer resume, route teardown, sign-out or explicit stop. Resume, pack
+start, duplicate start and position start now share one controller-owned attachment generation;
+stop and destroy invalidate it. Opponent append, navigation callbacks, lease takeover, feedback
+and reasoning publication remain bound to the exact live store/run/checkpoint. A crossed-resume
+falsifier proves the later request remains visible when the earlier request resolves last, and a
+stop-during-start falsifier proves no run or navigation callback survives teardown. Sequential
+canonical verification passes: `make verify-software` is green across 188 files / 1,220 tests plus
+type, performance, schema, manifest and production-build checks; `make test-browser` passes all 64
+required journeys with one explicitly optional Maia latency measurement skipped.

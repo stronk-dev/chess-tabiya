@@ -736,6 +736,14 @@ rewind before branching, and a live match tells them to pause before using
 rewind, branch, or reveal; internal run/node identifiers do not become screen
 copy.
 
+Run attachment is a controller-owned, last-request-wins lifecycle. Resume, pack
+start, duplicate start and position start each invalidate an older attachment;
+stopping or destroying the session invalidates all pending attachments. A stale
+response cannot replace the visible run, publish an error, request a reply, or
+announce navigation. Lease takeover may resume only while its exact source store
+is still attached. Feedback and reasoning refreshes likewise verify their run
+and checkpoint before publishing.
+
 ## Line Drill recall and verdict delivery
 
 For `mode: line`, `GET /packs/:id` keeps the `spine` key but projects an empty

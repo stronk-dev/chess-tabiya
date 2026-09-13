@@ -534,6 +534,77 @@ describe("DrillSessionController", () => {
       error: "This attempt is complete. Rewind to an earlier move to try another branch.",
     });
   });
+
+  it("admits only the newest crossed run attachment", async () => {
+    const api = new FakeApi();
+    const firstPage = deferred<EventsPage>();
+    const firstRun = createRun({
+      id: "older-run",
+      session: { kind: "pack", packId: pack.id, packDigest: digest, start: pack.start, feedbackPolicy: "delayed_checkpoint", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: digest,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const secondRun = createRun({
+      id: "newer-run",
+      session: { kind: "pack", packId: pack.id, packDigest: digest, start: pack.start, feedbackPolicy: "delayed_checkpoint", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: digest,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 2,
+      createdAt: at,
+    });
+    vi.spyOn(api, "events").mockImplementation(async (runId) => {
+      if (runId === firstRun.id) return firstPage.promise;
+      return { events: secondRun.events, nextSeq: secondRun.events.at(-1)!.seq };
+    });
+    vi.spyOn(api, "graph").mockImplementation(async (runId) => {
+      const run = runId === firstRun.id ? firstRun : secondRun;
+      return {
+        id: run.id,
+        viewer: { role: "host", mayWrite: false, holdsLease: false, leaseHeldBy: { learnerId: "learner-a", handle: "alice" }, seatedInContest: false, reviewing: false, reviewRail: "not_applicable" },
+        nodes: run.nodes,
+        branches: run.branches,
+        activeCursor: run.activeCursor,
+      };
+    });
+    const environment = controller(api);
+
+    const older = environment.controller.resume(firstRun.id);
+    await Promise.resolve();
+    await environment.controller.resume(secondRun.id);
+    expect(environment.controller.state.runState?.run.id).toBe(secondRun.id);
+
+    firstPage.resolve({ events: firstRun.events, nextSeq: firstRun.events.at(-1)!.seq });
+    await older;
+    expect(environment.controller.state.runState?.run.id).toBe(secondRun.id);
+    expect(environment.controller.state.error).toBeUndefined();
+  });
+
+  it("does not attach or announce a run whose start resolves after stop", async () => {
+    const api = new FakeApi();
+    const created = deferred<DrillRun>();
+    vi.spyOn(api, "createRun").mockReturnValueOnce(created.promise);
+    const environment = controller(api);
+    const staleRun = createRun({
+      id: "screen-run",
+      session: { kind: "pack", packId: pack.id, packDigest: digest, start: pack.start, feedbackPolicy: "delayed_checkpoint", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: digest,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 23,
+      createdAt: at,
+    });
+
+    const starting = environment.controller.startPack(pack.id);
+    await vi.waitFor(() => expect(api.createRun).toHaveBeenCalledOnce());
+    environment.controller.stopSession();
+    created.resolve(staleRun);
+    await starting;
+
+    expect(environment.controller.state).toEqual({ busy: false });
+    expect(environment.started).toEqual([]);
+  });
+
   it("does not select another opponent move after the learner delivers mate", async () => {
     const terminalPack = {
       ...pack,

@@ -211,6 +211,7 @@ export class DrillSessionController {
   #subscribingStore: RunStateStore | undefined;
   #matchMode: MatchMode | undefined;
   #projectionOnly = false;
+  #attachmentGeneration = 0;
 
   constructor(api: DrillClientApi, options: ControllerOptions = {}) {
     this.#api = api;
@@ -232,44 +233,52 @@ export class DrillSessionController {
   }
 
   async resume(runId: string, options: { readonly matchMode?: MatchMode; readonly projectionOnly?: boolean } = {}): Promise<void> {
+    const generation = ++this.#attachmentGeneration;
     this.#patch({ busy: true, error: undefined, simulation: undefined });
     try {
       this.#matchMode = options.matchMode;
       this.#projectionOnly = options.projectionOnly === true;
       const eventPage = await this.#api.events(runId, 0);
+      if (!this.#attachmentIsCurrent(generation)) return;
       const started = eventPage.events[0];
       if (started?.type !== "run.started") {
         throw new TypeError("Cannot resume a run without its run.started event");
       }
       const claimed = this.#projectionOnly ? undefined : WriterSession.peek(runId, this.#storage);
       const [capabilities, graph] = await Promise.all([this.#api.capabilities(), this.#api.graph(runId, claimed?.writerId)]);
+      if (!this.#attachmentIsCurrent(generation)) return;
       const session =
         graph.viewer.holdsLease && claimed !== undefined
           ? claimed
           : WriterSession.observe(runId, this.#storage);
-      const store = this.#newStore(session, projectRun(eventPage.events));
-      this.#capabilities = capabilities;
+      const run = projectRun(eventPage.events);
       if (started.data.sessionKind !== "pack") {
-        this.#attachStore(store, undefined, undefined, await this.#loadShapes());
+        const shapes = await this.#loadShapes();
+        if (!this.#attachmentIsCurrent(generation)) return;
+        this.#capabilities = capabilities;
+        this.#attachStore(this.#newStore(session, run), undefined, undefined, shapes);
       } else {
         const packId = started.data.packId;
         if (packId === null) throw new TypeError("Pack run is missing its pack id");
         const { document, digest } = await this.#api.pack(packId);
-        this.#attachStore(store, document, digest, await this.#loadShapes(document.shapes));
+        const shapes = await this.#loadShapes(document.shapes);
+        if (!this.#attachmentIsCurrent(generation)) return;
+        this.#capabilities = capabilities;
+        this.#attachStore(this.#newStore(session, run), document, digest, shapes);
       }
       this.#patch({ viewer: graph.viewer });
-      await this.#playOpponentIfNeeded();
+      await this.#playOpponentIfNeeded(false, generation);
+      if (!this.#attachmentIsCurrent(generation)) return;
       await this.#refreshAuthoredFeedback();
+      if (!this.#attachmentIsCurrent(generation)) return;
       await this.#refreshReasoning();
     } catch (error) {
-      this.#patch({
-        busy: false,
-        error: sessionErrorMessage(error),
-      });
+      if (this.#attachmentIsCurrent(generation)) this.#fail(error);
     }
   }
 
   async startPack(packId: string, scheduleId?: string): Promise<void> {
+    const generation = ++this.#attachmentGeneration;
     this.#projectionOnly = false;
     this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined, simulation: undefined });
@@ -278,6 +287,7 @@ export class DrillSessionController {
         this.#api.pack(packId),
         this.#api.capabilities(),
       ]);
+      if (!this.#attachmentIsCurrent(generation)) return;
       selectorMode(document, capabilities);
       const runId = this.#runId();
       const seed = this.#seed();
@@ -292,18 +302,23 @@ export class DrillSessionController {
         },
         session.writerId,
       );
+      if (!this.#attachmentIsCurrent(generation)) return;
+      const shapes = await this.#loadShapes(document.shapes);
+      if (!this.#attachmentIsCurrent(generation)) return;
       this.#capabilities = capabilities;
       const store = this.#newStore(session, run);
-      this.#attachStore(store, document, digest, await this.#loadShapes(document.shapes));
-      await this.#playOpponentIfNeeded();
+      this.#attachStore(store, document, digest, shapes);
+      await this.#playOpponentIfNeeded(false, generation);
+      if (!this.#attachmentIsCurrent(generation)) return;
       await this.#refreshAuthoredFeedback();
-      this.#onRunStarted?.({ runId });
+      if (this.#attachmentIsCurrent(generation)) this.#onRunStarted?.({ runId });
     } catch (error) {
-      this.#fail(error);
+      if (this.#attachmentIsCurrent(generation)) this.#fail(error);
     }
   }
 
   async startDuplicate(sourceRunId: string, scheduleId?: string): Promise<void> {
+    const generation = ++this.#attachmentGeneration;
     this.#projectionOnly = false;
     this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined, simulation: undefined });
@@ -319,19 +334,26 @@ export class DrillSessionController {
         }, session.writerId),
         this.#api.capabilities(),
       ]);
-      this.#capabilities = capabilities;
+      if (!this.#attachmentIsCurrent(generation)) return;
       if (run.sessionKind === "pack") {
         if (run.packId === null) throw new TypeError("Duplicated pack run is missing its pack id");
         const { document, digest } = await this.#api.pack(run.packId);
-        this.#attachStore(this.#newStore(session, run), document, digest, await this.#loadShapes(document.shapes));
+        const shapes = await this.#loadShapes(document.shapes);
+        if (!this.#attachmentIsCurrent(generation)) return;
+        this.#capabilities = capabilities;
+        this.#attachStore(this.#newStore(session, run), document, digest, shapes);
       } else {
-        this.#attachStore(this.#newStore(session, run), undefined, undefined, await this.#loadShapes());
+        const shapes = await this.#loadShapes();
+        if (!this.#attachmentIsCurrent(generation)) return;
+        this.#capabilities = capabilities;
+        this.#attachStore(this.#newStore(session, run), undefined, undefined, shapes);
       }
-      await this.#playOpponentIfNeeded();
+      await this.#playOpponentIfNeeded(false, generation);
+      if (!this.#attachmentIsCurrent(generation)) return;
       await this.#refreshAuthoredFeedback();
-      this.#onRunStarted?.({ runId });
+      if (this.#attachmentIsCurrent(generation)) this.#onRunStarted?.({ runId });
     } catch (error) {
-      this.#fail(error);
+      if (this.#attachmentIsCurrent(generation)) this.#fail(error);
     }
   }
 
@@ -341,11 +363,13 @@ export class DrillSessionController {
     readonly mode: "human_common" | "strong_engine";
     readonly targetElo?: 1000 | 1400 | 1800 | 2200;
   }): Promise<void> {
+    const generation = ++this.#attachmentGeneration;
     this.#projectionOnly = false;
     this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined });
     try {
       const capabilities = await this.#api.capabilities();
+      if (!this.#attachmentIsCurrent(generation)) return;
       if (!capabilities.policyModes.includes(input.mode)) throw new ApiError(422, "POLICY_MODE_UNSUPPORTED", `${input.mode} is unavailable`);
       const runId = this.#runId(), seed = this.#seed();
       const session = WriterSession.claimFor(runId, this.#storage);
@@ -365,11 +389,16 @@ export class DrillSessionController {
         policyConfig: positionPolicyConfig(capabilities),
         seed,
       }, session.writerId);
+      if (!this.#attachmentIsCurrent(generation)) return;
+      const shapes = await this.#loadShapes();
+      if (!this.#attachmentIsCurrent(generation)) return;
       this.#capabilities = capabilities;
-      this.#attachStore(this.#newStore(session, run), undefined, undefined, await this.#loadShapes());
-      await this.#playOpponentIfNeeded();
-      this.#onRunStarted?.({ runId });
-    } catch (error) { this.#fail(error); }
+      this.#attachStore(this.#newStore(session, run), undefined, undefined, shapes);
+      await this.#playOpponentIfNeeded(false, generation);
+      if (this.#attachmentIsCurrent(generation)) this.#onRunStarted?.({ runId });
+    } catch (error) {
+      if (this.#attachmentIsCurrent(generation)) this.#fail(error);
+    }
   }
 
   async move(uci: string): Promise<boolean> {
@@ -415,12 +444,15 @@ export class DrillSessionController {
   }
 
   async claimLease(): Promise<void> {
-    const runId = this.#requiredStore().snapshot.run.id;
+    const sourceStore = this.#requiredStore();
+    const runId = sourceStore.snapshot.run.id;
+    const generation = this.#attachmentGeneration;
     if (this.#api.claimLease === undefined) {
       throw new Error("Lease claiming is not available");
     }
     const session = WriterSession.claimFor(runId, this.#storage);
     await this.#api.claimLease(runId, session.writerId);
+    if (!this.#attachmentIsCurrent(generation) || this.#store !== sourceStore) return;
     await this.resume(runId, { ...(this.#matchMode === undefined ? {} : { matchMode: this.#matchMode }) });
   }
 
@@ -684,6 +716,7 @@ export class DrillSessionController {
   }
 
   stopSession(): void {
+    this.#attachmentGeneration += 1;
     this.#unsubscribeStore?.();
     this.#unsubscribeStore = undefined;
     this.#store?.stop();
@@ -697,16 +730,18 @@ export class DrillSessionController {
   }
 
   destroy(): void {
+    this.#attachmentGeneration += 1;
     this.#unsubscribeStore?.();
     this.#store?.stop();
     this.#subscribers.clear();
   }
 
-  async #playOpponentIfNeeded(ignoreCheckpoint = false): Promise<void> {
+  async #playOpponentIfNeeded(ignoreCheckpoint = false, attachmentGeneration?: number): Promise<void> {
     if (this.#projectionOnly || this.#matchMode !== undefined) return;
     const pack = this.#state.pack;
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");
+    const store = this.#requiredStore();
     const runState = this.#requiredRun();
     if (runState.access === "read_only" || (!ignoreCheckpoint && this.#state.checkpoint !== undefined)) {
       return;
@@ -727,8 +762,16 @@ export class DrillSessionController {
     );
     const selection = group === undefined
       ? await this.#api.selectMove(this.#selectionRequest())
-      : (await this.#requiredStore().groupReply(group.groupId)).selection;
-    const result = await this.#requiredStore().appendOpponentPly(selection);
+      : (await store.groupReply(group.groupId)).selection;
+    if (
+      this.#store !== store ||
+      (attachmentGeneration !== undefined && !this.#attachmentIsCurrent(attachmentGeneration))
+    ) return;
+    const result = await store.appendOpponentPly(selection);
+    if (
+      this.#store !== store ||
+      (attachmentGeneration !== undefined && !this.#attachmentIsCurrent(attachmentGeneration))
+    ) return;
     if (this.#captureCheckpoint(result.emitted)) {
       await this.#refreshAuthoredFeedback();
       await this.#refreshReasoning();
@@ -781,14 +824,24 @@ export class DrillSessionController {
   async #refreshAuthoredFeedback(): Promise<void> {
     const runState = this.#state.runState ?? this.#subscribingStore?.snapshot;
     if (runState === undefined) return;
-    this.#patch({ authoredFeedback: await this.#api.authoredFeedback(runState.run.id) });
+    const runId = runState.run.id;
+    const authoredFeedback = await this.#api.authoredFeedback(runId);
+    if ((this.#state.runState ?? this.#subscribingStore?.snapshot)?.run.id !== runId) return;
+    this.#patch({ authoredFeedback });
   }
 
   async #refreshReasoning(): Promise<void> {
     const checkpoint = this.#state.checkpoint;
     const runState = this.#state.runState ?? this.#subscribingStore?.snapshot;
     if (checkpoint?.interaction?.type !== "stated_reasoning" || runState === undefined) return;
-    this.#patch({ reasoning: await this.#api.reasoning(runState.run.id, checkpoint.id) });
+    const runId = runState.run.id;
+    const checkpointId = checkpoint.id;
+    const reasoning = await this.#api.reasoning(runId, checkpointId);
+    if (
+      (this.#state.runState ?? this.#subscribingStore?.snapshot)?.run.id !== runId ||
+      this.#state.checkpoint?.id !== checkpointId
+    ) return;
+    this.#patch({ reasoning });
   }
 
   #captureCheckpoint(events: readonly DrillRunEvent[]): boolean {
@@ -888,6 +941,10 @@ export class DrillSessionController {
       busy: false,
       error: sessionErrorMessage(error),
     });
+  }
+
+  #attachmentIsCurrent(generation: number): boolean {
+    return generation === this.#attachmentGeneration;
   }
 
   #patch(patch: StatePatch): void {
