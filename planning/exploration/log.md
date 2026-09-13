@@ -19342,3 +19342,11 @@ client assumption. These facts remain behind Inspector; ordinary play still rece
 line or distribution and no renderer grades or prescribes a move. `make test-software` passes 188
 files / 1,184 tests, and `make test-browser` passes all 64 required journeys with the one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-13 — Raw WDL no longer implies a retained perspective ([[D3194]])
+
+The new Inspector operand rendering exposed a pre-existing semantic hold rather than silently
+solving it: stored WDL tuples do not retain a stable perspective, as D927 already measured. The
+tuple remains inspectable, but its sentence now says that perspective was not retained. It does not
+assign old rows a White, learner or side-to-move meaning. D927 and the returned Review/provider
+contracts continue to own normalization. `make test-software` passes 188 files / 1,184 tests.

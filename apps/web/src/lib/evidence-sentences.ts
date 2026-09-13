@@ -210,7 +210,10 @@ function renderEnginePayload(payload: EvidencePayload): string {
     const reading = win === undefined || draw === undefined || loss === undefined
       ? "W/D/L values unavailable"
       : `W/D/L ${win}/${draw}/${loss}`;
-    return withProvenance(`Recorded ${source} distribution: ${reading}`, payload);
+    return withProvenance(
+      `Recorded ${source} distribution (perspective not retained): ${reading}`,
+      payload,
+    );
   }
   const moves = Array.isArray(values.movesUci)
     ? values.movesUci.filter((move): move is string => typeof move === "string")

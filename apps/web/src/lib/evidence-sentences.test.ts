@@ -114,7 +114,7 @@ describe("evidence sentence contract", () => {
       payload: { values: { centipawns: 18, perspective: "white" } },
     });
     expect(renderEvidenceRef("engine:evidence-job-2", pack, payloads)).toMatchObject({
-      text: "Recorded human-model distribution: W/D/L 0.2/0.5/0.3.",
+      text: "Recorded human-model distribution (perspective not retained): W/D/L 0.2/0.5/0.3.",
       sourceLabel: "Human model",
       payload: { values: { win: 0.2, draw: 0.5, loss: 0.3 } },
     });
