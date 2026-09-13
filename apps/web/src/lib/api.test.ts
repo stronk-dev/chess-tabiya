@@ -16,7 +16,7 @@ const run = createRun({
   createdAt: "2026-08-12T20:00:00.000Z",
 });
 const selection: OpponentSelection = {
-  moveUci: "h2h1",
+  moveUci: "h2g2",
   policyModeApplied: "human_common",
   engine: {
     id: "mock",
@@ -274,7 +274,7 @@ describe("DrillApi", () => {
     await api.runs(20, 5);
     await expect(api.selectMove({
       startFen: run.nodes[0]!.fen,
-      historyUci: [],
+      historyUci: ["a2a3"],
       policy: { mode: "human_common", policyConfigDigest: run.packDigest! },
       seed: 7,
     })).resolves.toMatchObject({ policyModeApplied: "human_common" });

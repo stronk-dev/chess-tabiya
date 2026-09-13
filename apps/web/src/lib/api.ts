@@ -29,6 +29,7 @@ import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parseCapabilities } from "./capability-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
+import { parseOpponentSelection } from "./opponent-selection-response.js";
 import { parsePackDocument } from "./pack-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
 import { parseShapeDocument } from "./shape-response.js";
@@ -1272,7 +1273,7 @@ export class DrillApi implements DrillClientApi {
   redeemSessionLink(token:string):Promise<{readonly session:LiveSession;readonly runId:string}>{return this.#json(`/api/shared/${encoded(token)}/join`,{method:"POST",body:{}});}
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
-    return this.#json("/select-move", { method: "POST", body: input });
+    return this.#json<unknown>("/select-move", { method: "POST", body: input }).then((value) => parseOpponentSelection(value, input));
   }
 
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage> {

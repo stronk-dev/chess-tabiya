@@ -26729,6 +26729,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/human-evidence-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3258",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:633bde8edb635cf0ca093c11f982336c1cbf0997ddd453f22e9c9da00c02638b",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/opponent-selection-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

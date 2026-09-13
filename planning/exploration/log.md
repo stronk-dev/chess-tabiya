@@ -20197,3 +20197,20 @@ Both accepted response trees are deeply frozen before evidence adapters can bran
 verify-software` passes 206 files / 1,393 tests plus types, performance, schema, manifest, packaging and
 production builds. The complete `make test-browser` gate passes 92 required journeys with one
 explicitly optional Maia latency probe skipped.
+
+## 2026-09-14 — Opponent selection is legal and request-bound before run persistence ([[D3258]])
+
+`DrillApi.selectMove()` no longer casts an engine response and immediately hands it to the board and
+run mutation path. One shared opponent-selection authority now replays the exact request history,
+builds the legal move set for that position, binds the selected move and every candidate to it, and
+admits only the requested policy mode plus the explicitly contracted `theory_strict` to
+`human_common` fallback.
+
+The same authority reconciles unique ordered ranks, selected-move inclusion, float32-tolerant policy
+mass, per-mille WDL, concession ratios, the single trailing off-window abstention and tablebase-only
+ordering. Engine identity and the complete selection are deeply frozen. The first software run caught
+a long-standing API fixture that asked an opponent to move while White was on turn and returned an
+illegal `Kh1`; the fixture now exercises the real `Ka3 Kg2` sequence instead of weakening the guard.
+`make verify-software` passes 207 files / 1,406 tests plus types, performance, schema, manifest,
+packaging and production builds. The complete `make test-browser` gate passes 92 required journeys
+with one explicitly optional Maia latency probe skipped.

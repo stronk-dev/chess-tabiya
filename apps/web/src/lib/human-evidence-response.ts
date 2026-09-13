@@ -1,6 +1,5 @@
-import { FLOAT32_POLICY_MASS_TOLERANCE, type SelectionCandidate, type SelectionEngineIdentity } from "@chess-tabiya/runtime";
-
 import type { CorpusPage, CorpusPopulation, CorpusResult, HumanSplitPage } from "./api.js";
+import { parseSelectionCandidates, parseSelectionEngine } from "./opponent-selection-response.js";
 
 type RecordValue = Readonly<Record<string, unknown>>;
 
@@ -38,11 +37,6 @@ function finite(value: unknown, label: string, minimum?: number, maximum?: numbe
   return value;
 }
 
-function boolean(value: unknown, label: string): boolean {
-  if (typeof value !== "boolean") throw new TypeError(`${label} must be boolean`);
-  return value;
-}
-
 function uci(value: unknown, label: string): string {
   const parsed = nonempty(value, label);
   if (!/^[a-h][1-8][a-h][1-8][qrbn]?$/u.test(parsed)) throw new TypeError(`${label} must be a UCI move`);
@@ -61,51 +55,6 @@ function deepFreeze<T>(value: T): T {
     Object.freeze(value);
   }
   return value;
-}
-
-function engine(value: unknown): SelectionEngineIdentity {
-  const item = record(value, "human-split/engine");
-  exact(item, ["id", "name", "version", "seedHonored"], "human-split/engine", ["modelId", "containerDigest", "eloHonored", "eloApplied", "searchBound"]);
-  nonempty(item.id, "human-split/engine/id"); nonempty(item.name, "human-split/engine/name"); nonempty(item.version, "human-split/engine/version"); boolean(item.seedHonored, "human-split/engine/seedHonored");
-  if (item.modelId !== undefined) nonempty(item.modelId, "human-split/engine/modelId");
-  if (item.containerDigest !== undefined) nonempty(item.containerDigest, "human-split/engine/containerDigest");
-  if (item.eloHonored !== undefined) boolean(item.eloHonored, "human-split/engine/eloHonored");
-  if (item.eloApplied !== undefined) integer(item.eloApplied, "human-split/engine/eloApplied", 0);
-  if (item.searchBound !== undefined) {
-    const bound = record(item.searchBound, "human-split/engine/searchBound"); exact(bound, ["kind", "value"], "human-split/engine/searchBound");
-    oneOf(bound.kind, ["nodes", "movetime"] as const, "human-split/engine/searchBound/kind"); integer(bound.value, "human-split/engine/searchBound/value", 1);
-  }
-  return item as unknown as SelectionEngineIdentity;
-}
-
-function candidates(value: unknown): readonly SelectionCandidate[] {
-  if (!Array.isArray(value)) throw new TypeError("human-split/candidates must be an array");
-  const moves = new Set<string>(), ranks = new Set<number>();
-  let priorRank = 0, measuredMass = 0;
-  const parsed = value.map((raw, index): SelectionCandidate => {
-    const label = `human-split/candidates/${index}`, item = record(raw, label);
-    exact(item, ["moveUci", "rank"], label, ["mass", "concessionRatio", "offWindow", "scoreCp", "wdl"]);
-    const move = uci(item.moveUci, `${label}/moveUci`), rank = integer(item.rank, `${label}/rank`, 1);
-    if (moves.has(move) || ranks.has(rank)) throw new TypeError("human-split candidates contain duplicate move or rank identities");
-    if (rank <= priorRank) throw new TypeError("human-split candidates are not ordered by rank");
-    moves.add(move); ranks.add(rank); priorRank = rank;
-    const offWindow = item.offWindow === undefined ? false : boolean(item.offWindow, `${label}/offWindow`);
-    if (item.mass !== undefined) {
-      const mass = finite(item.mass, `${label}/mass`, 0, 1 + FLOAT32_POLICY_MASS_TOLERANCE);
-      if (offWindow) throw new TypeError(`${label} cannot report mass for an off-window move`);
-      measuredMass += mass;
-    }
-    if (item.concessionRatio !== undefined) finite(item.concessionRatio, `${label}/concessionRatio`, 0, 1);
-    if (item.scoreCp !== undefined) integer(item.scoreCp, `${label}/scoreCp`);
-    if (item.wdl !== undefined) {
-      const wdl = record(item.wdl, `${label}/wdl`); exact(wdl, ["win", "draw", "loss"], `${label}/wdl`);
-      const win = integer(wdl.win, `${label}/wdl/win`, 0), draw = integer(wdl.draw, `${label}/wdl/draw`, 0), loss = integer(wdl.loss, `${label}/wdl/loss`, 0);
-      if (win + draw + loss !== 1000) throw new TypeError(`${label}/wdl must sum to 1000`);
-    }
-    return item as unknown as SelectionCandidate;
-  });
-  if (measuredMass > 1 + FLOAT32_POLICY_MASS_TOLERANCE) throw new TypeError("human-split measured policy mass exceeds 1");
-  return parsed;
 }
 
 function population(value: unknown, label: string): CorpusPopulation {
@@ -152,7 +101,7 @@ function corpusResult(value: unknown): CorpusResult {
 export function parseHumanSplitPage(value: unknown, requestedNodeId: string): HumanSplitPage {
   const item = record(value, "human-split"); exact(item, ["nodeId", "engine", "targetElo", "candidates"], "human-split");
   const nodeId = nonempty(item.nodeId, "human-split/nodeId"); if (nodeId !== requestedNodeId) throw new TypeError("human-split response does not match the requested node");
-  engine(item.engine); if (item.targetElo !== null) integer(item.targetElo, "human-split/targetElo", 0); candidates(item.candidates);
+  parseSelectionEngine(item.engine, "human-split/engine"); if (item.targetElo !== null) integer(item.targetElo, "human-split/targetElo", 0); parseSelectionCandidates(item.candidates, "human-split/candidates");
   return deepFreeze(structuredClone(item)) as unknown as HumanSplitPage;
 }
 
