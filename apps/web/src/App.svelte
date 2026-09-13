@@ -288,10 +288,18 @@
   let repertoireTargetElo=$state(1600);
   let repertoireCoverageDenominator=$state(100);
   let repertoireError:string|undefined=$state();
-  let repertoireMutationBusy=$state(false);
+  let repertoireMutationBusy:string|undefined=$state();
+  let repertoireScanBusy:string|undefined=$state();
+  let repertoireEntryBusy:string|undefined=$state();
   let repertoireDeleteIntent:string|undefined=$state();
   let repertoireAnswerBusy:string|undefined=$state();
   let repertoireAnswerErrors:Record<string,string>=$state({});
+  let repertoireScanErrors:Record<string,string>=$state({});
+  let repertoireEntryErrors:Record<string,string>=$state({});
+  let repertoireMutationGeneration=0;
+  let repertoireScanGeneration=0;
+  let repertoireEntryGeneration=0;
+  let repertoireAnswerGeneration=0;
   let recommendations:readonly ProgressRecommendation[]=$state([]);
   let recommendationSelection:ProgressRecommendationPage["selection"]=$state({shown:0,total:0});
   let runSelection:RunPage["selection"]=$state({shown:0,total:0});
@@ -712,6 +720,14 @@
       } else if (next.name === "learn") {
         assignmentBusy = undefined;
         assignmentActionError = undefined;
+        repertoireMutationBusy=undefined;
+        repertoireScanBusy=undefined;
+        repertoireEntryBusy=undefined;
+        repertoireAnswerBusy=undefined;
+        repertoireError=undefined;
+        repertoireScanErrors={};
+        repertoireEntryErrors={};
+        repertoireAnswerErrors={};
         relatedAttempts = {};
         const loaded = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
@@ -1017,12 +1033,93 @@
     navigate(routePath({ name: "run", runId: result.run.id }));
   }
 
-  async function createRepertoire():Promise<void>{repertoireError=undefined;try{if(api.createRepertoire===undefined)throw new Error("Repertoire import is unavailable");const created=await api.createRepertoire({name:repertoireName,side:repertoireSide,targetElo:repertoireTargetElo,coverageDenominator:repertoireCoverageDenominator,source:repertoireStudyUrl.trim()?{kind:"lichess_study",url:repertoireStudyUrl}:{kind:"pgn",pgn:repertoirePgn}});repertoires=[created,...repertoires];repertoireName="";repertoirePgn="";repertoireStudyUrl="";}catch(error){repertoireError=error instanceof Error?error.message:String(error);}}
-  async function scanRepertoire(id:string):Promise<void>{const before=repertoirePages[id]?.scan?.scannedAt;await api.scanRepertoire?.(id);for(let index=0;index<50;index++){const page=await api.repertoireGaps?.(id);if(page!==undefined){repertoirePages={...repertoirePages,[id]:page};if(page.status==="ready"&&page.scan!==null&&(before===undefined||page.scan.scannedAt!==before))break;}await new Promise((resolve)=>setTimeout(resolve,100));}repertoires=await(api.repertoires?.()??Promise.resolve(repertoires));}
+  function repertoireRouteIsCurrent(generation:number):boolean{return generation===loadGeneration;}
+  function repertoireGapKey(id:string,gapKey:string):string{return `${id}\0${gapKey}`;}
+  async function createRepertoire():Promise<void>{
+    if(repertoireMutationBusy!==undefined)return;
+    const input={name:repertoireName,side:repertoireSide,targetElo:repertoireTargetElo,coverageDenominator:repertoireCoverageDenominator,source:repertoireStudyUrl.trim()?{kind:"lichess_study" as const,url:repertoireStudyUrl}:{kind:"pgn" as const,pgn:repertoirePgn}};
+    const generation=loadGeneration;const action=++repertoireMutationGeneration;
+    repertoireMutationBusy="create";repertoireError=undefined;
+    try{
+      if(api.createRepertoire===undefined)throw new Error("unavailable");
+      const created=await api.createRepertoire(input);
+      if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn"){
+        repertoires=[created,...repertoires.filter((item)=>item.id!==created.id)];
+        if(repertoireName===input.name)repertoireName="";
+        if(input.source.kind==="pgn"&&repertoirePgn===input.source.pgn)repertoirePgn="";
+        if(input.source.kind==="lichess_study"&&repertoireStudyUrl===input.source.url)repertoireStudyUrl="";
+      }
+    }catch{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireError="The repertoire could not be imported. Check its source and try again.";}
+    finally{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireMutationBusy=undefined;}
+  }
+  async function scanRepertoire(id:string):Promise<void>{
+    if(repertoireScanBusy!==undefined)return;
+    const before=repertoirePages[id]?.scan?.scannedAt;const generation=loadGeneration;const action=++repertoireScanGeneration;
+    repertoireScanBusy=id;repertoireScanErrors={...repertoireScanErrors,[id]:""};
+    let finished=false;
+    try{
+      if(api.scanRepertoire===undefined||api.repertoireGaps===undefined)throw new Error("unavailable");
+      await api.scanRepertoire(id);
+      for(let index=0;index<50&&repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration;index++){
+        const page=await api.repertoireGaps(id);
+        if(!repertoireRouteIsCurrent(generation)||action!==repertoireScanGeneration)return;
+        if(page.repertoire.id!==id)throw new Error("crossed");
+        repertoirePages={...repertoirePages,[id]:page};
+        if(page.status==="ready"&&page.scan!==null&&(before===undefined||page.scan.scannedAt!==before)){finished=true;break;}
+        await new Promise((resolve)=>setTimeout(resolve,100));
+      }
+      if(!repertoireRouteIsCurrent(generation)||action!==repertoireScanGeneration)return;
+      if(!finished){repertoireScanErrors={...repertoireScanErrors,[id]:"The scan is still running. Try again to refresh its results."};return;}
+      try{const next=await (api.repertoires?.()??Promise.resolve(repertoires));if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoires=next;}
+      catch{if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoireScanErrors={...repertoireScanErrors,[id]:"The scan finished, but its summary could not refresh. Reload to see the current state."};}
+    }catch{if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoireScanErrors={...repertoireScanErrors,[id]:"The repertoire scan could not finish. Try again."};}
+    finally{if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoireScanBusy=undefined;}
+  }
   function repertoireEntry(runId:string|null){return repertoireEntryDecision(capabilities?.policyModes??[],runId);}
-  async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{const existing=repertoirePages[id]?.scan!==null&&repertoirePages[id]?.scan!==undefined?[...repertoirePages[id]!.scan!.gaps,...repertoirePages[id]!.scan!.alternateGaps].find((gap)=>gap.key===gapKey)?.runId??null:null;const entry=repertoireEntry(existing);if(!entry.available)return;const result=await api.enterRepertoireGap?.(id,gapKey,entry.resistance);if(result===undefined)return;if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);navigate(routePath({name:"run",runId:result.runId}));}
-  async function chooseRepertoireAnswer(id:string,gapKey:string,moveUci:string,ifMatch:string):Promise<void>{const actionKey=`${id}:${gapKey}:${moveUci}`;repertoireAnswerBusy=actionKey;repertoireAnswerErrors={...repertoireAnswerErrors,[gapKey]:""};try{if(api.chooseRepertoireAnswer===undefined)throw new Error("Choosing a repertoire answer is unavailable");const updated=await api.chooseRepertoireAnswer(id,{positionKey:gapKey,moveUci,ifMatch});repertoires=repertoires.map((item)=>item.id===id?updated:item);const page=await api.repertoireGaps?.(id);if(page!==undefined)repertoirePages={...repertoirePages,[id]:page};}catch(error){repertoireAnswerErrors={...repertoireAnswerErrors,[gapKey]:error instanceof Error?error.message:String(error)};}finally{repertoireAnswerBusy=undefined;}}
-  async function deleteRepertoire(id:string):Promise<void>{if(api.deleteRepertoire===undefined||repertoireMutationBusy)return;repertoireMutationBusy=true;repertoireError=undefined;try{await api.deleteRepertoire(id);repertoires=repertoires.filter((item)=>item.id!==id);const {[id]:_removed,...remaining}=repertoirePages;repertoirePages=remaining;repertoireDeleteIntent=undefined;recommendations=recommendations.filter((item)=>item.kind!=="repertoire_gap"||item.repertoireId!==id);}catch(error){repertoireError=error instanceof Error?error.message:String(error);}finally{repertoireMutationBusy=false;}}
+  async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{
+    if(repertoireEntryBusy!==undefined)return;
+    const existing=repertoirePages[id]?.scan!==null&&repertoirePages[id]?.scan!==undefined?[...repertoirePages[id]!.scan!.gaps,...repertoirePages[id]!.scan!.alternateGaps].find((gap)=>gap.key===gapKey)?.runId??null:null;
+    const entry=repertoireEntry(existing);if(!entry.available)return;
+    const generation=loadGeneration;const action=++repertoireEntryGeneration;const key=repertoireGapKey(id,gapKey);
+    repertoireEntryBusy=key;repertoireEntryErrors={...repertoireEntryErrors,[key]:""};
+    try{
+      if(api.enterRepertoireGap===undefined)throw new Error("unavailable");
+      const result=await api.enterRepertoireGap(id,gapKey,entry.resistance);
+      if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);
+      if(generation===loadGeneration&&action===repertoireEntryGeneration&&route.name==="learn")navigate(routePath({name:"run",runId:result.runId}));
+    }catch{if(generation===loadGeneration&&action===repertoireEntryGeneration&&route.name==="learn")repertoireEntryErrors={...repertoireEntryErrors,[key]:"This gap could not be opened for rehearsal. Try again."};}
+    finally{if(generation===loadGeneration&&action===repertoireEntryGeneration&&route.name==="learn")repertoireEntryBusy=undefined;}
+  }
+  async function chooseRepertoireAnswer(id:string,gapKey:string,moveUci:string,ifMatch:string):Promise<void>{
+    if(repertoireAnswerBusy!==undefined)return;
+    const actionKey=`${id}:${gapKey}:${moveUci}`;const errorKey=repertoireGapKey(id,gapKey);const generation=loadGeneration;const action=++repertoireAnswerGeneration;
+    repertoireAnswerBusy=actionKey;repertoireAnswerErrors={...repertoireAnswerErrors,[errorKey]:""};
+    try{
+      if(api.chooseRepertoireAnswer===undefined)throw new Error("unavailable");
+      const updated=await api.chooseRepertoireAnswer(id,{positionKey:gapKey,moveUci,ifMatch});
+      if(!repertoireRouteIsCurrent(generation)||action!==repertoireAnswerGeneration)return;
+      repertoires=repertoires.map((item)=>item.id===id?updated:item);
+    }catch{if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration)repertoireAnswerErrors={...repertoireAnswerErrors,[errorKey]:"That repertoire answer could not be saved. Nothing changed; try again."};}
+    if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration&&!repertoireAnswerErrors[errorKey]&&api.repertoireGaps!==undefined){
+      try{const page=await api.repertoireGaps(id);if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration&&page.repertoire.id===id)repertoirePages={...repertoirePages,[id]:page};}
+      catch{if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration)repertoireAnswerErrors={...repertoireAnswerErrors,[errorKey]:"The answer was saved, but the gap list could not refresh. Reload to see the current state."};}
+    }
+    if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration)repertoireAnswerBusy=undefined;
+  }
+  async function deleteRepertoire(id:string):Promise<void>{
+    if(api.deleteRepertoire===undefined||repertoireMutationBusy!==undefined)return;
+    const generation=loadGeneration;const action=++repertoireMutationGeneration;
+    repertoireMutationBusy=`delete:${id}`;repertoireError=undefined;
+    try{
+      await api.deleteRepertoire(id);
+      if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn"){
+        repertoires=repertoires.filter((item)=>item.id!==id);const {[id]:_removed,...remaining}=repertoirePages;repertoirePages=remaining;
+        if(repertoireDeleteIntent===id)repertoireDeleteIntent=undefined;
+        recommendations=recommendations.filter((item)=>item.kind!=="repertoire_gap"||item.repertoireId!==id);
+      }
+    }catch{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireError="The repertoire could not be deleted. Nothing changed; try again.";}
+    finally{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireMutationBusy=undefined;}
+  }
   function recommendationPacks(item:ProgressRecommendation):readonly PackSummary[]{return item.kind==="shape_encounter"?item.packIds.flatMap((packId)=>{const pack=packs.find((candidate)=>candidate.id===packId);return pack===undefined?[]:[pack];}):[];}
   async function distillActiveRun(title: string): Promise<void> {
     const run = session.runState?.run;
@@ -1951,21 +2048,21 @@
       </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title" aria-describedby={recommendationSelection.shown<recommendationSelection.total?"recommendation-budget":undefined}><h2 id="recommended-title">Recommended next</h2>{#if recommendationSelection.shown<recommendationSelection.total}<p id="recommendation-budget" class="honest">Showing {recommendationSelection.shown} of {recommendationSelection.total} grounded recommendations.</p>{/if}<div class="item-list">
-          {#each recommendations as item}<article><div><p>{item.sentence}</p>{#if item.kind==="shape_encounter"}{@const matchingPacks=recommendationPacks(item)}{#if matchingPacks.length>0}<div class="recommendation-actions">{#each matchingPacks as pack}<button type="button" onclick={()=>void controller.startPack(pack.id)}>{packPhaseCopy(pack.phase)} · Rehearse {pack.title}</button>{/each}</div>{:else}<p class="honest">No matching rehearsal is currently served.</p>{/if}{/if}</div>{#if item.kind==="repertoire_gap"}{@const entry=repertoireEntry(null)}<button type="button" disabled={!entry.available} aria-describedby={!entry.available?"recommendation-resistance-unavailable":undefined} onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>{entry.label}</button>{/if}</article>{/each}
+          {#each recommendations as item}<article><div><p>{item.sentence}</p>{#if item.kind==="shape_encounter"}{@const matchingPacks=recommendationPacks(item)}{#if matchingPacks.length>0}<div class="recommendation-actions">{#each matchingPacks as pack}<button type="button" onclick={()=>void controller.startPack(pack.id)}>{packPhaseCopy(pack.phase)} · Rehearse {pack.title}</button>{/each}</div>{:else}<p class="honest">No matching rehearsal is currently served.</p>{/if}{/if}</div>{#if item.kind==="repertoire_gap"}{@const entry=repertoireEntry(null)}{@const entryKey=repertoireGapKey(item.repertoireId,item.gapKey)}<button type="button" disabled={!entry.available||repertoireEntryBusy!==undefined} aria-describedby={!entry.available?"recommendation-resistance-unavailable":undefined} onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>{repertoireEntryBusy===entryKey?"Opening rehearsal…":entry.label}</button>{#if repertoireEntryErrors[entryKey]}<p role="alert">{repertoireEntryErrors[entryKey]}</p>{/if}{/if}</article>{/each}
           {#if recommendations.some((item)=>item.kind==="repertoire_gap")&&!repertoireEntry(null).available}<p id="recommendation-resistance-unavailable" class="honest">{repertoireEntry(null).reason}</p>{/if}
         </div></section>
       {/if}
       <section aria-labelledby="repertoire-title">
         <h2 id="repertoire-title">Repertoire gaps</h2>
         <form class="repertoire-form" onsubmit={(event)=>{event.preventDefault();void createRepertoire();}}>
-          <label>Name <input required bind:value={repertoireName} /></label>
-          <label>Your side <select bind:value={repertoireSide}><option value="white">White</option><option value="black">Black</option></select></label>
-          <label>Opponent rating band <input type="number" min="1000" max="2400" step="100" required bind:value={repertoireTargetElo} /></label>
-          <label>Cover replies seen at least once in <input type="number" min="10" max="10000" required bind:value={repertoireCoverageDenominator} /> games</label>
-          <label>Public Lichess study URL <input type="url" placeholder="https://lichess.org/study/abcdefgh" bind:value={repertoireStudyUrl} /></label>
+          <label>Name <input required disabled={repertoireMutationBusy!==undefined} bind:value={repertoireName} /></label>
+          <label>Your side <select disabled={repertoireMutationBusy!==undefined} bind:value={repertoireSide}><option value="white">White</option><option value="black">Black</option></select></label>
+          <label>Opponent rating band <input type="number" min="1000" max="2400" step="100" required disabled={repertoireMutationBusy!==undefined} bind:value={repertoireTargetElo} /></label>
+          <label>Cover replies seen at least once in <input type="number" min="10" max="10000" required disabled={repertoireMutationBusy!==undefined} bind:value={repertoireCoverageDenominator} /> games</label>
+          <label>Public Lichess study URL <input type="url" placeholder="https://lichess.org/study/abcdefgh" disabled={repertoireMutationBusy!==undefined} bind:value={repertoireStudyUrl} /></label>
           <span>or paste a multi-game, variation-bearing PGN</span>
-          <label>Repertoire PGN <textarea rows="5" bind:value={repertoirePgn}></textarea></label>
-          <button class="primary" type="submit" aria-describedby="repertoire-import-help" disabled={!repertoireName.trim()||(!repertoireStudyUrl.trim()&&!repertoirePgn.trim())}>Import repertoire</button>
+          <label>Repertoire PGN <textarea rows="5" disabled={repertoireMutationBusy!==undefined} bind:value={repertoirePgn}></textarea></label>
+          <button class="primary" type="submit" aria-describedby="repertoire-import-help" disabled={repertoireMutationBusy!==undefined||!repertoireName.trim()||(!repertoireStudyUrl.trim()&&!repertoirePgn.trim())}>{repertoireMutationBusy==="create"?"Importing…":"Import repertoire"}</button>
           <p id="repertoire-import-help" class="honest">Name the repertoire and provide either a public Lichess study or pasted PGN.</p>
           {#if repertoireError}<p role="alert">{repertoireError}</p>{/if}
         </form>
@@ -1974,9 +2071,10 @@
             {@const page=repertoirePages[repertoire.id]}
             <article class="repertoire-card">
               <div><h3>{repertoire.name}</h3><p>{chessSideLabel(repertoire.side)} · {repertoire.targetElo} band · cover replies seen at least 1 in {repertoire.coverageDenominator} games</p></div>
-              <div class="row-actions"><button type="button" onclick={()=>void scanRepertoire(repertoire.id)}>{page?.status==="ready"?"Rescan":"Scan gaps"}</button><button type="button" onclick={()=>repertoireDeleteIntent=repertoire.id}>Delete repertoire</button></div>
-              {#if repertoireDeleteIntent===repertoire.id}<aside class="consent-card" aria-label={`Delete ${repertoire.name}`}><h4>Delete {repertoire.name}?</h4><p>Its imported moves, scan results, and repertoire links will be removed. Rehearsal runs already created from gaps stay in your saved run history.</p><div class="row-actions"><button type="button" disabled={repertoireMutationBusy} onclick={()=>void deleteRepertoire(repertoire.id)}>{repertoireMutationBusy?"Deleting…":"Confirm deletion"}</button><button type="button" disabled={repertoireMutationBusy} onclick={()=>repertoireDeleteIntent=undefined}>Cancel</button></div></aside>{/if}
+              <div class="row-actions"><button type="button" disabled={repertoireScanBusy!==undefined} onclick={()=>void scanRepertoire(repertoire.id)}>{repertoireScanBusy===repertoire.id?"Scanning…":page?.status==="ready"?"Rescan":"Scan gaps"}</button><button type="button" disabled={repertoireMutationBusy!==undefined} onclick={()=>repertoireDeleteIntent=repertoire.id}>Delete repertoire</button></div>
+              {#if repertoireDeleteIntent===repertoire.id}<aside class="consent-card" aria-label={`Delete ${repertoire.name}`}><h4>Delete {repertoire.name}?</h4><p>Its imported moves, scan results, and repertoire links will be removed. Rehearsal runs already created from gaps stay in your saved run history.</p><div class="row-actions"><button type="button" disabled={repertoireMutationBusy!==undefined} onclick={()=>void deleteRepertoire(repertoire.id)}>{repertoireMutationBusy===`delete:${repertoire.id}`?"Deleting…":"Confirm deletion"}</button><button type="button" disabled={repertoireMutationBusy!==undefined} onclick={()=>repertoireDeleteIntent=undefined}>Cancel</button></div></aside>{/if}
               {#if page?.status==="pending"}<p>Scanning…</p>{/if}
+              {#if repertoireScanErrors[repertoire.id]}<p role="alert">{repertoireScanErrors[repertoire.id]}</p>{/if}
               {#if page?.scan}
                 <div class="gap-results" aria-label={`Gaps for ${repertoire.name}`}>
                   <p>{corpusPopulationLabel(page.scan.population)}</p><p class="honest">{page.scan.guard}.</p>
@@ -1989,9 +2087,9 @@
                       <div><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {repertoireGapStateLabel(gap.state)}</span>
                         {#if gap.firstMoves.length>0}<div class="gap-answer"><span>Moves you tried:</span>{#each gap.firstMoves as move}{#if gap.answer?.moveUci===move.moveUci}<strong>Current repertoire answer: {move.moveSan}</strong>{:else}<button type="button" disabled={repertoireAnswerBusy!==undefined} aria-describedby={repertoireAnswerBusy!==undefined?`gap-answer-status-${gap.key}`:undefined} onclick={()=>void chooseRepertoireAnswer(repertoire.id,gap.key,move.moveUci,repertoire.digest)}>{repertoireAnswerBusy===`${repertoire.id}:${gap.key}:${move.moveUci}`?"Saving…":`Use ${move.moveSan} as my repertoire answer`}</button>{/if}{/each}</div>{/if}
                         {#if repertoireAnswerBusy!==undefined}<span id={`gap-answer-status-${gap.key}`} class="honest">Finish saving the current repertoire choice first.</span>{/if}
-                        {#if repertoireAnswerErrors[gap.key]}<p role="alert">{repertoireAnswerErrors[gap.key]}</p>{/if}
+                        {#if repertoireAnswerErrors[repertoireGapKey(repertoire.id,gap.key)]}<p role="alert">{repertoireAnswerErrors[repertoireGapKey(repertoire.id,gap.key)]}</p>{/if}
                       </div>
-                      {#if index===0}{@const entry=repertoireEntry(gap.runId)}<button type="button" disabled={!entry.available} aria-describedby={!entry.available?`gap-resistance-${repertoire.id}`:undefined} onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>{entry.label}</button>{/if}
+                      {#if index===0}{@const entry=repertoireEntry(gap.runId)}{@const entryKey=repertoireGapKey(repertoire.id,gap.key)}<button type="button" disabled={!entry.available||repertoireEntryBusy!==undefined} aria-describedby={!entry.available?`gap-resistance-${repertoire.id}`:undefined} onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>{repertoireEntryBusy===entryKey?"Opening rehearsal…":entry.label}</button>{#if repertoireEntryErrors[entryKey]}<p role="alert">{repertoireEntryErrors[entryKey]}</p>{/if}{/if}
                     </div>
                   {:else}<p>No ranked gaps above this bound.</p>{/each}
                   {#if page.scan.gaps[0]&&!repertoireEntry(page.scan.gaps[0].runId).available}<p id={`gap-resistance-${repertoire.id}`} class="honest">{repertoireEntry(page.scan.gaps[0].runId).reason}</p>{/if}

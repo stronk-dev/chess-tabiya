@@ -55,6 +55,17 @@ unchanged. Learn also offers an explicit repertoire deletion confirmation. It na
 that imported moves, scans, and links are removed while already-created rehearsal runs
 remain in saved history.
 
+Every Learn action retains its route and exact repertoire, gap, move, digest, and form
+input across asynchronous work. Import, scan, gap entry, answer selection, and deletion
+are single-flight on their mutation class and expose the pending operation. A scan admits
+only pages that name the repertoire it requested and only while that Learn generation is
+current; navigation invalidates polling and an older completion cannot publish into a
+later screen. A gap-entry response may preserve its returned writer capability, but it
+does not navigate after the learner has left Learn. Failures keep the input or action
+available for retry without exposing transport details. Choosing an answer separates
+the successful digest-guarded mutation from its secondary gap-list refresh, so refresh
+failure never falsely says the answer itself was rejected.
+
 Settings/re-import editing is not exposed yet. The archived RFC requires optimistic
 concurrency and scan-staleness after those edits, but its published digest excludes the
 rating band and coverage bound. D3146 owns the required contract repair; widening the

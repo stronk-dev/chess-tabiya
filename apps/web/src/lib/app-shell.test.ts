@@ -24,6 +24,8 @@ import type {
   LiveSessionDetail,
   PackDraft,
   PackSummary,
+  RepertoireGapPage,
+  RepertoireSummary,
   RunSummary,
   ShapeDraft,
   GameStory,
@@ -1473,6 +1475,71 @@ describe("application shell", () => {
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm sharing")!.click();
     await vi.waitFor(() => expect(submitAssignment).toHaveBeenCalledTimes(2));
     await vi.waitFor(() => expect(document.querySelector("#submission-confirm-title")).toBeNull());
+    await unmount(component);
+  });
+
+  it("refuses a repertoire scan page for a different repertoire", async () => {
+    history.replaceState(null, "", "/learn");
+    const summary: RepertoireSummary = {
+      id: "repertoire-one", name: "Black repertoire", side: "black", targetElo: 1600,
+      coverageDenominator: 100, digest, updatedAt: "2026-09-13T12:00:00.000Z",
+      scan: { scannedAt: "2026-09-13T12:00:00.000Z", stale: false, truncated: false, gapCount: 1 },
+    };
+    const page = (repertoire: RepertoireSummary): RepertoireGapPage => ({
+      status: "ready", stale: false, repertoire,
+      scan: {
+        scannedAt: "2026-09-13T12:00:00.000Z",
+        population: { source: "lichess-explorer", ratings: [1600], speeds: ["rapid"], since: "2025-01", until: "2026-09" },
+        gaps: [{ key: "gap-one", representativeFen: INITIAL_FEN, replySan: "e4", replyUci: "e2e4", line: [], mass: 0.5, gamesUntilSeen: 2, state: "open", runId: null, firstMoves: [], answer: null }],
+        alternateGaps: [], unknown: [], uncoveredMass: 0.5, truncated: false, sourceFailures: 0, queriesUsed: 1, unreachedKeys: 0, guard: "Public rapid games", partiality: null,
+      },
+    });
+    let gapRead = 0;
+    const repertoireApi: DrillClientApi = {
+      ...api(),
+      async repertoires() { return [summary]; },
+      async repertoireGaps() {
+        gapRead += 1;
+        return gapRead === 1 ? page(summary) : page({ ...summary, id: "repertoire-crossed", name: "Wrong repertoire" });
+      },
+      async scanRepertoire() {},
+    };
+    const component = mount(App, { target: target(), props: { api: repertoireApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Black repertoire"));
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Rescan")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The repertoire scan could not finish. Try again."));
+    expect(document.body.textContent).not.toContain("Wrong repertoire");
+    await unmount(component);
+  });
+
+  it("does not navigate when a gap entry finishes after leaving Learn", async () => {
+    history.replaceState(null, "", "/learn");
+    const pendingEntry = deferred<{ readonly runId: string; readonly writerId: string | null; readonly alreadyEntered: boolean }>();
+    const summary: RepertoireSummary = { id: "repertoire-entry", name: "Entry repertoire", side: "white", targetElo: 1600, coverageDenominator: 100, digest, updatedAt: "2026-09-13T12:00:00.000Z", scan: null };
+    const page: RepertoireGapPage = {
+      status: "ready", stale: false, repertoire: summary,
+      scan: {
+        scannedAt: "2026-09-13T12:00:00.000Z",
+        population: { source: "lichess-explorer", ratings: [1600], speeds: ["rapid"], since: "2025-01", until: "2026-09" },
+        gaps: [{ key: "entry-gap", representativeFen: INITIAL_FEN, replySan: "e5", replyUci: "e7e5", line: ["e4"], mass: 0.4, gamesUntilSeen: 3, state: "open", runId: null, firstMoves: [], answer: null }],
+        alternateGaps: [], unknown: [], uncoveredMass: 0.4, truncated: false, sourceFailures: 0, queriesUsed: 1, unreachedKeys: 0, guard: "Public rapid games", partiality: null,
+      },
+    };
+    const router = new HistoryRouter(window);
+    const enterRepertoireGap = vi.fn(() => pendingEntry.promise);
+    const repertoireApi: DrillClientApi = { ...api(), async repertoires() { return [summary]; }, async repertoireGaps() { return page; }, enterRepertoireGap };
+    const component = mount(App, { target: target(), props: { api: repertoireApi, router, storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Entry repertoire"));
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Enter with human-like resistance")!.click();
+    await vi.waitFor(() => expect(enterRepertoireGap).toHaveBeenCalledWith("repertoire-entry", "entry-gap", "human_common"));
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    pendingEntry.resolve({ runId: "departed-gap-run", writerId: "writer-departed", alreadyEntered: false });
+    await tick();
+    await Promise.resolve();
+    expect(window.location.pathname).toBe("/");
     await unmount(component);
   });
 

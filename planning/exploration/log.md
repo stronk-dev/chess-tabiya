@@ -19777,3 +19777,17 @@ sharing falsifiers pass. Sequential canonical verification passes: `make verify-
 across 188 files / 1,229 tests plus type, performance, schema, manifest and production-build checks;
 `make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
 measurement skipped.
+
+## 2026-09-13 — Repertoire actions retain their route and resource ([[D3228]])
+
+The opening-repertoire workflow performed every import, scan, entry, answer and delete against
+mutable Learn state after awaiting. Scan polling could outlive navigation or accept a page for a
+different repertoire; a completed gap entry could navigate after the learner left; answer refresh
+failure was indistinguishable from mutation failure; and provider diagnostics reached the learner.
+The actions now retain exact route, repertoire, gap, move, digest and form identities, expose
+single-flight progress and safe retry, and keep scan publication monotonic and subject-checked.
+Mutation truth is separated from secondary refresh truth. A crossed-repertoire scan is refused,
+and a held gap entry resolved after navigating Home cannot pull the learner back into its run.
+Sequential canonical verification passes: `make verify-software` is green across 188 files / 1,231
+tests plus type, performance, schema, manifest and production-build checks; `make test-browser`
+passes all 64 required journeys with one explicitly optional Maia latency measurement skipped.
