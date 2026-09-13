@@ -551,6 +551,96 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("creates a branch group once and preserves its choices for a safe retry", async () => {
+    const run = branchedRun();
+    const first = deferred<import("./api.js").CreateGroupResult>();
+    const onCreateGroup = vi.fn()
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce({
+        run,
+        group: { sourceNodeId: run.activeCursor.nodeId },
+      } as unknown as import("./api.js").CreateGroupResult);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onCreateGroup, registerKeyboardRegion,
+    } });
+    await tick();
+
+    [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Branch group")!
+      .click();
+    await tick();
+    const creator = document.querySelector<HTMLElement>(".group-creator")!;
+    const legalMoves = [...chessground.configs.at(-1)!.movable!.dests!.entries()]
+      .flatMap(([from, destinations]) => destinations.map((to) => [from, to] as const));
+    expect(legalMoves.length).toBeGreaterThanOrEqual(2);
+    chessground.configs.at(-1)!.movable!.events!.after!(...legalMoves[0]!, {} as never);
+    chessground.configs.at(-1)!.movable!.events!.after!(...legalMoves[1]!, {} as never);
+    await tick();
+    const create = [...creator.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Create group")!;
+    create.click();
+    await tick();
+    expect(create.disabled).toBe(true);
+    expect(create.textContent).toContain("Creating group");
+    create.click();
+    expect(onCreateGroup).toHaveBeenCalledTimes(1);
+
+    first.reject(new Error("private group storage detail"));
+    await vi.waitFor(() => expect(creator.querySelector("[role='alert']")?.textContent).toContain("Your choices are still here"));
+    expect(creator.textContent).not.toContain("private group storage detail");
+    expect(creator.querySelectorAll(".candidate-chips button")).toHaveLength(2);
+    expect(create.disabled).toBe(false);
+
+    create.click();
+    await vi.waitFor(() => expect(onCreateGroup).toHaveBeenCalledTimes(2));
+    expect(onCreateGroup).toHaveBeenLastCalledWith({
+      source: "hand_picked",
+      resistance: "fixed",
+      candidates: legalMoves.slice(0, 2).map(([from, to]) => `${from}${to}`),
+    });
+    await vi.waitFor(() => expect(document.querySelector(".group-creator")).toBeNull());
+    await unmount(component);
+  });
+
+  it("refuses a branch-group response crossed from another run", async () => {
+    const run = branchedRun();
+    const onCreateGroup = vi.fn().mockResolvedValue({
+      run: { ...run, id: "crossed-run" },
+      group: { sourceNodeId: run.activeCursor.nodeId },
+    } as unknown as import("./api.js").CreateGroupResult);
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onCreateGroup, registerKeyboardRegion,
+    } });
+    await tick();
+    [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Branch group")!
+      .click();
+    await tick();
+    const creator = document.querySelector<HTMLElement>(".group-creator")!;
+    const legalMoves = [...chessground.configs.at(-1)!.movable!.dests!.entries()]
+      .flatMap(([from, destinations]) => destinations.map((to) => [from, to] as const));
+    chessground.configs.at(-1)!.movable!.events!.after!(...legalMoves[0]!, {} as never);
+    chessground.configs.at(-1)!.movable!.events!.after!(...legalMoves[1]!, {} as never);
+    await tick();
+    const create = [...creator.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Create group")!;
+    create.click();
+
+    await vi.waitFor(() => expect(creator.querySelector("[role='alert']")?.textContent).toContain("did not match this run and position"));
+    expect(create.disabled).toBe(true);
+    expect(creator.textContent).not.toContain("crossed-run");
+    expect(document.querySelector(".group-creator")).toBe(creator);
+    await unmount(component);
+  });
+
   it("keeps pivotal markers off by default, passive when enabled, and removable again", async () => {
     const initial = createRun({ id: "pivotal-ui", session: { kind: "position", start: { fen: "r3k2r/ppppqppp/2nbbn2/8/8/2NBBN2/PPPPQPPP/R3K2R w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
     const child = { ...initial.nodes[0]!, id: "pivotal-ui:node:1", parentId: initial.nodes[0]!.id, fen: "4k2r/8/8/8/8/8/RP6/4K3 b - - 0 1", transposeKey: "4k2r/8/8/8/8/8/RP6/4K3 b - -", moveUci: "a2a3", moveSan: "a3", ply: 1, actor: "user" as const };

@@ -26288,6 +26288,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/DrillScreen.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3209",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1173207dc2cf5bc4080574a52bbc49e8b15b07ac6e585adaaac1ee509ad64df2",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

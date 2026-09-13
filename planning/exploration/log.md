@@ -19532,3 +19532,16 @@ action, while rejection and a changed population restore an explicit safe retry 
 diagnostics. `make verify-software` passes 188 files / 1,197 tests plus type, performance, schema,
 manifest and production-build checks; `make test-browser` passes all 64 required journeys with one
 explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Branch-group creation is source-bound and recoverable ([[D3209]])
+
+The parallel-experiment palette previously allowed repeated creation submissions and let rejection
+escape without telling the learner whether the durable group existed. Creation is now single-flight
+and keeps source, resistance and candidate choices after a known failure. A successful result must
+name the exact run and source node that issued it; a crossed result locks the form and directs the
+learner to reopen the run instead of risking a duplicate mutation. Cancelling or unmounting
+invalidates the local request lifetime. The controller's existing explicit `undefined` failure arm
+is handled alongside thrown failures without exposing diagnostics. `make verify-software` passes
+188 files / 1,199 tests plus type, performance, schema, manifest and production-build checks;
+`make test-browser` passes all 64 required journeys with one explicitly optional Maia latency
+measurement skipped.

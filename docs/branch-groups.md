@@ -89,6 +89,12 @@ The drill screen can capture legal candidates without committing them, create
 the group, and enter its first member. Grouped branches remain visible in the
 ordinary branch rail. The group panel provides three semantic zoom bands:
 
+Creation is single-flight. The palette retains its source, resistance and candidate choices after
+a known failure and offers an explicit retry without exposing server diagnostics. A successful
+response must name the exact run and source node from which the request was made; a crossed result
+locks the form and asks the learner to close it and reopen the run rather than risking a duplicate
+group. Cancelling or unmounting invalidates the local request lifetime.
+
 - Overview: branch label, objective state, and terminal result;
 - Summary: last move, plies, exact material count, checkpoints, and evidence
   absence;

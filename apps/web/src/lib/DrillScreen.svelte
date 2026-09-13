@@ -38,7 +38,7 @@
     whyBanner,
   } from "./screen-model.js";
   import type { RunStateSnapshot } from "./run-state.js";
-  import type { AuthoredFeedbackPage, CreateGroupRequest } from "./api.js";
+  import type { AuthoredFeedbackPage, CreateGroupRequest, CreateGroupResult } from "./api.js";
   import type { RegisterKeyboardRegion } from "./keyboard.js";
   import {
     assessmentSentence,
@@ -129,7 +129,7 @@
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     onCompareVoice?: (() => Promise<VoicePage>) | undefined;
     onSpeech?: (nodeId: string, scope: VoicePage["scope"]) => Promise<Blob>;
-    onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
+    onCreateGroup?: (input: CreateGroupRequest) => CreateGroupResult | undefined | Promise<CreateGroupResult | undefined>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => boolean | void | Promise<boolean | void>;
     onSimulate?: (() => void | Promise<void>) | undefined;
     onEnterSimulation?: ((branchIndex: number) => void | Promise<void>) | undefined;
@@ -261,6 +261,11 @@
   let groupSize = $state(4);
   let groupCandidates: string[] = $state([]);
   let groupModes: Record<string, "sequential" | "lockstep"> = $state({});
+  let groupBusy = $state(false);
+  let groupError: string | undefined = $state();
+  let groupOutcomeUncertain = $state(false);
+  let groupRequest = 0;
+  let groupOpenContext: { readonly runId: string; readonly nodeId: string } | undefined = $state();
   let replayTimer: ReturnType<typeof setInterval> | undefined;
   let mainElement = $state<HTMLElement>();
   let forkIntentInput = $state<HTMLTextAreaElement>();
@@ -320,12 +325,20 @@
 
   function openGroupCreator(event: Event): void {
     groupInvoker = invoker(event);
+    groupOpenContext = Object.freeze({ runId: run.id, nodeId: displayedNode.id });
+    groupError = undefined;
+    groupOutcomeUncertain = false;
     groupOpen = true;
     if (phoneSheetModal) closeCompanion();
     void tick().then(() => groupHeading?.focus());
   }
 
   function closeGroupCreator(): void {
+    groupRequest += 1;
+    groupBusy = false;
+    groupError = undefined;
+    groupOutcomeUncertain = false;
+    groupOpenContext = undefined;
     groupOpen = false;
     groupCandidates = [];
     restoreFocus(compactViewport ? mainElement : groupInvoker);
@@ -887,7 +900,7 @@
   }
 
   function captureGroupMove(uci: string): void {
-    if (groupCandidates.includes(uci)) return;
+    if (groupBusy || groupCandidates.includes(uci)) return;
     if (groupCandidates.length < 8) groupCandidates = [...groupCandidates, uci];
   }
 
@@ -910,18 +923,38 @@
   }
 
   async function createGroup(): Promise<void> {
-    if (!canWrite || onCreateGroup === undefined) return;
-    await onCreateGroup({
+    if (!canWrite || onCreateGroup === undefined || groupBusy || groupOpenContext === undefined) return;
+    const context = groupOpenContext;
+    const request = ++groupRequest;
+    const input: CreateGroupRequest = {
       source: groupSource,
       resistance: groupResistance,
       ...(groupSource === "hand_picked" ? { candidates: groupCandidates } : { size: groupSize }),
-    });
-    groupOpen = false;
-    groupCandidates = [];
-    compactTab = "branches";
-    sheetOpen = !compactViewport;
-    restoreFocus(compactViewport ? mainElement : groupInvoker);
-    groupInvoker = undefined;
+    };
+    groupBusy = true;
+    groupError = undefined;
+    try {
+      const result = await onCreateGroup(input);
+      if (request !== groupRequest) return;
+      if (result === undefined) {
+        groupError = "The branch group was not created. Your choices are still here; try again.";
+        return;
+      }
+      if (result.run.id !== context.runId || result.group.sourceNodeId !== context.nodeId) {
+        groupOutcomeUncertain = true;
+        groupError = "The response did not match this run and position. Close this form and reopen the run before trying again.";
+        return;
+      }
+      closeGroupCreator();
+      compactTab = "branches";
+      sheetOpen = !compactViewport;
+    } catch {
+      if (request === groupRequest && context === groupOpenContext) {
+        groupError = "The branch group was not created. Your choices are still here; try again.";
+      }
+    } finally {
+      if (request === groupRequest) groupBusy = false;
+    }
   }
 
   async function nextGroupMember(group: BranchGroup): Promise<void> {
@@ -1310,6 +1343,7 @@
     if (replayTimer !== undefined) clearInterval(replayTimer);
     if (markTimer !== undefined) clearTimeout(markTimer);
     markRequest += 1;
+    groupRequest += 1;
     if (spokenAudio !== undefined) {
       spokenAudio.audio.pause();
       URL.revokeObjectURL(spokenAudio.url);
@@ -1740,7 +1774,7 @@
       <div class="group-creator" role="dialog" aria-modal="false" aria-labelledby="group-create-title" aria-describedby="group-create-description">
         <div><p>Parallel experiment</p><h2 id="group-create-title" tabindex="-1" bind:this={groupHeading}>Create a branch group</h2></div>
         <label>Source
-          <select bind:value={groupSource}>
+          <select bind:value={groupSource} disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined}>
             <option value="hand_picked">My candidate moves</option>
             <option value="authored" disabled={pack === undefined}>Authored variations</option>
             <option value="human_replies" disabled={capabilities?.providers.opponent === "none" || assistancePermission.humanSplit === "locked_off"}>Recorded human replies</option>
@@ -1748,18 +1782,20 @@
           </select>
         </label>
         <label>Resistance
-          <select bind:value={groupResistance}><option value="fixed">Fixed</option><option value="per_branch">Varied</option></select>
+          <select bind:value={groupResistance} disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined}><option value="fixed">Fixed</option><option value="per_branch">Varied</option></select>
         </label>
         {#if groupSource === "hand_picked"}
           <p id="group-create-description" class="capture-help">Choose legal moves on the board. This palette stays open and the run is not changed until you create the group.</p>
-          <button class="board-return" type="button" onclick={focusBoardForGroup}>Choose moves on the board</button>
-          <div class="candidate-chips">{#each groupCandidates as uci}<button type="button" onclick={() => (groupCandidates = groupCandidates.filter((move) => move !== uci))}>{moveSanFromUci(displayedNode.fen, uci) ?? "Legal candidate"} ×</button>{:else}<span>No candidates captured yet.</span>{/each}</div>
+          <button class="board-return" type="button" disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined} onclick={focusBoardForGroup}>Choose moves on the board</button>
+          <div class="candidate-chips">{#each groupCandidates as uci}<button type="button" disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined} onclick={() => (groupCandidates = groupCandidates.filter((move) => move !== uci))}>{moveSanFromUci(displayedNode.fen, uci) ?? "Legal candidate"} ×</button>{:else}<span>No candidates captured yet.</span>{/each}</div>
         {:else}
           <p id="group-create-description" class="capture-help">Choose how this parallel experiment is populated. The run is not changed until you create the group.</p>
-          <label>Members <input type="number" min="2" max="8" bind:value={groupSize} /></label>
+          <label>Members <input type="number" min="2" max="8" bind:value={groupSize} disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined} /></label>
         {/if}
-        <div class="creator-actions"><button type="button" onclick={closeGroupCreator}>Cancel</button><button type="button" disabled={groupSource === "hand_picked" && groupCandidates.length < 2} aria-describedby={groupSource === "hand_picked" && groupCandidates.length < 2 ? "group-candidates-needed" : undefined} onclick={() => void createGroup()}>Create group</button></div>
+        <div class="creator-actions"><button type="button" onclick={closeGroupCreator}>Cancel</button><button type="button" disabled={groupBusy || groupOutcomeUncertain || (groupSource === "hand_picked" && groupCandidates.length < 2)} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : groupSource === "hand_picked" && groupCandidates.length < 2 ? "group-candidates-needed" : undefined} onclick={() => void createGroup()}>{groupBusy ? "Creating group…" : "Create group"}</button></div>
         {#if groupSource === "hand_picked" && groupCandidates.length < 2}<span id="group-candidates-needed" class="honest">Capture at least two distinct legal moves.</span>{/if}
+        {#if groupBusy}<span id="group-create-busy" class="honest" role="status">Creating this group from the current position.</span>{/if}
+        {#if groupError}<span id="group-create-error" class="honest" role="alert">{groupError}</span>{/if}
       </div>
     {/if}
   </main>
