@@ -26,6 +26,7 @@ import type {
   PackSummary,
   RepertoireGapPage,
   RepertoireSummary,
+  RunPage,
   RunSummary,
   ShapeDraft,
   GameStory,
@@ -2673,30 +2674,81 @@ describe("application shell", () => {
     await unmount(component);
   });
 
-  it("states the saved-run denominator and loads the next page", async () => {
+  it("retains the saved-run page through duplicate, failure, crossed response, retry, and departure", async () => {
     history.replaceState(null, "", "/review");
     const older = { ...runSummary, id: "older-run", title: "Older rehearsal", updatedAt: "2026-08-10T21:00:00.000Z" };
+    const departed = { ...runSummary, id: "departed-run", title: "Departed rehearsal", updatedAt: "2026-08-09T21:00:00.000Z" };
+    const firstPage = deferred<RunPage>();
+    const departedPage = deferred<RunPage>();
     const pages: number[] = [];
+    let offsetOneCalls = 0;
     const pagedApi: DrillClientApi = {
       ...api(),
       async runPage(_limit = 50, offset = 0) {
         pages.push(offset);
-        return offset === 0
-          ? { runs: [runSummary], selection: { shown: 1, total: 2 } }
-          : { runs: [older], selection: { shown: 2, total: 2 } };
+        if (offset === 0) return { runs: [runSummary], selection: { shown: 1, total: 4 } };
+        if (offset === 1) {
+          offsetOneCalls += 1;
+          if (offsetOneCalls === 1) return firstPage.promise;
+          if (offsetOneCalls === 2) return { runs: [runSummary], selection: { shown: 2, total: 4 } };
+          return { runs: [older], selection: { shown: 2, total: 4 } };
+        }
+        return departedPage.promise;
       },
     };
+    const router = new HistoryRouter(window);
     const component = mount(App, {
       target: target(),
-      props: { api: pagedApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+      props: { api: pagedApi, router, storage: new MemoryStorage() },
     });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Showing 1 of 2 saved games and rehearsals."));
-    const loadMore = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Load more")!;
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Showing 1 of 4 saved games and rehearsals."));
+    let loadMore = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Load more")!;
+    loadMore.click();
+    loadMore.click();
+    await vi.waitFor(() => expect(pages).toEqual([0, 1]));
+    expect(loadMore.disabled).toBe(true);
+    firstPage.reject(new Error("private storage detail"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("More saved games could not be loaded. Your current list is unchanged; try again."));
+    expect(document.body.textContent).not.toContain("private storage detail");
+    expect(document.body.textContent).toContain(runSummary.title);
+
+    loadMore = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Load more")!;
+    loadMore.click();
+    await vi.waitFor(() => expect(pages).toEqual([0, 1, 1]));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("More saved games could not be loaded."));
+    expect(document.querySelectorAll(".item-list article")).toHaveLength(1);
+
+    loadMore = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Load more")!;
     loadMore.click();
     await vi.waitFor(() => expect(document.body.textContent).toContain("Older rehearsal"));
-    expect(document.body.textContent).not.toContain("Showing 1 of 2");
-    expect(pages).toEqual([0, 1]);
+    expect(document.body.textContent).toContain("Showing 2 of 4 saved games and rehearsals.");
+
+    loadMore = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Load more")!;
+    loadMore.click();
+    await vi.waitFor(() => expect(pages).toEqual([0, 1, 1, 1, 2]));
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    departedPage.resolve({ runs: [departed], selection: { shown: 3, total: 4 } });
+    await tick();
+    await Promise.resolve();
+    expect(document.body.textContent).not.toContain("Departed rehearsal");
+    await unmount(component);
+  });
+
+  it("bounds an invalid initial saved-run page before it reaches a route", async () => {
+    history.replaceState(null, "", "/review");
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: { ...api(), async runPage() { throw new Error("private database topology"); } },
+        router: new HistoryRouter(window),
+        storage: new MemoryStorage(),
+      },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Saved games could not be loaded. Reload this page to try again."));
+    expect(document.body.textContent).not.toContain("private database topology");
     await unmount(component);
   });
 

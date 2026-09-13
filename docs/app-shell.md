@@ -137,6 +137,13 @@ registry identities therefore remain storage/export data rather than ordinary na
 Home requests one newest run because it renders one Continue action. Review, Learn assignment
 matching, Live source selection and Library state their shown/total counts and page forward in
 bounded 50-run requests; none present the first page as the complete saved history.
+The browser validates every initial and subsequent page before publishing it: each summary must
+carry a usable identity, timestamp, lifecycle values, non-negative counts and lease identity; the
+page must contain unique new run IDs and its `shown` value must equal the requested offset plus the
+returned row count without exceeding `total`. A malformed, overlapping or non-advancing page leaves
+the last good list in place behind bounded retry copy, and a response that settles after route
+departure is inert. The compatibility `runs()` list adapter reports only the rows it can prove and
+never invents an unseen remainder.
 
 SQLite stores a denormalized summary beside each run snapshot:
 

@@ -19996,3 +19996,17 @@ no-navigation/no-duplicate boundary. Sequential canonical verification passes: `
 verify-software` is green across 196 files / 1,297 tests plus type, performance, schema, manifest
 and production-build checks; `make test-browser` passes all 64 required journeys with one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-14 — Saved-run pages retain one validated window ([[D3244]])
+
+The shared run-history boundary now validates both initial and subsequent pages before any of
+Review, Learn, Live or Library publishes them. Summary identities, lifecycle values, timestamps,
+counts and lease identity must be usable; selection arithmetic must match the requested offset;
+and later pages must contain only unique, new IDs while making progress. Failure retains the last
+good list behind bounded retry copy, duplicate requests are refused, and route-departed settlement
+is inert. The compatibility list adapter no longer reports the pre-request list length as its
+post-request denominator. A mounted journey crosses duplicate click, private-provider failure,
+crossed response, retry and departure; focused response tests falsify malformed summaries,
+denominators, duplicates and no-progress pages. `make verify-software` is green across 197 files /
+1,306 tests plus type, performance, schema, manifest and production-build checks; `make
+test-browser` passes all 64 required journeys with one optional Maia latency measurement skipped.

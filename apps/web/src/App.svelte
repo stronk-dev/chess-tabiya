@@ -81,6 +81,7 @@
   import { WriterSession, type KeyValueStorage } from "./lib/writer-session.js";
   import { assertStoryForkResponse, assertStoryRewindResponse } from "./lib/story-reentry-response.js";
   import { assertRunDeletionPreview } from "./lib/run-deletion-preview.js";
+  import { assertRunPageResponse, legacyRunPage } from "./lib/run-page-response.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -708,27 +709,34 @@
   }
 
   async function initialRunPage(limit = 50): Promise<RunPage> {
-    if (api.runPage !== undefined) return api.runPage(limit, 0);
-    const loaded = await api.runs(limit, 0);
-    return { runs: loaded, selection: { shown: loaded.length, total: loaded.length } };
+    try {
+      const page = api.runPage !== undefined
+        ? await api.runPage(limit, 0)
+        : legacyRunPage(await api.runs(limit, 0), 0);
+      assertRunPageResponse(page, { limit, offset: 0 });
+      return page;
+    } catch {
+      throw new Error("Saved games could not be loaded. Reload this page to try again.");
+    }
   }
 
   async function loadMoreRuns(): Promise<void> {
     if (runPageBusy || runs.length >= runSelection.total) return;
     const generation=loadGeneration;
+    const offset=runs.length;
+    const priorIds=new Set(runs.map((run)=>run.id));
     runPageBusy = true;
     runPageError = undefined;
     try {
       const page = api.runPage === undefined
-        ? { runs: await api.runs(50, runs.length), selection: { shown: runs.length, total: runs.length } }
-        : await api.runPage(50, runs.length);
+        ? legacyRunPage(await api.runs(50, offset), offset)
+        : await api.runPage(50, offset);
       if(generation!==loadGeneration)return;
-      const byId = new Map(runs.map((run) => [run.id, run]));
-      for (const run of page.runs) byId.set(run.id, run);
-      runs = [...byId.values()];
-      runSelection = { shown: runs.length, total: page.selection.total };
-    } catch (error) {
-      if(generation===loadGeneration)runPageError = error instanceof Error ? error.message : String(error);
+      assertRunPageResponse(page,{limit:50,offset,priorIds});
+      runs = [...runs,...page.runs];
+      runSelection = page.selection;
+    } catch {
+      if(generation===loadGeneration)runPageError = "More saved games could not be loaded. Your current list is unchanged; try again.";
     } finally {
       if(generation===loadGeneration)runPageBusy = false;
     }
