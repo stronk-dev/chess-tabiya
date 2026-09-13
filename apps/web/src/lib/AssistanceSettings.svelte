@@ -1,11 +1,12 @@
 <script lang="ts">
   import { permittedAssistance, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type RunSessionKind } from "@chess-tabiya/runtime";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
   import { ASSISTANCE_PROFILES, loadAssistance, saveAssistance, type AssistanceProfile } from "./assistance-preference.js";
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
+  import { assertAccountDeletionPreview } from "./account-deletion-preview.js";
 
   interface Props {
     capabilities?: Capabilities | undefined;
@@ -23,10 +24,20 @@
   let password = $state("");
   let exportPassword = $state("");
   let exportStatus = $state<string | undefined>();
+  let exportError = $state<string | undefined>();
+  let exportBusy = $state(false);
   let deleteError = $state<string | undefined>();
+  let deleteBusy = $state(false);
   let deletionPreview = $state<DeletionPreview | undefined>();
   let previewLoading = $state(false);
   let previewError = $state<string | undefined>();
+  let signOutBusy = $state(false);
+  let signOutError = $state<string | undefined>();
+  let previewRequest = 0;
+  let exportRequest = 0;
+  let deleteRequest = 0;
+  let signOutRequest = 0;
+  let mounted = true;
   const providerLabels: Readonly<Record<keyof Capabilities["providers"], string>> = Object.freeze({
     opponent: "Human-like opponents",
     judge: "Position calculation",
@@ -75,20 +86,39 @@
     saveAssistance(kind, value, storage());
   }
   async function removeAccount(): Promise<void> {
+    if (deleteBusy) return;
     deleteError = undefined;
     if (deletionPreview === undefined) { deleteError = "Review what will happen before deleting the account."; return; }
     if (password.length === 0) { deleteError = "Re-enter your password before deleting the account."; return; }
-    try { await onDelete(password, deletionPreview.digest); password = ""; } catch (error) { deleteError = error instanceof Error ? error.message : String(error); }
+    const request = ++deleteRequest;
+    const submittedPassword = password;
+    const previewDigest = deletionPreview.digest;
+    deleteBusy = true;
+    try {
+      await onDelete(submittedPassword, previewDigest);
+      if (mounted && request === deleteRequest && password === submittedPassword) password = "";
+    } catch {
+      if (mounted && request === deleteRequest) deleteError = "Your account could not be deleted. Nothing was changed; review the summary and try again.";
+    } finally {
+      if (mounted && request === deleteRequest) deleteBusy = false;
+    }
   }
   async function previewDeletion(): Promise<void> {
+    if (previewLoading || deleteBusy) return;
+    const request = ++previewRequest;
     previewLoading = true;
     previewError = undefined;
     deletionPreview = undefined;
     try {
       if (loadDeletionPreview === undefined) throw new Error("Deletion preview is unavailable.");
-      deletionPreview = await loadDeletionPreview();
-    } catch (error) { previewError = error instanceof Error ? error.message : String(error); }
-    finally { previewLoading = false; }
+      const preview = await loadDeletionPreview();
+      assertAccountDeletionPreview(preview);
+      if (mounted && request === previewRequest) deletionPreview = preview;
+    } catch {
+      if (mounted && request === previewRequest) previewError = "Your data summary could not be loaded. Nothing was changed; try again.";
+    } finally {
+      if (mounted && request === previewRequest) previewLoading = false;
+    }
   }
   function effectCount(groups: readonly DeletionEffect[]): number { return groups.reduce((total, effect) => total + effect.count, 0); }
   function records(count: number): string { return `${count} ${count === 1 ? "record" : "records"}`; }
@@ -102,12 +132,41 @@
     return value === "available" ? "Available" : "Not available on this server";
   }
   async function downloadAccount(): Promise<void> {
+    if (exportBusy) return;
     exportStatus = undefined;
+    exportError = undefined;
     if (exportPassword.length === 0) { exportStatus = "Re-enter your password to download your data."; return; }
-    try { await onExport(exportPassword); exportStatus = "Your account data download has started."; }
-    catch (error) { exportStatus = error instanceof Error ? error.message : String(error); }
-    finally { exportPassword = ""; }
+    const request = ++exportRequest;
+    const submittedPassword = exportPassword;
+    exportPassword = "";
+    exportBusy = true;
+    try {
+      await onExport(submittedPassword);
+      if (mounted && request === exportRequest) exportStatus = "Your account data download has started.";
+    } catch {
+      if (mounted && request === exportRequest) exportError = "Your account download could not be prepared. Re-enter your password and try again.";
+    } finally {
+      if (mounted && request === exportRequest) exportBusy = false;
+    }
   }
+
+  async function signOut(): Promise<void> {
+    if (signOutBusy) return;
+    const request = ++signOutRequest;
+    signOutBusy = true;
+    signOutError = undefined;
+    try { await onSignOut(); }
+    catch { if (mounted && request === signOutRequest) signOutError = "You could not be signed out. Your session is unchanged; try again."; }
+    finally { if (mounted && request === signOutRequest) signOutBusy = false; }
+  }
+
+  onDestroy(() => {
+    mounted = false;
+    previewRequest += 1;
+    exportRequest += 1;
+    deleteRequest += 1;
+    signOutRequest += 1;
+  });
 </script>
 
 <section id="playing-settings" aria-labelledby="assistance-settings-title">
@@ -137,7 +196,9 @@
 {#if learner}
 <section id="account-settings" aria-labelledby="account-settings-title">
   <h2 id="account-settings-title">Account</h2><p>Signed in as <strong>@{learner.handle}</strong>.</p>
-  <button type="button" onclick={onSignOut}>Sign out</button>
+  <button type="button" disabled={signOutBusy} aria-describedby={signOutBusy ? "account-signout-busy" : undefined} onclick={() => void signOut()}>{signOutBusy ? "Signing out…" : "Sign out"}</button>
+  {#if signOutBusy}<p id="account-signout-busy" role="status">Ending this account session…</p>{/if}
+  {#if signOutError}<p role="alert">{signOutError}</p>{/if}
   <section class="data-summary" aria-labelledby="account-data-title">
     <h3 id="account-data-title">Your data and privacy</h3>
     <p class="honest">This is a read-only summary of account data in this deployment. Loading or refreshing it does not start deletion.</p>
@@ -153,7 +214,7 @@
         {#if effectCount(deletionPreview.revoke) > 0}<h4>Revocable access</h4><ul>{#each deletionPreview.revoke as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}
         {#if effectCount(deletionPreview.retainedPublished) > 0}<h4>Published work</h4><ul>{#each deletionPreview.retainedPublished as effect}<li>{effect.label}</li>{/each}</ul>{/if}
         <p class="honest">{deletionPreview.backupNotice}</p>
-        <button type="button" onclick={() => void previewDeletion()}>Refresh data summary</button>
+        <button type="button" disabled={previewLoading || deleteBusy} aria-describedby={previewLoading ? "account-preview-busy" : deleteBusy ? "account-delete-busy" : undefined} onclick={() => void previewDeletion()}>Refresh data summary</button>
       </div>
     {:else}<p>This deployment cannot provide an account data summary.</p>{/if}
   </section>
@@ -162,22 +223,26 @@
     <p class="honest">A portable copy of your runs, progress, authored drafts, publications, and account-scoped activity. Passwords, sessions, provider credentials, and preferences stored only on this device are excluded.</p>
     <p class="honest">This Tabiya account archive is for safekeeping and inspection. Tabiya cannot import it, and other chess products do not read it. To move games between chess tools, <a href="/library">download them as PGN</a>.</p>
     <label>Current password <input type="password" autocomplete="current-password" bind:value={exportPassword} /></label>
-    <button type="submit">Download my data</button>
+    <button type="submit" disabled={exportBusy} aria-describedby={exportBusy ? "account-export-busy" : undefined}>{exportBusy ? "Preparing download…" : "Download my data"}</button>
+    {#if exportBusy}<p id="account-export-busy" role="status">Preparing one private account archive.</p>{/if}
     {#if exportStatus}<p role="status">{exportStatus}</p>{/if}
+    {#if exportError}<p role="alert">{exportError}</p>{/if}
   </form>
   <form onsubmit={(event) => { event.preventDefault(); void removeAccount(); }}>
     <h3>Delete account</h3>
     {#if deletionPreview === undefined}
       <p>Load the data summary above before deleting the account.</p>
-      <button type="button" disabled={previewLoading} onclick={() => void previewDeletion()}>{previewLoading ? "Loading data summary…" : "Load data summary"}</button>
+      <button type="button" disabled={previewLoading || deleteBusy} aria-describedby={previewLoading ? "account-preview-busy" : deleteBusy ? "account-delete-busy" : undefined} onclick={() => void previewDeletion()}>{previewLoading ? "Loading data summary…" : "Load data summary"}</button>
     {:else}
     <p>The current data summary above is the deletion preview. Refresh it if your account changed since this page opened.</p>
     <label>Re-enter password <input type="password" autocomplete="current-password" bind:value={password} /></label>
-    <button type="submit">Delete account</button>
+    <button type="submit" disabled={deleteBusy || previewLoading} aria-describedby={deleteBusy ? "account-delete-busy" : previewLoading ? "account-preview-busy" : undefined}>{deleteBusy ? "Deleting account…" : "Delete account"}</button>
+    {#if deleteBusy}<p id="account-delete-busy" role="status">Deleting this account and ending its sessions…</p>{/if}
     <p class="honest">This browser's sign-in and play preferences are cleared after deletion. Other devices may keep old display preferences, but you will be signed out everywhere.</p>
     {/if}
     {#if deleteError}<p role="alert">{deleteError}</p>{/if}
   </form>
+  {#if previewLoading}<span id="account-preview-busy" class="visually-hidden">Loading the current account data summary.</span>{/if}
 </section>
 {/if}
 

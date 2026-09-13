@@ -79,6 +79,13 @@ start deletion; a refresh failure removes the stale digest from the confirmation
 form and remains retryable. The delete form reuses the current visible summary
 instead of maintaining a second description of its effects.
 
+The Account controls own their asynchronous lifecycles. Summary refresh, archive export, deletion,
+and sign-out each allow one request, expose their pending state, and render bounded retry guidance
+without server diagnostics. Only an account-scoped, digest-bearing preview becomes deletion
+authority. Export and deletion retain the submitted password and preview digest while allowing no
+late response to clear newer form input. Leaving Settings invalidates local presentation, and an
+archive prepared afterwards cannot trigger an unexpected download on the learner's new screen.
+
 The client also states storage consequences at the action that creates each less-obvious
 durable record. Starting a rated game names the per-game opponent, side, outcome or
 abandonment, and void-reason record, plus its export and account-deletion fate. Accepting

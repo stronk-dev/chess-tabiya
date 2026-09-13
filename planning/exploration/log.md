@@ -19859,3 +19859,16 @@ duplicate, failure/retry and leave-return falsifiers pass. Sequential canonical 
 passes: `make verify-software` is green across 191 files / 1,254 tests plus type, performance,
 schema, manifest and production-build checks; `make test-browser` passes all 64 required journeys
 with one explicitly optional Maia latency measurement skipped.
+
+## 2026-09-13 — Account data actions own bounded, single-flight lifecycles ([[D3234]])
+
+Settings previously admitted duplicate summary, export, deletion and sign-out requests; rendered
+provider diagnostics directly; accepted a crossed run-scoped preview as account deletion
+authority; and allowed a delayed archive to download after departure. All four actions now retain
+their exact request, expose pending state, publish only while mounted and use bounded retry copy.
+Only an account-scoped preview with a usable digest can enable deletion, submitted credentials do
+not clear newer input, and the app shell suppresses a late export after Settings navigation.
+Crossed-preview, duplicate, failure and departed-export falsifiers pass. Sequential canonical
+verification passes: `make verify-software` is green across 192 files / 1,257 tests plus type,
+performance, schema, manifest and production-build checks; `make test-browser` passes all 64
+required journeys with one explicitly optional Maia latency measurement skipped.

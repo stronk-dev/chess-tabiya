@@ -28,6 +28,13 @@ function setInput(input: HTMLInputElement, value: string): void {
   input.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
+function deferred<T>(): { readonly promise: Promise<T>; readonly resolve: (value: T) => void; readonly reject: (reason?: unknown) => void } {
+  let resolve!: (value: T) => void;
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((resolvePromise, rejectPromise) => { resolve = resolvePromise; reject = rejectPromise; });
+  return { promise, resolve, reject };
+}
+
 afterEach(() => document.body.replaceChildren());
 
 describe("account lifecycle panel", () => {
@@ -53,7 +60,7 @@ describe("account lifecycle panel", () => {
     document.querySelector<HTMLButtonElement>('button[type="submit"]')!.click();
     await vi.waitFor(() => expect(onExport).toHaveBeenCalledWith("export-password"));
     await vi.waitFor(() => expect(passwordInputs[0]!.value).toBe(""));
-    expect([...document.querySelectorAll('[role="status"]')].some((status) => status.textContent?.includes("download has started"))).toBe(true);
+    await vi.waitFor(() => expect([...document.querySelectorAll('[role="status"]')].some((status) => status.textContent?.includes("download has started"))).toBe(true));
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("Private account data"));
     const deletionStatus = document.querySelector<HTMLElement>('.deletion-preview [data-status-announcement]')!;
@@ -86,13 +93,15 @@ describe("account lifecycle panel", () => {
     setInput(exportPassword, "not-retained");
     document.querySelector<HTMLButtonElement>('button[type="submit"]')!.click();
     await vi.waitFor(() => expect(exportPassword.value).toBe(""));
-    expect([...document.querySelectorAll('[role="status"]')].some((status) => status.textContent?.includes("temporarily unavailable"))).toBe(true);
+    expect(document.querySelector('[role="alert"]')?.textContent).toContain("download could not be prepared");
+    expect(document.body.textContent).not.toContain("Export temporarily unavailable");
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("Private account data"));
     const deletePassword = [...document.querySelectorAll<HTMLInputElement>('input[type="password"]')].at(-1)!;
     setInput(deletePassword, "still-present-for-retry");
     [...document.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].find((button) => button.textContent?.includes("Delete account"))!.click();
-    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("became stale"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("account could not be deleted"));
+    expect(document.body.textContent).not.toContain("Deletion preview became stale");
     expect(document.body.textContent).toContain("Private account data");
     expect(deletePassword.value).toBe("still-present-for-retry");
     await unmount(component);
@@ -111,12 +120,58 @@ describe("account lifecycle panel", () => {
       onSignOut: vi.fn(), onExport: vi.fn(), onDelete, loadDeletionPreview,
     } });
 
-    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("temporarily unavailable"));
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("data summary could not be loaded"));
+    expect(document.body.textContent).not.toContain("Summary temporarily unavailable");
     expect(onDelete).not.toHaveBeenCalled();
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Try loading again")!.click();
     await vi.waitFor(() => expect(document.body.textContent).toContain("Private account data"));
     expect(loadDeletionPreview).toHaveBeenCalledTimes(2);
     expect(onDelete).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("keeps account export, deletion, and sign-out single-flight with bounded failures", async () => {
+    const pendingExport = deferred<void>();
+    const pendingDelete = deferred<void>();
+    const pendingSignOut = deferred<void>();
+    const onExport = vi.fn(() => pendingExport.promise);
+    const onDelete = vi.fn(() => pendingDelete.promise);
+    const onSignOut = vi.fn(() => pendingSignOut.promise);
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      learner: { id: "learner-a", handle: "alice", createdAt: "2026-08-23T00:00:00.000Z" },
+      onSignOut, onExport, onDelete, loadDeletionPreview: async () => preview,
+    } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Private account data"));
+
+    const passwordInputs = [...document.querySelectorAll<HTMLInputElement>('input[type="password"]')];
+    const exportButton = [...document.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].find((button) => button.textContent === "Download my data")!;
+    setInput(passwordInputs[0]!, "export-password");
+    exportButton.click();
+    await vi.waitFor(() => expect(exportButton.textContent).toBe("Preparing download…"));
+    exportButton.click();
+    expect(onExport).toHaveBeenCalledTimes(1);
+    pendingExport.reject(new Error("private export provider detail"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("download could not be prepared"));
+    expect(document.body.textContent).not.toContain("private export provider detail");
+
+    const deleteButton = [...document.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].find((button) => button.textContent === "Delete account")!;
+    setInput(passwordInputs[1]!, "delete-password");
+    deleteButton.click();
+    await vi.waitFor(() => expect(deleteButton.textContent).toBe("Deleting account…"));
+    deleteButton.click();
+    expect(onDelete).toHaveBeenCalledTimes(1);
+    pendingDelete.reject(new Error("private deletion provider detail"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("could not be deleted"));
+    expect(document.body.textContent).not.toContain("private deletion provider detail");
+
+    const signOut = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Sign out")!;
+    signOut.click();
+    await vi.waitFor(() => expect(signOut.textContent).toBe("Signing out…"));
+    signOut.click();
+    expect(onSignOut).toHaveBeenCalledTimes(1);
+    pendingSignOut.reject(new Error("private session detail"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("could not be signed out"));
+    expect(document.body.textContent).not.toContain("private session detail");
     await unmount(component);
   });
 });

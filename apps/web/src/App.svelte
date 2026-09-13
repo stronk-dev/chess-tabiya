@@ -1289,7 +1289,9 @@
 
   async function exportAccountWithPassword(password: string): Promise<void> {
     if (api.exportAccount === undefined) throw new Error("Account export is unavailable.");
+    const generation = loadGeneration;
     const download = await api.exportAccount(password);
+    if (generation !== loadGeneration || route.name !== "settings") return;
     const url = URL.createObjectURL(download.blob);
     const anchor = document.createElement("a");
     anchor.href = url;

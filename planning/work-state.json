@@ -26513,6 +26513,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/run-deletion-preview.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3234",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1efbd80162648b40edba51bd0f667108a5b03cf209a99cf5cfeb1c084a89bb98",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/account-deletion-preview.ts",
+      "evidenceKind": "path"
     }
   ]
 }

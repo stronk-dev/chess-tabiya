@@ -646,6 +646,51 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("does not start an account archive download after Settings has been left", async () => {
+    history.replaceState(null, "", "/settings");
+    const pendingExport = deferred<{ readonly blob: Blob; readonly filename: string; readonly digest: string }>();
+    const preview: DeletionPreview = {
+      version: 1,
+      scope: { kind: "account" },
+      digest,
+      hardDelete: [], tombstone: [], revoke: [], retainedPublished: [],
+      backupNotice: "Live data is removed immediately.",
+    };
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: {
+        api: {
+          ...api(),
+          async session() { return { id: "learner-a", handle: "alice", createdAt: "2026-09-13T13:30:00.000Z" }; },
+          async accountDeletionPreview() { return preview; },
+          exportAccount: vi.fn(() => pendingExport.promise),
+        },
+        router,
+        storage: new MemoryStorage(),
+      },
+    });
+
+    const exportPassword = await vi.waitFor(() => {
+      const input = document.querySelector<HTMLInputElement>('#account-settings input[autocomplete="current-password"]');
+      expect(input).not.toBeNull();
+      return input!;
+    });
+    exportPassword.value = "export-password";
+    exportPassword.dispatchEvent(new Event("input", { bubbles: true }));
+    [...document.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].find((button) => button.textContent === "Download my data")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Preparing one private account archive."));
+    router.navigate("/");
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/"));
+    pendingExport.resolve({ blob: new Blob(["private"]), filename: "tabiya-account.json", digest });
+    await tick();
+    await Promise.resolve();
+    expect(click).not.toHaveBeenCalled();
+    click.mockRestore();
+    await unmount(component);
+  });
+
   it("turns an empty Home into a direct rehearsal start instead of an empty resume card", async () => {
     const emptyApi: DrillClientApi = { ...api(), async runs() { return []; } };
     const component = mount(App, {
