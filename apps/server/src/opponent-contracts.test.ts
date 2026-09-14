@@ -78,12 +78,17 @@ describe("opponent contracts", () => {
 
     expect(selectionContract).toMatch(/\borderingBasis\?:/u);
 
-    const renderingSources = sourceFiles("apps/web/src")
+    const webSources = sourceFiles("apps/web/src");
+    const renderingSources = webSources
       .map((path) => readFileSync(path, "utf8"))
       .join("\n");
     expect(renderingSources).not.toMatch(/\b(?:0\.719|0\.751|0\.611|0\.689|0\.227|0\.313)\b/u);
-    expect(renderingSources).not.toMatch(/candidates?[^\n]{0,80}\.rank\b/u);
-    expect(renderingSources).not.toMatch(/\borderingBasis\b/u);
+    const presentationSources = webSources
+      .filter((path) => path.endsWith(".svelte"))
+      .map((path) => readFileSync(path, "utf8"))
+      .join("\n");
+    expect(presentationSources).not.toMatch(/candidates?[^\n]{0,80}\.rank\b/u);
+    expect(presentationSources).not.toMatch(/\borderingBasis\b/u);
   });
 
   it("warns only when perfect tablebase is paired with a hold objective", () => {

@@ -26765,6 +26765,113 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/voice-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3262",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:8bfe3263ca70d7bff68eca7e8625d61762da9bb044cc5e9ecbf12c1052016095",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3263",
+      "state": "blocked",
+      "sourceGlyph": "📜",
+      "sourceDigest": "sha256:f0bc69249b49ae054af7a94a7e525c9167b0b4c1638a03183dc90ca994b25f6b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "item:D3262"
+    },
+    {
+      "id": "D3264",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ff40e5e67595e47e9e4cdc9452ca3efeeb7461b2ebc6e8b3c98b2d0d5a770138",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/evidence-value-authority-route-map.json",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3265",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0aabe73cf42ca4f1137a275ab7bea14baa5ceadedf2139ab6772f8e0ac9fd178",
+      "uxItems": [],
+      "evidence": "tools/d2144-evidence-value-authority-route-map/route-map.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3266",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a8c72620220f0c47e456944a2ee3f441324418a521963ef6ba268ea45c0591f8",
+      "uxItems": [],
+      "evidence": "Makefile",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3267",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:38896b0098f57e67fc16c4d5692a333b95f1e408fdd8fe57ea34b064f6e3c747",
+      "uxItems": [],
+      "evidence": "Makefile",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3268",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:774edcd3235e131f53a3d0bea6e8876e0cabf32969e5093706ac92b0d28ce253",
+      "uxItems": [],
+      "evidence": "tools/d1862-presentation-adapter-plan/plan.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3269",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e7c6655ae2a1bed3622d864e6aecb5e77fdda77ced5d4d6745ee2b1d93ab5f98",
+      "uxItems": [],
+      "evidence": "Makefile",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3270",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:afe910ceb1a473bbffd41346df7f2a3df6b92ce8ae83b771506c7caf3c771a02",
+      "uxItems": [],
+      "evidence": "tools/verify-scaffold.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3271",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:08e5d141f0988a654162b6f24e2615290a20fb1c9fbd498dad6f6bf4a8615c30",
+      "uxItems": [],
+      "evidence": "tools/d3065-module-discharge-coverage-contract/contract.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3272",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6c8a6050978f7f9b29458fdc8429045bb07c88d0461e57cfa12f5d2d2ac2f3a9",
+      "uxItems": [],
+      "evidence": "tools/d3129-wave-c-module-amendment/contract.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3273",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:201bbac7f9624f8c627e238bdadb431728e929bd5de369f30bbdf2698e6ff132",
+      "uxItems": [],
+      "evidence": "apps/server/src/guidance.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

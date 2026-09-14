@@ -72,7 +72,7 @@ const SPECIALIZED_MINT_ROUTES = Object.freeze([
   { operation: "declareStructuralPredicateFeatureEvidence", projections: STRUCTURAL_PREDICATE_PROJECTION_IDS },
   { operation: "declareOpponentProviderEvidence", projections: ["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result"] },
   { operation: "declareLivePacketEvidence", projections: ["human.maia.event", "live.syzygy.result", "live.stockfish.eval", "live.stockfish.wdl", "live.stockfish.pv"] },
-  { operation: "declareSourcingRecordEvidence", projections: ["sourcing.ledger.engine_eval", "sourcing.ledger.tablebase_result", "sourcing.ledger.explorer_position_census", "theory.opening_identity.record"] },
+  { operation: "declareSourcingRecordEvidence", projections: ["sourcing.ledger.engine_eval", "sourcing.ledger.tablebase_result", "sourcing.ledger.explorer_position_census", "sourcing.ledger.citable_text", "theory.opening_identity.record"] },
   { operation: "declareCompareDerivedEvidence", projections: ["derived.compare.engine_trajectory", "derived.compare.structure_delta", "derived.compare.piece_route", "derived.compare.eval_delta"] },
   { operation: "declareRunRecordEvidence", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", "run.record.imported_result"] },
   { operation: "declareStoryDerivedEvidence", projections: ["derived.story.eval_shift", "derived.story.last_level", "derived.story.rank", "derived.story.title"] },
@@ -266,8 +266,8 @@ describe("D2144 declared-evidence value authority", () => {
     expect({ generic: generic.length, specialized: specialized.length, total: routes.length }).toMatchInlineSnapshot(`
       {
         "generic": 75,
-        "specialized": 116,
-        "total": 191,
+        "specialized": 117,
+        "total": 192,
       }
     `);
 
@@ -304,7 +304,7 @@ describe("D2144 declared-evidence value authority", () => {
         },
       ]
     `);
-    expect(byProjection.size).toBe(187);
+    expect(byProjection.size).toBe(188);
 
     const manifestIds = new Set(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => projection.id));
     expect([...byProjection.keys()].filter((projection) => !manifestIds.has(projection)).sort()).toEqual([]);

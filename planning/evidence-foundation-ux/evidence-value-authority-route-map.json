@@ -827,8 +827,8 @@
       ],
       "currentProductionUseCount": 2,
       "currentProductionUseSites": [
-        "packages/runtime/src/story.ts:232",
-        "packages/runtime/src/story.ts:36"
+        "packages/runtime/src/story.ts:294",
+        "packages/runtime/src/story.ts:48"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/story.ts#storyEvidence",
@@ -858,8 +858,8 @@
       ],
       "currentProductionUseCount": 2,
       "currentProductionUseSites": [
-        "packages/runtime/src/story.ts:232",
-        "packages/runtime/src/story.ts:36"
+        "packages/runtime/src/story.ts:294",
+        "packages/runtime/src/story.ts:48"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/story.ts#storyEvidence",
@@ -888,8 +888,8 @@
       ],
       "currentProductionUseCount": 2,
       "currentProductionUseSites": [
-        "packages/runtime/src/story.ts:232",
-        "packages/runtime/src/story.ts:36"
+        "packages/runtime/src/story.ts:294",
+        "packages/runtime/src/story.ts:48"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/story.ts#storyEvidence",
@@ -919,8 +919,8 @@
       ],
       "currentProductionUseCount": 2,
       "currentProductionUseSites": [
-        "packages/runtime/src/story.ts:232",
-        "packages/runtime/src/story.ts:36"
+        "packages/runtime/src/story.ts:294",
+        "packages/runtime/src/story.ts:48"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/story.ts#storyEvidence",
@@ -1381,7 +1381,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/web/src/lib/evidence-sentences.ts:225"
+        "apps/web/src/lib/evidence-sentences.ts:308"
       ],
       "currentProducerOperations": [
         "apps/web/src/lib/evidence-sentences.ts#declaredSource"
@@ -1491,7 +1491,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/web/src/lib/evidence-sentences.ts:225"
+        "apps/web/src/lib/evidence-sentences.ts:308"
       ],
       "currentProducerOperations": [
         "apps/web/src/lib/evidence-sentences.ts#declaredSource"
@@ -1549,7 +1549,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/web/src/lib/evidence-sentences.ts:225"
+        "apps/web/src/lib/evidence-sentences.ts:308"
       ],
       "currentProducerOperations": [
         "apps/web/src/lib/evidence-sentences.ts#declaredSource"
@@ -1605,7 +1605,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/web/src/lib/evidence-sentences.ts:225"
+        "apps/web/src/lib/evidence-sentences.ts:308"
       ],
       "currentProducerOperations": [
         "apps/web/src/lib/evidence-sentences.ts#declaredSource"
@@ -1718,7 +1718,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/web/src/lib/evidence-sentences.ts:225"
+        "apps/web/src/lib/evidence-sentences.ts:308"
       ],
       "currentProducerOperations": [
         "apps/web/src/lib/evidence-sentences.ts#declaredSource"
@@ -1772,7 +1772,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:139"
+        "apps/server/src/guidance.ts:206"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket"
@@ -1830,7 +1830,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:133"
+        "apps/server/src/guidance.ts:200"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket"
@@ -1857,7 +1857,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:140"
+        "apps/server/src/guidance.ts:207"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket"
@@ -1884,7 +1884,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:140"
+        "apps/server/src/guidance.ts:207"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket"
@@ -2003,8 +2003,8 @@
       ],
       "currentProductionUseCount": 2,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:137",
-        "packages/runtime/src/story.ts:200"
+        "apps/server/src/guidance.ts:204",
+        "packages/runtime/src/story.ts:263"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket",
@@ -2294,7 +2294,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:132"
+        "apps/server/src/guidance.ts:199"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket"
@@ -2359,10 +2359,10 @@
       ],
       "currentProductionUseCount": 4,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:136",
+        "apps/server/src/guidance.ts:203",
         "packages/runtime/src/compare-strips.ts:142",
         "packages/runtime/src/pivotal.ts:109",
-        "packages/runtime/src/story.ts:181"
+        "packages/runtime/src/story.ts:244"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket",
@@ -3285,7 +3285,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3317,7 +3317,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3349,7 +3349,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3381,7 +3381,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3413,7 +3413,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3445,7 +3445,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3477,7 +3477,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3509,7 +3509,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3541,7 +3541,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3577,7 +3577,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:134"
+        "apps/server/src/guidance.ts:201"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket"
@@ -3609,7 +3609,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3641,7 +3641,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3673,7 +3673,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3705,7 +3705,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3762,7 +3762,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3794,7 +3794,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3826,7 +3826,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -3858,7 +3858,7 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:135",
+        "apps/server/src/guidance.ts:202",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:849"
       ],
@@ -5056,8 +5056,8 @@
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
         "packages/runtime/src/compare-strips.ts:29",
-        "packages/runtime/src/story.ts:207",
-        "packages/runtime/src/story.ts:209"
+        "packages/runtime/src/story.ts:270",
+        "packages/runtime/src/story.ts:272"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/compare-strips.ts#sentenceEvidence",
@@ -5089,8 +5089,8 @@
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
         "packages/runtime/src/compare-strips.ts:29",
-        "packages/runtime/src/story.ts:207",
-        "packages/runtime/src/story.ts:209"
+        "packages/runtime/src/story.ts:270",
+        "packages/runtime/src/story.ts:272"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/compare-strips.ts#sentenceEvidence",
@@ -5119,7 +5119,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/web/src/lib/evidence-sentences.ts:254"
+        "apps/web/src/lib/evidence-sentences.ts:337"
       ],
       "currentProducerOperations": [
         "apps/web/src/lib/evidence-sentences.ts#renderEvidenceRef"
@@ -5148,8 +5148,8 @@
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
         "packages/runtime/src/compare-strips.ts:29",
-        "packages/runtime/src/story.ts:207",
-        "packages/runtime/src/story.ts:209"
+        "packages/runtime/src/story.ts:270",
+        "packages/runtime/src/story.ts:272"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/compare-strips.ts#sentenceEvidence",
@@ -5180,8 +5180,8 @@
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
         "packages/runtime/src/compare-strips.ts:29",
-        "packages/runtime/src/story.ts:207",
-        "packages/runtime/src/story.ts:209"
+        "packages/runtime/src/story.ts:270",
+        "packages/runtime/src/story.ts:272"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/compare-strips.ts#sentenceEvidence",
@@ -5211,8 +5211,8 @@
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
         "packages/runtime/src/compare-strips.ts:29",
-        "packages/runtime/src/story.ts:207",
-        "packages/runtime/src/story.ts:209"
+        "packages/runtime/src/story.ts:270",
+        "packages/runtime/src/story.ts:272"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/compare-strips.ts#sentenceEvidence",
@@ -5243,12 +5243,40 @@
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
         "packages/runtime/src/compare-strips.ts:29",
-        "packages/runtime/src/story.ts:207",
-        "packages/runtime/src/story.ts:209"
+        "packages/runtime/src/story.ts:270",
+        "packages/runtime/src/story.ts:272"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/compare-strips.ts#sentenceEvidence",
         "packages/runtime/src/story.ts#storyMoments"
+      ]
+    },
+    {
+      "oldOperation": "declareSourcingRecordEvidence",
+      "currentProjection": "sourcing.ledger.citable_text@1",
+      "targetProfiles": [
+        {
+          "projection": "sourcing.ledger.citable_text@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createSourcingLedgerCitableTextV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.claim_binding@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/sourcing/claim-binding.ts:184"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
       ]
     },
     {
@@ -5273,7 +5301,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/sourcing/claim-binding.ts:183"
+        "apps/server/src/sourcing/claim-binding.ts:184"
       ],
       "currentProducerOperations": [
         "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
@@ -5301,7 +5329,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/sourcing/claim-binding.ts:183"
+        "apps/server/src/sourcing/claim-binding.ts:184"
       ],
       "currentProducerOperations": [
         "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
@@ -5329,7 +5357,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/sourcing/claim-binding.ts:183"
+        "apps/server/src/sourcing/claim-binding.ts:184"
       ],
       "currentProducerOperations": [
         "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
@@ -5357,7 +5385,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "apps/server/src/sourcing/claim-binding.ts:183"
+        "apps/server/src/sourcing/claim-binding.ts:184"
       ],
       "currentProducerOperations": [
         "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
@@ -5387,9 +5415,9 @@
       ],
       "currentProductionUseCount": 3,
       "currentProductionUseSites": [
-        "apps/server/src/guidance.ts:138",
-        "packages/runtime/src/shape-firing.ts:41",
-        "packages/runtime/src/story.ts:203"
+        "apps/server/src/guidance.ts:205",
+        "packages/runtime/src/shape-firing.ts:57",
+        "packages/runtime/src/story.ts:266"
       ],
       "currentProducerOperations": [
         "apps/server/src/guidance.ts#evidencePacket",
@@ -5431,8 +5459,8 @@
     }
   ],
   "summary": {
-    "routeCount": 191,
-    "distinctCurrentProjections": 187,
+    "routeCount": 192,
+    "distinctCurrentProjections": 188,
     "duplicateProjections": [
       "human.maia.event@1",
       "live.stockfish.eval@1",
@@ -5440,9 +5468,9 @@
       "rules.structural.reading.named_structure@1"
     ],
     "noRouteCount": 6,
-    "rowsWithProductionUses": 184,
+    "rowsWithProductionUses": 185,
     "rowsWithoutProductionUses": 7,
-    "rowsWithResolvedProducerOperations": 184,
+    "rowsWithResolvedProducerOperations": 185,
     "distinctCurrentProducerOperations": 46,
     "usedRowsMissingProducerOperations": [],
     "exportOnlyRowsWithProducerOperations": [],
@@ -5456,6 +5484,6 @@
       "rules.tactic.reading.defender_duty_set@1"
     ],
     "boundProjectionsWithoutProductionUses": [],
-    "receiptDigest": "sha256:f8e6a9e0c34e6cbffb76d5754ed102a94601d13217b57a773a46e0195bc61376"
+    "receiptDigest": "sha256:d893063f7d4449146274da9b13756d6767a7f689a8e31de246e303ac057a6d5f"
   }
 }

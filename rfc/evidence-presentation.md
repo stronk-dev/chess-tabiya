@@ -81,6 +81,12 @@ contract. The old 117-pair family census remains a historical pre-repair input, 
 presentation population. Implementation remains unauthorized pending another fresh review and the
 existing [[D1672]] owner-tier amendment.
 
+The current 2026-09-14 population is one row larger: `pack-population-provenance` added the live
+authoring-only `authoring.claim_binding@1 → sourcing.ledger.citable_text@1` binding after that
+baseline. [[D3268]] assigns it to the existing structured-document source-record family. Current
+normative counts below are therefore 113 pairs, while dated 112/117 counts in the return history
+remain historical evidence.
+
 ## Third fresh independent return (2026-08-30)
 
 The repaired exact rows exposed seven further buildability blockers: [[D2157]], [[D2158]],
@@ -164,7 +170,7 @@ The returned seams now share literal authorities in
 
 1. `POST_P_PRESENTATION_ADAPTER_ROWS` is the sole post-P population: remove the selection-only
    story-rank binding, replace all eleven operand-repair rows, add exactly one source-bound
-   citation, sort, freeze and require 112 unique `adapt` rows. Abstention and post-P coverage read
+   citation, sort, freeze and require 113 unique `adapt` rows. Abstention and post-P coverage read
    that image directly; no preimage-plus-append population remains.
 2. `CitationOperand` is exactly nested `{content,source}`. One exact parser rejects flat roots,
    extra fields and crossed content/source shapes; the derivation and adapter retain the same two
@@ -530,7 +536,7 @@ completion:
    versioned source-attribution registry; and export the Explorer operation's exact
    `no_data_at_band | source_unavailable` result-reason authority, replacing the projection's
    incompatible `empty_population` spelling. The matching source adapters change in the same commit.
-   Recompile F1 and require exactly 112 post-P presentation pairs,
+   Recompile F1 and require exactly 113 post-P presentation pairs,
    all with buildable operands. P changes no component, module, seat, content or schema.
 2. **A — sealed component foundation and current consumers.** Land the component schemas,
    projection-keyed adapter registry, process seal, closed wire/parser, coverage classes and the
@@ -623,13 +629,13 @@ registers it. This closes [[D1670]] without an ad-hoc exclusion list.
 The authoring authority for the current population is
 `tools/d1862-presentation-adapter-plan/plan.ts`, checked by
 `make evidence-presentation-author-contract` and
-`make evidence-presentation-second-author-repair`. The compact family table still re-derives the
-117 pre-repair non-machine pairs. The controlling exact row image classifies all 20 consumers,
+`make evidence-presentation-second-author-repair`. The compact family table re-derives the
+current 118 pre-repair non-machine pairs. The controlling exact row image classifies all 20 consumers,
 removes the five internal-operation pairs from the presentation population, and therefore covers
-**112 pre-P presentation pairs: 100 immediately adaptable, eleven operand repairs and one
+**113 pre-P presentation pairs: 101 immediately adaptable, eleven operand repairs and one
 selection-only binding removal**. Checkpoint P removes that selection binding, repairs the eleven
 pair occurrences and adds one source-bound citation pair through eight atomic source operations,
-yielding **exactly 112 post-P presentation pairs**, all adaptable. Adding, removing or changing a live form or reachability class fails set
+yielding **exactly 113 post-P presentation pairs**, all adaptable. Adding, removing or changing a live form or reachability class fails set
 equality until this RFC is amended.
 
 The exact bounded families are below. `forms = binding` means every live non-machine form on that
@@ -1562,9 +1568,9 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
    whose member-form union equals the binding forms; every adapter maps back to one such pair.
    *RED:* add one learner binding without an adapter; retire/unbind a projection while
    leaving its adapter. Both fail set equality. Adding a machine-only projection creates no fake
-   widget. The author checkpoint starts at **112 real pre-P presentation pairs: 100 adaptable,
+   widget. The author checkpoint starts at **113 real pre-P presentation pairs: 101 adaptable,
    eleven explicit operand-repair occurrences and one visual-binding removal**. Checkpoint P must
-   yield **112/112 adaptable** after removing the rank binding and adding the source-bound citation
+   yield **113/113 adaptable** after removing the rank binding and adding the source-bound citation
    binding. *Wrong impl:* treating role or `list/panel` as route reachability,
    walking every catalogue projection, or counting a repair placeholder as executable.
 3. **The label registry is set-equal to the derived set of learner-reachable closed unions, and

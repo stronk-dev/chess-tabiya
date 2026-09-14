@@ -18,9 +18,9 @@ import {
   sourceAttributionRegistryDigest,
 } from "../d1862-presentation-adapter-plan/plan.js";
 
-test("D2348: checkpoint P publishes one transformed 112-row adaptable authority", () => {
-  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 112);
-  assert.equal(new Set(POST_P_PRESENTATION_ADAPTER_ROWS.map((row) => row.key)).size, 112);
+test("D2348: checkpoint P publishes one transformed 113-row adaptable authority", () => {
+  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 113);
+  assert.equal(new Set(POST_P_PRESENTATION_ADAPTER_ROWS.map((row) => row.key)).size, 113);
   assert.ok(POST_P_PRESENTATION_ADAPTER_ROWS.every((row) => row.disposition === "adapt"));
   assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.filter((row) => row.familyId === "story_rank_internal").length, 0);
   assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.filter((row) => row.projection === "derived.citation.attribution@1").length, 1);

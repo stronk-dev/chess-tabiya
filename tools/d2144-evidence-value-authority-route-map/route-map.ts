@@ -48,7 +48,7 @@ const SPECIALIZED = Object.freeze([
   { operation: "declareStructuralPredicateFeatureEvidence", projections: STRUCTURAL_PREDICATE_PROJECTION_IDS },
   { operation: "declareOpponentProviderEvidence", projections: ["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result"] },
   { operation: "declareLivePacketEvidence", projections: ["human.maia.event", "live.syzygy.result", "live.stockfish.eval", "live.stockfish.wdl", "live.stockfish.pv"] },
-  { operation: "declareSourcingRecordEvidence", projections: ["sourcing.ledger.engine_eval", "sourcing.ledger.tablebase_result", "sourcing.ledger.explorer_position_census", "theory.opening_identity.record"] },
+  { operation: "declareSourcingRecordEvidence", projections: ["sourcing.ledger.engine_eval", "sourcing.ledger.tablebase_result", "sourcing.ledger.explorer_position_census", "sourcing.ledger.citable_text", "theory.opening_identity.record"] },
   { operation: "declareCompareDerivedEvidence", projections: ["derived.compare.engine_trajectory", "derived.compare.structure_delta", "derived.compare.piece_route", "derived.compare.eval_delta"] },
   { operation: "declareRunRecordEvidence", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", "run.record.imported_result"] },
   { operation: "declareStoryDerivedEvidence", projections: ["derived.story.eval_shift", "derived.story.last_level", "derived.story.rank", "derived.story.title"] },
@@ -311,7 +311,7 @@ if (process.argv.includes("--write")) {
   if (!existsSync(target) || readFileSync(target, "utf8") !== serialized) {
     throw new TypeError(`evidence value-authority route receipt is stale; run make evidence-value-authority-route-map-update`);
   }
-  if (receipt.summary.routeCount !== 191 || receipt.summary.distinctCurrentProjections !== 187 || receipt.summary.noRouteCount !== 6) {
+  if (receipt.summary.routeCount !== 192 || receipt.summary.distinctCurrentProjections !== 188 || receipt.summary.noRouteCount !== 6) {
     throw new TypeError(`evidence value-authority route population drifted: ${JSON.stringify(receipt.summary)}`);
   }
   if (receipt.summary.boundProjectionsWithoutProductionUses.length > 0) {

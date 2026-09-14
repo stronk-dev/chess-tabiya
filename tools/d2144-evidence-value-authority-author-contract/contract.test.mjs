@@ -121,14 +121,14 @@ test("dependencies and closure gates are explicit rather than hand-waved", () =>
   assert.match(rfc, /semantic-validation-authority\.md/u);
   assert.match(rfc, /recorded-semantic-path\.md/u);
   assert.match(rfc, /set equality among all non-retired final catalogue projections, factory rows and authority[\s\S]*?profiles, with bindings a checked subset/u);
-  assert.match(rfc, /191-route \/ 187-projection/u);
+  assert.match(rfc, /192-route \/ 188-projection/u);
   assert.match(rfc, /four duplicate paths and six no-route declarations/u);
   assert.match(audit, /"generic": 75/u);
-  assert.match(audit, /"specialized": 116/u);
-  assert.match(audit, /"total": 191/u);
-  assert.equal(routeReceipt.routes.length, 191);
-  assert.equal(new Set(routeReceipt.routes.map((route) => route.currentProjection)).size, 187);
-  assert.equal(routeReceipt.summary.rowsWithProductionUses, 184);
+  assert.match(audit, /"specialized": 117/u);
+  assert.match(audit, /"total": 192/u);
+  assert.equal(routeReceipt.routes.length, 192);
+  assert.equal(new Set(routeReceipt.routes.map((route) => route.currentProjection)).size, 188);
+  assert.equal(routeReceipt.summary.rowsWithProductionUses, 185);
   assert.equal(routeReceipt.summary.rowsWithoutProductionUses, 7);
   assert.deepEqual(routeReceipt.summary.boundProjectionsWithoutProductionUses, []);
   for (const route of routeReceipt.routes) {
@@ -187,7 +187,7 @@ test("recorded runtime readings derive from their exact sourcing-ledger evidence
 });
 
 test("every used route names an exact callable producer operation", () => {
-  assert.equal(routeReceipt.summary.rowsWithResolvedProducerOperations, 184);
+  assert.equal(routeReceipt.summary.rowsWithResolvedProducerOperations, 185);
   assert.equal(routeReceipt.summary.distinctCurrentProducerOperations, 46);
   assert.deepEqual(routeReceipt.summary.usedRowsMissingProducerOperations, []);
   assert.deepEqual(routeReceipt.summary.exportOnlyRowsWithProducerOperations, []);
@@ -211,6 +211,6 @@ test("every used route names an exact callable producer operation", () => {
       assert.doesNotMatch(operation, /#<module>$/u);
     }
   }
-  assert.match(rfc, /184 used routes to 46 exact enclosing callable operations/u);
+  assert.match(rfc, /185 used routes to 46 exact enclosing callable operations/u);
   assert.match(rfc, /seven export-only[\s\S]*?carry no current operation/u);
 });

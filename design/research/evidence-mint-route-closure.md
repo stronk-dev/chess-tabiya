@@ -3,9 +3,10 @@
 **Question.** Does the D2144 74-row generic-adapter census cover every production path that can mint
 `DeclaredEvidence`, and does every non-retired manifest projection have such a path?
 
-**Disposition.** Answered negatively `[V]` at 2026-08-30 HEAD. The corrected generic population is
-75, not 74. Together with sixteen specialized/dynamic operations expanded over their closed branch
-sets, production exposes **191 mint routes over 187 distinct projections**. Four projections have
+**Disposition.** Answered negatively `[V]` at 2026-08-30 HEAD and re-derived 2026-09-14 after the
+`citable_text` source route landed. The corrected generic population is 75, not 74. Together with
+sixteen specialized/dynamic operations expanded over their closed branch sets, production exposes
+**192 mint routes over 188 distinct projections**. Four projections have
 two mint routes. The compiled manifest contains 193 projections; six have no mint route, five of
 them non-retired but currently unbound.
 
@@ -31,17 +32,17 @@ a naming convention. `[V]` (D2144 first test)
 ## Complete production route population
 
 Unit: one `(exported mint operation, projection id)` path. A dynamic operation contributes one row
-per admitted projection branch. Total: 191. `[V]`
+per admitted projection branch. Total: 192. `[V]`
 
 | Route family | Routes |
 |---|---:|
 | generic one-projection object adapters | 75 |
 | primitive/specialized single projections (pack phase, Maia candidate WDL, legal moves, pawn contacts) | 4 |
 | structural reading / transition reading / structural feature predicate routers | 49 |
-| opponent provider / live packet / sourcing record routers | 12 |
+| opponent provider / live packet / sourcing record routers | 13 |
 | compare / run / story derived routers | 14 |
 | structural event / transition event / avoidance routers | 37 |
-| **Total** | **191** |
+| **Total** | **192** |
 
 `[V]` The sixteen specialized operations and their admitted branch sets are literal in
 `packages/runtime/src/evidence-source-adapters.ts:40-42,66-87,122-151,180-268`. The executable
@@ -87,8 +88,8 @@ is a typed unavailable result, not an absent authority boundary. `[M]`
 
 The RFC closure unit is not “75 old adapters” and not “193 declarations.” It is three joined sets:
 
-1. **191 current mint routes** — all must migrate or disappear;
-2. **187 currently mintable projection identities** — each must have exactly one final factory;
+1. **192 current mint routes** — all must migrate or disappear;
+2. **188 currently mintable projection identities** — each must have exactly one final factory;
 3. **6 currently unminted declarations** — retired `pawn_count` stays without a factory; each of
    the other five gains one independently validated factory/profile, whose valid output may be an
    explicit typed unavailable arm until its upstream authority exists.
@@ -107,7 +108,7 @@ The first literal receipt used direct-call syntax and reported 25 routes with no
 That probe was false: it missed callback invocation such as
 `reading.structures.map(declareNamedStructureEvidence)`. The corrected instrument parses imports,
 aliases, namespace references, direct calls and value/callback uses with the TypeScript syntax tree.
-It finds **184/191 used routes and seven export-only routes**. `[V]`
+It finds **185/192 used routes and seven export-only routes**. `[V]`
 (`tools/d2144-evidence-value-authority-route-map/route-map.ts`;
 `planning/evidence-foundation-ux/evidence-value-authority-route-map.json`)
 
@@ -118,3 +119,9 @@ defender duty. Therefore **zero bound projections lack a production mint use**. 
 joins exact bindings/dispositions and fails if that population becomes non-empty. The five dormant
 foundations still need a factory/profile whose available arm is backed by a real production
 operation before any consumer binding; catalogue presence remains insufficient. `[M]`
+
+The 2026-09-14 rerun caught `sourcing.ledger.citable_text@1` as a seventh apparent no-route
+declaration. That was an instrument omission: `declareSourcingRecordEvidence` already emits it and
+`claimBindingLedger` already calls that router. Adding the missing specialized branch changes the
+route/projection/used populations by one while leaving the six genuine no-route declarations and
+seven export-only routes unchanged. `[V]`

@@ -37,7 +37,7 @@ test("D2157: named structure identity, label and witness geometry move atomicall
 });
 
 test("D2158: citation is a sealed multi-input derivation with complete attribution", () => {
-  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 112);
+  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 113);
   const adapter = POST_P_PRESENTATION_ADAPTER_ROWS.find((row) => row.projection === "derived.citation.attribution@1")!;
   assert.equal(adapter.projection, "derived.citation.attribution@1");
   assert.deepEqual(components(adapter), ["citation"]);

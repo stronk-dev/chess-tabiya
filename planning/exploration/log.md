@@ -20258,3 +20258,115 @@ derives its response scope from the actual request. `make verify-software` passe
 tests plus types, performance, schema, manifest, packaging and production builds. The complete
 `make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
 skipped.
+
+## 2026-09-14 — Owner opens the full semantic consequence-search RFC ([[D3262]]–[[D3263]])
+
+The owner asked for one RFC encapsulating the full upgrade from an engine recommendation to a
+grounded explanation of why that move differs from its alternatives, including deeper collector
+search and pruning that can also serve bots and coaching. This opens
+`rfc/semantic-consequence-search.md` early under RFC-0000's owner-ruling arm.
+
+The draft is grounded in the already executable D1066/D1363 semantic-horizon, D794 bounded-reply,
+D1023 bounded-target and D1071 candidate-population results. Their combined finding is not “search
+deeper”: provider-line occurrence misattributes perspective, exact bounded proof is useful but rare,
+and bare knight-route reach measured 98.7% false positives. The new contract therefore separates
+registered hypotheses, legal traversal and proof strength; retains witnesses/refutations and policy
+residual mass; and compiles selected-versus-alternative reasons without promoting Stockfish, Maia,
+Explorer, theory or semantic co-presence into another source's authority.
+
+One empirical arm remains before acceptance: a preregistered five-profile comparison must choose
+production horizons, budgets and pruning defaults. The RFC is registered and routed to the 1.0
+evidence capability now so the idea cannot disappear, but implementation remains unauthorized while
+that result and the shared candidate packet/service/registry dependencies are open.
+
+The documentation pass also ran the specialized RFC-evidence gate rather than stopping at stable
+governance. It found the derived evidence value-authority route receipt stale after earlier Story,
+guidance and evidence-rendering call-site movement. The production route/projection population did
+not change; current AST locations did. The canonical update target regenerated the receipt, and
+[[D3264]] records the closed drift instead of leaving a silent generated-file mismatch for CI.
+
+### 2026-09-14 — Erratum: the route population did change ([[D3265]])
+
+The preceding entry said only AST locations moved. That conclusion was wrong: I read the
+`projectionsWithoutProductionUses` bucket while diagnosing the failing `noRoute` count. The actual
+seventh apparent no-route projection was `sourcing.ledger.citable_text@1`. It already had a live
+branch in `declareSourcingRecordEvidence` and a production caller in `claimBindingLedger`; the two
+executable census tables omitted that branch.
+
+Both authorities now include the exact projection. The regenerated receipt measures 192 routes
+over 188 projections: 185 used rows resolve to 46 callable operations, seven routes remain
+export-only, four projection identities retain duplicate legacy paths, and the manifest returns to
+the six genuine no-route declarations. The correction changes the recorded population rather than
+weakening the guard.
+
+### 2026-09-14 — Semantic collector cut enrolled in canonical governance ([[D3266]])
+
+The whole active-RFC evidence audit reached `semantic-collector-cut-contract` and found its own
+canonical-gate assertion red: `verify-governance` did not include the bounded current cut. The
+Makefile now runs that contract in stable governance. The historical promotion-review chain remains
+outside the canonical gate, preserving the 2026-09-07 separation between current repository truth
+and opt-in draft evidence.
+
+### 2026-09-14 — RFC-evidence aggregate follows the provider-protocol cut ([[D3267]])
+
+After the semantic cut passed, the aggregate reached four retired provider-protocol author/review
+targets. Their old contract requires restoration to canonical governance; the later bounded cut
+requires the opposite. The aggregate now runs only `provider-protocol-cut-contract` for that RFC.
+All historical targets remain individually runnable, but they no longer make the current portfolio
+aggregate internally contradictory.
+
+### 2026-09-14 — `citable_text` joins the authoring presentation family ([[D3268]])
+
+The next aggregate failure was a real downstream omission, not another stale count. The manifest's
+live `authoring.claim_binding@1 → sourcing.ledger.citable_text@1` pair had no presentation family,
+so the exhaustive adapter plan threw before its assertions ran. It now joins the existing
+`authoring_evidence_record` family as a parsed structured document. This does not authorize a
+learner sentence: the source record remains authoring-facing and distinct from the RFC's derived,
+source-bound citation component. The exact live non-machine pair population is now 118, partitioned
+107 adaptable / 10 operand repair / 1 visual-binding removal.
+
+### 2026-09-14 — RFC-evidence aggregate follows the repaired bot-policy checkpoint ([[D3269]])
+
+The portfolio audit next reached `bot-policy-fifth-fresh-review`, whose eight counterexamples are
+the historical return that motivated the fifth author repair. The bot RFC explicitly says this
+target is a retained falsifier and not a release gate; after the repair, all eight attacks now throw
+at the intended boundary, so a target that expects them to succeed is correctly red. The aggregate
+and its scaffold guard now require `bot-policy-fifth-author-repair`, the current executable
+checkpoint, while the historical falsifier remains individually addressable and the RFC still
+requires a genuinely new fresh review before acceptance.
+
+### 2026-09-14 — Scaffold follows both current-cut boundaries ([[D3270]])
+
+The aggregate dependency was corrected before its meta-check: `verify-scaffold` still demanded the
+retired provider-protocol sixth review, and its broad draft-evidence exclusion rejected the one
+semantic-collector cut that the current cut contract requires in stable governance. The scaffold
+now names both policies exactly. RFC evidence requires `provider-protocol-cut-contract`; governance
+requires and uniquely admits `semantic-collector-cut-contract`; every other review, author, cut,
+trait, calibration and route-map target remains outside the stable governance tier.
+
+### 2026-09-14 — Module discharge contract follows the Wave-C census ([[D3271]])
+
+The portfolio audit finally reached the module discharge checkpoint and found its exact population
+assertion still pinned to the pre-amendment 127 requirements / 224 pairs. The canonical generated
+artifacts, module RFC, register and Wave-C amendment all already agree on 132 / 229. The retained
+contract now checks that current exact population; every binding remains
+`blocked_dependencies`, so the repair changes neither authorization nor product completion.
+
+### 2026-09-14 — Wave-C contract follows D921's reviewed state ([[D3272]])
+
+The Wave-C contract's final check still required D921's 2026-09-07 `doing` state even though the
+fresh review passed on 2026-09-12 and the tracker correctly records owner acceptance as the sole
+remaining gate. The checkpoint now requires that exact owner-ruling block. Its architectural claim
+is unchanged: the Review compiler does not block the producer amendment, and no product binding is
+authorized until the owner accepts D921.
+
+### 2026-09-14 — Real-content assertions follow response authority ([[D3273]])
+
+The complete release gate found four guidance assertions pinned to bytes that the shipped response
+authority intentionally replaced: the deterministic phase sentence is now “Current position:
+Opening.” and the evidence polling route returns only ordered sequence receipts, never raw engine
+payloads. A fifth assertion treated the closed `orderingBasis` response parser as learner
+presentation because it scanned all web TypeScript and Svelte files together. Tests now require the
+current exact sentence and receipt, retain the resistance-literal ban across all web source, and
+apply rank/order display prohibitions to the actual Svelte presentation tier. Production bytes did
+not change.

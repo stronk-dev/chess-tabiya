@@ -144,7 +144,8 @@ const family = (value: AdapterFamilyInput): AdapterFamilyPlan => Object.freeze({
 export const PRESENTATION_ADAPTER_FAMILIES: readonly AdapterFamilyPlan[] = Object.freeze([
   family({ id: "authoring_evidence_record", consumers: ["authoring.claim_binding@1"], projections: [
     "sourcing.ledger.engine_eval@1", "sourcing.ledger.explorer_position_census@1",
-    "sourcing.ledger.tablebase_result@1", "theory.opening_identity.record@1",
+    "sourcing.ledger.tablebase_result@1", "sourcing.ledger.citable_text@1",
+    "theory.opening_identity.record@1",
   ], parser: "parseEvidenceRecordDocument", retained: ["kind", "sourceId", "retrievedAt", "values"], components: ["structured_document"], assertions: ["record_kind_schema_matches", "canonical_values_preserved"], disposition: "adapt" }),
   family({ id: "pivotal_marker", consumers: ["board.pivotal_marker@1", "compare.structure_strip@1", "guidance.deterministic@1", "guidance.voice_compare@1", "guidance.voice_story@1", "guidance.voice@1", "review.story@1"], projections: ["rules.pivotal.marker@1"], parser: "parsePivotalMarker", retained: ["nodeId", "kind", "detail", "provenanceNote"], components: ["enum_state"], assertions: ["marker_kind_registered", "node_and_detail_preserved"], disposition: "adapt" }),
   family({ id: "structural_square_set", consumers: ["board.selected_square_sight@1", "inspector.position_structure@1"], projections: structural, parser: "parseStructuralObservation", retained: ["kind", "squares"], components: ["square_set", "enum_state"], assertions: ["kind_registered", "squares_byte_equal", "one_fact_per_square_set"], disposition: "adapt" }),

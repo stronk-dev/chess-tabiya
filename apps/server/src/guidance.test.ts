@@ -166,7 +166,7 @@ describe("adaptive guidance server seams", () => {
     let calls = 0;
     const provider: VoiceProvider = { async render() { calls += 1; return "Play e2e4 because it is best."; } };
     const packet = fixturePacket();
-    expect(await renderVoice(provider, packet, "plain")).toEqual({ text: "Detected by Tabiya's phase bands: opening.", source: "deterministic" });
+    expect(await renderVoice(provider, packet, "plain")).toEqual({ text: "Current position: Opening.", source: "deterministic" });
     expect(calls).toBe(2);
   });
 
@@ -346,7 +346,7 @@ describe("adaptive guidance server seams", () => {
     const response = await handler(request("/runs/guide/speech", "POST", input));
     expect(response.status).toBe(200); expect(response.headers.get("content-type")).toBe("audio/test");
     expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([1, 2, 3]);
-    expect(sent).toHaveLength(1); expect(sent[0]).toContain("opening"); expect(sent[0]).not.toContain("guide");
+    expect(sent).toEqual(["Current position: Opening."]); expect(sent[0]).not.toContain("guide");
     expect(service.events("guide", 0).events).toEqual(before);
   });
 
@@ -415,7 +415,7 @@ describe("adaptive guidance server seams", () => {
     }
     const hostResponse = await handler(request(`/runs/${run.id}/evidence?sinceSeq=0`, "GET", undefined, host.cookie));
     expect(hostResponse.status).toBe(200);
-    expect(await hostResponse.json()).toMatchObject({ results: [{ payload: { kind: "eval", source: "engine_validated" } }] });
+    expect(await hostResponse.json()).toEqual({ results: [{ seq: 1 }], nextSeq: 1 });
   });
 
   it("withholds reasoning-review evidence packets from participants and spectators", async () => {
@@ -458,7 +458,7 @@ describe("adaptive guidance server seams", () => {
 
   it("sends only the pinned external voice packet and falls back after transport failures", async () => {
     const packet = fixturePacket();
-    const deterministic = "Detected by Tabiya's phase bands: opening.";
+    const deterministic = "Current position: Opening.";
     const bodies: unknown[] = [];
     const provider = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", key: "SENTINEL_SECRET", fetch: async (_input, init) => {
       bodies.push(JSON.parse(String(init?.body)) as unknown);

@@ -29,8 +29,8 @@ const plannedRows = PRESENTATION_ADAPTER_FAMILIES.flatMap((family) => family.con
 ));
 
 describe("D1862 exact presentation-adapter plan", () => {
-  it("is set-equal to all 117 live non-machine binding pairs", () => {
-    expect(livePairs.size).toBe(117);
+  it("is set-equal to all 118 live non-machine binding pairs", () => {
+    expect(livePairs.size).toBe(118);
     expect(new Set(plannedRows.map((row) => row.key)).size).toBe(plannedRows.length);
     expect(new Set(plannedRows.map((row) => row.key))).toEqual(new Set(livePairs.keys()));
     expect(plannedRows.every((row) => row.forms !== undefined && row.forms.length > 0)).toBe(true);
@@ -38,7 +38,7 @@ describe("D1862 exact presentation-adapter plan", () => {
 
   it("makes every served form literal and partitions repair rather than hiding it", () => {
     const dispositions = Object.groupBy(plannedRows, (row) => row.family.disposition);
-    expect(dispositions.adapt).toHaveLength(106);
+    expect(dispositions.adapt).toHaveLength(107);
     expect(dispositions.repair_projection_operands).toHaveLength(10);
     expect(dispositions.remove_visual_binding).toHaveLength(1);
 

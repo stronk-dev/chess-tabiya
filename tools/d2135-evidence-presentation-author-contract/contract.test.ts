@@ -34,10 +34,10 @@ function renderTemplate(template: string, operands: Readonly<Record<string, stri
 
 describe("evidence-presentation D2135-D2140 second author repair", () => {
   it("D2135 assigns every real pair/form triple to one compatible component or composition", () => {
-    expect(liveVisual).toHaveLength(112);
-    expect(PRESENTATION_ADAPTER_ROWS).toHaveLength(112);
+    expect(liveVisual).toHaveLength(113);
+    expect(PRESENTATION_ADAPTER_ROWS).toHaveLength(113);
     expect(new Set(PRESENTATION_ADAPTER_ROWS.map((row) => row.key))).toEqual(new Set(liveVisual.map((row) => row.key)));
-    expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).adapt).toHaveLength(100);
+    expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).adapt).toHaveLength(101);
     expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).repair_projection_operands).toHaveLength(11);
     expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).remove_visual_binding).toHaveLength(1);
     for (const current of liveVisual) expect(rowByKey.get(current.key)?.forms).toEqual(current.forms);
@@ -75,8 +75,8 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
       "named-structure-geometry", "pack-phase-payload", "source-bound-citation",
     ]);
     expect(rfc).toMatch(/Checkpoint P — manifest presentation repair predecessor/u);
-    expect(rfc).toMatch(/exactly 112 post-P presentation pairs/u);
-    expect(POST_P_PRESENTATION_ADAPTER_ROWS).toHaveLength(112);
+    expect(rfc).toMatch(/exactly 113 post-P presentation pairs/u);
+    expect(POST_P_PRESENTATION_ADAPTER_ROWS).toHaveLength(113);
     expect(POST_P_PRESENTATION_ADAPTER_ROWS.every((row) => row.disposition === "adapt")).toBe(true);
     expect(POST_P_PRESENTATION_ADAPTER_ROWS.filter((row) => row.projection === "derived.citation.attribution@1")).toHaveLength(1);
     expect(rfc).not.toMatch(/no edit to\s+`packages\/runtime\/src\/evidence-catalog\.ts`/u);

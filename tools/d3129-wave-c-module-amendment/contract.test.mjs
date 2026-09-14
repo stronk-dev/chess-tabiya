@@ -77,11 +77,12 @@ test("D921 no longer depends on the Review compiler that consumes it", () => {
   const d921 = workState.items.find((item) => item.id === "D921");
   assert.deepEqual(d921, {
     id: "D921",
-    state: "doing",
+    state: "blocked",
     sourceGlyph: "💡",
     sourceDigest: d921.sourceDigest,
     uxItems: [],
-    owner: "assistance-and-presentation",
-    since: "2026-09-07",
+    owner: "OWNER",
+    blocker: "owner-ruling",
+    question: "Accept-the-reviewed-26-pair-Wave-C-amendment",
   });
 });

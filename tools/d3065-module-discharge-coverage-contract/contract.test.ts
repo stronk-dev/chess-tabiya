@@ -49,8 +49,8 @@ describe("D3065 bounded module discharge coverage repair", () => {
   });
 
   it("regenerates a requirements-only image and leaves every product binding blocked", () => {
-    expect(execution).toMatchObject({ population: 127, completionClaim: "requirements_only" });
-    expect(bindings).toMatchObject({ population: 224, completionClaim: "requirements_only" });
+    expect(execution).toMatchObject({ population: 132, completionClaim: "requirements_only" });
+    expect(bindings).toMatchObject({ population: 229, completionClaim: "requirements_only" });
     expect(bindings.rows.every((row) => row.status === "blocked_dependencies")).toBe(true);
   });
 

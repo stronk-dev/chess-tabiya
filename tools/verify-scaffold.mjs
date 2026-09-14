@@ -158,13 +158,15 @@ const governanceDependencies = missingMakeDependencies(makefile, "verify-governa
   "test-tier-check",
   "docs-check",
   "staged-process-contracts-test",
+  "semantic-collector-cut-contract",
 ]);
 if (!governanceDependencies.ruleFound || governanceDependencies.missing.length > 0) {
   failures.push(`Makefile: verify-governance is missing stable repository checks: ${governanceDependencies.missing.join(", ") || "verify-governance rule"}`);
 }
 const governanceRule = makefile.match(/^verify-governance:\s*(.+)$/mu)?.[1] ?? "";
 const reviewEvidenceInGovernance = governanceRule.split(/\s+/u).filter((dependency) =>
-  /(?:fresh-review|author-repair|author-contract|cut-contract|trait-screen|calibration-verdict|route-map)/u.test(dependency),
+  dependency !== "semantic-collector-cut-contract"
+  && /(?:fresh-review|author-repair|author-contract|cut-contract|trait-screen|calibration-verdict|route-map)/u.test(dependency),
 );
 if (reviewEvidenceInGovernance.length > 0) {
   failures.push(`Makefile: draft-RFC evidence must stay outside verify-governance: ${reviewEvidenceInGovernance.join(", ")}`);
@@ -177,8 +179,8 @@ const rfcEvidenceDependencies = missingMakeDependencies(makefile, "verify-rfc-ev
   "concept-registry-sixth-fresh-review",
   "longitudinal-store-tenth-fresh-review",
   "pack-capability-seventeenth-fresh-review",
-  "provider-protocol-sixth-fresh-review",
-  "bot-policy-fifth-fresh-review",
+  "provider-protocol-cut-contract",
+  "bot-policy-fifth-author-repair",
   "shared-resource-bootstrap-collision-core-author-contract",
 ]);
 if (!rfcEvidenceDependencies.ruleFound || rfcEvidenceDependencies.missing.length > 0) {

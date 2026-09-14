@@ -16,8 +16,8 @@ import {
 } from "../d1862-presentation-adapter-plan/plan.js";
 
 test("D2348 regression: post-P is the exact transformed authority", () => {
-  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 112);
-  assert.equal(new Set(POST_P_PRESENTATION_ADAPTER_ROWS.map((row) => row.key)).size, 112);
+  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 113);
+  assert.equal(new Set(POST_P_PRESENTATION_ADAPTER_ROWS.map((row) => row.key)).size, 113);
   assert.ok(POST_P_PRESENTATION_ADAPTER_ROWS.every((row) => row.disposition === "adapt"));
 });
 

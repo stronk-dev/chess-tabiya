@@ -307,6 +307,7 @@ infrastructure. 49 − 6 − 12 = **31**.
 | 29 | `titled-player-training.md` | Shrinking-interval (Woodpecker) cycles; authored users for `WindowTrigger` | **nothing** |
 | 30 | `human-outcome-coverage-depth.md` | The ply-20 coverage boundary as a campaign difficulty constraint | `campaign-research-queue.md` |
 | 31 | `maia-band-calibrated-range.md` | The `[0,5000]` clamp behaviour as a production guard | `exploration/plan.md` mention only |
+| 32 | `semantic-consequence-search.md` | A registered hypothesis/traversal/proof/contrast substrate answering why one selected move differs from alternatives | `rfc/semantic-consequence-search.md`; [[D3262]] search-profile calibration |
 
 ---
 

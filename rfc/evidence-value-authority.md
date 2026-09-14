@@ -86,7 +86,7 @@ This RFC owns:
 
 - correcting/splitting the five false or mixed current projections;
 - one package-internal mint boundary and one projection-specific factory population;
-- migration/removal of all 191 current mint routes, including the 75 generic adapters and four
+- migration/removal of all 192 current mint routes, including the 75 generic adapters and four
   duplicate projection paths;
 - migration of every current production call site and consumer binding;
 - value-authority receipts in memory and executable negative authority fixtures; and
@@ -362,19 +362,19 @@ results are computed in the same pass and retain their existing exact identities
 
 ### 4. The complete current mint-route migration
 
-The D2146 census separates three units at the current baseline: **191** production mint routes,
-**187** distinct mintable projection ids and **6** manifest projections with no route. The 191
-routes comprise 75 generic adapters plus 116 specialized/dynamic branches; four projections each
+The D2146 census separates three units at the current baseline: **192** production mint routes,
+**188** distinct mintable projection ids and **6** manifest projections with no route. The 192
+routes comprise 75 generic adapters plus 117 specialized/dynamic branches; four projections each
 have two routes. The implementation records one reviewed migration row per current route with
 `oldOperation`, exact projection ref, target projection ref, factory shape, production operation,
 authority inputs, convention/source dependency and call-site count.
 
 The checked-in author receipt at
 `planning/evidence-foundation-ux/evidence-value-authority-route-map.json` is the literal starting
-table, not a prose census. Its syntax-aware use pass records 184 used routes, seven export-only
+table, not a prose census. Its syntax-aware use pass records 185 used routes, seven export-only
 routes and zero bound projections without a production use. The earlier direct-call-only probe that
 reported 25 export-only / 19 bound rows is rejected by [[D2147]] because it missed callback use.
-The current route receipt resolves those 184 used routes to 46 exact enclosing callable operations;
+The current route receipt resolves those 185 used routes to 46 exact enclosing callable operations;
 no used route lacks an operation and no route resolves only to module scope. The seven export-only
 routes deliberately carry no current operation. `producerImplementation` remains copied manifest
 provenance and is never accepted as a factory's callable authority.
@@ -389,7 +389,7 @@ The set is partitioned at baseline as follows:
 | authored/theory projection | 3 | registered document/provenance authority |
 | **Total generic adapters** | **75** | — |
 
-Those 75 rows are one subset of the route table, not the full boundary. The complete 191-row receipt
+Those 75 rows are one subset of the route table, not the full boundary. The complete 192-row receipt
 must collapse the duplicate routes for `human.maia.event@1`, `live.stockfish.eval@1`,
 `live.syzygy.result@1` and `rules.structural.reading.named_structure@1` to one final factory each.
 
@@ -495,7 +495,7 @@ A permanent `make evidence-value-authority` target runs:
 3. set equality among all non-retired final catalogue projections, factory rows and authority
    profiles, with bindings a checked subset; the same gate additionally requires the factory rows,
    generated route input/result maps and invoker arms to be set-equal;
-4. exact current-route migration equality against the re-derived 191-route / 187-projection
+4. exact current-route migration equality against the re-derived 192-route / 188-projection
    baseline, including the four duplicate paths and six no-route declarations;
 5. the §3 9/6/2/3 reviewed grounding table;
 6. convention closure for all six exact-under-convention rows;
@@ -527,16 +527,16 @@ planes, optional LLM renderer and assistance ceilings.
 
 ## Acceptance criteria
 
-1. D2144/D2146's baseline is re-derived at author review: 75 generic adapters / 51 bound; 191
-   production routes / 187 distinct mintable projections; 4 duplicate-route projections; 6
+1. D2144/D2146's baseline is re-derived at author review: 75 generic adapters / 51 bound; 192
+   production routes / 188 distinct mintable projections; 4 duplicate-route projections; 6
    no-route declarations, with no unexplained drift.
 2. D2145's twenty-row table remains set-equal and the 9/6/2/3 classification is independently
    reviewed against producer symbols.
 3. The semantic-convention and provider-exchange dependencies are accepted with the exact closure
    and receipt types consumed here; this RFC does not restate them.
-4. The checked-in literal 191-row migration receipt names every old route, target factory symbol,
+4. The checked-in literal 192-row migration receipt names every old route, target factory symbol,
    shape, authority input, dependency and production use; its syntax-aware author pass resolves all
-   184 used rows to 46 exact callable operations and leaves only seven export-only rows operationless.
+   185 used rows to 46 exact callable operations and leaves only seven export-only rows operationless.
    The four duplicates must
    collapse and duplicate/missing/wildcard rows fail.
 5. Only the package-private mint boundary calls `declareEvidence`; mint internals and old adapters
@@ -614,16 +614,20 @@ planes, optional LLM renderer and assistance ceilings.
 | D1 | Semantic convention register/provenance accepted and exact six-row closure consumable | semantic-convention-provenance | accepted dependency plus exact convention-closure contract fixture | |
 | D2 | Provider/source receipt contract accepted and exact nine direct plus two chained recorded-reading source shapes consumable | provider-exchange-and-execution | accepted dependency plus exact source/derived receipt contract fixture | |
 | D3 | Semantic event authority profiles accepted for reuse without duplicating cases | semantic-validation-authority | accepted dependency plus set-equal authority-profile receipt | |
-| D4 | Fresh independent buildability review after D1–D3 and the literal 191-route author table | codex | fresh review record with every blocking finding closed or routed | |
+| D4 | Fresh independent buildability review after D1–D3 and the literal 192-route author table | codex | fresh review record with every blocking finding closed or routed | |
 | D5 | Exact ordered path authority for retrospective method-stage derivation | recorded-semantic-path | accepted `run.record.edge@1` plus mixed/reordered/non-contiguous path refusals | |
 
 ## Open questions
 
 None for the owner. Author review must settle exact successor symbol spelling and the literal
-191-route migration table before acceptance; those are buildability obligations, not product choices.
+192-route migration table before acceptance; those are buildability obligations, not product choices.
 
 ## Changelog
 
+- 2026-09-14: [[D3265]] adds the omitted `sourcing.ledger.citable_text@1` branch of
+  `declareSourcingRecordEvidence` to the executable census. The current baseline is 75 generic plus
+  117 specialized routes: 192 routes / 188 projections, 185 used rows / 7 export-only rows and 46
+  exact callable operations; the manifest still has six no-route declarations.
 - 2026-09-04: [[D2629]] makes the registry executable without widening mint authority. One
   package-internal generated `invokeEvidenceValueRoute` correlates every literal route to its exact
   authority inputs/result; production operations import it, while the central registry remains the
