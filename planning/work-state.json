@@ -26756,6 +26756,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/opponent-path-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3261",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ce32760d237f1e9172af295505deb19bdf5b5b81065f97fa8395ff031af27eb9",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/voice-response.ts",
+      "evidenceKind": "path"
     }
   ]
 }

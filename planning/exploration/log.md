@@ -20244,3 +20244,17 @@ must still extend the local run exactly while its adjacent selection is independ
 full `make verify-software` gate passes 209 files / 1,420 tests plus types, performance, schema,
 manifest, packaging and production builds. The complete `make test-browser` gate passes 92 required
 journeys, including the branch-group loop, with one explicitly optional Maia latency probe skipped.
+
+## 2026-09-14 — Voice output is bound to its requested guidance scope ([[D3261]])
+
+The server's evidence renderer and voice checker were closed, but both web voice methods still cast
+the final JSON. One client authority now accepts only the three declared fields, non-empty text, the
+`provider` or `deterministic` source, and the exact marker, reading, steering, story or compare scope
+that was requested. Crossed scopes, unknown source labels, extra payloads and blank/non-text output
+fail before replacing the current guidance module or Story text; accepted pages are frozen.
+
+The API surface fixture now exercises both node-scoped voice and branch-scoped comparison voice and
+derives its response scope from the actual request. `make verify-software` passes 210 files / 1,426
+tests plus types, performance, schema, manifest, packaging and production builds. The complete
+`make test-browser` gate passes 92 required journeys with one explicitly optional Maia latency probe
+skipped.

@@ -197,7 +197,10 @@ describe("DrillApi", () => {
       if (url.endsWith("/select-move")) return json(selection);
       if (url.includes("/human-split")) return json({ nodeId: run.nodes[0]!.id, engine: selection.engine, targetElo: 1600, candidates: [] });
       if (url.includes("/corpus")) return json({ nodeId: run.nodes[0]!.id, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } });
-      if (url.includes("/voice")) return json({ text: "fixture", source: "deterministic", scope: "reading" });
+      if (url.includes("/voice")) {
+        const body = JSON.parse(String(init?.body)) as { readonly scope: string };
+        return json({ text: "fixture", source: "deterministic", scope: body.scope });
+      }
       if (url.includes("/graph")) {
         return json({
           graph: {
@@ -288,6 +291,7 @@ describe("DrillApi", () => {
     }, "writer-one")).resolves.toMatchObject({ selection: { moveUci: "h2g2" } });
     await api.humanSplit(run.id, run.nodes[0]!.id);
     await api.voice(run.id, run.nodes[0]!.id, "reading");
+    await api.compareVoice(run.id, ["a", "b"]);
     await api.move(run.id, { uci: "a2a3" }, "writer-one");
     await api.appendOpponentPly(run.id, selection, "writer-one");
     await api.rewind(run.id, { nodeId: run.nodes[0]!.id }, "writer-one");
@@ -333,6 +337,7 @@ describe("DrillApi", () => {
       "/select-move",
       "/runs/run%20%2F%20one/prediction",
       "/runs/run%20%2F%20one/human-split",
+      "/runs/run%20%2F%20one/voice",
       "/runs/run%20%2F%20one/voice",
       "/runs/run%20%2F%20one/moves",
       "/runs/run%20%2F%20one/moves",

@@ -35,6 +35,7 @@ import { parseOpponentSelection } from "./opponent-selection-response.js";
 import { parsePackDocument } from "./pack-response.js";
 import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
 import { parseShapeDocument } from "./shape-response.js";
+import { parseVoicePage } from "./voice-response.js";
 
 export interface PackSummary {
   readonly id: string;
@@ -1285,11 +1286,11 @@ export class DrillApi implements DrillClientApi {
   corpus(runId: string, nodeId: string): Promise<CorpusPage> { return this.#json<unknown>(`/runs/${encoded(runId)}/corpus?nodeId=${encoded(nodeId)}`).then((value) => parseCorpusPage(value, nodeId)); }
 
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
-    return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } });
+    return this.#json<unknown>(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } }).then((value) => parseVoicePage(value, scope));
   }
 
   compareVoice(runId: string, branchIds: readonly string[]): Promise<VoicePage> {
-    return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { branches: branchIds, scope: "compare" } });
+    return this.#json<unknown>(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { branches: branchIds, scope: "compare" } }).then((value) => parseVoicePage(value, "compare"));
   }
 
   async speech(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<Blob> {
