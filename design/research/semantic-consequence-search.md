@@ -444,6 +444,18 @@ bounded, not all-defence proofs. The semantic reserve still needs a separate
 selected-reply outcome join. [[D3289]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-local-relation-contrast.md`.
 
+The held-out join now separates event scheduling from positive local
+witnesses on the corrected 182-comparison frame. Only 84 comparisons have
+a positive named local witness. A coherent top-eight reserve reaches 39,
+43 or 41 of them at depth 8, depth 12 or 100 ms respectively; the
+all-legal event-source sensitivity reaches all 84 but also schedules 68
+exact relation events with no positive local witness. Those 68 are not
+detector errors—the event occurred—but they would be false *explanations*
+if exposed as causal hints. The budget-specific counts refute a pooled
+reach claim and leave target persistence, all-defence proof and product
+cost open. [[D3281]] [[D3289]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-event-reach-evaluation.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

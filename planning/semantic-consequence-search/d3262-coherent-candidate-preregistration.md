@@ -139,3 +139,14 @@ are in `d3262-coherent-local-relation-contrast.md`. These readings supply
 held-out local target controls, not a judgement about a searched reply or an
 engine move. The predeclared semantic reserve and five-arm comparison remain
 unscored.
+
+## Post-freeze held-out event reach — 2026-09-23
+
+The source-blind relation-event reserve is now joined, *after* selection,
+to the corrected immediate/witness readings. The resulting fixed 3,276-row
+artifact records positive local witness reach separately at depth 8, depth
+12 and 100 ms, at widths 2/4/8 and both declared event-source widths.
+`d3262-coherent-event-reach-evaluation.md` reports the measured result and
+the event-without-positive-witness controls. Reaching a local witness is
+not target persistence, all-defence proof or a causal engine explanation;
+the five-arm and end-to-end cost gates remain open.

@@ -20809,3 +20809,16 @@ crossed graph, candidate FEN, authority and source truth. This is not a
 target-preserving reserve outcome, all-defence proof, move grade or causal
 engine explanation; those and end-to-end cost remain open under [[D3262]]
 and [[D3289]].
+### 2026-09-23 — D3262 corrected held-out event-reach join
+
+The sealed source-blind reserve now joins positive local witnesses after
+selection across 182 comparisons, three engine budgets, three beam widths
+and two event-source widths. Top-eight reserve reaches 39/43/41 of 84
+positive local witnesses at depth 8/depth 12/100 ms; all-legal event
+source reaches all 84 but also schedules 68 exact events without a
+positive local witness. The initial pooled-budget printout obscured the
+39/43/41 split; a test failed on that mistaken 41-for-all assumption, and
+the report and test now keep the budgets distinct. These are reach and
+negative-control facts, not an engine reason. Continuation, all-defence
+proof, abstention, other arms and end-to-end cost remain open under
+[[D3262]]/[[D3289]].
