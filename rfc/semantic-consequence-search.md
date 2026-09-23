@@ -563,6 +563,16 @@ immediate reply. All 32 direct minor arrivals are positively capturable
 by that pawn. A compiled reason must keep current control, conditional
 arrival punishment and durable prevention as different propositions; the
 first two do not license the third or explain the engine's root choice.
+[[D3292]] adds the corrected exact bounded target arm on the same separately
+frozen comparison frame. It evaluates all 182 named cells with complete
+immediate legal replies, `exists opponent preparation → forall immediate
+learner defences`, and no node-cap exhaustion. The 96 source immediate
+readings still agree with D1023; twelve bounded destination readings do not,
+because that predecessor retained a captured controlling pawn in its tracked
+object. Every disagreement has a legal pawn-capture witness, including en
+passant. Seven source destination cells now have a preparation surviving
+every defence inside this four-ply target question. That is a corrected
+short-horizon result, not durable prevention or root engine causality.
 These are post-freeze receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 

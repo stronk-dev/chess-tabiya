@@ -477,6 +477,23 @@ This is a source-identity, one-reply result, not long-horizon prevention or an
 engine reason. [[D3291]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-destination-reply-control.md`.
 
+The corrected exact bounded target arm now evaluates all 182 named cells under
+the literal `exists opponent preparation → forall immediate learner defences`
+quantifier, with complete legal-reply set checks and no 25,000-node cap hit.
+Among 64 source material cells, 36 retain their positive named capture
+immediately, 17 regain one inside the bound and one has a preparation surviving
+every immediate defence. Among 32 source minor-destination cells, none remains
+locally non-losing immediately after the pawn push, 29 regain one inside the
+bound and seven have a preparation surviving every defence. Natural alternatives
+are measured separately (30 material, 56 destination); these are overlapping
+selected comparisons, not a game population. Twelve bounded destination
+readings differ from D1023 because its tracker retains a captured controller
+identity through an object spread. All twelve changed lines have legal pawn
+capture witnesses, including en passant; the 96 immediate source readings
+still agree. This corrects a source-control instrument, not the five-arm
+profile verdict or an engine-reason claim. [[D3292]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-bounded-targets.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

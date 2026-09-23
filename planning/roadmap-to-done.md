@@ -2489,3 +2489,19 @@ counterexamples. The next repair must own one immutable admitted request, reconc
 with derived ancestry, publish an exact result parser and totalize malformed input before another
 fresh review. Support, Review, bot policy and longitudinal style consumers remain correctly blocked
 from treating these facts as production evidence.
+
+## Checkpoint — Corrected exact continuation exposes a source-control error
+
+`make semantic-search-coherent-bounded-targets-check` now verifies 182 named
+target comparisons on the separately frozen coherent-root profile, including
+all 96 source-observed controls and 86 selected natural alternatives. The
+25,000-node cap is never hit. Twelve predecessor bounded destination readings
+change because a captured controlling pawn was retained as a stale tracked
+identity; all twelve corrected witnesses replay legally, including en passant.
+The checked artifact and limitation are recorded under [[D3292]] in
+`planning/semantic-consequence-search/d3262-coherent-bounded-targets.md`.
+
+This is progress in the research authority, not a crossed 1.0 capability:
+the five-arm proof/abstention/cost comparison remains open under [[D3262]],
+`semantic-consequence-search` is still a draft RFC, and no new hint, Review,
+bot or pack consumer may present this as the engine's reason for a move.

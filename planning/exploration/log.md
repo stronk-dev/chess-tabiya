@@ -20847,3 +20847,17 @@ capture separate, and negative fixtures reject a crossed reply FEN or
 target population. [[D3291]] records the resulting wording boundary:
 short-horizon denial is not durable prevention or an engine reason.
 The five-arm proof/abstention/cost comparison remains open under [[D3262]].
+
+### 2026-09-23 — D3262 corrected bounded target arm finds a stale controller
+
+The disposable exact target evaluator now reads all 182 comparisons in the
+separately frozen coherent-root profile, checks the complete immediate legal
+reply boundary, and preserves 96 predecessor immediate controls. No cell hits
+the 25,000-node cap. Twelve predecessor bounded destination results disagree:
+the old tracker retained a captured controlling pawn in an object spread, so
+later continuations were silently dropped. All twelve corrected witness lines
+replay legally, including en passant. [[D3292]] and the checked dossier
+`planning/semantic-consequence-search/d3262-coherent-bounded-targets.md`
+record the counts and scope. The Make target is part of `verify-rfc-evidence`.
+No production search profile or engine-reason claim follows; next is the
+coherent five-arm proof/abstention/cost comparison under [[D3262]].
