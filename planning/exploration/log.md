@@ -20577,3 +20577,16 @@ top-p, and 46 without a named positive reply. Castling initially failed the inde
 join until raw `e1h1` was mapped to legal `e1g1` without altering either source. This is
 source truth for the exact model/band/history and first child layer, not deeper traversal,
 proof or production bot policy. [[D3276]] and [[D3262]] remain open beyond that scope.
+
+### 2026-09-23 — D3262 operand-touch reservation fails the pawn-denial hard control
+
+The source-blind first-child selector marks 1,265 of 6,020 legal comparison replies and
+includes all 139 independently named positives. Reserving one highest-ranked touch improves
+overall width-eight named-reply reach from 58/60/64 to 64/66/70 across the three Stockfish
+budgets, but recovers only one of 32 source pawn-denial minor arrivals at depth eight and
+none at depth twelve or 100 ms. [[D3281]] records that operand contact is too broad to
+preserve the specific relation; the held-out positive reply never enters selection. The
+checked artifacts and tests are `d3262-semantic-touch-first-layer.md` and
+`d3262-semantic-reserve-first-layer.md`. This is not a semantic proof, a complete arm or a
+production pruning policy. [[D3262]] stays open; next is a typed relation-change selector
+with negative controls and no outcome leakage.

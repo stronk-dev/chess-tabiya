@@ -156,3 +156,13 @@ configured policy places positive mass on 52/185 named comparison replies and ze
 top-p on 87; 46 have no named positive reply. This does not supply later-node Maia queries,
 proof-class outcomes, other Elo bands or end-to-end cost. [[D3276]] is narrowed to those
 remaining scopes; the five-arm [[D3262]] result is still open.
+
+`d3262-semantic-touch-first-layer.md` now checks a source-blind first-child operand-touch
+predicate across 6,020 legal comparison replies. It touches all 139 independently named
+positive replies but also 1,265 edges overall. `d3262-semantic-reserve-first-layer.md`
+then reserves one highest engine-ranked touch per comparison before reading named outcomes.
+At width eight it raises named-reply reach from 58/60/64 to 64/66/70 across the three
+Stockfish budgets, but reaches only one of the 32 source pawn-denial controls at depth eight
+and none at depth twelve or 100 ms. The broad touch rule therefore fails as a sufficient
+semantic-preservation selector ([[D3281]]). This is a first-layer diagnostic, not a
+post-hoc rewrite of the preregistered five-arm semantic profile. [[D3262]] remains open.

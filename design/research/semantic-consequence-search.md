@@ -273,6 +273,19 @@ remains open beyond that scope. `[V]` `planning/semantic-consequence-search/d326
 `planning/semantic-consequence-search/d3262-maia-direct-logits.md`, and
 `planning/semantic-consequence-search/d3262-maia-direct-mass-frontier.md`.
 
+A source-blind operand-touch selector now scans the complete first-child reply graph. It
+marks 1,265 of 6,020 comparison reply edges as touching a named piece, destination or
+line, and all 139 independently named positive replies touch. However, a one-slot reserve
+of the highest engine-ranked touch only raises named-reply reach from 58/60/64 to 64/66/70
+at width eight across the three Stockfish budgets. It recovers the source pawn-denial
+minor arrival in only one of 32 cases at depth eight, and none at depth twelve or 100 ms.
+This distinguishes broad operand *contact* from a typed target-*relation change*: the
+former is a high-recall scheduling cue but not the semantic preservation mechanism the
+RFC needs ([[D3281]]). No proof-class result, depth-four traversal or production profile
+is licensed by this first-layer experiment. `[V]`
+`planning/semantic-consequence-search/d3262-semantic-touch-first-layer.md` and
+`planning/semantic-consequence-search/d3262-semantic-reserve-first-layer.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

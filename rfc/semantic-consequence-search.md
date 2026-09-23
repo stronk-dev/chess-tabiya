@@ -468,6 +468,13 @@ destination square is not necessarily an attack on an enemy piece. The exact-arm
 must retain both trigger readings and their distinct cost/reach, then settle which reading
 the production profile means before this RFC can claim a calibrated exact arm.
 
+[[D3281]] records a failed first-child semantic-selection baseline: every independently
+named positive reply touches a declared operand, yet reserving only the highest engine-ranked
+touch finds at most one of 32 pawn-denial controls across the tested budgets. Arm 5 still
+needs a source-blind, typed relation-change selector and hard negatives; broad operand
+contact is not sufficient target preservation. This receipt does not amend the frozen
+five-arm population or authorize a production profile.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,
