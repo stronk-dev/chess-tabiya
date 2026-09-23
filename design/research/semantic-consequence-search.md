@@ -175,6 +175,11 @@ sets and FENs were independently replayed with python-chess in the pinned Maia c
 fork and bishop controls retain their differing legal reply populations. This is not yet an
 all-reply motif result or a measured five-arm comparison. `[V]`
 `planning/semantic-consequence-search/d3262-exact-replies.md`.
+The paired fork hard control now produces a nonvacuous exact geometric-identity distinction:
+the attacker/rook target persists through all five replies in one fixture, while `...Bxc7` is a
+named refutation among 33 replies in the other. This is a scoped target-retention statement, not
+a general winning-fork classifier. `[V]`
+`planning/semantic-consequence-search/d3262-fork-control-identity.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

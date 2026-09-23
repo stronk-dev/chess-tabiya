@@ -76,6 +76,10 @@ The shared root/candidate frame is frozen from those source receipts as
 Exact opponent replies are enumerated at `d3262-exact-replies.md` /
 `d3262-exact-replies.json`: 6,310 edges, independently replayed with python-chess. This is an
 edge population, not the arm's semantic verdict or forcing extension.
+The paired fork hard control now has a scoped declared-identity result in
+`d3262-fork-control-identity.md`: `...Bxc7` is an exact refutation in the parried fixture,
+while the surviving fixture retains its geometric rook target through all five replies. This
+does not generalize to the other roots or grade the tactic.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and

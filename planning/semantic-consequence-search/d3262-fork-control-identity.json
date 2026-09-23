@@ -1,0 +1,333 @@
+{
+  "version": 1,
+  "exactReplyDigest": "sha256:63d38517b2cf9be19137e1b57b846be10b017006e69d6633510b1c43b93bd316",
+  "authority": "declared_piece_identity_and_geometric_attack_only",
+  "controls": [
+    {
+      "rootId": "tactical:fork-parried",
+      "candidateUci": "e6c7",
+      "attacker": {
+        "square": "c7",
+        "role": "knight",
+        "color": "white"
+      },
+      "targets": [
+        {
+          "square": "a8",
+          "role": "rook",
+          "color": "black"
+        },
+        {
+          "square": "e8",
+          "role": "rook",
+          "color": "black"
+        }
+      ],
+      "replyCount": 33,
+      "firstRefutation": "g3c7",
+      "allReplyRetained": false,
+      "replies": [
+        {
+          "uci": "a8a1",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8a2",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8a3",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8a4",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8a5",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8a6",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8a7",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8b8",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8c8",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "a8d8",
+          "retainedTargets": [
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8b8",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8c8",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8d8",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e1",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e2",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e3",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e4",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e5",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e6",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e7",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8f8",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8g8",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "g3c7",
+          "retainedTargets": [],
+          "retainsAny": false
+        },
+        {
+          "uci": "g3d6",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "g3e1",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "g3e5",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "g3f2",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "g3f4",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "g3h2",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "g3h4",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "h8g7",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "h8g8",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "h8h7",
+          "retainedTargets": [
+            "a8",
+            "e8"
+          ],
+          "retainsAny": true
+        }
+      ]
+    },
+    {
+      "rootId": "tactical:fork-survives",
+      "candidateUci": "e6c7",
+      "attacker": {
+        "square": "c7",
+        "role": "knight",
+        "color": "white"
+      },
+      "targets": [
+        {
+          "square": "a8",
+          "role": "rook",
+          "color": "black"
+        },
+        {
+          "square": "e8",
+          "role": "king",
+          "color": "black"
+        }
+      ],
+      "replyCount": 5,
+      "firstRefutation": null,
+      "allReplyRetained": true,
+      "replies": [
+        {
+          "uci": "e8d7",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8d8",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8e7",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8f7",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        },
+        {
+          "uci": "e8f8",
+          "retainedTargets": [
+            "a8"
+          ],
+          "retainsAny": true
+        }
+      ]
+    }
+  ]
+}

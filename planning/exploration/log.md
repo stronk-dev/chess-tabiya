@@ -20437,3 +20437,13 @@ pinned Maia container. The fork controls differ by 33 versus five replies, with 
 `...Bxc7` present, and the bishop control retains `...Bh5`. These are legal-population facts,
 not semantic proof or a five-arm profile. [[D3262]] stays open; next is target-identity survival,
 forcing extension and the measured provider/engine/Maia/semantic frontiers.
+
+### 2026-09-23 — D3262 fork hard control gains an exact identity refutation
+
+The declared knight/rook identities in D794's paired fork fixtures were joined to the 6,310-edge
+exact graph. `planning/semantic-consequence-search/d3262-fork-control-identity.md` records the
+scoped result: all five replies retain the geometric rook target in the surviving control; the
+parried control has 33 replies and first loses the attacker to `...Bxc7`. A fabricated attacker,
+target or empty universal population fails the instrument. The independent D794 positive-exchange
+test also passed, but its stronger verdict was not smuggled into this geometric result. [[D3262]]
+remains open; the bishop-pressure control and all five-arm comparisons are still outstanding.
