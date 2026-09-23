@@ -46,6 +46,11 @@ COPY --from=build /app/content content
 COPY planning/exploration/log.md planning/exploration/log.md
 COPY docs/tablebase-grounding.md docs/tablebase-grounding.md
 COPY rfc/archive/graduation-clearance.md rfc/archive/graduation-clearance.md
+COPY rfc/assistance-config-register.md rfc/assistance-config-register.md
+COPY rfc/breadth-collectors.md rfc/breadth-collectors.md
+COPY rfc/claim-semantic-anchors.md rfc/claim-semantic-anchors.md
+COPY rfc/pack-training-forms.md rfc/pack-training-forms.md
+COPY rfc/semantic-collectors.md rfc/semantic-collectors.md
 
 RUN mkdir -p /data && chown node:node /data
 USER node

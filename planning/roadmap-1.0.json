@@ -295,7 +295,7 @@
       "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md", "provider-health-degradation.md", "opponent-recovery-journey.md", "verifiable-runtime-distribution.md"],
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
-        "state": ["partial", "Schema/register/work/intent checks and three workflows exist; storage and deployment have executable contract models, but fresh reviews prove their success authorities remain detached from real storage, filesystem, mounted-file, TLS, HTTP and ingress operations."],
+        "state": ["partial", "Schema/register/work/intent checks and three workflows exist. The rebuilt local server image now reaches health with Maia and the copied draft corpus after the 2026-09-23 runtime-dependency and RFC-reference packaging repairs; this is a first-boot proof, not a deployment profile. Storage and deployment contract models still lack proof against real storage, filesystem, mounted-file, TLS, HTTP and ingress operations."],
         "api": ["partial", "Health exists, but `/capabilities` still converts constructor flags into availability and the client still deletes controls when a provider is absent. Provider health was cut to its blocking obligation on 2026-09-06: its twelve-round author model is retired as acceptance authority and the production implementation is now the proof, with durable opponent recovery split into opponent-recovery-journey.md. Route integration, readiness, metrics policy and production-boundary coverage remain."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
@@ -464,11 +464,11 @@
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-09-06",
-          "summary": "Safe deployment's fourth fresh review returns the third repair: its sealed objects still originate in caller testimony rather than mounted files, live TLS/HTTP/check/ingress operations or product storage. Release proof remains blocked on a bounded repair, fresh review, production implementation, official content and complete learner journeys.",
-          "impact": "regressed",
-          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"],
-          "anchors": [{"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"}]
+          "at": "2026-09-23",
+          "summary": "The rebuilt local self-host server image now boots healthy with Maia and the copied draft corpus after D3274/D3275 packaging repairs; a production API capture exercised it across 66 roots. This advances first-boot proof only. The safe-deployment authority remains returned, and clean-host digest-pinned release, backup/restore, upgrade/rollback, official content and complete learner journeys remain unproven.",
+          "impact": "advanced",
+          "evidence": ["apps/server/Dockerfile", "tools/verify-packaging.mjs", "planning/semantic-consequence-search/d3262-maia-capture.md", "rfc/semantic-consequence-search.md", "rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md"],
+          "anchors": [{"kind": "work_state", "id": "D3274", "digest": "sha256:2f1bb8ad4a09be2585a0663bd2ecf8c23afac65fe9a3a4689ca2e63e75bd966b"}, {"kind": "work_state", "id": "D3275", "digest": "sha256:f2edb5da7cf95d453087b9beee4dbba7b7c08eeee0012c74d787775530d82280"}, {"kind": "rfc", "id": "semantic-consequence-search.md", "digest": "sha256:fba22cb1102551d9ceb5de3568e697b93192009827e86de0c79d40f1c13f0403"}, {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"}]
         },
         "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
       }

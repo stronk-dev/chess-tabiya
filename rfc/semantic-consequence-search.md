@@ -449,6 +449,14 @@ input digest and result artifact comparing:
 4. Maia-mass bounded frontier;
 5. semantic-target-preserving frontier.
 
+The root-source receipt found [[D3276]]: pinned Maia emits raw legal-logit softmax masses
+for at most 20 moves, while the configured bot samples after temperature/top-p. The experiment
+must name which distribution its mass arm measures, retain the unreturned legal moves as a
+residual population, and abstain from any claim about the configured bot's reply probability
+unless that transformation is separately validated. It must also normalize Maia's king-to-rook
+castling encoding only at the legal-identity join, retaining raw source bytes. The root capture
+does not satisfy the child-node traversal or profile decision.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,

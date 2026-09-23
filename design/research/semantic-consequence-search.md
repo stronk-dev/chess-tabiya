@@ -153,6 +153,20 @@ Those are existing sibling owners.
 
 ## Remaining pre-acceptance experiment
 
+The frozen 66-root Stockfish and Maia **root-source** captures now exist, with independent
+legal-move, identity, rank, mass and PV checks. Stockfish covers 2,013/2,013 legal root moves at
+each of three budgets; Maia returns 1,277/2,013 under its maximum 20-line output, with 736
+unreturned moves. Its reported `policy` is raw softmax over legal logits, while temperature and
+top-p govern the sampled move separately; seven returned castles use king-to-rook notation.
+The requested seed is explicitly reported unhonored. These are inputs, not a search-arm result,
+and no search default has been selected. `[V]` Source receipts and checker outputs:
+`planning/semantic-consequence-search/d3262-stockfish-capture.md`,
+`planning/semantic-consequence-search/d3262-maia-capture.md`,
+`tools/d3262-search-calibration/stockfish-capture-check.mjs`, and
+`tools/d3262-search-calibration/maia-capture-check.mjs`; raw-mass semantics were read from the
+pinned Maia3 `score_moves()` inside `chess-tabiya-maia:dev` at source commit
+`1e13597c42d4858b7cfd7cfdae01e297263364b2`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

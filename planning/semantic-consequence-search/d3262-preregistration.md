@@ -69,5 +69,9 @@ no profile meets it, live hints use direct/cached evidence with honest empty and
 remains background Review/authoring. Publish the reach/cost/abstention Pareto table before fixing
 numerical production budgets; do not weaken proof vocabulary to improve apparent latency.
 
-**Status:** manifest frozen; no D3262 provider capture or five-arm result yet. [[D3262]] remains
-open, and semantic-consequence-search criterion 23/Discharge D1 remains unmet.
+**Status 2026-09-23:** manifest frozen; complete-root Stockfish and Maia source captures
+landed and independently checked (`d3262-stockfish-capture.md`, `d3262-maia-capture.md`).
+The Maia source exposes raw model rather than configured sampling mass, which the arm must
+keep distinct; this observation does not amend the frozen population or rescue a missing arm.
+No five-arm traversal result exists. [[D3262]] remains open, and
+semantic-consequence-search criterion 23/Discharge D1 remains unmet.

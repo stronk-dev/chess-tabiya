@@ -1,8 +1,9 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
+import { buildSync } from "esbuild";
 
 import { GRADUATION_RULING_ANCHOR_ROOTS } from "../apps/server/src/graduation-ruling-roots.mjs";
 import { missingGraduationRulingCopies } from "./graduation-ruling-packaging.mjs";
@@ -99,6 +100,32 @@ required(
   "Production image context must include disclosed draft packs",
 );
 const serverDockerfile = readFileSync("apps/server/Dockerfile", "utf8");
+const contentDependencies = new Set();
+for (const relative of readdirSync("content", { recursive: true })) {
+  if (!relative.endsWith(".json")) continue;
+  const source = readFileSync(join("content", relative), "utf8");
+  for (const match of source.matchAll(/"blockedBy"\s*:\s*"([^"]+)"/gu)) contentDependencies.add(match[1]);
+}
+for (const dependency of [...contentDependencies].sort()) {
+  required(existsSync(dependency), `Content graduation dependency does not exist: ${dependency}`);
+  required(serverDockerfile.includes(`COPY ${dependency} ${dependency}`), `Production image must contain referenced content dependency ${dependency}`);
+}
+const serverBuild = JSON.parse(readFileSync("apps/server/package.json", "utf8")).scripts.build;
+required(serverBuild.includes("src/main.ts") && serverBuild.includes("--bundle"), "Server build must bundle its runtime entry");
+const runtimeBundle = buildSync({
+  entryPoints: ["apps/server/src/main.ts"],
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  external: [...serverBuild.matchAll(/--external:([^\s]+)/gu)].map((match) => match[1]),
+  metafile: true,
+  write: false,
+});
+const runtimeExternals = Object.values(runtimeBundle.metafile.outputs)
+  .flatMap((output) => output.imports)
+  .filter((item) => item.external && !item.path.startsWith("node:"))
+  .map((item) => item.path);
+required(runtimeExternals.length === 0, `Server runtime bundle imports packages absent from final image: ${runtimeExternals.join(", ")}`);
 for (const root of missingGraduationRulingCopies(GRADUATION_RULING_ANCHOR_ROOTS, serverDockerfile)) {
   required(false, `Production image must include the graduation-ruling source ${root}`);
 }

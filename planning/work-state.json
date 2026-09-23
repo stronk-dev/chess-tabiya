@@ -26872,6 +26872,32 @@
       "uxItems": [],
       "evidence": "apps/server/src/guidance.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3274",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2f1bb8ad4a09be2585a0663bd2ecf8c23afac65fe9a3a4689ca2e63e75bd966b",
+      "uxItems": [],
+      "evidence": "tools/verify-packaging.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3275",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f2edb5da7cf95d453087b9beee4dbba7b7c08eeee0012c74d787775530d82280",
+      "uxItems": [],
+      "evidence": "apps/server/Dockerfile",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3276",
+      "state": "todo",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:efbddfa801fb1f0861a945e5ff3fecfa0d05aa8420d49e95c08a0fd0d87008ab",
+      "uxItems": []
     }
   ]
 }

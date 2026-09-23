@@ -10,7 +10,7 @@ import {
   type GraduationEntry,
 } from "@chess-tabiya/schema/drill-pack";
 
-import { runExpressionCensus } from "../expression-census.js";
+import type { runExpressionCensus } from "../expression-census.js";
 import { EMITTER_GRADUATION_CLEARANCE_PLANS, type EmitterGraduationClearancePlan } from "../graduation-blocker-templates.mjs";
 import { objectiveRules } from "../pack-orchestrator.js";
 import { validateClaimBindings } from "./claim-binding.js";
@@ -362,14 +362,14 @@ async function atomicWrite(documents: readonly { path: string; value: unknown; p
   }
 }
 
-export async function clearGraduationEntries(file: string, options: { readonly now?: () => Date; readonly census?: ReturnType<typeof runExpressionCensus>; readonly check?: boolean } = {}): Promise<GraduationTransitionResult> {
+export async function clearGraduationEntries(file: string, options: { readonly now?: () => Date; readonly census: ReturnType<typeof runExpressionCensus>; readonly check?: boolean }): Promise<GraduationTransitionResult> {
   const target = paths(file);
   const [packValue, ledgerValue, manifestValue] = await Promise.all([readJson(target.pack), readJson(target.ledger), readJson(target.manifest)]);
   const pack = packValue as DrillPackDefinition;
   const ledger = ledgerValue as EvidenceLedger;
   const manifest = manifestValue as SourceManifest;
   const before = await digestDrillPack(pack);
-  const census = options.census ?? runExpressionCensus({ roots: [dirname(target.pack)] });
+  const census = options.census;
   const entries = (pack.provenance.graduationBlockers ?? []) as readonly unknown[];
   const at = (options.now ?? (() => new Date()))().toISOString();
   const transitions: GraduationTransitionResult["transitions"][number][] = [];
@@ -407,12 +407,4 @@ export async function clearGraduationEntries(file: string, options: { readonly n
     { path: target.transition, value: transition },
   ]);
   return transition;
-}
-
-if (/graduation-clear\.(?:js|ts)$/u.test(process.argv[1] ?? "")) {
-  const files = process.argv.slice(2);
-  if (files.length === 0) throw new GraduationClearanceError("GRADUATION_CLEARANCE_INVALID", "at least one pack file is required");
-  const results = [];
-  for (const file of files) results.push(await clearGraduationEntries(file, { check: process.env.CHECK === "1" }));
-  process.stdout.write(`${JSON.stringify(results.length === 1 ? results[0] : results, null, 2)}\n`);
 }

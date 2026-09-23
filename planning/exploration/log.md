@@ -20400,3 +20400,21 @@ identity and digest. This is one provider arm, not the five-arm result; [[D3262]
 new disposable capture retains every returned root candidate and its mass rather than D1023's
 top-eight aggregate, and preserves source-off results. No Maia request or search-profile verdict
 was made in this step; the next action is to run it against the local Maia-enabled server.
+
+### 2026-09-23 — self-host image repaired; complete-root Maia source captured
+
+`make up-engines` exposed two actual startup failures before the capture: the server bundle imported
+TypeScript from a source-only graduation census but the runtime image had no package tree
+([[D3274]]), then pack validation found `blockedBy` RFC documents absent from the image
+([[D3275]]). The clearance CLI now owns the compiler-dependent census, and a packaging check
+rejects external runtime imports and missing corpus-referenced files. The rebuilt server image
+reached Docker healthy and served the capture; both defects are closed against that boundary.
+
+The predeclared 66-root Maia capture returned every root at band 1400. Its independently checked
+artifact contains 1,277 candidate moves out of 2,013 legal, with 736 unreturned moves; seven
+castles require notation joining. p95 request time was 148.54 ms. The pinned Maia source shows
+reported raw softmax `policy` masses are not the temperature/top-p sampling distribution, and the
+engine says the seed was not honored ([[D3276]]). Source receipt:
+`planning/semantic-consequence-search/d3262-maia-capture.md`. No five-arm traversal, production
+budget or default was chosen; [[D3262]] remains open. Next is child-node source capture and the
+preregistered exact-reply/beam/semantic-target comparisons, preserving the probability distinction.
