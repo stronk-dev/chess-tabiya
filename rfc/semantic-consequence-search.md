@@ -481,6 +481,12 @@ whose exchange is not positive. It is a valid branch-scheduling primitive, not a
 an answer to why the root candidate is better than its alternative. Arm 5 must test the
 continuation and contrast after selection; the 139/139 named-event reach is not its verdict.
 
+[[D3282]] bounds the first exact local-contrast reading: 123 same-target
+predecessor-candidate/natural-alternative pairs span only 47 of 64 registered target groups.
+The other 17 have no newly selected alternative and must abstain at that comparison scope.
+The 54 destination punishment-versus-safe-arrival pairs and the 35 directionally different
+material pairs are local operands, not engine-preference explanations or all-reply proofs.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,

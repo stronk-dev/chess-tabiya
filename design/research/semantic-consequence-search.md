@@ -298,6 +298,16 @@ The event-conditioned continuation and contrastive proof remain unmeasured ([[D3
 `[V]` `planning/semantic-consequence-search/d3262-semantic-relation-event-first-layer.md`
 and `planning/semantic-consequence-search/d3262-semantic-relation-event-reserve.md`.
 
+An exact *local* contrast now joins each predecessor-observed candidate with a newly
+selected alternative under the same registered target. Of 64 target groups, 47 have such
+an alternative: 123 pairs compare. Material shows 23 source-only, 12 alternative-only
+and 33 same positive-capture relations; destination shows 54 declared-pawn-punishment
+versus locally safe arrival contrasts and one non-comparable alternative where the minor
+is absent. Seventeen groups lack a newly selected alternative altogether ([[D3282]]).
+This is the first typed operand for “why this move rather than that one,” but it does not
+link the local difference to an engine preference, prove it survives replies, or choose
+which side benefits. `[V]` `planning/semantic-consequence-search/d3262-local-relation-contrast.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

@@ -20603,3 +20603,13 @@ so an event cannot be relabeled a profitable consequence.
 `d3262-semantic-relation-event-reserve.md` record the first-layer
 result. Target-conditioned continuation, contrastive proof and cost remain to be measured;
 [[D3281]] and the five-arm [[D3262]] calibration remain open.
+
+### 2026-09-23 — D3262 exact local contrasts expose the missing alternatives
+
+`d3262-local-relation-contrast.md` joins 123 same-target predecessor-candidate/natural-
+alternative pairs. The exact local material relation differs in 35 pairs in both
+directions; the destination relation differs in 54 pairs, with one alternative marked
+non-comparable because the named minor is absent. Seventeen of 64 registered targets
+have no newly selected alternative, now [[D3282]] rather than a hidden denominator loss.
+This is local evidence for future contrastive explanation, not a move grade, engine-cause
+claim or all-reply proof. [[D3262]] remains open for the search and cost comparison.

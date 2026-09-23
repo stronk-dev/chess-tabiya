@@ -176,3 +176,11 @@ material captures that fail positive exchange. This is an event-availability cei
 conditioned on a preregistered target, **not** the semantic arm's proof, family mix,
 depth-four reach, contrast or cost. `d3262-semantic-relation-event-reserve.md` retains
 the complete first-layer comparison. [[D3281]] and [[D3262]] remain open.
+
+`d3262-local-relation-contrast.md` now joins exact local material and destination
+readings across 123 predecessor-observed-candidate/newly-selected-alternative pairs.
+The relation differs in 35 material pairs (23 one way, 12 the other) and in 54 destination
+pairs; 33 material pairs retain the same boolean relation and one destination alternative
+has no named minor, so it is not classified as safe. The 123 pairs span only 47 of 64
+registered targets; 17 have no newly selected alternative ([[D3282]]). These are local
+comparison operands, not causal explanations or a completed semantic search arm.
