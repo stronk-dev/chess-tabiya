@@ -91,6 +91,10 @@ target and must remain `no_target` for that arm. This is target availability, no
 `d3262-target-comparison-frame.md` now applies the 64 distinct named root targets to the common
 selected frame: 185 target/candidate pairs, 96 source-observed pair identities and 89 natural
 alternatives. Source outcomes never transfer to those alternatives; no pair has a search verdict.
+`d3262-material-immediate.md` now measures one outcome family on 98 of those questions: exact
+positive legal material-capture availability immediately after each move. All 64 source material
+rows agree with independent replay; the other 34 receive new results. This is not the bounded
+reply or five-arm result, and no selected move is graded.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and

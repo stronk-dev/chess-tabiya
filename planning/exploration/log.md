@@ -20483,3 +20483,12 @@ an exact source-row identity and 89 are natural alternatives with no inherited o
 four special controls remain separate, including Carlsbad's `no_target`. This is a checked input
 frame, not a search result; [[D3262]] remains open for traversal, source agreement, cost and
 abstention.
+
+### 2026-09-23 — D3262 measures immediate material consequences on the common frame
+
+`planning/semantic-consequence-search/d3262-material-immediate.md` records the first independent
+outcome pass on the frozen 185-question comparison frame: 98 material pairs, all 64 sealed source
+immediate controls reproduced, 34 natural alternatives evaluated, and zero unexpected identity
+losses. A named capture counts as preserved only when it remains legal and positive under the
+existing exchange convention; 14 legal captures became exchange-neutral. The exact candidate FEN
+is joined to the reply graph. This does not grade moves or clear the five-arm [[D3262]] gate.

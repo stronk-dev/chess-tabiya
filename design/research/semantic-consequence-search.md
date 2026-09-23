@@ -199,6 +199,13 @@ The resulting comparison population has 64 distinct root targets crossed only wi
 legal moves at the same root: 185 pairs, including 96 source-observed identities and 89 natural
 alternatives. These are test questions, not 185 detected effects. No source outcome is copied
 to another move. `[V]` `planning/semantic-consequence-search/d3262-target-comparison-frame.md`.
+The first actual comparison result is now narrow but nonvacuous: 98 material target/candidate
+pairs were replayed with exact piece identity and `legal-exchange@1`; 64/64 source-immediate
+controls agree with the sealed D1023 reading, and 34 previously unlabelled natural alternatives
+were evaluated. Fifty-three preserve the named positive capture and 45 remove it by a typed
+cause; a merely geometric attack is insufficient. This is immediate availability only, not
+all-defences survival, engine preference, or a reason to recommend a move. `[V]`
+`planning/semantic-consequence-search/d3262-material-immediate.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
