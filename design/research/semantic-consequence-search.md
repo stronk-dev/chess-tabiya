@@ -542,6 +542,19 @@ arms' distinct deeper traversal or proof/abstention/cost verdict; a miss
 over unvisited legal replies remains unknown. [[D3297]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-frontier-target-outcome.md`.
 
+The immediate consequence for contrastive coaching is adverse. Joining those
+29 partial selections to the frozen 116 same-target source/alternative pairs
+produces **zero certified directional contrasts**: a selected branch may
+witness the named opponent option, but an unvisited reply cannot establish
+its absence on the other candidate. Depth-12 engine top eight appears
+directional on 25 pairs; 13 have equal complete bounded reach, so that
+one-sided observation would give a false prevention story. Configured
+Maia 0.80 appears directional on 17 pairs, six with equal exact reach.
+This is not a population accuracy rate or an engine-cause verdict, but it
+demonstrates the required abstention rule at the exact target boundary.
+[[D3298]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-frontier-contrast.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

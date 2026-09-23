@@ -223,3 +223,15 @@ later nodes still use the shared exact evaluator rather than the distinct
 provider-based traversal of arms 3/4/5. The five-arm proof/abstention/cost
 gate remains open, and a missed witness is an abstention, not an exact
 negative.
+
+## Post-freeze same-target frontier contrast — 2026-09-23
+
+`d3262-coherent-frontier-contrast.md` joins the 29 first-reply selected
+outcomes to the separately frozen 116 exact source-versus-natural-alternative
+target pairs. None of the settings certifies a directional root-move target
+contrast: a missing bounded witness on the putative negative side remains
+unknown over unvisited legal replies. Depth-12 engine top eight observes 25
+apparent directions, 13 of them on pairs whose complete exact bounded reach
+is the same; configured Maia 0.80 observes 17, six on exact same-reach pairs.
+These counts diagnose the abstention boundary, not Stockfish's cause, a
+representative success rate, or the four-ply provider-based five-arm verdict.

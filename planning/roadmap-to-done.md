@@ -2535,3 +2535,13 @@ all-legal semantic reserve does not improve top-eight reach and can lose
 witnesses at width two. This narrows first-reply pruning, not later-node
 provider traversal, proof/abstention/cost, causal engine explanation or a
 crossed 1.0 capability. [[D3262]] remains open.
+
+The next same-target join ([[D3298]]) shows why that limit matters to a
+learner-facing “why this move?” feature. Across 116 frozen candidate pairs,
+none of the 29 partial first-reply settings certifies a directional bounded
+contrast. Depth-12 engine top eight appears directional on 25 pairs, but 13
+have equal exact bounded reach; configured Maia 0.80 appears directional on
+17, six with equal exact reach. A search that has only failed to see the
+opponent's option cannot call the move preventive. This adds an explicit
+abstention requirement to the eventual compiler; it does not choose a
+production search profile or cross the Support/Review/bot 1.0 gates.

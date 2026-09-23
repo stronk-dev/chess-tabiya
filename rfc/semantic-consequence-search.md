@@ -613,6 +613,16 @@ continuation here is the common exact evaluator, not the arms' distinct
 provider-based multi-node traversal. This closes the first-reply outcome
 join only, not the five-arm proof/abstention/cost or root engine-causality
 criteria. See checked `d3262-coherent-frontier-target-outcome.md`.
+[[D3298]] tests the next implication before a Why/Guided Hint compiler can
+claim contrast: the frozen 116 same-target source/alternative pairs joined
+to those 29 partial selected-reply outcomes. Depth-12 engine top eight
+observes 25 apparent directions, but 13 occur on exact same-reach pairs;
+configured Maia 0.80 observes 17, with six on exact ties. **No** setting
+certifies a directional pair, because the apparent absent side leaves legal
+opponent replies unvisited. A one-sided branch observation can be retained
+as a line fact, not narrated as prevention or a reason for Stockfish's
+root rank. See checked `d3262-coherent-frontier-contrast.md`; deeper
+provider traversal and cost remain separate open arms.
 These are post-freeze receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 

@@ -20921,3 +20921,17 @@ checked `planning/semantic-consequence-search/d3262-coherent-frontier-target-out
 record the first-reply sensitivity. The arms' distinct deeper traversal,
 proof/abstention/cost verdict, end-to-end latency and engine-causal
 contrast remain open under [[D3262]].
+
+### 2026-09-23 — D3298 makes one-sided search observations abstain
+
+The frozen 116 source-versus-natural-alternative target pairs now join to
+all 29 partial first-reply settings. Each positive is a bounded witness;
+an unvisited legal reply makes a missing positive unknown rather than
+absent. None of the settings certifies any of the thirteen exact directional
+contrasts. Depth-12 engine top eight observes 25 apparent directions, 13
+on pairs with equal exact bounded reach; configured Maia 0.80 observes 17,
+six on exact ties. [[D3298]] and the checked
+`planning/semantic-consequence-search/d3262-coherent-frontier-contrast.md`
+record the abstention result. This blocks a tempting false prevention story
+in Why/Guided Hint, while the provider-based four-ply proof/cost and engine
+causality work remain [[D3262]].
