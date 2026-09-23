@@ -1,7 +1,7 @@
 # D3262/D3276 — bounded reconstruction of Maia's configured sampler
 
-**2026-09-23 · first child layer; a declared numerical sensitivity test, not yet direct-logit
-validation.** `d3262-maia-configured-window.json`, SHA-256
+**2026-09-23 · first child layer; a declared numerical sensitivity test, subsequently
+cross-validated on the pinned model.** `d3262-maia-configured-window.json`, SHA-256
 `6ea99adab69f85307a613a84f646341ae83d00e56868c6fa2de28c59ec56e4ac`,
 reconstructs the pinned Maia3 sampling rule from the checked 196 child-position raw-softmax
 windows. `make semantic-search-maia-configured-window` reruns the input joins and four tests,
@@ -41,9 +41,10 @@ positions, **not** a judgment that the minor arrival is a useful or useless defe
 population-wide human frequency. `[V]` The checked artifact and
 `d3262-destination-reply-witness.md`.
 
-This narrows [[D3276]] but does not close it. The ±0.000001 mass error is an explicit
-sensitivity assumption, not a formally established bound on PyTorch inference; no full-logit
-re-query has verified all 196 supports. It also does not measure later traversal nodes,
-different Elo bands or policies, or the end-to-end hint/bot selection path. The five-arm
-[[D3262]] profile decision remains open. `[V]` Pinned `uci.py` and
-`d3262-preregistration.md`.
+The ±0.000001 mass error remains a declared sensitivity assumption, not a formal numerical
+bound on PyTorch inference. The later direct full-logit receipt in `d3262-maia-direct-logits.md`
+validates all 194 stable supports and 619 mass intervals against the pinned model, and
+resolves the other two cutoffs from actual logits. This instrument still does not measure
+later traversal nodes, different Elo bands or policies, or the end-to-end hint/bot selection
+path. [[D3276]] remains open beyond this exact profile; the five-arm [[D3262]] decision is
+open. `[V]` Direct receipt and `d3262-preregistration.md`.

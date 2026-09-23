@@ -145,5 +145,14 @@ verdict, end-to-end hint-latency result or production profile. [[D3262]] remains
 `d3262-maia-configured-window.md` now makes [[D3276]] measurable at the first child layer.
 The pinned sampler's temperature/top-p transform and the unreturned-move tail yield a stable
 support under an explicit ±0.000001 raw-mass perturbation at 194/196 positions; two abstain.
-This is not direct full-logit validation, not other bands, and not later traversal nodes, so
-the configured-distribution claim and five-arm decision remain open.
+That bounded artifact alone was not direct full-logit validation, other bands, or later
+traversal nodes, so it did not choose the five-arm profile.
+
+`d3262-maia-direct-logits.md` and `d3262-maia-direct-mass-frontier.md` now replace the
+first-child numerical assumption with direct pinned-model inference: all 6,310 legal raw
+probabilities, 637 configured-support entries, 3,749/3,749 captured raw-window matches,
+194/194 bounded support matches, and both prior cutoff abstentions resolved. The true
+configured policy places positive mass on 52/185 named comparison replies and zero after
+top-p on 87; 46 have no named positive reply. This does not supply later-node Maia queries,
+proof-class outcomes, other Elo bands or end-to-end cost. [[D3276]] is narrowed to those
+remaining scopes; the five-arm [[D3262]] result is still open.

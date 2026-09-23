@@ -33,8 +33,9 @@ actual opponent's complete reply probability. This is [[D3276]]. `[V]`
 
 This artifact is root-only; `d3262-maia-child-capture.md` separately records the first
 candidate-child layer, `d3262-maia-child-prefix.md` its raw-model cap-eight projection,
-and `d3262-maia-configured-window.md` its bounded configured-sampler reconstruction.
-Full-logit validation, further child-node traversal, complete engine and semantic beams,
-transposition accounting,
-contrastive proofs, memory and end-to-end hint latency have not run. [[D3262]] remains open,
+`d3262-maia-configured-window.md` its bounded reconstruction, and
+`d3262-maia-direct-logits.md` the same first-child configured policy measured from complete
+model logits. Further child-node traversal, complete engine and semantic beams,
+transposition accounting, contrastive proofs, memory and end-to-end hint latency have not run.
+[[D3262]] remains open,
 and no production search profile or bot policy was selected.

@@ -22,8 +22,13 @@ prefix once, in the returned tail five times, and outside the returned window 26
 selected natural-alternative comparisons, not an estimate of player populations or a verdict
 that one move is better. `[V]` The checked projection.
 
+“Unknown” is the authority of this **truncated provider window**, not a permanent claim about
+the position. The later complete-logit receipt `d3262-maia-direct-logits.md` measures the
+previously unreturned raw values and actual configured top-p support for these same 196
+children; `d3262-maia-direct-mass-frontier.md` is the source to use for configured mass.
+
 This is a real per-node provider reading, replacing a root-only proxy for horizon two. It
-does **not** run the horizon-four traversal, re-query Maia after each subsequent node, apply
-configured temperature/top-p sampling, preserve semantic target identity through a reply, or
+does **not** run the horizon-four traversal, re-query Maia after each subsequent node,
+preserve semantic target identity through a reply, or
 establish a proof-class result. The five-arm reach/cost comparison and the choice of any
 production search profile remain open under [[D3262]]. `[V]` `d3262-preregistration.md`.

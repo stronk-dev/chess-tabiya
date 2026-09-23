@@ -20564,3 +20564,16 @@ unreturned tail, 194/196 first-child supports are stable and two abstain. One of
 declared pawn-denial minor arrivals has positive reconstructed configured mass; 31 are zero
 after a stable cutoff. The result is a sensitivity test, not full-logit validation or a
 deeper search arm. [[D3276]] and [[D3262]] remain open.
+
+### 2026-09-23 — D3276 direct logits validate the first-child configured source
+
+The pinned Maia3 5M checkpoint was re-run on all 196 frozen child positions. The checked
+`d3262-maia-direct-logits.md` receipt retains all 6,310 legal raw probabilities and 637
+configured-support moves. Its 3,749 captured top-window probabilities match with maximum
+delta `4.99e-13`; all 194 sensitivity-stable supports and 619 mass intervals match, and the
+two previously unknown cutoffs resolve from direct logits. The named-reply projection in
+`d3262-maia-direct-mass-frontier.md` reads 52 positive configured masses, 87 zeros after
+top-p, and 46 without a named positive reply. Castling initially failed the independent
+join until raw `e1h1` was mapped to legal `e1g1` without altering either source. This is
+source truth for the exact model/band/history and first child layer, not deeper traversal,
+proof or production bot policy. [[D3276]] and [[D3262]] remain open beyond that scope.

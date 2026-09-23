@@ -262,9 +262,16 @@ from the configured 0.8-temperature/0.92-top-p sampler. Under an explicitly decl
 ±0.000001 perturbation per reported raw mass and a capped omitted tail, the child-position
 cutoff is stable at 194/196 positions; two abstain. Among 32 source pawn-denial controls, the
 named minor arrival has positive reconstructed configured mass once and zero after the stable
-cutoff 31 times. This is a sensitivity result, not yet a direct-logit proof of the actual
-sampler's distribution; [[D3276]] remains open for that validation and deeper nodes. `[V]`
-`planning/semantic-consequence-search/d3262-maia-configured-window.md`.
+cutoff 31 times. That sensitivity result was then checked against the pinned model on all
+196 child FENs. All 3,749 reported raw-window entries matched the direct legal softmax
+(maximum delta `4.99e-13`); all 194 stable supports and 619 mass intervals matched; the two
+uncertain cutoffs resolved. The direct configured support has 637 entries across 6,310 legal
+replies. Among 185 named comparisons, 52 have positive configured mass, 87 are excluded by
+top-p, and 46 have no named positive reply. This proves source distribution for this exact
+model/band/history/position frame, not other profiles or deeper search nodes. [[D3276]]
+remains open beyond that scope. `[V]` `planning/semantic-consequence-search/d3262-maia-configured-window.md`,
+`planning/semantic-consequence-search/d3262-maia-direct-logits.md`, and
+`planning/semantic-consequence-search/d3262-maia-direct-mass-frontier.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
