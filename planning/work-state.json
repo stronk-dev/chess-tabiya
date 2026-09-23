@@ -27001,9 +27001,18 @@
       "id": "D3289",
       "state": "todo",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:563aa624d1a286e81cb67b66cfc8703496a2db8961e14f9baaa414d8db5f5f5c",
+      "sourceDigest": "sha256:94eff577a7ab11a0136e3b1b1f7a6d62f0fe4a61d8ec4fe98203fec9ccd53e3f",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3290",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:840ea6e714a5864afe8ad77d88d38a2c9eb9d2352b88c21f3a67bb24e79e0b67",
+      "uxItems": [],
+      "evidence": "tools/d3262-search-calibration/root-frame.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }

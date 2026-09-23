@@ -20721,3 +20721,19 @@ population miss. The frozen comparison may be reported as sensitivity evidence
 but not as the full corrected provider-best union. [[D3262]] remains open for
 a separately declared full population, five-arm proof/abstention and end-to-end
 cost; no production search profile or engine reason was selected.
+
+### 2026-09-23 — corrected candidate population frozen before new-child outcomes
+
+Following [[D3289]], `d3262-coherent-candidate-preregistration.md` declares a
+separate source-corrected profile without rewriting either earlier frame.
+The unchanged union rule on the checked coherent all-legal root source selects
+193 candidates over 66 roots (+3/−6 across seven roots). A checked legal-reply
+graph enumerates 6,176 opponent edges; all 190 retained candidate graphs
+match their frozen predecessors exactly. The other three child positions have
+not yet received provider readings or semantic outcomes, and the five-arm
+proof/abstention and interactive cost remain unmeasured.
+
+The first frame run exposed [[D3290]]: a suffix-based CLI guard in the imported
+old frame module also matched the new command, attempted to write the old
+immutable frame and failed without changing it. An exact-path main guard and
+suffix-collision regression test now keep the frozen artifact untouched.

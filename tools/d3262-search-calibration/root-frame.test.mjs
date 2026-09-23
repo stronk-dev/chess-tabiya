@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { manifestRows } from "./manifest.mjs";
-import { rowFrame } from "./root-frame.mjs";
+import { isRootFrameCli, rowFrame } from "./root-frame.mjs";
 
 const stockfish = JSON.parse(readFileSync(new URL("../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url), "utf8"));
 const maia = JSON.parse(readFileSync(new URL("../../planning/semantic-consequence-search/d3262-maia-capture.json", import.meta.url), "utf8"));
@@ -33,4 +33,8 @@ test("an invented source candidate is refused at the legal root join", () => {
   const bad = structuredClone(manifestRows[0]);
   bad.sourceRows = [{ candidateUci: "a1a8", sourceId: "bad" }];
   assert.throws(() => rowFrame(bad, stockfish.rows[0], maia.rows[0]), /absent from the legal root/u);
+});
+test("an importing script with a suffix-matching name is not this CLI", () => {
+  assert.equal(isRootFrameCli("tools/d3262-search-calibration/root-frame.mjs"), true);
+  assert.equal(isRootFrameCli("tools/d3262-search-calibration/coherent-root-frame.mjs"), false);
 });

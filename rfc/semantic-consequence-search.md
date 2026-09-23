@@ -525,6 +525,14 @@ population ([[D3289]]). The unchanged 196-candidate frame remains a labelled
 sensitivity profile, not a corrected union of provider bests; adding those
 moves requires a separately frozen population and downstream source captures.
 No production search profile can be selected from these Stockfish sources alone.
+The separate coherent-root correction is now preregistered at
+`planning/semantic-consequence-search/d3262-coherent-candidate-preregistration.md`:
+the same union rule selects 193 candidates over the unchanged 66 roots, and
+their 6,176 legal opponent replies are captured with 190 retained candidate
+graphs identical to the frozen frame. New child/path provider inputs,
+five-arm semantic proof/abstention and cost remain outstanding. These are
+post-freeze population receipts, not amendments to the original 196-candidate
+profile or a reason to accept this RFC.
 
 [[D3286]] requires a separate Maia query identity for arm 4. The pinned Maia3
 model with UCI history consumes the ordered tokenized root and move path, while

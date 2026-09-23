@@ -395,6 +395,15 @@ or production hint-latency measure. `[V]`
 `planning/semantic-consequence-search/d3262-horizon4-frontier.md`,
 `planning/semantic-consequence-search/d3262-stockfish-coherent-recapture.md`.
 
+A separately preregistered coherent-root population now applies the unchanged
+source/control/Stockfish-best/Maia-best union rule to the checked coherent
+all-legal root source: 193 candidates over the same 66 roots, adding three
+and dropping six across seven roots. Its complete legal reply graph has 6,176
+edges; 190 retained candidate graphs are identical to the old frame. This is
+the first source-corrected candidate population, not a five-arm verdict; its
+three new child providers and downstream continuation/cost still need capture.
+[[D3289]] `[V]` `planning/semantic-consequence-search/d3262-coherent-candidate-preregistration.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

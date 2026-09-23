@@ -2,6 +2,8 @@
 // to recommend; no source value is merged or interpreted as a chess judgement.
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { manifestIdentity, manifestRows } from "./manifest.mjs";
 import { validateMaiaCapture } from "./maia-capture-check.mjs";
@@ -14,6 +16,7 @@ const maia = JSON.parse(readFileSync(maiaPath, "utf8"));
 validateMaiaCapture(maia, stockfish);
 
 function check(condition, message) { if (!condition) throw new Error(message); }
+export function isRootFrameCli(argv1) { return argv1 !== undefined && resolve(argv1) === fileURLToPath(import.meta.url); }
 function canonical(uci, legal) {
   const aliases = { e1h1: "e1g1", e1a1: "e1c1", e8h8: "e8g8", e8a8: "e8c8" };
   const move = legal.has(uci) ? uci : aliases[uci];
@@ -68,7 +71,7 @@ export function rowFrame(root, engineRow, humanRow) {
   };
 }
 
-if (process.argv[1]?.endsWith("root-frame.mjs")) {
+if (isRootFrameCli(process.argv[1])) {
   const rows = manifestRows.map((root, index) => rowFrame(root, stockfish.rows[index], maia.rows[index]));
   const artifact = {
     version: 1,
