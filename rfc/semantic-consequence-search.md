@@ -601,6 +601,18 @@ negatives, not move grades. Neither reading is a complete arm-2 proof or a
 reason for Stockfish's root ranking; the choice of attack meaning remains
 open pending the common proof/abstention/cost comparison. See
 `d3262-coherent-exact-trigger-outcome.md`.
+[[D3297]] joins the corrected 29 first-reply engine, Maia and one-slot
+semantic selections to the **same** exact bounded target question across
+all 182 named cells. Depth-12 engine top eight and configured Maia 0.80
+each retain 51/58 reintroduction witnesses and 7/8 existential
+all-learner-defence preparations, but miss different cells. The all-legal
+semantic reserve does not improve the top-eight result and can lose a
+width-two witness. Most legal replies remain unvisited by every partial
+frontier; a miss requires abstention, never an exact negative. Later
+continuation here is the common exact evaluator, not the arms' distinct
+provider-based multi-node traversal. This closes the first-reply outcome
+join only, not the five-arm proof/abstention/cost or root engine-causality
+criteria. See checked `d3262-coherent-frontier-target-outcome.md`.
 These are post-freeze receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 

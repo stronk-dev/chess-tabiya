@@ -20907,3 +20907,17 @@ artifact. [[D3295]] and
 `planning/semantic-consequence-search/d3262-coherent-exact-trigger-outcome.md`
 record the limited result. This is not the five-arm profile or causal engine
 explanation; [[D3262]] remains open.
+
+### 2026-09-23 — D3297 measures first-reply pruning without claiming the five arms
+
+The corrected 182-cell target frame now compares 29 engine, configured Maia
+and one-slot semantic first-reply selections against the same exact bounded
+target question. Depth-12 engine top eight and Maia 0.80 each retain 51/58
+reintroduction witnesses and 7/8 existential all-learner-defence
+preparations, but miss different cells. The all-legal semantic reserve does
+not improve top-eight reach and can lose witnesses at width two. Every
+partial miss remains unknown over unvisited replies. [[D3297]] and the
+checked `planning/semantic-consequence-search/d3262-coherent-frontier-target-outcome.md`
+record the first-reply sensitivity. The arms' distinct deeper traversal,
+proof/abstention/cost verdict, end-to-end latency and engine-causal
+contrast remain open under [[D3262]].

@@ -2525,3 +2525,13 @@ existential all-learner-defence preparations. The readings require very
 different work (1,216 versus 664 extended replies). This narrows arm-2
 calibration but does not choose D3280, discharge D3262, or cross any 1.0
 capability. The multi-arm and end-to-end cost verdict remains required.
+
+The common first-reply outcome join ([[D3297]]) now compares all 29 corrected
+engine/Maia/one-slot semantic selected-reply sets against the same 182-cell
+exact bounded target question. Depth-12 engine top eight and configured Maia
+0.80 each retain 51/58 reintroduction witnesses and 7/8 existential
+all-learner-defence preparations, but not the same seven misses. The
+all-legal semantic reserve does not improve top-eight reach and can lose
+witnesses at width two. This narrows first-reply pruning, not later-node
+provider traversal, proof/abstention/cost, causal engine explanation or a
+crossed 1.0 capability. [[D3262]] remains open.

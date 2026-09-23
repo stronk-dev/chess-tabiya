@@ -209,3 +209,17 @@ edges. `d3262-coherent-exact-trigger-outcome.md` records the exact digest and
 scope. Nonforcing replies remain in the first-layer denominator but do not
 receive an extra ply; this sensitivity is not an all-defence verdict or a
 production search-profile selection.
+
+## Post-freeze common first-reply outcome sensitivity — 2026-09-23
+
+`d3262-coherent-frontier-target-outcome.md` holds every corrected named cell
+and the same four controls while comparing 29 selected reply sets against the
+complete bounded target question. Engine depth-12 top eight and configured
+Maia 0.80 both retain 51 of 58 reintroduction witnesses and seven of eight
+existential all-learner-defence preparations, but miss different cells. The
+all-legal semantic event reserve does not improve top-eight target reach and
+can lose witnesses at width two. This is a first-reply pruning sensitivity;
+later nodes still use the shared exact evaluator rather than the distinct
+provider-based traversal of arms 3/4/5. The five-arm proof/abstention/cost
+gate remains open, and a missed witness is an abstention, not an exact
+negative.

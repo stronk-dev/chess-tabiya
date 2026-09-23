@@ -530,6 +530,18 @@ moves. Source availability does not prove a target consequence, explain an
 engine choice or satisfy the five-arm cost/abstention gate. [[D3294]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-semantic-source-closure.md`.
 
+The corrected first-reply outcome join now compares 29 engine, configured
+Maia and one-slot semantic selected reply sets against one exact bounded
+target question on all 182 named cells. Complete exact continuation has
+58 bounded reintroduction witnesses and eight existential preparations
+surviving every immediate learner defence. Depth-12 engine top eight and
+Maia 0.80 each retain 51/58 and 7/8, but the missed seven-cell sets differ.
+The all-legal semantic event reserve does not improve top-eight reach and
+can lose witnesses at width two. This is selection sensitivity, not the
+arms' distinct deeper traversal or proof/abstention/cost verdict; a miss
+over unvisited legal replies remains unknown. [[D3297]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-frontier-target-outcome.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;
