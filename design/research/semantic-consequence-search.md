@@ -195,6 +195,10 @@ has an authored knight route, not an autonomous semantic target, so that search 
 `no_target` there. Target registration is not evidence that a frontier found or proved a reason.
 `[V]` `planning/semantic-consequence-search/d3262-target-register.md` and
 `make semantic-search-target-register`.
+The resulting comparison population has 64 distinct root targets crossed only with selected
+legal moves at the same root: 185 pairs, including 96 source-observed identities and 89 natural
+alternatives. These are test questions, not 185 detected effects. No source outcome is copied
+to another move. `[V]` `planning/semantic-consequence-search/d3262-target-comparison-frame.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

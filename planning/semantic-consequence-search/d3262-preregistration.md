@@ -88,6 +88,9 @@ manifest intentionally projected them away. `d3262-target-register.md` restores 
 as a separate checked receipt: 96 rows, 94 distinct source root-candidates. The two fork and
 bishop controls have declared relations; Carlsbad has an authored route but no autonomous semantic
 target and must remain `no_target` for that arm. This is target availability, not traversal.
+`d3262-target-comparison-frame.md` now applies the 64 distinct named root targets to the common
+selected frame: 185 target/candidate pairs, 96 source-observed pair identities and 89 natural
+alternatives. Source outcomes never transfer to those alternatives; no pair has a search verdict.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and

@@ -20474,3 +20474,12 @@ contract: a test parsed repeated `verify-rfc-evidence:` lines into a `Map` that 
 earlier prerequisite list, whereas GNU Make accumulates both. The checker now combines the lists
 and has a repeated-rule regression fixture. This repair changes the verification instrument, not
 the product or the D3262 target receipt. [[D3277]]
+
+### 2026-09-23 — D3262 freezes the contrastive target/candidate population
+
+`planning/semantic-consequence-search/d3262-target-comparison-frame.md` joins 64 distinct named
+root targets to the shared selected moves at their own roots: 185 questions, of which 96 retain
+an exact source-row identity and 89 are natural alternatives with no inherited outcome. The
+four special controls remain separate, including Carlsbad's `no_target`. This is a checked input
+frame, not a search result; [[D3262]] remains open for traversal, source agreement, cost and
+abstention.
