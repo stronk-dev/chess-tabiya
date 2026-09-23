@@ -10,7 +10,7 @@ import { kingCastlesTo, makeSquare, parseSquare, parseUci, rookCastlesTo } from 
 import type { Color, Move, Role, Square, SquareName } from "../../packages/runtime/node_modules/chessops/dist/esm/types.js";
 import { exchangeCaptureAt } from "../../packages/runtime/src/exchange.js";
 
-type Piece = { readonly color: Color; readonly role: Role; readonly square: SquareName };
+export type Piece = { readonly color: Color; readonly role: Role; readonly square: SquareName };
 type MaterialTarget = { readonly attacker: Piece; readonly target: Piece };
 type DestinationTarget = { readonly minor: Piece; readonly controllingPawn: Piece; readonly square: SquareName };
 type Definition = { readonly id: string; readonly rootId: string; readonly family: "material" | "destination"; readonly target: MaterialTarget | DestinationTarget; readonly sources: readonly { readonly candidateUci: string }[] };
@@ -18,13 +18,13 @@ type Pair = { readonly rootId: string; readonly targetId: string; readonly candi
 
 const path = (name: string) => `planning/semantic-consequence-search/${name}`;
 function check(value: unknown, message: string): asserts value { if (!value) throw new Error(message); }
-function position(fen: string): Chess { return Chess.fromSetup(parseFen(fen).unwrap()).unwrap(); }
+export function position(fen: string): Chess { return Chess.fromSetup(parseFen(fen).unwrap()).unwrap(); }
 function square(name: SquareName): Square { const result = parseSquare(name); check(result !== undefined, `Invalid square ${name}`); return result; }
 function samePiece(pos: Chess, piece: Piece): boolean {
   const found = pos.board.get(square(piece.square));
   return found?.color === piece.color && found.role === piece.role;
 }
-function trackedAfter(pos: Chess, move: Move, piece: Piece | null): Piece | null {
+export function trackedAfter(pos: Chess, move: Move, piece: Piece | null): Piece | null {
   if (piece === null) return null;
   check(samePiece(pos, piece), `Declared piece identity absent at ${piece.square}`);
   const tracked = square(piece.square);
@@ -38,7 +38,7 @@ function trackedAfter(pos: Chess, move: Move, piece: Piece | null): Piece | null
   if ("from" in move && move.from === tracked) return { ...piece, square: makeSquare(move.to), role: move.promotion ?? piece.role };
   return piece;
 }
-function played(pos: Chess, uci: string): Move {
+export function played(pos: Chess, uci: string): Move {
   const parsed = parseUci(uci);
   check(parsed !== undefined, `Invalid reply ${uci}`);
   const move = normalizeMove(pos, parsed);

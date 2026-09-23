@@ -286,6 +286,18 @@ is licensed by this first-layer experiment. `[V]`
 `planning/semantic-consequence-search/d3262-semantic-touch-first-layer.md` and
 `planning/semantic-consequence-search/d3262-semantic-reserve-first-layer.md`.
 
+The first corrective selector now names an **exact target event** rather than any touched
+operand: the registered attacker captures the registered target, or the registered minor
+arrives on its declared square. It finds 153 legal events in 185 comparison questions and
+reserves all 139 held-out positive event replies, including all 32 pawn-denial arrivals,
+at every first-layer width and Stockfish budget. This is strong *scheduling* evidence but
+not a 139/139 explanation result: the held-out labels are themselves capture/arrival
+events, and 14 selected material captures fail the positive-exchange reading. Target
+registration also precedes the test; it does not solve discovery of arbitrary plans.
+The event-conditioned continuation and contrastive proof remain unmeasured ([[D3281]]).
+`[V]` `planning/semantic-consequence-search/d3262-semantic-relation-event-first-layer.md`
+and `planning/semantic-consequence-search/d3262-semantic-relation-event-reserve.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

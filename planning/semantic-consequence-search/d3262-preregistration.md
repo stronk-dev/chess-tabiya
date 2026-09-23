@@ -166,3 +166,13 @@ Stockfish budgets, but reaches only one of the 32 source pawn-denial controls at
 and none at depth twelve or 100 ms. The broad touch rule therefore fails as a sufficient
 semantic-preservation selector ([[D3281]]). This is a first-layer diagnostic, not a
 post-hoc rewrite of the preregistered five-arm semantic profile. [[D3262]] remains open.
+
+`d3262-semantic-relation-event-first-layer.md` tests the narrower target-typed scheduling
+predicate without held-out reply names: a named attacker captures its target, or a named
+minor arrives on its destination. It finds 153 exact legal events and includes all 139
+positive event replies, versus 1,265 broad touches. The one-slot event reserve schedules
+all 32 pawn-denial arrivals at every first-child width/budget, but also schedules 14
+material captures that fail positive exchange. This is an event-availability ceiling
+conditioned on a preregistered target, **not** the semantic arm's proof, family mix,
+depth-four reach, contrast or cost. `d3262-semantic-relation-event-reserve.md` retains
+the complete first-layer comparison. [[D3281]] and [[D3262]] remain open.

@@ -20590,3 +20590,16 @@ checked artifacts and tests are `d3262-semantic-touch-first-layer.md` and
 `d3262-semantic-reserve-first-layer.md`. This is not a semantic proof, a complete arm or a
 production pruning policy. [[D3262]] stays open; next is a typed relation-change selector
 with negative controls and no outcome leakage.
+
+### 2026-09-23 — D3262 typed target events recover branches, not explanations
+
+The checked exact event selector reads only preregistered target geometry and the legal
+reply graph. It finds 153 legal capture/arrival events among 185 named comparisons,
+including all 139 held-out positive event replies. Reserving one such event enters all
+32 source pawn-denial minor arrivals across widths 2/4/8 and all three Stockfish budgets.
+The test also keeps its negative: 14 reserved material captures are exchange-neutralized,
+so an event cannot be relabeled a profitable consequence.
+`d3262-semantic-relation-event-first-layer.md` and
+`d3262-semantic-relation-event-reserve.md` record the first-layer
+result. Target-conditioned continuation, contrastive proof and cost remain to be measured;
+[[D3281]] and the five-arm [[D3262]] calibration remain open.

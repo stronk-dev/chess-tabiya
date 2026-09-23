@@ -475,6 +475,12 @@ needs a source-blind, typed relation-change selector and hard negatives; broad o
 contact is not sufficient target preservation. This receipt does not amend the frozen
 five-arm population or authorize a production profile.
 
+The subsequent exact-event receipt recovers all 32 named pawn-denial arrivals at the first
+reply by reserving the registered minor's arrival, while also reserving 14 material captures
+whose exchange is not positive. It is a valid branch-scheduling primitive, not a proof or
+an answer to why the root candidate is better than its alternative. Arm 5 must test the
+continuation and contrast after selection; the 139/139 named-event reach is not its verdict.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,
