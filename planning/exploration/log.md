@@ -20624,3 +20624,14 @@ population does not estimate a general chess rate, and rank disagreement does no
 which other consideration caused the engine preference. It does falsify the shortcut of
 presenting a true structural contrast as *the* reason for a recommendation. [[D3283]]
 routes the abstention/proof requirement; [[D3262]] remains open.
+
+### 2026-09-23 — D3284 exact event reach is not configured reply relevance
+
+`d3262-event-policy-relevance.md` joins 153 typed first-reply events to exact local
+evaluation, the pinned Maia3 band-1400 configured sampler and complete Stockfish
+child ranks. All 32 pawn-denial arrival events are schedulable, but only one has
+positive mass under that Maia top-p policy and none is in Stockfish's depth-12 child
+top eight. The result bounds proactive reply-specific hints under these policies;
+it does not estimate human play or explain an engine recommendation. Conditional
+on-demand exploration remains possible. [[D3284]] records the gap, and [[D3262]]
+still requires the five-arm continuation and counterfactual profile.

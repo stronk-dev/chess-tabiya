@@ -494,6 +494,14 @@ an observation, but may not be called the engine's reason without counterfactual
 continuation that survives the named alternatives. A contrary rank requires explicit
 abstention or a separately proven explanation, never a polished local-fact story.
 
+[[D3284]] separates *scheduled* exact events from reply relevance. All 32 named
+pawn-denial minor arrivals can be retained by the source-blind event selector, but
+only one has positive mass under the pinned Maia3 band-1400 configured sampler, and
+none appears in Stockfish's depth-12 child top eight. The production profile may
+retain an exact conditional line for on-demand exploration, but proactive guidance
+must not imply a likely reply or an engine reason from event reach alone. These
+frontiers are neither a human-move rate nor a complete five-arm verdict.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,

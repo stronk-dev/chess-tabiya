@@ -317,6 +317,18 @@ likes this move” card. The fixed selected sample is not a population rate. A w
 needs a continuation-backed counterfactual link or honest abstention ([[D3283]]). `[V]`
 `planning/semantic-consequence-search/d3262-local-rank-concordance.md`.
 
+A separate provider-frontier join distinguishes an exact branch's existence from its
+relevance under a pinned policy. The source-blind selector reaches all 32 registered
+pawn-denial minor arrivals, but only one receives positive mass after the configured
+Maia3 band-1400 top-p cutoff and none is in Stockfish's depth-12 child top eight.
+The other exact-event strata remain distinct: 53 positive named captures, 14
+exchange-neutralized captures and 54 locally safe arrivals. This bounds proactive
+reply-specific hints under those tested frontiers, not human likelihood or an
+engine-preference explanation. Conditional on-demand exploration can still use the
+exact witness; the five-arm profile must measure continuation and relevance before
+making a default hint. [[D3284]] `[V]`
+`planning/semantic-consequence-search/d3262-event-policy-relevance.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

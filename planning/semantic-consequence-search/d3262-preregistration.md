@@ -192,3 +192,11 @@ destination family is 3/54. Nine 100-ms directional pairs contain bounded raw sc
 and remain separately identified. This is evidence against treating a true local
 classification as the engine's reason, not evidence that an engine rank itself explains
 the move. [[D3283]] and the full counterfactual [[D3262]] remain open.
+
+`d3262-event-policy-relevance.md` checks those exact first-reply events against the
+pinned configured Maia3 sampler and complete Stockfish child ranks. The semantic
+selector schedules all 32 registered pawn-denial minor arrivals, but only one has
+positive configured Maia mass and none is child depth-12 top eight. That is an
+event-reach versus *these frontiers* mismatch, not a human-reply frequency. It does
+not alter the preregistered five arms, use the held-out reply to select branches, or
+license proactive hints from a conditional event. [[D3284]] remains open.
