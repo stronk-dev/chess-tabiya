@@ -46,14 +46,20 @@ artifacts have no duplicate ranks, but 64/198 root probes and 188/588 child prob
 mix adjacent depths, all in the 100-ms arm. Depth-8 and depth-12 tables do not mix.
 The uncorrected two-position top-eight smoke had 10–11 entries per probe with
 duplicate ranks; the coherent-table correction gives exactly eight per probe at
-one complete depth. Previously reported timed-rank comparisons remain provisional
-until coherent re-capture; the depth-12 contradiction in [[D3283]] is unaffected.
-`[V]` Stored source captures, checked coherent-table fixture, and local smoke.
+one complete depth. The subsequent 66-root / 196-child same-width coherent
+re-capture now exists and is checked at all three budgets. Old timed-rank
+comparisons remain historical, not automatically corrected: the 100-ms best
+changes on 18 roots and 63 children, and the new root best is outside the
+frozen candidate frame on three roots ([[D3289]]). Fixed-depth all-legal ranks
+reproduce exactly, so the depth-12 contradiction in [[D3283]] is unaffected.
+`[V]` Stored source captures, checked coherent-table fixture, local smoke and
+`d3262-stockfish-coherent-recapture.md`.
 
-Next: obtain path-aware configured Maia distributions at the selected deeper
-nodes, then evaluate actual horizon-four
-proof/abstention and end-to-end cost for the preregistered arms. Neither this
-manifest nor the smoke passes criterion 23 or Discharge D1 of the search RFC.
+Next: use the separately captured path-aware Maia distributions, declare an
+honest corrected candidate population for any full provider-best comparison,
+then evaluate actual horizon-four proof/abstention and end-to-end cost. Neither
+this manifest nor the source recaptures pass criterion 23 or Discharge D1 of
+the search RFC.
 
 The 2,185-FEN deduplication is **Stockfish-only**. [[D3286]] found that the
 pinned Maia3 adapter with UCI history tokenizes the root and each replayed move,

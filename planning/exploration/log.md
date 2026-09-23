@@ -20700,3 +20700,24 @@ one-move supports (`c7d6` versus `d8d6`). [[D3287]] records the pinned
 top-p discontinuity for bot-policy calibration without calling it a general
 human-behavior rate. No source result is yet a causal engine reason; [[D3262]]
 and [[D3286]] stay open for the five-arm semantic/abstention and latency test.
+
+### 2026-09-23 — coherent root/child Stockfish sources expose candidate-frame drift
+
+The old 66-root and 196-child timed Stockfish ranks have now been recaptured
+with one complete depth table, at both their original all-legal MultiPV width
+and the separate width-eight beam setting. Independent checks bind the pinned
+binary, full legal denominator, exact FEN/graph, each retained PV and rank
+depth. The checked source-sensitivity receipt is
+`d3262-stockfish-coherent-recapture.md`; CI checks the source artifacts and
+derived counts via `make semantic-search-stockfish-coherent-impact-check`.
+
+At the same all-legal width, fixed-depth orders reproduce exactly, while the
+100-ms best changes on 18/66 roots and 63/196 children. A changed best is not
+confined to old mixed-depth rows. Changing MultiPV width changes fixed-depth
+best moves too: 25/66 roots and 80/196 children at depth eight. [[D3288]]
+records width as part of source identity. Three coherent 100-ms root bests are
+absent from the preregistered common candidate frame; [[D3289]] records the
+population miss. The frozen comparison may be reported as sensitivity evidence
+but not as the full corrected provider-best union. [[D3262]] remains open for
+a separately declared full population, five-arm proof/abstention and end-to-end
+cost; no production search profile or engine reason was selected.

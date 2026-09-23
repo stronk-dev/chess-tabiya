@@ -26969,7 +26969,7 @@
       "id": "D3285",
       "state": "todo",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:092c34a612e99728b086d9d345068c4748254731bc4dd4bd24126b49a7110898",
+      "sourceDigest": "sha256:c9be26c1666f99dc1c33292655ef4536e950f549886bb3da51f0d2866e0a894c",
       "uxItems": [],
       "owner": "evidence-foundation"
     },
@@ -26988,6 +26988,22 @@
       "sourceDigest": "sha256:cd45226458ae7b97aa40c57f1fb4381ea090873364f3750d2bbb161bb34015b8",
       "uxItems": [],
       "owner": "bot-play"
+    },
+    {
+      "id": "D3288",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:3f7ba544ba1fe2fc54ba5ad6d53da38d734f23c406b5c09bc048539943617628",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3289",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:563aa624d1a286e81cb67b66cfc8703496a2db8961e14f9baaa414d8db5f5f5c",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

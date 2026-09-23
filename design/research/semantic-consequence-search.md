@@ -381,10 +381,19 @@ all at 100 ms; depth-eight and depth-twelve tables are coherent. The corrected
 bounded capture now covers all 2,185 selected positions in 88 checked chunks,
 with 196,782 legal-move instances and 51,741 coherent ranked entries across the
 three budgets. It selects a complete single-depth table and records 1,825 unfinished
-deeper timed iterations. Existing old timed-rank conclusions remain provisional
-pending coherent root/child re-capture. The new source artifact is not a depth-four
-proof, a five-arm comparison or a production hint-latency measure. [[D3285]] `[V]`
-`planning/semantic-consequence-search/d3262-horizon4-frontier.md`.
+deeper timed iterations. Same-width coherent re-captures of all 66 roots and 196
+children now pass source, legal-denominator and PV checks. At fixed depth, old and
+new all-legal top-eight orders match exactly; at 100 ms the best changes on 18/66
+roots and 63/196 children, including cases without old mixed depths. Old timed
+conclusions cannot be promoted by simply replacing their labels ([[D3285]]).
+The coherent top-eight source also differs from coherent all-legal at fixed depth
+— 25/66 root and 80/196 child bests at depth eight ([[D3288]]). Most importantly,
+three coherent timed root bests are outside the frozen candidate frame; that
+frame remains a sensitivity population, not the complete corrected provider-best
+union ([[D3289]]). None of these captures is a depth-four proof, five-arm result
+or production hint-latency measure. `[V]`
+`planning/semantic-consequence-search/d3262-horizon4-frontier.md`,
+`planning/semantic-consequence-search/d3262-stockfish-coherent-recapture.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

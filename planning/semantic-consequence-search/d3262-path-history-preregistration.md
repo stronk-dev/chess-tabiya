@@ -79,3 +79,12 @@ queries. The paired source and its limitations are recorded in
 five-arm hypothesis/proof comparison, mixed-old-timed-rank re-capture or
 end-to-end cost verdict has been produced. This status entry does not change
 the preregistered population, algorithms or measures above.
+
+The root/child coherent Stockfish recapture subsequently closed the old
+mixed-depth capture gap as a source measurement
+(`d3262-stockfish-coherent-recapture.md`). It also exposed [[D3289]]: three
+corrected 100-ms root bests are not in this profile's retained 196 candidates.
+That is an explicit population miss, not permission to add those candidates
+after seeing results. A fixed-frame five-arm run can be labelled sensitivity
+analysis only; a full corrected provider-best union needs a separately frozen
+candidate/source frame and downstream captures. Gates 3–5 stay open.

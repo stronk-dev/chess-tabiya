@@ -26,6 +26,9 @@ export SF_CMD
 .PHONY: semantic-search-maia-history-frame-delta-update semantic-search-maia-history-frame-delta-check
 .PHONY: semantic-search-stockfish-history-supplement-frame-update semantic-search-stockfish-history-supplement-frame-check
 .PHONY: semantic-search-stockfish-history-supplement-capture semantic-search-stockfish-history-supplement-check
+.PHONY: semantic-search-stockfish-root-coherent-capture semantic-search-stockfish-child-coherent-capture semantic-search-stockfish-coherent-check
+.PHONY: semantic-search-stockfish-root-coherent-all-capture semantic-search-stockfish-child-coherent-all-capture
+.PHONY: semantic-search-stockfish-coherent-impact-update semantic-search-stockfish-coherent-impact-check
 .PHONY: semantic-search-maia-horizon4-path-frame-update semantic-search-maia-horizon4-path-frame-check
 .PHONY: semantic-search-maia-horizon4-path-capture semantic-search-maia-horizon4-path-check
 
@@ -186,6 +189,29 @@ semantic-search-stockfish-capture:
 
 semantic-search-stockfish-child-capture:
 	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --child $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-root-coherent-capture:
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --coherent-root $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-child-coherent-capture: semantic-search-exact-replies
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --coherent-child $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-root-coherent-all-capture:
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --coherent-root-all $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-child-coherent-all-capture: semantic-search-exact-replies
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --coherent-child-all $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-coherent-check: semantic-search-stockfish-child-check
+	$(CI_NODE) --test tools/d3262-search-calibration/stockfish-coherent-recapture-check.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-coherent-recapture-check.mjs
+
+semantic-search-stockfish-coherent-impact-update: semantic-search-stockfish-coherent-check
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-coherent-impact.mjs --write
+
+semantic-search-stockfish-coherent-impact-check: semantic-search-stockfish-coherent-check
+	$(CI_NODE) --test tools/d3262-search-calibration/stockfish-coherent-impact.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-coherent-impact.mjs
 
 semantic-search-stockfish-horizon4-capture: semantic-search-horizon4-frontier
 	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --horizon4 $(if $(START),--start $(START),) $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
@@ -1686,7 +1712,7 @@ verify-governance: register-check status-parity work-index work-state work-item-
 # they do not establish repository, product, or release correctness. Run the relevant narrow target
 # while editing an RFC, or this aggregate when intentionally auditing the whole active RFC portfolio.
 verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review pack-capability-cut-fresh-review graduation-clearance-author-repair semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-cut-contract live-sources-author-repair review-evidence-fourth-fresh-review review-evidence-fourth-author-repair review-evidence-fifth-fresh-review evidence-presentation-seventh-fresh-review bot-policy-fifth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair shared-resource-bootstrap-collision-core-second-author-repair bounded-target-sixth-author-repair module-discharge-coverage-contract wave-c-module-amendment
-verify-rfc-evidence: semantic-search-stockfish-check semantic-search-stockfish-child-beam semantic-search-maia-check semantic-search-maia-child-prefix semantic-search-maia-direct-frontier semantic-search-maia-horizon4-path-check semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-reserve semantic-search-relation-event-reserve semantic-search-local-rank-concordance semantic-search-event-policy-relevance semantic-search-horizon4-frontier semantic-search-stockfish-horizon4-smoke-check semantic-search-stockfish-horizon4-check semantic-search-provider-line-arm semantic-search-exact-arm-forcing
+verify-rfc-evidence: semantic-search-stockfish-check semantic-search-stockfish-child-beam semantic-search-stockfish-coherent-impact-check semantic-search-maia-check semantic-search-maia-child-prefix semantic-search-maia-direct-frontier semantic-search-maia-horizon4-path-check semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-reserve semantic-search-relation-event-reserve semantic-search-local-rank-concordance semantic-search-event-policy-relevance semantic-search-horizon4-frontier semantic-search-stockfish-horizon4-smoke-check semantic-search-stockfish-horizon4-check semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 
 .PHONY: feedback-delivery-measurement feedback-binding-audit capability-watch-check
 feedback-delivery-measurement:

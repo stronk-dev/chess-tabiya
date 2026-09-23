@@ -232,3 +232,15 @@ positions and 2,189 path-keyed deeper Maia distributions are now checked in
 `d3262-path-history-provider-capture.md`. This closes the provider-source gap
 for the corrected frame, **not** the original empty-history profile's proof,
 the corrected five-arm proof/abstention comparison or end-to-end cost gate.
+
+The old root/child timed-rank source gap has now been independently re-captured
+at both coherent top-eight and coherent all-legal MultiPV widths; all 66 roots
+and 196 candidate children pass `make semantic-search-stockfish-coherent-check`.
+The same-width sensitivity is recorded at
+`d3262-stockfish-coherent-recapture.md`. The corrected 100-ms all-legal root
+best is outside this frozen candidate frame on three roots ([[D3289]]), and
+changing MultiPV width changes even fixed-depth bests ([[D3288]]). These are
+post-freeze findings, not amendments to the frozen 196-candidate population.
+This frame can support labelled sensitivity analysis but **cannot** be reported
+as the fully corrected union-of-provider-bests five-arm population. Criterion
+23/Discharge D1 remains unmet.

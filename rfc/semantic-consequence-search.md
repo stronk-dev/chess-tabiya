@@ -514,9 +514,17 @@ capture takes one complete single-depth rank table and labels any unfinished
 deeper iteration. Its completed 2,185-position deeper Stockfish artifact is
 checked against the full 2,186-path frame and exact legal edges, with 51,741
 retained ranked entries across three budgets. Older fixed-depth readings remain
-coherent; the old 100-ms rank comparisons are provisional until coherent
-re-capture. No production search
-profile can be selected from this Stockfish source alone.
+coherent. The root and first-child layers are now also re-captured at both
+coherent top-eight and same-width all-legal MultiPV, with source, legal and PV
+checks on all 66 and 196 positions. Old-to-coherent all-legal 100-ms top moves
+change on 18 roots and 63 children, including unmixed old ranks; the old timed
+comparisons remain historical, not proof. Coherent top-eight and all-legal
+queries also differ at fixed depth ([[D3288]]), so width belongs to the source
+identity. Three coherent timed root bests fall outside the frozen candidate
+population ([[D3289]]). The unchanged 196-candidate frame remains a labelled
+sensitivity profile, not a corrected union of provider bests; adding those
+moves requires a separately frozen population and downstream source captures.
+No production search profile can be selected from these Stockfish sources alone.
 
 [[D3286]] requires a separate Maia query identity for arm 4. The pinned Maia3
 model with UCI history consumes the ordered tokenized root and move path, while

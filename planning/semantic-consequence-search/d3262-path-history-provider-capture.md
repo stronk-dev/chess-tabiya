@@ -47,6 +47,13 @@ same-FEN rows in the path capture and the validator's paired variation.
 
 Still required for D3262 criterion 23: the separately preregistered five-arm
 traversal with semantic hypotheses, contrastive witnesses/refutations and
-typed abstentions; old timed-rank re-capture where an old arm uses a mixed
-100-ms table; and cold/warm/offline end-to-end latency and memory. A source
+typed abstentions; and cold/warm/offline end-to-end latency and memory. A source
 capture or a high-recall branch is not an engine-reason explanation.
+
+**Post-capture update, 2026-09-23:** The old root/child timed layer has since
+been re-captured at coherent same-width and top-eight settings, checked in
+`d3262-stockfish-coherent-recapture.md`. That discharges the *source-capture*
+part of the preceding list, not the five-arm verdict. Three corrected timed
+root bests fall outside the frozen candidate frame ([[D3289]]), so a full
+corrected union-of-provider-bests comparison requires a new preregistered
+candidate frame rather than relabelling the existing path-history profile.
