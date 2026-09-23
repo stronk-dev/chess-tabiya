@@ -1,0 +1,1898 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "exactReplyDigest": "sha256:3fcd3ef596886aee1e1427bc2502aaeef1baa39827c2e8d35b398e1fb478bb68",
+  "start": 0,
+  "positions": 3,
+  "partial": false,
+  "source": {
+    "engineName": "Stockfish 19",
+    "executableDigest": "sha256:dc2f18c34ae962dff591b66147d220ec06e61d756b93d8a4f5e04fd8e55c251f",
+    "threads": 1,
+    "hashMb": 16,
+    "multiPv": "top8_legal_moves_at_candidate_child",
+    "scorePerspective": "raw_uci_uninterpreted"
+  },
+  "rows": [
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "f7f5",
+      "fen": "4k3/pp2b1pp/4p3/3pPp2/3P4/1P4P1/1P2KPP1/2B5 w - f6 0 26",
+      "probes": [
+        {
+          "budget": "depth8",
+          "legal": [
+            "b3b4",
+            "c1d2",
+            "c1e3",
+            "c1f4",
+            "c1g5",
+            "c1h6",
+            "e2d1",
+            "e2d2",
+            "e2d3",
+            "e2e1",
+            "e2e3",
+            "e2f1",
+            "e2f3",
+            "e5f6",
+            "f2f3",
+            "f2f4",
+            "g3g4"
+          ],
+          "entries": [
+            {
+              "moveUci": "e5f6",
+              "rank": 1,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -74,
+                "bound": false
+              },
+              "pv": [
+                "e5f6",
+                "e7f6",
+                "e2d3",
+                "h7h5",
+                "c1e3",
+                "e8e7"
+              ]
+            },
+            {
+              "moveUci": "c1e3",
+              "rank": 2,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -103,
+                "bound": false
+              },
+              "pv": [
+                "c1e3",
+                "e8d7",
+                "e2f3",
+                "d7c6"
+              ]
+            },
+            {
+              "moveUci": "f2f4",
+              "rank": 3,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -105,
+                "bound": false
+              },
+              "pv": [
+                "f2f4",
+                "e8d7",
+                "e2f3",
+                "g7g6",
+                "g3g4",
+                "f5g4",
+                "f3g4",
+                "d7c6",
+                "g4f3"
+              ]
+            },
+            {
+              "moveUci": "e2f3",
+              "rank": 4,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -105,
+                "bound": false
+              },
+              "pv": [
+                "e2f3",
+                "h7h5",
+                "c1e3",
+                "e8d7",
+                "f3e2",
+                "d7c6",
+                "f2f4",
+                "c6b5",
+                "e2d2",
+                "h5h4"
+              ]
+            },
+            {
+              "moveUci": "c1d2",
+              "rank": 5,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -114,
+                "bound": false
+              },
+              "pv": [
+                "c1d2",
+                "e8d7",
+                "e2f3",
+                "h7h5",
+                "d2e3",
+                "d7c6",
+                "f3e2",
+                "c6b5",
+                "e2d1",
+                "b5b4"
+              ]
+            },
+            {
+              "moveUci": "e2d1",
+              "rank": 6,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -123,
+                "bound": false
+              },
+              "pv": [
+                "e2d1",
+                "e8d7",
+                "c1e3",
+                "d7c6",
+                "f2f3",
+                "c6b5",
+                "d1c2",
+                "e7b4",
+                "e3f2",
+                "b4a5",
+                "g3g4",
+                "f5g4",
+                "f3g4",
+                "a5b6",
+                "c2c3",
+                "b6d8"
+              ]
+            },
+            {
+              "moveUci": "f2f3",
+              "rank": 7,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -124,
+                "bound": false
+              },
+              "pv": [
+                "f2f3",
+                "e8d7",
+                "c1e3",
+                "d7c6",
+                "e2d1",
+                "c6b5",
+                "d1c2",
+                "e7b4",
+                "e3f2",
+                "b4a5",
+                "g3g4",
+                "f5g4",
+                "f3g4",
+                "a5b6",
+                "c2c3",
+                "b6c7"
+              ]
+            },
+            {
+              "moveUci": "e2d3",
+              "rank": 8,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -126,
+                "bound": false
+              },
+              "pv": [
+                "e2d3",
+                "e8d7",
+                "f2f3",
+                "d7c6",
+                "c1e3",
+                "c6b5",
+                "e3f2",
+                "e7b4",
+                "d3c2",
+                "b4a5",
+                "g3g4",
+                "f5g4",
+                "f3g4"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b3b4",
+            "c1f4",
+            "c1g5",
+            "c1h6",
+            "e2d2",
+            "e2e1",
+            "e2e3",
+            "e2f1",
+            "g3g4"
+          ],
+          "terminal": false,
+          "coherentDepth": 8,
+          "trailingPartialDepth": null,
+          "bestmove": "e5f6",
+          "elapsedMs": 38.8
+        },
+        {
+          "budget": "depth12",
+          "legal": [
+            "b3b4",
+            "c1d2",
+            "c1e3",
+            "c1f4",
+            "c1g5",
+            "c1h6",
+            "e2d1",
+            "e2d2",
+            "e2d3",
+            "e2e1",
+            "e2e3",
+            "e2f1",
+            "e2f3",
+            "e5f6",
+            "f2f3",
+            "f2f4",
+            "g3g4"
+          ],
+          "entries": [
+            {
+              "moveUci": "e5f6",
+              "rank": 1,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -67,
+                "bound": false
+              },
+              "pv": [
+                "e5f6",
+                "e7f6",
+                "e2d3",
+                "h7h5",
+                "c1d2",
+                "g7g6",
+                "d2f4"
+              ]
+            },
+            {
+              "moveUci": "c1d2",
+              "rank": 2,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -129,
+                "bound": false
+              },
+              "pv": [
+                "c1d2",
+                "e8d7",
+                "e2d3",
+                "d7c6",
+                "f2f3",
+                "h7h5",
+                "d2e3",
+                "c6b5",
+                "e3f2",
+                "e7b4",
+                "d3c2",
+                "a7a5",
+                "c2d3"
+              ]
+            },
+            {
+              "moveUci": "e2d1",
+              "rank": 3,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -129,
+                "bound": false
+              },
+              "pv": [
+                "e2d1",
+                "e8d7",
+                "f2f3",
+                "h7h5",
+                "c1e3",
+                "d7c6",
+                "d1c2",
+                "c6b5",
+                "c2b1",
+                "a7a5",
+                "b1c2",
+                "e7b4",
+                "e3f2",
+                "a5a4",
+                "b3a4",
+                "b5a4",
+                "g3g4",
+                "h5g4",
+                "f3g4",
+                "f5g4",
+                "f2h4",
+                "b7b5",
+                "h4d8",
+                "b4e1"
+              ]
+            },
+            {
+              "moveUci": "e2f3",
+              "rank": 4,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -131,
+                "bound": false
+              },
+              "pv": [
+                "e2f3",
+                "h7h5",
+                "f3e2",
+                "e8d7",
+                "f2f3",
+                "d7c6",
+                "c1e3",
+                "c6b5",
+                "e2d1",
+                "e7b4",
+                "e3f2",
+                "a7a6",
+                "d1c2"
+              ]
+            },
+            {
+              "moveUci": "f2f3",
+              "rank": 5,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -136,
+                "bound": false
+              },
+              "pv": [
+                "f2f3",
+                "h7h5",
+                "c1e3",
+                "e8d7",
+                "e2d2",
+                "d7c6",
+                "e3f2",
+                "a7a5",
+                "d2c2",
+                "e7b4",
+                "c2c1"
+              ]
+            },
+            {
+              "moveUci": "e2d2",
+              "rank": 6,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -139,
+                "bound": false
+              },
+              "pv": [
+                "e2d2",
+                "e8d7",
+                "f2f3",
+                "d7c6",
+                "d2c2",
+                "h7h5",
+                "c1e3",
+                "c6b5",
+                "e3f2",
+                "a7a5",
+                "c2d3"
+              ]
+            },
+            {
+              "moveUci": "c1e3",
+              "rank": 7,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -141,
+                "bound": false
+              },
+              "pv": [
+                "c1e3",
+                "e8d7",
+                "e2d3",
+                "e7b4",
+                "f2f3",
+                "h7h5",
+                "e3f2",
+                "d7c6"
+              ]
+            },
+            {
+              "moveUci": "e2d3",
+              "rank": 8,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -142,
+                "bound": false
+              },
+              "pv": [
+                "e2d3",
+                "e8d7",
+                "f2f3",
+                "h7h5",
+                "c1e3",
+                "d7c6",
+                "e3f2",
+                "c6b5",
+                "d3d2",
+                "a7a5",
+                "d2c2",
+                "a5a4",
+                "c2c3",
+                "e7b4",
+                "c3c2"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b3b4",
+            "c1f4",
+            "c1g5",
+            "c1h6",
+            "e2e1",
+            "e2e3",
+            "e2f1",
+            "f2f4",
+            "g3g4"
+          ],
+          "terminal": false,
+          "coherentDepth": 12,
+          "trailingPartialDepth": null,
+          "bestmove": "e5f6",
+          "elapsedMs": 200.3
+        },
+        {
+          "budget": "movetime100",
+          "legal": [
+            "b3b4",
+            "c1d2",
+            "c1e3",
+            "c1f4",
+            "c1g5",
+            "c1h6",
+            "e2d1",
+            "e2d2",
+            "e2d3",
+            "e2e1",
+            "e2e3",
+            "e2f1",
+            "e2f3",
+            "e5f6",
+            "f2f3",
+            "f2f4",
+            "g3g4"
+          ],
+          "entries": [
+            {
+              "moveUci": "e5f6",
+              "rank": 1,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -74,
+                "bound": false
+              },
+              "pv": [
+                "e5f6",
+                "e7f6",
+                "e2d3",
+                "h7h5",
+                "c1e3",
+                "e8e7"
+              ]
+            },
+            {
+              "moveUci": "c1e3",
+              "rank": 2,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -103,
+                "bound": false
+              },
+              "pv": [
+                "c1e3",
+                "e8d7",
+                "e2f3",
+                "d7c6"
+              ]
+            },
+            {
+              "moveUci": "f2f4",
+              "rank": 3,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -105,
+                "bound": false
+              },
+              "pv": [
+                "f2f4",
+                "e8d7",
+                "e2f3",
+                "g7g6",
+                "g3g4",
+                "f5g4",
+                "f3g4",
+                "d7c6",
+                "g4f3"
+              ]
+            },
+            {
+              "moveUci": "e2f3",
+              "rank": 4,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -105,
+                "bound": false
+              },
+              "pv": [
+                "e2f3",
+                "h7h5",
+                "c1e3",
+                "e8d7",
+                "f3e2",
+                "d7c6",
+                "f2f4",
+                "c6b5",
+                "e2d2",
+                "h5h4"
+              ]
+            },
+            {
+              "moveUci": "c1d2",
+              "rank": 5,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -114,
+                "bound": false
+              },
+              "pv": [
+                "c1d2",
+                "e8d7",
+                "e2f3",
+                "h7h5",
+                "d2e3",
+                "d7c6",
+                "f3e2",
+                "c6b5",
+                "e2d1",
+                "b5b4"
+              ]
+            },
+            {
+              "moveUci": "e2d1",
+              "rank": 6,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -123,
+                "bound": false
+              },
+              "pv": [
+                "e2d1",
+                "e8d7",
+                "c1e3",
+                "d7c6",
+                "f2f3",
+                "c6b5",
+                "d1c2",
+                "e7b4",
+                "e3f2",
+                "b4a5",
+                "g3g4",
+                "f5g4",
+                "f3g4",
+                "a5b6",
+                "c2c3",
+                "b6d8"
+              ]
+            },
+            {
+              "moveUci": "f2f3",
+              "rank": 7,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -124,
+                "bound": false
+              },
+              "pv": [
+                "f2f3",
+                "e8d7",
+                "c1e3",
+                "d7c6",
+                "e2d1",
+                "c6b5",
+                "d1c2",
+                "e7b4",
+                "e3f2",
+                "b4a5",
+                "g3g4",
+                "f5g4",
+                "f3g4",
+                "a5b6",
+                "c2c3",
+                "b6c7"
+              ]
+            },
+            {
+              "moveUci": "e2d3",
+              "rank": 8,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -126,
+                "bound": false
+              },
+              "pv": [
+                "e2d3",
+                "e8d7",
+                "f2f3",
+                "d7c6",
+                "c1e3",
+                "c6b5",
+                "e3f2",
+                "e7b4",
+                "d3c2",
+                "b4a5",
+                "g3g4",
+                "f5g4",
+                "f3g4"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b3b4",
+            "c1f4",
+            "c1g5",
+            "c1h6",
+            "e2d2",
+            "e2e1",
+            "e2e3",
+            "e2f1",
+            "g3g4"
+          ],
+          "terminal": false,
+          "coherentDepth": 8,
+          "trailingPartialDepth": 10,
+          "bestmove": "e5f6",
+          "elapsedMs": 101.52
+        }
+      ]
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "f2f3",
+      "fen": "6k1/5pp1/7p/3rP3/8/5P2/6PP/R5K1 b - - 0 2",
+      "probes": [
+        {
+          "budget": "depth8",
+          "legal": [
+            "d5a5",
+            "d5b5",
+            "d5c5",
+            "d5d1",
+            "d5d2",
+            "d5d3",
+            "d5d4",
+            "d5d6",
+            "d5d7",
+            "d5d8",
+            "d5e5",
+            "f7f5",
+            "f7f6",
+            "g7g5",
+            "g7g6",
+            "g8f8",
+            "g8h7",
+            "g8h8",
+            "h6h5"
+          ],
+          "entries": [
+            {
+              "moveUci": "d5d8",
+              "rank": 1,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 4,
+                "bound": false
+              },
+              "pv": [
+                "d5d8",
+                "f3f4",
+                "g7g6",
+                "a1c1",
+                "d8a8",
+                "g1f1",
+                "h6h5"
+              ]
+            },
+            {
+              "moveUci": "d5e5",
+              "rank": 2,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 1,
+                "bound": false
+              },
+              "pv": [
+                "d5e5",
+                "a1a8",
+                "g8h7",
+                "a8f8",
+                "e5e6"
+              ]
+            },
+            {
+              "moveUci": "g7g6",
+              "rank": 3,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 1,
+                "bound": false
+              },
+              "pv": [
+                "g7g6",
+                "a1a8",
+                "g8g7",
+                "a8a7",
+                "d5e5",
+                "g1f2",
+                "g6g5",
+                "h2h3",
+                "e5e8"
+              ]
+            },
+            {
+              "moveUci": "g7g5",
+              "rank": 4,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 1,
+                "bound": false
+              },
+              "pv": [
+                "g7g5",
+                "a1e1",
+                "g8g7"
+              ]
+            },
+            {
+              "moveUci": "h6h5",
+              "rank": 5,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 0,
+                "bound": false
+              },
+              "pv": [
+                "h6h5",
+                "a1a8",
+                "g8h7",
+                "f3f4",
+                "g7g6",
+                "a8f8",
+                "h7g7"
+              ]
+            },
+            {
+              "moveUci": "d5c5",
+              "rank": 6,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -1,
+                "bound": false
+              },
+              "pv": [
+                "d5c5",
+                "a1a8",
+                "g8h7",
+                "f3f4",
+                "g7g5",
+                "a8a7",
+                "h7g6"
+              ]
+            },
+            {
+              "moveUci": "g8h7",
+              "rank": 7,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -2,
+                "bound": false
+              },
+              "pv": [
+                "g8h7",
+                "f3f4",
+                "g7g5",
+                "a1a7",
+                "h7g6",
+                "a7a6",
+                "g6g7"
+              ]
+            },
+            {
+              "moveUci": "d5d2",
+              "rank": 8,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -2,
+                "bound": false
+              },
+              "pv": [
+                "d5d2",
+                "a1a8",
+                "g8h7",
+                "f3f4",
+                "g7g6",
+                "a8e8",
+                "h7g7"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "d5a5",
+            "d5b5",
+            "d5d1",
+            "d5d3",
+            "d5d4",
+            "d5d6",
+            "d5d7",
+            "f7f5",
+            "f7f6",
+            "g8f8",
+            "g8h8"
+          ],
+          "terminal": false,
+          "coherentDepth": 8,
+          "trailingPartialDepth": null,
+          "bestmove": "d5d8",
+          "elapsedMs": 52.94
+        },
+        {
+          "budget": "depth12",
+          "legal": [
+            "d5a5",
+            "d5b5",
+            "d5c5",
+            "d5d1",
+            "d5d2",
+            "d5d3",
+            "d5d4",
+            "d5d6",
+            "d5d7",
+            "d5d8",
+            "d5e5",
+            "f7f5",
+            "f7f6",
+            "g7g5",
+            "g7g6",
+            "g8f8",
+            "g8h7",
+            "g8h8",
+            "h6h5"
+          ],
+          "entries": [
+            {
+              "moveUci": "d5b5",
+              "rank": 1,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 9,
+                "bound": false
+              },
+              "pv": [
+                "d5b5",
+                "a1a8",
+                "g8h7",
+                "f3f4",
+                "b5b1",
+                "g1f2",
+                "b1b2",
+                "f2f3",
+                "g7g6"
+              ]
+            },
+            {
+              "moveUci": "g7g5",
+              "rank": 2,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 4,
+                "bound": false
+              },
+              "pv": [
+                "g7g5",
+                "a1e1",
+                "g8g7",
+                "h2h4",
+                "d5a5",
+                "h4g5",
+                "h6g5",
+                "e5e6",
+                "f7e6"
+              ]
+            },
+            {
+              "moveUci": "d5e5",
+              "rank": 3,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 3,
+                "bound": false
+              },
+              "pv": [
+                "d5e5",
+                "a1a8",
+                "g8h7",
+                "a8d8",
+                "g7g5",
+                "f3f4",
+                "g5f4"
+              ]
+            },
+            {
+              "moveUci": "h6h5",
+              "rank": 4,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 2,
+                "bound": false
+              },
+              "pv": [
+                "h6h5",
+                "f3f4",
+                "g7g6",
+                "h2h3",
+                "g8f8",
+                "a1a8",
+                "f8g7"
+              ]
+            },
+            {
+              "moveUci": "g7g6",
+              "rank": 5,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 0,
+                "bound": false
+              },
+              "pv": [
+                "g7g6",
+                "f3f4",
+                "h6h5",
+                "h2h4",
+                "d5c5",
+                "a1a8",
+                "g8g7",
+                "a8a7",
+                "g7g8"
+              ]
+            },
+            {
+              "moveUci": "d5d2",
+              "rank": 6,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 0,
+                "bound": false
+              },
+              "pv": [
+                "d5d2",
+                "a1a8",
+                "g8h7",
+                "a8a7",
+                "h7g8",
+                "a7a8"
+              ]
+            },
+            {
+              "moveUci": "g8h7",
+              "rank": 7,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "g8h7",
+                "f3f4",
+                "g7g5",
+                "a1a7",
+                "h7g6",
+                "a7a6",
+                "g6g7",
+                "g1f2",
+                "g5f4",
+                "e5e6",
+                "f7e6",
+                "a6e6"
+              ]
+            },
+            {
+              "moveUci": "d5c5",
+              "rank": 8,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "d5c5",
+                "a1a8",
+                "g8h7",
+                "f3f4",
+                "g7g6",
+                "a8e8",
+                "h6h5",
+                "h2h3",
+                "c5c4"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "d5a5",
+            "d5d1",
+            "d5d3",
+            "d5d4",
+            "d5d6",
+            "d5d7",
+            "d5d8",
+            "f7f5",
+            "f7f6",
+            "g8f8",
+            "g8h8"
+          ],
+          "terminal": false,
+          "coherentDepth": 12,
+          "trailingPartialDepth": null,
+          "bestmove": "d5b5",
+          "elapsedMs": 248.37
+        },
+        {
+          "budget": "movetime100",
+          "legal": [
+            "d5a5",
+            "d5b5",
+            "d5c5",
+            "d5d1",
+            "d5d2",
+            "d5d3",
+            "d5d4",
+            "d5d6",
+            "d5d7",
+            "d5d8",
+            "d5e5",
+            "f7f5",
+            "f7f6",
+            "g7g5",
+            "g7g6",
+            "g8f8",
+            "g8h7",
+            "g8h8",
+            "h6h5"
+          ],
+          "entries": [
+            {
+              "moveUci": "d5e5",
+              "rank": 1,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 8,
+                "bound": false
+              },
+              "pv": [
+                "d5e5",
+                "h2h3",
+                "g7g5",
+                "a1a8",
+                "g8g7",
+                "a8a7",
+                "e5e1",
+                "g1h2",
+                "e1d1"
+              ]
+            },
+            {
+              "moveUci": "g7g5",
+              "rank": 2,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 7,
+                "bound": false
+              },
+              "pv": [
+                "g7g5",
+                "f3f4",
+                "g5f4",
+                "a1a7",
+                "d5e5"
+              ]
+            },
+            {
+              "moveUci": "d5d8",
+              "rank": 3,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 4,
+                "bound": false
+              },
+              "pv": [
+                "d5d8",
+                "f3f4",
+                "g7g6",
+                "h2h4",
+                "g6g5",
+                "g1h2",
+                "g5f4"
+              ]
+            },
+            {
+              "moveUci": "h6h5",
+              "rank": 4,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 3,
+                "bound": false
+              },
+              "pv": [
+                "h6h5",
+                "a1a8",
+                "g8h7",
+                "f3f4",
+                "g7g6",
+                "a8a7",
+                "d5d1",
+                "g1f2",
+                "h7g8",
+                "a7b7"
+              ]
+            },
+            {
+              "moveUci": "g8h7",
+              "rank": 5,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 0,
+                "bound": false
+              },
+              "pv": [
+                "g8h7",
+                "f3f4",
+                "g7g5",
+                "a1a7",
+                "h7g6",
+                "a7a6",
+                "g6g7",
+                "e5e6"
+              ]
+            },
+            {
+              "moveUci": "d5c5",
+              "rank": 6,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 0,
+                "bound": false
+              },
+              "pv": [
+                "d5c5",
+                "f3f4",
+                "g7g6",
+                "h2h4",
+                "h6h5",
+                "a1a8",
+                "g8g7",
+                "a8a1"
+              ]
+            },
+            {
+              "moveUci": "g7g6",
+              "rank": 7,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -1,
+                "bound": false
+              },
+              "pv": [
+                "g7g6",
+                "f3f4",
+                "h6h5",
+                "h2h4",
+                "d5c5",
+                "a1a8",
+                "g8g7"
+              ]
+            },
+            {
+              "moveUci": "f7f6",
+              "rank": 8,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -1,
+                "bound": false
+              },
+              "pv": [
+                "f7f6",
+                "e5e6",
+                "d5e5",
+                "a1a6",
+                "f6f5",
+                "g2g4",
+                "f5g4"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "d5a5",
+            "d5b5",
+            "d5d1",
+            "d5d2",
+            "d5d3",
+            "d5d4",
+            "d5d6",
+            "d5d7",
+            "f7f5",
+            "g8f8",
+            "g8h8"
+          ],
+          "terminal": false,
+          "coherentDepth": 10,
+          "trailingPartialDepth": 11,
+          "bestmove": "d5e5",
+          "elapsedMs": 100.82
+        }
+      ]
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "e1e2",
+      "fen": "6k1/5pp1/7p/8/3rP3/8/4KPPP/R7 b - - 5 3",
+      "probes": [
+        {
+          "budget": "depth8",
+          "legal": [
+            "d4a4",
+            "d4b4",
+            "d4c4",
+            "d4d1",
+            "d4d2",
+            "d4d3",
+            "d4d5",
+            "d4d6",
+            "d4d7",
+            "d4d8",
+            "d4e4",
+            "f7f5",
+            "f7f6",
+            "g7g5",
+            "g7g6",
+            "g8f8",
+            "g8h7",
+            "g8h8",
+            "h6h5"
+          ],
+          "entries": [
+            {
+              "moveUci": "d4e4",
+              "rank": 1,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 2,
+                "bound": false
+              },
+              "pv": [
+                "d4e4",
+                "e2f3",
+                "e4e8",
+                "a1a2"
+              ]
+            },
+            {
+              "moveUci": "g7g6",
+              "rank": 2,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "g7g6",
+                "e4e5",
+                "d4b4"
+              ]
+            },
+            {
+              "moveUci": "d4b4",
+              "rank": 3,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "d4b4",
+                "e4e5",
+                "b4b2",
+                "e2e3",
+                "b2b3",
+                "e3f4",
+                "b3b6",
+                "a1a8",
+                "g8h7"
+              ]
+            },
+            {
+              "moveUci": "f7f6",
+              "rank": 4,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "f7f6",
+                "e2e3",
+                "d4b4",
+                "a1a8",
+                "g8h7",
+                "a8a2"
+              ]
+            },
+            {
+              "moveUci": "h6h5",
+              "rank": 5,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "h6h5",
+                "e2e3",
+                "d4b4",
+                "g2g3",
+                "g7g6"
+              ]
+            },
+            {
+              "moveUci": "d4d8",
+              "rank": 6,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -4,
+                "bound": false
+              },
+              "pv": [
+                "d4d8",
+                "e2e3",
+                "g7g6",
+                "e4e5",
+                "d8b8",
+                "a1a2"
+              ]
+            },
+            {
+              "moveUci": "g7g5",
+              "rank": 7,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -4,
+                "bound": false
+              },
+              "pv": [
+                "g7g5",
+                "e2e3",
+                "d4b4",
+                "g2g3",
+                "g8g7",
+                "e4e5"
+              ]
+            },
+            {
+              "moveUci": "d4c4",
+              "rank": 8,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -5,
+                "bound": false
+              },
+              "pv": [
+                "d4c4",
+                "e2e3",
+                "c4b4",
+                "a1a8",
+                "g8h7",
+                "f2f4"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "d4a4",
+            "d4d1",
+            "d4d2",
+            "d4d3",
+            "d4d5",
+            "d4d6",
+            "d4d7",
+            "f7f5",
+            "g8f8",
+            "g8h7",
+            "g8h8"
+          ],
+          "terminal": false,
+          "coherentDepth": 8,
+          "trailingPartialDepth": null,
+          "bestmove": "d4e4",
+          "elapsedMs": 32.5
+        },
+        {
+          "budget": "depth12",
+          "legal": [
+            "d4a4",
+            "d4b4",
+            "d4c4",
+            "d4d1",
+            "d4d2",
+            "d4d3",
+            "d4d5",
+            "d4d6",
+            "d4d7",
+            "d4d8",
+            "d4e4",
+            "f7f5",
+            "f7f6",
+            "g7g5",
+            "g7g6",
+            "g8f8",
+            "g8h7",
+            "g8h8",
+            "h6h5"
+          ],
+          "entries": [
+            {
+              "moveUci": "d4b4",
+              "rank": 1,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 25,
+                "bound": false
+              },
+              "pv": [
+                "d4b4",
+                "a1a8",
+                "g8h7",
+                "e4e5",
+                "b4e4",
+                "e2f1"
+              ]
+            },
+            {
+              "moveUci": "h6h5",
+              "rank": 2,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 24,
+                "bound": false
+              },
+              "pv": [
+                "h6h5",
+                "e2e3",
+                "d4b4",
+                "a1a8",
+                "g8h7"
+              ]
+            },
+            {
+              "moveUci": "d4d8",
+              "rank": 3,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 22,
+                "bound": false
+              },
+              "pv": [
+                "d4d8",
+                "f2f4",
+                "d8b8",
+                "h2h4",
+                "h6h5"
+              ]
+            },
+            {
+              "moveUci": "f7f6",
+              "rank": 4,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 21,
+                "bound": false
+              },
+              "pv": [
+                "f7f6",
+                "e2e3",
+                "d4b4",
+                "a1a8",
+                "g8h7",
+                "f2f4",
+                "g7g6",
+                "f4f5",
+                "g6f5",
+                "e4f5"
+              ]
+            },
+            {
+              "moveUci": "g8h7",
+              "rank": 5,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 16,
+                "bound": false
+              },
+              "pv": [
+                "g8h7",
+                "e2e3",
+                "d4b4",
+                "a1a2",
+                "g7g6",
+                "e4e5"
+              ]
+            },
+            {
+              "moveUci": "g7g6",
+              "rank": 6,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 16,
+                "bound": false
+              },
+              "pv": [
+                "g7g6",
+                "a1a2",
+                "d4e4",
+                "e2f3",
+                "e4b4",
+                "a2e2",
+                "b4b3",
+                "e2e3"
+              ]
+            },
+            {
+              "moveUci": "d4e4",
+              "rank": 7,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 0,
+                "bound": false
+              },
+              "pv": [
+                "d4e4",
+                "e2f3",
+                "e4e6",
+                "a1a8",
+                "g8h7",
+                "g2g4",
+                "e6f6",
+                "f3g2",
+                "f6g6"
+              ]
+            },
+            {
+              "moveUci": "g7g5",
+              "rank": 8,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -4,
+                "bound": false
+              },
+              "pv": [
+                "g7g5",
+                "e2e3",
+                "d4b4",
+                "a1a2",
+                "g8g7",
+                "h2h4",
+                "g5h4",
+                "e3f4",
+                "f7f6"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "d4a4",
+            "d4c4",
+            "d4d1",
+            "d4d2",
+            "d4d3",
+            "d4d5",
+            "d4d6",
+            "d4d7",
+            "f7f5",
+            "g8f8",
+            "g8h8"
+          ],
+          "terminal": false,
+          "coherentDepth": 12,
+          "trailingPartialDepth": null,
+          "bestmove": "d4b4",
+          "elapsedMs": 313.54
+        },
+        {
+          "budget": "movetime100",
+          "legal": [
+            "d4a4",
+            "d4b4",
+            "d4c4",
+            "d4d1",
+            "d4d2",
+            "d4d3",
+            "d4d5",
+            "d4d6",
+            "d4d7",
+            "d4d8",
+            "d4e4",
+            "f7f5",
+            "f7f6",
+            "g7g5",
+            "g7g6",
+            "g8f8",
+            "g8h7",
+            "g8h8",
+            "h6h5"
+          ],
+          "entries": [
+            {
+              "moveUci": "d4b4",
+              "rank": 1,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 3,
+                "bound": false
+              },
+              "pv": [
+                "d4b4",
+                "a1a8",
+                "g8h7",
+                "f2f4",
+                "g7g6"
+              ]
+            },
+            {
+              "moveUci": "d4e4",
+              "rank": 2,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -1,
+                "bound": false
+              },
+              "pv": [
+                "d4e4",
+                "e2f3",
+                "e4d4",
+                "a1e1"
+              ]
+            },
+            {
+              "moveUci": "f7f6",
+              "rank": 3,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "f7f6",
+                "e2e3",
+                "d4b4",
+                "f2f4",
+                "b4b3",
+                "e3f2",
+                "b3b2",
+                "f2f3",
+                "g8f7"
+              ]
+            },
+            {
+              "moveUci": "d4d8",
+              "rank": 4,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "d4d8",
+                "f2f4",
+                "d8b8",
+                "h2h4",
+                "b8b2",
+                "e2e3",
+                "b2g2",
+                "f4f5"
+              ]
+            },
+            {
+              "moveUci": "h6h5",
+              "rank": 5,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "h6h5",
+                "e2e3",
+                "d4b4",
+                "g2g3",
+                "b4b3",
+                "e3f4",
+                "b3b7"
+              ]
+            },
+            {
+              "moveUci": "g7g6",
+              "rank": 6,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -3,
+                "bound": false
+              },
+              "pv": [
+                "g7g6",
+                "e2e3",
+                "d4b4",
+                "a1a2",
+                "g8g7",
+                "e4e5",
+                "b4b3",
+                "e3d4"
+              ]
+            },
+            {
+              "moveUci": "g7g5",
+              "rank": 7,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -4,
+                "bound": false
+              },
+              "pv": [
+                "g7g5",
+                "e2e3",
+                "d4b4",
+                "g2g3",
+                "g8g7",
+                "f2f4",
+                "g5f4",
+                "g3f4",
+                "b4b3",
+                "e3d4"
+              ]
+            },
+            {
+              "moveUci": "g8h7",
+              "rank": 8,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": -4,
+                "bound": false
+              },
+              "pv": [
+                "g8h7",
+                "e2e3",
+                "d4b4",
+                "a1a2",
+                "g7g5",
+                "a2e2"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "d4a4",
+            "d4c4",
+            "d4d1",
+            "d4d2",
+            "d4d3",
+            "d4d5",
+            "d4d6",
+            "d4d7",
+            "f7f5",
+            "g8f8",
+            "g8h8"
+          ],
+          "terminal": false,
+          "coherentDepth": 10,
+          "trailingPartialDepth": 11,
+          "bestmove": "d4b4",
+          "elapsedMs": 100.39
+        }
+      ]
+    }
+  ]
+}

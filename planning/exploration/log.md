@@ -20737,3 +20737,21 @@ The first frame run exposed [[D3290]]: a suffix-based CLI guard in the imported
 old frame module also matched the new command, attempted to write the old
 immutable frame and failed without changing it. An exact-path main guard and
 suffix-collision regression test now keep the frozen artifact untouched.
+
+### 2026-09-23 — corrected-frame new-child provider sources captured
+
+All three candidate children added by the separately preregistered coherent
+root frame now have checked Stockfish 19 all-legal and top-eight rank sources
+at depth 8, depth 12 and 100 ms. The pinned Maia3-5M container reproduced
+an existing path control, then replayed each corrected root plus candidate
+move. Its full-legal distributions cover 55 replies, equal to both the
+python-chess legal set in the container and the chessops exact graph; the
+configured sampler retains six support entries in total. The independent
+check refuses crossed source/history, omitted legal moves and forged mass.
+
+`d3262-coherent-new-child-sources.md` records all three source digests and
+the exact boundary. The 193-candidate profile still needs target comparisons,
+first-reply selection, newly selected deeper Stockfish/Maia source union,
+five-arm semantic proof/abstention and end-to-end cost. [[D3289]] and
+[[D3262]] remain open; model support was not called human frequency or a
+causal engine reason.

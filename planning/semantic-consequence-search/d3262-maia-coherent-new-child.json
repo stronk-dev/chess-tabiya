@@ -1,0 +1,374 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "profile": "d3262-coherent-root-v1",
+  "authority": "coherent_root_new_child_maia_distribution_not_human_frequency_or_proof",
+  "inputDigests": {
+    "d3262-coherent-exact-replies.json": "sha256:3fcd3ef596886aee1e1427bc2502aaeef1baa39827c2e8d35b398e1fb478bb68",
+    "d3262-exact-replies.json": "sha256:63d38517b2cf9be19137e1b57b846be10b017006e69d6633510b1c43b93bd316",
+    "d3262-maia-direct-logits.json": "sha256:4513d01c0983797d27c6ab30e1ffa42c046e519957756bfe97a71673340df7ab",
+    "d3262-maia-history-replay.json": "sha256:81b3d761395be080585af93127245e2116b12b175fac915c9892e1fce361adf4"
+  },
+  "source": {
+    "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+    "modelCheckpointSha256": "sha256:ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f562524f",
+    "uciSourceSha256": "sha256:0f2905bb668f0cb8af6b175e698756d89472b200c36e3f3410ff98390e35474d",
+    "mode": "human_common",
+    "band": 1400,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "useUciHistory": true,
+    "historyUci": "root_candidate_path_per_row",
+    "device": "cpu",
+    "rawMeaning": "direct_full_legal_softmax_logits",
+    "configuredMeaning": "direct_sample_from_logits_support_and_normalized_mass",
+    "preRootHistory": "unavailable_not_inferred"
+  },
+  "positions": 3,
+  "rows": [
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "f7f5",
+      "rootFen": "4k3/pp2bppp/4p3/3pP3/3P4/1P4P1/1P2KPP1/2B5 b - - 4 25",
+      "fen": "4k3/pp2b1pp/4p3/3pPp2/3P4/1P4P1/1P2KPP1/2B5 w - f6 0 26",
+      "historyUci": [
+        "f7f5"
+      ],
+      "legalUcis": [
+        "b3b4",
+        "c1d2",
+        "c1e3",
+        "c1f4",
+        "c1g5",
+        "c1h6",
+        "e2d1",
+        "e2d2",
+        "e2d3",
+        "e2e1",
+        "e2e3",
+        "e2f1",
+        "e2f3",
+        "e5f6",
+        "f2f3",
+        "f2f4",
+        "g3g4"
+      ],
+      "rawFullLegal": [
+        {
+          "legalUci": "b3b4",
+          "mass": 0.011518774554133415
+        },
+        {
+          "legalUci": "c1d2",
+          "mass": 0.15190210938453674
+        },
+        {
+          "legalUci": "c1e3",
+          "mass": 0.015775680541992188
+        },
+        {
+          "legalUci": "c1f4",
+          "mass": 0.014180068857967854
+        },
+        {
+          "legalUci": "c1g5",
+          "mass": 0.001357093919068575
+        },
+        {
+          "legalUci": "c1h6",
+          "mass": 9.026544285006821e-05
+        },
+        {
+          "legalUci": "e2d1",
+          "mass": 0.0003153747820761055
+        },
+        {
+          "legalUci": "e2d2",
+          "mass": 0.002404438564553857
+        },
+        {
+          "legalUci": "e2d3",
+          "mass": 0.10281838476657867
+        },
+        {
+          "legalUci": "e2e1",
+          "mass": 0.00010317054693587124
+        },
+        {
+          "legalUci": "e2e3",
+          "mass": 0.013974374160170555
+        },
+        {
+          "legalUci": "e2f1",
+          "mass": 0.0007799625163897872
+        },
+        {
+          "legalUci": "e2f3",
+          "mass": 0.05130523443222046
+        },
+        {
+          "legalUci": "e5f6",
+          "mass": 0.33145201206207275
+        },
+        {
+          "legalUci": "f2f3",
+          "mass": 0.06662631034851074
+        },
+        {
+          "legalUci": "f2f4",
+          "mass": 0.23100405931472778
+        },
+        {
+          "legalUci": "g3g4",
+          "mass": 0.004392755217850208
+        }
+      ],
+      "configuredSupport": [
+        {
+          "legalUci": "e5f6",
+          "mass": 0.44535958766937256
+        },
+        {
+          "legalUci": "f2f4",
+          "mass": 0.2836022675037384
+        },
+        {
+          "legalUci": "c1d2",
+          "mass": 0.1679345816373825
+        },
+        {
+          "legalUci": "e2d3",
+          "mass": 0.10310356318950653
+        }
+      ]
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "f2f3",
+      "rootFen": "6k1/5pp1/7p/3rP3/8/8/5PPP/R5K1 w - - 1 2",
+      "fen": "6k1/5pp1/7p/3rP3/8/5P2/6PP/R5K1 b - - 0 2",
+      "historyUci": [
+        "f2f3"
+      ],
+      "legalUcis": [
+        "d5a5",
+        "d5b5",
+        "d5c5",
+        "d5d1",
+        "d5d2",
+        "d5d3",
+        "d5d4",
+        "d5d6",
+        "d5d7",
+        "d5d8",
+        "d5e5",
+        "f7f5",
+        "f7f6",
+        "g7g5",
+        "g7g6",
+        "g8f8",
+        "g8h7",
+        "g8h8",
+        "h6h5"
+      ],
+      "rawFullLegal": [
+        {
+          "legalUci": "d5a5",
+          "mass": 5.185046757105738e-05
+        },
+        {
+          "legalUci": "d5b5",
+          "mass": 0.00017251772806048393
+        },
+        {
+          "legalUci": "d5c5",
+          "mass": 0.00023624853929504752
+        },
+        {
+          "legalUci": "d5d1",
+          "mass": 0.00023548892932012677
+        },
+        {
+          "legalUci": "d5d2",
+          "mass": 0.001219440484419465
+        },
+        {
+          "legalUci": "d5d3",
+          "mass": 8.361264917766675e-05
+        },
+        {
+          "legalUci": "d5d4",
+          "mass": 0.00016998259525280446
+        },
+        {
+          "legalUci": "d5d6",
+          "mass": 0.00013172758917789906
+        },
+        {
+          "legalUci": "d5d7",
+          "mass": 0.00010132435272680596
+        },
+        {
+          "legalUci": "d5d8",
+          "mass": 0.00010710326750995591
+        },
+        {
+          "legalUci": "d5e5",
+          "mass": 0.9828386902809143
+        },
+        {
+          "legalUci": "f7f5",
+          "mass": 0.00027288656565360725
+        },
+        {
+          "legalUci": "f7f6",
+          "mass": 0.0011246242793276906
+        },
+        {
+          "legalUci": "g7g5",
+          "mass": 0.0024228401016443968
+        },
+        {
+          "legalUci": "g7g6",
+          "mass": 0.0013157522771507502
+        },
+        {
+          "legalUci": "g8f8",
+          "mass": 0.003792029106989503
+        },
+        {
+          "legalUci": "g8h7",
+          "mass": 0.00562202837318182
+        },
+        {
+          "legalUci": "g8h8",
+          "mass": 3.459626532276161e-05
+        },
+        {
+          "legalUci": "h6h5",
+          "mass": 6.71528177917935e-05
+        }
+      ],
+      "configuredSupport": [
+        {
+          "legalUci": "d5e5",
+          "mass": 1.0
+        }
+      ]
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "e1e2",
+      "rootFen": "6k1/5pp1/7p/8/3rP3/8/5PPP/R3K3 w - - 4 3",
+      "fen": "6k1/5pp1/7p/8/3rP3/8/4KPPP/R7 b - - 5 3",
+      "historyUci": [
+        "e1e2"
+      ],
+      "legalUcis": [
+        "d4a4",
+        "d4b4",
+        "d4c4",
+        "d4d1",
+        "d4d2",
+        "d4d3",
+        "d4d5",
+        "d4d6",
+        "d4d7",
+        "d4d8",
+        "d4e4",
+        "f7f5",
+        "f7f6",
+        "g7g5",
+        "g7g6",
+        "g8f8",
+        "g8h7",
+        "g8h8",
+        "h6h5"
+      ],
+      "rawFullLegal": [
+        {
+          "legalUci": "d4a4",
+          "mass": 0.00027119729202240705
+        },
+        {
+          "legalUci": "d4b4",
+          "mass": 0.0016797457356005907
+        },
+        {
+          "legalUci": "d4c4",
+          "mass": 0.000799892470240593
+        },
+        {
+          "legalUci": "d4d1",
+          "mass": 7.322232704609632e-05
+        },
+        {
+          "legalUci": "d4d2",
+          "mass": 0.0002735381422098726
+        },
+        {
+          "legalUci": "d4d3",
+          "mass": 0.00010917369945673272
+        },
+        {
+          "legalUci": "d4d5",
+          "mass": 0.0003014186804648489
+        },
+        {
+          "legalUci": "d4d6",
+          "mass": 0.0008666477515362203
+        },
+        {
+          "legalUci": "d4d7",
+          "mass": 0.0005156564875505865
+        },
+        {
+          "legalUci": "d4d8",
+          "mass": 0.0009162166388705373
+        },
+        {
+          "legalUci": "d4e4",
+          "mass": 0.9710907340049744
+        },
+        {
+          "legalUci": "f7f5",
+          "mass": 0.0004923001397401094
+        },
+        {
+          "legalUci": "f7f6",
+          "mass": 0.002438395516946912
+        },
+        {
+          "legalUci": "g7g5",
+          "mass": 0.003352359402924776
+        },
+        {
+          "legalUci": "g7g6",
+          "mass": 0.002450302941724658
+        },
+        {
+          "legalUci": "g8f8",
+          "mass": 0.0022421495523303747
+        },
+        {
+          "legalUci": "g8h7",
+          "mass": 0.011964216828346252
+        },
+        {
+          "legalUci": "g8h8",
+          "mass": 9.831927309278399e-05
+        },
+        {
+          "legalUci": "h6h5",
+          "mass": 6.450880755437538e-05
+        }
+      ],
+      "configuredSupport": [
+        {
+          "legalUci": "d4e4",
+          "mass": 1.0
+        }
+      ]
+    }
+  ]
+}

@@ -400,9 +400,19 @@ source/control/Stockfish-best/Maia-best union rule to the checked coherent
 all-legal root source: 193 candidates over the same 66 roots, adding three
 and dropping six across seven roots. Its complete legal reply graph has 6,176
 edges; 190 retained candidate graphs are identical to the old frame. This is
-the first source-corrected candidate population, not a five-arm verdict; its
-three new child providers and downstream continuation/cost still need capture.
+the first source-corrected candidate population, not a five-arm verdict; at
+that population checkpoint its new child providers and downstream continuation
+had not yet been captured.
 [[D3289]] `[V]` `planning/semantic-consequence-search/d3262-coherent-candidate-preregistration.md`.
+
+Those three child providers are now captured and checked at separate Stockfish
+all-legal/top-eight widths and at path-keyed Maia3-5M root-plus-candidate
+history. The 55 exact legal replies agree between the corrected chessops
+graph and the Maia container's python-chess replay; the pinned Maia sampler
+retains six configured support entries across those three paths. This is a
+source join, not a human-frequency estimate or a semantic proof. The new
+target comparisons and deeper reply frontiers remain unmeasured. [[D3289]]
+`[V]` `planning/semantic-consequence-search/d3262-coherent-new-child-sources.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

@@ -529,8 +529,12 @@ The separate coherent-root correction is now preregistered at
 `planning/semantic-consequence-search/d3262-coherent-candidate-preregistration.md`:
 the same union rule selects 193 candidates over the unchanged 66 roots, and
 their 6,176 legal opponent replies are captured with 190 retained candidate
-graphs identical to the frozen frame. New child/path provider inputs,
-five-arm semantic proof/abstention and cost remain outstanding. These are
+graphs identical to the frozen frame. The three new candidate children now
+have checked separate coherent Stockfish width-eight/all-legal and path-keyed
+Maia source readings, with 55 independent legal replies
+(`planning/semantic-consequence-search/d3262-coherent-new-child-sources.md`).
+Corrected target/first-reply/deeper provider joins, five-arm semantic
+proof/abstention and cost remain outstanding. These are
 post-freeze population receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 

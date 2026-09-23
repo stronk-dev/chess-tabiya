@@ -21,20 +21,25 @@ const coherentRootMode = args.includes("--coherent-root");
 const coherentChildMode = args.includes("--coherent-child");
 const coherentAllRootMode = args.includes("--coherent-root-all");
 const coherentAllChildMode = args.includes("--coherent-child-all");
-const childMode = args.includes("--child") || coherentChildMode || coherentAllChildMode;
+const coherentNewChildMode = args.includes("--coherent-new-child");
+const coherentNewAllChildMode = args.includes("--coherent-new-child-all");
+const newChildMode = coherentNewChildMode || coherentNewAllChildMode;
+const childMode = args.includes("--child") || coherentChildMode || coherentAllChildMode || newChildMode;
 const horizon4Mode = args.includes("--horizon4");
 const historySupplementMode = args.includes("--history-supplement");
 const frontierMode = horizon4Mode || historySupplementMode;
-const coherentMode = coherentRootMode || coherentChildMode || coherentAllRootMode || coherentAllChildMode;
+const coherentMode = coherentRootMode || coherentChildMode || coherentAllRootMode || coherentAllChildMode || newChildMode;
 const boundedMode = frontierMode || coherentMode;
-if (Number(args.includes("--child")) + Number(coherentRootMode) + Number(coherentChildMode) + Number(coherentAllRootMode) + Number(coherentAllChildMode) + Number(horizon4Mode) + Number(historySupplementMode) > 1) throw new Error("Select one Stockfish capture population");
+if (Number(args.includes("--child")) + Number(coherentRootMode) + Number(coherentChildMode) + Number(coherentAllRootMode) + Number(coherentAllChildMode) + Number(coherentNewChildMode) + Number(coherentNewAllChildMode) + Number(horizon4Mode) + Number(historySupplementMode) > 1) throw new Error("Select one Stockfish capture population");
 function option(name) {
   const index = args.indexOf(name);
   return index < 0 ? undefined : args[index + 1];
 }
-const graphBytes = childMode ? readFileSync(new URL("../../planning/semantic-consequence-search/d3262-exact-replies.json", import.meta.url)) : undefined;
+const graphBytes = childMode ? readFileSync(new URL(newChildMode ? "../../planning/semantic-consequence-search/d3262-coherent-exact-replies.json" : "../../planning/semantic-consequence-search/d3262-exact-replies.json", import.meta.url)) : undefined;
 const graph = graphBytes === undefined ? undefined : JSON.parse(graphBytes.toString("utf8"));
-if (childMode && (graph.authority !== "complete_legal_opponent_reply_edges_not_a_semantic_proof" || graph.manifest !== manifestIdentity.manifestDigest)) throw new Error("Child capture requires the frozen exact-reply frame");
+if (childMode && (graph.authority !== (newChildMode ? "coherent_root_complete_legal_reply_edges_not_semantic_proof" : "complete_legal_opponent_reply_edges_not_a_semantic_proof") || graph.manifest !== manifestIdentity.manifestDigest)) throw new Error("Child capture requires its checked exact-reply frame");
+const oldGraph = newChildMode ? JSON.parse(readFileSync(new URL("../../planning/semantic-consequence-search/d3262-exact-replies.json", import.meta.url))) : undefined;
+if (newChildMode && `sha256:${createHash("sha256").update(graphBytes).digest("hex")}` !== "sha256:3fcd3ef596886aee1e1427bc2502aaeef1baa39827c2e8d35b398e1fb478bb68") throw new Error("Corrected child graph drifted from preregistration");
 const frontierBytes = frontierMode ? readFileSync(new URL(historySupplementMode ? "../../planning/semantic-consequence-search/d3262-stockfish-history-supplement-frame.json" : "../../planning/semantic-consequence-search/d3262-horizon4-frontier.json", import.meta.url)) : undefined;
 const frontier = frontierBytes === undefined ? undefined : JSON.parse(frontierBytes.toString("utf8"));
 if (horizon4Mode && (frontier.authority !== "partial_frontier_provider_capture_frame_not_search_result" || frontier.manifest !== manifestIdentity.manifestDigest || frontier.jobs.length !== 2185)) throw new Error("Horizon-four capture requires the frozen frontier frame");
@@ -42,13 +47,13 @@ if (historySupplementMode && (frontier.authority !== "maia_history_supplement_st
 const population = frontierMode
   ? frontier.jobs.map((job) => ({ jobId: job.id, fen: job.fen }))
   : childMode
-  ? graph.roots.flatMap((root) => root.candidates.map((candidate) => ({ rootId: root.rootId, candidateUci: candidate.candidateUci, fen: candidate.afterFen })))
+  ? graph.roots.flatMap((root, index) => root.candidates.filter((candidate) => !newChildMode || !oldGraph.roots[index].candidates.some((prior) => prior.candidateUci === candidate.candidateUci)).map((candidate) => ({ rootId: root.rootId, candidateUci: candidate.candidateUci, fen: candidate.afterFen })))
   : manifestRows.map((root) => ({ rootId: root.id, fen: root.fen }));
-if (childMode && (population.length !== 196 || new Set(population.map((row) => row.fen)).size !== 196)) throw new Error("Unexpected child-position population");
+if (childMode && (population.length !== (newChildMode ? 3 : 196) || new Set(population.map((row) => row.fen)).size !== population.length)) throw new Error("Unexpected child-position population");
 const start = option("--start") === undefined ? 0 : Number(option("--start"));
 const limit = option("--limit") === undefined ? population.length - start : Number(option("--limit"));
 if (!Number.isSafeInteger(start) || start < 0 || start >= population.length || !Number.isSafeInteger(limit) || limit < 1 || start + limit > population.length) throw new Error("--start/--limit must select a nonempty position interval");
-const fullOutput = new URL(historySupplementMode ? "../../planning/semantic-consequence-search/d3262-stockfish-history-supplement.json" : horizon4Mode ? "../../planning/semantic-consequence-search/d3262-stockfish-horizon4-capture.json" : coherentAllChildMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-coherent-all.json" : coherentAllRootMode ? "../../planning/semantic-consequence-search/d3262-stockfish-root-coherent-all.json" : coherentChildMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-coherent.json" : coherentRootMode ? "../../planning/semantic-consequence-search/d3262-stockfish-root-coherent.json" : childMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-capture.json" : "../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url);
+const fullOutput = new URL(historySupplementMode ? "../../planning/semantic-consequence-search/d3262-stockfish-history-supplement.json" : horizon4Mode ? "../../planning/semantic-consequence-search/d3262-stockfish-horizon4-capture.json" : coherentNewAllChildMode ? "../../planning/semantic-consequence-search/d3262-stockfish-new-child-coherent-all.json" : coherentNewChildMode ? "../../planning/semantic-consequence-search/d3262-stockfish-new-child-coherent.json" : coherentAllChildMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-coherent-all.json" : coherentAllRootMode ? "../../planning/semantic-consequence-search/d3262-stockfish-root-coherent-all.json" : coherentChildMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-coherent.json" : coherentRootMode ? "../../planning/semantic-consequence-search/d3262-stockfish-root-coherent.json" : childMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-capture.json" : "../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url);
 const output = option("--out") ?? (start === 0 && limit === population.length ? fullOutput : undefined);
 if (output === undefined) throw new Error("A partial capture requires --out so it cannot masquerade as the full artifact");
 if (boundedMode && existsSync(output)) throw new Error(`Refusing to replace an existing bounded capture: ${output}`);
@@ -186,9 +191,9 @@ try {
   await engine.initialize();
   for (const job of jobs) {
     const probes = [];
-    for (const budget of ["depth8", "depth12", "movetime100"]) probes.push(await engine.probe(job.fen, budget, coherentAllRootMode || coherentAllChildMode ? Infinity : boundedMode ? 8 : Infinity, boundedMode));
+    for (const budget of ["depth8", "depth12", "movetime100"]) probes.push(await engine.probe(job.fen, budget, coherentAllRootMode || coherentAllChildMode || coherentNewAllChildMode ? Infinity : boundedMode ? 8 : Infinity, boundedMode));
     rows.push({ ...job, probes });
-    process.stderr.write(`D3262 Stockfish ${historySupplementMode ? "history supplement " : horizon4Mode ? "horizon4 " : coherentAllChildMode ? "coherent all child " : coherentAllRootMode ? "coherent all root " : coherentChildMode ? "coherent child " : coherentRootMode ? "coherent root " : childMode ? "child " : ""}${rows.length}/${jobs.length}: ${job.jobId ?? job.rootId}${job.candidateUci === undefined ? "" : `/${job.candidateUci}`}\n`);
+    process.stderr.write(`D3262 Stockfish ${historySupplementMode ? "history supplement " : horizon4Mode ? "horizon4 " : coherentNewAllChildMode ? "coherent new all-child " : coherentNewChildMode ? "coherent new child " : coherentAllChildMode ? "coherent all child " : coherentAllRootMode ? "coherent all root " : coherentChildMode ? "coherent child " : coherentRootMode ? "coherent root " : childMode ? "child " : ""}${rows.length}/${jobs.length}: ${job.jobId ?? job.rootId}${job.candidateUci === undefined ? "" : `/${job.candidateUci}`}\n`);
   }
 } finally { engine.close(); }
 const artifact = {
@@ -199,7 +204,7 @@ const artifact = {
   ...(coherentMode ? { start, positions: rows.length } : {}),
   partial: start !== 0 || limit !== population.length,
   ...(!boundedMode ? childMode ? { positions: rows.length } : { roots: rows.length } : {}),
-  source: { engineName: engine.identity, executableDigest, threads: 1, hashMb: 16, multiPv: frontierMode ? "top8_legal_moves_at_selected_reply" : coherentAllChildMode ? "coherent_all_legal_moves_at_candidate_child" : coherentAllRootMode ? "coherent_all_legal_root_moves" : coherentChildMode ? "top8_legal_moves_at_candidate_child" : coherentRootMode ? "top8_legal_root_moves" : childMode ? "all_legal_moves_at_candidate_child" : "all_legal_root_moves", scorePerspective: "raw_uci_uninterpreted" },
+  source: { engineName: engine.identity, executableDigest, threads: 1, hashMb: 16, multiPv: frontierMode ? "top8_legal_moves_at_selected_reply" : coherentNewAllChildMode || coherentAllChildMode ? "coherent_all_legal_moves_at_candidate_child" : coherentAllRootMode ? "coherent_all_legal_root_moves" : coherentNewChildMode || coherentChildMode ? "top8_legal_moves_at_candidate_child" : coherentRootMode ? "top8_legal_root_moves" : childMode ? "all_legal_moves_at_candidate_child" : "all_legal_root_moves", scorePerspective: "raw_uci_uninterpreted" },
   rows,
 };
 const outputBytes = `${JSON.stringify(artifact, null, 2)}\n`;

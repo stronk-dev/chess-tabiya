@@ -82,3 +82,15 @@ replays its full legal edge graph, SHA-256
 frozen predecessors, three newly enumerated and six excluded. These are
 population and legality receipts only; no new-child provider, semantic
 continuation, five-arm result or cost result is yet claimed.
+
+## Post-freeze new-child provider receipt — 2026-09-23
+
+The three newly selected candidate children now have checked coherent
+Stockfish all-legal and top-eight readings at every declared budget and
+root-plus-candidate Maia3-5M path distributions. The exact source digests,
+55-reply legal denominator, pinned control replay and negative fixtures are
+in `d3262-coherent-new-child-sources.md`. This closes the *new-child provider*
+portion of the source gap. It does not reclassify a configured Maia support
+as human frequency or establish a semantic engine reason. The corrected
+target comparisons, first-reply selection, deeper provider union, five-arm
+proof/abstention and end-to-end cost remain unmeasured.
