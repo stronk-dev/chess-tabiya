@@ -3,13 +3,14 @@
 // alternative. It never ranks either move or infers a whole-game cause.
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
+import { basename } from "node:path";
 
 const path = (name) => `planning/semantic-consequence-search/${name}`;
 function check(value, message) { if (!value) throw new Error(message); }
 function rowKey(row) { return `${row.rootId}|${row.targetId}|${row.candidateUci}`; }
 function groupKey(row) { return `${row.rootId}|${row.targetId}`; }
 
-export function compileLocalRelationContrast(comparisons, material, witness) {
+export function compileLocalRelationContrast(comparisons, material, witness, options = {}) {
   check(comparisons.authority === "target_candidate_comparison_population_not_outcome_or_move_grade", "Wrong local-contrast comparison authority");
   check(material.authority === "exact_immediate_material_relation_not_move_grade_or_search_result" && material.manifest === comparisons.manifest, "Crossed local-contrast material evaluator");
   check(witness.authority === "named_exact_reply_witness_not_all_defences_or_move_grade" && witness.manifest === comparisons.manifest, "Crossed local-contrast destination evaluator");
@@ -18,9 +19,11 @@ export function compileLocalRelationContrast(comparisons, material, witness) {
   const witnessRows = new Map(witness.rows.map((row) => [rowKey(row), row]));
   const groups = new Map();
   for (const row of comparisons.comparisons) groups.set(groupKey(row), [...(groups.get(groupKey(row)) ?? []), row]);
-  check(groups.size === 64 && materialRows.size === 98 && witnessRows.size === 87, "Local-contrast population drift");
+  check(groups.size === (options.targets ?? 64) && materialRows.size === (options.material ?? 98)
+    && witnessRows.size === (options.destination ?? 87), "Local-contrast population drift");
   const unpairedTargets = [...groups.values()].filter((group) => !group.some((row) => !row.sourceObserved)).map((group) => ({ rootId: group[0].rootId, targetId: group[0].targetId, sourceCandidateUcis: group.filter((row) => row.sourceObserved).map((row) => row.candidateUci), reason: "no_selected_natural_alternative" }));
-  check(unpairedTargets.length === 17, "Local-contrast no-alternative population drift");
+  if (options.unpaired !== undefined) check(unpairedTargets.length === options.unpaired, "Local-contrast no-alternative population drift");
+  else if (options.targets === undefined) check(unpairedTargets.length === 17, "Local-contrast no-alternative population drift");
   const rows = [...groups.values()].flatMap((group) => {
     const definition = definitions.get(group[0].targetId);
     check(definition !== undefined && group.every((row) => row.rootId === definition.rootId && row.targetId === definition.id), "Crossed local-contrast target group");
@@ -46,11 +49,13 @@ export function compileLocalRelationContrast(comparisons, material, witness) {
       return { rootId: definition.rootId, targetId: definition.id, family: "destination", sourceCandidateUci: source.candidateUci, alternativeCandidateUci: alternative.candidateUci, source: { status: before.status, eventUci: before.arrivalUci, namedPawnCaptureUci: before.namedPawnCaptureUci }, alternative: { status: after.status, eventUci: after.arrivalUci, namedPawnCaptureUci: after.namedPawnCaptureUci }, contrast: status };
     }));
   });
-  check(rows.length === 123, "Local-contrast pair population drift");
+  if (options.pairs !== undefined) check(rows.length === options.pairs, "Local-contrast pair population drift");
+  else if (options.targets === undefined) check(rows.length === 123, "Local-contrast pair population drift");
   return { version: 1, manifest: comparisons.manifest, authority: "exact_pairwise_local_target_relation_not_move_grade_or_global_cause", unpairedTargets, rows };
 }
 
-if (process.argv[1]?.endsWith("local-relation-contrast.mjs")) {
+if (process.argv[1] && basename(process.argv[1]) === "local-relation-contrast.mjs"
+  && new URL(`file://${process.argv[1]}`).href === import.meta.url) {
   const names = ["d3262-target-comparison-frame.json", "d3262-material-immediate.json", "d3262-destination-reply-witness.json"];
   const bytes = names.map((name) => readFileSync(path(name)));
   const artifact = { ...compileLocalRelationContrast(...bytes.map((value) => JSON.parse(value.toString()))), inputDigests: Object.fromEntries(names.map((name, index) => [name, `sha256:${createHash("sha256").update(bytes[index]).digest("hex")}`])) };

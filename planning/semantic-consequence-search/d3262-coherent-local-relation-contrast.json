@@ -1,0 +1,2252 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "authority": "exact_pairwise_local_target_relation_not_move_grade_or_global_cause",
+  "unpairedTargets": [
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "targetId": "target:28a856d72400b38209f58dde627810ffbf5a7246d5553e6d1a021f60d0e1a610",
+      "sourceCandidateUcis": [
+        "d8e7",
+        "e4c5"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:979b52c0f665251f",
+      "targetId": "target:2cf8c3800f782f4b34619c50085851705dc3ad9f04f91d510fdb2738e84d67b6",
+      "sourceCandidateUcis": [
+        "c7c1",
+        "e7c5"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "targetId": "target:4ad9e532415c9a5e3e10525cb1ebe064e04616425f925d8c58b2676b5aa3a07e",
+      "sourceCandidateUcis": [
+        "e5d4",
+        "g8e7"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:5349bf6a339256e5",
+      "targetId": "target:4b90d11e1cac01358f6f9c048beb4ebf19e42ec4884d06fc809cbffac4e318ac",
+      "sourceCandidateUcis": [
+        "c5c4",
+        "d2d1"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "targetId": "target:541ac36c657c3975c8f307010eca3cc2c8267312f46afbf6a8b25d353fdf1a45",
+      "sourceCandidateUcis": [
+        "e4d5",
+        "f3e5"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "targetId": "target:5fec8bcfb5cd87d868d5a86acb22db7b282fd922b13aba205ec7aecfde454adf",
+      "sourceCandidateUcis": [
+        "c8e6",
+        "d8d6"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "targetId": "target:6965a73c42e597621286990f53d20b601fde91d317ef2ac250d600a2c2202124",
+      "sourceCandidateUcis": [
+        "a7a6"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "targetId": "target:7efbafa1378aaf264093cf7f6044d7411d72a810aded4edf6c419fecd2ac8299",
+      "sourceCandidateUcis": [
+        "c6b4",
+        "e8e1"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "targetId": "target:8913672af4f438b827fdf0d3e0f65e6d25ca5fa3c759ef6cb1feb01d2befbaef",
+      "sourceCandidateUcis": [
+        "a7a6"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "targetId": "target:97ea5e2020129d9e39512f20aa0de82f67ed3e583585c0646ac778b197e4cbd7",
+      "sourceCandidateUcis": [
+        "a6a5",
+        "a6b6"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "targetId": "target:a40499970dc705f6819d4eb7aae1503aae72e78e7048a457f73d371d192652fb",
+      "sourceCandidateUcis": [
+        "b4d3",
+        "c8f5"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "targetId": "target:b819090ff2609c2966a594779b5c46068f7186b5912d82ccae52382597a28f7f",
+      "sourceCandidateUcis": [
+        "d6e5",
+        "g2h1"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "targetId": "target:c68d69696d691ff987e7b7235a5bede44ed5887ab221cf04f80bca97bdbceb33",
+      "sourceCandidateUcis": [
+        "b7b6",
+        "b7c6"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "targetId": "target:c73c0fc8f8521df559a933b6b1b5e78289a75a6c598ac9f9bced0dcede4b6d93",
+      "sourceCandidateUcis": [
+        "e7h4",
+        "g8h6"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:9840521190fdbfff",
+      "targetId": "target:e77e59e8a806da5ad429c741368b181ab382ac07373c77d8284c81edcd486a3e",
+      "sourceCandidateUcis": [
+        "e8c8",
+        "e8e4"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "targetId": "target:f30e2e62cb720dd4de83e673d97c84f6b987b9dd7b33c6c32bb781d05b6d3030",
+      "sourceCandidateUcis": [
+        "c8h3",
+        "e4f3"
+      ],
+      "reason": "no_selected_natural_alternative"
+    },
+    {
+      "rootId": "d1023:d1e1300f0eec8303",
+      "targetId": "target:fbd6af9a49cdd8ed8c89c3f18e4cf75e69d5131bf61fb0fb19ca9e15e5b1b51c",
+      "sourceCandidateUcis": [
+        "d7d5"
+      ],
+      "reason": "no_selected_natural_alternative"
+    }
+  ],
+  "rows": [
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "targetId": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "family": "destination",
+      "sourceCandidateUci": "d4d5",
+      "alternativeCandidateUci": "c1d2",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "b8c6",
+        "namedPawnCaptureUci": "d5c6"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "b8c6",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "targetId": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "family": "destination",
+      "sourceCandidateUci": "d4d5",
+      "alternativeCandidateUci": "f3d2",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "b8c6",
+        "namedPawnCaptureUci": "d5c6"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "b8c6",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "targetId": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "family": "destination",
+      "sourceCandidateUci": "d4d5",
+      "alternativeCandidateUci": "f3e5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "b8c6",
+        "namedPawnCaptureUci": "d5c6"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "b8c6",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "targetId": "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6",
+      "family": "material",
+      "sourceCandidateUci": "c8a6",
+      "alternativeCandidateUci": "c8d7",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "c3c6"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "targetId": "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6",
+      "family": "material",
+      "sourceCandidateUci": "f6h4",
+      "alternativeCandidateUci": "c8d7",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "c3c6"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "targetId": "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745",
+      "family": "destination",
+      "sourceCandidateUci": "g7g5",
+      "alternativeCandidateUci": "c7c5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "targetId": "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745",
+      "family": "destination",
+      "sourceCandidateUci": "g7g5",
+      "alternativeCandidateUci": "f6g4",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "targetId": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "family": "destination",
+      "sourceCandidateUci": "d7d5",
+      "alternativeCandidateUci": "b8c6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": "d5c4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "targetId": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "family": "destination",
+      "sourceCandidateUci": "d7d5",
+      "alternativeCandidateUci": "d7d6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": "d5c4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "targetId": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "family": "destination",
+      "sourceCandidateUci": "d7d5",
+      "alternativeCandidateUci": "g8e7",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": "d5c4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "targetId": "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e",
+      "family": "destination",
+      "sourceCandidateUci": "e5e6",
+      "alternativeCandidateUci": "d1d4",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": "e6d7"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "targetId": "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e",
+      "family": "destination",
+      "sourceCandidateUci": "e5e6",
+      "alternativeCandidateUci": "f3d4",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": "e6d7"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "targetId": "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431",
+      "family": "destination",
+      "sourceCandidateUci": "b7b5",
+      "alternativeCandidateUci": "b8d7",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": "b5c4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "targetId": "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431",
+      "family": "destination",
+      "sourceCandidateUci": "b7b5",
+      "alternativeCandidateUci": "e5d4",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": "b5c4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f1c4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "family": "material",
+      "sourceCandidateUci": "d2d6",
+      "alternativeCandidateUci": "d2d7",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "family": "material",
+      "sourceCandidateUci": "d2d6",
+      "alternativeCandidateUci": "d2f2",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "attacker_captured",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "family": "material",
+      "sourceCandidateUci": "e6c4",
+      "alternativeCandidateUci": "d2d7",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f2d2"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "family": "material",
+      "sourceCandidateUci": "e6c4",
+      "alternativeCandidateUci": "d2f2",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f2d2"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "attacker_captured",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "targetId": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "family": "destination",
+      "sourceCandidateUci": "g7g5",
+      "alternativeCandidateUci": "e8d7",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "targetId": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "family": "destination",
+      "sourceCandidateUci": "g7g5",
+      "alternativeCandidateUci": "f7f5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "targetId": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "family": "destination",
+      "sourceCandidateUci": "g7g5",
+      "alternativeCandidateUci": "h7h5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "targetId": "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b",
+      "family": "material",
+      "sourceCandidateUci": "e5d4",
+      "alternativeCandidateUci": "b8d7",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "attacker_captured",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "targetId": "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b",
+      "family": "material",
+      "sourceCandidateUci": "f8e7",
+      "alternativeCandidateUci": "b8d7",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4e5"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "targetId": "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db",
+      "family": "destination",
+      "sourceCandidateUci": "c7c5",
+      "alternativeCandidateUci": "b7b6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "d3b4",
+        "namedPawnCaptureUci": "c5b4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "d3b4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "targetId": "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db",
+      "family": "destination",
+      "sourceCandidateUci": "c7c5",
+      "alternativeCandidateUci": "f7f5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "d3b4",
+        "namedPawnCaptureUci": "c5b4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "d3b4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "targetId": "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6",
+      "family": "material",
+      "sourceCandidateUci": "f6e4",
+      "alternativeCandidateUci": "e8g8",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "a1a4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "a1a4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "targetId": "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6",
+      "family": "material",
+      "sourceCandidateUci": "f6g8",
+      "alternativeCandidateUci": "e8g8",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "a1a4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "a1a4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "targetId": "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48",
+      "family": "destination",
+      "sourceCandidateUci": "f2f3",
+      "alternativeCandidateUci": "b3c1",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "e6g4",
+        "namedPawnCaptureUci": "f3g4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "e6g4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "targetId": "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48",
+      "family": "destination",
+      "sourceCandidateUci": "f2f3",
+      "alternativeCandidateUci": "b3d4",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "e6g4",
+        "namedPawnCaptureUci": "f3g4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "e6g4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "targetId": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "family": "destination",
+      "sourceCandidateUci": "g2g4",
+      "alternativeCandidateUci": "c2c3",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": "g4h5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "targetId": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "family": "destination",
+      "sourceCandidateUci": "g2g4",
+      "alternativeCandidateUci": "d4c5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": "g4h5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "targetId": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "family": "destination",
+      "sourceCandidateUci": "g2g4",
+      "alternativeCandidateUci": "f1e2",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": "g4h5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "targetId": "target:52333229711faef6063afca3cafde0bdfb2b4281c66785271d784a08ae351a41",
+      "family": "material",
+      "sourceCandidateUci": "a7a5",
+      "alternativeCandidateUci": "c6e7",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5c6"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "targetId": "target:52333229711faef6063afca3cafde0bdfb2b4281c66785271d784a08ae351a41",
+      "family": "material",
+      "sourceCandidateUci": "f6d5",
+      "alternativeCandidateUci": "c6e7",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "attacker_captured",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "targetId": "target:56ad02dbb4da0ad3c7b56de26c0dcd06a115c70531d9db05078f7e05c67a2eff",
+      "family": "destination",
+      "sourceCandidateUci": "d7d5",
+      "alternativeCandidateUci": "e4f6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "d3c4",
+        "namedPawnCaptureUci": "d5c4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "d3c4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "family": "material",
+      "sourceCandidateUci": "e7e6",
+      "alternativeCandidateUci": "c5d4",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "attacker_captured",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "family": "material",
+      "sourceCandidateUci": "e7e6",
+      "alternativeCandidateUci": "c8g4",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4c5"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "family": "material",
+      "sourceCandidateUci": "e7e6",
+      "alternativeCandidateUci": "d8b6",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "family": "material",
+      "sourceCandidateUci": "h8g8",
+      "alternativeCandidateUci": "c5d4",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4c5"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "attacker_captured",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "family": "material",
+      "sourceCandidateUci": "h8g8",
+      "alternativeCandidateUci": "c8g4",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4c5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4c5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "family": "material",
+      "sourceCandidateUci": "h8g8",
+      "alternativeCandidateUci": "d8b6",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4c5"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "targetId": "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d",
+      "family": "material",
+      "sourceCandidateUci": "e7e6",
+      "alternativeCandidateUci": "f8d8",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d2e4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d2e4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "targetId": "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d",
+      "family": "material",
+      "sourceCandidateUci": "f7f5",
+      "alternativeCandidateUci": "f8d8",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d2e4"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "targetId": "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667",
+      "family": "destination",
+      "sourceCandidateUci": "d5c4",
+      "alternativeCandidateUci": "c8b7",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c2d3",
+        "namedPawnCaptureUci": "c4d3"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c2d3",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "targetId": "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667",
+      "family": "destination",
+      "sourceCandidateUci": "d5c4",
+      "alternativeCandidateUci": "d6g3",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c2d3",
+        "namedPawnCaptureUci": "c4d3"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c2d3",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "targetId": "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382",
+      "family": "destination",
+      "sourceCandidateUci": "a7a6",
+      "alternativeCandidateUci": "c7c5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f1b5",
+        "namedPawnCaptureUci": "a6b5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f1b5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "targetId": "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382",
+      "family": "destination",
+      "sourceCandidateUci": "a7a6",
+      "alternativeCandidateUci": "g8e7",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f1b5",
+        "namedPawnCaptureUci": "a6b5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f1b5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "targetId": "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212",
+      "family": "destination",
+      "sourceCandidateUci": "a6a5",
+      "alternativeCandidateUci": "f7f6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c3b4",
+        "namedPawnCaptureUci": "a5b4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c3b4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "targetId": "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212",
+      "family": "destination",
+      "sourceCandidateUci": "a6a5",
+      "alternativeCandidateUci": "f8c8",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c3b4",
+        "namedPawnCaptureUci": "a5b4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c3b4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "targetId": "target:86c00ec1c4ff7432712d486baefd3292c0a3e91f51a39f3c2b6eed70d47fd098",
+      "family": "destination",
+      "sourceCandidateUci": "e4e5",
+      "alternativeCandidateUci": "d4d5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "g7f6",
+        "namedPawnCaptureUci": "e5f6"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "g7f6",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "targetId": "target:87a5a74fbfdde323d0a7104b357b69e85f67d3d4da43a44e7a7706aed80773fd",
+      "family": "destination",
+      "sourceCandidateUci": "g2g4",
+      "alternativeCandidateUci": "f4g3",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": "g4h5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f6h5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "targetId": "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d",
+      "family": "destination",
+      "sourceCandidateUci": "a7a6",
+      "alternativeCandidateUci": "a5c7",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "d3b5",
+        "namedPawnCaptureUci": "a6b5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "d3b5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "targetId": "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d",
+      "family": "destination",
+      "sourceCandidateUci": "a7a6",
+      "alternativeCandidateUci": "e8g8",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "d3b5",
+        "namedPawnCaptureUci": "a6b5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "d3b5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "targetId": "target:8af41eb4399083da3ed204fdf2b590197eeb321f068a72273ca8cf25c9391dac",
+      "family": "destination",
+      "sourceCandidateUci": "f7f6",
+      "alternativeCandidateUci": "f5e7",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1g5",
+        "namedPawnCaptureUci": "f6g5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1g5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "family": "material",
+      "sourceCandidateUci": "f2f3",
+      "alternativeCandidateUci": "a1a2",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4e4"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "family": "material",
+      "sourceCandidateUci": "f2f3",
+      "alternativeCandidateUci": "e1e2",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4e4"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "family": "material",
+      "sourceCandidateUci": "h2h3",
+      "alternativeCandidateUci": "a1a2",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4e4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4e4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "family": "material",
+      "sourceCandidateUci": "h2h3",
+      "alternativeCandidateUci": "e1e2",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4e4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d4e4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "targetId": "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9",
+      "family": "material",
+      "sourceCandidateUci": "b8a6",
+      "alternativeCandidateUci": "f6e4",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d1d4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d1d4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "targetId": "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9",
+      "family": "material",
+      "sourceCandidateUci": "f6d5",
+      "alternativeCandidateUci": "f6e4",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d1d4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d1d4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "family": "destination",
+      "sourceCandidateUci": "h7h6",
+      "alternativeCandidateUci": "b6a5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": "h6g5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "family": "destination",
+      "sourceCandidateUci": "h7h6",
+      "alternativeCandidateUci": "b6a6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": "h6g5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "family": "destination",
+      "sourceCandidateUci": "h7h6",
+      "alternativeCandidateUci": "b6c5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": "h6g5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "family": "destination",
+      "sourceCandidateUci": "h7h6",
+      "alternativeCandidateUci": "c8f5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": "h6g5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "f3g5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "targetId": "target:99f903002a1fe54bf1e028c954d9bde44323de3ff675022a84bc2130a0dd470c",
+      "family": "destination",
+      "sourceCandidateUci": "e7e6",
+      "alternativeCandidateUci": "e7e5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "d4f5",
+        "namedPawnCaptureUci": "e6f5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "d4f5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "targetId": "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef",
+      "family": "destination",
+      "sourceCandidateUci": "g7g5",
+      "alternativeCandidateUci": "c8c2",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "e3f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "e3f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "targetId": "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef",
+      "family": "destination",
+      "sourceCandidateUci": "g7g5",
+      "alternativeCandidateUci": "c8c6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "e3f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "e3f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "targetId": "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea",
+      "family": "material",
+      "sourceCandidateUci": "c7c6",
+      "alternativeCandidateUci": "a3b4",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d3a3"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "targetId": "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea",
+      "family": "material",
+      "sourceCandidateUci": "h8e8",
+      "alternativeCandidateUci": "a3b4",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d3a3"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "targetId": "target:a810d46c5977e950ce9bda231433ff4b65b797e89281bdbe2a861cc6ebf36c4e",
+      "family": "destination",
+      "sourceCandidateUci": "c7c6",
+      "alternativeCandidateUci": "f8e8",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "g2d5",
+        "namedPawnCaptureUci": "c6d5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "g2d5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "family": "material",
+      "sourceCandidateUci": "d1e1",
+      "alternativeCandidateUci": "d4e2",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "c5d4"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "family": "material",
+      "sourceCandidateUci": "d1e1",
+      "alternativeCandidateUci": "d4f5",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "c5d4"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "family": "material",
+      "sourceCandidateUci": "d4b3",
+      "alternativeCandidateUci": "d4e2",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "family": "material",
+      "sourceCandidateUci": "d4b3",
+      "alternativeCandidateUci": "d4f5",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "targetId": "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7",
+      "family": "destination",
+      "sourceCandidateUci": "e7e6",
+      "alternativeCandidateUci": "e5c4",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c4d5",
+        "namedPawnCaptureUci": "e6d5"
+      },
+      "alternative": {
+        "status": "named_minor_absent",
+        "eventUci": null,
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "not_comparable_minor_absent"
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "targetId": "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7",
+      "family": "destination",
+      "sourceCandidateUci": "e7e6",
+      "alternativeCandidateUci": "g8f6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c4d5",
+        "namedPawnCaptureUci": "e6d5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c4d5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "targetId": "target:aaa7622bd5d593108fd72f49ac225ad2223f16b1aa83ec5c73c74378801de06e",
+      "family": "destination",
+      "sourceCandidateUci": "c7c6",
+      "alternativeCandidateUci": "e7e1",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "b3d5",
+        "namedPawnCaptureUci": "c6d5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "b3d5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "targetId": "target:b1c13604d5c1019574773a10032585d1d4a750748230cab9f5e8b3c46e4db447",
+      "family": "destination",
+      "sourceCandidateUci": "e6e5",
+      "alternativeCandidateUci": "h7h6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "g5f4",
+        "namedPawnCaptureUci": "e5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "g5f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "targetId": "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d",
+      "family": "material",
+      "sourceCandidateUci": "c3d4",
+      "alternativeCandidateUci": "e1g1",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6e4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6e4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "targetId": "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d",
+      "family": "material",
+      "sourceCandidateUci": "f3h4",
+      "alternativeCandidateUci": "e1g1",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6e4"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6e4"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "targetId": "target:bb45f6acf462c7dc3558f77c4b3b6e9ccd934a2d559ce1d666eae049f98bb6b1",
+      "family": "destination",
+      "sourceCandidateUci": "e4f3",
+      "alternativeCandidateUci": "c8h3",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "g1e2",
+        "namedPawnCaptureUci": "f3e2"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "g1e2",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "family": "material",
+      "sourceCandidateUci": "a2a4",
+      "alternativeCandidateUci": "b1c3",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e4"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "family": "material",
+      "sourceCandidateUci": "a2a4",
+      "alternativeCandidateUci": "b1d2",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e4"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "family": "material",
+      "sourceCandidateUci": "e4e5",
+      "alternativeCandidateUci": "b1c3",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "family": "material",
+      "sourceCandidateUci": "e4e5",
+      "alternativeCandidateUci": "b1d2",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "target_moved",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "targetId": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "family": "destination",
+      "sourceCandidateUci": "e5e6",
+      "alternativeCandidateUci": "c2c3",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": "e6d7"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "targetId": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "family": "destination",
+      "sourceCandidateUci": "e5e6",
+      "alternativeCandidateUci": "d4c5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": "e6d7"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "targetId": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "family": "destination",
+      "sourceCandidateUci": "e5e6",
+      "alternativeCandidateUci": "g1f3",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": "e6d7"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c8d7",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "family": "material",
+      "sourceCandidateUci": "f2f4",
+      "alternativeCandidateUci": "a1b1",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "family": "material",
+      "sourceCandidateUci": "f2f4",
+      "alternativeCandidateUci": "f2f3",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "family": "material",
+      "sourceCandidateUci": "f2f4",
+      "alternativeCandidateUci": "g2g4",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "family": "material",
+      "sourceCandidateUci": "h2h4",
+      "alternativeCandidateUci": "a1b1",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "family": "material",
+      "sourceCandidateUci": "h2h4",
+      "alternativeCandidateUci": "f2f3",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "family": "material",
+      "sourceCandidateUci": "h2h4",
+      "alternativeCandidateUci": "g2g4",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "d5e5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "family": "material",
+      "sourceCandidateUci": "d2d4",
+      "alternativeCandidateUci": "b1c3",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "family": "material",
+      "sourceCandidateUci": "d2d4",
+      "alternativeCandidateUci": "f1b5",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "capture_illegal",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "family": "material",
+      "sourceCandidateUci": "d2d4",
+      "alternativeCandidateUci": "g1f3",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "family": "material",
+      "sourceCandidateUci": "g1e2",
+      "alternativeCandidateUci": "b1c3",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "family": "material",
+      "sourceCandidateUci": "g1e2",
+      "alternativeCandidateUci": "f1b5",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "capture_illegal",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "family": "material",
+      "sourceCandidateUci": "g1e2",
+      "alternativeCandidateUci": "g1f3",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f6d5"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "targetId": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "family": "destination",
+      "sourceCandidateUci": "g6g5",
+      "alternativeCandidateUci": "a7a5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "targetId": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "family": "destination",
+      "sourceCandidateUci": "g6g5",
+      "alternativeCandidateUci": "c6c5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "targetId": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "family": "destination",
+      "sourceCandidateUci": "g6g5",
+      "alternativeCandidateUci": "d7d6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": "g5f4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c1f4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "targetId": "target:da6364ed09ff7d4fd98b890a38437700ec9cf794993b906e0e97a9bdaa60045b",
+      "family": "destination",
+      "sourceCandidateUci": "c2c3",
+      "alternativeCandidateUci": "e1g1",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c5d4",
+        "namedPawnCaptureUci": "c3d4"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c5d4",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "family": "material",
+      "sourceCandidateUci": "c5d4",
+      "alternativeCandidateUci": "c6a5",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "family": "material",
+      "sourceCandidateUci": "c5d4",
+      "alternativeCandidateUci": "c6e7",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "family": "material",
+      "sourceCandidateUci": "c5d4",
+      "alternativeCandidateUci": "e6d5",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "family": "material",
+      "sourceCandidateUci": "e6e5",
+      "alternativeCandidateUci": "c6a5",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "capture_illegal",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "family": "material",
+      "sourceCandidateUci": "e6e5",
+      "alternativeCandidateUci": "c6e7",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "capture_illegal",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "family": "material",
+      "sourceCandidateUci": "e6e5",
+      "alternativeCandidateUci": "e6d5",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "capture_illegal",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f4c7"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "targetId": "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1",
+      "family": "material",
+      "sourceCandidateUci": "c7c6",
+      "alternativeCandidateUci": "h2g1",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "a2f2"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "targetId": "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1",
+      "family": "material",
+      "sourceCandidateUci": "g2g4",
+      "alternativeCandidateUci": "h2g1",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "a2f2"
+      },
+      "alternative": {
+        "status": "no_positive_named_capture",
+        "cause": "exchange_neutralized",
+        "eventUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "targetId": "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206",
+      "family": "material",
+      "sourceCandidateUci": "e8e1",
+      "alternativeCandidateUci": "d4d3",
+      "source": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f3b7"
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f3b7"
+      },
+      "contrast": "same_local_relation"
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "targetId": "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206",
+      "family": "material",
+      "sourceCandidateUci": "e8e4",
+      "alternativeCandidateUci": "d4d3",
+      "source": {
+        "status": "no_positive_named_capture",
+        "cause": "capture_illegal",
+        "eventUci": null
+      },
+      "alternative": {
+        "status": "positive_named_capture_available",
+        "cause": "preserved",
+        "eventUci": "f3b7"
+      },
+      "contrast": "alternative_only_local_relation"
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "targetId": "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc",
+      "family": "destination",
+      "sourceCandidateUci": "a7a6",
+      "alternativeCandidateUci": "c6a5",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c3b5",
+        "namedPawnCaptureUci": "a6b5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c3b5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "targetId": "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc",
+      "family": "destination",
+      "sourceCandidateUci": "a7a6",
+      "alternativeCandidateUci": "c8e6",
+      "source": {
+        "status": "named_pawn_punishment_witness",
+        "eventUci": "c3b5",
+        "namedPawnCaptureUci": "a6b5"
+      },
+      "alternative": {
+        "status": "locally_safe_arrival_witness",
+        "eventUci": "c3b5",
+        "namedPawnCaptureUci": null
+      },
+      "contrast": "source_only_local_relation"
+    }
+  ],
+  "profile": "d3262-coherent-local-relation-contrast-v1",
+  "inputDigests": {
+    "d3262-coherent-target-comparison-frame.json": "sha256:229335224b1c175478537554ec52ee7341b983e7358222fe1c7d67c2af16cc6b",
+    "d3262-coherent-immediate-and-witness.json": "sha256:6cb42fc859e83027a93774f67531fbb8eb51fdea3e6db84236c4298aa1495328"
+  }
+}

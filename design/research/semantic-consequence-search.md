@@ -433,6 +433,17 @@ has yet been joined to held-out target success, refutations or latency, so
 these are branch-reach counts only. [[D3281]] [[D3289]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-semantic-reserve.md`.
 
+The corrected exact local evaluator now joins all 182 target comparisons to
+legal piece-identity replay and checks 96 source-observed cells against their
+independent predecessor reading. Of 60 material source-versus-natural pairs,
+18 preserve a positive named capture only on the source, 11 only on the
+alternative, and 31 on both or neither. The 56 destination pairs largely
+reproduce their authored pawn relation; that is a source control, not an
+engine-reason discovery rate. Named arrival/pawn reply witnesses remain
+bounded, not all-defence proofs. The semantic reserve still needs a separate
+selected-reply outcome join. [[D3289]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-local-relation-contrast.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

@@ -56,10 +56,13 @@ export function evaluateRecordedArrival(rootFen: string, candidateUci: string, c
   return { candidateUci, legalReplyCount: candidate.replyCount, status: "named_pawn_punishment_witness", arrivalUci, namedPawnCaptureUci, positiveCaptureUcis, witnessPath: [candidateUci, arrivalUci, namedPawnCaptureUci] };
 }
 
-export function compileDestinationReplyWitness(comparisons: any, immediate: any, replyGraph: any): any {
+export function compileDestinationReplyWitness(comparisons: any, immediate: any, replyGraph: any, options: {
+  replyAuthority?: string;
+  expectedComparisons?: number;
+} = {}): any {
   check(comparisons.authority === "target_candidate_comparison_population_not_outcome_or_move_grade", "Wrong comparison authority");
   check(immediate.authority === "exact_immediate_minor_destination_availability_not_move_grade" && immediate.manifest === comparisons.manifest, "Crossed immediate reading");
-  check(replyGraph.authority === "complete_legal_opponent_reply_edges_not_a_semantic_proof" && replyGraph.manifest === comparisons.manifest, "Crossed exact reply graph");
+  check(replyGraph.authority === (options.replyAuthority ?? "complete_legal_opponent_reply_edges_not_a_semantic_proof") && replyGraph.manifest === comparisons.manifest, "Crossed exact reply graph");
   const targetById = new Map(comparisons.definitions.map((definition: any) => [definition.id, definition]));
   const repliesByRoot = new Map(replyGraph.roots.map((root: any) => [root.rootId, root]));
   const rows = immediate.rows.map((reading: any) => {
@@ -69,7 +72,7 @@ export function compileDestinationReplyWitness(comparisons: any, immediate: any,
     check(candidate !== undefined, `Missing exact candidate ${reading.rootId}/${reading.candidateUci}`);
     return { rootId: reading.rootId, targetId: reading.targetId, sourceObserved: reading.sourceObserved, genericFirstPositiveCaptureUci: reading.positiveReplyUci, ...evaluateRecordedArrival((repliesByRoot.get(reading.rootId) as any).fen, reading.candidateUci, candidate, definition.target, reading) };
   });
-  check(rows.length === 87, `Unexpected destination comparison count ${rows.length}`);
+  check(rows.length === (options.expectedComparisons ?? 87), `Unexpected destination comparison count ${rows.length}`);
   return { version: 1, manifest: comparisons.manifest, authority: "named_exact_reply_witness_not_all_defences_or_move_grade", rows };
 }
 

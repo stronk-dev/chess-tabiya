@@ -128,3 +128,14 @@ engine baselines and labels an all-legal event-source variant separately.
 counts. No held-out success, false-attribution or proof verdict follows from
 merely scheduling a declared relation event; the fifth arm is not yet
 calibrated against the other four.
+
+## Post-freeze immediate local relation — 2026-09-23
+
+The corrected target frame now has an exact immediate relation reading for
+all 182 cells and a bounded named destination witness. The source-versus-
+natural-alternative projection has 116 exact local pairs and 17 targets
+without a selected alternative. Digests, cause counts and the scope limit
+are in `d3262-coherent-local-relation-contrast.md`. These readings supply
+held-out local target controls, not a judgement about a searched reply or an
+engine move. The predeclared semantic reserve and five-arm comparison remain
+unscored.

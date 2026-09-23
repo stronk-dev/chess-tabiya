@@ -61,10 +61,13 @@ export function evaluateMaterialImmediate(fen: string, candidateUci: string, tar
   return { immediate: "removed", cause: root.isLegal(attempt) ? "exchange_neutralized" : "capture_illegal", positiveCaptureUci: null, afterFen };
 }
 
-export function compileMaterialImmediate(comparisons: any, frame: any, source: any, replyGraph: any): any {
+export function compileMaterialImmediate(comparisons: any, frame: any, source: any, replyGraph: any, options: {
+  rootAuthority?: string;
+  replyAuthority?: string;
+} = {}): any {
   check(comparisons.authority === "target_candidate_comparison_population_not_outcome_or_move_grade", "Wrong comparison authority");
-  check(frame.authority === "shared_candidate_population_not_move_grade" && frame.manifest === comparisons.manifest, "Crossed root frame");
-  check(replyGraph.authority === "complete_legal_opponent_reply_edges_not_a_semantic_proof" && replyGraph.manifest === frame.manifest, "Crossed exact reply graph");
+  check(frame.authority === (options.rootAuthority ?? "shared_candidate_population_not_move_grade") && frame.manifest === comparisons.manifest, "Crossed root frame");
+  check(replyGraph.authority === (options.replyAuthority ?? "complete_legal_opponent_reply_edges_not_a_semantic_proof") && replyGraph.manifest === frame.manifest, "Crossed exact reply graph");
   const byTarget = new Map(comparisons.definitions.map((definition: any) => [definition.id, definition]));
   const byRoot = new Map(frame.roots.map((root: any) => [root.rootId, root]));
   const repliesByRoot = new Map(replyGraph.roots.map((root: any) => [root.rootId, root]));

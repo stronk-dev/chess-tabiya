@@ -20797,3 +20797,15 @@ the all-legal variant can schedule it but does not prove it is useful.
 Source digests, legal replies, MultiPV widths and negative fixtures check the
 artifact. Held-out target outcomes, false attribution, typed abstention,
 all-defence claims and end-to-end cost remain open under [[D3262]]/[[D3289]].
+### 2026-09-23 — D3262 corrected exact local target readings
+
+The corrected 182-comparison frame now has digest-bound immediate material
+and destination readings, 96 independent predecessor source controls and
+88 bounded named destination witnesses. Its source-versus-natural local
+contrast has 116 pairs; material relations split 18 source-only, 11
+alternative-only and 31 same, while the authored destination relation
+controls mostly reproduce their own premise. Negative fixtures reject
+crossed graph, candidate FEN, authority and source truth. This is not a
+target-preserving reserve outcome, all-defence proof, move grade or causal
+engine explanation; those and end-to-end cost remain open under [[D3262]]
+and [[D3289]].

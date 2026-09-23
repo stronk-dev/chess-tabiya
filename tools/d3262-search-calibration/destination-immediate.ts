@@ -63,10 +63,13 @@ export function verifySourcePawn(fen: string, candidateUci: string, target: Dest
   check(root.isLegal(capture) && (legalExchangeForMove(root, capture)?.resultUnits ?? 0) > 0, `Declared pawn does not positively capture after minor arrival`);
 }
 
-export function compileDestinationImmediate(comparisons: any, frame: any, source: any, replyGraph: any): any {
+export function compileDestinationImmediate(comparisons: any, frame: any, source: any, replyGraph: any, options: {
+  rootAuthority?: string;
+  replyAuthority?: string;
+} = {}): any {
   check(comparisons.authority === "target_candidate_comparison_population_not_outcome_or_move_grade", "Wrong comparison authority");
-  check(frame.authority === "shared_candidate_population_not_move_grade" && frame.manifest === comparisons.manifest, "Crossed root frame");
-  check(replyGraph.authority === "complete_legal_opponent_reply_edges_not_a_semantic_proof" && replyGraph.manifest === frame.manifest, "Crossed exact reply graph");
+  check(frame.authority === (options.rootAuthority ?? "shared_candidate_population_not_move_grade") && frame.manifest === comparisons.manifest, "Crossed root frame");
+  check(replyGraph.authority === (options.replyAuthority ?? "complete_legal_opponent_reply_edges_not_a_semantic_proof") && replyGraph.manifest === frame.manifest, "Crossed exact reply graph");
   const byTarget = new Map(comparisons.definitions.map((definition: any) => [definition.id, definition]));
   const byRoot = new Map(frame.roots.map((root: any) => [root.rootId, root]));
   const repliesByRoot = new Map(replyGraph.roots.map((root: any) => [root.rootId, root]));
