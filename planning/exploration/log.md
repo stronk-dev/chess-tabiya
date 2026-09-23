@@ -20786,3 +20786,14 @@ providers to all 1,966 corrected selected first-reply paths, including the
 same-FEN/different-Maia-history distinction. D3289's provider-source gap is
 closed, but its corrected target-preserving arm and [[D3262]]'s five-arm
 semantic proof, typed abstention and end-to-end cost gate remain open.
+### 2026-09-23 — D3262 corrected source-blind event selector
+
+The corrected 182-comparison target frame now recomputes 152 exact relation
+events, 18 cases with no legal event and 12 with an absent operand. A
+one-slot semantic reserve keeps coherent top-eight engine baselines separate
+from an all-legal event-source sensitivity. In 264 of 546 rows at each
+candidate width, the exact event sits outside the top-eight source window;
+the all-legal variant can schedule it but does not prove it is useful.
+Source digests, legal replies, MultiPV widths and negative fixtures check the
+artifact. Held-out target outcomes, false attribution, typed abstention,
+all-defence claims and end-to-end cost remain open under [[D3262]]/[[D3289]].

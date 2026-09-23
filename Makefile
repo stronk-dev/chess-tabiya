@@ -37,6 +37,8 @@ export SF_CMD
 .PHONY: semantic-search-stockfish-coherent-deeper-capture semantic-search-maia-coherent-deeper-capture
 .PHONY: semantic-search-stockfish-coherent-deeper-check semantic-search-maia-coherent-deeper-check
 .PHONY: semantic-search-coherent-deeper-union-update semantic-search-coherent-deeper-union-check
+.PHONY: semantic-search-coherent-relation-event-update semantic-search-coherent-relation-event-check
+.PHONY: semantic-search-coherent-semantic-reserve-update semantic-search-coherent-semantic-reserve-check
 .PHONY: semantic-search-stockfish-new-child-capture semantic-search-stockfish-new-child-all-capture semantic-search-stockfish-new-child-check
 .PHONY: semantic-search-maia-new-child-capture semantic-search-maia-new-child-check
 .PHONY: semantic-search-maia-horizon4-path-frame-update semantic-search-maia-horizon4-path-frame-check
@@ -295,6 +297,24 @@ semantic-search-coherent-deeper-union-update: semantic-search-stockfish-coherent
 semantic-search-coherent-deeper-union-check: semantic-search-stockfish-coherent-deeper-check semantic-search-maia-coherent-deeper-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-deeper-source-union.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-deeper-source-union.mjs
+
+semantic-search-coherent-relation-event-update: semantic-search-coherent-target-frame-check semantic-search-coherent-exact-replies-check
+	./node_modules/.bin/tsc --noEmit --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck tools/d3262-search-calibration/coherent-semantic-relation-event-first-layer.ts
+	./node_modules/.bin/esbuild tools/d3262-search-calibration/coherent-semantic-relation-event-first-layer.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/coherent-semantic-relation-event-first-layer.mjs
+	$(CI_NODE) tools/d3262-search-calibration/dist/coherent-semantic-relation-event-first-layer.mjs --write
+
+semantic-search-coherent-relation-event-check: semantic-search-coherent-target-frame-check semantic-search-coherent-exact-replies-check
+	./node_modules/.bin/tsc --noEmit --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck tools/d3262-search-calibration/coherent-semantic-relation-event-first-layer.ts
+	./node_modules/.bin/esbuild tools/d3262-search-calibration/coherent-semantic-relation-event-first-layer.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/coherent-semantic-relation-event-first-layer.mjs
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-semantic-relation-event-first-layer.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/dist/coherent-semantic-relation-event-first-layer.mjs
+
+semantic-search-coherent-semantic-reserve-update: semantic-search-coherent-relation-event-check semantic-search-stockfish-coherent-check semantic-search-stockfish-new-child-check
+	$(CI_NODE) tools/d3262-search-calibration/coherent-semantic-reserve.mjs --write
+
+semantic-search-coherent-semantic-reserve-check: semantic-search-coherent-relation-event-check semantic-search-stockfish-coherent-check semantic-search-stockfish-new-child-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-semantic-reserve.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-semantic-reserve.mjs
 
 semantic-search-stockfish-horizon4-capture: semantic-search-horizon4-frontier
 	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --horizon4 $(if $(START),--start $(START),) $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
@@ -1795,7 +1815,7 @@ verify-governance: register-check status-parity work-index work-state work-item-
 # they do not establish repository, product, or release correctness. Run the relevant narrow target
 # while editing an RFC, or this aggregate when intentionally auditing the whole active RFC portfolio.
 verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review pack-capability-cut-fresh-review graduation-clearance-author-repair semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-cut-contract live-sources-author-repair review-evidence-fourth-fresh-review review-evidence-fourth-author-repair review-evidence-fifth-fresh-review evidence-presentation-seventh-fresh-review bot-policy-fifth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair shared-resource-bootstrap-collision-core-second-author-repair bounded-target-sixth-author-repair module-discharge-coverage-contract wave-c-module-amendment
-verify-rfc-evidence: semantic-search-stockfish-check semantic-search-stockfish-child-beam semantic-search-stockfish-coherent-impact-check semantic-search-maia-new-child-check semantic-search-coherent-first-reply-check semantic-search-coherent-deeper-supplement-check semantic-search-coherent-deeper-union-check semantic-search-maia-check semantic-search-maia-child-prefix semantic-search-maia-direct-frontier semantic-search-maia-horizon4-path-check semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-coherent-target-frame-check semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-reserve semantic-search-relation-event-reserve semantic-search-local-rank-concordance semantic-search-event-policy-relevance semantic-search-horizon4-frontier semantic-search-stockfish-horizon4-smoke-check semantic-search-stockfish-horizon4-check semantic-search-provider-line-arm semantic-search-exact-arm-forcing
+verify-rfc-evidence: semantic-search-stockfish-check semantic-search-stockfish-child-beam semantic-search-stockfish-coherent-impact-check semantic-search-maia-new-child-check semantic-search-coherent-first-reply-check semantic-search-coherent-deeper-supplement-check semantic-search-coherent-deeper-union-check semantic-search-coherent-relation-event-check semantic-search-coherent-semantic-reserve-check semantic-search-maia-check semantic-search-maia-child-prefix semantic-search-maia-direct-frontier semantic-search-maia-horizon4-path-check semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-coherent-target-frame-check semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-reserve semantic-search-relation-event-reserve semantic-search-local-rank-concordance semantic-search-event-policy-relevance semantic-search-horizon4-frontier semantic-search-stockfish-horizon4-smoke-check semantic-search-stockfish-horizon4-check semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 
 .PHONY: feedback-delivery-measurement feedback-binding-audit capability-watch-check
 feedback-delivery-measurement:

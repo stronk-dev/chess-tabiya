@@ -424,6 +424,15 @@ target-preserving arm or the five-arm proof/abstention/cost verdict. [[D3289]] `
 `planning/semantic-consequence-search/d3262-coherent-new-child-sources.md`,
 `planning/semantic-consequence-search/d3262-coherent-first-reply-frontier.md`.
 
+The corrected source-blind relation-event selector finds 152 event-bearing
+comparisons out of 182, but exact event occurrence is not profit or cause.
+Its one-slot reserve measures a real provider-width sensitivity: in 264 of
+546 budget/comparison rows, the declared event is outside coherent top-eight,
+while the separate all-legal source can still schedule it. Neither width
+has yet been joined to held-out target success, refutations or latency, so
+these are branch-reach counts only. [[D3281]] [[D3289]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-semantic-reserve.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

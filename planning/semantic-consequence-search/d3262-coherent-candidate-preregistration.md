@@ -118,3 +118,13 @@ capture digests are in `d3262-coherent-first-reply-frontier.md`. This removes
 the missing-provider excuse from the next five-arm comparison; it does not
 resolve the semantic-target-preserving selection, proof/abstention, timing
 gate or criterion 23.
+
+## Post-freeze source-blind event selection — 2026-09-23
+
+The corrected target/event census and one-slot semantic reserve now run on
+the separately declared population. The reserve keeps coherent top-eight
+engine baselines and labels an all-legal event-source variant separately.
+`d3262-coherent-semantic-reserve.md` records the exact digests and reach-only
+counts. No held-out success, false-attribution or proof verdict follows from
+merely scheduling a declared relation event; the fifth arm is not yet
+calibrated against the other four.

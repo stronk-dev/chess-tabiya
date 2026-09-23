@@ -3,6 +3,7 @@
 // enters this compile step. An event is not proof that the candidate was good.
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
+import { basename } from "node:path";
 
 import { makeFen } from "../../packages/runtime/node_modules/chessops/dist/esm/fen.js";
 import { parseSquare } from "../../packages/runtime/node_modules/chessops/dist/esm/util.js";
@@ -31,9 +32,11 @@ function destinationRootPawn(pos: ReturnType<typeof position>, definition: Defin
   return rootPawn;
 }
 
-export function compileSemanticRelationEventFirstLayer(comparisons: any, graph: any): any {
-  check(comparisons.authority === "target_candidate_comparison_population_not_outcome_or_move_grade", "Wrong relation-event comparison frame");
-  check(graph.authority === "complete_legal_opponent_reply_edges_not_a_semantic_proof" && graph.manifest === comparisons.manifest, "Crossed relation-event legal graph");
+export function compileSemanticRelationEventFirstLayer(comparisons: any, graph: any, options: {
+  comparisonAuthority?: string; graphAuthority?: string; expectedComparisons?: number;
+} = {}): any {
+  check(comparisons.authority === (options.comparisonAuthority ?? "target_candidate_comparison_population_not_outcome_or_move_grade"), "Wrong relation-event comparison frame");
+  check(graph.authority === (options.graphAuthority ?? "complete_legal_opponent_reply_edges_not_a_semantic_proof") && graph.manifest === comparisons.manifest, "Crossed relation-event legal graph");
   const definitions = new Map<string, Definition>(comparisons.definitions.map((value: Definition) => [value.id, value]));
   const roots = new Map<string, any>(graph.roots.map((value: any) => [value.rootId, value]));
   const rows = comparisons.comparisons.map((pair: Pair) => {
@@ -63,11 +66,12 @@ export function compileSemanticRelationEventFirstLayer(comparisons: any, graph: 
     });
     return { ...pair, family: definition.family, status: eventReplies.length > 0 ? "event_available" : "no_legal_event", legalReplies: candidate.replies.length, eventReplies };
   });
-  check(rows.length === 185, "Relation-event census lost named comparisons");
+  check(rows.length === (options.expectedComparisons ?? 185), "Relation-event census lost named comparisons");
   return { version: 1, manifest: comparisons.manifest, authority: "source_blind_typed_relation_event_scheduling_not_profit_or_proof", rows };
 }
 
-if (process.argv[1]?.endsWith("semantic-relation-event-first-layer.mjs")) {
+if (process.argv[1] && basename(process.argv[1]) === "semantic-relation-event-first-layer.mjs"
+  && new URL(`file://${process.argv[1]}`).href === import.meta.url) {
   const names = ["d3262-target-comparison-frame.json", "d3262-exact-replies.json"];
   const bytes = names.map((name) => readFileSync(path(name)));
   const artifact = { ...compileSemanticRelationEventFirstLayer(JSON.parse(bytes[0].toString()), JSON.parse(bytes[1].toString())), inputDigests: Object.fromEntries(names.map((name, index) => [name, `sha256:${createHash("sha256").update(bytes[index]).digest("hex")}`])) };
