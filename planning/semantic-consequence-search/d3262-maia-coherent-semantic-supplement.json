@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "authority": "coherent_semantic_path_keyed_maia_not_human_frequency_or_proof",
+  "inputDigests": {
+    "d3262-coherent-semantic-supplement-frame.json": "sha256:f7d1f5c30ede4bef18a1ea023d420b6207bc5dd81eb0f17d5fb63c8766faf189",
+    "d3262-maia-direct-logits.json": "sha256:4513d01c0983797d27c6ab30e1ffa42c046e519957756bfe97a71673340df7ab",
+    "d3262-maia-history-replay.json": "sha256:81b3d761395be080585af93127245e2116b12b175fac915c9892e1fce361adf4"
+  },
+  "source": {
+    "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+    "modelCheckpointSha256": "sha256:ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f562524f",
+    "uciSourceSha256": "sha256:0f2905bb668f0cb8af6b175e698756d89472b200c36e3f3410ff98390e35474d",
+    "mode": "human_common",
+    "band": 1400,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "useUciHistory": true,
+    "historyUci": "root_candidate_reply_path_per_row",
+    "device": "cpu",
+    "rawMeaning": "direct_full_legal_softmax_logits",
+    "configuredMeaning": "direct_sample_from_logits_support_and_normalized_mass",
+    "preRootHistory": "unavailable_not_inferred"
+  },
+  "positions": 1,
+  "rows": [
+    {
+      "id": "sha256:cc1f25020f279e749d32d327aa20720430fbcd08d37c2f3bfacab53485e42594",
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "f7f5",
+      "replyUci": "c1f4",
+      "rootFen": "4k3/pp2bppp/4p3/3pP3/3P4/1P4P1/1P2KPP1/2B5 b - - 4 25",
+      "historyUci": [
+        "f7f5",
+        "c1f4"
+      ],
+      "fen": "4k3/pp2b1pp/4p3/3pPp2/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26",
+      "terminal": false,
+      "terminalReason": null,
+      "legalUcis": [
+        "a7a5",
+        "a7a6",
+        "b7b5",
+        "b7b6",
+        "e7a3",
+        "e7b4",
+        "e7c5",
+        "e7d6",
+        "e7d8",
+        "e7f6",
+        "e7f8",
+        "e7g5",
+        "e7h4",
+        "e8d7",
+        "e8d8",
+        "e8f7",
+        "e8f8",
+        "g7g5",
+        "g7g6",
+        "h7h5",
+        "h7h6"
+      ],
+      "rawFullLegal": [
+        {
+          "legalUci": "a7a5",
+          "mass": 0.01046959962695837
+        },
+        {
+          "legalUci": "a7a6",
+          "mass": 0.008433532901108265
+        },
+        {
+          "legalUci": "b7b5",
+          "mass": 0.020559603348374367
+        },
+        {
+          "legalUci": "b7b6",
+          "mass": 0.006703604944050312
+        },
+        {
+          "legalUci": "e7a3",
+          "mass": 7.111323066055775e-05
+        },
+        {
+          "legalUci": "e7b4",
+          "mass": 0.037752777338027954
+        },
+        {
+          "legalUci": "e7c5",
+          "mass": 3.5623124858830124e-05
+        },
+        {
+          "legalUci": "e7d6",
+          "mass": 2.9689503207919188e-05
+        },
+        {
+          "legalUci": "e7d8",
+          "mass": 0.004140998236835003
+        },
+        {
+          "legalUci": "e7f6",
+          "mass": 0.00010777542775031179
+        },
+        {
+          "legalUci": "e7f8",
+          "mass": 0.00033922793227247894
+        },
+        {
+          "legalUci": "e7g5",
+          "mass": 0.00040846687625162303
+        },
+        {
+          "legalUci": "e7h4",
+          "mass": 7.924304554762784e-06
+        },
+        {
+          "legalUci": "e8d7",
+          "mass": 0.09923526644706726
+        },
+        {
+          "legalUci": "e8d8",
+          "mass": 0.0018282801611348987
+        },
+        {
+          "legalUci": "e8f7",
+          "mass": 0.077761210501194
+        },
+        {
+          "legalUci": "e8f8",
+          "mass": 0.0010042914655059576
+        },
+        {
+          "legalUci": "g7g5",
+          "mass": 0.44283202290534973
+        },
+        {
+          "legalUci": "g7g6",
+          "mass": 0.06437967717647552
+        },
+        {
+          "legalUci": "h7h5",
+          "mass": 0.024389395490288734
+        },
+        {
+          "legalUci": "h7h6",
+          "mass": 0.19950981438159943
+        }
+      ],
+      "configuredSupport": [
+        {
+          "legalUci": "g7g5",
+          "mass": 0.6108865141868591
+        },
+        {
+          "legalUci": "h7h6",
+          "mass": 0.22548481822013855
+        },
+        {
+          "legalUci": "e8d7",
+          "mass": 0.09418772906064987
+        },
+        {
+          "legalUci": "e8f7",
+          "mass": 0.06944093108177185
+        }
+      ]
+    }
+  ]
+}

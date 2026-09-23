@@ -31,7 +31,8 @@ export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, direc
   captureAuthority: "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof",
   frameName: "d3262-maia-horizon4-path-frame.json", positions: 2189, sharedFenControl: true,
 }) {
-  const jobs = expected.frameName === "d3262-coherent-deeper-supplement-frame.json" ? frame.maiaJobs : frame.jobs;
+  const jobs = ["d3262-coherent-deeper-supplement-frame.json", "d3262-coherent-semantic-supplement-frame.json"]
+    .includes(expected.frameName) ? frame.maiaJobs : frame.jobs;
   check(frame.authority === expected.frameAuthority && jobs.length === expected.positions
     && capture.version === 1 && capture.manifest === frame.manifest && capture.positions === expected.positions && capture.rows.length === expected.positions
     && capture.authority === expected.captureAuthority, "Crossed or incomplete Maia path capture");

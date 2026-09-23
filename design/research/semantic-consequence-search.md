@@ -508,6 +508,16 @@ selected targets do not establish why the engine recommends a move; the
 correct output for an incompatible or unproved contrast is abstention.
 [[D3293]] `[V]` `planning/semantic-consequence-search/d3262-coherent-bounded-contrast.md`.
 
+The predeclared all-legal semantic-event reserve has 152 distinct exact reply
+paths, 68 outside the corrected engine/Maia-selected 1,966-path union. Existing
+source captures covered 67 of those 68; the remaining `f7f5 c1f4` path now
+has a checked Stockfish 19 position reading and an exact-history Maia3-5M
+distribution. The sealed 152-binding join has zero missing providers and
+negative fixtures for crossed FEN/history, missing source and erased legal
+moves. Source availability does not prove a target consequence, explain an
+engine choice or satisfy the five-arm cost/abstention gate. [[D3294]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-semantic-source-closure.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

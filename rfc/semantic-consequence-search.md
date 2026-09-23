@@ -553,6 +553,11 @@ The corrected target frame, 1,966 selected first-reply paths and their deeper
 Stockfish/Maia provider joins are now checked. Exact immediate local target readings,
 source-versus-natural local contrasts and the source-blind reserve's held-out reach
 join are also checked under the separate 193-candidate profile.
+The all-legal semantic-event reserve has a separate source population: 152
+distinct exact reply paths, 68 outside that 1,966-path union. A source-blind
+gap check found one path missing both providers; a one-job supplement and
+sealed 152-binding union now close Stockfish and path-keyed Maia coverage
+([[D3294]]). This is source completeness, not continuation or proof.
 Path-keyed first-reply Maia event relevance is checked as a separate model
 diagnostic; it is not the multi-node policy-coverage arm. Five-arm continuation,
 semantic proof/abstention, comparison and end-to-end cost remain outstanding.

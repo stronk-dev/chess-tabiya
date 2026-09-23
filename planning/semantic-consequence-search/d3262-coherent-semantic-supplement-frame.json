@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "profile": "d3262-coherent-semantic-supplement-v1",
+  "authority": "missing_semantic_event_provider_jobs_not_result_or_move_grade",
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "inputDigests": {
+    "d3262-coherent-semantic-provider-gap.json": "sha256:95b5cd7c2000738f64050230081d4503a18b2456de4704e887a5759a46b03dc4",
+    "d3262-coherent-exact-replies.json": "sha256:3fcd3ef596886aee1e1427bc2502aaeef1baa39827c2e8d35b398e1fb478bb68"
+  },
+  "engineJobs": [
+    {
+      "id": "sha256:359d844d700cfae5f4f4802c91222978fa3027e572a907563641f2bb2370732a",
+      "fen": "4k3/pp2b1pp/4p3/3pPp2/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26",
+      "paths": [
+        {
+          "rootId": "d1023:32dbd41ca364bdb7",
+          "candidateUci": "f7f5",
+          "replyUci": "c1f4"
+        }
+      ]
+    }
+  ],
+  "maiaJobs": [
+    {
+      "id": "sha256:cc1f25020f279e749d32d327aa20720430fbcd08d37c2f3bfacab53485e42594",
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "f7f5",
+      "replyUci": "c1f4",
+      "rootFen": "4k3/pp2bppp/4p3/3pP3/3P4/1P4P1/1P2KPP1/2B5 b - - 4 25",
+      "historyUci": [
+        "f7f5",
+        "c1f4"
+      ],
+      "fen": "4k3/pp2b1pp/4p3/3pPp2/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26"
+    }
+  ]
+}

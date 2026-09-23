@@ -20878,3 +20878,16 @@ perspective. [[D3293]] and the checked
 record the result. Root engine ranks agree with only 4/7/6 of the thirteen
 reach contrasts at the three separate budgets; this is not an engine reason.
 The remaining multi-arm proof/abstention/cost gate stays open under [[D3262]].
+
+### 2026-09-23 — D3294 closes semantic-event provider coverage, not the search verdict
+
+The predeclared all-legal semantic-event reserve selects 152 distinct exact
+reply paths, 68 outside the earlier 1,966-path engine/Maia-selected union.
+Existing captures covered 67 of the 68; a source-blind one-job supplement
+captured the remaining Stockfish 19 position and ordered-history Maia3-5M
+policy. `make semantic-search-coherent-semantic-source-union-check` verifies
+152/152 bindings and zero missing provider paths, with hard negatives for
+crossed FEN/history, erased legal moves and missing source. [[D3294]] and
+`planning/semantic-consequence-search/d3262-coherent-semantic-source-closure.md`
+record the digests. No target persistence, engine-reason attribution,
+five-arm proof/abstention or cost gate follows; those remain [[D3262]].

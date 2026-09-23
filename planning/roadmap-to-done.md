@@ -2510,3 +2510,10 @@ This is progress in the research authority, not a crossed 1.0 capability:
 the five-arm proof/abstention/cost comparison remains open under [[D3262]],
 `semantic-consequence-search` is still a draft RFC, and no new hint, Review,
 bot or pack consumer may present this as the engine's reason for a move.
+
+The source-blind all-legal semantic-event reserve now has a checked 152-path
+Stockfish/Maia source union, including one previously absent path captured
+under both providers ([[D3294]]). This closes an input-availability gap for
+the fifth arm, not its continuation, causal attribution, production profile
+or release capability. The next executable is the predeclared five-arm
+proof/abstention/cost comparison on the corrected frame.

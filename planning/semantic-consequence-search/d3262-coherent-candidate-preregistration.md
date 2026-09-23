@@ -129,6 +129,17 @@ counts. No held-out success, false-attribution or proof verdict follows from
 merely scheduling a declared relation event; the fifth arm is not yet
 calibrated against the other four.
 
+## Post-freeze semantic-event provider closure — 2026-09-23
+
+The all-legal semantic-event reserve selects 152 distinct exact reply paths;
+68 lie outside the 1,966-path engine/Maia-selected union. Existing captures
+covered 67 of those 68. A separately declared one-path supplement captured
+the remaining Stockfish position and exact-history Maia distribution. The
+checked 152-binding union has zero missing provider paths.
+`d3262-coherent-semantic-source-closure.md` records digests and negative
+fixtures. This is source closure only; semantic continuation, five-arm proof,
+abstention and end-to-end cost remain unmeasured.
+
 ## Post-freeze immediate local relation — 2026-09-23
 
 The corrected target frame now has an exact immediate relation reading for

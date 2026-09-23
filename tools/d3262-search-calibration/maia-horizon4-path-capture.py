@@ -64,18 +64,22 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", required=True)
     parser.add_argument("--coherent-supplement", action="store_true")
+    parser.add_argument("--semantic-supplement", action="store_true")
     args = parser.parse_args()
-    frame_path = ROOT / ("d3262-coherent-deeper-supplement-frame.json" if args.coherent_supplement
+    require(not (args.coherent_supplement and args.semantic_supplement), "Select one Maia capture population")
+    frame_path = ROOT / ("d3262-coherent-semantic-supplement-frame.json" if args.semantic_supplement
+                         else "d3262-coherent-deeper-supplement-frame.json" if args.coherent_supplement
                          else "d3262-maia-horizon4-path-frame.json")
     direct_path = ROOT / "d3262-maia-direct-logits.json"
     child_path = ROOT / "d3262-maia-history-replay.json"
     frame = json.loads(frame_path.read_text())
     direct = json.loads(direct_path.read_text())
     child = json.loads(child_path.read_text())
-    jobs = frame["maiaJobs"] if args.coherent_supplement else frame["jobs"]
-    expected_authority = ("missing_deeper_provider_jobs_not_result_or_move_grade" if args.coherent_supplement
+    jobs = frame["maiaJobs"] if args.coherent_supplement or args.semantic_supplement else frame["jobs"]
+    expected_authority = ("missing_semantic_event_provider_jobs_not_result_or_move_grade" if args.semantic_supplement
+                          else "missing_deeper_provider_jobs_not_result_or_move_grade" if args.coherent_supplement
                           else "path_keyed_maia_horizon_four_capture_jobs_not_policy_result")
-    expected_jobs = 250 if args.coherent_supplement else 2189
+    expected_jobs = 1 if args.semantic_supplement else 250 if args.coherent_supplement else 2189
     require(frame["authority"] == expected_authority
             and frame["manifest"] == direct["manifest"] == child["manifest"]
             and len(jobs) == expected_jobs, "Crossed Maia path frame")
@@ -122,7 +126,8 @@ def main():
 
     artifact = {
         "version": 1, "manifest": frame["manifest"],
-        "authority": ("coherent_deeper_path_keyed_maia_not_human_frequency_or_proof" if args.coherent_supplement
+        "authority": ("coherent_semantic_path_keyed_maia_not_human_frequency_or_proof" if args.semantic_supplement
+                      else "coherent_deeper_path_keyed_maia_not_human_frequency_or_proof" if args.coherent_supplement
                       else "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof"),
         "inputDigests": {frame_path.name: digest(frame_path), direct_path.name: digest(direct_path), child_path.name: digest(child_path)},
         "source": {**direct["source"], "historyUci": "root_candidate_reply_path_per_row",

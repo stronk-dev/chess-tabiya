@@ -1,0 +1,5025 @@
+{
+  "version": 1,
+  "profile": "d3262-coherent-semantic-provider-gap-v1",
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "authority": "predeclared_semantic_event_path_source_availability_not_target_outcome_or_search_result",
+  "paths": [
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "c2c3",
+      "replyUci": "c8d7",
+      "fen": "rn1qkbnr/pp1bpppp/8/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+      "targetIds": [
+        "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1564,
+        "fen": "rn1qkbnr/pp1bpppp/8/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 3,
+        "fen": "rn1qkbnr/pp1bpppp/8/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "d4c5",
+      "replyUci": "c8d7",
+      "fen": "rn1qkbnr/pp1bpppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR w KQkq - 1 5",
+      "targetIds": [
+        "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1566,
+        "fen": "rn1qkbnr/pp1bpppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR w KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 14,
+        "fen": "rn1qkbnr/pp1bpppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR w KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "e5e6",
+      "replyUci": "c8d7",
+      "fen": "rn1qkbnr/pp1bpppp/4P3/2pp4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 1 5",
+      "targetIds": [
+        "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1562,
+        "fen": "rn1qkbnr/pp1bpppp/4P3/2pp4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 25,
+        "fen": "rn1qkbnr/pp1bpppp/4P3/2pp4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "g1f3",
+      "replyUci": "c8d7",
+      "fen": "rn1qkbnr/pp1bpppp/8/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+      "targetIds": [
+        "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1565,
+        "fen": "rn1qkbnr/pp1bpppp/8/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 39,
+        "fen": "rn1qkbnr/pp1bpppp/8/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "candidateUci": "b8d7",
+      "replyUci": "d4e5",
+      "fen": "r1bqkb1r/pppn1ppp/3p1n2/4P3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+      "targetIds": [
+        "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1088,
+        "fen": "r1bqkb1r/pppn1ppp/3p1n2/4P3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 48,
+        "fen": "r1bqkb1r/pppn1ppp/3p1n2/4P3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "candidateUci": "f8e7",
+      "replyUci": "d4e5",
+      "fen": "rnbqk2r/ppp1bppp/3p1n2/4P3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+      "targetIds": [
+        "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1871,
+        "fen": "rnbqk2r/ppp1bppp/3p1n2/4P3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 71,
+        "fen": "rnbqk2r/ppp1bppp/3p1n2/4P3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "candidateUci": "e7h4",
+      "replyUci": "h6f8",
+      "fen": "r1bq1Bnk/pppn1p1p/4p3/3p4/3P1P1b/3B4/PPP3PP/RN1Q1RK1 b - - 0 13",
+      "targetIds": [
+        "target:c73c0fc8f8521df559a933b6b1b5e78289a75a6c598ac9f9bced0dcede4b6d93"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 761,
+        "fen": "r1bq1Bnk/pppn1p1p/4p3/3p4/3P1P1b/3B4/PPP3PP/RN1Q1RK1 b - - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 87,
+        "fen": "r1bq1Bnk/pppn1p1p/4p3/3p4/3P1P1b/3B4/PPP3PP/RN1Q1RK1 b - - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "candidateUci": "c2c3",
+      "replyUci": "c5d4",
+      "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/2BbP3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5",
+      "targetIds": [
+        "target:da6364ed09ff7d4fd98b890a38437700ec9cf794993b906e0e97a9bdaa60045b"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 903,
+        "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/2BbP3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 106,
+        "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/2BbP3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "candidateUci": "e1g1",
+      "replyUci": "c5d4",
+      "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/2BbP3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5",
+      "targetIds": [
+        "target:da6364ed09ff7d4fd98b890a38437700ec9cf794993b906e0e97a9bdaa60045b"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 904,
+        "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/2BbP3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 117,
+        "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/2BbP3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "candidateUci": "c8e6",
+      "replyUci": "c3d5",
+      "fen": "r2q1rk1/pp3pp1/4bb1p/3N4/3P4/6P1/PP3PBP/R2Q1RK1 b - - 0 14",
+      "targetIds": [
+        "target:5fec8bcfb5cd87d868d5a86acb22db7b282fd922b13aba205ec7aecfde454adf"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1260,
+        "fen": "r2q1rk1/pp3pp1/4bb1p/3N4/3P4/6P1/PP3PBP/R2Q1RK1 b - - 0 14"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 127,
+        "fen": "r2q1rk1/pp3pp1/4bb1p/3N4/3P4/6P1/PP3PBP/R2Q1RK1 b - - 0 14"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "candidateUci": "d8d6",
+      "replyUci": "c3d5",
+      "fen": "r1b2rk1/pp3pp1/3q1b1p/3N4/3P4/6P1/PP3PBP/R2Q1RK1 b - - 0 14",
+      "targetIds": [
+        "target:5fec8bcfb5cd87d868d5a86acb22db7b282fd922b13aba205ec7aecfde454adf"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 752,
+        "fen": "r1b2rk1/pp3pp1/3q1b1p/3N4/3P4/6P1/PP3PBP/R2Q1RK1 b - - 0 14"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 141,
+        "fen": "r1b2rk1/pp3pp1/3q1b1p/3N4/3P4/6P1/PP3PBP/R2Q1RK1 b - - 0 14"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "candidateUci": "e8g8",
+      "replyUci": "a1a4",
+      "fen": "5rk1/1p3p1p/5np1/1P1p1p2/R2N4/3KP3/5PPP/8 b - - 0 25",
+      "targetIds": [
+        "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 300,
+        "fen": "5rk1/1p3p1p/5np1/1P1p1p2/R2N4/3KP3/5PPP/8 b - - 0 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 150,
+        "fen": "5rk1/1p3p1p/5np1/1P1p1p2/R2N4/3KP3/5PPP/8 b - - 0 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "candidateUci": "f6e4",
+      "replyUci": "a1a4",
+      "fen": "4k2r/1p3p1p/6p1/1P1p1p2/R2Nn3/3KP3/5PPP/8 b k - 0 25",
+      "targetIds": [
+        "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 185,
+        "fen": "4k2r/1p3p1p/6p1/1P1p1p2/R2Nn3/3KP3/5PPP/8 b k - 0 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 161,
+        "fen": "4k2r/1p3p1p/6p1/1P1p1p2/R2Nn3/3KP3/5PPP/8 b k - 0 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "candidateUci": "f6g8",
+      "replyUci": "a1a4",
+      "fen": "4k1nr/1p3p1p/6p1/1P1p1p2/R2N4/3KP3/5PPP/8 b k - 0 25",
+      "targetIds": [
+        "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 173,
+        "fen": "4k1nr/1p3p1p/6p1/1P1p1p2/R2N4/3KP3/5PPP/8 b k - 0 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 173,
+        "fen": "4k1nr/1p3p1p/6p1/1P1p1p2/R2N4/3KP3/5PPP/8 b k - 0 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "candidateUci": "c7c6",
+      "replyUci": "b3d5",
+      "fen": "1k2r3/1p2r2p/p1p3pn/3B1P2/P7/7P/P1P5/4RRK1 b - - 1 25",
+      "targetIds": [
+        "target:aaa7622bd5d593108fd72f49ac225ad2223f16b1aa83ec5c73c74378801de06e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2,
+        "fen": "1k2r3/1p2r2p/p1p3pn/3B1P2/P7/7P/P1P5/4RRK1 b - - 1 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 186,
+        "fen": "1k2r3/1p2r2p/p1p3pn/3B1P2/P7/7P/P1P5/4RRK1 b - - 1 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "candidateUci": "e7e1",
+      "replyUci": "b3d5",
+      "fen": "1k2r3/1pp4p/p5pn/3B1P2/P7/7P/P1P5/4rRK1 b - - 1 25",
+      "targetIds": [
+        "target:aaa7622bd5d593108fd72f49ac225ad2223f16b1aa83ec5c73c74378801de06e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 14,
+        "fen": "1k2r3/1pp4p/p5pn/3B1P2/P7/7P/P1P5/4rRK1 b - - 1 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 199,
+        "fen": "1k2r3/1pp4p/p5pn/3B1P2/P7/7P/P1P5/4rRK1 b - - 1 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "candidateUci": "d7d5",
+      "replyUci": "d3c4",
+      "fen": "rnbqkb1r/ppp2ppp/4p3/3p4/2BPn3/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5",
+      "targetIds": [
+        "target:56ad02dbb4da0ad3c7b56de26c0dcd06a115c70531d9db05078f7e05c67a2eff"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1981,
+        "fen": "rnbqkb1r/ppp2ppp/4p3/3p4/2BPn3/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 216,
+        "fen": "rnbqkb1r/ppp2ppp/4p3/3p4/2BPn3/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "candidateUci": "e4f6",
+      "replyUci": "d3c4",
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+      "targetIds": [
+        "target:56ad02dbb4da0ad3c7b56de26c0dcd06a115c70531d9db05078f7e05c67a2eff"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1997,
+        "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 229,
+        "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "candidateUci": "f5e7",
+      "replyUci": "c1g5",
+      "fen": "r3kb1r/ppp1nppp/2p1b3/4P1B1/6P1/2N2N1P/PPP2P2/R4RK1 b - - 2 12",
+      "targetIds": [
+        "target:8af41eb4399083da3ed204fdf2b590197eeb321f068a72273ca8cf25c9391dac"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1325,
+        "fen": "r3kb1r/ppp1nppp/2p1b3/4P1B1/6P1/2N2N1P/PPP2P2/R4RK1 b - - 2 12"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 238,
+        "fen": "r3kb1r/ppp1nppp/2p1b3/4P1B1/6P1/2N2N1P/PPP2P2/R4RK1 b - - 2 12"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "candidateUci": "f7f6",
+      "replyUci": "c1g5",
+      "fen": "r3kb1r/ppp3pp/2p1bp2/4PnB1/6P1/2N2N1P/PPP2P2/R4RK1 b - - 1 12",
+      "targetIds": [
+        "target:8af41eb4399083da3ed204fdf2b590197eeb321f068a72273ca8cf25c9391dac"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1349,
+        "fen": "r3kb1r/ppp3pp/2p1bp2/4PnB1/6P1/2N2N1P/PPP2P2/R4RK1 b - - 1 12"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 249,
+        "fen": "r3kb1r/ppp3pp/2p1bp2/4PnB1/6P1/2N2N1P/PPP2P2/R4RK1 b - - 1 12"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "candidateUci": "g8e7",
+      "replyUci": "d4e5",
+      "fen": "r1bqk2r/ppppnppp/2n5/2b1P3/4P3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+      "targetIds": [
+        "target:4ad9e532415c9a5e3e10525cb1ebe064e04616425f925d8c58b2676b5aa3a07e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 999,
+        "fen": "r1bqk2r/ppppnppp/2n5/2b1P3/4P3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 270,
+        "fen": "r1bqk2r/ppppnppp/2n5/2b1P3/4P3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "candidateUci": "d1e1",
+      "replyUci": "c5d4",
+      "fen": "r1bqkbnr/1pp3pp/p4p2/8/3pP3/8/PPP2PPP/RNB1QRK1 w kq - 0 9",
+      "targetIds": [
+        "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1108,
+        "fen": "r1bqkbnr/1pp3pp/p4p2/8/3pP3/8/PPP2PPP/RNB1QRK1 w kq - 0 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 275,
+        "fen": "r1bqkbnr/1pp3pp/p4p2/8/3pP3/8/PPP2PPP/RNB1QRK1 w kq - 0 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "e8d7",
+      "replyUci": "c1f4",
+      "fen": "8/pp1kbppp/4p3/3pP3/3P1B2/1P4P1/1P2KPP1/8 b - - 6 26",
+      "targetIds": [
+        "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 536,
+        "fen": "8/pp1kbppp/4p3/3pP3/3P1B2/1P4P1/1P2KPP1/8 b - - 6 26"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 315,
+        "fen": "8/pp1kbppp/4p3/3pP3/3P1B2/1P4P1/1P2KPP1/8 b - - 6 26"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "f7f5",
+      "replyUci": "c1f4",
+      "fen": "4k3/pp2b1pp/4p3/3pPp2/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26",
+      "targetIds": [
+        "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": null,
+      "maia": null,
+      "needsStockfish": true,
+      "needsMaia": true
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "g7g5",
+      "replyUci": "c1f4",
+      "fen": "4k3/pp2bp1p/4p3/3pP1p1/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26",
+      "targetIds": [
+        "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 203,
+        "fen": "4k3/pp2bp1p/4p3/3pP1p1/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 327,
+        "fen": "4k3/pp2bp1p/4p3/3pP1p1/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "h7h5",
+      "replyUci": "c1f4",
+      "fen": "4k3/pp2bpp1/4p3/3pP2p/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26",
+      "targetIds": [
+        "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 215,
+        "fen": "4k3/pp2bpp1/4p3/3pP2p/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 339,
+        "fen": "4k3/pp2bpp1/4p3/3pP2p/3P1B2/1P4P1/1P2KPP1/8 b - - 1 26"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "candidateUci": "c8b7",
+      "replyUci": "c2d3",
+      "fen": "rn1q1rk1/1b3ppp/3bpn2/p2p4/1pPP4/1P1BPNB1/3N1PPP/R2QK2R b KQ - 2 13",
+      "targetIds": [
+        "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1494,
+        "fen": "rn1q1rk1/1b3ppp/3bpn2/p2p4/1pPP4/1P1BPNB1/3N1PPP/R2QK2R b KQ - 2 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 349,
+        "fen": "rn1q1rk1/1b3ppp/3bpn2/p2p4/1pPP4/1P1BPNB1/3N1PPP/R2QK2R b KQ - 2 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "candidateUci": "d5c4",
+      "replyUci": "c2d3",
+      "fen": "rnbq1rk1/5ppp/3bpn2/p7/1ppP4/1P1BPNB1/3N1PPP/R2QK2R b KQ - 1 13",
+      "targetIds": [
+        "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1725,
+        "fen": "rnbq1rk1/5ppp/3bpn2/p7/1ppP4/1P1BPNB1/3N1PPP/R2QK2R b KQ - 1 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 357,
+        "fen": "rnbq1rk1/5ppp/3bpn2/p7/1ppP4/1P1BPNB1/3N1PPP/R2QK2R b KQ - 1 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "candidateUci": "d6g3",
+      "replyUci": "c2d3",
+      "fen": "rnbq1rk1/5ppp/4pn2/p2p4/1pPP4/1P1BPNb1/3N1PPP/R2QK2R b KQ - 1 13",
+      "targetIds": [
+        "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1736,
+        "fen": "rnbq1rk1/5ppp/4pn2/p2p4/1pPP4/1P1BPNb1/3N1PPP/R2QK2R b KQ - 1 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 365,
+        "fen": "rnbq1rk1/5ppp/4pn2/p2p4/1pPP4/1P1BPNb1/3N1PPP/R2QK2R b KQ - 1 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "candidateUci": "c8h3",
+      "replyUci": "c3e4",
+      "fen": "rn1qkbnr/pp2pppp/2p5/8/3PN3/5P1b/PPP3PP/R1BQKBNR b KQkq - 0 5",
+      "targetIds": [
+        "target:f30e2e62cb720dd4de83e673d97c84f6b987b9dd7b33c6c32bb781d05b6d3030"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1574,
+        "fen": "rn1qkbnr/pp2pppp/2p5/8/3PN3/5P1b/PPP3PP/R1BQKBNR b KQkq - 0 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 382,
+        "fen": "rn1qkbnr/pp2pppp/2p5/8/3PN3/5P1b/PPP3PP/R1BQKBNR b KQkq - 0 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "candidateUci": "c8h3",
+      "replyUci": "g1e2",
+      "fen": "rn1qkbnr/pp2pppp/2p5/8/3Pp3/2N2P1b/PPP1N1PP/R1BQKB1R b KQkq - 2 5",
+      "targetIds": [
+        "target:bb45f6acf462c7dc3558f77c4b3b6e9ccd934a2d559ce1d666eae049f98bb6b1"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1576,
+        "fen": "rn1qkbnr/pp2pppp/2p5/8/3Pp3/2N2P1b/PPP1N1PP/R1BQKB1R b KQkq - 2 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 385,
+        "fen": "rn1qkbnr/pp2pppp/2p5/8/3Pp3/2N2P1b/PPP1N1PP/R1BQKB1R b KQkq - 2 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "candidateUci": "e4f3",
+      "replyUci": "g1e2",
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2p2/PPP1N1PP/R1BQKB1R b KQkq - 1 5",
+      "targetIds": [
+        "target:bb45f6acf462c7dc3558f77c4b3b6e9ccd934a2d559ce1d666eae049f98bb6b1"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2105,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2p2/PPP1N1PP/R1BQKB1R b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 395,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2p2/PPP1N1PP/R1BQKB1R b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "c1d2",
+      "replyUci": "b8c6",
+      "fen": "r3kb1r/ppp1pppp/2n2nb1/q7/3P2P1/2N2N1P/PPPB1P2/R2QKB1R w KQkq - 3 9",
+      "targetIds": [
+        "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1338,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q7/3P2P1/2N2N1P/PPPB1P2/R2QKB1R w KQkq - 3 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 403,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q7/3P2P1/2N2N1P/PPPB1P2/R2QKB1R w KQkq - 3 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "d4d5",
+      "replyUci": "b8c6",
+      "fen": "r3kb1r/ppp1pppp/2n2nb1/q2P4/6P1/2N2N1P/PPP2P2/R1BQKB1R w KQkq - 1 9",
+      "targetIds": [
+        "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1336,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q2P4/6P1/2N2N1P/PPP2P2/R1BQKB1R w KQkq - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 412,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q2P4/6P1/2N2N1P/PPP2P2/R1BQKB1R w KQkq - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "f3d2",
+      "replyUci": "b8c6",
+      "fen": "r3kb1r/ppp1pppp/2n2nb1/q7/3P2P1/2N4P/PPPN1P2/R1BQKB1R w KQkq - 3 9",
+      "targetIds": [
+        "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1339,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q7/3P2P1/2N4P/PPPN1P2/R1BQKB1R w KQkq - 3 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 423,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q7/3P2P1/2N4P/PPPN1P2/R1BQKB1R w KQkq - 3 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "f3e5",
+      "replyUci": "b8c6",
+      "fen": "r3kb1r/ppp1pppp/2n2nb1/q3N3/3P2P1/2N4P/PPP2P2/R1BQKB1R w KQkq - 3 9",
+      "targetIds": [
+        "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1337,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q3N3/3P2P1/2N4P/PPP2P2/R1BQKB1R w KQkq - 3 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 432,
+        "fen": "r3kb1r/ppp1pppp/2n2nb1/q3N3/3P2P1/2N4P/PPP2P2/R1BQKB1R w KQkq - 3 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "candidateUci": "a5c7",
+      "replyUci": "d3b5",
+      "fen": "rnb1k2r/ppq2p2/3p1n1p/1BpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQkq - 4 13",
+      "targetIds": [
+        "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1645,
+        "fen": "rnb1k2r/ppq2p2/3p1n1p/1BpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQkq - 4 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 448,
+        "fen": "rnb1k2r/ppq2p2/3p1n1p/1BpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQkq - 4 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "candidateUci": "a7a6",
+      "replyUci": "d3b5",
+      "fen": "rnb1k2r/1p3p2/p2p1n1p/qBpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQkq - 1 13",
+      "targetIds": [
+        "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1644,
+        "fen": "rnb1k2r/1p3p2/p2p1n1p/qBpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQkq - 1 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 459,
+        "fen": "rnb1k2r/1p3p2/p2p1n1p/qBpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQkq - 1 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "candidateUci": "e8g8",
+      "replyUci": "d3b5",
+      "fen": "rnb2rk1/pp3p2/3p1n1p/qBpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQ - 4 13",
+      "targetIds": [
+        "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1701,
+        "fen": "rnb2rk1/pp3p2/3p1n1p/qBpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQ - 4 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 468,
+        "fen": "rnb2rk1/pp3p2/3p1n1p/qBpP2p1/4P3/1QP3B1/P4PPP/R3K1NR b KQ - 4 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "candidateUci": "c3d4",
+      "replyUci": "f6e4",
+      "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2BPn3/5N2/PP3PPP/RNBQK2R w KQkq - 0 7",
+      "targetIds": [
+        "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 984,
+        "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2BPn3/5N2/PP3PPP/RNBQK2R w KQkq - 0 7"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 484,
+        "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2BPn3/5N2/PP3PPP/RNBQK2R w KQkq - 0 7"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "candidateUci": "e1g1",
+      "replyUci": "f6e4",
+      "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2Bpn3/2P2N2/PP3PPP/RNBQ1RK1 w kq - 0 7",
+      "targetIds": [
+        "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 983,
+        "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2Bpn3/2P2N2/PP3PPP/RNBQ1RK1 w kq - 0 7"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 494,
+        "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2Bpn3/2P2N2/PP3PPP/RNBQ1RK1 w kq - 0 7"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "candidateUci": "f3h4",
+      "replyUci": "f6e4",
+      "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2Bpn2N/2P5/PP3PPP/RNBQK2R w KQkq - 0 7",
+      "targetIds": [
+        "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 982,
+        "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2Bpn2N/2P5/PP3PPP/RNBQK2R w KQkq - 0 7"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 503,
+        "fen": "r1bqk2r/pppp1ppp/2n5/2b5/2Bpn2N/2P5/PP3PPP/RNBQK2R w KQkq - 0 7"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "candidateUci": "d1d4",
+      "replyUci": "c8d7",
+      "fen": "rn1qkbnr/pp1bpppp/8/3pP3/3Q4/5N2/PPP2PPP/RNB1KB1R w KQkq - 1 6",
+      "targetIds": [
+        "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1568,
+        "fen": "rn1qkbnr/pp1bpppp/8/3pP3/3Q4/5N2/PPP2PPP/RNB1KB1R w KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 508,
+        "fen": "rn1qkbnr/pp1bpppp/8/3pP3/3Q4/5N2/PPP2PPP/RNB1KB1R w KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "candidateUci": "e5e6",
+      "replyUci": "c8d7",
+      "fen": "rn1qkbnr/pp1bpppp/4P3/3p4/3p4/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+      "targetIds": [
+        "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1563,
+        "fen": "rn1qkbnr/pp1bpppp/4P3/3p4/3p4/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 518,
+        "fen": "rn1qkbnr/pp1bpppp/4P3/3p4/3p4/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "candidateUci": "f3d4",
+      "replyUci": "c8d7",
+      "fen": "rn1qkbnr/pp1bpppp/8/3pP3/3N4/8/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+      "targetIds": [
+        "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1567,
+        "fen": "rn1qkbnr/pp1bpppp/8/3pP3/3N4/8/PPP2PPP/RNBQKB1R w KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 529,
+        "fen": "rn1qkbnr/pp1bpppp/8/3pP3/3N4/8/PPP2PPP/RNBQKB1R w KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "candidateUci": "e6c4",
+      "replyUci": "f2d2",
+      "fen": "7k/ppp2prp/2p5/8/2b1P2N/P1P3P1/1PPR3P/R5K1 b - - 0 21",
+      "targetIds": [
+        "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 471,
+        "fen": "7k/ppp2prp/2p5/8/2b1P2N/P1P3P1/1PPR3P/R5K1 b - - 0 21"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 582,
+        "fen": "7k/ppp2prp/2p5/8/2b1P2N/P1P3P1/1PPR3P/R5K1 b - - 0 21"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "candidateUci": "c8a6",
+      "replyUci": "c3c6",
+      "fen": "r3r1k1/6p1/b1Q1pq1p/3p4/3P4/3BP3/1R3PPP/5RK1 b - - 0 22",
+      "targetIds": [
+        "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1396,
+        "fen": "r3r1k1/6p1/b1Q1pq1p/3p4/3P4/3BP3/1R3PPP/5RK1 b - - 0 22"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 606,
+        "fen": "r3r1k1/6p1/b1Q1pq1p/3p4/3P4/3BP3/1R3PPP/5RK1 b - - 0 22"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "candidateUci": "c8d7",
+      "replyUci": "c3c6",
+      "fen": "r3r1k1/3b2p1/2Q1pq1p/3p4/3P4/3BP3/1R3PPP/5RK1 b - - 0 22",
+      "targetIds": [
+        "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1385,
+        "fen": "r3r1k1/3b2p1/2Q1pq1p/3p4/3P4/3BP3/1R3PPP/5RK1 b - - 0 22"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 616,
+        "fen": "r3r1k1/3b2p1/2Q1pq1p/3p4/3P4/3BP3/1R3PPP/5RK1 b - - 0 22"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "candidateUci": "f6h4",
+      "replyUci": "c3c6",
+      "fen": "r1b1r1k1/6p1/2Q1p2p/3p4/3P3q/3BP3/1R3PPP/5RK1 b - - 0 22",
+      "targetIds": [
+        "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 685,
+        "fen": "r1b1r1k1/6p1/2Q1p2p/3p4/3P3q/3BP3/1R3PPP/5RK1 b - - 0 22"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 642,
+        "fen": "r1b1r1k1/6p1/2Q1p2p/3p4/3P3q/3BP3/1R3PPP/5RK1 b - - 0 22"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "candidateUci": "c7c6",
+      "replyUci": "d3a3",
+      "fen": "2kr3r/pp2pp1p/2p3p1/3P4/2P1P3/Q6P/P4PP1/1K1R3R b - - 0 17",
+      "targetIds": [
+        "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 38,
+        "fen": "2kr3r/pp2pp1p/2p3p1/3P4/2P1P3/Q6P/P4PP1/1K1R3R b - - 0 17"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 667,
+        "fen": "2kr3r/pp2pp1p/2p3p1/3P4/2P1P3/Q6P/P4PP1/1K1R3R b - - 0 17"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "candidateUci": "h8e8",
+      "replyUci": "d3a3",
+      "fen": "2krr3/ppp1pp1p/6p1/3P4/2P1P3/Q6P/P4PP1/1K1R3R b - - 0 17",
+      "targetIds": [
+        "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 65,
+        "fen": "2krr3/ppp1pp1p/6p1/3P4/2P1P3/Q6P/P4PP1/1K1R3R b - - 0 17"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 678,
+        "fen": "2krr3/ppp1pp1p/6p1/3P4/2P1P3/Q6P/P4PP1/1K1R3R b - - 0 17"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "candidateUci": "d6e5",
+      "replyUci": "g3f4",
+      "fen": "rn1q1rk1/ppp2ppp/8/4p3/2BP1P1N/2P5/PP3KbP/RN1Q3R b - - 0 13",
+      "targetIds": [
+        "target:b819090ff2609c2966a594779b5c46068f7186b5912d82ccae52382597a28f7f"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1526,
+        "fen": "rn1q1rk1/ppp2ppp/8/4p3/2BP1P1N/2P5/PP3KbP/RN1Q3R b - - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 692,
+        "fen": "rn1q1rk1/ppp2ppp/8/4p3/2BP1P1N/2P5/PP3KbP/RN1Q3R b - - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "candidateUci": "g2h1",
+      "replyUci": "g3f4",
+      "fen": "rn1q1rk1/ppp2ppp/3p4/4P3/2BP1P1N/2P5/PP3K1P/RN1Q3b b - - 0 13",
+      "targetIds": [
+        "target:b819090ff2609c2966a594779b5c46068f7186b5912d82ccae52382597a28f7f"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1513,
+        "fen": "rn1q1rk1/ppp2ppp/3p4/4P3/2BP1P1N/2P5/PP3K1P/RN1Q3b b - - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 711,
+        "fen": "rn1q1rk1/ppp2ppp/3p4/4P3/2BP1P1N/2P5/PP3K1P/RN1Q3b b - - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "candidateUci": "c7c6",
+      "replyUci": "a2f2",
+      "fen": "6k1/6p1/2R1p2p/3p4/3P4/4P2P/5rPK/8 w - - 0 31",
+      "targetIds": [
+        "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 419,
+        "fen": "6k1/6p1/2R1p2p/3p4/3P4/4P2P/5rPK/8 w - - 0 31"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 716,
+        "fen": "6k1/6p1/2R1p2p/3p4/3P4/4P2P/5rPK/8 w - - 0 31"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "candidateUci": "g2g4",
+      "replyUci": "a2f2",
+      "fen": "6k1/2R3p1/2p1p2p/3p4/3P2P1/4P2P/5r1K/8 w - - 0 31",
+      "targetIds": [
+        "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 319,
+        "fen": "6k1/2R3p1/2p1p2p/3p4/3P2P1/4P2P/5r1K/8 w - - 0 31"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 727,
+        "fen": "6k1/2R3p1/2p1p2p/3p4/3P2P1/4P2P/5r1K/8 w - - 0 31"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "candidateUci": "h2g1",
+      "replyUci": "a2f2",
+      "fen": "6k1/2R3p1/2p1p2p/3p4/3P4/4P2P/5rP1/6K1 w - - 0 31",
+      "targetIds": [
+        "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 322,
+        "fen": "6k1/2R3p1/2p1p2p/3p4/3P4/4P2P/5rP1/6K1 w - - 0 31"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 741,
+        "fen": "6k1/2R3p1/2p1p2p/3p4/3P4/4P2P/5rP1/6K1 w - - 0 31"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "b6a5",
+      "replyUci": "f3g5",
+      "fen": "r1b2r1k/pp4pp/2p5/q5NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21",
+      "targetIds": [
+        "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 726,
+        "fen": "r1b2r1k/pp4pp/2p5/q5NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 752,
+        "fen": "r1b2r1k/pp4pp/2p5/q5NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "b6a6",
+      "replyUci": "f3g5",
+      "fen": "r1b2r1k/pp4pp/q1p5/6NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21",
+      "targetIds": [
+        "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 740,
+        "fen": "r1b2r1k/pp4pp/q1p5/6NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 767,
+        "fen": "r1b2r1k/pp4pp/q1p5/6NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "b6c5",
+      "replyUci": "f3g5",
+      "fen": "r1b2r1k/pp4pp/2p5/2q3NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21",
+      "targetIds": [
+        "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 717,
+        "fen": "r1b2r1k/pp4pp/2p5/2q3NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 776,
+        "fen": "r1b2r1k/pp4pp/2p5/2q3NP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "c8f5",
+      "replyUci": "f3g5",
+      "fen": "r4r1k/pp4pp/1qp5/5bNP/4QB2/2P5/P4PP1/2KR3R b - - 2 21",
+      "targetIds": [
+        "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1432,
+        "fen": "r4r1k/pp4pp/1qp5/5bNP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 789,
+        "fen": "r4r1k/pp4pp/1qp5/5bNP/4QB2/2P5/P4PP1/2KR3R b - - 2 21"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "h7h6",
+      "replyUci": "f3g5",
+      "fen": "r1b2r1k/pp4p1/1qp4p/6NP/4QB2/2P5/P4PP1/2KR3R b - - 1 21",
+      "targetIds": [
+        "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 704,
+        "fen": "r1b2r1k/pp4p1/1qp4p/6NP/4QB2/2P5/P4PP1/2KR3R b - - 1 21"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 797,
+        "fen": "r1b2r1k/pp4p1/1qp4p/6NP/4QB2/2P5/P4PP1/2KR3R b - - 1 21"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "candidateUci": "a7a6",
+      "replyUci": "d4b5",
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/1N6/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+      "targetIds": [
+        "target:6965a73c42e597621286990f53d20b601fde91d317ef2ac250d600a2c2202124"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1886,
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/1N6/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 812,
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/1N6/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "candidateUci": "a7a6",
+      "replyUci": "f1b5",
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6",
+      "targetIds": [
+        "target:8913672af4f438b827fdf0d3e0f65e6d25ca5fa3c759ef6cb1feb01d2befbaef"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1885,
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 813,
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "candidateUci": "c7c5",
+      "replyUci": "c1f4",
+      "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/3P1BN1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9",
+      "targetIds": [
+        "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1772,
+        "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/3P1BN1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 822,
+        "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/3P1BN1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "candidateUci": "f6g4",
+      "replyUci": "c1f4",
+      "fen": "rnbq1rk1/ppp1bppp/4p3/3p4/3P1Bn1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9",
+      "targetIds": [
+        "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1806,
+        "fen": "rnbq1rk1/ppp1bppp/4p3/3p4/3P1Bn1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 835,
+        "fen": "rnbq1rk1/ppp1bppp/4p3/3p4/3P1Bn1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "candidateUci": "g7g5",
+      "replyUci": "c1f4",
+      "fen": "rnbq1rk1/ppp1bp1p/4pn2/3p2p1/3P1BN1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9",
+      "targetIds": [
+        "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1796,
+        "fen": "rnbq1rk1/ppp1bp1p/4pn2/3p2p1/3P1BN1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 845,
+        "fen": "rnbq1rk1/ppp1bp1p/4pn2/3p2p1/3P1BN1/3B1P2/PPP3PP/RN1Q1RK1 b - - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "candidateUci": "c7c6",
+      "replyUci": "g2d5",
+      "fen": "rnbq1rk1/pp3ppp/2pb1p2/3B4/8/2P3P1/P1PPNP1P/R1BQK2R b KQ - 1 9",
+      "targetIds": [
+        "target:a810d46c5977e950ce9bda231433ff4b65b797e89281bdbe2a861cc6ebf36c4e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1783,
+        "fen": "rnbq1rk1/pp3ppp/2pb1p2/3B4/8/2P3P1/P1PPNP1P/R1BQK2R b KQ - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 861,
+        "fen": "rnbq1rk1/pp3ppp/2pb1p2/3B4/8/2P3P1/P1PPNP1P/R1BQK2R b KQ - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "candidateUci": "f8e8",
+      "replyUci": "g2d5",
+      "fen": "rnbqr1k1/ppp2ppp/3b1p2/3B4/8/2P3P1/P1PPNP1P/R1BQK2R b KQ - 6 9",
+      "targetIds": [
+        "target:a810d46c5977e950ce9bda231433ff4b65b797e89281bdbe2a861cc6ebf36c4e"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2150,
+        "fen": "rnbqr1k1/ppp2ppp/3b1p2/3B4/8/2P3P1/P1PPNP1P/R1BQK2R b KQ - 6 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 871,
+        "fen": "rnbqr1k1/ppp2ppp/3b1p2/3B4/8/2P3P1/P1PPNP1P/R1BQK2R b KQ - 6 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "candidateUci": "e7e6",
+      "replyUci": "d2e4",
+      "fen": "rnb2rk1/pp3ppp/4q3/3Pp3/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13",
+      "targetIds": [
+        "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1705,
+        "fen": "rnb2rk1/pp3ppp/4q3/3Pp3/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 879,
+        "fen": "rnb2rk1/pp3ppp/4q3/3Pp3/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "candidateUci": "f7f5",
+      "replyUci": "d2e4",
+      "fen": "rnb2rk1/pp2q1pp/8/3Ppp2/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13",
+      "targetIds": [
+        "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1684,
+        "fen": "rnb2rk1/pp2q1pp/8/3Ppp2/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 890,
+        "fen": "rnb2rk1/pp2q1pp/8/3Ppp2/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "candidateUci": "f8d8",
+      "replyUci": "d2e4",
+      "fen": "rnbr2k1/pp2qppp/8/3Pp3/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13",
+      "targetIds": [
+        "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2161,
+        "fen": "rnbr2k1/pp2qppp/8/3Pp3/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 900,
+        "fen": "rnbr2k1/pp2qppp/8/3Pp3/4N3/P3P3/1P3PPP/R2QKB1R b KQ - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "candidateUci": "b7b6",
+      "replyUci": "d3b4",
+      "fen": "r1bq1rk1/p1pnnpbp/1p1p2p1/3Pp3/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11",
+      "targetIds": [
+        "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 793,
+        "fen": "r1bq1rk1/p1pnnpbp/1p1p2p1/3Pp3/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 912,
+        "fen": "r1bq1rk1/p1pnnpbp/1p1p2p1/3Pp3/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "candidateUci": "c7c5",
+      "replyUci": "d3b4",
+      "fen": "r1bq1rk1/pp1nnpbp/3p2p1/2pPp3/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11",
+      "targetIds": [
+        "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 807,
+        "fen": "r1bq1rk1/pp1nnpbp/3p2p1/2pPp3/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 924,
+        "fen": "r1bq1rk1/pp1nnpbp/3p2p1/2pPp3/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "candidateUci": "f7f5",
+      "replyUci": "d3b4",
+      "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11",
+      "targetIds": [
+        "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 841,
+        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 938,
+        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/1NP1P3/2N5/PP2BPPP/R1BQ1RK1 b - - 1 11"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "candidateUci": "d8e7",
+      "replyUci": "d3e4",
+      "fen": "r1b1rnk1/pp2qppp/2p5/3p4/3PB3/2N1P3/PPQ1NPPP/1R3RK1 b - - 0 13",
+      "targetIds": [
+        "target:28a856d72400b38209f58dde627810ffbf5a7246d5553e6d1a021f60d0e1a610"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 688,
+        "fen": "r1b1rnk1/pp2qppp/2p5/3p4/3PB3/2N1P3/PPQ1NPPP/1R3RK1 b - - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 952,
+        "fen": "r1b1rnk1/pp2qppp/2p5/3p4/3PB3/2N1P3/PPQ1NPPP/1R3RK1 b - - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "candidateUci": "b8a6",
+      "replyUci": "d1d4",
+      "fen": "r1bqkb1r/pppp1ppp/n4n2/4P3/3Q4/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5",
+      "targetIds": [
+        "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1101,
+        "fen": "r1bqkb1r/pppp1ppp/n4n2/4P3/3Q4/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 985,
+        "fen": "r1bqkb1r/pppp1ppp/n4n2/4P3/3Q4/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "candidateUci": "f6d5",
+      "replyUci": "d1d4",
+      "fen": "rnbqkb1r/pppp1ppp/8/3nP3/3Q4/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5",
+      "targetIds": [
+        "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2019,
+        "fen": "rnbqkb1r/pppp1ppp/8/3nP3/3Q4/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 997,
+        "fen": "rnbqkb1r/pppp1ppp/8/3nP3/3Q4/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "candidateUci": "f6e4",
+      "replyUci": "d1d4",
+      "fen": "rnbqkb1r/pppp1ppp/8/4P3/3Qn3/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5",
+      "targetIds": [
+        "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2027,
+        "fen": "rnbqkb1r/pppp1ppp/8/4P3/3Qn3/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1006,
+        "fen": "rnbqkb1r/pppp1ppp/8/4P3/3Qn3/5N2/PPP2PPP/RNB1KB1R b KQkq - 0 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "candidateUci": "b4d3",
+      "replyUci": "e1e7",
+      "fen": "r1bq1rk1/pp2Rpb1/3p4/2pP1N1p/6p1/3n2P1/PPP2PBP/R1BQ2K1 b - - 0 13",
+      "targetIds": [
+        "target:a40499970dc705f6819d4eb7aae1503aae72e78e7048a457f73d371d192652fb"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 825,
+        "fen": "r1bq1rk1/pp2Rpb1/3p4/2pP1N1p/6p1/3n2P1/PPP2PBP/R1BQ2K1 b - - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1017,
+        "fen": "r1bq1rk1/pp2Rpb1/3p4/2pP1N1p/6p1/3n2P1/PPP2PBP/R1BQ2K1 b - - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "candidateUci": "c8f5",
+      "replyUci": "e1e7",
+      "fen": "r2q1rk1/pp2Rpb1/3p4/2pP1b1p/1n4p1/3P2P1/PPP2PBP/R1BQ2K1 b - - 0 13",
+      "targetIds": [
+        "target:a40499970dc705f6819d4eb7aae1503aae72e78e7048a457f73d371d192652fb"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1258,
+        "fen": "r2q1rk1/pp2Rpb1/3p4/2pP1b1p/1n4p1/3P2P1/PPP2PBP/R1BQ2K1 b - - 0 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1029,
+        "fen": "r2q1rk1/pp2Rpb1/3p4/2pP1b1p/1n4p1/3P2P1/PPP2PBP/R1BQ2K1 b - - 0 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "candidateUci": "d4d5",
+      "replyUci": "g7f6",
+      "fen": "r2q1rk1/pp2pp1p/2n2bp1/3P4/4P1b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 13",
+      "targetIds": [
+        "target:86c00ec1c4ff7432712d486baefd3292c0a3e91f51a39f3c2b6eed70d47fd098"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1235,
+        "fen": "r2q1rk1/pp2pp1p/2n2bp1/3P4/4P1b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1044,
+        "fen": "r2q1rk1/pp2pp1p/2n2bp1/3P4/4P1b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "candidateUci": "e4e5",
+      "replyUci": "g7f6",
+      "fen": "r2q1rk1/pp2pp1p/2n2bp1/4P3/3P2b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 13",
+      "targetIds": [
+        "target:86c00ec1c4ff7432712d486baefd3292c0a3e91f51a39f3c2b6eed70d47fd098"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1236,
+        "fen": "r2q1rk1/pp2pp1p/2n2bp1/4P3/3P2b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 13"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1058,
+        "fen": "r2q1rk1/pp2pp1p/2n2bp1/4P3/3P2b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 13"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "candidateUci": "c6b4",
+      "replyUci": "e1e8",
+      "fen": "4R1k1/ppp2p1p/6p1/8/1n1b1P2/7P/PP4P1/1RB4K b - - 0 21",
+      "targetIds": [
+        "target:7efbafa1378aaf264093cf7f6044d7411d72a810aded4edf6c419fecd2ac8299"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 235,
+        "fen": "4R1k1/ppp2p1p/6p1/8/1n1b1P2/7P/PP4P1/1RB4K b - - 0 21"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1066,
+        "fen": "4R1k1/ppp2p1p/6p1/8/1n1b1P2/7P/PP4P1/1RB4K b - - 0 21"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "candidateUci": "f4g3",
+      "replyUci": "f6h5",
+      "fen": "r1bqk2r/pp3ppp/2nbp3/2pp3n/3P4/2P1PNB1/PP1N1PPP/R2QKB1R w KQkq - 3 8",
+      "targetIds": [
+        "target:87a5a74fbfdde323d0a7104b357b69e85f67d3d4da43a44e7a7706aed80773fd"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 931,
+        "fen": "r1bqk2r/pp3ppp/2nbp3/2pp3n/3P4/2P1PNB1/PP1N1PPP/R2QKB1R w KQkq - 3 8"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1077,
+        "fen": "r1bqk2r/pp3ppp/2nbp3/2pp3n/3P4/2P1PNB1/PP1N1PPP/R2QKB1R w KQkq - 3 8"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "candidateUci": "g2g4",
+      "replyUci": "f6h5",
+      "fen": "r1bqk2r/pp3ppp/2nbp3/2pp3n/3P1BP1/2P1PN2/PP1N1P1P/R2QKB1R w KQkq - 1 8",
+      "targetIds": [
+        "target:87a5a74fbfdde323d0a7104b357b69e85f67d3d4da43a44e7a7706aed80773fd"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 930,
+        "fen": "r1bqk2r/pp3ppp/2nbp3/2pp3n/3P1BP1/2P1PN2/PP1N1P1P/R2QKB1R w KQkq - 1 8"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1087,
+        "fen": "r1bqk2r/pp3ppp/2nbp3/2pp3n/3P1BP1/2P1PN2/PP1N1P1P/R2QKB1R w KQkq - 1 8"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "c8g4",
+      "replyUci": "d4c5",
+      "fen": "r2qkb1r/pp2pppp/2n2n2/2Pp4/5Bb1/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6",
+      "targetIds": [
+        "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1306,
+        "fen": "r2qkb1r/pp2pppp/2n2n2/2Pp4/5Bb1/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1116,
+        "fen": "r2qkb1r/pp2pppp/2n2n2/2Pp4/5Bb1/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "d8b6",
+      "replyUci": "d4c5",
+      "fen": "r1b1kb1r/pp2pppp/1qn2n2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6",
+      "targetIds": [
+        "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 644,
+        "fen": "r1b1kb1r/pp2pppp/1qn2n2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1130,
+        "fen": "r1b1kb1r/pp2pppp/1qn2n2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "e7e6",
+      "replyUci": "d4c5",
+      "fen": "r1bqkb1r/pp3ppp/2n1pn2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6",
+      "targetIds": [
+        "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1065,
+        "fen": "r1bqkb1r/pp3ppp/2n1pn2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1140,
+        "fen": "r1bqkb1r/pp3ppp/2n1pn2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 0 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "h8g8",
+      "replyUci": "d4c5",
+      "fen": "r1bqkbr1/pp2pppp/2n2n2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQq - 0 6",
+      "targetIds": [
+        "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1167,
+        "fen": "r1bqkbr1/pp2pppp/2n2n2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQq - 0 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1149,
+        "fen": "r1bqkbr1/pp2pppp/2n2n2/2Pp4/5B2/4PN2/PPPN1PPP/R2QKB1R b KQq - 0 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "candidateUci": "b3c1",
+      "replyUci": "e6g4",
+      "fen": "r3kbnr/1pp3pp/p4p2/8/2p1PBb1/8/PPP2PPP/RNNR2K1 w kq - 2 12",
+      "targetIds": [
+        "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1364,
+        "fen": "r3kbnr/1pp3pp/p4p2/8/2p1PBb1/8/PPP2PPP/RNNR2K1 w kq - 2 12"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1182,
+        "fen": "r3kbnr/1pp3pp/p4p2/8/2p1PBb1/8/PPP2PPP/RNNR2K1 w kq - 2 12"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "candidateUci": "b3d4",
+      "replyUci": "e6g4",
+      "fen": "r3kbnr/1pp3pp/p4p2/8/2pNPBb1/8/PPP2PPP/RN1R2K1 w kq - 2 12",
+      "targetIds": [
+        "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1365,
+        "fen": "r3kbnr/1pp3pp/p4p2/8/2pNPBb1/8/PPP2PPP/RN1R2K1 w kq - 2 12"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1191,
+        "fen": "r3kbnr/1pp3pp/p4p2/8/2pNPBb1/8/PPP2PPP/RN1R2K1 w kq - 2 12"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "candidateUci": "f2f3",
+      "replyUci": "e6g4",
+      "fen": "r3kbnr/1pp3pp/p4p2/8/2p1PBb1/1N3P2/PPP3PP/RN1R2K1 w kq - 1 12",
+      "targetIds": [
+        "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1363,
+        "fen": "r3kbnr/1pp3pp/p4p2/8/2p1PBb1/1N3P2/PPP3PP/RN1R2K1 w kq - 1 12"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1200,
+        "fen": "r3kbnr/1pp3pp/p4p2/8/2p1PBb1/1N3P2/PPP3PP/RN1R2K1 w kq - 1 12"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "candidateUci": "c8c2",
+      "replyUci": "e3f4",
+      "fen": "r5k1/pp2bppp/4p3/3pP3/3P1B2/1P4P1/1Pr2PP1/1R3RK1 b - - 2 20",
+      "targetIds": [
+        "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1452,
+        "fen": "r5k1/pp2bppp/4p3/3pP3/3P1B2/1P4P1/1Pr2PP1/1R3RK1 b - - 2 20"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1207,
+        "fen": "r5k1/pp2bppp/4p3/3pP3/3P1B2/1P4P1/1Pr2PP1/1R3RK1 b - - 2 20"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "candidateUci": "c8c6",
+      "replyUci": "e3f4",
+      "fen": "r5k1/pp2bppp/2r1p3/3pP3/3P1B2/1P4P1/1P3PP1/1R3RK1 b - - 2 20",
+      "targetIds": [
+        "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1441,
+        "fen": "r5k1/pp2bppp/2r1p3/3pP3/3P1B2/1P4P1/1P3PP1/1R3RK1 b - - 2 20"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1220,
+        "fen": "r5k1/pp2bppp/2r1p3/3pP3/3P1B2/1P4P1/1P3PP1/1R3RK1 b - - 2 20"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "candidateUci": "g7g5",
+      "replyUci": "e3f4",
+      "fen": "r1r3k1/pp2bp1p/4p3/3pP1p1/3P1B2/1P4P1/1P3PP1/1R3RK1 b - - 1 20",
+      "targetIds": [
+        "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1217,
+        "fen": "r1r3k1/pp2bp1p/4p3/3pP1p1/3P1B2/1P4P1/1P3PP1/1R3RK1 b - - 1 20"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1231,
+        "fen": "r1r3k1/pp2bp1p/4p3/3pP1p1/3P1B2/1P4P1/1P3PP1/1R3RK1 b - - 1 20"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "candidateUci": "e6e5",
+      "replyUci": "g5f4",
+      "fen": "rnbqk2r/pp3p1p/3p1np1/2pPp3/2P1PB2/2PB4/P4PPP/R2QK1NR b KQkq - 1 9",
+      "targetIds": [
+        "target:b1c13604d5c1019574773a10032585d1d4a750748230cab9f5e8b3c46e4db447"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1850,
+        "fen": "rnbqk2r/pp3p1p/3p1np1/2pPp3/2P1PB2/2PB4/P4PPP/R2QK1NR b KQkq - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1247,
+        "fen": "rnbqk2r/pp3p1p/3p1np1/2pPp3/2P1PB2/2PB4/P4PPP/R2QK1NR b KQkq - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "candidateUci": "h7h6",
+      "replyUci": "g5f4",
+      "fen": "rnbqk2r/pp3p2/3ppnpp/2pP4/2P1PB2/2PB4/P4PPP/R2QK1NR b KQkq - 1 9",
+      "targetIds": [
+        "target:b1c13604d5c1019574773a10032585d1d4a750748230cab9f5e8b3c46e4db447"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1858,
+        "fen": "rnbqk2r/pp3p2/3ppnpp/2pP4/2P1PB2/2PB4/P4PPP/R2QK1NR b KQkq - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1256,
+        "fen": "rnbqk2r/pp3p2/3ppnpp/2pP4/2P1PB2/2PB4/P4PPP/R2QK1NR b KQkq - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "candidateUci": "e7e5",
+      "replyUci": "d4f5",
+      "fen": "rnbqkb1r/1p3ppp/p2p1n2/4pN2/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 7",
+      "targetIds": [
+        "target:99f903002a1fe54bf1e028c954d9bde44323de3ff675022a84bc2130a0dd470c"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1909,
+        "fen": "rnbqkb1r/1p3ppp/p2p1n2/4pN2/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 7"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1265,
+        "fen": "rnbqkb1r/1p3ppp/p2p1n2/4pN2/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 7"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "candidateUci": "e7e6",
+      "replyUci": "d4f5",
+      "fen": "rnbqkb1r/1p3ppp/p2ppn2/5N2/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 7",
+      "targetIds": [
+        "target:99f903002a1fe54bf1e028c954d9bde44323de3ff675022a84bc2130a0dd470c"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1910,
+        "fen": "rnbqkb1r/1p3ppp/p2ppn2/5N2/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 7"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1274,
+        "fen": "rnbqkb1r/1p3ppp/p2ppn2/5N2/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 7"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "candidateUci": "b7b5",
+      "replyUci": "f1c4",
+      "fen": "rnbqkbnr/p4ppp/2pp4/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 5",
+      "targetIds": [
+        "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2059,
+        "fen": "rnbqkbnr/p4ppp/2pp4/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1291,
+        "fen": "rnbqkbnr/p4ppp/2pp4/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "candidateUci": "b8d7",
+      "replyUci": "f1c4",
+      "fen": "r1bqkbnr/pp1n1ppp/2pp4/4p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 2 5",
+      "targetIds": [
+        "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1116,
+        "fen": "r1bqkbnr/pp1n1ppp/2pp4/4p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 2 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1299,
+        "fen": "r1bqkbnr/pp1n1ppp/2pp4/4p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 2 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "candidateUci": "e5d4",
+      "replyUci": "f1c4",
+      "fen": "rnbqkbnr/pp3ppp/2pp4/8/2BpP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 5",
+      "targetIds": [
+        "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2126,
+        "fen": "rnbqkbnr/pp3ppp/2pp4/8/2BpP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1313,
+        "fen": "rnbqkbnr/pp3ppp/2pp4/8/2BpP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "a7a5",
+      "replyUci": "c1f4",
+      "fen": "rnbq1rk1/3pnpbp/2p1p1p1/pp2P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9",
+      "targetIds": [
+        "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1715,
+        "fen": "rnbq1rk1/3pnpbp/2p1p1p1/pp2P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1320,
+        "fen": "rnbq1rk1/3pnpbp/2p1p1p1/pp2P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "c6c5",
+      "replyUci": "c1f4",
+      "fen": "rnbq1rk1/p2pnpbp/4p1p1/1pp1P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9",
+      "targetIds": [
+        "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1756,
+        "fen": "rnbq1rk1/p2pnpbp/4p1p1/1pp1P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1330,
+        "fen": "rnbq1rk1/p2pnpbp/4p1p1/1pp1P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "d7d6",
+      "replyUci": "c1f4",
+      "fen": "rnbq1rk1/p3npbp/2ppp1p1/1p2P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9",
+      "targetIds": [
+        "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1765,
+        "fen": "rnbq1rk1/p3npbp/2ppp1p1/1p2P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1339,
+        "fen": "rnbq1rk1/p3npbp/2ppp1p1/1p2P3/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "g6g5",
+      "replyUci": "c1f4",
+      "fen": "rnbq1rk1/p2pnpbp/2p1p3/1p2P1p1/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9",
+      "targetIds": [
+        "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1746,
+        "fen": "rnbq1rk1/p2pnpbp/2p1p3/1p2P1p1/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1349,
+        "fen": "rnbq1rk1/p2pnpbp/2p1p3/1p2P1p1/3P1B2/1B3N2/PPP2PPP/RN1Q1RK1 b - - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "b8c6",
+      "replyUci": "f1c4",
+      "fen": "r1bqk1nr/pppp1pbp/2n1p1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+      "targetIds": [
+        "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 880,
+        "fen": "r1bqk1nr/pppp1pbp/2n1p1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1363,
+        "fen": "r1bqk1nr/pppp1pbp/2n1p1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "d7d5",
+      "replyUci": "f1c4",
+      "fen": "rnbqk1nr/ppp2pbp/4p1p1/3pP3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5",
+      "targetIds": [
+        "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1828,
+        "fen": "rnbqk1nr/ppp2pbp/4p1p1/3pP3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1378,
+        "fen": "rnbqk1nr/ppp2pbp/4p1p1/3pP3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "d7d6",
+      "replyUci": "f1c4",
+      "fen": "rnbqk1nr/ppp2pbp/3pp1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5",
+      "targetIds": [
+        "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1817,
+        "fen": "rnbqk1nr/ppp2pbp/3pp1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1391,
+        "fen": "rnbqk1nr/ppp2pbp/3pp1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "g8e7",
+      "replyUci": "f1c4",
+      "fen": "rnbqk2r/ppppnpbp/4p1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+      "targetIds": [
+        "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1875,
+        "fen": "rnbqk2r/ppppnpbp/4p1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1401,
+        "fen": "rnbqk2r/ppppnpbp/4p1p1/4P3/2BP4/5N2/PPP2PPP/RNBQK2R b KQkq - 3 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "c5d4",
+      "replyUci": "f4c7",
+      "fen": "r1b1k1nr/ppB2ppp/2n1p3/3P4/2Bb4/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9",
+      "targetIds": [
+        "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 549,
+        "fen": "r1b1k1nr/ppB2ppp/2n1p3/3P4/2Bb4/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1417,
+        "fen": "r1b1k1nr/ppB2ppp/2n1p3/3P4/2Bb4/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "c6a5",
+      "replyUci": "f4c7",
+      "fen": "r1b1k1nr/ppB2ppp/4p3/n1bP4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9",
+      "targetIds": [
+        "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 551,
+        "fen": "r1b1k1nr/ppB2ppp/4p3/n1bP4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1428,
+        "fen": "r1b1k1nr/ppB2ppp/4p3/n1bP4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "c6e7",
+      "replyUci": "f4c7",
+      "fen": "r1b1k1nr/ppB1nppp/4p3/2bP4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9",
+      "targetIds": [
+        "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 548,
+        "fen": "r1b1k1nr/ppB1nppp/4p3/2bP4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1443,
+        "fen": "r1b1k1nr/ppB1nppp/4p3/2bP4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "e6d5",
+      "replyUci": "f4c7",
+      "fen": "r1b1k1nr/ppB2ppp/2n5/2bp4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9",
+      "targetIds": [
+        "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 550,
+        "fen": "r1b1k1nr/ppB2ppp/2n5/2bp4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1458,
+        "fen": "r1b1k1nr/ppB2ppp/2n5/2bp4/2B5/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "candidateUci": "a6a5",
+      "replyUci": "c3b4",
+      "fen": "5rk1/1p1bpp1p/3pn1p1/p7/PBP1P3/5P2/2P3PP/R4RK1 b - - 1 25",
+      "targetIds": [
+        "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 288,
+        "fen": "5rk1/1p1bpp1p/3pn1p1/p7/PBP1P3/5P2/2P3PP/R4RK1 b - - 1 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1483,
+        "fen": "5rk1/1p1bpp1p/3pn1p1/p7/PBP1P3/5P2/2P3PP/R4RK1 b - - 1 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "candidateUci": "f7f6",
+      "replyUci": "c3b4",
+      "fen": "5rk1/1p1bp2p/p2pnpp1/8/PBP1P3/5P2/2P3PP/R4RK1 b - - 1 25",
+      "targetIds": [
+        "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 274,
+        "fen": "5rk1/1p1bp2p/p2pnpp1/8/PBP1P3/5P2/2P3PP/R4RK1 b - - 1 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1496,
+        "fen": "5rk1/1p1bp2p/p2pnpp1/8/PBP1P3/5P2/2P3PP/R4RK1 b - - 1 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "candidateUci": "f8c8",
+      "replyUci": "c3b4",
+      "fen": "2r3k1/1p1bpp1p/p2pn1p1/8/PBP1P3/5P2/2P3PP/R4RK1 b - - 4 25",
+      "targetIds": [
+        "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 81,
+        "fen": "2r3k1/1p1bpp1p/p2pn1p1/8/PBP1P3/5P2/2P3PP/R4RK1 b - - 4 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1509,
+        "fen": "2r3k1/1p1bpp1p/p2pn1p1/8/PBP1P3/5P2/2P3PP/R4RK1 b - - 4 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "candidateUci": "a2a4",
+      "replyUci": "d5e4",
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/P2Pp3/8/1PP2PPP/RNBQKBNR w KQkq - 0 4",
+      "targetIds": [
+        "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2114,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/P2Pp3/8/1PP2PPP/RNBQKBNR w KQkq - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1518,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/P2Pp3/8/1PP2PPP/RNBQKBNR w KQkq - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "candidateUci": "b1c3",
+      "replyUci": "d5e4",
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "targetIds": [
+        "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2112,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1530,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "candidateUci": "b1d2",
+      "replyUci": "d5e4",
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+      "targetIds": [
+        "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2113,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1540,
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "candidateUci": "a7a6",
+      "replyUci": "f1b5",
+      "fen": "rnbqkbnr/1pp2ppp/p3p3/1B1pP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+      "targetIds": [
+        "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2044,
+        "fen": "rnbqkbnr/1pp2ppp/p3p3/1B1pP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 1 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1563,
+        "fen": "rnbqkbnr/1pp2ppp/p3p3/1B1pP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 1 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "candidateUci": "c7c5",
+      "replyUci": "f1b5",
+      "fen": "rnbqkbnr/pp3ppp/4p3/1BppP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+      "targetIds": [
+        "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 2134,
+        "fen": "rnbqkbnr/pp3ppp/4p3/1BppP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 1 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1577,
+        "fen": "rnbqkbnr/pp3ppp/4p3/1BppP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 1 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "candidateUci": "g8e7",
+      "replyUci": "f1b5",
+      "fen": "rnbqkb1r/ppp1nppp/4p3/1B1pP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 2 4",
+      "targetIds": [
+        "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1943,
+        "fen": "rnbqkb1r/ppp1nppp/4p3/1B1pP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 2 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1588,
+        "fen": "rnbqkb1r/ppp1nppp/4p3/1B1pP3/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 2 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:d1e1300f0eec8303",
+      "candidateUci": "d7d5",
+      "replyUci": "g2e4",
+      "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pp3/4B3/1PN3P1/P1PPPP1P/R1BQK1NR b KQkq - 1 5",
+      "targetIds": [
+        "target:fbd6af9a49cdd8ed8c89c3f18e4cf75e69d5131bf61fb0fb19ca9e15e5b1b51c"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1068,
+        "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pp3/4B3/1PN3P1/P1PPPP1P/R1BQK1NR b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1603,
+        "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pp3/4B3/1PN3P1/P1PPPP1P/R1BQK1NR b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "b1c3",
+      "replyUci": "f6d5",
+      "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4",
+      "targetIds": [
+        "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1969,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1613,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "d2d4",
+      "replyUci": "f6d5",
+      "fen": "rnbqkb1r/ppp1pppp/8/3n4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "targetIds": [
+        "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1968,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1624,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "g1e2",
+      "replyUci": "f6d5",
+      "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/8/PPPPNPPP/RNBQKB1R w KQkq - 0 4",
+      "targetIds": [
+        "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1971,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/8/PPPPNPPP/RNBQKB1R w KQkq - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1640,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/8/PPPPNPPP/RNBQKB1R w KQkq - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "g1f3",
+      "replyUci": "f6d5",
+      "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4",
+      "targetIds": [
+        "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1970,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1650,
+        "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "a1b1",
+      "replyUci": "d5e5",
+      "fen": "6k1/5pp1/7p/4r3/8/8/5PPP/1R4K1 w - - 0 3",
+      "targetIds": [
+        "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 386,
+        "fen": "6k1/5pp1/7p/4r3/8/8/5PPP/1R4K1 w - - 0 3"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1660,
+        "fen": "6k1/5pp1/7p/4r3/8/8/5PPP/1R4K1 w - - 0 3"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "f2f3",
+      "replyUci": "d5e5",
+      "fen": "6k1/5pp1/7p/4r3/8/5P2/6PP/R5K1 w - - 0 3",
+      "targetIds": [
+        "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-coherent-deeper-supplement.json",
+        "row": 43,
+        "fen": "6k1/5pp1/7p/4r3/8/5P2/6PP/R5K1 w - - 0 3"
+      },
+      "maia": {
+        "source": "d3262-maia-coherent-deeper-supplement.json",
+        "row": 189,
+        "fen": "6k1/5pp1/7p/4r3/8/5P2/6PP/R5K1 w - - 0 3"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "f2f4",
+      "replyUci": "d5e5",
+      "fen": "6k1/5pp1/7p/4r3/5P2/8/6PP/R5K1 w - - 0 3",
+      "targetIds": [
+        "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 383,
+        "fen": "6k1/5pp1/7p/4r3/5P2/8/6PP/R5K1 w - - 0 3"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1682,
+        "fen": "6k1/5pp1/7p/4r3/5P2/8/6PP/R5K1 w - - 0 3"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "g2g4",
+      "replyUci": "d5e5",
+      "fen": "6k1/5pp1/7p/4r3/6P1/8/5P1P/R5K1 w - - 0 3",
+      "targetIds": [
+        "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 384,
+        "fen": "6k1/5pp1/7p/4r3/6P1/8/5P1P/R5K1 w - - 0 3"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1695,
+        "fen": "6k1/5pp1/7p/4r3/6P1/8/5P1P/R5K1 w - - 0 3"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "h2h4",
+      "replyUci": "d5e5",
+      "fen": "6k1/5pp1/7p/4r3/7P/8/5PP1/R5K1 w - - 0 3",
+      "targetIds": [
+        "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 385,
+        "fen": "6k1/5pp1/7p/4r3/7P/8/5PP1/R5K1 w - - 0 3"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1706,
+        "fen": "6k1/5pp1/7p/4r3/7P/8/5PP1/R5K1 w - - 0 3"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "candidateUci": "e7e6",
+      "replyUci": "c4d5",
+      "fen": "r1bqkbnr/pp1p1ppp/4p3/2pBn3/4P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 1 5",
+      "targetIds": [
+        "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1140,
+        "fen": "r1bqkbnr/pp1p1ppp/4p3/2pBn3/4P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 1 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1730,
+        "fen": "r1bqkbnr/pp1p1ppp/4p3/2pBn3/4P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 1 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "candidateUci": "g8f6",
+      "replyUci": "c4d5",
+      "fen": "r1bqkb1r/pp1ppppp/5n2/2pBn3/4P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 7 5",
+      "targetIds": [
+        "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1023,
+        "fen": "r1bqkb1r/pp1ppppp/5n2/2pBn3/4P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 7 5"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1741,
+        "fen": "r1bqkb1r/pp1ppppp/5n2/2pBn3/4P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 7 5"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "a1a2",
+      "replyUci": "d4e4",
+      "fen": "6k1/5pp1/7p/8/4r3/8/R4PPP/4K3 w - - 0 4",
+      "targetIds": [
+        "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 401,
+        "fen": "6k1/5pp1/7p/8/4r3/8/R4PPP/4K3 w - - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1754,
+        "fen": "6k1/5pp1/7p/8/4r3/8/R4PPP/4K3 w - - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "e1e2",
+      "replyUci": "d4e4",
+      "fen": "6k1/5pp1/7p/8/4r3/8/4KPPP/R7 w - - 0 4",
+      "targetIds": [
+        "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-coherent-deeper-supplement.json",
+        "row": 46,
+        "fen": "6k1/5pp1/7p/8/4r3/8/4KPPP/R7 w - - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-coherent-deeper-supplement.json",
+        "row": 206,
+        "fen": "6k1/5pp1/7p/8/4r3/8/4KPPP/R7 w - - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "f2f3",
+      "replyUci": "d4e4",
+      "fen": "6k1/5pp1/7p/8/4r3/5P2/6PP/R3K3 w - - 0 4",
+      "targetIds": [
+        "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 399,
+        "fen": "6k1/5pp1/7p/8/4r3/5P2/6PP/R3K3 w - - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1766,
+        "fen": "6k1/5pp1/7p/8/4r3/5P2/6PP/R3K3 w - - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "h2h3",
+      "replyUci": "d4e4",
+      "fen": "6k1/5pp1/7p/8/4r3/7P/5PP1/R3K3 w - - 0 4",
+      "targetIds": [
+        "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 400,
+        "fen": "6k1/5pp1/7p/8/4r3/7P/5PP1/R3K3 w - - 0 4"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1791,
+        "fen": "6k1/5pp1/7p/8/4r3/7P/5PP1/R3K3 w - - 0 4"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "candidateUci": "a7a6",
+      "replyUci": "c3b5",
+      "fen": "r1bq1rk1/1pp2ppp/p1np1n2/1N2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 1 9",
+      "targetIds": [
+        "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 776,
+        "fen": "r1bq1rk1/1pp2ppp/p1np1n2/1N2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 1 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1803,
+        "fen": "r1bq1rk1/1pp2ppp/p1np1n2/1N2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 1 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "candidateUci": "c6a5",
+      "replyUci": "c3b5",
+      "fen": "r1bq1rk1/ppp2ppp/3p1n2/nN2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 2 9",
+      "targetIds": [
+        "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 840,
+        "fen": "r1bq1rk1/ppp2ppp/3p1n2/nN2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 2 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1817,
+        "fen": "r1bq1rk1/ppp2ppp/3p1n2/nN2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 2 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "candidateUci": "c8e6",
+      "replyUci": "c3b5",
+      "fen": "r2q1rk1/ppp2ppp/2npbn2/1N2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 2 9",
+      "targetIds": [
+        "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1273,
+        "fen": "r2q1rk1/ppp2ppp/2npbn2/1N2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 2 9"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1829,
+        "fen": "r2q1rk1/ppp2ppp/2npbn2/1N2p3/2B1P3/3PPN1P/PPP3P1/R2QK2R b KQ - 2 9"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "candidateUci": "e4d5",
+      "replyUci": "f6d5",
+      "fen": "r1bqk2r/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2QK2R w KQkq - 0 10",
+      "targetIds": [
+        "target:541ac36c657c3975c8f307010eca3cc2c8267312f46afbf6a8b25d353fdf1a45"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 958,
+        "fen": "r1bqk2r/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2QK2R w KQkq - 0 10"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1848,
+        "fen": "r1bqk2r/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2QK2R w KQkq - 0 10"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "candidateUci": "f3e5",
+      "replyUci": "f6e4",
+      "fen": "r1bqk2r/ppp2ppp/2n5/3pN3/2BPn3/8/PP1N1PPP/R2QK2R w KQkq - 0 10",
+      "targetIds": [
+        "target:541ac36c657c3975c8f307010eca3cc2c8267312f46afbf6a8b25d353fdf1a45"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 965,
+        "fen": "r1bqk2r/ppp2ppp/2n5/3pN3/2BPn3/8/PP1N1PPP/R2QK2R w KQkq - 0 10"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1856,
+        "fen": "r1bqk2r/ppp2ppp/2n5/3pN3/2BPn3/8/PP1N1PPP/R2QK2R w KQkq - 0 10"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "candidateUci": "a7a5",
+      "replyUci": "d5c6",
+      "fen": "r1bqk2r/1pp2ppp/2P2n2/p7/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 10",
+      "targetIds": [
+        "target:52333229711faef6063afca3cafde0bdfb2b4281c66785271d784a08ae351a41"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 920,
+        "fen": "r1bqk2r/1pp2ppp/2P2n2/p7/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 10"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1867,
+        "fen": "r1bqk2r/1pp2ppp/2P2n2/p7/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 10"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "candidateUci": "d4d3",
+      "replyUci": "f3b7",
+      "fen": "3rr1k1/pB3ppp/1n6/8/5BP1/P2p3P/1P3PK1/4R2R b - - 0 25",
+      "targetIds": [
+        "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 131,
+        "fen": "3rr1k1/pB3ppp/1n6/8/5BP1/P2p3P/1P3PK1/4R2R b - - 0 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1900,
+        "fen": "3rr1k1/pB3ppp/1n6/8/5BP1/P2p3P/1P3PK1/4R2R b - - 0 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "candidateUci": "e8e1",
+      "replyUci": "f3b7",
+      "fen": "3r2k1/pB3ppp/1n6/8/3p1BP1/P6P/1P3PK1/4r2R b - - 0 25",
+      "targetIds": [
+        "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 93,
+        "fen": "3r2k1/pB3ppp/1n6/8/3p1BP1/P6P/1P3PK1/4r2R b - - 0 25"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1909,
+        "fen": "3r2k1/pB3ppp/1n6/8/3p1BP1/P6P/1P3PK1/4r2R b - - 0 25"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "c2c3",
+      "replyUci": "f6h5",
+      "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq - 1 6",
+      "targetIds": [
+        "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1045,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1955,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "d4c5",
+      "replyUci": "f6h5",
+      "fen": "r1bqkb1r/pp2pppp/2n5/2Pp3n/5B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 1 6",
+      "targetIds": [
+        "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1048,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2Pp3n/5B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1964,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2Pp3n/5B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "f1e2",
+      "replyUci": "f6h5",
+      "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1B2/4PN2/PPP1BPPP/RN1QK2R w KQkq - 3 6",
+      "targetIds": [
+        "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1046,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1B2/4PN2/PPP1BPPP/RN1QK2R w KQkq - 3 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1974,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1B2/4PN2/PPP1BPPP/RN1QK2R w KQkq - 3 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "g2g4",
+      "replyUci": "f6h5",
+      "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1BP1/4PN2/PPP2P1P/RN1QKB1R w KQkq - 1 6",
+      "targetIds": [
+        "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": false,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 1047,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1BP1/4PN2/PPP2P1P/RN1QKB1R w KQkq - 1 6"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 1985,
+        "fen": "r1bqkb1r/pp2pppp/2n5/2pp3n/3P1BP1/4PN2/PPP2P1P/RN1QKB1R w KQkq - 1 6"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "candidateUci": "a6b6",
+      "replyUci": "a5b6",
+      "fen": "6k1/1R4p1/1Qp1p2p/3p4/3P4/4P2P/5PP1/6K1 b - - 0 28",
+      "targetIds": [
+        "target:97ea5e2020129d9e39512f20aa0de82f67ed3e583585c0646ac778b197e4cbd7"
+      ],
+      "configurations": [
+        "depth8:2",
+        "depth8:4",
+        "depth8:8",
+        "depth12:2",
+        "depth12:4",
+        "depth12:8",
+        "movetime100:2",
+        "movetime100:4",
+        "movetime100:8"
+      ],
+      "priorUnion": true,
+      "stockfish": {
+        "source": "d3262-stockfish-horizon4-capture.json",
+        "row": 301,
+        "fen": "6k1/1R4p1/1Qp1p2p/3p4/3P4/4P2P/5PP1/6K1 b - - 0 28"
+      },
+      "maia": {
+        "source": "d3262-maia-horizon4-path-capture.json",
+        "row": 2004,
+        "fen": "6k1/1R4p1/1Qp1p2p/3p4/3P4/4P2P/5PP1/6K1 b - - 0 28"
+      },
+      "needsStockfish": false,
+      "needsMaia": false
+    }
+  ],
+  "inputDigests": {
+    "d3262-coherent-semantic-reserve.json": "sha256:d28be6c198a9c617b21479b5f7a3a80f78065539d2de3052f67fb432e7232540",
+    "d3262-coherent-exact-replies.json": "sha256:3fcd3ef596886aee1e1427bc2502aaeef1baa39827c2e8d35b398e1fb478bb68",
+    "d3262-coherent-deeper-source-union.json": "sha256:31e8f9ba654ffcb306d22d8b7455500049c931c66aea58ee7a2e9cb0da9a55da",
+    "d3262-stockfish-horizon4-capture.json": "sha256:fa67d49debd72854ebd07fa9188fbd8f8d6e55a9e75a7455bfc41c87750e8931",
+    "d3262-stockfish-coherent-deeper-supplement.json": "sha256:7d163bcf173380b01706dbb4c333ad3ad9bca9076d24bc9799c25ea1cd030ea9",
+    "d3262-maia-horizon4-path-capture.json": "sha256:860ac9eca2f9d514e76134e8cbbb80c4c86d77fea4bea72a8746f42d444c6c71",
+    "d3262-maia-coherent-deeper-supplement.json": "sha256:2de17dd0471e914c2d894fcd1fdaf579c53ec09cf23a3c9bf5911299f5ce3fa6"
+  }
+}
