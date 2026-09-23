@@ -20427,3 +20427,13 @@ complete legal root set. It yields 196 selected candidates across 66 roots; 21 h
 Maia mass and remain unknown, not zero. The exact-byte regeneration and four hard-negative tests
 run via `make semantic-search-root-frame`. This prepares comparable five-arm inputs but does not
 run a traversal arm or establish a production search profile. [[D3262]] remains open.
+
+### 2026-09-23 — D3262 exact legal reply edges enumerated
+
+`planning/semantic-consequence-search/d3262-exact-replies.md` records 6,310 legal opponent
+replies over the same 196 selected root moves. A read-only regeneration gate detects deleted or
+crossed reply edges; python-chess independently matched every move set and resulting FEN in the
+pinned Maia container. The fork controls differ by 33 versus five replies, with the parried line's
+`...Bxc7` present, and the bishop control retains `...Bh5`. These are legal-population facts,
+not semantic proof or a five-arm profile. [[D3262]] stays open; next is target-identity survival,
+forcing extension and the measured provider/engine/Maia/semantic frontiers.

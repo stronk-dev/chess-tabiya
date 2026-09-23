@@ -170,6 +170,11 @@ The deterministic common-root frame now selects 196 move identities across the 6
 21 selected identities have no returned Maia mass and remain explicitly unknown.
 `[V]` `planning/semantic-consequence-search/d3262-root-frame.md` and
 `make semantic-search-root-frame`.
+The exact one-reply graph now has 6,310 edges for the 196 selected candidates. All stored reply
+sets and FENs were independently replayed with python-chess in the pinned Maia container; the
+fork and bishop controls retain their differing legal reply populations. This is not yet an
+all-reply motif result or a measured five-arm comparison. `[V]`
+`planning/semantic-consequence-search/d3262-exact-replies.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
