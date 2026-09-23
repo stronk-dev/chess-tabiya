@@ -247,6 +247,16 @@ Maia's returned window and have **unknown individual mass**, not zero. This is o
 of the Maia arm, not configured temperature/top-p sampling, depth-four traversal or a proof
 that a line is human-likely. `[V]` `planning/semantic-consequence-search/d3262-maia-child-capture.md`
 and `planning/semantic-consequence-search/d3262-maia-child-prefix.md`.
+The comparable Stockfish child source is now checked on the same 196 positions and 6,310 legal
+replies at depth 8, depth 12 and 100 ms. At horizon two, its width-8 ranking contains the
+named reply in 58, 60 and 64 of 185 named comparisons respectively; 46 comparisons have no
+named positive reply. The declared minor-arrival reply in **all 32** source pawn-denial
+controls is outside width eight at every budget. This is a measured first-layer reach limit,
+not a claim that the arrival is a good defence or a complete beam failure. The separately
+preregistered semantic-target-preserving arm remains necessary to test whether retaining a
+named relation changes explanation coverage. `[V]`
+`planning/semantic-consequence-search/d3262-stockfish-child-capture.md` and
+`planning/semantic-consequence-search/d3262-stockfish-child-beam.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

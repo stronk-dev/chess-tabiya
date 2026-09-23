@@ -15,16 +15,24 @@ import { manifestIdentity, manifestRows } from "./manifest.mjs";
 const SF_CMD = process.env.SF_CMD;
 if (SF_CMD === undefined || SF_CMD.length === 0) throw new Error("SF_CMD must identify the Stockfish binary; use the Make target");
 const args = process.argv.slice(2);
+const childMode = args.includes("--child");
 function option(name) {
   const index = args.indexOf(name);
   return index < 0 ? undefined : args[index + 1];
 }
-const limit = option("--limit") === undefined ? manifestRows.length : Number(option("--limit"));
-if (!Number.isSafeInteger(limit) || limit < 1 || limit > manifestRows.length) throw new Error("--limit must be a positive manifest prefix length");
-const fullOutput = new URL("../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url);
-const output = option("--out") ?? (limit === manifestRows.length ? fullOutput : undefined);
+const graphBytes = childMode ? readFileSync(new URL("../../planning/semantic-consequence-search/d3262-exact-replies.json", import.meta.url)) : undefined;
+const graph = graphBytes === undefined ? undefined : JSON.parse(graphBytes.toString("utf8"));
+if (childMode && (graph.authority !== "complete_legal_opponent_reply_edges_not_a_semantic_proof" || graph.manifest !== manifestIdentity.manifestDigest)) throw new Error("Child capture requires the frozen exact-reply frame");
+const population = childMode
+  ? graph.roots.flatMap((root) => root.candidates.map((candidate) => ({ rootId: root.rootId, candidateUci: candidate.candidateUci, fen: candidate.afterFen })))
+  : manifestRows.map((root) => ({ rootId: root.id, fen: root.fen }));
+if (childMode && (population.length !== 196 || new Set(population.map((row) => row.fen)).size !== 196)) throw new Error("Unexpected child-position population");
+const limit = option("--limit") === undefined ? population.length : Number(option("--limit"));
+if (!Number.isSafeInteger(limit) || limit < 1 || limit > population.length) throw new Error("--limit must be a positive position prefix length");
+const fullOutput = new URL(childMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-capture.json" : "../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url);
+const output = option("--out") ?? (limit === population.length ? fullOutput : undefined);
 if (output === undefined) throw new Error("A partial capture requires --out so it cannot masquerade as the full artifact");
-const jobs = manifestRows.slice(0, limit);
+const jobs = population.slice(0, limit);
 const PROMOTIONS = Object.freeze(["queen", "rook", "bishop", "knight"]);
 
 function position(fen) { return Chess.fromSetup(parseFen(fen).unwrap()).unwrap(); }
@@ -147,20 +155,21 @@ const engine = new UciEngine();
 const rows = [];
 try {
   await engine.initialize();
-  for (const root of jobs) {
+  for (const job of jobs) {
     const probes = [];
-    for (const budget of ["depth8", "depth12", "movetime100"]) probes.push(await engine.probe(root.fen, budget));
-    rows.push({ rootId: root.id, fen: root.fen, probes });
-    process.stderr.write(`D3262 Stockfish ${rows.length}/${jobs.length}: ${root.id}\n`);
+    for (const budget of ["depth8", "depth12", "movetime100"]) probes.push(await engine.probe(job.fen, budget));
+    rows.push({ ...job, probes });
+    process.stderr.write(`D3262 Stockfish ${childMode ? "child " : ""}${rows.length}/${jobs.length}: ${job.rootId}${job.candidateUci === undefined ? "" : `/${job.candidateUci}`}\n`);
   }
 } finally { engine.close(); }
 const artifact = {
   version: 1,
   manifest: manifestIdentity.manifestDigest,
-  partial: limit !== manifestRows.length,
-  roots: rows.length,
-  source: { engineName: engine.identity, executableDigest, threads: 1, hashMb: 16, multiPv: "all_legal_root_moves", scorePerspective: "raw_uci_uninterpreted" },
+  ...(childMode ? { exactReplyDigest: `sha256:${createHash("sha256").update(graphBytes).digest("hex")}` } : {}),
+  partial: limit !== population.length,
+  ...(childMode ? { positions: rows.length } : { roots: rows.length }),
+  source: { engineName: engine.identity, executableDigest, threads: 1, hashMb: 16, multiPv: childMode ? "all_legal_moves_at_candidate_child" : "all_legal_root_moves", scorePerspective: "raw_uci_uninterpreted" },
   rows,
 };
 await writeFile(output, `${JSON.stringify(artifact, null, 2)}\n`, { flag: "wx" });
-process.stdout.write(`${JSON.stringify({ output: String(output), roots: rows.length, engine: engine.identity, manifest: artifact.manifest, partial: artifact.partial })}\n`);
+process.stdout.write(`${JSON.stringify({ output: String(output), [childMode ? "positions" : "roots"]: rows.length, engine: engine.identity, manifest: artifact.manifest, partial: artifact.partial })}\n`);

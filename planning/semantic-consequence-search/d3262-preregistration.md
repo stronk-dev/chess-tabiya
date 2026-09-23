@@ -133,3 +133,11 @@ preregistered cap-eight prefix reaches raw-model mass 0.80 at 191/196 positions 
 168/196. This is not the configured temperature/top-p sampling distribution ([[D3276]]), and
 26/32 named source pawn-denial replies are unreturned with unknown individual mass. The
 horizon-four/multi-node Maia traversal and its semantic proof and cost readings remain open.
+
+The matching Stockfish child source and horizon-two rank projection are checked at
+`d3262-stockfish-child-capture.md` and `d3262-stockfish-child-beam.md`. Complete MultiPV
+retains all 6,310 legal replies per budget. The width-8 frontiers contain 58, 60 and 64 of
+185 named comparison replies at depth 8, depth 12 and 100 ms; 46 comparisons have no named
+positive reply. All 32 source pawn-denial minor arrivals are outside width eight at every
+budget. This supports a comparison of first-child pruning, not a depth-four beam, proof-class
+verdict, end-to-end hint-latency result or production profile. [[D3262]] remains open.

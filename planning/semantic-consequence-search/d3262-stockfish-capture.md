@@ -29,9 +29,9 @@ pending-state default: the hint RFC allows a prompt honest pending state. That e
 latency, later render latency and learner wait cost remain unmeasured. The 100-ms query is only a
 source-time observation; it has not passed an end-to-end or semantic-correctness gate. `[V]`
 
-The Maia root-source capture has now landed in `d3262-maia-capture.md`; its child-node mass
-frontier, exact reply and both pruned frontiers are still absent. No D3262 search
-profile, causal claim or production default is selected. [[D3262]] and the semantic search RFC's
-criterion 23/Discharge D1 remain open. The next provider arm must retain per-node Maia
-`{moveUci, mass}` on the traversal nodes, distinguish raw model mass from configured sampling,
-and account for unreturned moves; the old D1023 aggregate cannot substitute. `[V]`
+This is the root receipt. `d3262-exact-replies.md`, `d3262-maia-child-capture.md`,
+`d3262-maia-child-prefix.md`, `d3262-stockfish-child-capture.md` and
+`d3262-stockfish-child-beam.md` now provide the legal reply frame and two measured first-child
+frontiers. Deeper per-node traversal, semantic target preservation and five-arm profile
+calibration are still absent. No D3262 search profile, causal claim or production default is
+selected. [[D3262]] and the semantic search RFC's criterion 23/Discharge D1 remain open. `[V]`

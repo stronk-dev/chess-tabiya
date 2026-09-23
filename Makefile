@@ -158,7 +158,7 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	node apps/server/dist/semantic-evidence-check.js
 
-.PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check semantic-search-maia-capture semantic-search-maia-check semantic-search-maia-child-capture semantic-search-maia-child-check semantic-search-maia-child-prefix semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-provider-line-arm semantic-search-exact-arm-forcing
+.PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check semantic-search-stockfish-child-capture semantic-search-stockfish-child-check semantic-search-stockfish-child-beam semantic-search-maia-capture semantic-search-maia-check semantic-search-maia-child-capture semantic-search-maia-child-check semantic-search-maia-child-prefix semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 semantic-search-input-readiness:
 	$(CI_NODE) tools/d3262-search-calibration/input-readiness.mjs
 
@@ -167,6 +167,17 @@ semantic-search-manifest:
 
 semantic-search-stockfish-capture:
 	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-child-capture:
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --child $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-child-check: semantic-search-stockfish-check semantic-search-exact-replies
+	$(CI_NODE) --test tools/d3262-search-calibration/stockfish-child-capture-check.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-child-capture-check.mjs
+
+semantic-search-stockfish-child-beam: semantic-search-stockfish-child-check semantic-search-material-immediate semantic-search-destination-reply-witness
+	$(CI_NODE) --test tools/d3262-search-calibration/stockfish-child-beam.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-child-beam.mjs
 
 semantic-search-stockfish-check:
 	$(CI_NODE) --test tools/d3262-search-calibration/stockfish-capture-check.test.mjs
@@ -1540,7 +1551,7 @@ verify-governance: register-check status-parity work-index work-state work-item-
 # they do not establish repository, product, or release correctness. Run the relevant narrow target
 # while editing an RFC, or this aggregate when intentionally auditing the whole active RFC portfolio.
 verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review pack-capability-cut-fresh-review graduation-clearance-author-repair semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-cut-contract live-sources-author-repair review-evidence-fourth-fresh-review review-evidence-fourth-author-repair review-evidence-fifth-fresh-review evidence-presentation-seventh-fresh-review bot-policy-fifth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair shared-resource-bootstrap-collision-core-second-author-repair bounded-target-sixth-author-repair module-discharge-coverage-contract wave-c-module-amendment
-verify-rfc-evidence: semantic-search-stockfish-check semantic-search-maia-check semantic-search-maia-child-prefix semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-provider-line-arm semantic-search-exact-arm-forcing
+verify-rfc-evidence: semantic-search-stockfish-check semantic-search-stockfish-child-beam semantic-search-maia-check semantic-search-maia-child-prefix semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 
 .PHONY: feedback-delivery-measurement feedback-binding-audit capability-watch-check
 feedback-delivery-measurement:

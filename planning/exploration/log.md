@@ -20544,3 +20544,13 @@ pawn-denial controls, only one named minor arrival is in either prefix and 26 ar
 returned window with unknown individual mass. The raw softmax is not configured sampling
 probability ([[D3276]]), and neither horizon four nor semantic proof has been measured;
 [[D3262]] remains open.
+
+### 2026-09-23 — D3262 engine child source and bounded-rank first layer
+
+`planning/semantic-consequence-search/d3262-stockfish-child-capture.md` independently
+checks Stockfish 19 MultiPV at all 196 candidate-child positions and all 6,310 legal replies
+for each of depth 8, depth 12 and 100 ms. Its companion horizon-two beam receipt measures
+widths 2/4/8 without calling ranked occurrence a proof. At width eight, 58/60/64 of the 185
+named comparisons retain their reply across the three budgets, while the named minor arrival
+in all 32 source pawn-denial controls is outside every such beam. Semantic target preservation,
+deeper traversal, end-to-end cost and profile selection remain open under [[D3262]].
