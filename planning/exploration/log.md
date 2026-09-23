@@ -20835,3 +20835,15 @@ legal denominator and forged mass. These overlapping cells are neither
 independent human games nor a Stockfish reason. The multi-node policy arm,
 continuation/proof, abstention and end-to-end cost remain open under
 [[D3262]]/[[D3284]]/[[D3289]].
+### 2026-09-23 — D3262 named destination control after exact replies
+
+The corrected target frame's 88 named destination cells now have a
+replay-checked reading after all 3,070 legal immediate replies. In the 32
+source pawn moves, the named pawn still attacks the named square after
+1,070/1,109 replies, but only 5/32 moves retain that control under every
+reply. All 32 direct named minor arrivals allow that pawn a legal positive
+capture. The instrument keeps controller retention, minor arrival and
+capture separate, and negative fixtures reject a crossed reply FEN or
+target population. [[D3291]] records the resulting wording boundary:
+short-horizon denial is not durable prevention or an engine reason.
+The five-arm proof/abstention/cost comparison remains open under [[D3262]].

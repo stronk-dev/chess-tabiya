@@ -466,6 +466,17 @@ not independent games, Lichess human frequencies or reasons for Stockfish's
 root preference. [[D3284]] [[D3289]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-event-policy-relevance.md`.
 
+The corrected exact-reply continuation narrows the pawn-denial wording further.
+Across 32 source-observed moves and all 1,109 immediate legal replies, the named
+pawn still attacks its declared destination after 1,070 replies; only 5 of the
+32 moves retain that named control against *every* reply. All 32 direct named
+minor arrivals admit a legal positive capture by the named pawn, but the
+opponent is not obliged to arrive. The 56 selected alternatives have 55 direct
+arrivals and zero named-pawn wins; that says nothing about other defenders.
+This is a source-identity, one-reply result, not long-horizon prevention or an
+engine reason. [[D3291]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-destination-reply-control.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

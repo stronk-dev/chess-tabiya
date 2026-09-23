@@ -556,6 +556,13 @@ join are also checked under the separate 193-candidate profile.
 Path-keyed first-reply Maia event relevance is checked as a separate model
 diagnostic; it is not the multi-node policy-coverage arm. Five-arm continuation,
 semantic proof/abstention, comparison and end-to-end cost remain outstanding.
+[[D3291]] adds one exact continuation boundary on the corrected frame: the
+named pawn retains control of its destination after 1,070/1,109 source
+replies, yet only 5/32 source candidates retain it under every legal
+immediate reply. All 32 direct minor arrivals are positively capturable
+by that pawn. A compiled reason must keep current control, conditional
+arrival punishment and durable prevention as different propositions; the
+first two do not license the third or explain the engine's root choice.
 These are post-freeze receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 

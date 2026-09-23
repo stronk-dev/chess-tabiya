@@ -160,3 +160,14 @@ denominators and separately measured raw/configured masses. This is one
 model-band reply-relevance diagnostic, not human frequency or the policy-
 coverage arm's multi-node traversal. Five-arm proof/abstention/cost remains
 unmeasured.
+
+## Post-freeze named destination continuation — 2026-09-23
+
+`d3262-coherent-destination-reply-control.md` independently replays all
+3,070 legal immediate replies in the corrected frame's 88 named destination
+cells. The named pawn retains control after 1,070/1,109 source replies, but
+only 5/32 source candidates retain it after every reply. All 32 immediate
+named minor arrivals admit a positive capture by that pawn; this is not
+proof that the opponent will arrive or that control persists deeper. This
+bounded witness/refutation axis does not select the semantic arm's profile,
+make an engine-causality claim or clear criterion 23.
