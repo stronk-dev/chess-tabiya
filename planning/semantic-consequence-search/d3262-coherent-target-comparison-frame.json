@@ -1,0 +1,3036 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "targetRegisterDigest": "sha256:52fc381b0178b84ea0b8ff1b22f097b060ca663ad434c39bfbdfc739c509fc21",
+  "rootFrameDigest": "sha256:dcf339d6042392e3a5d0cc355c3d6779ed751d5540a8a8094d50ce3d7e43df2b",
+  "authority": "target_candidate_comparison_population_not_outcome_or_move_grade",
+  "definitions": [
+    {
+      "id": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "rootId": "d1023:3e77bf53f9edd017",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "knight",
+          "square": "b8"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "c6"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-scandinavian-white/p15-ne5",
+          "population": "authored pack spines",
+          "candidateUci": "d4d5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6",
+      "rootId": "d1023:54bf540393f76a8a",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c6"
+        },
+        "baselineMoveUci": "c3c6"
+      },
+      "sources": [
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p42-ba6",
+          "population": "authored pack spines",
+          "candidateUci": "c8a6",
+          "played": true
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p42-ba6",
+          "population": "authored pack spines",
+          "candidateUci": "f6h4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745",
+      "rootId": "d1023:69697d269fd5389d",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/ZHWGswJq#16",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "g7g5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "rootId": "d1023:b442d22b427a3141",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "c4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/ktZ3spXM#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "d7d5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e",
+      "rootId": "d1023:48c69f44c7994f27",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "c8"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "d7"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-caro-advance-early-c5/nxd4-central",
+          "population": "authored pack spines",
+          "candidateUci": "e5e6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431",
+      "rootId": "d1023:ad1cab4183426f19",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b5"
+        },
+        "square": "c4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/6a0z3iBG#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "b7b5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "rootId": "d1023:4b8565c9a5372755",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "f2"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "d2"
+        },
+        "baselineMoveUci": "f2d2"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/a0Xo4b5J#40",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "d2d6",
+          "played": true
+        },
+        {
+          "sourceId": "https://lichess.org/a0Xo4b5J#40",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e6c4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      },
+      "sources": [
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p50-kd7",
+          "population": "authored pack spines",
+          "candidateUci": "g7g5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b",
+      "rootId": "d1023:0d9e2b67f643a200",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d4e5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/GF5vtBlD#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e5d4",
+          "played": true
+        },
+        {
+          "sourceId": "https://lichess.org/GF5vtBlD#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "f8e7",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db",
+      "rootId": "d1023:7a95268085c02ca4",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "d3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "square": "b4"
+      },
+      "sources": [
+        {
+          "sourceId": "kid-mar-del-plata-white/f5-storm",
+          "population": "authored pack spines",
+          "candidateUci": "c7c5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6",
+      "rootId": "d1023:22769455c8ed5d0c",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "a1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a4"
+        },
+        "baselineMoveUci": "a1a4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/JpzfY1Ph#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "f6e4",
+          "played": true
+        },
+        {
+          "sourceId": "https://lichess.org/JpzfY1Ph#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "f6g8",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48",
+      "rootId": "d1023:9b18090f9036e620",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "e6"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "f3"
+        },
+        "square": "g4"
+      },
+      "sources": [
+        {
+          "sourceId": "open-centre-ruy-exchange/nd4-centralize",
+          "population": "authored pack spines",
+          "candidateUci": "f2f3",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:28a856d72400b38209f58dde627810ffbf5a7246d5553e6d1a021f60d0e1a610",
+      "rootId": "d1023:7dad12c8f48a9409",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "d3"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d3e4"
+      },
+      "sources": [
+        {
+          "sourceId": "carlsbad-minority-attack/qxe7-recapture",
+          "population": "authored pack spines",
+          "candidateUci": "d8e7",
+          "played": true
+        },
+        {
+          "sourceId": "carlsbad-minority-attack/qxe7-recapture",
+          "population": "authored pack spines",
+          "candidateUci": "e4c5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:2cf8c3800f782f4b34619c50085851705dc3ad9f04f91d510fdb2738e84d67b6",
+      "rootId": "d1023:979b52c0f665251f",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "c1"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "c7"
+        },
+        "baselineMoveUci": "c1c7"
+      },
+      "sources": [
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p44-rc1",
+          "population": "authored pack spines",
+          "candidateUci": "c7c1",
+          "played": true
+        },
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p44-rc1",
+          "population": "authored pack spines",
+          "candidateUci": "e7c5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:4ad9e532415c9a5e3e10525cb1ebe064e04616425f925d8c58b2676b5aa3a07e",
+      "rootId": "d1023:30b49fbc2e177700",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d4e5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/50gVKdhE#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e5d4",
+          "played": true
+        },
+        {
+          "sourceId": "https://lichess.org/50gVKdhE#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "g8e7",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:4b90d11e1cac01358f6f9c048beb4ebf19e42ec4884d06fc809cbffac4e318ac",
+      "rootId": "d1023:5349bf6a339256e5",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "f5"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "baselineMoveUci": "f5c5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/a0Xo4b5J#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c5c4",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/a0Xo4b5J#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "d2d1",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "knight",
+          "square": "f6"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "g4"
+        },
+        "square": "h5"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-london-black/p9-nbd2",
+          "population": "authored pack spines",
+          "candidateUci": "g2g4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:52333229711faef6063afca3cafde0bdfb2b4281c66785271d784a08ae351a41",
+      "rootId": "d1023:f9a63bd3ee891678",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "c6"
+        },
+        "baselineMoveUci": "d5c6"
+      },
+      "sources": [
+        {
+          "sourceId": "italian-center-attack-white/p18-nxd5",
+          "population": "authored pack spines",
+          "candidateUci": "a7a5",
+          "played": false
+        },
+        {
+          "sourceId": "italian-center-attack-white/p18-nxd5",
+          "population": "authored pack spines",
+          "candidateUci": "f6d5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:541ac36c657c3975c8f307010eca3cc2c8267312f46afbf6a8b25d353fdf1a45",
+      "rootId": "d1023:f4d472eb6a000524",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "f6e4"
+      },
+      "sources": [
+        {
+          "sourceId": "italian-center-attack-white/p17-exd5",
+          "population": "authored pack spines",
+          "candidateUci": "e4d5",
+          "played": true
+        },
+        {
+          "sourceId": "italian-center-attack-white/p17-exd5",
+          "population": "authored pack spines",
+          "candidateUci": "f3e5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:56ad02dbb4da0ad3c7b56de26c0dcd06a115c70531d9db05078f7e05c67a2eff",
+      "rootId": "d1023:2d489b66490e30f2",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "d3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "c4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/ZHWGswJq#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "d7d5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:5fec8bcfb5cd87d868d5a86acb22db7b282fd922b13aba205ec7aecfde454adf",
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "baselineMoveUci": "c3d5"
+      },
+      "sources": [
+        {
+          "sourceId": "iqp-black-tarrasch-defence/be6-develop",
+          "population": "authored pack spines",
+          "candidateUci": "c8e6",
+          "played": true
+        },
+        {
+          "sourceId": "iqp-black-tarrasch-defence/be6-develop",
+          "population": "authored pack spines",
+          "candidateUci": "d8d6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "rootId": "d1023:97f19370bc28f4ec",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "baselineMoveUci": "d4c5"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-london-black/p10-e6",
+          "population": "authored pack spines",
+          "candidateUci": "e7e6",
+          "played": true
+        },
+        {
+          "sourceId": "anti-london-black/p10-e6",
+          "population": "authored pack spines",
+          "candidateUci": "h8g8",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:6965a73c42e597621286990f53d20b601fde91d317ef2ac250d600a2c2202124",
+      "rootId": "d1023:668dc8aad37cb498",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "d4"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-sicilian-najdorf-english-attack/p10-a6",
+          "population": "authored pack spines",
+          "candidateUci": "a7a6",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d",
+      "rootId": "d1023:75d766e89debc7ff",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "d2"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d2e4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/Sodns02o#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e7e6",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/Sodns02o#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "f7f5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667",
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c2"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c4"
+        },
+        "square": "d3"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/hU10ITVj#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "d5c4",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382",
+      "rootId": "d1023:cd69be023b15ea3e",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      },
+      "sources": [
+        {
+          "sourceId": "french-advance-black/p6-c5",
+          "population": "authored pack spines",
+          "candidateUci": "a7a6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:7efbafa1378aaf264093cf7f6044d7411d72a810aded4edf6c419fecd2ac8299",
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "e1"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "e8"
+        },
+        "baselineMoveUci": "e1e8"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/pQZ75avT#40",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c6b4",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/pQZ75avT#40",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e8e1",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212",
+      "rootId": "d1023:b893141580b18d5f",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a5"
+        },
+        "square": "b4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/eC6uvelI#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "a6a5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:86c00ec1c4ff7432712d486baefd3292c0a3e91f51a39f3c2b6eed70d47fd098",
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "g7"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "square": "f6"
+      },
+      "sources": [
+        {
+          "sourceId": "grunfeld-exchange-fianchetto/e5-advance",
+          "population": "authored pack spines",
+          "candidateUci": "e4e5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:87a5a74fbfdde323d0a7104b357b69e85f67d3d4da43a44e7a7706aed80773fd",
+      "rootId": "d1023:92265995f8fe8596",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "knight",
+          "square": "f6"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "g4"
+        },
+        "square": "h5"
+      },
+      "sources": [
+        {
+          "sourceId": "london-system-white/p13-bg3",
+          "population": "authored pack spines",
+          "candidateUci": "g2g4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:8913672af4f438b827fdf0d3e0f65e6d25ca5fa3c759ef6cb1feb01d2befbaef",
+      "rootId": "d1023:668dc8aad37cb498",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      },
+      "sources": [
+        {
+          "sourceId": "najdorf-english-attack-black/p10-a6",
+          "population": "authored pack spines",
+          "candidateUci": "a7a6",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d",
+      "rootId": "d1023:3f3bae7705d0c126",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "d3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/fd37KgOs#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "a7a6",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:8af41eb4399083da3ed204fdf2b590197eeb321f068a72273ca8cf25c9391dac",
+      "rootId": "d1023:2f2950b030bc6722",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "f6"
+        },
+        "square": "g5"
+      },
+      "sources": [
+        {
+          "sourceId": "berlin-queenless-press/ne7-retreat",
+          "population": "authored pack spines",
+          "candidateUci": "f7f6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "rootId": "d1023:ef628fec1346fe49",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d4e4"
+      },
+      "sources": [
+        {
+          "sourceId": "rook-4v3-same-side-hold/w-f3",
+          "population": "authored pack spines",
+          "candidateUci": "f2f3",
+          "played": true
+        },
+        {
+          "sourceId": "rook-4v3-same-side-hold/w-f3",
+          "population": "authored pack spines",
+          "candidateUci": "h2h3",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9",
+      "rootId": "d1023:873b5e380b31b977",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "d1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d4"
+        },
+        "baselineMoveUci": "d1d4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/UNkqj1pt#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "b8a6",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/UNkqj1pt#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "f6d5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "rootId": "d1023:60dea30119fdb203",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "f3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "h6"
+        },
+        "square": "g5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/hjh8d0Z8#40",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "h7h6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:97ea5e2020129d9e39512f20aa0de82f67ed3e583585c0646ac778b197e4cbd7",
+      "rootId": "d1023:ff15de5a0fa18704",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "a5"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "a6"
+        },
+        "baselineMoveUci": "a5a6"
+      },
+      "sources": [
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p54-ra5",
+          "population": "authored pack spines",
+          "candidateUci": "a6a5",
+          "played": true
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p54-ra5",
+          "population": "authored pack spines",
+          "candidateUci": "a6b6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:99f903002a1fe54bf1e028c954d9bde44323de3ff675022a84bc2130a0dd470c",
+      "rootId": "d1023:ac3d22de578d29d1",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "d4"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "f5"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-sicilian-najdorf-english-attack/e6-scheveningen",
+          "population": "authored pack spines",
+          "candidateUci": "e7e6",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef",
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "e3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      },
+      "sources": [
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p38-rc7",
+          "population": "authored pack spines",
+          "candidateUci": "g7g5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea",
+      "rootId": "d1023:5736c670d59a6fb9",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "d3"
+        },
+        "target": {
+          "color": "black",
+          "role": "queen",
+          "square": "a3"
+        },
+        "baselineMoveUci": "d3a3"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/cXj7tMkk#32",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c7c6",
+          "played": true
+        },
+        {
+          "sourceId": "https://lichess.org/cXj7tMkk#32",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "h8e8",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:a40499970dc705f6819d4eb7aae1503aae72e78e7048a457f73d371d192652fb",
+      "rootId": "d1023:87feca64394ec8cd",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "e1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e7"
+        },
+        "baselineMoveUci": "e1e7"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/QJE0UbfB#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "b4d3",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/QJE0UbfB#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c8f5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:a810d46c5977e950ce9bda231433ff4b65b797e89281bdbe2a861cc6ebf36c4e",
+      "rootId": "d1023:6b8c498cf444842a",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "g2"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c6"
+        },
+        "square": "d5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/F6Bb9Zr3#16",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c7c6",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "rootId": "d1023:30e8c7888b84e04e",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "pawn",
+          "promoted": false,
+          "square": "c5"
+        },
+        "target": {
+          "color": "white",
+          "role": "knight",
+          "square": "d4"
+        },
+        "baselineMoveUci": "c5d4"
+      },
+      "sources": [
+        {
+          "sourceId": "open-centre-ruy-exchange/nb3-retreat",
+          "population": "authored pack spines",
+          "candidateUci": "d1e1",
+          "played": false
+        },
+        {
+          "sourceId": "open-centre-ruy-exchange/nb3-retreat",
+          "population": "authored pack spines",
+          "candidateUci": "d4b3",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7",
+      "rootId": "d1023:e864f0d19d48dc64",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c4"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "d5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/eC6uvelI#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e7e6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:aaa7622bd5d593108fd72f49ac225ad2223f16b1aa83ec5c73c74378801de06e",
+      "rootId": "d1023:26707a86f92b638e",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "b3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c6"
+        },
+        "square": "d5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/jA71yBXB#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c7c6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:b1c13604d5c1019574773a10032585d1d4a750748230cab9f5e8b3c46e4db447",
+      "rootId": "d1023:a3e8d485fab10509",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "g5"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "square": "f4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/fd37KgOs#16",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e6e5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:b819090ff2609c2966a594779b5c46068f7186b5912d82ccae52382597a28f7f",
+      "rootId": "d1023:5aeadf7b395cac74",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "g3"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "f4"
+        },
+        "baselineMoveUci": "g3f4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/9FTgKq10#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "d6e5",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/9FTgKq10#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "g2h1",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d",
+      "rootId": "d1023:402cccc15ea24b1f",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "f6e4"
+      },
+      "sources": [
+        {
+          "sourceId": "italian-center-attack-white/p11-cxd4",
+          "population": "authored pack spines",
+          "candidateUci": "c3d4",
+          "played": true
+        },
+        {
+          "sourceId": "italian-center-attack-white/p11-cxd4",
+          "population": "authored pack spines",
+          "candidateUci": "f3h4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:bb45f6acf462c7dc3558f77c4b3b6e9ccd934a2d559ce1d666eae049f98bb6b1",
+      "rootId": "d1023:39f4b8a5afff2321",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "g1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "f3"
+        },
+        "square": "e2"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/kL85VmlC#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e4f3",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d5e4"
+      },
+      "sources": [
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p05-e5",
+          "population": "authored pack spines",
+          "candidateUci": "a2a4",
+          "played": false
+        },
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p05-e5",
+          "population": "authored pack spines",
+          "candidateUci": "e4e5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "rootId": "d1023:0d7de0d86430f444",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "c8"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "d7"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-caro-advance-c5-race/dxc5-grab",
+          "population": "authored pack spines",
+          "candidateUci": "e5e6",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:c68d69696d691ff987e7b7235a5bede44ed5887ab221cf04f80bca97bdbceb33",
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "c6"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b7"
+        },
+        "baselineMoveUci": "c6b7"
+      },
+      "sources": [
+        {
+          "sourceId": "pawn-breakthrough-convert/b-bxc6",
+          "population": "authored pack spines",
+          "candidateUci": "b7b6",
+          "played": false
+        },
+        {
+          "sourceId": "pawn-breakthrough-convert/b-bxc6",
+          "population": "authored pack spines",
+          "candidateUci": "b7c6",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:c73c0fc8f8521df559a933b6b1b5e78289a75a6c598ac9f9bced0dcede4b6d93",
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "h6"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "f8"
+        },
+        "baselineMoveUci": "h6f8"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/ZHWGswJq#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e7h4",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/ZHWGswJq#24",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "g8h6",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "rootId": "d1023:e539b1202c9dcb20",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d5e5"
+      },
+      "sources": [
+        {
+          "sourceId": "rook-4v3-same-side-hold/w-f4",
+          "population": "authored pack spines",
+          "candidateUci": "f2f4",
+          "played": true
+        },
+        {
+          "sourceId": "rook-4v3-same-side-hold/w-f4",
+          "population": "authored pack spines",
+          "candidateUci": "h2h4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "baselineMoveUci": "f6d5"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-scandinavian-white/p5-d4-vs-nf6",
+          "population": "authored pack spines",
+          "candidateUci": "d2d4",
+          "played": true
+        },
+        {
+          "sourceId": "anti-scandinavian-white/p5-d4-vs-nf6",
+          "population": "authored pack spines",
+          "candidateUci": "g1e2",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "rootId": "d1023:b2c0051a04c7f157",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/ktZ3spXM#16",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "g6g5",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:da6364ed09ff7d4fd98b890a38437700ec9cf794993b906e0e97a9bdaa60045b",
+      "rootId": "d1023:1755bba04565192c",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "c5"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "c3"
+        },
+        "square": "d4"
+      },
+      "sources": [
+        {
+          "sourceId": "anti-italian-center-attack-black/p7-c3",
+          "population": "authored pack spines",
+          "candidateUci": "c2c3",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "rootId": "d1023:b532b7870e77d174",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "f4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c7"
+        },
+        "baselineMoveUci": "f4c7"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/9l0YS4kF#16",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c5d4",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/9l0YS4kF#16",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e6e5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:e77e59e8a806da5ad429c741368b181ab382ac07373c77d8284c81edcd486a3e",
+      "rootId": "d1023:9840521190fdbfff",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "e4"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "e8"
+        },
+        "baselineMoveUci": "e4e8"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/pQZ75avT#32",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e8c8",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/pQZ75avT#32",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e8e4",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1",
+      "rootId": "d1023:5b13efc149c44518",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "a2"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "f2"
+        },
+        "baselineMoveUci": "a2f2"
+      },
+      "sources": [
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
+          "population": "authored pack spines",
+          "candidateUci": "c7c6",
+          "played": true
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
+          "population": "authored pack spines",
+          "candidateUci": "g2g4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:f30e2e62cb720dd4de83e673d97c84f6b987b9dd7b33c6c32bb781d05b6d3030",
+      "rootId": "d1023:39f4b8a5afff2321",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "c3e4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/kL85VmlC#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "c8h3",
+          "played": false
+        },
+        {
+          "sourceId": "https://lichess.org/kL85VmlC#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e4f3",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206",
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "family": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "f3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b7"
+        },
+        "baselineMoveUci": "f3b7"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/CmcgG2om#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e8e1",
+          "played": true
+        },
+        {
+          "sourceId": "https://lichess.org/CmcgG2om#48",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "e8e4",
+          "played": false
+        }
+      ]
+    },
+    {
+      "id": "target:fbd6af9a49cdd8ed8c89c3f18e4cf75e69d5131bf61fb0fb19ca9e15e5b1b51c",
+      "rootId": "d1023:d1e1300f0eec8303",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "g2"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "e4"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/RpFyUtKu#8",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "d7d5",
+          "played": true
+        }
+      ]
+    },
+    {
+      "id": "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc",
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "family": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "c3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      },
+      "sources": [
+        {
+          "sourceId": "https://lichess.org/pUkgyxDV#16",
+          "population": "sealed imported fixed-ply sample",
+          "candidateUci": "a7a6",
+          "played": false
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "targetId": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "candidateUci": "c1d2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "targetId": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "candidateUci": "d4d5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "targetId": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "candidateUci": "f3d2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "targetId": "target:028612ec1d95109536540c5248d900c2363be46cff9da2d45f7467d09a4a476a",
+      "candidateUci": "f3e5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "targetId": "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6",
+      "candidateUci": "c8a6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "targetId": "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6",
+      "candidateUci": "c8d7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "targetId": "target:07504b3ad45428057d5be3622c8882e41613b0b3694105086cc1a0fdab7849f6",
+      "candidateUci": "f6h4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "targetId": "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745",
+      "candidateUci": "c7c5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "targetId": "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745",
+      "candidateUci": "f6g4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "targetId": "target:07d534d94656d0c22e9d151e177a76afe8f85ffedb604fb98c83e9eeeee6f745",
+      "candidateUci": "g7g5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "targetId": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "candidateUci": "b8c6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "targetId": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "candidateUci": "d7d5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "targetId": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "candidateUci": "d7d6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "targetId": "target:08be3e64fb14f22dc650ee633d1462132883986caaeca3a6011a01cba8404767",
+      "candidateUci": "g8e7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "targetId": "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e",
+      "candidateUci": "d1d4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "targetId": "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e",
+      "candidateUci": "e5e6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "targetId": "target:0a50dc7f95aaa603e07b833a15afaf020a9cdd3f5834aee59d65630149d5b10e",
+      "candidateUci": "f3d4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "targetId": "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431",
+      "candidateUci": "b7b5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "targetId": "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431",
+      "candidateUci": "b8d7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "targetId": "target:11098b32bc0b83d3b2a2c1c57770fb9110e1569e35573723ba836623ab1be431",
+      "candidateUci": "e5d4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "candidateUci": "d2d6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "candidateUci": "d2d7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "candidateUci": "d2f2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "targetId": "target:1246d1837dba22fab7443d7dae3973f91229e3f5a0a907e07a35588c4578a501",
+      "candidateUci": "e6c4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "targetId": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "candidateUci": "e8d7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "targetId": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "candidateUci": "f7f5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "targetId": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "candidateUci": "g7g5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "targetId": "target:167b90c76f6ac380534ca95a47730e521df673083a89823bca4caf9241d3c624",
+      "candidateUci": "h7h5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "targetId": "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b",
+      "candidateUci": "b8d7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "targetId": "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b",
+      "candidateUci": "e5d4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "targetId": "target:18509ff8dc44a8674301fcb370dd59c914a60360c5fefd371dbd3b465a7b164b",
+      "candidateUci": "f8e7",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "targetId": "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db",
+      "candidateUci": "b7b6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "targetId": "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db",
+      "candidateUci": "c7c5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "targetId": "target:1aeaf7162aa375bb972ee9f1accae5b5db99adf517ac8379693973edb7b5e3db",
+      "candidateUci": "f7f5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "targetId": "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6",
+      "candidateUci": "e8g8",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "targetId": "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6",
+      "candidateUci": "f6e4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "targetId": "target:222e1affc5f38333eb2b7237f0f8ddffbd0434133fa70622582f1bb930331fb6",
+      "candidateUci": "f6g8",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "targetId": "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48",
+      "candidateUci": "b3c1",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "targetId": "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48",
+      "candidateUci": "b3d4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "targetId": "target:23183e020abce40e14c1d7e78c320a91863452007b58d540c5f7b36cb4f04e48",
+      "candidateUci": "f2f3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "targetId": "target:28a856d72400b38209f58dde627810ffbf5a7246d5553e6d1a021f60d0e1a610",
+      "candidateUci": "d8e7",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "targetId": "target:28a856d72400b38209f58dde627810ffbf5a7246d5553e6d1a021f60d0e1a610",
+      "candidateUci": "e4c5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:979b52c0f665251f",
+      "targetId": "target:2cf8c3800f782f4b34619c50085851705dc3ad9f04f91d510fdb2738e84d67b6",
+      "candidateUci": "c7c1",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:979b52c0f665251f",
+      "targetId": "target:2cf8c3800f782f4b34619c50085851705dc3ad9f04f91d510fdb2738e84d67b6",
+      "candidateUci": "e7c5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "targetId": "target:4ad9e532415c9a5e3e10525cb1ebe064e04616425f925d8c58b2676b5aa3a07e",
+      "candidateUci": "e5d4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "targetId": "target:4ad9e532415c9a5e3e10525cb1ebe064e04616425f925d8c58b2676b5aa3a07e",
+      "candidateUci": "g8e7",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5349bf6a339256e5",
+      "targetId": "target:4b90d11e1cac01358f6f9c048beb4ebf19e42ec4884d06fc809cbffac4e318ac",
+      "candidateUci": "c5c4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5349bf6a339256e5",
+      "targetId": "target:4b90d11e1cac01358f6f9c048beb4ebf19e42ec4884d06fc809cbffac4e318ac",
+      "candidateUci": "d2d1",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "targetId": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "candidateUci": "c2c3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "targetId": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "candidateUci": "d4c5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "targetId": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "candidateUci": "f1e2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "targetId": "target:51dfdafd5a1a417126b75ed1c257f85ff3d5b92f0f707e635a16be4962e5d024",
+      "candidateUci": "g2g4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "targetId": "target:52333229711faef6063afca3cafde0bdfb2b4281c66785271d784a08ae351a41",
+      "candidateUci": "a7a5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "targetId": "target:52333229711faef6063afca3cafde0bdfb2b4281c66785271d784a08ae351a41",
+      "candidateUci": "c6e7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "targetId": "target:52333229711faef6063afca3cafde0bdfb2b4281c66785271d784a08ae351a41",
+      "candidateUci": "f6d5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "targetId": "target:541ac36c657c3975c8f307010eca3cc2c8267312f46afbf6a8b25d353fdf1a45",
+      "candidateUci": "e4d5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "targetId": "target:541ac36c657c3975c8f307010eca3cc2c8267312f46afbf6a8b25d353fdf1a45",
+      "candidateUci": "f3e5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "targetId": "target:56ad02dbb4da0ad3c7b56de26c0dcd06a115c70531d9db05078f7e05c67a2eff",
+      "candidateUci": "d7d5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "targetId": "target:56ad02dbb4da0ad3c7b56de26c0dcd06a115c70531d9db05078f7e05c67a2eff",
+      "candidateUci": "e4f6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "targetId": "target:5fec8bcfb5cd87d868d5a86acb22db7b282fd922b13aba205ec7aecfde454adf",
+      "candidateUci": "c8e6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "targetId": "target:5fec8bcfb5cd87d868d5a86acb22db7b282fd922b13aba205ec7aecfde454adf",
+      "candidateUci": "d8d6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "candidateUci": "c5d4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "candidateUci": "c8g4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "candidateUci": "d8b6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "candidateUci": "e7e6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "targetId": "target:6907573cfde67e1853cd9a56dc69d30db2f55d3aafbe1bb5bfc249407cb32a70",
+      "candidateUci": "h8g8",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "targetId": "target:6965a73c42e597621286990f53d20b601fde91d317ef2ac250d600a2c2202124",
+      "candidateUci": "a7a6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "targetId": "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d",
+      "candidateUci": "e7e6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "targetId": "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d",
+      "candidateUci": "f7f5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "targetId": "target:73fdfbb7e5424f4d0b1ca9e704a95dd0c411f390f918db252735206f81169f7d",
+      "candidateUci": "f8d8",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "targetId": "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667",
+      "candidateUci": "c8b7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "targetId": "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667",
+      "candidateUci": "d5c4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "targetId": "target:7510313f3194c3150497cf840a03c877b7d4801687bb0dad18567da59c911667",
+      "candidateUci": "d6g3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "targetId": "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382",
+      "candidateUci": "a7a6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "targetId": "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382",
+      "candidateUci": "c7c5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "targetId": "target:7bcd134722d0cb959129f357de77325ac3f56e21daa362952da56e1675653382",
+      "candidateUci": "g8e7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "targetId": "target:7efbafa1378aaf264093cf7f6044d7411d72a810aded4edf6c419fecd2ac8299",
+      "candidateUci": "c6b4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "targetId": "target:7efbafa1378aaf264093cf7f6044d7411d72a810aded4edf6c419fecd2ac8299",
+      "candidateUci": "e8e1",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "targetId": "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212",
+      "candidateUci": "a6a5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "targetId": "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212",
+      "candidateUci": "f7f6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "targetId": "target:837de2b3f6d37dbe1928e52d4052fdb8057a899887f41af2467a4b76cfa42212",
+      "candidateUci": "f8c8",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "targetId": "target:86c00ec1c4ff7432712d486baefd3292c0a3e91f51a39f3c2b6eed70d47fd098",
+      "candidateUci": "d4d5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "targetId": "target:86c00ec1c4ff7432712d486baefd3292c0a3e91f51a39f3c2b6eed70d47fd098",
+      "candidateUci": "e4e5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "targetId": "target:87a5a74fbfdde323d0a7104b357b69e85f67d3d4da43a44e7a7706aed80773fd",
+      "candidateUci": "f4g3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "targetId": "target:87a5a74fbfdde323d0a7104b357b69e85f67d3d4da43a44e7a7706aed80773fd",
+      "candidateUci": "g2g4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "targetId": "target:8913672af4f438b827fdf0d3e0f65e6d25ca5fa3c759ef6cb1feb01d2befbaef",
+      "candidateUci": "a7a6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "targetId": "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d",
+      "candidateUci": "a5c7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "targetId": "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d",
+      "candidateUci": "a7a6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "targetId": "target:89e9cc25d68c4439ea09f77e229a37528f24fff4f7afd843078fe24efa706e4d",
+      "candidateUci": "e8g8",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "targetId": "target:8af41eb4399083da3ed204fdf2b590197eeb321f068a72273ca8cf25c9391dac",
+      "candidateUci": "f5e7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "targetId": "target:8af41eb4399083da3ed204fdf2b590197eeb321f068a72273ca8cf25c9391dac",
+      "candidateUci": "f7f6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "candidateUci": "a1a2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "candidateUci": "e1e2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "candidateUci": "f2f3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "targetId": "target:8e6c39c3fa254811d2734beff0b703632556a48c884264605673c318d5ff9a12",
+      "candidateUci": "h2h3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "targetId": "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9",
+      "candidateUci": "b8a6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "targetId": "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9",
+      "candidateUci": "f6d5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "targetId": "target:926e18f054dc5056413d408527fb59d97ca6f457d1e6e09a44d856a243d9b2d9",
+      "candidateUci": "f6e4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "candidateUci": "b6a5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "candidateUci": "b6a6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "candidateUci": "b6c5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "candidateUci": "c8f5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "targetId": "target:94241ce6b784b36e755744ca7169d41e284ac26eeb5e71a50fd0a4ce10ba54d4",
+      "candidateUci": "h7h6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "targetId": "target:97ea5e2020129d9e39512f20aa0de82f67ed3e583585c0646ac778b197e4cbd7",
+      "candidateUci": "a6a5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "targetId": "target:97ea5e2020129d9e39512f20aa0de82f67ed3e583585c0646ac778b197e4cbd7",
+      "candidateUci": "a6b6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "targetId": "target:99f903002a1fe54bf1e028c954d9bde44323de3ff675022a84bc2130a0dd470c",
+      "candidateUci": "e7e5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "targetId": "target:99f903002a1fe54bf1e028c954d9bde44323de3ff675022a84bc2130a0dd470c",
+      "candidateUci": "e7e6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "targetId": "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef",
+      "candidateUci": "c8c2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "targetId": "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef",
+      "candidateUci": "c8c6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "targetId": "target:9dcdc6b5da680fab96eb4b49a92eb93dfc367a8989ce6965869de3816cc097ef",
+      "candidateUci": "g7g5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "targetId": "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea",
+      "candidateUci": "a3b4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "targetId": "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea",
+      "candidateUci": "c7c6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "targetId": "target:a22c30177a371133ac931d4d98cf15b1ae73306c4487d5321b4942a6cd30c9ea",
+      "candidateUci": "h8e8",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "targetId": "target:a40499970dc705f6819d4eb7aae1503aae72e78e7048a457f73d371d192652fb",
+      "candidateUci": "b4d3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "targetId": "target:a40499970dc705f6819d4eb7aae1503aae72e78e7048a457f73d371d192652fb",
+      "candidateUci": "c8f5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "targetId": "target:a810d46c5977e950ce9bda231433ff4b65b797e89281bdbe2a861cc6ebf36c4e",
+      "candidateUci": "c7c6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "targetId": "target:a810d46c5977e950ce9bda231433ff4b65b797e89281bdbe2a861cc6ebf36c4e",
+      "candidateUci": "f8e8",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "candidateUci": "d1e1",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "candidateUci": "d4b3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "candidateUci": "d4e2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "targetId": "target:a849317194b7beefa45c9063e8c718d904874a3fc08f4b0098084a4d7328f17f",
+      "candidateUci": "d4f5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "targetId": "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7",
+      "candidateUci": "e5c4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "targetId": "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7",
+      "candidateUci": "e7e6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "targetId": "target:aa031c488d39c9552d876b42df18a197fefb2aa16bafc5f7259585e9909785c7",
+      "candidateUci": "g8f6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "targetId": "target:aaa7622bd5d593108fd72f49ac225ad2223f16b1aa83ec5c73c74378801de06e",
+      "candidateUci": "c7c6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "targetId": "target:aaa7622bd5d593108fd72f49ac225ad2223f16b1aa83ec5c73c74378801de06e",
+      "candidateUci": "e7e1",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "targetId": "target:b1c13604d5c1019574773a10032585d1d4a750748230cab9f5e8b3c46e4db447",
+      "candidateUci": "e6e5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "targetId": "target:b1c13604d5c1019574773a10032585d1d4a750748230cab9f5e8b3c46e4db447",
+      "candidateUci": "h7h6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "targetId": "target:b819090ff2609c2966a594779b5c46068f7186b5912d82ccae52382597a28f7f",
+      "candidateUci": "d6e5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "targetId": "target:b819090ff2609c2966a594779b5c46068f7186b5912d82ccae52382597a28f7f",
+      "candidateUci": "g2h1",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "targetId": "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d",
+      "candidateUci": "c3d4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "targetId": "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d",
+      "candidateUci": "e1g1",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "targetId": "target:ba918dae1641db930946bca5cf9776d2d1d64524d7e5bdf08b2f5dc6e14d7f6d",
+      "candidateUci": "f3h4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "targetId": "target:bb45f6acf462c7dc3558f77c4b3b6e9ccd934a2d559ce1d666eae049f98bb6b1",
+      "candidateUci": "c8h3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "targetId": "target:bb45f6acf462c7dc3558f77c4b3b6e9ccd934a2d559ce1d666eae049f98bb6b1",
+      "candidateUci": "e4f3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "candidateUci": "a2a4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "candidateUci": "b1c3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "candidateUci": "b1d2",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "targetId": "target:bf3dae5c79e7a820b9fed611b98d38225419a6a2ffb41c8844acd5019c4dcee2",
+      "candidateUci": "e4e5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "targetId": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "candidateUci": "c2c3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "targetId": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "candidateUci": "d4c5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "targetId": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "candidateUci": "e5e6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "targetId": "target:c5e519a57f2d39c1924a082cf53bed775f65a68ae95b1fa3ab1549420a17404a",
+      "candidateUci": "g1f3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "targetId": "target:c68d69696d691ff987e7b7235a5bede44ed5887ab221cf04f80bca97bdbceb33",
+      "candidateUci": "b7b6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "targetId": "target:c68d69696d691ff987e7b7235a5bede44ed5887ab221cf04f80bca97bdbceb33",
+      "candidateUci": "b7c6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "targetId": "target:c73c0fc8f8521df559a933b6b1b5e78289a75a6c598ac9f9bced0dcede4b6d93",
+      "candidateUci": "e7h4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "targetId": "target:c73c0fc8f8521df559a933b6b1b5e78289a75a6c598ac9f9bced0dcede4b6d93",
+      "candidateUci": "g8h6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "candidateUci": "a1b1",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "candidateUci": "f2f3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "candidateUci": "f2f4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "candidateUci": "g2g4",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "targetId": "target:d06a61485291b16ca81aa17c0b48141b49f11335cc22dc25f64c713d697df066",
+      "candidateUci": "h2h4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "candidateUci": "b1c3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "candidateUci": "d2d4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "candidateUci": "f1b5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "candidateUci": "g1e2",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "targetId": "target:d579d3b5f3cc6c5eca62947fc7573708ea29988895a17bc35f74219e2259b9a9",
+      "candidateUci": "g1f3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "targetId": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "candidateUci": "a7a5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "targetId": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "candidateUci": "c6c5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "targetId": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "candidateUci": "d7d6",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "targetId": "target:d617c8f67dfe1611814967e76a6b68f1063eb9cf26ea51aa0ae65f44a9262c92",
+      "candidateUci": "g6g5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "targetId": "target:da6364ed09ff7d4fd98b890a38437700ec9cf794993b906e0e97a9bdaa60045b",
+      "candidateUci": "c2c3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "targetId": "target:da6364ed09ff7d4fd98b890a38437700ec9cf794993b906e0e97a9bdaa60045b",
+      "candidateUci": "e1g1",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "candidateUci": "c5d4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "candidateUci": "c6a5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "candidateUci": "c6e7",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "candidateUci": "e6d5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "targetId": "target:dda7453b38761f31ee5ba9fd33cb21dd83a30b65ce46348cd42487f4f458e874",
+      "candidateUci": "e6e5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:9840521190fdbfff",
+      "targetId": "target:e77e59e8a806da5ad429c741368b181ab382ac07373c77d8284c81edcd486a3e",
+      "candidateUci": "e8c8",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:9840521190fdbfff",
+      "targetId": "target:e77e59e8a806da5ad429c741368b181ab382ac07373c77d8284c81edcd486a3e",
+      "candidateUci": "e8e4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "targetId": "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1",
+      "candidateUci": "c7c6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "targetId": "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1",
+      "candidateUci": "g2g4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "targetId": "target:e818f277f0d427deb6e8f21c55b76cf49f2dd647e10de85c308afecd9529afd1",
+      "candidateUci": "h2g1",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "targetId": "target:f30e2e62cb720dd4de83e673d97c84f6b987b9dd7b33c6c32bb781d05b6d3030",
+      "candidateUci": "c8h3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "targetId": "target:f30e2e62cb720dd4de83e673d97c84f6b987b9dd7b33c6c32bb781d05b6d3030",
+      "candidateUci": "e4f3",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "targetId": "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206",
+      "candidateUci": "d4d3",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "targetId": "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206",
+      "candidateUci": "e8e1",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "targetId": "target:f682af9eaf358af33022c02d8c2654d66a9eec7aa87a95d089e4c5afbc1ed206",
+      "candidateUci": "e8e4",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:d1e1300f0eec8303",
+      "targetId": "target:fbd6af9a49cdd8ed8c89c3f18e4cf75e69d5131bf61fb0fb19ca9e15e5b1b51c",
+      "candidateUci": "d7d5",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "targetId": "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc",
+      "candidateUci": "a7a6",
+      "sourceObserved": true
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "targetId": "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc",
+      "candidateUci": "c6a5",
+      "sourceObserved": false
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "targetId": "target:fdfab68566fc5ae1b7d5f63405fd38ca63c0e154cf6f65bcfbc2367a2d6a5bcc",
+      "candidateUci": "c8e6",
+      "sourceObserved": false
+    }
+  ],
+  "controls": [
+    {
+      "rootId": "pressure:bg4-h3-bh5",
+      "status": "declared_relation_control",
+      "declaration": "tools/d3262-search-calibration/bishop-pressure-control.mjs#bishopPressureDeclaration",
+      "selectedCandidates": [
+        "c2c4",
+        "f1e2",
+        "h2h3"
+      ]
+    },
+    {
+      "rootId": "quiet-plan:carlsbad-nf8",
+      "status": "no_autonomous_semantic_target",
+      "declaration": "content/drafts/carlsbad-minority-attack.json#nf8-regroup",
+      "selectedCandidates": [
+        "a7a5",
+        "d7f8",
+        "h7h6"
+      ]
+    },
+    {
+      "rootId": "tactical:fork-parried",
+      "status": "declared_relation_control",
+      "declaration": "tools/d3262-search-calibration/fork-control-identity.mjs#controls",
+      "selectedCandidates": [
+        "e6c7",
+        "e6f4",
+        "e6g5",
+        "h1g2"
+      ]
+    },
+    {
+      "rootId": "tactical:fork-survives",
+      "status": "declared_relation_control",
+      "declaration": "tools/d3262-search-calibration/fork-control-identity.mjs#controls",
+      "selectedCandidates": [
+        "e6c7",
+        "e6d4",
+        "e6f4",
+        "h1g2"
+      ]
+    }
+  ],
+  "profile": "d3262-coherent-target-comparison-v1"
+}

@@ -37,8 +37,17 @@ are **not** measured human move frequencies, and any unsupported move is
 excluded by the pinned configured sampler rather than assumed impossible.
 
 The 190 retained candidates may reuse prior sources only after exact
-source/path checks. The corrected 193-candidate frame still needs a new
-target-comparison frame, first-reply frontier and deeper path/position source
-union before any five-arm semantic proof, abstention or end-to-end cost
-verdict. No move is graded and no engine preference is explained by this
-capture.
+source/path checks. The corrected target-comparison frame now joins the same
+64 source-named targets to all selected moves at their roots: 182 comparisons,
+96 source-observed cells and 86 natural alternatives, plus four separately
+declared controls. Its SHA-256 is
+`229335224b1c175478537554ec52ee7341b983e7358222fe1c7d67c2af16cc6b`.
+`make semantic-search-coherent-target-frame-check` verifies both input digests,
+the named-source join and negative crossed-authority/missing-source fixtures.
+The old 185-comparison frame remains frozen; these are distinct populations,
+not a retroactive correction of an outcome.
+
+The corrected frame still needs a first-reply frontier and deeper
+path/position source union before any five-arm semantic proof, abstention or
+end-to-end cost verdict. No move is graded and no engine preference is
+explained by this capture.

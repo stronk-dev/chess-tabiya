@@ -20755,3 +20755,14 @@ first-reply selection, newly selected deeper Stockfish/Maia source union,
 five-arm semantic proof/abstention and end-to-end cost. [[D3289]] and
 [[D3262]] remain open; model support was not called human frequency or a
 causal engine reason.
+### 2026-09-23 — D3262 corrected target-comparison population
+
+The coherent 193-candidate frame now has its own digest-bound target comparison
+artifact rather than inheriting the old 196-candidate/185-comparison population.
+The 64 source-named targets produce 182 comparison cells: 96 source-observed and
+86 natural alternatives, plus four separate controls. A new named Make check
+and two negative fixtures reject crossed authority and a missing observed
+source. The frozen predecessor frame remains intact. This is a question
+population, not a move grade or semantic verdict; the first-reply frontier,
+deeper provider union, five-arm proof/abstention and measured production cost
+remain open under [[D3262]] and [[D3289]].

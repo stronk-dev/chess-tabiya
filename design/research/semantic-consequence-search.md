@@ -410,8 +410,11 @@ all-legal/top-eight widths and at path-keyed Maia3-5M root-plus-candidate
 history. The 55 exact legal replies agree between the corrected chessops
 graph and the Maia container's python-chess replay; the pinned Maia sampler
 retains six configured support entries across those three paths. This is a
-source join, not a human-frequency estimate or a semantic proof. The new
-target comparisons and deeper reply frontiers remain unmeasured. [[D3289]]
+source join, not a human-frequency estimate or a semantic proof. The corrected
+target frame now contains 182 comparison cells for 64 source-named targets:
+96 source-observed and 86 natural alternatives. Its checker binds the target
+register and corrected candidate-frame digests; it does not report outcomes.
+The deeper reply frontiers remain unmeasured. [[D3289]]
 `[V]` `planning/semantic-consequence-search/d3262-coherent-new-child-sources.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:

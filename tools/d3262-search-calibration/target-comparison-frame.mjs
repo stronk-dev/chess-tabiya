@@ -15,9 +15,13 @@ function check(value, message) { if (!value) throw new Error(message); }
 function targetKey(row) { return JSON.stringify([row.rootId, row.targetFamily, row.target]); }
 function targetId(key) { return `target:${createHash("sha256").update(key).digest("hex")}`; }
 
-export function compileTargetComparisonFrame(register, rootFrame) {
+export function compileTargetComparisonFrame(register, rootFrame, {
+  targetRegisterBytes = targetBytes,
+  rootFrameBytes = frameBytes,
+  rootFrameAuthority = "shared_candidate_population_not_move_grade",
+} = {}) {
   check(register.authority === "source_named_target_identity_not_search_verdict", "Target register has the wrong authority");
-  check(rootFrame.authority === "shared_candidate_population_not_move_grade", "Root frame has the wrong authority");
+  check(rootFrame.authority === rootFrameAuthority, "Root frame has the wrong authority");
   check(register.manifest === rootFrame.manifest, "Target register and root frame disagree on the frozen manifest");
   const rootById = new Map(rootFrame.roots.map((root) => [root.rootId, root]));
   check(rootById.size === rootFrame.roots.length, "Duplicate root identity");
@@ -48,8 +52,8 @@ export function compileTargetComparisonFrame(register, rootFrame) {
   return {
     version: 1,
     manifest: register.manifest,
-    targetRegisterDigest: `sha256:${createHash("sha256").update(targetBytes).digest("hex")}`,
-    rootFrameDigest: `sha256:${createHash("sha256").update(frameBytes).digest("hex")}`,
+    targetRegisterDigest: `sha256:${createHash("sha256").update(targetRegisterBytes).digest("hex")}`,
+    rootFrameDigest: `sha256:${createHash("sha256").update(rootFrameBytes).digest("hex")}`,
     authority: "target_candidate_comparison_population_not_outcome_or_move_grade",
     definitions,
     comparisons,
@@ -57,7 +61,7 @@ export function compileTargetComparisonFrame(register, rootFrame) {
   };
 }
 
-if (process.argv[1]?.endsWith("target-comparison-frame.mjs")) {
+if (process.argv[1] && new URL(`file://${process.argv[1]}`).href === import.meta.url) {
   const artifact = compileTargetComparisonFrame(targets, frame);
   const bytes = `${JSON.stringify(artifact, null, 2)}\n`;
   if (process.argv.includes("--write")) writeFileSync(outputPath, bytes, { flag: "wx" });
