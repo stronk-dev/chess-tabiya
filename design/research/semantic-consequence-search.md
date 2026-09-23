@@ -220,6 +220,16 @@ retains both instead of laundering the former into the latter ([[D3278]]). This 
 **not** a five-arm exact-result: the frozen extension trigger set did not include destination
 occupancy, so using these extra plies in that arm would be a post-outcome rule change
 ([[D3279]]). `[V]` `planning/semantic-consequence-search/d3262-destination-reply-witness.md`.
+The first frozen search arm now has a named-target result rather than a proposed algorithm.
+Across the 53 comparisons where a positive registered material capture exists, Stockfish's
+single PV shows it 29, 26 and 28 times at depth 8, depth 12 and 100 ms; an unshown legal
+alternative is **not** a refutation. None of the 32 declared pawn-control lines appears as
+minor arrival followed by pawn capture in those PVs. This directly measures the limited reach
+of provider-line explanation for these fixed targets. The same projection covers all 196
+selected candidates across 66 roots: the parried-fork refutation appears in the depth-12 and
+100 ms PVs but not depth 8; all three bishop-pressure PVs omit the declared retreat; Carlsbad
+remains explicitly no-target rather than inferring a plan from knight movement. `[V]`
+`planning/semantic-consequence-search/d3262-provider-line-arm.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

@@ -20511,3 +20511,15 @@ capture (`a6b5`); the diagnostic now retains both and a forged-pawn negative fix
 [[D3278]]. The bounded line is deliberately off-profile: destination occupancy was not a frozen
 forcing-extension trigger, so [[D3279]] remains open and the five-arm [[D3262]] result is still
 unmeasured.
+
+### 2026-09-23 — D3262 provider-line arm measures named-target reach
+
+`planning/semantic-consequence-search/d3262-provider-line-arm.md` joins all 185 named
+target/candidate comparisons to the three frozen Stockfish budgets, with 555 replayed PV
+prefixes. Of 53 available positive material captures, the one-line arm shows 29, 26 and 28;
+the others are unobserved on that PV, not refuted. None of the 32 source pawn-denial controls
+shows the declared minor-arrival → pawn-capture sequence on a PV. All 196 selected candidates
+are covered, including no-target abstentions on the special-control alternatives. The
+parried-fork refutation appears on depth-12/100-ms PVs but not depth 8; `...Bh5` appears on
+none of the three bishop-pressure PVs. This is the first arm's bounded occurrence result;
+the other four arms remain open under [[D3262]].

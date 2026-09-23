@@ -106,6 +106,14 @@ diagnostic: the frozen exact-arm extension triggers list check, capture and atta
 occupancy. This result must not be counted as the preregistered arm without a new declaration
 ([[D3279]]). One source control also proves why generic first-positive-capture identity cannot
 stand in for the declared pawn ([[D3278]]).
+`d3262-provider-line-arm.md` now measures the first preregistered arm on all 185 named
+target/candidate comparisons at each of the three separate Stockfish budgets. A positive
+registered material capture appears on 29/53, 26/53 and 28/53 PVs respectively; no PV shows
+the declared pawn capture in the 32 source pawn-denial controls. This is occurrence on one
+line, not evidence that the unshown alternatives fail. The four special controls and all
+196 selected candidates are now represented, including no-target abstentions. The parried
+fork's refutation appears on depth-12 and 100 ms PVs, but not on depth 8; none of the three
+bishop-pressure PVs shows the declared `...Bh5` retreat. The other four arms have no result.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and
