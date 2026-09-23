@@ -230,6 +230,14 @@ selected candidates across 66 roots: the parried-fork refutation appears in the 
 100 ms PVs but not depth 8; all three bishop-pressure PVs omit the declared retreat; Carlsbad
 remains explicitly no-target rather than inferring a plan from knight movement. `[V]`
 `planning/semantic-consequence-search/d3262-provider-line-arm.md`.
+The exact-arm forcing census now makes a second limitation numerical. Under the frozen
+check/capture/attack trigger words, only 3–4 of the 32 source pawn-denial arrivals receive
+the extra learner ply that would show their declared pawn capture. The range is not random
+error: “attack” may mean new control of a future square or a new attack on an enemy piece;
+those readings expand 36,779 versus 18,831 learner edges on the named comparison frame
+([[D3280]]). The earlier pawn-reply diagnostic remains valid but off-profile. No exact-arm
+proof verdict or production budget follows from this census. `[V]`
+`planning/semantic-consequence-search/d3262-exact-arm-forcing.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

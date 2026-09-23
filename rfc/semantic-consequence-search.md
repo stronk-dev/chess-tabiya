@@ -463,6 +463,11 @@ destination occupancy. If that trigger is wanted in a search profile, preregiste
 comparison before measuring its reach or cost; do not add these observed plies to the current
 five-arm result after the fact.
 
+[[D3280]] keeps a second interpretation open: a reply newly controlling a registered future
+destination square is not necessarily an attack on an enemy piece. The exact-arm experiment
+must retain both trigger readings and their distinct cost/reach, then settle which reading
+the production profile means before this RFC can claim a calibrated exact arm.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,

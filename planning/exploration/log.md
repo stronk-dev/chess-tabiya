@@ -20523,3 +20523,13 @@ are covered, including no-target abstentions on the special-control alternatives
 parried-fork refutation appears on depth-12/100-ms PVs but not depth 8; `...Bh5` appears on
 none of the three bishop-pressure PVs. This is the first arm's bounded occurrence result;
 the other four arms remain open under [[D3262]].
+
+### 2026-09-23 — D3262 exact forcing rule has two measurable readings
+
+`planning/semantic-consequence-search/d3262-exact-arm-forcing.md` replays the complete
+6,310-edge reply graph and measures eligible one-ply extensions on all 185 named comparisons.
+The frozen “attacks registered target” language expands 1,226 replies / 36,779 learner edges
+if newly controlling a future square counts, but 680 / 18,831 if only a new attack on an enemy
+piece counts. Only 4/32 or 3/32 source pawn-denial arrivals get the needed extra ply. [[D3280]]
+records the profile ambiguity; [[D3279]] still forbids silently adding destination occupancy.
+The exact arm is not declared complete, and no move is graded by this cost census.

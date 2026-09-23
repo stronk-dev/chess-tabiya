@@ -19,7 +19,7 @@ function externalUci(state, move) {
   const side = castlingSide(state, move);
   return side === undefined || !("from" in move) ? makeUci(move) : makeUci({ from: move.from, to: kingCastlesTo(state.turn, side) });
 }
-function legalMoves(state) {
+export function legalMoves(state) {
   const result = [];
   for (const [from, destinations] of state.allDests()) for (const to of destinations) {
     const roles = state.board.getRole(from) === "pawn" && (to < 8 || to >= 56) ? ["queen", "rook", "bishop", "knight"] : [undefined];

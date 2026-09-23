@@ -113,7 +113,14 @@ the declared pawn capture in the 32 source pawn-denial controls. This is occurre
 line, not evidence that the unshown alternatives fail. The four special controls and all
 196 selected candidates are now represented, including no-target abstentions. The parried
 fork's refutation appears on depth-12 and 100 ms PVs, but not on depth 8; none of the three
-bishop-pressure PVs shows the declared `...Bh5` retreat. The other four arms have no result.
+bishop-pressure PVs shows the declared `...Bh5` retreat. The remaining four arms have no
+completed profile result.
+`d3262-exact-arm-forcing.md` now measures the exact arm's reply and one-ply-extension cost,
+without assigning a proof verdict. The frozen phrase “attacks the registered target” admits
+two readings for future-square targets ([[D3280]]): 1,226 versus 680 extended named-comparison
+replies and 36,779 versus 18,831 learner edges. Only 3–4 of the 32 source pawn-denial arrivals
+would receive the declared extra learner ply without a separately preregistered occupancy
+trigger ([[D3279]]). This sensitivity does not choose a profile or complete arm 2.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and
