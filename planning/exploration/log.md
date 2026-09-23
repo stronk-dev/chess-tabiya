@@ -20822,3 +20822,16 @@ the report and test now keep the budgets distinct. These are reach and
 negative-control facts, not an engine reason. Continuation, all-defence
 proof, abstention, other arms and end-to-end cost remain open under
 [[D3262]]/[[D3289]].
+### 2026-09-23 — D3262 corrected path-keyed Maia event relevance
+
+The corrected 182 comparison cells now join exact events and held-out
+positive local witnesses to the pinned root-plus-candidate Maia3 configured
+sampler, with full legal denominators and raw/configured mass kept separate.
+Only 38/84 positive local witnesses have configured support; 21/68 exact
+events without a positive local witness also have support. The source
+pawn-denial positive remains 1/32, while 15/55 safe alternative minor
+arrivals have support. Negative fixtures reject crossed history, model,
+legal denominator and forged mass. These overlapping cells are neither
+independent human games nor a Stockfish reason. The multi-node policy arm,
+continuation/proof, abstention and end-to-end cost remain open under
+[[D3262]]/[[D3284]]/[[D3289]].

@@ -150,3 +150,13 @@ artifact records positive local witness reach separately at depth 8, depth
 the event-without-positive-witness controls. Reaching a local witness is
 not target persistence, all-defence proof or a causal engine explanation;
 the five-arm and end-to-end cost gates remain open.
+
+## Post-freeze path-keyed policy relevance — 2026-09-23
+
+The corrected 182-cell target frame now joins its exact events and held-out
+local witnesses to the pinned root-plus-candidate Maia3 configured sampler.
+`d3262-coherent-event-policy-relevance.md` records the digest, complete legal
+denominators and separately measured raw/configured masses. This is one
+model-band reply-relevance diagnostic, not human frequency or the policy-
+coverage arm's multi-node traversal. Five-arm proof/abstention/cost remains
+unmeasured.

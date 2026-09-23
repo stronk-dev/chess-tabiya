@@ -480,6 +480,22 @@ reply by reserving the registered minor's arrival, while also reserving 14 mater
 whose exchange is not positive. It is a valid branch-scheduling primitive, not a proof or
 an answer to why the root candidate is better than its alternative. Arm 5 must test the
 continuation and contrast after selection; the 139/139 named-event reach is not its verdict.
+The separately frozen coherent-root population now has a held-out reach join across 182
+comparisons. Its 84 positive *local* witnesses are reached 39/43/41 times by the coherent
+top-eight reserve at depth 8/depth 12/100 ms; an all-legal event-source sensitivity reaches
+all 84 but also reserves 68 exact relation events without a positive local witness.
+The latter are real events, not detection errors, and would be false explanations if
+rendered as causal hints. Neither source width supplies target persistence or a proof class;
+`planning/semantic-consequence-search/d3262-coherent-event-reach-evaluation.md` owns the
+budget-separated receipt.
+The same corrected population's path-keyed Maia3 policy relevance remains
+separate from event truth: 38/84 positive local witnesses and 21/68 events
+without a positive local witness have configured support. Only one of the
+32 source pawn-denial arrivals has support; 15 of 55 safe alternative
+arrivals do. Those are comparison-cell counts under one configured model,
+not human frequencies, independent games or the policy-coverage arm's
+multi-node proof. See
+`planning/semantic-consequence-search/d3262-coherent-event-policy-relevance.md`.
 
 [[D3282]] bounds the first exact local-contrast reading: 123 same-target
 predecessor-candidate/natural-alternative pairs span only 47 of 64 registered target groups.
@@ -533,9 +549,14 @@ graphs identical to the frozen frame. The three new candidate children now
 have checked separate coherent Stockfish width-eight/all-legal and path-keyed
 Maia source readings, with 55 independent legal replies
 (`planning/semantic-consequence-search/d3262-coherent-new-child-sources.md`).
-Corrected target/first-reply/deeper provider joins, five-arm semantic
-proof/abstention and cost remain outstanding. These are
-post-freeze population receipts, not amendments to the original 196-candidate
+The corrected target frame, 1,966 selected first-reply paths and their deeper
+Stockfish/Maia provider joins are now checked. Exact immediate local target readings,
+source-versus-natural local contrasts and the source-blind reserve's held-out reach
+join are also checked under the separate 193-candidate profile.
+Path-keyed first-reply Maia event relevance is checked as a separate model
+diagnostic; it is not the multi-node policy-coverage arm. Five-arm continuation,
+semantic proof/abstention, comparison and end-to-end cost remain outstanding.
+These are post-freeze receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 
 [[D3286]] requires a separate Maia query identity for arm 4. The pinned Maia3

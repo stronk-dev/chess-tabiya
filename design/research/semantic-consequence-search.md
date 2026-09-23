@@ -456,6 +456,16 @@ reach claim and leave target persistence, all-defence proof and product
 cost open. [[D3281]] [[D3289]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-event-reach-evaluation.md`.
 
+The corrected path-keyed Maia3 configured policy adds a distinct relevance
+axis to that held-out join: only 38/84 positive local witnesses have
+configured support, while 21/68 exact events without a positive local
+witness also have support. The source pawn-denial control remains 1/32;
+15/55 safe minor arrivals on natural alternatives also have support.
+These are overlapping named comparison cells under one configured model,
+not independent games, Lichess human frequencies or reasons for Stockfish's
+root preference. [[D3284]] [[D3289]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-event-policy-relevance.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;
