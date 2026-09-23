@@ -20613,3 +20613,14 @@ non-comparable because the named minor is absent. Seventeen of 64 registered tar
 have no newly selected alternative, now [[D3282]] rather than a hidden denominator loss.
 This is local evidence for future contrastive explanation, not a move grade, engine-cause
 claim or all-reply proof. [[D3262]] remains open for the search and cost comparison.
+
+### 2026-09-23 — D3283 local truth often runs against engine root rank
+
+`d3262-local-rank-concordance.md` joins the 123 exact local pairs to checked Stockfish
+root MultiPV order at three budgets, using no raw cp/mate arithmetic. Of 89 pairs with a
+directional local relation, only 25 agree with depth-12 rank under the one-relation
+polarity hypothesis; destination/pawn-denial agrees in 3/54. The fixed selected
+population does not estimate a general chess rate, and rank disagreement does not say
+which other consideration caused the engine preference. It does falsify the shortcut of
+presenting a true structural contrast as *the* reason for a recommendation. [[D3283]]
+routes the abstention/proof requirement; [[D3262]] remains open.

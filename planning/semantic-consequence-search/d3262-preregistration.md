@@ -184,3 +184,11 @@ pairs; 33 material pairs retain the same boolean relation and one destination al
 has no named minor, so it is not classified as safe. The 123 pairs span only 47 of 64
 registered targets; 17 have no newly selected alternative ([[D3282]]). These are local
 comparison operands, not causal explanations or a completed semantic search arm.
+
+`d3262-local-rank-concordance.md` checks those directional local operands against the
+complete root Stockfish MultiPV order without normalizing raw cp/mate values. At depth
+twelve, only 25/89 point the same way under the one-relation polarity hypothesis; the
+destination family is 3/54. Nine 100-ms directional pairs contain bounded raw scores
+and remain separately identified. This is evidence against treating a true local
+classification as the engine's reason, not evidence that an engine rank itself explains
+the move. [[D3283]] and the full counterfactual [[D3262]] remain open.

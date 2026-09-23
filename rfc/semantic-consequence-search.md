@@ -487,6 +487,13 @@ The other 17 have no newly selected alternative and must abstain at that compari
 The 54 destination punishment-versus-safe-arrival pairs and the 35 directionally different
 material pairs are local operands, not engine-preference explanations or all-reply proofs.
 
+[[D3283]] makes the attribution boundary measurable: of 89 directional local contrasts,
+only 25 agree with Stockfish's depth-12 root rank under the single-relation polarity
+hypothesis, including just 3/54 destination contrasts. The exact relation can be shown as
+an observation, but may not be called the engine's reason without counterfactual
+continuation that survives the named alternatives. A contrary rank requires explicit
+abstention or a separately proven explanation, never a polished local-fact story.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,

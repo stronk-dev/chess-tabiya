@@ -308,6 +308,15 @@ This is the first typed operand for “why this move rather than that one,” bu
 link the local difference to an engine preference, prove it survives replies, or choose
 which side benefits. `[V]` `planning/semantic-consequence-search/d3262-local-relation-contrast.md`.
 
+The first root-rank sanity check sharply limits attribution: among 89 directional local
+contrasts, 25 match the depth-12 Stockfish MultiPV order under a single-relation polarity
+hypothesis, while 64 run contrary; destination/pawn-denial contrasts match in only 3/54.
+This reading uses rank order only, with no raw cp/mate arithmetic or claim that ranking
+reveals cause. It shows why a true detected structural fact can be a bad “why the engine
+likes this move” card. The fixed selected sample is not a population rate. A why-card
+needs a continuation-backed counterfactual link or honest abstention ([[D3283]]). `[V]`
+`planning/semantic-consequence-search/d3262-local-rank-concordance.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;
