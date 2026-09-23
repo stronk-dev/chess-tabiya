@@ -2500,6 +2500,11 @@ change because a captured controlling pawn was retained as a stale tracked
 identity; all twelve corrected witnesses replay legally, including en passant.
 The checked artifact and limitation are recorded under [[D3292]] in
 `planning/semantic-consequence-search/d3262-coherent-bounded-targets.md`.
+The same-target contrast now checks 116 selected pairs: 84 immediate
+differences shrink to 13 inclusive four-ply reach differences, with only
+11 eligible for like-for-like reintroduction comparison. [[D3293]] records
+the abstention boundary in `d3262-coherent-bounded-contrast.md`; separate
+engine-rank concordance does not turn it into causal explanation.
 
 This is progress in the research authority, not a crossed 1.0 capability:
 the five-arm proof/abstention/cost comparison remains open under [[D3262]],

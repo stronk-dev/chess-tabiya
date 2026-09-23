@@ -171,3 +171,17 @@ named minor arrivals admit a positive capture by that pawn; this is not
 proof that the opponent will arrive or that control persists deeper. This
 bounded witness/refutation axis does not select the semantic arm's profile,
 make an engine-causality claim or clear criterion 23.
+
+## Post-freeze bounded target and same-target contrast — 2026-09-23
+
+`d3262-coherent-bounded-targets.md` records exact target continuation on all
+182 corrected comparison cells, including the captured-controller correction
+to twelve predecessor source readings. Its 116 selected source-versus-natural-
+alternative pairs are joined in `d3262-coherent-bounded-contrast.md` without
+changing the candidate population. Only 13 pairs retain a directional
+opponent-option reach difference after inclusive four-ply continuation; only
+11 pairs permit a like-for-like bounded reintroduction comparison because
+most alternatives already expose the option immediately. Separate root
+Stockfish rank concordance is reported by budget, not called a cause. Arm
+3/4/5 continuation, calibrated proof/abstention, end-to-end cost and
+criterion 23 remain open.

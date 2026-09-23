@@ -573,6 +573,19 @@ object. Every disagreement has a legal pawn-capture witness, including en
 passant. Seven source destination cells now have a preparation surviving
 every defence inside this four-ply target question. That is a corrected
 short-horizon result, not durable prevention or root engine causality.
+[[D3293]] is the same corrected frame's first bounded **contrast** rather
+than a single-candidate reading. Eighty-four of 116 source-versus-natural
+pairs have different immediate opponent-option availability, but only 13
+differ on inclusive immediate-or-four-ply reach. Only 11 pairs initially
+remove the target on both sides and therefore permit a like-for-like
+reintroduction/all-defence comparison; none has a directional all-defence
+contrast. In particular, an already available target's `reintroduced=false`
+cannot be compared with a removed target's `reintroduced=true` as though
+the first were safer. The 13 directional reach contrasts agree with the
+separate coherent root engine rank in 4/7/6 cases at depth 8/depth 12/100
+ms, which is not causal attribution. See the checked
+`d3262-coherent-bounded-contrast.md` and retain these typed abstentions in
+the eventual compiler.
 These are post-freeze receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 

@@ -494,6 +494,20 @@ still agree. This corrects a source-control instrument, not the five-arm
 profile verdict or an engine-reason claim. [[D3292]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-bounded-targets.md`.
 
+The same corrected profile now has a bounded same-target contrast over 116
+selected source-versus-natural pairs, keeping 17 unpaired targets explicit.
+Although 84 pairs differ in immediate opponent-option availability, only 13
+differ in inclusive immediate-or-four-ply reach. A raw reintroduction boolean
+is not comparable across the 84 mixed-immediate pairs: `false` can mean the
+opponent option was already available and did not need reintroduction. Only
+11 both-removed pairs admit that narrower comparison, and none has a
+directional all-defence contrast. The 13 inclusive reach directions agree
+with coherent all-legal Stockfish root ordering in 4, 7 and 6 cases at the
+separate depth-8, depth-12 and 100-ms budgets. These overlapping pairs and
+selected targets do not establish why the engine recommends a move; the
+correct output for an incompatible or unproved contrast is abstention.
+[[D3293]] `[V]` `planning/semantic-consequence-search/d3262-coherent-bounded-contrast.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

@@ -20861,3 +20861,20 @@ replay legally, including en passant. [[D3292]] and the checked dossier
 record the counts and scope. The Make target is part of `verify-rfc-evidence`.
 No production search profile or engine-reason claim follows; next is the
 coherent five-arm proof/abstention/cost comparison under [[D3262]].
+
+### 2026-09-23 — D3262 bounded same-target contrast catches incompatible scopes
+
+The corrected 182-cell target readings now join to 116 frozen
+source-versus-natural-alternative pairs, retaining 17 targets without a
+selected alternative. Eighty-four immediate target-availability contrasts
+shrink to thirteen directional inclusive four-ply reach contrasts. Only
+eleven pairs remove the target on both sides and permit reintroduction to
+be compared; none gives a directional all-defence contrast. A first
+projection made the invalid comparison of `reintroduced=false` on an
+already-available target against `true` on a removed one; the permanent
+fixture now requires typed incomparable scope and independently checks
+perspective. [[D3293]] and the checked
+`planning/semantic-consequence-search/d3262-coherent-bounded-contrast.md`
+record the result. Root engine ranks agree with only 4/7/6 of the thirteen
+reach contrasts at the three separate budgets; this is not an engine reason.
+The remaining multi-arm proof/abstention/cost gate stays open under [[D3262]].
