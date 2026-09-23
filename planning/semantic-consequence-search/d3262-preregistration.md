@@ -100,6 +100,12 @@ source destination denials and named positive pawn captures replay, while 54/55 
 alternatives leave the destination locally safe and one captures the minor. A missing minor is
 not a pawn-prevention claim. Both immediate families are now measured; bounded continuations
 and the five-arm profile are still open.
+`d3262-destination-reply-witness.md` joins the exact minor-arrival reply and, for the 32 source
+controls, the *declared* pawn's positive capture one learner ply later. It is an off-profile
+diagnostic: the frozen exact-arm extension triggers list check, capture and attack, not destination
+occupancy. This result must not be counted as the preregistered arm without a new declaration
+([[D3279]]). One source control also proves why generic first-positive-capture identity cannot
+stand in for the declared pawn ([[D3278]]).
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and

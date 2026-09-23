@@ -26907,6 +26907,23 @@
       "uxItems": [],
       "evidence": "tools/d2685-review-evidence-third-author-repair/contract.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3278",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d5f39c66845e7f6bff99dafe3d153b8350a968f94727721681de8272cd205c59",
+      "uxItems": [],
+      "evidence": "tools/d3262-search-calibration/destination-reply-witness.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3279",
+      "state": "todo",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:aa76fea86e4ae3e2d23800b55ccbbed986c06e4fb9c0cf0d932508bcd42fcb57",
+      "uxItems": []
     }
   ]
 }

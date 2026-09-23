@@ -20501,3 +20501,13 @@ causes rechecked, 54 of 55 natural alternatives locally safe, and one alternativ
 minor was captured. That captured-minor case is typed separately rather than laundered into a
 pawn-prevention claim. All 185 named comparison questions now have a narrow immediate reading;
 bounded replies and the five-arm [[D3262]] calibration remain open.
+
+### 2026-09-23 — D3262 names the exact pawn reply without laundering source identity
+
+`planning/semantic-consequence-search/d3262-destination-reply-witness.md` retains 32 legal
+minor-arrival → declared-pawn-capture witnesses, 54 locally safe arrivals, and one absent minor.
+One source case has a generic first capture (`a5b5`) different from the declared moved pawn's
+capture (`a6b5`); the diagnostic now retains both and a forged-pawn negative fixture closes
+[[D3278]]. The bounded line is deliberately off-profile: destination occupancy was not a frozen
+forcing-extension trigger, so [[D3279]] remains open and the five-arm [[D3262]] result is still
+unmeasured.

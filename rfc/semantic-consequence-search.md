@@ -457,6 +457,12 @@ unless that transformation is separately validated. It must also normalize Maia'
 castling encoding only at the legal-identity join, retaining raw source bytes. The root capture
 does not satisfy the child-node traversal or profile decision.
 
+The named destination-arrival → declared-pawn-capture witness is a useful bounded diagnostic,
+but [[D3279]] keeps it outside arm 2: the frozen forcing-extension triggers do not include
+destination occupancy. If that trigger is wanted in a search profile, preregister a separate
+comparison before measuring its reach or cost; do not add these observed plies to the current
+five-arm result after the fact.
+
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
 family/proof mix, visited nodes, transposition reuse, perspective/polarity failures, witnesses,

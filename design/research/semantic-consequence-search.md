@@ -212,6 +212,14 @@ arrives. Of 55 natural alternatives, 54 leave that destination locally non-losin
 captures the minor; the latter is typed separately, not called pawn prevention. This is a
 selected comparison frame, so the split does not estimate population-wide frequency or show
 which move is best. `[V]` `planning/semantic-consequence-search/d3262-destination-immediate.md`.
+An exact-reply diagnostic now retains one named minor-arrival reply and, where declared, one
+additional legal positive pawn capture. It finds 32 declared-pawn punishment witnesses, 54
+locally safe arrival witnesses and one named-minor-absent case. In one source control the generic
+first positive capture is `a5b5`, but the declared moved pawn's capture is `a6b5`; the witness
+retains both instead of laundering the former into the latter ([[D3278]]). This diagnostic is
+**not** a five-arm exact-result: the frozen extension trigger set did not include destination
+occupancy, so using these extra plies in that arm would be a post-outcome rule change
+([[D3279]]). `[V]` `planning/semantic-consequence-search/d3262-destination-reply-witness.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
