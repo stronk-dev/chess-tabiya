@@ -20383,3 +20383,12 @@ instrument is `tools/d3262-search-calibration/input-readiness.mjs`. The same pas
 manifest (62 D1023 roots plus four hard controls) in
 `planning/semantic-consequence-search/d3262-preregistration.md`; predecessor summaries were
 rechecked, but no D3262 provider capture exists and no search default was selected.
+
+### 2026-09-23 — D3262 complete-root Stockfish capture
+
+On the frozen 66-root manifest, Stockfish 19 returned every one of 2,013 legal root moves at
+depth 8, depth 12 and 100 ms, retaining per-move raw score, rank, depth, bound and replayable PV.
+The independent checker joins every stored root and legal move back to the manifest. Depth-12
+root-query p95 is 2,802.21 ms before semantic traversal or rendering; 100 ms has 53 bounded
+scores. `planning/semantic-consequence-search/d3262-stockfish-capture.md` records the source
+identity and digest. This is one provider arm, not the five-arm result; [[D3262]] remains open.

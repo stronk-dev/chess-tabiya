@@ -1,6 +1,8 @@
 // Disposable D3262 preregistration input. No provider calls or chess judgements.
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 
 // The monorepo installs chessops under package-local dependencies, not at root.
 import { Chess, normalizeMove } from "../../packages/runtime/node_modules/chessops/dist/esm/chess.js";
@@ -72,5 +74,8 @@ const bytes = JSON.stringify(rows);
 const manifestDigest = createHash("sha256").update(bytes).digest("hex");
 if (manifestDigest !== EXPECTED_MANIFEST_DIGEST) throw new Error(`The D3262 root manifest changed to ${manifestDigest}; do not silently change the calibration population`);
 const byPhase = Object.fromEntries([...new Set(rows.map((row) => row.phase))].sort().map((phase) => [phase, rows.filter((row) => row.phase === phase).length]));
-const result = { version: 1, sampleDigest: `sha256:${sampleDigest}`, carlsbadDigest: `sha256:${carlsbadDigest}`, rootCount: rows.length, predecessorRoots: roots.size, manifestDigest: `sha256:${manifestDigest}`, byPhase, ...(process.argv.includes("--rows") ? { rows } : {}) };
-process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+export const manifestRows = Object.freeze(rows);
+export const manifestIdentity = Object.freeze({ version: 1, sampleDigest: `sha256:${sampleDigest}`, carlsbadDigest: `sha256:${carlsbadDigest}`, rootCount: rows.length, predecessorRoots: roots.size, manifestDigest: `sha256:${manifestDigest}`, byPhase });
+if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  process.stdout.write(`${JSON.stringify({ ...manifestIdentity, ...(process.argv.includes("--rows") ? { rows: manifestRows } : {}) }, null, 2)}\n`);
+}
