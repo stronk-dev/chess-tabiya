@@ -24,8 +24,8 @@ function replay(fen, pv) {
   }
 }
 
-export function validateHorizon4Capture(frontier, frontierBytes, capture, reference) {
-  check(frontier.authority === "partial_frontier_provider_capture_frame_not_search_result" && frontier.jobs.length === 2185, "Wrong horizon-four frontier");
+export function validateHorizon4Capture(frontier, frontierBytes, capture, reference, expected = { authority: "partial_frontier_provider_capture_frame_not_search_result", positions: 2185 }) {
+  check(frontier.authority === expected.authority && frontier.jobs.length === expected.positions, "Wrong horizon-four frontier");
   check(capture.manifest === frontier.manifest && capture.frontierDigest === sha(frontierBytes), "Crossed frontier capture");
   check(reference.manifest === frontier.manifest && capture.source.engineName === reference.source.engineName && capture.source.executableDigest === reference.source.executableDigest, "Crossed Stockfish binary");
   check(capture.source.multiPv === "top8_legal_moves_at_selected_reply" && capture.source.scorePerspective === "raw_uci_uninterpreted" && capture.source.threads === 1 && capture.source.hashMb === 16, "Wrong bounded Stockfish source");

@@ -282,10 +282,37 @@ for the same child reached through its actual root/candidate path. The next-laye
 has 2,186 paths but 2,185 unique FENs: the latter is a sound Stockfish work-saving join,
 not a Maia policy identity. The deeper Maia arm must retain the ordered path and mark
 unavailable pre-root history explicitly. This is the structural finding [[D3286]], not
-a measured claim that a specific move's mass changes. `[V]` Pinned
+a license to infer full prior game history. `[V]` Pinned
 `chess-tabiya-maia:dev` `maia3/uci.py` `_reset_history`, `cmd_position`, `score_moves`;
 `apps/server/src/opponent-selector.ts` `positionCommand`; checked D3262 direct-logit
 source and horizon-four manifest.
+
+The paired model run now measures that difference. On the same 196 children, scoring
+`root FEN + candidate UCI` changes raw mass on 195 positions, the capped 0.90
+configured reply prefix on 100, and the raw top move on 32. Replacing only the
+first-child Maia arm changes its 0.90 prefix from 510 to 518 paths: 66 enter and
+58 leave. The frozen shared frame would change from 2,186 to 2,189 paths and
+needed 19 Stockfish positions its complete old-frame capture never saw. The
+previous 1/32 pawn-denial support count survives for the same `f3g5` reply,
+but that narrow survival does not validate the rest of the old Maia frontier.
+The two frames remain separate; a path-history profile was preregistered
+before any supplemental/deeper capture, and neither policy output is a
+human-frequency estimate or a why-card. `[V]`
+`planning/semantic-consequence-search/d3262-maia-history-replay.md` and its
+three checked artifacts.
+
+The corrected provider sources are now complete for this frame: the 19 new
+FENs have coherent Stockfish top-eight readings at all three budgets, and all
+2,189 root/candidate/reply histories have direct full-legal Maia policy
+(65,694 legal moves; 8,034 configured-support entries). The one shared FEN
+has **two distinct policy outputs**: raw total variation 0.02063, while the
+configured top-p support is one disjoint move per path (`c7d6` versus `d8d6`).
+This is a measured path-identity falsifier and a possible bot-sampler rigidity
+signal ([[D3287]]), not a general frequency or good-move judgement. The
+five-arm semantic proof, abstention comparison and end-to-end cost remain
+unmeasured; provider completeness is not search calibration. `[V]`
+`planning/semantic-consequence-search/d3262-path-history-preregistration.md`
+and `d3262-path-history-provider-capture.md`.
 
 A source-blind operand-touch selector now scans the complete first-child reply graph. It
 marks 1,265 of 6,020 comparison reply edges as touching a named piece, destination or
@@ -338,8 +365,9 @@ Maia3 band-1400 top-p cutoff and none is in Stockfish's depth-12 child top eight
 The other exact-event strata remain distinct: 53 positive named captures, 14
 exchange-neutralized captures and 54 locally safe arrivals. This bounds proactive
 reply-specific hints under those tested frontiers, not human likelihood or an
-engine-preference explanation. The Maia frontier here uses empty child-FEN history,
-not the production path-replayed policy ([[D3286]]). Conditional on-demand
+engine-preference explanation. The Maia frontier here uses empty child-FEN history;
+root-path replay independently preserves the 1/32 count while changing many
+other selected replies ([[D3286]]). Conditional on-demand
 exploration can still use the exact witness; the five-arm profile must measure
 continuation and relevance before making a default hint. [[D3284]] `[V]`
 `planning/semantic-consequence-search/d3262-event-policy-relevance.md`.

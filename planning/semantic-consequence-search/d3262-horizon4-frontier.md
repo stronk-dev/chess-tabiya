@@ -58,10 +58,16 @@ manifest nor the smoke passes criterion 23 or Discharge D1 of the search RFC.
 The 2,185-FEN deduplication is **Stockfish-only**. [[D3286]] found that the
 pinned Maia3 adapter with UCI history tokenizes the root and each replayed move,
 and its model consumes those tokens. The checked `paths` array therefore remains
-the 2,186-query authority for a deeper Maia arm; the sole same-FEN pair has
+the 2,186-query authority for the **frozen empty-history experiment**; the sole same-FEN pair has
 different path identities, which the frozen-frame test asserts. Earlier direct
 child logits used empty history at each child FEN and cannot be silently
-substituted for the path-replayed policy. This is a source-identity correction,
-not a measured change in Maia mass. `[V]` Pinned Maia3 UCI source,
+substituted for the path-replayed policy. Paired replay now measures the source
+effect: the corrected first-reply Maia selection would produce 2,189 paths
+over 2,188 FENs, 19 of which were not in this Stockfish capture. This remains
+a separate counterfactual frame, not a retroactive change to the frozen
+artifact or a five-arm result. Those 19 positions and the corrected frame's
+2,189 deeper Maia paths are now independently checked in
+`d3262-path-history-provider-capture.md`; the original capture bytes are
+unchanged. `[V]` `d3262-maia-history-replay.md`, pinned Maia3 UCI source,
 `apps/server/src/opponent-selector.ts` `positionCommand`, direct-logit receipt,
 and `horizon4-frontier.test.mjs`.

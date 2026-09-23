@@ -19,7 +19,9 @@ if (SF_CMD === undefined || SF_CMD.length === 0) throw new Error("SF_CMD must id
 const args = process.argv.slice(2);
 const childMode = args.includes("--child");
 const horizon4Mode = args.includes("--horizon4");
-if (childMode && horizon4Mode) throw new Error("Select one Stockfish capture population");
+const historySupplementMode = args.includes("--history-supplement");
+const boundedMode = horizon4Mode || historySupplementMode;
+if (Number(childMode) + Number(horizon4Mode) + Number(historySupplementMode) > 1) throw new Error("Select one Stockfish capture population");
 function option(name) {
   const index = args.indexOf(name);
   return index < 0 ? undefined : args[index + 1];
@@ -27,10 +29,11 @@ function option(name) {
 const graphBytes = childMode ? readFileSync(new URL("../../planning/semantic-consequence-search/d3262-exact-replies.json", import.meta.url)) : undefined;
 const graph = graphBytes === undefined ? undefined : JSON.parse(graphBytes.toString("utf8"));
 if (childMode && (graph.authority !== "complete_legal_opponent_reply_edges_not_a_semantic_proof" || graph.manifest !== manifestIdentity.manifestDigest)) throw new Error("Child capture requires the frozen exact-reply frame");
-const frontierBytes = horizon4Mode ? readFileSync(new URL("../../planning/semantic-consequence-search/d3262-horizon4-frontier.json", import.meta.url)) : undefined;
+const frontierBytes = boundedMode ? readFileSync(new URL(historySupplementMode ? "../../planning/semantic-consequence-search/d3262-stockfish-history-supplement-frame.json" : "../../planning/semantic-consequence-search/d3262-horizon4-frontier.json", import.meta.url)) : undefined;
 const frontier = frontierBytes === undefined ? undefined : JSON.parse(frontierBytes.toString("utf8"));
 if (horizon4Mode && (frontier.authority !== "partial_frontier_provider_capture_frame_not_search_result" || frontier.manifest !== manifestIdentity.manifestDigest || frontier.jobs.length !== 2185)) throw new Error("Horizon-four capture requires the frozen frontier frame");
-const population = horizon4Mode
+if (historySupplementMode && (frontier.authority !== "maia_history_supplement_stockfish_jobs_not_search_result" || frontier.manifest !== manifestIdentity.manifestDigest || frontier.jobs.length !== 19)) throw new Error("History supplement requires its checked frame");
+const population = boundedMode
   ? frontier.jobs.map((job) => ({ jobId: job.id, fen: job.fen }))
   : childMode
   ? graph.roots.flatMap((root) => root.candidates.map((candidate) => ({ rootId: root.rootId, candidateUci: candidate.candidateUci, fen: candidate.afterFen })))
@@ -39,10 +42,10 @@ if (childMode && (population.length !== 196 || new Set(population.map((row) => r
 const start = option("--start") === undefined ? 0 : Number(option("--start"));
 const limit = option("--limit") === undefined ? population.length - start : Number(option("--limit"));
 if (!Number.isSafeInteger(start) || start < 0 || start >= population.length || !Number.isSafeInteger(limit) || limit < 1 || start + limit > population.length) throw new Error("--start/--limit must select a nonempty position interval");
-const fullOutput = new URL(horizon4Mode ? "../../planning/semantic-consequence-search/d3262-stockfish-horizon4-capture.json" : childMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-capture.json" : "../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url);
+const fullOutput = new URL(historySupplementMode ? "../../planning/semantic-consequence-search/d3262-stockfish-history-supplement.json" : horizon4Mode ? "../../planning/semantic-consequence-search/d3262-stockfish-horizon4-capture.json" : childMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-capture.json" : "../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url);
 const output = option("--out") ?? (start === 0 && limit === population.length ? fullOutput : undefined);
 if (output === undefined) throw new Error("A partial capture requires --out so it cannot masquerade as the full artifact");
-if (horizon4Mode && existsSync(output)) throw new Error(`Refusing to replace an existing horizon-four capture: ${output}`);
+if (boundedMode && existsSync(output)) throw new Error(`Refusing to replace an existing bounded capture: ${output}`);
 const jobs = population.slice(start, start + limit);
 const PROMOTIONS = Object.freeze(["queen", "rook", "bishop", "knight"]);
 
@@ -177,27 +180,27 @@ try {
   await engine.initialize();
   for (const job of jobs) {
     const probes = [];
-    for (const budget of ["depth8", "depth12", "movetime100"]) probes.push(await engine.probe(job.fen, budget, horizon4Mode ? 8 : Infinity));
+    for (const budget of ["depth8", "depth12", "movetime100"]) probes.push(await engine.probe(job.fen, budget, boundedMode ? 8 : Infinity));
     rows.push({ ...job, probes });
-    process.stderr.write(`D3262 Stockfish ${horizon4Mode ? "horizon4 " : childMode ? "child " : ""}${rows.length}/${jobs.length}: ${job.jobId ?? job.rootId}${job.candidateUci === undefined ? "" : `/${job.candidateUci}`}\n`);
+    process.stderr.write(`D3262 Stockfish ${historySupplementMode ? "history supplement " : horizon4Mode ? "horizon4 " : childMode ? "child " : ""}${rows.length}/${jobs.length}: ${job.jobId ?? job.rootId}${job.candidateUci === undefined ? "" : `/${job.candidateUci}`}\n`);
   }
 } finally { engine.close(); }
 const artifact = {
   version: 1,
   manifest: manifestIdentity.manifestDigest,
   ...(childMode ? { exactReplyDigest: `sha256:${createHash("sha256").update(graphBytes).digest("hex")}` } : {}),
-  ...(horizon4Mode ? { frontierDigest: `sha256:${createHash("sha256").update(frontierBytes).digest("hex")}`, start, positions: rows.length } : {}),
+  ...(boundedMode ? { frontierDigest: `sha256:${createHash("sha256").update(frontierBytes).digest("hex")}`, start, positions: rows.length } : {}),
   partial: start !== 0 || limit !== population.length,
-  ...(!horizon4Mode ? childMode ? { positions: rows.length } : { roots: rows.length } : {}),
-  source: { engineName: engine.identity, executableDigest, threads: 1, hashMb: 16, multiPv: horizon4Mode ? "top8_legal_moves_at_selected_reply" : childMode ? "all_legal_moves_at_candidate_child" : "all_legal_root_moves", scorePerspective: "raw_uci_uninterpreted" },
+  ...(!boundedMode ? childMode ? { positions: rows.length } : { roots: rows.length } : {}),
+  source: { engineName: engine.identity, executableDigest, threads: 1, hashMb: 16, multiPv: boundedMode ? "top8_legal_moves_at_selected_reply" : childMode ? "all_legal_moves_at_candidate_child" : "all_legal_root_moves", scorePerspective: "raw_uci_uninterpreted" },
   rows,
 };
 const outputBytes = `${JSON.stringify(artifact, null, 2)}\n`;
-if (horizon4Mode) {
+if (boundedMode) {
   const targetPath = typeof output === "string" ? output : fileURLToPath(output);
   const temporary = `${targetPath}.partial-${process.pid}`;
   await writeFile(temporary, outputBytes, { flag: "wx" });
   try { await link(temporary, targetPath); }
   finally { await unlink(temporary); }
 } else await writeFile(output, outputBytes, { flag: "wx" });
-process.stdout.write(`${JSON.stringify({ output: String(output), [childMode || horizon4Mode ? "positions" : "roots"]: rows.length, engine: engine.identity, manifest: artifact.manifest, partial: artifact.partial })}\n`);
+process.stdout.write(`${JSON.stringify({ output: String(output), [childMode || boundedMode ? "positions" : "roots"]: rows.length, engine: engine.identity, manifest: artifact.manifest, partial: artifact.partial })}\n`);

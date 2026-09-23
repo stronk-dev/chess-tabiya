@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "authority": "maia_history_supplement_stockfish_jobs_not_search_result",
+  "jobs": [
+    {
+      "id": "sha256:d8272941c955df6c71ad20bb442dada1691a68364afd12c7747a3746718e91ea",
+      "fen": "4r2k/8/8/8/5N2/6b1/8/r6K w - - 2 2",
+      "paths": [
+        {
+          "rootId": "tactical:fork-parried",
+          "candidateUci": "e6f4",
+          "replyUci": "a8a1"
+        }
+      ]
+    },
+    {
+      "id": "sha256:14acc9cd8c706900f6827a9fa0de202d588e4f30b19cc1a5188d66138450888d",
+      "fen": "8/pp1kbppp/4p3/3pP3/3P1P2/1P4P1/1P2K1P1/2B5 b - - 0 26",
+      "paths": [
+        {
+          "rootId": "d1023:32dbd41ca364bdb7",
+          "candidateUci": "e8d7",
+          "replyUci": "f2f4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:09457ab7c888355fd254d974e80f39d0236589f118c39914a90a016d8520a233",
+      "fen": "r1b2r1k/pp2Q1p1/1qp4p/7P/5B2/2P2N2/P4PP1/2KR3R b - - 1 21",
+      "paths": [
+        {
+          "rootId": "d1023:60dea30119fdb203",
+          "candidateUci": "h7h6",
+          "replyUci": "e4e7"
+        }
+      ]
+    },
+    {
+      "id": "sha256:807afec2bc6e5bb7acecb94a21c54d7648362c547c094e804f8e089d7e39a6f7",
+      "fen": "r1b2r1k/pp2Q1pp/2p5/q6P/5B2/2P2N2/P4PP1/2KR3R b - - 2 21",
+      "paths": [
+        {
+          "rootId": "d1023:60dea30119fdb203",
+          "candidateUci": "b6a5",
+          "replyUci": "e4e7"
+        }
+      ]
+    },
+    {
+      "id": "sha256:21f40bd0fa4ccc4f17ab24b72a84f265c5453a7b7c29d6fe4a95c70836f48966",
+      "fen": "r1b2r1k/pp4p1/1qp4p/7P/4QBP1/2P2N2/P4P2/2KR3R b - - 0 21",
+      "paths": [
+        {
+          "rootId": "d1023:60dea30119fdb203",
+          "candidateUci": "h7h6",
+          "replyUci": "g2g4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:0266d1d64d796531804d3db13db00be0f0b549b2cfce361cefae9a8d3033092b",
+      "fen": "r1b2r1k/pp4pp/q1p5/7P/4QB2/2P2N2/PK3PP1/3R3R b - - 2 21",
+      "paths": [
+        {
+          "rootId": "d1023:60dea30119fdb203",
+          "candidateUci": "b6a6",
+          "replyUci": "c1b2"
+        }
+      ]
+    },
+    {
+      "id": "sha256:0ad357bfa10947fcbee70a9557db7dfd4c0c32601f2eb0caf57d1bf429c3167a",
+      "fen": "r1bq1rk1/p1pnnpbp/1p1p2p1/3Pp3/2P1P1B1/2NN4/PP3PPP/R1BQ1RK1 b - - 1 11",
+      "paths": [
+        {
+          "rootId": "d1023:7a95268085c02ca4",
+          "candidateUci": "b7b6",
+          "replyUci": "e2g4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:59929f30105b0d85e8649321daa504bda1d9ca7892bb2202355d11fad2a28b14",
+      "fen": "r1bq1rk1/pp1nnpbp/3p2p1/2pPp3/2P1P3/1PNN4/P3BPPP/R1BQ1RK1 b - - 0 11",
+      "paths": [
+        {
+          "rootId": "d1023:7a95268085c02ca4",
+          "candidateUci": "c7c5",
+          "replyUci": "b2b3"
+        }
+      ]
+    },
+    {
+      "id": "sha256:cf8e89e01c0914138ba0f1a97816934bdfdc1a116fdc3ff4cb36d4e7ede25f09",
+      "fen": "r1bqk1nr/pppp1pbp/2n1p1p1/4P3/2PP4/5N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+      "paths": [
+        {
+          "rootId": "d1023:b442d22b427a3141",
+          "candidateUci": "b8c6",
+          "replyUci": "c2c4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:a78e9277c203954e6b570b79a5f5d77845bd148200b64c87f90db5aeb5df8aeb",
+      "fen": "r1bqk2r/ppp1nppp/3P1n2/8/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 10",
+      "paths": [
+        {
+          "rootId": "d1023:f9a63bd3ee891678",
+          "candidateUci": "c6e7",
+          "replyUci": "d5d6"
+        }
+      ]
+    },
+    {
+      "id": "sha256:cfdcda751792189ff14eb90b8c4c13d9f684bb1af73e58e21926faacfbaa91a1",
+      "fen": "r1bqkb1r/pp3ppp/2n2n2/2Ppp3/5B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 6",
+      "paths": [
+        {
+          "rootId": "d1023:fbc0c15e6636cd89",
+          "candidateUci": "d4c5",
+          "replyUci": "e7e5"
+        }
+      ]
+    },
+    {
+      "id": "sha256:d4db73e831a5921bae82822ecacf41ed6e69759c3dd7b18fe1a2568d2142cb0e",
+      "fen": "r1bqr1k1/1p1nbppp/2p2n2/p2p2B1/3PP3/2NB4/PPQ1NPPP/R4RK1 b - - 0 11",
+      "paths": [
+        {
+          "rootId": "quiet-plan:carlsbad-nf8",
+          "candidateUci": "a7a5",
+          "replyUci": "e3e4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:287ae3d37091901f21e98af2b20e78c5f74196013b2c94a8dac7f6ca8f253df1",
+      "fen": "r1bqrnk1/pp2bppp/2p2n2/3p2B1/3PP3/2NB4/PPQ1NPPP/R4RK1 b - - 0 11",
+      "paths": [
+        {
+          "rootId": "quiet-plan:carlsbad-nf8",
+          "candidateUci": "d7f8",
+          "replyUci": "e3e4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:373b1305a67c41b8eea3097eebfd43768be74e81f071293a4db5ced85974c86b",
+      "fen": "r3r1k1/3b2p1/2p1pq1p/3p4/3PP3/2QB4/1R3PPP/5RK1 b - - 0 22",
+      "paths": [
+        {
+          "rootId": "d1023:54bf540393f76a8a",
+          "candidateUci": "c8d7",
+          "replyUci": "e3e4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:215c5a77c8f52891801da8b80f7ac639f7e453b07d10344dc2fd152cd04606b7",
+      "fen": "r5rk/8/8/6N1/8/6b1/8/7K w - - 2 2",
+      "paths": [
+        {
+          "rootId": "tactical:fork-parried",
+          "candidateUci": "e6g5",
+          "replyUci": "e8g8"
+        }
+      ]
+    },
+    {
+      "id": "sha256:5d33a7ad6315402ee8215bc4a7bb5a993dfa8716159c490a0205baf60dd7d2e8",
+      "fen": "rnbqk1nr/ppp2pbp/4p1p1/3pP3/2PP4/5N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+      "paths": [
+        {
+          "rootId": "d1023:b442d22b427a3141",
+          "candidateUci": "d7d5",
+          "replyUci": "c2c4"
+        }
+      ]
+    },
+    {
+      "id": "sha256:4e0ad51d7e2d869b543db8d35a9faa1fa104d2a48c61eef56120575f402fc6a8",
+      "fen": "rnbqkb1r/1p3ppp/p2ppn2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 1 7",
+      "paths": [
+        {
+          "rootId": "d1023:ac3d22de578d29d1",
+          "candidateUci": "e7e6",
+          "replyUci": "e3g5"
+        }
+      ]
+    },
+    {
+      "id": "sha256:f44cbe73c02ef12ddf8e512d956a4e7841368dace68d25a062f2024d90e904fb",
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/P2PP3/8/1PP2PPP/RNBQKBNR w KQkq - 1 4",
+      "paths": [
+        {
+          "rootId": "d1023:cc0aaadaeed4f2ce",
+          "candidateUci": "a2a4",
+          "replyUci": "g8f6"
+        }
+      ]
+    },
+    {
+      "id": "sha256:d8025b59354861506e6d6c8e657aa9f735d093ef8d6c24f9e932757e56ba7925",
+      "fen": "rnbqkbnr/1pp2ppp/p3p3/3pP3/3P1P2/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+      "paths": [
+        {
+          "rootId": "d1023:cd69be023b15ea3e",
+          "candidateUci": "a7a6",
+          "replyUci": "f2f4"
+        }
+      ]
+    }
+  ],
+  "inputDigests": {
+    "d3262-maia-history-frame-delta.json": "sha256:67456d55962aa98f7539151094db00a7ee902df4ae901ca8ebd7e56b98abe7fe",
+    "d3262-horizon4-frontier.json": "sha256:ee5a62e8db4624cb824e0596ecac72c3ef1896edaa3de8c8a12334d2d8d15875"
+  }
+}

@@ -199,7 +199,9 @@ selector schedules all 32 registered pawn-denial minor arrivals, but only one ha
 positive configured Maia mass and none is child depth-12 top eight. That is an
 event-reach versus *these frontiers* mismatch, not a human-reply frequency. The
 Maia child frontier was queried with empty history at the child FEN, so it is not
-yet the policy for the same path replayed from its root ([[D3286]]). It does
+the policy for the same path replayed from its root. [[D3286]]'s paired source
+run preserves this one-of-32 pawn-denial count but changes 100 of 196 capped
+0.90 reply prefixes. It does
 not alter the preregistered five arms, use the held-out reply to select branches, or
 license proactive hints from a conditional event. [[D3284]] remains open.
 
@@ -216,6 +218,17 @@ comparisons, path-aware Maia mass or end-to-end latency.
 
 [[D3286]] also distinguishes source query identity before a deeper Maia capture:
 the 2,185 unique FEN jobs are valid for Stockfish, while Maia3 with UCI history
-consumes the ordered root/candidate/reply path. Its arm must retain all 2,186
-path identities and state that pre-root history is unavailable, rather than
-silently copying one FEN-level distribution to both paths.
+consumes the ordered root/candidate/reply path. The frozen empty-history frame
+contains 2,186 paths; the separately labelled root-replayed counterfactual
+contains 2,189 and introduces 19 FENs absent from the completed Stockfish source.
+Neither frame may copy one FEN-level Maia distribution across distinct paths,
+and both must state that pre-root history is unavailable. A path-history
+profile must be separately preregistered before its new frame replaces the
+frozen five-arm comparison; the current preregistration's result remains open.
+
+`d3262-path-history-preregistration.md` subsequently froze that separate
+profile before supplemental/deeper capture. All 19 newly selected Stockfish
+positions and 2,189 path-keyed deeper Maia distributions are now checked in
+`d3262-path-history-provider-capture.md`. This closes the provider-source gap
+for the corrected frame, **not** the original empty-history profile's proof,
+the corrected five-arm proof/abstention comparison or end-to-end cost gate.

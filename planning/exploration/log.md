@@ -20665,3 +20665,38 @@ deduplication is valid for Stockfish, not for the 2,186 Maia path identities.
 Research, preregistration and the draft search RFC now require root-plus-move
 queries with unavailable pre-root history stated. The work-state row is assigned
 to evidence-foundation; it does not retroactively claim a measured mass change.
+
+### 2026-09-23 — D3286 root-replayed Maia policy measured
+
+The pinned Maia3-5M model was queried at all 196 candidate children by their
+actual frozen root FEN plus candidate move, after reproducing each stored
+empty-history model result on the same run. Raw policy changes on 195 children,
+the 0.90 capped prefix on 100, and the raw top move on 32. The 0.90 policy
+frontier gains 66 paths and loses 58; the previously reported one supported
+pawn-denial arrival of 32 survives for the same `f3g5` reply. Keeping engine
+and semantic selection fixed, the corrected first-reply union would be 2,189
+paths / 2,188 FENs; 19 FENs are absent from the completed Stockfish source.
+
+`d3262-maia-history-replay.md` and three checked artifacts retain the paired
+measurement, source digests, explicit pre-root-history absence and hard
+negative tests. The earlier 2,186-path frame remains frozen; this is a
+separately labelled counterfactual until a path-history profile is
+preregistered and its missing provider nodes, deeper Maia policy, proof and
+cost are measured. [[D3262]] and [[D3286]] remain open.
+
+### 2026-09-23 — corrected path-history provider inputs captured, not yet explained
+
+The separately preregistered D3286 correction now has all nineteen additional
+Stockfish positions and 2,189 path-keyed deeper Maia queries checked. The
+supplement contains 1,641 legal-move instances and 435 coherent top-eight
+ranked entries across three budgets; Maia retains full-legal mass for 65,694
+legal moves and 8,034 configured-support entries across nonterminal paths.
+`d3262-path-history-provider-capture.md` keeps the source digests, exact joins,
+negative fixtures and remaining proof/cost work.
+
+The one shared final FEN supplies a direct falsifier for FEN-keyed Maia caches:
+two histories have raw policy total variation 0.02063 but disjoint configured
+one-move supports (`c7d6` versus `d8d6`). [[D3287]] records the pinned
+top-p discontinuity for bot-policy calibration without calling it a general
+human-behavior rate. No source result is yet a causal engine reason; [[D3262]]
+and [[D3286]] stay open for the five-arm semantic/abstention and latency test.

@@ -501,8 +501,9 @@ none appears in Stockfish's depth-12 child top eight. The production profile may
 retain an exact conditional line for on-demand exploration, but proactive guidance
 must not imply a likely reply or an engine reason from event reach alone. These
 frontiers are neither a human-move rate nor a complete five-arm verdict.
-They were measured with empty history at each child FEN, so they are not yet a
-live opponent-path distribution ([[D3286]]).
+The original Maia frontier used empty history at each child FEN. Root-path
+replay independently preserves the 1/32 count but not the rest of the selected
+frontier ([[D3286]]).
 
 [[D3285]] is a capture-authority correction before the deeper provider runs. The
 checked union of the width-eight engine, configured-Maia and semantic first-reply
@@ -513,19 +514,29 @@ capture takes one complete single-depth rank table and labels any unfinished
 deeper iteration. Its completed 2,185-position deeper Stockfish artifact is
 checked against the full 2,186-path frame and exact legal edges, with 51,741
 retained ranked entries across three budgets. Older fixed-depth readings remain
-coherent; the old 100-ms rank
-comparisons are provisional until coherent re-capture. No production search
+coherent; the old 100-ms rank comparisons are provisional until coherent
+re-capture. No production search
 profile can be selected from this Stockfish source alone.
 
 [[D3286]] requires a separate Maia query identity for arm 4. The pinned Maia3
 model with UCI history consumes the ordered tokenized root and move path, while
 the 2,185-job FEN deduplication is valid only for position-only sources such as
-this Stockfish capture. Query Maia by each of the 2,186 selected path identities
-with the declared root FEN and candidate/reply moves; record that any pre-root
-history is unavailable. Do not reuse FEN-level policy mass across paths, and
-do not treat the earlier empty-history child-logit diagnostic as a live-path
-policy reading. This requirement is source-identity repair, not a post-hoc
-change to the preregistered five search arms.
+this Stockfish capture. A checked paired model run on all 196 first-child
+positions changes the 0.90 capped reply prefix on 100 and the raw top move on
+32; the corrected Maia selector adds 66 and drops 58 0.90 paths. Holding the
+other selectors fixed, a separately labelled frame contains 2,189 paths
+over 2,188 FENs. The 19 Stockfish positions missing from the old-frame source
+and all 2,189 deeper Maia paths are now captured under a separately frozen
+path-history profile, with exact source/legal/terminal checks. One shared FEN
+returns disjoint configured one-move supports under two histories ([[D3287]]).
+Query deeper Maia by the declared root FEN plus candidate and reply moves,
+recording unavailable pre-root history. Never reuse FEN-level
+policy mass across paths or relabel the empty-history child diagnostic as a
+live-path reading. Keep the old 2,186-path preregistration frozen; a corrected
+path-history profile must be separately declared and measured before it can
+change arm 4 or the production recommendation. The profile is now declared and
+its provider inputs measured; the five-arm proof, abstention and cost verdicts
+are not.
 
 The population covers opening, middlegame, endgame, tactical and quiet-plan positions and includes
 the knight-route false-positive and retained bishop-pressure cases. The report includes reach,
