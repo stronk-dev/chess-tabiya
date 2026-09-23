@@ -125,3 +125,11 @@ The Maia source exposes raw model rather than configured sampling mass, which th
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and
 semantic-consequence-search criterion 23/Discharge D1 remains unmet.
+
+The first child-node Maia source receipt and raw-model prefix projection are now checked at
+`d3262-maia-child-capture.md` and `d3262-maia-child-prefix.md`. All 196 selected child positions
+were captured; the returned provider window contains 3,749 of 6,310 legal replies. The
+preregistered cap-eight prefix reaches raw-model mass 0.80 at 191/196 positions and 0.90 at
+168/196. This is not the configured temperature/top-p sampling distribution ([[D3276]]), and
+26/32 named source pawn-denial replies are unreturned with unknown individual mass. The
+horizon-four/multi-node Maia traversal and its semantic proof and cost readings remain open.

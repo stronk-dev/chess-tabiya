@@ -238,6 +238,15 @@ those readings expand 36,779 versus 18,831 learner edges on the named comparison
 ([[D3280]]). The earlier pawn-reply diagnostic remains valid but off-profile. No exact-arm
 proof verdict or production budget follows from this census. `[V]`
 `planning/semantic-consequence-search/d3262-exact-arm-forcing.md`.
+The Maia first-child source gap is now measured rather than proxied by root values. All 196
+selected candidate-child positions returned raw-model lists: 3,749 of 6,310 legal replies,
+with 2,561 unreturned. At the preregistered eight-move cap, a raw-mass 0.80 prefix reaches
+threshold at 191/196 positions and 0.90 at 168/196. In the 32 source pawn-denial controls,
+the named minor-arrival reply is inside that prefix only once; 26 such replies lie outside
+Maia's returned window and have **unknown individual mass**, not zero. This is one child layer
+of the Maia arm, not configured temperature/top-p sampling, depth-four traversal or a proof
+that a line is human-likely. `[V]` `planning/semantic-consequence-search/d3262-maia-child-capture.md`
+and `planning/semantic-consequence-search/d3262-maia-child-prefix.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

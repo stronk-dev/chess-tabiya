@@ -20533,3 +20533,14 @@ if newly controlling a future square counts, but 680 / 18,831 if only a new atta
 piece counts. Only 4/32 or 3/32 source pawn-denial arrivals get the needed extra ply. [[D3280]]
 records the profile ambiguity; [[D3279]] still forbids silently adding destination occupancy.
 The exact arm is not declared complete, and no move is graded by this cost census.
+
+### 2026-09-23 — D3262 Maia child positions and one-layer raw-mass frontier
+
+`planning/semantic-consequence-search/d3262-maia-child-capture.md` records real Maia responses
+at all 196 selected candidate-child positions: 3,749 returned of 6,310 legal replies, 2,561
+unreturned, zero source-off. `d3262-maia-child-prefix.md` applies the frozen cap-eight 0.80/0.90
+raw-model thresholds to that child layer: 191/196 and 168/196 reach them. For the 32 source
+pawn-denial controls, only one named minor arrival is in either prefix and 26 are outside the
+returned window with unknown individual mass. The raw softmax is not configured sampling
+probability ([[D3276]]), and neither horizon four nor semantic proof has been measured;
+[[D3262]] remains open.

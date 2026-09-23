@@ -30,6 +30,8 @@ a per-move vector. A future Maia-mass frontier may use raw model mass with its c
 or derive a bounded configured-sampling frontier; it may not present raw top-20 coverage as
 the actual opponent's complete reply probability. This is [[D3276]]. `[V]`
 
-The capture is still root-only. Child-node Maia requests, exact-reply enumeration, engine and
-semantic beams, transposition accounting, contrastive proofs, memory and end-to-end hint latency
-have not run. [[D3262]] remains open, and no production search profile or bot policy was selected.
+This artifact is root-only; `d3262-maia-child-capture.md` separately records the first
+candidate-child layer and `d3262-maia-child-prefix.md` its raw-model cap-eight projection.
+Further child-node traversal, engine and semantic beams, transposition accounting,
+contrastive proofs, memory and end-to-end hint latency have not run. [[D3262]] remains open,
+and no production search profile or bot policy was selected.
