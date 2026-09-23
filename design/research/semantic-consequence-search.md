@@ -206,6 +206,12 @@ were evaluated. Fifty-three preserve the named positive capture and 45 remove it
 cause; a merely geometric attack is insufficient. This is immediate availability only, not
 all-defences survival, engine preference, or a reason to recommend a move. `[V]`
 `planning/semantic-consequence-search/d3262-material-immediate.md`.
+The other 87 comparisons now have an exact minor-destination availability reading. All 32
+source controls reproduce a legal positive capture by the *named moved pawn* after the minor
+arrives. Of 55 natural alternatives, 54 leave that destination locally non-losing and one
+captures the minor; the latter is typed separately, not called pawn prevention. This is a
+selected comparison frame, so the split does not estimate population-wide frequency or show
+which move is best. `[V]` `planning/semantic-consequence-search/d3262-destination-immediate.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

@@ -95,6 +95,11 @@ alternatives. Source outcomes never transfer to those alternatives; no pair has 
 positive legal material-capture availability immediately after each move. All 64 source material
 rows agree with independent replay; the other 34 receive new results. This is not the bounded
 reply or five-arm result, and no selected move is graded.
+`d3262-destination-immediate.md` measures the other 87 target/candidate questions: 32/32 sealed
+source destination denials and named positive pawn captures replay, while 54/55 natural
+alternatives leave the destination locally safe and one captures the minor. A missing minor is
+not a pawn-prevention claim. Both immediate families are now measured; bounded continuations
+and the five-arm profile are still open.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and

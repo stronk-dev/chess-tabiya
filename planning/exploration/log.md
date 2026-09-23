@@ -20492,3 +20492,12 @@ immediate controls reproduced, 34 natural alternatives evaluated, and zero unexp
 losses. A named capture counts as preserved only when it remains legal and positive under the
 existing exchange convention; 14 legal captures became exchange-neutral. The exact candidate FEN
 is joined to the reply graph. This does not grade moves or clear the five-arm [[D3262]] gate.
+
+### 2026-09-23 — D3262 measures immediate minor-destination availability
+
+`planning/semantic-consequence-search/d3262-destination-immediate.md` completes the immediate
+reading on the frozen comparison questions: 87 destination pairs, all 32 source moved-pawn
+causes rechecked, 54 of 55 natural alternatives locally safe, and one alternative in which the
+minor was captured. That captured-minor case is typed separately rather than laundered into a
+pawn-prevention claim. All 185 named comparison questions now have a narrow immediate reading;
+bounded replies and the five-arm [[D3262]] calibration remain open.
