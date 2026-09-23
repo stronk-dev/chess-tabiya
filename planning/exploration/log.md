@@ -20766,3 +20766,12 @@ source. The frozen predecessor frame remains intact. This is a question
 population, not a move grade or semantic verdict; the first-reply frontier,
 deeper provider union, five-arm proof/abstention and measured production cost
 remain open under [[D3262]] and [[D3289]].
+### 2026-09-23 — D3262 corrected first replies expose deeper source gap
+
+The coherent 193-candidate graph and path-replayed Maia policy select 1,966
+first-reply paths from 6,176 exact legal edges. The checked path/position
+supplement finds 250 Maia history paths and 267 Stockfish FENs absent from
+the existing deeper captures. This distinguishes a real provider-capture
+queue from a semantic explanation; old direct Maia logits were not mixed
+with path-history samples. The target-preserving arm and full five-arm
+proof/abstention/cost comparison remain open under [[D3262]]/[[D3289]].

@@ -47,7 +47,8 @@ the named-source join and negative crossed-authority/missing-source fixtures.
 The old 185-comparison frame remains frozen; these are distinct populations,
 not a retroactive correction of an outcome.
 
-The corrected frame still needs a first-reply frontier and deeper
-path/position source union before any five-arm semantic proof, abstention or
+The corrected first-reply frontier is now measured separately in
+`d3262-coherent-first-reply-frontier.md`. Its source union exposes missing
+deeper provider jobs; it is not yet a five-arm semantic proof, abstention or
 end-to-end cost verdict. No move is graded and no engine preference is
 explained by this capture.

@@ -94,3 +94,15 @@ portion of the source gap. It does not reclassify a configured Maia support
 as human frequency or establish a semantic engine reason. The corrected
 target comparisons, first-reply selection, deeper provider union, five-arm
 proof/abstention and end-to-end cost remain unmeasured.
+
+## Post-freeze target and first-reply receipts — 2026-09-23
+
+The separate corrected target frame has 64 named targets, 182 comparison
+cells and four controls. Its 96 source-observed and 86 natural-alternative
+cells are questions, not outcomes. The first-reply provider union selects
+1,966 paths from the 6,176 legal edges using coherent top-eight Stockfish
+rank and root-plus-candidate path-replayed Maia support. A checked supplement
+identifies 250 missing deeper Maia histories and 267 missing Stockfish FENs.
+`d3262-coherent-first-reply-frontier.md` records the exact digests, source
+partition and remaining limits. No target-preserving result, semantic proof,
+abstention or production cost has been promoted by these receipts.
