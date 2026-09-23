@@ -26,12 +26,15 @@ reported `policy` values from `torch.softmax(logits, dim=-1)` and emits at most 
 The reported values therefore describe the raw legal-move model distribution, **not** the
 temperature/top-p-transformed sampling distribution of this configured bot. The listed mass
 often approaches one, but the 736 unreturned moves still exist and their aggregate tail is not
-a per-move vector. A future Maia-mass frontier may use raw model mass with its correct label,
-or derive a bounded configured-sampling frontier; it may not present raw top-20 coverage as
-the actual opponent's complete reply probability. This is [[D3276]]. `[V]`
+a per-move vector. `d3262-maia-child-prefix.md` uses raw mass with that label, while
+`d3262-maia-configured-window.md` derives a first-child configured-sampler window only where
+its cutoff survives a declared error bound. Neither may present raw top-20 coverage as the
+actual opponent's complete reply probability. This is [[D3276]]. `[V]`
 
 This artifact is root-only; `d3262-maia-child-capture.md` separately records the first
-candidate-child layer and `d3262-maia-child-prefix.md` its raw-model cap-eight projection.
-Further child-node traversal, engine and semantic beams, transposition accounting,
+candidate-child layer, `d3262-maia-child-prefix.md` its raw-model cap-eight projection,
+and `d3262-maia-configured-window.md` its bounded configured-sampler reconstruction.
+Full-logit validation, further child-node traversal, complete engine and semantic beams,
+transposition accounting,
 contrastive proofs, memory and end-to-end hint latency have not run. [[D3262]] remains open,
 and no production search profile or bot policy was selected.

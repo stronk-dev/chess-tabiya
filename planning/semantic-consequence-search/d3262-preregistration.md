@@ -141,3 +141,9 @@ retains all 6,310 legal replies per budget. The width-8 frontiers contain 58, 60
 positive reply. All 32 source pawn-denial minor arrivals are outside width eight at every
 budget. This supports a comparison of first-child pruning, not a depth-four beam, proof-class
 verdict, end-to-end hint-latency result or production profile. [[D3262]] remains open.
+
+`d3262-maia-configured-window.md` now makes [[D3276]] measurable at the first child layer.
+The pinned sampler's temperature/top-p transform and the unreturned-move tail yield a stable
+support under an explicit ±0.000001 raw-mass perturbation at 194/196 positions; two abstain.
+This is not direct full-logit validation, not other bands, and not later traversal nodes, so
+the configured-distribution claim and five-arm decision remain open.

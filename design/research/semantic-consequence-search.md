@@ -257,6 +257,14 @@ preregistered semantic-target-preserving arm remains necessary to test whether r
 named relation changes explanation coverage. `[V]`
 `planning/semantic-consequence-search/d3262-stockfish-child-capture.md` and
 `planning/semantic-consequence-search/d3262-stockfish-child-beam.md`.
+The pinned Maia sampling code exposes a bounded way to distinguish its reported raw softmax
+from the configured 0.8-temperature/0.92-top-p sampler. Under an explicitly declared
+±0.000001 perturbation per reported raw mass and a capped omitted tail, the child-position
+cutoff is stable at 194/196 positions; two abstain. Among 32 source pawn-denial controls, the
+named minor arrival has positive reconstructed configured mass once and zero after the stable
+cutoff 31 times. This is a sensitivity result, not yet a direct-logit proof of the actual
+sampler's distribution; [[D3276]] remains open for that validation and deeper nodes. `[V]`
+`planning/semantic-consequence-search/d3262-maia-configured-window.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

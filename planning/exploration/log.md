@@ -20554,3 +20554,13 @@ widths 2/4/8 without calling ranked occurrence a proof. At width eight, 58/60/64
 named comparisons retain their reply across the three budgets, while the named minor arrival
 in all 32 source pawn-denial controls is outside every such beam. Semantic target preservation,
 deeper traversal, end-to-end cost and profile selection remain open under [[D3262]].
+
+### 2026-09-23 — D3276 configured-Maia sampling window is bounded, not assumed
+
+`planning/semantic-consequence-search/d3262-maia-configured-window.md` follows the pinned
+Maia3 source's temperature/top-p rule instead of treating its emitted raw policy as the bot's
+sampling probability. Under an explicit ±0.000001 raw-mass perturbation and bounded
+unreturned tail, 194/196 first-child supports are stable and two abstain. One of the 32
+declared pawn-denial minor arrivals has positive reconstructed configured mass; 31 are zero
+after a stable cutoff. The result is a sensitivity test, not full-logit validation or a
+deeper search arm. [[D3276]] and [[D3262]] remain open.
