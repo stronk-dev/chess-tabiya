@@ -166,6 +166,10 @@ and no search default has been selected. `[V]` Source receipts and checker outpu
 `tools/d3262-search-calibration/maia-capture-check.mjs`; raw-mass semantics were read from the
 pinned Maia3 `score_moves()` inside `chess-tabiya-maia:dev` at source commit
 `1e13597c42d4858b7cfd7cfdae01e297263364b2`.
+The deterministic common-root frame now selects 196 move identities across the 66 roots;
+21 selected identities have no returned Maia mass and remain explicitly unknown.
+`[V]` `planning/semantic-consequence-search/d3262-root-frame.md` and
+`make semantic-search-root-frame`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

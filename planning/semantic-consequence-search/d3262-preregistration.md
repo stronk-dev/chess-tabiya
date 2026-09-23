@@ -71,6 +71,8 @@ numerical production budgets; do not weaken proof vocabulary to improve apparent
 
 **Status 2026-09-23:** manifest frozen; complete-root Stockfish and Maia source captures
 landed and independently checked (`d3262-stockfish-capture.md`, `d3262-maia-capture.md`).
+The shared root/candidate frame is frozen from those source receipts as
+`d3262-root-frame.md` / `d3262-root-frame.json`: 196 selected candidates across 66 roots.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and

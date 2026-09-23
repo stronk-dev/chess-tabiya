@@ -20418,3 +20418,12 @@ engine says the seed was not honored ([[D3276]]). Source receipt:
 `planning/semantic-consequence-search/d3262-maia-capture.md`. No five-arm traversal, production
 budget or default was chosen; [[D3262]] remains open. Next is child-node source capture and the
 preregistered exact-reply/beam/semantic-target comparisons, preserving the probability distinction.
+
+### 2026-09-23 — D3262 common root/candidate frame frozen
+
+`planning/semantic-consequence-search/d3262-root-frame.md` records the deterministic union of
+source candidates, three separate Stockfish budget leaders and Maia's raw-mass leader against the
+complete legal root set. It yields 196 selected candidates across 66 roots; 21 have no returned
+Maia mass and remain unknown, not zero. The exact-byte regeneration and four hard-negative tests
+run via `make semantic-search-root-frame`. This prepares comparable five-arm inputs but does not
+run a traversal arm or establish a production search profile. [[D3262]] remains open.
