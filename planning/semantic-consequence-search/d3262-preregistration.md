@@ -200,3 +200,12 @@ positive configured Maia mass and none is child depth-12 top eight. That is an
 event-reach versus *these frontiers* mismatch, not a human-reply frequency. It does
 not alter the preregistered five arms, use the held-out reply to select branches, or
 license proactive hints from a conditional event. [[D3284]] remains open.
+
+`d3262-horizon4-frontier.md` seals the checked union of the three partial
+first-reply frontiers as 2,186 paths over 2,185 exact reply positions, ready for
+deeper provider capture. Its first two Stockfish positions were captured and
+checked, not extrapolated into a complete arm. That smoke exposed [[D3285]]:
+old 100-ms MultiPV captures mixed adjacent search depths. The new bounded
+capture selects one complete rank-depth table; prior timed-rank findings are
+provisional until re-capture. The five-arm proof, Maia at deeper nodes and
+end-to-end latency remain unmeasured.

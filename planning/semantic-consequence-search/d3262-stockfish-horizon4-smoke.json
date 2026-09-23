@@ -1,0 +1,1416 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "frontierDigest": "sha256:ee5a62e8db4624cb824e0596ecac72c3ef1896edaa3de8c8a12334d2d8d15875",
+  "start": 0,
+  "positions": 2,
+  "partial": true,
+  "source": {
+    "engineName": "Stockfish 19",
+    "executableDigest": "sha256:dc2f18c34ae962dff591b66147d220ec06e61d756b93d8a4f5e04fd8e55c251f",
+    "threads": 1,
+    "hashMb": 16,
+    "multiPv": "top8_legal_moves_at_selected_reply",
+    "scorePerspective": "raw_uci_uninterpreted"
+  },
+  "rows": [
+    {
+      "jobId": "sha256:2c037e64aaf8b00db5740a5802f04e7548a1302c2e7a87c89fca4eab62894175",
+      "fen": "1k2r1B1/1pp4p/p5pn/5P2/P7/7P/P1P5/4rRK1 b - - 1 25",
+      "probes": [
+        {
+          "budget": "depth8",
+          "legal": [
+            "a6a5",
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c8",
+            "c7c5",
+            "c7c6",
+            "e1a1",
+            "e1b1",
+            "e1c1",
+            "e1d1",
+            "e1e2",
+            "e1e3",
+            "e1e4",
+            "e1e5",
+            "e1e6",
+            "e1e7",
+            "e1f1",
+            "e8c8",
+            "e8d8",
+            "e8e2",
+            "e8e3",
+            "e8e4",
+            "e8e5",
+            "e8e6",
+            "e8e7",
+            "e8f8",
+            "e8g8",
+            "g6f5",
+            "g6g5",
+            "h6f5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "entries": [
+            {
+              "moveUci": "g6f5",
+              "rank": 1,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 850,
+                "bound": false
+              },
+              "pv": [
+                "g6f5",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1e8",
+                "g8h7"
+              ]
+            },
+            {
+              "moveUci": "h6g8",
+              "rank": 2,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 840,
+                "bound": false
+              },
+              "pv": [
+                "h6g8",
+                "f5f6",
+                "e1f1",
+                "g1f1",
+                "g8f6",
+                "c2c3",
+                "h7h6",
+                "a2a3",
+                "f6e4"
+              ]
+            },
+            {
+              "moveUci": "e1f1",
+              "rank": 3,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 839,
+                "bound": false
+              },
+              "pv": [
+                "e1f1",
+                "g1f1",
+                "e8g8",
+                "f1g1",
+                "g8e8"
+              ]
+            },
+            {
+              "moveUci": "h6f5",
+              "rank": 4,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 815,
+                "bound": false
+              },
+              "pv": [
+                "h6f5",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1e8",
+                "g8h7",
+                "e8h8",
+                "h7g6"
+              ]
+            },
+            {
+              "moveUci": "a6a5",
+              "rank": 5,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 814,
+                "bound": false
+              },
+              "pv": [
+                "a6a5",
+                "f1e1",
+                "e8e1",
+                "g1f2"
+              ]
+            },
+            {
+              "moveUci": "e1e5",
+              "rank": 6,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 759,
+                "bound": false
+              },
+              "pv": [
+                "e1e5",
+                "g8h7",
+                "e5f5",
+                "f1f5",
+                "g6f5",
+                "h7g6",
+                "e8f8"
+              ]
+            },
+            {
+              "moveUci": "e8g8",
+              "rank": 7,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 755,
+                "bound": false
+              },
+              "pv": [
+                "e8g8",
+                "f1e1",
+                "h6f5",
+                "e1e4",
+                "f5d6",
+                "e4d4",
+                "h7h6"
+              ]
+            },
+            {
+              "moveUci": "e1e3",
+              "rank": 8,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 728,
+                "bound": false
+              },
+              "pv": [
+                "e1e3",
+                "f5f6",
+                "e8g8",
+                "f6f7",
+                "g8f8",
+                "g1f2",
+                "f8f7",
+                "f2e3",
+                "h6f5",
+                "e3f4"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c8",
+            "c7c5",
+            "c7c6",
+            "e1a1",
+            "e1b1",
+            "e1c1",
+            "e1d1",
+            "e1e2",
+            "e1e4",
+            "e1e6",
+            "e1e7",
+            "e8c8",
+            "e8d8",
+            "e8e2",
+            "e8e3",
+            "e8e4",
+            "e8e5",
+            "e8e6",
+            "e8e7",
+            "e8f8",
+            "g6g5",
+            "h6f7",
+            "h6g4"
+          ],
+          "terminal": false,
+          "coherentDepth": 8,
+          "trailingPartialDepth": null,
+          "bestmove": "g6f5",
+          "elapsedMs": 12.65
+        },
+        {
+          "budget": "depth12",
+          "legal": [
+            "a6a5",
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c8",
+            "c7c5",
+            "c7c6",
+            "e1a1",
+            "e1b1",
+            "e1c1",
+            "e1d1",
+            "e1e2",
+            "e1e3",
+            "e1e4",
+            "e1e5",
+            "e1e6",
+            "e1e7",
+            "e1f1",
+            "e8c8",
+            "e8d8",
+            "e8e2",
+            "e8e3",
+            "e8e4",
+            "e8e5",
+            "e8e6",
+            "e8e7",
+            "e8f8",
+            "e8g8",
+            "g6f5",
+            "g6g5",
+            "h6f5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "entries": [
+            {
+              "moveUci": "h6g8",
+              "rank": 1,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 884,
+                "bound": false
+              },
+              "pv": [
+                "h6g8",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1e8",
+                "c2c4",
+                "g6f5",
+                "f2f1",
+                "f5f4",
+                "h3h4",
+                "b7b5",
+                "a4b5",
+                "a6b5",
+                "c4b5"
+              ]
+            },
+            {
+              "moveUci": "e1f1",
+              "rank": 2,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 870,
+                "bound": false
+              },
+              "pv": [
+                "e1f1",
+                "g1f1",
+                "e8g8",
+                "f1g2",
+                "g8e8",
+                "f5f6",
+                "g6g5",
+                "a4a5"
+              ]
+            },
+            {
+              "moveUci": "h6f5",
+              "rank": 3,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 837,
+                "bound": false
+              },
+              "pv": [
+                "h6f5",
+                "g8h7",
+                "e1f1",
+                "g1f1",
+                "e8h8",
+                "h7g6",
+                "f5d6",
+                "f1e2"
+              ]
+            },
+            {
+              "moveUci": "e1e3",
+              "rank": 4,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 807,
+                "bound": false
+              },
+              "pv": [
+                "e1e3",
+                "f5g6",
+                "h7g6",
+                "g8d5"
+              ]
+            },
+            {
+              "moveUci": "e1e5",
+              "rank": 5,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 789,
+                "bound": false
+              },
+              "pv": [
+                "e1e5",
+                "g8f7",
+                "h6f7",
+                "f5g6",
+                "h7g6",
+                "f1f7",
+                "e5h5",
+                "f7f2",
+                "h5h3"
+              ]
+            },
+            {
+              "moveUci": "a6a5",
+              "rank": 6,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 784,
+                "bound": false
+              },
+              "pv": [
+                "a6a5",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1e8",
+                "f5g6",
+                "e8g8",
+                "g6h7"
+              ]
+            },
+            {
+              "moveUci": "g6f5",
+              "rank": 7,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 780,
+                "bound": false
+              },
+              "pv": [
+                "g6f5",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1h1",
+                "f2g2",
+                "h1c1",
+                "g2g3",
+                "c1c2",
+                "g8b3",
+                "c2c3",
+                "g3h4"
+              ]
+            },
+            {
+              "moveUci": "e1e4",
+              "rank": 8,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 775,
+                "bound": false
+              },
+              "pv": [
+                "e1e4",
+                "g8d5",
+                "e4e5",
+                "f5g6",
+                "e5g5",
+                "g1h2",
+                "g5g6",
+                "d5b3",
+                "e8e2",
+                "h2h1",
+                "a6a5",
+                "f1f8",
+                "b8a7",
+                "f8f2"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c8",
+            "c7c5",
+            "c7c6",
+            "e1a1",
+            "e1b1",
+            "e1c1",
+            "e1d1",
+            "e1e2",
+            "e1e6",
+            "e1e7",
+            "e8c8",
+            "e8d8",
+            "e8e2",
+            "e8e3",
+            "e8e4",
+            "e8e5",
+            "e8e6",
+            "e8e7",
+            "e8f8",
+            "e8g8",
+            "g6g5",
+            "h6f7",
+            "h6g4"
+          ],
+          "terminal": false,
+          "coherentDepth": 12,
+          "trailingPartialDepth": null,
+          "bestmove": "h6g8",
+          "elapsedMs": 131.14
+        },
+        {
+          "budget": "movetime100",
+          "legal": [
+            "a6a5",
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c8",
+            "c7c5",
+            "c7c6",
+            "e1a1",
+            "e1b1",
+            "e1c1",
+            "e1d1",
+            "e1e2",
+            "e1e3",
+            "e1e4",
+            "e1e5",
+            "e1e6",
+            "e1e7",
+            "e1f1",
+            "e8c8",
+            "e8d8",
+            "e8e2",
+            "e8e3",
+            "e8e4",
+            "e8e5",
+            "e8e6",
+            "e8e7",
+            "e8f8",
+            "e8g8",
+            "g6f5",
+            "g6g5",
+            "h6f5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "entries": [
+            {
+              "moveUci": "h6g8",
+              "rank": 1,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 861,
+                "bound": false
+              },
+              "pv": [
+                "h6g8",
+                "f5f6",
+                "e1f1",
+                "g1f1",
+                "g8f6",
+                "c2c3",
+                "h7h6",
+                "c3c4",
+                "h6h5",
+                "h3h4"
+              ]
+            },
+            {
+              "moveUci": "e1f1",
+              "rank": 2,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 839,
+                "bound": false
+              },
+              "pv": [
+                "e1f1",
+                "g1f1",
+                "e8f8",
+                "f1g1",
+                "f8g8",
+                "f5g6",
+                "g8g6",
+                "g1h2"
+              ]
+            },
+            {
+              "moveUci": "e1e5",
+              "rank": 3,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 817,
+                "bound": false
+              },
+              "pv": [
+                "e1e5",
+                "f5f6",
+                "e8g8",
+                "f1f3",
+                "e5f5",
+                "f3f5",
+                "h6f5"
+              ]
+            },
+            {
+              "moveUci": "h6f5",
+              "rank": 4,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 809,
+                "bound": false
+              },
+              "pv": [
+                "h6f5",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1e7",
+                "g8b3",
+                "e7e8",
+                "b3f7",
+                "e8f8",
+                "f7b3"
+              ]
+            },
+            {
+              "moveUci": "e1e4",
+              "rank": 5,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 803,
+                "bound": false
+              },
+              "pv": [
+                "e1e4",
+                "f5f6",
+                "e8g8",
+                "f6f7",
+                "g8f8",
+                "f1f6",
+                "e4e1",
+                "g1f2"
+              ]
+            },
+            {
+              "moveUci": "a6a5",
+              "rank": 6,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 776,
+                "bound": false
+              },
+              "pv": [
+                "a6a5",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1e8",
+                "g8b3",
+                "h6f5"
+              ]
+            },
+            {
+              "moveUci": "g6f5",
+              "rank": 7,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 768,
+                "bound": false
+              },
+              "pv": [
+                "g6f5",
+                "f1e1",
+                "e8e1",
+                "g1f2",
+                "e1e4",
+                "f2f3",
+                "e4h4",
+                "f3g2",
+                "f5f4",
+                "g8b3",
+                "h4h5",
+                "g2f3",
+                "h5h3",
+                "f3f4",
+                "h3h1"
+              ]
+            },
+            {
+              "moveUci": "e8g8",
+              "rank": 8,
+              "depth": 10,
+              "score": {
+                "kind": "cp",
+                "value": 750,
+                "bound": false
+              },
+              "pv": [
+                "e8g8",
+                "f1e1",
+                "h6f5",
+                "e1e2",
+                "f5d6",
+                "e2f2"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c8",
+            "c7c5",
+            "c7c6",
+            "e1a1",
+            "e1b1",
+            "e1c1",
+            "e1d1",
+            "e1e2",
+            "e1e3",
+            "e1e6",
+            "e1e7",
+            "e8c8",
+            "e8d8",
+            "e8e2",
+            "e8e3",
+            "e8e4",
+            "e8e5",
+            "e8e6",
+            "e8e7",
+            "e8f8",
+            "g6g5",
+            "h6f7",
+            "h6g4"
+          ],
+          "terminal": false,
+          "coherentDepth": 10,
+          "trailingPartialDepth": 12,
+          "bestmove": "h6g8",
+          "elapsedMs": 102.52
+        }
+      ]
+    },
+    {
+      "jobId": "sha256:459c255086753886dd361b323f8a12555e0dde7b91db85d9829b2fc3780dc0af",
+      "fen": "1k2r3/1p2r2p/p1p1R1pn/5P2/P7/1B5P/P1P5/5RK1 b - - 1 25",
+      "probes": [
+        {
+          "budget": "depth8",
+          "legal": [
+            "a6a5",
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c7",
+            "b8c8",
+            "c6c5",
+            "e7c7",
+            "e7d7",
+            "e7e6",
+            "e7f7",
+            "e7g7",
+            "e8c8",
+            "e8d8",
+            "e8f8",
+            "e8g8",
+            "e8h8",
+            "g6f5",
+            "g6g5",
+            "h6f5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "entries": [
+            {
+              "moveUci": "h6f5",
+              "rank": 1,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 433,
+                "bound": false
+              },
+              "pv": [
+                "h6f5",
+                "e6e7",
+                "e8e7",
+                "a4a5",
+                "b8c7",
+                "c2c3",
+                "e7e8",
+                "b3c2"
+              ]
+            },
+            {
+              "moveUci": "e7e6",
+              "rank": 2,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": 35,
+                "bound": false
+              },
+              "pv": [
+                "e7e6",
+                "f5e6",
+                "h6f5"
+              ]
+            },
+            {
+              "moveUci": "b8c8",
+              "rank": 3,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -54,
+                "bound": false
+              },
+              "pv": [
+                "b8c8",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7",
+                "e8f8",
+                "b3e6",
+                "c8c7"
+              ]
+            },
+            {
+              "moveUci": "a6a5",
+              "rank": 4,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -78,
+                "bound": false
+              },
+              "pv": [
+                "a6a5",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7",
+                "e8f8"
+              ]
+            },
+            {
+              "moveUci": "b7b5",
+              "rank": 5,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -86,
+                "bound": false
+              },
+              "pv": [
+                "b7b5",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "a4b5",
+                "a6b5",
+                "f6f7",
+                "e8f8",
+                "f1f6",
+                "b8c7",
+                "c2c3"
+              ]
+            },
+            {
+              "moveUci": "b7b6",
+              "rank": 6,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -98,
+                "bound": false
+              },
+              "pv": [
+                "b7b6",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7",
+                "e8f8",
+                "f1f6",
+                "b8c7",
+                "c2c3"
+              ]
+            },
+            {
+              "moveUci": "b8c7",
+              "rank": 7,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -103,
+                "bound": false
+              },
+              "pv": [
+                "b8c7",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7",
+                "e8f8",
+                "f1e1",
+                "a6a5"
+              ]
+            },
+            {
+              "moveUci": "c6c5",
+              "rank": 8,
+              "depth": 8,
+              "score": {
+                "kind": "cp",
+                "value": -124,
+                "bound": false
+              },
+              "pv": [
+                "c6c5",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7",
+                "e8f8",
+                "b3d5",
+                "b8c7",
+                "f1f6"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b8a7",
+            "b8a8",
+            "e7c7",
+            "e7d7",
+            "e7f7",
+            "e7g7",
+            "e8c8",
+            "e8d8",
+            "e8f8",
+            "e8g8",
+            "e8h8",
+            "g6f5",
+            "g6g5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "terminal": false,
+          "coherentDepth": 8,
+          "trailingPartialDepth": null,
+          "bestmove": "h6f5",
+          "elapsedMs": 10.08
+        },
+        {
+          "budget": "depth12",
+          "legal": [
+            "a6a5",
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c7",
+            "b8c8",
+            "c6c5",
+            "e7c7",
+            "e7d7",
+            "e7e6",
+            "e7f7",
+            "e7g7",
+            "e8c8",
+            "e8d8",
+            "e8f8",
+            "e8g8",
+            "e8h8",
+            "g6f5",
+            "g6g5",
+            "h6f5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "entries": [
+            {
+              "moveUci": "h6f5",
+              "rank": 1,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 357,
+                "bound": false
+              },
+              "pv": [
+                "h6f5",
+                "f1e1",
+                "a6a5",
+                "e6e7",
+                "e8e7",
+                "e1e7",
+                "f5e7",
+                "b3e6",
+                "e7d5"
+              ]
+            },
+            {
+              "moveUci": "e7e6",
+              "rank": 2,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 65,
+                "bound": false
+              },
+              "pv": [
+                "e7e6",
+                "f5e6",
+                "h6f5",
+                "f1d1",
+                "a6a5",
+                "g1f2",
+                "f5g7"
+              ]
+            },
+            {
+              "moveUci": "b8c8",
+              "rank": 3,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -50,
+                "bound": false
+              },
+              "pv": [
+                "b8c8",
+                "e6e7",
+                "e8e7",
+                "f5f6"
+              ]
+            },
+            {
+              "moveUci": "b8c7",
+              "rank": 4,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -68,
+                "bound": false
+              },
+              "pv": [
+                "b8c7",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f1f4",
+                "c7d6",
+                "f4h4",
+                "h6f5",
+                "h4h7",
+                "d6e5"
+              ]
+            },
+            {
+              "moveUci": "b7b5",
+              "rank": 5,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -92,
+                "bound": false
+              },
+              "pv": [
+                "b7b5",
+                "e6e7",
+                "e8e7",
+                "f5g6",
+                "h7g6",
+                "a4b5",
+                "a6b5",
+                "f1f6",
+                "e7e3",
+                "f6c6",
+                "e3h3",
+                "c6g6"
+              ]
+            },
+            {
+              "moveUci": "a6a5",
+              "rank": 6,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -94,
+                "bound": false
+              },
+              "pv": [
+                "a6a5",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7",
+                "e8f8",
+                "f1f4",
+                "b8c7"
+              ]
+            },
+            {
+              "moveUci": "c6c5",
+              "rank": 7,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -123,
+                "bound": false
+              },
+              "pv": [
+                "c6c5",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7"
+              ]
+            },
+            {
+              "moveUci": "b7b6",
+              "rank": 8,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -127,
+                "bound": false
+              },
+              "pv": [
+                "b7b6",
+                "f5g6",
+                "e7e6",
+                "b3e6",
+                "h7g6",
+                "f1f6",
+                "h6f5",
+                "f6g6",
+                "f5e7",
+                "g6g5",
+                "b8c7",
+                "a4a5",
+                "b6a5",
+                "e6b3",
+                "e8f8",
+                "g5a5"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b8a7",
+            "b8a8",
+            "e7c7",
+            "e7d7",
+            "e7f7",
+            "e7g7",
+            "e8c8",
+            "e8d8",
+            "e8f8",
+            "e8g8",
+            "e8h8",
+            "g6f5",
+            "g6g5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "terminal": false,
+          "coherentDepth": 12,
+          "trailingPartialDepth": null,
+          "bestmove": "h6f5",
+          "elapsedMs": 67.96
+        },
+        {
+          "budget": "movetime100",
+          "legal": [
+            "a6a5",
+            "b7b5",
+            "b7b6",
+            "b8a7",
+            "b8a8",
+            "b8c7",
+            "b8c8",
+            "c6c5",
+            "e7c7",
+            "e7d7",
+            "e7e6",
+            "e7f7",
+            "e7g7",
+            "e8c8",
+            "e8d8",
+            "e8f8",
+            "e8g8",
+            "e8h8",
+            "g6f5",
+            "g6g5",
+            "h6f5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "entries": [
+            {
+              "moveUci": "h6f5",
+              "rank": 1,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 357,
+                "bound": false
+              },
+              "pv": [
+                "h6f5",
+                "f1e1",
+                "a6a5",
+                "e6e7",
+                "e8e7",
+                "e1e7",
+                "f5e7",
+                "b3e6",
+                "e7d5"
+              ]
+            },
+            {
+              "moveUci": "e7e6",
+              "rank": 2,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": 65,
+                "bound": false
+              },
+              "pv": [
+                "e7e6",
+                "f5e6",
+                "h6f5",
+                "f1d1",
+                "a6a5",
+                "g1f2",
+                "f5g7"
+              ]
+            },
+            {
+              "moveUci": "b8c8",
+              "rank": 3,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -50,
+                "bound": false
+              },
+              "pv": [
+                "b8c8",
+                "e6e7",
+                "e8e7",
+                "f5f6"
+              ]
+            },
+            {
+              "moveUci": "b8c7",
+              "rank": 4,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -68,
+                "bound": false
+              },
+              "pv": [
+                "b8c7",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f1f4",
+                "c7d6",
+                "f4h4",
+                "h6f5",
+                "h4h7",
+                "d6e5"
+              ]
+            },
+            {
+              "moveUci": "b7b5",
+              "rank": 5,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -92,
+                "bound": false
+              },
+              "pv": [
+                "b7b5",
+                "e6e7",
+                "e8e7",
+                "f5g6",
+                "h7g6",
+                "a4b5",
+                "a6b5",
+                "f1f6",
+                "e7e3",
+                "f6c6",
+                "e3h3",
+                "c6g6"
+              ]
+            },
+            {
+              "moveUci": "a6a5",
+              "rank": 6,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -94,
+                "bound": false
+              },
+              "pv": [
+                "a6a5",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7",
+                "e8f8",
+                "f1f4",
+                "b8c7"
+              ]
+            },
+            {
+              "moveUci": "c6c5",
+              "rank": 7,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -123,
+                "bound": false
+              },
+              "pv": [
+                "c6c5",
+                "e6e7",
+                "e8e7",
+                "f5f6",
+                "e7e8",
+                "f6f7"
+              ]
+            },
+            {
+              "moveUci": "b7b6",
+              "rank": 8,
+              "depth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -127,
+                "bound": false
+              },
+              "pv": [
+                "b7b6",
+                "f5g6",
+                "e7e6",
+                "b3e6",
+                "h7g6",
+                "f1f6",
+                "h6f5",
+                "f6g6",
+                "f5e7",
+                "g6g5",
+                "b8c7",
+                "a4a5",
+                "b6a5",
+                "e6b3",
+                "e8f8",
+                "g5a5"
+              ]
+            }
+          ],
+          "missingMoves": [
+            "b8a7",
+            "b8a8",
+            "e7c7",
+            "e7d7",
+            "e7f7",
+            "e7g7",
+            "e8c8",
+            "e8d8",
+            "e8f8",
+            "e8g8",
+            "e8h8",
+            "g6f5",
+            "g6g5",
+            "h6f7",
+            "h6g4",
+            "h6g8"
+          ],
+          "terminal": false,
+          "coherentDepth": 12,
+          "trailingPartialDepth": 13,
+          "bestmove": "h6f5",
+          "elapsedMs": 102.38
+        }
+      ]
+    }
+  ]
+}

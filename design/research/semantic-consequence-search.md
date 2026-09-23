@@ -329,6 +329,17 @@ exact witness; the five-arm profile must measure continuation and relevance befo
 making a default hint. [[D3284]] `[V]`
 `planning/semantic-consequence-search/d3262-event-policy-relevance.md`.
 
+The next-layer capture frame now unions the width-eight engine, configured-Maia
+and semantic first-reply selections while retaining arm provenance: 2,186 paths
+over 2,185 distinct exact positions. A checked two-position Stockfish smoke found
+that the earlier latest-per-move parser can splice MultiPV ranks from different
+depths. This affects 64/198 stored root probes and 188/588 stored child probes,
+all at 100 ms; depth-eight and depth-twelve tables are coherent. The corrected
+bounded capture selects a complete single-depth table and records unfinished
+deeper iterations. Existing timed-rank conclusions are provisional pending
+re-capture, and the frame is not a depth-four proof. [[D3285]] `[V]`
+`planning/semantic-consequence-search/d3262-horizon4-frontier.md`.
+
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 
 1. provider-line-only;

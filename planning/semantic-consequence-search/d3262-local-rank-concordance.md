@@ -41,3 +41,10 @@ roots/targets, so percentages are not independent player-level rates. The next p
 is to connect an exact contrast to the engine-preference delta through continuation and
 counterfactual alternatives, or abstain. [[D3283]] records that delivery rule; [[D3262]]
 remains open. `[V]` The checked artifacts and preregistration.
+
+**2026-09-23 correction ([[D3285]]):** the captured 100-ms root MultiPV rows can
+mix adjacent depths, so their rank-alignment column and nine bounded-pair count
+remain a historical reading of the stored bytes, not a coherent timed-budget
+comparison. The depth-8 and depth-12 columns have single-depth tables and the
+25/89 depth-12 conclusion above is unaffected. Re-capture the timed arm before
+using it to choose a profile. `[V]` `d3262-horizon4-frontier.md`.

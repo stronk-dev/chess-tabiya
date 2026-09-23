@@ -20635,3 +20635,15 @@ top eight. The result bounds proactive reply-specific hints under these policies
 it does not estimate human play or explain an engine recommendation. Conditional
 on-demand exploration remains possible. [[D3284]] records the gap, and [[D3262]]
 still requires the five-arm continuation and counterfactual profile.
+
+### 2026-09-23 — D3262 horizon-four provider frame and D3285 rank-depth correction
+
+`d3262-horizon4-frontier.md` checks a shared next-layer capture frame for the
+three partial search arms: 2,186 selected reply paths over 2,185 distinct
+positions. A stored two-position Stockfish smoke is validated against exact
+legal moves, one complete rank-depth table, PV replay and the pinned binary.
+The smoke found a capture bug before bulk work: latest-per-move parsing spliced
+MultiPV ranks from different depths. Historical 100-ms root/child probes mix
+depths in 64/198 and 188/588 cases; fixed-depth captures do not. [[D3285]]
+routes coherent timed re-capture, while [[D3262]] still lacks the full deeper
+provider data, proof/abstention comparison and end-to-end latency gate.
