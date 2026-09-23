@@ -197,15 +197,25 @@ the move. [[D3283]] and the full counterfactual [[D3262]] remain open.
 pinned configured Maia3 sampler and complete Stockfish child ranks. The semantic
 selector schedules all 32 registered pawn-denial minor arrivals, but only one has
 positive configured Maia mass and none is child depth-12 top eight. That is an
-event-reach versus *these frontiers* mismatch, not a human-reply frequency. It does
+event-reach versus *these frontiers* mismatch, not a human-reply frequency. The
+Maia child frontier was queried with empty history at the child FEN, so it is not
+yet the policy for the same path replayed from its root ([[D3286]]). It does
 not alter the preregistered five arms, use the held-out reply to select branches, or
 license proactive hints from a conditional event. [[D3284]] remains open.
 
 `d3262-horizon4-frontier.md` seals the checked union of the three partial
-first-reply frontiers as 2,186 paths over 2,185 exact reply positions, ready for
-deeper provider capture. Its first two Stockfish positions were captured and
-checked, not extrapolated into a complete arm. That smoke exposed [[D3285]]:
+first-reply frontiers as 2,186 paths over 2,185 exact reply positions. All 2,185
+selected Stockfish positions are now captured and checked across depth 8, depth
+12 and 100 ms; 88 immutable chunks merged into one portable source artifact.
+The initial two-position smoke exposed [[D3285]]:
 old 100-ms MultiPV captures mixed adjacent search depths. The new bounded
-capture selects one complete rank-depth table; prior timed-rank findings are
-provisional until re-capture. The five-arm proof, Maia at deeper nodes and
-end-to-end latency remain unmeasured.
+capture selects one complete rank-depth table; prior root/first-child timed-rank
+findings remain provisional until those older artifacts are coherently re-captured.
+The new deeper Stockfish source does not itself establish proof, search-arm
+comparisons, path-aware Maia mass or end-to-end latency.
+
+[[D3286]] also distinguishes source query identity before a deeper Maia capture:
+the 2,185 unique FEN jobs are valid for Stockfish, while Maia3 with UCI history
+consumes the ordered root/candidate/reply path. Its arm must retain all 2,186
+path identities and state that pre-root history is unavailable, rather than
+silently copying one FEN-level distribution to both paths.

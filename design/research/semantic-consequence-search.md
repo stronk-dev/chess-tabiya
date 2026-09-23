@@ -273,6 +273,20 @@ remains open beyond that scope. `[V]` `planning/semantic-consequence-search/d326
 `planning/semantic-consequence-search/d3262-maia-direct-logits.md`, and
 `planning/semantic-consequence-search/d3262-maia-direct-mass-frontier.md`.
 
+The **history frame** is a further limit, not just a later-node capture gap. The direct
+196-child model receipt seeds each child from its FEN with empty `historyUci`; the pinned
+Maia3 adapter, when configured with UCI history, instead tokenizes the start position and
+each replayed move, and the live selector forwards `startFen + historyUci`. The existing
+configured-support counts are therefore valid for that empty-history diagnostic, not yet
+for the same child reached through its actual root/candidate path. The next-layer manifest
+has 2,186 paths but 2,185 unique FENs: the latter is a sound Stockfish work-saving join,
+not a Maia policy identity. The deeper Maia arm must retain the ordered path and mark
+unavailable pre-root history explicitly. This is the structural finding [[D3286]], not
+a measured claim that a specific move's mass changes. `[V]` Pinned
+`chess-tabiya-maia:dev` `maia3/uci.py` `_reset_history`, `cmd_position`, `score_moves`;
+`apps/server/src/opponent-selector.ts` `positionCommand`; checked D3262 direct-logit
+source and horizon-four manifest.
+
 A source-blind operand-touch selector now scans the complete first-child reply graph. It
 marks 1,265 of 6,020 comparison reply edges as touching a named piece, destination or
 line, and all 139 independently named positive replies touch. However, a one-slot reserve
@@ -324,9 +338,10 @@ Maia3 band-1400 top-p cutoff and none is in Stockfish's depth-12 child top eight
 The other exact-event strata remain distinct: 53 positive named captures, 14
 exchange-neutralized captures and 54 locally safe arrivals. This bounds proactive
 reply-specific hints under those tested frontiers, not human likelihood or an
-engine-preference explanation. Conditional on-demand exploration can still use the
-exact witness; the five-arm profile must measure continuation and relevance before
-making a default hint. [[D3284]] `[V]`
+engine-preference explanation. The Maia frontier here uses empty child-FEN history,
+not the production path-replayed policy ([[D3286]]). Conditional on-demand
+exploration can still use the exact witness; the five-arm profile must measure
+continuation and relevance before making a default hint. [[D3284]] `[V]`
 `planning/semantic-consequence-search/d3262-event-policy-relevance.md`.
 
 The next-layer capture frame now unions the width-eight engine, configured-Maia
@@ -335,9 +350,12 @@ over 2,185 distinct exact positions. A checked two-position Stockfish smoke foun
 that the earlier latest-per-move parser can splice MultiPV ranks from different
 depths. This affects 64/198 stored root probes and 188/588 stored child probes,
 all at 100 ms; depth-eight and depth-twelve tables are coherent. The corrected
-bounded capture selects a complete single-depth table and records unfinished
-deeper iterations. Existing timed-rank conclusions are provisional pending
-re-capture, and the frame is not a depth-four proof. [[D3285]] `[V]`
+bounded capture now covers all 2,185 selected positions in 88 checked chunks,
+with 196,782 legal-move instances and 51,741 coherent ranked entries across the
+three budgets. It selects a complete single-depth table and records 1,825 unfinished
+deeper timed iterations. Existing old timed-rank conclusions remain provisional
+pending coherent root/child re-capture. The new source artifact is not a depth-four
+proof, a five-arm comparison or a production hint-latency measure. [[D3285]] `[V]`
 `planning/semantic-consequence-search/d3262-horizon4-frontier.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:

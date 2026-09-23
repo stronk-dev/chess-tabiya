@@ -24,12 +24,21 @@ legal move instances across six probes, 48 retained ranked entries and two timed
 probes with an explicitly discarded unfinished deeper iteration. The checked
 `d3262-stockfish-horizon4-smoke.json` has SHA-256
 `2090e849c7a9e477ed164d28bc46d219251ef96399093300b017c48b790cccb3`.
-The full
-2,185-position capture has **not** run. Every interval is checked against the
+The full **2,185-position Stockfish capture now exists** as
+`d3262-stockfish-horizon4-capture.json` (SHA-256
+`fa67d49debd72854ebd07fa9188fbd8f8d6e55a9e75a7455bfc41c87750e8931`).
+Its 88 immutable 25-position-or-smaller intervals were checked before merge; the
+merged artifact contains 196,782 legal-move instances across three budgets,
+51,741 coherent ranked entries and 1,825 explicitly marked unfinished deeper
+timed iterations. Source-only depth-8 p50/p95 was 39.26/86.49 ms; depth-12
+379.69/735.64 ms; 100-ms search 101.19/102.69 ms on this machine. These are
+per-selected-position engine probes, not end-to-end hint latency or a production
+budget. Every interval and the merged artifact are checked against the
 frame, legal denominator, rank 1–8, common depth, PV replay, executable digest
-and partial/full label. `[V]` `stockfish-capture.mjs`,
-`stockfish-horizon4-check.mjs`, their negative fixtures, and the checked smoke
-artifact.
+and partial/full label. `make semantic-search-stockfish-horizon4-check` is now
+part of the opt-in RFC-evidence gate. `[V]` Checked full capture,
+`stockfish-capture.mjs`, `stockfish-horizon4-check.mjs`, batch/merge negative
+fixtures and the retained smoke artifact.
 
 The smoke exposed [[D3285]] before bulk capture: the older latest-per-move
 collector spliced rank updates from different depths. Its root and candidate-child
@@ -41,7 +50,18 @@ one complete depth. Previously reported timed-rank comparisons remain provisiona
 until coherent re-capture; the depth-12 contradiction in [[D3283]] is unaffected.
 `[V]` Stored source captures, checked coherent-table fixture, and local smoke.
 
-Next: run/merge checked bounded Stockfish intervals and obtain configured Maia
-distributions at the selected deeper nodes, then evaluate actual horizon-four
+Next: obtain path-aware configured Maia distributions at the selected deeper
+nodes, then evaluate actual horizon-four
 proof/abstention and end-to-end cost for the preregistered arms. Neither this
 manifest nor the smoke passes criterion 23 or Discharge D1 of the search RFC.
+
+The 2,185-FEN deduplication is **Stockfish-only**. [[D3286]] found that the
+pinned Maia3 adapter with UCI history tokenizes the root and each replayed move,
+and its model consumes those tokens. The checked `paths` array therefore remains
+the 2,186-query authority for a deeper Maia arm; the sole same-FEN pair has
+different path identities, which the frozen-frame test asserts. Earlier direct
+child logits used empty history at each child FEN and cannot be silently
+substituted for the path-replayed policy. This is a source-identity correction,
+not a measured change in Maia mass. `[V]` Pinned Maia3 UCI source,
+`apps/server/src/opponent-selector.ts` `positionCommand`, direct-logit receipt,
+and `horizon4-frontier.test.mjs`.

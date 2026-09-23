@@ -2,9 +2,10 @@
 // it does not assign a semantic reason, grade a learner move, or select a profile.
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
+import { link, unlink, writeFile } from "node:fs/promises";
 import { createInterface } from "node:readline";
+import { fileURLToPath } from "node:url";
 
 import { castlingSide, Chess, normalizeMove } from "../../packages/runtime/node_modules/chessops/dist/esm/chess.js";
 import { makeFen, parseFen } from "../../packages/runtime/node_modules/chessops/dist/esm/fen.js";
@@ -41,6 +42,7 @@ if (!Number.isSafeInteger(start) || start < 0 || start >= population.length || !
 const fullOutput = new URL(horizon4Mode ? "../../planning/semantic-consequence-search/d3262-stockfish-horizon4-capture.json" : childMode ? "../../planning/semantic-consequence-search/d3262-stockfish-child-capture.json" : "../../planning/semantic-consequence-search/d3262-stockfish-capture.json", import.meta.url);
 const output = option("--out") ?? (start === 0 && limit === population.length ? fullOutput : undefined);
 if (output === undefined) throw new Error("A partial capture requires --out so it cannot masquerade as the full artifact");
+if (horizon4Mode && existsSync(output)) throw new Error(`Refusing to replace an existing horizon-four capture: ${output}`);
 const jobs = population.slice(start, start + limit);
 const PROMOTIONS = Object.freeze(["queen", "rook", "bishop", "knight"]);
 
@@ -190,5 +192,12 @@ const artifact = {
   source: { engineName: engine.identity, executableDigest, threads: 1, hashMb: 16, multiPv: horizon4Mode ? "top8_legal_moves_at_selected_reply" : childMode ? "all_legal_moves_at_candidate_child" : "all_legal_root_moves", scorePerspective: "raw_uci_uninterpreted" },
   rows,
 };
-await writeFile(output, `${JSON.stringify(artifact, null, 2)}\n`, { flag: "wx" });
+const outputBytes = `${JSON.stringify(artifact, null, 2)}\n`;
+if (horizon4Mode) {
+  const targetPath = typeof output === "string" ? output : fileURLToPath(output);
+  const temporary = `${targetPath}.partial-${process.pid}`;
+  await writeFile(temporary, outputBytes, { flag: "wx" });
+  try { await link(temporary, targetPath); }
+  finally { await unlink(temporary); }
+} else await writeFile(output, outputBytes, { flag: "wx" });
 process.stdout.write(`${JSON.stringify({ output: String(output), [childMode || horizon4Mode ? "positions" : "roots"]: rows.length, engine: engine.identity, manifest: artifact.manifest, partial: artifact.partial })}\n`);

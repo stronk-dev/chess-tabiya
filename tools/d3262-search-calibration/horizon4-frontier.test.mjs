@@ -17,6 +17,13 @@ test("all three partial frontiers compile to one exact next-layer capture frame"
   assert.equal(artifact.jobs.length, 2185);
   assert.equal(new Set(artifact.jobs.map((job) => job.fen)).size, artifact.jobs.length);
   assert.equal(artifact.jobs.reduce((sum, job) => sum + job.paths.length, 0), artifact.paths.length);
+  const samePositionDifferentPaths = artifact.jobs.filter((job) => job.paths.length > 1);
+  assert.equal(samePositionDifferentPaths.length, 1);
+  assert.equal(samePositionDifferentPaths[0].paths.length, 2);
+  assert.notDeepEqual(
+    samePositionDifferentPaths[0].paths.map(({ rootId, candidateUci, replyUci }) => [rootId, candidateUci, replyUci])[0],
+    samePositionDifferentPaths[0].paths.map(({ rootId, candidateUci, replyUci }) => [rootId, candidateUci, replyUci])[1],
+  );
   assert.equal(artifact.paths.filter((row) => row.selectedBy.includes("maia:0.80")).length, 415);
   assert.equal(artifact.paths.filter((row) => row.selectedBy.includes("maia:0.90")).length, 510);
   assert.ok(artifact.paths.every((row) => !row.selectedBy.includes("maia:0.80") || row.selectedBy.includes("maia:0.90")));

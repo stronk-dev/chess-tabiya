@@ -20647,3 +20647,21 @@ MultiPV ranks from different depths. Historical 100-ms root/child probes mix
 depths in 64/198 and 188/588 cases; fixed-depth captures do not. [[D3285]]
 routes coherent timed re-capture, while [[D3262]] still lacks the full deeper
 provider data, proof/abstention comparison and end-to-end latency gate.
+
+### 2026-09-23 — D3262 checked deeper Stockfish source; D3286 Maia path identity
+
+The horizon-four Stockfish frame is now captured in 88 checked, immutable local
+intervals and merged into one portable source artifact: 2,185 selected positions,
+196,782 legal-move instances across depth 8/depth 12/100 ms, and 51,741 coherent
+ranked entries. The full artifact is enrolled in `make verify-rfc-evidence`; the
+source-only elapsed times and 1,825 explicitly unfinished deeper timed iterations
+are recorded in `d3262-horizon4-frontier.md`. This closes a provider-input gap,
+not the five-arm proof comparison, Maia capture or production latency gate.
+
+Reading the pinned Maia3 UCI adapter against the existing direct child-logit
+receipt exposed [[D3286]]: `--use-uci-history` makes model input path-sensitive,
+but the prior receipt seeds each child FEN with empty history. The 2,185-FEN
+deduplication is valid for Stockfish, not for the 2,186 Maia path identities.
+Research, preregistration and the draft search RFC now require root-plus-move
+queries with unavailable pre-root history stated. The work-state row is assigned
+to evidence-foundation; it does not retroactively claim a measured mass change.

@@ -15,3 +15,4 @@ content/sources/
 .env.*
 !.env.example
 tools/maia-harness/out/
+planning/semantic-consequence-search/d3262-stockfish-horizon4-chunks/
