@@ -158,6 +158,13 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	node apps/server/dist/semantic-evidence-check.js
 
+.PHONY: semantic-search-input-readiness semantic-search-manifest
+semantic-search-input-readiness:
+	$(CI_NODE) tools/d3262-search-calibration/input-readiness.mjs
+
+semantic-search-manifest:
+	$(CI_NODE) tools/d3262-search-calibration/manifest.mjs $(if $(ROWS),--rows,)
+
 foundation-closure-check: evidence-manifest-check evidence-value-authority-route-map semantic-validation-matrix
 	./node_modules/.bin/vitest run --config tools/d1737-source-identity-closeout/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/vitest run --config tools/d1710-producer-execution-harness/vitest.config.ts --reporter=verbose

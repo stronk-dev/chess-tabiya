@@ -20370,3 +20370,16 @@ presentation because it scanned all web TypeScript and Svelte files together. Te
 current exact sentence and receipt, retain the resistance-literal ban across all web source, and
 apply rank/order display prohibitions to the actual Svelte presentation tier. Production bytes did
 not change.
+
+### 2026-09-23 — D3262 input preflight blocks inherited five-arm calibration
+
+The source-aligned, digest-reported predecessor census in
+`design/research/semantic-search-input-readiness.md` found that D1061's 64 engine-line roots have no
+endgame stratum or Maia distribution, while D1023's 96 paired policy rows are 62 unique roots with
+no retained per-move Maia mass or Stockfish PV. Five FENs overlap. No production search budget or
+causal-language policy can be inferred from these artifacts. [[D3262]] remains open; next is a
+fixed-root source-preserving capture, then the preregistered five-arm run. The disposable preflight
+instrument is `tools/d3262-search-calibration/input-readiness.mjs`. The same pass froze a 66-root
+manifest (62 D1023 roots plus four hard controls) in
+`planning/semantic-consequence-search/d3262-preregistration.md`; predecessor summaries were
+rechecked, but no D3262 provider capture exists and no search default was selected.
