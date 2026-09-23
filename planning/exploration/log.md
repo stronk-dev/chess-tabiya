@@ -20447,3 +20447,12 @@ parried control has 33 replies and first loses the attacker to `...Bxc7`. A fabr
 target or empty universal population fails the instrument. The independent D794 positive-exchange
 test also passed, but its stronger verdict was not smuggled into this geometric result. [[D3262]]
 remains open; the bishop-pressure control and all five-arm comparisons are still outstanding.
+
+### 2026-09-23 — D3262 retained bishop pressure survives the harassment control
+
+`planning/semantic-consequence-search/d3262-bishop-pressure-control.md` records a checked
+piece-identity relation for `h3` and the legal `...Bh5` reply: the h3 pawn attacks the g4 bishop,
+the retreat clears that attack while maintaining the f3 knight screen and latent d1 queen line.
+All six legal knight moves expose a geometric bishop attack on the queen. An independent
+python-chess check agreed. This does not make the retreat forced or good: Black had 31 legal
+replies, and the five-arm contrastive/value test remains open under [[D3262]].

@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "exactReplyDigest": "sha256:63d38517b2cf9be19137e1b57b846be10b017006e69d6633510b1c43b93bd316",
+  "authority": "declared_pressure_and_legal_screen_move_exposure_only",
+  "result": {
+    "rootId": "pressure:bg4-h3-bh5",
+    "candidateUci": "h2h3",
+    "selectedReplyUci": "g4h5",
+    "opponentReplyCount": 31,
+    "identities": {
+      "pawn": {
+        "square": "h3",
+        "role": "pawn",
+        "color": "white"
+      },
+      "harassedBishop": {
+        "square": "g4",
+        "role": "bishop",
+        "color": "black"
+      },
+      "retreatedBishop": {
+        "square": "h5",
+        "role": "bishop",
+        "color": "black"
+      },
+      "screen": {
+        "square": "f3",
+        "role": "knight",
+        "color": "white"
+      },
+      "backingTarget": {
+        "square": "d1",
+        "role": "queen",
+        "color": "white"
+      }
+    },
+    "pawnAttacksBeforeRetreat": true,
+    "pawnAttacksAfterRetreat": false,
+    "bishopAttacksScreenAfterRetreat": true,
+    "bishopDirectlyAttacksQueenAfterRetreat": false,
+    "legalScreenMoves": [
+      "f3d2",
+      "f3e5",
+      "f3g1",
+      "f3g5",
+      "f3h2",
+      "f3h4"
+    ],
+    "exposingScreenMoves": [
+      "f3d2",
+      "f3e5",
+      "f3g1",
+      "f3g5",
+      "f3h2",
+      "f3h4"
+    ],
+    "geometricExposureOnly": true
+  }
+}

@@ -180,6 +180,12 @@ the attacker/rook target persists through all five replies in one fixture, while
 named refutation among 33 replies in the other. This is a scoped target-retention statement, not
 a general winning-fork classifier. `[V]`
 `planning/semantic-consequence-search/d3262-fork-control-identity.md`.
+The bishop-pressure control now verifies the predeclared `h3` / `...Bh5` relation: the pawn
+attacks the bishop on g4, the retreat is one of 31 legal replies, and the bishop on h5 retains
+the f3 knight with a d1 queen behind it. Every one of the knight's six legal moves exposes a
+geometric attack on the queen; python-chess independently reproduced that narrow result. No
+engine preference or forced continuation follows from it. `[V]`
+`planning/semantic-consequence-search/d3262-bishop-pressure-control.md`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

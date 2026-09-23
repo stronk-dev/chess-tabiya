@@ -80,6 +80,9 @@ The paired fork hard control now has a scoped declared-identity result in
 `d3262-fork-control-identity.md`: `...Bxc7` is an exact refutation in the parried fixture,
 while the surviving fixture retains its geometric rook target through all five replies. This
 does not generalize to the other roots or grade the tactic.
+The `h3` / `...Bh5` line now has a scoped relation receipt in
+`d3262-bishop-pressure-control.md`: the harassed bishop retreats while retaining the f3 knight
+screen and a latent d1 queen exposure. It does not say the retreat is forced or recommended.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and
