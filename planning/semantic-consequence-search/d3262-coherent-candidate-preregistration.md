@@ -196,3 +196,16 @@ most alternatives already expose the option immediately. Separate root
 Stockfish rank concordance is reported by budget, not called a cause. Arm
 3/4/5 continuation, calibrated proof/abstention, end-to-end cost and
 criterion 23 remain open.
+
+## Post-freeze exact forcing-trigger sensitivity — 2026-09-23
+
+The corrected arm-2 first-layer trigger now replays all 182 named cells with
+the two frozen D3280 attack meanings kept separate. Against the checked
+complete exact bounded target result, each restricted extension misses seven
+of 58 reintroductions while retaining all eight preparations that survive
+every immediate learner defence on this frame. The meanings differ in work:
+1,216 versus 664 triggered replies and 36,446 versus 18,369 extra learner
+edges. `d3262-coherent-exact-trigger-outcome.md` records the exact digest and
+scope. Nonforcing replies remain in the first-layer denominator but do not
+receive an extra ply; this sensitivity is not an all-defence verdict or a
+production search-profile selection.

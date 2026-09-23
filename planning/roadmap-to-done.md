@@ -2517,3 +2517,11 @@ under both providers ([[D3294]]). This closes an input-availability gap for
 the fifth arm, not its continuation, causal attribution, production profile
 or release capability. The next executable is the predeclared five-arm
 proof/abstention/cost comparison on the corrected frame.
+
+The corrected exact arm's two preregistered attack-trigger readings now have
+an outcome sensitivity over all 182 named cells ([[D3295]]): both omit seven
+of 58 bounded reintroduction witnesses despite retaining the eight selected
+existential all-learner-defence preparations. The readings require very
+different work (1,216 versus 664 extended replies). This narrows arm-2
+calibration but does not choose D3280, discharge D3262, or cross any 1.0
+capability. The multi-arm and end-to-end cost verdict remains required.

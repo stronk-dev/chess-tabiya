@@ -10,8 +10,6 @@ import { kingCastlesTo, makeUci, parseUci } from "../../packages/runtime/node_mo
 
 const framePath = new URL("../../planning/semantic-consequence-search/d3262-root-frame.json", import.meta.url);
 const outputPath = new URL("../../planning/semantic-consequence-search/d3262-exact-replies.json", import.meta.url);
-const frameBytes = readFileSync(framePath);
-const frame = JSON.parse(frameBytes.toString("utf8"));
 
 function check(condition, message) { if (!condition) throw new Error(message); }
 function position(fen) { return Chess.fromSetup(parseFen(fen).unwrap()).unwrap(); }
@@ -56,11 +54,11 @@ export function enumerateCandidate(fen, uci) {
   return { candidateUci: uci, afterFen, opponentInCheck: before.isCheck(), terminal: replies.length === 0, replyCount: replies.length, replies };
 }
 
-export function buildExactReplyEnumeration(rootFrame) {
+export function buildExactReplyEnumeration(rootFrame, rootFrameBytes = `${JSON.stringify(rootFrame, null, 2)}\n`) {
   check(rootFrame.authority === "shared_candidate_population_not_move_grade", "Exact replies require the shared ungraded root frame");
   return {
     version: 1,
-    rootFrameDigest: `sha256:${createHash("sha256").update(frameBytes).digest("hex")}`,
+    rootFrameDigest: `sha256:${createHash("sha256").update(rootFrameBytes).digest("hex")}`,
     manifest: rootFrame.manifest,
     authority: "complete_legal_opponent_reply_edges_not_a_semantic_proof",
     roots: rootFrame.roots.map((root) => ({
@@ -77,7 +75,8 @@ export function validateExactReplyArtifact(artifact, rootFrame) {
 
 if (process.argv[1]?.endsWith("exact-reply-enumeration.mjs")) {
   const started = performance.now();
-  const artifact = buildExactReplyEnumeration(frame);
+  const frameBytes = readFileSync(framePath);
+  const artifact = buildExactReplyEnumeration(JSON.parse(frameBytes.toString("utf8")), frameBytes);
   const bytes = `${JSON.stringify(artifact, null, 2)}\n`;
   if (process.argv.includes("--write")) writeFileSync(outputPath, bytes, { flag: "wx" });
   else check(readFileSync(outputPath, "utf8") === bytes, "D3262 exact-reply artifact differs from the frozen root frame");

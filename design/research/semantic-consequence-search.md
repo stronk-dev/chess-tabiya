@@ -508,6 +508,18 @@ selected targets do not establish why the engine recommends a move; the
 correct output for an incompatible or unproved contrast is abstention.
 [[D3293]] `[V]` `planning/semantic-consequence-search/d3262-coherent-bounded-contrast.md`.
 
+Restricting the corrected exact arm's extra learner ply to check, capture or
+newly registered attack has a measurable omission. Across 182 named cells,
+the complete bounded question has 58 reintroductions and eight existential
+preparations surviving every immediate learner defence. The named-square
+attack interpretation extends 1,216 opponent replies/36,446 learner edges;
+the enemy-piece interpretation extends 664/18,369. Both retain 51 of 58
+reintroductions and all eight surviving preparations, missing the same six
+material and one destination witnesses. First-layer legal replies remain
+complete, so this is a conditional extension false-negative count, not an
+all-defence proof or an engine-causality result. [[D3295]] `[V]`
+`planning/semantic-consequence-search/d3262-coherent-exact-trigger-outcome.md`.
+
 The predeclared all-legal semantic-event reserve has 152 distinct exact reply
 paths, 68 outside the corrected engine/Maia-selected 1,966-path union. Existing
 source captures covered 67 of those 68; the remaining `f7f5 c1f4` path now

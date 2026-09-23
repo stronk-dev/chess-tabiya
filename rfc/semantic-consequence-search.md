@@ -591,6 +591,16 @@ separate coherent root engine rank in 4/7/6 cases at depth 8/depth 12/100
 ms, which is not causal attribution. See the checked
 `d3262-coherent-bounded-contrast.md` and retain these typed abstentions in
 the eventual compiler.
+[[D3295]] applies the still-unruled D3280 exact-arm trigger meanings to the
+corrected 182-cell frame. New named-square control extends 1,216 replies
+and 36,446 learner edges; new enemy-piece attack extends 664 and 18,369.
+Both retain 51/58 bounded target reintroductions and all eight existential
+preparations surviving every immediate learner defence in this selected
+frame. The seven omitted bounded witnesses are typed trigger-scope false
+negatives, not move grades. Neither reading is a complete arm-2 proof or a
+reason for Stockfish's root ranking; the choice of attack meaning remains
+open pending the common proof/abstention/cost comparison. See
+`d3262-coherent-exact-trigger-outcome.md`.
 These are post-freeze receipts, not amendments to the original 196-candidate
 profile or a reason to accept this RFC.
 

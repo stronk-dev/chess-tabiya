@@ -4,6 +4,7 @@
 // It does not grade the root move or attribute an engine recommendation.
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
+import { basename } from "node:path";
 
 import { castlingSide, Chess, normalizeMove } from "../../packages/runtime/node_modules/chessops/dist/esm/chess.js";
 import { makeFen, parseFen } from "../../packages/runtime/node_modules/chessops/dist/esm/fen.js";
@@ -37,7 +38,7 @@ function square(value: SquareName): Square {
   return parsed;
 }
 function position(fen: string): Chess { return Chess.fromSetup(parseFen(fen).unwrap()).unwrap(); }
-function legalMoves(pos: Chess): readonly Move[] {
+export function legalMoves(pos: Chess): readonly Move[] {
   const moves: Move[] = [];
   for (const [from, dests] of pos.allDests()) for (const to of dests) {
     const roles: readonly (Role | undefined)[] = pos.board.getRole(from) === "pawn" && (to < 8 || to >= 56) ? promotions : [undefined];
@@ -54,7 +55,7 @@ function externalUci(pos: Chess, move: Move): string {
     ? makeUci(move)
     : makeUci({ from: move.from, to: kingCastlesTo(pos.turn, side) });
 }
-function checkExactReplyBoundary(rootFen: string, candidateUci: string, graphRoot: any, graphCandidate: any): void {
+export function checkExactReplyBoundary(rootFen: string, candidateUci: string, graphRoot: any, graphCandidate: any): void {
   check(graphRoot.fen === rootFen, `Crossed exact-reply root ${candidateUci}`);
   const root = position(rootFen);
   const parsed = parseUci(candidateUci);
@@ -143,7 +144,8 @@ function controllerRemovedOnWitness(rootFen: string, witness: readonly string[] 
   return exchangeCaptureAt(pos, preparationMove)?.square === pawn.square;
 }
 
-export function evaluateBoundedTarget(rootFen: string, candidateUci: string, definition: any): Reading {
+export function evaluateBoundedTarget(rootFen: string, candidateUci: string, definition: any,
+  allowedPreparations?: ReadonlySet<string>): Reading {
   const root = position(rootFen);
   const parsed = parseUci(candidateUci);
   check(parsed !== undefined, `Invalid candidate ${candidateUci}`);
@@ -179,7 +181,13 @@ export function evaluateBoundedTarget(rootFen: string, candidateUci: string, def
   let visited = 1;
   let witness: readonly string[] | null = null;
   let firstRefutation: readonly string[] | null = null;
-  for (const preparation of legalMoves(afterCandidate)) {
+  const preparations = legalMoves(afterCandidate);
+  if (allowedPreparations !== undefined) {
+    const legal = new Set(preparations.map((move) => externalUci(afterCandidate, move)));
+    check([...allowedPreparations].every((uci) => legal.has(uci)), "Forcing extension contains a nonlegal preparation");
+  }
+  for (const preparation of preparations) {
+    if (allowedPreparations !== undefined && !allowedPreparations.has(externalUci(afterCandidate, preparation))) continue;
     visited += 1;
     if (visited > nodeCap) return reading("removed", witness, firstRefutation, false, visited, "budget_exhausted");
     const afterPreparation = playTracking(afterCandidate, preparation, updated);
@@ -260,7 +268,7 @@ export function compileCoherentBoundedTargets(comparisons: any, frame: any, grap
     manifest: comparisons.manifest, sourceControls, sourceDisagreements, rows };
 }
 
-if (process.argv[1] && new URL(`file://${process.argv[1]}`).href === import.meta.url) {
+if (process.argv[1] && basename(process.argv[1]) === "coherent-bounded-targets.mjs") {
   const inputs = names.map((name) => readFileSync(`${directory}/${name}`));
   const sourceBytes = readFileSync(sourcePath);
   const artifact = {

@@ -20891,3 +20891,19 @@ crossed FEN/history, erased legal moves and missing source. [[D3294]] and
 `planning/semantic-consequence-search/d3262-coherent-semantic-source-closure.md`
 record the digests. No target persistence, engine-reason attribution,
 five-arm proof/abstention or cost gate follows; those remain [[D3262]].
+
+### 2026-09-23 — D3295 corrects the exact forcing arm's outcome scope
+
+The corrected 193-candidate frame now compares both preregistered D3280
+attack-trigger readings against the complete 182-cell bounded target result.
+Named-square control extends 1,216 replies/36,446 learner edges; enemy-piece
+attack extends 664/18,369. Both retain 51/58 bounded reintroductions and all
+eight existential preparations surviving every immediate learner defence;
+seven nonforcing witnesses are missed. The read-only checker retains exact
+legal, FEN, check and capture controls and hard negatives. The first bundled
+run exposed an import-time frozen-frame read in the reusable exact-reply
+module; [[D3296]] closes that side effect without changing the frozen
+artifact. [[D3295]] and
+`planning/semantic-consequence-search/d3262-coherent-exact-trigger-outcome.md`
+record the limited result. This is not the five-arm profile or causal engine
+explanation; [[D3262]] remains open.

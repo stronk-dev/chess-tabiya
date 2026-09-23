@@ -27045,6 +27045,23 @@
       "sourceDigest": "sha256:ba4517f70baa892bb39ca59a980189686761e487addcd4b338929bd9ea1d5256",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3295",
+      "state": "todo",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:3048e701a93c680922f7a60c834dabc3332e01c3d9dd0e49dc17a8758500f128",
+      "uxItems": []
+    },
+    {
+      "id": "D3296",
+      "state": "done",
+      "evidence": "tools/d3262-search-calibration/exact-reply-enumeration.mjs",
+      "evidenceKind": "path",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0f6bed7f446f1f01648e3364215d896f75e875fa26be38c8dbf2c029ec4345f4",
+      "uxItems": []
     }
   ]
 }
