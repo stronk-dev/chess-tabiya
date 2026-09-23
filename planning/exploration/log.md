@@ -20392,3 +20392,11 @@ The independent checker joins every stored root and legal move back to the manif
 root-query p95 is 2,802.21 ms before semantic traversal or rendering; 100 ms has 53 bounded
 scores. `planning/semantic-consequence-search/d3262-stockfish-capture.md` records the source
 identity and digest. This is one provider arm, not the five-arm result; [[D3262]] remains open.
+
+### 2026-09-23 — D3262 Maia source request fixed before capture
+
+`planning/semantic-consequence-search/d3262-maia-capture-plan.md` fixes the 1400-band
+`human_common` request parameters inherited from the already measured D1023 source arm. The
+new disposable capture retains every returned root candidate and its mass rather than D1023's
+top-eight aggregate, and preserves source-off results. No Maia request or search-profile verdict
+was made in this step; the next action is to run it against the local Maia-enabled server.

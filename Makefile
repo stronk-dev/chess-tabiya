@@ -158,7 +158,7 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	node apps/server/dist/semantic-evidence-check.js
 
-.PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check
+.PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check semantic-search-maia-capture
 semantic-search-input-readiness:
 	$(CI_NODE) tools/d3262-search-calibration/input-readiness.mjs
 
@@ -171,6 +171,9 @@ semantic-search-stockfish-capture:
 semantic-search-stockfish-check:
 	$(CI_NODE) --test tools/d3262-search-calibration/stockfish-capture-check.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture-check.mjs
+
+semantic-search-maia-capture:
+	$(CI_NODE) tools/d3262-search-calibration/maia-capture.mjs $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
 
 foundation-closure-check: evidence-manifest-check evidence-value-authority-route-map semantic-validation-matrix
 	./node_modules/.bin/vitest run --config tools/d1737-source-identity-closeout/vitest.config.ts --reporter=verbose
