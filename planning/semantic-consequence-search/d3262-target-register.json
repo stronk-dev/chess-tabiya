@@ -1,0 +1,2110 @@
+{
+  "version": 1,
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "sourceDigest": "sha256:6cdddbffd72d8af93504f808bf012d5ea68b5f9103277bb493e2d1c92984748b",
+  "authority": "source_named_target_identity_not_search_verdict",
+  "targetRows": [
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "sourceId": "anti-caro-advance-c5-race/dxc5-grab",
+      "population": "authored pack spines",
+      "candidateUci": "e5e6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "c8"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "d7"
+      }
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "sourceId": "https://lichess.org/GF5vtBlD#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e5d4",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d4e5"
+      }
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "sourceId": "https://lichess.org/GF5vtBlD#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "f8e7",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d4e5"
+      }
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "sourceId": "https://lichess.org/ZHWGswJq#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e7h4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "h6"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "f8"
+        },
+        "baselineMoveUci": "h6f8"
+      }
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "sourceId": "https://lichess.org/ZHWGswJq#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "g8h6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "h6"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "f8"
+        },
+        "baselineMoveUci": "h6f8"
+      }
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "sourceId": "anti-italian-center-attack-black/p7-c3",
+      "population": "authored pack spines",
+      "candidateUci": "c2c3",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "c5"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "c3"
+        },
+        "square": "d4"
+      }
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "sourceId": "iqp-black-tarrasch-defence/be6-develop",
+      "population": "authored pack spines",
+      "candidateUci": "c8e6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "baselineMoveUci": "c3d5"
+      }
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "sourceId": "iqp-black-tarrasch-defence/be6-develop",
+      "population": "authored pack spines",
+      "candidateUci": "d8d6",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "baselineMoveUci": "c3d5"
+      }
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "sourceId": "https://lichess.org/JpzfY1Ph#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "f6e4",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "a1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a4"
+        },
+        "baselineMoveUci": "a1a4"
+      }
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "sourceId": "https://lichess.org/JpzfY1Ph#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "f6g8",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "a1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a4"
+        },
+        "baselineMoveUci": "a1a4"
+      }
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "sourceId": "https://lichess.org/jA71yBXB#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c7c6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "b3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c6"
+        },
+        "square": "d5"
+      }
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "sourceId": "https://lichess.org/ZHWGswJq#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "d7d5",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "d3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "c4"
+      }
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "sourceId": "berlin-queenless-press/ne7-retreat",
+      "population": "authored pack spines",
+      "candidateUci": "f7f6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "f6"
+        },
+        "square": "g5"
+      }
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "sourceId": "https://lichess.org/50gVKdhE#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e5d4",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d4e5"
+      }
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "sourceId": "https://lichess.org/50gVKdhE#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "g8e7",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d4e5"
+      }
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "sourceId": "open-centre-ruy-exchange/nb3-retreat",
+      "population": "authored pack spines",
+      "candidateUci": "d1e1",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "pawn",
+          "promoted": false,
+          "square": "c5"
+        },
+        "target": {
+          "color": "white",
+          "role": "knight",
+          "square": "d4"
+        },
+        "baselineMoveUci": "c5d4"
+      }
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "sourceId": "open-centre-ruy-exchange/nb3-retreat",
+      "population": "authored pack spines",
+      "candidateUci": "d4b3",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "pawn",
+          "promoted": false,
+          "square": "c5"
+        },
+        "target": {
+          "color": "white",
+          "role": "knight",
+          "square": "d4"
+        },
+        "baselineMoveUci": "c5d4"
+      }
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "sourceId": "trajectory-caro-advance-chain-bishops/p50-kd7",
+      "population": "authored pack spines",
+      "candidateUci": "g7g5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      }
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "sourceId": "https://lichess.org/hU10ITVj#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "d5c4",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c2"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c4"
+        },
+        "square": "d3"
+      }
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "sourceId": "https://lichess.org/kL85VmlC#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c8h3",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "c3e4"
+      }
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "sourceId": "https://lichess.org/kL85VmlC#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e4f3",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "g1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "f3"
+        },
+        "square": "e2"
+      }
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "sourceId": "https://lichess.org/kL85VmlC#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e4f3",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "c3e4"
+      }
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "sourceId": "anti-scandinavian-white/p15-ne5",
+      "population": "authored pack spines",
+      "candidateUci": "d4d5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "knight",
+          "square": "b8"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "c6"
+      }
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "sourceId": "https://lichess.org/fd37KgOs#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "a7a6",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "d3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      }
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "sourceId": "italian-center-attack-white/p11-cxd4",
+      "population": "authored pack spines",
+      "candidateUci": "c3d4",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "f6e4"
+      }
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "sourceId": "italian-center-attack-white/p11-cxd4",
+      "population": "authored pack spines",
+      "candidateUci": "f3h4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "f6e4"
+      }
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "sourceId": "anti-caro-advance-early-c5/nxd4-central",
+      "population": "authored pack spines",
+      "candidateUci": "e5e6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "c8"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "d7"
+      }
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "sourceId": "https://lichess.org/a0Xo4b5J#40",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "d2d6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "f2"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "d2"
+        },
+        "baselineMoveUci": "f2d2"
+      }
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "sourceId": "https://lichess.org/a0Xo4b5J#40",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e6c4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "f2"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "d2"
+        },
+        "baselineMoveUci": "f2d2"
+      }
+    },
+    {
+      "rootId": "d1023:5349bf6a339256e5",
+      "sourceId": "https://lichess.org/a0Xo4b5J#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c5c4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "f5"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "baselineMoveUci": "f5c5"
+      }
+    },
+    {
+      "rootId": "d1023:5349bf6a339256e5",
+      "sourceId": "https://lichess.org/a0Xo4b5J#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "d2d1",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "f5"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "baselineMoveUci": "f5c5"
+      }
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "sourceId": "trajectory-qgd-exchange-minority/p42-ba6",
+      "population": "authored pack spines",
+      "candidateUci": "c8a6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c6"
+        },
+        "baselineMoveUci": "c3c6"
+      }
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "sourceId": "trajectory-qgd-exchange-minority/p42-ba6",
+      "population": "authored pack spines",
+      "candidateUci": "f6h4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "c3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c6"
+        },
+        "baselineMoveUci": "c3c6"
+      }
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "sourceId": "https://lichess.org/cXj7tMkk#32",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c7c6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "d3"
+        },
+        "target": {
+          "color": "black",
+          "role": "queen",
+          "square": "a3"
+        },
+        "baselineMoveUci": "d3a3"
+      }
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "sourceId": "https://lichess.org/cXj7tMkk#32",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "h8e8",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "d3"
+        },
+        "target": {
+          "color": "black",
+          "role": "queen",
+          "square": "a3"
+        },
+        "baselineMoveUci": "d3a3"
+      }
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "sourceId": "https://lichess.org/9FTgKq10#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "d6e5",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "g3"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "f4"
+        },
+        "baselineMoveUci": "g3f4"
+      }
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "sourceId": "https://lichess.org/9FTgKq10#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "g2h1",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "g3"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "f4"
+        },
+        "baselineMoveUci": "g3f4"
+      }
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
+      "population": "authored pack spines",
+      "candidateUci": "c7c6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "a2"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "f2"
+        },
+        "baselineMoveUci": "a2f2"
+      }
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
+      "population": "authored pack spines",
+      "candidateUci": "g2g4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "a2"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "f2"
+        },
+        "baselineMoveUci": "a2f2"
+      }
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "sourceId": "https://lichess.org/hjh8d0Z8#40",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "h7h6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "f3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "h6"
+        },
+        "square": "g5"
+      }
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "sourceId": "anti-sicilian-najdorf-english-attack/p10-a6",
+      "population": "authored pack spines",
+      "candidateUci": "a7a6",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "d4"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      }
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "sourceId": "najdorf-english-attack-black/p10-a6",
+      "population": "authored pack spines",
+      "candidateUci": "a7a6",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      }
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "sourceId": "https://lichess.org/ZHWGswJq#16",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "g7g5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      }
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "sourceId": "https://lichess.org/F6Bb9Zr3#16",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c7c6",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "g2"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c6"
+        },
+        "square": "d5"
+      }
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "sourceId": "https://lichess.org/Sodns02o#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e7e6",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "d2"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d2e4"
+      }
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "sourceId": "https://lichess.org/Sodns02o#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "f7f5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "knight",
+          "promoted": false,
+          "square": "d2"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d2e4"
+      }
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "sourceId": "kid-mar-del-plata-white/f5-storm",
+      "population": "authored pack spines",
+      "candidateUci": "c7c5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "d3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "square": "b4"
+      }
+    },
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "sourceId": "carlsbad-minority-attack/qxe7-recapture",
+      "population": "authored pack spines",
+      "candidateUci": "d8e7",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "d3"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d3e4"
+      }
+    },
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "sourceId": "carlsbad-minority-attack/qxe7-recapture",
+      "population": "authored pack spines",
+      "candidateUci": "e4c5",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "d3"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d3e4"
+      }
+    },
+    {
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "sourceId": "pawn-breakthrough-convert/b-bxc6",
+      "population": "authored pack spines",
+      "candidateUci": "b7b6",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "c6"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b7"
+        },
+        "baselineMoveUci": "c6b7"
+      }
+    },
+    {
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "sourceId": "pawn-breakthrough-convert/b-bxc6",
+      "population": "authored pack spines",
+      "candidateUci": "b7c6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "c6"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b7"
+        },
+        "baselineMoveUci": "c6b7"
+      }
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "sourceId": "https://lichess.org/UNkqj1pt#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "b8a6",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "d1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d4"
+        },
+        "baselineMoveUci": "d1d4"
+      }
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "sourceId": "https://lichess.org/UNkqj1pt#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "f6d5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "d1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d4"
+        },
+        "baselineMoveUci": "d1d4"
+      }
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "sourceId": "https://lichess.org/QJE0UbfB#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "b4d3",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "e1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e7"
+        },
+        "baselineMoveUci": "e1e7"
+      }
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "sourceId": "https://lichess.org/QJE0UbfB#24",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c8f5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "e1"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e7"
+        },
+        "baselineMoveUci": "e1e7"
+      }
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "sourceId": "grunfeld-exchange-fianchetto/e5-advance",
+      "population": "authored pack spines",
+      "candidateUci": "e4e5",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "g7"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "square": "f6"
+      }
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "sourceId": "https://lichess.org/pQZ75avT#40",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c6b4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "e1"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "e8"
+        },
+        "baselineMoveUci": "e1e8"
+      }
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "sourceId": "https://lichess.org/pQZ75avT#40",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e8e1",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "e1"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "e8"
+        },
+        "baselineMoveUci": "e1e8"
+      }
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "sourceId": "london-system-white/p13-bg3",
+      "population": "authored pack spines",
+      "candidateUci": "g2g4",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "knight",
+          "square": "f6"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "g4"
+        },
+        "square": "h5"
+      }
+    },
+    {
+      "rootId": "d1023:979b52c0f665251f",
+      "sourceId": "trajectory-caro-advance-chain-bishops/p44-rc1",
+      "population": "authored pack spines",
+      "candidateUci": "c7c1",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "c1"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "c7"
+        },
+        "baselineMoveUci": "c1c7"
+      }
+    },
+    {
+      "rootId": "d1023:979b52c0f665251f",
+      "sourceId": "trajectory-caro-advance-chain-bishops/p44-rc1",
+      "population": "authored pack spines",
+      "candidateUci": "e7c5",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "rook",
+          "promoted": false,
+          "square": "c1"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "c7"
+        },
+        "baselineMoveUci": "c1c7"
+      }
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "sourceId": "anti-london-black/p10-e6",
+      "population": "authored pack spines",
+      "candidateUci": "e7e6",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "baselineMoveUci": "d4c5"
+      }
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "sourceId": "anti-london-black/p10-e6",
+      "population": "authored pack spines",
+      "candidateUci": "h8g8",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c5"
+        },
+        "baselineMoveUci": "d4c5"
+      }
+    },
+    {
+      "rootId": "d1023:9840521190fdbfff",
+      "sourceId": "https://lichess.org/pQZ75avT#32",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e8c8",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "e4"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "e8"
+        },
+        "baselineMoveUci": "e4e8"
+      }
+    },
+    {
+      "rootId": "d1023:9840521190fdbfff",
+      "sourceId": "https://lichess.org/pQZ75avT#32",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e8e4",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "e4"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "e8"
+        },
+        "baselineMoveUci": "e4e8"
+      }
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "sourceId": "open-centre-ruy-exchange/nd4-centralize",
+      "population": "authored pack spines",
+      "candidateUci": "f2f3",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "bishop",
+          "square": "e6"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "f3"
+        },
+        "square": "g4"
+      }
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "sourceId": "trajectory-caro-advance-chain-bishops/p38-rc7",
+      "population": "authored pack spines",
+      "candidateUci": "g7g5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "e3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      }
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "sourceId": "https://lichess.org/fd37KgOs#16",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e6e5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "g5"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "square": "f4"
+      }
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "sourceId": "anti-sicilian-najdorf-english-attack/e6-scheveningen",
+      "population": "authored pack spines",
+      "candidateUci": "e7e6",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "d4"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "f5"
+      }
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "sourceId": "https://lichess.org/6a0z3iBG#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "b7b5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b5"
+        },
+        "square": "c4"
+      }
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "sourceId": "https://lichess.org/ktZ3spXM#16",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "g6g5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "g5"
+        },
+        "square": "f4"
+      }
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "sourceId": "https://lichess.org/ktZ3spXM#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "d7d5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "c4"
+      }
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "sourceId": "https://lichess.org/9l0YS4kF#16",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "c5d4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "f4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c7"
+        },
+        "baselineMoveUci": "f4c7"
+      }
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "sourceId": "https://lichess.org/9l0YS4kF#16",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e6e5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "f4"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "c7"
+        },
+        "baselineMoveUci": "f4c7"
+      }
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "sourceId": "https://lichess.org/eC6uvelI#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "a6a5",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a5"
+        },
+        "square": "b4"
+      }
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "sourceId": "trajectory-caro-advance-chain-bishops/p05-e5",
+      "population": "authored pack spines",
+      "candidateUci": "a2a4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d5e4"
+      }
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "sourceId": "trajectory-caro-advance-chain-bishops/p05-e5",
+      "population": "authored pack spines",
+      "candidateUci": "e4e5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d5e4"
+      }
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "sourceId": "french-advance-black/p6-c5",
+      "population": "authored pack spines",
+      "candidateUci": "a7a6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "f1"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      }
+    },
+    {
+      "rootId": "d1023:d1e1300f0eec8303",
+      "sourceId": "https://lichess.org/RpFyUtKu#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "d7d5",
+      "played": true,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "g2"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "square": "e4"
+      }
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "sourceId": "anti-scandinavian-white/p5-d4-vs-nf6",
+      "population": "authored pack spines",
+      "candidateUci": "d2d4",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "baselineMoveUci": "f6d5"
+      }
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "sourceId": "anti-scandinavian-white/p5-d4-vs-nf6",
+      "population": "authored pack spines",
+      "candidateUci": "g1e2",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "d5"
+        },
+        "baselineMoveUci": "f6d5"
+      }
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "sourceId": "rook-4v3-same-side-hold/w-f4",
+      "population": "authored pack spines",
+      "candidateUci": "f2f4",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d5e5"
+      }
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "sourceId": "rook-4v3-same-side-hold/w-f4",
+      "population": "authored pack spines",
+      "candidateUci": "h2h4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e5"
+        },
+        "baselineMoveUci": "d5e5"
+      }
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "sourceId": "https://lichess.org/eC6uvelI#8",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e7e6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "bishop",
+          "square": "c4"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "e6"
+        },
+        "square": "d5"
+      }
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "sourceId": "rook-4v3-same-side-hold/w-f3",
+      "population": "authored pack spines",
+      "candidateUci": "f2f3",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d4e4"
+      }
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "sourceId": "rook-4v3-same-side-hold/w-f3",
+      "population": "authored pack spines",
+      "candidateUci": "h2h3",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "rook",
+          "promoted": false,
+          "square": "d4"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "d4e4"
+      }
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "sourceId": "https://lichess.org/pUkgyxDV#16",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "a7a6",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "white",
+          "role": "knight",
+          "square": "c3"
+        },
+        "controllingPawn": {
+          "color": "black",
+          "role": "pawn",
+          "square": "a6"
+        },
+        "square": "b5"
+      }
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "sourceId": "italian-center-attack-white/p17-exd5",
+      "population": "authored pack spines",
+      "candidateUci": "e4d5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "f6e4"
+      }
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "sourceId": "italian-center-attack-white/p17-exd5",
+      "population": "authored pack spines",
+      "candidateUci": "f3e5",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "black",
+          "role": "knight",
+          "promoted": false,
+          "square": "f6"
+        },
+        "target": {
+          "color": "white",
+          "role": "pawn",
+          "square": "e4"
+        },
+        "baselineMoveUci": "f6e4"
+      }
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "sourceId": "italian-center-attack-white/p18-nxd5",
+      "population": "authored pack spines",
+      "candidateUci": "a7a5",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "c6"
+        },
+        "baselineMoveUci": "d5c6"
+      }
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "sourceId": "italian-center-attack-white/p18-nxd5",
+      "population": "authored pack spines",
+      "candidateUci": "f6d5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "pawn",
+          "promoted": false,
+          "square": "d5"
+        },
+        "target": {
+          "color": "black",
+          "role": "knight",
+          "square": "c6"
+        },
+        "baselineMoveUci": "d5c6"
+      }
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "sourceId": "https://lichess.org/CmcgG2om#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e8e1",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "f3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b7"
+        },
+        "baselineMoveUci": "f3b7"
+      }
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "sourceId": "https://lichess.org/CmcgG2om#48",
+      "population": "sealed imported fixed-ply sample",
+      "candidateUci": "e8e4",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "bishop",
+          "promoted": false,
+          "square": "f3"
+        },
+        "target": {
+          "color": "black",
+          "role": "pawn",
+          "square": "b7"
+        },
+        "baselineMoveUci": "f3b7"
+      }
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "sourceId": "anti-london-black/p9-nbd2",
+      "population": "authored pack spines",
+      "candidateUci": "g2g4",
+      "played": false,
+      "targetFamily": "destination",
+      "target": {
+        "minor": {
+          "color": "black",
+          "role": "knight",
+          "square": "f6"
+        },
+        "controllingPawn": {
+          "color": "white",
+          "role": "pawn",
+          "square": "g4"
+        },
+        "square": "h5"
+      }
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "sourceId": "trajectory-qgd-exchange-minority/p54-ra5",
+      "population": "authored pack spines",
+      "candidateUci": "a6a5",
+      "played": true,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "a5"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "a6"
+        },
+        "baselineMoveUci": "a5a6"
+      }
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "sourceId": "trajectory-qgd-exchange-minority/p54-ra5",
+      "population": "authored pack spines",
+      "candidateUci": "a6b6",
+      "played": false,
+      "targetFamily": "material",
+      "target": {
+        "attacker": {
+          "color": "white",
+          "role": "queen",
+          "promoted": false,
+          "square": "a5"
+        },
+        "target": {
+          "color": "black",
+          "role": "rook",
+          "square": "a6"
+        },
+        "baselineMoveUci": "a5a6"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "rootId": "pressure:bg4-h3-bh5",
+      "status": "declared_relation_control",
+      "declaration": "tools/d3262-search-calibration/bishop-pressure-control.mjs#bishopPressureDeclaration"
+    },
+    {
+      "rootId": "quiet-plan:carlsbad-nf8",
+      "status": "no_autonomous_semantic_target",
+      "declaration": "content/drafts/carlsbad-minority-attack.json#nf8-regroup"
+    },
+    {
+      "rootId": "tactical:fork-parried",
+      "status": "declared_relation_control",
+      "declaration": "tools/d3262-search-calibration/fork-control-identity.mjs#controls"
+    },
+    {
+      "rootId": "tactical:fork-survives",
+      "status": "declared_relation_control",
+      "declaration": "tools/d3262-search-calibration/fork-control-identity.mjs#controls"
+    }
+  ]
+}

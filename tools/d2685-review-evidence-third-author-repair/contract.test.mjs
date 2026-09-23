@@ -494,6 +494,21 @@ test("D2691 source-plan/compiler/assertion execute exact set equality", () => {
   assert.throws(() => compileReviewEvidence({ subject, sources: [wrongNode, ...sources.slice(1)] }));
 });
 
+function makeDependencies(makefile) {
+  const dependencies = new Map();
+  for (const line of makefile.split("\n")) {
+    const match = /^([a-z0-9-]+):\s*(.*)$/u.exec(line);
+    if (match === null) continue;
+    // GNU Make accumulates prerequisites from repeated declarations of a target.
+    dependencies.set(match[1], [...(dependencies.get(match[1]) ?? []), ...match[2].trim().split(/\s+/u).filter(Boolean)]);
+  }
+  return dependencies;
+}
+
+test("repeated Make target declarations accumulate their prerequisites", () => {
+  assert.deepEqual(makeDependencies("aggregate: first\naggregate: second\n").get("aggregate"), ["first", "second"]);
+});
+
 test("D2692 live execution image and opt-in RFC evidence retain the repaired ABI", () => {
   const execution = JSON.parse(readFileSync("rfc/contracts/module-execution-plan-v1.json", "utf8"));
   const source = execution.sourceContracts.find((row) => row.id === "review_evidence_packet@1");
@@ -504,10 +519,7 @@ test("D2692 live execution image and opt-in RFC evidence retain the repaired ABI
   assert.equal(source.assertion.appliesTo, "ReviewEvidencePacket");
   assert.match(source.seal, /private aggregate authority/u);
   const makefile = readFileSync("Makefile", "utf8");
-  const dependencies = new Map(makefile.split("\n").flatMap((line) => {
-    const match = /^([a-z0-9-]+):\s*(.*)$/u.exec(line);
-    return match === null ? [] : [[match[1], match[2].trim().split(/\s+/u).filter(Boolean)]];
-  }));
+  const dependencies = makeDependencies(makefile);
   const reaches = (current, target, seen = new Set()) => current === target || (!seen.has(current) && (
     seen.add(current), (dependencies.get(current) ?? []).some((dependency) => reaches(dependency, target, seen))
   ));

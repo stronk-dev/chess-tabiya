@@ -20456,3 +20456,21 @@ the retreat clears that attack while maintaining the f3 knight screen and latent
 All six legal knight moves expose a geometric bishop attack on the queen. An independent
 python-chess check agreed. This does not make the retreat forced or good: Black had 31 legal
 replies, and the five-arm contrastive/value test remains open under [[D3262]].
+
+### 2026-09-23 — D3262 restores exact source targets before semantic traversal
+
+The sealed D1023 sample retained 96 exact material/destination target identities, but D3262's
+frozen manifest projected each to a family label. A separate byte-checked join now retains all
+96 targets against 94 distinct source root-candidates without changing the preregistered roots
+or importing predecessor outcome verdicts. Two fork roots and the bishop root keep their separate
+declared relation controls; the Carlsbad route receives `no_target` rather than an inferred plan.
+`planning/semantic-consequence-search/d3262-target-register.md` records the scope. [[D3262]]
+remains open; no five-arm traversal or production profile is claimed.
+
+### 2026-09-23 — D3277 aggregate RFC evidence parser follows Make semantics
+
+Running the aggregate draft-RFC evidence gate exposed a false failure in its own review-evidence
+contract: a test parsed repeated `verify-rfc-evidence:` lines into a `Map` that discarded the
+earlier prerequisite list, whereas GNU Make accumulates both. The checker now combines the lists
+and has a repeated-rule regression fixture. This repair changes the verification instrument, not
+the product or the D3262 target receipt. [[D3277]]

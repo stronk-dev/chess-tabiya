@@ -186,6 +186,15 @@ the f3 knight with a d1 queen behind it. Every one of the knight's six legal mov
 geometric attack on the queen; python-chess independently reproduced that narrow result. No
 engine preference or forced continuation follows from it. `[V]`
 `planning/semantic-consequence-search/d3262-bishop-pressure-control.md`.
+The sealed D1023 predecessor sample names exact material or destination target identities for
+all 96 selected source rows, but the frozen 66-root manifest reduced them to a family label.
+The separate join receipt now restores those identities without changing the preregistered
+population: 96/96 source rows join, covering 94 distinct source root-candidates on 62 roots.
+The bishop and two fork controls carry their own declared relation checks; the Carlsbad control
+has an authored knight route, not an autonomous semantic target, so that search arm must report
+`no_target` there. Target registration is not evidence that a frontier found or proved a reason.
+`[V]` `planning/semantic-consequence-search/d3262-target-register.md` and
+`make semantic-search-target-register`.
 
 Architecture is not calibration. Before acceptance, one preregistered harness must compare at least:
 

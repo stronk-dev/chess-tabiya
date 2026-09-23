@@ -83,6 +83,11 @@ does not generalize to the other roots or grade the tactic.
 The `h3` / `...Bh5` line now has a scoped relation receipt in
 `d3262-bishop-pressure-control.md`: the harassed bishop retreats while retaining the f3 knight
 screen and a latent d1 queen exposure. It does not say the retreat is forced or recommended.
+The D1023 predecessor rows retain exact target identities in their sealed source, but the frozen
+manifest intentionally projected them away. `d3262-target-register.md` restores the source join
+as a separate checked receipt: 96 rows, 94 distinct source root-candidates. The two fork and
+bishop controls have declared relations; Carlsbad has an authored route but no autonomous semantic
+target and must remain `no_target` for that arm. This is target availability, not traversal.
 The Maia source exposes raw model rather than configured sampling mass, which the arm must
 keep distinct; this observation does not amend the frozen population or rescue a missing arm.
 No five-arm traversal result exists. [[D3262]] remains open, and
