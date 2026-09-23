@@ -414,11 +414,13 @@ source join, not a human-frequency estimate or a semantic proof. The corrected
 target frame now contains 182 comparison cells for 64 source-named targets:
 96 source-observed and 86 natural alternatives. Its checker binds the target
 register and corrected candidate-frame digests; it does not report outcomes.
-The coherent engine/Maia first-reply union now selects 1,966 paths from
-6,176 exact legal replies. A path/position join proves the deeper source gap:
-250 Maia histories and 267 Stockfish FENs need fresh capture before the
-corrected comparison can run. The target-preserving arm and five-arm outcome
-remain unmeasured. [[D3289]] `[V]`
+The coherent engine/Maia first-reply union selects 1,966 paths from 6,176
+exact legal replies. The 250 missing Maia histories and 267 Stockfish FENs
+are now captured and independently validated. A digest-bound source union
+joins all 1,966 selected paths to an exact path-keyed Maia record and a
+position-keyed coherent Stockfish record, keeping their distinct reuse
+rules. This closes the selected-provider source gap, **not** the semantic
+target-preserving arm or the five-arm proof/abstention/cost verdict. [[D3289]] `[V]`
 `planning/semantic-consequence-search/d3262-coherent-new-child-sources.md`,
 `planning/semantic-consequence-search/d3262-coherent-first-reply-frontier.md`.
 

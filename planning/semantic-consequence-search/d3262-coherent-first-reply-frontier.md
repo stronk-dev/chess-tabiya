@@ -34,3 +34,31 @@ The supplement is a capture queue, not captured evidence. The target-preserving
 semantic arm has not been re-run on this corrected frame. No five-arm proof,
 abstention, explanatory discrimination or cold/warm/offline cost verdict
 follows from these reach counts. [[D3262]] and [[D3289]] remain open.
+
+## Post-capture source-closure receipt — 2026-09-23
+
+The 267 Stockfish supplement positions are now captured with the pinned
+Stockfish 19 binary and coherent top-eight rank tables at depth 8, depth 12
+and 100 ms. The independent check reconstructs 24,123 legal-move instances,
+6,360 ranked entries and 226 explicitly labelled trailing partial iterations;
+its capture SHA-256 is
+`7d163bcf173380b01706dbb4c333ad3ad9bca9076d24bc9799c25ea1cd030ea9`.
+The 250 path-keyed Maia3-5M queries are also captured after replaying the
+existing control distribution in the pinned local container. The checker
+reconstructs 7,566 legal moves and 946 configured-support entries, with zero
+terminal paths; capture SHA-256
+`2de17dd0471e914c2d894fcd1fdaf579c53ec09cf23a3c9bf5911299f5ce3fa6`.
+These are model-policy masses, **not** human frequencies.
+
+The checked union SHA-256
+`31e8f9ba654ffcb306d22d8b7455500049c931c66aea58ee7a2e9cb0da9a55da`
+binds all 1,966 selected paths to both providers: Stockfish 1,699 paths
+from the prior FEN capture and 267 from the supplement; Maia 1,716 paths
+from prior exact histories and 250 from the supplement. The one same-FEN
+pair remains two distinct Maia path identities. Negative fixtures refuse
+missing or crossed source rows, legal-denominator loss, mixed engine depth
+and forged policy mass. `make semantic-search-coherent-deeper-union-check`
+replays the full chain. Source coverage is now complete for the *selected*
+frontier, but the target-preserving arm, counterfactual proof/abstention and
+end-to-end product cost still have not been measured. [[D3262]] and [[D3289]]
+remain open.

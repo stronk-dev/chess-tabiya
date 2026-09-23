@@ -63,16 +63,22 @@ def distribution(engine, cfg):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", required=True)
+    parser.add_argument("--coherent-supplement", action="store_true")
     args = parser.parse_args()
-    frame_path = ROOT / "d3262-maia-horizon4-path-frame.json"
+    frame_path = ROOT / ("d3262-coherent-deeper-supplement-frame.json" if args.coherent_supplement
+                         else "d3262-maia-horizon4-path-frame.json")
     direct_path = ROOT / "d3262-maia-direct-logits.json"
     child_path = ROOT / "d3262-maia-history-replay.json"
     frame = json.loads(frame_path.read_text())
     direct = json.loads(direct_path.read_text())
     child = json.loads(child_path.read_text())
-    require(frame["authority"] == "path_keyed_maia_horizon_four_capture_jobs_not_policy_result"
+    jobs = frame["maiaJobs"] if args.coherent_supplement else frame["jobs"]
+    expected_authority = ("missing_deeper_provider_jobs_not_result_or_move_grade" if args.coherent_supplement
+                          else "path_keyed_maia_horizon_four_capture_jobs_not_policy_result")
+    expected_jobs = 250 if args.coherent_supplement else 2189
+    require(frame["authority"] == expected_authority
             and frame["manifest"] == direct["manifest"] == child["manifest"]
-            and len(frame["jobs"]) == 2189, "Crossed Maia path frame")
+            and len(jobs) == expected_jobs, "Crossed Maia path frame")
 
     cfg = parse_args(["--model", "5m", "--use-uci-history", "--local-files-only", "--device", "cpu"])
     engine = Maia3UCIEngine(cfg)
@@ -96,7 +102,7 @@ def main():
     require(max(abs(actual["mass"] - previous["mass"]) for actual, previous in zip(control_support, control["configuredSupport"])) <= 0.000001, "Maia child control support mass changed")
 
     rows = []
-    for index, job in enumerate(frame["jobs"]):
+    for index, job in enumerate(jobs):
         require(job["historyUci"] == [job["candidateUci"], job["replyUci"]], f"Maia path identity changed at {index}")
         engine.cmd_position(f"position fen {job['rootFen']} moves {' '.join(job['historyUci'])}")
         require(engine.board.fen() == job["fen"] and len(engine.history) == 3, f"Maia path replay failed at {index}")
@@ -105,17 +111,19 @@ def main():
         terminal = outcome is not None
         raw, support = ([], []) if terminal else distribution(engine, cfg)
         require(terminal or legal == [item["legalUci"] for item in raw], f"Maia legal denominator differs at {index}")
+        source_job = {field: job[field] for field in ("id", "rootId", "candidateUci", "replyUci", "rootFen", "historyUci", "fen")}
         rows.append({
-            **job, "terminal": terminal,
+            **source_job, "terminal": terminal,
             "terminalReason": outcome.termination.name if terminal else None,
             "legalUcis": legal, "rawFullLegal": raw, "configuredSupport": support,
         })
         if (index + 1) % 100 == 0:
-            print(f"D3262 path-keyed Maia {index + 1}/{len(frame['jobs'])}", file=sys.stderr, flush=True)
+            print(f"D3262 path-keyed Maia {index + 1}/{len(jobs)}", file=sys.stderr, flush=True)
 
     artifact = {
         "version": 1, "manifest": frame["manifest"],
-        "authority": "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof",
+        "authority": ("coherent_deeper_path_keyed_maia_not_human_frequency_or_proof" if args.coherent_supplement
+                      else "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof"),
         "inputDigests": {frame_path.name: digest(frame_path), direct_path.name: digest(direct_path), child_path.name: digest(child_path)},
         "source": {**direct["source"], "historyUci": "root_candidate_reply_path_per_row",
                    "preRootHistory": "unavailable_not_inferred"},

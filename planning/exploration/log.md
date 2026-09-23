@@ -20775,3 +20775,14 @@ the existing deeper captures. This distinguishes a real provider-capture
 queue from a semantic explanation; old direct Maia logits were not mixed
 with path-history samples. The target-preserving arm and full five-arm
 proof/abstention/cost comparison remain open under [[D3262]]/[[D3289]].
+### 2026-09-23 — D3262 corrected deeper providers captured and joined
+
+The preregistered 267 missing Stockfish FENs and 250 Maia path histories are
+captured with the pinned binary/model settings. Independent readers verify
+24,123 Stockfish legal-move instances and 7,566 Maia legal moves; negative
+fixtures refuse crossed history, source identity, legal denominators, engine
+rank depth and configured mass. A separate digest-bound union joins both
+providers to all 1,966 corrected selected first-reply paths, including the
+same-FEN/different-Maia-history distinction. D3289's provider-source gap is
+closed, but its corrected target-preserving arm and [[D3262]]'s five-arm
+semantic proof, typed abstention and end-to-end cost gate remain open.

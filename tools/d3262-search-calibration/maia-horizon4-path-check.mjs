@@ -26,11 +26,16 @@ function masses(items, expectedLegal, label, complete = false) {
   return seen;
 }
 
-export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, directBytes, child, childBytes, capture) {
-  check(frame.authority === "path_keyed_maia_horizon_four_capture_jobs_not_policy_result" && frame.jobs.length === 2189
-    && capture.version === 1 && capture.manifest === frame.manifest && capture.positions === 2189 && capture.rows.length === 2189
-    && capture.authority === "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof", "Crossed or incomplete Maia path capture");
-  check(capture.inputDigests?.["d3262-maia-horizon4-path-frame.json"] === sha(frameBytes)
+export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, directBytes, child, childBytes, capture, expected = {
+  frameAuthority: "path_keyed_maia_horizon_four_capture_jobs_not_policy_result",
+  captureAuthority: "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof",
+  frameName: "d3262-maia-horizon4-path-frame.json", positions: 2189, sharedFenControl: true,
+}) {
+  const jobs = expected.frameName === "d3262-coherent-deeper-supplement-frame.json" ? frame.maiaJobs : frame.jobs;
+  check(frame.authority === expected.frameAuthority && jobs.length === expected.positions
+    && capture.version === 1 && capture.manifest === frame.manifest && capture.positions === expected.positions && capture.rows.length === expected.positions
+    && capture.authority === expected.captureAuthority, "Crossed or incomplete Maia path capture");
+  check(capture.inputDigests?.[expected.frameName] === sha(frameBytes)
     && capture.inputDigests?.["d3262-maia-direct-logits.json"] === sha(directBytes)
     && capture.inputDigests?.["d3262-maia-history-replay.json"] === sha(childBytes), "Maia path source digest mismatch");
   const source = capture.source;
@@ -40,8 +45,8 @@ export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, direc
     && source.useUciHistory === true && source.historyUci === "root_candidate_reply_path_per_row"
     && source.preRootHistory === "unavailable_not_inferred" && source.device === "cpu", "Maia path model or history source changed");
   let legalMovesCount = 0, configuredSupport = 0, terminal = 0;
-  for (let index = 0; index < frame.jobs.length; index += 1) {
-    const job = frame.jobs[index], row = capture.rows[index];
+  for (let index = 0; index < jobs.length; index += 1) {
+    const job = jobs[index], row = capture.rows[index];
     check(row.id === job.id && row.rootId === job.rootId && row.candidateUci === job.candidateUci
       && row.replyUci === job.replyUci && row.rootFen === job.rootFen && row.fen === job.fen
       && JSON.stringify(row.historyUci) === JSON.stringify(job.historyUci), `Crossed Maia path row ${index}`);
@@ -62,14 +67,18 @@ export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, direc
     configuredSupport += row.configuredSupport.length;
   }
   const sharedFenRows = capture.rows.filter((row, _, rows) => rows.some((other) => other !== row && other.fen === row.fen));
-  check(sharedFenRows.length === 2 && sharedFenRows[0].fen === sharedFenRows[1].fen, "Shared-FEN path control missing");
-  const sharedRaw = sharedFenRows.map((row) => new Map(row.rawFullLegal.map((item) => [item.legalUci, item.mass])));
-  const sharedConfigured = sharedFenRows.map((row) => new Map(row.configuredSupport.map((item) => [item.legalUci, item.mass])));
-  const sameFenRawTotalVariation = [...sharedRaw[0]].reduce((sum, [move, mass]) => sum + Math.abs(mass - sharedRaw[1].get(move)), 0) / 2;
-  const sameFenConfiguredTotalVariation = [...new Set([...sharedConfigured[0].keys(), ...sharedConfigured[1].keys()])]
-    .reduce((sum, move) => sum + Math.abs((sharedConfigured[0].get(move) ?? 0) - (sharedConfigured[1].get(move) ?? 0)), 0) / 2;
-  return { positions: capture.positions, uniqueFens: new Set(frame.jobs.map((job) => job.fen)).size, terminal, legalMoves: legalMovesCount, configuredSupport,
-    sameFenRawTotalVariation, sameFenConfiguredTotalVariation };
+  if (expected.sharedFenControl) check(sharedFenRows.length === 2 && sharedFenRows[0].fen === sharedFenRows[1].fen, "Shared-FEN path control missing");
+  let sameFenRawTotalVariation;
+  let sameFenConfiguredTotalVariation;
+  if (expected.sharedFenControl) {
+    const sharedRaw = sharedFenRows.map((row) => new Map(row.rawFullLegal.map((item) => [item.legalUci, item.mass])));
+    const sharedConfigured = sharedFenRows.map((row) => new Map(row.configuredSupport.map((item) => [item.legalUci, item.mass])));
+    sameFenRawTotalVariation = [...sharedRaw[0]].reduce((sum, [move, mass]) => sum + Math.abs(mass - sharedRaw[1].get(move)), 0) / 2;
+    sameFenConfiguredTotalVariation = [...new Set([...sharedConfigured[0].keys(), ...sharedConfigured[1].keys()])]
+      .reduce((sum, move) => sum + Math.abs((sharedConfigured[0].get(move) ?? 0) - (sharedConfigured[1].get(move) ?? 0)), 0) / 2;
+  }
+  return { positions: capture.positions, uniqueFens: new Set(jobs.map((job) => job.fen)).size, terminal, legalMoves: legalMovesCount, configuredSupport,
+    ...(expected.sharedFenControl ? { sameFenRawTotalVariation, sameFenConfiguredTotalVariation } : {}) };
 }
 
 if (process.argv[1]?.endsWith("maia-horizon4-path-check.mjs")) {

@@ -106,3 +106,15 @@ identifies 250 missing deeper Maia histories and 267 missing Stockfish FENs.
 `d3262-coherent-first-reply-frontier.md` records the exact digests, source
 partition and remaining limits. No target-preserving result, semantic proof,
 abstention or production cost has been promoted by these receipts.
+
+## Post-freeze deeper source closure — 2026-09-23
+
+The supplement capture queue has now been executed under the declared
+Stockfish 19 and Maia3-5M sources. Independent checks reconstruct every
+selected child legal denominator and the ordered Maia history. A sealed union
+binds all 1,966 selected first-reply paths to both deeper providers, with
+source digests and explicit old/new row references. The exact counts and
+capture digests are in `d3262-coherent-first-reply-frontier.md`. This removes
+the missing-provider excuse from the next five-arm comparison; it does not
+resolve the semantic-target-preserving selection, proof/abstention, timing
+gate or criterion 23.
