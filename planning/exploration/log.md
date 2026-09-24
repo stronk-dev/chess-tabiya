@@ -21131,3 +21131,27 @@ shows a fixed explanation beside the due date. D864 closes.
   line for the position, attributed to its engine and search limit. It is never
   in the ordinary payload and is withheld during an open retry.
 - **Ledger:** D880 closes.
+
+### 2026-09-24 — bot-policy and bot-roster: partial landing, both implementing
+
+- **Catalogue:** `bot-profile-catalog@1` registers twelve complete profiles, as
+  three families across four bands.
+- **Compiler:** it seals the root and applies top-p to the tempered
+  distribution. The Stockfish guard compares candidates against the best legal
+  move and stands aside on any malformed row. Stored decisions replay from
+  independently loaded inputs.
+- **Cards:** built from templates, with every number read from a committed
+  artifact. All twelve are honestly uncalibrated, with no strength number and
+  no name.
+- **Capabilities:** `/capabilities` lists every profile as `not_startable`,
+  with named blockers.
+- **Ledger:** D3025 and D3026 close.
+- **Blocked:**
+  - Run lane 0.18 and its migration, which queue behind concept-registry →
+    evidence-job-durability → longitudinal-store.
+  - The opponent-ply route, which needs provider-exchange delivery.
+  - Availability, which needs provider-health.
+  - Calibration, and the owner's persona names (D1610).
+- **Consequence:** learners cannot choose a bot yet. The durable-state
+  migration chain is now the binding constraint for bots, and it also blocks
+  longitudinal history and campaign.

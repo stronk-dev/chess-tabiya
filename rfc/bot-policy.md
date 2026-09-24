@@ -1,6 +1,6 @@
 # RFC: Bot policy
 
-- **Status:** **draft — owner-directed partial implementation landed 2026-09-24 without the fresh
+- **Status:** **implementing — owner-directed partial implementation landed 2026-09-24 without the fresh
   review; the persisted route stays dependency-blocked.** Shipped: the `bot-profile-catalog@1`
   runtime catalogue (twelve profiles derived as families × bands, pinned behaviour/profile digests,
   complete-reference resolution, closed layer/classifier/reason/card/blocker grammar, composition

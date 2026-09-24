@@ -1,6 +1,6 @@
 # RFC: Bot roster
 
-- **Status:** draft — **owner-directed partial implementation landed 2026-09-24 without the
+- **Status:** implementing — **owner-directed partial implementation landed 2026-09-24 without the
   fresh review: the 4×3 roster is registered, not playable.** `bot-profile-catalog@1` (owned by
   `bot-policy` §1) derives the twelve `family.band@1` profiles as `FAMILIES × BANDS` with separate
   pinned `behaviorDigest`/profile digests; every profile has a grounded, source-bearing card from

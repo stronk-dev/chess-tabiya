@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:559e732e9822637617cf0c9eb1f16dc64f8055fe7ba85cb82156a85456b871c8",
+    "roadmap": "sha256:911c16e02cc74a0b4ead757b3cf8707f102f394911e74ed17885ea300f71ec2f",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:46018b7a444003d6187216f6734ab44b37bae34ba012e03f49ca081e3bdc4850",
-    "rfcRegister": "sha256:a95524ab8f36eb3229a50bdc2f50ca7d72f0bc19460912af983d3432aa0bcfaf",
+    "workState": "sha256:7dd3c8ff3ccf6d63ce69d13e6e9aeecaf6892bc157a8e78df327011dae0d57c2",
+    "rfcRegister": "sha256:adf2059ef417d7c9dbd9e990c3ce612b2d1a57d437e5dbede92c718ce3814aea",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:30ffd333d712c53b1c2c7506d41cc4be49dfe88f965bb990878a4fe638ed199f",
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 52,
+      "draft": 50,
       "accepted": 0,
-      "implementing": 9,
+      "implementing": 11,
       "awaiting": 11,
       "implemented": 0,
       "superseded": 0,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 625,
       "doing": 0,
-      "blocked": 1204,
-      "done": 1108,
+      "blocked": 1202,
+      "done": 1110,
       "refused": 111
     },
     "workItems": {
@@ -264,56 +264,30 @@
       ],
       "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
-        "at": "2026-09-07",
-        "summary": "Bot policy's bounded fifth author repair closes complete-profile identity, independent durable reconstruction, both replay paths, closed request grammar, duplicate guard rows and repository compiler parity. Shared durable provider parsing and the current accepted health checkpoint remain explicit dependencies; longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
+        "at": "2026-09-24",
+        "summary": "Bot policy and roster landed their non-persistent half: a twelve-profile catalogue with exact identity binding, a sealed deterministic compiler with a strict guard and replay from independent inputs, and honest uncalibrated cards exposed as not-startable. Persisting the chosen profile needs run lane 0.18 and a migration queued behind concept-registry, evidence-job-durability and longitudinal-store, which is now the binding constraint for bots, history and campaign.",
         "impact": "advanced",
         "evidence": [
-          "planning/platform-alignment/bot-policy/fifth-author-repair-2026-09-07.md",
+          "apps/server/src/bot-policy-compiler.ts",
+          "planning/bot-policy/implementation-receipt-2026-09-24.md",
           "rfc/bot-policy.md",
-          "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts",
-          "rfc/longitudinal-store.md",
-          "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2986-campaign-seventh-fresh-review/review.test.ts",
-          "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts",
-          "rfc/safe-deployment-profiles.md",
-          "rfc/campaign-core.md",
-          "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts",
-          "rfc/storage-backup-recovery.md",
-          "rfc/social-play.md"
+          "rfc/bot-roster.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "safe-deployment-profiles.md",
-            "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"
-          },
-          {
-            "kind": "rfc",
-            "id": "campaign-core.md",
-            "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"
-          },
-          {
-            "kind": "rfc",
-            "id": "storage-backup-recovery.md",
-            "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"
-          },
-          {
-            "kind": "rfc",
-            "id": "longitudinal-store.md",
-            "digest": "sha256:d6c2798b7b33d17cd80d2d31c471e0e74f7e175ca76203a30bab16752db2acff"
-          },
-          {
-            "kind": "rfc",
             "id": "bot-policy.md",
-            "digest": "sha256:0d7bcc6d02dfa4b3cdadca0c5141e41207588372b7d28a3fb8837abe04e61e9f"
+            "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
           },
           {
             "kind": "rfc",
-            "id": "social-play.md",
-            "digest": "sha256:3f81a29ba056944e9b54a9b56b5af9eb5bd5415253aada5eac6c9f862cb39a6b"
+            "id": "bot-roster.md",
+            "digest": "sha256:51f22932e44a8c95ecac0c96c6ccf50861146e946213b04e46b3d205f6cdd27c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3027",
+            "digest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e"
           }
         ]
       },
