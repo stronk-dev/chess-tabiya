@@ -19289,12 +19289,12 @@
     },
     {
       "id": "D2429",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3dcb7e6eb5ec3b9d882bd3a225d470d1e65ebb0cf41a7b70518e2c2d8c1143e4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:85fe5360d726df513c7a2db3d8af572f1bae956258b4b65b1accf9c99890b081",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/capability-operations.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2430",
@@ -20007,48 +20007,48 @@
     },
     {
       "id": "D2509",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:907bf597d4b2e87a77a27c2d5407b0bf7f3391c1fd20b02449aa267cb48dbee3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f4b43271c16c1c27087a4b2dbaf01d342a14d260dd45db7e9ad53ab4f197658b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/capability-operations.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2510",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5eb4d5a90543e6a434bc87fe9dc416fbe495ebef8b53fc6d4b630fa29ca3a61e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:874320a78493753e8066528ed81fe2c556a224d3d3070ea71f906fef0a67ad4e",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/capability-operations.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2511",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75b6636f756d87bb0dc1b651e437fd1ddf649e7562909a14f10570dd8ca466bb",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:976fb45fd2d9a7c9715f8f69ada104c9e87e99cef5ec2aa9ef66c7b20085b1bf",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/capability-operations.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2512",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:397d2cb951de6e91e02a85679e9eca9fc6a4eb3c4ff36bb6cc9e4bcd1c31fce7",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:70d1b2ad67e5d32e737f8a709afcb6683f750535e2163677ddcbb9ff32fe66f7",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/capability-operations.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2513",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:755867e5839ebfd57a3681281867078aaddd076cc3ecaa983b3f1488fef678ec",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d4b8dc7a5abd7799a6e0af2492d8a60473f8385def73760b26a9b676dbc2e4a8",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/capability-operations.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2514",
@@ -20709,57 +20709,57 @@
     },
     {
       "id": "D2587",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:54ddf64b67d9d7b5ad37ca71dc36c3a1cbbe1378ac472cd08a2d75188597d833",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:36bd814eb64523b566f991ef08f57d651f2dbf221b6fdc9f9c093cc645c9690e",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2588",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:04ed23877ca9f6088f281fd2f50233ceb917254a06b1089cdc4861468d8aa1a4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6cc7b4788fdb503fe470d060451ac537ec8e51fc021288860b975e49c6c1cb92",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2589",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bb32f2b855a46205b17996bf4bc47cac8a2f8bcc10448899f56766a3575b24ce",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:aacfe15bdbb4daeebbff7472596d4127025112bf1481293de76380546e4b5bea",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2590",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1cd6d34326afecbfd13b661bea0ec0df696f4418fd3968ed6d8a666c80ab52c1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d7534e3289f296398aa5bb09198a9acfffdb70607a811017c9776725f5439597",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2591",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4ce945e2a89d835f42e6809305c97bdb6e9bccd360d0789c6d55c40f33f4d811",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:96ffba36eb7ec1c622d328921bfd4cf8e6c9d885be64f68ee1207d92479896fa",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2592",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:98cd1ea4937d69acbc99a590c940e3edd101141d8df8df1fccd830e532ebe059",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ba47fc8913ba78cf37bf830be288872c59d87f70d4ac53d2fad832973ba049ca",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2593",
@@ -21483,48 +21483,48 @@
     },
     {
       "id": "D2673",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:45fa269a30558007caf9bc2b11fa246da3b2b9cdf8555d3311d692d759881617",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7b595ad0571d4c8a9d5c7a5c70984c889b9c967de87aebea6a81106e673e6fef",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2674",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:045805b52b9f2d1f35cd1d24740864ad9b1c4fa173f97db025d6629b6db7d858",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a62f55d84e2782dd1f25d840a7275c438427a1c42d94b008494be5bc7a42ad85",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2675",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f4f844b6d1f860c873d7d81b4586691a7e05e9bfe1f561cd6ba8ad881e1a19a4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:28b41c95eed42b294822c9638347d220550ad31a3c09a2d7f98909f97d36b8e9",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2676",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3ccdc48cecc53092af613b6c306f8c2a778f5f32724742414ef27d1f155018a1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b741552e914bfb9076a4f11cabb7d77e910dbcbb7c6d13ee5f4f34637ed90ef5",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2677",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:923b69e2f494edc36f88bd78121e7634a2d2a644b6e54ffca8d23acbab3c5782",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:84a48857f848bcce8ebaefd5e67db9d944e8bf85ee2981186726b5ca2863d24a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2678",
@@ -22104,57 +22104,57 @@
     },
     {
       "id": "D2742",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:d950d20aec538866a42445a52a152b6f9be6f63c5e8031a62a861efb049c7472",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fa7f591dc75827122d1f16e3d21f94c4a64ddb53f2955d9d5c7be61e016a0e18",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2743",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:39d22adf51782780bfe8ba5f6f7fa4a4f74ad7fc53653ef6cfd07e1019e1690d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f9ff8272a5a67b475ba118a37c3de084b11fb2ba69320d69b3c86ee46f94e4dc",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2744",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:a854c2cdf0e36fde2bd7ca48c93b6065b6afd44cd07963bb07a98ebe7fdb5ecf",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fec00512ae5e4e908c1eafe892f54ae48586592b2bacaf597754490e827998e6",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2745",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:f728e26fc9b387701c206563c9df23983858a34eb15d15785ff3c345020325a4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:925a43308fdc98d4d52eee81c4226eae6db03fd22f654091ca92ff11622f8b27",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2746",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:48699e36d253fb359325189fccf80af8e1769c3781e56e5a957c7a9e68503e7e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:181cd3c8604a8c26e51b3c2c49acac2b145f4dc67c1d851c8ea5f3aeaffdd07d",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2747",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:c096e3d779470cbabd4a341a336359da082b3e2c418e3cb330a1b194dac006a4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:90e39eafd4d13251a51b9ecac42419cf87c4577c24a2435446112888e87b9b04",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2748",
@@ -22365,75 +22365,75 @@
     },
     {
       "id": "D2771",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8af3cdc1d9206c1749a9727ff8b09501ff688d96f5ace61707d90b47bfd87639",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6d7c6a264f4e9bc607cbdc194a9775f074993f59f1e424eb378670c84903357c",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2772",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ff362660c8efd9f79e4610e0f0d3d6a99f46eb1676af8e5ed3116b69738add5d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a69db8647cfebcdddde144b9b20107ab82f56810c8694d3893ae80e43c1ee626",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2773",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75fbdc8db277cd23d848f0de2cd7215d166b0c397ff64376245da17fe3a8fc5f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ae9db8d3750a136c30d008dfd2adeca057254b97354685d24474f5a22fefdb01",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2774",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:901afdfca7a7d81dcb5faa03057b74f6609c5514e96c976a13fbc471c3acbe52",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dc1601fe49dea2003bc7a54e8d7623f6c591c49a33a855dfefbe0501e5d93c80",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2775",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bc0cf323889b57c17c31c1f5d8819bcdc394b271e64ec0adfbb6f1d78a99819f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:40e85f739e0642d1a43692f92e866ba2446c88379ac1fa1311a465557e62a88e",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2776",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1ae6fc1258503208e43bf9e017d94cc8603fc260560df8a3913f7ef8cb9163c3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1d2f483ae60fa053c077f9c1a5ad6692d3b25c16997b487f92f82ad3b6ba3c14",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2777",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:563063b9e50e40e0afc7638e128391d5224e0eab8cfb39ea636c2e66b0441d4f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:57d9c4ce8841bfd8ff18f271a28dd7bb850a18ddef763fefe858c101d9115463",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2778",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bfdb5669474d04e262beee246948772d655dec0f3b74516b231a1a0088c33f5c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b21193e52115148d801cd5ea1e2165d1ca9de9b7fc0835c9bbeef2473afa56ec",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2779",
@@ -22644,66 +22644,66 @@
     },
     {
       "id": "D2802",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c3a956f100b096447628cb84177f5087b2e414ddfa9dfcf3bcef0b0af950f073",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b845a8563b10f54a634303a2fe1bc0f605feee8edfad972ecf3159ded7ddfebc",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2803",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:742d3860af0671a9a6ea2d0e0a69b47d76bb3b23ef5e9105f98bf8fe90800a49",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b3c9ecec7a83cd1c2cf8a024e283c7b7d8a807a6a1b3ae3a16d4177be3191efa",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2804",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c402b930c3c81ccbdf124964a06b0ae34d6f34cc6755da1d9a24da848275ddec",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7e1b2b1750dc963525cec23e2cfc0cb10bc849acec65481f5924e2b4f97f39fe",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2805",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e0ecacb588f1ec0bc537e414a0d403cdd91dfbb39a20281ed34b836bd42fb8e4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:635ec5a39c6dc858a2de2bf876551c91d7a1b964459e9e1b40f9266053ce1e54",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2806",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:23678d2dc791729a7e08cea0e41e0c795e0e1438e2339d3bcc9a0c3809103818",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a6dc41988af89f211d5eedbd7819f35b66c8b5d29f9e75c7941cfec137f13250",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2807",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:53b0a6f7a2525433b1cafa12a139fa172a3cd5e9616b61154c7af81a574a972b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cade56a928507a48b2c23faefac8de655fed85d4d63a5eeb33239deb5f373369",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2808",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3f9ad3ba0368f3d28cb22c0746f30c87e2971bbd2600cf0d8ac4768442295170",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fa97486f323ff590ecc9bc4e898676ff6ba55c48a3c5fe448f167d8d9e2a3626",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2809",
@@ -24432,66 +24432,66 @@
     },
     {
       "id": "D3002",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6dc54bfa3b45ec752d12c803d6642a407810c66bea643f1837e9f6802fddc146",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4f8a832877b7eb6f2ec4a1e49764bbbd0a7e66d09c0f36e4c35a6f10c84ab6ad",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3003",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:872349ab71eff63685265c02ef15e7f34be6d223c0ba6959a85652a11396a260",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ee781a8312293eb62af2158785eab5c533a92eadbaadd6f3bd5be962a21889d3",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3004",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:92805495f9b2c2e5ec5cffe1a7896415a34413363405c394ed6a0fb29de26cad",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7c39ee5a345395be131bafcade9c3365f8ac0ac5278aa150df6eb6a4516629cd",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3005",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:33e85bf15e58cace0e8e5c24e15cda7df3ecd99f459c45db959520f29f5d6608",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9564a74c33bf37688854d2a5bb395c85fd4f178a7977471c843a0cb1e1eb6596",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3006",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:95c2686263f38465c5489e595ad53f600c7d7fdddf01c1e11c65c48ccd73a87f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7213d67aa771eb972b920c5a187892aa318602891fb32bf44e7fd636bfaf0c1f",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3007",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4238387b15ec3078a51ea4f9e7e088f99e6243a96992d1ee9a2e560a592eba25",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d6273ff6b3ef78a2bec72fac89cbeef2071447b348e29dff4a4e4043a9e33ca6",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3008",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:310b7b79ed7eb91b9db3b8b9ac88b9925cb7bdfc0c0594864ab59a122b073aa6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fa315eb48be2e3333fff83647c1641d98361515facc407217948bf43cdd552df",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-job-durability.md"
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3009",

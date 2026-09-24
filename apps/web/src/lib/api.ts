@@ -1459,10 +1459,15 @@ export class DrillApi implements DrillClientApi {
     return this.#json<unknown>(`/runs/${encoded(runId)}/group-reply`, { method: "POST", writerId, body: { groupId } }).then((value) => parseGroupReplyResult(value, request));
   }
 
-  analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {
-    return this.#json(`/runs/${encoded(runId)}/analysis`, {
-      method: "POST", writerId, body: { nodeIds, kind: "bestline", multiPv: 1, movetime: 100 },
+  /**
+   * Durable analysis admission (rfc/evidence-job-durability.md §2): one idempotency key per
+   * request, so a transport retry of the same call replays the stored batch instead of duplicating.
+   */
+  async analysis(runId: string, nodeIds: readonly string[], writerId: string, idempotencyKey: string = globalThis.crypto.randomUUID()): Promise<{ readonly batchId: string; readonly jobs: readonly { readonly id: string }[] }> {
+    const response = await this.#response(`/runs/${encoded(runId)}/analysis`, {
+      method: "POST", writerId, body: { nodeIds, kind: "bestline", multiPv: 1, movetime: 100 }, headers: { "idempotency-key": idempotencyKey },
     });
+    return (await response.json()) as { readonly batchId: string; readonly jobs: readonly { readonly id: string }[] };
   }
 
   scheduleReturn(runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }, writerId: string): Promise<ScheduledReturnResult> {

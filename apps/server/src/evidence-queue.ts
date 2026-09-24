@@ -1,17 +1,38 @@
+/**
+ * The durable evidence worker (rfc/evidence-job-durability.md §2).
+ *
+ * `EvidenceJobQueue` no longer holds jobs in memory: admission, lease, retry, settlement, staged
+ * results and consumption are rows owned by `EvidenceJobStore` in the application database. This
+ * class is the in-process executor bound to that store. It claims rows under a compare-and-swap
+ * lease, calls exactly one of the two queued provider gateways, and settles through the store.
+ * Restart recovery is `attach`: expired leases return to `retry_wait` and admitted rows resume.
+ *
+ * The two gateways are the whole queued provider population (criterion 21):
+ * `evidence.stockfish_analysis` → `#execute` → `EvidenceExecutor.execute`, and
+ * `evidence.tablebase_probe` → `#tablebasePayload` → `TablebaseSource.probe`.
+ */
 import {
-  engineEvidenceRef,
   normalizeInboundMove,
-  tablebaseEvidenceRef,
   type EvidenceKind,
   type EvidencePayload,
-  type JobObserver,
   type ObjectiveEvidenceProposal,
   type ObjectiveEvidenceRequest,
   type ObjectiveEvidenceUpgrader,
+  type ProviderSourceFailureReason,
 } from "@chess-tabiya/runtime";
 
 import type { EngineRequest } from "./engine-supervisor.js";
-import { engineUnavailable } from "./errors.js";
+import { ServerError, engineUnavailable } from "./errors.js";
+import {
+  DEFAULT_EVIDENCE_RETRY_POLICY,
+  EvidenceProviderLate,
+  type EvidenceJobLease,
+  type EvidenceJobStore,
+  type EvidenceResultPage,
+  type EvidenceRetryPolicy,
+  type StagedEvidenceResult,
+} from "./evidence-job-store.js";
+import { EvidenceJobCorrupt, evidenceRefForJob, type EvidenceJobRow, type QueuedProviderOperationId } from "./evidence-jobs.js";
 import type { TablebaseSource } from "./tablebase.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
 
@@ -27,26 +48,17 @@ export interface EvidenceJobInput {
   readonly objectiveRequest?: ObjectiveEvidenceRequest;
 }
 
+/** The executor-facing job view of one leased durable row. */
 export interface EvidenceJob extends EvidenceJobInput {
   readonly id: string;
 }
 
-export interface StagedEvidence {
-  readonly seq: number;
-  readonly jobId: string;
-  readonly runId: string;
-  readonly nodeId: string;
-  readonly evidenceRefs: readonly [string, ...string[]];
-  readonly payload: EvidencePayload;
-  readonly objectiveProposal?: ObjectiveEvidenceProposal;
-}
-
-export interface EvidencePage {
-  readonly results: readonly StagedEvidence[];
-  readonly nextSeq: number;
-}
+export type StagedEvidence = StagedEvidenceResult;
+export type EvidencePage = EvidenceResultPage;
 
 export interface EvidenceExecutor {
+  /** The compiled provider instance whose identity every payload must carry. */
+  readonly instanceId?: string;
   execute(job: EvidenceJob, signal: AbortSignal): Promise<EvidencePayload>;
 }
 
@@ -58,11 +70,22 @@ export interface EvidenceJobFailure {
   readonly message: string;
 }
 
-interface QueuedEvidence {
-  readonly job: EvidenceJob;
-  readonly controller: AbortController;
-  readonly recordFailure: boolean;
-  cancelled: boolean;
+/** The durable surface the queue binds to; `SQLiteRunStorage` provides it. */
+export interface EvidenceJobHost {
+  readonly evidenceJobs: EvidenceJobStore;
+  setEvidenceJobListener(listener: { wake(): void; cancelled(jobIds: readonly string[]): void } | undefined): void;
+}
+
+export interface EvidenceQueueOptions {
+  readonly maxConcurrency?: number;
+  readonly objectiveUpgrader?: ObjectiveEvidenceUpgrader;
+  readonly tablebaseSource?: TablebaseSource;
+  /** Lease duration for one claim; a provider response after expiry is stale. */
+  readonly leaseMs?: number;
+  /** Provider-unavailability retry policy before the origin's terminal effect. */
+  readonly retry?: EvidenceRetryPolicy;
+  /** The lease owner string written into claimed rows (defaults to a per-process identity). */
+  readonly owner?: string;
 }
 
 function positiveInteger(value: number, label: string): void {
@@ -71,239 +94,292 @@ function positiveInteger(value: number, label: string): void {
   }
 }
 
-function freezePayload(payload: EvidencePayload): EvidencePayload {
-  return Object.freeze({
-    kind: payload.kind,
-    source: payload.source,
-    values: Object.freeze(structuredClone(payload.values)),
-  });
-}
-
 function whitePerspectiveScore(value: number, fen: string): number {
   const turn = fen.split(/\s+/)[1];
   if (turn !== "w" && turn !== "b") throw new TypeError("Evidence job FEN has no valid turn");
   return turn === "w" ? value : -value;
 }
 
-export class EvidenceJobQueue implements JobObserver {
+const SHUTDOWN = Symbol("evidence-queue-shutdown");
+const SUPERSEDED = Symbol("evidence-job-superseded");
+
+function failureReason(error: unknown): ProviderSourceFailureReason {
+  if (error instanceof EvidenceJobCorrupt) return "invalid_response";
+  if (error instanceof ServerError && (error.code === "ENGINE_UNAVAILABLE" || error.code === "TABLEBASE_UNAVAILABLE")) return "provider_unavailable";
+  if (error instanceof Error && /timed? ?out|deadline/iu.test(error.message)) return "deadline_exceeded";
+  if (error instanceof TypeError) return "invalid_response";
+  return "provider_unavailable";
+}
+
+function executorJob(row: EvidenceJobRow): EvidenceJob {
+  const { request } = row;
+  return Object.freeze({
+    id: row.id,
+    runId: request.runId,
+    nodeId: request.nodeId,
+    fen: request.fen,
+    kind: request.kind,
+    ...(request.depth === null ? {} : { depth: request.depth }),
+    ...(request.movetime === null ? {} : { movetime: request.movetime }),
+    ...(request.multiPv === null ? {} : { multiPv: request.multiPv }),
+    ...(request.timeoutMs === null ? {} : { timeoutMs: request.timeoutMs }),
+    ...(request.objectiveRequest === null ? {} : { objectiveRequest: request.objectiveRequest }),
+  });
+}
+
+export class EvidenceJobQueue {
   readonly #executor: EvidenceExecutor;
   readonly #upgrader: ObjectiveEvidenceUpgrader | undefined;
   readonly #tablebase: TablebaseSource | undefined;
   readonly #maxConcurrency: number;
-  readonly #pending: QueuedEvidence[] = [];
-  readonly #running = new Map<string, QueuedEvidence>();
-  readonly #staged = new Map<string, StagedEvidence[]>();
-  readonly #nextSeq = new Map<string, number>();
+  readonly #leaseMs: number;
+  readonly #retry: EvidenceRetryPolicy;
+  readonly #owner: string;
+  readonly #active = new Map<string, AbortController>();
   readonly #idleWaiters = new Set<() => void>();
-  readonly #failures: EvidenceJobFailure[] = [];
-  readonly #producerAttempts = new Set<string>();
-  #activeCount = 0;
-  #jobCounter = 0;
+  #host: EvidenceJobHost | undefined;
+  #retryTimer: ReturnType<typeof setTimeout> | undefined;
+  #closed = false;
 
-  constructor(
-    executor: EvidenceExecutor,
-    options: {
-      readonly maxConcurrency?: number;
-      readonly objectiveUpgrader?: ObjectiveEvidenceUpgrader;
-      readonly tablebaseSource?: TablebaseSource;
-    } = {},
-  ) {
+  constructor(executor: EvidenceExecutor, options: EvidenceQueueOptions = {}) {
     this.#executor = executor;
     this.#maxConcurrency = options.maxConcurrency ?? 2;
     positiveInteger(this.#maxConcurrency, "Evidence queue concurrency");
+    this.#leaseMs = options.leaseMs ?? 120_000;
+    positiveInteger(this.#leaseMs, "Evidence lease");
+    this.#retry = options.retry ?? DEFAULT_EVIDENCE_RETRY_POLICY;
+    positiveInteger(this.#retry.maxAttempts, "Evidence retry attempts");
+    if (!Number.isSafeInteger(this.#retry.retryDelayMs) || this.#retry.retryDelayMs < 0) throw new TypeError("Evidence retry delay must be a non-negative safe integer");
     this.#upgrader = options.objectiveUpgrader;
     this.#tablebase = options.tablebaseSource;
+    this.#owner = options.owner ?? `evidence-worker:${process.pid}:${Math.random().toString(36).slice(2, 10)}`;
   }
 
-  enqueue(input: EvidenceJobInput): EvidenceJob {
-    return this.#enqueue(input, true);
+  /** Whether a tablebase gateway is configured (run enrichment plans only then include it). */
+  get tablebaseConfigured(): boolean {
+    return this.#tablebase !== undefined;
   }
 
-  /** Attempt non-interactive evidence once, only while the queue is idle. */
-  enqueueProducer(input: EvidenceJobInput): EvidenceJob | undefined {
-    const key = `${input.runId}\0${input.nodeId}\0${input.kind}`;
-    if (this.#producerAttempts.has(key)) return undefined;
-    this.#producerAttempts.add(key);
-    if (!this.isIdle()) return undefined;
-    return this.#enqueue(input, false);
+  /** The compiled provider instance per queued operation. */
+  instance(operation: QueuedProviderOperationId): string {
+    if (operation === "evidence.tablebase_probe") {
+      return this.#tablebase === undefined ? "tablebase-unconfigured" : this.#tablebase.kind === "lichess" ? "tablebase.lichess.org" : "tablebase-fixture";
+    }
+    return this.#executor.instanceId ?? "evidence-executor";
+  }
+
+  /**
+   * Bind to one durable store and resume: expired leases return to `retry_wait` and every
+   * admitted or due row is claimed. Binding twice to different stores is refused.
+   */
+  attach(host: EvidenceJobHost): void {
+    if (this.#host === host) return;
+    if (this.#host !== undefined) throw new TypeError("An evidence queue is bound to exactly one application database");
+    this.#host = host;
+    this.#closed = false;
+    host.setEvidenceJobListener({ wake: () => this.#pump(), cancelled: (ids) => this.#abort(ids, SUPERSEDED) });
+    host.evidenceJobs.recoverExpiredLeases();
+    this.#pump();
+  }
+
+  get store(): EvidenceJobStore {
+    if (this.#host === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Evidence queue is not bound to storage");
+    return this.#host.evidenceJobs;
   }
 
   isIdle(): boolean {
-    return this.#activeCount === 0 && this.#pending.length === 0;
-  }
-
-  #enqueue(input: EvidenceJobInput, recordFailure: boolean): EvidenceJob {
-    if (input.kind !== "tablebase" && (input.depth === undefined) === (input.movetime === undefined)) {
-      throw new TypeError("Evidence job requires exactly one of depth or movetime");
+    if (this.#active.size !== 0) return false;
+    if (this.#host === undefined || this.#closed) return true;
+    try {
+      return this.#host.evidenceJobs.pendingCount() === 0;
+    } catch {
+      return true; // a closed database has no claimable work for this worker
     }
-    if (input.kind === "tablebase" && (input.depth !== undefined || input.movetime !== undefined)) {
-      throw new TypeError("Tablebase evidence jobs do not take an engine search bound");
-    }
-    if (input.depth !== undefined) positiveInteger(input.depth, "Evidence depth");
-    if (input.movetime !== undefined) {
-      positiveInteger(input.movetime, "Evidence movetime");
-    }
-    if (input.timeoutMs !== undefined) positiveInteger(input.timeoutMs, "Evidence timeout");
-    const job = Object.freeze({
-      ...input,
-      id: `evidence-job-${++this.#jobCounter}`,
-    });
-    this.#pending.push({ job, controller: new AbortController(), recordFailure, cancelled: false });
-    this.#pump();
-    return job;
-  }
-
-  page(runId: string, sinceSeq = 0): EvidencePage {
-    const nextSeq = Math.max(sinceSeq, this.#nextSeq.get(runId) ?? 0);
-    return Object.freeze({
-      results: Object.freeze(
-        (this.#staged.get(runId) ?? []).filter((result) => result.seq > sinceSeq),
-      ),
-      nextSeq,
-    });
-  }
-
-  result(runId: string, seq: number): StagedEvidence | undefined {
-    return this.#staged.get(runId)?.find((candidate) => candidate.seq === seq);
-  }
-
-  failures(runId: string): readonly EvidenceJobFailure[] {
-    return Object.freeze(
-      this.#failures.filter((failure) => failure.runId === runId),
-    );
-  }
-
-  outstanding(runId: string): readonly Pick<EvidenceJob, "id" | "runId" | "nodeId" | "kind">[] {
-    const queued = [
-      ...this.#pending.map((entry) => entry.job),
-      ...[...this.#running.values()].map((entry) => entry.job),
-    ];
-    const staged = (this.#staged.get(runId) ?? []).map((result) => Object.freeze({
-      id: result.jobId,
-      runId: result.runId,
-      nodeId: result.nodeId,
-      kind: result.payload.kind,
-    }));
-    return Object.freeze([...queued.filter((job) => job.runId === runId), ...staged]);
-  }
-
-  consume(runId: string, seq: number): void {
-    const staged = this.#staged.get(runId);
-    if (staged === undefined) return;
-    this.#staged.set(
-      runId,
-      staged.filter((candidate) => candidate.seq !== seq),
-    );
-  }
-
-  onRewound(prunedNodeIds: readonly string[]): void {
-    const pruned = new Set(prunedNodeIds);
-    for (let index = this.#pending.length - 1; index >= 0; index -= 1) {
-      const queued = this.#pending[index]!;
-      if (!pruned.has(queued.job.nodeId)) continue;
-      queued.cancelled = true;
-      queued.controller.abort();
-      this.#pending.splice(index, 1);
-    }
-    for (const queued of this.#running.values()) {
-      if (!pruned.has(queued.job.nodeId)) continue;
-      queued.cancelled = true;
-      queued.controller.abort();
-    }
-    for (const [runId, staged] of this.#staged) {
-      this.#staged.set(
-        runId,
-        staged.filter((result) => !pruned.has(result.nodeId)),
-      );
-    }
-    this.#settleIdle();
   }
 
   whenIdle(): Promise<void> {
-    if (this.#activeCount === 0 && this.#pending.length === 0) {
-      return Promise.resolve();
-    }
+    if (this.isIdle()) return Promise.resolve();
     return new Promise((resolve) => this.#idleWaiters.add(resolve));
   }
 
+  page(runId: string, sinceSeq = 0): EvidencePage {
+    return this.store.page(runId, sinceSeq);
+  }
+
+  result(runId: string, seq: number): StagedEvidence | undefined {
+    return this.store.result(runId, seq);
+  }
+
+  /** Jobs still to settle or staged but unapplied, for Story readiness and tests. */
+  outstanding(runId: string): readonly Pick<EvidenceJob, "id" | "runId" | "nodeId" | "kind">[] {
+    return Object.freeze(this.store.jobsForRun(runId)
+      .filter((row) => row.state === "admitted" || row.state === "running" || row.state === "retry_wait" || row.state === "settled_success")
+      .map((row) => Object.freeze({ id: row.id, runId: row.runId, nodeId: row.nodeId, kind: row.request.kind })));
+  }
+
+  /** Terminal honest absence for provider unavailability (never an evidence payload). */
+  failures(runId: string): readonly EvidenceJobFailure[] {
+    return Object.freeze(this.store.jobsForRun(runId).flatMap((row) => {
+      if (row.state === "settled_unavailable" || (row.state === "settled_empty" && row.settlement.reason === "provider_unavailable")) {
+        const failure = "failure" in row.settlement ? row.settlement.failure : undefined;
+        return [Object.freeze({ jobId: row.id, runId: row.runId, nodeId: row.nodeId, kind: row.request.kind, message: failure?.providerDetail ?? failure?.reason ?? "provider unavailable" })];
+      }
+      return [];
+    }));
+  }
+
+  /** Graceful shutdown: in-flight leases return to `retry_wait` with a shutdown basis. */
+  async close(): Promise<void> {
+    this.#closed = true;
+    if (this.#retryTimer !== undefined) clearTimeout(this.#retryTimer);
+    this.#retryTimer = undefined;
+    this.#abort([...this.#active.keys()], SHUTDOWN);
+    if (this.#active.size > 0) await new Promise<void>((resolve) => this.#idleWaiters.add(resolve));
+    this.#host?.setEvidenceJobListener(undefined);
+  }
+
+  #abort(jobIds: readonly string[], reason: symbol): void {
+    for (const id of jobIds) this.#active.get(id)?.abort(reason);
+  }
+
   #pump(): void {
-    while (
-      this.#activeCount < this.#maxConcurrency &&
-      this.#pending.length > 0
-    ) {
-      const queued = this.#pending.shift()!;
-      if (queued.cancelled) continue;
-      this.#activeCount += 1;
-      this.#running.set(queued.job.id, queued);
-      void this.#execute(queued);
+    const host = this.#host;
+    if (host === undefined) return;
+    try {
+      while (!this.#closed && this.#active.size < this.#maxConcurrency) {
+        const lease = host.evidenceJobs.claimNext(this.#owner, this.#leaseMs);
+        if (lease === undefined) break;
+        const controller = new AbortController();
+        this.#active.set(lease.jobId, controller);
+        void this.#run(lease, controller);
+      }
+      this.#scheduleRetry();
+    } catch (error) {
+      // The durable rows stay authoritative: a closed database detaches this worker, and any
+      // other claim failure leaves the row for the next wake or restart recovery.
+      if (error instanceof Error && /database is not open/u.test(error.message)) this.#detach();
     }
     this.#settleIdle();
   }
 
-  async #execute(queued: QueuedEvidence): Promise<void> {
+  /** The application database closed underneath the worker: stop claiming, keep rows as they are. */
+  #detach(): void {
+    this.#closed = true;
+    if (this.#retryTimer !== undefined) clearTimeout(this.#retryTimer);
+    this.#retryTimer = undefined;
+    this.#abort([...this.#active.keys()], SHUTDOWN);
+  }
+
+  #scheduleRetry(): void {
+    if (this.#closed || this.#host === undefined || this.#retryTimer !== undefined) return;
+    const next = this.#host.evidenceJobs.nextRetryAt();
+    if (next === undefined) return;
+    const delay = Math.max(0, Date.parse(next) - Date.parse(this.#host.evidenceJobs.now()));
+    this.#retryTimer = setTimeout(() => {
+      this.#retryTimer = undefined;
+      this.#pump();
+    }, Math.min(delay + 5, 2_147_483_647));
+    // A retry hint must not hold the process open; restart recovery owns the waiting row.
+    (this.#retryTimer as { unref?: () => void }).unref?.();
+  }
+
+  async #run(lease: EvidenceJobLease, controller: AbortController): Promise<void> {
     try {
-      const payload = freezePayload(queued.job.kind === "tablebase"
-        ? await this.#tablebasePayload(queued.job)
-        : await this.#executor.execute(queued.job, queued.controller.signal));
-      if (queued.cancelled || queued.controller.signal.aborted) return;
-
-      const evidenceRef = queued.job.kind === "tablebase" ? tablebaseEvidenceRef(queued.job.id) : engineEvidenceRef(queued.job.id);
-      const evidenceRefs = Object.freeze([evidenceRef]) as readonly [string];
-      let objectiveProposal: ObjectiveEvidenceProposal | null = null;
-      if (
-        this.#upgrader !== undefined &&
-        queued.job.objectiveRequest !== undefined
-      ) {
-        objectiveProposal = await this.#upgrader.evaluate(
-          Object.freeze({
-            ...queued.job.objectiveRequest,
-            evidenceRefs: Object.freeze([
-              ...new Set([
-                ...queued.job.objectiveRequest.evidenceRefs,
-                evidenceRef,
-              ]),
-            ]),
-          }),
-        );
-      }
-      if (queued.cancelled || queued.controller.signal.aborted) return;
-      if (
-        objectiveProposal !== null &&
-        objectiveProposal.nodeId !== queued.job.nodeId
-      ) {
-        throw new TypeError("Objective upgrader proposed a different node");
-      }
-
-      const seq = (this.#nextSeq.get(queued.job.runId) ?? 0) + 1;
-      this.#nextSeq.set(queued.job.runId, seq);
-      const result: StagedEvidence = Object.freeze({
-        seq,
-        jobId: queued.job.id,
-        runId: queued.job.runId,
-        nodeId: queued.job.nodeId,
-        evidenceRefs,
-        payload,
-        ...(objectiveProposal === null ? {} : { objectiveProposal }),
-      });
-      const staged = this.#staged.get(queued.job.runId) ?? [];
-      this.#staged.set(queued.job.runId, [...staged, result]);
-    } catch (error) {
-      if (queued.recordFailure && !queued.cancelled && !queued.controller.signal.aborted) {
-        this.#failures.push(
-          Object.freeze({
-            jobId: queued.job.id,
-            runId: queued.job.runId,
-            nodeId: queued.job.nodeId,
-            kind: queued.job.kind,
-            message: error instanceof Error ? error.message : String(error),
-          }),
-        );
-      }
+      await this.#execute(lease, controller.signal);
+    } catch {
+      // A settlement refusal leaves the row for lease-expiry recovery; nothing is fabricated.
     } finally {
-      this.#running.delete(queued.job.id);
-      this.#activeCount -= 1;
+      this.#active.delete(lease.jobId);
       this.#pump();
     }
+  }
+
+  /** The single worker body: begin under a live lease, call one gateway, settle through the store. */
+  async #execute(lease: EvidenceJobLease, signal: AbortSignal): Promise<void> {
+    const store = this.store;
+    const job = lease.job;
+    const operation = job.providerOperationId;
+    let instance = this.instance(operation);
+    if (operation === "evidence.tablebase_probe" && this.#tablebase === undefined) {
+      store.settleEmpty(lease, "capability_not_configured");
+      return;
+    }
+    const request = store.beginProviderRequest(lease);
+    if (request === undefined) return;
+    let raw: EvidencePayload;
+    try {
+      raw = operation === "evidence.tablebase_probe"
+        ? await this.#tablebasePayload(executorJob(job))
+        : await this.#executor.execute(executorJob(job), signal);
+    } catch (error) {
+      if (signal.aborted) {
+        if (signal.reason === SHUTDOWN) store.returnForShutdown(lease);
+        return;
+      }
+      const failure = store.failProviderRequest(request, failureReason(error), error instanceof Error ? error.message : String(error));
+      store.settleProviderUnavailable(lease, failure, this.#retry, instance);
+      return;
+    }
+    if (signal.aborted) {
+      if (signal.reason === SHUTDOWN) store.returnForShutdown(lease);
+      return;
+    }
+    // An executor that declares no compiled instance (test doubles) is identified by its own
+    // claim; production executors declare one, so a crossed engine claim is refused.
+    if (operation === "evidence.stockfish_analysis" && this.#executor.instanceId === undefined) {
+      const claimed = (raw as { readonly values?: { readonly engineId?: unknown } } | null)?.values?.engineId;
+      if (typeof claimed === "string" && claimed !== "") instance = claimed;
+    }
+    let delivery;
+    try {
+      delivery = store.completeProviderRequest(request, this.#withProvenance(raw, job, instance), instance);
+    } catch (error) {
+      if (error instanceof EvidenceProviderLate) return; // stale: expiry recovery owns the row
+      const failure = store.failProviderRequest(request, failureReason(error), error instanceof Error ? error.message : String(error));
+      store.settleProviderUnavailable(lease, failure, this.#retry, instance);
+      return;
+    }
+    let proposal: ObjectiveEvidenceProposal | null = null;
+    const objective = job.request.objectiveRequest;
+    if (this.#upgrader !== undefined && objective !== null) {
+      const reference = evidenceRefForJob(job.request.kind, job.id);
+      proposal = await this.#upgrader.evaluate(Object.freeze({
+        ...objective,
+        evidenceRefs: Object.freeze([...new Set([...objective.evidenceRefs, reference])]),
+      }));
+    }
+    if (signal.aborted) {
+      if (signal.reason === SHUTDOWN) store.returnForShutdown(lease);
+      return;
+    }
+    try {
+      store.settleSuccess(delivery, proposal);
+    } catch (error) {
+      if (!(error instanceof ServerError && error.code === "EVIDENCE_JOB_CORRUPT")) throw error;
+      const failure = store.failProviderRequest(request, "invalid_response", error.message);
+      store.settleProviderUnavailable(lease, failure, this.#retry, instance);
+    }
+  }
+
+  /**
+   * Engine provenance is the gateway's, not the provider's: an absent `engineId`/search bound is
+   * stamped from the compiled instance and the stored request; a present one must already equal
+   * them (the payload parser refuses a crossed claim).
+   */
+  #withProvenance(payload: EvidencePayload, job: EvidenceJobRow, instance: string): unknown {
+    if (payload === null || typeof payload !== "object" || job.request.kind === "tablebase") return payload;
+    const values = (payload as { readonly values?: unknown }).values;
+    if (values === null || typeof values !== "object" || Array.isArray(values)) return payload;
+    const current = values as Readonly<Record<string, unknown>>;
+    const bound = job.request.depth !== null ? { requestedDepth: job.request.depth } : { requestedMovetimeMs: job.request.movetime };
+    return {
+      ...payload,
+      values: {
+        ...(current.engineId === undefined ? { engineId: instance } : {}),
+        ...(current.requestedDepth === undefined && current.requestedMovetimeMs === undefined ? bound : {}),
+        ...current,
+      },
+    };
   }
 
   async #tablebasePayload(job: EvidenceJob): Promise<EvidencePayload> {
@@ -318,13 +394,13 @@ export class EvidenceJobQueue implements JobObserver {
         category: result.category,
         dtz: result.dtz,
         preciseDtz: result.preciseDtz ?? null,
-        sourceId: this.#tablebase.kind === "lichess" ? "tablebase.lichess.org" : "tablebase-fixture",
+        sourceId: this.instance("evidence.tablebase_probe"),
       }),
     });
   }
 
   #settleIdle(): void {
-    if (this.#activeCount !== 0 || this.#pending.length !== 0) return;
+    if (!this.isIdle() && !(this.#closed && this.#active.size === 0)) return;
     for (const resolve of this.#idleWaiters) resolve();
     this.#idleWaiters.clear();
   }
@@ -374,6 +450,10 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
     this.#client = client;
     this.#engineId = engineId;
     this.#configuredMultiPv = configuredMultiPv;
+  }
+
+  get instanceId(): string {
+    return this.#engineId;
   }
 
   async execute(job: EvidenceJob, signal: AbortSignal): Promise<EvidencePayload> {

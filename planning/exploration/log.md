@@ -21246,3 +21246,16 @@ narrow it, and each removal is a typed suppression rendered in words.
 - **D3300 opened:** one imported game takes about 10 s to project, and
   `close()` waits for it. Test teardowns get a 30 s budget until the projector
   is profiled and drain is bounded.
+
+### 2026-09-24 — evidence-job-durability landed at migration 27 (implementing)
+
+- **Durable queue:** evidence jobs are now durable. Batches, jobs, result
+  sequences and run transitions have append-only triggers, and the queue is a
+  lease-fenced worker that resumes after restart.
+- **Idempotent admission:** Story, explicit and enrichment enqueues admit
+  idempotently inside the run's save transaction. `/analysis` requires an
+  `Idempotency-Key`, and `POST /evidence` replays stored results.
+- **Ledger:** the 45-row inherited defect set (D2429 … D3008) closes with
+  direct tests.
+- **Migration queue:** concept-registry is next, then bot-policy's run
+  lane 0.18.

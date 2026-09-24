@@ -236,7 +236,7 @@ moves, chess nouns and prescriptive verbs remain packet-relative pending [[D1419
 - No account linking, automatic history import, background fetch, weakness model,
   variants, or third-party engine annotations.
 - No chess.com URL fetch; PGN paste is the supported path.
-- The evidence queue remains process-local. Durable evidence makes completion
-  convergent, but an interrupted pass may repeat bounded work.
+- Story evidence is admitted as durable batches (≤16 jobs, keyed by branch, terminal node and
+  chunk); an interrupted pass resumes after restart instead of repeating work.
 - Native terminal story offers, story-card image rendering, and revocable public
   share-card hosting are documented in `adoption-wave-1.md`.

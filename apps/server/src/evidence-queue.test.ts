@@ -19,13 +19,14 @@ import { FixtureTablebaseSource } from "./tablebase.js";
 const INITIAL_FEN =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-12T18:00:00.000Z";
+const JOB_REF = /^engine:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
-function createInput(id: string) {
+function createInput(id: string, fen = INITIAL_FEN) {
   return {
     id,
     session: {
       kind: "position" as const,
-      start: { fen: INITIAL_FEN, side: "white" as const },
+      start: { fen, side: "white" as const },
       feedbackPolicy: "attempt_end" as const,
       opponentPolicy: { mode: "human_common" as const },
     },
@@ -38,11 +39,15 @@ function createInput(id: string) {
   };
 }
 
+/** A kind-exact engine payload (the durable settlement parser is kind-specific). */
 function payload(
   kind: EvidencePayload["kind"],
   source: EvidencePayload["source"] = "engine_validated",
 ): EvidencePayload {
-  return { kind, source, values: { score: kind === "eval" ? 32 : 0.61 } };
+  const values = kind === "wdl" ? { win: 610, draw: 300, loss: 90 }
+    : kind === "bestline" ? { movesUci: ["e2e4"] }
+      : { centipawns: 32 };
+  return { kind, source, values };
 }
 
 function deferred<T>(): {
@@ -56,22 +61,13 @@ function deferred<T>(): {
   return { promise, resolve };
 }
 
-function job(runId: string, nodeId: string, kind: "eval" | "wdl" = "eval") {
-  return {
-    runId,
-    nodeId,
-    fen: INITIAL_FEN,
-    kind,
-    depth: 12,
-  } as const;
-}
-
 async function request(
   handler: ReturnType<typeof createRestHandler>,
   method: string,
   path: string,
   body?: unknown,
   writerId = "writer-a",
+  headers: Readonly<Record<string, string>> = {},
 ): Promise<Response> {
   return handler(
     new Request(`http://server.test${path}`, {
@@ -79,6 +75,7 @@ async function request(
       headers: {
         ...(writerId === "" ? {} : { "x-writer-id": writerId }),
         ...(body === undefined ? {} : { "content-type": "application/json" }),
+        ...headers,
       },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     }),
@@ -86,6 +83,16 @@ async function request(
 }
 
 describe("evidence job queue", () => {
+  const stores: SQLiteRunStorage[] = [];
+  afterEach(() => {
+    for (const storage of stores.splice(0)) storage.close();
+  });
+  function storage(): SQLiteRunStorage {
+    const created = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    stores.push(created);
+    return created;
+  }
+
   it("extracts typed eval, WDL, and best-line evidence from analysis Stockfish", async () => {
     const requests: { engineId: string; commands: readonly string[]; resetSearchState?: boolean; signal?: AbortSignal }[] = [];
     const executor = new StockfishEvidenceExecutor({
@@ -190,10 +197,18 @@ describe("evidence job queue", () => {
         throw new Error("engine executor must not run for tablebase evidence");
       },
     }, { tablebaseSource: tablebase });
-    queue.enqueue({ runId: "tablebase-run", nodeId: "node", fen, kind: "tablebase" });
+    const store = storage();
+    const service = new RunService(store, { evidenceQueue: queue });
+    const run = await service.create(createInput("tablebase-run", fen), "writer-a");
+    const root = run.nodes[0]!;
+    store.admitInternalEvidence(run.id, [{
+      origin: "run_enrichment",
+      idempotencyKey: `run_enrichment@1:${root.id}`,
+      request: { schema: "evidence_batch_request@1", runId: run.id, origin: "run_enrichment", jobs: [{ schema: "evidence_job_request@1", runId: run.id, nodeId: root.id, fen, kind: "tablebase", depth: null, movetime: null, multiPv: null, timeoutMs: null, objectiveRequest: null }] },
+    }]);
     await queue.whenIdle();
     const [result] = queue.page("tablebase-run").results;
-    expect(result?.evidenceRefs).toEqual(["tablebase:evidence-job-1"]);
+    expect(result?.evidenceRefs).toEqual([`tablebase:${result!.jobId}`]);
     expect(result?.payload).toEqual({
       kind: "tablebase",
       source: "tablebase_exact",
@@ -222,92 +237,68 @@ describe("evidence job queue", () => {
         return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } };
       },
     }, { tablebaseSource: tablebase });
-    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
-    const service = new RunService(storage, { evidenceQueue: queue, tablebaseSource: tablebase });
-    try {
-      await service.create({
-        ...createInput("tablebase-producer"),
-        session: {
-          kind: "position",
-          start: { fen: startFen, side: "white" },
-          feedbackPolicy: "attempt_end",
-          opponentPolicy: { mode: "human_common" },
-        },
-      }, "writer-a");
-      service.move("tablebase-producer", "writer-a", "h2h3", { at });
-      await queue.whenIdle();
-      expect(queue.outstanding("tablebase-producer").map((entry) => entry.kind).sort())
-        .toEqual(["eval", "tablebase"]);
-    } finally {
-      storage.close();
-    }
+    const service = new RunService(storage(), { evidenceQueue: queue, tablebaseSource: tablebase });
+    await service.create(createInput("tablebase-producer", startFen), "writer-a");
+    service.move("tablebase-producer", "writer-a", "h2h3", { at });
+    await queue.whenIdle();
+    expect(queue.outstanding("tablebase-producer").map((entry) => entry.kind).sort())
+      .toEqual(["eval", "tablebase"]);
   });
 
-  it("attempts producer evidence once, only while idle, and drops its failures", async () => {
-    const gate = deferred<EvidencePayload>();
-    const queue = new EvidenceJobQueue({ execute: () => gate.promise }, {
-      maxConcurrency: 1,
-      tablebaseSource: {
-        kind: "mock",
-        async probe() { throw new Error("producer unavailable"); },
-      },
+  it("admits one enrichment batch per node key: a replayed key re-derives and re-admits nothing", async () => {
+    let executed = 0;
+    const queue = new EvidenceJobQueue({ async execute() { executed += 1; return payload("eval"); } });
+    const store = storage();
+    const service = new RunService(store, { evidenceQueue: queue });
+    await service.create(createInput("revisit-run"), "writer-a");
+    const moved = service.move("revisit-run", "writer-a", "e2e4", { at }).run;
+    await queue.whenIdle();
+    const node = moved.nodes.find((candidate) => candidate.id === moved.activeCursor.nodeId)!;
+    let derived = 0;
+    const replayed = store.evidenceJobs.admitInternalIfAbsent({
+      runId: moved.id,
+      origin: "run_enrichment",
+      idempotencyKey: `run_enrichment@1:${node.id}`,
+      plan: () => { derived += 1; return undefined; },
     });
-    queue.enqueue(job("producer-budget", "interactive"));
-    expect(queue.enqueueProducer({
-      runId: "producer-budget",
-      nodeId: "busy-node",
-      fen: "4k3/8/8/8/8/8/7P/4K3 w - - 0 1",
-      kind: "tablebase",
-    })).toBeUndefined();
-    gate.resolve(payload("eval"));
+    expect(derived).toBe(0);
+    expect(replayed).toMatchObject({ replayed: true, constructions: 0, jobs: [{ nodeId: node.id, kind: "eval", state: "settled_success" }] });
     await queue.whenIdle();
-    expect(queue.enqueueProducer({
-      runId: "producer-budget",
-      nodeId: "busy-node",
-      fen: "4k3/8/8/8/8/8/7P/4K3 w - - 0 1",
-      kind: "tablebase",
-    })).toBeUndefined();
-    expect(queue.enqueueProducer({
-      runId: "producer-budget",
-      nodeId: "fresh-node",
-      fen: "4k3/8/8/8/8/8/7P/4K3 w - - 0 1",
-      kind: "tablebase",
-    })).toBeDefined();
-    await queue.whenIdle();
-    expect(queue.failures("producer-budget")).toEqual([]);
+    expect(executed).toBe(1);
+    expect(store.evidenceJobs.jobsForRun("revisit-run")).toHaveLength(1);
   });
 
-  it("starts jobs FIFO while respecting bounded concurrency", async () => {
-    const gates = [deferred<EvidencePayload>(), deferred<EvidencePayload>(), deferred<EvidencePayload>()];
+  it("claims in admission order while respecting bounded concurrency", async () => {
+    const gates = { eval: deferred<EvidencePayload>(), wdl: deferred<EvidencePayload>(), bestline: deferred<EvidencePayload>() };
     const starts: string[] = [];
     let active = 0;
     let maximumActive = 0;
     const executor: EvidenceExecutor = {
       async execute(current) {
-        const index = Number(current.nodeId.slice(-1)) - 1;
-        starts.push(current.nodeId);
+        starts.push(current.kind);
         active += 1;
         maximumActive = Math.max(maximumActive, active);
-        const result = await gates[index]!.promise;
+        const result = await gates[current.kind as keyof typeof gates].promise;
         active -= 1;
         return result;
       },
     };
     const queue = new EvidenceJobQueue(executor, { maxConcurrency: 2 });
-
-    queue.enqueue(job("run-a", "node-1"));
-    queue.enqueue(job("run-a", "node-2"));
-    queue.enqueue(job("run-a", "node-3"));
+    const service = new RunService(storage(), { evidenceQueue: queue });
+    const run = await service.create(createInput("run-a"), "writer-a");
+    const nodeId = run.activeCursor.nodeId;
+    service.enqueueEvidence("run-a", { nodeId, kind: "eval", depth: 12 });
+    service.enqueueEvidence("run-a", { nodeId, kind: "wdl", depth: 12 });
+    service.enqueueEvidence("run-a", { nodeId, kind: "bestline", depth: 12 });
     await Promise.resolve();
-    expect(starts).toEqual(["node-1", "node-2"]);
+    expect(starts).toEqual(["eval", "wdl"]);
     expect(maximumActive).toBe(2);
 
-    gates[1]!.resolve(payload("eval"));
-    await Promise.resolve();
-    await Promise.resolve();
-    expect(starts).toEqual(["node-1", "node-2", "node-3"]);
-    gates[0]!.resolve(payload("eval"));
-    gates[2]!.resolve(payload("eval"));
+    gates.wdl.resolve(payload("wdl"));
+    for (let tick = 0; tick < 5; tick += 1) await Promise.resolve();
+    expect(starts).toEqual(["eval", "wdl", "bestline"]);
+    gates.eval.resolve(payload("eval"));
+    gates.bestline.resolve(payload("bestline"));
     await queue.whenIdle();
 
     expect(maximumActive).toBe(2);
@@ -328,28 +319,25 @@ describe("evidence job queue", () => {
       },
     };
     const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
-    const storage = new SQLiteRunStorage();
-    const service = new RunService(storage, { evidenceQueue: queue });
-    try {
-      const created = await service.create(createInput("rewind-run"), "writer-a");
-      const rootId = created.activeCursor.nodeId;
-      const moved = service.move("rewind-run", "writer-a", "e2e4", { at });
-      const nodeId = moved.run.activeCursor.nodeId;
-      service.enqueueEvidence("rewind-run", { nodeId, kind: "eval", depth: 14 });
-      service.enqueueEvidence("rewind-run", { nodeId, kind: "wdl", depth: 14 });
-      await Promise.resolve();
+    const store = storage();
+    const service = new RunService(store, { evidenceQueue: queue });
+    const created = await service.create(createInput("rewind-run"), "writer-a");
+    const rootId = created.activeCursor.nodeId;
+    const moved = service.move("rewind-run", "writer-a", "e2e4", { at });
+    const nodeId = moved.run.activeCursor.nodeId;
+    service.enqueueEvidence("rewind-run", { nodeId, kind: "eval", depth: 14 });
+    service.enqueueEvidence("rewind-run", { nodeId, kind: "wdl", depth: 14 });
+    await Promise.resolve();
 
-      service.rewind("rewind-run", "writer-a", { nodeId: rootId }, at);
-      expect(observed.signals[0]!.aborted).toBe(true);
-      late.resolve(payload("eval"));
-      await queue.whenIdle();
+    service.rewind("rewind-run", "writer-a", { nodeId: rootId }, at);
+    expect(observed.signals[0]!.aborted).toBe(true);
+    late.resolve(payload("eval"));
+    await queue.whenIdle();
 
-      expect(observed.jobs).toHaveLength(1);
-      expect(queue.page("rewind-run").results).toEqual([]);
-      expect(queue.failures("rewind-run")).toEqual([]);
-    } finally {
-      storage.close();
-    }
+    expect(observed.jobs).toHaveLength(1);
+    expect(queue.page("rewind-run").results).toEqual([]);
+    expect(queue.failures("rewind-run")).toEqual([]);
+    expect(store.evidenceJobs.jobsForRun("rewind-run").map((row) => row.state)).toEqual(["cancelled", "cancelled", "cancelled"]);
   });
 });
 
@@ -360,7 +348,7 @@ describe("evidence staging and writer application", () => {
     for (const storage of stores.splice(0)) storage.close();
   });
 
-  it("accepts explicit eval and WDL analysis requests through REST", async () => {
+  it("accepts explicit eval and WDL analysis requests through REST under an idempotency key", async () => {
     const queue = new EvidenceJobQueue({
       async execute(current) {
         return payload(current.kind);
@@ -371,19 +359,23 @@ describe("evidence staging and writer application", () => {
     const service = new RunService(storage, { evidenceQueue: queue });
     const handler = createRestHandler(service);
     const run = await service.create(createInput("analysis-kinds"), "writer-a");
-    for (const kind of ["eval", "wdl"] as const) {
+    const keyless = await request(handler, "POST", "/runs/analysis-kinds/analysis", { nodeIds: [run.activeCursor.nodeId], kind: "eval", depth: 12 });
+    expect(keyless.status).toBe(400);
+    for (const [kind, key] of [["eval", "3f0b6a4e-2c1d-4e8f-9a7b-1c2d3e4f5a6b"], ["wdl", "4a1c7b5f-3d2e-4f9a-8b6c-2d3e4f5a6b7c"]] as const) {
       const response = await request(handler, "POST", "/runs/analysis-kinds/analysis", {
         nodeIds: [run.activeCursor.nodeId],
         kind,
         depth: 12,
-      });
+      }, "writer-a", { "idempotency-key": key });
       expect(response.status).toBe(202);
+      expect(await response.json()).toMatchObject({ batchId: expect.any(String), jobs: [{ nodeId: run.activeCursor.nodeId, kind }] });
     }
     await queue.whenIdle();
     expect(queue.page("analysis-kinds").results.map((result) => result.payload.kind)).toEqual(["eval", "wdl"]);
   });
 
   it("stages over GET, enforces the writer lease, then appends position evidence without inventing an objective", async () => {
+    let upgraderCalls = 0;
     const executor: EvidenceExecutor = {
       async execute(current) {
         return payload(current.kind);
@@ -391,6 +383,7 @@ describe("evidence staging and writer application", () => {
     };
     const upgrader: ObjectiveEvidenceUpgrader = {
       async evaluate(objectiveRequest) {
+        upgraderCalls += 1;
         const evidenceRef = objectiveRequest.evidenceRefs.at(-1)!;
         return {
           nodeId: objectiveRequest.nodeId,
@@ -457,11 +450,19 @@ describe("evidence staging and writer application", () => {
     const saved = storage.read("apply-run")!.run;
     expect(saved.events.at(-1)?.type).toBe("evidence.attached");
     expect(saved.nodes[0]).toMatchObject({ objectiveState: "active" });
-    expect(saved.nodes[0]!.evidenceRefs).toEqual(["engine:evidence-job-1"]);
+    expect(saved.nodes[0]!.evidenceRefs).toHaveLength(1);
+    expect(saved.nodes[0]!.evidenceRefs[0]).toMatch(JOB_REF);
     expect(queue.page("apply-run").results).toEqual([]);
+    // A position session has no objective request, so the upgrader is never consulted.
+    expect(upgraderCalls).toBe(0);
+
+    // Response-loss replay of the same result returns the stored application without appending.
+    const replay = await request(handler, "POST", "/runs/apply-run/evidence", { resultSeq: 1, at });
+    expect(replay.status).toBe(200);
+    expect(storage.read("apply-run")!.run.events).toHaveLength(saved.events.length);
   });
 
-  it("keeps engine-validated and human-model-predicted evidence as separate typed events", async () => {
+  it("refuses a Stockfish-gateway payload that claims another evidence source", async () => {
     const executor: EvidenceExecutor = {
       async execute(current) {
         return current.kind === "eval"
@@ -469,7 +470,7 @@ describe("evidence staging and writer application", () => {
           : payload("wdl", "human_model_predicted");
       },
     };
-    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1, retry: { maxAttempts: 1, retryDelayMs: 0 } });
     const storage = new SQLiteRunStorage();
     stores.push(storage);
     const service = new RunService(storage, { evidenceQueue: queue });
@@ -480,13 +481,10 @@ describe("evidence staging and writer application", () => {
     await queue.whenIdle();
     service.reveal("typed-run", "writer-a", at);
     const page = service.evidence("typed-run");
-    expect(page.results.map((result) => result.payload.source)).toEqual([
-      "engine_validated",
-      "human_model_predicted",
-    ]);
-    expect(service.evidence("typed-run", 1).results.map((result) => result.seq)).toEqual([
-      2,
-    ]);
+    expect(page.results.map((result) => result.payload.source)).toEqual(["engine_validated"]);
+    expect(queue.failures("typed-run")).toEqual([expect.objectContaining({ kind: "wdl", message: expect.stringContaining("engine_validated") })]);
+    const rows = storage.evidenceJobs.jobsForRun("typed-run");
+    expect(rows.map((row) => row.state)).toEqual(["settled_success", "settled_unavailable"]);
 
     for (const result of page.results) {
       service.applyEvidence("typed-run", "writer-a", result.seq, at);
@@ -494,24 +492,18 @@ describe("evidence staging and writer application", () => {
     const attached = storage
       .read("typed-run")!
       .run.events.filter((event) => event.type === "evidence.attached");
-    expect(attached).toHaveLength(2);
-    expect(attached.map((event) => event.data.payload.source)).toEqual([
-      "engine_validated",
-      "human_model_predicted",
-    ]);
-    expect(attached.map((event) => event.data.payload.kind)).toEqual(["eval", "wdl"]);
+    expect(attached.map((event) => [event.data.payload.kind, event.data.payload.source])).toEqual([["eval", "engine_validated"]]);
   });
 
   it("derives comparison evidence from durable events after staged results are consumed", async () => {
+    let executed = 0;
     const executor: EvidenceExecutor = {
-      async execute(current) {
+      async execute() {
+        executed += 1;
         return {
           kind: "eval",
           source: "engine_validated",
-          values:
-            current.id === "evidence-job-1"
-              ? { centipawns: 27 }
-              : { mateIn: -2 },
+          values: executed === 1 ? { centipawns: 27 } : { mateIn: -2 },
         };
       },
     };

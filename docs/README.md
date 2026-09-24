@@ -113,6 +113,8 @@ Current completion state is deliberately not copied here. Use the
 - [Learner profile](learner-profile.md) — the private profile over the store: habit cards with
   per-metric floors, opening results, the observation ledger, skills with named blockers, history,
   drill-down and consented sharing.
+- [Evidence jobs](evidence-jobs.md) — durable admission, lease, settlement and consumption of
+  queued engine/tablebase evidence.
 
 ## Identity and client platform
 

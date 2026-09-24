@@ -465,29 +465,29 @@
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "The longitudinal store landed at migration 26: additive observation tables, one watermarked mutation boundary, claim-fenced jobs, a supervised worker thread gating readiness and health, rebuild and full export/deletion coverage. The migration queue now opens for evidence-job durability, then concept-registry, then bot-policy's run lane 0.18; bot policy and roster already landed their non-persistent half.",
+          "summary": "Two durable foundations landed in register order: the longitudinal store at migration 26 and evidence-job durability at migration 27, so observations and queued engine/tablebase evidence now survive restart with fenced leases, idempotent admission and replay. Concept-registry holds the next position, followed by bot-policy's run lane 0.18 and campaign.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/longitudinal-store.ts",
-            "planning/longitudinal-store/implementation-2026-09-24.md",
-            "rfc/longitudinal-store.md",
-            "rfc/bot-policy.md"
+            "apps/server/src/evidence-job-store.ts",
+            "planning/evidence-job-durability/implementation-2026-09-24.md",
+            "rfc/evidence-job-durability.md",
+            "rfc/longitudinal-store.md"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "evidence-job-durability.md",
+              "digest": "sha256:0f3c9f4d5fc49bd594a01f03c69d8cc15433a96d78d47dcafe775453eff78742"
+            },
             {
               "kind": "rfc",
               "id": "longitudinal-store.md",
               "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
             },
             {
-              "kind": "rfc",
-              "id": "bot-policy.md",
-              "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
-            },
-            {
               "kind": "work_state",
-              "id": "D3027",
-              "digest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e"
+              "id": "D3300",
+              "digest": "sha256:73fefdc741ca314c6a3832598368eed98269963dea2a8e2c3c4bf774017c462e"
             }
           ]
         },

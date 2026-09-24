@@ -14,6 +14,7 @@ import {
   EngineCapabilities,
 } from "./capabilities.js";
 import { assertEvidenceManifest } from "./evidence-manifest.js";
+import { APPLICATION_EVIDENCE_RETRY_POLICY } from "./evidence-job-store.js";
 import {
   EvidenceJobQueue,
   StockfishEvidenceExecutor,
@@ -243,23 +244,20 @@ class MockEngineClient implements SelectorEngineClient {
 }
 
 class MockEvidenceExecutor implements EvidenceExecutor {
+  readonly instanceId = "mock-evidence";
+
   execute(job: EvidenceJob): Promise<EvidencePayload> {
     // Like the Stockfish executor, an eval reading records its search's first move (`bestMoveUci`);
     // the mock reports the first legal move. Only the explicit Analyze action ever renders it.
-    const first = job.kind === "eval" ? legalMoves(job.fen, [])[0] : undefined;
-    return Promise.resolve(
-      Object.freeze({
-        kind: job.kind,
-        source: "engine_validated",
-        values: Object.freeze({
-          engineId: "mock-evidence",
-          requestedMovetimeMs: job.movetime,
-          centipawns: 0,
-          perspective: "white",
-          ...(first === undefined ? {} : { bestMoveUci: first }),
-        }),
-      }),
-    );
+    // Each kind carries its own exact value shape (the durable settlement parser is kind-specific).
+    const first = legalMoves(job.fen, [])[0];
+    const bound = job.depth === undefined ? { requestedMovetimeMs: job.movetime } : { requestedDepth: job.depth };
+    const values = job.kind === "wdl"
+      ? { engineId: this.instanceId, ...bound, win: 0, draw: 1000, loss: 0 }
+      : job.kind === "bestline"
+        ? { engineId: this.instanceId, ...bound, movesUci: first === undefined ? [] : [first] }
+        : { engineId: this.instanceId, ...bound, centipawns: 0, perspective: "white", ...(first === undefined ? {} : { bestMoveUci: first }) };
+    return Promise.resolve(Object.freeze({ kind: job.kind, source: "engine_validated", values: Object.freeze(values) }));
   }
 }
 
@@ -467,6 +465,7 @@ export async function composeApplication(
   });
   const evidenceQueue = new EvidenceJobQueue(evidenceExecutor, {
     maxConcurrency: 2,
+    retry: APPLICATION_EVIDENCE_RETRY_POLICY,
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
   });
   const service = new RunService(storage, {
@@ -520,6 +519,7 @@ export async function composeApplication(
         ...(options.longitudinalWorkerEntry === undefined ? {} : { threadUrl: options.longitudinalWorkerEntry }),
       });
     } catch (error) {
+      await evidenceQueue.close();
       storage.close();
       await supervisor?.shutdown();
       throw error;
@@ -563,6 +563,8 @@ export async function composeApplication(
       });
       storage.setLongitudinalWakeListener(undefined);
       await worker?.drain();
+      // In-flight evidence leases return to retry_wait with a shutdown basis; nothing is lost.
+      await evidenceQueue.close();
       await supervisor?.shutdown();
       storage.close();
     },
