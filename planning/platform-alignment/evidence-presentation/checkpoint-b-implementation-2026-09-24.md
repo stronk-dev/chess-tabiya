@@ -89,3 +89,13 @@ the context admits it).
 - `compileModuleExactOperationResolution`'s artifact receipt (MR D8) is not produced; the operation's
   source image is the literal `module-query-sources.ts` table.
 - D1 (owner's design/05 amendment), D9 owner use, archival of all four RFCs.
+
+## Verification (after `git merge main` at 88fb79e2)
+
+- `make typecheck` — clean (runtime, schema, server, web: svelte-check 0 errors).
+- `make verify-software` — green: test-software 285 files / 2358 tests; label-sweep 0 findings; component-theme-sweep; component-coverage OK (ordinary 91/91, Inspector 115/115, author/operator 5/5, module seats 188/188); remaining checks green.
+- `make verify-content` — 21 files / 212 tests.
+- `CI=1 make test-browser-smoke` — 53 passed, 1 skipped (pre-existing skip).
+- `CI=1 make test-browser-matrix` — 48 passed, including the new module-seat matrix (states 3/5/9/13 at seven projections).
+
+Fixed on the way: main's Just Play "starting support" copy failed WCAG contrast (now `--ink`); main's new provider-health/import surfaces rendered raw reason/state/id text (now labels or `learnerProse`).
