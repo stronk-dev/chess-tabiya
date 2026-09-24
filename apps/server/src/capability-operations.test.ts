@@ -186,10 +186,18 @@ describe("criterion 21 — queued providers are a closed operation population ([
     }
     expect(serviceSource).not.toMatch(/\.enqueue(?:Producer)?\(/u);
     expect(serviceSource).not.toContain("#enqueueMoveEvidence");
-    for (const method of ["  move(", "  opponentPly(", "  async createGroup("]) {
+    for (const method of ["  move(", "  #commitOpponentSelection(", "  async createGroup("]) {
       const body = serviceSource.slice(serviceSource.indexOf(method));
       const end = body.indexOf("\n  }\n");
       expect(body.slice(0, end), method).toContain("this.#commitWithEnrichment(");
+      expect(body.slice(0, end), method).not.toContain("this.#storage.save(");
+    }
+    // Both opponent writers — caller selections and the bot-policy operation — commit through the
+    // one enrichment-owning opponent append (rfc/bot-policy.md §4.1 atomic append).
+    for (const method of ["  opponentPly(", "  async botOpponentPly("]) {
+      const body = serviceSource.slice(serviceSource.indexOf(method));
+      const end = body.indexOf("\n  }\n");
+      expect(body.slice(0, end), method).toContain("this.#commitOpponentSelection(");
       expect(body.slice(0, end), method).not.toContain("this.#storage.save(");
     }
   });

@@ -8,6 +8,8 @@
   import DrillScreen from "./lib/DrillScreen.svelte";
   import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
+  import LibraryScreen from "./lib/LibraryScreen.svelte";
+  import TheoryEntryScreen from "./lib/TheoryEntryScreen.svelte";
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import ReviewMapScreen from "./lib/ReviewMapScreen.svelte";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
@@ -815,13 +817,15 @@
         capabilities = loaded[1];
         if(shareRefresh===storyShareGeneration)storyShares = loaded[2];
       } else if (next.name === "play") {
-        const nextPacks = await api.packs();
+        // The Play picker reads the bot roster (and its live availability) from /capabilities.
+        const [nextPacks, nextCapabilities] = await Promise.all([api.packs(), api.capabilities()]);
         if (generation !== loadGeneration) return;
         packs = nextPacks;
+        capabilities = nextCapabilities;
       } else if (next.name === "library") {
-        const loaded = await Promise.all([api.packs(), initialRunPage()]);
+        const loaded = await Promise.all([api.packs(), initialRunPage(), api.dueProgress?.() ?? Promise.resolve(EMPTY_DUE_QUEUE)]);
         if (generation !== loadGeneration) return;
-        packs = loaded[0]; runs = loaded[1].runs; runSelection = loaded[1].selection;
+        packs = loaded[0]; runs = loaded[1].runs; runSelection = loaded[1].selection; dueSchedules = loaded[2].schedules;
       } else if (next.name === "settings") {
         const nextCapabilities = await api.capabilities();
         if (generation !== loadGeneration) return;
@@ -2530,7 +2534,7 @@
   {:else if route.name === "play"}
     <div class="play-surface">
       <a class="surface-skip" href="#position-catalogue" onclick={(event) => { event.preventDefault(); document.getElementById("position-catalogue")?.focus(); }}>Skip to position catalogue</a>
-      <JustPlayStarter busy={session.busy} onStart={(input) => controller.startPosition(input)} />
+      <JustPlayStarter busy={session.busy} roster={capabilities?.policyProfiles.human_common.profiles ?? []} onStart={(input) => controller.startPosition(input)} />
       <PackList
         {packs}
         loading={session.busy}
@@ -2574,6 +2578,9 @@
         onSwitchBranch={(nodeId, branchId) => controller.switchBranch(nodeId, branchId)}
         onCompare={(branchIds) => controller.compare(branchIds)}
         onReplayResistance={(input) => controller.startPosition({ ...input, mode: "human_common" })}
+        onRematch={session.runState.run.opponentPolicy.profile === undefined ? undefined : () => controller.startDuplicate(session.runState!.run.id)}
+        botReply={session.botReply}
+        onRetryOpponent={() => controller.retryOpponent()}
         onClassifyBranches={(branchIds) => api.branchDecidedness(session.runState!.run.id, branchIds)}
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
@@ -3154,11 +3161,16 @@
     <RatingScreen {api} onStart={startRatedGame} onOpenProfile={() => navigate(routePath({ name: "profile" }))} />
   {:else if route.name === "profile"}
     <ProfileScreen {api} onNavigate={navigate} onStartPack={(packId) => controller.startPack(packId)} />
+  {:else if route.name === "pack" || route.name === "shape-entry" || route.name === "principle-entry" || route.name === "opening-entry"}
+    <main class="library-surface" aria-labelledby="entry-title">
+      {#if session.error}<p class="library-alert" role="alert">{session.error}</p>{/if}
+      <TheoryEntryScreen {api} {route} busy={session.busy} onNavigate={navigate} onRehearse={(packId) => controller.startPack(packId)} onStartDue={(schedule) => startDueSchedule(schedule)} />
+    </main>
   {:else if route.name === "library"}
-    <main class="shell-view" aria-labelledby="library-title">
-      <p class="eyebrow">Library</p><h1 id="library-title">Packs and run artifacts</h1>
-      <section><h2>Rehearsal packs</h2><ul>{#each packs as pack}<li>{pack.title} <small>{pack.reviewStatus.replaceAll("_", " ")}</small></li>{:else}<li>No packs available.</li>{/each}</ul></section>
-      <section><h2>My games</h2>
+    <main class="library-surface" aria-labelledby="library-title">
+      {#if session.error}<p class="library-alert" role="alert">{session.error}</p>{/if}
+      <LibraryScreen {api} {packs} {dueSchedules} busy={session.busy} onNavigate={navigate} onRehearse={(packId) => controller.startPack(packId)} onStartDue={(schedule) => startDueSchedule(schedule)} />
+      <section class="library-games" aria-labelledby="library-games-title"><h2 id="library-games-title">My games</h2>
         <p>Download a game as standard PGN for chess tools, or open it to choose particular branches.</p>
         <p class="honest">Deleting a run removes Tabiya's live copy immediately. Shared runs may remain as read-only history for collaborators, and deployment backups may retain an older copy until their configured retention period ends.</p>
         <ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{runTitle(run)}</button> <small>{run.branchCount} branches</small> <button type="button" disabled={runArtifactBusyId !== undefined} aria-describedby={runArtifactBusyId !== undefined ? "library-artifact-busy" : undefined} onclick={() => void exportRunPgn(run.id)}>{runArtifactBusyId === run.id ? "Preparing PGN…" : "Download PGN"}</button> {#if run.viewerRole === "host"}<button type="button" disabled={runDeletionBusy !== undefined} aria-describedby={runDeletionBusy !== undefined ? "library-deletion-busy" : undefined} onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No saved games yet.</li>{/each}</ul>
@@ -3216,7 +3228,8 @@
     background: radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--ink) 5%, transparent), transparent 30rem), linear-gradient(135deg, transparent 0 58%, color-mix(in srgb, var(--accent) 4%, transparent) 58% 100%), var(--paper);
   }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
-  .play-surface{height:100%;overflow:auto;padding:1rem 0}.surface-skip{position:fixed;z-index:50;top:.35rem;left:.35rem;padding:.6rem .8rem;border-radius:.5rem;background:var(--ink);color:var(--paper);transform:translateY(-150%)}.surface-skip:focus{transform:translateY(0)}
+  .play-surface{height:100%;overflow:auto;padding:1rem 0}
+  .library-surface{height:100%;overflow:auto}.library-games{width:min(76rem,calc(100% - 2rem));margin:0 auto 3rem;padding-top:1rem;border-top:1px solid var(--line)}.library-alert{width:min(76rem,calc(100% - 2rem));margin:1rem auto 0}.surface-skip{position:fixed;z-index:50;top:.35rem;left:.35rem;padding:.6rem .8rem;border-radius:.5rem;background:var(--ink);color:var(--paper);transform:translateY(-150%)}.surface-skip:focus{transform:translateY(0)}
   .public-landing { height: 100%; overflow: auto; }
   .legal-footer { padding: 1rem clamp(1rem, 4vw, 3rem) 1.5rem; color: var(--muted); font-size: 0.8rem; }
   .legal-footer a { color: var(--ink); }
