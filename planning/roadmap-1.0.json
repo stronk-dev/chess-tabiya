@@ -463,19 +463,18 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Whole-game Review is a working learner journey: the Review Map lists every ply with grounded report-ladder grades, offers Retry from here on every row and moment through a preserving fork, selects 0..3 moments from one projection shared by private review, share and card, gates accuracy on full coverage, and shows recorded semantic events per ply. Return scheduling reaches Learn with the owner-ruled standing words. Eval graph, Compare handoff and the Review compiler packet remain.",
+          "summary": "Whole-game Review is a working learner journey: every ply with grounded grades, Retry from here through a preserving fork and a Compare handoff afterwards, 0..3 shared moments, coverage-gated accuracy and learner-side eval graph, recorded semantic events per ply, and an explicit attributed Analyze action withheld during retries. Return scheduling reaches Learn with the owner-ruled standing words. The Review compiler packet and module presets remain.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/review-map.test.ts",
+            "packages/runtime/src/review-map-remainder.test.ts",
             "planning/review/implementation-2026-09-24.md",
-            "rfc/review-map.md",
-            "rfc/return-scheduling.md"
+            "rfc/review-map.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "review-map.md",
-              "digest": "sha256:4a5337e911a419072302b92edc00b87095b429f48718667aa34283db3d4d184b"
+              "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
             },
             {
               "kind": "rfc",
@@ -484,8 +483,8 @@
             },
             {
               "kind": "work_state",
-              "id": "D880",
-              "digest": "sha256:dc5fd5f8f578a60fd1e223e48f96d6330d1610acefc0b06d2d7bd4eaa9118947"
+              "id": "D1467",
+              "digest": "sha256:da350aa968f6d7aa9bd3506c1fe5e83af8f163bf532bf89be787ed5b6f14d6dc"
             }
           ]
         },

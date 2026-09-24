@@ -7239,11 +7239,12 @@
     },
     {
       "id": "D880",
-      "state": "todo",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:dc5fd5f8f578a60fd1e223e48f96d6330d1610acefc0b06d2d7bd4eaa9118947",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:02eaf31357fb52ccdd4fba3902b90b29ee37d419c7cdcd96902a4dc63f875daf",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "packages/runtime/src/review-map-remainder.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D881",

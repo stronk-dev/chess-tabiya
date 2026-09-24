@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:52bb27a96bc791aa2b1729fd9f7e53f56df214e0802d248c7e059bfba741ff80",
+    "roadmap": "sha256:559e732e9822637617cf0c9eb1f16dc64f8055fe7ba85cb82156a85456b871c8",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:956f71214f909de4fe556dc76861750e5cd0dc648dc38c5860c9d3e74aabe6be",
-    "rfcRegister": "sha256:18cc38ceb723e35c36136b38d6f4ccbcb943f45c84dafab727df6bb357784bd5",
+    "workState": "sha256:46018b7a444003d6187216f6734ab44b37bae34ba012e03f49ca081e3bdc4850",
+    "rfcRegister": "sha256:a95524ab8f36eb3229a50bdc2f50ca7d72f0bc19460912af983d3432aa0bcfaf",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
-    "application": "sha256:2298b5f5a9cd379c03993e95f12616ad6a51476b2df33d3e99db65e0064fb11d",
-    "rest": "sha256:ab87c4a79871a3bfbcdbd9e4bd8adfc3014933a27b9e1a04cd6566558854f55c"
+    "application": "sha256:30ffd333d712c53b1c2c7506d41cc4be49dfe88f965bb990878a4fe638ed199f",
+    "rest": "sha256:620f9dc73e944ea3138ffef1f87be0d24834cae96075f9094e3733de8cb6d5e6"
   },
   "summary": {
     "capabilities": 14,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 626,
+      "todo": 625,
       "doing": 0,
       "blocked": 1204,
-      "done": 1107,
+      "done": 1108,
       "refused": 111
     },
     "workItems": {
@@ -380,19 +380,18 @@
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Whole-game Review is a working learner journey: the Review Map lists every ply with grounded report-ladder grades, offers Retry from here on every row and moment through a preserving fork, selects 0..3 moments from one projection shared by private review, share and card, gates accuracy on full coverage, and shows recorded semantic events per ply. Return scheduling reaches Learn with the owner-ruled standing words. Eval graph, Compare handoff and the Review compiler packet remain.",
+        "summary": "Whole-game Review is a working learner journey: every ply with grounded grades, Retry from here through a preserving fork and a Compare handoff afterwards, 0..3 shared moments, coverage-gated accuracy and learner-side eval graph, recorded semantic events per ply, and an explicit attributed Analyze action withheld during retries. Return scheduling reaches Learn with the owner-ruled standing words. The Review compiler packet and module presets remain.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/src/review-map.test.ts",
+          "packages/runtime/src/review-map-remainder.test.ts",
           "planning/review/implementation-2026-09-24.md",
-          "rfc/review-map.md",
-          "rfc/return-scheduling.md"
+          "rfc/review-map.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
             "id": "review-map.md",
-            "digest": "sha256:4a5337e911a419072302b92edc00b87095b429f48718667aa34283db3d4d184b"
+            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
           },
           {
             "kind": "rfc",
@@ -401,8 +400,8 @@
           },
           {
             "kind": "work_state",
-            "id": "D880",
-            "digest": "sha256:dc5fd5f8f578a60fd1e223e48f96d6330d1610acefc0b06d2d7bd4eaa9118947"
+            "id": "D1467",
+            "digest": "sha256:da350aa968f6d7aa9bd3506c1fe5e83af8f163bf532bf89be787ed5b6f14d6dc"
           }
         ]
       },

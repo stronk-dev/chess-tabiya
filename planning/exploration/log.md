@@ -21119,3 +21119,15 @@ shows a fixed explanation beside the due date. D864 closes.
   is now only the three opening routes. The refusal-debt register loses
   FORBIDDEN and SOURCE_UNAVAILABLE, which are now tested. MASTERS_PGN_INVALID
   gains a direct test.
+
+### 2026-09-24 — Review Map remainder: eval graph, Compare handoff, Analyze
+
+- **Eval graph:** plots win-points from the reviewed side and uses the same
+  coverage gate as accuracy. Missing regions are shaded and described. It is
+  navigable by keyboard and has a text alternative.
+- **Compare handoff:** "Compare lines from here" hands off to the shipped N-way
+  compare once a retry has played at least one move.
+- **Analyze:** an explicit, secondary action that reveals the recorded engine
+  line for the position, attributed to its engine and search limit. It is never
+  in the ordinary payload and is withheld during an open retry.
+- **Ledger:** D880 closes.
