@@ -7524,11 +7524,12 @@
     },
     {
       "id": "D917",
-      "state": "todo",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:70949016a3dbadf10ca3d1317f6bb84e1b9870f4b2ab444d729272bd8686dc21",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c09d8223caa3c3943043e7edda8ad43ae9770a04be975f2f59b8eae72069c3f2",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "packages/runtime/src/review-evidence.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D918",
@@ -12865,11 +12866,12 @@
     },
     {
       "id": "D1648",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:075d6ba072c43332b3e2a3cb6714c2c7c2df71073aa7c706673f70f9f0594739",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3d3c57cad776044f8ca01a20d3045b8f15d65fdc2214db41cac5d675ef01029c",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "packages/runtime/src/review-evidence.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1649",
@@ -25329,57 +25331,57 @@
     },
     {
       "id": "D3102",
-      "state": "blocked",
-      "owner": "assistance-and-presentation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:56e8ad648b8268b70b535afd09988c8b1087f6ec6b5fdb4f0ba9a08f1222da6c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c08e18fd61fcc824c6acf1ddc53334888a1739a5f2f38f22dfaee96d07470154",
       "uxItems": [],
-      "blocker": "rfc:evidence-presentation.md"
+      "evidence": "packages/runtime/src/presentation-contract.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3103",
-      "state": "blocked",
-      "owner": "assistance-and-presentation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f89f619cea1ae40e6d610edba31c0ab34ffcfcb461a53674af0bb6326f98dbea",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d88b62a5a7b71c090c5fb61739495489215df25d1d87cbb9e47386e84fe0626e",
       "uxItems": [],
-      "blocker": "rfc:evidence-presentation.md"
+      "evidence": "packages/runtime/src/corpus-result.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3104",
-      "state": "blocked",
-      "owner": "assistance-and-presentation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4af0b4cd32207dc84c7ed331278129c80a622eb8869aa1dda16e41d869915fb2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e8f4213668644db06a4711b940f6ceea51ff16e7c3241026bfd639afa2518842",
       "uxItems": [],
-      "blocker": "rfc:evidence-presentation.md"
+      "evidence": "packages/runtime/src/presentation-contract.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3105",
-      "state": "blocked",
-      "owner": "assistance-and-presentation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:13833c90af2cb47c8a9e2dde5614862761fd95cc0a80170be8cd04c200387940",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b0cdf60058abb880643bf7ccb5141353d7d494ea253ebcb20724fe5b493c4174",
       "uxItems": [],
-      "blocker": "rfc:evidence-presentation.md"
+      "evidence": "packages/runtime/src/structure-witness.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3106",
-      "state": "blocked",
-      "owner": "assistance-and-presentation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:dd6589adb5ec1f731e90d6e4de82cf512d371b7d1101cc86bcd4566fa65abab3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:168bdb554672cb304e4b089df3d6af9aa133a4a2ecf3b30ef932616732da5463",
       "uxItems": [],
-      "blocker": "rfc:evidence-presentation.md"
+      "evidence": "packages/runtime/src/presentation-checkpoint-p.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3107",
-      "state": "blocked",
-      "owner": "assistance-and-presentation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:215c7cd38d7abff8a651d3104f148a88856e1ca4636a2edb15da42639ba44b7c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cc36d54727403c1c17ec8cecb9512c96243f01a71e99967760cc099c0c2a3c6e",
       "uxItems": [],
-      "blocker": "rfc:evidence-presentation.md"
+      "evidence": "packages/runtime/src/source-attribution.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3108",

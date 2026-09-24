@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9aaf308ce6241ef780a561778ace9f183d01bbb427c199e5a131ace3631a7670",
+    "roadmap": "sha256:2f0b1abe713130d0a6dfeb637e74812c443a161db5147c9882e165af4489212e",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:2a8980a35974d58259dc6130fcdba284a0784555525f994145f4a34dff6793b6",
-    "rfcRegister": "sha256:c88a25ac9825fd3dd829e5d264867fb04f4a0a6e92ed80c3d8221802ad36dda0",
+    "workState": "sha256:d90a64c9bf3daaf6cc03c8b7247c5517b4551381f16a0b831239fa9f4efe107f",
+    "rfcRegister": "sha256:c0d2bf154265ef7d88cc171239edb886258b5064a453f3c0a6fed28f1261317f",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:afc6dfb524c9c901e5368ae1191db359acb151121d677244495b6eefb9832540",
-    "application": "sha256:44f850b562185de07067fef54087cb71def47f5609f162118cb2f9e6edf875c0",
-    "rest": "sha256:fd673db4e71f39671c496b97e813df279c4a0b570b35feca7be98fc9ad18cb4a"
+    "application": "sha256:6748e856d54b9677f4aa8c067242e740880fa34345fe79610e5108bda87acb87",
+    "rest": "sha256:48d424e15ce2f91c03b138cddd6e0c2a3ac99c725cadce4d6a8c70af5874d976"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 42,
+      "draft": 40,
       "accepted": 0,
-      "implementing": 19,
+      "implementing": 21,
       "awaiting": 11,
       "implemented": 0,
       "superseded": 0,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 624,
+      "todo": 622,
       "doing": 0,
-      "blocked": 1144,
-      "done": 1170,
+      "blocked": 1138,
+      "done": 1178,
       "refused": 111
     },
     "workItems": {
@@ -164,48 +164,30 @@
       "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "The evidence-to-consumer chain now runs in production for Review and Post-commit Nudge: the module registry compiles all eleven modules at startup (including the accepted D921 Wave-C pairs) and gates every Review Map fact, so move-quality grades reach both consumers; the recorded semantic path feeds Review, the candidate packet feeds selection, and provider exchange seals Stockfish/Maia/Syzygy/Explorer deliveries into value-authority factories under the new provider-protocol register. Remaining: the Review compiler packet, evidence-presentation seats, preset disclosure, and migrating legacy provider callers.",
+        "summary": "Collector to fact to module to learner surface is closed at runtime for Review: the typed Review packet, compiled through the provider scheduler and sealed, renders in the Review Map evidence panel via module.review_map@1 and evidence-presentation's component receipts, and Story no longer flattens mate or loses learner perspective. Post-commit Nudge, the recorded semantic path and the candidate packet also run in production. Remaining: other module seats, preset disclosure receipts and legacy provider callers.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/module-registry.ts",
-          "packages/runtime/src/provider-exchange.ts",
-          "rfc/module-registration.md",
-          "rfc/provider-exchange-and-execution.md",
-          "rfc/learner-modules.md",
-          "rfc/move-quality-grades.md",
-          "rfc/provider-protocol-register.md",
-          "rfc/review-map.md"
+          "packages/runtime/src/review-evidence.ts",
+          "packages/runtime/src/presentation-contract.ts",
+          "rfc/review-evidence-compiler.md",
+          "rfc/evidence-presentation.md",
+          "rfc/evidence-job-durability.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "module-registration.md",
-            "digest": "sha256:49cd572afe9d387a7d072b60be852325f019368c07393123e51e1b602d610f64"
+            "id": "review-evidence-compiler.md",
+            "digest": "sha256:5ef0b526c33a75c0440499daa68b31142a61391300baa8720ca52f052eb8eaa9"
           },
           {
             "kind": "rfc",
-            "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:ebddcc793fb0fb8227bddd1ba41f60fde8bb72681e9d71675dc12272f41f6fbf"
+            "id": "evidence-presentation.md",
+            "digest": "sha256:58ac4d32ecbb86674e347e6de1ab47715b5a8cf7f32f0a2bcf94e2e08fda178c"
           },
           {
             "kind": "rfc",
-            "id": "learner-modules.md",
-            "digest": "sha256:68132f47c846c0faa0df246e05d7504a3ca67eb7d620ef8ccfe5248a573c5afe"
-          },
-          {
-            "kind": "rfc",
-            "id": "move-quality-grades.md",
-            "digest": "sha256:0821dc89c12d645511647f289479ed8301d694eb7e86141d810634e76b6bbab9"
-          },
-          {
-            "kind": "rfc",
-            "id": "provider-protocol-register.md",
-            "digest": "sha256:722d617cb8f212b44f2d594d8a5f1b2d10658da33fc410fd0a56ec7208129eec"
-          },
-          {
-            "kind": "rfc",
-            "id": "review-map.md",
-            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+            "id": "evidence-job-durability.md",
+            "digest": "sha256:0f3c9f4d5fc49bd594a01f03c69d8cc15433a96d78d47dcafe775453eff78742"
           },
           {
             "kind": "work_state",

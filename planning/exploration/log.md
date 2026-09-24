@@ -21259,3 +21259,21 @@ narrow it, and each removal is a typed suppression rendered in words.
   direct tests.
 - **Migration queue:** concept-registry is next, then bot-policy's run
   lane 0.18.
+
+### 2026-09-24 — review-evidence-compiler and evidence-presentation Checkpoint A
+
+**Review packet:**
+- The Review Map's evidence panel now renders a typed, sealed Review packet
+  through `module.review_map@1` instead of an abstention.
+- Story compiles from that packet, with no mate→±1000 flattening and the
+  correct learner perspective (D917, D1648).
+- Review evidence runs through the provider scheduler. This supersedes
+  evidence-job-durability's Story owner; explicit analysis and enrichment stay
+  on the durable job store.
+
+**Presentation:** evidence-presentation ships the component, adapter and
+receipt contract the packet needs, with D3102–D3107 fixed in production.
+
+**Behaviour change:** Analyze now reports "no recorded engine line", because
+typed engine deliveries carry no PV. Restoring the line needs a PV-bearing
+provider operation.
