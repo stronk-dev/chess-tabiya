@@ -66,7 +66,9 @@ import type { TtsProvider } from "./external-tts.js";
 import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } from "./tablebase.js";
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
 import { binaryArtifactProbe } from "./engine-supervisor.js";
-import { composeProviderTraversalApplication, type ProviderTraversalApplication } from "./provider-traversal.js";
+import { OPERATOR_PROVIDER_BOUNDS, composeProviderTraversalApplication, type ProviderExchangeBounds, type ProviderTraversalApplication } from "./provider-traversal.js";
+import { BotOpponentProviders } from "./bot-opponent-operation.js";
+import { BotProviderAvailability } from "./bot-opponent-source.js";
 
 /** rfc/review-evidence-compiler.md §4.1: the 1.0 Review enrichment profile (explicit bounds). */
 export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
@@ -79,6 +81,19 @@ export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
   // rfc/review-map.md §7: the Analyze line records at most this many plies of the searched PV.
   linePlies: 12,
   timeoutMs: 10_000,
+});
+
+/**
+ * The application's provider-exchange deployment bounds. The bot opponent is the first
+ * learner-facing consumer (rfc/provider-exchange-and-execution.md §9 asks that consumer to publish
+ * its defaults): a profile reply needs the Maia page and the guard's Stockfish root table at once,
+ * and the two engines are separate processes (each still serializes its own exchanges), so two
+ * exchanges may run concurrently. Retention and TTL are the operator values.
+ */
+export const APPLICATION_PROVIDER_BOUNDS: ProviderExchangeBounds = Object.freeze({
+  ...OPERATOR_PROVIDER_BOUNDS,
+  maxActive: 2,
+  maxQueued: 8,
 });
 
 export type EngineMode = "mock" | "maia";
@@ -464,6 +479,9 @@ async function composeServices(
     ? undefined
     : candidateTablebaseSource;
   const openingCatalogue = await loadOpeningCatalogue(options.openingCataloguePath ?? join(process.cwd(), "apps", "server", "artifacts", "runtime-opening-catalogue.json"));
+  // rfc/bot-policy.md §4.3: profile availability is observed from the shared exchange's own
+  // outcomes (startup probe + every opponent-ply acquisition); nothing configures it.
+  const botAvailability = new BotProviderAvailability();
 
   if (engineMode === "maia") {
     const stockfish = options.stockfishCommand ?? "stockfish";
@@ -487,7 +505,7 @@ async function composeServices(
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue });
+    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, botAvailability: () => botAvailability.snapshot() });
     evidenceExecutor = new StockfishEvidenceExecutor(
       supervisor,
       analysisSpec.id,
@@ -501,7 +519,7 @@ async function composeServices(
       ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue,
+      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, botAvailability: () => botAvailability.snapshot(),
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }
@@ -514,7 +532,20 @@ async function composeServices(
     tablebaseFetch: tablebaseSource instanceof LichessTablebaseSource ? providerFetch : null,
     explorerFetch: engineMode === "maia" && options.corpusToken !== undefined ? providerFetch : null,
     explorerToken: options.corpusToken ?? null,
+    bounds: APPLICATION_PROVIDER_BOUNDS,
   });
+  // rfc/bot-policy.md §4.1/§4.5: the opponent-ply operation's provider half. It shares the ONE
+  // scheduler (no bot-only fetch, queue or cache) and feeds every outcome into the availability
+  // observer; the startup probe gives the roster a first observation before any game.
+  const botOpponent = new BotOpponentProviders({
+    scheduler: providers.scheduler,
+    stockfishEngine: async () => {
+      const identity = await providerEngines.start("stockfish-analysis");
+      return Object.freeze({ id: identity.id, version: identity.version });
+    },
+    availability: botAvailability,
+  });
+  const botProbe = botOpponent.probe().catch(() => undefined);
   const evidenceQueue = new EvidenceJobQueue(evidenceExecutor, {
     maxConcurrency: 2,
     retry: APPLICATION_EVIDENCE_RETRY_POLICY,
@@ -541,6 +572,8 @@ async function composeServices(
     opponentSelector: selector,
     shapeRegistry: shapes,
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
+    botOpponent,
+    botAvailability: () => botAvailability.snapshot(),
   });
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,
@@ -608,6 +641,7 @@ async function composeServices(
       });
     } catch (error) {
       await evidenceQueue.close();
+      await botProbe;
       storage.close();
       await supervisor?.shutdown();
       throw error;
@@ -653,6 +687,7 @@ async function composeServices(
       await worker?.drain();
       // In-flight evidence leases return to retry_wait with a shutdown basis; nothing is lost.
       await evidenceQueue.close();
+      await botProbe;
       await supervisor?.shutdown();
       storage.close();
     },

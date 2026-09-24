@@ -1,9 +1,9 @@
-import { BOT_FAMILY_LABELS, BOT_PROFILE_CATALOG, BOT_ROSTER_BLOCKERS, botControlledTraits } from "@chess-tabiya/runtime";
+import { BOT_FAMILY_LABELS, BOT_PROFILE_CATALOG, botControlledTraits, type BotProfileStartability } from "@chess-tabiya/runtime";
 
 import type { BotRosterRow } from "./api.js";
 
 /** A structurally valid `/capabilities` roster for web fixtures; the server compiles the real cards. */
-export function botRosterFixture(): readonly BotRosterRow[] {
+export function botRosterFixture(startable: BotProfileStartability = { kind: "available" }): readonly BotRosterRow[] {
   return BOT_PROFILE_CATALOG.map((entry) => ({
     reference: entry.reference,
     behaviorDigest: entry.behaviorDigest,
@@ -19,6 +19,6 @@ export function botRosterFixture(): readonly BotRosterRow[] {
       strength: { kind: "uncalibrated" },
       decorative: null,
     },
-    startable: { kind: "not_startable", blockedBy: BOT_ROSTER_BLOCKERS },
+    startable,
   }));
 }

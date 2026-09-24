@@ -181,7 +181,7 @@ predecessor renegotiates here rather than renumbering unilaterally.
 
 ## Run-schema-version register
 
-<!-- register: run-schema head=0.17 -->
+<!-- register: run-schema head=0.18 -->
 <!-- schema-digest: run-schema d003c8461855 -->
 
 ### Landed
@@ -189,12 +189,12 @@ predecessor renegotiates here rather than renumbering unilaterally.
 | version | owner RFC | what it changed | landed at |
 |---|---|---|---|
 | 0.17 | `archive/opponent-contracts.md` | optional `OpponentSelection.orderingBasis` | `6ba0736` |
+| 0.18 | `bot-policy.md` | optional `RunOpponentPolicy.profile` (the exact `bot-profile-catalog@1` reference; `human_common` only, exclusive with `targetElo`/`temperature`/`topP`) and optional `OpponentSelection.policy` (sealed decision + non-circular operation record + persisted shared Maia/Stockfish deliveries, written only by `POST /runs/:runId/opponent-ply`); historical runs carry and infer neither | this landing (migration 29) |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| lane 0.18 | `bot-policy.md` | OpponentSelection.policy event envelope + RunOpponentPolicy exact profile reference (packages/runtime/src/types.ts:69,102; run.started and opponent.move_selected payloads widen together) | `tabiya-claims` |
 | lane 0.19 | `recorded-clocks.md` | Node.clockState narrows from an untyped open object (schemas/drill_run.schema.json:218-222, additionalProperties true) to a closed ClockReading; a breaking narrowing of an already-persisted field | `tabiya-claims` |
 | lane 0.20 | `variants.md` | DrillRun.rules (new, optional, closed union over chessops' RULES minus 'chess'; absent means standard chess — a Tier-2 run is not self-describing because its ruleset is not in the FEN) | `tabiya-claims` |
 | lane 0.21 | `enforced-clocks.md` | ClockReading.source gains "played"; DrillRunEvent gains ClockFlaggedEvent; RunSession gains an optional TimedControl | `tabiya-claims` |
@@ -375,7 +375,7 @@ checked by `make register-check`, never generated.
 
 ## Migration register
 
-<!-- register: migration head=28 -->
+<!-- register: migration head=29 -->
 
 Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
 migration 2 and `STORAGE_VERSION` 1→2, so neither could land independently. A
@@ -429,12 +429,12 @@ was sound for the same reason — the draft that could not land is the one that 
 | 26 | 25→26 | `longitudinal-store.md` | **implemented 2026-09-24** — adds `drill_runs.longitudinal_profile_disposition` (`profileable` default) and `drill_runs.longitudinal_structure_attribution` (`unattributable_legacy` default; new runs insert `single_player`), the `drill_runs_longitudinal_owner` parent key, and creates `learner_observation_denominators`, `learner_observations`, `learner_structure_stats` and `learner_observation_jobs` with five named indexes. Additive schema only: no backfill and no snapshot rewrite; startup reconciliation queues pre-migration runs. The body is idempotent (column-presence guarded, `IF NOT EXISTS`) so rewound-version fixtures replay it safely |
 | 27 | 26→27 | `evidence-job-durability.md` | **implemented 2026-09-24** — creates `evidence_job_batches`, `evidence_result_sequences`, `evidence_jobs` and `evidence_run_transitions` with the RFC's exact §2 DDL, the two `evidence_run_transitions` append-only triggers and two named indexes (`evidence_jobs_claimable`, `evidence_jobs_run_state`). Additive schema only: no backfill (the in-process queue it replaces never survived a restart) and no run-schema change. The body is table-presence guarded so rewound-version fixtures replay it safely |
 | 28 | 27→28 | `concept-registry.md` | **implemented 2026-09-24** — rebuilds `attempt_concepts` as registered global identities (`concept_key` = `concept:<id>@1` CHECKed against `concept_id`, `registry_schema_version`, `registry_digest`, revision-time `label`, occurrence `pack_id`/`pack_digest`) and creates `attempt_concept_legacy` (closed-reason quarantine) and `concept_registry_migration` (one canonical receipt). A data migration: every legacy `pack:<pack>#<id>` row is resolved through its replayed run, its exact complete-document pack artifact and the compiled registry inside one coordinator-owned transaction, or quarantined; unknown or colliding rows fail closed and roll back to 27. The body is presence-guarded so rewound-version fixtures replay it safely |
+| 29 | 28→29 | `bot-policy.md` | **implemented 2026-09-24** — stamp-only, frozen literals `"0.17"`→`"0.18"` (`#upgradeV017Runs`): run lane 0.18 only adds the optional `RunOpponentPolicy.profile` and `OpponentSelection.policy`, so no event byte is rewritten and no historical run gains a profile. Mandatory because every run read filters on the exact current schema version; prior-release upgrade test in `apps/server/src/bot-opponent-ply.test.ts` |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| position behind concept-registry | `bot-policy.md` | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite | `tabiya-claims` |
 | position behind bot-policy | `campaign-core.md` | campaign_runs; campaign_run_creations; campaign_events; campaign_mutation_commands; campaign_reward_awards | `tabiya-claims` |
 | position behind campaign-core | `campaign-catalogue-progression.md` | learner_catalogue_sightings; learner_catalogue_projection_state | `tabiya-claims` |
 | position behind campaign-catalogue-progression | `live-sources.md` | imported_games.source_kind CHECK gains 'lichess_broadcast' and source_receipt_json retains the typed broadcast receipt (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration) | `tabiya-claims` |

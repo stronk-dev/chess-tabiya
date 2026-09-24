@@ -31,7 +31,39 @@ import {
   type CommitMoveOptions,
   type PolicyConfig,
   type VersionedPolicy,
+  BOT_OPPONENT_PLY_RESULTS,
+  BotOpponentPlyRequestError,
+  parseBotOpponentPlyRequest,
+  type BotOpponentPlyRequest,
+  type BotOpponentPlyResultKind,
 } from "@chess-tabiya/runtime";
+import type { BotPolicyEventEnvelope } from "./bot-policy-compiler.js";
+
+/** Safe learner-facing copy per closed failure row; no provider reason crosses the boundary. */
+const BOT_OPPONENT_PLY_MESSAGES: Readonly<Record<Exclude<BotOpponentPlyResultKind, "committed" | "replayed_idempotent" | "replayed_concurrent_winner">, string>> = Object.freeze({
+  stale_root: "The board changed before the opponent could reply. Refresh the position.",
+  request_reused_with_different_operands: "This opponent request was already used for a different position.",
+  concurrent_commit_conflict: "Another reply to this position was recorded at the same time. Refresh and try again.",
+  base_provider_unavailable: "The opponent's move model is unavailable right now. Try again, or choose another opponent.",
+  provider_failed: "The opponent's move model returned an unusable answer. Try again, or choose another opponent.",
+});
+
+/**
+ * What the browser needs from a committed/replayed operation: identities and the layer actions for
+ * the in-run degraded/abstained status. The decision's provider payloads and guard scores stay
+ * server-side (they are engine evidence, not opponent identity).
+ */
+function botOperationSummary(envelope: BotPolicyEventEnvelope) {
+  return Object.freeze({
+    requestId: envelope.operation.requestId,
+    profileDigest: envelope.operation.profileDigest,
+    derivationDigest: envelope.operation.derivationDigest,
+    operationDigest: envelope.operation.operationDigest,
+    committedEventSequence: envelope.operation.committedEventSequence,
+    chosenMoveUci: envelope.operation.chosenMoveUci,
+    layers: envelope.decision.layers,
+  });
+}
 
 import { ServerError } from "./errors.js";
 import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
@@ -454,7 +486,7 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
           const side = requiredString(start.side, "/session/start/side");
           if (side !== "white" && side !== "black") throw invalid("/session/start/side must be white or black");
           if (sessionValue.feedbackPolicy !== "attempt_end") throw invalid("/session/feedbackPolicy must be attempt_end");
-          const opponent = closedRecord(sessionValue.opponentPolicy, "/session/opponentPolicy", ["mode", "targetElo", "temperature", "topP"]);
+          const opponent = closedRecord(sessionValue.opponentPolicy, "/session/opponentPolicy", ["mode", "targetElo", "temperature", "topP", "profile"]);
           const mode = requiredString(opponent.mode, "/session/opponentPolicy/mode");
           if (mode !== "human_common" && mode !== "strong_engine") {
             throw invalid("/session/opponentPolicy/mode cannot use theory_strict without a spine");
@@ -475,7 +507,8 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
             kind: "position" as const,
             start: { fen: requiredString(start.fen, "/session/start/fen"), side: side as "white" | "black" },
             feedbackPolicy: "attempt_end" as const,
-            opponentPolicy: { mode: mode as "human_common" | "strong_engine", ...(targetElo === undefined ? {} : { targetElo }), ...(temperature === undefined ? {} : { temperature }), ...(topP === undefined ? {} : { topP }) },
+            // `profile` stays unknown bytes here; the run service resolves the whole catalogue member.
+            opponentPolicy: { mode: mode as "human_common" | "strong_engine", ...(targetElo === undefined ? {} : { targetElo }), ...(temperature === undefined ? {} : { temperature }), ...(topP === undefined ? {} : { topP }), ...(opponent.profile === undefined ? {} : { profile: opponent.profile }) },
           };
         })()
       : (() => { throw invalid("/session/kind must be pack or position"); })();
@@ -705,7 +738,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -1726,6 +1759,26 @@ export function createRestHandler(
           writerId(request),
           requiredString(body.groupId, "groupId"),
         ));
+      }
+      if (route.action === "opponent-ply") {
+        // rfc/bot-policy.md §4.1: exactly four request fields; the server derives everything else.
+        requireJson(request);
+        let parsed: BotOpponentPlyRequest;
+        try {
+          parsed = parseBotOpponentPlyRequest(value);
+        } catch (error) {
+          if (error instanceof BotOpponentPlyRequestError) throw invalid(error.message);
+          throw error;
+        }
+        const outcome = await service.botOpponentPly(route.runId, principal, writerId(request), parsed);
+        const row = BOT_OPPONENT_PLY_RESULTS[outcome.kind];
+        if (outcome.kind === "committed") {
+          return json(row.status, { result: row, run: outcome.result.run, emitted: outcome.result.emitted, operation: botOperationSummary(outcome.envelope) });
+        }
+        if (outcome.kind === "replayed_idempotent" || outcome.kind === "replayed_concurrent_winner") {
+          return json(row.status, { result: row, run: outcome.run, emitted: [], operation: botOperationSummary(outcome.envelope) });
+        }
+        return json(row.status, { error: { code: row.code, message: BOT_OPPONENT_PLY_MESSAGES[outcome.kind], result: row } });
       }
       if (route.action === "moves") {
         if (value.selection !== undefined) {
