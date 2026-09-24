@@ -945,5 +945,588 @@
       "kind": "related_position_same_idea",
       "note": "mate-bishop-knight - the same root and the same thirty-nine plies authored as a single outcome drill rather than three legs. It is the sibling that carries the machine-attached tablebase evidence, because verify-draft cannot attach evidence to a trajectory pack."
     }
+  ],
+  "requires": [
+    {
+      "id": "branch.decidedness",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "checkpointInteraction.intent_capture",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "claim.earning",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "conditionBase.from.active",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "conditionBase.from.preserved",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "conditionBase.to.degraded",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "conditionBase.to.preserved",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.interesting_deviation",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.tactical_error",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviationLocation.fen",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviationLocation.spineNodeId",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "distanceTarget.kind-piece.color.black",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "distanceTarget.kind-piece.role.king",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "distanceTarget.piece",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.author_principle",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.derived_feature",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.tablebase_exact",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackPolicy.delayed_checkpoint",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "fenPredicate.structuralFeature",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "grade.move_quality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.claim_bound",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.unbuilt",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.accepted",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.accepted.kind.owner_ruling",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.accepted.kind.permanent_property",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.clearance",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.accepted",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.blocking",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.defaults",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.immediate",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "line.membership",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "mode.trajectory",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.state_machine",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.transition_legality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.assessedBy.authored",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.assessedBy.kind-syzygy.category.win",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.assessedBy.syzygy",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.resolveAt.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveType.reach_structure",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveType.run_trajectory",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveType.win",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponent.selection",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.mode.perfect_tablebase",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "outcome.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "phase.endgame",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "piece.color.black",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "piece.role.king",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "principle.authored-teaching-is-declared",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "provenance.reviewStatus.draft",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "reasoning.key_point_match",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "retryVariants.kind.different_material_details",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "retryVariants.kind.related_position_same_idea",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "rules.structural.predicate.king_zone",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "rules.structural.predicate.piece_count",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "rules.structural.predicate.piece_distance",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.atSpineNode",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.fenPredicate",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "squareTemplateFeature.piece",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "start.side.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.any",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.feature",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.kind-quantified.over-squares.quantifier.some",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.not",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.quantified",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-king_zone.color.black",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-king_zone.zone.edge",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_count.basis.count",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_count.color.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_count.comparison.atLeast",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_count.role.bishop",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_count.role.knight",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_distance.color.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_distance.comparison.atMost",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-piece_distance.role.king",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.king_zone",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.piece_count",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.piece_distance",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "successCondition.reach_checkpoint",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "successCondition.structural_feature",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.unauthored_default",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.window",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "trajectory.verdict",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "variantOf.relation.same_root_other_objective",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    }
   ]
 }

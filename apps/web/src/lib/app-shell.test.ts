@@ -153,6 +153,7 @@ const capabilities: Capabilities = {
     },
   },
   providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },
+  packCapabilities: { protocol: "tabiya.pack-capabilities", protocolVersion: 1, rows: [] },
   surfaces: {
     play: "available",
     review: "available",

@@ -17,5 +17,29 @@
   ],
   "opponentPolicy": { "mode": "human_common", "seedMode": "per_run" },
   "feedbackPolicy": "delayed_checkpoint",
-  "provenance": { "reviewStatus": "schema_example" }
+  "provenance": { "reviewStatus": "schema_example" },
+  "requires": [
+    { "id": "branch.decidedness", "version": { "kind": "integer", "value": 1 } },
+    { "id": "checkpointInteraction.prediction", "version": { "kind": "integer", "value": 1 } },
+    { "id": "claim.earning", "version": { "kind": "integer", "value": 1 } },
+    { "id": "feedbackPolicy.delayed_checkpoint", "version": { "kind": "integer", "value": 1 } },
+    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 1 } },
+    { "id": "guard.defaults", "version": { "kind": "integer", "value": 1 } },
+    { "id": "guard.immediate", "version": { "kind": "integer", "value": 1 } },
+    { "id": "line.membership", "version": { "kind": "integer", "value": 1 } },
+    { "id": "mode.outcome", "version": { "kind": "integer", "value": 1 } },
+    { "id": "objective.state_machine", "version": { "kind": "integer", "value": 1 } },
+    { "id": "objective.transition_legality", "version": { "kind": "integer", "value": 1 } },
+    { "id": "objectiveType.hold", "version": { "kind": "integer", "value": 1 } },
+    { "id": "opponent.selection", "version": { "kind": "integer", "value": 1 } },
+    { "id": "opponentPolicy.mode.human_common", "version": { "kind": "integer", "value": 1 } },
+    { "id": "opponentPolicy.seedMode.per_run", "version": { "kind": "integer", "value": 1 } },
+    { "id": "outcome.terminal", "version": { "kind": "integer", "value": 1 } },
+    { "id": "provenance.reviewStatus.schema_example", "version": { "kind": "integer", "value": 1 } },
+    { "id": "reasoning.key_point_match", "version": { "kind": "integer", "value": 1 } },
+    { "id": "simpleTrigger.atPly", "version": { "kind": "integer", "value": 1 } },
+    { "id": "tempo.unauthored_default", "version": { "kind": "integer", "value": 1 } },
+    { "id": "tempo.window", "version": { "kind": "integer", "value": 1 } },
+    { "id": "trajectory.verdict", "version": { "kind": "integer", "value": 1 } }
+  ]
 }

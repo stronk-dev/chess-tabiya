@@ -384,5 +384,364 @@
         }
       }
     ]
-  }
+  },
+  "requires": [
+    {
+      "id": "branch.decidedness",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "checkpointInteraction.intent_capture",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "claim.earning",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "conditionBase.to.degraded",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.accepted_alternative",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.concept_violation",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.tactical_error",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviationLocation.fen",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviationLocation.spineNodeId",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.author_principle",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.hypothesis",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackPolicy.immediate_guard",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "grade.move_quality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.kind-ledger_record.recordKind.engine_eval",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.kind-ledger_record.recordKind.tablebase_result",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.ledger_record",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.unbuilt",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.accepted",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.accepted.kind.owner_ruling",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.clearance",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.accepted",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.blocking",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.defaults",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.immediate",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "line.membership",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "mode.outcome",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.state_machine",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.transition_legality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.assessedBy.authored",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.resolveAt.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveType.win",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponent.selection",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.mode.human_common",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.seedMode.per_branch",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "outcome.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "phase.endgame",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "principle.count-before-conclusion",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "principle.guard-calibration-is-authored",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "principle.material-serves-purpose",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "principle.result-not-moves",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "provenance.reviewStatus.draft",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "reasoning.key_point_match",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.atPly",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.atSpineNode",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "start.side.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "successCondition.kind-material_balance.comparison.atMost",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "successCondition.kind-material_balance.perspective.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "successCondition.material_balance",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.unauthored_default",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.window",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "trajectory.verdict",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    }
+  ]
 }

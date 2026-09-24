@@ -8,5 +8,30 @@
   "checkpoints": [{ "id": "window", "trigger": { "atWindow": { "windowId": "missing", "verdict": "in_time" } } }],
   "opponentPolicy": { "mode": "strong_engine", "seedMode": "per_run" },
   "feedbackPolicy": "segment_end",
-  "provenance": { "reviewStatus": "schema_example" }
+  "provenance": { "reviewStatus": "schema_example" },
+  "requires": [
+    { "id": "branch.decidedness", "version": { "kind": "integer", "value": 1 } },
+    { "id": "claim.earning", "version": { "kind": "integer", "value": 1 } },
+    { "id": "feedbackPolicy.segment_end", "version": { "kind": "integer", "value": 1 } },
+    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 1 } },
+    { "id": "guard.defaults", "version": { "kind": "integer", "value": 1 } },
+    { "id": "guard.immediate", "version": { "kind": "integer", "value": 1 } },
+    { "id": "line.membership", "version": { "kind": "integer", "value": 1 } },
+    { "id": "mode.plan", "version": { "kind": "integer", "value": 1 } },
+    { "id": "objective.state_machine", "version": { "kind": "integer", "value": 1 } },
+    { "id": "objective.transition_legality", "version": { "kind": "integer", "value": 1 } },
+    { "id": "objectiveType.play_until_checkpoint", "version": { "kind": "integer", "value": 1 } },
+    { "id": "opponent.selection", "version": { "kind": "integer", "value": 1 } },
+    { "id": "opponentPolicy.mode.strong_engine", "version": { "kind": "integer", "value": 1 } },
+    { "id": "opponentPolicy.seedMode.per_run", "version": { "kind": "integer", "value": 1 } },
+    { "id": "outcome.terminal", "version": { "kind": "integer", "value": 1 } },
+    { "id": "provenance.reviewStatus.schema_example", "version": { "kind": "integer", "value": 1 } },
+    { "id": "reasoning.key_point_match", "version": { "kind": "integer", "value": 1 } },
+    { "id": "start.side.white", "version": { "kind": "integer", "value": 1 } },
+    { "id": "tempo.unauthored_default", "version": { "kind": "integer", "value": 1 } },
+    { "id": "tempo.window", "version": { "kind": "integer", "value": 1 } },
+    { "id": "tempoVerdict.in_time", "version": { "kind": "integer", "value": 1 } },
+    { "id": "trajectory.verdict", "version": { "kind": "integer", "value": 1 } },
+    { "id": "windowTrigger.atWindow.verdict", "version": { "kind": "integer", "value": 1 } }
+  ]
 }

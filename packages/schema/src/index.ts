@@ -1,5 +1,5 @@
 export const DRILL_RUN_SCHEMA_VERSION = "0.17" as const;
-export const DRILL_PACK_SCHEMA_VERSION = "0.29" as const;
+export const DRILL_PACK_SCHEMA_VERSION = "0.30" as const;
 export const DRILL_PACK_REQUIRED_FIELDS = Object.freeze([
   "id",
   "version",
@@ -11,6 +11,7 @@ export const DRILL_PACK_REQUIRED_FIELDS = Object.freeze([
   "opponentPolicy",
   "feedbackPolicy",
   "provenance",
+  "requires",
 ] as const);
 export const SHAPE_ENTRY_SCHEMA_VERSION = "0.3" as const;
 
@@ -33,3 +34,5 @@ export const schemaBuildInfo = Object.freeze({
   shapeEntryVersion: SHAPE_ENTRY_SCHEMA_VERSION,
   principleEntryVersion: PRINCIPLE_ENTRY_SCHEMA_VERSION,
 });
+
+export * from "./capability/index.js";

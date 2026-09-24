@@ -24,6 +24,7 @@ import { PackRegistry } from "./pack-registry.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const at = "2026-08-12T20:00:00.000Z";
 const fixture = JSON.parse(
@@ -75,7 +76,7 @@ async function request(
 
 async function setup(document: DrillPackDefinition) {
   const registry = await PackRegistry.fromDocuments([
-    { source: "test-pack", value: document },
+    { source: "test-pack", value: withDerivedRequires(document) },
   ]);
   const executor = new RecordingExecutor();
   const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
@@ -255,7 +256,7 @@ describe("drill-client pack registry", () => {
     const illegal = pack();
     (illegal.spine![0] as { moveUci: string }).moveUci = "a1a8";
     await expect(
-      PackRegistry.fromDocuments([{ source: "illegal", value: illegal }]),
+      PackRegistry.fromDocuments([{ source: "illegal", value: withDerivedRequires(illegal) }]),
     ).rejects.toMatchObject({ code: "PACK_INVALID" });
 
     await expect(

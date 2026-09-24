@@ -1,834 +1,205 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "artifact": "tabiya.pack-capability.schema-transition.v3",
-  "legacy": {
-    "schemaId": "urn:chess-tabiya:schema:drill-pack:0.27",
-    "schemaSha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0",
-    "catalogueDocuments": 92,
-    "populationAlgorithm": "sorted-path-and-raw-sha256-v1",
-    "populationSha256": "933eeecd0aee6e50b2a595b62bfc22485ba8a4d2dc945a5b4efdd9cf35fca849",
-    "admission": "repository_catalogue_allowlist_only",
-    "documents": [
-      {
-        "path": "content/candidates/a87-dutch-defense-leningrad-variation/pack.json",
-        "sha256": "0c691ccfa8a29efa53a0d65c1d20cb52aee31809e6523a56c33e049c01ad30d2"
-      },
-      {
-        "path": "content/candidates/b12-caro-kann-defense-advance-variation-short-variation/pack.json",
-        "sha256": "7c0c8e89955aeaef3b3fc34c57a23b57c1af83ef14c89b9115a6f86823b2e22a"
-      },
-      {
-        "path": "content/candidates/b90-sicilian-defense-najdorf-variation-english-attack/pack.json",
-        "sha256": "8f6271bca3e9852e4129a937e7c4c90394805b6488596b5be500475b949726f4"
-      },
-      {
-        "path": "content/candidates/c02-french-defense-advance-variation-main-line/pack.json",
-        "sha256": "8a0e6cabb6704ea250c126b1337c25275d0a3adbe27f81d2ea2a659e222ce249"
-      },
-      {
-        "path": "content/candidates/c02-french-defense-advance-variation/pack.json",
-        "sha256": "5a419e432332a821cb3a99837ab69e2aa969926168912cf4f87329937cb475f4"
-      },
-      {
-        "path": "content/candidates/c54-italian-game-classical-variation-center-attack/pack.json",
-        "sha256": "70a44c9e3f5d1f2ab7ba58257f7b8f7b4b453bf175f28ebb8014beed3e603c3e"
-      },
-      {
-        "path": "content/candidates/d02-queen-s-pawn-game-london-system/pack.json",
-        "sha256": "3409ef23f8600150007b7a14ea3409fff7925e7aaa548136e7f9645bce374d6b"
-      },
-      {
-        "path": "content/candidates/d35-queen-s-gambit-declined-exchange-variation/pack.json",
-        "sha256": "a2ac6784a018e656120340421e68fe3428a5497bbc67dd857c09472acb88c5df"
-      },
-      {
-        "path": "content/candidates/e99-king-s-indian-defense-orthodox-variation-classical-system-traditional-line/pack.json",
-        "sha256": "7ba1099931ca9b5daf7f86df2966327418348e0179eab26094b3ab525ea358e0"
-      },
-      {
-        "path": "content/candidates/endgame-rook-4v3-same-side-root/pack.json",
-        "sha256": "3ff942619e3b80b8cd54c8e44abbcc48eaaa7b9bc356c322abfccdf2e55c0861"
-      },
-      {
-        "path": "content/candidates/onramp-00008/pack.json",
-        "sha256": "fc3d720f20dde632e6694a86eabbe8e90f63e31f6f88e5fb417cd6487042f647"
-      },
-      {
-        "path": "content/candidates/onramp-0000d/pack.json",
-        "sha256": "798f31c42a1f0f92a8c0097971eac57a76135b96dec1ce9f90d20415c9ee3755"
-      },
-      {
-        "path": "content/candidates/onramp-000lc/pack.json",
-        "sha256": "7b81c763ede1ec9d4eaac3b0f82bf62946a82edafcb3a40469221fac5bfa2737"
-      },
-      {
-        "path": "content/candidates/onramp-001wr/pack.json",
-        "sha256": "fbe5c16f60b00008c318d7e5fdb2b7d33830efbdfebec2fc21df38ff13bd1dc6"
-      },
-      {
-        "path": "content/candidates/onramp-001xl/pack.json",
-        "sha256": "f68cf6047de12f81db434b2fe917c01ed14993e8e810a19786109f8f0d8ba82d"
-      },
-      {
-        "path": "content/candidates/onramp-003ep/pack.json",
-        "sha256": "aaabc45b7b51d14c567fa29bebb527b9e964e4e9089ec481019c21f09da7c050"
-      },
-      {
-        "path": "content/candidates/onramp-004mt/pack.json",
-        "sha256": "11295e9df7e41c2dda7460679df2ae27602076b9d88f8de5c85593f0c8096a52"
-      },
-      {
-        "path": "content/candidates/onramp-0050w/pack.json",
-        "sha256": "4b24c09637e00506ae50ad0e325944c9ac44dc2a490d6f5c57edbe9aaa57f72e"
-      },
-      {
-        "path": "content/candidates/onramp-007tv/pack.json",
-        "sha256": "8e066cdb29a03f34a03b356133eb10de377e2d23f2207551f1f32fa3da4332a8"
-      },
-      {
-        "path": "content/candidates/onramp-009fp/pack.json",
-        "sha256": "788d2dbc7d0c2598e71732c7c77b4e14ca369e1150013dedefef4568625ff4d9"
-      },
-      {
-        "path": "content/candidates/onramp-00aas/pack.json",
-        "sha256": "15200b1aa100549d0f950cfcb5272150624fc2f24c78d81e58c37367140b2ca8"
-      },
-      {
-        "path": "content/candidates/onramp-00ab1/pack.json",
-        "sha256": "f7bab6cd30b0adeff1b5047f3f2fb6ad3954d38df48df86ba59ec528013996d5"
-      },
-      {
-        "path": "content/candidates/onramp-00adi/pack.json",
-        "sha256": "d94e2f3ed48cbda788c393954faf8f9699661584bfc8dd1f5469101f38d2d6f5"
-      },
-      {
-        "path": "content/candidates/onramp-00aho/pack.json",
-        "sha256": "59634687bbaeece6c9180069d4aed075ca67bb5e1914bad312305472b4aa899d"
-      },
-      {
-        "path": "content/candidates/onramp-00bts/pack.json",
-        "sha256": "78eb6d695e87dbddd9a0a1bfe7ac9bba48d3eb85d933b5d0e731920f5447abe6"
-      },
-      {
-        "path": "content/candidates/onramp-00cy1/pack.json",
-        "sha256": "e458054231f10f7345ed16396c38306a87e2ac48319e83756f1aee58162f75d4"
-      },
-      {
-        "path": "content/candidates/onramp-00dnp/pack.json",
-        "sha256": "7352f3d9ee642254153a0a5d7d46c11cc094f80dfeaac47ad89a72d075389833"
-      },
-      {
-        "path": "content/candidates/onramp-00evs/pack.json",
-        "sha256": "aafe666677881698785436b692777feb2e4f9e442330e0756162143adaa71524"
-      },
-      {
-        "path": "content/candidates/onramp-00icz/pack.json",
-        "sha256": "367ec2ee8f38e26fc327ba353dad1c312aa0eef1fd05f7dfbf10f39239b33faa"
-      },
-      {
-        "path": "content/candidates/onramp-00jcd/pack.json",
-        "sha256": "6b18bbb9db624641cd3c5bdb54f4f7136523485e3f1be8155f9c97ff263b3912"
-      },
-      {
-        "path": "content/candidates/onramp-00jph/pack.json",
-        "sha256": "74b8acedba4fc1fc1b12fcaac0dd9a7f5a042876fecf10b64f0c0a90a3a586cd"
-      },
-      {
-        "path": "content/candidates/onramp-00kzf/pack.json",
-        "sha256": "f5d2268b75ec8ef24c89ff3f080c7ad17657d8812fc2e847b1ab132f0213b1ce"
-      },
-      {
-        "path": "content/candidates/onramp-00nej/pack.json",
-        "sha256": "8ae43cdb46089231a3b26a065b00653ea77c80b8094291045958328d361d9810"
-      },
-      {
-        "path": "content/candidates/onramp-00o8m/pack.json",
-        "sha256": "fb0150db112f704e27d2c9b788ed06d34e12a89370d1d475800e928f6de82268"
-      },
-      {
-        "path": "content/candidates/onramp-00pgi/pack.json",
-        "sha256": "4393ac282b8e69cc86e8a3e43fa3a897032aa8fce70cb0be290f00a8d52dd9d1"
-      },
-      {
-        "path": "content/candidates/onramp-00puc/pack.json",
-        "sha256": "ae82dc722c0d377a462f6624b64bc0bbd95d14ed9dd59efc1b6574c988cb326f"
-      },
-      {
-        "path": "content/drafts/anti-caro-advance-early-c5.json",
-        "sha256": "990addc3c3414fa7b868e14c15585c2d969ca4ef5017b05ff99a6bdfad8d0720"
-      },
-      {
-        "path": "content/drafts/anti-caro-advance.json",
-        "sha256": "04480a63d7a479e52a6b18ac1a3ffeb471eea0a46f8c91c8ae4dcf9166ea7c6a"
-      },
-      {
-        "path": "content/drafts/anti-dutch-leningrad-white.json",
-        "sha256": "74556500d26877cfeb50c0818f3d2382984f8fd264d1754572b0b0bf93e0a933"
-      },
-      {
-        "path": "content/drafts/anti-french-advance-white.json",
-        "sha256": "4211dc25aa7fe2885f5fb83e1a35ef7ece60deb12386520971f731044e7fb301"
-      },
-      {
-        "path": "content/drafts/anti-italian-center-attack-black.json",
-        "sha256": "2fb765aaffe4b75ccdf7d2ccffa569b595f25147b6c3e629042648854d11a884"
-      },
-      {
-        "path": "content/drafts/anti-kid-classical-white.json",
-        "sha256": "43d1e104b000b3896cf1a451e6a1e2a4bf0eb1701d059a80c5fbe477a623f71d"
-      },
-      {
-        "path": "content/drafts/anti-london-black.json",
-        "sha256": "3659238358bf14f76a3b938967aaefb3afd5ec0de1133ffdef56859b366a8000"
-      },
-      {
-        "path": "content/drafts/anti-scandinavian-white.json",
-        "sha256": "e46914cf3266aa85fd4bc10beaee52ce7c1a40418eae4be3d9c49d0e1c3a91ff"
-      },
-      {
-        "path": "content/drafts/anti-sicilian-najdorf-english-attack.json",
-        "sha256": "1b962f80c13a8f4bc874fa416fc715d2fbb2c4993f9f28f1d012c26aed305b2c"
-      },
-      {
-        "path": "content/drafts/berlin-queenless-press.json",
-        "sha256": "eb587958829a95bcfc14d130e75c68da4da6ba8cb431cedb6916b39bddc0fe99"
-      },
-      {
-        "path": "content/drafts/carlsbad-minority-attack.json",
-        "sha256": "752a8c9332fe16006acda1351cfbab052775a65de68f6ca1fffa2f394abaa14a"
-      },
-      {
-        "path": "content/drafts/caro-kann-advance-black.json",
-        "sha256": "bf692f697bc561ce2bf58f3558d8a79d8b9e244b1641776cca5cafcf9c3fa33c"
-      },
-      {
-        "path": "content/drafts/closed-centre-chain-black-base-strike.json",
-        "sha256": "75a66f0662d87e525d71b6b75d308b12292fa8c5a8c4866537b72367973cc9b9"
-      },
-      {
-        "path": "content/drafts/conversion-up-a-piece.json",
-        "sha256": "673cff41007b3e79c478f574201ec766da12dd3b73a97f43ce7f25ebe2cd82ae"
-      },
-      {
-        "path": "content/drafts/dragon-yugoslav-race.json",
-        "sha256": "4d100b3600afc64e1fcf06f5e7a97cb06c53d0b9a44709417c2dc9180644536a"
-      },
-      {
-        "path": "content/drafts/french-advance-black.json",
-        "sha256": "8b2d36cccecaea676600d3eb0180637d48baaab5c1a12cd5f610958d2877f55e"
-      },
-      {
-        "path": "content/drafts/french-advance-chain-white.json",
-        "sha256": "155111b43e504d7b9f1595ff603b89a628ce141691e268c6c08dbc63e43528ce"
-      },
-      {
-        "path": "content/drafts/grunfeld-exchange-fianchetto.json",
-        "sha256": "dd3a45648818fa64d2ebf6c369917796b6f656dd987985c02f4da7ecc06310f5"
-      },
-      {
-        "path": "content/drafts/immediate-guard.browser.json",
-        "sha256": "d5d5f300f0ff7e447a29a2f39ad73caf21aa10e167b0da18416030d48d0ca097"
-      },
-      {
-        "path": "content/drafts/iqp-black-tarrasch-defence.json",
-        "sha256": "9476f957347b61cc26d3e9152cdc96b96f3095d3e35363efd15f813af7b0d919"
-      },
-      {
-        "path": "content/drafts/iqp-white-panov-attack.json",
-        "sha256": "5808444546f60be66fc494af71f277e4b40124c6a4ebef828554b87b49503df1"
-      },
-      {
-        "path": "content/drafts/italian-center-attack-white.json",
-        "sha256": "79402c61bd86a589908c904fa3fc767fcb57fd2ede2849e51187e72a877173cc"
-      },
-      {
-        "path": "content/drafts/kid-classical-black.json",
-        "sha256": "41349c4f12868c44a276277147079fb4c97be63b78f7a226cae098dc91dea575"
-      },
-      {
-        "path": "content/drafts/kid-mar-del-plata-white.json",
-        "sha256": "afaa9b97ca5198aa75aaceeb45d7860c965da6e032fd9ed163a228ecbd41d00a"
-      },
-      {
-        "path": "content/drafts/leningrad-dutch-black.json",
-        "sha256": "7f692cee0f1a12511fcd5ccdfe6a827f8c56d77e48b71fe42e8d5190d7158673"
-      },
-      {
-        "path": "content/drafts/line-boundary.browser.json",
-        "sha256": "37ac3ed76d4d36ed1344e675a3c14e436a7cb9b8c203876d895a6488c277ae9e"
-      },
-      {
-        "path": "content/drafts/london-system-white.json",
-        "sha256": "c9f60c226509eafc112d9792cd84ca6b1efbde17998ca38809d643d833d40f3b"
-      },
-      {
-        "path": "content/drafts/london-wedge-black-counterplay.json",
-        "sha256": "a81c673c775b87a4ad9f44c54c7ec29c7f92925dbbae58931e8235db3cf37126"
-      },
-      {
-        "path": "content/drafts/lucena-bridge-convert.json",
-        "sha256": "25fe15fb42b2e87e7c94889193c6d91d337d358942f5ffaad8b5cf364e53f019"
-      },
-      {
-        "path": "content/drafts/maroczy-bind-white-squeeze.json",
-        "sha256": "1981e5b48c0d67bdf71eaeeb1da70fe20958ff1735fd9270ffe7d8d72b5dcf6d"
-      },
-      {
-        "path": "content/drafts/mate-bishop-knight.json",
-        "sha256": "771db4d9de5607a6b9ce8d4ee1647e20b85d79c64a2d6225b2e4d29c7d6acbe1"
-      },
-      {
-        "path": "content/drafts/mate-k-q-technique.json",
-        "sha256": "dada810b16c25569935cd7ff0cf76d4575d83ebf4700bd2637d86ecb44ef7668"
-      },
-      {
-        "path": "content/drafts/mate-k-r-technique.json",
-        "sha256": "b6b4fb911a80766ccf69f95dde9f129255e8b2bc35d2446e36c6528edafd77b8"
-      },
-      {
-        "path": "content/drafts/mate-two-bishops.json",
-        "sha256": "04804818f99be25d5faba1489f0979beb13edb7eb3ecbe48aa35b5169ca36952"
-      },
-      {
-        "path": "content/drafts/najdorf-english-attack-black.json",
-        "sha256": "9b825749bb5134b5bf90510f6e068612d383ba95bd0aba89547480d3f5bca1eb"
-      },
-      {
-        "path": "content/drafts/nimzo-doubled-c-pawns.json",
-        "sha256": "14030239df91bf102717954fde1542c262b0683c6c3e565a981b2b3686d6add4"
-      },
-      {
-        "path": "content/drafts/open-centre-french-exchange-black.json",
-        "sha256": "8260303cb19f234cffb7afd8dd45e71a537131785aae488ea65799ff6922c30f"
-      },
-      {
-        "path": "content/drafts/open-centre-ruy-exchange.json",
-        "sha256": "13a31b1ee01532610e25d4cbc531b4b893d605a91229bb1187b759f97b208750"
-      },
-      {
-        "path": "content/drafts/opening-principles-black.json",
-        "sha256": "6feb67a9c0a6c898ed05ded79100a09fd070bd5c6a10a7d42d296a4bd3d1c7a6"
-      },
-      {
-        "path": "content/drafts/opening-principles-white.json",
-        "sha256": "e7248a41300c67081f46d3e21176acfa8a6dfc616bca4ad227175f5286da3fcd"
-      },
-      {
-        "path": "content/drafts/opponent-intent-early-queen.json",
-        "sha256": "6512e9eb613f9b4794dab4baa4011290a6b126d2befc21d753fc051a9a8b5d4f"
-      },
-      {
-        "path": "content/drafts/opposite-bishops-fortress-hold.json",
-        "sha256": "9a032dc6e88103f7f7a588bf95a5ba1b3bf704a9d6d2e06a64cf167edd86e463"
-      },
-      {
-        "path": "content/drafts/outcome-hold.browser.json",
-        "sha256": "8ac0fcc51214600112f9ae9c8357d16a83b9d5c72177ed49d5c4893567a2b558"
-      },
-      {
-        "path": "content/drafts/outcome-resist.browser.json",
-        "sha256": "bc665400f8937b61fb5c7abdb0860845f66e12a3f6d609e6980e44c42b039c83"
-      },
-      {
-        "path": "content/drafts/pawn-breakthrough-convert.json",
-        "sha256": "0fb18e0b23393235a10e402fef42180ca6eedd295a725266ab12e344217d6fed"
-      },
-      {
-        "path": "content/drafts/pawn-opposition-convert.json",
-        "sha256": "30d51e2ed5f4cb3e792168f4c6fcea3d65e5be1f1a5ca308e44e58bf7a336e02"
-      },
-      {
-        "path": "content/drafts/philidor-passive-rook-convert.json",
-        "sha256": "b844af6f0c1cafe02ecb687f502c414fee6e475a1dd03940e273d57b88ce245e"
-      },
-      {
-        "path": "content/drafts/philidor-third-rank-hold.json",
-        "sha256": "f7ab26379c3cbd37a16abadc54c62e0597d2193fd447ae860d8ec8d190efef0c"
-      },
-      {
-        "path": "content/drafts/queen-vs-pawn-seventh-convert.json",
-        "sha256": "9e8bc0a1f4f62d78de11a3b3ae7fece1ff950ab34b8aa962aa5931991d172ce4"
-      },
-      {
-        "path": "content/drafts/rook-4v3-same-side.json",
-        "sha256": "71c1b5b6e61a4454e7181d3ca1e02379969fc10f1e1cf63b4cae9e7cb7192097"
-      },
-      {
-        "path": "content/drafts/scandinavian-mainline-black.json",
-        "sha256": "05ffc6c142c39d25a41bfca99cf0ca51e2e1aced38e6a8651f369a54b1d16a93"
-      },
-      {
-        "path": "content/drafts/stated-reasoning.browser.json",
-        "sha256": "6583a6023d17e2b049af4e8fe481be1c45dc0fc65937cb4fc823a9242a5525eb"
-      },
-      {
-        "path": "content/drafts/trajectory-caro-advance-chain-bishops.json",
-        "sha256": "1427af264af72c7ed1e908971a2eaf320586dfe2343fb9021bcebd656c23ece9"
-      },
-      {
-        "path": "content/drafts/trajectory-legs.browser.json",
-        "sha256": "92a3cdee3f8247ff6864021e6d3435da1c270476ea5c1deb2a1eaa42afb61755"
-      },
-      {
-        "path": "content/drafts/trajectory-mate-bishop-knight.json",
-        "sha256": "7ef665d83d120c801215084c7fe06f1d41ed8dfd24b6c70ed4471046d4ddd3c9"
-      },
-      {
-        "path": "content/drafts/trajectory-qgd-exchange-minority.json",
-        "sha256": "9729d878bb971d9f03c42be94b88a7fb03ff02b3d984db430c74e54e826c36e5"
+  "artifact": "tabiya.pack-capability.schema-transition.v4",
+  "supersededStages": {
+    "reason": "The 0.28 and 0.29 lanes landed independently (71cc8954, 72dffeeb) before this lane, with bytes that differ from the stages sealed here on 2026-09-07; the sealed 0.28/0.29 patches were never applied. The 0.30 stage is re-based on the shipped 0.29 schema, and its patch is unchanged.",
+    "lanes": [
+      {
+        "lane": "0.28",
+        "owner": "rfc/archive/graduation-clearance.md",
+        "landedAt": "71cc8954",
+        "sealedTargetSha256": "c4132e4c9268a964d229323e0b6ec8dfc8723b976bd272f0b56dbe5003fcfafe"
+      },
+      {
+        "lane": "0.29",
+        "owner": "rfc/pack-population-provenance.md",
+        "landedAt": "72dffeeb",
+        "sealedTargetSha256": "55c0095dfe381cfd5750cd4c6bdb71d2f80337f6c22616419cba798a3368a605"
       }
     ]
   },
-  "stages": [
-    {
-      "lane": "0.28",
-      "owner": "rfc/archive/graduation-clearance.md",
-      "source": {
-        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.27",
-        "schemaSha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0"
+  "source": {
+    "schemaId": "urn:chess-tabiya:schema:drill-pack:0.29",
+    "rawSha256": "88db01823f2393444c61b37f0c24a7eb2a7f92b33a1c690a1a0c9e34811493c2",
+    "canonicalSha256": "7a35efce46c41d6dc54ff55b58a1b72d85d0d02da97273f85d584765bda8ba1b"
+  },
+  "stage": {
+    "lane": "0.30",
+    "owner": "rfc/pack-capability-contract.md",
+    "patchAlgorithm": "ordered-json-pointer-patch-v2",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/$id",
+        "value": "urn:chess-tabiya:schema:drill-pack:0.30"
       },
-      "target": {
-        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.28",
-        "schemaSha256": "c4132e4c9268a964d229323e0b6ec8dfc8723b976bd272f0b56dbe5003fcfafe",
-        "canonicalBytes": 84113
+      {
+        "op": "replace",
+        "path": "/description",
+        "value": "Living v0.30 format with required semantic capability declarations."
       },
-      "patch": [
-        {
-          "op": "replace",
-          "path": "/$id",
-          "value": "urn:chess-tabiya:schema:drill-pack:0.28"
-        },
-        {
-          "op": "replace",
-          "path": "/description",
-          "value": "Living v0.28 format with typed graduation clearance."
-        },
-        {
-          "op": "remove",
-          "path": "/$defs/graduationEntry/properties/clearedBy"
-        },
-        {
-          "op": "add",
-          "path": "/$defs/graduationEntry/properties/clearance",
-          "value": {
-            "type": "object",
-            "required": [
-              "kind",
-              "subject"
-            ],
-            "properties": {
-              "kind": {
-                "enum": [
-                  "assessment_grounded",
-                  "ledger_record",
-                  "claim_bound",
-                  "shape_firing",
-                  "pointer_authored",
-                  "unbuilt",
-                  "unreachable",
-                  "referent_removed"
-                ]
-              },
-              "subject": {
-                "type": "string",
-                "pattern": "^/[^/]"
-              },
-              "recordKind": {
-                "enum": [
-                  "opening_identity",
-                  "position_legality",
-                  "explorer_frequency",
-                  "explorer_position_census",
-                  "tablebase_result",
-                  "engine_eval",
-                  "puzzle_provenance"
-                ]
-              },
-              "instrument": {
-                "$ref": "#/$defs/nonEmptyString"
-              },
-              "blockedBy": {
-                "$ref": "#/$defs/nonEmptyString"
-              },
-              "placeholder": {
-                "$ref": "#/$defs/nonEmptyString"
-              },
-              "absentIds": {
-                "type": "array",
-                "minItems": 1,
-                "items": {
-                  "$ref": "#/$defs/id"
-                }
-              }
-            },
-            "additionalProperties": false
-          }
-        },
-        {
-          "op": "replace",
-          "path": "/$defs/graduationEntry/properties/resolved",
-          "value": {
-            "type": "object",
-            "required": [
-              "at",
-              "by",
-              "clearance"
-            ],
-            "properties": {
-              "at": {
-                "type": "string",
-                "format": "date"
-              },
-              "by": {
-                "$ref": "#/$defs/nonEmptyString"
-              },
-              "clearance": {
-                "$ref": "#/$defs/graduationEntry/properties/clearance"
-              }
-            },
-            "additionalProperties": false
-          }
-        },
-        {
-          "op": "replace",
-          "path": "/$defs/graduationEntry/properties/accepted",
-          "value": {
-            "type": "object",
-            "required": [
-              "kind",
-              "ruling",
-              "rulingRef",
-              "unreachableBecause"
-            ],
-            "properties": {
-              "kind": {
-                "enum": [
-                  "owner_ruling",
-                  "permanent_property",
-                  "out_of_scope"
-                ]
-              },
-              "ruling": {
-                "$ref": "#/$defs/nonEmptyString"
-              },
-              "rulingRef": {
-                "$ref": "#/$defs/nonEmptyString"
-              },
-              "unreachableBecause": {
-                "$ref": "#/$defs/nonEmptyString"
-              }
-            },
-            "additionalProperties": false
-          }
-        },
-        {
-          "op": "replace",
-          "path": "/$defs/graduationEntry/oneOf",
-          "value": [
+      {
+        "op": "add",
+        "path": "/required/-",
+        "value": "requires"
+      },
+      {
+        "op": "add",
+        "path": "/properties/requires",
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/capabilityRequirement"
+          },
+          "uniqueItems": true
+        }
+      },
+      {
+        "op": "add",
+        "path": "/$defs/capabilityVersion",
+        "value": {
+          "oneOf": [
             {
+              "type": "object",
+              "required": [
+                "kind",
+                "value"
+              ],
               "properties": {
-                "state": {
-                  "const": "blocking"
+                "kind": {
+                  "const": "integer"
+                },
+                "value": {
+                  "type": "integer",
+                  "minimum": 1
                 }
               },
-              "required": [
-                "clearance"
-              ],
-              "not": {
-                "anyOf": [
-                  {
-                    "properties": {
-                      "resolved": {}
-                    },
-                    "required": [
-                      "resolved"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "accepted": {}
-                    },
-                    "required": [
-                      "accepted"
-                    ]
-                  }
-                ]
-              }
+              "additionalProperties": false
             },
             {
-              "properties": {
-                "state": {
-                  "const": "resolved"
-                },
-                "resolved": {}
-              },
+              "type": "object",
               "required": [
-                "resolved"
+                "kind",
+                "value"
               ],
-              "not": {
-                "anyOf": [
-                  {
-                    "properties": {
-                      "clearance": {}
-                    },
-                    "required": [
-                      "clearance"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "accepted": {}
-                    },
-                    "required": [
-                      "accepted"
-                    ]
-                  }
-                ]
-              }
-            },
-            {
               "properties": {
-                "state": {
-                  "const": "accepted"
+                "kind": {
+                  "const": "semver"
                 },
-                "accepted": {}
+                "value": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+                }
               },
-              "required": [
-                "accepted"
-              ],
-              "not": {
-                "anyOf": [
-                  {
-                    "properties": {
-                      "clearance": {}
-                    },
-                    "required": [
-                      "clearance"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "resolved": {}
-                    },
-                    "required": [
-                      "resolved"
-                    ]
-                  }
-                ]
-              }
+              "additionalProperties": false
             }
           ]
         }
-      ]
-    },
-    {
-      "lane": "0.29",
-      "owner": "rfc/pack-population-provenance.md",
-      "source": {
-        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.28",
-        "schemaSha256": "c4132e4c9268a964d229323e0b6ec8dfc8723b976bd272f0b56dbe5003fcfafe"
       },
-      "target": {
-        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.29",
-        "schemaSha256": "55c0095dfe381cfd5750cd4c6bdb71d2f80337f6c22616419cba798a3368a605",
-        "canonicalBytes": 85581
-      },
-      "patch": [
-        {
-          "op": "replace",
-          "path": "/$id",
-          "value": "urn:chess-tabiya:schema:drill-pack:0.29"
-        },
-        {
-          "op": "replace",
-          "path": "/description",
-          "value": "Living v0.29 format with typed corpus provenance and citable evidence."
-        },
-        {
-          "op": "replace",
-          "path": "/$defs/timingWindow/properties/note/maxLength",
-          "value": 2000
-        },
-        {
-          "op": "add",
-          "path": "/$defs/feedbackClaim/properties/evidenceTypes/items/enum/-",
-          "value": "provenance_note"
-        },
-        {
-          "op": "add",
-          "path": "/$defs/graduationEntry/properties/clearance/properties/recordKind/enum/-",
-          "value": "citable_text"
-        },
-        {
-          "op": "add",
-          "path": "/$defs/provenance/properties/corpusEvidence",
-          "value": {
-            "oneOf": [
-              {
-                "type": "object",
-                "required": [
-                  "state"
-                ],
-                "properties": {
-                  "state": {
-                    "const": "ledger"
-                  }
-                },
-                "additionalProperties": false
-              },
-              {
-                "type": "object",
-                "required": [
-                  "state",
-                  "reason",
-                  "detail"
-                ],
-                "properties": {
-                  "state": {
-                    "const": "abstained"
-                  },
-                  "reason": {
-                    "enum": [
-                      "out_of_range",
-                      "source_unavailable",
-                      "no_data_at_band",
-                      "licence_withheld"
-                    ]
-                  },
-                  "detail": {
-                    "$ref": "#/$defs/nonEmptyString"
-                  }
-                },
-                "additionalProperties": false
-              },
-              {
-                "type": "object",
-                "required": [
-                  "state"
-                ],
-                "properties": {
-                  "state": {
-                    "const": "unsourced"
-                  }
-                },
-                "additionalProperties": false
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "lane": "0.30",
-      "owner": "rfc/pack-capability-contract.md",
-      "source": {
-        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.29",
-        "schemaSha256": "55c0095dfe381cfd5750cd4c6bdb71d2f80337f6c22616419cba798a3368a605"
-      },
-      "target": {
-        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.30",
-        "schemaSha256": "f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db",
-        "canonicalBytes": 87000
-      },
-      "patch": [
-        {
-          "op": "replace",
-          "path": "/$id",
-          "value": "urn:chess-tabiya:schema:drill-pack:0.30"
-        },
-        {
-          "op": "replace",
-          "path": "/description",
-          "value": "Living v0.30 format with required semantic capability declarations."
-        },
-        {
-          "op": "add",
-          "path": "/required/-",
-          "value": "requires"
-        },
-        {
-          "op": "add",
-          "path": "/properties/requires",
-          "value": {
-            "type": "array",
-            "items": {
-              "$ref": "#/$defs/capabilityRequirement"
+      {
+        "op": "add",
+        "path": "/$defs/capabilityRequirement",
+        "value": {
+          "type": "object",
+          "required": [
+            "id",
+            "version"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)*$"
             },
-            "uniqueItems": true
-          }
+            "version": {
+              "$ref": "#/$defs/capabilityVersion"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "target": {
+      "schemaId": "urn:chess-tabiya:schema:drill-pack:0.30",
+      "canonicalSha256": "4a8efaf85c0f7d7c73f8542bc91e993a844f5bfcd6454d98d02a2186836270fa"
+    }
+  },
+  "postConditions": [
+    {
+      "pointer": "/required",
+      "contains": "requires"
+    },
+    {
+      "pointer": "/properties/requires",
+      "equals": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/capabilityRequirement"
         },
-        {
-          "op": "add",
-          "path": "/$defs/capabilityVersion",
-          "value": {
-            "oneOf": [
-              {
-                "type": "object",
-                "required": [
-                  "kind",
-                  "value"
-                ],
-                "properties": {
-                  "kind": {
-                    "const": "integer"
-                  },
-                  "value": {
-                    "type": "integer",
-                    "minimum": 1
-                  }
-                },
-                "additionalProperties": false
-              },
-              {
-                "type": "object",
-                "required": [
-                  "kind",
-                  "value"
-                ],
-                "properties": {
-                  "kind": {
-                    "const": "semver"
-                  },
-                  "value": {
-                    "type": "string",
-                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
-                  }
-                },
-                "additionalProperties": false
-              }
-            ]
-          }
-        },
-        {
-          "op": "add",
-          "path": "/$defs/capabilityRequirement",
-          "value": {
+        "uniqueItems": true
+      }
+    },
+    {
+      "pointer": "/$defs/capabilityVersion",
+      "equals": {
+        "oneOf": [
+          {
             "type": "object",
             "required": [
-              "id",
-              "version"
+              "kind",
+              "value"
             ],
             "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)*$"
+              "kind": {
+                "const": "integer"
               },
-              "version": {
-                "$ref": "#/$defs/capabilityVersion"
+              "value": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "kind",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "const": "semver"
+              },
+              "value": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
               }
             },
             "additionalProperties": false
           }
-        }
-      ]
+        ]
+      }
+    },
+    {
+      "pointer": "/$defs/capabilityRequirement",
+      "equals": {
+        "type": "object",
+        "required": [
+          "id",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)*$"
+          },
+          "version": {
+            "$ref": "#/$defs/capabilityVersion"
+          }
+        },
+        "additionalProperties": false
+      }
     }
   ],
-  "target": {
-    "schemaId": "urn:chess-tabiya:schema:drill-pack:0.30",
-    "schemaSha256": "f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db",
-    "canonicalBytes": 87000,
-    "patchAlgorithm": "ordered-cumulative-json-pointer-stages-v2"
-  },
   "applicabilityExclusions": [
     {
       "schemaPointer": "/properties/requires",
@@ -846,9 +217,381 @@
       "reason": "metadata grammar is outside the stamped semantic population"
     }
   ],
-  "retirement": {
-    "condition": "all 92 legacy catalogue documents have canonical 0.30 stamps and their dependent digests are restamped",
-    "effect": "delete the 0.27 schema reader and legacy population allowlist in the same commit",
-    "forbidden": "adding a new digest to the legacy allowlist or accepting an unstamped external document"
+  "migration": {
+    "populationAlgorithm": "sorted-path-and-raw-sha256-v1",
+    "note": "The pre-migration 0.29 population the applier rewrote; each document now carries a canonical 0.30 stamp. Adding, deleting or renaming a pack document without a row here fails the author contract.",
+    "documents": [
+      {
+        "path": "content/candidates/a87-dutch-defense-leningrad-variation/pack.json",
+        "sha256": "f49e9ecf16e5389cdf2f730038941c164b2cb8e2fcfb64900dc128a8b057d2be"
+      },
+      {
+        "path": "content/candidates/b12-caro-kann-defense-advance-variation-short-variation/pack.json",
+        "sha256": "218992e1c486a2f3521da329b55d704d42374404187239fec8dd836ca101825a"
+      },
+      {
+        "path": "content/candidates/b90-sicilian-defense-najdorf-variation-english-attack/pack.json",
+        "sha256": "c2218e232d80207c7d77991fb4029e3a1e1efb7aba8cb01ee96da747e741383f"
+      },
+      {
+        "path": "content/candidates/c02-french-defense-advance-variation-main-line/pack.json",
+        "sha256": "97f2d8fbe73cca72189319ef3436cc19631ea3a95993113f140c690d7dfa654b"
+      },
+      {
+        "path": "content/candidates/c02-french-defense-advance-variation/pack.json",
+        "sha256": "eaef4693acb7b6a5b3a67d15535cb3037d223c0e40588d87665763c2d3fc2306"
+      },
+      {
+        "path": "content/candidates/c54-italian-game-classical-variation-center-attack/pack.json",
+        "sha256": "c528c1d03988f577e1ad5e97c3a4d5f12797054602c02ea2c142861228a59a44"
+      },
+      {
+        "path": "content/candidates/d02-queen-s-pawn-game-london-system/pack.json",
+        "sha256": "a30eeb4385dda363c3fe0bc86659990feeb187876ba2b790d5c89cf13cba2309"
+      },
+      {
+        "path": "content/candidates/d35-queen-s-gambit-declined-exchange-variation/pack.json",
+        "sha256": "db4e87f10caa7c2070a9435ca243d0cfdedae814d56991ff51fd4d5baaa78369"
+      },
+      {
+        "path": "content/candidates/e99-king-s-indian-defense-orthodox-variation-classical-system-traditional-line/pack.json",
+        "sha256": "39ac16613ac958741b38c75ca01d4b8440f04701f90b917048e5de7ab09e9b08"
+      },
+      {
+        "path": "content/candidates/endgame-rook-4v3-same-side-root/pack.json",
+        "sha256": "b977c8be1d463d52baa67d26a326706df6e9ed8e37738014273734d53b56871a"
+      },
+      {
+        "path": "content/candidates/onramp-00008/pack.json",
+        "sha256": "ae137ee1dcb010f2256ac7442bdf0997cd92b4c8cb86367f86745c2e6994fff0"
+      },
+      {
+        "path": "content/candidates/onramp-0000d/pack.json",
+        "sha256": "cc8060a993b1c4d1d8493ff748f4adbc56704c178d230cb0ac2f500a7899b0c9"
+      },
+      {
+        "path": "content/candidates/onramp-000lc/pack.json",
+        "sha256": "8a7e9225b368957bda60b0d341c45dc3d9a558f0ba4a807bc441814045dc7ff9"
+      },
+      {
+        "path": "content/candidates/onramp-001wr/pack.json",
+        "sha256": "c46b8199d8b3df0303fbed114143dedf4924a238d0b821bfa43af5074285e159"
+      },
+      {
+        "path": "content/candidates/onramp-001xl/pack.json",
+        "sha256": "29476f3dac5851f6b960412656a124a0f55bc43031a4e07fe0e75e1a58df24fe"
+      },
+      {
+        "path": "content/candidates/onramp-003ep/pack.json",
+        "sha256": "a74daad01f8ce27887cdc9560dba01842d55a88eb9c317f1c863f940f4460881"
+      },
+      {
+        "path": "content/candidates/onramp-004mt/pack.json",
+        "sha256": "1cd0ed08f8005f26638ce1a4700bebf5b70f35c1fa288d282f7a5732f7b34a26"
+      },
+      {
+        "path": "content/candidates/onramp-0050w/pack.json",
+        "sha256": "2cb109338951fd5d0ba613bc192aa643a13f000f561eba1583bab70624b575da"
+      },
+      {
+        "path": "content/candidates/onramp-007tv/pack.json",
+        "sha256": "9e68702c0614e8f1fb3bf833c8830d02a216e0d63ef79fc548cfc60295951bdd"
+      },
+      {
+        "path": "content/candidates/onramp-009fp/pack.json",
+        "sha256": "bc4de04d32d4543b41e6c8859f725bdd05e895d4481bac44b5c2f536e888d442"
+      },
+      {
+        "path": "content/candidates/onramp-00aas/pack.json",
+        "sha256": "267b12765e255299cc9fefd3b08c0ddd3ecf79e1d974de578414a75a11f7500b"
+      },
+      {
+        "path": "content/candidates/onramp-00ab1/pack.json",
+        "sha256": "3190618061750f1d7641a6a13ed7eedeb1402f70d517755d0881fb1beab5604f"
+      },
+      {
+        "path": "content/candidates/onramp-00adi/pack.json",
+        "sha256": "fed0b462d81a038ab1bd8f751fff247ce1a9b555bbfdd0f7a14d08acad5df8ba"
+      },
+      {
+        "path": "content/candidates/onramp-00aho/pack.json",
+        "sha256": "aee823f2656b0702c100aa2ef2b1056efccc113e07bbddd746e7154b7828912f"
+      },
+      {
+        "path": "content/candidates/onramp-00bts/pack.json",
+        "sha256": "d807b4beec77853aee751552acf2a823afcb34861c32f78f2bacd8f7672de944"
+      },
+      {
+        "path": "content/candidates/onramp-00cy1/pack.json",
+        "sha256": "c8a8c9f4dc515e452dd8a1f4cadb4666371ecfc04c75da0d1dbdb59e3512067e"
+      },
+      {
+        "path": "content/candidates/onramp-00dnp/pack.json",
+        "sha256": "cc9be1abe614ac4430cdff7c292bf27f341fc5f652500b555621e20fcff844b8"
+      },
+      {
+        "path": "content/candidates/onramp-00evs/pack.json",
+        "sha256": "dcdbd84fb18d89aa185ba5b5c53ec3a4a16b4c33212eb23c611a32f29be4cacc"
+      },
+      {
+        "path": "content/candidates/onramp-00icz/pack.json",
+        "sha256": "36ce6c20ad14ca6b3db04214804ed521bca4eabcd9ad5eb599cb829bcb3110cc"
+      },
+      {
+        "path": "content/candidates/onramp-00jcd/pack.json",
+        "sha256": "6193fdca6be68757cabed0be85cdafce5755ec1248598e6073d5b15e1d507851"
+      },
+      {
+        "path": "content/candidates/onramp-00jph/pack.json",
+        "sha256": "0a491692bd39eeb04c58e1f4f41b8186cba7032357f5811f8611955987f723c4"
+      },
+      {
+        "path": "content/candidates/onramp-00kzf/pack.json",
+        "sha256": "3b3acdc72521bf955d0189faec0019ff473211335284a58ca7ddda55b2913c87"
+      },
+      {
+        "path": "content/candidates/onramp-00nej/pack.json",
+        "sha256": "218cd492e4aea78ab01f99c38e775fb5b7edb05766785a12577d34908be6242f"
+      },
+      {
+        "path": "content/candidates/onramp-00o8m/pack.json",
+        "sha256": "504394f3457884193b1a9a068087ce4152f0644e888da420d7467da07694a07c"
+      },
+      {
+        "path": "content/candidates/onramp-00pgi/pack.json",
+        "sha256": "30d8b2893e6c8e017d3ff172b49492ab6f1aa8be7485398fbf72194d9cd03a55"
+      },
+      {
+        "path": "content/candidates/onramp-00puc/pack.json",
+        "sha256": "fa2e598491aeed8cc8b94bceb8aed7e8d2bd942edece70115fb535c738c173b5"
+      },
+      {
+        "path": "content/drafts/anti-caro-advance-early-c5.json",
+        "sha256": "4b7e27ca5e777c36aff5f7f54d05dcea320ed7773126d5bd62159459feeb9eea"
+      },
+      {
+        "path": "content/drafts/anti-caro-advance.json",
+        "sha256": "37a4a13888f6399ed410a5d1790e46bf2f46d630304eb526f08b5e17204de487"
+      },
+      {
+        "path": "content/drafts/anti-dutch-leningrad-white.json",
+        "sha256": "4736523aac5425d87dbc90add7746d4c9dc4c1517e812434c3d980d805f92d69"
+      },
+      {
+        "path": "content/drafts/anti-french-advance-white.json",
+        "sha256": "ff460791d3947ce5e19a06579e076a2f03b0d6f958334b35f96959e48694f05f"
+      },
+      {
+        "path": "content/drafts/anti-italian-center-attack-black.json",
+        "sha256": "a05674469a2795307b0019d6a86b6a805dd5f80c2a335d257df8b1fc3c5a2af0"
+      },
+      {
+        "path": "content/drafts/anti-kid-classical-white.json",
+        "sha256": "9fcb0a0280edf6d93c33938d8fbd2733f1e2d9bad167909707222d52d9a0a68f"
+      },
+      {
+        "path": "content/drafts/anti-london-black.json",
+        "sha256": "783639f8963bf6898da7e935b3c90c16be7ee0b5d2ae1e27afb6f8f88fcf9327"
+      },
+      {
+        "path": "content/drafts/anti-scandinavian-white.json",
+        "sha256": "843ff507ca85ddef6d4dd84777bd7c3141a76a1a1e642743b009b5b196f8afd6"
+      },
+      {
+        "path": "content/drafts/anti-sicilian-najdorf-english-attack.json",
+        "sha256": "9110cda03c8afff3c14d6ebee9c87271f20d14e0c927b50f7657f575b19650bb"
+      },
+      {
+        "path": "content/drafts/berlin-queenless-press.json",
+        "sha256": "fbb5b1b42ee941858085cc9e9f51e09e628547a18706f4deaba158fe96664691"
+      },
+      {
+        "path": "content/drafts/carlsbad-minority-attack.json",
+        "sha256": "b23c29b5d9136ba36f9f15cde34be831b7c13d990e5f3e51a0a84a25a86b7d52"
+      },
+      {
+        "path": "content/drafts/caro-kann-advance-black.json",
+        "sha256": "c26082d31f66ddd2651946747ee8c84f057f7ace05ba217f4e255bad6690451e"
+      },
+      {
+        "path": "content/drafts/closed-centre-chain-black-base-strike.json",
+        "sha256": "64f26b88b2f19e2156efb3ef3e90e55a62bb57fc12ef9f797dc6ba31133c724b"
+      },
+      {
+        "path": "content/drafts/conversion-up-a-piece.json",
+        "sha256": "fa59aa2f31f95cba2622a17d596c0c52a853e89dceb11c7a1f3211060a14d61c"
+      },
+      {
+        "path": "content/drafts/dragon-yugoslav-race.json",
+        "sha256": "14f0873254f66d048a6698d6209d7128c33beefa8ac247c82eb8b341bdf9217b"
+      },
+      {
+        "path": "content/drafts/french-advance-black.json",
+        "sha256": "820e984722c3875c63d81ffd68c4847018566b8dd0d67c076ba7b522bf23aac9"
+      },
+      {
+        "path": "content/drafts/french-advance-chain-white.json",
+        "sha256": "e62c6273744d4194d0780d61048fd7797364c16c8acf56c63831728537b14482"
+      },
+      {
+        "path": "content/drafts/grunfeld-exchange-fianchetto.json",
+        "sha256": "749df88287521665fe4e02b76cc5a9fba20867ffdf901105f31d77212b0470db"
+      },
+      {
+        "path": "content/drafts/immediate-guard.browser.json",
+        "sha256": "281708839889ac102db95450d002cbcf8f1e1374a69caec7953e19f06af3748a"
+      },
+      {
+        "path": "content/drafts/iqp-black-tarrasch-defence.json",
+        "sha256": "8d414c0b159beab32070bac83f17fa4a9e336f5bf763bcb3ca66a13edca7dbfa"
+      },
+      {
+        "path": "content/drafts/iqp-white-panov-attack.json",
+        "sha256": "fb8a95589f87905e6c546e3be3e17c1eeabf63f59b736a97f4523c6a4d01d2a7"
+      },
+      {
+        "path": "content/drafts/italian-center-attack-white.json",
+        "sha256": "9fdc000f286a7966ed84c3ca800c79ccae83ca61c466c78045a56ff16428c571"
+      },
+      {
+        "path": "content/drafts/kid-classical-black.json",
+        "sha256": "06da72e9942d25f2645c5ac1e10325bbb49a1842c488b6fe2a1d01eef298bb43"
+      },
+      {
+        "path": "content/drafts/kid-mar-del-plata-white.json",
+        "sha256": "b9430f9e69edce77597f60a12b1bb64288d78cfcc489f8f7140d6fa9c8a55c4f"
+      },
+      {
+        "path": "content/drafts/leningrad-dutch-black.json",
+        "sha256": "070d491457102f15ba0d2e8f7b27ec47d4f738a44faaaaaaebf4701c3c8051e9"
+      },
+      {
+        "path": "content/drafts/line-boundary.browser.json",
+        "sha256": "37ac3ed76d4d36ed1344e675a3c14e436a7cb9b8c203876d895a6488c277ae9e"
+      },
+      {
+        "path": "content/drafts/london-system-white.json",
+        "sha256": "cc398bf665618df1aa4e092baab4d5cbffaf7668bd5fd65225ff2bb7f5f3d153"
+      },
+      {
+        "path": "content/drafts/london-wedge-black-counterplay.json",
+        "sha256": "674e76adb82af4233930b66abfdb885015af037124e87622e2dc0a923a279a8f"
+      },
+      {
+        "path": "content/drafts/lucena-bridge-convert.json",
+        "sha256": "bcf26f4f7bf39201c9ab26a28f32f8e46085c7bf8e72f5bea2d187dc1e7e52c2"
+      },
+      {
+        "path": "content/drafts/maroczy-bind-white-squeeze.json",
+        "sha256": "3ba8e43875f86606db42d05745c3e44bc9bbd4964f56256de135b7e8dbe48fca"
+      },
+      {
+        "path": "content/drafts/mate-bishop-knight.json",
+        "sha256": "551788da073773020039ceb3c34f7c4e6d1f46d184514c1df0af14f9d5c77a20"
+      },
+      {
+        "path": "content/drafts/mate-k-q-technique.json",
+        "sha256": "1549930ad678e1b4e5887e4ff4d74669b652274fd89d82ce5099306516317f92"
+      },
+      {
+        "path": "content/drafts/mate-k-r-technique.json",
+        "sha256": "687b95e19e34e8e61dce06def4d99b1dc496cdab7b413d0fdc59302620d61f2d"
+      },
+      {
+        "path": "content/drafts/mate-two-bishops.json",
+        "sha256": "43010f7029af57f5351a1d953355e83df7c1d17af3c4839c8743c64c6232cdca"
+      },
+      {
+        "path": "content/drafts/najdorf-english-attack-black.json",
+        "sha256": "63bfe9073b189926afe8efd3f18ab6630494d08484be802cdce42f4aab6a959a"
+      },
+      {
+        "path": "content/drafts/nimzo-doubled-c-pawns.json",
+        "sha256": "654643a82fb604972d572b2c8744aaffa29b82588dda01cdba8d77f7e0fc5f58"
+      },
+      {
+        "path": "content/drafts/open-centre-french-exchange-black.json",
+        "sha256": "3250ca5acc7b34d3e450d37d56e5852bae5ba5c68fe9497586c7b35523e8f4dd"
+      },
+      {
+        "path": "content/drafts/open-centre-ruy-exchange.json",
+        "sha256": "cc48d071f0aac7c133e66db31be8621bbf335c8edfa4151a079c7e2fa970aa71"
+      },
+      {
+        "path": "content/drafts/opening-principles-black.json",
+        "sha256": "0c67f08e9432df90af6dda3a2a4d0831532e2582fc458043d34a8f43f1b4546d"
+      },
+      {
+        "path": "content/drafts/opening-principles-white.json",
+        "sha256": "c9ace6b78eaed77aa61b396d21940e024fd02946e18e7066071df806d60b7b9e"
+      },
+      {
+        "path": "content/drafts/opponent-intent-early-queen.json",
+        "sha256": "53fe15290d42054b6846b2fd8ec375b5c0b17f4d35d7593e7e6d2b52f722a2d2"
+      },
+      {
+        "path": "content/drafts/opposite-bishops-fortress-hold.json",
+        "sha256": "28e00b2fe2a015e1fe166ee7e403e234fe1f405d5bcc39800729c6d6d9a7b338"
+      },
+      {
+        "path": "content/drafts/outcome-hold.browser.json",
+        "sha256": "53bf43c60d1156b2f6452c550ef003c1853a36391a617ed4103b9dfe77ddafb0"
+      },
+      {
+        "path": "content/drafts/outcome-resist.browser.json",
+        "sha256": "8d225d56a2154a520d9de9a87434a4715c4b112f8e1b1a08a8c6497585f5c8ea"
+      },
+      {
+        "path": "content/drafts/pawn-breakthrough-convert.json",
+        "sha256": "0a9bb97a33e84272a851ced9df5500fb3642b3c9639da00b1cad99f6d9c842cf"
+      },
+      {
+        "path": "content/drafts/pawn-opposition-convert.json",
+        "sha256": "45c6198c654709cd82db42a08217d639e981fa847e58b7f52f2cde3c96c9cd58"
+      },
+      {
+        "path": "content/drafts/philidor-passive-rook-convert.json",
+        "sha256": "b5435907fe6b289c2325fe8d106d1b859382d061f641e7b000e5c9a1c772b25e"
+      },
+      {
+        "path": "content/drafts/philidor-third-rank-hold.json",
+        "sha256": "33e4b455b603cecd168e41c8f1978d4312005afb2801da50b5e41c3ee494c771"
+      },
+      {
+        "path": "content/drafts/queen-vs-pawn-seventh-convert.json",
+        "sha256": "e0f83226608ad6443740375793b5e736468254d1efc91719d3b9deeaab2b9b75"
+      },
+      {
+        "path": "content/drafts/rook-4v3-same-side.json",
+        "sha256": "28d638d3e76309d2f495e4e66437b343d7eec1d47270900f725bd1f43d1ae488"
+      },
+      {
+        "path": "content/drafts/scandinavian-mainline-black.json",
+        "sha256": "8f39a67dec16a98959789ca38663f9b5d7d10022bcec90c3461dcd7b5d5e0bcc"
+      },
+      {
+        "path": "content/drafts/stated-reasoning.browser.json",
+        "sha256": "9b07584f353cd39ec435d20caa33369277f92540b70ea17138924e6445ad89e6"
+      },
+      {
+        "path": "content/drafts/trajectory-caro-advance-chain-bishops.json",
+        "sha256": "80e8308efb8ab2eb6d958fbe2c89d8ccfafb50ad9ce5d59fc6ac2c4b07e45c4f"
+      },
+      {
+        "path": "content/drafts/trajectory-legs.browser.json",
+        "sha256": "2b16f7357975253ff10588749ae772c9a308da66115817da67d7c1fbc0d14b5e"
+      },
+      {
+        "path": "content/drafts/trajectory-mate-bishop-knight.json",
+        "sha256": "aa9fe4d359e4c8b3b27d5102480c7d59442d744ac9fe41ed7f4fb79b5f95aff5"
+      },
+      {
+        "path": "content/drafts/trajectory-qgd-exchange-minority.json",
+        "sha256": "4c0f16c28fe300b61c5b4c10107411aeb1b62fe063368904c5cd664d12530cb5"
+      }
+    ],
+    "populationSha256": "e2ede33c7abad24600e132dc63797797292aee87dfb91a5d873f2f587e4d2134",
+    "productionDocuments": 86,
+    "browserFixtures": 6
   }
 }

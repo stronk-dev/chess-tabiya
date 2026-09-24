@@ -35,6 +35,8 @@ import { parseUci } from "chessops/util";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
+import { packRequirementIssues } from "./capability/pack-capabilities.js";
+import { livingPackSchema } from "./pack-schema.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import {
   DECLARED_UNIMPLEMENTED_POLICY_MODES,
@@ -167,15 +169,9 @@ export interface PackSiblingLookup {
 }
 
 let schemaValidator: ValidateFunction | undefined;
-let schemaDocument: Record<string, unknown> | undefined;
 
 function livingSchema(): Record<string, unknown> {
-  if (schemaDocument !== undefined) return schemaDocument;
-  const path = fileURLToPath(
-    new URL("../../../schemas/drill_pack.schema.json", import.meta.url),
-  );
-  schemaDocument = JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>;
-  return schemaDocument;
+  return livingPackSchema();
 }
 
 function validator(): ValidateFunction {
@@ -1605,6 +1601,13 @@ export function validatePackDocument(value: unknown, options: {
     ),
     ...runtimeIssues(document, options.shapes, options.packs, options.principles, options.compileObjectiveRules),
     ...packConceptIssues(document, options.concepts ?? installedConceptRegistry()),
+    // rfc/pack-capability-contract.md §4.1: the declared capability requirements byte-equal the
+    // derivation from this document's own content (criterion 3).
+    ...packRequirementIssues(document as unknown as Readonly<Record<string, unknown>>, {
+      schema: livingSchema(),
+      ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
+      ...(options.principles === undefined ? {} : { principles: options.principles }),
+    }).map((issue) => runtimeIssue(issue.code, issue.path, issue.message)),
   ];
   return Object.freeze({
     valid: !issues.some((issue) => issue.severity === "error"),

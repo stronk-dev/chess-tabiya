@@ -15,6 +15,7 @@ import {
   type PackValidationResult,
 } from "./pack-validation.js";
 import { SQLiteRunStorage, type StoredPackDraft } from "./storage.js";
+import { withDerivedRequires, type CapabilityEntryLookup } from "./capability/pack-capabilities.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 
 function digest(value: unknown): string {
@@ -91,7 +92,7 @@ export class PackStudio {
     if (draftStatus(input.document) !== "draft") {
       throw new ServerError("PROVENANCE_STATUS_NOT_WRITABLE", "Studio documents must remain draft until registration");
     }
-    const document = structuredClone(input.document) as Record<string, unknown>;
+    const document = this.#stamp(structuredClone(input.document)) as Record<string, unknown>;
     const id = randomUUID();
     const row: StoredPackDraft = Object.freeze({
       id, packId: String(document.id ?? "untitled"), ownerLearnerId: principal.learnerId,
@@ -103,7 +104,7 @@ export class PackStudio {
   }
 
   lint(document: unknown): PackValidationResult & { readonly conceptRegistryDigest: string } {
-    return Object.freeze({ ...validatePackDocument(document, this.#validationOptions()), conceptRegistryDigest: this.#registry.concepts.digest });
+    return Object.freeze({ ...validatePackDocument(this.#stamp(document), this.#validationOptions()), conceptRegistryDigest: this.#registry.concepts.digest });
   }
 
   /**
@@ -114,8 +115,9 @@ export class PackStudio {
     return conceptCatalogueView(this.#registry.concepts);
   }
 
-  update(id: string, principal: Principal, expectedDigest: string, document: unknown, at = new Date().toISOString()): StudioDraftView {
+  update(id: string, principal: Principal, expectedDigest: string, input: unknown, at = new Date().toISOString()): StudioDraftView {
     const current = this.required(id, principal);
+    const document = this.#stamp(input);
     if (draftStatus(document) !== "draft") {
       throw new ServerError("PROVENANCE_STATUS_NOT_WRITABLE", "Studio documents must remain draft until registration");
     }
@@ -150,10 +152,16 @@ export class PackStudio {
       throw new ServerError("GRADUATION_BLOCKERS_OUTSTANDING", "Clear declared graduation blockers before registration");
     }
     provenance.reviewStatus = "published";
+    // The review status is a closed member, so publication re-derives the stamp.
+    const stamped = this.#stamp(raw) as Record<string, unknown>;
+    for (const key of Object.keys(raw)) delete raw[key];
+    Object.assign(raw, stamped);
     const validation = validatePackDocument(raw, this.#validationOptions());
     if (!validation.valid || validation.document === undefined) {
       throw new ServerError("PACK_INVALID", "Draft cannot be registered while validation errors remain", { details: { issues: validation.issues } });
     }
+    // rfc/pack-capability-contract.md §4.3: refuse, on the 422 arm, a pack this deployment cannot carry.
+    this.#registry.assertSupported(validation.document);
     if (raw.id === "drafts" || this.#registry.get(String(raw.id))?.channel === "official") {
       throw new ServerError("PACK_ID_RESERVED", `Pack id ${String(raw.id)} is reserved by the official catalogue`);
     }
@@ -178,6 +186,23 @@ export class PackStudio {
     const served = this.#registry.get(packId);
     if (served === undefined) throw new ServerError("PACK_NOT_FOUND", `Unknown served pack: ${packId}`);
     return Object.freeze({ format: "chess-tabiya-pack", version: 1, document: served.document, digest: served.digest, ...(served.publisherHandle === undefined ? {} : { publisherHandle: served.publisherHandle }) });
+  }
+
+  /**
+   * rfc/pack-capability-contract.md §4.1: `requires` is derived, never authored, and every writer calls
+   * the one stamping function before digesting. A document the derivation cannot walk (malformed, an
+   * unknown shape) is stored as sent; validation then names its defect.
+   */
+  #stamp(document: unknown): unknown {
+    if (document === null || typeof document !== "object" || Array.isArray(document)) return document;
+    try {
+      return withDerivedRequires(document as Record<string, unknown>, {
+        ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }),
+        principles: this.#principles as unknown as CapabilityEntryLookup,
+      });
+    } catch {
+      return document;
+    }
   }
 
   #validationOptions() {

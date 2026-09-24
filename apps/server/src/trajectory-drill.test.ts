@@ -4,11 +4,12 @@ import { describe, expect, it } from "vitest";
 
 import { orchestratePackMove } from "./pack-orchestrator.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-13T13:00:00.000Z";
 
-const pack = {
+const pack = withDerivedRequires({
   id: "trajectory-fixture",
   version: "0.1.0",
   title: "Mechanical trajectory fixture",
@@ -47,7 +48,7 @@ const pack = {
   opponentPolicy: { mode: "human_common", targetElo: 1600 },
   feedbackPolicy: "delayed_checkpoint",
   provenance: { reviewStatus: "draft", sources: [], reviewers: [] },
-} as unknown as DrillPackDefinition;
+}) as unknown as DrillPackDefinition;
 
 function rootRun() {
   return createRun({

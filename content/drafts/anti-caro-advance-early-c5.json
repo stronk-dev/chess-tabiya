@@ -496,5 +496,469 @@
         }
       }
     ]
-  }
+  },
+  "requires": [
+    {
+      "id": "branch.decidedness",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "checkpointInteraction.intent_capture",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "claim.earning",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.accepted_alternative",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.concept_violation",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviation.class.interesting_deviation",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviationCost.cp",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviationCost.kind-cp.basis.engine",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "deviationLocation.spineNodeId",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.author_principle",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.corpus_observed",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackClaim.evidenceTypes.derived_feature",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackPolicy.delayed_checkpoint",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "grade.move_quality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.assessment_grounded",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.claim_bound",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.referent_removed",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.shape_firing",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.unbuilt",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.accepted",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.accepted.kind.owner_ruling",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.clearance",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.resolved",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.accepted",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.blocking",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.resolved",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.defaults",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.immediate",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "line.membership",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "mode.line",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.state_machine",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.transition_legality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.assessedBy.engine",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.assessedBy.kind-engine.score.cp",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveGrading.resolveAt.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveType.follow_theory",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponent.selection",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.mode.theory_strict",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.seedMode.per_branch",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "outcome.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "phase.opening",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "piece.color.black",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "piece.color.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "piece.role.pawn",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "principle.structure-outlives-arrangement",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "principle.tempo-is-the-currency",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "provenance.reviewStatus.draft",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "reasoning.key_point_match",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "rules.structural.predicate.doubled_pawn",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "rules.structural.predicate.half_open_file",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "shape.advance-caro-dxc5-residue",
+      "version": {
+        "kind": "semver",
+        "value": "0.1.0"
+      }
+    },
+    {
+      "id": "simpleTrigger.atAuthoredBoundary",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.atSpineNode",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "start.side.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.all",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.feature",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.not",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralExpression.pieceOnSquare",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.doubled_pawn",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.half_open_file",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-doubled_pawn.color.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-half_open_file.color.black",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "structuralFeature.kind-half_open_file.color.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.unauthored_default",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.window",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "trajectory.verdict",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    }
+  ]
 }

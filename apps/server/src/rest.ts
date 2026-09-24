@@ -672,6 +672,7 @@ export function errorResponse(error: unknown): Response {
                 : error.code === "PACK_VERSION_NOT_INCREASING" ||
                     error.code === "SHAPE_VERSION_NOT_INCREASING" ||
                     error.code === "PACK_INVALID" ||
+                    error.code === "PACK_CAPABILITY_UNSUPPORTED" ||
                     error.code === "PROVENANCE_STATUS_NOT_WRITABLE" ||
                     error.code === "GRADUATION_BLOCKERS_OUTSTANDING"
                     || error.code === "TOO_MANY_BRANCHES"

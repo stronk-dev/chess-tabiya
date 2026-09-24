@@ -8,6 +8,7 @@ import { PrincipleRegistry } from "./principle-registry.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const fixture = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as any;
 const principal = { learnerId: "learner-studio", handle: "author" } as const;
@@ -20,7 +21,7 @@ describe("Pack Studio", () => {
     const storage = new SQLiteRunStorage();
     stores.push(storage);
     storage.createLearner({ id: principal.learnerId, handle: principal.handle, createdAt: "2026-08-13T14:00:00.000Z", passwordHash: "!" });
-    const registry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
+    const registry = await PackRegistry.fromDocuments([{ source: "official", value: withDerivedRequires(fixture) }]);
     const principles = await PrincipleRegistry.loadDefault();
     return { storage, registry, principles, studio: new PackStudio(storage, registry, undefined, principles) };
   }
@@ -31,8 +32,8 @@ describe("Pack Studio", () => {
     const earlier = structuredClone(fixture);
     earlier.id = "a-pack";
     const registry = await PackRegistry.fromDocuments([
-      { source: "later", value: later },
-      { source: "earlier", value: earlier },
+      { source: "later", value: withDerivedRequires(later) },
+      { source: "earlier", value: withDerivedRequires(earlier) },
     ]);
     expect(registry.list().map((pack) => pack.id)).toEqual(["a-pack", "z-pack"]);
   });
@@ -91,7 +92,7 @@ describe("Pack Studio", () => {
     document.version = "1.0.0";
     document.provenance = { reviewStatus: "draft", sources: ["source"], corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "No corpus source was available for this authored fixture." } };
     const registered = studio.register(studio.create(principal, { document }).id, principal);
-    const freshRegistry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
+    const freshRegistry = await PackRegistry.fromDocuments([{ source: "official", value: withDerivedRequires(fixture) }]);
     const freshStudio = new PackStudio(storage, freshRegistry, undefined, principles);
     freshStudio.hydrate();
     expect(freshRegistry.byDigest(registered.digest)?.summary).toMatchObject({ id: "restart-pack", channel: "community" });
@@ -142,7 +143,7 @@ describe("Pack Studio", () => {
     expect(registry.get("playtest-only")).toBeUndefined();
     expect(registry.byDigest(record.digest)?.document.id).toBe("playtest-only");
 
-    const fresh = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
+    const fresh = await PackRegistry.fromDocuments([{ source: "official", value: withDerivedRequires(fixture) }]);
     new PackStudio(storage, fresh, undefined, principles).hydrate();
     expect(fresh.get("playtest-only")).toBeUndefined();
     expect(fresh.byDigest(record.digest)?.document.id).toBe("playtest-only");
@@ -152,7 +153,7 @@ describe("Pack Studio", () => {
     const storage = new SQLiteRunStorage();
     stores.push(storage);
     storage.createLearner({ id: "__legacy", handle: "legacy-playtest", createdAt: "2026-08-23T00:00:00.000Z", passwordHash: "!" });
-    const registry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
+    const registry = await PackRegistry.fromDocuments([{ source: "official", value: withDerivedRequires(fixture) }]);
     const principles = await PrincipleRegistry.loadDefault();
     const studio = new PackStudio(storage, registry, undefined, principles);
     const document = structuredClone(fixture);

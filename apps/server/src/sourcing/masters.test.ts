@@ -6,6 +6,7 @@ import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it, vi } from "vitest";
 
 import { checkSourcingDirectory } from "./check.js";
+import { withDerivedRequires } from "../capability/pack-capabilities.js";
 import { readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import {
   assertMastersRequest,
@@ -209,6 +210,8 @@ describe("famous-games masters sourcing (rfc/famous-games.md)", () => {
     const pack = await readJson(packPath) as any;
     pack.feedbackClaims = [{ id: "move-frequency", text: "The move appears in 31.4% of games.", evidenceTypes: ["corpus_observed"] }];
     pack.provenance.sources = [`lichess-explorer — ${EXPLORER_RATIONALE}`];
+    // A feedback claim's evidence type is a closed member: re-derive the capability stamp (§4.1).
+    pack.requires = withDerivedRequires(pack).requires;
     const ledger = await readJson(ledgerPath) as any;
     ledger.packDigest = await digestDrillPack(pack);
     await writeCanonicalJson(packPath, pack);

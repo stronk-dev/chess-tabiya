@@ -29,7 +29,9 @@ export function requiredFieldStates(documentText: string): readonly RequiredFiel
   const object = document !== null && typeof document === "object" && !Array.isArray(document)
     ? document as Record<string, unknown>
     : undefined;
-  return Object.freeze(DRILL_PACK_REQUIRED_FIELDS.map((field) => Object.freeze({
+  // `requires` is required by the schema but derived, never authored: Studio's server stamps it on
+  // every save (rfc/pack-capability-contract.md §4.1), so it is not an item on the author's checklist.
+  return Object.freeze(DRILL_PACK_REQUIRED_FIELDS.filter((field) => field !== "requires").map((field) => Object.freeze({
     field,
     present: object !== undefined && Object.hasOwn(object, field),
   })));

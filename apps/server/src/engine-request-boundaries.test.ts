@@ -9,6 +9,7 @@ import { PackRegistry } from "./pack-registry.js";
 import { RepertoireService } from "./repertoire.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const digest = `sha256:${"e".repeat(64)}`;
 const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
@@ -38,7 +39,7 @@ describe("target Elo request boundaries", () => {
     try {
       const raw = JSON.parse(await readFile(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as Record<string, unknown>;
       const pack = { ...raw, opponentPolicy: { ...(raw.opponentPolicy as Record<string, unknown>), targetElo: 1900 } };
-      const registry = await PackRegistry.fromDocuments([{ source: "range-pack", value: pack }]);
+      const registry = await PackRegistry.fromDocuments([{ source: "range-pack", value: withDerivedRequires(pack) }]);
       const runs = new RunService(storage, { opponentSelector: selector, packRegistry: registry });
       const repertoire = new RepertoireService(storage, runs);
       const refusal = { code: "TARGET_ELO_OUT_OF_RANGE", details: expect.objectContaining({ min: 1100, max: 1800, source: "advertised+configured" }) };

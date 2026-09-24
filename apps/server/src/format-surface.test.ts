@@ -11,6 +11,7 @@ import { DECLARED_UNIMPLEMENTED_POLICY_MODES } from "./capabilities.js";
 import { validatePackDocument } from "./pack-validation.js";
 import { MACHINE_LABEL_EVIDENCE_KINDS } from "./sourcing/claim-binding.js";
 import { ABSTENTION_REASONS, EVIDENCE_KINDS } from "./sourcing/types.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const source = JSON.parse(readFileSync(
   new URL(resolvePackPath("trajectory-mate-bishop-knight"), import.meta.url),
@@ -31,10 +32,10 @@ function candidate(): any {
 
 describe("format surface 0.25", () => {
   it("admits narrowed per-leg policy and pack-listed shapes without moving existing content", () => {
-    const value = candidate();
+    const value = withDerivedRequires(candidate());
     const result = validatePackDocument(value);
     expect(result.valid, JSON.stringify(result.issues)).toBe(true);
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.29");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.30");
   });
 
   it("refuses every inert or unrecordable per-leg form by name", () => {

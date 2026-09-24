@@ -55,6 +55,9 @@ export function positionPackScaffold(input: {
       attribution: [],
       graduationBlockers: [...judgementBlockers()],
     },
+    // rfc/pack-capability-contract.md §4.1: the capability stamp is derived, never authored. Studio's
+    // server stamps it on every write; the working copy starts empty.
+    requires: [],
   };
 }
 

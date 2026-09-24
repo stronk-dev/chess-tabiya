@@ -27,6 +27,8 @@ import {
 } from "./evidence-manifest.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { projectBotRoster, type BotRosterRow } from "./bot-roster.js";
+import { projectPackCapabilities, runtimeSupportedCapabilities, type RuntimeCapabilitySupport } from "./capability/pack-capabilities.js";
+import type { PackCapabilitiesPublicProjectionV1 } from "@chess-tabiya/schema";
 
 export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
 
@@ -105,6 +107,8 @@ export interface Capabilities {
   readonly providers: CapabilityProviders;
   readonly surfaces: SurfaceCapabilities;
   readonly evidenceManifest: EvidenceManifestCapabilities;
+  /** rfc/pack-capability-contract.md §4.2: the SUPPORTED pack-capability projection of this deployment. */
+  readonly packCapabilities: PackCapabilitiesPublicProjectionV1;
 }
 
 export type ClientCapabilities = Omit<Pick<Capabilities,
@@ -120,6 +124,7 @@ export type ClientCapabilities = Omit<Pick<Capabilities,
   | "providers"
   | "surfaces"
   | "evidenceManifest"
+  | "packCapabilities"
 >, "policyProfiles"> & {
   readonly policyProfiles: {
     readonly strong_engine: Omit<StrongEngineProfile, "nodes">;
@@ -150,6 +155,7 @@ export function projectClientCapabilities(value: Capabilities): ClientCapabiliti
     providers: value.providers,
     surfaces: value.surfaces,
     evidenceManifest: value.evidenceManifest,
+    packCapabilities: value.packCapabilities,
   });
 }
 
@@ -345,6 +351,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #tts: CapabilityProviders["tts"];
   readonly #tablebase: CapabilityProviders["tablebase"];
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
+  readonly #packCapabilities: RuntimeCapabilitySupport;
 
   constructor(
     client: CapabilityEngineClient,
@@ -357,6 +364,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly tts?: CapabilityProviders["tts"];
       readonly tablebase?: CapabilityProviders["tablebase"];
       readonly openingCatalogue?: OpeningCatalogueAvailability;
+      readonly packCapabilities?: RuntimeCapabilitySupport;
     },
   ) {
     this.#client = client;
@@ -367,6 +375,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
     this.#tts = options.tts ?? "none";
     this.#tablebase = options.tablebase ?? "none";
     this.#openingCatalogue = options.openingCatalogue;
+    this.#packCapabilities = options.packCapabilities ?? runtimeSupportedCapabilities();
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -434,6 +443,14 @@ export class EngineCapabilities implements CapabilitiesProvider {
       providers: providerState,
       surfaces: surfaces(providerState),
       evidenceManifest: evidenceManifestCapabilities(providerState, this.#openingCatalogue),
+      // §5.1: a configured provider whose engine is not ready is `temporarily_unavailable` — present
+      // and retryable — never removed from the supported set.
+      packCapabilities: projectPackCapabilities(this.#packCapabilities, {
+        unreachable: {
+          ...(providerState.judge === "none" ? { analysis: {} } : {}),
+          ...(providerState.opponent === "none" ? { opponent: {} } : {}),
+        },
+      }),
     });
   }
 }

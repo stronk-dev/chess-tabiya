@@ -35,6 +35,7 @@ import {
 } from "./opponent-selector.js";
 import { PackRegistry } from "./pack-registry.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { runtimeSupportedCapabilities } from "./capability/pack-capabilities.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -403,11 +404,27 @@ export async function composeApplication(
   const concepts = installedConceptRegistry();
   const shapes = await ShapeRegistry.loadDefault();
   const principles = await PrincipleRegistry.loadDefault();
+  const sources = providerSources(options);
+  // rfc/pack-capability-contract.md §4.2/§5.1: the configured capability identities of this
+  // deployment. A provider the operator did not configure makes its capabilities `unsupported`.
+  const capabilitySupport = runtimeSupportedCapabilities({
+    providers: Object.freeze({
+      opponent: true,
+      analysis: true,
+      corpus: sources.corpusSource !== undefined,
+      tablebase: sources.tablebaseSource !== undefined,
+      voice: options.voiceProvider !== undefined,
+      tts: options.ttsProvider !== undefined,
+    }),
+    shapes: shapes.list(),
+    principles: principles.list(),
+  });
   const registry = await PackRegistry.loadDefault({
     development: options.development === true,
     shapes,
     principles,
     concepts,
+    capabilities: capabilitySupport,
     ...(options.draftPackFile === undefined
       ? {}
       : { draftFile: options.draftPackFile }),
@@ -423,12 +440,26 @@ export async function composeApplication(
     }),
   });
   try {
-    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig });
+    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig, sources });
   } catch (error) {
     // Nothing composed after the coordinator may leave the database open ([[D2965]]).
     try { storage.close(); } catch { /* preserve the primary failure */ }
     throw error;
   }
+}
+
+/** The corpus and tablebase sources this deployment is configured with (constructed once at boot). */
+function providerSources(options: ApplicationOptions): { readonly corpusSource: CorpusSource | undefined; readonly tablebaseSource: TablebaseSource | undefined } {
+  const engineMode = options.engineMode ?? "mock";
+  const corpusSource = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : options.corpusToken === undefined ? undefined : new LichessCorpusSource({ token: options.corpusToken }));
+  const candidateTablebaseSource = options.tablebaseSource === null
+    ? undefined
+    : options.tablebaseSource ?? (engineMode === "mock" ? new FixtureTablebaseSource() : new LichessTablebaseSource());
+  const tablebaseSource = candidateTablebaseSource instanceof FixtureTablebaseSource
+    && !candidateTablebaseSource.configured
+    ? undefined
+    : candidateTablebaseSource;
+  return Object.freeze({ corpusSource, tablebaseSource });
 }
 
 async function composeServices(
@@ -440,9 +471,10 @@ async function composeServices(
     readonly principles: PrincipleRegistry;
     readonly registry: PackRegistry;
     readonly workerConfig: ReturnType<typeof validateLongitudinalWorkerConfig>;
+    readonly sources: ReturnType<typeof providerSources>;
   },
 ): Promise<ChessTabiyaApplication> {
-  const { storage, shapes, principles, registry, workerConfig } = authorities;
+  const { storage, shapes, principles, registry, workerConfig, sources } = authorities;
   const shapeStudio = new ShapeStudio(storage, shapes, () => registry.list().map((summary) => ({
     document: registry.required(summary.id).document,
     title: summary.title,
@@ -455,14 +487,7 @@ async function composeServices(
   let selector: OpponentSelector;
   let capabilities: EngineCapabilities;
   let evidenceExecutor: EvidenceExecutor;
-  const corpusSource = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : options.corpusToken === undefined ? undefined : new LichessCorpusSource({ token: options.corpusToken }));
-  const candidateTablebaseSource = options.tablebaseSource === null
-    ? undefined
-    : options.tablebaseSource ?? (engineMode === "mock" ? new FixtureTablebaseSource() : new LichessTablebaseSource());
-  const tablebaseSource = candidateTablebaseSource instanceof FixtureTablebaseSource
-    && !candidateTablebaseSource.configured
-    ? undefined
-    : candidateTablebaseSource;
+  const { corpusSource, tablebaseSource } = sources;
   const openingCatalogue = await loadOpeningCatalogue(options.openingCataloguePath ?? join(process.cwd(), "apps", "server", "artifacts", "runtime-opening-catalogue.json"));
 
   if (engineMode === "maia") {
@@ -487,7 +512,7 @@ async function composeServices(
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue });
+    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, packCapabilities: registry.capabilities });
     evidenceExecutor = new StockfishEvidenceExecutor(
       supervisor,
       analysisSpec.id,
@@ -501,7 +526,7 @@ async function composeServices(
       ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue,
+      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, packCapabilities: registry.capabilities,
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }

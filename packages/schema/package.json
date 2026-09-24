@@ -9,7 +9,8 @@
     "./shape-entry": "./src/shape-entry/index.ts",
     "./principle-entry": "./src/principle-entry/index.ts",
     "./campaign": "./src/campaign/index.ts",
-    "./pack-path": "./src/pack-path/index.ts"
+    "./pack-path": "./src/pack-path/index.ts",
+    "./capability": "./src/capability/index.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"

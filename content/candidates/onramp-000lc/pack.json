@@ -98,5 +98,231 @@
     "side": "black"
   },
   "title": "Play on from Lichess puzzle 000lC",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "requires": [
+    {
+      "id": "branch.decidedness",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "claim.earning",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackPolicy.immediate_guard",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "grade.move_quality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.assessment_grounded",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.content_declared",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.kind-content_declared.templateId.authored-teaching-absent",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.kind-content_declared.templateId.mechanical-objective-placeholder",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.kind-content_declared.templateId.target-elo-authored",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationClearance.objective_graded",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.clearance",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "graduationEntry.state.blocking",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.defaults",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.immediate",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "line.membership",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "mode.outcome",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.state_machine",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.transition_legality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveType.play_until_checkpoint",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponent.selection",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.mode.human_common",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.seedMode.per_branch",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "outcome.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "phase.middlegame",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "provenance.reviewStatus.draft",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "reasoning.key_point_match",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.atPly",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "start.side.black",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "successCondition.reach_checkpoint",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.unauthored_default",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.window",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "trajectory.verdict",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    }
+  ]
 }

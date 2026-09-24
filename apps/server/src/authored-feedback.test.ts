@@ -25,6 +25,7 @@ import { SQLiteRunStorage } from "./storage.js";
 import { sha256 } from "./sourcing/canonical.js";
 import { validateClaimBindings } from "./sourcing/claim-binding.js";
 import type { EvidenceLedger, SourcingIssue } from "./sourcing/types.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const at = "2026-08-12T12:30:00.000Z";
 const policyConfig: PolicyConfig = {
@@ -40,7 +41,7 @@ const packA = JSON.parse(
 
 async function registered(document: DrillPackDefinition): Promise<PackRecord> {
   return (
-    await PackRegistry.fromDocuments([{ source: "authored-feedback-test", value: document }])
+    await PackRegistry.fromDocuments([{ source: "authored-feedback-test", value: withDerivedRequires(document) }])
   ).required(document.id);
 }
 
@@ -103,6 +104,7 @@ function smallPack(overrides: Record<string, unknown> = {}): DrillPackDefinition
     opponentPolicy: { mode: "human_common", seedMode: "fixed" },
     feedbackPolicy: "delayed_checkpoint",
     provenance: { reviewStatus: "draft", sources: [], reviewers: [] },
+    requires: [],
     ...overrides,
   } as DrillPackDefinition;
 }
@@ -121,7 +123,7 @@ describe("authored feedback projection", () => {
       ],
     });
     const registry = await PackRegistry.fromDocuments([
-      { source: "root-checkpoint", value: document },
+      { source: "root-checkpoint", value: withDerivedRequires(document) },
     ]);
     const storage = new SQLiteRunStorage();
     try {
@@ -498,7 +500,7 @@ describe("authored feedback projection", () => {
 
   it("keeps both ledger-less registry fallbacks empty and fails machine labels closed", async () => {
     const seed = smallPack({ id: "registry-seed" });
-    const registry = await PackRegistry.fromDocuments([{ source: "registry-seed", value: seed }]);
+    const registry = await PackRegistry.fromDocuments([{ source: "registry-seed", value: withDerivedRequires(seed) }]);
     const document = smallPack({
       id: "registry-fallback",
       checkpoints: [{ id: "finish", trigger: { atSpineNode: "e5" } }],
@@ -584,7 +586,7 @@ describe("authored feedback projection", () => {
         spans: [{ span: machineText, assertion: { kind: "explorer.moveSharePct@v1", args: { fen: document.start.fen, san: "e4" } } }],
       }],
     };
-    const original = (await PackRegistry.fromDocuments([{ source: "rebound-original", value: document, ledger }])).required(document.id);
+    const original = (await PackRegistry.fromDocuments([{ source: "rebound-original", value: withDerivedRequires(document), ledger }])).required(document.id);
     expect(original.boundClaimIds.has("machine")).toBe(true);
 
     const reorderedClaims = structuredClone(document.feedbackClaims!);
@@ -595,7 +597,7 @@ describe("authored feedback projection", () => {
     const issues: SourcingIssue[] = [];
     validateClaimBindings(reordered, ledger, issues);
     expect(issues.map((issue) => issue.code)).toContain("CLAIM_POINTER_REBOUND");
-    const rebound = (await PackRegistry.fromDocuments([{ source: "rebound-reordered", value: reordered, ledger }])).required(reordered.id);
+    const rebound = (await PackRegistry.fromDocuments([{ source: "rebound-reordered", value: withDerivedRequires(reordered), ledger }])).required(reordered.id);
     expect(rebound.boundClaimIds.has("machine")).toBe(false);
 
     let run = play(newRun(rebound, "claim-rebound"), ["e2e4", "e7e5"]);
@@ -624,7 +626,7 @@ describe("authored feedback projection", () => {
 
   it("keeps first disclosure monotonic after rewind and serves it over REST", async () => {
     const registry = await PackRegistry.fromDocuments([
-      { source: "pack-a", value: packA },
+      { source: "pack-a", value: withDerivedRequires(packA) },
     ]);
     const pack = registry.required(packA.id);
     const storage = new SQLiteRunStorage();

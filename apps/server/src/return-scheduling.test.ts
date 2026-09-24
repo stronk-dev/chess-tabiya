@@ -29,6 +29,7 @@ import {
   SQLiteRunStorage,
   type RetryVariantKinds,
 } from "./storage.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-09-01T12:00:00.000Z";
@@ -273,7 +274,7 @@ describe("return scheduling (rfc/return-scheduling.md)", () => {
     const { resolvePackPath } = await import("@chess-tabiya/schema/pack-path");
     const base = JSON.parse(readFileSync(new URL(resolvePackPath("anti-caro-advance"), import.meta.url), "utf8")) as Record<string, unknown>;
     const document = { ...base, id: "retry-variant-pack", retryVariants: [{ kind: "alternate_plan_class" }, { kind: "opposite_side" }] };
-    const registry = await PackRegistry.fromDocuments([{ source: "retry-variant-test", value: document }]);
+    const registry = await PackRegistry.fromDocuments([{ source: "retry-variant-test", value: withDerivedRequires(document) }]);
     const record = registry.required("retry-variant-pack");
     const store = storage();
     const forwarded: (RetryVariantKinds | undefined)[] = [];

@@ -80,5 +80,175 @@
       "Browser acceptance fixture; no chess claim beyond authored membership."
     ],
     "graduationBlockers": []
-  }
+  },
+  "requires": [
+    {
+      "id": "branch.decidedness",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "claim.earning",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "feedbackPolicy.delayed_checkpoint",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "grade.move_quality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.defaults",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "guard.immediate",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "line.membership",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "mode.line",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.state_machine",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objective.transition_legality",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "objectiveType.follow_theory",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponent.selection",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.mode.theory_strict",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "opponentPolicy.seedMode.fixed",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "outcome.terminal",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "phase.opening",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "provenance.reviewStatus.draft",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "reasoning.key_point_match",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.atAuthoredBoundary",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "simpleTrigger.atPly",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "start.side.white",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.unauthored_default",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "tempo.window",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    {
+      "id": "trajectory.verdict",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    }
+  ]
 }

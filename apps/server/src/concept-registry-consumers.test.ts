@@ -33,6 +33,7 @@ import { validatePackDocument } from "./pack-validation.js";
 import { PrincipleRegistry } from "./principle-registry.js";
 import { projectAttempts, RegisteredConceptResolver } from "./progress.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const AT = "2026-09-24T10:00:00.000Z";
 const example = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as DrillPackDefinition & Record<string, unknown>;
@@ -168,7 +169,7 @@ describe("criterion 9 and rfc/skills.md criterion 7 — publication and Pack Stu
 
   it("serves the picker catalogue from the registry and refuses to register an arbitrary string", async () => {
     const store = storage();
-    const registry = await PackRegistry.fromDocuments([{ source: "official", value: example }]);
+    const registry = await PackRegistry.fromDocuments([{ source: "official", value: withDerivedRequires(example) }]);
     const studio = new PackStudio(store, registry, undefined, await PrincipleRegistry.loadDefault());
     const catalogue = studio.conceptCatalogue();
     expect(catalogue.registryDigest).toBe(installedConceptRegistry().digest);

@@ -43,6 +43,7 @@ const capabilities: CapabilitiesProvider = {
       policyProfiles: { strong_engine: { movetimeMs: 100, nodes: 50_000, threads: 1, hashMb: 16, multiPv: 1 }, human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } }, resistance: HUMAN_COMMON_RESISTANCE_PROFILE, profiles: projectBotRoster().profiles } },
       providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "none" },
       surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
+      packCapabilities: { protocol: "tabiya.pack-capabilities", protocolVersion: 1, rows: [] },
     };
   },
 };

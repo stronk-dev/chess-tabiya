@@ -224,6 +224,7 @@ describe("engine capabilities", () => {
             expect.objectContaining({ consumerId: "runtime.evidence_ref", projectionId: "live.stockfish.pv" }),
           ]),
         },
+        packCapabilities: expect.objectContaining({ protocol: "tabiya.pack-capabilities", protocolVersion: 1, rows: expect.any(Array) }),
       });
       expect(observed).toEqual(["stockfish-analysis", "maia-5m"]);
     } finally {

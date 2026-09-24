@@ -7,6 +7,8 @@ import {
   resolveBotProfileReference,
 } from "@chess-tabiya/runtime";
 
+import { parsePackCapabilitiesPublicProjectionV1 } from "@chess-tabiya/schema/capability";
+
 import type { Capabilities } from "./api.js";
 
 type RecordValue = Readonly<Record<string, unknown>>;
@@ -135,7 +137,7 @@ function deepFreeze<T>(value: T): T {
 }
 
 export function parseCapabilities(value: unknown): Capabilities {
-  const item = record(value, "capabilities"); exact(item, ["engines", "policyModes", "unsupportedPolicyModes", "feedbackPolicies", "guardBasis", "recordedReadingKinds", "assessmentCategories", "objectiveAssessmentSets", "runSchemaVersion", "policyProfiles", "providers", "surfaces", "evidenceManifest"], "capabilities");
+  const item = record(value, "capabilities"); exact(item, ["engines", "policyModes", "unsupportedPolicyModes", "feedbackPolicies", "guardBasis", "recordedReadingKinds", "assessmentCategories", "objectiveAssessmentSets", "runSchemaVersion", "policyProfiles", "providers", "surfaces", "evidenceManifest", "packCapabilities"], "capabilities");
   validateEngines(item.engines); uniqueVocabulary(item.policyModes, POLICY_MODES, "capabilities/policyModes");
   if (!Array.isArray(item.unsupportedPolicyModes)) throw new TypeError("capabilities/unsupportedPolicyModes must be an array"); const unsupported = new Set<string>(); item.unsupportedPolicyModes.forEach((raw, index) => { const label = `capabilities/unsupportedPolicyModes/${index}`, row = record(raw, label); exact(row, ["mode", "reason"], label); const mode = nonempty(row.mode, `${label}/mode`); if (unsupported.has(mode)) throw new TypeError("capabilities unsupported policies contain duplicates"); unsupported.add(mode); nonempty(row.reason, `${label}/reason`); });
   uniqueVocabulary(item.feedbackPolicies, ["delayed_checkpoint", "segment_end", "immediate_guard"] as const, "capabilities/feedbackPolicies", 1); uniqueVocabulary(item.guardBasis, ["rules", "engine"] as const, "capabilities/guardBasis", 1);
@@ -144,5 +146,7 @@ export function parseCapabilities(value: unknown): Capabilities {
   const version = nonempty(item.runSchemaVersion, "capabilities/runSchemaVersion"); if (!/^\d+\.\d+(?:\.\d+)?$/u.test(version)) throw new TypeError("capabilities run schema version is invalid"); validateProfiles(item.policyProfiles);
   const providers = record(item.providers, "capabilities/providers"); exact(providers, ["opponent", "judge", "llm", "corpus", "tts", "tablebase"], "capabilities/providers"); oneOf(providers.opponent, ["maia", "mock", "none"] as const, "capabilities/providers/opponent"); oneOf(providers.judge, ["stockfish", "mock", "none"] as const, "capabilities/providers/judge"); oneOf(providers.llm, ["none", "external"] as const, "capabilities/providers/llm"); oneOf(providers.corpus, ["lichess-explorer", "mock", "none"] as const, "capabilities/providers/corpus"); oneOf(providers.tts, ["none", "external"] as const, "capabilities/providers/tts"); oneOf(providers.tablebase, ["lichess", "mock", "none"] as const, "capabilities/providers/tablebase");
   const surfaces = record(item.surfaces, "capabilities/surfaces"); exact(surfaces, SURFACES, "capabilities/surfaces"); SURFACES.forEach((surface) => oneOf(surfaces[surface], ["available", "unavailable-here"] as const, `capabilities/surfaces/${surface}`)); validateManifest(item.evidenceManifest);
-  return deepFreeze(structuredClone(item)) as unknown as Capabilities;
+  // rfc/pack-capability-contract.md §4.2: the one shared wire authority; no local lookalike.
+  const packCapabilities = parsePackCapabilitiesPublicProjectionV1(item.packCapabilities);
+  return deepFreeze({ ...structuredClone(item), packCapabilities }) as unknown as Capabilities;
 }

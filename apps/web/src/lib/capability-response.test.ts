@@ -36,6 +36,15 @@ const capabilities = Object.freeze({
     availability: [{ producerId: "human.maia", version: 1, state: "available", reason: "Maia is ready." }],
     bindings: [{ consumerId: "opponent.selection", consumerVersion: 1, projectionId: "human.maia.policy", projectionVersion: 1, forms: ["machine_condition"], providerOff: "unavailable" }],
   },
+  packCapabilities: {
+    protocol: "tabiya.pack-capabilities",
+    protocolVersion: 1,
+    rows: [
+      { capability: { id: "live.stockfish.eval", version: { kind: "integer", value: 1 } }, semanticDisposition: { kind: "active" }, availability: "provider", reachability: { kind: "temporarily_unavailable", providerFamily: "analysis" } },
+      { capability: { id: "structuralFeature.pawn_count", version: { kind: "integer", value: 1 } }, semanticDisposition: { kind: "deprecated", successor: { id: "structuralFeature.piece_count", version: { kind: "integer", value: 1 } }, reasonCode: "superseded" }, availability: "local", reachability: { kind: "supported" } },
+      { capability: { id: "structuralFeature.piece_count", version: { kind: "integer", value: 1 } }, semanticDisposition: { kind: "active" }, availability: "local", reachability: { kind: "supported" } },
+    ],
+  },
 });
 
 describe("capability response authority", () => {
@@ -61,6 +70,13 @@ describe("capability response authority", () => {
     [{ ...capabilities, evidenceManifest: { ...capabilities.evidenceManifest, counts: { ...capabilities.evidenceManifest.counts, producers: 2 } } }],
     [{ ...capabilities, evidenceManifest: { ...capabilities.evidenceManifest, bindings: [capabilities.evidenceManifest.bindings[0], capabilities.evidenceManifest.bindings[0]], counts: { ...capabilities.evidenceManifest.counts, bindings: 2 } } }],
     [{ ...capabilities, surfaces: { ...capabilities.surfaces, campaign: "available" } }],
+    // rfc/pack-capability-contract.md criterion 8 — the shared parser, not a web lookalike.
+    [{ ...capabilities, packCapabilities: undefined }],
+    [{ ...capabilities, packCapabilities: { ...capabilities.packCapabilities, rows: [{ ...capabilities.packCapabilities.rows[0], availability: "local" }, ...capabilities.packCapabilities.rows.slice(1)] } }],
+    [{ ...capabilities, packCapabilities: { ...capabilities.packCapabilities, rows: [...capabilities.packCapabilities.rows].reverse() } }],
+    [{ ...capabilities, packCapabilities: { ...capabilities.packCapabilities, rows: [capabilities.packCapabilities.rows[0], capabilities.packCapabilities.rows[0]] } }],
+    [{ ...capabilities, packCapabilities: { ...capabilities.packCapabilities, rows: capabilities.packCapabilities.rows.slice(0, 2) } }],
+    [{ ...capabilities, packCapabilities: { ...capabilities.packCapabilities, rows: [{ ...capabilities.packCapabilities.rows[0], providerId: "stockfish-analysis" }, ...capabilities.packCapabilities.rows.slice(1)] } }],
   ])("refuses internal, crossed, inconsistent, or unknown capability bytes", (value) => {
     expect(() => parseCapabilities(value)).toThrow(TypeError);
   });

@@ -95,6 +95,7 @@ const capabilities: Capabilities = {
     },
   },
   providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },
+  packCapabilities: { protocol: "tabiya.pack-capabilities", protocolVersion: 1, rows: [] },
   surfaces: {
     play: "available",
     review: "available",

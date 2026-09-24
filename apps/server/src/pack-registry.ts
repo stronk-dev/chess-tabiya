@@ -16,6 +16,9 @@ import {
 } from "@chess-tabiya/schema/pack-path";
 import { assertCompiledConceptRegistry, type CompiledConceptRegistry, type PositionEvidenceIndex } from "@chess-tabiya/runtime";
 
+import { capabilityKey, type CapabilityId } from "@chess-tabiya/schema";
+
+import { runtimeSupportedCapabilities, unmetRequirements, type RuntimeCapabilitySupport } from "./capability/pack-capabilities.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { ServerError } from "./errors.js";
 import { validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } from "./pack-validation.js";
@@ -252,15 +255,60 @@ function sidecarPaths(source: string): {
   };
 }
 
+/** A resolved shape/principle capability is carried by the registry this catalogue loaded, at that exact version. */
+function loadedEntry(capability: CapabilityId, shapes: PackShapeLookup | undefined, principles: PackPrincipleLookup | undefined): boolean {
+  if (capability.version.kind !== "semver") return false;
+  const [kind, ...rest] = capability.id.split(".");
+  const lookup = kind === "shape" ? shapes : kind === "principle" ? principles : undefined;
+  const version = (lookup?.get(rest.join("."))?.document as { readonly version?: unknown } | undefined)?.version;
+  return version === capability.version.value;
+}
+
+/** A pack the handshake refused at registration because this deployment does not carry what it requires. */
+export interface CapabilityRefusal {
+  readonly source: string;
+  readonly packId: string;
+  readonly unmet: readonly CapabilityId[];
+}
+
 export class PackRegistry {
   readonly #records: Map<string, PackRecord>;
   readonly #digests: Map<string, PackRecord>;
   readonly #concepts: CompiledConceptRegistry;
+  readonly #capabilities: RuntimeCapabilitySupport;
+  readonly #capabilityRefusals: readonly CapabilityRefusal[];
 
-  private constructor(records: ReadonlyMap<string, PackRecord>, concepts: CompiledConceptRegistry) {
+  private constructor(records: ReadonlyMap<string, PackRecord>, concepts: CompiledConceptRegistry, capabilities: RuntimeCapabilitySupport, refusals: readonly CapabilityRefusal[]) {
     this.#records = new Map(records);
     this.#digests = new Map([...records.values()].map((record) => [record.digest, record]));
     this.#concepts = concepts;
+    this.#capabilities = capabilities;
+    this.#capabilityRefusals = Object.freeze([...refusals]);
+  }
+
+  /** The configured capability identities this catalogue registered packs against (§4.2/§4.3). */
+  get capabilities(): RuntimeCapabilitySupport {
+    return this.#capabilities;
+  }
+
+  /**
+   * The startup report of rfc/pack-capability-contract.md §5.1: packs excluded from the listing
+   * because a required capability is `unsupported` on this deployment. The boot survives them.
+   */
+  capabilityRefusals(): readonly CapabilityRefusal[] {
+    return this.#capabilityRefusals;
+  }
+
+  /**
+   * §4.3 handshake for a registration after boot: refuses with PACK_CAPABILITY_UNSUPPORTED (HTTP 422)
+   * carrying the exact unmet set. A `temporarily_unavailable` provider never reaches here — transient
+   * health does not remove an identity from the supported set.
+   */
+  assertSupported(document: DrillPackDefinition): void {
+    const unmet = unmetRequirements(document.requires ?? [], this.#capabilities);
+    if (unmet.length > 0) {
+      throw new ServerError("PACK_CAPABILITY_UNSUPPORTED", `Pack ${document.id} requires ${unmet.length} capabilit${unmet.length === 1 ? "y" : "ies"} this deployment does not carry: ${unmet.map(capabilityKey).join(", ")}`, { details: { packId: document.id, unmet } });
+    }
   }
 
   /** The compiled concept registry every pack in this catalogue was validated against. */
@@ -285,10 +333,12 @@ export class PackRegistry {
       readonly manifest?: unknown;
       readonly channel?: "official" | "community";
     }[],
-    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup; readonly concepts?: CompiledConceptRegistry } = {},
+    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup; readonly concepts?: CompiledConceptRegistry; readonly capabilities?: RuntimeCapabilitySupport } = {},
   ): Promise<PackRegistry> {
     const concepts = options.concepts ?? installedConceptRegistry();
     assertCompiledConceptRegistry(concepts);
+    const capabilities = options.capabilities ?? runtimeSupportedCapabilities();
+    const refusals: CapabilityRefusal[] = [];
     const records = new Map<string, PackRecord>();
     const validated = documents.map(({ source, value, ledger, manifest, channel = "official" }) => ({
       source,
@@ -309,6 +359,13 @@ export class PackRegistry {
       }
       const document = freeze(checked.document);
       const { source, ledger, manifest, channel } = entry;
+      // §4.3 / [[D1077]]: an `unsupported` requirement is a static deployment fact. The pack is
+      // excluded from the listing and named in the startup report; the boot survives it ([[D468]]).
+      const unmet = unmetRequirements(document.requires, capabilities).filter((capability) => !loadedEntry(capability, options.shapes, options.principles));
+      if (unmet.length > 0) {
+        refusals.push(freeze({ source, packId: document.id, unmet }));
+        continue;
+      }
       const previous = records.get(document.id);
       if (previous !== undefined && previous.channel === "official" && channel === "community" && options.replaceDuplicates !== true) continue;
       if (previous !== undefined && previous.channel === channel && options.replaceDuplicates !== true) {
@@ -365,7 +422,7 @@ export class PackRegistry {
         }),
       );
     }
-    return new PackRegistry(records, concepts);
+    return new PackRegistry(records, concepts, capabilities, refusals);
   }
 
   static async loadDefault(
@@ -377,6 +434,7 @@ export class PackRegistry {
       readonly shapes?: PackShapeLookup;
       readonly principles?: PackPrincipleLookup;
       readonly concepts?: CompiledConceptRegistry;
+      readonly capabilities?: RuntimeCapabilitySupport;
     } = {},
   ): Promise<PackRegistry> {
     const contentDirectory = fileURLToPath(
@@ -417,6 +475,7 @@ export class PackRegistry {
       ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
       ...(options.principles === undefined ? {} : { principles: options.principles }),
       ...(options.concepts === undefined ? {} : { concepts: options.concepts }),
+      ...(options.capabilities === undefined ? {} : { capabilities: options.capabilities }),
     });
   }
 

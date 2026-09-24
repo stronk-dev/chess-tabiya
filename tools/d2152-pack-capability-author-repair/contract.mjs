@@ -1,53 +1,35 @@
-// Author contract for D2152-D2156. It publishes reviewed bytes; it does not implement lane 0.30.
+// Author contract for rfc/pack-capability-contract.md (D2152–D2156, re-based 2026-09-24).
+//
+// It publishes and checks the two reviewed authorities the implementation must expand to:
+//   rfc/contracts/pack-capability-schema-transition-v1.json — the 0.30 stage, re-based on the shipped
+//     0.29 schema, its post-conditions and the migration population the applier rewrote;
+//   rfc/contracts/pack-capability-applicability-v1.json — the literal closed-vocabulary inventory of
+//     the LIVE pack schema (closed-schema-members-v2), its stable public ids
+//     (stable-schema-member-v3), the unconditional/constant/interpreter roots and external sources.
+// `--update` rewrites the generated fields; `--seal-population` records the pre-migration population.
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+
+import {
+  canonicalJson,
+  closedSchemaInventory,
+  mapSchemaMembers,
+  valueAtPointer,
+} from "../../packages/schema/src/capability/schema-members.ts";
 
 const transitionPath = "rfc/contracts/pack-capability-schema-transition-v1.json";
 const applicabilityPath = "rfc/contracts/pack-capability-applicability-v1.json";
 const schemaPath = "schemas/drill_pack.schema.json";
 const update = process.argv.includes("--update");
+const sealPopulation = process.argv.includes("--seal-population");
 const read = (path) => readFileSync(path, "utf8");
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
 
-function canonical(value) {
-  if (value === null || typeof value !== "object") return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
-  return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(",")}}`;
-}
-
-function pointerTokens(pointer) {
-  return pointer.split("/").slice(1).map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"));
-}
-
-function applyPatch(source, operations) {
-  const target = structuredClone(source);
-  for (const operation of operations) {
-    const tokens = pointerTokens(operation.path);
-    const final = tokens.pop();
-    assert.notEqual(final, undefined, `empty patch pointer ${operation.path}`);
-    const parent = tokens.reduce((value, token) => value[token], target);
-    if (operation.op === "replace") {
-      assert.ok(Object.hasOwn(parent, final), `replace target absent: ${operation.path}`);
-      parent[final] = structuredClone(operation.value);
-    } else if (operation.op === "remove") {
-      assert.ok(Object.hasOwn(parent, final), `remove target absent: ${operation.path}`);
-      delete parent[final];
-    } else if (operation.op === "add" && final === "-") {
-      assert.ok(Array.isArray(parent), `append target is not an array: ${operation.path}`);
-      parent.push(structuredClone(operation.value));
-    } else if (operation.op === "add") {
-      assert.equal(Object.hasOwn(parent, final), false, `add target already exists: ${operation.path}`);
-      parent[final] = structuredClone(operation.value);
-    } else throw new TypeError(`unsupported patch operation ${operation.op}`);
-  }
-  return target;
-}
-
-function legacyPopulation() {
+export function packPopulation() {
   const rows = [];
   for (const name of readdirSync("content/drafts")) {
-    if (!name.endsWith(".json") || name.endsWith(".sources.json") || name.endsWith(".evidence.json") || name.endsWith(".job.json")) continue;
+    if (!name.endsWith(".json") || /\.(sources|evidence|job|graduation|priority)\.json$/u.test(name)) continue;
     const path = `content/drafts/${name}`;
     rows.push({ path, sha256: sha256(readFileSync(path)) });
   }
@@ -55,121 +37,29 @@ function legacyPopulation() {
     const path = `content/candidates/${directory}/pack.json`;
     if (existsSync(path)) rows.push({ path, sha256: sha256(readFileSync(path)) });
   }
-  return rows.sort((left, right) => left.path.localeCompare(right.path));
+  return rows.sort((left, right) => (left.path < right.path ? -1 : left.path > right.path ? 1 : 0));
 }
 
-function sealedTransition(input) {
+function checkTransition(input, schema) {
   const output = structuredClone(input);
-  const legacyDocuments = legacyPopulation();
-  assert.equal(legacyDocuments.length, 92, "legacy catalogue population moved");
-  output.legacy.catalogueDocuments = legacyDocuments.length;
-  output.legacy.documents = legacyDocuments;
-  output.legacy.populationSha256 = sha256(JSON.stringify(legacyDocuments));
-  let image = JSON.parse(read(schemaPath));
-  let sourceSha = sha256(read(schemaPath));
-  assert.equal(sourceSha, output.legacy.schemaSha256);
-  assert.deepEqual(output.stages.map((stage) => stage.lane), ["0.28", "0.29", "0.30"]);
-  assert.deepEqual(output.stages.map((stage) => stage.owner), [
-    "rfc/archive/graduation-clearance.md",
-    "rfc/pack-population-provenance.md",
-    "rfc/pack-capability-contract.md",
-  ]);
-  for (const stage of output.stages) {
-    stage.source.schemaSha256 = sourceSha;
-    assert.equal(image.$id, stage.source.schemaId, `${stage.lane} source id`);
-    image = applyPatch(image, stage.patch);
-    const bytes = `${JSON.stringify(image, null, 2)}\n`;
-    sourceSha = sha256(bytes);
-    assert.equal(image.$id, stage.target.schemaId, `${stage.lane} target id`);
-    stage.target.schemaSha256 = sourceSha;
-    stage.target.canonicalBytes = Buffer.byteLength(bytes);
+  for (const condition of output.postConditions) {
+    const value = valueAtPointer(schema, condition.pointer);
+    if (condition.contains !== undefined) assert.ok(Array.isArray(value) && value.includes(condition.contains), `0.30 post-condition ${condition.pointer} lost ${condition.contains}`);
+    else assert.equal(canonicalJson(value), canonicalJson(condition.equals), `0.30 post-condition ${condition.pointer} drifted`);
   }
-  const clearance = image.$defs.graduationEntry.properties.clearance;
-  assert.ok(clearance.properties.recordKind.enum.includes("citable_text"));
-  assert.equal(image.$defs.timingWindow.properties.note.maxLength, 2000);
-  assert.ok(image.$defs.feedbackClaim.properties.evidenceTypes.items.enum.includes("provenance_note"));
-  assert.equal(image.$defs.provenance.properties.corpusEvidence.oneOf.length, 3);
-  assert.ok(image.required.includes("requires"));
-  output.target.schemaSha256 = sourceSha;
-  output.target.canonicalBytes = output.stages.at(-1).target.canonicalBytes;
-  return { output, image };
-}
-
-function closedVocabulary(schema, excludedPointers) {
-  const rows = [];
-  let enumNodes = 0;
-  let enumMembers = 0;
-  let unionNodes = 0;
-  let unionMembers = 0;
-  const escape = (token) => token.replaceAll("~", "~0").replaceAll("/", "~1");
-  const excluded = (pointer) => excludedPointers.some((root) => pointer === root || pointer.startsWith(`${root}/`));
-  const walk = (value, pointer = "") => {
-    if (excluded(pointer)) return;
-    if (Array.isArray(value)) {
-      value.forEach((item, index) => walk(item, `${pointer}/${index}`));
-      return;
-    }
-    if (value === null || typeof value !== "object") return;
-    if (Array.isArray(value.enum)) {
-      enumNodes += 1;
-      enumMembers += value.enum.length;
-      for (const member of value.enum) rows.push({ schemaPointer: pointer, member });
-    }
-    if (Array.isArray(value.oneOf)) {
-      const branches = value.oneOf.map((branch) => Object.entries(branch?.properties ?? {}).flatMap(([name, memberSchema]) =>
-        memberSchema !== null && typeof memberSchema === "object" && Object.hasOwn(memberSchema, "const")
-          ? [[name, memberSchema.const]] : []));
-      const discriminated = branches.length > 0 && branches.every((branch) => branch.length === 1)
-        && new Set(branches.map((branch) => branch[0][0])).size === 1;
-      if (discriminated) {
-        unionNodes += 1;
-        unionMembers += branches.length;
-        for (const branch of branches) rows.push({ schemaPointer: pointer, member: branch[0][1] });
-      }
-    }
-    for (const [key, child] of Object.entries(value)) walk(child, `${pointer}/${escape(key)}`);
-  };
-  walk(schema);
-  rows.sort((left, right) => canonical(left).localeCompare(canonical(right)));
-  return { rows, enumNodes, enumMembers, unionNodes, unionMembers };
-}
-
-function encodeToken(value) {
-  const text = String(value);
-  return /^[A-Za-z0-9_-]+$/u.test(text) ? text : `x${Buffer.from(text).toString("hex")}`;
-}
-
-function valueAt(root, tokens) {
-  return tokens.reduce((value, token) => value?.[token], root);
-}
-
-function publicId(source, schema) {
-  const raw = source.schemaPointer.split("/").filter(Boolean).map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"));
-  const ownerAt = raw[0] === "$defs" || raw[0] === "properties" ? 1 : 0;
-  const tokens = [encodeToken(raw[ownerAt] ?? "root")];
-  for (let index = ownerAt + 1; index < raw.length; index += 1) {
-    const token = raw[index];
-    if (["$defs", "properties", "items"].includes(token)) continue;
-    if (token === "oneOf" && /^\d+$/u.test(raw[index + 1] ?? "")) {
-      const branchIndex = Number(raw[index + 1]);
-      const parent = valueAt(schema, raw.slice(0, index));
-      const branch = parent.oneOf[branchIndex];
-      const constants = Object.entries(branch?.properties ?? {}).flatMap(([name, value]) =>
-        value !== null && typeof value === "object" && Object.hasOwn(value, "const") ? [[name, value.const]] : []);
-      let identity = constants.length === 1
-        ? `${encodeToken(constants[0][0])}-${encodeToken(constants[0][1])}`
-        : `shape-${sha256(canonical(branch)).slice(0, 12)}`;
-      if (constants.length === 1 && parent.oneOf.filter((candidate) => candidate?.properties?.[constants[0][0]]?.const === constants[0][1]).length > 1) {
-        const over = Array.isArray(branch?.properties?.over?.required) ? branch.properties.over.required.join("-") : sha256(canonical(branch)).slice(0, 12);
-        identity += `.over-${encodeToken(over)}`;
-      }
-      tokens.push(identity);
-      index += 1;
-      continue;
-    }
-    if (!/^\d+$/u.test(token)) tokens.push(encodeToken(token));
+  assert.ok(/^urn:chess-tabiya:schema:drill-pack:0\.(3\d)$/u.test(schema.$id), "the live schema is below lane 0.30");
+  const population = packPopulation();
+  if (sealPopulation) {
+    output.migration.documents = population;
+    output.migration.populationSha256 = sha256(JSON.stringify(population));
+    output.migration.productionDocuments = population.filter((row) => !row.path.endsWith(".browser.json")).length;
+    output.migration.browserFixtures = population.filter((row) => row.path.endsWith(".browser.json")).length;
   }
-  return [...tokens, encodeToken(source.member)].join(".");
+  const sealed = output.migration.documents.map((row) => row.path);
+  assert.deepEqual(population.map((row) => row.path), sealed, "the pack population moved: a document was added, removed or renamed without a migration row");
+  assert.equal(sha256(JSON.stringify(output.migration.documents)), output.migration.populationSha256, "migration population digest is stale");
+  assert.equal(output.migration.productionDocuments + output.migration.browserFixtures, sealed.length);
+  return output;
 }
 
 function symbolCount(site) {
@@ -177,127 +67,72 @@ function symbolCount(site) {
   assert.ok(match, `site is not module#symbol: ${site}`);
   const [module, symbol] = site.split("#");
   const source = read(module);
-  const declaration = new RegExp(`\\b(?:export\\s+)?(?:async\\s+)?(?:function|class|const|let|var|interface|type|enum)\\s+${symbol}\\b`, "gu");
+  const declaration = new RegExp(`^(?:export\\s+)?(?:async\\s+)?(?:function|class|const|let|var|interface|type|enum)\\s+${symbol.replaceAll("$", "\\$")}\\b`, "gmu");
   return [...source.matchAll(declaration)].length;
 }
 
 function assertLocalSites(applicability) {
-  const rows = [...applicability.always, ...applicability.meaningAuthority.constantRoots];
-  for (const row of rows) {
-    for (const site of [...row.sites, ...(row.dependencies ?? [])]) {
-      assert.equal(symbolCount(site), 1, `${site} must resolve exactly once`);
-    }
-  }
+  const sites = [
+    ...applicability.always.flatMap((row) => [...row.sites, ...(row.dependencies ?? [])]),
+    ...applicability.meaningAuthority.constantRoots.flatMap((row) => row.sites),
+    ...applicability.meaningAuthority.interpreterRoots.flatMap((row) => [...row.sites, ...row.admissionSites]),
+    ...applicability.lifecycleSubjects.flatMap((row) => row.versions.flatMap((version) => version.sites)),
+  ];
+  for (const site of sites) assert.equal(symbolCount(site), 1, `${site} must resolve exactly once`);
 }
 
-function assertChessopsSource(source) {
+export function assertExternalSource(source) {
   assert.equal(source.package, "chessops");
-  assert.equal(source.version, "0.15.1");
-  assert.equal(source.integrity, "sha512-hQDwv90AFkrPEsRJBebh3ZE+xDga25TCCv4lavNT2plZmd33UKNFYaZsE+7rafMbnBRrDEWUVsSYFqY3qCIGZw==");
   const lock = read(source.lockfile);
-  assert.ok(lock.includes(`${source.lockfileKey}:`));
-  assert.ok(lock.includes(`resolution: {integrity: ${source.integrity}}`));
+  assert.ok(lock.includes(`${source.lockfileKey}:`), `${source.lockfileKey} is not a lockfile key`);
+  assert.ok(lock.includes(`resolution: {integrity: ${source.integrity}}`), "chessops integrity is not the lockfile resolution");
   for (const site of source.manifestSites) {
     const [path, pointer] = site.split("#");
     const manifest = JSON.parse(read(path));
     const value = pointer.split(".").reduce((part, key) => part?.[key], manifest);
     assert.equal(value, source.version, `${site} must pin the resolved semantic dependency`);
   }
-  assert.ok(read("packages/runtime/src/structure.ts").includes('from "chessops/'));
 }
 
-function sealedApplicability(input, targetSchema, targetSha) {
+function sealApplicability(input, schema) {
   const output = structuredClone(input);
-  output.always = output.always.map((row) => ({
-    ...row,
-    selector: { kind: "always" },
-    capability: typeof row.capability === "string"
-      ? { id: row.capability, version: { kind: "integer", value: 1 } }
-      : row.capability,
-  }));
+  output.schema.sha256 = sha256(read(schemaPath));
+  output.schema.canonicalSha256 = sha256(canonicalJson(schema));
+  const inventory = closedSchemaInventory(schema, output.metadataExclusions);
+  const mappings = mapSchemaMembers(schema, inventory);
+  output.closedVocabulary.counts = {
+    enumNodes: inventory.enumNodes,
+    enumMembers: inventory.enumMembers,
+    valueUnionNodes: inventory.valueUnionNodes,
+    valueUnionMembers: inventory.valueUnionMembers,
+    keyUnionNodes: inventory.keyUnionNodes,
+    keyUnionMembers: inventory.keyUnionMembers,
+    mappedMembers: inventory.rows.length,
+    excludedMembers: 0,
+  };
+  output.closedVocabulary.sourceInventory = inventory.rows.map((row) => ({ ...row }));
+  output.closedVocabulary.inventorySha256 = sha256(canonicalJson(inventory.rows));
+  output.closedVocabulary.expandedMappingSha256 = sha256(canonicalJson(mappings));
   for (const row of output.always) {
     assert.deepEqual(row.selector, { kind: "always" });
     assert.equal(typeof row.capability.id, "string");
     assert.deepEqual(row.capability.version, { kind: "integer", value: 1 });
   }
-  output.schema.sha256 = sha256(read(schemaPath));
-  output.schema.targetSha256 = targetSha;
-  const inventory = closedVocabulary(targetSchema, output.metadataExclusions);
-  output.closedVocabulary.enumNodes = inventory.enumNodes;
-  output.closedVocabulary.enumMembers = inventory.enumMembers;
-  output.closedVocabulary.discriminatedOneOfNodes = inventory.unionNodes;
-  output.closedVocabulary.discriminatedOneOfMembers = inventory.unionMembers;
-  output.closedVocabulary.mappedMembers = inventory.rows.length;
-  output.closedVocabulary.excludedMembers = 0;
-  output.closedVocabulary.sourceInventory = inventory.rows;
-  output.closedVocabulary.inventorySha256 = sha256(canonical(inventory.rows));
-  const mappings = inventory.rows.map((sourceIdentity) => ({
-    sourceIdentity,
-    capability: { id: publicId(sourceIdentity, targetSchema), version: { kind: "integer", value: 1 } },
-  }));
-  assert.equal(new Set(mappings.map((row) => row.capability.id)).size, mappings.length, "public capability ids must be collision-free");
-  output.closedVocabulary.expandedMappingSha256 = sha256(canonical(mappings));
-  const closedRows = mappings.map(({ sourceIdentity, capability }) => ({ selector: { kind: "schema_member", sourceIdentity }, capability }));
-  output.expandedAuthoritySha256 = sha256(canonical({ closedVocabulary: closedRows, always: output.always, resolvedReferences: output.resolvedReferences }));
+  const closedRows = mappings.map(({ sourceIdentity, id }) => ({ selector: { kind: "schema_member", sourceIdentity }, capability: { id, version: { kind: "integer", value: 1 } } }));
+  output.expandedAuthoritySha256 = sha256(canonicalJson({ closedVocabulary: closedRows, always: output.always, resolvedReferences: output.resolvedReferences, memberDependencies: output.memberDependencies }));
   assertLocalSites(output);
-  assert.equal(output.meaningAuthority.externalSources.length, 1);
-  assertChessopsSource(output.meaningAuthority.externalSources[0]);
-  return output;
+  for (const source of output.meaningAuthority.externalSources) assertExternalSource(source);
+  for (const exclusion of output.metadataExclusions) assert.ok(valueAtPointer(schema, exclusion) !== undefined, `metadata exclusion ${exclusion} names nothing in the schema`);
+  return { output, mappings };
 }
 
-function followHistory(start, declarations) {
-  const subjectId = start.id;
-  const seen = new Set();
-  let cursor = start;
-  while (true) {
-    const key = canonical(cursor);
-    assert.equal(seen.has(key), false, "CAPABILITY_SUCCESSOR_CYCLE");
-    seen.add(key);
-    const declaration = declarations.find((row) => canonical(row.id) === key);
-    assert.ok(declaration, "CAPABILITY_SUCCESSOR_UNKNOWN");
-    assert.equal(declaration.subjectId, subjectId, "CAPABILITY_SUCCESSOR_SUBJECT_MISMATCH");
-    assert.equal(declaration.id.id, subjectId, "CAPABILITY_SUCCESSOR_SUBJECT_MISMATCH");
-    if (declaration.disposition.kind === "active") return declaration.id;
-    if (declaration.disposition.kind === "withdrawn" && declaration.disposition.successor === null) {
-      assert.ok(declaration.disposition.noSuccessor, "CAPABILITY_WITHDRAWAL_REFUSAL_MISSING");
-      return declaration.disposition.noSuccessor;
-    }
-    cursor = declaration.disposition.successor;
-  }
-}
-
-function assertWithdrawalContract() {
-  const rfc = read("rfc/pack-capability-contract.md");
-  assert.match(rfc, /readonly successor: CapabilityId/u);
-  assert.match(rfc, /readonly successor: null; readonly noSuccessor: WithdrawalRefusal/u);
-  assert.match(rfc, /migrationPlanForRequirement` follows either kind of edge/u);
-  const id1 = { id: "example", version: { kind: "integer", value: 1 } };
-  const id2 = { id: "example", version: { kind: "integer", value: 2 } };
-  const successor = [
-    { subjectId: "example", id: id1, disposition: { kind: "withdrawn", successor: id2 } },
-    { subjectId: "example", id: id2, disposition: { kind: "active" } },
-  ];
-  assert.deepEqual(followHistory(id1, successor), id2);
-  const refusal = { kind: "no_migration_exists", reason: "the old answer shape has no truthful projection" };
-  assert.deepEqual(followHistory(id1, [
-    { subjectId: "example", id: id1, disposition: { kind: "withdrawn", successor: null, noSuccessor: refusal } },
-  ]), refusal);
-  assert.throws(() => followHistory(id1, [
-    { subjectId: "different", id: id1, disposition: { kind: "active" } },
-  ]), /CAPABILITY_SUCCESSOR_SUBJECT_MISMATCH/u);
-  assert.throws(() => followHistory(id1, [
-    { subjectId: "example", id: id1, disposition: { kind: "withdrawn", successor: id2 } },
-    { subjectId: "example", id: id2, disposition: { kind: "withdrawn", successor: id1 } },
-  ]), /CAPABILITY_SUCCESSOR_CYCLE/u);
-}
-
+const schema = JSON.parse(read(schemaPath));
 const transitionInput = JSON.parse(read(transitionPath));
 const applicabilityInput = JSON.parse(read(applicabilityPath));
-const { output: transition, image: targetSchema } = sealedTransition(transitionInput);
-const applicability = sealedApplicability(applicabilityInput, targetSchema, transition.target.schemaSha256);
-assertWithdrawalContract();
+const transition = checkTransition(transitionInput, schema);
+const { output: applicability, mappings } = sealApplicability(applicabilityInput, schema);
 
-if (update) {
+if (update || sealPopulation) {
   writeFileSync(transitionPath, `${JSON.stringify(transition, null, 2)}\n`);
   writeFileSync(applicabilityPath, `${JSON.stringify(applicability, null, 2)}\n`);
 } else {
@@ -305,14 +140,16 @@ if (update) {
   assert.deepEqual(applicabilityInput, applicability, "applicability authority is stale; run make pack-capability-author-repair-update");
 }
 
-// Able-to-fail controls: an external upgrade and a removed mapping must both be detected.
-assert.throws(() => assertChessopsSource({ ...applicability.meaningAuthority.externalSources[0], version: "0.15.2" }));
-const shortened = structuredClone(applicability);
-shortened.closedVocabulary.sourceInventory.pop();
-assert.notDeepEqual(shortened.closedVocabulary.sourceInventory, closedVocabulary(targetSchema, shortened.metadataExclusions).rows);
-const editedLegacy = structuredClone(transition.legacy.documents);
-editedLegacy[0].sha256 = "0".repeat(64);
-assert.notEqual(sha256(JSON.stringify(editedLegacy)), transition.legacy.populationSha256);
-assert.equal(new Set(transition.legacy.documents.map((row) => row.path)).size, 92);
+// Able-to-fail controls: an external upgrade, a removed mapping and an edited population row.
+assert.throws(() => assertExternalSource({ ...applicability.meaningAuthority.externalSources[0], version: "0.15.2" }));
+assert.throws(() => assertExternalSource({ ...applicability.meaningAuthority.externalSources[0], integrity: "sha512-0" }));
+const shortened = structuredClone(applicability.closedVocabulary.sourceInventory);
+shortened.pop();
+assert.notEqual(sha256(canonicalJson(shortened)), applicability.closedVocabulary.inventorySha256);
+if (transition.migration.documents.length > 0) {
+  const edited = structuredClone(transition.migration.documents);
+  edited[0].path = `${edited[0].path}.renamed`;
+  assert.notEqual(sha256(JSON.stringify(edited)), transition.migration.populationSha256);
+}
 
-console.log(`pack capability author contract: ${transition.stages.length} cumulative stages; ${applicability.closedVocabulary.sourceInventory.length} checked mappings; ${applicability.always.length} unconditional roots; ${applicability.meaningAuthority.constantRoots.length} constant roots; chessops ${applicability.meaningAuthority.externalSources[0].version}`);
+console.log(`pack capability author contract: lane ${schema.$id.split(":").at(-1)}; ${applicability.closedVocabulary.sourceInventory.length} closed members mapped to ${new Set(mappings.map((row) => row.id)).size} public ids; ${applicability.always.length} unconditional roots; ${applicability.meaningAuthority.constantRoots.length} constant roots; ${applicability.meaningAuthority.interpreterRoots.length} interpreter families; migration population ${transition.migration.documents.length} (${transition.migration.productionDocuments} production + ${transition.migration.browserFixtures} browser fixtures)`);

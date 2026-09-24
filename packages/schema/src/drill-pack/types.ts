@@ -1,3 +1,5 @@
+import type { CapabilityId } from "../capability/types.js";
+
 export const OBJECTIVE_TYPES = [
   "reach_structure",
   "preserve_plan_window",
@@ -293,6 +295,11 @@ export interface DrillPackDefinition {
   };
   readonly deviations?: readonly Deviation[];
   readonly feedbackClaims?: readonly FeedbackClaim[];
+  /**
+   * rfc/pack-capability-contract.md §4.1 (lane 0.30): the canonical capability requirements, derived
+   * from this document's own content and byte-equal to that derivation. Required; absence is refusal.
+   */
+  readonly requires: readonly CapabilityId[];
   readonly [key: string]: unknown;
 }
 
