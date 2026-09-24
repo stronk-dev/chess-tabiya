@@ -35,7 +35,7 @@ import { assertMoveQualityGradeSentence, renderMoveQualityGrade, type MoveQualit
 import { renderPivotalMarker, type PivotalMarker } from "./pivotal.js";
 import type { ReviewEnginePoint, ReviewEvalDelta, ReviewMateTransition, ReviewScoreReceipt, ReviewSearchBound, ReviewWdlPoint, StockfishPositionEvaluation } from "./review-points.js";
 import { renderShapeFiring, type ShapeFiring } from "./shape-firing.js";
-import { CONSUMER_FACT_RENDERERS, STRUCTURED_DOCUMENT_SCHEMAS, consumerAdapterSpecs } from "./presentation-consumer-adapters.js";
+import { CONSUMER_FACT_RENDERERS, CONSUMER_MAGNITUDE_QUANTITIES, STRUCTURED_DOCUMENT_SCHEMAS, consumerAdapterSpecs } from "./presentation-consumer-adapters.js";
 import { INSPECTOR_FACT_RENDERERS, INSPECTOR_MAGNITUDE_QUANTITIES, inspectorAdapterSpecs } from "./presentation-inspector-adapters.js";
 import { PLAY_FACT_RENDERERS, PLAY_MAGNITUDE_QUANTITIES, playAdapterSpecs } from "./presentation-play-adapters.js";
 import { PresentationSchemaError, ROLE_NAMES, SIDE_NAMES, listPhrase, type FactOperandsOf, type FactRendererDefinition } from "./presentation-schema.js";
@@ -666,7 +666,7 @@ function magnitudeValueText(operand: MagnitudeOperand): string {
 }
 
 /** Registered quantity labels keyed by exact source projection; no label means unrenderable. */
-const MAGNITUDE_QUANTITIES: Readonly<Record<string, { readonly label: string }>> = Object.freeze({ ...PLAY_MAGNITUDE_QUANTITIES, ...INSPECTOR_MAGNITUDE_QUANTITIES });
+const MAGNITUDE_QUANTITIES: Readonly<Record<string, { readonly label: string }>> = Object.freeze({ ...PLAY_MAGNITUDE_QUANTITIES, ...INSPECTOR_MAGNITUDE_QUANTITIES, ...CONSUMER_MAGNITUDE_QUANTITIES });
 
 function genericMagnitudeSentence(operand: MagnitudeOperand): string {
   const quantity = MAGNITUDE_QUANTITIES[`${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`];
@@ -1292,6 +1292,8 @@ export interface PresentationKit {
   readonly squareSet: (evidence: DeclaredEvidence<unknown>, squares: readonly SquareName[], brush: MarkBrush, caption: FactStatementOperand) => ComponentValue;
   readonly structuredDocument: (schemaId: StructuredDocumentSchemaId, document: Readonly<Record<string, PresentationJsonValue>>) => StructuredDocumentOperand;
   readonly grounding: (projection: VersionedEvidenceId) => EvidenceGrounding;
+  /** §3.8: a payload that IS a `CitationOperand` (`derived.citation.attribution@1`), through the exact citation parser. */
+  readonly citation: (evidence: DeclaredEvidence<unknown>) => CitationOperand;
 }
 
 const KIT: PresentationKit = Object.freeze({
@@ -1313,6 +1315,10 @@ const KIT: PresentationKit = Object.freeze({
     return parseStructuredDocument({ schemaId, document, canonicalBytes, digest: presentationDigest("presentation.structured_document@1", { schemaId, canonicalBytes }) });
   },
   grounding: declaredGrounding,
+  citation: (evidence: DeclaredEvidence<unknown>): CitationOperand => {
+    assertDeclaredEvidence(evidence);
+    return deepFreeze(parseCitation(jsonClone(evidence.payload)));
+  },
 });
 const adapter = (spec: AdapterSpec): ProjectionPresentationAdapter => {
   if (spec.composition !== undefined) {
@@ -1347,8 +1353,8 @@ export const PRESENTATION_ADAPTERS: readonly ProjectionPresentationAdapter[] = O
   adapter({ consumer: REVIEW_STORY, projection: V1("run.record.consequence"), component: "fact_statement", forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["terminal", "outcome"], assertions: ["copied_byte_equal"], construct: fact("story.consequence@1", "recorded_run", "recorded-run@1", (payload) => { const value = payload as { readonly terminal: boolean; readonly outcome?: RunOutcome; readonly plies?: number; readonly objectiveState?: ObjectiveState }; return value.terminal ? { terminal: true, outcome: value.outcome! } : { terminal: false, plies: value.plies!, objectiveState: value.objectiveState! }; }) }),
   adapter({ consumer: REVIEW_STORY, projection: V1("run.record.imported_result"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["result"], assertions: ["copied_byte_equal"], construct: fact("story.imported_result@1", "recorded_run", "recorded-run@1", (payload) => ({ result: (payload as { readonly result: PgnResultToken }).result })) }),
   adapter({ consumer: REVIEW_STORY, projection: V1("rules.endgame.classification"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["fen", "type", "conventionId", "provenanceNote"], assertions: ["copied_byte_equal"], construct: fact("story.endgame_classification@1", "declared_convention", "story-compatibility@1", (payload) => payload as EndgameClassification) }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("derived.review.eval_delta"), component: "magnitude", forms: STORY_FORMS, sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("derived.review.mate_transition"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
+  adapter({ consumer: REVIEW_STORY, projection: V1("derived.review.eval_delta"), component: "magnitude", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
+  adapter({ consumer: REVIEW_STORY, projection: V1("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
   adapter({ consumer: REVIEW_STORY, projection: V1("derived.story.last_level"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["recordedResult", "evaluation"], assertions: ["mechanical_transform"], construct: fact("story.last_level@1", "declared_convention", "story-last-level@1", (payload) => ({ learnerCentipawns: (payload as { readonly evaluation: { readonly learnerCentipawns: number } }).evaluation.learnerCentipawns })) }),
   adapter({ consumer: REVIEW_STORY, projection: V1("derived.story.title"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["title"], assertions: ["copied_byte_equal"], construct: fact("story.title@1", "declared_convention", "story-compatibility@1", (payload) => ({ title: (payload as { readonly title: string }).title })) }),
   // module.review_map@1 — the Review Map evidence panel seat (module-registration A5 slice)
