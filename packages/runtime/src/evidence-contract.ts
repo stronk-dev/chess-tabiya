@@ -1,3 +1,5 @@
+import type { ConventionReceipt } from "./evidence-conventions.js";
+
 export type EvidencePlane = "rules" | "transition" | "search" | "human" | "theory" | "authored" | "record" | "derived";
 export type ProjectionRole = "predicate" | "reading" | "event" | "source_record";
 export type EvidenceGrounding = "position_rules" | "declared_convention" | "bounded_search" | "tablebase_exact" | "human_model" | "human_corpus" | "cited_theory" | "authored_claim" | "recorded_run";
@@ -493,6 +495,11 @@ export interface EvidenceValueReceipt {
   readonly payloadDigest: string;
   /** Declared-input payload digests (derived) or sealed receipt/document digests (source/authored). */
   readonly sourceDigests: readonly string[];
+  /**
+   * Value-level convention closure (rfc/semantic-convention-provenance.md §4), sealed atomically
+   * with the value by the sole mint. Absent only on test fixtures minted outside the factories.
+   */
+  readonly convention?: ConventionReceipt;
 }
 
 /** What the sole mint boundary supplies when it seals a factory-computed payload. */
@@ -500,6 +507,7 @@ export interface EvidenceMintAuthority {
   readonly factory: string;
   readonly inputDigest: string;
   readonly sourceDigests: readonly string[];
+  readonly convention?: ConventionReceipt;
 }
 
 const VALUE_RECEIPTS = new WeakMap<object, EvidenceValueReceipt>();
@@ -537,6 +545,7 @@ export function declareEvidence<T>(producer: VersionedEvidenceId, projection: Ve
     inputDigest: authority.inputDigest,
     payloadDigest: sealedPayloadDigest(value.payload),
     sourceDigests: [...authority.sourceDigests],
+    ...(authority.convention === undefined ? {} : { convention: authority.convention }),
   });
   DECLARED_VALUES.add(value);
   VALUE_RECEIPTS.set(value, receipt);
@@ -578,6 +587,11 @@ export function assertDeclaredEvidence(value: unknown): asserts value is Declare
   if (refKey(receipt.projection) !== refKey(declared.projection) || receipt.payloadDigest !== sealedPayloadDigest(declared.payload)) {
     fail("EVIDENCE_GENERIC_BYPASS", "evidence value receipt disagrees with its sealed projection or payload", ["declared-evidence:receipt-mismatch"]);
   }
+}
+
+/** Package-internal read of the value's sealed convention closure; `undefined` for a fixture value. */
+export function evidenceConventionReceipt(value: DeclaredEvidence<unknown>): ConventionReceipt | undefined {
+  return evidenceValueReceipt(value).convention;
 }
 
 /** Package-internal read of the value receipt; absent from the package barrel. */

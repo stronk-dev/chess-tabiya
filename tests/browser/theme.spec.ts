@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 
 import { expect, test, type Page } from "@playwright/test";
 
+import { chooseRawRung } from "./play-helpers.js";
+
 async function register(page: Page): Promise<void> {
   await page.goto("/play");
   if (await page.getByRole("button", { name: "Create an account" }).isVisible().catch(() => false)) {
@@ -28,6 +30,7 @@ function squarePoint(
 
 test("appearance axes apply live without replacing the board or its position", async ({ page }) => {
   await register(page);
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   const shell = page.locator(".board-shell").first();
   const board = shell.getByLabel("Chessboard");
@@ -166,6 +169,7 @@ test("system display preferences keep board semantics visible without colour alo
   await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
   await expect(page.locator("html")).toHaveAttribute("data-app-theme", "warm-dark");
 
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   const board = page.getByLabel("Chessboard");
   const box = await board.boundingBox();

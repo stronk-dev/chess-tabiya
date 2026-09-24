@@ -65,9 +65,71 @@ list.
    its request id, writer-lease digest and event sequence; its operation digest excludes timing,
    the resulting event head and itself.
 
-`packages/runtime/src/bot-opponent-ply.ts` holds the closed grammar of the future
-`POST /runs/:runId/opponent-ply`: the exact four-field request parser and the eight-row
-result/status/code/retry/action table.
+`packages/runtime/src/bot-opponent-ply.ts` holds the closed grammar of
+`POST /runs/:runId/opponent-ply`: the exact four-field request parser, the eight-row
+result/status/code/retry/action table, and `runEventHeadDigest`, the event-head CAS token server
+and browser both compute.
+
+## Playing a bot: run lane 0.18 and the opponent-ply operation
+
+**Persistence (run schema 0.18, migration 29).** `RunOpponentPolicy.profile` stores the exact
+catalogue reference in `run.started`; it is valid only with `human_common` and without
+`targetElo`/`temperature`/`topP`, is resolved as a whole catalogue member at create
+(`RunService.create`) and at every projection (`projectRun`), and is read byte-for-byte on resume.
+Rematch (`POST /runs/:id/duplicate`) and flip copy the same reference with a new seed. Every bot
+move's `opponent.move_selected` carries `OpponentSelection.policy = { decision, operation,
+deliveries }`: the sealed decision, the non-circular operation record, and the shared
+`tabiya.provider-delivery.v1` images it was compiled from. Migration 29 is stamp-only
+(`"0.17"`→`"0.18"`, frozen literals); historical runs gain nothing. The public projection shows
+the profile but never the envelope (it holds guard scores and provider bytes); the recorded
+`candidates` carry Maia's reconstructed mass, not the guard-masked distribution.
+
+**The operation** (`RunService.botOpponentPly`, `apps/server/src/bot-opponent-operation.ts`,
+`apps/server/src/bot-opponent-source.ts`). The browser sends exactly `{ requestId,
+expectedNodeId, expectedBranchId, expectedEventHeadDigest }`. The server then:
+
+1. checks the writer lease and looks the request id up in the run's own event log **before any
+   provider call** — a match with the same pre-provider operand digest (root, writer lease,
+   profile digest, branch seed, all recomputed from the run) returns the stored reply after the
+   durable parse; a different digest returns `request_reused_with_different_operands`;
+2. refuses a moved root (`stale_root`) — cursor node and branch plus the event-head token;
+3. seals the root, legal map and `pawn_move@1` view from the run's own path, and asks the ONE
+   shared `ProviderExchangeScheduler` for `maia.policy_page@1` and, for guarded families,
+   `stockfish.legal_root_table@1` under the guard's 500 ms opportunity deadline — with no
+   transaction open and no bot-private fetch, queue or cache;
+4. compiles the decision; a Maia failure returns `base_provider_unavailable`/`provider_failed` and
+   writes nothing;
+5. re-reads the run: an existing winner for the request id with equal pre-provider and commit
+   operand digests is `replayed_concurrent_winner`, different delivered bytes are
+   `concurrent_commit_conflict`; only then the root CAS (`stale_root`);
+6. appends move + decision + operation + deliveries in one `opponent.move_selected`.
+
+`parseStoredBotEnvelope` is the one durable parser: deliveries re-enter through
+`parsePersistedProviderDelivery`, the decision is recompiled from the run's root, the run's
+catalogue profile and those deliveries, and the whole stored decision and operation must be equal
+([[D3027]]). A tampered mass, move or delivery byte fails as `STORAGE_FAILURE`. `/moves` refuses
+caller selection bytes on a profile run, and branch groups are refused on profile runs until their
+wrapper calls the same core.
+
+**Availability** (`BotProviderAvailability`). Each operation's state is `unverified` until the
+exchange returns a delivery (`available`) or `provider_unavailable`/`identity_mismatch`
+(`unavailable`); transient outcomes change nothing. A startup probe makes one ordinary shared
+request per operation from the start position; every bot move updates it too. The §4.3 join
+(`botProfileStartability`): baseline needs only Maia; guarded and pawn-forward need Stockfish too
+and stay `conditional` (`guard_release_receipt_absent`) because provider health's release receipt
+does not exist yet. An `unavailable` profile cannot be created. There is no configuration input.
+The production Maia sidecar exposes no container identity to the exchange, so in `ENGINE_MODE=maia`
+Maia deliveries — and therefore every bot — are honestly unavailable until it does. Mock-engine
+deployments serve a labelled "Mock Maia" through the same exchange.
+
+**Play.** `apps/web/src/lib/JustPlayStarter.svelte` shows the roster as three family sections of
+four band cards from `/capabilities` (title, one compiled mechanism sentence, `Uncalibrated`,
+availability copy) with the full grounded card for the selection; raw Maia rungs and the engine
+test sit under **Advanced**. Nothing is preselected (the first-use default is the owner's D1611
+decision) and no display name is invented (D1610). A profile run shows "Bot · <family> · model band
+<band>" in the status bar, a degraded/abstained note when the last reply's guard stood aside, "Ask
+the bot again" after a failure (reusing the idempotency key for the same root), and "Play this bot
+again" (rematch).
 
 ## Cards and `/capabilities`
 
@@ -84,9 +146,10 @@ no measured behaviour beyond the first 20 plies. No calibration receipt exists, 
 `humanLikeLabelAllowed` needs all three favourable.
 
 `/capabilities` advertises the roster as `policyProfiles.human_common.profiles`: each row's exact
-reference, behaviour digest, card and `startable`. The web parser
+reference, behaviour digest, card and `startable` (`available` | `conditional` with closed
+conditions | `unavailable` with closed blockers). The web parser
 (`apps/web/src/lib/capability-response.ts`) requires the rows to be set-equal to the runtime
-catalogue and uses the runtime's closed card/source/blocker vocabularies. `/capabilities` also
+catalogue and uses the runtime's closed card/source/availability vocabularies. `/capabilities` also
 carries the two refused dispositions: multi-band runtime Maia queries (D817) and artificial move
 delay (D820).
 
@@ -101,18 +164,15 @@ the compiler's `features` rows are empty until a Stage-B trait passes its own me
 
 ## What is not wired yet
 
-Every roster row is `not_startable`, blocked by `run-schema-0.18`, `provider-exchange` and
-`provider-health`, and the Play picker still offers the raw Maia rungs:
+- Provider health (`rfc/provider-health-degradation.md`) is a draft: availability is the
+  exchange-observed snapshot above, and guarded families stay `conditional` without a release
+  receipt. The A11 shared-route latency benchmark and calibration receipts do not exist, so every
+  card is `uncalibrated`.
+- Branch groups, simulations and live matches do not play profile replies.
+- The `bot-profile-catalog` shared-resource register row waits on absent-source admission
+  ([[D3082]]); Stage B trait consumption, owner names/art (D1610) and the first-use default (D1611)
+  remain open.
 
-- the run's exact profile reference (`RunOpponentPolicy.profile`) and the decision/operation
-  envelope (`OpponentSelection.policy`) persist under run lane 0.18, whose stamp-only migration is
-  registered behind `concept-registry` (itself behind `evidence-job-durability` and
-  `longitudinal-store`);
-- the Maia page and Stockfish root table must arrive as shared provider deliveries
-  (`rfc/provider-exchange-and-execution.md`), not a bot-private acquisition;
-- profile availability joins provider health's snapshot and release receipt
-  (`rfc/provider-health-degradation.md`).
-
-Until then the route is not mounted, and the legacy `BOT_POLICY_PROFILES` behind public
-`/select-move` stays empty so no profile can be played through the browser-authoritative path.
-The old caller-fed `composeBotPolicySelection` (bare guard losses and trait strings) is deleted.
+The legacy `BOT_POLICY_PROFILES` behind public `/select-move` stays empty, so no profile can be
+played through the browser-authoritative path. The old caller-fed `composeBotPolicySelection`
+(bare guard losses and trait strings) is deleted.
