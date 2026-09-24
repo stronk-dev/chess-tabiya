@@ -627,7 +627,9 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
   // A16: post-commit output is bound to the durable feedback-delivery boundary. Pre-/at-commit
   // requests are explicit Support/sight gestures over local rules readings (the shipped sight
   // caption is not delivery-gated either); checkpoint/review surfaces are explicit entries.
-  if (request.timing === "post_commit" && !feedbackDeliveryOpen(run)) throw new ModuleQueryError("MODULE_QUERY_WITHHELD", "post-commit module output is withheld until this run opens feedback");
+  // Post-commit, checkpoint and review deliveries read recorded evidence and are bound to the durable
+  // disclosure boundary (A16): withheld until the run opens feedback (an outcome opens it too).
+  if (request.timing !== "pre_commit" && request.timing !== "at_commit" && !feedbackDeliveryOpen(run)) throw new ModuleQueryError("MODULE_QUERY_WITHHELD", `${request.timing} module output is withheld until this run opens feedback`);
   const timing: ModuleTiming = request.timing;
   const requested = new Set<ModuleId>("requested" in request ? request.requested : []);
   const packets: ModuleQueryPacket[] = [];

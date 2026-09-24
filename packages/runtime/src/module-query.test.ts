@@ -12,7 +12,7 @@ import {
   type FinalizedAssistanceV1,
 } from "./assistance-exchange.js";
 import { canonicalRunStart } from "./session.js";
-import { commitMove, createRun, fork, rewind } from "./runtime.js";
+import { commitMove, createRun, fork, revealFeedback, rewind } from "./runtime.js";
 import {
   ModuleQueryError,
   fitModulePresentation,
@@ -177,6 +177,24 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     const sentences = assertDelivered(coach, assistance);
     expect(sentences.length).toBeGreaterThan(0);
     expect(coach.budget.after.facts).toBeLessThanOrEqual(2);
+  });
+});
+
+describe("Analyze: the Full Inspector surface (explicit mode, family-partitioned)", () => {
+  it("presents the node's sealed census and states every family, withheld until feedback opens", () => {
+    const assistance = finalized("position", "analysis");
+    const closed = positionRun(ITALIAN, ["e1g1"]);
+    expect(() => queryModules({ run: closed, assistance, role: "learner", session: "position", request: { timing: "review", nodeId: closed.activeCursor.nodeId, requested: ["full_inspector"] } })).toThrow(/MODULE_QUERY_WITHHELD/u);
+    const run = revealFeedback(closed, at).run;
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } });
+    const inspector = packetOf(page, "full_inspector")!;
+    const sentences = assertDelivered(inspector, assistance);
+    expect(sentences.length).toBeGreaterThan(0);
+    expect(inspector.budget.after.facts).toBeLessThanOrEqual(20);
+    expect(inspector.empty?.kind).toBe("family_partitioned");
+    const families = inspector.empty?.kind === "family_partitioned" ? inspector.empty.families : [];
+    expect(families.map((family) => family.family)).toEqual(["local_rules", "authored_theory", "recorded_run", "stockfish", "syzygy", "maia", "explorer", "derived"]);
+    expect(families.find((family) => family.family === "local_rules")?.kind).toBe("available");
   });
 });
 

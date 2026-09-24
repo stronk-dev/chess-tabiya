@@ -28,6 +28,7 @@
   import { renderCorpusPage } from "./corpus-sentences.js";
   import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
   import ModuleSeats from "./ModuleSeats.svelte";
+  import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
   import { composedSeats, effectActive, toggleExpanded, type PlaySeatModule, type StagedCue } from "./module-seats.js";
   import { boardPaint } from "./evidence/presented-view.js";
@@ -967,6 +968,40 @@
   function toggleSeat(module: PlaySeatModule): void {
     seatExpanded = toggleExpanded(seatExpanded, module);
     seatFocusSquares = undefined;
+  }
+
+  // module-registration §4.11 + §5.2: Full Inspector is an explicit surface. Opening the Inspector
+  // under a style that composed it is the explicit request; its families state their own states.
+  let fullInspectorActive = $derived(onModuleQuery !== undefined && effectActive(compiledAssistance, "full_inspector", "review"));
+  let fullInspector: ParsedModulePacket | undefined = $state.raw();
+  let fullInspectorState: "idle" | "pending" | "failed" = $state("idle");
+  let fullInspectorRequest = 0;
+  $effect(() => {
+    const open = inspectorOpen;
+    const active = fullInspectorActive;
+    const node = displayedNode.id;
+    untrack(() => {
+      if (!open || !active || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) { fullInspector = undefined; fullInspectorState = "idle"; return; }
+      const request = ++fullInspectorRequest;
+      const finalDigest = compiledAssistance.finalDigest;
+      fullInspectorState = "pending";
+      void onModuleQuery({ assistance: requestedAssistance, query: { timing: "review", nodeId: node, requested: ["full_inspector"] } })
+        .then((value) => {
+          if (request !== fullInspectorRequest) return;
+          const page = parseModuleQueryPage(value, { runId: run.id, subjectNodeId: node, finalDigest });
+          fullInspector = page.packets.find((packet) => packet.module === "full_inspector");
+          fullInspectorState = "idle";
+        })
+        .catch(() => { if (request === fullInspectorRequest) { fullInspector = undefined; fullInspectorState = "failed"; } });
+    });
+  });
+  const INSPECTOR_FAMILY_LABELS: Readonly<Record<string, string>> = Object.freeze({ local_rules: "Local rules", authored_theory: "Authored theory", recorded_run: "Recorded game", stockfish: "Stockfish", syzygy: "Tablebase", maia: "Human-move model", explorer: "Game corpus", derived: "Derived readings" });
+  function familyLine(state: { readonly family: string; readonly kind: string; readonly factCount?: number }): string {
+    const label = INSPECTOR_FAMILY_LABELS[state.family] ?? "Other";
+    if (state.kind === "available") return `${label}: ${state.factCount} ${state.factCount === 1 ? "fact" : "facts"}`;
+    if (state.kind === "no_witness") return `${label}: nothing recorded here`;
+    if (state.kind === "unavailable") return `${label}: unavailable`;
+    return `${label}: not requested here`;
   }
 
   // §4.5: board paint is the expanded seat's own facts (or the held cue's); collapsing removes it.
@@ -2462,6 +2497,17 @@
             {/each}
           </fieldset>
         </section>
+        {#if fullInspectorActive}
+          <section class="full-inspector" aria-label="Evidence inspector: full inspector" data-module="full_inspector">
+            <h3>Everything recorded here, attributed</h3>
+            {#if fullInspectorState === "pending"}<p role="status">Collecting the recorded evidence…</p>
+            {:else if fullInspectorState === "failed"}<p role="alert">The full inspector could not be loaded.</p>
+            {:else if fullInspector !== undefined}
+              {#if fullInspector.empty?.kind === "family_partitioned"}<ul class="inspector-families">{#each fullInspector.empty.families as state (state.family)}<li data-family-state={state.kind}>{familyLine(state)}</li>{/each}</ul>{/if}
+              <PresentedEvidence items={fullInspector.items} />
+            {/if}
+          </section>
+        {/if}
         <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
           <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Position structure</button>
           {#if structuralOpen}<div class="structural-facts">{#if assistance.guided === "live" && firings.length === 0}<p>No named structure entry matches this line.</p>{/if}{#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}{#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}</div>{/if}
