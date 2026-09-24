@@ -1,0 +1,36 @@
+# rfc/safe-deployment-profiles.md §4 — appliance edge: one exact LAN hostname, Caddy internal CA.
+# Clients must trust the exported root (make appliance-ca-export); "Not private" is a failed setup.
+{
+	admin off
+	servers {
+		timeouts {
+			read_header 10s
+			read_body 30s
+			idle 5m
+		}
+	}
+}
+
+{$TABIYA_PUBLIC_HOSTNAME} {
+	tls internal
+
+	# Outer guard; the application's own bounds remain authoritative.
+	request_body {
+		max_size 8MB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+
+	# Caddy passes the original Host and overwrites X-Forwarded-For/Proto/Host from an untrusted
+	# client; a client-supplied RFC 7239 Forwarded header is stripped.
+	reverse_proxy tabiya-proxy-origin:3000 {
+		header_up -Forwarded
+		health_uri /readyz
+		health_interval 10s
+	}
+}

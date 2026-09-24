@@ -93,16 +93,23 @@ revocable. Every invalid-token state deliberately looks like the same 404.
   administration UI. A forgotten password has no in-application recovery path.
 - Rate limiting is per handle only; a hosted reverse proxy should add broader
   abuse controls.
-- The application server speaks plain HTTP. Production must terminate TLS in
-  front of it; secure cookies are the default. Local HTTP development must set
-  `TABIYA_COOKIE_SECURE=false`.
+- The application server speaks plain HTTP. The deployment profile decides the session
+  cookie ([deployment profiles](deployment.md)): `local` (loopback HTTP) issues
+  `tabiya_session` without `Secure`; `appliance` and `hosted` terminate TLS in the bundled
+  Caddy edge and issue a host-only `__Host-tabiya_session` with `Secure`. Outside
+  development a profile is required, so no packaged default silently issues an insecure
+  cookie. `TABIYA_COOKIE_SECURE` is no longer a setting; a value contradicting the profile
+  refuses startup.
 - Cross-origin client/API deployment is unsupported; the shipped client and API
   are same-origin.
 - Run events still identify chess actors only as user/opponent/system. A live session's
   possession journal derives the learner responsible for ordinary committed plies;
   Arena imports use their leg attribution instead.
-- Account export is not an account-import format. It is a portable, intelligible copy
-  of account data. Object-specific PGN and draft interchange remain separate.
+- Account export is a portable, intelligible copy of account data, and since 2026-09-24 it
+  is also an account-import format for the learner's *private* record
+  (`docs/account-data-lifecycle.md` §Import). Importing never grants access to, or
+  recreates, anything involving another learner. Object-specific PGN and draft
+  interchange remain separate.
 - Live rows are removed immediately. Existing operator backups may retain an older
   copy until the deployment's backup policy expires; account deletion cannot rewrite
   a backup already made.

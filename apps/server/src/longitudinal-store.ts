@@ -212,7 +212,7 @@ export const LONGITUDINAL_INDEXES = Object.freeze([
 ] as const);
 
 /**
- * The normative eleven-row source-mutation authority (§C). Every `SQLiteRunStorage` method named here
+ * The normative source-mutation authority (§C; eleven rows, plus account import's restore). Every `SQLiteRunStorage` method named here
  * calls `this.#upsertLongitudinalWatermark({ symbol, effect }, …)` inside its own literal
  * `BEGIN IMMEDIATE … COMMIT`; longitudinal-store.test.ts compiles the call sites from the TypeScript
  * AST and compares them bidirectionally with this list.
@@ -223,6 +223,8 @@ export const LONGITUDINAL_SOURCE_MUTATION_OPERATIONS = Object.freeze([
   Object.freeze({ symbol: "SQLiteRunStorage#createImportedRun", effect: "always" }),
   Object.freeze({ symbol: "SQLiteRunStorage#createDerivedRun", effect: "always" }),
   Object.freeze({ symbol: "SQLiteRunStorage#createRepertoireGapRun", effect: "always" }),
+  // Account import restores owned runs; their projections are re-derived, never copied from a file.
+  Object.freeze({ symbol: "SQLiteRunStorage#restoreAccountBundle", effect: "always" }),
   Object.freeze({ symbol: "SQLiteRunStorage#save", effect: "conditional" }),
   Object.freeze({ symbol: "SQLiteRunStorage#saveArenaImport", effect: "conditional" }),
   Object.freeze({ symbol: "SQLiteRunStorage#createLiveSession", effect: "conditional" }),
@@ -232,9 +234,10 @@ export const LONGITUDINAL_SOURCE_MUTATION_OPERATIONS = Object.freeze([
 ] as const);
 export type LongitudinalMutationDescriptor = (typeof LONGITUDINAL_SOURCE_MUTATION_OPERATIONS)[number];
 
-/** The seven run-snapshot writers ([[D1616]]). */
+/** The run-snapshot writers ([[D1616]]'s seven, plus account import's restore). */
 export const LONGITUDINAL_RUN_WRITE_OPERATIONS = Object.freeze([
   "create", "createRatedRun", "createImportedRun", "createDerivedRun", "createRepertoireGapRun", "save", "saveArenaImport",
+  "restoreAccountBundle",
 ] as const);
 
 export interface LongitudinalClaim {

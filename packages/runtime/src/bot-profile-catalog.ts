@@ -401,7 +401,7 @@ export type BotCardSourceId = (typeof BOT_CARD_SOURCE_IDS)[number];
  */
 export const BOT_AVAILABILITY_CONDITIONS = Object.freeze(["maia_unverified", "stockfish_unverified", "guard_release_receipt_absent"] as const);
 export type BotAvailabilityCondition = (typeof BOT_AVAILABILITY_CONDITIONS)[number];
-export const BOT_AVAILABILITY_BLOCKERS = Object.freeze(["maia_unavailable", "stockfish_unavailable"] as const);
+export const BOT_AVAILABILITY_BLOCKERS = Object.freeze(["maia_unavailable", "stockfish_unavailable", "guard_release_receipt_invalid"] as const);
 export type BotAvailabilityBlocker = (typeof BOT_AVAILABILITY_BLOCKERS)[number];
 
 export type BotProfileStartability =
@@ -416,6 +416,11 @@ export interface BotProviderAvailabilitySnapshot {
   readonly revision: number;
   readonly maia: BotProviderOperationState;
   readonly stockfish: BotProviderOperationState;
+  /**
+   * The provider-health release receipt the guarded families need (rfc/bot-policy.md §4.3): a
+   * missing receipt is conditional; a forged, cross-registry or stale one is unavailable.
+   */
+  readonly guardReleaseReceipt?: "valid" | "absent" | "invalid";
 }
 
 /**
@@ -427,11 +432,12 @@ export function botProfileStartability(entry: BotProfileCatalogEntry, snapshot: 
   const blockedBy: BotAvailabilityBlocker[] = [];
   if (snapshot.maia === "unavailable") blockedBy.push("maia_unavailable");
   if (guarded && snapshot.stockfish === "unavailable") blockedBy.push("stockfish_unavailable");
+  if (guarded && snapshot.guardReleaseReceipt === "invalid") blockedBy.push("guard_release_receipt_invalid");
   if (blockedBy.length > 0) return Object.freeze({ kind: "unavailable", blockedBy: Object.freeze(blockedBy) });
   const conditions: BotAvailabilityCondition[] = [];
   if (snapshot.maia === "unverified") conditions.push("maia_unverified");
   if (guarded && snapshot.stockfish === "unverified") conditions.push("stockfish_unverified");
-  if (guarded) conditions.push("guard_release_receipt_absent");
+  if (guarded && snapshot.guardReleaseReceipt !== "valid") conditions.push("guard_release_receipt_absent");
   return conditions.length === 0 ? Object.freeze({ kind: "available" }) : Object.freeze({ kind: "conditional", conditions: Object.freeze(conditions) });
 }
 

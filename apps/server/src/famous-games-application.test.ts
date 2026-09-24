@@ -83,6 +83,6 @@ describe("famous games through the production application", { timeout: 20_000 },
     expect(capabilities.status, capabilities.text).toBe(200);
     expect(capabilities.body).not.toHaveProperty("capabilityDispositions");
     expect(capabilities.text).not.toMatch(/masters|topGames/);
-    expect(capabilities.body).toMatchObject({ providers: { opponent: "mock" } });
+    expect(capabilities.body).toMatchObject({ providerHealth: { providers: expect.arrayContaining([expect.objectContaining({ instanceId: "maia-inference", implementation: "local_fixture" })]) } });
   });
 });

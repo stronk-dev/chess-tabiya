@@ -118,9 +118,17 @@ export async function binaryArtifactProbe(spec: EngineSpec): Promise<EngineArtif
   return null;
 }
 
+/** Supervisor lifecycle, delivered to the provider-health registry (rfc/provider-health-degradation.md §2). */
+export type EngineLifecycle =
+  | { readonly engineId: string; readonly kind: "starting" }
+  | { readonly engineId: string; readonly kind: "ready" }
+  | { readonly engineId: string; readonly kind: "failed"; readonly reason: "startup" | "process_exit" | "cancelled_by_shutdown" };
+
 export interface EngineSupervisorOptions {
   /** Capture launched-artifact identity per generation (required for provider exchanges). */
   readonly artifactProbe?: EngineArtifactProbe;
+  /** Receives every spawn, completed handshake and failure; it must not throw. */
+  readonly onLifecycle?: (event: EngineLifecycle) => void;
 }
 
 /** One provider exchange: commands, the terminating predicate and the literal `finally` reset. */
@@ -293,12 +301,14 @@ class ManagedUciEngine {
   #lastError: string | undefined;
   #closing = false;
   readonly #artifactProbe: EngineArtifactProbe | undefined;
+  readonly #onLifecycle: ((event: EngineLifecycle) => void) | undefined;
   #generation = 0;
   #artifact: EngineArtifactCapture | null = null;
   #optionImage: EngineOptionImage | undefined;
 
-  constructor(spec: EngineSpec, artifactProbe?: EngineArtifactProbe) {
+  constructor(spec: EngineSpec, artifactProbe?: EngineArtifactProbe, onLifecycle?: (event: EngineLifecycle) => void) {
     this.#artifactProbe = artifactProbe;
+    this.#onLifecycle = onLifecycle;
     const backoff = spec.restartBackoff ?? DEFAULT_BACKOFF;
     positiveDuration(backoff.initialMs, "Restart initial delay");
     positiveDuration(backoff.maximumMs, "Restart maximum delay");
@@ -339,6 +349,14 @@ class ManagedUciEngine {
     return this.#transcript.snapshot();
   }
 
+  #emit(event: EngineLifecycle): void {
+    try {
+      this.#onLifecycle?.(event);
+    } catch {
+      // Health bookkeeping never changes supervision.
+    }
+  }
+
   async start(): Promise<EngineIdentity> {
     if (this.#status === "ready" && this.#identity !== undefined) return this.#identity;
     if (this.#startPromise !== undefined) return this.#startPromise;
@@ -353,6 +371,7 @@ class ManagedUciEngine {
     this.#clearRestartTimer();
     this.#status = "starting";
     this.#optionImage = undefined;
+    this.#emit({ engineId: this.#spec.id, kind: "starting" });
     // The launched artifact is captured immediately before this generation's spawn.
     this.#artifact = this.#artifactProbe === undefined ? null : await this.#artifactProbe(this.#spec).catch(() => null);
     this.#transcript.push(
@@ -418,10 +437,12 @@ class ManagedUciEngine {
       this.#restartAttempt = 0;
       this.#lastError = undefined;
       this.#transcript.push("lifecycle", "ready");
+      this.#emit({ engineId: this.#spec.id, kind: "ready" });
       return this.#identity;
     } catch (error) {
       this.#lastError = error instanceof Error ? error.message : String(error);
       this.#status = "unavailable";
+      this.#emit({ engineId: this.#spec.id, kind: "failed", reason: this.#closing ? "cancelled_by_shutdown" : "startup" });
       child.kill();
       this.#scheduleRestart();
       if (error instanceof Error && "code" in error) throw error;
@@ -494,6 +515,11 @@ class ManagedUciEngine {
   }
 
   /** The established generation, or null while no generation is ready. */
+  /** The launched-artifact capture of the established generation, or null. */
+  artifact(): EngineArtifactCapture | null {
+    return this.establishedGeneration() === null ? null : this.#artifact;
+  }
+
   establishedGeneration(): number | null {
     return this.#status === "ready" && this.#generation > 0 ? this.#generation : null;
   }
@@ -670,6 +696,7 @@ class ManagedUciEngine {
     this.#transcript.push("lifecycle", error.message);
     this.#disposeProcess(child);
     this.#rejectWaiters(engineUnavailable(this.#spec.id, this.#nextBackoffMs(), error));
+    this.#emit({ engineId: this.#spec.id, kind: "failed", reason: this.#closing ? "cancelled_by_shutdown" : "process_exit" });
     if (this.#closing) return;
     this.#status = "unavailable";
     this.#scheduleRestart();
@@ -740,7 +767,7 @@ export class EngineSupervisor {
     const engines = new Map<string, ManagedUciEngine>();
     for (const spec of specs) {
       if (engines.has(spec.id)) throw new TypeError(`Duplicate engine id: ${spec.id}`);
-      engines.set(spec.id, new ManagedUciEngine(spec, options.artifactProbe));
+      engines.set(spec.id, new ManagedUciEngine(spec, options.artifactProbe, options.onLifecycle));
     }
     this.#engines = engines;
   }
@@ -759,6 +786,10 @@ export class EngineSupervisor {
 
   exchange(engineId: string, request: EngineExchangeRequest): Promise<EngineExchangeCapture> {
     return this.#engine(engineId).exchange(request);
+  }
+
+  artifact(engineId: string): EngineArtifactCapture | null {
+    return this.#engine(engineId).artifact();
   }
 
   establishedGeneration(engineId: string): number | null {

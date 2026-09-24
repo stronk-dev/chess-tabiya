@@ -28,14 +28,18 @@ import {
   type EngineRequest,
   type EngineSpec,
 } from "./engine-supervisor.js";
-import { maiaNetworkSpec } from "./maia.js";
+import { MAIA3_MODEL_ID, maiaContainerProbe, maiaNetworkSpec } from "./maia.js";
+import { ProviderRegistry, type ProviderHealthLogEvent, type ProviderInstanceConfiguration } from "./provider-health.js";
+import { healthReportedCorpus, healthReportedReasoningReview, healthReportedTablebase, healthReportedTts, healthReportedVoice } from "./provider-health-adapters.js";
+import { ExternalHttpVoiceProvider } from "./external-voice.js";
+import { ExternalHttpTtsProvider } from "./external-tts.js";
 import {
   OpponentSelector,
   type SelectorEngineClient,
 } from "./opponent-selector.js";
 import { PackRegistry } from "./pack-registry.js";
 import { validatePackDocument } from "./pack-validation.js";
-import { runtimeSupportedCapabilities } from "./capability/pack-capabilities.js";
+import { runtimeSupportedCapabilities, type DeploymentProviders } from "./capability/pack-capabilities.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -43,6 +47,7 @@ import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-e
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { PackStudio } from "./pack-studio.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
+import { deploymentRefusal, type DeploymentBoundary } from "./config.js";
 import {
   LONGITUDINAL_WORKER_DEFAULTS,
   fileBackedDatabaseIdentity,
@@ -125,6 +130,50 @@ export interface ApplicationOptions {
   readonly longitudinalWorkerEntry?: URL;
   /** rfc/skills.md §2.5 valence register; defaults to `content/valence/register.json`. */
   readonly valenceRegisterPath?: string;
+  /** Structured provider-health transition log (rfc/provider-health-degradation.md §11). */
+  readonly providerHealthLog?: (event: ProviderHealthLogEvent) => void;
+  /**
+   * rfc/storage-backup-recovery.md §6: production opens only an absent/empty or exactly current
+   * database; `prepare-start` has already performed any upgrade under the storage lock.
+   */
+  readonly requirePreparedStorage?: boolean;
+  /**
+   * rfc/safe-deployment-profiles.md: the compiled transport boundary. When present it owns the
+   * session cookie security/name and refuses wrong Host, proxy headers and cross-origin writes
+   * before any routing.
+   */
+  readonly deployment?: DeploymentBoundary;
+}
+
+/**
+ * The production migration authority for `storage-admin` (rfc/storage-backup-recovery.md §6): the
+ * same compiled concept registry, shapes, principles and built-in pack artifacts the HTTP startup
+ * would use, so a staged upgrade runs the exact chain — including the concept phase — the server
+ * would. Returns a migrator that migrates one staged file to the current version and closes it.
+ */
+export async function createStorageMigrator(options: Pick<ApplicationOptions, "development" | "draftPackFile" | "draftPackFiles"> = {}): Promise<(path: string) => void> {
+  const concepts = installedConceptRegistry();
+  const shapes = await ShapeRegistry.loadDefault();
+  const principles = await PrincipleRegistry.loadDefault();
+  const registry = await PackRegistry.loadDefault({
+    development: options.development === true,
+    shapes,
+    principles,
+    concepts,
+    ...(options.draftPackFile === undefined ? {} : { draftFile: options.draftPackFile }),
+    ...(options.draftPackFiles === undefined ? {} : { draftFiles: options.draftPackFiles }),
+  });
+  const authority = Object.freeze({
+    registry: concepts,
+    builtInArtifacts: registry.artifactInventory(),
+    validateStoredPack: (document: unknown) => validatePackDocument(document, { shapes, principles, concepts, packs: Object.freeze({ get: (id: string) => registry.get(id)?.document }) }),
+  });
+  return (path: string) => {
+    new SQLiteRunStorage(path, {
+      concepts: authority,
+      onMigration: (entry) => console.error(`storage migration ${entry.version}: ${entry.name}`),
+    }).close();
+  };
 }
 
 /**
@@ -175,6 +224,12 @@ export interface ChessTabiyaApplication {
    * over the five operations. Process-local operator/research door only; no HTTP route.
    */
   readonly providers: ProviderTraversalApplication;
+  /**
+   * The one live provider-health authority (rfc/provider-health-degradation.md): snapshot,
+   * operation availability, admission/settlement and release receipts. Bot policy's roster
+   * availability consumes it through `BotProviderAvailability`.
+   */
+  readonly providerHealth: ProviderRegistry;
   readonly startupReceipt: ApplicationStartupReceipt;
   readonly longitudinal: ApplicationLongitudinal;
   close(): Promise<void>;
@@ -391,6 +446,10 @@ export const DEFAULT_DATABASE_PATH = (): string => resolve(process.cwd(), "data"
  * startup reconciles longitudinal jobs and awaits the worker's ready message before returning, so
  * `main.ts` listens only after the semantic executor is live.
  */
+function unready(): Response {
+  return new Response(`{"status":"unready"}`, { status: 503, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
+}
+
 export async function createApplication(
   options: ApplicationOptions = {},
 ): Promise<ChessTabiyaApplication> {
@@ -421,21 +480,9 @@ export async function composeApplication(
   const concepts = installedConceptRegistry();
   const shapes = await ShapeRegistry.loadDefault();
   const principles = await PrincipleRegistry.loadDefault();
-  const sources = providerSources(options);
   // rfc/pack-capability-contract.md §4.2/§5.1: the configured capability identities of this
   // deployment. A provider the operator did not configure makes its capabilities `unsupported`.
-  const capabilitySupport = runtimeSupportedCapabilities({
-    providers: Object.freeze({
-      opponent: true,
-      analysis: true,
-      corpus: sources.corpusSource !== undefined,
-      tablebase: sources.tablebaseSource !== undefined,
-      voice: options.voiceProvider !== undefined,
-      tts: options.ttsProvider !== undefined,
-    }),
-    shapes: shapes.list(),
-    principles: principles.list(),
-  });
+  const capabilitySupport = runtimeSupportedCapabilities({ providers: configuredPackProviders(options), shapes: shapes.list(), principles: principles.list() });
   const registry = await PackRegistry.loadDefault({
     development: options.development === true,
     shapes,
@@ -449,7 +496,11 @@ export async function composeApplication(
       ? {}
       : { draftFiles: options.draftPackFiles }),
   });
+  if (options.deployment !== undefined && options.cookieSecure !== undefined && options.cookieSecure !== options.deployment.secureCookie) {
+    throw new TypeError("PROFILE_HYBRID_REFUSED: cookieSecure contradicts the deployment profile");
+  }
   const storage = new SQLiteRunStorage(databasePath, {
+    ...(options.requirePreparedStorage === true ? { requirePreparedStorage: true } : {}),
     concepts: Object.freeze({
       registry: concepts,
       builtInArtifacts: registry.artifactInventory(),
@@ -457,7 +508,7 @@ export async function composeApplication(
     }),
   });
   try {
-    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig, sources });
+    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig });
   } catch (error) {
     // Nothing composed after the coordinator may leave the database open ([[D2965]]).
     try { storage.close(); } catch { /* preserve the primary failure */ }
@@ -465,18 +516,18 @@ export async function composeApplication(
   }
 }
 
-/** The corpus and tablebase sources this deployment is configured with (constructed once at boot). */
-function providerSources(options: ApplicationOptions): { readonly corpusSource: CorpusSource | undefined; readonly tablebaseSource: TablebaseSource | undefined } {
+/**
+ * Which provider families this deployment configures, by the same rules composeServices uses to
+ * register provider instances (configuration answers "exists"; health answers "reachable").
+ */
+function configuredPackProviders(options: ApplicationOptions): DeploymentProviders {
   const engineMode = options.engineMode ?? "mock";
-  const corpusSource = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : options.corpusToken === undefined ? undefined : new LichessCorpusSource({ token: options.corpusToken }));
-  const candidateTablebaseSource = options.tablebaseSource === null
-    ? undefined
-    : options.tablebaseSource ?? (engineMode === "mock" ? new FixtureTablebaseSource() : new LichessTablebaseSource());
-  const tablebaseSource = candidateTablebaseSource instanceof FixtureTablebaseSource
-    && !candidateTablebaseSource.configured
-    ? undefined
-    : candidateTablebaseSource;
-  return Object.freeze({ corpusSource, tablebaseSource });
+  const suppliedTablebase = options.tablebaseSource === null ? undefined : options.tablebaseSource;
+  const builtInTablebase = options.tablebaseSource === undefined && engineMode === "maia";
+  const fixtureTablebase = suppliedTablebase ?? (options.tablebaseSource === undefined && engineMode === "mock" ? new FixtureTablebaseSource() : undefined);
+  const tablebase = builtInTablebase || (fixtureTablebase !== undefined && !(fixtureTablebase instanceof FixtureTablebaseSource && !fixtureTablebase.configured));
+  const corpus = (options.corpusSource === undefined && engineMode === "maia" && options.corpusToken !== undefined) || options.corpusSource !== undefined || engineMode === "mock";
+  return Object.freeze({ opponent: true, analysis: true, corpus, tablebase, voice: options.voiceProvider !== undefined || options.reasoningReviewProvider !== undefined, tts: options.ttsProvider !== undefined });
 }
 
 async function composeServices(
@@ -488,10 +539,9 @@ async function composeServices(
     readonly principles: PrincipleRegistry;
     readonly registry: PackRegistry;
     readonly workerConfig: ReturnType<typeof validateLongitudinalWorkerConfig>;
-    readonly sources: ReturnType<typeof providerSources>;
   },
 ): Promise<ChessTabiyaApplication> {
-  const { storage, shapes, principles, registry, workerConfig, sources } = authorities;
+  const { storage, shapes, principles, registry, workerConfig } = authorities;
   const shapeStudio = new ShapeStudio(storage, shapes, () => registry.list().map((summary) => ({
     document: registry.required(summary.id).document,
     title: summary.title,
@@ -504,35 +554,103 @@ async function composeServices(
   let selector: OpponentSelector;
   let capabilities: EngineCapabilities;
   let evidenceExecutor: EvidenceExecutor;
-  const { corpusSource, tablebaseSource } = sources;
+  // rfc/provider-health-degradation.md §1: configuration answers only "exists, with which
+  // implementation". Built-in Lichess clients integrate health themselves; anything supplied from
+  // outside (fixtures, test doubles) is labelled `local_fixture` and wrapped by an adapter.
+  const configured: ProviderInstanceConfiguration[] = [];
+  const stockfishCommand = options.stockfishCommand ?? "stockfish";
+  const maiaHost = options.maiaHost ?? "maia";
+  const maiaPort = options.maiaPort ?? 7000;
+  if (engineMode === "maia") {
+    configured.push(
+      { instanceId: "stockfish-play", implementation: "uci_sidecar", endpoint: stockfishCommand, identity: "stockfish-play", options: { ...stockfishPlaySpec({ command: stockfishCommand }).options } },
+      { instanceId: "stockfish-analysis", implementation: "uci_sidecar", endpoint: stockfishCommand, identity: "stockfish-analysis", options: { ...stockfishAnalysisSpec(stockfishCommand).options } },
+      { instanceId: "maia-inference", implementation: "uci_sidecar", endpoint: `${maiaHost}:${maiaPort}`, identity: MAIA3_MODEL_ID },
+    );
+  } else {
+    configured.push(
+      { instanceId: "stockfish-play", implementation: "local_fixture", endpoint: "mock-opponent", identity: "deterministic mock opponent" },
+      { instanceId: "stockfish-analysis", implementation: "local_fixture", endpoint: "mock-evidence", identity: "deterministic mock evidence" },
+      { instanceId: "maia-inference", implementation: "local_fixture", endpoint: "mock-opponent", identity: "deterministic mock opponent" },
+    );
+  }
+  const suppliedTablebase = options.tablebaseSource === null ? undefined : options.tablebaseSource;
+  const builtInTablebase = options.tablebaseSource === undefined && engineMode === "maia";
+  const fixtureTablebase = suppliedTablebase ?? (options.tablebaseSource === undefined && engineMode === "mock" ? new FixtureTablebaseSource() : undefined);
+  const tablebaseConfigured = builtInTablebase || (fixtureTablebase !== undefined && !(fixtureTablebase instanceof FixtureTablebaseSource && !fixtureTablebase.configured));
+  if (tablebaseConfigured) {
+    configured.push(builtInTablebase || fixtureTablebase instanceof LichessTablebaseSource
+      ? { instanceId: "tablebase-primary", implementation: "lichess_http", endpoint: "https://tablebase.lichess.org/standard", identity: "lichess-syzygy-7man" }
+      : { instanceId: "tablebase-primary", implementation: "local_fixture", endpoint: "fixture-tablebase", identity: "fixture tablebase" });
+  }
+  const builtInCorpus = options.corpusSource === undefined && engineMode === "maia" && options.corpusToken !== undefined;
+  const suppliedCorpus = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : undefined);
+  if (builtInCorpus || suppliedCorpus !== undefined) {
+    configured.push(builtInCorpus || suppliedCorpus instanceof LichessCorpusSource
+      ? { instanceId: "explorer-primary", implementation: "lichess_http", endpoint: "https://explorer.lichess.ovh/lichess", identity: "lichess-opening-explorer" }
+      : { instanceId: "explorer-primary", implementation: "local_fixture", endpoint: "fixture-explorer", identity: "fixture explorer" });
+  }
+  if (options.voiceProvider !== undefined || options.reasoningReviewProvider !== undefined) {
+    const voice = options.voiceProvider ?? options.reasoningReviewProvider;
+    configured.push(voice instanceof ExternalHttpVoiceProvider
+      ? { instanceId: "external-voice", implementation: "external_http", endpoint: "external-voice", identity: options.voicePersona ?? "default persona" }
+      : { instanceId: "external-voice", implementation: "local_fixture", endpoint: "fixture-voice", identity: "fixture voice" });
+  }
+  if (options.ttsProvider !== undefined) {
+    configured.push(options.ttsProvider instanceof ExternalHttpTtsProvider
+      ? { instanceId: "external-tts", implementation: "external_http", endpoint: "external-tts", identity: "external tts" }
+      : { instanceId: "external-tts", implementation: "local_fixture", endpoint: "fixture-tts", identity: "fixture tts" });
+  }
+  let exchangeArtifact: (instanceId: string) => boolean = () => true;
+  const providerHealth = new ProviderRegistry({
+    configured,
+    exchangeArtifact: (instanceId) => exchangeArtifact(instanceId),
+    ...(options.providerHealthLog === undefined ? {} : { log: options.providerHealthLog }),
+  });
+  const corpusSource = builtInCorpus
+    ? new LichessCorpusSource({ token: options.corpusToken!, health: providerHealth })
+    : suppliedCorpus === undefined ? undefined : healthReportedCorpus(suppliedCorpus, providerHealth);
+  const tablebaseSource = !tablebaseConfigured
+    ? undefined
+    : builtInTablebase
+      ? new LichessTablebaseSource({ health: providerHealth })
+      : healthReportedTablebase(fixtureTablebase!, providerHealth);
+  const voiceProvider = options.voiceProvider === undefined ? undefined : healthReportedVoice(options.voiceProvider, providerHealth);
+  const reasoningReviewProvider = options.reasoningReviewProvider === undefined ? undefined : healthReportedReasoningReview(options.reasoningReviewProvider, providerHealth);
+  const ttsProvider = options.ttsProvider === undefined ? undefined : healthReportedTts(options.ttsProvider, providerHealth);
   const openingCatalogue = await loadOpeningCatalogue(options.openingCataloguePath ?? join(process.cwd(), "apps", "server", "artifacts", "runtime-opening-catalogue.json"));
-  // rfc/bot-policy.md §4.3: profile availability is observed from the shared exchange's own
-  // outcomes (startup probe + every opponent-ply acquisition); nothing configures it.
-  const botAvailability = new BotProviderAvailability();
+  // rfc/bot-policy.md §4.3 / D3031: profile availability is the provider-health authority's
+  // snapshot and release receipt; every shared-exchange outcome settles into that registry.
+  const botAvailability = new BotProviderAvailability(providerHealth);
 
   if (engineMode === "maia") {
-    const stockfish = options.stockfishCommand ?? "stockfish";
+    const stockfish = stockfishCommand;
     const analysisSpec = stockfishAnalysisSpec(stockfish);
-    supervisor = new EngineSupervisor([
-      maiaNetworkSpec(options.maiaHost ?? "maia", options.maiaPort ?? 7000),
+    const maiaProbe = maiaContainerProbe(maiaHost, maiaPort);
+    const engines = new EngineSupervisor([
+      maiaNetworkSpec(maiaHost, maiaPort),
       stockfishPlaySpec({ command: stockfish }),
       analysisSpec,
     ], {
-      // Provider exchanges need the launched artifact of the analysis generation. The networked
-      // Maia sidecar exposes no container identity, so Maia exchanges stay honestly unavailable.
-      artifactProbe: (spec) => spec.id === analysisSpec.id ? binaryArtifactProbe(spec) : Promise.resolve(null),
+      // Provider exchanges need the launched artifact of each generation: the hashed analysis
+      // binary, and the running Maia container's OCI identity reported by its sidecar.
+      artifactProbe: (spec) => spec.id === analysisSpec.id ? binaryArtifactProbe(spec) : spec.id === "maia-5m" ? maiaProbe(spec) : Promise.resolve(null),
+      onLifecycle: providerHealth.engineLifecycleSink({ "maia-5m": "maia-inference", "stockfish-play": "stockfish-play", "stockfish-analysis": "stockfish-analysis" }),
     });
-    await supervisor.startAll();
+    supervisor = engines;
+    exchangeArtifact = (instanceId) => instanceId !== "maia-inference" || engines.artifact("maia-5m")?.kind === "container";
+    // An optional engine that cannot start leaves its instance unavailable; it never blocks startup.
+    await Promise.allSettled([engines.start("maia-5m"), engines.start("stockfish-play"), engines.start("stockfish-analysis")]);
     assertAdvertisedCapabilityDispositions([
-      supervisor.health("stockfish-play"),
-      supervisor.health("stockfish-analysis"),
-      supervisor.health("maia-5m"),
+      engines.health("stockfish-play"),
+      engines.health("stockfish-analysis"),
+      engines.health("maia-5m"),
     ]);
-    selector = new OpponentSelector(supervisor, tablebaseSource === undefined ? {} : { tablebaseSource });
-    capabilities = new EngineCapabilities(supervisor, [
+    selector = new OpponentSelector(engines, { health: providerHealth, ...(tablebaseSource === undefined ? {} : { tablebaseSource }) });
+    capabilities = new EngineCapabilities(engines, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, botAvailability: () => botAvailability.snapshot(), packCapabilities: registry.capabilities });
+    ], { health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot(), packCapabilities: registry.capabilities });
     evidenceExecutor = new StockfishEvidenceExecutor(
       supervisor,
       analysisSpec.id,
@@ -540,13 +658,19 @@ async function composeServices(
     );
   } else {
     const mock = new MockEngineClient();
+    await mock.start();
+    // The local mock processes complete their handshake in-process; they are `local_fixture`.
+    providerHealth.recordHandshake("maia-inference");
+    providerHealth.recordHandshake("stockfish-play");
+    providerHealth.recordHandshake("stockfish-analysis");
     selector = new OpponentSelector(mock, {
       maiaEngineId: "mock-opponent",
       strongEngineId: "mock-opponent",
+      health: providerHealth,
       ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, botAvailability: () => botAvailability.snapshot(), packCapabilities: registry.capabilities,
+      health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot(), packCapabilities: registry.capabilities,
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }
@@ -556,7 +680,7 @@ async function composeServices(
   const providerEngines = supervisor ?? new MockProviderEngineClient();
   const providers = composeProviderTraversalApplication({
     engines: providerEngines,
-    tablebaseFetch: tablebaseSource instanceof LichessTablebaseSource ? providerFetch : null,
+    tablebaseFetch: builtInTablebase || fixtureTablebase instanceof LichessTablebaseSource ? providerFetch : null,
     explorerFetch: engineMode === "maia" && options.corpusToken !== undefined ? providerFetch : null,
     explorerToken: options.corpusToken ?? null,
     bounds: APPLICATION_PROVIDER_BOUNDS,
@@ -603,7 +727,7 @@ async function composeServices(
     botAvailability: () => botAvailability.snapshot(),
   });
   const identity = new IdentityService(storage, {
-    cookieSecure: options.cookieSecure ?? true,
+    cookieSecure: options.deployment?.secureCookie ?? options.cookieSecure ?? true,
   });
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
@@ -640,14 +764,23 @@ async function composeServices(
     ratedResults: (learnerId) => new Map(storage.ratedGames(learnerId).flatMap((game) => game.result === null ? [] : [[game.runId, game.result] as const])),
     valenceRegister: await loadValenceRegister(options.valenceRegisterPath ?? join(process.cwd(), "content", "valence", "register.json")),
   });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }));
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }));
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
+  let readyProbe: () => Response = () => unready();
+  const deployment = options.deployment;
   const handler: RestHandler = async (request) => {
     const url = new URL(request.url);
+    if (deployment !== undefined) {
+      const refused = deploymentRefusal(deployment, request);
+      if (refused !== undefined) return refused;
+    }
     if (url.pathname === "/healthz") {
       return healthProbe();
+    }
+    if (url.pathname === "/readyz") {
+      return readyProbe();
     }
     return isApiPath(url.pathname)
       ? api(request)
@@ -687,7 +820,28 @@ async function composeServices(
   healthProbe = () => {
     const longitudinal = longitudinalHealth();
     const ok = longitudinal.status === "ready" || longitudinal.status === "disabled_test";
-    return Response.json({ status: ok ? "ok" : "degraded", engineMode, longitudinal }, { status: ok ? 200 : 503 });
+    // Process liveness: an absent or failed OPTIONAL provider is reported but never fails the probe
+    // (rfc/provider-health-degradation.md §9). The body reads the registry; it probes nothing.
+    const providers = providerHealth.snapshot().providers.map((row) => Object.freeze({
+      instanceId: row.instanceId,
+      state: row.state,
+      ...(row.state === "unavailable" || row.state === "degraded_cached_only" ? { reason: row.reason } : {}),
+    }));
+    return Response.json({ status: ok ? "ok" : "degraded", engineMode, longitudinal, providers }, { status: ok ? 200 : 503, headers: { "cache-control": "no-store" } });
+  };
+  // rfc/storage-backup-recovery.md §6 / [[D2728]]: readiness is the live route observing the live
+  // storage connection — its exact current version plus one representative read — and a live
+  // semantic executor. The canonical body is the only one a rehearsal or proxy accepts.
+  readyProbe = () => {
+    const longitudinal = longitudinalHealth();
+    if (draining || (longitudinal.status !== "ready" && longitudinal.status !== "disabled_test")) return unready();
+    let probe: ReturnType<SQLiteRunStorage["readinessProbe"]>;
+    try { probe = storage.readinessProbe(); } catch { return unready(); }
+    if (probe.storageVersion !== STORAGE_VERSION) return unready();
+    return new Response(`{"representativeData":"${probe.representativeData}","status":"ready","storageVersion":${probe.storageVersion}}`, {
+      status: 200,
+      headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
+    });
   };
   const startupReceipt: ApplicationStartupReceipt = Object.freeze({
     storageVersion: STORAGE_VERSION,
@@ -698,6 +852,7 @@ async function composeServices(
     server,
     engineMode,
     providers,
+    providerHealth,
     startupReceipt,
     longitudinal: Object.freeze({
       health: longitudinalHealth,
@@ -706,6 +861,7 @@ async function composeServices(
     }),
     async close() {
       draining = true;
+      providerHealth.shutdown();
       await new Promise<void>((resolveClose, reject) => {
         if (!server.listening) { resolveClose(); return; }
         server.close((error) => (error === undefined ? resolveClose() : reject(error)));

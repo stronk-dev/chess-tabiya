@@ -12,6 +12,14 @@ import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import { engineBandProfile, type EngineBandProfile } from "./engine-band.js";
 import type { OpponentPolicyMode } from "./opponent-selector.js";
 import {
+  availabilityIsNotConfigured,
+  capabilityModeAvailability,
+  capabilityOperationAvailability,
+  type ApplicationProviderOperationId,
+  type ProviderHealthCapabilities,
+} from "@chess-tabiya/runtime";
+import { ProviderRegistry } from "./provider-health.js";
+import {
   RECORDED_READING_DISPOSITIONS,
   assertRecordedReadingDispositions,
   type RecordedReadingDisposition,
@@ -27,7 +35,7 @@ import {
 } from "./evidence-manifest.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { projectBotRoster, type BotRosterRow } from "./bot-roster.js";
-import { projectPackCapabilities, runtimeSupportedCapabilities, type RuntimeCapabilitySupport } from "./capability/pack-capabilities.js";
+import { projectPackCapabilities, runtimeSupportedCapabilities, type DeploymentProviders, type RuntimeCapabilitySupport } from "./capability/pack-capabilities.js";
 import type { PackCapabilitiesPublicProjectionV1 } from "@chess-tabiya/schema";
 import type { BotProviderAvailabilitySnapshot } from "@chess-tabiya/runtime";
 
@@ -68,15 +76,6 @@ export const HUMAN_COMMON_RESISTANCE_PROFILE = Object.freeze({
   fastestLosingRate: Object.freeze({ value: 0.033 as const, uniformBaseline: 0.313 as const }),
 });
 
-export interface CapabilityProviders {
-  readonly opponent: "maia" | "mock" | "none";
-  readonly judge: "stockfish" | "mock" | "none";
-  readonly llm: "none" | "external";
-  readonly corpus: "lichess-explorer" | "mock" | "none";
-  readonly tts: "none" | "external";
-  readonly tablebase: "lichess" | "mock" | "none";
-}
-
 export type SurfaceCapabilities = Readonly<
   Record<SurfaceId, SurfaceAvailability>
 >;
@@ -105,7 +104,8 @@ export interface Capabilities {
       readonly profiles: readonly BotRosterRow[];
     };
   };
-  readonly providers: CapabilityProviders;
+  /** The live provider-health snapshot (rfc/provider-health-degradation.md §9); never config flags. */
+  readonly providerHealth: ProviderHealthCapabilities;
   readonly surfaces: SurfaceCapabilities;
   readonly evidenceManifest: EvidenceManifestCapabilities;
   /** rfc/pack-capability-contract.md §4.2: the SUPPORTED pack-capability projection of this deployment. */
@@ -122,7 +122,7 @@ export type ClientCapabilities = Omit<Pick<Capabilities,
   | "assessmentCategories"
   | "objectiveAssessmentSets"
   | "runSchemaVersion"
-  | "providers"
+  | "providerHealth"
   | "surfaces"
   | "evidenceManifest"
   | "packCapabilities"
@@ -153,7 +153,7 @@ export function projectClientCapabilities(value: Capabilities): ClientCapabiliti
       }),
       human_common: value.policyProfiles.human_common,
     }),
-    providers: value.providers,
+    providerHealth: value.providerHealth,
     surfaces: value.surfaces,
     evidenceManifest: value.evidenceManifest,
     packCapabilities: value.packCapabilities,
@@ -294,63 +294,54 @@ export function assertSurfaceCapabilities(
   }
 }
 
-function providers(
-  engineMode: CapabilityEngineMode,
-  identities: readonly EngineIdentity[],
-  llmAvailable: boolean,
-  corpus: CapabilityProviders["corpus"],
-  tts: CapabilityProviders["tts"],
-  tablebase: CapabilityProviders["tablebase"],
-): CapabilityProviders {
-  if (engineMode === "mock") {
-    const opponentReady = identities.some((identity) => identity.kind === "opponent");
-    return Object.freeze({
-      opponent: opponentReady ? "mock" : "none",
-      // Mock mode wires MockEvidenceExecutor even though it has no UCI identity.
-      judge: "mock",
-      llm: llmAvailable ? "external" : "none",
-      corpus,
-      tts,
-      tablebase,
-    });
-  }
-  return Object.freeze({
-    opponent: identities.some((identity) => identity.kind === "opponent")
-      ? "maia"
-      : "none",
-    judge: identities.some((identity) => identity.kind === "judge")
-      ? "stockfish"
-      : "none",
-    llm: llmAvailable ? "external" : "none",
-    corpus,
-    tts,
-    tablebase,
-  });
+/** Configuration alone makes a capability outright unsupported (the owner's O13 ruling). */
+function configured(health: ProviderHealthCapabilities, operation: ApplicationProviderOperationId): boolean {
+  return !availabilityIsNotConfigured(capabilityOperationAvailability(health, operation));
 }
 
-function surfaces(providerState: CapabilityProviders): SurfaceCapabilities {
+function surfaces(health: ProviderHealthCapabilities): SurfaceCapabilities {
+  // A surface is "unavailable here" only when no opponent can ever be configured on this deployment.
+  // A runtime opponent failure keeps the surface and reports the paused opponent in the run instead.
+  const opponent = health.policyModes.some((row) => !availabilityIsNotConfigured(row.availability));
   const value: Readonly<Record<string, unknown>> = Object.freeze({
-    play: providerState.opponent === "none" ? "unavailable-here" : "available",
+    play: opponent ? "available" : "unavailable-here",
     review: "available",
     learn: "available",
     live: "available",
     create: "available",
-    justPlay: providerState.opponent === "none" ? "unavailable-here" : "available",
-    fromPosition: providerState.opponent === "none" ? "unavailable-here" : "available",
+    justPlay: opponent ? "available" : "unavailable-here",
+    fromPosition: opponent ? "available" : "unavailable-here",
   });
   assertSurfaceCapabilities(value);
   return value;
 }
 
+const PACK_PROVIDER_FAMILY: Readonly<Record<string, keyof DeploymentProviders>> = Object.freeze({
+  "stockfish-analysis": "analysis",
+  "maia-inference": "opponent",
+  "tablebase-primary": "tablebase",
+  "explorer-primary": "corpus",
+  "external-voice": "voice",
+  "external-tts": "tts",
+});
+
+/** Configured instances whose live health is unavailable or recovering, by pack provider family. */
+function packOutages(health: ProviderHealthCapabilities): Partial<Record<keyof DeploymentProviders, { readonly retryAfterMs?: number }>> {
+  const out: Partial<Record<keyof DeploymentProviders, { readonly retryAfterMs?: number }>> = {};
+  for (const snapshot of health.providers) {
+    const family = PACK_PROVIDER_FAMILY[snapshot.instanceId];
+    if (family === undefined) continue;
+    if (snapshot.state === "unavailable") out[family] = snapshot.retryAfterMs === null ? {} : { retryAfterMs: snapshot.retryAfterMs };
+    else if (snapshot.state === "recovering") out[family] = {};
+  }
+  return out;
+}
+
 export class EngineCapabilities implements CapabilitiesProvider {
   readonly #client: CapabilityEngineClient;
   readonly #engineIds: readonly string[];
-  readonly #engineMode: CapabilityEngineMode;
+  readonly #health: ProviderRegistry;
   readonly #strongEngineProfile: StrongEngineProfile;
-  readonly #llmAvailable: boolean;
-  readonly #corpus: CapabilityProviders["corpus"];
-  readonly #tts: CapabilityProviders["tts"];
-  readonly #tablebase: CapabilityProviders["tablebase"];
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
   readonly #packCapabilities: RuntimeCapabilitySupport;
   readonly #botAvailability: (() => BotProviderAvailabilitySnapshot) | undefined;
@@ -359,12 +350,9 @@ export class EngineCapabilities implements CapabilitiesProvider {
     client: CapabilityEngineClient,
     engineIds: readonly string[],
     options: {
-      readonly engineMode: CapabilityEngineMode;
+      /** The one live provider-health authority; configuration never answers availability. */
+      readonly health: ProviderRegistry;
       readonly strongEngineProfile?: Partial<StrongEngineProfile>;
-      readonly llmAvailable?: boolean;
-      readonly corpus?: CapabilityProviders["corpus"];
-      readonly tts?: CapabilityProviders["tts"];
-      readonly tablebase?: CapabilityProviders["tablebase"];
       readonly openingCatalogue?: OpeningCatalogueAvailability;
       readonly packCapabilities?: RuntimeCapabilitySupport;
       /** rfc/bot-policy.md §4.3: exchange-observed provider availability for the roster join. */
@@ -373,11 +361,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   ) {
     this.#client = client;
     this.#engineIds = Object.freeze([...engineIds]);
-    this.#engineMode = options.engineMode;
-    this.#llmAvailable = options.llmAvailable === true;
-    this.#corpus = options.corpus ?? "none";
-    this.#tts = options.tts ?? "none";
-    this.#tablebase = options.tablebase ?? "none";
+    this.#health = options.health;
     this.#openingCatalogue = options.openingCatalogue;
     this.#packCapabilities = options.packCapabilities ?? runtimeSupportedCapabilities();
     this.#botAvailability = options.botAvailability;
@@ -405,32 +389,27 @@ export class EngineCapabilities implements CapabilitiesProvider {
           source: "unpublished" as const,
           advertised: Object.freeze({ min: null, max: null }),
         });
-    const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus, this.#tts, this.#tablebase);
+    // One immutable registry snapshot per response: it never probes a provider (§9).
+    const health = ProviderRegistry.wire(this.#health.snapshot());
+    const judge = configured(health, "evidence.stockfish_analysis");
+    const tablebase = configured(health, "evidence.tablebase_probe");
     assertRecordedReadingCapabilityDispositions();
     return Object.freeze({
       engines,
-      policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode) =>
-        mode === "human_common" || mode === "theory_strict"
-          ? providerState.opponent !== "none"
-          : mode === "strong_engine"
-            ? providerState.judge !== "none"
-        : mode === "perfect_tablebase"
-          ? providerState.tablebase !== "none"
-          : mode === "practical_resistance"
-            ? providerState.tablebase !== "none" && providerState.opponent !== "none"
-            : true)),
+      // Modes the deployment supports at all; the live state of each is providerHealth.policyModes.
+      policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode) => !availabilityIsNotConfigured(capabilityModeAvailability(health, mode)))),
       unsupportedPolicyModes: DECLARED_UNIMPLEMENTED_POLICY_MODES,
       feedbackPolicies: FEEDBACK_POLICIES,
       tempoVerdicts: TEMPO_VERDICTS,
       tempoGradeable: TEMPO_GRADEABLE_VERDICTS,
       tempoDefaults: UNAUTHORED_TEMPO_DEFAULTS,
-      guardBasis: providerState.judge === "none"
-        ? Object.freeze(["rules"] as const)
-        : Object.freeze(["rules", "engine"] as const),
+      guardBasis: judge
+        ? Object.freeze(["rules", "engine"] as const)
+        : Object.freeze(["rules"] as const),
       costBasis: Object.freeze([
         "material" as const,
-        ...(providerState.judge === "none" ? [] : ["engine" as const]),
-        ...(providerState.tablebase === "none" ? [] : ["tablebase" as const]),
+        ...(judge ? ["engine" as const] : []),
+        ...(tablebase ? ["tablebase" as const] : []),
       ]),
       capabilityDispositions: CAPABILITY_DISPOSITIONS,
       recordedReadingKinds: RECORDED_READING_DISPOSITIONS,
@@ -445,17 +424,12 @@ export class EngineCapabilities implements CapabilitiesProvider {
           profiles: projectBotRoster(this.#botAvailability?.()).profiles,
         }),
       }),
-      providers: providerState,
-      surfaces: surfaces(providerState),
-      evidenceManifest: evidenceManifestCapabilities(providerState, this.#openingCatalogue),
-      // §5.1: a configured provider whose engine is not ready is `temporarily_unavailable` — present
-      // and retryable — never removed from the supported set.
-      packCapabilities: projectPackCapabilities(this.#packCapabilities, {
-        unreachable: {
-          ...(providerState.judge === "none" ? { analysis: {} } : {}),
-          ...(providerState.opponent === "none" ? { opponent: {} } : {}),
-        },
-      }),
+      providerHealth: health,
+      surfaces: surfaces(health),
+      evidenceManifest: evidenceManifestCapabilities(health, this.#openingCatalogue),
+      // rfc/pack-capability-contract.md §5.1: a configured provider whose health is down or recovering is
+      // `temporarily_unavailable` — present and retryable — never removed from the supported set.
+      packCapabilities: projectPackCapabilities(this.#packCapabilities, { unreachable: packOutages(health) }),
     });
   }
 }

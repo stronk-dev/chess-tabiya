@@ -31,7 +31,6 @@ export {
   SURFACE_IDS,
   SUPPORTED_POLICY_MODES,
   type CapabilityEngineMode,
-  type CapabilityProviders,
   type Capabilities,
   type CapabilitiesProvider,
   type CapabilityEngineClient,

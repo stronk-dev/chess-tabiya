@@ -35,7 +35,18 @@
 
 ```tabiya-claims
 migration | position behind campaign-catalogue-progression | imported_games.source_kind CHECK gains 'lichess_broadcast' and source_receipt_json retains the typed broadcast receipt (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration)
+import-source-protocol | members request_broadcast, source_lichess_broadcast | the finished-round broadcast request kind and its durable source kind
 ```
+
+**The protocol claim (corrected 2026-09-24).** `import-source-protocol-register.md` landed the resource
+as a present `members` row over the implemented catalogue's `string_tuple` reader, seeded with the four
+members the shipped importer already used (`request_lichess`, `request_pgn`, `source_lichess_url`,
+`source_pgn_paste`). The implemented bootstrap has no lane, `canonical_resource` or `whole projection`
+claim grammar, so §1's former `first lane 1 | whole projection` claim is replaced by the two `members`
+this RFC adds. The atomic-widening property §1 wants survives in a different form: both new members sit in
+one tuple from which the server, storage and web types derive, and the SQLite CHECK census fails if the
+durable face and the migration disagree. The remaining §1 payload (discriminants, receipt fields, limits,
+digest domains) stays this RFC's product work.
 
 ## Summary
 

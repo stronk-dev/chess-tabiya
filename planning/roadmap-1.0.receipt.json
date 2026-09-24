@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9b37f9d0725b1acb0cc119a907ec87e855f73bfaa2d0054326b86a28c011485e",
+    "roadmap": "sha256:deaa92497fe9aaa95b7b7eca0682b9ad4a61f72942280e644ef3aa3c06ae1d64",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:c4c2790b068db70c8437b760585dbe25e59081ab410fba6ec55a37c89fc2d636",
-    "rfcRegister": "sha256:a3129e4b4e2449a55be8e369b3061247497a110ebd381acdc5cc5744fd7cd7f6",
+    "workState": "sha256:79aa4c11d96d647c86b93c19d0f453519d80e699ba87b0bd489425a8f6a05cfc",
+    "rfcRegister": "sha256:92dc510800e7847d16a0ff4f40abf5a450a626af478d1e0e44aca57f319a98f6",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
-    "router": "sha256:afc6dfb524c9c901e5368ae1191db359acb151121d677244495b6eefb9832540",
-    "application": "sha256:2665e30d6ef12a2d786e2f83bafb22987f7bb41c4f5836dd16394df922b0af29",
-    "rest": "sha256:c55d790dcf2cc005a4084c29806a5572b8207ecd1c884d92a5be51f9842a9008"
+    "router": "sha256:e46fa7287a4c83836b114e80dbb7a72e929f0db7eae5e68eb57be2902c9ee5a1",
+    "application": "sha256:bdb15c52d081713ab6815ccc1c0e5354e813710eb92436704e1b5073d5a66c3b",
+    "rest": "sha256:53784af7232b7e105d1263575ab97219ba67913140abcfcadcdfdcb8d43a2d90"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 71,
     "activeRfcLifecycle": {
-      "draft": 36,
+      "draft": 29,
       "accepted": 0,
-      "implementing": 25,
+      "implementing": 32,
       "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 624,
+      "todo": 620,
       "doing": 0,
-      "blocked": 1063,
-      "done": 1202,
+      "blocked": 1061,
+      "done": 1208,
       "refused": 160
     },
     "workItems": {
@@ -52,12 +52,12 @@
       "not_applicable": 8
     },
     "appRoutes": {
-      "live": 9,
-      "live_but_inadequate": 5,
+      "live": 14,
+      "live_but_inadequate": 4,
       "missing": 1
     },
     "apiFamilies": {
-      "live": 20,
+      "live": 21,
       "live_direct": 1,
       "implemented_but_unreachable": 0,
       "missing": 1
@@ -426,23 +426,34 @@
       "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Famous-game sourcing is implemented as an authoring path: one cited master game at a time becomes a stripped, attribution-bearing candidate through the shared explorer fetch path, index enumeration and learner masters import stay refused, and capability rows state exactly what is and is not available. No official pack has graduated; the sourceGame schema lane waits on lane 0.30.",
+        "summary": "The theory/library workflow exists: a phase-first Library searches packs, principles, shapes, concepts and named openings with one row per item, official material first and drafts labelled; entry pages join each item to rehearse, understand and return doors over GET /theory; principles gain a pinned, rights-reviewed citation register; pasted games are stripped of third-party annotations. No official pack has graduated and no principle cites a source yet — authored content remains the gate.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/src/sourcing/masters.ts",
-          "planning/famous-games/implementation-2026-09-24.md",
-          "rfc/famous-games.md"
+          "apps/server/src/theory-library.test.ts",
+          "rfc/theory-knowledge-pipeline.md",
+          "rfc/theory-drill-current-joins.md",
+          "rfc/import-source-protocol-register.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "famous-games.md",
-            "digest": "sha256:8f19c11e9fcbcbb299cdf78535615e0d961c53abc417c1ec01224e97ddb71144"
+            "id": "theory-knowledge-pipeline.md",
+            "digest": "sha256:a9bace0ec4438edc6a9dbadc1a461ccdedd6c3fb3fef1b17a482a140bbdc8cae"
+          },
+          {
+            "kind": "rfc",
+            "id": "theory-drill-current-joins.md",
+            "digest": "sha256:4195698ca5705574716fe919f0a0061095b8ef9e469eb57ee1cf037a9865d6ff"
+          },
+          {
+            "kind": "rfc",
+            "id": "import-source-protocol-register.md",
+            "digest": "sha256:094f8370441b6d9d09fa7dc8e1f5a934f07bb2285605313934c152bdbae57172"
           },
           {
             "kind": "work_state",
-            "id": "D959",
-            "digest": "sha256:555ea1424ca4c7171b7c42f158ca4bb0880fc37b3b4cfbfeb22a991f7ddcbd35"
+            "id": "D1046",
+            "digest": "sha256:04caac94e14fa6e8bd24f444a6ef649fd70d027c07d01bb4eb02729f7d31fdff"
           }
         ]
       },
@@ -473,37 +484,35 @@
       ],
       "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
-        "at": "2026-09-23",
-        "summary": "The rebuilt local self-host server image now boots healthy with Maia and the copied draft corpus after D3274/D3275 packaging repairs; a production API capture exercised it across 66 roots. This advances first-boot proof only. The safe-deployment authority remains returned, and clean-host digest-pinned release, backup/restore, upgrade/rollback, official content and complete learner journeys remain unproven.",
+        "at": "2026-09-24",
+        "summary": "Self-hosting now has real operator paths: an exclusive storage lock, verified backup/restore/rollback with crash-safe replacement, upgrade through a verified pre-upgrade bundle, three validated deployment profiles (local, appliance with TLS, hosted ACME) with secure cookies and cross-origin refusal, a CPU-only engine tier, and live provider health with Maia container identity. A real backup-restore-boot round trip and an upgrade-rollback pass; clean-host digest-pinned release proof remains.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/Dockerfile",
-          "tools/verify-packaging.mjs",
-          "planning/semantic-consequence-search/d3262-maia-capture.md",
-          "rfc/semantic-consequence-search.md",
+          "apps/server/src/storage-appliance.test.ts",
+          "rfc/storage-backup-recovery.md",
           "rfc/safe-deployment-profiles.md",
-          "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md"
+          "rfc/provider-health-degradation.md"
         ],
         "anchors": [
           {
-            "kind": "work_state",
-            "id": "D3274",
-            "digest": "sha256:2f1bb8ad4a09be2585a0663bd2ecf8c23afac65fe9a3a4689ca2e63e75bd966b"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3275",
-            "digest": "sha256:f2edb5da7cf95d453087b9beee4dbba7b7c08eeee0012c74d787775530d82280"
-          },
-          {
             "kind": "rfc",
-            "id": "semantic-consequence-search.md",
-            "digest": "sha256:fba22cb1102551d9ceb5de3568e697b93192009827e86de0c79d40f1c13f0403"
+            "id": "storage-backup-recovery.md",
+            "digest": "sha256:3f2a0df32352bbc2b1d744ade544f6d75769d1ebc176ac2daa4ca50012ef3456"
           },
           {
             "kind": "rfc",
             "id": "safe-deployment-profiles.md",
-            "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"
+            "digest": "sha256:b26a1d4a65c50862156d63c5b722bded914ae8fbc48a01f59a590d3b00bff1cb"
+          },
+          {
+            "kind": "rfc",
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:3de1c228e6e548f861e4e89020e982d30328eea3c92d302c9e5050884bb12dd3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1846",
+            "digest": "sha256:bd4878cac3dc3d44721f7af84359c821c3e9def53e46a78e0c1c53dbedf7ba1f"
           }
         ]
       },
@@ -820,12 +829,12 @@
         "retired": 1
       },
       "routes": {
-        "live": 1,
-        "live_but_inadequate": 1,
+        "live": 6,
+        "live_but_inadequate": 0,
         "missing": 0
       },
       "apiFamilies": {
-        "live": 4,
+        "live": 5,
         "live_direct": 0,
         "implemented_but_unreachable": 0,
         "missing": 0

@@ -339,7 +339,9 @@ describe("[[D2964]], [[D2965]] — no half-composed authority survives a refused
     expect(close).toHaveBeenCalledTimes(1);
   });
 
-  it("closes storage when composition fails after the coordinator committed", async () => {
+  // Composes the whole application (registries compile at import); under shared-host load this
+  // exceeds the 5 s default.
+  it("closes storage when composition fails after the coordinator committed", { timeout: 30_000 }, async () => {
     const directory = mkdtempSync(join(tmpdir(), "tabiya-concept-compose-"));
     directories.push(directory);
     const invalid = join(directory, "register.json");

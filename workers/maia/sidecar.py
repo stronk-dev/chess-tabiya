@@ -3,7 +3,9 @@
 
 from __future__ import annotations
 
+import json
 import os
+import re
 import selectors
 import signal
 import socket
@@ -16,6 +18,22 @@ HOST = os.environ.get("MAIA_LISTEN_HOST", "0.0.0.0")
 PORT = int(os.environ.get("MAIA_LISTEN_PORT", "7000"))
 READY = Path(os.environ.get("MAIA_READY_FILE", "/ready"))
 COMMAND = ["maia3-uci", "--model", "5m", "--use-uci-history"]
+# rfc/provider-health-degradation.md §3 / rfc/provider-exchange-and-execution.md §3: the running
+# container's OCI identity, injected by the release compiler from the registry's own digests. The
+# sidecar only reports it; it never invents one.
+IDENTITY_REQUEST = b"tabiya-identity\n"
+DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
+
+
+def container_identity() -> bytes:
+    image_id = os.environ.get("MAIA_IMAGE_ID", "")
+    manifest = os.environ.get("MAIA_MANIFEST_DIGEST", "")
+    config = os.environ.get("MAIA_CONFIG_DIGEST", "")
+    if image_id == "" or not DIGEST.match(manifest) or not DIGEST.match(config):
+        body = {"unavailable": "container identity was not injected into this deployment"}
+    else:
+        body = {"runtime": "oci", "imageId": image_id, "manifestDigest": manifest, "configDigest": config}
+    return (json.dumps(body, sort_keys=True) + "\n").encode()
 
 
 def send(engine: subprocess.Popen[bytes], line: str) -> None:
@@ -70,6 +88,22 @@ def main() -> int:
             client, _address = server.accept()
         except OSError:
             break
+        # The first line of a connection may be the identity probe; anything else is UCI traffic.
+        client.settimeout(5)
+        try:
+            first = client.recv(65_536)
+        except OSError:
+            first = b""
+        if first.startswith(IDENTITY_REQUEST):
+            try:
+                client.sendall(container_identity())
+            finally:
+                client.close()
+            continue
+        if first:
+            assert engine.stdin is not None
+            engine.stdin.write(first)
+            engine.stdin.flush()
         client.setblocking(False)
         selector = selectors.DefaultSelector()
         selector.register(client, selectors.EVENT_READ, "client")
