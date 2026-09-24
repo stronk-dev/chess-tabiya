@@ -106,7 +106,8 @@ function sources(roots: readonly string[]): readonly string[] {
   return out.sort();
 }
 
-const PRODUCTION = sources(["apps/server/src", "apps/web/src", "packages/runtime/src", "packages/schema/src"]).filter((file) => !/\.test\.ts$|provider-test-fixtures\.ts$/u.test(file));
+// `packages/runtime/src/testing/` is test-only support (never exported by the package).
+const PRODUCTION = sources(["apps/server/src", "apps/web/src", "packages/runtime/src", "packages/schema/src"]).filter((file) => !/\.test\.ts$|provider-test-fixtures\.ts$|^packages\/runtime\/src\/testing\//u.test(file));
 
 describe("provider exchange censuses", () => {
   it("only the server scheduler imports the scheduler-only constructor authority", () => {

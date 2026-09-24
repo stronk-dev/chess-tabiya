@@ -34,6 +34,7 @@ import {
 } from "./module-contract.js";
 import { MODULE_POLICIES, moduleSessions, type ModulePolicy } from "./module-policy.js";
 import { PRESET_DECLARATIONS, WORKFLOW_CONTEXT_POLICIES, type PresetDeclaration, type WorkflowContextPolicy } from "./presets.js";
+import { presentationAdapter } from "./presentation-contract.js";
 
 const ref = (id: string, version = 1): VersionedEvidenceId => Object.freeze({ id, version });
 const refKey = (value: VersionedEvidenceId): string => `${value.id}@${value.version}`;
@@ -228,7 +229,8 @@ export interface ModuleOperation {
 export const MODULE_OPERATIONS: readonly ModuleOperation[] = Object.freeze([
   Object.freeze({
     module: "review_map" as const, operation: "reviewMapProjection", timing: "review" as const,
-    projections: Object.freeze([ref("derived.grade.move_quality"), ref("live.stockfish.eval"), ...RECORDED_PATH_SUCCESSOR_REFS]),
+    // rfc/review-evidence-compiler.md: the typed packet projections the evidence panel admits.
+    projections: Object.freeze([ref("derived.grade.move_quality"), ref("live.stockfish.eval"), ...RECORDED_PATH_SUCCESSOR_REFS, ...["derived.review.eval_point", "derived.review.eval_delta", "derived.review.mate_transition", "derived.review.wdl_point"].map((id) => ref(id))]),
   }),
   Object.freeze({
     module: "postcommit_nudge" as const, operation: "postcommitNudgePacket", timing: "post_commit" as const,
@@ -241,7 +243,7 @@ const QUERY_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "module-re
 const RECEIPT_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "intent-presets", ledger: "D1866", reason: "Pre-/at-commit output requires the server-created ephemeral ModuleDisclosureReceipt (§2.5, A16)." });
 const CANDIDATE_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "shared-candidate-evidence-packet", ledger: "D745", reason: "Avoidance needs the complete legal-alternative population at the committed edge; the post-commit operation reads one edge." });
 const WINDOW_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "recorded-semantic-path", ledger: "D1870", reason: "This v1 sequence/observed event derives from a multi-edge window; the recorded-path compiler emits only its v2 successor, and only over a Review branch." });
-const REVIEW_PACKET_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "review-evidence-compiler", ledger: "review-map D4", reason: "The typed per-position Review packet is draft; the Review Map renders it as an explicit abstention." });
+const REVIEW_OPERATION_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "review-map", ledger: "review-evidence-compiler D1", reason: "No Review Map production operation acquires this pair's sealed source yet; the final Review Map source-local admission policy (D928) decides which packet families it requests." });
 
 export type ModulePairExecution =
   | { readonly module: ModuleId; readonly projection: VersionedEvidenceId; readonly status: "executable"; readonly operation: string; readonly timing: ModuleTiming }
@@ -252,7 +254,10 @@ function pairBlockers(module: ModuleDeclaration, projection: VersionedEvidenceId
     if (projection.id.startsWith("derived.semantic_avoidance.")) return [CANDIDATE_BLOCKER, PRESENTATION_BLOCKER];
     if (SEQUENCE_EVENT_IDS.has(projection.id)) return [WINDOW_BLOCKER, PRESENTATION_BLOCKER];
   }
-  if (module.id === "review_map") return [REVIEW_PACKET_BLOCKER, PRESENTATION_BLOCKER];
+  // evidence-presentation Checkpoint A: a pair with a registered pair-keyed adapter is no longer
+  // blocked on presentation; only its missing production operation remains.
+  const presentable = presentationAdapter({ id: `module.${module.id}`, version: 1 }, projection) !== undefined;
+  if (module.id === "review_map") return presentable ? [REVIEW_OPERATION_BLOCKER] : [REVIEW_OPERATION_BLOCKER, PRESENTATION_BLOCKER];
   const live = module.timings.some((value) => value.timing === "pre_commit" || value.timing === "at_commit");
   return live ? [RECEIPT_BLOCKER, QUERY_BLOCKER, PRESENTATION_BLOCKER] : [QUERY_BLOCKER, PRESENTATION_BLOCKER];
 }

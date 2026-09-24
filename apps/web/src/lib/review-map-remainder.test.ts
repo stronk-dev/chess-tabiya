@@ -2,7 +2,7 @@
 // rfc/review-map.md — the remainder on the web surface: the eval graph (§6, [[D880]]), the Compare
 // handoff (§4) and the explicit Analyze action (§7, O7.3).
 
-import { attachEvidence, branchPath, commitMove, fork, reviewAnalysis, reviewMapProjection, reviewText, rewind, storyMoments, type DrillRun } from "@chess-tabiya/runtime";
+import { attachEvidence, branchPath, commitMove, fork, reviewAnalysis, reviewMapProjection, reviewText, rewind, storyMomentsForRun, type DrillRun } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -15,7 +15,7 @@ afterEach(() => document.body.replaceChildren());
 
 function payloadOf(run: DrillRun, side: "white" | "black" = run.start.side): ReviewMap {
   const branchId = run.branches[0]!.id;
-  const projection = reviewMapProjection({ run, branchId, story: storyMoments(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", side, viewer: { role: "learner", session: "imported" } });
+  const projection = reviewMapProjection({ run, branchId, story: storyMomentsForRun(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", side, viewer: { role: "learner", session: "imported" } });
   return JSON.parse(JSON.stringify({
     runId: run.id, branchId, side, ready: true, pendingEvidence: 0,
     source: { kind: "pgn_paste", headers: { White: "Alice", Black: "Bob" }, result: "1-0", importedAt: "2026-09-24T12:00:00.000Z" },
@@ -53,6 +53,9 @@ describe("eval graph on the Review Map (§6)", () => {
     expect(points().map((point) => point.dataset.nodeId)).toEqual(review.rows.map((row) => row.nodeId));
     expect(points().filter((point) => point.getAttribute("tabindex") === "0")).toHaveLength(1);
     expect(points().map((point) => point.getAttribute("aria-label"))).toEqual(review.evalGraph.points.map((point) => point.sentence));
+    // Start from the first ply so the arrow keys have a following ply whatever moment opens the map.
+    document.querySelector<HTMLButtonElement>(".move-select")!.click();
+    await vi.waitFor(() => expect(selectedRow()).toBe(review.rows[0]!.nodeId));
     const start = review.rows.findIndex((row) => row.nodeId === selectedRow());
     const focused = points()[start]!;
     expect(focused.getAttribute("tabindex")).toBe("0");

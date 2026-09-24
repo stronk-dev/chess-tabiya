@@ -135,13 +135,14 @@ describe("module registration — the compiled production registry", () => {
     expect(awaiting.every((projection) => !PRIMARY_EVIDENCE_MANIFEST.projections.some((value) => key(value) === projection))).toBe(true);
     const bound = PRIMARY_EVIDENCE_MANIFEST.bindings.filter((binding) => binding.consumer.id.startsWith("module.")).map((binding) => `${binding.consumer.id.slice("module.".length)}\u0000${key(binding.projection)}`).sort();
     expect([...pairs].sort()).toEqual(bound);
-    // Drift tripwires, derived: 237 post-rebase + 21 recorded-path successors compiled; 2 awaiting; R = 0 (guided hint blocked).
-    expect(pairs).toHaveLength(258);
-    expect(pairs.length + awaiting.length).toBe(260);
-    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(147);
+    // Drift tripwires, derived: 237 post-rebase + 21 recorded-path successors + 5 typed Review
+    // projections (rfc/review-evidence-compiler.md) compiled; 2 awaiting; R = 0 (guided hint blocked).
+    expect(pairs).toHaveLength(263);
+    expect(pairs.length + awaiting.length).toBe(265);
+    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(152);
     expect(Object.fromEntries(MODULE_REGISTRY.modules.map((module) => [module.id, accepted(module).length]))).toEqual({
       rules_floor: 0, sight_on_request: 23, blunder_prevention: 3, threat_radar: 7, postcommit_nudge: 52, structure_nudge: 7,
-      theory_breadcrumb: 3, guided_hint: 0, compare_coach: 8, review_map: 81, full_inspector: 74,
+      theory_breadcrumb: 3, guided_hint: 0, compare_coach: 8, review_map: 85, full_inspector: 75,
     });
     // Semantic eligibility and the research selection policy are untouched (§2.2).
     expect(PRIMARY_EVIDENCE_MANIFEST.eligibility.every((row) => row.consumer.id === "research.semantic_selection")).toBe(true);

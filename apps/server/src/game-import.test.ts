@@ -6,6 +6,9 @@ import { SQLiteRunStorage } from "./storage.js";
 import { normalizeLichessGameUrl, normalizeLichessStudyUrl, resolveImportSource, resolveStudySource, stripPgnAnnotations } from "./import-source.js";
 import { createRestHandler } from "./rest.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
+import { MockProviderEngineClient } from "./mock-provider-engine.js";
+import { composeProviderTraversalApplication } from "./provider-traversal.js";
+import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
 
 const PGN = `[Event "Friendly"]
 [Site "https://lichess.org/abcd1234"]
@@ -178,55 +181,51 @@ describe("own-game import", () => {
     expect(await bad.json()).toMatchObject({ error: { code: "INVALID_REQUEST", message: "Unknown field /extra" } });
   });
 
-  it("completes the N+1 evidence pass durably and makes story reads idempotent", async () => {
-    let score = 0;
-    const executor: EvidenceExecutor = { async execute(job) { score -= 200; return { kind: "eval", source: "engine_validated", values: { centipawns: score, engineId: "mock-judge", requestedMovetimeMs: job.movetime } }; } };
+  it("completes the N+1 evidence pass durably through the Review coordinator and makes story reads idempotent", async () => {
+    // rfc/review-evidence-compiler.md §4.1: import completion reaches only ensureBranch; no job
+    // enters the evidence queue, and the typed deliveries attach to the run's own event log.
+    let executed = 0;
+    const executor: EvidenceExecutor = { async execute() { executed += 1; return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }; } };
     const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     stores.push(storage);
-    const service = new RunService(storage, { evidenceQueue: queue });
+    const { service, coordinator } = reviewService(storage, queue);
     const imported = await service.importGame({ id: "story-import", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "story-writer");
-    expect(imported.evidencePass.jobs).toBe(imported.run.nodes.length);
-    await queue.whenIdle();
+    expect(imported.evidencePass.jobs).toBeGreaterThan(0);
+    await coordinator.whenIdle();
+    expect(storage.read("story-import")!.run.events.filter((event) => event.type === "evidence.attached")).toHaveLength(imported.run.nodes.length);
     service.reveal(imported.run.id, "story-writer");
-    for (const result of queue.page(imported.run.id).results) service.applyEvidence(imported.run.id, "story-writer", result.seq);
     const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
     const story = service.story(imported.run.id, principal);
-    expect(story).toMatchObject({ ready: true, pendingEvidence: 0, side: "white", outcome: { kind: "unfinished" } });
+    expect(story).toMatchObject({ protocol: "review-story@1", progress: { kind: "settled" }, subject: { learnerSide: "white", outcome: { kind: "unfinished" } } });
     expect(story.moments.some((moment) => moment.kinds.includes("eval_pivot"))).toBe(true);
     expect(queue.outstanding(imported.run.id)).toEqual([]);
-    expect(service.story(imported.run.id, principal).pendingEvidence).toBe(0);
+    expect(executed).toBe(0);
+    expect(service.story(imported.run.id, principal).packetDigest).toBe(story.packetDigest);
   });
 
-  it("does not let a tablebase failure suppress story eval evidence for the same node", async () => {
+  it("does not let an evidence-queue tablebase failure affect the Review engine family", async () => {
     const executor: EvidenceExecutor = { async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 12 } }; } };
     const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
-    queue.enqueue({
-      runId: "story-kind-isolation",
-      nodeId: "story-kind-isolation:node:0",
-      fen: "8/8/8/8/8/8/4K3/6k1 w - - 0 1",
-      kind: "tablebase",
-    });
+    queue.enqueue({ runId: "story-kind-isolation", nodeId: "story-kind-isolation:node:0", fen: "8/8/8/8/8/8/4K3/6k1 w - - 0 1", kind: "tablebase" });
     await queue.whenIdle();
-    expect(queue.failures("story-kind-isolation")).toEqual([
-      expect.objectContaining({ nodeId: "story-kind-isolation:node:0", kind: "tablebase" }),
-    ]);
-
+    expect(queue.failures("story-kind-isolation")).toEqual([expect.objectContaining({ nodeId: "story-kind-isolation:node:0", kind: "tablebase" })]);
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     stores.push(storage);
-    const service = new RunService(storage, { evidenceQueue: queue });
-    const imported = await service.importGame({
-      id: "story-kind-isolation",
-      side: "white",
-      opponentPolicy: { mode: "human_common" },
-      policyConfig,
-      seed: 4,
-      source: { kind: "pgn", pgn: PGN },
-    }, "story-writer");
-
-    expect(imported.evidencePass.jobs).toBe(imported.run.nodes.length);
-    expect(queue.outstanding(imported.run.id)).toEqual(expect.arrayContaining([
-      expect.objectContaining({ nodeId: imported.run.nodes[0]!.id, kind: "eval" }),
-    ]));
+    const { service, coordinator } = reviewService(storage, queue);
+    const imported = await service.importGame({ id: "story-kind-isolation", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 4, source: { kind: "pgn", pgn: PGN } }, "story-writer");
+    await coordinator.whenIdle();
+    service.reveal(imported.run.id, "story-writer");
+    const story = service.story(imported.run.id, { learnerId: "__legacy", handle: "__legacy" });
+    expect(story.families.engine_eval.unavailable).toEqual([]);
+    expect(story.families.engine_eval.itemCount).toBeGreaterThan(0);
   });
 });
+
+/** The Review coordinator over the one real provider exchange, served by the labelled mock engine. */
+function reviewService(storage: SQLiteRunStorage, queue: EvidenceJobQueue) {
+  const swinging = (fen: string) => { const white = Number(fen.split(" ")[5]) >= 3 ? -400 : 20; return { score: `cp ${fen.split(" ")[1] === "w" ? white : -white}`, wdl: [300, 400, 300] as const }; };
+  const { scheduler } = composeProviderTraversalApplication({ engines: new MockProviderEngineClient({ score: swinging }), tablebaseFetch: null, explorerFetch: null, explorerToken: null });
+  const coordinator = new ReviewEvidenceCoordinator({ scheduler, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 64, maxAttemptsPerRequest: 2 }), windowNodes: 3, maxOutstandingPerRun: 2, maxTrackedRuns: 4, maxAttemptsPerRequest: 2, movetimeMs: 50, timeoutMs: 2_000 });
+  return { coordinator, service: new RunService(storage, { evidenceQueue: queue, reviewEvidence: coordinator }) };
+}

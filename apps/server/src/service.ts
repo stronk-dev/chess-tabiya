@@ -38,8 +38,15 @@ import {
   reviewMapProjection,
   moduleEvidenceRole,
   postcommitNudgePacket,
-  storyMoments,
-  reviewStoryTitle,
+  compileReviewPacketForSubject,
+  exactLegalMoves,
+  createReviewPrefixAuthority,
+  projectPublicReviewStory,
+  renderReviewStoryReceipt,
+  reviewDurableEngineStates,
+  reviewStoryMoments,
+  reviewSubjectPath,
+  type ReviewProviderNodeState,
   trajectoryPolicyAt,
   shapeFirings,
   type BranchComparison,
@@ -127,6 +134,7 @@ import {
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { recordedSemanticPathOperation } from "./recorded-semantic-path.js";
+import type { ReviewEvidenceCoordinator } from "./review-evidence.js";
 import { resolveImportSource, type ImportSource } from "./import-source.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
 
@@ -392,6 +400,7 @@ export class RunService {
   readonly #importFetch: typeof fetch;
   readonly #shapes: ShapeRegistry | undefined;
   readonly #tablebase: TablebaseSource | undefined;
+  readonly #reviewEvidence: ReviewEvidenceCoordinator | undefined;
   readonly #simulations = new Map<string, {
     readonly runId: string;
     readonly writerId: string;
@@ -414,9 +423,12 @@ export class RunService {
       readonly importFetch?: typeof fetch;
       readonly shapeRegistry?: ShapeRegistry;
       readonly tablebaseSource?: TablebaseSource;
+      /** rfc/review-evidence-compiler.md §4.1: the one application-lifetime Review coordinator. */
+      readonly reviewEvidence?: ReviewEvidenceCoordinator;
     } = {},
   ) {
     this.#storage = storage;
+    this.#reviewEvidence = options.reviewEvidence;
     this.#evidenceQueue = options.evidenceQueue;
     this.#packRegistry = options.packRegistry;
     this.#progress = options.progressStorage;
@@ -904,7 +916,7 @@ export class RunService {
       throw new ServerError("STORAGE_FAILURE", "Imported-game storage is not configured");
     }
     this.#storage.createImportedRun(run, lease, title, record);
-    const jobs = this.#ensureStoryEvidence(run, run.branches[0]!.id).enqueued;
+    const jobs = this.#reviewEngineStates(run.id, run.branches[0]!.id, true).requested;
     return Object.freeze({ run, importRecord: record, evidencePass: Object.freeze({ jobs }) });
   }
 
@@ -918,38 +930,42 @@ export class RunService {
     return record;
   }
 
+  /**
+   * rfc/review-evidence-compiler.md §4: `GET /runs/:id/story` returns only the closed
+   * `review-story@1` receipt rendered by `renderReviewStoryReceipt(packet)`. The call reaches the
+   * Review coordinator's `ensureBranch` (never the evidence queue) so the bounded enrichment pass
+   * progresses; the packet is recompiled from the storage-derived subject on every read.
+   */
   story(runId: string, principal: Principal, requestedBranchId?: string) {
     const context = this.#storyContext(runId, principal, requestedBranchId, true);
-    return Object.freeze({
-      runId,
-      ready: context.pass.ready,
-      pendingEvidence: context.pass.pending,
-      branchId: context.branchId,
-      side: context.run.start.side,
-      source: context.source,
-      outcome: context.outcome,
-      ...context.projection,
-    });
+    return renderReviewStoryReceipt(context.packet);
+  }
+
+  /** Server-only Story moments with their sealed evidence (the guidance.voice_story operation). */
+  storyEvidence(runId: string, principal: Principal, requestedBranchId?: string) {
+    return this.#storyContext(runId, principal, requestedBranchId, false).projection;
   }
 
   /**
    * rfc/review-map.md: the whole-game Review Map for one recorded branch. A read-only projection:
    * it enqueues no evaluation job, writes no event and persists no grade (criterion 14). The per-move
-   * evidence panel consumes the recorded-semantic-path operation (its D1 production consumer).
+   * evidence panel consumes the recorded-semantic-path operation (its D1 production consumer) and
+   * the typed Review packet through `module.review_map@1` (rfc/review-evidence-compiler.md).
    */
   async review(runId: string, principal: Principal, requestedBranchId?: string) {
     const context = this.#storyContext(runId, principal, requestedBranchId, false);
     const semanticPath = await recordedSemanticPathOperation(this.#storage)({ principal, runId, branchId: context.branchId });
-    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role) });
+    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role), packet: context.packet });
     return Object.freeze({
       runId,
       branchId: context.branchId,
       side: context.run.start.side,
+      // Generated summaries of the packet's orthogonal completion fields; never a web input authority.
       ready: context.pass.ready,
       pendingEvidence: context.pass.pending,
       source: context.source,
       outcome: context.outcome,
-      storyTitle: reviewStoryTitle({ side: context.run.start.side, outcome: context.outcome, ...context.projection }),
+      storyTitle: context.projection.title.text,
       viewer: Object.freeze({ mayWrite: mayWrite(context.role) }),
       semanticPath: Object.freeze(semanticPath.kind === "available" ? { kind: "available" as const, events: semanticPath.events.length } : { kind: "refused" as const, reason: semanticPath.reason }),
       ...projection,
@@ -985,18 +1001,24 @@ export class RunService {
     if (branchId === undefined || (!importedMainline && branchOutcome === undefined)) throw new ServerError("STORY_UNAVAILABLE","This branch has no terminal story");
     if (!feedbackDisclosed(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal the finished game before opening its story");
     const record = run.sessionKind === "imported" ? this.importRecord(runId, principal) : undefined;
-    const pass = this.#ensureStoryEvidence(run, branchId, enqueue);
+    // rfc/review-evidence-compiler.md §4: the subject is derived from parsed storage only.
+    const authorize = createReviewPrefixAuthority({
+      loadRun: (id) => this.#storage.read(id)?.run,
+      loadImportRecord: (id) => { const stored = this.#storage.importedGame?.(id); return stored === undefined ? undefined : { runId: stored.runId, result: stored.result, movetextDigest: stored.movetextDigest }; },
+    });
+    const subject = authorize({ runId, branchId });
+    const engine = this.#reviewEngineStates(runId, branchId, enqueue).states;
     const shapes = this.#shapes?.list().map((summary) => {
       const document = this.#shapes!.required(summary.id).document;
       return { id: document.id, trigger: document.trigger };
-    });
-    const projection = storyMoments(run, branchId, {
-      ...(record===undefined?{}:{recordedResult: record.result}),
-      ...(shapes === undefined ? {} : { shapes }),
-    });
+    }) ?? [];
+    const packet = compileReviewPacketForSubject(subject, { engine, shapes });
+    const projection = reviewStoryMoments(packet);
+    const progress = packet.completion.progress;
+    const pass = Object.freeze(progress.kind === "settled" ? { ready: true, pending: 0 } : { ready: false, pending: progress.pendingNodeCount + progress.notYetScheduledNodeCount });
     const terminal = branchOutcome !== undefined;
     return {
-      run, role, branchId, record, pass, projection,
+      run, role, branchId, record, pass, projection, packet,
       source: record===undefined?Object.freeze({kind:"native" as const}):Object.freeze({ kind: record.sourceKind, ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }), headers: record.headers, result: record.result, importedAt: record.importedAt }),
       outcome: Object.freeze(terminal
         ? { kind: "board_terminal" as const, result: branchOutcome.data.outcome }
@@ -1023,8 +1045,12 @@ export class RunService {
     const context=this.#storyContext(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId,false);
     // rfc/review-map.md §5 ([[D688]]): the public card reads the same moment selection as the private review.
     const review=reviewMapProjection({run:context.run,branchId:context.branchId,story:context.projection,context:context.record===undefined?"review":"imported_analysis",viewer:this.#moduleViewer(record.runId,{learnerId:learner.id,handle:learner.handle},context.run,context.role)});
+    // rfc/review-evidence-compiler.md §4: the public share is a strict narrower projection of the
+    // same selected presentation receipts, copied byte-for-byte from the authorized story receipt.
+    const receipt=projectPublicReviewStory(renderReviewStoryReceipt(context.packet),review.moments.map((moment)=>moment.nodeId));
     return Object.freeze({
-      title:reviewStoryTitle({side:context.run.start.side,outcome:context.outcome,...context.projection}),
+      title:context.projection.title.text,
+      receipt,
       outcome:context.outcome,
       considered:review.considered,
       momentsSentence:review.momentsSentence,
@@ -2266,29 +2292,22 @@ export class RunService {
     return Object.freeze({ schedule, result });
   }
 
-  #ensureStoryEvidence(run: DrillRun, branchId: string, enqueue = true): { readonly ready: boolean; readonly pending: number; readonly enqueued: number } {
+  /**
+   * The per-node shared-engine states for one branch. With `request`, the Review coordinator's
+   * single `ensureBranch` operation admits the next bounded window; without it (read-only review
+   * surfaces) the coordinator is only observed. No coordinator means no analysis engine: every node
+   * without a durable delivery is `provider_off`.
+   */
+  #reviewEngineStates(runId: string, branchId: string, request: boolean): { readonly states: ReadonlyMap<string, ReviewProviderNodeState>; readonly requested: number } {
+    if (this.#reviewEvidence !== undefined) {
+      const result = request ? this.#reviewEvidence.ensureBranch(runId, branchId) : this.#reviewEvidence.observe(runId, branchId);
+      return Object.freeze({ states: result.states, requested: [...result.states.values()].filter((state) => state.kind === "pending").length });
+    }
+    const run = this.#required(runId).run;
     const path = branchPath(run, branchId);
-    const durable = new Set(run.events.flatMap((event) =>
-      event.type === "evidence.attached" && event.data.payload.kind === "eval" &&
-      event.data.payload.source === "engine_validated"
-        ? [event.data.nodeId]
-        : [],
-    ));
-    const queue = this.#evidenceQueue;
-    if (queue === undefined) {
-      return Object.freeze({ ready: false, pending: path.filter((node) => !durable.has(node.id)).length, enqueued: 0 });
-    }
-    const failed = new Set(queue.failures(run.id).filter((failure) => failure.kind === "eval").map((failure) => failure.nodeId));
-    const outstanding = new Set(queue.outstanding(run.id).filter((job) => job.kind === "eval").map((job) => job.nodeId));
-    let enqueued = 0;
-    for (const node of path) {
-      if (!enqueue || durable.has(node.id) || failed.has(node.id) || outstanding.has(node.id)) continue;
-      queue.enqueue({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "eval", movetime: this.#evidenceMovetimeMs });
-      outstanding.add(node.id);
-      enqueued += 1;
-    }
-    const ready = path.every((node) => durable.has(node.id) || failed.has(node.id));
-    return Object.freeze({ ready, pending: path.filter((node) => !durable.has(node.id) && !failed.has(node.id)).length, enqueued });
+    const durable = reviewDurableEngineStates(run, path);
+    const states = new Map<string, ReviewProviderNodeState>(path.map((node) => [node.id, durable.get(node.id)?.kind === "delivered" ? durable.get(node.id)! : exactLegalMoves(node.fen).length === 0 ? Object.freeze({ kind: "honest_empty" as const, reason: "outside_domain" as const }) : Object.freeze({ kind: "unavailable" as const, reason: "provider_off" as const })]));
+    return Object.freeze({ states, requested: 0 });
   }
 
   #required(runId: string): StoredRun {

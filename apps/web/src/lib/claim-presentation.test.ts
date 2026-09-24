@@ -28,13 +28,15 @@ describe("claim provenance", () => {
   });
   it("names only earned machine labels as recorded evidence", () => {
     const text = claimProvenance(claim());
-    expect(text).toContain("Evidence recorded for: tablebase_exact.");
-    expect(text).not.toContain("Evidence recorded for: tablebase_exact, author_principle");
+    // rfc/evidence-presentation.md §6: the evidence-type vocabulary renders through its label registry.
+    expect(text).toContain("Evidence recorded for: exact tablebase.");
+    expect(text).not.toContain("Evidence recorded for: exact tablebase, author principle");
+    expect(text).not.toMatch(/tablebase_exact|author_principle/u);
     expect(text).toContain("It can be wrong when: The activity is forced.");
   });
 
   it("states the absence of a record for self-declared claims", () => {
     expect(claimProvenance(claim({ binding: "self_declared", evidenceTypes: ["derived_feature"], earnedEvidenceTypes: [], principles: [] })))
-      .toBe("Author's claim, author-declared: derived_feature. No machine record is attached.");
+      .toBe("Author's claim, author-declared: board-feature detector. No machine record is attached.");
   });
 });

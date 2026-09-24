@@ -15,6 +15,7 @@ import { normalizeMove } from "chessops/chess";
 import { parseUci } from "chessops/util";
 
 import { castlingLegality, castlingRights, castlingRightsLost } from "./castling.js";
+import { parseCorpusResultAbstention } from "./corpus-result.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { recordedBranchFacts, type BranchComparison, type ComparisonEvidenceEntry, type ComparisonScore, type RecordedBranchFacts } from "./compare.js";
 import { endgameClassification } from "./endgame.js";
@@ -69,7 +70,22 @@ import {
 } from "./semantic-evidence.js";
 import { shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
 import { squareControlEvents, squareControlReading } from "./square-control.js";
-import { STORY_MATE_CP, STORY_PIVOT_CP, rankStoryMoments, storyEvaluation, suggestTitle, type StoryMoment, type StoryTitleInput } from "./story.js";
+import { STORY_PIVOT_CP, rankStoryMoments, suggestTitle, type StoryMoment, type StoryTitleInput } from "./story.js";
+import {
+  learnerCentipawns,
+  mateTransitionChanges,
+  reviewPointCentipawns,
+  reviewPointComparability,
+  whiteWdl,
+  type ForcedMateAfterMoveProofV2,
+  type RecordedPosition,
+  type ReviewEnginePoint,
+  type ReviewEvalDelta,
+  type ReviewMateTransition,
+  type ReviewWdlPoint,
+  type StockfishPositionEvaluation,
+  type WhiteWdlPoint,
+} from "./review-points.js";
 import { evaluateStructuralPredicate } from "./structural-evidence.js";
 import { matchesStructuralExpression, pawnConnectivityReading, spaceReading, structuralReading, type StructuralReading } from "./structure.js";
 import {
@@ -493,6 +509,27 @@ export const createRulesTacticConsequenceForcedMateAfterMoveV1Evidence = (() => 
   });
 })();
 
+/**
+ * rfc/review-evidence-compiler.md §3.2: the same mate-proof computation through a separate exact
+ * adapter. It retains exactly the nine declared operands — including both position endpoints — and
+ * drops every undeclared key, so Review can join it to one byte-identical recorded edge.
+ */
+export const createRulesTacticConsequenceForcedMateAfterMoveV2Evidence = (() => {
+  const route = "rules.tactic.consequence.forced_mate_after_move@2";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, breadth: sealed("rules.tactic.consequence.reply_breadth@1"), maxAttackerMoves: value("an integer attacker-move horizon", Number.isSafeInteger) }], result: "availability", dependency: "semantic-convention-provenance", pending: "mate-proof@1 is carried in-payload; its registered descriptor lands with semantic-convention-provenance." }, ({ beforeFen, breadth, maxAttackerMoves }: { readonly beforeFen: string; readonly breadth: DeclaredEvidence<ReplyBreadth>; readonly maxAttackerMoves: number }): EvidenceAvailability<DeclaredEvidence<ForcedMateAfterMoveProofV2>> => {
+    const result = forcedMateAfterMove(validFen(beforeFen), breadth.payload.triggeringMove, maxAttackerMoves, breadth.payload);
+    if (result.kind === "unavailable") return unavailable(result.reason);
+    const { proof } = result;
+    const exact: ForcedMateAfterMoveProofV2 = Object.freeze({
+      beforeFen: proof.beforeFen, candidate: proof.candidate, afterFen: proof.afterFen, attacker: proof.attacker,
+      maxAttackerMoves: proof.maxAttackerMoves, proofStatus: proof.proofStatus, proofDigest: proof.proofDigest,
+      rootReplies: proof.rootReplies, nodes: proof.nodes,
+    });
+    return available(mint(route, symbol, exact, { beforeFen, breadth, maxAttackerMoves }, [breadth]));
+  });
+})();
+
 function structuralEventsForEdge(edge: EvidenceEdge) {
   return memo(`structuralEvents|${edgeKey(edge)}`, () => structuralSemanticEventPayloads(edge.beforeFen, edge.moveUci, edge.afterFen, cachedStructuralReading));
 }
@@ -909,7 +946,8 @@ export const createRunRecordEvidenceRefResolutionV1Evidence = (() => {
 // Derived comparison and story projections
 // ---------------------------------------------------------------------------------------------
 
-function scoreCp(score: ComparisonScore): number { return score.kind === "cp" ? score.value : score.movesTo < 0 ? -STORY_MATE_CP : STORY_MATE_CP; }
+/** rfc/review-evidence-compiler.md refusal 1: a mate score is never converted to cp; no delta crosses the type boundary. */
+function scoreCp(score: ComparisonScore): number | null { return score.kind === "cp" ? score.value : null; }
 
 function verifiedTrail(run: DrillRun, comparison: BranchComparison, branchId: string): readonly ComparisonEvidenceEntry[] {
   const recorded = new Set(comparisonFacts(run, comparison, branchId).evidence.map((entry) => evidenceDigest(entry)));
@@ -932,7 +970,9 @@ export const createDerivedCompareEvalDeltaV1Evidence = (() => {
     const trail = [...verifiedTrail(run, comparison, branchId)].sort((left, right) => left.plyOffset - right.plyOffset);
     const result: DeclaredEvidence<unknown>[] = [];
     for (let index = 1; index < trail.length; index += 1) {
-      const delta = scoreCp(trail[index]!.score) - scoreCp(trail[index - 1]!.score);
+      const afterCp = scoreCp(trail[index]!.score), beforeCp = scoreCp(trail[index - 1]!.score);
+      if (afterCp === null || beforeCp === null) continue;
+      const delta = afterCp - beforeCp;
       if (Math.abs(delta) >= STORY_PIVOT_CP) result.push(mint(route, symbol, Object.freeze({ delta, plyOffset: trail[index]!.plyOffset }), { run, branchId, before: trail[index - 1], after: trail[index] }, [evidenceDigest(trail[index - 1]), evidenceDigest(trail[index])]));
     }
     return Object.freeze(result);
@@ -958,44 +998,39 @@ export const createDerivedComparePieceRouteV1Evidence = (() => {
   });
 })();
 
-export const createDerivedStoryEvalShiftV1Evidence = (() => {
-  const route = "derived.story.eval_shift@1";
-  const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, branchId: value("a branch id", isText) }], result: "items", dependency: "provider-exchange-and-execution", pending: "Recorded evaluations come from the run's engine_validated evidence.attached events; the live exchange receipt lands with provider-exchange-and-execution." }, ({ run, branchId }: { readonly run: DrillRun; readonly branchId: string }): readonly RunEvidenceItem<unknown>[] => {
-    const path = branchPath(run, branchId);
-    const evaluations = path.map((node) => storyEvaluation(run, node));
-    const result: RunEvidenceItem<unknown>[] = [];
-    for (let index = 1; index < path.length; index += 1) {
-      const before = evaluations[index - 1], after = evaluations[index];
-      if (before === undefined || after === undefined) continue;
-      const delta = after.centipawns - before.centipawns;
-      if (Math.abs(delta) < STORY_PIVOT_CP) continue;
-      result.push(Object.freeze({ evidence: mint(route, symbol, Object.freeze({ before, after, delta }), { run, branchId, nodeId: path[index]!.id }), nodeId: path[index]!.id, plyOffset: path[index]!.ply }));
-    }
-    return Object.freeze(result);
-  });
-})();
+const isLearnerSide = (candidate: unknown): boolean => candidate === "white" || candidate === "black";
 
+/**
+ * rfc/review-evidence-compiler.md §5: last-level evaluates typed cp review points only and converts
+ * White evidence to the learner's perspective here, at the consumer. A mate point can neither
+ * satisfy nor fail the within-one-pawn convention.
+ */
 export const createDerivedStoryLastLevelV1Evidence = (() => {
   const route = "derived.story.last_level@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, branchId: value("a branch id", isText), recordedResult: value("a PGN result token", (candidate) => typeof candidate === "string" && PGN_RESULT_TOKENS.has(candidate)) }], result: "items", dependency: "provider-exchange-and-execution", pending: "Recorded evaluations come from the run's engine_validated evidence.attached events; the live exchange receipt lands with provider-exchange-and-execution." }, ({ run, branchId, recordedResult }: { readonly run: DrillRun; readonly branchId: string; readonly recordedResult: "1-0" | "0-1" | "1/2-1/2" }): readonly RunEvidenceItem<unknown>[] => {
-    const side = run.start.side;
+  return factory({ route, symbol, shape: "derived", arms: [{ path: value("an ordered recorded path of node ids", (candidate) => Array.isArray(candidate) && candidate.every(isText)), side: value("a learner side", isLearnerSide), recordedResult: value("a PGN result token", (candidate) => typeof candidate === "string" && PGN_RESULT_TOKENS.has(candidate)), points: sealedList(0, null, "derived.review.eval_point@1") }], result: "items", dependency: "provider-exchange-and-execution" }, ({ path, side, recordedResult, points }: { readonly path: readonly string[]; readonly side: "white" | "black"; readonly recordedResult: "1-0" | "0-1" | "1/2-1/2"; readonly points: readonly DeclaredEvidence<ReviewEnginePoint>[] }): readonly RunEvidenceItem<unknown>[] => {
     const lost = (side === "white" && recordedResult === "0-1") || (side === "black" && recordedResult === "1-0");
     if (!lost) return Object.freeze([]);
-    const path = branchPath(run, branchId);
-    const evaluations = path.map((node) => storyEvaluation(run, node));
-    let last = -1;
-    for (let index = 0; index < evaluations.length; index += 1) if ((evaluations[index]?.centipawns ?? -101) >= -100) last = index;
-    if (last < 0) return Object.freeze([]);
-    return Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ recordedResult, evaluation: evaluations[last] }), { run, branchId, recordedResult }), nodeId: path[last]!.id, plyOffset: path[last]!.ply })]);
+    const order = new Map(path.map((nodeId, index) => [nodeId, index]));
+    let last: { readonly point: DeclaredEvidence<ReviewEnginePoint>; readonly index: number; readonly learnerCp: number; readonly whiteCp: number } | undefined;
+    for (const point of points) {
+      const index = order.get(point.payload.position.payload.nodeId);
+      if (index === undefined) throw new TypeError("Last-level point is not on the recorded path");
+      const whiteCp = reviewPointCentipawns(point.payload);
+      if (whiteCp === null) continue;
+      const learnerCp = learnerCentipawns(whiteCp, side);
+      if (learnerCp >= -100 && (last === undefined || index > last.index)) last = { point, index, learnerCp, whiteCp };
+    }
+    if (last === undefined) return Object.freeze([]);
+    const position = last.point.payload.position.payload;
+    return Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ recordedResult, evaluation: Object.freeze({ nodeId: position.nodeId, whiteCentipawns: last.whiteCp, learnerCentipawns: last.learnerCp, side }) }), { path, side, recordedResult, points }, [last.point]), nodeId: position.nodeId, plyOffset: position.ply })]);
   });
 })();
 
 const MOMENT_KIND_SOURCES: Readonly<Record<string, string>> = Object.freeze({
   irreversibility: "derived.pivotal.irreversibility@1", phase_change: "derived.pivotal.phase_change@1",
   human_divergence: "derived.pivotal.human_divergence@1", option_collapse: "derived.pivotal.option_collapse@1",
-  eval_pivot: "derived.story.eval_shift@1", last_level: "derived.story.last_level@1",
+  eval_pivot: "derived.review.eval_delta@1", mate_transition: "derived.review.mate_transition@1", last_level: "derived.story.last_level@1",
   endgame_entry: "rules.endgame.classification@1", shape_span: "theory.shapes.firing@1",
 });
 
@@ -1010,10 +1045,75 @@ export const createDerivedStoryRankV1Evidence = (() => {
         const required = kind === "outcome" ? ["run.record.consequence@1", "run.record.imported_result@1"] : [MOMENT_KIND_SOURCES[kind]!];
         if (!required.some((candidate) => routes.has(candidate))) throw new TypeError(`Story moment kind ${kind} has no sealed ${required.join(" | ")} evidence`);
       }
-      const shift = moment.evidence.find((item) => sealedRoute(item) === "derived.story.eval_shift@1")?.payload as { readonly before?: unknown; readonly after?: unknown } | undefined;
-      if ((moment.evalBefore !== undefined || moment.evalAfter !== undefined) && (shift === undefined || !sameDigest(shift.before, moment.evalBefore) || !sameDigest(shift.after, moment.evalAfter))) throw new TypeError("Story moment evaluations are not its sealed evaluation shift");
+      // The moment's typed evaluation pair must be exactly the endpoints of its sealed transition.
+      const transition = moment.evidence.find((item) => sealedRoute(item) === "derived.review.eval_delta@1" || sealedRoute(item) === "derived.review.mate_transition@1")?.payload as ReviewEvalDelta | ReviewMateTransition | undefined;
+      if (moment.evaluation !== null) {
+        if (transition === undefined) throw new TypeError("Story moment evaluation has no sealed review transition");
+        const before = transition.before.payload.evaluation.payload.payload.score;
+        const after = transition.after.payload.evaluation.payload.payload.score;
+        if (!sameDigest(before, moment.evaluation.before) || !sameDigest(after, moment.evaluation.after)) throw new TypeError("Story moment evaluations are not its sealed review transition");
+      }
     }
     return mint(route, symbol, Object.freeze({ rank: rankStoryMoments(moments) }), { moments: moments.map((moment) => ({ nodeId: moment.nodeId, ply: moment.ply, kinds: moment.kinds, evidence: moment.evidence })) }, sources);
+  });
+})();
+
+// ---------------------------------------------------------------------------------------------
+// rfc/review-evidence-compiler.md §§1–3: the typed Review projections. Each derivation retains its
+// exact sealed inputs literally and is measured/reported; none widens the provider delivery.
+// ---------------------------------------------------------------------------------------------
+
+const sameCanonicalFen = (left: string, right: string): boolean => left === right;
+
+export const createDerivedReviewEvalPointV1Evidence = (() => {
+  const route = "derived.review.eval_point@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ evaluation: sealed("live.stockfish.position_eval@1"), position: sealed("run.record.position@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ evaluation, position }: { readonly evaluation: DeclaredEvidence<StockfishPositionEvaluation>; readonly position: DeclaredEvidence<RecordedPosition> }): EvidenceAvailability<DeclaredEvidence<ReviewEnginePoint>> => {
+    if (!sameCanonicalFen(evaluation.payload.payload.fen, position.payload.fen)) return unavailable("position_mismatch");
+    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_point@1" as const, position, evaluation }), { evaluation, position }, [evaluation, position]));
+  });
+})();
+
+export const createDerivedReviewEvalDeltaV1Evidence = (() => {
+  const route = "derived.review.eval_delta@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("derived.review.eval_point@1"), after: sealed("derived.review.eval_point@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ before, after }: { readonly before: DeclaredEvidence<ReviewEnginePoint>; readonly after: DeclaredEvidence<ReviewEnginePoint> }): EvidenceAvailability<DeclaredEvidence<ReviewEvalDelta>> => {
+    const comparability = reviewPointComparability(before.payload, after.payload);
+    if (comparability !== "comparable") return unavailable(comparability);
+    const beforeCp = reviewPointCentipawns(before.payload), afterCp = reviewPointCentipawns(after.payload);
+    if (beforeCp === null || afterCp === null) return unavailable("mate_operand");
+    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_delta@1" as const, before, after, deltaCp: afterCp - beforeCp }), { before, after }, [before, after]));
+  });
+})();
+
+export const createDerivedReviewMateTransitionV1Evidence = (() => {
+  const route = "derived.review.mate_transition@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("derived.review.eval_point@1"), after: sealed("derived.review.eval_point@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ before, after }: { readonly before: DeclaredEvidence<ReviewEnginePoint>; readonly after: DeclaredEvidence<ReviewEnginePoint> }): EvidenceAvailability<DeclaredEvidence<ReviewMateTransition>> => {
+    const comparability = reviewPointComparability(before.payload, after.payload);
+    if (comparability !== "comparable") return unavailable(comparability);
+    const changes = mateTransitionChanges(before.payload.evaluation.payload.payload.score, after.payload.evaluation.payload.payload.score);
+    if (typeof changes === "string") return unavailable(changes);
+    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.mate_transition@1" as const, before, after, changes }), { before, after }, [before, after]));
+  });
+})();
+
+export const createDerivedReviewWdlWhiteV1Evidence = (() => {
+  const route = "derived.review.wdl_white@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ evaluation: sealed("live.stockfish.position_eval@1") }], result: "single", dependency: "provider-exchange-and-execution" }, ({ evaluation }: { readonly evaluation: DeclaredEvidence<StockfishPositionEvaluation> }): DeclaredEvidence<WhiteWdlPoint> => {
+    const fen = evaluation.payload.payload.fen;
+    const normalized = whiteWdl(fen, evaluation.payload.payload.rawWdl);
+    return mint(route, symbol, Object.freeze({ projectionId: "derived.review.wdl_white@1" as const, source: evaluation, fen, rawSubject: normalized.rawSubject, perspective: "white" as const, win: normalized.win, draw: normalized.draw, loss: normalized.loss }), { evaluation }, [evaluation]);
+  });
+})();
+
+export const createDerivedReviewWdlPointV1Evidence = (() => {
+  const route = "derived.review.wdl_point@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ normalized: sealed("derived.review.wdl_white@1"), position: sealed("run.record.position@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ normalized, position }: { readonly normalized: DeclaredEvidence<WhiteWdlPoint>; readonly position: DeclaredEvidence<RecordedPosition> }): EvidenceAvailability<DeclaredEvidence<ReviewWdlPoint>> => {
+    if (!sameCanonicalFen(normalized.payload.fen, position.payload.fen)) return unavailable("position_mismatch");
+    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.wdl_point@1" as const, position, normalized }), { normalized, position }, [normalized, position]));
   });
 })();
 
@@ -1187,10 +1287,20 @@ export const createHumanExplorerPopulationV1Evidence = (() => {
     mint(route, symbol, page, { page }, [evidenceDigest(page)]));
 })();
 
+/** [[D3103]]: an abstention arm is admitted only as the complete exported `CorpusResult` arm. */
+function completeCorpusAbstention(candidate: unknown): boolean {
+  try {
+    parseCorpusResultAbstention(candidate);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export const createHumanExplorerPositionStatsV1Evidence = (() => {
   const route = "human.explorer.position_stats@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "source_receipt", arms: [{ result: value("a CorpusResult", (candidate) => isRecord(candidate) && (candidate.kind === "stats" || candidate.kind === "abstention") && "population" in candidate) }], result: "single", dependency: "provider-exchange-and-execution", pending: PROVIDER_PENDING }, ({ result }: { readonly result: Readonly<Record<string, unknown>> }) =>
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ result: value("a CorpusResult", (candidate) => isRecord(candidate) && ((candidate.kind === "stats" && "population" in candidate) || (candidate.kind === "abstention" && completeCorpusAbstention(candidate)))) }], result: "single", dependency: "provider-exchange-and-execution", pending: PROVIDER_PENDING }, ({ result }: { readonly result: Readonly<Record<string, unknown>> }) =>
     mint(route, symbol, result, { result }, [evidenceDigest(result)]));
 })();
 

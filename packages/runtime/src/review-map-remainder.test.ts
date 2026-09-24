@@ -10,13 +10,13 @@ import { reviewAnalysis } from "./review-analysis.js";
 import { REVIEW_COMPARE_LIMIT, openRetryEntry, reviewMapProjection, type ReviewMapProjection } from "./review-map.js";
 import { reviewText } from "./review-map-templates.js";
 import { commitMove, fork, rewind } from "./runtime.js";
-import { storyMoments } from "./story.js";
+import { storyMomentsForRun } from "./story.js";
 import { REVIEW_FIXTURE_AT, fixtureCentipawns, reviewFixtureRun } from "./testing/review-map-fixture.js";
 import type { DrillRun } from "./types.js";
 import { judgementWordsOutsideGrounding } from "./voice.js";
 
 function projectionOf(run: DrillRun, branchId = run.branches[0]!.id): ReviewMapProjection {
-  return reviewMapProjection({ run, branchId, story: storyMoments(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", viewer: { role: "learner", session: "imported" } });
+  return reviewMapProjection({ run, branchId, story: storyMomentsForRun(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", viewer: { role: "learner", session: "imported" } });
 }
 
 /** A retry exactly as the Review Map performs it: rewind to the entry, fork `story-reentry`, optionally play. */

@@ -26,7 +26,7 @@ import { compileEvidenceManifest } from "./evidence-contract.js";
 import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame", "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame", "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance"]);
 const ref = (id: string) => ({ id, version: 1 } as const);
 
 function jsonFiles(url: URL): readonly URL[] {
@@ -53,9 +53,10 @@ describe("primary evidence catalogue", () => {
     expect(MODULE_CONSUMER_IDS).toHaveLength(9);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    // 258 module pairs = the post-successor-rebase 237 plus the 21 recorded-path v2 successors.
-    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(258);
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([40, 222, 34, 501]); // +6 provider-exchange sources (rfc/provider-exchange-and-execution.md §§5–9)
+    // 263 module pairs = the post-successor-rebase 237, the 21 recorded-path v2 successors, and the
+    // five review-evidence-compiler projections (four Review Map, one Full Inspector forced-mate v2).
+    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(263);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([41, 228, 34, 508]); // +6 provider-exchange sources; +1 producer, +6 projections, +7 bindings (rfc/review-evidence-compiler.md)
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());

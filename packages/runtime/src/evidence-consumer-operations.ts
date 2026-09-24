@@ -3,7 +3,7 @@ import { evidenceConsumerOperation } from "./evidence-contract.js";
 import { consumePivotalMarkers } from "./pivotal.js";
 import { consumeMoveTransition, consumePositionStructure, consumeSelectedSquareSight } from "./reading-evidence.js";
 import { consumeShapeFiring } from "./shape-firing.js";
-import { renderReviewStoryEvidence } from "./story.js";
+import { renderReviewStoryReceipt } from "./story.js";
 import { structuralEvidenceForAuthoring, structuralEvidenceForObjective } from "./structural-evidence.js";
 
 export const RUNTIME_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
@@ -16,5 +16,5 @@ export const RUNTIME_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
   evidenceConsumerOperation("compare.structure_strip", consumeComparisonStripEvidence),
   evidenceConsumerOperation("compare.engine_trajectory", consumeComparisonEngineTrajectory),
   evidenceConsumerOperation("board.pivotal_marker", consumePivotalMarkers),
-  evidenceConsumerOperation("review.story", renderReviewStoryEvidence),
+  evidenceConsumerOperation("review.story", renderReviewStoryReceipt),
 ]);

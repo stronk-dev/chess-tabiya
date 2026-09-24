@@ -1,13 +1,20 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — **FIFTH AUTHOR REPAIR COMPLETE 2026-09-13 on
-  [[D3184]]–[[D3189]].** The bounded model now preserves every adapter state inside a family,
-  derives node/incoming-edge slots and scheduling windows, retains started cancellations against
-  the retry ceiling, derives a contiguous path-bound subject from parsed storage authorities,
-  executes the registry's payload parsers and carries distinct decision/evidence/stop identities.
-  `make review-evidence-fifth-author-repair` retains the full return chain and passes six repair
-  groups. Production remains unauthorized pending another genuinely fresh review and the declared
-  dependencies.
+- **Status:** **implementing — landed 2026-09-24 at the owner's direction (implement directly, no
+  review round); receipt `planning/evidence-foundation-ux/review-evidence-compiler-implementation-2026-09-24.md`.**
+  The five Review projections and forced-mate v2 compile in the manifest with factories and pinned
+  profiles; `packages/runtime/src/review-evidence.ts` ships the storage-derived prefix subject, the
+  literal node/incoming-edge source-adapter registry with executable parsers, the subject-derived
+  windowed plan, private-sealed adapter results, the aggregate-sealed packet, the total family and
+  completion folds and packet-issued abstentions; `story.ts` compiles Story from the packet
+  (`renderReviewStoryReceipt` → `review-story@1`, web `parseReviewStoryReceipt`, public projection);
+  `apps/server/src/review-evidence.ts` ships `ReviewAttemptOutcomeStore` and the one
+  `ReviewEvidenceCoordinator` over `ProviderExchangeScheduler.get`; the Review Map evidence panel
+  renders the packet through `module.review_map@1`. Mate/cp flattening ([[D917]]) and learner
+  perspective ([[D1648]]) are repaired; semantic-collectors D2 is supplied. Open: the in-domain
+  tablebase request, runtime opening items (D2), the C4 harness reproduction figures of criterion 5,
+  the measured criterion-19 bound, ledger/log closeout (criterion 20), D1 and D3. *Prior status,
+  retained for history:* draft — fifth author repair complete 2026-09-13 on [[D3184]]–[[D3189]].
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -196,8 +203,10 @@ joining it to an exact recorded position.
 Both transition projections consume two `derived.review.eval_point@1` items. They are general
 typed comparisons, not claims that the points are adjacent; `compileReviewEvidence` chooses
 adjacent same-branch pairs by the recorded path. The nested deliveries must use the same actual
-engine `{id,version}`, generation, normalized command digest and identical requested/reached bound.
-A mismatch abstains rather than subtracting measurements with different operands.
+engine `{id,version}`, generation, position-free search command image and identical requested
+bound. A mismatch abstains rather than subtracting measurements with different operands. (The
+normalized command digest names the position and the reached depth is a per-position outcome, so
+neither can be required equal across two positions — corrected 2026-09-24.)
 
 ### 3.1 Cp delta
 
@@ -380,6 +389,8 @@ interface ReviewEvidencePacket {
   readonly manifestDigest: string;
   readonly nodes: readonly ReviewNodePacket[];
   readonly families: Readonly<Record<ReviewSourceFamily, ReviewRunFamilyState>>;
+  // Corrected 2026-09-24: the fourth repair made completion a retained packet field.
+  readonly completion: { readonly progress: ReviewProgress; readonly degradation: ReviewDegradation };
   readonly packetDigest: string;
 }
 
@@ -669,7 +680,11 @@ forgeable evidence lookalike. `STORY_MATE_CP` and every mate→cp clamp are dele
   (`packages/runtime/src/story.ts:182`) gives `phase_change` priority **3** and `endgame_entry`
   priority **4**; the drafted "phase/endgame" collapsed two live bands into one, which would have
   changed the order this bullet calls preserved. Mate transition takes a new band at position 1 and
-  every band below it shifts by one;
+  every band below it shifts by one. (Corrected 2026-09-24: HEAD's tail is shape, then other facts,
+  then irreversibility last — `story.ts` "Irreversibility alone is deliberately the final family" —
+  so the preserved order is outcome, mate transition, cp pivot, last level, phase change, endgame
+  entry, shape, other, irreversibility; the listed "irreversibility, shape, then other" contradicted
+  the preservation it claims);
 - **the second tiebreak survives only for cp-typed moments, and this must be said.** HEAD sorts
   within a band by `|evalAfter.centipawns − evalBefore.centipawns|` descending before ply
   (`story.ts:183`). Once the server compiler reads the typed `ReviewEnginePoint`, a mate-typed point
@@ -678,8 +693,10 @@ forgeable evidence lookalike. `STORY_MATE_CP` and every mate→cp clamp are dele
   converting mate to cp. The repaired path reads the nested retained
   `evaluation.payload.score`; the rule is explicit: the magnitude tiebreak applies **only** when
   both endpoints of a moment are `kind: "centipawns"`; a moment with any mate-typed endpoint skips
-  the magnitude comparison and is ordered by ply then node id within its band, ahead of cp moments
-  with equal ply. An implementer who reads only the band list above and deletes the magnitude
+  the magnitude comparison and is ordered by ply then node id within its band. (Corrected 2026-09-24:
+  "ahead of cp moments with equal ply" is vacuous and, as a mixed rule, not a total order — a moment's
+  band is its strongest kind, so mate-typed moments occupy band 1, cp-typed band 2, and later bands
+  carry no evaluation.) An implementer who reads only the band list above and deletes the magnitude
   tiebreak changes live output; one who keeps it verbatim breaks the type. Both are wrong;
 - ties use ply then node id (HEAD reaches the same result through a stable sort over the
   ply/node-id-ordered moment list at `story.ts:181`, so this is a statement of existing behavior);
@@ -1030,6 +1047,25 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-09-24 **implemented directly at the owner's direction; status `implementing`.** Receipt:
+  `planning/evidence-foundation-ux/review-evidence-compiler-implementation-2026-09-24.md`. Criteria
+  1–4, 6–18 and 21 have production tests (runtime `review-evidence.test.ts`, `story.test.ts`,
+  `review-map.test.ts`, `presentation-contract.test.ts`; server `review-evidence.test.ts`,
+  `game-import.test.ts`, `review-map.test.ts`, `adoption-wave.test.ts`; web
+  `story-response.test.ts`, `review-map-screen.test.ts`; browser `drill.spec.ts`). **Inline
+  corrections:** §3 comparability uses the position-free command image and the requested bound
+  (the normalized command digest names the position; reached depth is an outcome); §5's rank tail
+  follows HEAD (shape, other, irreversibility); §5's mixed tie rule is vacuous across bands and
+  stated as such; `ReviewEvidencePacket` carries `completion`. **Implementation choices:** deliveries
+  attach durably to the run's own `evidence.attached` eval event under `values.providerDelivery`
+  (re-derived through `parsePersistedProviderDelivery`; legacy scalar fields kept for inspector/grade
+  readers); a root occurrence constructs no Story moment; the bounded consequence window is zero
+  plies (`stopNodeId = evidenceNodeId`); the Review Map read only observes the coordinator;
+  mock-engine deployments run the one exchange over a labelled mock analysis engine. The
+  evidence-job-durability store has not reached main; the coordinator uses the provider scheduler
+  plus the run event log, and never the evidence queue. The Analyze reveal now honestly reports no
+  recorded line for typed deliveries (refusal 7 keeps best move/PV out of the eval payload).
 
 - 2026-09-13 fifth author repair ([[D3184]]–[[D3189]]): multi-adapter family accounting,
   grain-aware source planning, durable started-cancellation attempts, storage-derived prefix

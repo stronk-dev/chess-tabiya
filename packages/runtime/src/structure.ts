@@ -365,33 +365,109 @@ function directAttackCount(fen: string, color: Color, target: Square): number {
   return count;
 }
 
+/**
+ * The one registry of named-structure expressions (D3105). The match, the label lookup and the
+ * positive square witnesses all come from these registered expressions; there is no second table.
+ */
+export const STRUCTURE_PREDICATES: Readonly<Record<StructureId, StructuralExpression>> = deepFreeze<Record<StructureId, StructuralExpression>>({
+  carlsbad: { kind: "all", of: [
+    { kind: "feature", feature: { kind: "half_open_file", color: "white", file: "c" } },
+    { kind: "feature", feature: { kind: "half_open_file", color: "black", file: "e" } },
+    { kind: "pieceOnSquare", square: "d4", piece: { color: "white", role: "pawn" } },
+    { kind: "pieceOnSquare", square: "d5", piece: { color: "black", role: "pawn" } },
+    { kind: "pieceOnSquare", square: "c6", piece: { color: "black", role: "pawn" } },
+  ] },
+  "iqp-white": { kind: "all", of: [
+    { kind: "pieceOnSquare", square: "d4", piece: { color: "white", role: "pawn" } },
+    { kind: "feature", feature: { kind: "isolated_pawn", color: "white", file: "d" } },
+    { kind: "feature", feature: { kind: "half_open_file", color: "black", file: "d" } },
+  ] },
+  "iqp-black": { kind: "all", of: [
+    { kind: "pieceOnSquare", square: "d5", piece: { color: "black", role: "pawn" } },
+    { kind: "feature", feature: { kind: "isolated_pawn", color: "black", file: "d" } },
+    { kind: "feature", feature: { kind: "half_open_file", color: "white", file: "d" } },
+  ] },
+  "maroczy-bind": { kind: "all", of: [
+    { kind: "pieceOnSquare", square: "c4", piece: { color: "white", role: "pawn" } },
+    { kind: "pieceOnSquare", square: "e4", piece: { color: "white", role: "pawn" } },
+    { kind: "feature", feature: { kind: "half_open_file", color: "white", file: "d" } },
+    { kind: "feature", feature: { kind: "half_open_file", color: "black", file: "c" } },
+  ] },
+});
+
+function deepFreeze<T>(value: T): T {
+  if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
+    for (const item of Object.values(value as Record<string, unknown>)) deepFreeze(item);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+/** Outcome of one traversal: whether the expression holds and which squares positively witness it. */
+export interface StructuralExpressionWitness {
+  readonly matched: boolean;
+  readonly squares: readonly SquareName[];
+}
+
+const NO_WITNESS: readonly SquareName[] = Object.freeze([]);
+const UNMATCHED: StructuralExpressionWitness = Object.freeze({ matched: false, squares: NO_WITNESS });
+
+function witness(matched: boolean, squares: Iterable<SquareName> = NO_WITNESS): StructuralExpressionWitness {
+  if (!matched) return UNMATCHED;
+  return Object.freeze({ matched: true, squares: Object.freeze([...new Set(squares)].sort()) });
+}
+
+function pieceOnSquareHolds(fen: string, expression: Extract<StructuralExpression, { readonly kind: "pieceOnSquare" }>): boolean {
+  const position = positionFromFen(fen); const square = parseSquare(expression.square);
+  if (square === undefined) return false;
+  const actual = position.board.get(square);
+  return expression.piece === null ? actual === undefined : actual?.color === expression.piece.color && actual.role === expression.piece.role;
+}
+
+/**
+ * Decide an expression and collect its witness in ONE traversal. Witness squares are the occupied
+ * positive `pieceOnSquare` leaves of the matched expression (and of any matched named structure it
+ * references); negations, empty-square leaves, file features and quantifiers contribute no square.
+ * An unmatched expression has no witness.
+ */
+export function evaluateStructuralExpressionWithWitness(fen: string, expression: StructuralExpression): StructuralExpressionWitness {
+  if (expression.kind === "plan_signature") throw new TypeError("plan_signature must be expanded before runtime evaluation");
+  if (expression.kind === "all") {
+    const squares: SquareName[] = [];
+    for (const item of expression.of) {
+      const result = evaluateStructuralExpressionWithWitness(fen, item);
+      if (!result.matched) return UNMATCHED;
+      squares.push(...result.squares);
+    }
+    return witness(true, squares);
+  }
+  if (expression.kind === "any") {
+    const results = expression.of.map((item) => evaluateStructuralExpressionWithWitness(fen, item)).filter((result) => result.matched);
+    return witness(results.length > 0, results.flatMap((result) => result.squares));
+  }
+  if (expression.kind === "not") return witness(!evaluateStructuralExpressionWithWitness(fen, expression.of).matched);
+  if (expression.kind === "feature") {
+    if (expression.feature.kind === "named_structure") return evaluateNamedStructureWithWitness(fen, expression.feature.id);
+    return witness(matchesStructuralFeature(fen, expression.feature));
+  }
+  if (expression.kind === "pieceOnSquare") {
+    const matched = pieceOnSquareHolds(fen, expression);
+    return witness(matched, expression.piece === null ? NO_WITNESS : [expression.square]);
+  }
+  if (expression.kind === "mirrored") return evaluateStructuralExpressionWithWitness(fen, mirrorExpression(expression.of, expression.axis));
+  if (expression.kind === "quantified") return witness(matchesQuantified(fen, expression));
+  const exhaustive: never = expression;
+  throw new TypeError(`Unhandled structural expression: ${JSON.stringify(exhaustive)}`);
+}
+
+/** Match a registered named structure and return its positive square witness from the same traversal. */
+export function evaluateNamedStructureWithWitness(fen: string, id: StructureId): StructuralExpressionWitness {
+  if (!Object.hasOwn(STRUCTURE_PREDICATES, id)) throw new TypeError(`Named structure ${String(id)} has no registered expression`);
+  return evaluateStructuralExpressionWithWitness(fen, STRUCTURE_PREDICATES[id]);
+}
+
 function namedStructureMatches(fen: string, id: StructureId): boolean {
-  const entries: Readonly<Record<StructureId, StructuralExpression>> = {
-    carlsbad: { kind: "all", of: [
-      { kind: "feature", feature: { kind: "half_open_file", color: "white", file: "c" } },
-      { kind: "feature", feature: { kind: "half_open_file", color: "black", file: "e" } },
-      { kind: "pieceOnSquare", square: "d4", piece: { color: "white", role: "pawn" } },
-      { kind: "pieceOnSquare", square: "d5", piece: { color: "black", role: "pawn" } },
-      { kind: "pieceOnSquare", square: "c6", piece: { color: "black", role: "pawn" } },
-    ] },
-    "iqp-white": { kind: "all", of: [
-      { kind: "pieceOnSquare", square: "d4", piece: { color: "white", role: "pawn" } },
-      { kind: "feature", feature: { kind: "isolated_pawn", color: "white", file: "d" } },
-      { kind: "feature", feature: { kind: "half_open_file", color: "black", file: "d" } },
-    ] },
-    "iqp-black": { kind: "all", of: [
-      { kind: "pieceOnSquare", square: "d5", piece: { color: "black", role: "pawn" } },
-      { kind: "feature", feature: { kind: "isolated_pawn", color: "black", file: "d" } },
-      { kind: "feature", feature: { kind: "half_open_file", color: "white", file: "d" } },
-    ] },
-    "maroczy-bind": { kind: "all", of: [
-      { kind: "pieceOnSquare", square: "c4", piece: { color: "white", role: "pawn" } },
-      { kind: "pieceOnSquare", square: "e4", piece: { color: "white", role: "pawn" } },
-      { kind: "feature", feature: { kind: "half_open_file", color: "white", file: "d" } },
-      { kind: "feature", feature: { kind: "half_open_file", color: "black", file: "c" } },
-    ] },
-  };
-  return matchesStructuralExpression(fen, entries[id]);
+  return evaluateNamedStructureWithWitness(fen, id).matched;
 }
 
 function mirrorColor(color: Color, axis: MirrorAxis): Color {
@@ -568,12 +644,7 @@ export function matchesStructuralExpression(fen: string, expression: StructuralE
   if (expression.kind === "all" || expression.kind === "any") return expression.kind === "all" ? expression.of.every((item) => matchesStructuralExpression(fen, item)) : expression.of.some((item) => matchesStructuralExpression(fen, item));
   if (expression.kind === "not") return !matchesStructuralExpression(fen, expression.of);
   if (expression.kind === "feature") return matchesStructuralFeature(fen, expression.feature);
-  if (expression.kind === "pieceOnSquare") {
-    const position = positionFromFen(fen); const square = parseSquare(expression.square);
-    if (square === undefined) return false;
-    const actual = position.board.get(square);
-    return expression.piece === null ? actual === undefined : actual?.color === expression.piece.color && actual.role === expression.piece.role;
-  }
+  if (expression.kind === "pieceOnSquare") return pieceOnSquareHolds(fen, expression);
   if (expression.kind === "mirrored") return matchesStructuralExpression(fen, mirrorExpression(expression.of, expression.axis));
   if (expression.kind === "quantified") return matchesQuantified(fen, expression);
   const exhaustive: never = expression;
@@ -658,8 +729,13 @@ export function structuralReading(fen: string): StructuralReading {
   }
   const whiteKing = position.board.kingOf("white"), blackKing = position.board.kingOf("black");
   if (whiteKing !== undefined && blackKing !== undefined) values.push({ kind: "piece_distance", role: "king", squares: [makeSquare(whiteKing), makeSquare(blackKing)].sort() as SquareName[], count: emptyBoardDistance("king", whiteKing, blackKing)! });
-  const structures = (Object.keys(STRUCTURE_METADATA) as StructureId[]).filter((id) => namedStructureMatches(fen, id)).map((id) => Object.freeze({ id, ...STRUCTURE_METADATA[id] }));
-  for (const structure of structures) values.push({ kind: "named_structure", squares: [], provenanceNote: structure.provenanceNote });
+  const structures: StructureMatch[] = [];
+  for (const id of Object.keys(STRUCTURE_METADATA) as StructureId[]) {
+    const result = evaluateNamedStructureWithWitness(fen, id);
+    if (!result.matched) continue;
+    structures.push(Object.freeze({ id, ...STRUCTURE_METADATA[id] }));
+    values.push({ kind: "named_structure", squares: result.squares, provenanceNote: STRUCTURE_METADATA[id].provenanceNote });
+  }
   const skeletonKey = COLORS.flatMap((color) => pawns(position, color).map(makeSquare).sort().map((square) => `${color[0]}:${square}`)).join("|");
   return Object.freeze({ fen, skeletonKey, features: canonicalObservations(values), structures: Object.freeze(structures) });
 }
