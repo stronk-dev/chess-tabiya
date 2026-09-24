@@ -34,6 +34,10 @@ services:
       MAIA_LISTEN_HOST: 0.0.0.0
       MAIA_LISTEN_PORT: "7000"
       MAIA_READY_FILE: /ready
+      # Optional in development: the running image's OCI identity (see docs/provider-health.md).
+      MAIA_IMAGE_ID: ${MAIA_IMAGE_ID:-}
+      MAIA_MANIFEST_DIGEST: ${MAIA_MANIFEST_DIGEST:-}
+      MAIA_CONFIG_DIGEST: ${MAIA_CONFIG_DIGEST:-}
     healthcheck:
       test: ["CMD", "test", "-f", "/ready"]
       interval: 5s

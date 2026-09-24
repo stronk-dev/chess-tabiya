@@ -77,6 +77,9 @@ Current completion state is deliberately not copied here. Use the
   caching and failure handling.
 - [Provider exchange](provider-exchange.md) — one scheduler, sealed request identity and receipts,
   typed unavailability and the durable save/reload parser for Stockfish, Maia, Syzygy and Explorer.
+- [Provider health](provider-health.md) — the live provider-health registry, circuits and shared
+  backoff, `/capabilities` provider state, and honest in-run degradation including the paused
+  opponent.
 - [Engine grounding](engine-grounding.md) — fixed-depth opening assessments and the read-only engine
   authoring walk.
 - [Tablebase grounding](tablebase-grounding.md) — Syzygy sidecars, perfect resistance and refusal

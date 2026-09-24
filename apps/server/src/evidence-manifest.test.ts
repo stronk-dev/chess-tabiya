@@ -11,6 +11,7 @@ import {
   assertEvidenceManifest,
   evidenceManifestCapabilities,
 } from "./evidence-manifest.js";
+import { testProviderHealth } from "./provider-health.test-support.js";
 import { RECORDED_READING_DISPOSITIONS } from "./position-evidence.js";
 import { EVIDENCE_KINDS } from "./sourcing/types.js";
 import { CAPABILITY_DISPOSITIONS } from "./capabilities.js";
@@ -25,8 +26,8 @@ describe("server evidence manifest aggregate", () => {
     expect(Object.keys(PACKET_FIELD_PROJECTION_MAP).sort()).toEqual(["authored", "endgame", "markers", "observations", "phase", "plans", "readings", "structures"]);
   });
 
-  it("reports provider-off state independently for Stockfish, Syzygy, Maia and Explorer", () => {
-    const absent = evidenceManifestCapabilities({ opponent: "none", judge: "none", llm: "none", corpus: "none", tts: "none", tablebase: "none" });
+  it("reports provider-off state independently for Stockfish, Syzygy, Maia and Explorer", async () => {
+    const absent = evidenceManifestCapabilities(await testProviderHealth({}));
     const states = Object.fromEntries(absent.availability.map((row) => [row.producerId, row.state]));
     expect(states).toMatchObject({ "live.stockfish": "unavailable", "live.syzygy": "honest_empty", "human.maia": "unavailable", "human.explorer": "honest_empty", "theory.opening.runtime": "unavailable" });
     expect(absent.availability.find((row) => row.producerId === "theory.opening.runtime")?.reason).toBe("artifact_missing");
@@ -35,8 +36,21 @@ describe("server evidence manifest aggregate", () => {
     expect(absent.bindings.some((binding) => binding.consumerId === "guidance.voice")).toBe(true);
   });
 
-  it("exposes only consumer-safe binding summaries, never payloads or provider secrets", () => {
-    const value = evidenceManifestCapabilities({ opponent: "mock", judge: "mock", llm: "external", corpus: "mock", tts: "none", tablebase: "mock" });
+  it("reads the live registry state of each provider-backed producer, not configuration", async () => {
+    const health = await testProviderHealth({ "stockfish-analysis": "available", "maia-inference": { failed: "process_exit" }, "tablebase-primary": "unverified", "explorer-primary": { failed: "rate_limited" } });
+    const states = Object.fromEntries(evidenceManifestCapabilities(health).availability.map((row) => [row.producerId, [row.state, row.reason]]));
+    expect(states["live.stockfish"]![0]).toBe("available");
+    expect(states["live.syzygy"]).toEqual(["available", "tablebase-primary is ready to try (not yet verified)."]);
+    expect(states["human.maia"]![0]).toBe("unavailable");
+    expect(states["human.maia"]![1]).toContain("process_exit");
+    // Provider-off is never worded as a domain answer.
+    expect(states["human.explorer"]![0]).toBe("honest_empty");
+    expect(states["human.explorer"]![1]).toContain("not a domain answer");
+    expect(states["human.explorer"]![1]).not.toMatch(/no games|outside/iu);
+  });
+
+  it("exposes only consumer-safe binding summaries, never payloads or provider secrets", async () => {
+    const value = evidenceManifestCapabilities(await testProviderHealth({ "stockfish-analysis": "available", "maia-inference": "available", "external-voice": "unverified", "explorer-primary": "unverified", "tablebase-primary": "unverified" }));
     expect(value.digest).toMatch(/^[a-f0-9]{64}$/);
     expect(value.counts).toEqual({ producers: 41, projections: 230, consumers: 34, bindings: 508, semanticEvents: 78, eligibility: 78, reasons: 15, selectionPolicies: 1 });
     expect(JSON.stringify(value)).not.toMatch(/bestMoveUci|principalVariation|apiKey|authoredText/);

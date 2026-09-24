@@ -6,6 +6,7 @@ import { isNormal } from "chessops/types";
 import { parseUci } from "chessops/util";
 
 import {
+  applicationProviderExecution,
   assertConsumerEvidenceView,
   opponentProviderEvidence as declareOpponentProviderEvidence,
   evidenceForConsumer,
@@ -19,6 +20,8 @@ import {
   type SelectionCandidate,
   type SelectionEngineIdentity,
   type ConsumerEvidenceView,
+  type ApplicationProviderOperationId,
+  type ProviderInstanceId,
 } from "@chess-tabiya/runtime";
 
 import type {
@@ -44,6 +47,7 @@ import {
   type StrongEngineProfile,
 } from "./strong-engine.js";
 import { invertTablebaseCategory, type TablebaseMove, type TablebasePosition, type TablebaseSource } from "./tablebase.js";
+import { ProviderUnavailableError, type ProviderCacheInventory, type ProviderRegistry, type ProviderSettlement } from "./provider-health.js";
 
 export type OpponentPolicyMode = RunOpponentMode;
 
@@ -86,6 +90,134 @@ export interface OpponentSelectorOptions {
   readonly strongEngineMovetimeMs?: number;
   readonly strongEngineProfile?: Partial<StrongEngineProfile>;
   readonly tablebaseSource?: TablebaseSource;
+  /** The live provider-health authority (rfc/provider-health-degradation.md). */
+  readonly health?: ProviderRegistry;
+  /** Settled-cache bounds; the release matrix may lower them, never remove them (§7). */
+  readonly cache?: { readonly maxEntries?: number; readonly ttlMs?: number };
+  readonly monotonicNowMs?: () => number;
+  readonly wallNow?: () => string;
+}
+
+/** Whether a selection was produced by a live provider now or served from the exact-request cache. */
+export interface OpponentSelectionReceipt {
+  readonly source: "live" | "cached_exact";
+  /** The provider-instance generations the selection was produced under. */
+  readonly generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>;
+  readonly producedAt: string;
+  readonly servedAt: string;
+}
+
+export interface ReceiptedOpponentSelection {
+  readonly selection: OpponentSelection;
+  readonly receipt: OpponentSelectionReceipt;
+}
+
+/** §7 defaults: 512 settled entries and a TTL enforced at insertion (at most 24 hours). */
+export const OPPONENT_SELECTION_CACHE_BOUNDS = Object.freeze({ maxEntries: 512, ttlMs: 6 * 60 * 60 * 1000 });
+const MAX_SELECTION_TTL_MS = 24 * 60 * 60 * 1000;
+
+const MODE_INSTANCES: Readonly<Record<RunOpponentMode, readonly ProviderInstanceId[]>> = Object.freeze({
+  human_common: Object.freeze(["maia-inference"] as const),
+  theory_strict: Object.freeze(["maia-inference"] as const),
+  strong_engine: Object.freeze(["stockfish-play"] as const),
+  perfect_tablebase: Object.freeze(["tablebase-primary"] as const),
+  practical_resistance: Object.freeze(["maia-inference", "tablebase-primary"] as const),
+});
+
+interface SettledSelection {
+  readonly selection: OpponentSelection;
+  readonly generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>;
+  readonly producedAt: string;
+  readonly expiresAtMonotonic: number;
+}
+
+/** Retained payloads are recursively immutable (§7). */
+function deepFreeze<T>(value: T): T {
+  if (value !== null && typeof value === "object") {
+    for (const child of Object.values(value as Record<string, unknown>)) deepFreeze(child);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+/**
+ * The bounded, generation-keyed settled cache (§7): LRU by use, TTL fixed at insertion, in-flight
+ * work held elsewhere, readable by the registry as a per-instance inventory.
+ */
+class SettledSelectionCache {
+  readonly #entries = new Map<string, SettledSelection>();
+  readonly #maxEntries: number;
+  readonly #ttlMs: number;
+  #revision = 0;
+
+  constructor(maxEntries: number, ttlMs: number) {
+    if (!Number.isSafeInteger(maxEntries) || maxEntries < 1) throw new TypeError("selection cache maxEntries must be a positive integer");
+    if (!Number.isSafeInteger(ttlMs) || ttlMs < 1 || ttlMs > MAX_SELECTION_TTL_MS) throw new TypeError("selection cache TTL must be 1 ms to 24 hours");
+    this.#maxEntries = maxEntries;
+    this.#ttlMs = ttlMs;
+  }
+
+  get size(): number {
+    return this.#entries.size;
+  }
+
+  get(key: string, now: number): SettledSelection | undefined {
+    const entry = this.#entries.get(key);
+    if (entry === undefined) return undefined;
+    if (now >= entry.expiresAtMonotonic) {
+      this.#entries.delete(key);
+      this.#revision += 1;
+      return undefined;
+    }
+    // Recency updates on a hit: the hot oldest row survives the next insertion.
+    this.#entries.delete(key);
+    this.#entries.set(key, entry);
+    return entry;
+  }
+
+  put(key: string, now: number, value: Omit<SettledSelection, "expiresAtMonotonic">): void {
+    this.#entries.delete(key);
+    this.#entries.set(key, deepFreeze({ ...value, expiresAtMonotonic: now + this.#ttlMs }));
+    while (this.#entries.size > this.#maxEntries) this.#entries.delete(this.#entries.keys().next().value!);
+    this.#revision += 1;
+  }
+
+  validExactEntries(now: number, generation: string): number {
+    let count = 0;
+    for (const entry of this.#entries.values()) {
+      if (now < entry.expiresAtMonotonic && Object.values(entry.generations).includes(generation)) count += 1;
+    }
+    return count;
+  }
+
+  revision(): number {
+    return this.#revision;
+  }
+
+  retain(predicate: (entry: SettledSelection) => boolean): void {
+    let changed = false;
+    for (const [key, entry] of this.#entries) {
+      if (!predicate(entry)) {
+        this.#entries.delete(key);
+        changed = true;
+      }
+    }
+    if (changed) this.#revision += 1;
+  }
+}
+
+class SelectionInventory implements ProviderCacheInventory {
+  constructor(private readonly cache: SettledSelectionCache, private readonly prune: () => void) {}
+  validExactEntries(now: number, generation: string): number { return this.cache.validExactEntries(now, generation); }
+  revision(): number { return this.cache.revision(); }
+  invalidateExcept(): void { this.prune(); }
+}
+
+function classifyEngineFailure(error: unknown): ProviderSettlement {
+  const message = error instanceof Error ? `${error.message} ${error.cause instanceof Error ? error.cause.message : ""}` : String(error);
+  if (/timed out/iu.test(message)) return { kind: "failure", reason: "timeout" };
+  if (/exited|not writable|unavailable|generation changed/iu.test(message)) return { kind: "failure", reason: "process_exit" };
+  return { kind: "failure", reason: "protocol" };
 }
 
 const DEFAULT_TEMPERATURE = 0.8;
@@ -265,6 +397,11 @@ function neutralTiebreak(fen: string, leftUci: string, rightUci: string): number
 
 export function selectionCacheKey(request: SelectMoveRequest): string {
   return [
+    // Mode and sampler options are selection identity: two modes under one session digest (a
+    // human-replies group inside a strong-engine run) must never share a cached reply.
+    request.policy.mode,
+    request.policy.temperature ?? "",
+    request.policy.topP ?? "",
     request.policy.policyConfigDigest,
     request.policy.targetElo ?? "",
     request.policy.profile?.id ?? "",
@@ -465,7 +602,11 @@ export class OpponentSelector {
   readonly #strongEngineNodes: number | null;
   readonly #strongEngineMultiPv: number;
   readonly #tablebase: TablebaseSource | undefined;
-  readonly #cache = new Map<string, Promise<OpponentSelection>>();
+  readonly #health: ProviderRegistry | undefined;
+  readonly #settled: SettledSelectionCache;
+  readonly #inFlight = new Map<string, Promise<Omit<SettledSelection, "expiresAtMonotonic">>>();
+  readonly #monotonic: () => number;
+  readonly #wall: () => string;
 
   constructor(
     client: SelectorEngineClient | EngineSupervisor,
@@ -484,26 +625,99 @@ export class OpponentSelector {
     this.#strongEngineNodes = profile.nodes;
     this.#strongEngineMultiPv = profile.multiPv;
     this.#tablebase = options.tablebaseSource;
+    this.#health = options.health;
+    const health = options.health;
+    this.#monotonic = options.monotonicNowMs ?? (health === undefined ? () => performance.now() : () => health.monotonicNow());
+    this.#wall = options.wallNow ?? (() => new Date().toISOString());
+    this.#settled = new SettledSelectionCache(options.cache?.maxEntries ?? OPPONENT_SELECTION_CACHE_BOUNDS.maxEntries, options.cache?.ttlMs ?? OPPONENT_SELECTION_CACHE_BOUNDS.ttlMs);
+    if (health !== undefined) {
+      // Generation change drops every settled row naming a replaced generation.
+      const prune = (): void => this.#settled.retain((entry) => Object.entries(entry.generations).every(([instanceId, generation]) => health.generation(instanceId as ProviderInstanceId) === generation));
+      for (const instanceId of ["maia-inference", "stockfish-play", "tablebase-primary"] as const) {
+        health.registerCacheInventory(instanceId, new SelectionInventory(this.#settled, prune));
+      }
+    }
   }
 
   select(request: SelectMoveRequest): Promise<OpponentSelection> {
+    return this.selectWithReceipt(request).then((result) => result.selection);
+  }
+
+  /**
+   * One opponent selection under one compiled deadline. An exact settled hit for the current
+   * provider generations is served as `cached_exact` whatever the provider's health; a miss needs a
+   * live provider and fails with the typed, bounded unavailable outcome — never a different mode.
+   */
+  selectWithReceipt(request: SelectMoveRequest): Promise<ReceiptedOpponentSelection> {
+    // Request refusals (band, policy, terminal position) stay synchronous, before any provider.
     this.validatePolicy(request.policy);
     if (currentPosition(request).isEnd()) {
       throw invalid("Opponent selection requires a non-terminal position");
     }
-    const key = selectionCacheKey(request);
-    const cached = this.#cache.get(key);
-    if (cached !== undefined) return cached;
-    const selected = this.#selectUncached(request).catch((error) => {
-      this.#cache.delete(key);
-      throw error;
-    });
-    this.#cache.set(key, selected);
-    return selected;
+    return this.#selectWithReceipt(request);
+  }
+
+  async #selectWithReceipt(request: SelectMoveRequest): Promise<ReceiptedOpponentSelection> {
+    const generations = this.#generationImage(request.policy.mode);
+    const key = `${selectionCacheKey(request)}\0${JSON.stringify(generations)}`;
+    const hit = this.#settled.get(key, this.#monotonic());
+    if (hit !== undefined) {
+      return Object.freeze({ selection: hit.selection, receipt: Object.freeze({ source: "cached_exact", generations: hit.generations, producedAt: hit.producedAt, servedAt: this.#wall() }) });
+    }
+    let pending = this.#inFlight.get(key);
+    if (pending === undefined) {
+      const started = this.#selectLive(request, generations).then((settled) => {
+        // A result produced under a generation that has since been replaced never reaches a
+        // response and never populates the new generation's cache (§3, criterion 19).
+        if (JSON.stringify(this.#generationImage(request.policy.mode)) !== JSON.stringify(generations)) {
+          throw this.#generationChanged(request.policy.mode);
+        }
+        this.#settled.put(key, this.#monotonic(), settled);
+        return settled;
+      });
+      pending = started.finally(() => {
+        this.#inFlight.delete(key);
+      });
+      this.#inFlight.set(key, pending);
+    }
+    const settled = await pending;
+    return Object.freeze({ selection: settled.selection, receipt: Object.freeze({ source: "live", generations: settled.generations, producedAt: settled.producedAt, servedAt: this.#wall() }) });
+  }
+
+  async #selectLive(request: SelectMoveRequest, generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>): Promise<Omit<SettledSelection, "expiresAtMonotonic">> {
+    const deadline = this.#monotonic() + applicationProviderExecution("opponent.maia_inference").consumerBudgetMs;
+    const selection = await this.#selectUncached(request, deadline);
+    return Object.freeze({ selection, generations, producedAt: this.#wall() });
+  }
+
+  #generationImage(mode: string): Readonly<Partial<Record<ProviderInstanceId, string | null>>> {
+    const instances = MODE_INSTANCES[mode as RunOpponentMode] ?? [];
+    const health = this.#health;
+    return Object.freeze(Object.fromEntries(instances.map((instanceId) => [instanceId, health === undefined ? null : health.generation(instanceId)])));
+  }
+
+  #generationChanged(mode: string): ProviderUnavailableError {
+    const operation: ApplicationProviderOperationId = mode === "strong_engine" ? "opponent.stockfish_play" : mode === "perfect_tablebase" ? "evidence.tablebase_probe" : "opponent.maia_inference";
+    return new ProviderUnavailableError(operation, Object.freeze({ state: "unavailable", instanceIds: Object.freeze([...(MODE_INSTANCES[mode as RunOpponentMode] ?? [])]), reason: "process_exit" }), null, "the provider generation changed while the selection was in flight");
+  }
+
+  /** Runs one engine stage inside the shared deadline, admitted and settled by provider health. */
+  async #engine(operation: "opponent.maia_inference" | "opponent.stockfish_play", engineId: string, request: Omit<EngineRequest, "timeoutMs" | "signal">, deadline: number, searchFloorMs = 1): Promise<readonly string[]> {
+    const remaining = Math.floor(deadline - this.#monotonic());
+    if (remaining < searchFloorMs) {
+      const instanceId = applicationProviderExecution(operation).instanceId;
+      throw new ProviderUnavailableError(operation, Object.freeze({ state: "unavailable", instanceIds: Object.freeze([instanceId]), reason: "timeout" }), null, "the opponent deadline cannot admit another provider request");
+    }
+    if (this.#health === undefined) return this.#client.execute(engineId, { ...request, timeoutMs: remaining });
+    return this.#health.run(operation, ({ signal, remainingMs }) => this.#client.execute(engineId, { ...request, timeoutMs: Math.max(1, remainingMs), signal }), classifyEngineFailure, { deadlineMonotonic: deadline });
+  }
+
+  #probe(fen: string, deadline: number): Promise<TablebasePosition> {
+    return this.#tablebase!.probe(fen, { deadlineMonotonic: deadline });
   }
 
   cacheSize(): number {
-    return this.#cache.size;
+    return this.#settled.size;
   }
 
   validatePolicy(policy: Pick<SelectorPolicy, "mode" | "targetElo" | "temperature" | "topP" | "profile">): void {
@@ -518,6 +732,12 @@ export class OpponentSelector {
   }
 
   availableModes(): readonly RunOpponentMode[] {
+    if (this.#health !== undefined) {
+      // Configuration alone makes a mode outright unsupported; a runtime failure is a temporary
+      // state that the selection reports as its typed unavailable outcome.
+      const snapshot = this.#health.snapshot();
+      return Object.freeze(snapshot.policyModes.filter((row) => !(row.availability.state === "unavailable" && row.availability.reason === "not_configured")).map((row) => row.mode));
+    }
     const maia = this.#client.health(this.#maiaEngineId).identity !== undefined;
     const strong = this.#client.health(this.#strongEngineId).identity !== undefined;
     return Object.freeze([
@@ -543,7 +763,8 @@ export class OpponentSelector {
     if (!Number.isSafeInteger(count) || count < 2 || count > 8) {
       throw invalid("enumerate count must be an integer from 2 to 8");
     }
-    const lines = opponentProviderEvidence("stockfish", await this.#client.execute(this.#strongEngineId, {
+    const deadline = this.#monotonic() + applicationProviderExecution("opponent.stockfish_play").consumerBudgetMs;
+    const lines = opponentProviderEvidence("stockfish", await this.#engine("opponent.stockfish_play", this.#strongEngineId, {
       commands: [
         `setoption name MultiPV value ${count}`,
         positionCommand(request),
@@ -551,8 +772,7 @@ export class OpponentSelector {
       ],
       resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
-      timeoutMs: Math.max(5_000, this.#strongEngineMovetimeMs * 10),
-    }));
+    }, deadline));
     return makeSelection(
       bestMove(lines, requestPositionFen(request)),
       candidateLines(lines, requestPositionFen(request)),
@@ -561,18 +781,18 @@ export class OpponentSelector {
     );
   }
 
-  async #selectUncached(request: SelectMoveRequest): Promise<OpponentSelection> {
+  async #selectUncached(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
     switch (request.policy.mode) {
       case "human_common":
-        return this.#humanCommon(request);
+        return this.#humanCommon(request, deadline);
       case "strong_engine":
-        return this.#strongEngine(request);
+        return this.#strongEngine(request, deadline);
       case "theory_strict":
-        return this.#theoryStrict(request);
+        return this.#theoryStrict(request, deadline);
       case "perfect_tablebase":
-        return this.#perfectTablebase(request);
+        return this.#perfectTablebase(request, deadline);
       case "practical_resistance":
-        return this.#practicalResistance(request);
+        return this.#practicalResistance(request, deadline);
       default:
         throw policyModeUnsupported(request.policy.mode);
     }
@@ -581,6 +801,7 @@ export class OpponentSelector {
   async #maia(
     request: SelectMoveRequest,
     multiPv: number,
+    deadline: number,
   ): Promise<{ readonly lines: readonly string[]; readonly identity: EngineIdentity; readonly eloApplied?: number }> {
     const health = this.#client.health(this.#maiaEngineId);
     const identity = engineIdentity(this.#client, this.#maiaEngineId);
@@ -606,11 +827,11 @@ export class OpponentSelector {
       positionCommand(request),
       "go",
     ];
-    const lines = opponentProviderEvidence("maia", await this.#client.execute(this.#maiaEngineId, {
+    // One deadline covers both Maia attempts; the fixed 60-second wait is deleted (§5).
+    const lines = opponentProviderEvidence("maia", await this.#engine("opponent.maia_inference", this.#maiaEngineId, {
       commands,
       until: (line) => line.startsWith("bestmove "),
-      timeoutMs: 60_000,
-    }));
+    }, deadline));
     return Object.freeze({
       lines,
       identity,
@@ -618,17 +839,17 @@ export class OpponentSelector {
     });
   }
 
-  async #humanCommon(request: SelectMoveRequest): Promise<OpponentSelection> {
+  async #humanCommon(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
     const health = this.#client.health(this.#maiaEngineId);
     const maximum = health.options?.find((item) => item.name === "MultiPV" && item.type === "spin")?.max;
     const requestedWidth = Math.max(8, legalMoveCount(currentPosition(request)));
     const width = maximum === undefined ? requestedWidth : Math.min(requestedWidth, maximum);
-    let result = await this.#maia(request, width);
+    let result = await this.#maia(request, width, deadline);
     const fen = requestPositionFen(request);
     let candidates = candidateLines(result.lines, fen);
     let moveUci = bestMove(result.lines, fen);
     if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
-      result = await this.#maia(request, width);
+      result = await this.#maia(request, width, deadline);
       candidates = candidateLines(result.lines, fen);
       moveUci = bestMove(result.lines, fen);
     }
@@ -649,11 +870,11 @@ export class OpponentSelector {
   }
 
   /** @instrument-fed Stockfish 51-position reproducibility corpus */
-  async #strongEngine(request: SelectMoveRequest): Promise<OpponentSelection> {
+  async #strongEngine(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
     const searchBound = this.#strongEngineNodes === null
       ? Object.freeze({ kind: "movetime" as const, value: this.#strongEngineMovetimeMs })
       : Object.freeze({ kind: "nodes" as const, value: this.#strongEngineNodes });
-    const lines = opponentProviderEvidence("stockfish", await this.#client.execute(this.#strongEngineId, {
+    const lines = opponentProviderEvidence("stockfish", await this.#engine("opponent.stockfish_play", this.#strongEngineId, {
       commands: [
         `setoption name MultiPV value ${this.#strongEngineMultiPv}`,
         positionCommand(request),
@@ -661,8 +882,7 @@ export class OpponentSelector {
       ],
       resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
-      timeoutMs: searchBound.kind === "nodes" ? 5_000 : Math.max(5_000, searchBound.value * 10),
-    }));
+    }, deadline, searchBound.kind === "movetime" ? searchBound.value : 1));
     return makeSelection(
       bestMove(lines, requestPositionFen(request)),
       candidateLines(lines, requestPositionFen(request)),
@@ -673,15 +893,15 @@ export class OpponentSelector {
     );
   }
 
-  async #theoryStrict(request: SelectMoveRequest): Promise<OpponentSelection> {
+  async #theoryStrict(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
     const children = spineChildren(request);
     if (children === undefined || children.length === 0) {
       console.warn(
         "DEGRADED_THEORY_SPINE: position is off the authored spine; falling back to human_common",
       );
-      return this.#humanCommon(request);
+      return this.#humanCommon(request, deadline);
     }
-    const result = await this.#maia(request, Math.max(8, children.length));
+    const result = await this.#maia(request, Math.max(8, children.length), deadline);
     const fen = requestPositionFen(request);
     const allowed = new Set(children.map((child) => normalizeInboundMove(fen, child.moveUci, "pack_move_uci").moveUci));
     const matching = candidateLines(result.lines, fen).filter((candidate) =>
@@ -709,13 +929,13 @@ export class OpponentSelector {
     return makeSelection(moveUci, candidates, result.identity, "theory_strict", result.eloApplied);
   }
 
-  async #perfectTablebase(request: SelectMoveRequest): Promise<OpponentSelection> {
+  async #perfectTablebase(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
     if (this.#tablebase === undefined) {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Perfect tablebase resistance is unavailable", { details: { retryAfterMs: 0 } });
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const position = opponentProviderEvidence("syzygy", await this.#tablebase.probe(fen));
+    const position = opponentProviderEvidence("syzygy", await this.#probe(fen, deadline));
     if (position.category === "unknown") {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase category is unknown", { details: { retryAfterMs: 60_000 } });
     }
@@ -748,13 +968,13 @@ export class OpponentSelector {
     });
   }
 
-  async #practicalResistance(request: SelectMoveRequest): Promise<OpponentSelection> {
+  async #practicalResistance(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
     if (this.#tablebase === undefined) {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Practical resistance requires a tablebase provider", { details: { retryAfterMs: 0 } });
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const root = opponentProviderEvidence("syzygy", await this.#tablebase.probe(fen));
+    const root = opponentProviderEvidence("syzygy", await this.#probe(fen, deadline));
     if (root.category === "unknown") {
       throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", "The root outcome class is unknown");
     }
@@ -778,7 +998,7 @@ export class OpponentSelector {
     for (const candidate of preserving) {
       const child = play(board, candidate.uci, `tablebase reply ${candidate.uci}`);
       const childFen = makeFen(child.toSetup());
-      const childTablebase = opponentProviderEvidence("syzygy", await this.#tablebase.probe(childFen));
+      const childTablebase = opponentProviderEvidence("syzygy", await this.#probe(childFen, deadline));
       if (childTablebase.category === "unknown") {
         throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", `Outcome class after ${candidate.uci} is unknown`);
       }
@@ -786,7 +1006,7 @@ export class OpponentSelector {
         ...request,
         historyUci: Object.freeze([...request.historyUci, candidate.uci]),
       });
-      const maia = await this.#maia(childRequest, Math.max(8, legalMoveCount(child)));
+      const maia = await this.#maia(childRequest, Math.max(8, legalMoveCount(child)), deadline);
       const policy = candidateLines(maia.lines, childFen);
       const conceding = new Set(
         childTablebase.moves

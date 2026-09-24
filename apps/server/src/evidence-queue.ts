@@ -105,7 +105,7 @@ const SUPERSEDED = Symbol("evidence-job-superseded");
 
 function failureReason(error: unknown): ProviderSourceFailureReason {
   if (error instanceof EvidenceJobCorrupt) return "invalid_response";
-  if (error instanceof ServerError && (error.code === "ENGINE_UNAVAILABLE" || error.code === "TABLEBASE_UNAVAILABLE")) return "provider_unavailable";
+  if (error instanceof ServerError && (error.code === "ENGINE_UNAVAILABLE" || error.code === "PROVIDER_UNAVAILABLE" || error.code === "TABLEBASE_UNAVAILABLE")) return "provider_unavailable";
   if (error instanceof Error && /timed? ?out|deadline/iu.test(error.message)) return "deadline_exceeded";
   if (error instanceof TypeError) return "invalid_response";
   return "provider_unavailable";
