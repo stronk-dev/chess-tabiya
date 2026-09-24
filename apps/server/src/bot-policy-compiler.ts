@@ -7,10 +7,10 @@
  * Callers cannot supply a chosen move, final weights, layer actions, classifiers or guard losses:
  * every such value is derived here, and every stored byte is re-derived by the replay parsers.
  *
- * Provider inputs are the payload halves of `maia.policy_page@1` and
- * `stockfish.legal_root_table@1`. The shared provider exchange that will deliver them with
- * acquisition receipts (rfc/provider-exchange-and-execution.md, [[D3030]]) has not landed; until it
- * does, the payload digest is the whole source identity and no route consumes this module.
+ * Provider inputs are the bot views of the shared `maia.policy_page@1` and
+ * `stockfish.legal_root_table@1` deliveries (rfc/provider-exchange-and-execution.md, [[D3030]]);
+ * `bot-opponent-source.ts` is the only production adapter, and it carries each delivery's exact
+ * source identity into the payload. `bot-opponent-operation.ts` is the production caller.
  */
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -192,6 +192,21 @@ export interface BotMaiaPolicyPage {
   readonly actual: Readonly<{ modelId: string; version: string }>;
   readonly coverage: "bounded_top_k";
   readonly rows: readonly Readonly<{ moveUci: string; rawMass: number }>[];
+  /**
+   * The exact shared-delivery identity this page was read from (`bot-opponent-source.ts`). It is
+   * part of the payload, so the payload digest — and with it the derivation and commit operand
+   * digests — binds the provider's normalized request, response bytes, parsed payload and actual
+   * identity. Acquisition/serve times are deliberately absent.
+   */
+  readonly source?: BotProviderSourceIdentity;
+}
+
+export interface BotProviderSourceIdentity {
+  readonly normalizedRequestDigest: string;
+  readonly responseDigest: string;
+  readonly payloadDigest: string;
+  readonly actualIdentityDigest: string;
+  readonly generation: number | null;
 }
 
 export type BotStockfishScore =
@@ -207,6 +222,7 @@ export interface BotStockfishRootTable {
     perspective: "root_side";
   }>;
   readonly rows: readonly Readonly<{ moveUci: string; depth: number; score: BotStockfishScore }>[];
+  readonly source?: BotProviderSourceIdentity;
 }
 
 export type BotProviderResult<T> =

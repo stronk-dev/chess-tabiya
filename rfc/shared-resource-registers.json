@@ -2,6 +2,15 @@
   "schemaVersion": 1,
   "resources": [
     {
+      "id": "assistance-config",
+      "claimKind": "members",
+      "source": {
+        "kind": "string_tuple",
+        "path": "packages/runtime/src/assistance.ts",
+        "exportName": "ASSISTANCE_CONFIG_VERSIONS"
+      }
+    },
+    {
       "id": "campaign-schema",
       "claimKind": "schema_lane",
       "source": {
@@ -83,12 +92,30 @@
       }
     },
     {
+      "id": "semantic-conventions",
+      "claimKind": "members",
+      "source": {
+        "kind": "string_tuple",
+        "path": "packages/runtime/src/evidence-conventions.ts",
+        "exportName": "SEMANTIC_CONVENTION_MEMBERS"
+      }
+    },
+    {
       "id": "shape-entry-schema",
       "claimKind": "schema_lane",
       "source": {
         "kind": "json_schema",
         "schemaSlug": "shape-entry",
         "versionExport": "SHAPE_ENTRY_SCHEMA_VERSION"
+      }
+    },
+    {
+      "id": "workflow-preference",
+      "claimKind": "members",
+      "source": {
+        "kind": "string_tuple",
+        "path": "packages/runtime/src/presets.ts",
+        "exportName": "WORKFLOW_PREFERENCE_VERSIONS"
       }
     }
   ]

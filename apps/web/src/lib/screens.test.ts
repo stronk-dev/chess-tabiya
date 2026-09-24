@@ -6,6 +6,7 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   appendEvents,
   attachEvidence,
+  BOT_PROFILE_CATALOG,
   commitMove,
   compareBranches,
   createRun,
@@ -26,6 +27,7 @@ import {
 } from "@chess-tabiya/runtime";
 import type { ComponentProps } from "svelte";
 import { mount, tick, unmount } from "svelte";
+import { botRosterFixture } from "./bot-roster.test-support.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import fixtureJson from "../../../../schemas/drill_pack.example.json?raw";
@@ -1964,6 +1966,47 @@ describe("Layer 3 screens", () => {
     radios[4]!.click();
     document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
     expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "strong_engine" }));
+    expect(onStart.mock.calls.at(-1)?.[0]).not.toHaveProperty("targetElo");
+    await unmount(component);
+  });
+
+  // rfc/opponent-experience.md §§2–3, bounded by bot-policy/bot-roster: honest catalogue cards are the
+  // default path, raw rungs sit under Advanced, nothing is preselected (D1611 is unruled), no
+  // display name is invented (D1610) and no strength number is shown while uncalibrated.
+  it("offers the bot roster as grouped honest cards with raw rungs under Advanced", async () => {
+    const onStart = vi.fn();
+    const roster = botRosterFixture().map((row) => row.reference.family === "pawn-forward"
+      ? { ...row, startable: { kind: "unavailable" as const, blockedBy: ["stockfish_unavailable" as const] } }
+      : row.reference.family === "guarded-human"
+        ? { ...row, startable: { kind: "conditional" as const, conditions: ["guard_release_receipt_absent" as const] } }
+        : row);
+    const component = mount(JustPlayStarter, { target: target(), props: { onStart, roster } });
+    const bots = document.querySelectorAll<HTMLInputElement>('[data-bot-profile] input[name="opponent"]');
+    expect(bots).toHaveLength(12);
+    expect([...document.querySelectorAll(".bot-roster .family h3")].map((heading) => heading.textContent)).toEqual(["Human baseline", "Guarded human", "Pawn-forward"]);
+    expect([...document.querySelectorAll('input[name="opponent"]')].some((input) => (input as HTMLInputElement).checked)).toBe(false);
+    const start = document.querySelector<HTMLButtonElement>(".start")!;
+    expect(start.disabled).toBe(true);
+    expect(document.getElementById(start.getAttribute("aria-describedby")!)?.textContent).toBe("Choose an opponent to start.");
+    expect(document.querySelector(".advanced")?.hasAttribute("open")).toBe(false);
+    expect(document.querySelector(".advanced .ladder")).not.toBeNull();
+    const text = document.querySelector(".bot-roster")!.textContent!;
+    expect(text).toContain("Uncalibrated");
+    expect(text).not.toMatch(/\bElo\b|\bpersona\b/u);
+    // Unavailable cards stay visible with their reason and cannot be chosen.
+    const pawn = document.querySelector<HTMLLabelElement>('[data-bot-profile="pawn-forward.1400@1"]')!;
+    expect(pawn.querySelector("input")!.disabled).toBe(true);
+    expect(pawn.textContent).toContain("Stockfish check this bot needs is not reachable");
+    expect(document.querySelector('[data-bot-profile="guarded-human.1400@1"]')!.textContent).toContain("not yet release-measured");
+    // Choosing a bot shows its full grounded card and starts a run with the exact reference.
+    document.querySelector<HTMLInputElement>('[data-bot-profile="human-baseline.1800@1"] input')!.click();
+    await tick();
+    expect(document.querySelector(".bot-card h3")?.textContent).toBe("Human baseline · band 1800");
+    expect(document.querySelectorAll(".bot-card [data-card-statement]").length).toBeGreaterThan(0);
+    expect(start.disabled).toBe(false);
+    document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    const chosen = BOT_PROFILE_CATALOG.find((entry) => entry.reference.id === "human-baseline.1800@1")!.reference;
+    expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "human_common", profile: chosen }));
     expect(onStart.mock.calls.at(-1)?.[0]).not.toHaveProperty("targetElo");
     await unmount(component);
   });

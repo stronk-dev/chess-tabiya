@@ -14,6 +14,17 @@ export interface AssistanceConfig {
   readonly ambient: "off" | "on";
 }
 
+/**
+ * The `assistance-config` shared resource (rfc/assistance-config-register.md): one member per landed
+ * `AssistanceConfig` version, read by the catalogue's `string_tuple` reader. Coverage begins at the
+ * adopted v4; v1–v3 predate the register and are only migration inputs. A future v5 claims
+ * `assistance_config_v5`; two claimants of one next version collide. `assistance-register.test.ts`
+ * binds the last member to `AssistanceConfig.version`.
+ */
+export const ASSISTANCE_CONFIG_VERSIONS = [
+  "assistance_config_v4",
+] as const;
+
 export const SILENT_ASSISTANCE: AssistanceConfig = Object.freeze({
   version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off",
 });

@@ -13,7 +13,7 @@
 - **Exploration gate:** [[D2278]] reproduced the request/source vocabulary as hand-copied across
   server REST/service/storage/export and web API/client while `live-sources` falsely called it
   server-local
-- **Depends on:** implemented `shared-resource-register-bootstrap.md` (catalogue + checker)
+- **Depends on:** implemented `archive/shared-resource-register-bootstrap.md` (catalogue + checker)
 - **Parent / amends:** RFC-0000 rule 7, `rfc/README.md`, `rfc/live-sources.md`
 - **Planning:** `planning/import-source-protocol-register/`
 
@@ -129,7 +129,7 @@ semantics, it must do so through a new measured claim, not a name collision.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | generic bootstrap accepted and implemented | `shared-resource-register-bootstrap.md` | archived bootstrap receipt | **2026-09-24** — the catalogue and catalogue-driven checker are implemented; this RFC needs only the parser and C1–C8 |
+| D1 | generic bootstrap accepted and implemented | `shared-resource-register-bootstrap.md` | archived bootstrap receipt | **2026-09-24** — implemented and archived at `rfc/archive/shared-resource-register-bootstrap.md` (owner-directed, without its D1 fresh review). It offers no absent-source admission ([[D3082]]); a present-first `string_tuple` row, as `provider-protocol` used, is the available path |
 | D2 | descriptor/additions/register marker implemented and checked | `import-source-protocol-register.md` | this RFC's implementation commit plus RFC/register/log closeout | **2026-09-24** — present `members` row, seeded tuple, README register and census; see `planning/import-source-protocol-register/implementation-2026-09-24.md`. Log closeout and Active-row flip are left to the consolidating session |
 | D3 | product version 1 created under exact first-lane claim | `live-sources.md` | its accepted implementation | |
 

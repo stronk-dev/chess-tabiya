@@ -12,7 +12,7 @@ const capabilities = Object.freeze({
   recordedReadingKinds: [{ kind: "engine_eval", disposition: "admitted", reason: "Recorded evidence." }],
   assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
   objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
-  runSchemaVersion: "0.17",
+  runSchemaVersion: "0.18",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
     human_common: {
@@ -75,6 +75,14 @@ describe("capability response authority", () => {
     });
 
     it.each([
+      { kind: "available" },
+      { kind: "conditional", conditions: ["maia_unverified", "guard_release_receipt_absent"] },
+      { kind: "unavailable", blockedBy: ["maia_unavailable"] },
+    ] as const)("accepts the closed availability arm %j", (startable) => {
+      expect(() => parseCapabilities(withProfiles(botRosterFixture(startable)))).not.toThrow();
+    });
+
+    it.each([
       ["a missing profile", () => rows.slice(1)],
       ["a duplicated profile", () => [...rows.slice(1), rows[1]]],
       ["a substituted family on a genuine id", () => [{ ...first, reference: { ...first.reference, family: "pawn-forward" } }, ...rows.slice(1)]],
@@ -83,8 +91,12 @@ describe("capability response authority", () => {
       ["an unregistered statement id", () => [{ ...first, card: { ...first.card, statements: [{ id: "card.persona", text: "Loves attacking chess.", sources: ["catalog.profile"] }] } }, ...rows.slice(1)]],
       ["a statement without a source", () => [{ ...first, card: { ...first.card, statements: [{ ...first.card.statements[0]!, sources: [] }] } }, ...rows.slice(1)]],
       ["decorative identity before owner assets exist", () => [{ ...first, card: { ...first.card, decorative: { name: "Pip" } } }, ...rows.slice(1)]],
-      ["an unknown blocker", () => [{ ...first, startable: { kind: "not_startable", blockedBy: ["tuesday"] } }, ...rows.slice(1)]],
-      ["a startable claim", () => [{ ...first, startable: { kind: "available", blockedBy: [] } }, ...rows.slice(1)]],
+      ["an unknown blocker", () => [{ ...first, startable: { kind: "unavailable", blockedBy: ["tuesday"] } }, ...rows.slice(1)]],
+      ["an unavailable row with no blocker", () => [{ ...first, startable: { kind: "unavailable", blockedBy: [] } }, ...rows.slice(1)]],
+      ["an available row carrying reasons", () => [{ ...first, startable: { kind: "available", blockedBy: [] } }, ...rows.slice(1)]],
+      ["a conditional row with no condition", () => [{ ...first, startable: { kind: "conditional", conditions: [] } }, ...rows.slice(1)]],
+      ["an unknown condition", () => [{ ...first, startable: { kind: "conditional", conditions: ["config_flag"] } }, ...rows.slice(1)]],
+      ["the retired dependency blockers", () => [{ ...first, startable: { kind: "not_startable", blockedBy: ["run-schema-0.18"] } }, ...rows.slice(1)]],
     ])("refuses %s", (_label, build) => {
       expect(() => parseCapabilities(withProfiles(build()))).toThrow(TypeError);
     });

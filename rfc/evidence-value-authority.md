@@ -1,6 +1,6 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** awaiting D1 — implemented 2026-09-24 (dependency-qualified; D1–D5 stay open, so not `implemented`) — the value
+- **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D5 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft
   semantic-convention-provenance (D1), provider-exchange-and-execution (D2) and registered
@@ -620,7 +620,7 @@ planes, optional LLM renderer and assistance ceilings.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Semantic convention register/provenance accepted and exact six-row closure consumable | semantic-convention-provenance | accepted dependency plus exact convention-closure contract fixture | |
+| D1 | Semantic convention register/provenance accepted and exact six-row closure consumable | semantic-convention-provenance | accepted dependency plus exact convention-closure contract fixture | **2026-09-24** — the registry, `semantic-conventions` register and value-level `ConventionReceipt` landed (semantic-convention-provenance §1/§1.1/§4, owner-directed without acceptance review); the six exact-under-convention rows, `rules.phase.reading@2`, `named_structure@2`, `rules.endgame.classification@1`, the eleven recorded `@2` sequences and the setup/method stages mint with their exact closure. Fixtures: "seals the exact registered convention closure with every D1 row" and "seals the instance setup/method convention" in `evidence-value-authority.test.ts`; the table in `evidence-conventions.test.ts` |
 | D2 | Provider/source receipt contract accepted and exact nine direct plus two chained recorded-reading source shapes consumable | provider-exchange-and-execution | accepted dependency plus exact source/derived receipt contract fixture | |
 | D3 | Semantic event authority profiles accepted for reuse without duplicating cases | semantic-validation-authority | accepted dependency plus set-equal authority-profile receipt | |
 | D4 | Fresh independent buildability review after D1–D3 and the literal 192-route author table | codex | fresh review record with every blocking finding closed or routed | |
@@ -632,6 +632,17 @@ None for the owner. Author review must settle exact successor symbol spelling an
 192-route migration table before acceptance; those are buildability obligations, not product choices.
 
 ## Changelog
+
+- 2026-09-24 (D1): discharged by `semantic-convention-provenance.md`'s landing. The `pending`
+  convention notes are gone from the six exact-under-convention rows, `rules.phase.reading@2`,
+  `named_structure@2`, `rules.endgame.classification@1`, forced mate, the eleven recorded `@2`
+  sequences and the setup/method factories: each value now carries a sealed `ConventionReceipt`
+  whose refs are registered (`square-control@1`, `defence-duty@1`, `mate-proof@1`, `phase-bands@1`,
+  `named-structure-catalogue@1`, `endgame-material-census@1`, the sequence conventions, and the one
+  setup or method convention a value was computed under). The setup and method conventions moved from
+  their in-code registration into the shared register; `endgameSetupConvention`/`endgameMethodConvention`
+  resolve a code record only while its exact `id@version` is registered. Criterion 3 is met for the
+  convention half; D2 (provider receipts) is now the awaited discharge.
 
 - 2026-09-24 (later): correction (g) is superseded. `setup_match@1` and `method_stage@1` are live over the cited `lucena-setup@1`, `philidor-third-rank-setup@1` and `vancura-setup@1` conventions and their method conventions (`packages/runtime/src/endgame-setup.ts`, `endgame-method.ts`; dossier `design/research/endgame-setup-conventions.md`). Setup reachability stays unavailable ([[D2497]]).
 - 2026-09-24: implemented (claude, worktree `agent-ab369751c08788e1a`). Corrections made while

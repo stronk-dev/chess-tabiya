@@ -34,13 +34,17 @@ import type {
   BotProfileFamily,
   BotProfileId,
   BotProfileReference,
-  BotRosterBlocker,
+  BotProfileStartability,
+  BotOpponentPlyRequest,
+  BotOpponentPlyResultRow,
+  BotLayerId,
+  BotDegradationReason,
   FinalizedAssistanceV1,
   RequestedAssistanceV1,
   ImportSourceKind,
   ImportSourceRequestKind,
 } from "@chess-tabiya/runtime";
-import { parseFinalizedAssistanceV1, parseReviewStoryReceipt } from "@chess-tabiya/runtime";
+import { parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseReviewStoryReceipt } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
@@ -535,7 +539,7 @@ export interface BotRosterRow {
   readonly reference: BotProfileReference;
   readonly behaviorDigest: `sha256:${string}`;
   readonly card: BotCardWire;
-  readonly startable: { readonly kind: "not_startable"; readonly blockedBy: readonly BotRosterBlocker[] };
+  readonly startable: BotProfileStartability;
 }
 
 export interface Capabilities {
@@ -705,6 +709,7 @@ export interface CreateRunRequest {
           readonly targetElo?: number;
           readonly temperature?: number;
           readonly topP?: number;
+          readonly profile?: BotProfileReference;
         };
       };
   readonly policyConfig: PolicyConfig;
@@ -942,6 +947,34 @@ export class ApiError extends Error {
   }
 }
 
+/** What the browser learns from a committed/replayed bot reply (rfc/bot-policy.md §4.1). */
+export interface BotOpponentPlyOperation {
+  readonly requestId: string;
+  readonly profileDigest: `sha256:${string}`;
+  readonly derivationDigest: `sha256:${string}`;
+  readonly operationDigest: `sha256:${string}`;
+  readonly committedEventSequence: number;
+  readonly chosenMoveUci: string;
+  readonly layers: readonly { readonly id: BotLayerId; readonly action: "applied" | "abstained" | "degraded"; readonly reason?: BotDegradationReason }[];
+}
+
+export interface BotOpponentPlyResponse {
+  readonly result: BotOpponentPlyResultRow;
+  readonly run: DrillRun;
+  readonly emitted: readonly DrillRunEvent[];
+  readonly operation: BotOpponentPlyOperation;
+}
+
+/** A non-continue row of the closed eight-row table; the client acts on `result.action` only. */
+export class BotOpponentPlyError extends ApiError {
+  readonly result: BotOpponentPlyResultRow;
+  constructor(result: BotOpponentPlyResultRow, message: string) {
+    super(result.status, result.code ?? "OPPONENT_PLY_FAILED", message, { result });
+    this.name = "BotOpponentPlyError";
+    this.result = result;
+  }
+}
+
 interface ErrorEnvelope {
   readonly error?: {
     readonly code?: unknown;
@@ -963,6 +996,8 @@ export interface RunApi {
     writerId: string,
     options?: MoveOptions,
   ): Promise<MutationResult>;
+  /** rfc/bot-policy.md §4.1: the server-owned reply of a bot-profile run (four request fields). */
+  opponentPly?(runId: string, request: BotOpponentPlyRequest, writerId: string): Promise<BotOpponentPlyResponse>;
   rewind(
     runId: string,
     input: RewindRequest,
@@ -1597,6 +1632,31 @@ export class DrillApi implements DrillClientApi {
       writerId,
       body: { selection, ...options },
     });
+  }
+
+  async opponentPly(runId: string, request: BotOpponentPlyRequest, writerId: string): Promise<BotOpponentPlyResponse> {
+    let body: Readonly<Record<string, unknown>>;
+    try {
+      body = await this.#json<Readonly<Record<string, unknown>>>(`/runs/${encoded(runId)}/opponent-ply`, { method: "POST", writerId, body: request });
+    } catch (error) {
+      if (error instanceof ApiError && error.details.result !== undefined) {
+        let row: BotOpponentPlyResultRow;
+        try {
+          row = parseBotOpponentPlyResultRow(error.details.result);
+        } catch {
+          throw new ApiError(502, "INVALID_RESPONSE", "Opponent reply returned an unknown result row");
+        }
+        throw new BotOpponentPlyError(row, error.message);
+      }
+      throw error;
+    }
+    const row = parseBotOpponentPlyResultRow(body.result);
+    if (row.action !== "continue") throw new ApiError(502, "INVALID_RESPONSE", "A successful opponent reply carried a non-continue row");
+    const operation = body.operation as BotOpponentPlyOperation | undefined;
+    if (operation === undefined || typeof operation !== "object" || operation.requestId !== request.requestId) {
+      throw new ApiError(502, "INVALID_RESPONSE", "Opponent reply does not name this request");
+    }
+    return Object.freeze({ result: row, run: body.run as DrillRun, emitted: (body.emitted ?? []) as readonly DrillRunEvent[], operation });
   }
 
   rewind(

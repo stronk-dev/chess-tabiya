@@ -1,5 +1,7 @@
 import type { DrillRunSchemaVersion } from "@chess-tabiya/schema";
 
+import type { BotProfileReference } from "./bot-profile-catalog.js";
+
 export type Actor = "user" | "opponent" | "system";
 export type ObjectiveState =
   | "active"
@@ -71,6 +73,12 @@ export interface RunOpponentPolicy {
   readonly targetElo?: number;
   readonly temperature?: number;
   readonly topP?: number;
+  /**
+   * Run schema 0.18 (rfc/bot-policy.md §4.1): the exact `bot-profile-catalog@1` member this run
+   * plays. Valid only with `human_common` and without `targetElo`/`temperature`/`topP`; read
+   * byte-for-byte on resume, never upgraded to "latest". Historical runs carry none.
+   */
+  readonly profile?: BotProfileReference;
 }
 
 export interface PositionOpponentPolicy extends RunOpponentPolicy {
@@ -105,6 +113,23 @@ export interface OpponentSelection {
   readonly orderingBasis?: "dtz_ascending" | "dtz_descending" | "none";
   readonly candidates?: readonly SelectionCandidate[];
   readonly engine: SelectionEngineIdentity;
+  /**
+   * Run schema 0.18: the sealed bot-policy event envelope of a profile run's server-owned
+   * opponent ply — the deterministic decision, the non-circular operation record, and the
+   * persisted shared provider deliveries it was compiled from. Only the server's durable parser
+   * (`apps/server/src/bot-opponent-operation.ts`) turns these bytes back into authority; nothing
+   * reads them as trusted input.
+   */
+  readonly policy?: OpponentSelectionPolicy;
+}
+
+export interface OpponentSelectionPolicy {
+  readonly decision: Readonly<Record<string, unknown>>;
+  readonly operation: Readonly<Record<string, unknown>>;
+  readonly deliveries: Readonly<{
+    readonly maia: Readonly<Record<string, unknown>>;
+    readonly stockfish?: Readonly<Record<string, unknown>>;
+  }>;
 }
 
 export interface Node {

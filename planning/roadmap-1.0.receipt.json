@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:18cd3858c3a566785c2de6ddeebe33e4c38702ca791dd23f3dc5bd03bc9bc7c2",
+    "roadmap": "sha256:0e2e273795aae49e506bbd8dbd5937046bcf561423d2059bf3468462fdd422ea",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:833cab9bf4f06a9d7a33dddc30ea6118cabd6f970bfc5dca5ca75e8e535d865b",
-    "rfcRegister": "sha256:195658e500edc2aa656f89424c84e9d5890a3fd826fb4fc8052bdf2c35ab4b2a",
+    "workState": "sha256:7527ff33c8bf66aae6e5375f7a507ef94c79a9a526c91948d75db4bec477a55f",
+    "rfcRegister": "sha256:5e4e51c0e41950ba28fd48b2303085ca151ad8bdfaddea925c2809cd4f0f0bfa",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:afc6dfb524c9c901e5368ae1191db359acb151121d677244495b6eefb9832540",
-    "application": "sha256:c8a14dd0b777590f8d2acf948b4ce13ac55cb8d4e8e9ac0a4a175b704a96c412",
-    "rest": "sha256:533976b41e30b44eaa5c19352abfff2a3713f47ff8e5c87127089d44b821e468"
+    "application": "sha256:2665e30d6ef12a2d786e2f83bafb22987f7bb41c4f5836dd16394df922b0af29",
+    "rest": "sha256:c55d790dcf2cc005a4084c29806a5572b8207ecd1c884d92a5be51f9842a9008"
   },
   "summary": {
     "capabilities": 14,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 622,
       "doing": 0,
-      "blocked": 1132,
-      "done": 1184,
+      "blocked": 1130,
+      "done": 1186,
       "refused": 111
     },
     "workItems": {
@@ -258,28 +258,35 @@
       "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Three durable foundations landed in register order today: the longitudinal store (26), evidence-job durability (27) and the concept registry (28). The longitudinal worker now drains within 2 s by abandoning its claim for re-lease, and its projector is ~5.8x faster with byte-identical output. Bot-policy's run lane 0.18 holds the next position, then campaign.",
+        "summary": "Four durable migrations landed in register order today: longitudinal store (26), evidence jobs (27), concept registry (28) and bot-policy's run lane 0.18 (29), which stores the chosen bot profile and every bot decision with its provider deliveries so bots resume and rematch exactly. Campaign-core now holds the next position.",
         "impact": "advanced",
         "evidence": [
-          "planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md",
-          "rfc/longitudinal-store.md",
-          "rfc/concept-registry.md"
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "planning/bot-policy/implementation-receipt-2026-09-24-playable.md",
+          "rfc/bot-policy.md",
+          "rfc/bot-roster.md",
+          "rfc/opponent-experience.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "longitudinal-store.md",
-            "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+            "id": "bot-policy.md",
+            "digest": "sha256:a65db5a0f082a3c56e55c4ab1f752fa46e194fb4b9d4e37af799c922dc222508"
           },
           {
             "kind": "rfc",
-            "id": "concept-registry.md",
-            "digest": "sha256:e371f8263638667cbbaf86b1e60858c21ef40fbd7f68bb85056b51395a1ed8b0"
+            "id": "bot-roster.md",
+            "digest": "sha256:f3b6cc6e7fe35ebe6db3019278c630a3d98226933f5b78fb1530f3cfb4d95b83"
+          },
+          {
+            "kind": "rfc",
+            "id": "opponent-experience.md",
+            "digest": "sha256:84f2bc773bfa7fd5af4f1417ea670f876d8b1c630dd5625f404967f83e7c6876"
           },
           {
             "kind": "work_state",
-            "id": "D3300",
-            "digest": "sha256:05039110c08731062f3da449d882bcf214a73b64f340ccb19257b3acfd2e406a"
+            "id": "D1610",
+            "digest": "sha256:40b950bf031f0aac48bd5604711a003dd660236a7df268d43a6bc6f008829cae"
           }
         ]
       },
