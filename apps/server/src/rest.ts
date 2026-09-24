@@ -65,6 +65,7 @@ function botOperationSummary(envelope: BotPolicyEventEnvelope) {
   });
 }
 
+import { ACCOUNT_IMPORT_MAX_BYTES } from "./account-import.js";
 import { ServerError } from "./errors.js";
 import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
 import { openingIdentityAt, type OpeningCatalogueAvailability } from "./opening-catalogue.js";
@@ -437,6 +438,37 @@ function parsePolicyConfig(value: unknown): PolicyConfig {
   };
 }
 
+/** A JSON body read under a byte ceiling; used where a learner uploads a file. */
+async function parseBoundedBody(request: Request, maxBytes: number): Promise<Record<string, unknown>> {
+  const tooLarge = () => new ServerError("ACCOUNT_IMPORT_TOO_LARGE", `The upload exceeds the ${Math.floor(maxBytes / (1024 * 1024))} MiB limit`, { details: { maxBytes } });
+  const declared = Number(request.headers.get("content-length") ?? Number.NaN);
+  if (Number.isFinite(declared) && declared > maxBytes) throw tooLarge();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  if (request.body !== null) {
+    const reader = request.body.getReader();
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel().catch(() => undefined);
+        throw tooLarge();
+      }
+      chunks.push(value);
+    }
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  try {
+    return record(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)) as unknown);
+  } catch (error) {
+    if (error instanceof ServerError) throw error;
+    throw invalid("Request body must be valid JSON");
+  }
+}
+
 async function parseBody(request: Request): Promise<Record<string, unknown>> {
   try {
     return record(await request.json());
@@ -663,11 +695,14 @@ export function errorResponse(error: unknown): Response {
           ? 503
         : error.code === "POLICY_MODE_UNSUPPORTED" ||
             (error.code === "IMPORT_INVALID_PGN" || error.code === "IMPORT_INVALID") ||
+            error.code === "ACCOUNT_IMPORT_INVALID" || error.code === "ACCOUNT_IMPORT_UNSUPPORTED_VERSION" ||
             error.code === "IMPORT_SOURCE_UNSUPPORTED"
             || error.code === "REPERTOIRE_IMPORT_LIMIT"
           ? 422
           : error.code === "INVALID_REQUEST"
             ? 400
+          : error.code === "ACCOUNT_IMPORT_TOO_LARGE"
+            ? 413
             : error.code === "SIMULATION_EXPIRED"
               ? 410
             : error.code === "RUN_NOT_FOUND" ||
@@ -693,6 +728,7 @@ export function errorResponse(error: unknown): Response {
                 error.code === "SHAPE_ID_NOT_YOURS" ||
                 error.code === "DRAFT_STALE" ||
                 error.code === "DELETION_PREVIEW_STALE" ||
+                error.code === "ACCOUNT_IMPORT_CONFLICT" ||
                 error.code === "REPERTOIRE_STALE" ||
                 error.code === "BOARD_HELD" ||
                 error.code === "MATCH_LIVE" ||
@@ -855,10 +891,25 @@ export function createRestHandler(
           const principal = authenticate();
           return json(200, { learner: identity.learner(principal) });
         }
+        if (request.method === "GET" && url.pathname === "/auth/account-inventory") {
+          const principal = authenticate();
+          return json(200, identity.accountInventory(principal));
+        }
         if (request.method !== "POST") {
           return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
         }
         requireJson(request);
+        if (url.pathname === "/auth/import-preview" || url.pathname === "/auth/import") {
+          // Authenticate before reading an upload so an anonymous body is never buffered.
+          const principal = authenticate();
+          const commit = url.pathname === "/auth/import";
+          const body = closedRecord(await parseBoundedBody(request, ACCOUNT_IMPORT_MAX_BYTES), "/", commit ? ["password", "bundle"] : ["bundle"]);
+          if (body.bundle === undefined) throw invalid("bundle is required");
+          const receipt = commit
+            ? await identity.importAccount(principal, requiredString(body.password, "password"), body.bundle)
+            : identity.previewAccountImport(principal, body.bundle);
+          return json(commit ? 201 : 200, { receipt });
+        }
         const value = await parseBody(request);
         if (url.pathname === "/auth/register") {
           const session = await identity.register({
@@ -892,6 +943,9 @@ export function createRestHandler(
               "cache-control": "no-store",
               "content-type": "application/vnd.tabiya.account+json; version=1",
               "content-disposition": `attachment; filename="${exported.filename}"`,
+              // The bytes are canonicalized in memory before streaming, so the length is exact and the
+              // client can show download progress.
+              "content-length": String(exported.bytes.byteLength),
               "x-tabiya-export-sha256": exported.digest,
             },
           });

@@ -493,6 +493,36 @@ migrates; v2 is the sealed value `intent-presets.md` landed. The next version cl
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
 
+## Import-source-protocol register
+
+<!-- register: import-source-protocol members=4 -->
+
+The complete game-import source boundary as one atomic set ([[D2278]]). The tree source is the
+literal tuple `IMPORT_SOURCE_PROTOCOL_MEMBERS` in `packages/runtime/src/import-source-protocol.ts`,
+read by the catalogue's existing `string_tuple` reader (`rfc/shared-resource-registers.json`). A
+`request_<kind>` member is one `ImportSource.kind` a client may send; a `source_<kind>` member is one
+durable `imported_games.source_kind`. Server resolver/storage and web API types derive from the
+tuple, and `apps/server/src/import-source-protocol.test.ts` requires the running SQLite CHECK to
+equal the `source_` face. Introduced by `import-source-protocol-register.md` with the four members
+the shipped importer already used. Human-owned and checked by `make register-check`, never
+generated.
+
+### Landed
+
+| member | added by | added at |
+|---|---|---|
+| request_lichess | `archive/game-import-and-story.md` | `912af997` (seeded by `import-source-protocol-register.md`) |
+| request_pgn | `archive/game-import-and-story.md` | `912af997` (seeded by `import-source-protocol-register.md`) |
+| source_lichess_url | `archive/game-import-and-story.md` | `9477316d` (seeded by `import-source-protocol-register.md`) |
+| source_pgn_paste | `archive/game-import-and-story.md` | `9477316d` (seeded by `import-source-protocol-register.md`) |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+| members request_broadcast, source_lichess_broadcast | `live-sources.md` | the finished-round broadcast request kind and its durable source kind | 2026-09-24 |
+
+
 ## Migration register
 
 <!-- register: migration head=29 -->

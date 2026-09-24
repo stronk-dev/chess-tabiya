@@ -42,6 +42,7 @@ const tree = {
   "semantic-conventions": { members: ["space_v1"] },
   "assistance-config": { members: ["assistance_config_v4"] },
   "workflow-preference": { members: ["workflow_preference_v1", "workflow_preference_v2"] },
+  "import-source-protocol": { members: ["request_pgn", "source_pgn_paste"] },
 };
 
 const declaration = (body = "none") => `# RFC: fixture
@@ -290,7 +291,13 @@ test("§7.1 the exact seven-row seed parses, sorted and unique", () => {
   const reviewedSeed = JSON.parse(fs.readFileSync(path.join(repoRoot, "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json"), "utf8"));
   assert.deepEqual(reviewedSeed.resources.map(({ id }) => id), seven);
   assert.deepEqual(seed().resources.filter(({ id }) => seven.includes(id)), reviewedSeed.resources);
-  assert.deepEqual(ids, [...seven, "provider-protocol", "concept-registry-schema", "semantic-conventions", "assistance-config", "workflow-preference"].sort());
+  assert.deepEqual(ids, [...seven, "provider-protocol", "concept-registry-schema", "semantic-conventions", "assistance-config", "workflow-preference", "import-source-protocol"].sort());
+  // import-source-protocol-register.md adds `import-source-protocol` through the string_tuple reader.
+  assert.deepEqual(seed().resources.find(({ id }) => id === "import-source-protocol"), {
+    id: "import-source-protocol",
+    claimKind: "members",
+    source: { kind: "string_tuple", path: "packages/runtime/src/import-source-protocol.ts", exportName: "IMPORT_SOURCE_PROTOCOL_MEMBERS" },
+  });
   assert.deepEqual(seed().resources.find(({ id }) => id === "semantic-conventions"), {
     id: "semantic-conventions",
     claimKind: "members",
@@ -474,4 +481,21 @@ test("assistance-config and workflow-preference members: the real sources derive
   assert.deepEqual([...first.errors, ...second.errors], []);
   assert.match(checkC3([...first.claims, ...second.claims], [], catalogue).join("\n"), /collision: hint-distance\.md and other\.md both claim assistance-config\|assistance_config_v5/);
   assert.match(checkC1({ "one.md": declaration("workflow-preference | lane 2 | whole projection") }, catalogue).errors[0], /invalid member claim/);
+});
+
+// import-source-protocol-register.md criteria 2-4, corrected to the implemented members grammar.
+test("import-source-protocol members: the seeded tuple derives, live-sources' exact claim passes, and wrong claims fail", () => {
+  const real = deriveTree(repoRoot);
+  assert.deepEqual(real["import-source-protocol"].members, ["request_lichess", "request_pgn", "source_lichess_url", "source_pgn_paste"]);
+  const exact = "import-source-protocol | members request_broadcast, source_lichess_broadcast | broadcast pair";
+  const liveSources = checkC1({ "live-sources.md": declaration(exact) }, catalogue);
+  assert.deepEqual(liveSources.errors, []);
+  const second = checkC1({ "other.md": declaration("import-source-protocol | members source_lichess_broadcast | same member") }, catalogue);
+  assert.match(checkC3([...liveSources.claims, ...second.claims], [], catalogue).join("\n"), /collision: live-sources\.md and other\.md both claim import-source-protocol\|source_lichess_broadcast/);
+  assert.match(checkC1({ "live-sources.md": declaration("import-source-protocol | first lane 1 | whole projection") }, catalogue).errors[0], /invalid member claim/);
+  assert.match(checkC1({ "live-sources.md": declaration("import-source-protocol | members lichess-broadcast | hyphen") }, catalogue).errors[0], /invalid member claim/);
+  assert.ok(checkC1({ "live-sources.md": declaration("import-sources-protocol | members request_broadcast | renamed") }, catalogue).errors.length > 0);
+  // The committed live-sources.md carries exactly that claim.
+  const committed = fs.readFileSync(path.join(repoRoot, "rfc/live-sources.md"), "utf8");
+  assert.match(committed, /^import-source-protocol \| members request_broadcast, source_lichess_broadcast \| /m);
 });

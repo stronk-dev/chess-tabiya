@@ -2,7 +2,10 @@
   import { ASSISTANCE_PREFERENCE_FIELDS, CONFIGURABLE_MODULE_IDS, MODULE_LABELS, permittedAssistance, preferenceDisplayMode, presetDeclaration, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type ConfigurableModuleId, type PresetId, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
   import { onDestroy, onMount } from "svelte";
 
-  import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
+  import type { AccountExportProgress, AccountImportReceipt, AccountInventory, Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
+  import AccountImportPanel from "./AccountImportPanel.svelte";
+  import AccountInventoryPanel from "./AccountInventoryPanel.svelte";
+  import { formatBytes } from "./account-inventory-copy.js";
   import { ASSISTANCE_PROFILES, loadWorkflowPreference, requestedAssistanceConfig, saveWorkflowPreference, type AssistanceProfile } from "./assistance-preference.js";
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
@@ -12,13 +15,18 @@
     capabilities?: Capabilities | undefined;
     learner?: Learner | undefined;
     onSignOut: () => void | Promise<void>;
-    onExport: (password: string) => void | Promise<void>;
+    onExport: (password: string, onProgress?: (progress: AccountExportProgress) => void) => void | Promise<void>;
     onDelete: (password: string, previewDigest: string) => void | Promise<void>;
     loadDeletionPreview?: () => Promise<DeletionPreview>;
+    loadAccountInventory?: (() => Promise<AccountInventory>) | undefined;
+    previewAccountImport?: ((bundle: unknown) => Promise<AccountImportReceipt>) | undefined;
+    commitAccountImport?: ((password: string, bundle: unknown) => Promise<AccountImportReceipt>) | undefined;
     plannedSurfaceIds?: readonly string[];
   }
 
-  let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview, plannedSurfaceIds = [] }: Props = $props();
+  let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview, loadAccountInventory, previewAccountImport, commitAccountImport, plannedSurfaceIds = [] }: Props = $props();
+  let exportProgress = $state<AccountExportProgress | undefined>();
+  let inventoryVersion = $state(0);
   const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp", campaign: "Campaign" };
   let receipts: Record<AssistanceProfile, WorkflowPreferenceReceipt> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadWorkflowPreference(profile, storage())])) as Record<AssistanceProfile, WorkflowPreferenceReceipt>);
   let unsaved = $state(false);
@@ -160,14 +168,26 @@
     const submittedPassword = exportPassword;
     exportPassword = "";
     exportBusy = true;
+    exportProgress = undefined;
     try {
-      await onExport(submittedPassword);
+      await onExport(submittedPassword, (progress) => { if (mounted && request === exportRequest) exportProgress = progress; });
       if (mounted && request === exportRequest) exportStatus = "Your account data download has started.";
     } catch {
       if (mounted && request === exportRequest) exportError = "Your account download could not be prepared. Re-enter your password and try again.";
     } finally {
-      if (mounted && request === exportRequest) exportBusy = false;
+      if (mounted && request === exportRequest) { exportBusy = false; exportProgress = undefined; }
     }
+  }
+
+  function progressText(progress: AccountExportProgress): string {
+    return progress.totalBytes === null
+      ? `Downloaded ${formatBytes(progress.receivedBytes)}`
+      : `Downloaded ${formatBytes(progress.receivedBytes)} of ${formatBytes(progress.totalBytes)}`;
+  }
+
+  function accountImported(): void {
+    inventoryVersion += 1;
+    if (loadDeletionPreview !== undefined) void previewDeletion();
   }
 
   async function signOut(): Promise<void> {
@@ -261,17 +281,27 @@
         <button type="button" disabled={previewLoading || deleteBusy} aria-describedby={previewLoading ? "account-preview-busy" : deleteBusy ? "account-delete-busy" : undefined} onclick={() => void previewDeletion()}>Refresh data summary</button>
       </div>
     {:else}<p>This deployment cannot provide an account data summary.</p>{/if}
+    {#if loadAccountInventory}
+      {#key inventoryVersion}<AccountInventoryPanel loadInventory={loadAccountInventory} />{/key}
+    {/if}
   </section>
   <form onsubmit={(event) => { event.preventDefault(); void downloadAccount(); }}>
     <h3>Download my data</h3>
     <p class="honest">A portable copy of your runs, progress, authored drafts, publications, and account-scoped activity. Passwords, sessions, provider credentials, and preferences stored only on this device are excluded.</p>
-    <p class="honest">This Tabiya account archive is for safekeeping and inspection. Tabiya cannot import it, and other chess products do not read it. To move games between chess tools, <a href="/library">download them as PGN</a>.</p>
+    <p class="honest">This Tabiya account archive is for safekeeping, inspection and moving your private records into another Tabiya account; other chess products do not read it. To move games between chess tools, <a href="/library">download them as PGN</a>.</p>
     <label>Current password <input type="password" autocomplete="current-password" bind:value={exportPassword} /></label>
     <button type="submit" disabled={exportBusy} aria-describedby={exportBusy ? "account-export-busy" : undefined}>{exportBusy ? "Preparing download…" : "Download my data"}</button>
     {#if exportBusy}<p id="account-export-busy" role="status">Preparing one private account archive.</p>{/if}
+    {#if exportBusy && exportProgress}
+      <progress class="export-progress" max={exportProgress.totalBytes ?? undefined} value={exportProgress.receivedBytes} aria-label="Account download progress">{progressText(exportProgress)}</progress>
+      <p class="honest">{progressText(exportProgress)}</p>
+    {/if}
     {#if exportStatus}<p role="status">{exportStatus}</p>{/if}
     {#if exportError}<p role="alert">{exportError}</p>{/if}
   </form>
+  {#if previewAccountImport && commitAccountImport}
+    <AccountImportPanel previewImport={previewAccountImport} commitImport={commitAccountImport} onImported={accountImported} />
+  {/if}
   <form onsubmit={(event) => { event.preventDefault(); void removeAccount(); }}>
     <h3>Delete account</h3>
     {#if deletionPreview === undefined}
