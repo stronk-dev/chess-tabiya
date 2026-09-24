@@ -426,15 +426,26 @@
         "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Presets now drive the product: Quiet, Guide me, Theory only, Support and Analyze each compile a module set and config narrowed by context ceiling and viewer access with worded suppressions, the server re-derives the exchange, the pill offers only the context's presets and shows Custom when Advanced changes a field, and the 72 primitives stay under Advanced. Checkpoint B, five emitter-dependent composition states and executable Campaign remain.",
+          "summary": "Learner modules now render in play: sight, threat radar, blunder prevention with a staged-move head slot, post-commit and structure nudges, theory breadcrumb, compare coach and the Full Inspector each show admitted facts through sealed presentation receipts, only when the compiled preset carries them, with delivery bound to the final assistance digest. The stable board and one-expanded seat model hold across the matrix. Guided Hint's seat and legacy renderer migration remain.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/assistance-exchange.ts",
-            "planning/intent-presets/checkpoint-a-implementation-2026-09-24.md",
+            "packages/runtime/src/module-query.ts",
+            "rfc/evidence-presentation.md",
+            "rfc/module-registration.md",
             "rfc/intent-presets.md",
             "rfc/play-composition.md"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "evidence-presentation.md",
+              "digest": "sha256:b98b144e97684b62e10e3e4982436a4fcb19f02dbc2a9410dd9d2ab8583c4804"
+            },
+            {
+              "kind": "rfc",
+              "id": "module-registration.md",
+              "digest": "sha256:28111fa1f05d31c2547573de43a348459dd355c2562b002f72c039421296a15d"
+            },
             {
               "kind": "rfc",
               "id": "intent-presets.md",
