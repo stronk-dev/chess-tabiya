@@ -49,13 +49,15 @@ export interface ReviewFixtureOptions {
   /** Node indexes (0 = root) that receive a recorded evaluation; default every node. */
   readonly evaluated?: (index: number) => boolean;
   readonly extraValues?: Readonly<Record<string, unknown>>;
+  /** The side the run follows (the importer's colour); default White. */
+  readonly side?: "white" | "black";
 }
 
 export function reviewFixtureRun(options: ReviewFixtureOptions = {}): DrillRun {
   const kind = options.kind ?? "imported";
   const session = kind === "imported"
-    ? { kind: "imported" as const, start: { fen: START, side: "white" as const }, movetextDigest: DIGEST, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } }
-    : { kind: "position" as const, start: { fen: START, side: "white" as const }, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } };
+    ? { kind: "imported" as const, start: { fen: START, side: options.side ?? "white" }, movetextDigest: DIGEST, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } }
+    : { kind: "position" as const, start: { fen: START, side: options.side ?? "white" }, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } };
   let run = createRun({ id: options.id ?? `review-${kind}`, session, sessionDigest: DIGEST, policyConfig: CONFIG, seed: 1, createdAt: REVIEW_FIXTURE_AT });
   for (const uci of deterministicLine(options.plies ?? 70)) {
     const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;

@@ -173,6 +173,9 @@ class MockEngineClient implements SelectorEngineClient {
 
 class MockEvidenceExecutor implements EvidenceExecutor {
   execute(job: EvidenceJob): Promise<EvidencePayload> {
+    // Like the Stockfish executor, an eval reading records its search's first move (`bestMoveUci`);
+    // the mock reports the first legal move. Only the explicit Analyze action ever renders it.
+    const first = job.kind === "eval" ? legalMoves(job.fen, [])[0] : undefined;
     return Promise.resolve(
       Object.freeze({
         kind: job.kind,
@@ -182,6 +185,7 @@ class MockEvidenceExecutor implements EvidenceExecutor {
           requestedMovetimeMs: job.movetime,
           centipawns: 0,
           perspective: "white",
+          ...(first === undefined ? {} : { bestMoveUci: first }),
         }),
       }),
     );

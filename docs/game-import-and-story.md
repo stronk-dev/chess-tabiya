@@ -202,9 +202,30 @@ evaluation job, writes no event and persists no grade.
   the recorded-semantic-path compiler fired from that move (its first production consumer). The
   per-position review packet of the draft `review-evidence-compiler` is shown as an explicit
   abstention.
+- **Eval graph.** One point per ply over the durable evaluations (`evalGraph`), with the accuracy
+  figure's coverage gate: a position counts only when its recorded packet reads as a grade operand.
+  Recorded evaluations are White-perspective; points are drawn as win-points for the review's side
+  (the run's start side, i.e. the importer's colour), through the same logistic. Where readings are
+  missing — the native-run case — the graph draws no line across the stretch, shades it, and states
+  each gap in words, plus a coverage sentence. Every ply is a keyboard stop (one tab stop, arrow
+  keys/Home/End between points) that selects the move in the list; a text list mirrors every point.
+- **Compare handoff.** `compareDoors` lists, per reviewed position, the other recorded lines that
+  leave the reviewed line there and carry at least one move of their own (a retry that has been
+  played), reviewed line first, capped at the shipped compare's eight columns. The row (and moment
+  card) at that position offers *Compare lines from here*, which opens the run with the shipped N-way
+  compare on exactly those branch ids; no comparison machinery is added.
+- **Analyze.** An explicit, secondary action under the evidence panel. `GET
+  /runs/:id/review-analysis?node=<nodeId>` (read-only, like the review) returns the recorded engine
+  line from the position before that move — a `bestline` packet's principal variation, else the
+  eval packet's recorded search first move — as one template sentence naming the engine and the
+  requested search bound, plus a caveat that it is not advice. A line without its search bound is not
+  shown. The reveal closes when the selection moves or a retry starts, and it is **withheld** (server
+  and client) for the position a retry is open from: the run's active line leaves the reviewed line
+  there and has reached no outcome (`openRetryEntryNodeId`).
 - **Prose.** Every authored string is a registered template (`REVIEW_MAP_TEMPLATES`); none carries a
   judgement word. The footer names the grounding sources of the admitted items actually on the page.
-  No best move, principal variation or praise class appears.
+  No best move, principal variation or praise class appears in the ordinary map; an engine line
+  appears only under Analyze.
 
 `voiceCheck` enforces licence-by-span for judgement words ([[D1409]]): a judgement word is valid only
 inside a byte-exact grounding sentence of the rendered view, never elsewhere in the output. Squares,

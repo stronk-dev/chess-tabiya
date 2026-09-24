@@ -749,6 +749,13 @@ export {
   type ReviewMapProjection,
   type ReviewMapRow,
   type ReviewMomentSelection,
+  REVIEW_COMPARE_LIMIT,
+  openRetryEntry,
+  type ReviewCompareDoor,
+  type ReviewEvalGap,
+  type ReviewEvalGraph,
+  type ReviewEvalPoint,
 } from "./review-map.js";
+export { reviewAnalysis, type ReviewAnalysis } from "./review-analysis.js";
 export { REVIEW_MAP_TEMPLATES, reviewText, type ReviewTemplateId } from "./review-map-templates.js";
 export { judgementWordsOutsideGrounding, ungroundedResidue } from "./voice.js";

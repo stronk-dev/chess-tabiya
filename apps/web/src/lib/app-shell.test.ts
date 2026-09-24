@@ -55,6 +55,8 @@ function reviewPayload(options: { readonly runId: string; readonly branchId: str
     },
     coverage: { evaluated: 0, positions: 1, sentence: "Evaluation coverage: 0 of 1 positions on this line carry a recorded engine evaluation." },
     footer: { labels: ["Recorded game"], sentence: "Sources on this review: Recorded game." },
+    evalGraph: { kind: "abstained", side: "white", points: [], gaps: [], evaluated: 0, caption: "No position on this line carries a recorded engine evaluation, so no evaluation graph is drawn.", coverage: "0 of 0 moves have a recorded evaluation after them." },
+    compareDoors: [], openRetryEntryNodeId: null,
   };
 }
 

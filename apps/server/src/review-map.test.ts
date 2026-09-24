@@ -159,6 +159,73 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(graphAfter.nodes.filter((node) => node.branchId === review.branchId).map((node) => node.id)).toEqual(mainline);
     expect((await read()).rows).toHaveLength(PLIES);
   });
+
+  it("serves the eval graph, the explicit Analyze reveal and the Compare handoff — read-only, withheld during a retry", async () => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "review_remainder");
+    const runId = await importReviewedGame(origin, cookie, "writer-remainder");
+    interface Remainder {
+      readonly branchId: string;
+      readonly rows: readonly { readonly nodeId: string; readonly entryNodeId: string; readonly label: string }[];
+      readonly evalGraph: { readonly kind: string; readonly side: string; readonly evaluated: number; readonly points: readonly { readonly kind: string; readonly percent?: number }[] };
+      readonly compareDoors: readonly { readonly entryNodeId: string; readonly branchIds: readonly string[]; readonly omitted: number }[];
+      readonly openRetryEntryNodeId: string | null;
+    }
+    const read = async (): Promise<Remainder> => await (await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } })).json() as Remainder;
+    const analyze = (nodeId: string) => fetch(`${origin}/runs/${runId}/review-analysis?node=${encodeURIComponent(nodeId)}`, { headers: { cookie } });
+
+    const review = await read();
+    // §6: one drawn point per ply at full recorded coverage; the mock records 0 cp → 50 win-points.
+    expect(review.evalGraph).toMatchObject({ kind: "complete", side: "white", evaluated: PLIES });
+    expect(review.evalGraph.points.every((point) => point.kind === "evaluated" && point.percent === 50)).toBe(true);
+    expect(review.compareDoors).toEqual([]);
+    expect(review.openRetryEntryNodeId).toBeNull();
+    // Criterion 12: the mock evaluation records its search's first move; the ordinary map never carries it.
+    expect(JSON.stringify(review)).not.toMatch(/bestMove|movesUci|principal/u);
+
+    // §7 / O7.3: the explicit reveal, attributed to engine and search bound, and it writes nothing.
+    const tables = tableSnapshot(databasePath);
+    const events = eventKinds(databasePath, runId);
+    const target = review.rows[10]!;
+    const revealed = await analyze(target.nodeId);
+    expect(revealed.status, await revealed.clone().text()).toBe(200);
+    const line = await revealed.json() as { kind: string; source: string; engineId: string; bound: Record<string, number>; moves: string[]; sentence: string; entryNodeId: string };
+    expect(line).toMatchObject({ kind: "line", source: "search_first_move", engineId: "mock-evidence", entryNodeId: target.entryNodeId });
+    expect(line.bound.requestedMovetimeMs).toBeGreaterThan(0);
+    expect(line.moves).toHaveLength(1);
+    expect(line.sentence).toBe(`mock-evidence (${line.bound.requestedMovetimeMs} ms search) reported ${line.moves[0]} as the first move of its search from the position before ${target.label}; no longer line is recorded.`);
+    expect(tableSnapshot(databasePath)).toEqual(tables);
+    expect(eventKinds(databasePath, runId)).toEqual(events);
+    expect((await analyze(review.rows[0]!.entryNodeId)).status).toBe(400);
+    expect((await fetch(`${origin}/runs/${runId}/review-analysis`, { headers: { cookie } })).status).toBe(400);
+
+    // Retry from that position (as the Review Map does): the reveal is withheld while the retry is open.
+    const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "writer-remainder" }, body: JSON.stringify(body) });
+    expect((await post(`/runs/${runId}/lease`, {})).status).toBe(200);
+    expect((await post(`/runs/${runId}/rewind`, { nodeId: target.entryNodeId })).status).toBe(200);
+    expect((await post(`/runs/${runId}/fork`, { nodeId: target.entryNodeId, label: "story-reentry", intent: "Retry" })).status).toBe(200);
+    const opened = await read();
+    expect(opened.openRetryEntryNodeId).toBe(target.entryNodeId);
+    // §4: an empty retry is not a second line yet.
+    expect(opened.compareDoors).toEqual([]);
+    const withheld = await (await analyze(target.nodeId)).json() as { kind: string; sentence: string };
+    expect(withheld).toMatchObject({ kind: "withheld" });
+    expect(JSON.stringify(withheld)).not.toMatch(/"moves"|mock-evidence/u);
+    expect((await (await analyze(review.rows[12]!.nodeId)).json() as { kind: string }).kind).toBe("line");
+
+    // Play one move on the retry: the compare door appears, and the shipped compare accepts it verbatim.
+    const moved = await post(`/runs/${runId}/moves`, { uci: "a2a3" });
+    expect(moved.status, await moved.clone().text()).toBe(200);
+    const doors = (await read()).compareDoors;
+    expect(doors).toHaveLength(1);
+    expect(doors[0]!.entryNodeId).toBe(target.entryNodeId);
+    expect(doors[0]!.branchIds[0]).toBe(review.branchId);
+    const compared = await post(`/runs/${runId}/compare`, { branchIds: doors[0]!.branchIds });
+    expect(compared.status, await compared.clone().text()).toBe(200);
+    const comparison = (await compared.json() as { comparison: { columns: { branchId: string }[]; forkNodeId: string } }).comparison;
+    expect(comparison.columns.map((column) => column.branchId)).toEqual(doors[0]!.branchIds);
+    expect(comparison.forkNodeId).toBe(target.entryNodeId);
+  });
 });
 
 describe("review map service boundary", () => {
@@ -187,6 +254,29 @@ describe("review map service boundary", () => {
     expect(asReader.rows.map((row) => row.nodeId)).toEqual(asOwner.rows.map((row) => row.nodeId));
     expect(() => service.claimLease(imported.run.id, { learnerId: "reader", handle: "reader" }, "reader-writer")).toThrowError(expect.objectContaining({ code: "FORBIDDEN" }));
     await expect(service.review(imported.run.id, { learnerId: "stranger", handle: "stranger" })).rejects.toMatchObject({ code: "RUN_NOT_FOUND" });
+  });
+
+  it("[§6] draws the eval graph for the imported side: White-perspective +1.50 reads above level for White, below for Black", async () => {
+    const at = "2026-09-24T12:00:00.000Z";
+    const executor: EvidenceExecutor = { async execute(job) { return { kind: "eval", source: "engine_validated", values: { centipawns: 150, perspective: "white", engineId: "mock", requestedMovetimeMs: job.movetime } }; } };
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {}, now: () => at });
+    stores.push(storage);
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
+    const graphs: Record<string, { side: string; points: readonly { kind: string; percent?: number }[] }> = {};
+    for (const side of ["white", "black"] as const) {
+      const imported = await service.importGame({ id: `graph-${side}`, side, opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: GLYPHED_PGN } }, "writer");
+      await queue.whenIdle();
+      service.reveal(imported.run.id, "writer");
+      for (const result of queue.page(imported.run.id).results) service.applyEvidence(imported.run.id, "writer", result.seq);
+      graphs[side] = (await service.review(imported.run.id, principal)).evalGraph;
+    }
+    expect(graphs.white!.side).toBe("white");
+    expect(graphs.black!.side).toBe("black");
+    expect(graphs.white!.points.every((point) => point.kind === "evaluated" && point.percent! > 60)).toBe(true);
+    expect(graphs.black!.points.every((point) => point.kind === "evaluated" && point.percent! < 40)).toBe(true);
+    graphs.white!.points.forEach((point, index) => expect(point.percent! + graphs.black!.points[index]!.percent!).toBeCloseTo(100, 0));
   });
 
   it("[criterion 6] a line whose evaluation pass has not completed abstains and states the fraction; the read enqueues nothing", async () => {
