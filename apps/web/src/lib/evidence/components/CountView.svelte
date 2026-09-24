@@ -12,7 +12,7 @@
 <div class="count" data-component="count_with_denominator">
   <p class="value">{view.text}</p>
   {#if view.width !== null}<span class="track" aria-hidden="true"><span class="bar" style:width={`${view.width}%`}></span></span>{/if}
-  <p class="sr-only">{sentence}</p>
+  <p class="visually-hidden">{sentence}</p>
 </div>
 
 <style>
@@ -20,5 +20,4 @@
   .value{margin:0;font-size:.78rem;font-variant-numeric:tabular-nums;color:var(--ink)}
   .track{display:block;height:.35rem;border-radius:.2rem;background:var(--surface);border:1px solid var(--line);overflow:hidden}
   .bar{display:block;height:100%;background:var(--accent)}
-  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 </style>

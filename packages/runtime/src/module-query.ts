@@ -203,7 +203,7 @@ function witnessed(evidence: DeclaredEvidence<unknown>): boolean {
   switch (evidence.projection.id) {
     case "rules.tactic.consequence.threat": return payload.kind === "threats" && (payload.threats as readonly unknown[]).length > 0;
     case "rules.tactic.consequence.mate_in_one": return (payload.mates as readonly unknown[]).length > 0;
-    case "rules.tactic.reading.loose_piece": return (payload.pieces as readonly { readonly enPrise: boolean; readonly loose: boolean; readonly underDefended: boolean }[]).some((entry) => entry.enPrise || entry.loose || entry.underDefended);
+    case "rules.tactic.reading.loose_piece": return (payload.pieces as readonly { readonly enPrise: boolean; readonly loose: boolean; readonly underDefended: boolean }[]).some((entry) => entry.enPrise); // an undefended but unattacked piece is not a threat
     case "rules.tactic.reading.back_rank": return (payload.susceptible as readonly { readonly accessingHeavyPieces: readonly unknown[] }[]).some((entry) => entry.accessingHeavyPieces.length > 0);
     case "rules.tactic.reading.trapped_piece": return payload.kind === "pieces" && (payload.pieces as readonly unknown[]).length > 0;
     case "rules.tactic.reading.ray_classification": return (payload.rays as readonly unknown[]).length > 0;

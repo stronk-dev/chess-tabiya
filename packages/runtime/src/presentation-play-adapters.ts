@@ -280,7 +280,7 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
   };
   const looseConstruct: Construct = (evidence) => {
     const reading = evidence.payload as { readonly pieces: readonly { readonly piece: Occupant; readonly legalCapturers: readonly { readonly square: SquareName }[]; readonly defenders: readonly unknown[]; readonly enPrise: boolean; readonly loose: boolean; readonly underDefended: boolean }[] };
-    const flagged = reading.pieces.filter((entry) => entry.enPrise || entry.loose || entry.underDefended);
+    const flagged = reading.pieces.filter((entry) => entry.enPrise); // only a piece capturable at a material gain is a concrete exposure
     return statement("play.loose_pieces@1", "threat-convention@1", { pieces: flagged.map((entry) => ({ piece: piece(entry.piece.occupant), square: entry.piece.square, enPrise: entry.enPrise, loose: entry.loose, underDefended: entry.underDefended, capturers: entry.legalCapturers.map((capturer) => capturer.square), defenders: entry.defenders.length })) });
   };
   for (const module of ["threat_radar", "blunder_prevention"] as const) {

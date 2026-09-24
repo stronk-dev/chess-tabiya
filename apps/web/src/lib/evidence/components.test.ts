@@ -41,7 +41,7 @@ const corpus = (sampleSize: number): ConventionReceipt => ({ producer: { id: "hu
 const recorded: ConventionReceipt = { producer: { id: "derived.compare_narrative", version: 1 }, sourceProjection: { id: "derived.compare.eval_delta", version: 1 }, sourceEvidenceDigest: D("b"), perspective: "white", basis: { kind: "recorded_search", engine: { name: "Stockfish", version: "17" }, depth: 18 } };
 const caption = factStatementOperand("play.structural_observation@1", "declared_convention", "board-rules@1", { kind: "open_file", squares: ["d1", "d8"], file: "d" } as never);
 const settled = (reason: "provider_unavailable" | "floor_not_met" | "no_observation", absence: "unavailable" | "withheld" | "empty") => ({ kind: "settled_abstention", question: "review.human_corpus", projection: { id: "human.explorer.population", version: 1 }, producer: { id: "human.explorer", version: 1 }, requestId: "request-1", decision: { eventHeadSeq: 3, cursor: { branchId: "main", nodeId: "n3" }, disclosureBoundarySeq: null, digest: D("c") }, absence, reason, sourceReceipt: { producer: { id: "human.explorer", version: 1 }, projection: { id: "human.explorer.population", version: 1 }, receiptDigest: D("d") } });
-const document = (fields: Record<string, unknown>) => { const canonicalBytes = JSON.stringify(Object.fromEntries(Object.entries(fields).sort(([a], [b]) => a.localeCompare(b)))); return { schemaId: "runtime.source_record@1", document: fields, canonicalBytes, digest: presentationDigest("presentation.structured_document@1", { schemaId: "runtime.source_record@1", canonicalBytes }) }; };
+const document = (fields: Record<string, unknown>) => { const canonicalBytes = JSON.stringify(Object.fromEntries(Object.entries(fields).sort(([a], [b]) => a.localeCompare(b)))); return { schemaId: "authoring.engine_eval_record@1", document: fields, canonicalBytes, digest: presentationDigest("presentation.structured_document@1", { schemaId: "authoring.engine_eval_record@1", canonicalBytes }) }; };
 
 type State = "zero" | "one" | "many" | "withheld" | "unavailable";
 type Fixture = Readonly<Record<string, unknown>> | "not_applicable";
@@ -120,7 +120,7 @@ const MATRIX: Readonly<Record<ComponentId, Readonly<Record<State, Fixture>>>> = 
     withheld: settled("floor_not_met", "withheld"),
     unavailable: settled("provider_unavailable", "unavailable"),
   },
-  structured_document: { zero: "not_applicable", one: document({ producer: "live.syzygy", projection: "live.syzygy.result", payload: { category: "win" } }), many: "not_applicable", withheld: "not_applicable", unavailable: "not_applicable" },
+  structured_document: { zero: "not_applicable", one: document({ kind: "engine_eval", sourceId: "offline-stockfish", retrievedAt: "2026-09-24T00:00:00.000Z", values: { centipawns: 20 } }), many: "not_applicable", withheld: "not_applicable", unavailable: "not_applicable" },
 };
 
 const VIEWS: Readonly<Record<ComponentId, Component<{ component: never; sentence: string }>>> = {
@@ -149,7 +149,8 @@ describe("criterion 17: every component has an explicit zero / one / many / with
       for (const [state, fixture] of Object.entries(states)) {
         if (fixture === "not_applicable") continue;
         const { root, sentence, done } = render(id, fixture);
-        expect(root.textContent?.replace(/\s+/gu, " ") ?? "", `${id} ${state}`).not.toMatch(/[a-z]+_[a-z]+|@\d/u);
+        // structured_document is the author/operator raw-record viewer (§3.12): its field names are its content.
+        if (id !== "structured_document") expect(root.textContent?.replace(/\s+/gu, " ") ?? "", `${id} ${state}`).not.toMatch(/[a-z]+_[a-z]+|@\d/u);
         expect(root.innerHTML.length, `${id} ${state}`).toBeGreaterThan(0);
         expect(sentence.length).toBeGreaterThan(0);
         done();

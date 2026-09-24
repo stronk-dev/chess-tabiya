@@ -21,7 +21,7 @@
     {/each}
   </ol>
   <figcaption class="convention">{attribution(component.operand.convention)}</figcaption>
-  <p class="sr-only">{sentence}</p>
+  <p class="visually-hidden">{sentence}</p>
 </figure>
 
 <style>
@@ -35,5 +35,4 @@
   .withheld .label{color:var(--muted)}
   .share{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
   .convention{font-size:.7rem;color:var(--muted)}
-  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 </style>
