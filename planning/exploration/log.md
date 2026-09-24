@@ -21291,3 +21291,18 @@ provider operation.
 - **Ledger:** D2960–D2965 close.
 - **Migration queue:** bot-policy's run lane 0.18 is next, then campaign.
 - **Owner:** reviewing the 168 seeded labels (D2).
+
+### 2026-09-24 — D3300 partly fixed: bounded drain, flake fixed, projector ~5.8× faster
+
+- **Bounded shutdown:** `close()` now returns within 2 s mid-projection. The
+  thread checks a shared drain flag at each decision and abandons its claim for
+  immediate re-lease.
+- **Flake:** "unable to open database file" was a teardown race in the tests,
+  where a late hook deleted the next test's live directory. It is fixed, and the
+  30 s teardown budgets are reverted.
+- **Speed:** projection is about 5.8× faster, with byte-identical output. The
+  main cost was a table-rebuilding SHA-256, now native on Node, plus memoised
+  FEN and readings. A 78-ply game still takes about 5 s because each candidate
+  seals about 200 evidence values.
+- **Still open:** reducing that cost needs an evidence-contract change, so D3300
+  stays open for the remainder.

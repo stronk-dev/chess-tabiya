@@ -4,7 +4,7 @@ import { makeFen } from "chessops/fen";
 import type { Color, Move, Piece, Role, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { exactLegalMoves, exactMoveDestination, exactMoveIdentity } from "./legal-moves.js";
 import { castlingRightsLost, type CastlingRightLostEvent } from "./castling.js";
 import { captureClassEvent, legalCaptureMovesTo, legalExchangeForMove, type CaptureClassEvent, type LegalExchangeResult } from "./exchange.js";
@@ -286,7 +286,25 @@ export function canonicalMoveUci(beforeFen: string, moveUci: string): string {
   return exactMoveIdentity(beforeFen, moveUci);
 }
 
+// Every compiled event re-canonicalises its anchor; one edge compiles dozens of events over the same
+// anchor ([[D3300]]). The canonical anchor is a frozen pure function of the input fields, so a bounded
+// FIFO memo returns the identical value. Failing anchors are never cached and still throw.
+const CANONICAL_ANCHORS = new Map<string, SemanticEventAnchor>();
+const CANONICAL_ANCHOR_LIMIT = 4096;
+
 function canonicalAnchor(anchor: SemanticEventAnchor): SemanticEventAnchor {
+  const fields = [anchor.beforeFen, anchor.moveUci, anchor.afterFen, anchor.side, anchor.runId, anchor.branchId, anchor.nodeId];
+  if (!fields.every((field) => field === undefined || typeof field === "string")) return computeCanonicalAnchor(anchor);
+  const key = `${anchor.beforeFen}\0${anchor.moveUci}\0${anchor.afterFen}\0${anchor.side}\0${anchor.runId ?? "\u0001"}\0${anchor.branchId ?? "\u0001"}\0${anchor.nodeId ?? "\u0001"}`;
+  const cached = CANONICAL_ANCHORS.get(key);
+  if (cached !== undefined) return cached;
+  const computed = computeCanonicalAnchor(anchor);
+  CANONICAL_ANCHORS.set(key, computed);
+  if (CANONICAL_ANCHORS.size > CANONICAL_ANCHOR_LIMIT) CANONICAL_ANCHORS.delete(CANONICAL_ANCHORS.keys().next().value!);
+  return computed;
+}
+
+function computeCanonicalAnchor(anchor: SemanticEventAnchor): SemanticEventAnchor {
   const before = positionFromFen(anchor.beforeFen);
   const beforeFen = canonicalFen(before);
   const moveUci = canonicalMoveUci(beforeFen, anchor.moveUci);
@@ -1152,10 +1170,32 @@ export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen
   return localSemanticEventClosure(beforeFen, moveUci, afterFen).events;
 }
 
+type ManifestIndex = {
+  readonly semanticEvents: ReadonlyMap<string, CompiledEvidenceManifest["semanticEvents"][number]>;
+  readonly projections: ReadonlyMap<string, CompiledEvidenceManifest["projections"][number]>;
+};
+const MANIFEST_INDEXES = new WeakMap<CompiledEvidenceManifest, ManifestIndex>();
+
+/** First-match ref index over a frozen manifest (the `find` it replaces); unfrozen manifests are scanned. */
+function manifestIndex(manifest: CompiledEvidenceManifest): ManifestIndex | undefined {
+  if (!Object.isFrozen(manifest.semanticEvents) || !Object.isFrozen(manifest.projections)) return undefined;
+  const cached = MANIFEST_INDEXES.get(manifest);
+  if (cached !== undefined) return cached;
+  const semanticEvents = new Map<string, CompiledEvidenceManifest["semanticEvents"][number]>();
+  for (const candidate of manifest.semanticEvents) if (!semanticEvents.has(refKey(candidate.projection))) semanticEvents.set(refKey(candidate.projection), candidate);
+  const projections = new Map<string, CompiledEvidenceManifest["projections"][number]>();
+  for (const candidate of manifest.projections) if (!projections.has(refKey(candidate))) projections.set(refKey(candidate), candidate);
+  const index = { semanticEvents, projections };
+  MANIFEST_INDEXES.set(manifest, index);
+  return index;
+}
+
 export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManifest, input: SemanticEventInput<T>): SemanticEvidenceEvent<T> {
   assertDeclaredEvidence(input.evidence);
-  const declaration = manifest.semanticEvents.find((candidate) => refKey(candidate.projection) === refKey(input.evidence.projection));
-  const projection = manifest.projections.find((candidate) => refKey(candidate) === refKey(input.evidence.projection));
+  const evidenceKey = refKey(input.evidence.projection);
+  const index = manifestIndex(manifest);
+  const declaration = index !== undefined ? index.semanticEvents.get(evidenceKey) : manifest.semanticEvents.find((candidate) => refKey(candidate.projection) === evidenceKey);
+  const projection = index !== undefined ? index.projections.get(evidenceKey) : manifest.projections.find((candidate) => refKey(candidate) === evidenceKey);
   if (declaration === undefined || projection === undefined || refKey(projection.producer) !== refKey(input.evidence.producer)) genericBypass("semantic event evidence is not an exact declared event source");
   if (!declaration.allowedSigns.includes(input.sign)) throw new EvidenceManifestError("EVIDENCE_EVENT_SIGN_WIDENS", "runtime event sign is not declared", [refKey(input.evidence.projection)]);
   const operands = input.evidence.payload;

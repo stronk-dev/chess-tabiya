@@ -59,7 +59,17 @@ checkpoints, and publishes rows plus `completed_seq` in one compare-and-swap tra
 event head or derivation revision reopens a quarantine.
 
 `/healthz` returns `{ status, engineMode, longitudinal: { status, reason? } }`; a degraded or
-draining worker is HTTP 503. `close()` drains the worker's finite batch before closing storage.
+draining worker is HTTP 503. `close()` drains the worker before closing storage, bounded by
+`LONGITUDINAL_DRAIN_GRACE_MS` (2 s): the supervisor sets a shared drain cell that the thread reads
+at every decision checkpoint, so the thread abandons its in-flight claim — the lease is expired in
+place by a full-tuple CAS, which fences the claim and lets the next start re-lease the row at once
+with no failure counted — closes its connection and exits. A thread that has not reported drained
+when the grace elapses is terminated and lease expiry recovers its claim.
+
+A 78-ply imported game projects in about 5 s on a heavily loaded development host (it took about
+32 s before D3300); the per-edge cost is dominated by sealing ~200 evidence values per legal
+candidate. Output bytes are unchanged at `OBSERVATION_DERIVATION_REV = 1`
+(`planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md`).
 The test-only `createInMemoryTestApplication` has no worker and reports `disabled_test`.
 
 ## Reading

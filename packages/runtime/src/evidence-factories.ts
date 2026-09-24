@@ -18,7 +18,7 @@ import { sha256Hex } from "./assistance-exchange.js";
 import { castlingLegality, castlingRights, castlingRightsLost } from "./castling.js";
 import { parseCorpusResultAbstention } from "./corpus-result.js";
 import { isCompiledConceptRegistry, type CompiledConceptRegistry, type ConceptRef } from "./concept-registry.js";
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { recordedBranchFacts, type BranchComparison, type ComparisonEvidenceEntry, type ComparisonScore, type RecordedBranchFacts } from "./compare.js";
 import { endgameClassification } from "./endgame.js";
 import { endgameMethodConvention, replayEndgameMethod, type MethodStage } from "./endgame-method.js";
@@ -30,6 +30,7 @@ import {
   declareEvidence,
   evidenceDigest,
   evidenceValueReceipt,
+  isDeclaredEvidence,
   type DeclaredEvidence,
   type ProjectionDeclaration,
   type VersionedEvidenceId,
@@ -309,12 +310,8 @@ function authorityShape(candidate: unknown): unknown {
   if (Array.isArray(candidate)) return candidate.map(authorityShape);
   if (isRun(candidate)) return { run: candidate.id, nodes: candidate.nodes.length, events: candidate.events.length };
   if (candidate instanceof Map) return { map: [...candidate].map(([key, entry]) => [key, authorityShape(entry)]) };
-  try {
-    assertDeclaredEvidence(candidate);
-    return { sealed: evidenceValueReceipt(candidate).payloadDigest };
-  } catch {
-    // Ordinary authority record.
-  }
+  // A sealed value hashes as its receipt digest; anything else is an ordinary authority record.
+  if (isDeclaredEvidence(candidate)) return { sealed: evidenceValueReceipt(candidate).payloadDigest };
   if ((candidate as { readonly [key: symbol]: unknown })[Symbol.iterator] !== undefined && !Array.isArray(candidate)) return String(candidate);
   const shape: Record<string, unknown> = {};
   for (const [key, entry] of Object.entries(candidate)) if (typeof entry !== "function") shape[key] = authorityShape(entry);
@@ -331,11 +328,28 @@ function present<T>(payload: T, route: string): T {
 }
 
 /** The local mint helper. Deliberately not exported. */
+// One edge mints ~200 values over the same frozen canonical edge authority ([[D3300]]). A frozen
+// plain record of primitives cannot change, and its authority shape is itself, so its digest is
+// computed once per record; every other authority is shaped and hashed per mint as before.
+const FROZEN_AUTHORITY_DIGESTS = new WeakMap<object, string>();
+
+function authorityDigest(authority: unknown): string {
+  const stable = authority !== null && typeof authority === "object" && Object.isFrozen(authority)
+    && Object.getPrototypeOf(authority) === Object.prototype
+    && Object.values(authority).every((entry) => entry === null || (typeof entry !== "object" && typeof entry !== "function"));
+  if (!stable) return evidenceDigest(authorityShape(authority));
+  const cached = FROZEN_AUTHORITY_DIGESTS.get(authority);
+  if (cached !== undefined) return cached;
+  const digest = evidenceDigest(authorityShape(authority));
+  FROZEN_AUTHORITY_DIGESTS.set(authority, digest);
+  return digest;
+}
+
 function mint<T>(route: string, symbol: string, payload: T, authority: unknown, sources: readonly (DeclaredEvidence<unknown> | string)[] = []): DeclaredEvidence<T> {
   const projection = projectionFor(route);
   return declareEvidence(projection.producer, { id: projection.id, version: projection.version }, present(payload, route), {
     factory: symbol,
-    inputDigest: evidenceDigest(authorityShape(authority)),
+    inputDigest: authorityDigest(authority),
     sourceDigests: sources.map(sourceDigest),
   });
 }

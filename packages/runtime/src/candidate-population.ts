@@ -13,7 +13,7 @@ import { normalizeMove } from "chessops/chess";
 import { parseUci } from "chessops/util";
 
 import { castlingLegality, castlingRights } from "./castling.js";
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import {
   CANDIDATE_COLLECTOR_PROJECTION_KEYS,
   CANDIDATE_PACKET_ABSTENTION_REASONS,

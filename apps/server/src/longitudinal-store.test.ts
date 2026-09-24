@@ -363,6 +363,36 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     expect(jobRow(other.path, "job")?.state).toBe("running");
   });
 
+  it("abandons the in-flight claim at the next decision checkpoint on drain and re-leases it at once (D3300)", () => {
+    const { fixture: { path }, store } = prepared();
+    let checkpoints = 0;
+    let drain = false;
+    const counting = {
+      drainRequested: () => drain,
+      project: (image: Parameters<typeof projectObservations>[0], checkpoint: () => void) => projectObservations(image, {
+        dependencies: FIXTURE_DEPENDENCIES,
+        checkpoint: () => { checkpoints += 1; if (checkpoints === 1) drain = true; checkpoint(); },
+      }),
+    };
+    const drained = runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "draining", counting);
+    expect(drained).toMatchObject({ claimed: 1, completed: 0, failed: 0, conflicts: 0, abandoned: 1 });
+    // Honoured at the first checkpoint after the request, not after the whole projection.
+    expect(checkpoints).toBe(1);
+    const row = jobRow(path, "job")!;
+    expect(row).toMatchObject({ state: "running", retry_count: 0, failure_code: null, completed_seq: 0 });
+    expect(count(path, "learner_observation_denominators", "run_id='job'")).toBe(0);
+    // A drain requested before the tick claims nothing at all.
+    expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "draining", { ...FAST, drainRequested: () => true })).toMatchObject({ claimed: 0, abandoned: 0 });
+    // Restart: the same clock instant re-leases the abandoned row (no lease wait) and completes it.
+    const resumed = runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "restarted", FAST);
+    expect(resumed).toMatchObject({ claimed: 1, completed: 1, abandoned: 0 });
+    expect(jobRow(path, "job")).toMatchObject({ state: "complete", completed_seq: 3, claim_generation: Number(row.claim_generation) + 1 });
+    // Able-to-fail control: without the drain probe the identical projection publishes.
+    const { fixture: other, store: undrained } = prepared();
+    expect(runLongitudinalBatch(undrained, LONGITUDINAL_WORKER_DEFAULTS, "w", { project: counting.project })).toMatchObject({ claimed: 1, completed: 1, abandoned: 0 });
+    expect(jobRow(other.path, "job")?.state).toBe("complete");
+  });
+
   it("claims only the executable slot from a four-row oldest-first scan", () => {
     const value = fixture();
     const owner = learner(value.storage, "o");

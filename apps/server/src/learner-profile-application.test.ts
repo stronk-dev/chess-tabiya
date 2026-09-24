@@ -18,11 +18,17 @@ import { SQLiteRunStorage } from "./storage.js";
 
 const directories: string[] = [];
 let application: ChessTabiyaApplication | undefined;
+// Detach before awaiting: a late teardown must never close or delete the next test's database (D3300).
 afterEach(async () => {
-  await application?.close();
+  const closing = application;
+  const removing = directories.splice(0);
   application = undefined;
-  for (const directory of directories.splice(0)) rmSync(directory, { recursive: true, force: true });
-}, 30_000); // close() drains the longitudinal worker's in-flight projection (D3300)
+  try {
+    await closing?.close();
+  } finally {
+    for (const directory of removing) rmSync(directory, { recursive: true, force: true });
+  }
+});
 
 function temp(): string {
   const directory = mkdtempSync(join(tmpdir(), "tabiya-profile-app-"));

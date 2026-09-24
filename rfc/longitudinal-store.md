@@ -657,8 +657,8 @@ main event loop calls `legalAlternativeEdges`, `localSemanticEvents` or `project
 `createApplication` composes storage, runs reconciliation, starts one worker and awaits its ready
 message **before returning**; `main.ts` listens only after that promise resolves. There are no
 fictional `application.start()`/`.stop()` methods. The existing `close()` first marks readiness
-`draining`, closes the HTTP listener, tells the worker to drain and awaits its finite batch, then
-closes the worker connection, engine supervisor and HTTP-side storage in that order. An unexpected
+`draining`, closes the HTTP listener, tells the worker to drain and awaits it for at most the drain
+grace (2 s, [[D3300]]), then closes the worker connection, engine supervisor and HTTP-side storage in that order. An unexpected
 thread exit makes the application health `degraded` and never lets the main process renew its
 claims. Defaults are
 product-fixed operational bounds `{ workerBatchSize: 4, workerConcurrency: 1,
@@ -669,8 +669,14 @@ recovers missed wakes and startup backlog. Each tick claims at most one batch in
 oldest-first order above, projects without Stockfish, Maia, Explorer, network or LLM providers,
 and publishes each claim independently. The thread posts only closed progress/result/error
 messages; the main process never receives chess-derived row payloads to publish on the thread's
-behalf. Shutdown refuses new claims, sends `drain`, and awaits the finite in-flight batch; it never
-abandons a newly claimed row merely because the HTTP listener closed. Unexpected thread exit marks
+behalf. Shutdown refuses new claims and is bounded ([[D3300]], 2026-09-24 implementation
+correction): the supervisor sets a shared drain cell (a `SharedArrayBuffer` in `workerData`) and
+sends `drain`; the thread reads the cell at every decision checkpoint, abandons its in-flight claim
+and every not-yet-started claim by a full-tuple CAS that sets `lease_expires_at` to now — fencing the
+claim at once, counting no failure and keeping the row's oldest-first place — closes its connection
+and reports drained. The next claim re-leases the row through the ordinary expired-`running` path.
+A thread that has not reported drained within the grace is terminated and lease expiry recovers its
+claim. Unexpected thread exit marks
 readiness degraded and lease expiry is the durable recovery path; the supervisor does not renew a
 claim for a thread that may be dead.
 
@@ -691,8 +697,11 @@ an able-to-fail negative. A source-level Vitest import cannot discharge this bui
 The implementation acceptance instrument runs the real 80-ply fixed corpus arm in that worker
 thread while the main application answers a 20 Hz `/healthz` probe for at least 30 seconds. Main
 event-loop delay must remain p95 **<50 ms** and max **<250 ms**; no probe may exceed **500 ms**.
-The worker receipt must show at least three successful full-tuple lease renewals from in-loop
-decision checkpoints and one final publication. A mutation that executes the same projector in
+The worker receipt must show successful full-tuple lease renewals from in-loop decision
+checkpoints keeping pace with the projection — one per elapsed heartbeat up to the observed
+publication, less two for the first interval and checkpoint granularity ([[D3300]]: the projector
+now finishes the arm in seconds, so a fixed floor of three measured host speed) — and one final
+publication; the deterministic at-least-three-renewals fixture carries the fixed floor. A mutation that executes the same projector in
 the main process must fail the delay gate; a timer-only heartbeat inside the worker must fail the
 renewal fixture. These are responsiveness and lease-liveness proofs, not a shorter synthetic loop.
 
@@ -1249,8 +1258,10 @@ These are the only live acceptance criteria; the historical AC list below is non
     rebuild. Before readiness it idempotently reconciles all old eligible run heads and records the
     typed reconciliation receipt in the appliance startup/upgrade receipt. During the real 80-ply
     arm, 20 Hz health probes hold event-loop delay p95 <50 ms/max <250 ms, no probe exceeds 500 ms,
-    and at least three in-loop full-CAS renewals precede publication. Main-thread execution and a
-    timer-only worker heartbeat are able-to-fail negatives.
+    and in-loop full-CAS renewals keep pace with the projection before publication (at least three
+    in the controlled-duration fixture). Main-thread execution and a timer-only worker heartbeat are
+    able-to-fail negatives. `close()` returns within the 2 s drain grace while a projection is in
+    flight, and the abandoned job completes after restart ([[D3300]]).
 17. **Nine-return author falsifier.** `make longitudinal-store-ninth-author-repair` retains the
     complete earlier author chain and crosses both
     literal registries/signs, complete-population algebra, actual SQLite claim/index/constraint
@@ -2022,6 +2033,13 @@ head after that renumbering and **not yet written**:
 ## Changelog
 
 - 2026-09-24 (coordinator): [[D3300]] opened — one imported game takes ~10 s to project and `close()` waits for the in-flight batch; profile the projector and bound the drain grace.
+- 2026-09-24: [[D3300]] fixed as an implementation correction with no revision bump — the projector
+  output is byte-identical (the fixture-output digest and ten real-game projection digests are
+  unchanged) and about 5.8× faster (hashing, FEN parsing, anchor canonicalisation and
+  before-position readings stop repeating per edge); §C shutdown is bounded by a 2 s drain grace
+  that abandons the in-flight claim for immediate re-lease; criterion 16's renewal floor now
+  scales with projection time. Receipt:
+  `planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md`.
 - 2026-09-24: **implementation landed** — migration 26 landed with the storage, projector, worker, read, rebuild
   and export/deletion coverage (`docs/longitudinal-store.md`). Inline corrections of genuine
   defects, each pinned by a test:

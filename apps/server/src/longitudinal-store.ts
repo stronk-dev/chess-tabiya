@@ -636,6 +636,25 @@ export class LongitudinalStore {
     });
   }
 
+  /**
+   * Drain-time abandonment ([[D3300]]): the full-tuple CAS expires the lease *now*, so the stale
+   * claim is fenced at once and the ordinary expired-`running` path re-leases the row on the next
+   * claim — no failure is counted, `updated_at` keeps its oldest-first place, and the row shape is
+   * the one a crashed worker leaves after lease expiry. False when the claim is no longer current.
+   */
+  abandon(claim: LongitudinalClaim): boolean {
+    this.#assertClaim(claim);
+    return this.#inTransaction("BEGIN IMMEDIATE", () => {
+      const nowIso = this.#nowIso();
+      if (!this.#claimIsCurrent(claim, nowIso)) return false;
+      const changed = this.#db.prepare(`UPDATE learner_observation_jobs SET lease_expires_at = ?
+        WHERE run_id = ? AND learner_id = ? AND state = 'running' AND claim_generation = ? AND claim_token = ?
+          AND claimed_by = ? AND lease_expires_at = ? AND lease_expires_at > ?`)
+        .run(nowIso, claim.runId, claim.learnerId, claim.generation, claim.token, claim.workerId, claim.leaseExpiresAt, nowIso);
+      return changed.changes === 1;
+    });
+  }
+
   /** Durable bounded failure ([[D2406]]): quarantine on exhaustion, exact backoff otherwise. */
   fail(claim: LongitudinalClaim, code: LongitudinalFailureCode): boolean {
     this.#assertClaim(claim);

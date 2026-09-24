@@ -3,7 +3,7 @@ import type { Chess } from "chessops/chess";
 import type { Color, Move, NormalMove, Piece, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseUci } from "chessops/util";
 
-import { positionFromFen } from "./chess.js";
+import { positionFromFen } from "./position-cache.js";
 
 export const LEGAL_EXCHANGE_CONVENTION = "legal-exchange@1" as const;
 

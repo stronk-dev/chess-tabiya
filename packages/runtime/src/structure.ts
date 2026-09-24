@@ -3,7 +3,8 @@ import type { Color, FileName, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, opposite, parseSquare } from "chessops/util";
 import { STRUCTURAL_FEATURE_KINDS, type StructuralFeatureKind } from "@chess-tabiya/schema/drill-pack";
 
-import { positionFromFen } from "./chess.js";
+import { positionFromFen } from "./position-cache.js";
+import { memoByInput } from "./fen-memo.js";
 
 export type FeatureComparison = "atLeast" | "atMost" | "equal";
 export type ReachRole = "knight" | "bishop" | "rook" | "queen";
@@ -188,6 +189,10 @@ const SPACE_ZONES: Readonly<Record<SpaceZone, readonly number[]>> = Object.freez
 
 /** Exact pawn-file connectivity. It deliberately does not enter the authorable pack vocabulary. */
 export function pawnConnectivityReading(fen: string): PawnConnectivityReading {
+  return memoByInput("pawnConnectivityReading", fen, computePawnConnectivityReading);
+}
+
+function computePawnConnectivityReading(fen: string): PawnConnectivityReading {
   const position = positionFromFen(fen);
   const colors = COLORS.map((color): PawnConnectivityColorReading => {
     const ownPawns = [...position.board.pieces(color, "pawn")].sort((left, right) => left - right);
@@ -687,6 +692,10 @@ function canonicalObservations(values: readonly StructuralObservation[]): readon
 }
 
 export function structuralReading(fen: string): StructuralReading {
+  return memoByInput("structuralReading", fen, computeStructuralReading);
+}
+
+function computeStructuralReading(fen: string): StructuralReading {
   const position = positionFromFen(fen); const values: StructuralObservation[] = [];
   for (const color of COLORS) for (const role of ROLES) values.push({ kind: "piece_count", color, role, count: position.board.pieces(color, role).size(), squares: [] });
   for (const color of COLORS) for (const file of FILES) {

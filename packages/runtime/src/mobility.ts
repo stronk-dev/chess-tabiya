@@ -2,9 +2,10 @@ import { Chess, normalizeMove } from "chessops/chess";
 import type { Color, Move, Piece, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { legalCaptureMovesTo, legalExchangeForMove } from "./exchange.js";
 import { exactLegalMoveMap, exactLegalMoves, type ExactLegalMoveMap } from "./legal-moves.js";
+import { memoByInput } from "./fen-memo.js";
 
 export const LOCAL_NON_LOSING_CONVENTION = "local-non-losing@1" as const;
 const COLORS = Object.freeze(["white", "black"] as const);
@@ -100,6 +101,10 @@ function colorReading(fen: string, color: Color): ColorPieceDestinations {
 }
 
 export function pieceDestinationsReading(fen: string): PieceDestinationsReading {
+  return memoByInput("pieceDestinationsReading", fen, computePieceDestinationsReading);
+}
+
+function computePieceDestinationsReading(fen: string): PieceDestinationsReading {
   const canonical = canonicalFen(positionFromFen(fen));
   return Object.freeze({ fen: canonical, conventionId: LOCAL_NON_LOSING_CONVENTION, colors: Object.freeze(COLORS.map((color) => colorReading(canonical, color))) });
 }
