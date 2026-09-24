@@ -1,6 +1,6 @@
 # RFC: Bounded target policy composition
 
-- **Status:** draft (README row and this token flip together; left to the coordinator) —
+- **Status:** implementing —
   **implemented 2026-09-24 at the owner's direction, no review round.** Both reported projections,
   the runtime derivations, the server `BoundedTargetPolicyCompositionOperation` composed in
   `application.ts` over the bounded-target service and the one shared provider scheduler (closing

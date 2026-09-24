@@ -1,6 +1,6 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft (README row and this token flip together; left to the coordinator) — **Slice A
+- **Status:** implementing — **Slice A
   implemented 2026-09-24 at the owner's direction, no review round.** The authority mechanism,
   78-root profile register, 38 migrated D1713 emitter cases (29 positive / 9 negative, all passing
   through production operations), 53 executed imported-population receipts, 8 migrated D872

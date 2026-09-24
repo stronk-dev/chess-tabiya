@@ -1,6 +1,6 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** draft (the README row and this token flip together; left to the coordinator) —
+- **Status:** implementing —
   **implemented 2026-09-24 at the owner's direction, no review round.** The threat pass anchor,
   sole FEN-owning threat factory, three value routes, explicit producer latency, producer-operation
   census and the closed background service ship with their protocol exported from the barrel. All

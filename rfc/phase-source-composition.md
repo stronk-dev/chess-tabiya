@@ -1,6 +1,6 @@
 # RFC: Source-retaining phase composition
 
-- **Status:** draft (README row and this token flip together; left to the coordinator) —
+- **Status:** implementing —
   **implemented 2026-09-24 at the owner's direction, no review round.** The branded point and arc
   compilers, the private opening operation, the sealed recorded-evidence snapshot and the retained
   live Syzygy arms ship; Support (`evidencePacket`) and Review (`service.review`) consume the compiled
