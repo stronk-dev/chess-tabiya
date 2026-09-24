@@ -34,7 +34,39 @@ import {
   type CommitMoveOptions,
   type PolicyConfig,
   type VersionedPolicy,
+  BOT_OPPONENT_PLY_RESULTS,
+  BotOpponentPlyRequestError,
+  parseBotOpponentPlyRequest,
+  type BotOpponentPlyRequest,
+  type BotOpponentPlyResultKind,
 } from "@chess-tabiya/runtime";
+import type { BotPolicyEventEnvelope } from "./bot-policy-compiler.js";
+
+/** Safe learner-facing copy per closed failure row; no provider reason crosses the boundary. */
+const BOT_OPPONENT_PLY_MESSAGES: Readonly<Record<Exclude<BotOpponentPlyResultKind, "committed" | "replayed_idempotent" | "replayed_concurrent_winner">, string>> = Object.freeze({
+  stale_root: "The board changed before the opponent could reply. Refresh the position.",
+  request_reused_with_different_operands: "This opponent request was already used for a different position.",
+  concurrent_commit_conflict: "Another reply to this position was recorded at the same time. Refresh and try again.",
+  base_provider_unavailable: "The opponent's move model is unavailable right now. Try again, or choose another opponent.",
+  provider_failed: "The opponent's move model returned an unusable answer. Try again, or choose another opponent.",
+});
+
+/**
+ * What the browser needs from a committed/replayed operation: identities and the layer actions for
+ * the in-run degraded/abstained status. The decision's provider payloads and guard scores stay
+ * server-side (they are engine evidence, not opponent identity).
+ */
+function botOperationSummary(envelope: BotPolicyEventEnvelope) {
+  return Object.freeze({
+    requestId: envelope.operation.requestId,
+    profileDigest: envelope.operation.profileDigest,
+    derivationDigest: envelope.operation.derivationDigest,
+    operationDigest: envelope.operation.operationDigest,
+    committedEventSequence: envelope.operation.committedEventSequence,
+    chosenMoveUci: envelope.operation.chosenMoveUci,
+    layers: envelope.decision.layers,
+  });
+}
 
 import { ServerError } from "./errors.js";
 import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
@@ -71,6 +103,7 @@ import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
 import { distillRun } from "./distill.js";
 import type { ClassroomService } from "./classroom.js";
 import type { PrincipleRegistry } from "./principle-registry.js";
+import { LIBRARY_KINDS, LIBRARY_PHASES, openingEntryView, packEntryView, principleEntryView, shapeEntryView, type LibraryKind, type LibraryPhase, type TheoryLibrary } from "./theory-library.js";
 import { vocabularyUsage } from "./authoring-vocabulary.js";
 import type { LearnerProfileService } from "./learner-profile.js";
 import type { HintService } from "./hint-service.js";
@@ -458,7 +491,7 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
           const side = requiredString(start.side, "/session/start/side");
           if (side !== "white" && side !== "black") throw invalid("/session/start/side must be white or black");
           if (sessionValue.feedbackPolicy !== "attempt_end") throw invalid("/session/feedbackPolicy must be attempt_end");
-          const opponent = closedRecord(sessionValue.opponentPolicy, "/session/opponentPolicy", ["mode", "targetElo", "temperature", "topP"]);
+          const opponent = closedRecord(sessionValue.opponentPolicy, "/session/opponentPolicy", ["mode", "targetElo", "temperature", "topP", "profile"]);
           const mode = requiredString(opponent.mode, "/session/opponentPolicy/mode");
           if (mode !== "human_common" && mode !== "strong_engine") {
             throw invalid("/session/opponentPolicy/mode cannot use theory_strict without a spine");
@@ -479,7 +512,8 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
             kind: "position" as const,
             start: { fen: requiredString(start.fen, "/session/start/fen"), side: side as "white" | "black" },
             feedbackPolicy: "attempt_end" as const,
-            opponentPolicy: { mode: mode as "human_common" | "strong_engine", ...(targetElo === undefined ? {} : { targetElo }), ...(temperature === undefined ? {} : { temperature }), ...(topP === undefined ? {} : { topP }) },
+            // `profile` stays unknown bytes here; the run service resolves the whole catalogue member.
+            opponentPolicy: { mode: mode as "human_common" | "strong_engine", ...(targetElo === undefined ? {} : { targetElo }), ...(temperature === undefined ? {} : { temperature }), ...(topP === undefined ? {} : { topP }), ...(opponent.profile === undefined ? {} : { profile: opponent.profile }) },
           };
         })()
       : (() => { throw invalid("/session/kind must be pack or position"); })();
@@ -643,6 +677,7 @@ export function errorResponse(error: unknown): Response {
             : error.code === "RUN_NOT_FOUND" ||
                 error.code === "PACK_NOT_FOUND" ||
                 error.code === "SHAPE_NOT_FOUND" ||
+                error.code === "THEORY_ENTRY_NOT_FOUND" ||
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
                 || error.code === "HINT_REQUEST_NOT_FOUND"
                 || error.code === "UNKNOWN_GROUP" ||
@@ -710,7 +745,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -805,6 +840,7 @@ export function createRestHandler(
   openingCatalogue?: OpeningCatalogueAvailability,
   principles?: PrincipleRegistry,
   learnerProfile?: LearnerProfileService,
+  theoryLibrary?: TheoryLibrary,
   hints?: HintService,
 ): RestHandler {
   /** rfc/intent-presets.md §5.1: stages 1 -> 2 with server-derived context, access and provider state. */
@@ -1058,6 +1094,37 @@ export function createRestHandler(
         if (principles === undefined) throw new ServerError("STORAGE_FAILURE", "Principle registry is not configured");
         const usage = vocabularyUsage(service.packs().map((pack) => service.pack(pack.id).document));
         return json(200, { principles: principles.list().map((principle) => ({ ...principle, usedByPacks: usage.principles.get(principle.id) ?? 0 })) });
+      }
+      if (url.pathname.startsWith("/theory/")) {
+        // The Library's theory family (rfc/theory-drill-current-joins.md §4.3; theory-knowledge-pipeline
+        // principle-entry 0.2). Read-only public content like /packs, /shapes and /principles.
+        if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        if (theoryLibrary === undefined) throw new ServerError("STORAGE_FAILURE", "Theory library is not configured");
+        if (url.pathname === "/theory/search") {
+          const phase = url.searchParams.get("phase");
+          if (phase !== null && phase !== "" && !(LIBRARY_PHASES as readonly string[]).includes(phase)) throw invalid(`phase must be one of ${LIBRARY_PHASES.join(", ")}`);
+          const kinds = url.searchParams.getAll("kind").flatMap((value) => value.split(",")).filter((value) => value !== "");
+          for (const kind of kinds) if (!(LIBRARY_KINDS as readonly string[]).includes(kind)) throw invalid(`kind must be one of ${LIBRARY_KINDS.join(", ")}`);
+          const rawLimit = url.searchParams.get("limit");
+          if (rawLimit !== null && !/^[0-9]{1,4}$/.test(rawLimit)) throw invalid("limit must be a positive integer");
+          return json(200, theoryLibrary.search({
+            text: url.searchParams.get("q") ?? "",
+            ...(phase === null || phase === "" ? {} : { phase: phase as LibraryPhase }),
+            ...(kinds.length === 0 ? {} : { kinds: kinds as LibraryKind[] }),
+            ...(rawLimit === null ? {} : { limit: Number(rawLimit) }),
+          }));
+        }
+        const entry = /^\/theory\/(principles|shapes|openings|packs)\/([^/]+)$/.exec(url.pathname);
+        if (entry !== null) {
+          let id: string;
+          try { id = decodeURIComponent(entry[2]!); } catch { throw invalid("entry id is not valid URL encoding"); }
+          if (id.trim() === "") throw invalid("entry id must be non-empty");
+          if (entry[1] === "principles") return json(200, principleEntryView(theoryLibrary.sources, id));
+          if (entry[1] === "shapes") return json(200, shapeEntryView(theoryLibrary.sources, id));
+          if (entry[1] === "openings") return json(200, openingEntryView(theoryLibrary.sources, id));
+          return json(200, packEntryView(theoryLibrary.sources, id));
+        }
+        return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
       }
       if (request.method === "GET" && /^\/shapes\/[^/]+$/.test(url.pathname)) {
         if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");
@@ -1773,6 +1840,26 @@ export function createRestHandler(
           writerId(request),
           requiredString(body.groupId, "groupId"),
         ));
+      }
+      if (route.action === "opponent-ply") {
+        // rfc/bot-policy.md §4.1: exactly four request fields; the server derives everything else.
+        requireJson(request);
+        let parsed: BotOpponentPlyRequest;
+        try {
+          parsed = parseBotOpponentPlyRequest(value);
+        } catch (error) {
+          if (error instanceof BotOpponentPlyRequestError) throw invalid(error.message);
+          throw error;
+        }
+        const outcome = await service.botOpponentPly(route.runId, principal, writerId(request), parsed);
+        const row = BOT_OPPONENT_PLY_RESULTS[outcome.kind];
+        if (outcome.kind === "committed") {
+          return json(row.status, { result: row, run: outcome.result.run, emitted: outcome.result.emitted, operation: botOperationSummary(outcome.envelope) });
+        }
+        if (outcome.kind === "replayed_idempotent" || outcome.kind === "replayed_concurrent_winner") {
+          return json(row.status, { result: row, run: outcome.run, emitted: [], operation: botOperationSummary(outcome.envelope) });
+        }
+        return json(row.status, { error: { code: row.code, message: BOT_OPPONENT_PLY_MESSAGES[outcome.kind], result: row } });
       }
       if (route.action === "moves") {
         if (value.selection !== undefined) {

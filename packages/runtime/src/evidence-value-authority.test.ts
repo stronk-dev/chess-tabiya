@@ -18,11 +18,13 @@ import {
   assertDeclaredEvidence,
   evidenceDigest,
   evidenceForConsumer,
+  evidenceConventionReceipt,
   evidenceValueReceipt,
   identitySealedEvidenceWithoutValueReceipt,
   renderEvidenceItems,
   type DeclaredEvidence,
 } from "./evidence-contract.js";
+import { CONVENTION_REGISTRY } from "./evidence-conventions.js";
 import { attachEvidence } from "./evidence.js";
 import { evidenceFactorySymbol } from "./evidence-factories.js";
 import { invokeEvidenceValueRoute, evidenceValueRouteRegistry, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
@@ -297,9 +299,9 @@ describe("value authority: registry equality", () => {
     }
     for (const route of convention) {
       expect(projection(route)).toMatchObject({ grounding: "position_rules", exactness: "exact" });
-      // D1: closure is carried by semantic-convention-provenance, stated as an explicit pending gap.
+      // D1 discharged: the registered closure is sealed with every value (see the D1 test below).
       expect(ROUTES.get(route)).toMatchObject({ shape: "computed", dependency: "semantic-convention-provenance" });
-      expect(ROUTES.get(route)!.pending).toMatch(/semantic-convention-provenance/u);
+      expect(ROUTES.get(route)!.pending).toBeUndefined();
     }
     expect(projection("rules.phase.reading@2")).toMatchObject({ grounding: "declared_convention", exactness: "convention" });
     expect(projection("rules.structural.reading.named_structure@2")).toMatchObject({ grounding: "declared_convention", exactness: "convention", operands: ["id", "name", "provenanceNote"] });
@@ -375,6 +377,45 @@ describe("value authority: corrected successors", () => {
     expect(() => invoke("rules.structural.reading.named_structure@2", { fen: carlsbad, provenanceNote: "arbitrary prose" })).toThrow(/refused its authority inputs/u);
     expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some((binding) => exact(binding.projection) === "rules.structural.reading.named_structure@1")).toBe(false);
     expect(JSON.stringify(values[0]!.payload)).not.toMatch(/nodeId|runId/u);
+  });
+
+  it("seals the exact registered convention closure with every D1 row (criterion 7; D1)", () => {
+    const closure = (value: DeclaredEvidence<unknown>) => evidenceConventionReceipt(value)!;
+    const refsOf = (value: DeclaredEvidence<unknown>) => closure(value).refs.map(exact);
+    const fen = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 4 5";
+    const edge = { beforeFen: fen, moveUci: "f3e5", afterFen: "r1bqk2r/pppp1ppp/2n2n2/2b1N3/2B1P3/2N5/PPPP1PPP/R1BQK2R b KQkq - 0 5" };
+    expect(refsOf(invoke("rules.square.reading.control@1", { fen }) as DeclaredEvidence<unknown>)).toEqual(["square-control@1"]);
+    expect(refsOf(invoke("rules.tactic.reading.defender_duty_set@1", { fen }) as DeclaredEvidence<unknown>)).toEqual(["defence-duty@1"]);
+    for (const route of ["rules.square.event.control@1", "rules.tactic.event.defender_removed@1", "rules.tactic.event.defender_duty_relocated@1"]) {
+      const values = invoke(route, edge) as readonly DeclaredEvidence<unknown>[];
+      if (route.startsWith("rules.square")) expect(values.length).toBeGreaterThan(0);
+      for (const value of values) expect(refsOf(value), route).toEqual([route.startsWith("rules.square") ? "square-control@1" : "defence-duty@1"]);
+    }
+    const removed = invoke("rules.tactic.event.defender_removed@1", { beforeFen: "4k3/8/8/3p4/4n3/8/8/3RK3 w - - 0 1", moveUci: "d1d5", afterFen: "4k3/8/8/3R4/4n3/8/8/4K3 b - - 0 1" }) as readonly DeclaredEvidence<unknown>[];
+    for (const value of removed) expect(refsOf(value)).toEqual(["defence-duty@1"]);
+    const phase = invoke("rules.phase.reading@2", { fen }) as DeclaredEvidence<unknown>;
+    expect(refsOf(phase)).toEqual(["phase-bands@1"]);
+    expect(closure(phase)).toMatchObject({ registryDigest: CONVENTION_REGISTRY.digest, derivation: { kind: "source" } });
+    expect(closure(phase).digest).toMatch(/^sha256:[0-9a-f]{64}$/u);
+    const carlsbad = "r1bq1rk1/pp2bppp/2p2n2/3p4/3P4/2NBPN2/PP3PPP/R2QK2R w KQ - 0 10";
+    const structures = invoke("rules.structural.reading.named_structure@2", { fen: carlsbad }) as readonly DeclaredEvidence<{ readonly id: string }>[];
+    expect(structures.map((value) => value.payload.id)).toContain("carlsbad");
+    for (const value of structures) expect(refsOf(value)).toEqual(["named-structure-catalogue@1"]);
+    const endgame = invoke("rules.endgame.classification@1", { fen: "1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1" }) as readonly DeclaredEvidence<unknown>[];
+    expect(refsOf(endgame[0]!)).toEqual(["endgame-material-census@1", "phase-bands@1"]);
+    // Forced mate is derived from its exact sealed reply-breadth input: the receipt names that member and value.
+    const mateFen = "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1";
+    const breadth = invoke("rules.tactic.consequence.reply_breadth@1", { beforeFen: mateFen, moveUci: "f7g7", afterFen: "7k/6Q1/6K1/8/8/8/8/8 b - - 1 1" }) as DeclaredEvidence<unknown>;
+    const proof = invoke("rules.tactic.consequence.forced_mate_after_move@2", { beforeFen: mateFen, breadth, maxAttackerMoves: 1 }) as { kind: string; value: DeclaredEvidence<unknown> };
+    expect(proof.kind).toBe("available");
+    expect(closure(proof.value)).toMatchObject({ refs: [{ id: "mate-proof", version: 1 }], derivation: { kind: "derived", member: "rules.tactic.consequence.reply_breadth@1" } });
+    expect((closure(proof.value).derivation as { inputs: readonly unknown[] }).inputs).toHaveLength(1);
+  });
+
+  it("seals the instance setup/method convention, never the alternatives (D1; criterion 10)", () => {
+    const lucenaLike = "1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1";
+    const matched = invoke("theory.endgame.setup_match@1", { fen: lucenaLike, convention: { id: "lucena-setup", version: 1 } }) as { kind: string; value: DeclaredEvidence<unknown> };
+    expect(evidenceConventionReceipt(matched.value)!.refs).toEqual([{ id: "lucena-setup", version: 1 }]);
   });
 
   it("names Lucena/Philidor/Vancura only from a registered, cited setup convention's computed intersection (criterion 10)", () => {
@@ -640,7 +681,7 @@ function pivotalFixtures(): Readonly<Record<"irreversibility" | "phase_change" |
     const branch = { id: "main", forkNodeId: "n0", label: "Main", seed: 1, origin: "played" } as const;
     const header = { id, sessionKind: "position", packId: null, packDigest: null, sessionDigest: "sha256:test", start: { fen: fens[0]!, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 }, policyConfig } as const;
     const started = { seq: 0, type: "run.started", at, data: { ...header, rootNode: nodes[0]!, branch, activeCursor: { nodeId: nodes[0]!.id, branchId: "main" } } } as const;
-    return Object.freeze({ schemaVersion: "0.17", ...header, nodes, branches: [branch], events: [started, ...events], activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } }) as unknown as DrillRun;
+    return Object.freeze({ schemaVersion: "0.18", ...header, nodes, branches: [branch], events: [started, ...events], activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } }) as unknown as DrillRun;
   };
   const collapse = synthetic("pivotal-collapse", ["4k3/8/8/8/8/8/8/R3K3 w - - 0 1", "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1", "4k3/8/8/8/8/8/3r4/3K4 w - - 0 1"]);
   const engine = { id: "maia2", name: "Maia", version: "2", seedHonored: true };

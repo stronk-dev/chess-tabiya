@@ -3,6 +3,8 @@ import { randomUUID } from "node:crypto";
 
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
+
+import { chooseBot, chooseRawRung } from "./play-helpers.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 
 const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
@@ -341,6 +343,7 @@ test("review map remainder: eval graph by keyboard, explicit Analyze withheld du
 });
 
 test("account lifecycle downloads data, deletes one run, and clears this browser on account deletion", async ({ page }) => {
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   const runId = page.url().split("/").at(-1)!;
@@ -394,6 +397,7 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await page.getByLabel("Your side").selectOption("black");
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("button", { name: /Carlsbad structure/ })).toHaveCount(0);
@@ -443,7 +447,7 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
 
 test("Just Play states its selected human-model rung and low-material limit", async ({ page }) => {
   await page.goto("/play");
-  await page.getByLabel("Testing").check();
+  await chooseRawRung(page, "Testing");
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("8/8/8/8/8/4k3/6P1/4K3 w - - 0 1");
   await page.getByRole("button", { name: "Start and keep the game" }).click();
@@ -456,6 +460,7 @@ test("Just Play states its selected human-model rung and low-material limit", as
 });
 
 test("the private profile opens from Rating and Learn, abstains below each floor and drills into the counted game (rfc/player-style.md)", async ({ page }) => {
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await move(page, "g2", "g3");
@@ -498,6 +503,7 @@ test("the private profile opens from Rating and Learn, abstains below each floor
 });
 
 test("choosing a help style activates its modules through the server compiler and persists (rfc/intent-presets.md)", async ({ page }) => {
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   const footer = page.getByLabel("Active support promise");
@@ -534,6 +540,7 @@ test("choosing a help style activates its modules through the server compiler an
 });
 
 test("Just Play explicitly reveals evidence and the next move closes the window", async ({ page }) => {
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.locator("details.assistance-control summary")).toHaveAttribute("aria-label", "Support style: Quiet");
@@ -655,6 +662,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await page.reload();
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("3qk2r/5p2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("region", { name: "Phase reading" })).toContainText("Middlegame");
@@ -694,6 +702,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
 test("endgame evidence is inspectable without a pivotal marker", async ({ page }) => {
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
   await page.getByRole("button", { name: "Inspector" }).click();
@@ -712,6 +721,7 @@ test("endgame evidence names a technique only with its setup convention id and v
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   // The Lucena diagram from Wikipedia's "Lucena position" (oldid=1356336262): every lucena-setup@1 operand holds.
   await page.getByLabel("Position FEN").fill("1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await page.getByRole("button", { name: "Inspector" }).click();
   const evidence = page.getByRole("region", { name: "Current-position endgame evidence" });
@@ -721,6 +731,7 @@ test("endgame evidence names a technique only with its setup convention id and v
 });
 
 test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await openAdvancedSupport(page);
   await page.getByLabel("Passive markers").check();
@@ -1141,6 +1152,47 @@ test("library exposes phase honestly and survives a malformed pack response", as
   await expect(page.getByRole("alert")).not.toContainText("start.side");
   await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
   expect(pageErrors).toEqual([]);
+});
+
+test("Library search opens a principle, understands its basis, and rehearses an anchored pack", async ({ page }) => {
+  await page.goto("/library");
+  await expect(page.getByRole("heading", { name: "Find it, understand it, rehearse it, come back to it." })).toBeVisible();
+  // Phase-first: the phase filter is the first control, and packs are one row per id.
+  await page.getByRole("group", { name: "Chess phase" }).getByRole("button", { name: "Endgames" }).click();
+  await expect(page.getByRole("heading", { name: "Rehearsal packs" })).toBeVisible();
+  const packTitles = await page.locator('.item[data-kind="pack"] h3').allTextContents();
+  expect(packTitles.length).toBeGreaterThan(0);
+  expect(new Set(packTitles).size).toBe(packTitles.length);
+  await expect(page.getByText("No official pack has graduated yet.", { exact: false })).toBeVisible();
+  await expect(page.locator('.item[data-kind="pack"] .origin').first()).toHaveText(/Community draft · not yet reviewed/u);
+
+  await page.getByRole("group", { name: "Chess phase" }).getByRole("button", { name: "Every phase" }).click();
+  await page.getByLabel("Search the library").fill("tempo currency");
+  const principle = page.locator('.item[data-kind="principle"]').filter({ hasText: "Tempo is the currency" });
+  await expect(principle).toHaveCount(1);
+  await expect(principle.locator(".origin")).toHaveText("Official");
+  await principle.getByRole("link", { name: "Tempo is the currency", exact: true }).click();
+
+  await expect(page).toHaveURL(/\/library\/principle\/tempo-is-the-currency$/u);
+  await expect(page.getByRole("heading", { level: 1, name: "Tempo is the currency" })).toBeVisible();
+  await expect(page.getByText("Stands on the authors' practice. No external source is cited for it.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Where it stops holding" })).toBeVisible();
+  const anchored = page.locator("section").filter({ has: page.getByRole("heading", { name: "Rehearse it" }) }).locator("li");
+  await expect(anchored.first()).toContainText("Community draft · not yet reviewed");
+  const title = (await anchored.first().locator("a").textContent())!.trim();
+  await anchored.first().getByRole("button", { name: `Rehearse: ${title}` }).click();
+
+  await expect(page).toHaveURL(/\/play\/run\/run-/u);
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+
+  // Return: the pack entry names the learner's return path for the pack just rehearsed.
+  await page.goto("/library");
+  await page.getByLabel("Search the library").fill(title.split(":")[0]!);
+  const card = page.locator('.item[data-kind="pack"]').filter({ hasText: title });
+  await card.getByRole("link", { name: `Plan a return: ${title}` }).click();
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Return" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open your latest rehearsal of this pack" })).toBeVisible();
 });
 
 test("terminal outcome reveals authored commentary, a native story, and a revocable public card", async ({ page, browser }) => {
@@ -2187,6 +2239,7 @@ test("@matrix promotion picker overlays the unchanged board at every composition
     await page.goto("/play");
     await page.getByRole("button", { name: "Start from a FEN" }).click();
     await page.getByLabel("Position FEN").fill("7k/P7/8/8/8/8/8/7K w - - 0 1");
+    await chooseRawRung(page);
     await page.getByRole("button", { name: "Start and keep the game" }).click();
     await assertRunViewport(page, viewport);
     const calm = await page.getByLabel("Chessboard").boundingBox();
@@ -2298,8 +2351,56 @@ test("branch intent names the saved line and Compare replays the same decision a
   await expect(page.locator("[data-status-announcement]")).toContainText("Full game · until a rules-terminal result");
 });
 
+// rfc/bot-policy.md §4.1 A13 / rfc/bot-roster.md criterion 10: choose → play → resume → rematch.
+test("a learner chooses a registered bot, plays it, reloads, and the same bot continues", async ({ page }) => {
+  await page.goto("/play");
+  const card = page.locator('[data-bot-profile="human-baseline.1400@1"]');
+  await expect(card).toContainText("Human baseline · band 1400");
+  await expect(card).toContainText("Uncalibrated");
+  // Availability is observed from the provider exchange; the baseline card becomes choosable.
+  await expect(card.locator("input")).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Start and keep the game" })).toBeDisabled();
+  await chooseBot(page, "human-baseline.1400@1");
+  await expect(page.locator(".bot-card")).toContainText("Maia human-move model");
+  const plies: string[] = [];
+  page.on("request", (request) => { if (request.method() === "POST" && request.url().endsWith("/opponent-ply")) plies.push(request.postData() ?? ""); });
+  let selectMoves = 0;
+  page.on("request", (request) => { if (request.url().endsWith("/select-move")) selectMoves += 1; });
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page).toHaveURL(/\/play\/run\//u);
+  const status = page.locator("[data-status-announcement]");
+  await expect(status).toContainText("Bot · Human baseline · model band 1400");
+
+  await move(page, "e2", "e4", "white");
+  await expect(page.locator(".timeline")).toContainText("Active line 2 turns");
+  await move(page, "d2", "d4", "white");
+  await expect(page.locator(".timeline")).toContainText("Active line 4 turns");
+  expect(plies).toHaveLength(2);
+  // The browser sends exactly the four request fields: no FEN, history, seed, profile or move.
+  for (const body of plies) expect(Object.keys(JSON.parse(body) as object).sort()).toEqual(["expectedBranchId", "expectedEventHeadDigest", "expectedNodeId", "requestId"]);
+  expect(selectMoves).toBe(0);
+
+  const runUrl = page.url();
+  await page.reload();
+  await expect(page).toHaveURL(runUrl);
+  await expect(status).toContainText("Bot · Human baseline · model band 1400");
+  await expect(page.locator(".timeline")).toContainText("Active line 4 turns");
+  // b1-c3 is legal after any two black replies to 1.e4/2.d4 (it also blocks every possible check).
+  await move(page, "b1", "c3", "white");
+  await expect(page.locator(".timeline")).toContainText("Active line 6 turns");
+  expect(plies).toHaveLength(3);
+  expect(selectMoves).toBe(0);
+
+  // Rematch keeps the exact bot: a new run, the same identity.
+  await page.getByRole("button", { name: "Play this bot again" }).click();
+  await expect(page).not.toHaveURL(runUrl);
+  await expect(page).toHaveURL(/\/play\/run\//u);
+  await expect(status).toContainText("Bot · Human baseline · model band 1400");
+});
+
 test("a committed move updates the stable board instance instead of remounting it", async ({ page }) => {
   await page.goto("/play");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   const board = page.getByLabel("Chessboard");
   await expect(board).toBeVisible();
@@ -2317,6 +2418,7 @@ test("a committed move updates the stable board instance instead of remounting i
 test("an opponent reply visibly animates on the stable board instance", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/play");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   const board = page.getByLabel("Chessboard");
   await expect(board).toBeVisible();
@@ -2594,6 +2696,7 @@ test("@matrix @mobile named-shape dialog stays bounded with every action reachab
   await page.getByLabel("Your side").selectOption("black");
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await move(page, "c7", "c6", "black");
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
@@ -2711,6 +2814,7 @@ test("@matrix @mobile branch group stacks complete candidate cards without sidew
 test("the drill keyboard map remains contained and scrollable at the supported phone floor", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 680 });
   await page.goto("/play");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await page.getByRole("button", { name: "Keyboard shortcuts" }).click();
 
@@ -2731,6 +2835,7 @@ test("the drill keyboard map remains contained and scrollable at the supported p
 test("@mobile the branch-group palette stays bounded while the board remains its move picker", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 256 });
   await page.goto("/play");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.getByRole("button", { name: "Actions" }).click();
@@ -2862,6 +2967,7 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   await expect(position.getByLabel("Help style")).toHaveValue("custom");
   await page.goto("/play");
   await expect(page).toHaveTitle("Play · Tabiya");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page).toHaveTitle("Rehearsal · Tabiya");
   await expect(page.getByLabel("Chessboard")).toBeVisible();

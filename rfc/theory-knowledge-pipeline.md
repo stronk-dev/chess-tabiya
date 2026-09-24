@@ -45,8 +45,11 @@
   `planning/theory-knowledge-pipeline/` once implementing
 
 ```tabiya-claims
-principle-entry-schema | lane 0.2 | provenance.sources items become a closed union of the existing string form and a structured citation object (sourceId, revisionUrl, sha256, sectionRef, quotedText); standsOn gains a fourth member cited_source admissible only when a structured citation is present
+none
 ```
+
+**Principle-entry lane 0.2 landed 2026-09-24** (register row in `rfc/README.md`); the claim it
+declared is discharged and this block no longer holds a lane.
 
 **Why exactly one claim, and why not the four a reader will expect.**
 
@@ -1235,6 +1238,34 @@ Proposed — ids assigned at landing; head was **D1373** at drafting. (The wave 
   corpus can hold zero while returning anything useful is D6's measurement, not this RFC's claim.
 
 ## Changelog
+
+- 2026-09-24: **executable subset implemented on the owner's direct-implementation mandate**
+  (no review round). Landed: principle-entry **lane 0.2** (§10) with its biconditional; the
+  theory-source register `content/theory-sources.json` (`tabiya.theory.sources.v1`, the 13 pinned
+  R4 rows) and its validator `apps/server/src/theory-sources.ts`; P7 `CITATION_REVISION_UNPINNED`
+  on `citable_text` (§9); and the learner-facing citation join rendered by the Library principle
+  entry. **Defects fixed inline, each a changelog line:**
+  (1) [[D1898]] — a principle citation now references an accepted register row by `sourceId`;
+  `revisionUrl` and `sha256` must equal the row and the complete attribution (publisher, authors,
+  licence name/URL, notice, `modified: false`) is joined from it, never copied into the entry.
+  (2) [[D1894]] — `permits.*` are no longer authored on a row: permissions and obligations derive
+  from a reviewed closed policy of real SPDX identifiers (`CC0-1.0`, `CC-BY-4.0`, `CC-BY-SA-3.0`,
+  `CC-BY-SA-4.0`); `public-domain` is not a member and a self-granted `permits` block is refused.
+  (3) [[D1895]] — review lifecycle is `accepted | rejected | superseded` (a superseded row names an
+  accepted successor); only accepted rows are citable; immutability is proven by origin-specific
+  adapters (`sourcing/revision-pin.ts`: MediaWiki `oldid`, commit-pinned GitHub) that must extract
+  the row's own `revision`. (4) [[D1892]] — a clean checkout has no source bytes, so proof against
+  pinned bytes is a separate tier: with local bytes (`content/sources/theory/<id>/<revision>`) the
+  quote must occur exactly once (P6 `CITATION_SPAN_AMBIGUOUS`, plus `CITATION_QUOTE_ABSENT` and
+  `CITATION_SOURCE_DIGEST_DRIFT`); without them the citation reports `proof: "source_unavailable"`
+  truthfully. (5) The register records a `digestSubject` because the R4 Wikibooks digests are over
+  the MediaWiki API response, not the page URL's bytes; `bytes`/`retrievedAt` were never recorded
+  by R4 and are not invented. **Not implemented, and why:** the passage bundle, extractors,
+  enricher, FTS index and `search(TheoryQuery)` (§3–§8) remain blocked on [[D1889]]–[[D1891]],
+  [[D1893]], [[D1896]]–[[D1897]] and the owed span-scoped `voice.ts` repair (criterion 24b); the
+  `SourceLicence`/`licenceObligations` split (§6.2, criterion 15's pack-side arms) was not taken;
+  no principle cites a source yet, because choosing which passage supports a principle is an
+  authored applicability judgement (§1 origin C) that an implementing agent may not make.
 
 - 2026-08-27: **returned by independent buildability review on [[D1888]]–[[D1898]].** The review
   found the stored passage type merges the derived/authored key origins its later rules require;

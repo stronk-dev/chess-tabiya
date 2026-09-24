@@ -5,6 +5,9 @@ import {
   groupsFromEvents,
   projectRun,
   trajectoryPolicyAt,
+  botOpponentPlyRequestId,
+  runEventHeadDigest,
+  type BotProfileReference,
   type BranchComparison,
   type DrillRunEvent,
   type PolicyConfig,
@@ -14,6 +17,8 @@ import {
 
 import {
   ApiError,
+  BotOpponentPlyError,
+  type BotOpponentPlyOperation,
   type Capabilities,
   type AuthoredFeedbackPage,
   type DrillClientApi,
@@ -55,6 +60,8 @@ export interface DrillSessionState {
   readonly simulation?: SimulationResult;
   readonly viewer?: RunGraph["viewer"];
   readonly importedGuess?: ImportedGuess;
+  /** The last bot reply's layer actions (degraded/abstained status), never its evidence. */
+  readonly botReply?: { readonly layers: BotOpponentPlyOperation["layers"]; readonly replayed: boolean };
 }
 
 /** Must match the server's reserved imported-game checkpoint (rfc/return-scheduling.md §8). */
@@ -116,6 +123,12 @@ const RUN_ERROR_MESSAGES: Readonly<Record<string, string>> = Object.freeze({
   POLICY_MODE_UNSUPPORTED: "This opponent is not available here. Choose another opponent or another drill.",
   UNSUPPORTED_OPPONENT_POLICY: "This opponent is not available here. Choose another opponent or another drill.",
   ENGINE_UNAVAILABLE: "The opponent could not move right now. Try again, or choose another opponent.",
+  // rfc/bot-policy.md §4.1: one learner sentence per closed opponent-ply action; no provider reason.
+  OPPONENT_STALE_ROOT: "The board changed before the bot could reply. Reopen the run to continue from the current position.",
+  OPPONENT_REQUEST_REUSED: "That bot reply was already recorded for another position. Reopen the run to continue.",
+  OPPONENT_CONCURRENT_CONFLICT: "Another reply to this position was recorded at the same time. Reopen the run and try again.",
+  OPPONENT_PROVIDER_UNAVAILABLE: "The bot's move model is unavailable right now. Try again, or choose another opponent.",
+  OPPONENT_PROVIDER_FAILED: "The bot's move model returned an unusable answer. Try again, or choose another opponent.",
   NOT_ACTIVE_WRITER: "This run is active in another browser. Reopen it to watch or take control.",
   ILLEGAL_MOVE: "That move is not available from the position now shown. Check the board and try again.",
   MOVE_NOT_IN_RESPONSE: "That move is not available from the position now shown. Check the board and try again.",
@@ -246,6 +259,7 @@ export class DrillSessionController {
   #lastFollowerRevealSeq = 0;
   #subscribingStore: RunStateStore | undefined;
   #matchMode: MatchMode | undefined;
+  #botRequest: { readonly key: string; readonly id: `botreq_${string}` } | undefined;
   #projectionOnly = false;
   #attachmentGeneration = 0;
 
@@ -398,6 +412,8 @@ export class DrillSessionController {
     readonly side: "white" | "black";
     readonly mode: "human_common" | "strong_engine";
     readonly targetElo?: 1000 | 1400 | 1800 | 2200;
+    /** A registered bot profile (rfc/bot-policy.md §4.1); exclusive with `targetElo`. */
+    readonly profile?: BotProfileReference;
   }): Promise<void> {
     const generation = ++this.#attachmentGeneration;
     this.#projectionOnly = false;
@@ -407,6 +423,7 @@ export class DrillSessionController {
       const capabilities = await this.#api.capabilities();
       if (!this.#attachmentIsCurrent(generation)) return;
       if (!capabilities.policyModes.includes(input.mode)) throw new ApiError(422, "POLICY_MODE_UNSUPPORTED", `${input.mode} is unavailable`);
+      if (input.profile !== undefined && (input.mode !== "human_common" || input.targetElo !== undefined)) throw new ApiError(422, "INVALID_REQUEST", "A bot is chosen instead of a raw rung, never with one");
       const runId = this.#runId(), seed = this.#seed();
       const session = WriterSession.claimFor(runId, this.#storage);
       const run = await this.#api.createRun({
@@ -415,17 +432,21 @@ export class DrillSessionController {
           kind: "position",
           start: { fen: input.fen, side: input.side },
           feedbackPolicy: "attempt_end",
-          opponentPolicy: {
-            mode: input.mode,
-            ...(input.mode === "human_common" && input.targetElo !== undefined
-              ? { targetElo: input.targetElo }
-              : {}),
-          },
+          opponentPolicy: input.profile !== undefined
+            ? { mode: "human_common", profile: input.profile }
+            : {
+                mode: input.mode,
+                ...(input.mode === "human_common" && input.targetElo !== undefined
+                  ? { targetElo: input.targetElo }
+                  : {}),
+              },
         },
         policyConfig: positionPolicyConfig(capabilities),
         seed,
       }, session.writerId);
       if (!this.#attachmentIsCurrent(generation)) return;
+      // The response must echo the exact profile before the game opens (opponent-experience §2.6).
+      if (input.profile !== undefined && run.opponentPolicy.profile?.digest !== input.profile.digest) throw new ApiError(502, "INVALID_RESPONSE", "The created run does not carry the chosen bot");
       const shapes = await this.#loadShapes();
       if (!this.#attachmentIsCurrent(generation)) return;
       this.#capabilities = capabilities;
@@ -761,6 +782,26 @@ export class DrillSessionController {
     }
   }
 
+  /**
+   * Asks for the opponent's reply again after a failed attempt. For a bot-profile run the same
+   * idempotency key is reused while the root is unchanged, so a reply that was committed but whose
+   * response was lost comes back as the stored reply rather than a second move.
+   */
+  async retryOpponent(): Promise<boolean> {
+    if (this.#state.busy) return false;
+    const operation = this.#sessionOperation();
+    this.#patch({ busy: true, error: undefined });
+    try {
+      await this.#playOpponentIfNeeded();
+      if (!this.#sessionOperationIsCurrent(operation)) return false;
+      this.#patch({ busy: false });
+      return true;
+    } catch (error) {
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
+      return false;
+    }
+  }
+
   async switchBranch(leafNodeId: string, branchId: string): Promise<boolean> {
     if (!await this.rewind({ nodeId: leafNodeId, branchId })) return false;
     const operation = this.#sessionOperation();
@@ -875,6 +916,10 @@ export class DrillSessionController {
     ) {
       return;
     }
+    if (run.opponentPolicy.profile !== undefined) {
+      await this.#playBotReply(store, generation);
+      return;
+    }
     const group = groupsFromEvents(run).find((candidate: BranchGroup) =>
       candidate.members.some((member) => member.branchId === run.activeCursor.branchId),
     );
@@ -896,6 +941,33 @@ export class DrillSessionController {
       await this.#refreshReasoning();
     } else if (this.#hasOutcome(result.emitted)) {
       await this.#refreshAuthoredFeedback();
+    }
+  }
+
+  /**
+   * A bot-profile reply through the server-owned operation. The idempotency key is kept per root
+   * (run, node, branch, event head) so a retry after a lost response or a retryable failure reuses
+   * it and receives the committed reply instead of a second move; a stale root or a reused request
+   * issues a fresh key next time.
+   */
+  async #playBotReply(store: RunStateStore, generation: number): Promise<void> {
+    const run = store.snapshot.run;
+    const key = `${run.id}\u0000${run.activeCursor.nodeId}\u0000${run.activeCursor.branchId}\u0000${runEventHeadDigest(run)}`;
+    if (this.#botRequest?.key !== key) {
+      this.#botRequest = { key, id: botOpponentPlyRequestId((bytes) => globalThis.crypto.getRandomValues(bytes)) };
+    }
+    const requestId = this.#botRequest.id;
+    try {
+      const response = await store.botOpponentPly(requestId);
+      if (this.#botRequest?.id === requestId) this.#botRequest = undefined;
+      if (this.#store !== store || !this.#attachmentIsCurrent(generation)) return;
+      this.#patch({ botReply: Object.freeze({ layers: response.operation.layers, replayed: response.result.kind !== "committed" }) });
+      if (this.#hasOutcome(response.emitted)) await this.#refreshAuthoredFeedback();
+    } catch (error) {
+      if (error instanceof BotOpponentPlyError && (error.result.action === "refresh_position" || error.result.action === "issue_new_request") && this.#botRequest?.id === requestId) {
+        this.#botRequest = undefined;
+      }
+      throw error;
     }
   }
 
@@ -1035,6 +1107,7 @@ export class DrillSessionController {
       comparisonBranchIds: undefined,
       authoredFeedback: undefined,
       reasoning: undefined,
+      botReply: undefined,
     });
   }
 

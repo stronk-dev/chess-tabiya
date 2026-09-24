@@ -71,6 +71,8 @@ function external(method: HttpMethod, route: string, binding: CheckedOperationCa
 export const RUN_ROUTE_OPERATIONS: readonly CapabilityRouteBranch[] = Object.freeze([
   run("POST", "moves", none("run.move.user"), { path: "/selection", presence: "absent" }),
   run("POST", "moves", none("run.move.opponent_received"), { path: "/selection", presence: "present" }),
+  // rfc/bot-policy.md §4.1: the server-owned bot reply; provider availability is the profile join.
+  run("POST", "opponent-ply", session("run.opponent_ply", "opponent.selection")),
   run("POST", "rewind", none("run.rewind")),
   run("POST", "fork", none("run.fork")),
   run("GET", "graph", none("run.graph")),

@@ -1,6 +1,8 @@
 import {
   feedbackDeliveryOpen,
   projectRun,
+  runEventHeadDigest,
+  type BotOpponentPlyRequest,
   type DrillRun,
   type DrillRunEvent,
   type HintResponse,
@@ -22,6 +24,7 @@ import {
   type RewindRequest,
   type RunApi,
   type SimulationResult,
+  type BotOpponentPlyResponse,
 } from "./api.js";
 import { WriterSession } from "./writer-session.js";
 
@@ -228,6 +231,43 @@ export class RunStateStore {
         options,
       ),
     );
+  }
+
+  /**
+   * rfc/bot-policy.md §4.1: asks the server to play this bot-profile run's reply at the position this
+   * store currently shows. The request carries only the idempotency key and the root the browser
+   * saw (node, branch, event head); a committed reply appends its emitted events, and a replay of
+   * an already-committed request adopts the server's run.
+   */
+  async botOpponentPly(requestId: `botreq_${string}`): Promise<BotOpponentPlyResponse> {
+    if (this.#snapshot.access === "read_only") throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
+    if (this.#api.opponentPly === undefined) throw new ApiError(503, "ENGINE_UNAVAILABLE", "Bot opponents are unavailable here");
+    const run = this.#snapshot.run;
+    const request: BotOpponentPlyRequest = Object.freeze({
+      requestId,
+      expectedNodeId: run.activeCursor.nodeId,
+      expectedBranchId: run.activeCursor.branchId,
+      expectedEventHeadDigest: runEventHeadDigest(run),
+    });
+    let response: BotOpponentPlyResponse;
+    try {
+      response = await this.#api.opponentPly(this.#session.runId, request, this.#session.writerId);
+    } catch (error) {
+      if (error instanceof ApiError && error.code === "NOT_ACTIVE_WRITER") {
+        this.#session.markReadOnly();
+        this.#snapshot = Object.freeze({ ...this.#snapshot, access: "read_only", lastError: error });
+        this.#emit();
+        this.#syncPolling();
+      }
+      throw error;
+    }
+    if (response.emitted.length > 0) this.#applyMutation({ run: response.run, emitted: response.emitted });
+    else {
+      const adopted = projectRun(response.run.events);
+      this.#eventSeq = adopted.events.at(-1)?.seq ?? this.#eventSeq;
+      this.#setRun(adopted);
+    }
+    return response;
   }
 
   prediction(input: PredictionRequest): Promise<PredictionResult> {
