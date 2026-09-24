@@ -21035,3 +21035,17 @@ bindings by projection id without version. Once `@2` successors were bound
 beside `@1`, it rejected `/capabilities` and pack starts failed. Bindings are
 now keyed by consumer and projection version, with a unit regression. Smoke is
 40 passed, 1 skipped.
+
+### 2026-09-24 — owner rulings: endgame names, maturity label, next work, process
+
+The owner answered four questions in session:
+
+- **Endgame technique names:** keep them withdrawn, then rebuild them grounded.
+  claude amended `design/03` B10 and B4 on that ruling (law 5), which
+  discharges the proposed amendment filed by the evidence-value-authority
+  landing. The grounded setup-convention work has started.
+- **Return scheduling D2:** add a coarse three-word maturity label derived from
+  the ladder rung.
+- **Next work:** build `review-map` and `famous-games` in parallel.
+- **Process:** for this session, implement directly without review rounds.
+  Consolidation and review come later.
