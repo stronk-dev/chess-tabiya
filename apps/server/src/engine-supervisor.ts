@@ -1,5 +1,16 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
+import { readFile, realpath } from "node:fs/promises";
+import { basename, delimiter, isAbsolute, join } from "node:path";
 import { createInterface, type Interface as ReadLineInterface } from "node:readline";
+
+import {
+  digestEngineBinary,
+  digestEngineOptionImage,
+  type EngineBinaryDigest,
+  type EngineContainerDigest,
+  type EngineOptionImage,
+  type EngineOptionImageDigest,
+} from "@chess-tabiya/runtime";
 
 import { engineUnavailable } from "./errors.js";
 
@@ -77,6 +88,60 @@ export interface EngineOption {
   readonly min?: number;
   readonly max?: number;
   readonly vars?: readonly string[];
+}
+
+/**
+ * The artifact actually launched for one generation (rfc/provider-exchange-and-execution.md §3):
+ * the hashed executable bytes, or the runtime-reported OCI image identity. Never a spec label.
+ */
+export type EngineArtifactCapture =
+  | { readonly kind: "binary"; readonly binaryDigest: EngineBinaryDigest }
+  | { readonly kind: "container"; readonly containerDigest: EngineContainerDigest };
+
+/** Captures the launched artifact immediately before spawn; `null` means it cannot be captured. */
+export type EngineArtifactProbe = (spec: EngineSpec) => Promise<EngineArtifactCapture | null>;
+
+/** Hashes the resolved executable a spec launches. Wrappers (docker, nc, …) are not the engine. */
+export async function binaryArtifactProbe(spec: EngineSpec): Promise<EngineArtifactCapture | null> {
+  if (spec.modelId !== undefined || ["docker", "podman", "nc", "ncat", "socat"].includes(basename(spec.command))) return null;
+  const candidates = isAbsolute(spec.command)
+    ? [spec.command]
+    : (process.env.PATH ?? "").split(delimiter).filter(Boolean).map((directory) => join(directory, spec.command));
+  for (const candidate of candidates) {
+    try {
+      const bytes = await readFile(await realpath(candidate));
+      return Object.freeze({ kind: "binary", binaryDigest: digestEngineBinary(new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength)) });
+    } catch {
+      // Not this PATH entry.
+    }
+  }
+  return null;
+}
+
+export interface EngineSupervisorOptions {
+  /** Capture launched-artifact identity per generation (required for provider exchanges). */
+  readonly artifactProbe?: EngineArtifactProbe;
+}
+
+/** One provider exchange: commands, the terminating predicate and the literal `finally` reset. */
+export interface EngineExchangeRequest {
+  readonly commands: readonly string[];
+  readonly resetCommands: readonly string[];
+  readonly until: (line: string) => boolean;
+  readonly timeoutMs: number;
+  readonly signal?: AbortSignal;
+}
+
+/** Everything one serialized exchange observed, captured inside that same task and generation. */
+export interface EngineExchangeCapture {
+  readonly generation: number;
+  readonly identity: EngineIdentity;
+  readonly optionImage: EngineOptionImage;
+  readonly optionImageDigest: EngineOptionImageDigest;
+  readonly artifact: EngineArtifactCapture | null;
+  readonly options: readonly EngineOption[];
+  /** `> command` / `< engine line`, ending at the terminating line. */
+  readonly transcript: readonly string[];
 }
 
 export interface EngineRequest {
@@ -227,8 +292,13 @@ class ManagedUciEngine {
   #restartCount = 0;
   #lastError: string | undefined;
   #closing = false;
+  readonly #artifactProbe: EngineArtifactProbe | undefined;
+  #generation = 0;
+  #artifact: EngineArtifactCapture | null = null;
+  #optionImage: EngineOptionImage | undefined;
 
-  constructor(spec: EngineSpec) {
+  constructor(spec: EngineSpec, artifactProbe?: EngineArtifactProbe) {
+    this.#artifactProbe = artifactProbe;
     const backoff = spec.restartBackoff ?? DEFAULT_BACKOFF;
     positiveDuration(backoff.initialMs, "Restart initial delay");
     positiveDuration(backoff.maximumMs, "Restart maximum delay");
@@ -282,6 +352,9 @@ class ManagedUciEngine {
   async #spawnAndHandshake(): Promise<EngineIdentity> {
     this.#clearRestartTimer();
     this.#status = "starting";
+    this.#optionImage = undefined;
+    // The launched artifact is captured immediately before this generation's spawn.
+    this.#artifact = this.#artifactProbe === undefined ? null : await this.#artifactProbe(this.#spec).catch(() => null);
     this.#transcript.push(
       "lifecycle",
       `spawn ${this.#spec.command} ${(this.#spec.args ?? []).join(" ")}`.trim(),
@@ -296,6 +369,8 @@ class ManagedUciEngine {
     this.#stdout.on("line", (line) => this.#receive(line));
     this.#stderr.on("line", (line) => this.#transcript.push("stderr", line));
     child.once("error", (error) => this.#failed(child, error));
+    // A write racing a dying process is reported through its exit, not an unhandled EPIPE.
+    child.stdin.on("error", () => undefined);
     child.once("exit", (code, signal) => {
       this.#failed(
         child,
@@ -327,10 +402,18 @@ class ManagedUciEngine {
       if (parsedIdentity.mismatch !== undefined) {
         this.#transcript.push("lifecycle", parsedIdentity.mismatch);
       }
+      const applied: string[] = [];
       for (const [name, value] of Object.entries(this.#spec.options ?? {})) {
-        this.#send(`setoption name ${name} value ${String(value)}`);
+        const command = `setoption name ${name} value ${String(value)}`;
+        applied.push(command);
+        this.#send(command);
       }
       await this.#exchange("isready", (line) => line === "readyok", timeout);
+      this.#optionImage = Object.freeze({
+        advertisedUciOptionLines: Object.freeze(uciLines.filter((line) => line.startsWith("option name "))),
+        appliedSetoptionCommands: Object.freeze(applied),
+      });
+      this.#generation += 1;
       this.#status = "ready";
       this.#restartAttempt = 0;
       this.#lastError = undefined;
@@ -407,6 +490,87 @@ class ManagedUciEngine {
       () => undefined,
       () => undefined,
     );
+    return task;
+  }
+
+  /** The established generation, or null while no generation is ready. */
+  establishedGeneration(): number | null {
+    return this.#status === "ready" && this.#generation > 0 ? this.#generation : null;
+  }
+
+  /**
+   * One provider exchange inside one serialized task: identity, generation, option image and
+   * artifact are captured in the task that sends the commands; the literal reset and
+   * `isready`/`readyok` run in `finally`. A failed reset retires the generation (the process is
+   * killed and restarted under a new generation), and an exchange that straddles a generation
+   * change is refused rather than stamped with the later identity.
+   */
+  async exchange(request: EngineExchangeRequest): Promise<EngineExchangeCapture> {
+    const task = this.#requestQueue.then(async (): Promise<EngineExchangeCapture> => {
+      if (request.signal?.aborted) throw abortError();
+      await this.start();
+      if (request.signal?.aborted) throw abortError();
+      const generation = this.#generation;
+      const identity = this.#identity;
+      const optionImage = this.#optionImage;
+      const options = this.#options ?? Object.freeze([]);
+      const artifact = this.#artifact;
+      if (identity === undefined || optionImage === undefined || generation < 1) throw engineUnavailable(this.#spec.id, this.#nextBackoffMs());
+      const transcript: string[] = [];
+      const onAbort = (): void => {
+        try {
+          this.#send("stop");
+        } catch {
+          // Process failure owns diagnostics.
+        }
+      };
+      request.signal?.addEventListener("abort", onAbort, { once: true });
+      let completed = false;
+      try {
+        const response = this.#waitFor(request.until, request.timeoutMs);
+        for (const command of request.commands) {
+          transcript.push(`> ${command}`);
+          this.#send(command);
+        }
+        const lines = await response;
+        for (const line of lines) transcript.push(`< ${line}`);
+        completed = true;
+      } catch (error) {
+        if (!isAbortError(error)) this.#process?.kill();
+        throw error instanceof Error && "code" in error
+          ? error
+          : isAbortError(error) ? error : engineUnavailable(this.#spec.id, this.#nextBackoffMs(), error instanceof Error ? error : undefined);
+      } finally {
+        request.signal?.removeEventListener("abort", onAbort);
+        if (this.#process !== undefined && this.#generation === generation) {
+          try {
+            for (const command of request.resetCommands) this.#send(command);
+            await this.#exchange("isready", (line) => line === "readyok", 5_000);
+          } catch {
+            // A generation that cannot be reset may not serve another task.
+            completed = false;
+            this.#lastError = "provider exchange reset failed";
+            this.#status = "unavailable";
+            this.#process?.kill();
+          }
+        }
+      }
+      if (!completed) throw engineUnavailable(this.#spec.id, this.#nextBackoffMs(), new Error("provider exchange reset failed"));
+      if (request.signal?.aborted) throw abortError();
+      if (this.#generation !== generation || this.#status !== "ready") {
+        throw engineUnavailable(this.#spec.id, this.#nextBackoffMs(), new Error("engine generation changed during the exchange"));
+      }
+      return Object.freeze({
+        generation,
+        identity,
+        optionImage,
+        optionImageDigest: digestEngineOptionImage(optionImage),
+        artifact,
+        options,
+        transcript: Object.freeze(transcript),
+      });
+    });
+    this.#requestQueue = task.then(() => undefined, () => undefined);
     return task;
   }
 
@@ -572,11 +736,11 @@ function isAbortError(error: unknown): error is Error {
 export class EngineSupervisor {
   readonly #engines: ReadonlyMap<string, ManagedUciEngine>;
 
-  constructor(specs: readonly EngineSpec[]) {
+  constructor(specs: readonly EngineSpec[], options: EngineSupervisorOptions = {}) {
     const engines = new Map<string, ManagedUciEngine>();
     for (const spec of specs) {
       if (engines.has(spec.id)) throw new TypeError(`Duplicate engine id: ${spec.id}`);
-      engines.set(spec.id, new ManagedUciEngine(spec));
+      engines.set(spec.id, new ManagedUciEngine(spec, options.artifactProbe));
     }
     this.#engines = engines;
   }
@@ -591,6 +755,14 @@ export class EngineSupervisor {
 
   execute(engineId: string, request: EngineRequest): Promise<readonly string[]> {
     return this.#engine(engineId).execute(request);
+  }
+
+  exchange(engineId: string, request: EngineExchangeRequest): Promise<EngineExchangeCapture> {
+    return this.#engine(engineId).exchange(request);
+  }
+
+  establishedGeneration(engineId: string): number | null {
+    return this.#engine(engineId).establishedGeneration();
   }
 
   checkHealth(engineId: string): Promise<EngineHealth> {

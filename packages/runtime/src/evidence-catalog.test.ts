@@ -50,7 +50,7 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([40, 216, 25, 243]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([40, 222, 25, 243]); // +6: rfc/provider-exchange-and-execution.md §§5–9 provider sources and the Syzygy local-domain fact
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());

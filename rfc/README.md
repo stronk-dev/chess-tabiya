@@ -322,6 +322,32 @@ unspecified implementation; it supersedes the assumption that the next work is
 content for one narrow slice. Breadth RFCs must preserve the global shell and
 name the B-gates they complete before code begins.
 
+## Provider-protocol register
+
+<!-- register: provider-protocol members=5 -->
+
+The provider operations sealed by one shared exchange. The tree source is the literal tuple
+`PROVIDER_PROTOCOL_MEMBERS` in `packages/runtime/src/provider-protocol.ts`, read by the catalogue's
+existing `string_tuple` reader (`rfc/shared-resource-registers.json`). Introduced empty by
+`provider-protocol-register.md`; each member is one `ProviderOperationId` spelled in the member
+grammar (`stockfish.legal_root_table@1` is `stockfish_legal_root_table_v1`). Human-owned and
+checked by `make register-check`, never generated.
+
+### Landed
+
+| member | added by | added at |
+|---|---|---|
+| lichess_explorer_position_page_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| maia_policy_page_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| stockfish_legal_root_table_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| stockfish_position_evaluation_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| syzygy_position_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
 ## Migration register
 
 <!-- register: migration head=25 -->

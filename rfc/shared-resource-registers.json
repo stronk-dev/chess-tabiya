@@ -47,6 +47,15 @@
       }
     },
     {
+      "id": "provider-protocol",
+      "claimKind": "members",
+      "source": {
+        "kind": "string_tuple",
+        "path": "packages/runtime/src/provider-protocol.ts",
+        "exportName": "PROVIDER_PROTOCOL_MEMBERS"
+      }
+    },
+    {
       "id": "run-schema",
       "claimKind": "schema_lane",
       "source": {

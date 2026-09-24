@@ -28,6 +28,34 @@ import { commitMove, createRun, fork, rewind } from "./runtime.js";
 import { compileSemanticEvidenceEvent, legalAlternativeEdges, loosePieceSemanticEvents, pawnIslandSemanticEvents, structuralSemanticEvents, transitionSemanticEvents } from "./semantic-evidence.js";
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
 import type { DrillRun } from "./types.js";
+import { PROVIDER_EXCHANGE_AUTHORITY } from "./provider-exchange.js";
+import { normalizeProviderRequest } from "./provider-requests.js";
+import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
+import type { ProviderExecutionCapture, ProviderOperationId, ProviderRequestedIdentityMap } from "./provider-types.js";
+
+/** One scheduler-sealed live delivery per provider operation, keyed by its source route. */
+function providerDeliveries(): readonly (readonly [string, ProviderOperationId, unknown])[] {
+  const seal = <K extends ProviderOperationId>(operation: K, requested: ProviderRequestedIdentityMap[K], capture: ProviderExecutionCapture<K>): unknown => {
+    const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt({ operation, requestedIdentity: requested, capture, requestedAt: FIXTURE_AT, retrievedAt: FIXTURE_AT });
+    const { payload, payloadReceipt } = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+    return PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, payload, payloadReceipt, servedAt: FIXTURE_AT });
+  };
+  const promotion = "8/P7/8/8/8/8/8/k6K w - - 0 1";
+  const kqk = "8/8/8/8/8/8/3Q4/k1K5 w - - 0 1";
+  const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const root = normalizeProviderRequest("stockfish.legal_root_table@1", legalRootRequest(promotion));
+  const evaluation = normalizeProviderRequest("stockfish.position_evaluation@1", evaluationRequest(initial));
+  const maia = normalizeProviderRequest("maia.policy_page@1", maiaRequest({ kind: "exact_fen", fen: initial }, { requestedWidth: 2 }));
+  const syzygy = normalizeProviderRequest("syzygy.position@1", syzygyRequest(kqk));
+  const explorer = normalizeProviderRequest("lichess_explorer.position_page@1", explorerRequest());
+  return [
+    ["live.stockfish.legal_root_table@1", "stockfish.legal_root_table@1", seal("stockfish.legal_root_table@1", root, legalRootCapture(root, legalRootLines(promotion, allLegalRows(promotion), 8)))],
+    ["live.stockfish.position_eval@1", "stockfish.position_evaluation@1", seal("stockfish.position_evaluation@1", evaluation, evaluationCapture(evaluation, ["info depth 12 score cp 20 wdl 300 600 100 pv e2e4", "bestmove e2e4"]))],
+    ["human.maia.policy_page@1", "maia.policy_page@1", seal("maia.policy_page@1", maia, maiaCapture(maia, ["info depth 1 multipv 1 policy 0.4 pv e2e4", "info depth 1 multipv 2 policy 0.3 pv d2d4", "bestmove e2e4"]))],
+    ["live.syzygy.position_result@1", "syzygy.position@1", seal("syzygy.position@1", syzygy, httpCapture("syzygy.position@1", syzygyBody(kqk)))],
+    ["human.explorer.position_page@1", "lichess_explorer.position_page@1", seal("lichess_explorer.position_page@1", explorer, httpCapture("lichess_explorer.position_page@1", explorerBody()))],
+  ];
+}
 
 const ROOT = new URL("../../../", import.meta.url);
 const read = (path: string): string => readFileSync(new URL(path, ROOT), "utf8");
@@ -133,7 +161,9 @@ describe("value authority: static closure", () => {
       expect(exported.has(name), name).toBe(false);
     }
     const manifest = JSON.parse(read("packages/runtime/package.json")) as { readonly exports: Readonly<Record<string, string>> };
-    expect(Object.keys(manifest.exports).sort()).toEqual([".", "./rating"]);
+    // The provider scheduler-only subpath carries receipt constructors, not an evidence mint; its sole
+    // importer is census-checked in provider-protocol.test.ts.
+    expect(Object.keys(manifest.exports).sort()).toEqual([".", "./provider-exchange-authority", "./rating"]);
     expect(Object.values(manifest.exports).some((path) => /internal|factories|test-support/u.test(path))).toBe(false);
   });
 });
@@ -148,7 +178,7 @@ const RETIRED = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => pro
 describe("value authority: registry equality", () => {
   it("is set-equal to every non-retired catalogue projection, with bindings a subset (§8.3, criterion 13)", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
-    expect(ACTIVE).toHaveLength(210);
+    expect(ACTIVE).toHaveLength(216);
     expect(RETIRED).toEqual([
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
       "rules.structural.predicate.result@1", "rules.structural.reading.named_structure@1", "rules.structural.reading.pawn_count@1",
@@ -208,7 +238,9 @@ describe("value authority: registry equality", () => {
     }
     // The registry is exactly the receipt's targets plus the five no-route factories and method_stage.
     const extra = [...ROUTES.keys()].filter((route) => !targets.has(route)).sort();
-    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    // Plus the six provider-exchange routes (rfc/provider-exchange-and-execution.md §9), which have no
+    // pre-exchange route in the frozen receipt.
+    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.syzygy.position_result@1", "rules.endgame.tablebase_domain@1", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -818,6 +850,15 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   profiles.set("theory.shapes.firing@1", { valid: { entries: [{ id: "open-a", trigger: expression }], path: [{ id: "n1", fen: "rnbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1" }] }, falsify: refused("theory.shapes.firing@1", { entries: [{ id: "open-a", trigger: expression }], path: [{ id: "n1", fen: "not a fen" }] }) });
   const engine = { id: "sf", name: "Stockfish", version: "17", seedHonored: true, searchBound: { kind: "depth", value: 1 } };
   profiles.set("derived.opponent.candidate_feature_vector@1", { valid: { beforeFen: INITIAL, engine, candidates: [{ moveUci: "g1f3", scoreCp: 31 }] }, falsify: refused("derived.opponent.candidate_feature_vector@1", { beforeFen: INITIAL, engine, candidates: [{ moveUci: "e2e5", scoreCp: 0 }] }) });
+  // rfc/provider-exchange-and-execution.md §9: the five receipt-bearing provider sources and the
+  // Syzygy local-domain adapter. Valid input is a scheduler-sealed delivery; the falsifier is the
+  // same delivery's bare payload (stripping the receipt is not representable).
+  for (const [route, operation, delivery] of providerDeliveries()) {
+    profiles.set(route, { valid: { delivery }, falsify: refused(route, { delivery: (delivery as { readonly payload: unknown }).payload }) });
+    void operation;
+  }
+  const outside = PROVIDER_EXCHANGE_AUTHORITY.makeProviderLocalDomainResult(normalizeProviderRequest("syzygy.position@1", syzygyRequest(INITIAL)), FIXTURE_AT);
+  profiles.set("rules.endgame.tablebase_domain@1", { valid: { result: outside }, falsify: refused("rules.endgame.tablebase_domain@1", { result: { ...outside } }) });
   return profiles;
 }
 

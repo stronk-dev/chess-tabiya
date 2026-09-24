@@ -19,6 +19,7 @@ import { STRUCTURAL_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 import type { DrillRun, EvidencePayload, Node, SelectionEngineIdentity } from "./types.js";
 import type { RecordedReading } from "./voice.js";
 import type { RecordedEdge } from "./recorded-edge.js";
+import type { ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
 
 const READING_KINDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count" && kind !== "named_structure"));
 
@@ -138,6 +139,30 @@ export function evidenceReferenceEvidence(reference: string, pack?: DrillPackDef
 /** The candidate feature vector recomputed through the collector factories. */
 export function candidateFeatureVectorEvidence(input: { readonly beforeFen: string; readonly engine: SelectionEngineIdentity; readonly candidates: readonly CandidateFeatureInput[] }): DeclaredEvidence<CandidateFeatureVector> {
   return invokeEvidenceValueRoute("derived.opponent.candidate_feature_vector@1", input);
+}
+
+const PROVIDER_SOURCE_ROUTES = Object.freeze({
+  "stockfish.legal_root_table@1": "live.stockfish.legal_root_table@1",
+  "stockfish.position_evaluation@1": "live.stockfish.position_eval@1",
+  "maia.policy_page@1": "human.maia.policy_page@1",
+  "syzygy.position@1": "live.syzygy.position_result@1",
+  "lichess_explorer.position_page@1": "human.explorer.position_page@1",
+} as const satisfies { readonly [K in ProviderOperationId]: string });
+
+/**
+ * The exact operation-keyed provider source projection for one scheduler-sealed delivery
+ * (rfc/provider-exchange-and-execution.md §9). The route is chosen by the operation, never by
+ * the caller; a delivery of another operation fails the route's seal assertion.
+ */
+export function providerSourceEvidence<K extends ProviderOperationId>(operation: K, delivery: ProviderDelivery<ProviderOperationResultMap[K], K>): DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>> {
+  const route = PROVIDER_SOURCE_ROUTES[operation];
+  if (route === undefined) throw new TypeError(`Unknown provider operation ${String(operation)}`);
+  return invokeEvidenceValueRoute(route, { delivery } as never) as unknown as DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>>;
+}
+
+/** The local rules fact for one scheduler-sealed Syzygy outside-domain envelope (§7). */
+export function syzygyTablebaseDomainEvidence(result: ProviderLocalDomainResult<"syzygy.position@1">): DeclaredEvidence<ProviderLocalDomainResult<"syzygy.position@1">> {
+  return invokeEvidenceValueRoute("rules.endgame.tablebase_domain@1", { result }) as DeclaredEvidence<ProviderLocalDomainResult<"syzygy.position@1">>;
 }
 
 /** One exact recorded parent/child edge (`run.record.edge@1`) of an actual run. */

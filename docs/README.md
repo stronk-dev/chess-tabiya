@@ -73,6 +73,8 @@ Current completion state is deliberately not copied here. Use the
 
 - [Engine workers](engine-workers.md) — UCI supervision, Maia, Stockfish evidence, capabilities,
   caching and failure handling.
+- [Provider exchange](provider-exchange.md) — one scheduler, sealed request identity and receipts,
+  typed unavailability and the durable save/reload parser for Stockfish, Maia, Syzygy and Explorer.
 - [Engine grounding](engine-grounding.md) — fixed-depth opening assessments and the read-only engine
   authoring walk.
 - [Tablebase grounding](tablebase-grounding.md) — Syzygy sidecars, perfect resistance and refusal

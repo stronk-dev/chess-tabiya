@@ -101,6 +101,9 @@ import { branchPath } from "./branch-path.js";
 import { recordedPieceRoutes, structureDeltaEntries } from "./compare-strip-values.js";
 import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdentity } from "./types.js";
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
+import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
+import { providerProtocolRow } from "./provider-protocol.js";
+import type { ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
 
 // ---------------------------------------------------------------------------------------------
 // Public (package-internal) shapes. None of these is re-exported by the package barrel.
@@ -1060,7 +1063,69 @@ function pivotalFactory(kind: PivotalKind): EvidenceValueFactory<{ readonly run:
 // Source receipts: provider, model, corpus and ledger responses
 // ---------------------------------------------------------------------------------------------
 
-const PROVIDER_PENDING = "The typed response bytes are shape-checked and digested; the accepted exchange receipt (request/subject/provider/occurrence) lands with provider-exchange-and-execution.";
+const PROVIDER_PENDING = "Legacy pre-exchange route: the typed response bytes are shape-checked and digested only. The receipt-bearing successor is the operation-keyed provider source projection (live.stockfish.legal_root_table@1, live.stockfish.position_eval@1, human.maia.policy_page@1, live.syzygy.position_result@1, human.explorer.position_page@1); this route retires when its callers migrate through the provider exchange.";
+
+// ---------------------------------------------------------------------------------------------
+// Provider exchange source receipts (rfc/provider-exchange-and-execution.md §§3, 9; D2 of
+// rfc/evidence-value-authority.md). Each factory admits only the scheduler-sealed delivery of its
+// exact operation, asserts the acquisition and parsed-payload receipts, and seals the WHOLE
+// delivery: stripping the receipt to a bare payload is not a representable input.
+// ---------------------------------------------------------------------------------------------
+
+function isSealedDelivery(operation: ProviderOperationId, candidate: unknown): boolean {
+  try {
+    assertProviderDelivery(operation, candidate);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const hexOf = (digest: string): string => digest.slice("sha256:".length);
+
+function providerSourceFactory<K extends ProviderOperationId>(operation: K): EvidenceValueFactory<{ readonly delivery: ProviderDelivery<ProviderOperationResultMap[K], K> }, DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>>> {
+  const row = providerProtocolRow(operation);
+  const route = row.sourceProjection;
+  const symbol = evidenceFactorySymbol(route);
+  if (symbol !== row.sourceFactoryId) throw new TypeError(`${operation} source factory symbol ${symbol} disagrees with the provider-protocol resource ${row.sourceFactoryId}`);
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ delivery: value(`a scheduler-sealed ${operation} provider delivery`, (candidate) => isSealedDelivery(operation, candidate)) }], result: "single", dependency: "provider-exchange-and-execution" }, ({ delivery }: { readonly delivery: ProviderDelivery<ProviderOperationResultMap[K], K> }) => {
+    assertProviderDelivery(operation, delivery);
+    const { acquisition, payloadReceipt } = delivery;
+    return mint(route, symbol, delivery as ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>, {
+      operation,
+      kind: delivery.kind,
+      normalizedRequestDigest: acquisition.normalizedRequestDigest,
+      responseDigest: acquisition.responseDigest,
+      parser: payloadReceipt.parser,
+      parserImplementationDigest: payloadReceipt.parserImplementationDigest,
+      payloadDigest: payloadReceipt.payloadDigest,
+    }, [hexOf(acquisition.normalizedRequestDigest), hexOf(acquisition.responseDigest), hexOf(payloadReceipt.payloadDigest)]);
+  });
+}
+
+export const createLiveStockfishLegalRootTableV1Evidence = providerSourceFactory("stockfish.legal_root_table@1");
+export const createLiveStockfishPositionEvalV1Evidence = providerSourceFactory("stockfish.position_evaluation@1");
+export const createHumanMaiaPolicyPageV1Evidence = providerSourceFactory("maia.policy_page@1");
+export const createLiveSyzygyPositionResultV1Evidence = providerSourceFactory("syzygy.position@1");
+export const createHumanExplorerPositionPageV1Evidence = providerSourceFactory("lichess_explorer.position_page@1");
+
+/** §7: the one adapter for the scheduler-sealed whole Syzygy outside-domain envelope. */
+export const createRulesEndgameTablebaseDomainV1Evidence = (() => {
+  const route = "rules.endgame.tablebase_domain@1";
+  const symbol = evidenceFactorySymbol(route);
+  const sealedLocal = (candidate: unknown): boolean => {
+    try {
+      assertProviderLocalDomainResult("syzygy.position@1", candidate);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ result: value("a scheduler-sealed syzygy.position@1 local-domain result", sealedLocal) }], result: "single", dependency: "provider-exchange-and-execution" }, ({ result }: { readonly result: ProviderLocalDomainResult<"syzygy.position@1"> }) => {
+    assertProviderLocalDomainResult("syzygy.position@1", result);
+    return mint(route, symbol, result, { kind: result.kind, operation: result.operation, normalizedRequestDigest: result.normalizedRequestDigest, observedAt: result.observedAt, payload: result.payload }, [hexOf(result.normalizedRequestDigest)]);
+  });
+})();
 
 function packetFactory(route: string, accepts: (packet: EvidencePayload) => boolean, project: (packet: EvidencePayload) => unknown = (packet) => packet): EvidenceValueFactory<{ readonly packet: EvidencePayload }, DeclaredEvidence<unknown>> {
   const symbol = evidenceFactorySymbol(route);
