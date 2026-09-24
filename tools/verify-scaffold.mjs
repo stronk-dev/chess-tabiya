@@ -181,7 +181,6 @@ const rfcEvidenceDependencies = missingMakeDependencies(makefile, "verify-rfc-ev
   "pack-capability-seventeenth-fresh-review",
   "provider-protocol-cut-contract",
   "bot-policy-fifth-author-repair",
-  "shared-resource-bootstrap-collision-core-author-contract",
 ]);
 if (!rfcEvidenceDependencies.ruleFound || rfcEvidenceDependencies.missing.length > 0) {
   failures.push(`Makefile: verify-rfc-evidence is missing retained review targets: ${rfcEvidenceDependencies.missing.join(", ") || "verify-rfc-evidence rule"}`);

@@ -5,32 +5,121 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const RESOURCE_NAMES = Object.freeze([
-  "pack-schema",
-  "run-schema",
-  "shape-entry-schema",
-  "principle-entry-schema",
-  "campaign-schema",
-  "migration",
-  "evidence-kinds",
-]);
+export const CATALOGUE_PATH = "rfc/shared-resource-registers.json";
 
-// Keyed by the slug inside the schema's own $id, so the set of registered schemas is
-// derived from schemas/ rather than restated here. A schema on disk whose slug is
-// absent fails C7 instead of being skipped.
-const SCHEMA_SLUGS = Object.freeze({
-  "drill-pack": ["pack-schema", "DRILL_PACK_SCHEMA_VERSION"],
-  "drill-run": ["run-schema", "DRILL_RUN_SCHEMA_VERSION"],
-  "shape-entry": ["shape-entry-schema", "SHAPE_ENTRY_SCHEMA_VERSION"],
-  "principle-entry": ["principle-entry-schema", "PRINCIPLE_ENTRY_SCHEMA_VERSION"],
-  campaign: ["campaign-schema", null],
+// One grammar for resource ids at every boundary: catalogue rows, claim lines, register markers and
+// schema-digest markers. Schema `$id` slugs share it so a digit-bearing resource is expressible.
+export const RESOURCE_ID_PATTERN = /^[a-z][a-z0-9-]*$/;
+const RESOURCE_ID = "[a-z][a-z0-9-]*";
+const IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
+const CLAIM_SOURCE_KINDS = Object.freeze({
+  schema_lane: "json_schema",
+  migration_position: "storage_migrations",
+  members: "string_tuple",
+});
+const SOURCE_KEYS = Object.freeze({
+  json_schema: ["kind", "schemaSlug", "versionExport"],
+  storage_migrations: ["headExport", "kind", "path"],
+  string_tuple: ["exportName", "kind", "path"],
 });
 
-const ID_PATTERN = /^urn:chess-tabiya:schema:([a-z-]+):([0-9.]+)$/;
+const isPlainObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value)
+  && Object.getPrototypeOf(value) === Object.prototype;
+const sameKeys = (value, keys) => {
+  const actual = Object.keys(value).sort();
+  const expected = [...keys].sort();
+  return actual.length === expected.length && actual.every((key, index) => key === expected[index]);
+};
+const deepFreeze = (value) => {
+  if (value && typeof value === "object") {
+    for (const child of Object.values(value)) deepFreeze(child);
+    Object.freeze(value);
+  }
+  return value;
+};
 
+function admitSourcePath(root, relative, label) {
+  if (typeof relative !== "string" || relative === "") throw new Error(`${label}: path must be a non-empty string`);
+  if (path.isAbsolute(relative) || relative.split(/[\\/]/u).includes("..")) {
+    throw new Error(`${label}: path ${relative} must be repository-relative without ..`);
+  }
+  const realRoot = fs.realpathSync(root);
+  let real;
+  try {
+    real = fs.realpathSync(path.join(realRoot, relative));
+  } catch {
+    throw new Error(`${label}: path ${relative} does not exist`);
+  }
+  if (real !== realRoot && !real.startsWith(`${realRoot}${path.sep}`)) {
+    throw new Error(`${label}: path ${relative} escapes the repository`);
+  }
+  if (!fs.statSync(real).isFile()) throw new Error(`${label}: path ${relative} is not a regular file`);
+  return real;
+}
+
+// The sole resource inventory. Fails closed on any shape the RFC does not name and returns an
+// owned, deeply frozen image so a caller mutating its parsed JSON cannot change a running audit.
+export function parseResourceCatalogue(value, { root }) {
+  if (typeof root !== "string" || root === "") throw new Error("catalogue: root is required");
+  if (!isPlainObject(value) || !sameKeys(value, ["resources", "schemaVersion"])) {
+    throw new Error("catalogue: envelope must have exactly schemaVersion and resources");
+  }
+  if (value.schemaVersion !== 1) throw new Error("catalogue: schemaVersion must be 1");
+  if (!Array.isArray(value.resources) || value.resources.length === 0) throw new Error("catalogue: resources must be a non-empty array");
+  const identities = new Map();
+  const rows = value.resources.map((row, index) => {
+    const label = `catalogue row ${index}`;
+    if (!isPlainObject(row) || !sameKeys(row, ["claimKind", "id", "source"])) throw new Error(`${label}: keys must be exactly id, claimKind, source`);
+    if (typeof row.id !== "string" || !RESOURCE_ID_PATTERN.test(row.id)) throw new Error(`${label}: malformed id ${JSON.stringify(row.id)}`);
+    const expectedKind = CLAIM_SOURCE_KINDS[row.claimKind];
+    if (!Object.hasOwn(CLAIM_SOURCE_KINDS, row.claimKind)) throw new Error(`${row.id}: unknown claimKind ${JSON.stringify(row.claimKind)}`);
+    const source = row.source;
+    if (!isPlainObject(source) || !Object.hasOwn(SOURCE_KEYS, source.kind)) throw new Error(`${row.id}: unknown source kind`);
+    if (source.kind !== expectedKind) throw new Error(`${row.id}: claimKind ${row.claimKind} requires source ${expectedKind}, not ${source.kind}`);
+    if (!sameKeys(source, SOURCE_KEYS[source.kind])) throw new Error(`${row.id}: ${source.kind} source keys must be exactly ${SOURCE_KEYS[source.kind].join(", ")}`);
+    let identity;
+    if (source.kind === "json_schema") {
+      if (typeof source.schemaSlug !== "string" || !RESOURCE_ID_PATTERN.test(source.schemaSlug)) throw new Error(`${row.id}: malformed schemaSlug`);
+      if (source.versionExport !== null && (typeof source.versionExport !== "string" || !IDENTIFIER.test(source.versionExport))) {
+        throw new Error(`${row.id}: versionExport must be null or a JavaScript identifier`);
+      }
+      identity = `schema:${source.schemaSlug}`;
+    } else {
+      if (source.kind === "storage_migrations" && (source.path !== "apps/server/src/storage.ts" || source.headExport !== "STORAGE_VERSION")) {
+        throw new Error(`${row.id}: storage_migrations must name apps/server/src/storage.ts and STORAGE_VERSION`);
+      }
+      const exportName = source.kind === "storage_migrations" ? source.headExport : source.exportName;
+      if (typeof exportName !== "string" || !IDENTIFIER.test(exportName)) throw new Error(`${row.id}: export name must be a JavaScript identifier`);
+      identity = `path:${admitSourcePath(root, source.path, row.id)}#${exportName}`;
+    }
+    const previous = identities.get(identity);
+    if (previous) throw new Error(`${row.id}: source identity ${identity} is already claimed by ${previous}`);
+    identities.set(identity, row.id);
+    return { id: row.id, claimKind: row.claimKind, source: { ...source } };
+  });
+  for (let index = 1; index < rows.length; index += 1) {
+    if (rows[index - 1].id === rows[index].id) throw new Error(`catalogue: duplicate id ${rows[index].id}`);
+    if (rows[index - 1].id > rows[index].id) throw new Error(`catalogue: ids must be ASCII-sorted (${rows[index - 1].id} before ${rows[index].id})`);
+  }
+  return deepFreeze({ schemaVersion: 1, resources: rows });
+}
+
+export function loadResourceCatalogue(root) {
+  const bytes = fs.readFileSync(path.join(root, CATALOGUE_PATH), "utf8");
+  return parseResourceCatalogue(JSON.parse(bytes), { root });
+}
+
+const resourceRow = (catalogue, id) => catalogue.resources.find((row) => row.id === id);
+const claimKindOf = (catalogue, id) => resourceRow(catalogue, id)?.claimKind;
+const schemaRowForSlug = (catalogue, slug) => catalogue.resources
+  .find((row) => row.source.kind === "json_schema" && row.source.schemaSlug === slug);
+
+const ID_PATTERN = /^urn:chess-tabiya:schema:([a-z][a-z0-9-]*):([0-9.]+)$/;
+
+// A slug names at most one schema file; two files sharing one fail before any tree derivation.
 export function readSchemaFiles(root) {
   const dir = path.join(root, "schemas");
-  return fs.readdirSync(dir)
+  const files = fs.readdirSync(dir)
     .filter((name) => name.endsWith(".schema.json"))
     .sort()
     .map((filename) => {
@@ -40,21 +129,27 @@ export function readSchemaFiles(root) {
       const digest = crypto.createHash("sha256").update(bytes).digest("hex").slice(0, 12);
       return { filename, id: parsed.$id, slug: id?.[1] ?? null, version: id?.[2] ?? null, digest };
     });
+  const seen = new Map();
+  for (const file of files) {
+    if (!file.slug) continue;
+    if (seen.has(file.slug)) throw new Error(`schema slug ${file.slug} is carried by both ${seen.get(file.slug)} and ${file.filename}`);
+    seen.set(file.slug, file.filename);
+  }
+  return files;
 }
 
-export function checkC7(files) {
+export function checkC7(files, catalogue) {
   const errors = [];
   for (const file of files) {
     if (!file.slug) {
       errors.push(`C7 ${file.filename}: $id ${JSON.stringify(file.id)} is not a versioned urn:chess-tabiya:schema id`);
       continue;
     }
-    const mapping = SCHEMA_SLUGS[file.slug];
-    if (!mapping) errors.push(`C7 ${file.filename}: schema slug ${file.slug} has no register resource`);
-    else if (!RESOURCE_NAMES.includes(mapping[0])) errors.push(`C7 ${file.filename}: resource ${mapping[0]} is not a register resource`);
+    if (!schemaRowForSlug(catalogue, file.slug)) errors.push(`C7 ${file.filename}: schema slug ${file.slug} has no register resource`);
   }
-  for (const [slug, [resource]] of Object.entries(SCHEMA_SLUGS)) {
-    if (!files.some((file) => file.slug === slug)) errors.push(`C7 ${resource}: no schema on disk carries slug ${slug}`);
+  for (const row of catalogue.resources) {
+    if (row.source.kind !== "json_schema") continue;
+    if (!files.some((file) => file.slug === row.source.schemaSlug)) errors.push(`C7 ${row.id}: no schema on disk carries slug ${row.source.schemaSlug}`);
   }
   return errors;
 }
@@ -63,14 +158,14 @@ export function checkC7(files) {
 // bytes it was last reconciled against; an edit that matches no live claim is an undeclared
 // change, which is the under-declaration the campaign register was opened for. A resource with a
 // live claim is mid-flight and its digest is expected to differ until the lane lands.
-export function checkC8(files, registers, claims) {
+export function checkC8(files, registers, claims, catalogue) {
   const errors = [];
   const byResource = new Map(registers.map((register) => [register.resource, register]));
   const claimed = new Set(claims.map((claim) => claim.resource));
   for (const file of files) {
-    const mapping = file.slug ? SCHEMA_SLUGS[file.slug] : null;
-    if (!mapping) continue;
-    const [resource] = mapping;
+    const row = file.slug ? schemaRowForSlug(catalogue, file.slug) : null;
+    if (!row) continue;
+    const resource = row.id;
     const register = byResource.get(resource);
     if (!register) continue;
     if (register.digest === null) {
@@ -127,7 +222,10 @@ export function locateClaimBlocks(markdown) {
   return blocks;
 }
 
-export function parseClaimBlock(block, rfc) {
+const LANE = /^lane (?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*))*$/;
+const MEMBERS = /^members [a-z][a-z0-9_]*(?:, [a-z][a-z0-9_]*)*$/;
+
+export function parseClaimBlock(block, rfc, catalogue) {
   const meaningful = block.lines.map((line) => line.trim()).filter((line) => line && !line.startsWith("#"));
   if (meaningful.length === 1 && meaningful[0] === "none") return [];
   if (meaningful.includes("none")) throw new Error(`${rfc}: none cannot accompany a claim`);
@@ -138,18 +236,21 @@ export function parseClaimBlock(block, rfc) {
       throw new Error(`${rfc}: claim must have three non-empty fields: ${line}`);
     }
     const [resource, claim, changes] = cells;
-    if (!RESOURCE_NAMES.includes(resource)) throw new Error(`${rfc}: unknown resource ${resource}`);
-    if (resource.endsWith("-schema") && !/^lane \d+(?:\.\d+)*$/.test(claim)) {
+    const claimKind = claimKindOf(catalogue, resource);
+    if (!claimKind) throw new Error(`${rfc}: unknown resource ${resource}`);
+    if (claimKind === "schema_lane" && !LANE.test(claim)) {
       throw new Error(`${rfc}: invalid schema claim ${claim}`);
     }
-    if (resource === "migration" && !/^(position next|position behind [a-z0-9-]+|\d+)$/.test(claim)) {
+    if (claimKind === "migration_position" && !/^(position next|position behind [a-z0-9-]+|\d+)$/.test(claim)) {
       throw new Error(`${rfc}: invalid migration claim ${claim}`);
     }
-    if (resource === "evidence-kinds" && !/^members [a-z][a-z0-9_]*(?:, [a-z][a-z0-9_]*)*$/.test(claim)) {
-      throw new Error(`${rfc}: invalid evidence member claim ${claim}`);
+    if (claimKind === "members") {
+      if (!MEMBERS.test(claim)) throw new Error(`${rfc}: invalid member claim ${claim}`);
+      const members = claim.slice(8).split(", ");
+      if (new Set(members).size !== members.length) throw new Error(`${rfc}: duplicate member in claim ${claim}`);
     }
     const parsed = { rfc, resource, claim, changes };
-    if (resource === "migration") {
+    if (claimKind === "migration_position") {
       parsed.migrationIndex = migrationIndex;
       migrationIndex += 1;
     }
@@ -159,7 +260,7 @@ export function parseClaimBlock(block, rfc) {
 
 const sectionForSummary = (markdown) => markdown.search(/^## Summary\s*$/m);
 
-export function checkC1(documents) {
+export function checkC1(documents, catalogue) {
   const errors = [];
   const claims = [];
   for (const [rfc, markdown] of Object.entries(documents)) {
@@ -178,7 +279,7 @@ export function checkC1(documents) {
       continue;
     }
     try {
-      claims.push(...parseClaimBlock(blocks[0], rfc));
+      claims.push(...parseClaimBlock(blocks[0], rfc, catalogue));
     } catch (error) {
       errors.push(`C1 ${error.message}`);
     }
@@ -196,8 +297,8 @@ export const compareVersions = (left, right) => {
   return 0;
 };
 
-export function checkC2(claims, tree) {
-  const schemaClaims = claims.filter(({ resource }) => resource.endsWith("-schema"));
+export function checkC2(claims, tree, catalogue) {
+  const schemaClaims = claims.filter(({ resource }) => claimKindOf(catalogue, resource) === "schema_lane" && tree[resource]);
   const errors = schemaClaims
     .filter(({ resource, claim }) => compareVersions(claim.slice(5), tree[resource].head) <= 0)
     .map(({ rfc, resource, claim }) => `C2 ${rfc}: ${resource} ${claim} is not above tree head ${tree[resource].head}`);
@@ -213,14 +314,15 @@ export function checkC2(claims, tree) {
 
 const claimKey = ({ rfc, resource, claim, changes }) => `${rfc}|${resource}|${claim}|${changes}`;
 
-export function checkC3(claims, registers) {
+export function checkC3(claims, registers, catalogue) {
   const errors = [];
   const collisionKeys = new Map();
   for (const item of claims) {
     let keys = [`${item.resource}|${item.claim}`];
-    if (item.resource === "evidence-kinds") {
+    const claimKind = claimKindOf(catalogue, item.resource);
+    if (claimKind === "members") {
       keys = item.claim.slice(8).split(", ").map((member) => `${item.resource}|${member}`);
-    } else if (item.resource === "migration" && item.claim === "position next" && item.migrationIndex > 0) keys = [];
+    } else if (claimKind === "migration_position" && item.claim === "position next" && item.migrationIndex > 0) keys = [];
     for (const key of keys) {
       const previous = collisionKeys.get(key);
       if (previous && previous.rfc !== item.rfc) {
@@ -235,13 +337,14 @@ export function checkC3(claims, registers) {
   return errors;
 }
 
-export function checkC4(tree, registers) {
+export function checkC4(tree, registers, catalogue) {
   const errors = [];
   const byResource = new Map(registers.map((register) => [register.resource, register]));
-  for (const resource of RESOURCE_NAMES) {
+  for (const { id: resource, claimKind } of catalogue.resources) {
     const register = byResource.get(resource);
-    if (!register) continue;
-    if (resource === "evidence-kinds") {
+    // A catalogue row whose source is absent from the tree is reported by C7, not dereferenced here.
+    if (!register || !tree[resource]) continue;
+    if (claimKind === "members") {
       const landed = new Set(register.landed.map((row) => row.key));
       for (const member of tree[resource].members) {
         if (!landed.has(member)) errors.push(`C4 ${resource}: tree member ${member} has no landed row`);
@@ -252,7 +355,7 @@ export function checkC4(tree, registers) {
         errors.push(`C4 ${resource}: tree head ${head} has no landed row`);
       }
       for (const row of register.landed) {
-        const atOrBelow = resource === "migration"
+        const atOrBelow = claimKind === "migration_position"
           ? Number(row.key) <= Number(head)
           : compareVersions(row.key, head) <= 0;
         if (atOrBelow && /\b(?:held|claimed)\b/i.test(row.text)) {
@@ -264,19 +367,25 @@ export function checkC4(tree, registers) {
   return errors;
 }
 
-export function checkC5(claims) {
+export function checkC5(claims, catalogue) {
   return claims
-    .filter(({ resource, claim }) => resource === "migration" && /^\d+$/.test(claim))
+    .filter(({ resource, claim }) => claimKindOf(catalogue, resource) === "migration_position" && /^\d+$/.test(claim))
     .map(({ rfc, claim }) => `C5 ${rfc}: migration claim is a bare integer: ${claim}`);
 }
 
-export function checkC6(tree, registers) {
+export function checkC6(tree, registers, catalogue) {
   const errors = [];
   const counts = new Map();
   for (const register of registers) {
     counts.set(register.resource, (counts.get(register.resource) ?? 0) + 1);
     if (register.headCount !== 1) errors.push(`C6 ${register.resource}: expected exactly one machine-readable head line, found ${register.headCount}`);
-    const expected = register.resource === "evidence-kinds"
+    const claimKind = claimKindOf(catalogue, register.resource);
+    if (!claimKind) {
+      errors.push(`C6 ${register.resource}: register section names a resource absent from the catalogue`);
+      continue;
+    }
+    if (!tree[register.resource]) continue;
+    const expected = claimKind === "members"
       ? String(tree[register.resource].members.length)
       : String(tree[register.resource].head);
     if (register.head !== expected) {
@@ -285,7 +394,7 @@ export function checkC6(tree, registers) {
     const tableRows = register.body.split("\n").filter(isTableData).join("\n");
     if (/next[- ]free/i.test(tableRows)) errors.push(`C6 ${register.resource}: register contains a hand-written next-free row`);
   }
-  for (const resource of RESOURCE_NAMES) {
+  for (const { id: resource } of catalogue.resources) {
     if (counts.get(resource) !== 1) errors.push(`C6 ${resource}: expected exactly one register section, found ${counts.get(resource) ?? 0}`);
   }
   return errors;
@@ -299,10 +408,10 @@ function parseRegisterSections(markdown) {
     const nextHeading = markdown.slice(start + headings[index][0].length).search(/^##\s/m);
     const end = nextHeading < 0 ? markdown.length : start + headings[index][0].length + nextHeading;
     const body = markdown.slice(start, end);
-    const headMatches = [...body.matchAll(/<!-- register: ([a-z-]+) (?:head|members)=([^ ]+) -->/g)];
+    const headMatches = [...body.matchAll(new RegExp(`<!-- register: (${RESOURCE_ID}) (?:head|members)=([^ ]+) -->`, "g"))];
     if (headMatches.length === 0) continue;
     const [, resource, head] = headMatches[0];
-    const digestMatch = body.match(/<!-- schema-digest: ([a-z-]+) ([0-9a-f]{12}) -->/);
+    const digestMatch = body.match(new RegExp(`<!-- schema-digest: (${RESOURCE_ID}) ([0-9a-f]{12}) -->`));
     const digest = digestMatch && digestMatch[1] === resource ? digestMatch[2] : null;
     const subsection = (heading) => {
       const marker = `### ${heading}`;
@@ -332,27 +441,44 @@ const requireMatch = (text, regex, label) => {
   return match[1];
 };
 
-export function deriveTree(root, files = readSchemaFiles(root)) {
+function readStringTuple(text, exportName, label) {
+  const escaped = exportName.replace(/[$]/g, "\\$");
+  const match = text.match(new RegExp(`export const ${escaped}\\s*=\\s*\\[([\\s\\S]*?)\\]\\s*as const`));
+  if (!match) throw new Error(`${label}: cannot derive literal tuple ${exportName}`);
+  const elements = match[1].split(",").map((element) => element.trim()).filter(Boolean);
+  const members = elements.map((element) => {
+    const literal = element.match(/^"([^"\\]*)"$/);
+    if (!literal) throw new Error(`${label}: ${exportName} element ${element} is not a string literal`);
+    return literal[1];
+  });
+  if (new Set(members).size !== members.length) throw new Error(`${label}: ${exportName} has duplicate members`);
+  return members;
+}
+
+export function deriveTree(root, files = readSchemaFiles(root), catalogue = loadResourceCatalogue(root)) {
   const index = fs.readFileSync(path.join(root, "packages/schema/src/index.ts"), "utf8");
   const tree = {};
-  for (const file of files) {
-    const mapping = file.slug ? SCHEMA_SLUGS[file.slug] : null;
-    if (!mapping) continue;
-    const [resource, constant] = mapping;
-    if (constant) {
-      const constantHead = requireMatch(index, new RegExp(`${constant}\\s*=\\s*"([0-9.]+)"`), constant);
-      if (constantHead !== file.version) throw new Error(`${constant} ${constantHead} disagrees with ${file.filename} ${file.version}`);
+  for (const row of catalogue.resources) {
+    const { source } = row;
+    if (source.kind === "json_schema") {
+      const file = files.find((candidate) => candidate.slug === source.schemaSlug);
+      if (!file) continue;
+      if (source.versionExport) {
+        const constantHead = requireMatch(index, new RegExp(`${source.versionExport}\\s*=\\s*"([0-9.]+)"`), source.versionExport);
+        if (constantHead !== file.version) throw new Error(`${source.versionExport} ${constantHead} disagrees with ${file.filename} ${file.version}`);
+      }
+      tree[row.id] = { head: file.version };
+    } else if (source.kind === "storage_migrations") {
+      const storage = fs.readFileSync(path.join(root, source.path), "utf8");
+      const storageHead = Number(requireMatch(storage, new RegExp(`export const ${source.headExport}\\s*=\\s*(\\d+)`), source.headExport));
+      const migrations = [...storage.matchAll(/\{\s*version:\s*(\d+),\s*name:/g)].map((match) => Number(match[1]));
+      if (Math.max(...migrations) !== storageHead) throw new Error(`${source.headExport} ${storageHead} disagrees with migration head ${Math.max(...migrations)}`);
+      tree[row.id] = { head: storageHead };
+    } else {
+      const text = fs.readFileSync(path.join(root, source.path), "utf8");
+      tree[row.id] = { members: readStringTuple(text, source.exportName, row.id) };
     }
-    tree[resource] = { head: file.version };
   }
-  const storage = fs.readFileSync(path.join(root, "apps/server/src/storage.ts"), "utf8");
-  const storageHead = Number(requireMatch(storage, /export const STORAGE_VERSION\s*=\s*(\d+)/, "STORAGE_VERSION"));
-  const migrations = [...storage.matchAll(/\{\s*version:\s*(\d+),\s*name:/g)].map((match) => Number(match[1]));
-  if (Math.max(...migrations) !== storageHead) throw new Error(`STORAGE_VERSION ${storageHead} disagrees with migration head ${Math.max(...migrations)}`);
-  tree.migration = { head: storageHead };
-  const sourcing = fs.readFileSync(path.join(root, "apps/server/src/sourcing/types.ts"), "utf8");
-  const membersBody = requireMatch(sourcing, /export const EVIDENCE_KINDS\s*=\s*\[([\s\S]*?)\]\s*as const/, "EVIDENCE_KINDS");
-  tree["evidence-kinds"] = { members: [...membersBody.matchAll(/"([a-z0-9_]+)"/g)].map((match) => match[1]) };
   return tree;
 }
 
@@ -360,21 +486,22 @@ export function auditRepository(root) {
   const readme = fs.readFileSync(path.join(root, "rfc/README.md"), "utf8");
   const active = parseActiveRfcRows(readme).filter((rfc) => rfc !== "0000-rfc-process.md");
   const documents = Object.fromEntries(active.map((rfc) => [rfc, fs.readFileSync(path.join(root, "rfc", rfc), "utf8")]));
+  const catalogue = loadResourceCatalogue(root);
   const files = readSchemaFiles(root);
-  const tree = deriveTree(root, files);
+  const tree = deriveTree(root, files, catalogue);
   const registers = parseRegisterSections(readme);
-  const c1 = checkC1(documents);
+  const c1 = checkC1(documents, catalogue);
   const errors = [
     ...c1.errors,
-    ...checkC2(c1.claims, tree),
-    ...checkC3(c1.claims, registers),
-    ...checkC4(tree, registers),
-    ...checkC5(c1.claims),
-    ...checkC6(tree, registers),
-    ...checkC7(files),
-    ...checkC8(files, registers, c1.claims),
+    ...checkC2(c1.claims, tree, catalogue),
+    ...checkC3(c1.claims, registers, catalogue),
+    ...checkC4(tree, registers, catalogue),
+    ...checkC5(c1.claims, catalogue),
+    ...checkC6(tree, registers, catalogue),
+    ...checkC7(files, catalogue),
+    ...checkC8(files, registers, c1.claims, catalogue),
   ];
-  return { active, claims: c1.claims, tree, registers, errors };
+  return { active, catalogue, claims: c1.claims, tree, registers, errors };
 }
 
 const increment = (version) => {
@@ -385,17 +512,18 @@ const increment = (version) => {
 
 export function derivedOutput(result) {
   const lines = [];
-  for (const resource of RESOURCE_NAMES) {
-    if (resource.endsWith("-schema")) {
+  for (const { id: resource, claimKind } of result.catalogue.resources) {
+    if (!result.tree[resource]) lines.push(`${resource}: absent from the tree`);
+    else if (claimKind === "schema_lane") {
       const claimed = result.claims.filter((item) => item.resource === resource).map((item) => item.claim.slice(5));
       const highest = claimed.reduce((value, next) => compareVersions(next, value) > 0 ? next : value, result.tree[resource].head);
       lines.push(`${resource}: head ${result.tree[resource].head}; next free ${increment(highest)}`);
-    } else if (resource === "migration") {
+    } else if (claimKind === "migration_position") {
       const claims = result.claims.filter((item) => item.resource === resource);
-      lines.push(`migration: head ${result.tree.migration.head}; next ${claims.map((item) => `${item.rfc} (${item.claim})`).join(" -> ") || "position next"}`);
+      lines.push(`${resource}: head ${result.tree[resource].head}; next ${claims.map((item) => `${item.rfc} (${item.claim})`).join(" -> ") || "position next"}`);
     } else {
       const members = result.claims.filter((item) => item.resource === resource).flatMap((item) => item.claim.slice(8).split(", "));
-      lines.push(`evidence-kinds: ${result.tree[resource].members.length} members; next n/a; claimed ${members.join(", ") || "none"}`);
+      lines.push(`${resource}: ${result.tree[resource].members.length} members; next n/a; claimed ${members.join(", ") || "none"}`);
     }
   }
   return lines;

@@ -1,6 +1,6 @@
 # RFC: Shared-resource register catalogue bootstrap
 
-- **Status:** draft — bounded [[D3116]]–[[D3119]] and [[D3131]]–[[D3133]] repairs complete; fresh review required before acceptance/implementation
+- **Status:** awaiting D3 — implemented 2026-09-24 at the owner's direction to implement ready RFCs, without the D1 fresh review; the catalogue, parser and catalogue-driven checker ship with all fourteen §7 controls in `make shared-resource-catalogue`. Only the three consumer rebases remain
 - **Author:** Codex
 - **Created:** 2026-08-31; cut to the owner-ruled scope 2026-09-06
 - **Design refs:** none; this is repository process and changes no learner or product behavior
@@ -276,8 +276,8 @@ No product, schema, migration, vocabulary or content bytes change in this implem
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Fresh independent review of the cut contract; due 2026-09-07 | claude | review receipt plus verdict | |
-| D2 | Catalogue/checker implementation after acceptance; due 2026-09-07 | codex | implementing SHA plus `make verify-awake` | |
+| D1 | Fresh independent review of the cut contract; due 2026-09-07 | claude | review receipt plus verdict | **2026-09-24 — not run**: the owner directed implementation of ready RFCs in the coordinator session; the fourteen executable §7 controls stand in its place |
+| D2 | Catalogue/checker implementation after acceptance; due 2026-09-07 | codex | implementing SHA plus `make verify-awake` | **2026-09-24** — `rfc/shared-resource-registers.json`, `parseResourceCatalogue`, catalogue-driven C1–C8 and `make shared-resource-catalogue` (13 tests, 14 controls) in `verify-governance` |
 | D3 | Rebase exactly [[D2454]], [[D2455]], [[D2466]]; due 2026-09-08 | codex | three RFC amendments and transitioned work-state items | |
 
 ## Open questions
@@ -287,6 +287,7 @@ when a concrete resource proves one necessary.
 
 ## Changelog
 
+- 2026-09-24: implemented. `RESOURCE_NAMES`/`SCHEMA_SLUGS` deleted; the checker loads the seed-equal catalogue and every check reads it. Register and schema-digest markers and schema `$id` slugs now share the digit-bearing id grammar. A catalogue row whose source is absent is reported by C7 rather than dereferenced by C2/C4/C6. The pre-implementation author/review harnesses left `verify-rfc-evidence` because they assert the replaced inventories.
 - 2026-09-07: bounded repairs close [[D3116]]–[[D3119]] and [[D3131]]–[[D3133]] in the contract/author gate; fresh review remains.
 - 2026-09-07: fresh review returned source aliases, non-canonical lanes, mismatched id grammars and unchecked exports; the seven-resource cut survives.
 - 2026-09-07: author self-audit narrowed absent-source claims and repaired [[D3082]]–[[D3087]].

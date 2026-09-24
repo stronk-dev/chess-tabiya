@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {
+      "id": "campaign-schema",
+      "claimKind": "schema_lane",
+      "source": {
+        "kind": "json_schema",
+        "schemaSlug": "campaign",
+        "versionExport": null
+      }
+    },
+    {
+      "id": "evidence-kinds",
+      "claimKind": "members",
+      "source": {
+        "kind": "string_tuple",
+        "path": "apps/server/src/sourcing/types.ts",
+        "exportName": "EVIDENCE_KINDS"
+      }
+    },
+    {
+      "id": "migration",
+      "claimKind": "migration_position",
+      "source": {
+        "kind": "storage_migrations",
+        "path": "apps/server/src/storage.ts",
+        "headExport": "STORAGE_VERSION"
+      }
+    },
+    {
+      "id": "pack-schema",
+      "claimKind": "schema_lane",
+      "source": {
+        "kind": "json_schema",
+        "schemaSlug": "drill-pack",
+        "versionExport": "DRILL_PACK_SCHEMA_VERSION"
+      }
+    },
+    {
+      "id": "principle-entry-schema",
+      "claimKind": "schema_lane",
+      "source": {
+        "kind": "json_schema",
+        "schemaSlug": "principle-entry",
+        "versionExport": "PRINCIPLE_ENTRY_SCHEMA_VERSION"
+      }
+    },
+    {
+      "id": "run-schema",
+      "claimKind": "schema_lane",
+      "source": {
+        "kind": "json_schema",
+        "schemaSlug": "drill-run",
+        "versionExport": "DRILL_RUN_SCHEMA_VERSION"
+      }
+    },
+    {
+      "id": "shape-entry-schema",
+      "claimKind": "schema_lane",
+      "source": {
+        "kind": "json_schema",
+        "schemaSlug": "shape-entry",
+        "versionExport": "SHAPE_ENTRY_SCHEMA_VERSION"
+      }
+    }
+  ]
+}

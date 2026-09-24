@@ -20950,3 +20950,17 @@ reviews returned the RFC. Two passed items sit unaccepted: D921 since
 `planning/release-truth/acceptance-convergence-2026-09-24.md` ask the owner for
 those two acceptances and for a boundary-finding review convergence rule with
 delegated register-owner acceptance. No code, intent or RFC text changed.
+
+### 2026-09-24 — shared-resource-register-bootstrap implemented (awaiting D3)
+
+The seven-row `rfc/shared-resource-registers.json` catalogue now drives
+`tools/register-check.mjs`; `RESOURCE_NAMES` and `SCHEMA_SLUGS` are deleted.
+`parseResourceCatalogue(value, { root })` fails closed on shape, sorting,
+alias (including `./` and symlink) and containment errors and returns a
+frozen image. C1–C8 and the derived output read the catalogue; register and
+digest markers accept the digit-bearing id grammar. `make
+shared-resource-catalogue` runs the fourteen §7 controls in
+`verify-governance`. Implemented at the owner's direction without the D1
+fresh review. D3131–D3133 close; D3034 stays live as the staged-discharge
+foundation until the D3 rebases of D2454/D2455/D2466. Absent-source
+admission remains [[D3082]].

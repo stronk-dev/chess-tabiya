@@ -1,5 +1,10 @@
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   checkC1,
@@ -10,9 +15,19 @@ import {
   checkC6,
   checkC7,
   checkC8,
+  deriveTree,
+  derivedOutput,
+  loadResourceCatalogue,
   locateClaimBlocks,
   parseActiveRfcRows,
+  parseResourceCatalogue,
+  readSchemaFiles,
 } from "./register-check.mjs";
+import * as registerCheck from "./register-check.mjs";
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const seed = () => JSON.parse(fs.readFileSync(path.join(repoRoot, "rfc/shared-resource-registers.json"), "utf8"));
+const catalogue = loadResourceCatalogue(repoRoot);
 
 const tree = {
   "pack-schema": { head: "1.2" },
@@ -75,7 +90,7 @@ not | a | declaration
 \`\`\`\`
 `;
   assert.equal(locateClaimBlocks(markdown).length, 1);
-  assert.deepEqual(checkC1({ "one.md": markdown }).errors, []);
+  assert.deepEqual(checkC1({ "one.md": markdown }, catalogue).errors, []);
 });
 
 test("C1 fails a staged-in-body declaration", () => {
@@ -87,7 +102,7 @@ test("C1 fails a staged-in-body declaration", () => {
 none
 \`\`\`
 `;
-  assert.match(checkC1({ "one.md": markdown }).errors[0], /not in the metadata preamble/);
+  assert.match(checkC1({ "one.md": markdown }, catalogue).errors[0], /not in the metadata preamble/);
 });
 
 test("C1 fails a declaration placed after the metadata rule", () => {
@@ -101,19 +116,19 @@ none
 
 ## Summary
 `;
-  assert.match(checkC1({ "one.md": markdown }).errors[0], /not in the metadata preamble/);
+  assert.match(checkC1({ "one.md": markdown }, catalogue).errors[0], /not in the metadata preamble/);
 });
 
 test("C2 passes a lane above head and fails one at head", () => {
-  assert.deepEqual(checkC2([claim()], tree), []);
-  assert.match(checkC2([claim({ claim: "lane 1.2" })], tree)[0], /not above tree head/);
+  assert.deepEqual(checkC2([claim()], tree, catalogue), []);
+  assert.match(checkC2([claim({ claim: "lane 1.2" })], tree, catalogue)[0], /not above tree head/);
 });
 
 test("C3 passes a declaration/register bijection", () => {
   const item = claim();
   const rows = registers();
   rows.find((row) => row.resource === item.resource).claims.push(item);
-  assert.deepEqual(checkC3([item], rows), []);
+  assert.deepEqual(checkC3([item], rows, catalogue), []);
 });
 
 test("C3 fails two live documents claiming one lane", () => {
@@ -121,38 +136,38 @@ test("C3 fails two live documents claiming one lane", () => {
   const second = claim({ rfc: "two.md", changes: "$defs/other" });
   const rows = registers();
   rows.find((row) => row.resource === first.resource).claims.push(first, second);
-  assert.match(checkC3([first, second], rows).join("\n"), /collision/);
+  assert.match(checkC3([first, second], rows, catalogue).join("\n"), /collision/);
 });
 
 test("C4 passes complete landed heads and fails a missing member", () => {
-  assert.deepEqual(checkC4(tree, registers()), []);
+  assert.deepEqual(checkC4(tree, registers(), catalogue), []);
   const rows = registers();
   rows.find((row) => row.resource === "evidence-kinds").landed.pop();
-  assert.match(checkC4(tree, rows)[0], /has no landed row/);
+  assert.match(checkC4(tree, rows, catalogue)[0], /has no landed row/);
 });
 
 test("C4 fails a landed lane still advertised as held", () => {
   const rows = registers();
   rows[0].landed[0].text += " claimed and held";
-  assert.match(checkC4(tree, rows)[0], /still advertises/);
+  assert.match(checkC4(tree, rows, catalogue)[0], /still advertises/);
 });
 
 test("C5 passes positional migrations and fails a bare integer", () => {
-  assert.deepEqual(checkC5([claim({ resource: "migration", claim: "position next" })]), []);
-  assert.match(checkC5([claim({ resource: "migration", claim: "24" })])[0], /bare integer/);
+  assert.deepEqual(checkC5([claim({ resource: "migration", claim: "position next" })], catalogue), []);
+  assert.match(checkC5([claim({ resource: "migration", claim: "24" })], catalogue)[0], /bare integer/);
 });
 
 test("C6 passes tree-derived heads and fails a stale head", () => {
-  assert.deepEqual(checkC6(tree, registers()), []);
+  assert.deepEqual(checkC6(tree, registers(), catalogue), []);
   const rows = registers();
   rows[0].head = "1.1";
-  assert.match(checkC6(tree, rows)[0], /disagrees with tree/);
+  assert.match(checkC6(tree, rows, catalogue)[0], /disagrees with tree/);
 });
 
 test("C6 fails a hand-written next-free value", () => {
   const rows = registers();
   rows[0].body = "| — | next free 1.3 |";
-  assert.match(checkC6(tree, rows)[0], /hand-written next-free/);
+  assert.match(checkC6(tree, rows, catalogue)[0], /hand-written next-free/);
 });
 
 const schemaFiles = () => [
@@ -164,57 +179,230 @@ const schemaFiles = () => [
 ];
 
 test("C7 accepts the schemas on disk today", () => {
-  assert.deepEqual(checkC7(schemaFiles()), []);
+  assert.deepEqual(checkC7(schemaFiles(), catalogue), []);
 });
 
 test("C7 refuses a versioned schema with no register resource", () => {
   const extra = { filename: "arena.schema.json", id: "urn:chess-tabiya:schema:arena:0.1", slug: "arena", version: "0.1" };
-  assert.deepEqual(checkC7([...schemaFiles(), extra]), [
+  assert.deepEqual(checkC7([...schemaFiles(), extra], catalogue), [
     "C7 arena.schema.json: schema slug arena has no register resource",
   ]);
 });
 
 test("C7 refuses a schema whose $id is not a versioned tabiya urn", () => {
   const loose = { filename: "loose.schema.json", id: "https://example.test/loose.json", slug: null, version: null };
-  assert.deepEqual(checkC7([...schemaFiles(), loose]), [
+  assert.deepEqual(checkC7([...schemaFiles(), loose], catalogue), [
     'C7 loose.schema.json: $id "https://example.test/loose.json" is not a versioned urn:chess-tabiya:schema id',
   ]);
 });
 
 test("C7 refuses a register resource whose schema left the tree", () => {
   const without = schemaFiles().filter((file) => file.slug !== "campaign");
-  assert.deepEqual(checkC7(without), ["C7 campaign-schema: no schema on disk carries slug campaign"]);
+  assert.deepEqual(checkC7(without, catalogue), ["C7 campaign-schema: no schema on disk carries slug campaign"]);
 });
 
 test("C2 refuses a lane versioned to a different depth than its head", () => {
-  const errors = checkC2([claim({ resource: "campaign-schema", claim: "lane 1.1" })], tree);
+  const errors = checkC2([claim({ resource: "campaign-schema", claim: "lane 1.1" })], tree, catalogue);
   assert.deepEqual(errors, ["C2 one.md: campaign-schema lane 1.1 has 2 version part(s); head 1 has 1"]);
 });
 
 test("C2 accepts a bare major lane on a bare major head", () => {
-  assert.deepEqual(checkC2([claim({ resource: "campaign-schema", claim: "lane 2" })], tree), []);
+  assert.deepEqual(checkC2([claim({ resource: "campaign-schema", claim: "lane 2" })], tree, catalogue), []);
 });
 
 test("C8 passes when register digests match the schemas on disk", () => {
   const files = schemaFiles().filter((file) => ["drill-pack", "campaign"].includes(file.slug));
-  assert.deepEqual(checkC8(files, registers(), []), []);
+  assert.deepEqual(checkC8(files, registers(), [], catalogue), []);
 });
 
 test("C8 refuses an undeclared schema edit", () => {
   const files = [{ ...schemaFiles().find((file) => file.slug === "campaign"), digest: "cccccccccccc" }];
-  assert.deepEqual(checkC8(files, registers(), []), [
+  assert.deepEqual(checkC8(files, registers(), [], catalogue), [
     "C8 campaign-schema: campaign.schema.json changed since the register was reconciled (register bbbbbbbbbbbb, disk cccccccccccc) and no live claim declares it",
   ]);
 });
 
 test("C8 allows an edit that a live claim declares", () => {
   const files = [{ ...schemaFiles().find((file) => file.slug === "campaign"), digest: "cccccccccccc" }];
-  assert.deepEqual(checkC8(files, registers(), [claim({ resource: "campaign-schema", claim: "lane 2" })]), []);
+  assert.deepEqual(checkC8(files, registers(), [claim({ resource: "campaign-schema", claim: "lane 2" })], catalogue), []);
 });
 
 test("C8 refuses a register that records no digest", () => {
   const files = [schemaFiles().find((file) => file.slug === "drill-run")];
-  assert.deepEqual(checkC8(files, registers(), []), [
+  assert.deepEqual(checkC8(files, registers(), [], catalogue), [
     "C8 run-schema: register records no schema digest for drill_run.schema.json",
   ]);
+});
+
+// shared-resource-register-bootstrap §7 — the catalogue is the sole resource inventory.
+
+const schemaDigest = (text) => crypto.createHash("sha256").update(text).digest("hex").slice(0, 12);
+
+function syntheticRepository({ extraSchema = true, extraRow = true, extraRegister = true, mutate } = {}) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "register-check-"));
+  const write = (relative, text) => {
+    fs.mkdirSync(path.dirname(path.join(root, relative)), { recursive: true });
+    fs.writeFileSync(path.join(root, relative), text);
+  };
+  const schemas = { "base.schema.json": '{"$id":"urn:chess-tabiya:schema:base:0.1"}\n' };
+  if (extraSchema) schemas["schema2.schema.json"] = '{"$id":"urn:chess-tabiya:schema:schema2:0.4"}\n';
+  for (const [name, text] of Object.entries(schemas)) write(`schemas/${name}`, text);
+  write("packages/schema/src/index.ts", 'export const BASE_SCHEMA_VERSION = "0.1";\n');
+  write("apps/server/src/storage.ts", "export const STORAGE_VERSION = 2;\nconst m = [{ version: 1, name: \"a\" }, { version: 2, name: \"b\" }];\n");
+  write("apps/server/src/kinds.ts", 'export const KINDS = [\n  "alpha",\n  "beta",\n] as const;\n');
+  const resources = [
+    { id: "base-schema", claimKind: "schema_lane", source: { kind: "json_schema", schemaSlug: "base", versionExport: "BASE_SCHEMA_VERSION" } },
+    { id: "kinds", claimKind: "members", source: { kind: "string_tuple", path: "apps/server/src/kinds.ts", exportName: "KINDS" } },
+    { id: "migration", claimKind: "migration_position", source: { kind: "storage_migrations", path: "apps/server/src/storage.ts", headExport: "STORAGE_VERSION" } },
+  ];
+  if (extraRow) resources.push({ id: "schema2-lane", claimKind: "schema_lane", source: { kind: "json_schema", schemaSlug: "schema2", versionExport: null } });
+  resources.sort((left, right) => (left.id < right.id ? -1 : 1));
+  const catalogueValue = { schemaVersion: 1, resources };
+  mutate?.(catalogueValue, write);
+  write("rfc/shared-resource-registers.json", JSON.stringify(catalogueValue));
+  const lane = (id, head, file) => `## ${id} register\n\n<!-- register: ${id} head=${head} -->\n<!-- schema-digest: ${id} ${schemaDigest(schemas[file] ?? "absent")} -->\n\n### Landed\n\n| version | owner |\n|---|---|\n| ${head} | seed |\n\n### Live claims\n\n| claim | RFC | changes |\n|---|---|---|\n\n`;
+  let readme = "# RFCs\n\n## Active\n\n| RFC | Status |\n|---|---|\n\n";
+  readme += lane("base-schema", "0.1", "base.schema.json");
+  if (extraRegister) readme += lane("schema2-lane", "0.4", "schema2.schema.json");
+  readme += "## kinds register\n\n<!-- register: kinds members=2 -->\n\n### Landed\n\n| member | owner |\n|---|---|\n| alpha | seed |\n| beta | seed |\n\n";
+  readme += "## migration register\n\n<!-- register: migration head=2 -->\n\n### Landed\n\n| migration | owner |\n|---|---|\n| 2 | seed |\n\n## Archive\n";
+  write("rfc/README.md", readme);
+  return root;
+}
+
+test("§7.1 the exact seven-row seed parses, sorted and unique", () => {
+  const ids = catalogue.resources.map(({ id }) => id);
+  assert.deepEqual(ids, [
+    "campaign-schema", "evidence-kinds", "migration", "pack-schema",
+    "principle-entry-schema", "run-schema", "shape-entry-schema",
+  ]);
+  assert.deepEqual(
+    seed(),
+    JSON.parse(fs.readFileSync(path.join(repoRoot, "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json"), "utf8")),
+  );
+});
+
+test("§7.2 deleting, duplicating, renaming, extra keys and aliases fail", () => {
+  const parse = (mutate) => () => {
+    const value = seed();
+    mutate(value);
+    return parseResourceCatalogue(value, { root: repoRoot });
+  };
+  assert.throws(parse((value) => { value.resources = []; }), /non-empty/);
+  assert.throws(parse((value) => { value.resources.splice(1, 0, structuredClone(value.resources[1])); }), /already claimed|duplicate/);
+  assert.throws(parse((value) => { value.resources[0].id = "Campaign"; }), /malformed id/);
+  assert.throws(parse((value) => { value.resources[0].id = "zzz-schema"; }), /ASCII-sorted/);
+  assert.throws(parse((value) => { value.resources[0].extra = true; }), /keys must be exactly/);
+  assert.throws(parse((value) => { value.resources[0].source.extra = true; }), /source keys/);
+  assert.throws(parse((value) => { value.extra = true; }), /envelope/);
+  assert.throws(parse((value) => { value.schemaVersion = 2; }), /schemaVersion/);
+  assert.throws(parse((value) => { value.resources[0].claimKind = "members"; }), /requires source/);
+  // Alias: a second id naming pack-schema's slug.
+  assert.throws(parse((value) => {
+    value.resources.push({ id: "zz-alias", claimKind: "schema_lane", source: { kind: "json_schema", schemaSlug: "drill-pack", versionExport: null } });
+  }), /already claimed by pack-schema/);
+});
+
+test("§7.3 duplicate slugs and normalized or symlinked path/export identities fail", () => {
+  const root = syntheticRepository();
+  fs.symlinkSync(path.join(root, "apps/server/src/kinds.ts"), path.join(root, "apps/server/src/kinds-link.ts"));
+  const value = JSON.parse(fs.readFileSync(path.join(root, "rfc/shared-resource-registers.json"), "utf8"));
+  const withRow = (row) => ({ ...value, resources: [...value.resources, row].sort((l, r) => (l.id < r.id ? -1 : 1)) });
+  assert.throws(() => parseResourceCatalogue(withRow({ id: "zz-link", claimKind: "members", source: { kind: "string_tuple", path: "apps/server/src/kinds-link.ts", exportName: "KINDS" } }), { root }), /already claimed by kinds/);
+  assert.throws(() => parseResourceCatalogue(withRow({ id: "zz-dot", claimKind: "members", source: { kind: "string_tuple", path: "apps/server/./src/kinds.ts", exportName: "KINDS" } }), { root }), /already claimed by kinds/);
+  assert.throws(() => parseResourceCatalogue(withRow({ id: "zz-up", claimKind: "members", source: { kind: "string_tuple", path: "../outside.ts", exportName: "KINDS" } }), { root }), /without \.\./);
+  assert.throws(() => parseResourceCatalogue(withRow({ id: "zz-abs", claimKind: "members", source: { kind: "string_tuple", path: "/etc/hosts", exportName: "KINDS" } }), { root }), /repository-relative/);
+  assert.throws(() => parseResourceCatalogue(withRow({ id: "zz-dir", claimKind: "members", source: { kind: "string_tuple", path: "apps/server", exportName: "KINDS" } }), { root }), /regular file/);
+  assert.throws(() => parseResourceCatalogue(withRow({ id: "zz-bad", claimKind: "members", source: { kind: "string_tuple", path: "apps/server/src/kinds.ts", exportName: "not-an-id" } }), { root }), /JavaScript identifier/);
+});
+
+test("§7.4 and §7.6 a digit-bearing already-present schema is one catalogue row, no checker edit", () => {
+  const result = registerCheck.auditRepository(syntheticRepository());
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(result.tree["schema2-lane"], { head: "0.4" });
+  assert.match(derivedOutput(result).join("\n"), /schema2-lane: head 0\.4; next free 0\.5/);
+});
+
+test("§7.5 neither former code inventory exists", () => {
+  assert.equal("RESOURCE_NAMES" in registerCheck, false);
+  assert.equal("SCHEMA_SLUGS" in registerCheck, false);
+  const source = fs.readFileSync(path.join(repoRoot, "tools/register-check.mjs"), "utf8");
+  assert.doesNotMatch(source, /RESOURCE_NAMES|SCHEMA_SLUGS/);
+  for (const { id } of catalogue.resources) assert.doesNotMatch(source, new RegExp(`"${id}"`));
+});
+
+test("§7.7 the synthetic schema without its row, or its row without the schema, fails C7", () => {
+  const noRow = registerCheck.auditRepository(syntheticRepository({ extraRow: false, extraRegister: false }));
+  assert.ok(noRow.errors.includes("C7 schema2.schema.json: schema slug schema2 has no register resource"), noRow.errors.join("\n"));
+  const noSchema = registerCheck.auditRepository(syntheticRepository({ extraSchema: false }));
+  assert.ok(noSchema.errors.includes("C7 schema2-lane: no schema on disk carries slug schema2"), noSchema.errors.join("\n"));
+});
+
+test("§7.8 an unknown claim resource fails even with a same-named README section", () => {
+  const block = { lines: ["ghost-schema | lane 1 | $defs/x"] };
+  assert.throws(() => registerCheck.parseClaimBlock(block, "one.md", catalogue), /unknown resource ghost-schema/);
+  const rows = registers();
+  rows.push({ ...rows[0], resource: "ghost-schema" });
+  assert.match(checkC6(tree, rows, catalogue).join("\n"), /ghost-schema: register section names a resource absent from the catalogue/);
+});
+
+test("§7.9 two RFCs claiming one synthetic lane collide; a leading-zero lane is refused", () => {
+  const synthetic = loadResourceCatalogue(syntheticRepository());
+  const one = { rfc: "one.md", resource: "schema2-lane", claim: "lane 0.5", changes: "a" };
+  const two = { ...one, rfc: "two.md", changes: "b" };
+  assert.match(checkC3([one, two], [], synthetic).join("\n"), /collision: one\.md and two\.md both claim schema2-lane\|lane 0\.5/);
+  assert.throws(() => registerCheck.parseClaimBlock({ lines: ["schema2-lane | lane 0.05 | a"] }, "one.md", synthetic), /invalid schema claim/);
+});
+
+test("§7.10 a missing or extra register section fails set equality", () => {
+  const missing = registerCheck.auditRepository(syntheticRepository({ extraRegister: false }));
+  assert.ok(missing.errors.includes("C6 schema2-lane: expected exactly one register section, found 0"), missing.errors.join("\n"));
+  const extra = registerCheck.auditRepository(syntheticRepository({ extraRow: false }));
+  assert.match(extra.errors.join("\n"), /C6 schema2-lane: register section names a resource absent from the catalogue/);
+});
+
+test("§7.11 two schema files with one slug fail before tree derivation", () => {
+  const root = syntheticRepository();
+  fs.writeFileSync(path.join(root, "schemas/copy.schema.json"), '{"$id":"urn:chess-tabiya:schema:base:0.2"}\n');
+  assert.throws(() => readSchemaFiles(root), /schema slug base is carried by both/);
+  assert.throws(() => registerCheck.auditRepository(root), /schema slug base/);
+});
+
+test("§7.12 missing or mismatched exports and invalid tuples fail", () => {
+  const mismatched = syntheticRepository({ mutate: (_value, write) => write("packages/schema/src/index.ts", 'export const BASE_SCHEMA_VERSION = "0.9";\n') });
+  assert.throws(() => deriveTree(mismatched), /BASE_SCHEMA_VERSION 0\.9 disagrees/);
+  const missing = syntheticRepository({ mutate: (_value, write) => write("packages/schema/src/index.ts", "\n") });
+  assert.throws(() => deriveTree(missing), /cannot derive BASE_SCHEMA_VERSION/);
+  for (const [body, pattern] of [
+    ['"alpha",\n  ...OTHER,', /not a string literal/],
+    ['"alpha",\n  "alpha",', /duplicate members/],
+    ['"alpha",\n  7,', /not a string literal/],
+    ['"alpha",\n  [computed],', /not a string literal|cannot derive/],
+  ]) {
+    const root = syntheticRepository({ mutate: (_value, write) => write("apps/server/src/kinds.ts", `export const KINDS = [\n  ${body}\n] as const;\n`) });
+    assert.throws(() => deriveTree(root), pattern);
+  }
+  const noTuple = syntheticRepository({ mutate: (_value, write) => write("apps/server/src/kinds.ts", "export const OTHER = [] as const;\n") });
+  assert.throws(() => deriveTree(noTuple), /cannot derive literal tuple KINDS/);
+});
+
+test("§7.13 caller mutation after admission leaves the admitted image unchanged", () => {
+  const value = seed();
+  const admitted = parseResourceCatalogue(value, { root: repoRoot });
+  value.resources[0].id = "mutated";
+  value.resources[0].source.schemaSlug = "mutated";
+  value.resources.pop();
+  assert.equal(admitted.resources.length, 7);
+  assert.equal(admitted.resources[0].id, "campaign-schema");
+  assert.equal(admitted.resources[0].source.schemaSlug, "campaign");
+  assert.ok(Object.isFrozen(admitted.resources[0].source));
+});
+
+test("§7.14 the implementation carries no removed scope or speculative root", () => {
+  const source = fs.readFileSync(path.join(repoRoot, "tools/register-check.mjs"), "utf8");
+  for (const forbidden of [
+    "typescript_contract", "canonical_resource", "versioned_declarations", "adopted",
+    "first-parent", "release-manifest", "concept-registry-schema", "source-attribution-registry",
+  ]) assert.doesNotMatch(source, new RegExp(forbidden), forbidden);
+  assert.doesNotMatch(source, /child_process|git /);
 });
