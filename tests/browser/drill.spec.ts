@@ -2136,6 +2136,7 @@ const SCHOLAR_TRAP = "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQk
 
 async function startSupportFromFen(page: Page, fen: string, side: "white" | "black"): Promise<void> {
   await page.goto("/play");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill(fen);
   await page.getByLabel("Your side").selectOption(side);
@@ -2145,7 +2146,7 @@ async function startSupportFromFen(page: Page, fen: string, side: "white" | "bla
 }
 
 test("@matrix module seats render sealed evidence without moving the board (states 3, 5, 9, 13)", async ({ page }, testInfo) => {
-  test.setTimeout(420_000);
+  test.setTimeout(300_000);
   const projections = [
     { width: 1440, height: 900 },
     { width: 1366, height: 768 },
