@@ -7877,14 +7877,14 @@
     },
     {
       "id": "D959",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:555ea1424ca4c7171b7c42f158ca4bb0880fc37b3b4cfbfeb22a991f7ddcbd35",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6870c0104f2525d4377581963e307a32e0b7d5ec2c1b83035c39f3c62110e313",
       "uxItems": [
         "IMP-a10"
       ],
-      "owner": "content-and-theory",
-      "blocker": "rfc:famous-games.md"
+      "evidence": "apps/server/src/import-source-protocol.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D960",
@@ -17945,12 +17945,12 @@
     },
     {
       "id": "D2278",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a0b346f8d93c70e95316af3da1111b0c3113de3a03aa0fa8fbd10553f145dad2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:591ca5bb015038a006f0fb47bdb91544a2461d0ffeda85981b90fec87234a15c",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:live-sources.md"
+      "evidence": "packages/runtime/src/import-source-protocol.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2279",

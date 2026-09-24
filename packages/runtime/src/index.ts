@@ -1048,6 +1048,7 @@ export * from "./style-contract.js";
 export * from "./style-atoms.js";
 export * from "./skills-contract.js";
 export * from "./concept-registry.js";
+export * from "./provider-health.js";
 // rfc/hint-distance.md — Guided Hint registry, wire and server-local compiler.
 export {
   HINT_ABSTENTION_REASONS, HINT_DECLARATION_MATRIX, HINT_DISCLOSURE_BY_RUNG, HINT_DISCLOSURE_PROJECTION_IDS, HINT_DISTANCES, HINT_FAMILIES,

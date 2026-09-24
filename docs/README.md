@@ -79,6 +79,9 @@ Current completion state is deliberately not copied here. Use the
   caching and failure handling.
 - [Provider exchange](provider-exchange.md) — one scheduler, sealed request identity and receipts,
   typed unavailability and the durable save/reload parser for Stockfish, Maia, Syzygy and Explorer.
+- [Provider health](provider-health.md) — the live provider-health registry, circuits and shared
+  backoff, `/capabilities` provider state, and honest in-run degradation including the paused
+  opponent.
 - [Engine grounding](engine-grounding.md) — fixed-depth opening assessments and the read-only engine
   authoring walk.
 - [Tablebase grounding](tablebase-grounding.md) — Syzygy sidecars, perfect resistance and refusal
@@ -131,6 +134,13 @@ Current completion state is deliberately not copied here. Use the
 - [Account data lifecycle](account-data-lifecycle.md) — export, deletion, tombstones and browser-local
   clearing.
 - [Theming](theming.md) — app, board and piece appearance axes and persistence.
+
+## Operations and self-hosting
+
+- [Deployment profiles](deployment.md) — loopback `local`, LAN `appliance` and Internet `hosted`
+  topologies, the Caddy/TLS edge, cookie and origin policy, and the `core`/`cpu` resource tiers.
+- [Storage backup and recovery](storage-backup-and-recovery.md) — verified backup bundles,
+  restore, migration-safe startup, rollback to the prior release and the maintenance lock.
 
 ## Documentation rule
 

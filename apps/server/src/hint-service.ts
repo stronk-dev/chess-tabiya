@@ -30,6 +30,7 @@ import {
   type HintRung,
   type HintSourceReason,
   type HintVoiceState,
+  type ProviderOperationAvailability,
   type RenderedEvidenceView,
   type SealedHintHorizon,
   type TypedProviderRequest,
@@ -57,6 +58,12 @@ export interface HintServiceOptions {
   readonly maxOperations: number;
   readonly voice?: HintVoiceRenderer;
   readonly voiceTimeoutMs?: number;
+  /**
+   * The live provider-health state of `stockfish.principal_variation@1` (provider health §8). An
+   * unavailable or backing-off search source is an honest `source_unavailable` before any work; it is
+   * never a lowered ceiling ([[D1371]]). Absent in unit compositions that pass no registry.
+   */
+  readonly availability?: () => ProviderOperationAvailability;
 }
 
 /** Everything the service needs about one request, re-derived by RunService from the stored run. */
@@ -130,6 +137,10 @@ export class HintService {
   request(access: HintAccess, rung: HintRung): HintResponse {
     const requestId = this.requestIdFor(access.decision.digest, rung);
     if (this.#options.scheduler === null) return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "provider_unavailable" });
+    const health = this.#options.availability?.();
+    if (health !== undefined && (health.state === "unavailable" || health.state === "temporarily_blocked") && !this.#operations.has(requestId)) {
+      return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "provider_unavailable" });
+    }
     let operation = this.#operations.get(requestId);
     if (operation === undefined) {
       operation = { requestId, runId: access.run.id, rung, decisionDigest: access.decision.digest, horizonKey: `${access.run.id}\u0000${access.decision.cursor.nodeId}\u0000${access.fen}`, state: Object.freeze({ state: "pending", requestId, rung }), settled: false, lastUsed: ++this.#clock };

@@ -119,10 +119,11 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
     const response = await fetch(`http://127.0.0.1:${address.port}/capabilities`);
     expect(response.status).toBe(200);
     const descriptor = await response.json() as {
-      providers: { tablebase: string };
+      providerHealth: { providers: { instanceId: string; state: string }[] };
       policyModes: string[];
     };
-    expect(descriptor.providers.tablebase).toBe("none");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(descriptor.providerHealth.providers.find((row) => row.instanceId === "tablebase-primary")?.state).toBe("not_configured");
     expect(descriptor.policyModes).not.toContain("perfect_tablebase");
     expect(descriptor.policyModes).not.toContain("practical_resistance");
   });

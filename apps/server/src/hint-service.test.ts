@@ -180,6 +180,11 @@ describe("HintService source and voice arms", () => {
     const populations = new CandidatePopulationService({ capacity: 8 });
     const off = new HintService({ scheduler: null, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
     expect(off.request(access(run, FORK_FEN), "pattern")).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
+    // Provider health says the search source is down: honest source_unavailable before any search.
+    let searched = 0;
+    const unhealthy = new HintService({ scheduler: { get: async () => { searched += 1; throw new Error("must not search"); } }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8, availability: () => ({ state: "unavailable", instanceIds: [], reason: "not_configured" }) });
+    expect(unhealthy.request(access(run, FORK_FEN), "pattern")).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
+    expect(searched).toBe(0);
     const failing = new HintService({ scheduler: { get: async (request) => ({ kind: "source_failure", operation: request.operation, normalizedRequestDigest: "sha256:0", failedAt: "2026-09-24T12:00:00.000Z", reason: "deadline_exceeded" }) as unknown as TypedProviderResult<"stockfish.principal_variation@1"> }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
     expect(await settle(failing, failing.request(access(run, FORK_FEN), "pattern"))).toMatchObject({ state: "source_unavailable", reason: "deadline_exceeded" });
 

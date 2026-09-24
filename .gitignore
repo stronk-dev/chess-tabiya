@@ -19,3 +19,6 @@ planning/semantic-consequence-search/d3262-stockfish-horizon4-chunks/
 
 # Default file-backed application database (createApplication without DATABASE_PATH)
 /data/
+
+# Local storage backups (rfc/storage-backup-recovery.md): sensitive, never committed
+/backups/

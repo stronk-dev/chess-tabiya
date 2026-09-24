@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { operationConfigured } from "./lib/provider-availability.js";
   import "./lib/theme/base.css";
 
   import { onDestroy, onMount, tick, untrack } from "svelte";
@@ -2581,6 +2582,10 @@
         onRematch={session.runState.run.opponentPolicy.profile === undefined ? undefined : () => controller.startDuplicate(session.runState!.run.id)}
         botReply={session.botReply}
         onRetryOpponent={() => controller.retryOpponent()}
+        opponentPause={session.opponentPause}
+        opponentSource={session.opponentSource}
+        opponentChange={session.opponentChange}
+        onChangeOpponent={(mode) => controller.changeOpponent(mode)}
         onClassifyBranches={(branchIds) => api.branchDecidedness(session.runState!.run.id, branchIds)}
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
@@ -2588,7 +2593,7 @@
         importedGuess={session.importedGuess}
         onGuessImportedMove={(uci) => controller.guessImportedMove(uci)}
         onReasoning={(input) => controller.recordReasoning(input)}
-        onReasoningReview={capabilities?.providers.llm === "external" && api.reasoningReview !== undefined ? (checkpointEventSeq) => api.reasoningReview!(session.runState!.run.id, checkpointEventSeq) : undefined}
+        onReasoningReview={operationConfigured(capabilities, "review.reasoning") && api.reasoningReview !== undefined ? (checkpointEventSeq) => api.reasoningReview!(session.runState!.run.id, checkpointEventSeq) : undefined}
         onExport={exportPgn}
         onLoadMarks={api.marks === undefined ? undefined : () => api.marks!(session.runState!.run.id)}
         onSaveMarks={api.replaceMarks === undefined ? undefined : (input) => api.replaceMarks!(session.runState!.run.id, input)}
@@ -2600,7 +2605,7 @@
         hints={api.hint === undefined ? undefined : controller.hints}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
-        onCompareVoice={capabilities?.providers.llm === "external" && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}
+        onCompareVoice={operationConfigured(capabilities, "render.voice_compare") && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}
         onSpeech={(nodeId, scope) => api.speech(session.runState!.run.id, nodeId, scope)}
         onCreateGroup={(input) => controller.createGroup(input)}
         onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
@@ -2645,7 +2650,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={capabilities?.providers.llm === "external" && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

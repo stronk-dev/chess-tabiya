@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 
+import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -152,7 +153,7 @@ const capabilities: Capabilities = {
       profiles: botRosterFixture(),
     },
   },
-  providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },
+  providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "explorer-primary": "available", "tablebase-primary": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture", "explorer-primary": "local_fixture", "tablebase-primary": "local_fixture" }),
   surfaces: {
     play: "available",
     review: "available",
@@ -275,7 +276,7 @@ describe("application shell", () => {
     const voice = vi.fn(async () => ({ text: "Grounded narration.", source: "provider" as const, scope: "story" as const }));
     const storyApi: DrillClientApi = {
       ...api(),
-      async capabilities() { return { ...capabilities, providers: { ...capabilities.providers, llm: "external" } }; },
+      async capabilities() { return { ...capabilities, providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "explorer-primary": "available", "tablebase-primary": "available", "external-voice": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture", "explorer-primary": "local_fixture", "tablebase-primary": "local_fixture" }) }; },
       async review() { return story; },
       voice,
     };

@@ -41,14 +41,12 @@ async function enableEndgamePolicies(page: Page): Promise<void> {
     const response = await route.fetch();
     const descriptor = await response.json() as {
       policyModes: string[];
-      providers: Record<string, string>;
     };
     await route.fulfill({
       response,
       json: {
         ...descriptor,
         policyModes: [...descriptor.policyModes, "perfect_tablebase"],
-        providers: { ...descriptor.providers, tablebase: "mock" },
       },
     });
   });

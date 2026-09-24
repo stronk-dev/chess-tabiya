@@ -12,6 +12,9 @@ import {
   type DrillRunEvent,
   type PolicyConfig,
   type BranchGroup,
+  capabilityModeAvailability,
+  providerAvailabilityNotice,
+  type ProviderOperationAvailability,
   type HintResponse,
 } from "@chess-tabiya/runtime";
 
@@ -62,6 +65,47 @@ export interface DrillSessionState {
   readonly importedGuess?: ImportedGuess;
   /** The last bot reply's layer actions (degraded/abstained status), never its evidence. */
   readonly botReply?: { readonly layers: BotOpponentPlyOperation["layers"]; readonly replayed: boolean };
+  /**
+   * The opponent could not answer (rfc/provider-health-degradation.md §10): the run paused before
+   * any opponent move was committed. Retry re-issues the same request; Change opponent switches the
+   * mode for the rest of this session. Neither is written to the run (opponent-recovery-journey).
+   */
+  readonly opponentPause?: OpponentPause;
+  /** Where the last opponent reply came from: an exact cached reply is disclosed, never relabelled. */
+  readonly opponentSource?: "live" | "cached_exact";
+  /** An in-memory opponent change after a provider failure; the run record does not retain it. */
+  readonly opponentChange?: { readonly from: SelectableOpponentMode; readonly to: SelectableOpponentMode };
+}
+
+export type SelectableOpponentMode = "human_common" | "strong_engine";
+
+export interface OpponentPause {
+  /** Learner copy for why the opponent is paused; never raw provider text. */
+  readonly reason: string;
+  readonly retryAfterMs: number | null;
+  readonly mode: string;
+  /** Other opponents this session can switch to, each with its live state. */
+  readonly alternatives: readonly { readonly mode: SelectableOpponentMode; readonly label: string; readonly requestable: boolean; readonly note: string }[];
+}
+
+/** The codes a failed opponent SELECTION returns; each pauses the run rather than failing it. */
+const OPPONENT_PROVIDER_FAILURES: ReadonlySet<string> = new Set(["PROVIDER_UNAVAILABLE", "ENGINE_UNAVAILABLE", "TABLEBASE_UNAVAILABLE", "PRACTICAL_RESISTANCE_UNAVAILABLE"]);
+
+const OPPONENT_MODE_LABELS: Readonly<Record<SelectableOpponentMode, string>> = Object.freeze({
+  human_common: "a human-style opponent",
+  strong_engine: "the engine opponent",
+});
+
+/** The paused-opponent copy for one typed provider failure (task language, no provider JSON). */
+export function opponentPauseReason(error: ApiError): { readonly reason: string; readonly retryAfterMs: number | null } {
+  const details = error.details as { readonly availability?: unknown; readonly retryAfterMs?: unknown };
+  const retryAfterMs = typeof details.retryAfterMs === "number" && Number.isFinite(details.retryAfterMs) ? details.retryAfterMs : null;
+  const availability = details.availability;
+  if (availability !== null && typeof availability === "object" && "state" in availability) {
+    const notice = providerAvailabilityNotice(availability as ProviderOperationAvailability, "The opponent");
+    if (notice.reason !== "") return Object.freeze({ reason: notice.reason, retryAfterMs: notice.retryAfterMs ?? retryAfterMs });
+  }
+  return Object.freeze({ reason: "The opponent could not answer right now.", retryAfterMs });
 }
 
 /** Must match the server's reserved imported-game checkpoint (rfc/return-scheduling.md §8). */
@@ -123,6 +167,7 @@ const RUN_ERROR_MESSAGES: Readonly<Record<string, string>> = Object.freeze({
   POLICY_MODE_UNSUPPORTED: "This opponent is not available here. Choose another opponent or another drill.",
   UNSUPPORTED_OPPONENT_POLICY: "This opponent is not available here. Choose another opponent or another drill.",
   ENGINE_UNAVAILABLE: "The opponent could not move right now. Try again, or choose another opponent.",
+  PROVIDER_UNAVAILABLE: "A service this needs is unavailable right now. Try again, or continue without it.",
   // rfc/bot-policy.md §4.1: one learner sentence per closed opponent-ply action; no provider reason.
   OPPONENT_STALE_ROOT: "The board changed before the bot could reply. Reopen the run to continue from the current position.",
   OPPONENT_REQUEST_REUSED: "That bot reply was already recorded for another position. Reopen the run to continue.",
@@ -244,6 +289,8 @@ function selectorMode(
 }
 
 export class DrillSessionController {
+  /** The session-only opponent after a provider failure (never persisted; opponent-recovery-journey). */
+  #opponentOverride: SelectableOpponentMode | undefined;
   readonly #api: DrillClientApi;
   readonly #storage: KeyValueStorage;
   readonly #scheduler: PollScheduler | undefined;
@@ -790,7 +837,7 @@ export class DrillSessionController {
   async retryOpponent(): Promise<boolean> {
     if (this.#state.busy) return false;
     const operation = this.#sessionOperation();
-    this.#patch({ busy: true, error: undefined });
+    this.#patch({ busy: true, error: undefined, opponentPause: undefined });
     try {
       await this.#playOpponentIfNeeded();
       if (!this.#sessionOperationIsCurrent(operation)) return false;
@@ -800,6 +847,33 @@ export class DrillSessionController {
       if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
       return false;
     }
+  }
+
+  /**
+   * Switches the opponent for the remainder of this session after a provider failure, then asks the
+   * new opponent for the paused reply. In memory only: the run's policy, digest and events are not
+   * rewritten, and the surface says the run record does not retain the change.
+   */
+  async changeOpponent(mode: SelectableOpponentMode): Promise<boolean> {
+    if (this.#state.busy) return false;
+    const pause = this.#state.opponentPause;
+    if (pause === undefined || !pause.alternatives.some((alternative) => alternative.mode === mode)) return false;
+    const from = (this.#state.opponentChange?.to ?? pause.mode) as SelectableOpponentMode;
+    this.#opponentOverride = mode;
+    this.#patch({ opponentChange: Object.freeze({ from, to: mode }) });
+    return this.retryOpponent();
+  }
+
+  #pauseFor(error: ApiError, mode: string): OpponentPause {
+    const { reason, retryAfterMs } = opponentPauseReason(error);
+    const capabilities = this.#capabilities;
+    const alternatives = (["human_common", "strong_engine"] as const)
+      .filter((candidate) => candidate !== mode && capabilities?.policyModes.includes(candidate) === true)
+      .map((candidate) => {
+        const notice = providerAvailabilityNotice(capabilityModeAvailability(capabilities?.providerHealth, candidate), "That opponent");
+        return Object.freeze({ mode: candidate, label: OPPONENT_MODE_LABELS[candidate], requestable: notice.requestable, note: notice.reason });
+      });
+    return Object.freeze({ reason, retryAfterMs, mode, alternatives: Object.freeze(alternatives) });
   }
 
   async switchBranch(leafNodeId: string, branchId: string): Promise<boolean> {
@@ -924,13 +998,32 @@ export class DrillSessionController {
       candidate.members.some((member) => member.branchId === run.activeCursor.branchId),
     );
     const request = this.#selectionRequest();
-    const selection = group === undefined
-      ? await this.#api.selectMove(request)
-      : (await store.groupReply(group.groupId, request)).selection;
+    let selection: import("@chess-tabiya/runtime").OpponentSelection;
+    let source: "live" | "cached_exact" = "live";
+    try {
+      if (group !== undefined) {
+        selection = (await store.groupReply(group.groupId, request)).selection;
+      } else if (this.#api.selectMoveReceipted !== undefined) {
+        const receipted = await this.#api.selectMoveReceipted(request);
+        selection = receipted.selection;
+        source = receipted.source;
+      } else {
+        selection = await this.#api.selectMove(request);
+      }
+    } catch (error) {
+      // A provider failure pauses BEFORE any opponent move is committed: never a Stockfish, random
+      // or stale different-position reply (rfc/provider-health-degradation.md §10).
+      if (error instanceof ApiError && OPPONENT_PROVIDER_FAILURES.has(error.code) && this.#store === store && this.#attachmentIsCurrent(generation)) {
+        this.#patch({ opponentPause: this.#pauseFor(error, request.policy.mode), opponentSource: undefined });
+        return;
+      }
+      throw error;
+    }
     if (
       this.#store !== store ||
       !this.#attachmentIsCurrent(generation)
     ) return;
+    this.#patch({ opponentPause: undefined, opponentSource: source });
     const result = await store.appendOpponentPly(selection);
     if (
       this.#store !== store ||
@@ -991,13 +1084,14 @@ export class DrillSessionController {
             : (() => { throw new ApiError(503, "POLICY_MODE_UNSUPPORTED", `${requestedMode} is unavailable for trajectory leg ${legPolicy.legId}`); })()
           : (() => { throw new ApiError(422, "POLICY_MODE_UNSUPPORTED", `${String(requestedMode)} is invalid for trajectory leg ${legPolicy.legId}`); })();
     const branch = run.branches.find((candidate) => candidate.id === run.activeCursor.branchId)!;
+    const effectiveMode = this.#opponentOverride ?? mode;
     return {
       startFen: pack?.start.fen ?? run.start.fen,
       historyUci: historyFrom(run, run.activeCursor.nodeId).flatMap((historyNode) =>
         historyNode.moveUci === null ? [] : [historyNode.moveUci],
       ),
       policy: {
-        mode,
+        mode: effectiveMode,
         policyConfigDigest: run.sessionDigest,
         ...(typeof authored.targetElo === "number"
           ? { targetElo: authored.targetElo }
@@ -1108,7 +1202,11 @@ export class DrillSessionController {
       authoredFeedback: undefined,
       reasoning: undefined,
       botReply: undefined,
+      opponentPause: undefined,
+      opponentSource: undefined,
+      opponentChange: undefined,
     });
+    this.#opponentOverride = undefined;
   }
 
   async #loadShapes(ids?: readonly ShapeReference[]): Promise<readonly ShapeEntryView[]> {

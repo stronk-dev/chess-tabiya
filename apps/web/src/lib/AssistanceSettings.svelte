@@ -8,6 +8,7 @@
   import { formatBytes } from "./account-inventory-copy.js";
   import { ASSISTANCE_PROFILES, loadWorkflowPreference, requestedAssistanceConfig, saveWorkflowPreference, type AssistanceProfile } from "./assistance-preference.js";
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
+  import { operationConfigured, operationNotice, providerInspectorRows, providerRows } from "./provider-availability.js";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import { assertAccountDeletionPreview } from "./account-deletion-preview.js";
 
@@ -47,14 +48,6 @@
   let deleteRequest = 0;
   let signOutRequest = 0;
   let mounted = true;
-  const providerLabels: Readonly<Record<keyof Capabilities["providers"], string>> = Object.freeze({
-    opponent: "Human-like opponents",
-    judge: "Position calculation",
-    llm: "Optional narrated guidance",
-    corpus: "Human-game statistics",
-    tts: "Spoken guidance",
-    tablebase: "Exact endgame results",
-  });
   const surfaceLabels: Readonly<Record<keyof Capabilities["surfaces"], string>> = Object.freeze({
     play: "Rehearsals",
     review: "Review and import",
@@ -150,11 +143,6 @@
   }
   function effectCount(groups: readonly DeletionEffect[]): number { return groups.reduce((total, effect) => total + effect.count, 0); }
   function records(count: number): string { return `${count} ${count === 1 ? "record" : "records"}`; }
-  function providerState(value: Capabilities["providers"][keyof Capabilities["providers"]]): string {
-    if (value === "none") return "Not available";
-    if (value === "mock") return "Test service";
-    return "Available";
-  }
   function surfaceState(id: keyof Capabilities["surfaces"], value: Capabilities["surfaces"][keyof Capabilities["surfaces"]]): string {
     if (plannedSurfaceIds.includes(id)) return "Coming later";
     return value === "available" ? "Available" : "Not available on this server";
@@ -323,11 +311,11 @@
 <section id="about-deployment" aria-labelledby="about-deployment-title">
   <h2 id="about-deployment-title">About this deployment</h2>
   {#if capabilities}
-    <h3>Available services</h3><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{providerLabels[name as keyof Capabilities["providers"]]}</dt><dd>{providerState(value as Capabilities["providers"][keyof Capabilities["providers"]])}</dd></div>{/each}</dl>
+    <h3>Available services</h3><dl id="deployment-services">{#each providerRows(capabilities) as row (row.id)}<div data-provider={row.id}><dt>{row.label}</dt><dd>{row.state}</dd></div>{/each}</dl>
     <h3>App areas</h3><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li><strong>{surfaceLabels[id as keyof Capabilities["surfaces"]]}</strong>: {surfaceState(id as keyof Capabilities["surfaces"], availability as Capabilities["surfaces"][keyof Capabilities["surfaces"]])}</li>{/each}</ul>
-    <details class="technical-details"><summary>Technical details</summary><p>Run format {capabilities.runSchemaVersion}</p><p>Opponent policies: {capabilities.policyModes.join(", ")}</p><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{name}</dt><dd>{value}</dd></div>{/each}</dl></details>
+    <details class="technical-details"><summary>Technical details</summary><p>Run format {capabilities.runSchemaVersion}</p><p>Opponent policies: {capabilities.policyModes.join(", ")}</p><p>Provider snapshot {capabilities.providerHealth.generatedAt}</p><dl>{#each providerInspectorRows(capabilities) as row (row.id)}<div><dt>{row.id}</dt><dd>{row.detail}</dd></div>{/each}</dl></details>
   {:else}<p>Deployment status is unavailable.</p>{/if}
-  {#if capabilities?.providers.llm !== "external"}<p class="honest" id="external-voice-unavailable">External voice is unavailable because this deployment has no configured provider.</p>{/if}
+  {#if !operationConfigured(capabilities, "render.voice")}<p class="honest" id="external-voice-unavailable">External voice is unavailable because this deployment has no configured provider.</p>{:else if !operationNotice(capabilities, "render.voice").requestable}<p class="honest" id="external-voice-unavailable">{operationNotice(capabilities, "render.voice").reason} Written guidance stays grounded and unchanged.</p>{/if}
   <p class="honest">These are status facts, not account controls. Whoever runs this Tabiya server chooses which optional services are available.</p>
 </section>
 

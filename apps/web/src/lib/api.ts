@@ -1,3 +1,4 @@
+import type { ProviderHealthCapabilities } from "@chess-tabiya/runtime";
 import { parseConceptCatalogueView, type ConceptCatalogueView, type ConceptLabelView } from "@chess-tabiya/runtime";
 import type {
   DrillPackDefinition,
@@ -549,6 +550,12 @@ export interface BotCardWire {
   readonly decorative: null;
 }
 
+/** One opponent selection and whether it was served live or from the exact-request cache. */
+export interface ReceiptedSelection {
+  readonly selection: OpponentSelection;
+  readonly source: "live" | "cached_exact";
+}
+
 export interface BotRosterRow {
   readonly reference: BotProfileReference;
   readonly behaviorDigest: `sha256:${string}`;
@@ -613,14 +620,8 @@ export interface Capabilities {
       readonly profiles: readonly BotRosterRow[];
     };
   };
-  readonly providers: {
-    readonly opponent: "maia" | "mock" | "none";
-    readonly judge: "stockfish" | "mock" | "none";
-    readonly llm: "none" | "external";
-    readonly corpus: "lichess-explorer" | "mock" | "none";
-    readonly tts: "none" | "external";
-    readonly tablebase: "lichess" | "mock" | "none";
-  };
+  /** The live provider-health snapshot (rfc/provider-health-degradation.md §9), parsed by the runtime. */
+  readonly providerHealth: ProviderHealthCapabilities;
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
   readonly evidenceManifest: {
     readonly digest: string;
@@ -1097,6 +1098,8 @@ export interface DrillClientApi extends RunApi {
   runDeletionPreview?(runId: string): Promise<DeletionPreview>;
   deleteRun?(runId: string, previewDigest: string): Promise<void>;
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
+  /** Optional: the selection with its live/cached-exact receipt (provider health §10). */
+  selectMoveReceipted?(input: SelectMoveRequest): Promise<ReceiptedSelection>;
   graph(runId: string, writerId?: string): Promise<RunGraph>;
   claimLease?(runId: string, writerId: string): Promise<void>;
   grants?(runId: string): Promise<readonly RunGrant[]>;
@@ -1609,7 +1612,15 @@ export class DrillApi implements DrillClientApi {
   redeemSessionLink(token:string):Promise<{readonly session:LiveSession;readonly runId:string}>{return this.#json(`/api/shared/${encoded(token)}/join`,{method:"POST",body:{}});}
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
-    return this.#json<unknown>("/select-move", { method: "POST", body: input }).then((value) => parseOpponentSelection(value, input));
+    return this.selectMoveReceipted(input).then((result) => result.selection);
+  }
+
+  /** The selection plus its provider receipt: `cached_exact` is disclosed, never relabelled live. */
+  async selectMoveReceipted(input: SelectMoveRequest): Promise<ReceiptedSelection> {
+    const response = await this.#response("/select-move", { method: "POST", body: input });
+    const selection = parseOpponentSelection(await response.json(), input);
+    const source = response.headers.get("x-tabiya-provider-source") === "cached_exact" ? "cached_exact" : "live";
+    return Object.freeze({ selection, source });
   }
 
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage> {

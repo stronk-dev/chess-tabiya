@@ -1,0 +1,35 @@
+# rfc/safe-deployment-profiles.md §5 — hosted edge: one exact public hostname, automatic publicly
+# trusted TLS (ACME) with durable Caddy state. HTTP redirects to HTTPS; there is no HTTP fallback.
+{
+	admin off
+	email {$TABIYA_ACME_EMAIL}
+	servers {
+		timeouts {
+			read_header 10s
+			read_body 30s
+			idle 5m
+		}
+	}
+}
+
+{$TABIYA_PUBLIC_HOSTNAME} {
+	# Outer guard; the application's own bounds remain authoritative.
+	request_body {
+		max_size 8MB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+
+	# Caddy passes the original Host and overwrites X-Forwarded-For/Proto/Host from an untrusted
+	# client; a client-supplied RFC 7239 Forwarded header is stripped.
+	reverse_proxy tabiya-proxy-origin:3000 {
+		header_up -Forwarded
+		health_uri /readyz
+		health_interval 10s
+	}
+}
