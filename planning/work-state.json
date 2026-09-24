@@ -27106,6 +27106,15 @@
       "sourceDigest": "sha256:05039110c08731062f3da449d882bcf214a73b64f340ccb19257b3acfd2e406a",
       "uxItems": [],
       "owner": "learner-history"
+    },
+    {
+      "id": "D3301",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3888de57a9c5e72551fe24c24ff8789b4a43437797a040d29ef1e1048a17460c",
+      "uxItems": [],
+      "evidence": "apps/server/src/bot-opponent-ply.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

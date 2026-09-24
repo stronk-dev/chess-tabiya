@@ -1,6 +1,8 @@
 import type { TransitionObservation } from "@chess-tabiya/runtime";
 import type { TransitionFeature } from "@chess-tabiya/schema/drill-pack";
 
+import { IRREVERSIBILITY_SUBKIND_LABELS } from "./labels/irreversibility-subkind.js";
+
 export function renderTransitionObservation(observation: TransitionObservation): string {
   if (observation.kind === "move_irreversibility") {
     if (observation.subkind === "castled") return `${observation.color} castled.`;
@@ -25,7 +27,7 @@ export function renderTransitionObservation(observation: TransitionObservation):
 }
 
 export function renderTransitionSpec(feature: TransitionFeature): string {
-  if (feature.kind === "move_irreversibility") return `The committed move has Tabiya's ${feature.subkind.replaceAll("_", " ")} irreversibility property.`;
+  if (feature.kind === "move_irreversibility") return `The committed move has Tabiya's ${IRREVERSIBILITY_SUBKIND_LABELS[feature.subkind].label} irreversibility property.`;
   const comparison = feature.comparison === "atLeast" ? "at least" : feature.comparison === "atMost" ? "at most" : "exactly";
   if (feature.kind === "attacked_squares_changed") return `${feature.color} ${feature.direction} ${comparison} ${feature.count} attacks on enemy-occupied squares.`;
   if (feature.kind === "defended_squares_changed") return `${feature.color} ${feature.direction} ${comparison} ${feature.count} defences of friendly-occupied squares.`;

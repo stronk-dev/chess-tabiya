@@ -72,14 +72,14 @@ const INSTANCE_LABELS: Readonly<Record<ProviderHealthSnapshot["instanceId"], str
 });
 
 /** Ordinary settings rows: a label and a plain state, no generation or timestamps. */
-export function providerRows(capabilities: Pick<Capabilities, "providerHealth">): readonly { readonly id: string; readonly label: string; readonly state: string }[] {
-  return capabilities.providerHealth.providers.map((row) => Object.freeze({ id: row.instanceId, label: INSTANCE_LABELS[row.instanceId], state: STATE_LABELS[row.state] }));
+export function providerRows(capabilities: Pick<Capabilities, "providerHealth">): readonly { readonly id: string; readonly label: string; readonly stateLabel: string }[] {
+  return capabilities.providerHealth.providers.map((row) => Object.freeze({ id: row.instanceId, label: INSTANCE_LABELS[row.instanceId], stateLabel: STATE_LABELS[row.state] }));
 }
 
 /** Inspector detail: implementation, generation prefix, reason and outcome times (§10). */
-export function providerInspectorRows(capabilities: Pick<Capabilities, "providerHealth">): readonly { readonly id: string; readonly detail: string }[] {
+export function providerInspectorRows(capabilities: Pick<Capabilities, "providerHealth">): readonly { readonly id: string; readonly label: string; readonly detail: string }[] {
   return capabilities.providerHealth.providers.map((row) => {
-    if (row.state === "not_configured") return Object.freeze({ id: row.instanceId, detail: "not configured" });
+    if (row.state === "not_configured") return Object.freeze({ id: row.instanceId, label: INSTANCE_LABELS[row.instanceId], detail: "not configured" });
     const parts: string[] = [row.state, row.implementation, `generation ${row.generation.slice(7, 19)}`];
     if ((row.state === "unavailable" || row.state === "degraded_cached_only") && row.reason !== null) parts.push(`reason ${row.reason}`);
     if (row.state === "recovering") parts.push(`after ${row.priorReason}, 1 of 2 successes`);
@@ -89,6 +89,6 @@ export function providerInspectorRows(capabilities: Pick<Capabilities, "provider
       if (row.lastSuccessAt !== null) parts.push(`last success ${row.lastSuccessAt}`);
       if (row.lastFailureAt !== null) parts.push(`last failure ${row.lastFailureAt}`);
     }
-    return Object.freeze({ id: row.instanceId, detail: parts.join(" · ") });
+    return Object.freeze({ id: row.instanceId, label: INSTANCE_LABELS[row.instanceId], detail: parts.join(" · ") });
   });
 }

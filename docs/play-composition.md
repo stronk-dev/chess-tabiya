@@ -26,9 +26,15 @@ Desktop uses a fixed 336 px companion rail. Tablet uses a fixed 176 px band. Pho
 rim in layout and expands its companion as an overlay sheet. Support, Branches and Actions form one
 queue: exactly one structural seat is expanded, Support is the ordinary default, a consequence guard
 selects Support, and creating a branch or branch group selects Branches. On phone, branch creation
-selects the seat without covering the board before the learner's next move. These structural seats
-are the shell into which the accepted learner modules will be compiled, not a substitute for those
-modules.
+selects the seat without covering the board before the learner's next move.
+
+Inside Support, the learner-module seats (`ModuleSeats.svelte`) exist only for modules the finalized
+help style composed with a play-timing effect. Each seat is a badged row (the badge is the delivered
+fact count; an on-request row carries no count before it is opened), expands to its card, or stays
+quiet when honestly empty; at most one seat is expanded. The Staged-move risk check owns the one
+board-adjacent head slot and appears only while a staged move is held for Revise or play-anyway.
+Every seat renders only sealed presentation components from the module query, and board paint is
+the expanded seat's own facts. The Guided Hint seat belongs to the hint-distance lane.
 
 Raw position structure, transition census, human-model candidates and corpus counts are available
 only in the explicit full-screen Evidence Inspector. Ordinary play does not render those diagnostic
@@ -61,5 +67,9 @@ text entry, Inspector, objective overlays and the phone companion sheet. It sepa
 stable board identity after a committed move, permanent pointer/touch/keyboard/text input and
 multi-user match behavior.
 
-The RFC remains implementing. The module seats and badges, remaining vocabulary cleanup and complete
-7×16 screenshot matrix are still required before archival.
+A module-seat matrix covers composition states 3 (staged move with the head-slot cue, followed by a
+real move submission), 5 (a rail module expanded), 9 (honest-empty and not-consulted states) and 13
+(max load, exactly one expanded) at all seven projections with the board rectangle unchanged.
+
+The RFC remains implementing: state 6 (guided hint at its final stage) waits on the hint-distance
+lane's seat, and the remaining vocabulary cleanup is still required before archival.

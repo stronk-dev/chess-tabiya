@@ -104,6 +104,7 @@
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
   import { importFailureCopy } from "./lib/import-presentation.js";
   import { assertFlipResponse } from "./lib/flip-response.js";
+  import { LIVE_SESSION_CREATE_ACTIONS, glossOrFallback, labelFor, labelOrFallback, learnerProse } from "./lib/labels/index.js";
   import {
     arenaLegState,
     classroomRoleLabel,
@@ -265,7 +266,7 @@
   let liveVoteDuration = $state(60);
   let liveVoteOptions = $state([{ moveUci: "", label: "" }, { moveUci: "", label: "" }]);
   let liveVoteAppliedMove = $state("");
-  let liveVoteStatus: string | undefined = $state();
+  let liveVoteMessage: string | undefined = $state();
   let liveInviteHandle = $state("");
   let liveInviteUrl = $state("");
   let liveInviteLeg: 1 | 2 = $state(1);
@@ -284,7 +285,7 @@
   let activeMatchActionError:string|undefined=$state();
   let activeMatchActionGeneration=0;
   let liveAudiencePreview = $state(false);
-  let liveOverlayCopyStatus: string | undefined = $state();
+  let liveOverlayCopyMessage: string | undefined = $state();
   let importPgn = $state("");
   let importUrl = $state("");
   let importSide: "white" | "black" = $state("white");
@@ -577,6 +578,8 @@
   }
 
   function packTitle(packId:string):string{return packs.find((pack)=>pack.id===packId)?.title??"Unavailable rehearsal";}
+  /** A draft is named by its document's own human title, never by its record id (rfc/evidence-presentation.md §6a). */
+  function draftTitle(document:unknown,field:"title"|"name",fallback:string):string{const value=document!==null&&typeof document==="object"&&!Array.isArray(document)?(document as Record<string,unknown>)[field]:undefined;return typeof value==="string"&&value.trim()!==""?value.trim():fallback;}
   function runTitle(run:RunSummary):string{return run.packId!==null&&run.title===run.packId?packTitle(run.packId):run.title;}
   function isOverdue(dueAt:string|null):boolean{return dueAt!==null&&Date.parse(dueAt)<Date.now();}
   function classroomMemberHandle(learnerId:string):string{return classroomDetail?.members.find((member)=>member.learnerId===learnerId)?.handle??"former member";}
@@ -622,14 +625,14 @@
   async function copyLiveOverlayUrl(runId: string): Promise<void> {
     const url = liveOverlayUrl(runId);
     if (navigator.clipboard === undefined) {
-      liveOverlayCopyStatus = "Clipboard access is unavailable here. Select and copy the URL above.";
+      liveOverlayCopyMessage = "Clipboard access is unavailable here. Select and copy the URL above.";
       return;
     }
     try {
       await navigator.clipboard.writeText(url);
-      liveOverlayCopyStatus = "Overlay URL copied.";
+      liveOverlayCopyMessage = "Overlay URL copied.";
     } catch {
-      liveOverlayCopyStatus = "The browser refused clipboard access. Select and copy the URL above.";
+      liveOverlayCopyMessage = "The browser refused clipboard access. Select and copy the URL above.";
     }
   }
 
@@ -901,7 +904,7 @@
         if(liveDetail?.session.id!==next.sessionId)liveSessionActionError=undefined;
         if(liveSessionActionBusy!==undefined&&liveSessionActionBusy.sessionId!==next.sessionId){++liveSessionActionGeneration;liveSessionActionBusy=undefined;}
         liveReclaimIntent=false;
-        liveVoteStatus=undefined;
+        liveVoteMessage=undefined;
         const loaded=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
         if(generation!==loadGeneration||refresh!==liveRefreshGeneration)return;
         [liveDetail,liveJournal]=loaded;
@@ -2261,12 +2264,12 @@
     const detail=liveDetail;
     const vote=detail?.vote;
     if(detail===undefined||vote===undefined||vote.window.state!=="open"||!vote.window.options.some((option)=>option.moveUci===choiceUci))return;
-    liveVoteStatus=undefined;
+    liveVoteMessage=undefined;
     await runLiveSessionAction(detail,{kind:"cast-vote",sessionId:detail.session.id,target:`${vote.window.id}:${choiceUci}`},async()=>{if(api.castVote===undefined)throw new Error("unavailable");return api.castVote(detail.session.id,vote.window.id,choiceUci);},{
       failure:"Your vote could not be recorded. The tally is unchanged; try again.",
       completionFailure:"Your vote may have been recorded, but its tally could not be matched. Reload before voting again.",
       refresh:false,
-      onCommitted:(tally)=>{assertLiveVoteTally(tally,detail,vote,"open",vote.window.appliedOptionUci);++liveRefreshGeneration;liveDetail={...detail,vote:tally};const option=tally.window.options.find((candidate)=>candidate.moveUci===choiceUci);liveVoteStatus=`Vote recorded for ${option?.label??choiceUci}. You can change it while the vote is open.`;},
+      onCommitted:(tally)=>{assertLiveVoteTally(tally,detail,vote,"open",vote.window.appliedOptionUci);++liveRefreshGeneration;liveDetail={...detail,vote:tally};const option=tally.window.options.find((candidate)=>candidate.moveUci===choiceUci);liveVoteMessage=`Vote recorded for ${option?.label??choiceUci}. You can change it while the vote is open.`;},
     });
   }
   async function closeLiveVote():Promise<void>{
@@ -2275,12 +2278,12 @@
     if(detail===undefined||vote===undefined||vote.window.state!=="open")return;
     const applied=liveVoteAppliedMove||null;
     if(applied!==null&&!vote.window.options.some((option)=>option.moveUci===applied))return;
-    liveVoteStatus=undefined;
+    liveVoteMessage=undefined;
     await runLiveSessionAction(detail,{kind:"close-vote",sessionId:detail.session.id,target:`${vote.window.id}:${applied??"none"}`},async()=>{if(api.closeVote===undefined)throw new Error("unavailable");return api.closeVote(detail.session.id,vote.window.id,applied??undefined);},{
       failure:"The vote could not be closed. It remains open; try again.",
       completionFailure:"The vote may have closed, but its tally could not be matched. Reload before acting again.",
       refresh:false,
-      onCommitted:(tally)=>{assertLiveVoteTally(tally,detail,vote,"closed",applied);++liveRefreshGeneration;liveDetail={...detail,vote:tally};const selected=tally.window.options.find((option)=>option.moveUci===tally.window.appliedOptionUci);liveVoteStatus=selected===undefined?"Vote closed. No move was recorded as applied.":`Vote closed. Recorded ${selected.label} as applied; no move was played.`;},
+      onCommitted:(tally)=>{assertLiveVoteTally(tally,detail,vote,"closed",applied);++liveRefreshGeneration;liveDetail={...detail,vote:tally};const selected=tally.window.options.find((option)=>option.moveUci===tally.window.appliedOptionUci);liveVoteMessage=selected===undefined?"Vote closed. No move was recorded as applied.":`Vote closed. Recorded ${selected.label} as applied; no move was played.`;},
     });
   }
   async function inviteLiveParticipant():Promise<void>{
@@ -2601,7 +2604,7 @@
         onStop={() => navigate("/play")}
         onAssistanceQuery={api.assistance === undefined ? undefined : (request) => api.assistance!(session.runState!.run.id, request)}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
-        onNudge={api.nudge === undefined ? undefined : (nodeId) => api.nudge!(session.runState!.run.id, nodeId)}
+        onModuleQuery={api.modules === undefined ? undefined : (body) => api.modules!(session.runState!.run.id, body)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
         onCompareVoice={operationConfigured(capabilities, "render.voice_compare") && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}
@@ -2640,7 +2643,7 @@
         <aside class="session-banner" aria-label="Distill run"><strong>Authoring seed</strong><span>Turn these recorded branches into a blocked draft for human judgment.</span>{#if distillDraftRunId === session.runState.run.id}<DistillDraftForm busy={distillDraftBusy} error={distillDraftError} onSubmit={distillActiveRun} onCancel={() => { distillDraftRunId = undefined; distillDraftError = undefined; }} />{:else}<button type="button" onclick={() => { distillDraftRunId = session.runState!.run.id; distillDraftError = undefined; }}>Distill to draft</button>{/if}</aside>
       {/if}
       {#if derivations?.source}
-        <aside class="session-banner" aria-label="Opposite-side replay source"><strong>Opposite-side replay</strong><span>Mirror of run {derivations.source.sourceRunId} from its recorded position.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.source!.sourceRunId }))}>Open source</button></aside>
+        <aside class="session-banner" aria-label="Opposite-side replay source"><strong>Opposite-side replay</strong><span>Mirror of the source run from its recorded position.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.source!.sourceRunId }))}>Open source</button></aside>
       {:else if derivations && derivations.derived.length > 0}
         <aside class="session-banner" aria-label="Opposite-side replays"><strong>Mirrored attempts</strong><span>{derivations.derived.length} opposite-side {derivations.derived.length === 1 ? "run" : "runs"}.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.derived[0]!.derivedRunId }))}>Open replay</button></aside>
       {/if}
@@ -2856,7 +2859,7 @@
       <aside class="resume-drafts" aria-label="Your drafts">
         <h2 id="resume-drafts-title">Resume one of your drafts</h2>
         <div class="row-actions">
-          {#each drafts as draft}<button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>{draft.packId} · {draft.state}</button>{:else}<p>No saved pack drafts yet.</p>{/each}
+          {#each drafts as draft}<button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>{draftTitle(draft.document, "title", "Untitled pack draft")} · {labelFor("pack_draft_state", draft.state)}</button>{:else}<p>No saved pack drafts yet.</p>{/each}
         </div>
       </aside>
       {/if}
@@ -2868,7 +2871,7 @@
           <h2>Your drafts</h2>
           {#each drafts as draft}
             <button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>
-              {draft.packId} · {draft.state}
+              {draftTitle(draft.document, "title", "Untitled pack draft")} · {labelFor("pack_draft_state", draft.state)}
             </button>
           {:else}<p>No database drafts yet. Paste a v{DRILL_PACK_SCHEMA_VERSION} pack to begin.</p>{/each}
         </aside>
@@ -2883,7 +2886,7 @@
             <button type="button" disabled={studioMutationBusy !== undefined || selectedPackDraft?.state !== "draft"} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => { if (selectedPackDraft) withdrawConfirmId = selectedPackDraft.id; }}>Withdraw…</button>
           </div>
           {#if studioMutationBusy !== undefined}<p id="studio-action-busy" role="status">{studioMutationBusy.kind === "playtest" ? "Saving the retained draft and starting its playtest…" : studioMutationBusy.kind === "register" ? "Registering the retained draft…" : studioMutationBusy.kind === "withdraw" ? "Withdrawing the retained draft…" : studioMutationBusy.kind === "save" ? "Saving the retained draft…" : "Creating one draft from these retained bytes…"}</p>{/if}
-          {#if selectedPackDraft?.state !== "draft"}<p id="draft-action-disabled" class="honest">{selectedPackDraft ? `This draft is ${selectedPackDraft.state}; its saved bytes remain read-only.` : "Select or create a draft first."}</p>{/if}
+          {#if selectedPackDraft?.state !== "draft"}<p id="draft-action-disabled" class="honest">{selectedPackDraft ? `This draft is ${labelFor("pack_draft_state", selectedPackDraft.state)}; its saved bytes remain read-only.` : "Select or create a draft first."}</p>{/if}
           {#if selectedPackDraft?.state === "draft" && (packLintState !== "ready" || !packBufferValidation?.valid)}<p id="playtest-disabled" class="honest">{packLintState === "waiting" ? "Waiting for you to pause typing…" : packLintState === "checking" ? "Checking these unsaved bytes…" : packLintState === "unavailable" ? "Live validation is unavailable; saving remains possible." : "Fix the listed validation errors before the real run can start."}</p>{/if}
           {#if selectedPackRegistrationBlock !== undefined}<p id="register-disabled" class="honest">{selectedPackRegistrationBlock}</p>{/if}
           {#if selectedPackDraft}<p id="pack-publication-retention" class="honest">Playtesting stays private and preserves the tested bytes. Registration publishes immutable document bytes, authored prose, licence, and attribution; those remain available with “deleted account” attribution if you later delete your account.</p>{/if}
@@ -2913,10 +2916,10 @@
           {:else}
             <p><strong>{blockingGraduationEntries.length}</strong> blocking · {packGraduationEntries.length - blockingGraduationEntries.length} discharged</p>
             <ol class="graduation-list">
-              {#each packGraduationEntries as entry}
+              {#each packGraduationEntries as entry, entryIndex}
                 <li class:blocking={entry.state === "blocking"}>
-                  <span>{entry.state.replaceAll("_", " ")}</span>
-                  <code>{entry.id}</code>
+                  <span>{labelFor("graduation_entry_state", entry.state)}</span>
+                  <span>Entry {entryIndex + 1}</span>
                   <p>{entry.statement}</p>
                   {#if entry.legacy}<small>Legacy or malformed entry; validation treats this as blocking.</small>{/if}
                 </li>
@@ -2938,15 +2941,15 @@
         <div class="vocabulary-status-grid">
           <section aria-labelledby="unused-principles-title">
             <h3 id="unused-principles-title">Unused principles</h3>
-            <ul>{#each authoringPrinciples.filter((principle) => principle.usedByPacks === 0) as principle}<li><strong>{principle.name}</strong> <code>{principle.id}</code></li>{:else}<li>Every registered principle is used by a served pack.</li>{/each}</ul>
+            <ul>{#each authoringPrinciples.filter((principle) => principle.usedByPacks === 0) as principle}<li><strong>{principle.name}</strong></li>{:else}<li>Every registered principle is used by a served pack.</li>{/each}</ul>
           </section>
           <section aria-labelledby="unused-shapes-title">
             <h3 id="unused-shapes-title">Unused shapes</h3>
-            <ul>{#each authoringShapes.filter((shape) => shape.usedByPacks === 0) as shape}<li><strong>{shape.name}</strong> <code>{shape.id}</code></li>{:else}<li>Every registered shape is used by a served pack.</li>{/each}</ul>
+            <ul>{#each authoringShapes.filter((shape) => shape.usedByPacks === 0) as shape}<li><strong>{shape.name}</strong></li>{:else}<li>Every registered shape is used by a served pack.</li>{/each}</ul>
           </section>
           <section aria-labelledby="unavailable-policies-title">
             <h3 id="unavailable-policies-title">Unavailable run policies</h3>
-            <ul>{#each capabilities?.unsupportedPolicyModes ?? [] as policy}<li><code>{policy.mode}</code> — {policy.reason}</li>{:else}<li>No declared policy modes are unavailable.</li>{/each}</ul>
+            <ul>{#each capabilities?.unsupportedPolicyModes ?? [] as policy}<li>{labelOrFallback("unsupported_policy_mode", policy.mode, "An undeclared opponent mode")} — {learnerProse(policy.reason, glossOrFallback("unsupported_policy_mode", policy.mode, "This opponent mode is not selectable yet."))}</li>{:else}<li>No declared policy modes are unavailable.</li>{/each}</ul>
           </section>
         </div>
       </section>
@@ -2954,7 +2957,7 @@
       <div class="studio-grid">
         <aside aria-label="Your shape drafts">
           <h3>Your shape drafts</h3>
-          {#each shapeDrafts as draft}<button type="button" disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} onclick={() => { selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); shapeActionError = undefined; }}>{draft.shapeId} · {draft.state}</button>{:else}<p>No shape drafts yet.</p>{/each}
+          {#each shapeDrafts as draft}<button type="button" disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} onclick={() => { selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); shapeActionError = undefined; }}>{draftTitle(draft.document, "name", "Untitled shape draft")} · {labelFor("pack_draft_state", draft.state)}</button>{:else}<p>No shape drafts yet.</p>{/each}
         </aside>
         <section>
           <fieldset class="shape-editor-fields" inert={shapeMutationBusy !== undefined} aria-busy={shapeMutationBusy !== undefined}>
@@ -2990,7 +2993,7 @@
                   {#if selectedShapeCorpusMatch}
                     <article aria-label="Selected matching position">
                       <h4>{selectedShapeCorpusMatch.packTitle}</h4>
-                      <p><code>{selectedShapeCorpusMatch.packId}</code> · authored ply {selectedShapeCorpusMatch.ply}</p>
+                      <p>{packTitle(selectedShapeCorpusMatch.packId)} · authored ply {selectedShapeCorpusMatch.ply}</p>
                       <div class="shape-corpus-board"><Chessboard fen={selectedShapeCorpusMatch.fen} startSide={selectedShapeCorpusMatch.startSide} disabled showDests={false} highlightMoves={false} onMove={() => false} /></div>
                     </article>
                   {:else}<p class="honest">Open any match to inspect the actual board.</p>{/if}
@@ -3056,7 +3059,7 @@
         {#if !liveTitle.trim()}<p id="live-title-required" class="honest">Give the session a title viewers will recognize.</p>{/if}
       </div>
       <section><h2>Your sessions</h2><p class="honest">Wall cards show rules facts and the pack's recorded objective state; they are never ordered or labelled by engine evaluation.</p><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{liveKindLabel(item.kind)} · {liveBoardControlLabel(item.boardControl)}</p>{#if item.classroom}<p>Classroom: <strong>{item.classroom.name}</strong></p>{/if}<p><strong>{liveTurnLabel(item)}</strong>{item.board.pausedAt ? ` · paused since ${readableDate(item.board.pausedAt)}` : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>Objective: {objectiveStateLabel(item.board.objectiveState)}</p><p>{item.board.lastMoveAt ? `Last move ${readableDate(item.board.lastMoveAt)}` : "No move committed yet"}</p><p>@{item.board.leaseHeldBy.handle} holds the board · {rehearsalTurnCount(item.board.plyCount)}</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
-      <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledReason=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{runSessionKindLabel(item.sessionKind)} · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledReason!==undefined} aria-describedby={liveCreateBusy?"live-create-busy":disabledReason===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if disabledReason&&!liveCreateBusy}<span id={`live-disabled-${item.id}`} class="honest">{disabledReason}</span>{/if}</article>{/each}</div>{#if runSelection.shown<runSelection.total}<p id="live-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs.</p><button type="button" disabled={runPageBusy} aria-describedby="live-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more source runs"}</button>{/if}{#if runPageError}<p role="alert">{runPageError}</p>{/if}{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
+      <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledCopy=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{runSessionKindLabel(item.sessionKind)} · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledCopy!==undefined} aria-describedby={liveCreateBusy?"live-create-busy":disabledCopy===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":LIVE_SESSION_CREATE_ACTIONS[liveKind]}</button>{#if disabledCopy&&!liveCreateBusy}<span id={`live-disabled-${item.id}`} class="honest">{disabledCopy}</span>{/if}</article>{/each}</div>{#if runSelection.shown<runSelection.total}<p id="live-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs.</p><button type="button" disabled={runPageBusy} aria-describedby="live-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more source runs"}</button>{/if}{#if runPageError}<p role="alert">{runPageError}</p>{/if}{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
       <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>
     </main>
   {:else if route.name === "live-session"}
@@ -3099,7 +3102,7 @@
               </div>
               {#if !liveVoteReady()}<p id="vote-disabled" class="honest">Choose two to eight different legal moves, give each an audience label, and set a duration from 15 seconds to 10 minutes.</p>{/if}
             {/if}
-            {#if liveDetail.vote}<p>{liveDetail.vote.window.prompt} · {voteStateLabel(liveDetail.vote.window.state)}</p>{#if liveDetail.vote.window.state==="open"}<div class="vote-options" role="group" aria-label={liveDetail.vote.window.prompt}>{#each liveDetail.vote.tally as item}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void castLiveVote(item.moveUci)}>Vote for {item.label} <span aria-hidden="true">· {item.count}</span></button>{/each}</div>{:else}<ul>{#each liveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul>{/if}{#if liveVoteStatus}<p role="status">{liveVoteStatus}</p>{/if}<p class="honest">{voteAttribution(liveDetail)}</p>{:else}<p>No vote window is open.</p>{/if}
+            {#if liveDetail.vote}<p>{liveDetail.vote.window.prompt} · {voteStateLabel(liveDetail.vote.window.state)}</p>{#if liveDetail.vote.window.state==="open"}<div class="vote-options" role="group" aria-label={liveDetail.vote.window.prompt}>{#each liveDetail.vote.tally as item}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void castLiveVote(item.moveUci)}>Vote for {item.label} <span aria-hidden="true">· {item.count}</span></button>{/each}</div>{:else}<ul>{#each liveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul>{/if}{#if liveVoteMessage}<p role="status">{liveVoteMessage}</p>{/if}<p class="honest">{voteAttribution(liveDetail)}</p>{:else}<p>No vote window is open.</p>{/if}
             <h2>Session history</h2>
             <ol>{#each liveJournal as entry}<li>{sessionJournalLabel(entry.kind)} · {journalActorLabel(entry.actorLearnerId)} · {readableDate(entry.at)}</li>{/each}</ol>
           </section>
@@ -3134,7 +3137,7 @@
             <p>The overlay is the spectator-safe board, objective, preserved attempts, marks, and vote tally—never the host's private evidence panels or controls.</p>
             <label>OBS browser-source URL <input readonly value={liveOverlayUrl(liveDetail.session.runId)} onclick={(event)=>event.currentTarget.select()}/></label>
             <div class="row-actions"><button type="button" onclick={()=>void copyLiveOverlayUrl(liveDetail!.session.runId)}>Copy overlay URL</button><button type="button" aria-expanded={liveAudiencePreview} aria-controls="audience-preview" onclick={()=>liveAudiencePreview=!liveAudiencePreview}>{liveAudiencePreview?"Hide audience preview":"See what your audience sees"}</button></div>
-            {#if liveOverlayCopyStatus}<p role="status">{liveOverlayCopyStatus}</p>{/if}
+            {#if liveOverlayCopyMessage}<p role="status">{liveOverlayCopyMessage}</p>{/if}
             <p class="honest">In OBS, add this URL as a Browser Source, open that source's interaction window, and sign in once inside OBS. The page has a transparent background.</p>
             <p class="honest"><strong>No board delay:</strong> viewers see each move as you commit it. If you are showing a game still being played, set the delay in your streaming software. Vote duration only controls when a poll closes; it does not delay the board.</p>
             {#if liveAudiencePreview}<div id="audience-preview" class="audience-preview"><p><strong>Spectator-safe preview</strong> — this is the same projection the browser source renders.</p><iframe title="Audience overlay preview" src={routePath({name:"live-overlay",runId:liveDetail.session.runId})}></iframe></div>{/if}
@@ -3154,7 +3157,7 @@
           <aside>
             <p class="eyebrow">Tabiya live</p>
             <h1>{objective.headline}</h1>
-            <p>{objective.status} · {session.runState.run.branches.length} {session.runState.run.branches.length===1?"preserved attempt":"preserved attempts"}</p>
+            <p>{learnerProse(objective.status)} · {session.runState.run.branches.length} {session.runState.run.branches.length===1?"preserved attempt":"preserved attempts"}</p>
             {#if attribution}<p id="live-overlay-mark-attribution">{attribution}</p>{/if}
             {#if activeLiveDetail?.vote}<p>{activeLiveDetail.vote.window.prompt}</p><ul>{#each activeLiveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul><p>{voteAttribution(activeLiveDetail)}</p>{/if}
             {#if session.runState.withheld}<p>Host is ahead; evidence is withheld until this run discloses.</p>{/if}
@@ -3369,7 +3372,7 @@
   .graduation-list li.blocking { border-color: var(--danger); }
   .graduation-list span { color: var(--muted); font: 700 0.68rem/1.2 ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; }
   .graduation-list li.blocking span { color: var(--danger); }
-  .graduation-list code, .graduation-list p { overflow-wrap: anywhere; }
+  .graduation-list p { overflow-wrap: anywhere; }
   .graduation-list p { margin: 0; }
   .empty-state p { max-width: 42rem; color: var(--muted); font-size: 1.05rem; }
   section + section { margin-top: 2rem; }

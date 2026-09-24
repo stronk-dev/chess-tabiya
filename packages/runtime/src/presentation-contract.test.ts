@@ -54,8 +54,8 @@ describe("evidence presentation Checkpoint A: the closed component vocabulary", 
       expect(declaration.forms).not.toContain("machine_condition");
       expect(Object.isFrozen(declaration)).toBe(true);
     }
-    // Honest checkpoint: the implemented subset is named, not implied.
-    expect(COMPONENT_IDS.filter((id) => COMPONENT_DECLARATIONS[id].checkpointA === "implemented").sort()).toEqual(["abstention", "citation", "claim", "enum_state", "fact_statement", "magnitude"]);
+    // Checkpoint B: every member ships its parser, renderer and client component.
+    expect(COMPONENT_IDS.filter((id) => COMPONENT_DECLARATIONS[id].implementation === "implemented")).toEqual([...COMPONENT_IDS]);
   });
 
   it("guards every component text boundary against raw ids, and enum_state by vocabulary totality (criterion 5)", () => {

@@ -147,6 +147,12 @@ if (!softwareDependencies.ruleFound || softwareDependencies.missing.length > 0) 
   failures.push("Makefile: verify-software must include the isolated performance tier");
 }
 
+// rfc/evidence-presentation.md criterion 20: the §8.2 component-coverage instrument is a release gate.
+const presentationDependencies = missingMakeDependencies(makefile, "verify-software", ["component-coverage"]);
+if (!presentationDependencies.ruleFound || presentationDependencies.missing.length > 0) {
+  failures.push("Makefile: verify-software must include component-coverage");
+}
+
 const governanceDependencies = missingMakeDependencies(makefile, "verify-governance", [
   "register-check",
   "status-parity",

@@ -8,6 +8,7 @@
     type SquareTemplateFeature,
   } from "@chess-tabiya/schema/drill-pack";
   import StructuralExpressionNode from "./StructuralExpressionNode.svelte";
+  import { PIECE_ROLE_LABELS, STRUCTURAL_FEATURE_KIND_LABELS, labelOrFallback } from "./labels/index.js";
   import { defaultStructuralExpression, defaultStructuralFeature, structuralExpressionKind, type StructuralExpressionKind } from "./structural-expression-builder.js";
 
   interface Props {
@@ -133,7 +134,7 @@
     <label>Square<input pattern="[a-h][1-8]" maxlength="2" value={expression.square} oninput={(event) => onExpression({ ...expression, square: event.currentTarget.value as typeof expression.square })} /></label>
     <label>Occupant
       <select value={expression.piece === null ? "empty" : expression.piece.role} onchange={(event) => onExpression({ ...expression, piece: event.currentTarget.value === "empty" ? null : { color: expression.piece?.color ?? WHITE_SIDE, role: event.currentTarget.value as typeof roles[number] } })}>
-        <option value="empty">Empty</option>{#each roles as role}<option value={role}>{role}</option>{/each}
+        <option value="empty">Empty</option>{#each roles as role}<option value={role}>{PIECE_ROLE_LABELS[role].label}</option>{/each}
       </select>
     </label>
     {#if expression.piece !== null}<label>Colour<select value={expression.piece.color} onchange={(event) => onExpression({ ...expression, piece: { ...expression.piece!, color: event.currentTarget.value as typeof sides[number] } })}>{#each sides as side}<option value={side}>{side}</option>{/each}</select></label>{/if}
@@ -149,7 +150,7 @@
     <div class="compact-row"><label>Files<input pattern="[a-h]-[a-h]" value={`${squareExpression.over.squares.files.from}-${squareExpression.over.squares.files.to}`} oninput={(event) => updateSquareRegion("files", event.currentTarget.value)} /></label><label>Ranks<input pattern="[1-8]-[1-8]" value={`${squareExpression.over.squares.ranks.from}-${squareExpression.over.squares.ranks.to}`} oninput={(event) => updateSquareRegion("ranks", event.currentTarget.value)} /></label></div>
     <label>Fact<select value={squareExpression.feature.kind} onchange={(event) => updateSquareTemplate(event.currentTarget.value === "piece" ? { kind: "piece", piece: null } : event.currentTarget.value === "direct_attack_count" ? { kind: "direct_attack_count", color: WHITE_SIDE, comparison: "atLeast", count: 1 } : { kind: event.currentTarget.value, color: WHITE_SIDE })}><option value="pawn_safe_square">Pawn-safe square</option><option value="outpost">Outpost</option><option value="passed_pawn">Passed pawn</option><option value="direct_attack_count">Attack count</option><option value="piece">Piece occupancy</option></select></label>
     {#if squareExpression.feature.kind === "piece"}
-      <label>Occupant<select value={squareExpression.feature.piece?.role ?? "empty"} onchange={(event) => updateSquareTemplate({ piece: event.currentTarget.value === "empty" ? null : { color: squareExpression!.feature.kind === "piece" ? squareExpression!.feature.piece?.color ?? WHITE_SIDE : WHITE_SIDE, role: event.currentTarget.value } })}><option value="empty">Empty</option>{#each roles as role}<option value={role}>{role}</option>{/each}</select></label>
+      <label>Occupant<select value={squareExpression.feature.piece?.role ?? "empty"} onchange={(event) => updateSquareTemplate({ piece: event.currentTarget.value === "empty" ? null : { color: squareExpression!.feature.kind === "piece" ? squareExpression!.feature.piece?.color ?? WHITE_SIDE : WHITE_SIDE, role: event.currentTarget.value } })}><option value="empty">Empty</option>{#each roles as role}<option value={role}>{PIECE_ROLE_LABELS[role].label}</option>{/each}</select></label>
       {#if squareExpression.feature.piece}<label>Colour<select value={squareExpression.feature.piece.color} onchange={(event) => updateSquarePieceColor(event.currentTarget.value)}>{#each sides as side}<option value={side}>{side}</option>{/each}</select></label>{/if}
     {:else}
       <label>Colour<select value={squareExpression.feature.color} onchange={(event) => updateSquareTemplate({ color: event.currentTarget.value })}>{#each sides as side}<option value={side}>{side}</option>{/each}</select></label>
@@ -158,7 +159,7 @@
   {:else if expression.kind === "feature"}
     <label>Position fact
       <select value={expression.feature.kind} onchange={(event) => replaceFeature(event.currentTarget.value)}>
-        {#each STRUCTURAL_FEATURE_KINDS as kind}<option value={kind}>{kind.replaceAll("_", " ")}</option>{/each}
+        {#each STRUCTURAL_FEATURE_KINDS as kind}<option value={kind}>{STRUCTURAL_FEATURE_KIND_LABELS[kind].label}</option>{/each}
       </select>
     </label>
     {@const feature = expression.feature}
@@ -167,17 +168,17 @@
     {#if "file" in feature}<label>File<select value={feature.file} onchange={(event) => updateFeature({ file: event.currentTarget.value })}>{#each files as file}<option value={file}>{file}</option>{/each}</select></label>{/if}
     {#if feature.kind === "line_blockers"}<div class="compact-row"><label>From<input pattern="[a-h][1-8]" maxlength="2" value={feature.from} oninput={(event) => updateFeature({ from: event.currentTarget.value })} /></label><label>To<input pattern="[a-h][1-8]" maxlength="2" value={feature.to} oninput={(event) => updateFeature({ to: event.currentTarget.value })} /></label></div>{/if}
     {#if "comparison" in feature}<div class="compact-row"><label>Compare<select value={feature.comparison} onchange={(event) => updateFeature({ comparison: event.currentTarget.value })}>{#each comparisons as comparison}<option value={comparison}>{comparison}</option>{/each}</select></label><label>Count<input type="number" value={feature.count} oninput={(event) => updateFeature({ count: event.currentTarget.valueAsNumber })} /></label></div>{/if}
-    {#if feature.kind === "piece_reach_count"}<div class="compact-row"><label>Piece<select value={feature.role} onchange={(event) => updateFeature({ role: event.currentTarget.value })}>{#each pieces as role}<option value={role}>{role}</option>{/each}</select></label><label>Scope<select value={feature.scope} onchange={(event) => updateFeature({ scope: event.currentTarget.value })}><option value="any">Any piece</option><option value="every">Every piece</option></select></label></div>{/if}
+    {#if feature.kind === "piece_reach_count"}<div class="compact-row"><label>Piece<select value={feature.role} onchange={(event) => updateFeature({ role: event.currentTarget.value })}>{#each pieces as role}<option value={role}>{PIECE_ROLE_LABELS[role].label}</option>{/each}</select></label><label>Scope<select value={feature.scope} onchange={(event) => updateFeature({ scope: event.currentTarget.value })}><option value="any">Any piece</option><option value="every">Every piece</option></select></label></div>{/if}
     {#if feature.kind === "named_structure"}<label>Structure<select value={feature.id} onchange={(event) => updateFeature({ id: event.currentTarget.value })}><option value="carlsbad">Carlsbad</option><option value="iqp-white">White IQP</option><option value="iqp-black">Black IQP</option><option value="maroczy-bind">Maróczy bind</option></select></label>{/if}
     {#if feature.kind === "bishop_on_shade"}<label>Square colour<select value={feature.shade} onchange={(event) => updateFeature({ shade: event.currentTarget.value })}><option value="light">Light</option><option value="dark">Dark</option></select></label>{/if}
     {#if feature.kind === "pawn_count" || feature.kind === "piece_count"}<label>Basis<select value={feature.basis} onchange={(event) => updateFeature({ basis: event.currentTarget.value })}><option value="count">Count</option><option value="difference">Difference</option></select></label>{/if}
-    {#if feature.kind === "piece_count"}<label>Piece<select value={feature.role} onchange={(event) => updateFeature({ role: event.currentTarget.value })}>{#each roles as role}<option value={role}>{role}</option>{/each}</select></label>{/if}
+    {#if feature.kind === "piece_count"}<label>Piece<select value={feature.role} onchange={(event) => updateFeature({ role: event.currentTarget.value })}>{#each roles as role}<option value={role}>{PIECE_ROLE_LABELS[role].label}</option>{/each}</select></label>{/if}
     {#if feature.kind === "king_opposition"}<label>Form<select value={feature.form} onchange={(event) => updateFeature({ form: event.currentTarget.value })}><option value="direct">Direct</option><option value="distant">Distant</option></select></label>{/if}
     {#if feature.kind === "king_zone"}<label>Zone<select value={feature.zone} onchange={(event) => updateFeature({ zone: event.currentTarget.value })}><option value="edge">Edge</option><option value="corner">Corner</option></select></label>{/if}
     {#if feature.kind === "piece_distance"}
-      <label>Piece<select value={feature.role} onchange={(event) => updateFeature({ role: event.currentTarget.value })}>{#each ["king", ...pieces] as role}<option value={role}>{role}</option>{/each}</select></label>
+      <label>Piece<select value={feature.role} onchange={(event) => updateFeature({ role: event.currentTarget.value })}>{#each ["king", ...pieces] as role}<option value={role}>{labelOrFallback("piece_role", role, "piece")}</option>{/each}</select></label>
       <label>Target<select value={feature.target.kind} onchange={(event) => updateFeature({ target: event.currentTarget.value === "square" ? { kind: "square", square: "e4" } : { kind: "piece", color: BLACK_SIDE, role: "king" } })}><option value="square">Square</option><option value="piece">Piece</option></select></label>
-      {#if feature.target.kind === "square"}<label>Target square<input pattern="[a-h][1-8]" maxlength="2" value={feature.target.square} oninput={(event) => updateFeature({ target: { ...feature.target, square: event.currentTarget.value } })} /></label>{:else}<div class="compact-row"><label>Target colour<select value={feature.target.color} onchange={(event) => updateFeature({ target: { ...feature.target, color: event.currentTarget.value } })}>{#each sides as side}<option value={side}>{side}</option>{/each}</select></label><label>Target piece<select value={feature.target.role} onchange={(event) => updateFeature({ target: { ...feature.target, role: event.currentTarget.value } })}>{#each roles as role}<option value={role}>{role}</option>{/each}</select></label></div>{/if}
+      {#if feature.target.kind === "square"}<label>Target square<input pattern="[a-h][1-8]" maxlength="2" value={feature.target.square} oninput={(event) => updateFeature({ target: { ...feature.target, square: event.currentTarget.value } })} /></label>{:else}<div class="compact-row"><label>Target colour<select value={feature.target.color} onchange={(event) => updateFeature({ target: { ...feature.target, color: event.currentTarget.value } })}>{#each sides as side}<option value={side}>{side}</option>{/each}</select></label><label>Target piece<select value={feature.target.role} onchange={(event) => updateFeature({ target: { ...feature.target, role: event.currentTarget.value } })}>{#each roles as role}<option value={role}>{PIECE_ROLE_LABELS[role].label}</option>{/each}</select></label></div>{/if}
     {/if}
   {/if}
 </fieldset>

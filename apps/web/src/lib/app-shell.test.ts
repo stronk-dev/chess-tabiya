@@ -39,6 +39,7 @@ import { setPreferenceField } from "@chess-tabiya/runtime";
 import { HistoryRouter } from "./router.js";
 import { WriterSession, writerStorageKey, type KeyValueStorage } from "./writer-session.js";
 import { botRosterFixture } from "./bot-roster.test-support.js";
+import { OBJECTIVE_TYPE_LABELS } from "./labels/index.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const E4_FEN = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
@@ -106,7 +107,7 @@ const packSummary: PackSummary = {
   mode: pack.mode as string,
   phase: "opening",
   difficulty: pack.difficulty,
-  objectiveSummary: pack.objective.summary ?? pack.objective.type.replaceAll("_", " "),
+  objectiveSummary: pack.objective.summary ?? OBJECTIVE_TYPE_LABELS[pack.objective.type].label,
   concepts: (pack.concepts ?? []).map((id) => ({ id, label: id, status: "active" as const })),
   reviewStatus: "schema_example",
   channel: "official",
@@ -2906,7 +2907,7 @@ describe("application shell", () => {
     const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, updatePackDraft, lintPackDraft, playtestPackDraft };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     await vi.waitFor(() => expect(document.querySelector<HTMLButtonElement>("button.primary")?.disabled).toBe(false));
     expect(lintPackDraft).toHaveBeenCalledWith(draft.id, expect.objectContaining({ id: pack.id }));
@@ -2933,7 +2934,7 @@ describe("application shell", () => {
     };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     const save = await vi.waitFor(() => {
       const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Save");
@@ -2973,7 +2974,7 @@ describe("application shell", () => {
     };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     const register = await vi.waitFor(() => {
       const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Register community pack")!;
@@ -2984,7 +2985,7 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(registerPackDraft).toHaveBeenCalledTimes(1));
     await vi.waitFor(() => expect(document.body.textContent).toContain("The pack was registered, but the draft list could not refresh."));
     expect(document.body.textContent).not.toContain("private refresh trace");
-    expect(document.body.textContent).toContain(`${pack.id} · registered`);
+    expect(document.body.textContent).toContain(`${pack.title as string} · registered`);
     await unmount(component);
   });
 
@@ -3002,10 +3003,11 @@ describe("application shell", () => {
     const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, async lintPackDraft() { return draft.validation; } };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     await vi.waitFor(() => expect(document.querySelector(".graduation-column")?.textContent).toContain("1 blocking · 1 discharged"));
-    expect(document.querySelector(".graduation-column")?.textContent).toContain("needs-source");
+    expect(document.querySelector(".graduation-column")?.textContent).toContain("Entry 1");
+    expect(document.querySelector(".graduation-column")?.textContent).not.toContain("needs-source");
 
     const next = structuredClone(documentWithConditions) as Record<string, unknown>;
     (next.provenance as { graduationBlockers: { state: string }[] }).graduationBlockers[0]!.state = "resolved";
@@ -3033,7 +3035,7 @@ describe("application shell", () => {
     const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, updatePackDraft, lintPackDraft };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     await vi.waitFor(() => expect(lintPackDraft).toHaveBeenCalledTimes(1));
     const textarea = document.querySelector<HTMLTextAreaElement>("#studio-json")!;
@@ -3129,7 +3131,7 @@ describe("application shell", () => {
     const router = new HistoryRouter(window);
     const component = mount(App, { target: target(), props: { api: shapeApi, router, storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("shape-one · draft"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Untitled shape draft · draft"));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
     const create = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Create shape draft")!;
     create.click();
@@ -3175,12 +3177,12 @@ describe("application shell", () => {
     };
     const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("shape-one · draft"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Untitled shape draft · draft"));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
     const register = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Register community shape")!;
     await vi.waitFor(() => expect(register.disabled).toBe(false));
     register.click();
-    await vi.waitFor(() => expect(document.body.textContent).toContain("shape-one · registered"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Untitled shape draft · registered"));
     expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe("The shape was registered, but the draft list could not refresh. Reload Create to see its current state.");
     await unmount(component);
   });
@@ -3395,7 +3397,7 @@ describe("application shell", () => {
     const shapeApi: DrillClientApi = { ...api(), async packDrafts() { return []; }, async shapeDrafts() { return [shapeDraft]; } };
     const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("duration-shape · draft"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Untitled shape draft · draft"));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
     await vi.waitFor(() => expect(document.body.textContent).toContain("No success signature has been chosen."));
     const reason = document.querySelector<HTMLTextAreaElement>(".signature-editor article textarea")!;
@@ -3441,7 +3443,7 @@ describe("application shell", () => {
     const shapeApi: DrillClientApi = { ...api(), async packDrafts() { return []; }, async shapeDrafts() { return [shapeDraft]; }, lintShapeDraft };
     const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("builder-shape · draft"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Untitled shape draft · draft"));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
     await vi.waitFor(() => expect(document.querySelector("#signature-editor-title")?.textContent).toBe("Structural expression builder"));
 
@@ -3494,10 +3496,11 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(document.querySelector("#vocabulary-status-title")?.textContent).toBe("Vocabulary status"));
     const status = document.querySelector<HTMLElement>(".vocabulary-status")!;
     expect(status.textContent).toContain("Loose principle");
-    expect(status.textContent).toContain("orphan-principle");
+    expect(status.textContent).not.toContain("orphan-principle");
     expect(status.textContent).toContain("Unclaimed outpost");
     expect(status.textContent).not.toContain("Used shape");
-    expect(status.textContent).toContain("plan_defense");
+    expect(status.textContent).toContain("Plan defence");
+    expect(status.textContent).not.toContain("plan_defense");
     expect(status.textContent).toContain("No move selector implements this declared mode.");
     await unmount(component);
   });
@@ -3515,7 +3518,7 @@ describe("application shell", () => {
     const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; } };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     await vi.waitFor(() => expect(document.querySelector("#provenance-editor-title")?.textContent).toBe("Provenance"));
     const posture = [...document.querySelectorAll<HTMLInputElement>("input[name='pack-provenance-posture']")].find((input) => input.parentElement?.textContent?.includes("CC BY-SA"))!;
@@ -3557,7 +3560,7 @@ describe("application shell", () => {
     };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     await vi.waitFor(() => expect(document.querySelector("#vocabulary-editor-title")?.textContent).toBe("Pack vocabulary"));
     const shapeLabel = [...document.querySelectorAll<HTMLLabelElement>(".vocabulary-editor .picker-choice")].find((label) => label.textContent?.includes("Carlsbad structure"))!;
@@ -3585,7 +3588,7 @@ describe("application shell", () => {
     const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, withdrawPackDraft };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     const withdraw = await vi.waitFor(() => {
       const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Withdraw…");

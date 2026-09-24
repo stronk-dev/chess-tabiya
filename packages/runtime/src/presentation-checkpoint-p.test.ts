@@ -12,6 +12,7 @@ import { describe, expect, it } from "vitest";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
 import * as runtime from "./index.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import {
   CORPUS_RESULT_ABSTENTION_REASONS,
   PRIMARY_EVIDENCE_MANIFEST,
@@ -42,13 +43,13 @@ import {
 } from "./index.js";
 
 const CHECKPOINT_P_ROWS = Object.freeze({
-  "internal-opponent": "not_yet_landed",
-  "internal-repertoire": "not_yet_landed",
-  "internal-story-rank": "not_yet_landed",
+  "internal-opponent": "landed",
+  "internal-repertoire": "landed",
+  "internal-story-rank": "landed",
   "named-structure-geometry": "landed",
-  "pack-phase-payload": "not_yet_landed",
+  "pack-phase-payload": "landed",
   "consequence-payload": "landed",
-  "source-bound-citation": "partially_landed",
+  "source-bound-citation": "landed",
   "explorer-absence-reason": "landed",
 } as const);
 
@@ -111,34 +112,34 @@ describe("Checkpoint P fence: population", () => {
   });
 });
 
-describe("internal-opponent — NOT YET LANDED (opponent.selection@1 still declares presentational forms)", () => {
-  it("preimage: the consumer and its bindings carry list/panel forms", () => {
-    expect(CHECKPOINT_P_ROWS["internal-opponent"]).toBe("not_yet_landed");
-    expect(presentational(consumer("opponent.selection").forms)).toEqual(["list", "panel"]);
+describe("internal-opponent — LANDED (opponent.selection@1 is a machine-only operation)", () => {
+  it("postimage: the consumer and every binding declare only machine_condition", () => {
+    expect(CHECKPOINT_P_ROWS["internal-opponent"]).toBe("landed");
+    expect(consumer("opponent.selection").forms).toEqual(["machine_condition"]);
     const bindings = bindingsOf("opponent.selection");
     expect(bindings.length).toBeGreaterThan(0);
-    expect(bindings.some((binding) => presentational(binding.forms).length > 0)).toBe(true);
+    for (const binding of bindings) expect(presentational(binding.forms)).toEqual([]);
   });
 });
 
-describe("internal-repertoire — NOT YET LANDED (runtime.repertoire_scan@1 still declares presentational forms)", () => {
-  it("preimage: the consumer admits position stats with list/panel forms", () => {
-    expect(CHECKPOINT_P_ROWS["internal-repertoire"]).toBe("not_yet_landed");
-    expect(presentational(consumer("runtime.repertoire_scan").forms)).toEqual(["list", "panel"]);
+describe("internal-repertoire — LANDED (runtime.repertoire_scan@1 is a machine-only operation)", () => {
+  it("postimage: the consumer still admits position stats, with no presentational form", () => {
+    expect(CHECKPOINT_P_ROWS["internal-repertoire"]).toBe("landed");
+    expect(consumer("runtime.repertoire_scan").forms).toEqual(["machine_condition"]);
     const result = parseCorpusResultAbstention({ kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population });
     const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [corpusPositionEvidence(result)]);
     expect(view.items.map((item) => item.projection.id)).toEqual(["human.explorer.position_stats"]);
     const [binding] = bindingsOf("runtime.repertoire_scan", "human.explorer.position_stats");
-    expect(presentational(binding!.forms)).toEqual(["list", "panel"]);
+    expect(presentational(binding!.forms)).toEqual([]);
   });
 });
 
-describe("internal-story-rank — NOT YET LANDED (derived.story.rank@1 is still a visual review.story binding)", () => {
-  it("preimage: review.story binds story rank with presentational forms", () => {
-    expect(CHECKPOINT_P_ROWS["internal-story-rank"]).toBe("not_yet_landed");
+describe("internal-story-rank — LANDED (derived.story.rank@1 is selection-only for review.story)", () => {
+  it("postimage: the review.story rank binding carries only machine_condition; its siblings stay visual", () => {
+    expect(CHECKPOINT_P_ROWS["internal-story-rank"]).toBe("landed");
     const [binding] = bindingsOf("review.story", "derived.story.rank");
-    expect(binding).toBeDefined();
-    expect(presentational(binding!.forms).length).toBeGreaterThan(0);
+    expect(binding!.forms).toEqual(["machine_condition"]);
+    for (const other of bindingsOf("review.story").filter((entry) => entry.projection.id !== "derived.story.rank")) expect(other.forms).not.toContain("machine_condition");
   });
 });
 
@@ -151,20 +152,20 @@ describe("named-structure-geometry — LANDED operation (one registry decides ma
     expect(observed.map((feature) => feature.squares)).toEqual([["c4", "e4"]]);
   });
 
-  it("NOT YET LANDED: named_structure@2 evidence still retains id/name/provenanceNote without witness squares", () => {
-    expect(projection("rules.structural.reading.named_structure", 2).operands).toEqual(["id", "name", "provenanceNote"]);
+  it("postimage: named_structure@2 evidence retains typed identity and the exact matched-witness squares", () => {
+    expect(projection("rules.structural.reading.named_structure", 2).operands).toEqual(["id", "name", "provenanceNote", "squares"]);
     const named = guidanceAt(MAROCZY).filter((item) => item.projection.id === "rules.structural.reading.named_structure");
-    expect(named.map((item) => item.payload)).toEqual([{ id: "maroczy-bind", name: "Maroczy Bind", provenanceNote: "Tabiya catalogue convention: White pawns on c4/e4 with the declared open files." }]);
+    expect(named.map((item) => item.payload)).toEqual([{ id: "maroczy-bind", name: "Maroczy Bind", provenanceNote: "Tabiya catalogue convention: White pawns on c4/e4 with the declared open files.", squares: ["c4", "e4"] }]);
   });
 });
 
-describe("pack-phase-payload — NOT YET LANDED (pack.authored.phase@1 is still a bare string without a {phase} operand)", () => {
-  it("preimage: the catalogue declares no operand and the factory mints the bare phase string", () => {
-    expect(CHECKPOINT_P_ROWS["pack-phase-payload"]).toBe("not_yet_landed");
-    expect(projection("pack.authored.phase").operands).toEqual([]);
+describe("pack-phase-payload — LANDED (pack.authored.phase@1 is the exact {phase} payload)", () => {
+  it("postimage: the catalogue declares the phase operand and the factory mints {phase}", () => {
+    expect(CHECKPOINT_P_ROWS["pack-phase-payload"]).toBe("landed");
+    expect(projection("pack.authored.phase").operands).toEqual(["phase"]);
     const pack = { id: "checkpoint-p-pack", phase: "endgame" } as unknown as DrillPackDefinition;
     const phase = guidanceAt(MAROCZY, pack).filter((item) => item.projection.id === "pack.authored.phase");
-    expect(phase.map((item) => item.payload)).toEqual(["endgame"]);
+    expect(phase.map((item) => item.payload)).toEqual([{ phase: "endgame" }]);
   });
 });
 
@@ -185,9 +186,9 @@ describe("consequence-payload — LANDED with the Review Story slice (discrimina
   });
 });
 
-describe("source-bound-citation — registry LANDED; derived.citation.attribution@1 NOT YET LANDED", () => {
+describe("source-bound-citation — LANDED (registry plus derived.citation.attribution@1)", () => {
   it("postimage: the registry issues identity only for its parsed image and resolves attribution without guessing", () => {
-    expect(CHECKPOINT_P_ROWS["source-bound-citation"]).toBe("partially_landed");
+    expect(CHECKPOINT_P_ROWS["source-bound-citation"]).toBe("landed");
     expect(sourceAttributionRegistryDigest(SOURCE_ATTRIBUTION_REGISTRY_IMAGE)).toBe(SOURCE_ATTRIBUTION_REGISTRY_RESOURCE.digest);
     expect(() => sourceAttributionRegistryDigest({ id: "source-attribution-registry", version: 1, rows: [] } as unknown as ParsedSourceAttributionRegistryImage)).toThrow(TypeError);
     expect(() => parseSourceAttributionRegistryImage({ id: "source-attribution-registry", version: 1, rows: [] })).toThrow(TypeError);
@@ -198,9 +199,21 @@ describe("source-bound-citation — registry LANDED; derived.citation.attributio
     }
   });
 
-  it("preimage: no derived.citation.attribution projection exists and runtime.evidence_ref does not accept one", () => {
-    expect(PRIMARY_EVIDENCE_MANIFEST.projections.some((entry) => entry.id === "derived.citation.attribution")).toBe(false);
-    expect(consumer("runtime.evidence_ref").accepts.some((ref) => ref.id === "derived.citation.attribution")).toBe(false);
+  it("postimage: the derivation joins one resolution to exactly its source item and abstains without metadata", () => {
+    expect(projection("derived.citation.attribution").operands).toEqual(["content", "source"]);
+    expect(consumer("runtime.evidence_ref").accepts.some((ref) => ref.id === "derived.citation.attribution")).toBe(true);
+    const packet = { kind: "tablebase", source: "tablebase_exact", values: { category: "win", pieceCount: 4, dtz: 3 } } as const;
+    const resolution = invokeEvidenceValueRoute("run.record.evidence_ref_resolution@1", { reference: "tablebase:probe-1", payloads: new Map([["tablebase:probe-1", packet]]) });
+    const source = invokeEvidenceValueRoute("live.syzygy.result@1", { packet });
+    const cited = invokeEvidenceValueRoute("derived.citation.attribution@1", { resolution, source, sourceMetadata: { kind: "remote_endpoint", endpointId: "lichess_tablebase" } });
+    expect(cited.kind).toBe("available");
+    const payload = (cited as { readonly value: DeclaredEvidence<{ readonly content: { readonly text: string }; readonly source: { readonly licence: string; readonly revision: string } }> }).value.payload;
+    expect(payload.content.text).toBe(resolution.payload.text);
+    expect(payload.source).toMatchObject({ licence: "computed-chess-facts/no-rights-asserted", revision: "standard-endpoint-contract@1" });
+    // Missing receipt metadata abstains; a different source's bytes break the content join.
+    expect(invokeEvidenceValueRoute("derived.citation.attribution@1", { resolution, source })).toEqual({ kind: "unavailable", reason: "source_attribution_absent" });
+    const other = invokeEvidenceValueRoute("live.syzygy.result@1", { packet: { ...packet, values: { category: "draw", pieceCount: 4, dtz: 0 } } });
+    expect(invokeEvidenceValueRoute("derived.citation.attribution@1", { resolution, source: other, sourceMetadata: { kind: "remote_endpoint", endpointId: "lichess_tablebase" } })).toEqual({ kind: "unavailable", reason: "citation_content_absent" });
   });
 });
 

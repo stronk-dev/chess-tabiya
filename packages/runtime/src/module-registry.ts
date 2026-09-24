@@ -35,6 +35,7 @@ import {
 import { MODULE_POLICIES, moduleSessions, type ModulePolicy } from "./module-policy.js";
 import { PRESET_DECLARATIONS, WORKFLOW_CONTEXT_POLICIES, type PresetDeclaration, type WorkflowContextPolicy } from "./presets.js";
 import { presentationAdapter } from "./presentation-contract.js";
+import { MODULE_QUERY_OPERATION, moduleQuerySourceRoutes } from "./module-query-sources.js";
 
 const ref = (id: string, version = 1): VersionedEvidenceId => Object.freeze({ id, version });
 const refKey = (value: VersionedEvidenceId): string => `${value.id}@${value.version}`;
@@ -225,6 +226,14 @@ export interface ModuleOperation {
   readonly projections: readonly VersionedEvidenceId[];
 }
 
+const parseRef = (key: string): VersionedEvidenceId => { const [id, version] = key.split("@") as [string, string]; return ref(id, Number(version)); };
+/** One `queryModules` operation row per module it delivers (rfc/module-registration.md §2.5.2). */
+function queryOperation(module: Exclude<EvidenceModuleId, "review_map" | "postcommit_nudge">, timing: ModuleTiming): ModuleOperation {
+  const accepted = MODULE_CONSUMER_ACCEPTS[module].map(refKey);
+  const acquired = new Set(moduleQuerySourceRoutes(module, accepted));
+  return Object.freeze({ module, operation: MODULE_QUERY_OPERATION, timing, projections: Object.freeze(accepted.filter((key) => acquired.has(key)).map(parseRef)) });
+}
+
 /** The production module operations that exist today. Every other compiled pair is blocked. */
 export const MODULE_OPERATIONS: readonly ModuleOperation[] = Object.freeze([
   Object.freeze({
@@ -233,14 +242,21 @@ export const MODULE_OPERATIONS: readonly ModuleOperation[] = Object.freeze([
     projections: Object.freeze([ref("derived.grade.move_quality"), ref("live.stockfish.eval"), ...RECORDED_PATH_SUCCESSOR_REFS, ...["derived.review.eval_point", "derived.review.eval_delta", "derived.review.mate_transition", "derived.review.wdl_point"].map((id) => ref(id))]),
   }),
   Object.freeze({
-    module: "postcommit_nudge" as const, operation: "postcommitNudgePacket", timing: "post_commit" as const,
+    // Checkpoint B: the post-commit seat is now delivered by the one query operation.
+    module: "postcommit_nudge" as const, operation: MODULE_QUERY_OPERATION, timing: "post_commit" as const,
     projections: Object.freeze([ref("derived.grade.move_quality"), ...ONE_EDGE_EVENT_REFS.filter((value) => MODULE_CONSUMER_ACCEPTS.postcommit_nudge.some((accepted) => refKey(accepted) === refKey(value)))]),
   }),
+  queryOperation("sight_on_request", "pre_commit"),
+  queryOperation("blunder_prevention", "at_commit"),
+  queryOperation("threat_radar", "pre_commit"),
+  queryOperation("structure_nudge", "post_commit"),
+  queryOperation("theory_breadcrumb", "post_commit"),
+  queryOperation("compare_coach", "checkpoint"),
+  queryOperation("full_inspector", "review"),
 ]);
 
-const PRESENTATION_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "evidence-presentation", ledger: "module-registration A5", reason: "Pair-keyed presentation adapters and the sealed relation_overlay are draft; no seat may render this pair yet." });
-const QUERY_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "module-registration", ledger: "D8", reason: "RunService.queryModules and compileModuleExactOperationResolution have not landed; no production operation acquires this pair's sealed source." });
-const RECEIPT_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "intent-presets", ledger: "D1866", reason: "Pre-/at-commit output requires the server-created ephemeral ModuleDisclosureReceipt (§2.5, A16)." });
+const PRESENTATION_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "evidence-presentation", ledger: "module-registration A5", reason: "No exact pair-keyed presentation adapter is registered for this pair; no seat may render it." });
+const SOURCE_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "module-registration", ledger: "D8", reason: "The query operation does not acquire this pair's sealed source (a provider page or multi-edge window the explicit surface does not demand); it is stated as a not-requested family, never an empty fact." });
 const CANDIDATE_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "shared-candidate-evidence-packet", ledger: "D745", reason: "Avoidance needs the complete legal-alternative population at the committed edge; the post-commit operation reads one edge." });
 const WINDOW_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "recorded-semantic-path", ledger: "D1870", reason: "This v1 sequence/observed event derives from a multi-edge window; the recorded-path compiler emits only its v2 successor, and only over a Review branch." });
 const REVIEW_OPERATION_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "review-map", ledger: "review-evidence-compiler D1", reason: "No Review Map production operation acquires this pair's sealed source yet; the final Review Map source-local admission policy (D928) decides which packet families it requests." });
@@ -254,12 +270,11 @@ function pairBlockers(module: ModuleDeclaration, projection: VersionedEvidenceId
     if (projection.id.startsWith("derived.semantic_avoidance.")) return [CANDIDATE_BLOCKER, PRESENTATION_BLOCKER];
     if (SEQUENCE_EVENT_IDS.has(projection.id)) return [WINDOW_BLOCKER, PRESENTATION_BLOCKER];
   }
-  // evidence-presentation Checkpoint A: a pair with a registered pair-keyed adapter is no longer
-  // blocked on presentation; only its missing production operation remains.
+  // evidence-presentation Checkpoint B: a pair with a registered pair-keyed adapter is blocked only
+  // by its missing acquisition; the query operation and its disclosure receipts have landed.
   const presentable = presentationAdapter({ id: `module.${module.id}`, version: 1 }, projection) !== undefined;
   if (module.id === "review_map") return presentable ? [REVIEW_OPERATION_BLOCKER] : [REVIEW_OPERATION_BLOCKER, PRESENTATION_BLOCKER];
-  const live = module.timings.some((value) => value.timing === "pre_commit" || value.timing === "at_commit");
-  return live ? [RECEIPT_BLOCKER, QUERY_BLOCKER, PRESENTATION_BLOCKER] : [QUERY_BLOCKER, PRESENTATION_BLOCKER];
+  return presentable ? [SOURCE_BLOCKER] : [SOURCE_BLOCKER, PRESENTATION_BLOCKER];
 }
 
 /** Every compiled module pair, each either executable through a named operation or blocked by name. */
@@ -267,7 +282,9 @@ export const MODULE_PAIR_EXECUTION: readonly ModulePairExecution[] = Object.free
   if (module.accepts.kind !== "manifest") return [];
   const operation = MODULE_OPERATIONS.find((value) => value.module === module.id);
   return module.accepts.projections.map(({ projection }): ModulePairExecution => {
-    const executable = operation?.projections.some((value) => refKey(value) === refKey(projection)) === true;
+    // Executable = a production operation acquires the pair's sealed source AND an exact pair-keyed
+    // adapter presents it (module-registration A5). A missing adapter is a named blocker, never a gap.
+    const executable = operation?.projections.some((value) => refKey(value) === refKey(projection)) === true && presentationAdapter({ id: `module.${module.id}`, version: 1 }, projection) !== undefined;
     return Object.freeze(executable
       ? { module: module.id, projection, status: "executable" as const, operation: operation!.operation, timing: operation!.timing }
       : { module: module.id, projection, status: "blocked_dependencies" as const, blockers: Object.freeze(pairBlockers(module, projection)) });
