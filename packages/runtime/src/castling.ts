@@ -2,7 +2,7 @@ import { normalizeMove } from "chessops/chess";
 import type { Color, NormalMove, Square, SquareName } from "chessops/types";
 import { makeSquare, opposite, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 
 export type CastlingWing = "kingside" | "queenside";
 type CastleSide = "h" | "a";

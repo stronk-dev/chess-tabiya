@@ -3,10 +3,11 @@ import { normalizeMove } from "chessops/chess";
 import type { Color, Move, Piece, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { EXCHANGE_PIECE_VALUES } from "./exchange.js";
 import { matchesStructuralFeature } from "./structure.js";
 import { transitionSemanticFacts } from "./transition.js";
+import { memoByInput } from "./fen-memo.js";
 
 export const CANDIDATE_MAJORITY_CONVENTION = "candidate-majority@1" as const;
 export const RACE_ARRIVAL_CONVENTION = "race-arrival@1" as const;
@@ -133,6 +134,10 @@ function adjacentFile(left: Square, right: Square): boolean {
 }
 
 export function pawnContactsReading(fen: string): PawnContactsReading {
+  return memoByInput("pawnContactsReading", fen, computePawnContactsReading);
+}
+
+function computePawnContactsReading(fen: string): PawnContactsReading {
   const position = positionFromFen(fen);
   const canonical = canonicalFen(position);
   const contacts: PawnContactsReading["contacts"][number][] = [];

@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -283,5 +285,37 @@ describe("rfc/skills.md criterion 2 — the shipped valence biconditional passes
     expect(code(empty)).toBe("EVIDENCE_EVENT_VALENCE_UNBACKED");
     const undeclared = { ...populated, eligibility: [{ ...row, valenceAuthority: [{ id: "missing.authority", version: 1 }] }] };
     expect(code(undeclared)).toBe("EVIDENCE_EVENT_VALENCE_UNBACKED");
+  });
+});
+
+describe("evidenceDigest byte stability (D3300)", () => {
+  // The digest encoder was rewritten for speed (hoisted SHA-256, native hash on Node, direct string
+  // building, sealed-payload reuse). This is the former encoder verbatim, as the reference bytes.
+  const formerCanonical = (value: unknown): string => {
+    if (value === null || typeof value !== "object") return JSON.stringify(value);
+    if (Array.isArray(value)) return `[${value.map(formerCanonical).join(",")}]`;
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${formerCanonical(record[key])}`).join(",")}}`;
+  };
+  const formerDigest = (value: unknown): string => createHash("sha256").update(unescape(encodeURIComponent(formerCanonical(value))), "latin1").digest("hex");
+
+  it("hashes exactly the former canonical bytes, including their undefined/hole accidents", () => {
+    const sparse: unknown[] = [1];
+    sparse[3] = "x";
+    const values: unknown[] = [
+      undefined, null, 0, -0, 1.5e-7, Number.NaN, Number.POSITIVE_INFINITY, true, "", "é♞\"\\\n\u{1F600}", Symbol("s"),
+      [], [undefined, null, () => 1], sparse, { a: undefined, b: () => 1, c: Symbol("c") },
+      { z: 1, a: [2, { y: "3", b: null }], "10": "ten", "2": "two", "é": { "\u{1F600}": [] } },
+      new Date(0), new Map([[1, 2]]), "x".repeat(1_000),
+    ];
+    for (const value of values) expect(evidenceDigest(value), String(typeof value)).toBe(formerDigest(value));
+  });
+
+  it("reuses a sealed payload's bytes without changing any digest that embeds it", () => {
+    const payload = { family: "open_file", color: "white", squares: ["e4", "d4"] };
+    const sealed = declareEvidence({ id: "p.producer", version: 1 }, { id: "p.output", version: 1 }, payload);
+    const envelope = { operands: sealed.payload, sign: "gained", nested: [sealed.payload, { again: sealed.payload }] };
+    expect(evidenceDigest(sealed.payload)).toBe(formerDigest(payload));
+    expect(evidenceDigest(envelope)).toBe(formerDigest(envelope));
   });
 });

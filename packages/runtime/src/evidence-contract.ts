@@ -322,64 +322,153 @@ function latencyNarrows(candidate: EvidenceLatency, ceiling: EvidenceLatency): b
   return ceiling.maxMs === null || (candidate.maxMs !== null && candidate.maxMs >= 0 && candidate.maxMs <= ceiling.maxMs);
 }
 
+// Canonical bytes of each sealed payload, recorded when its digest is first taken. A sealed payload is
+// deep-frozen before sealing (the same premise as SEALED_PAYLOAD_DIGESTS), so an event id or receipt
+// that embeds it reuses these bytes instead of re-walking the tree ([[D3300]]).
+const SEALED_CANONICAL = new WeakMap<object, string>();
+
+// Byte-identical to the former `map`/`join` template form, including its accidents: a value
+// `JSON.stringify` cannot render (`undefined`, a function, a symbol) is `undefined` as a record
+// member or at the top level (where the former encoder stringified it) but empty as an array element
+// or hole (where `join` dropped it); record keys sort by UTF-16 code units.
 function canonical(value: unknown): string {
+  return canonicalPart(value) ?? "undefined";
+}
+
+function canonicalPart(value: unknown): string | undefined {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
+  const sealed = SEALED_CANONICAL.get(value);
+  if (sealed !== undefined) return sealed;
+  if (Array.isArray(value)) {
+    let text = "[";
+    for (let index = 0; index < value.length; index += 1) {
+      if (index > 0) text += ",";
+      if (index in value) text += canonicalPart(value[index]) ?? "";
+    }
+    return `${text}]`;
+  }
   const record = value as Record<string, unknown>;
-  return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonical(record[key])}`).join(",")}}`;
+  const keys = Object.keys(record).sort();
+  let text = "{";
+  for (let index = 0; index < keys.length; index += 1) {
+    const key = keys[index]!;
+    if (index > 0) text += ",";
+    text += `${quotedKey(key)}:${canonicalPart(record[key]) ?? "undefined"}`;
+  }
+  return `${text}}`;
+}
+
+// Record keys are a small closed vocabulary (payload field names), quoted once each.
+const QUOTED_KEYS = new Map<string, string>();
+function quotedKey(key: string): string {
+  let quoted = QUOTED_KEYS.get(key);
+  if (quoted === undefined) {
+    quoted = JSON.stringify(key);
+    if (QUOTED_KEYS.size < 4096) QUOTED_KEYS.set(key, quoted);
+  }
+  return quoted;
 }
 
 export function evidenceDigest(value: unknown): string {
   return sha256(canonical(value));
 }
 
-// Small dependency-free SHA-256 so the shared runtime contract remains browser-buildable.
-function sha256(input: string): string {
-  const rightRotate = (value: number, amount: number): number => (value >>> amount) | (value << (32 - amount));
-  const maxWord = 2 ** 32;
-  const words: number[] = [];
-  const ascii = unescape(encodeURIComponent(input));
-  const bitLength = ascii.length * 8;
-  const hash: number[] = [];
-  const constants: number[] = [];
-  const composite: Record<number, boolean> = {};
-  let prime = 2;
-  while (constants.length < 64) {
-    if (!composite[prime]) {
-      for (let multiple = prime * prime; multiple < 313; multiple += prime) composite[multiple] = true;
-      if (hash.length < 8) hash.push((Math.sqrt(prime) * maxWord) | 0);
-      constants.push((Math.cbrt(prime) * maxWord) | 0);
+// Small dependency-free SHA-256 so the shared runtime contract remains browser-buildable. Every
+// evidence seal goes through here, so it is the hot path of any complete-population census ([[D3300]]):
+// constants are hoisted, UTF-8 comes from one shared TextEncoder, and the schedule/state live in
+// reused typed arrays. The bytes hashed are unchanged: the only caller hashes `canonical` output,
+// which `JSON.stringify` keeps well-formed, so TextEncoder yields exactly the UTF-8 the former
+// `unescape(encodeURIComponent(...))` encoding produced.
+const SHA256_K = new Int32Array([
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+]);
+const SHA256_ENCODER = new TextEncoder();
+const SHA256_W = new Int32Array(64);
+const SHA256_H = new Int32Array(8);
+
+function portableSha256(input: string): string {
+  const bytes = SHA256_ENCODER.encode(input);
+  const length = bytes.length;
+  const padded = new Uint8Array(((length + 9 + 63) >> 6) << 6);
+  padded.set(bytes);
+  padded[length] = 0x80;
+  // The former encoder wrote only the low 32 bits of the bit length; inputs here are far below 512 MiB.
+  const bitLength = length * 8;
+  padded[padded.length - 4] = (bitLength >>> 24) & 0xff;
+  padded[padded.length - 3] = (bitLength >>> 16) & 0xff;
+  padded[padded.length - 2] = (bitLength >>> 8) & 0xff;
+  padded[padded.length - 1] = bitLength & 0xff;
+  const w = SHA256_W;
+  const h = SHA256_H;
+  h[0] = 0x6a09e667; h[1] = 0xbb67ae85 | 0; h[2] = 0x3c6ef372; h[3] = 0xa54ff53a | 0;
+  h[4] = 0x510e527f; h[5] = 0x9b05688c | 0; h[6] = 0x1f83d9ab; h[7] = 0x5be0cd19;
+  for (let offset = 0; offset < padded.length; offset += 64) {
+    for (let index = 0; index < 16; index += 1) {
+      const at = offset + index * 4;
+      w[index] = (padded[at]! << 24) | (padded[at + 1]! << 16) | (padded[at + 2]! << 8) | padded[at + 3]!;
     }
-    prime += 1;
-  }
-  const bytes = [...ascii].map((char) => char.charCodeAt(0));
-  bytes.push(0x80);
-  while (bytes.length % 64 !== 56) bytes.push(0);
-  for (let index = 7; index >= 0; index -= 1) bytes.push(index < 4 ? (bitLength >>> (index * 8)) & 0xff : 0);
-  for (let offset = 0; offset < bytes.length; offset += 64) {
-    for (let index = 0; index < 16; index += 1) words[index] = (bytes[offset + index * 4]! << 24) | (bytes[offset + index * 4 + 1]! << 16) | (bytes[offset + index * 4 + 2]! << 8) | bytes[offset + index * 4 + 3]!;
     for (let index = 16; index < 64; index += 1) {
-      const w15 = words[index - 15]!;
-      const w2 = words[index - 2]!;
-      const s0 = rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3);
-      const s1 = rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10);
-      words[index] = (words[index - 16]! + s0 + words[index - 7]! + s1) | 0;
+      const w15 = w[index - 15]!;
+      const w2 = w[index - 2]!;
+      const s0 = ((w15 >>> 7) | (w15 << 25)) ^ ((w15 >>> 18) | (w15 << 14)) ^ (w15 >>> 3);
+      const s1 = ((w2 >>> 17) | (w2 << 15)) ^ ((w2 >>> 19) | (w2 << 13)) ^ (w2 >>> 10);
+      w[index] = (w[index - 16]! + s0 + w[index - 7]! + s1) | 0;
     }
-    const state = [...hash];
+    let a: number = h[0]!, b: number = h[1]!, c: number = h[2]!, d: number = h[3]!, e: number = h[4]!, f: number = h[5]!, g: number = h[6]!, hh: number = h[7]!;
     for (let index = 0; index < 64; index += 1) {
-      const s1 = rightRotate(state[4]!, 6) ^ rightRotate(state[4]!, 11) ^ rightRotate(state[4]!, 25);
-      const choose = (state[4]! & state[5]!) ^ (~state[4]! & state[6]!);
-      const temp1 = (state[7]! + s1 + choose + constants[index]! + words[index]!) | 0;
-      const s0 = rightRotate(state[0]!, 2) ^ rightRotate(state[0]!, 13) ^ rightRotate(state[0]!, 22);
-      const majority = (state[0]! & state[1]!) ^ (state[0]! & state[2]!) ^ (state[1]! & state[2]!);
+      const s1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+      const choose = (e & f) ^ (~e & g);
+      const temp1 = (hh + s1 + choose + SHA256_K[index]! + w[index]!) | 0;
+      const s0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+      const majority = (a & b) ^ (a & c) ^ (b & c);
       const temp2 = (s0 + majority) | 0;
-      state.unshift((temp1 + temp2) | 0);
-      state[4] = (state[4]! + temp1) | 0;
-      state.pop();
+      hh = g; g = f; f = e; e = (d + temp1) | 0; d = c; c = b; b = a; a = (temp1 + temp2) | 0;
     }
-    for (let index = 0; index < 8; index += 1) hash[index] = (hash[index]! + state[index]!) | 0;
+    h[0] = (h[0]! + a) | 0; h[1] = (h[1]! + b) | 0; h[2] = (h[2]! + c) | 0; h[3] = (h[3]! + d) | 0;
+    h[4] = (h[4]! + e) | 0; h[5] = (h[5]! + f) | 0; h[6] = (h[6]! + g) | 0; h[7] = (h[7]! + hh) | 0;
   }
-  return hash.map((value) => (value >>> 0).toString(16).padStart(8, "0")).join("");
+  let hex = "";
+  for (let index = 0; index < 8; index += 1) hex += (h[index]! >>> 0).toString(16).padStart(8, "0");
+  return hex;
+}
+
+/**
+ * Where the host is Node, the same digest comes from its native SHA-256 ([[D3300]]): a complete
+ * legal-move population seals ~200 values per edge, and the portable implementation above was the
+ * census's single largest cost. The module stays import-free and browser-buildable —
+ * `process.getBuiltinModule` is probed at run time, never imported — and the native path is admitted
+ * only if it reproduces the portable digest on a multi-byte probe, so both hosts hash identical bytes.
+ */
+type NativeSha256 = (input: string) => string;
+const NATIVE_SHA256: NativeSha256 | undefined = (() => {
+  try {
+    const host = (globalThis as { readonly process?: { readonly getBuiltinModule?: (id: string) => unknown } }).process;
+    const crypto = host?.getBuiltinModule?.("node:crypto") as {
+      readonly hash?: (algorithm: string, data: string, encoding: "hex") => string;
+      readonly createHash?: (algorithm: string) => { update(data: string, encoding: "utf8"): { digest(encoding: "hex"): string } };
+    } | undefined;
+    const oneShot = crypto?.hash;
+    const streaming = crypto?.createHash;
+    const native: NativeSha256 | undefined = typeof oneShot === "function"
+      ? (input) => oneShot("sha256", input, "hex")
+      : typeof streaming === "function" ? (input) => streaming("sha256").update(input, "utf8").digest("hex") : undefined;
+    if (native === undefined) return undefined;
+    const probe = canonical({ probe: "tabiya é♞\u{1F600}", length: 64 });
+    return native(probe) === portableSha256(probe) ? native : undefined;
+  } catch {
+    return undefined;
+  }
+})();
+
+function sha256(input: string): string {
+  return NATIVE_SHA256 === undefined ? portableSha256(input) : NATIVE_SHA256(input);
 }
 
 function immutable<T>(value: T): T {
@@ -421,8 +510,10 @@ function sealedPayloadDigest(payload: unknown): string {
   if (payload === null || typeof payload !== "object") return evidenceDigest(payload);
   const cached = SEALED_PAYLOAD_DIGESTS.get(payload);
   if (cached !== undefined) return cached;
-  const digest = evidenceDigest(payload);
   // The payload is deep-frozen before this point; its canonical bytes cannot change afterwards.
+  const text = canonical(payload);
+  const digest = sha256(text);
+  SEALED_CANONICAL.set(payload, text);
   SEALED_PAYLOAD_DIGESTS.set(payload, digest);
   return digest;
 }
@@ -460,6 +551,19 @@ export function identitySealedEvidenceWithoutValueReceipt<T>(producer: Versioned
   const value = immutable({ [DECLARED]: true as const, producer: { ...producer }, projection: { ...projection }, payload });
   DECLARED_VALUES.add(value);
   return value;
+}
+
+/**
+ * Non-throwing twin of `assertDeclaredEvidence`: true exactly when the assertion would pass. Hot
+ * callers that probe arbitrary authority records use it instead of catching a constructed error
+ * per record ([[D3300]]).
+ */
+export function isDeclaredEvidence(value: unknown): value is DeclaredEvidence<unknown> {
+  if (typeof value !== "object" || value === null || (value as { readonly [DECLARED]?: unknown })[DECLARED] !== true || !DECLARED_VALUES.has(value)) return false;
+  const receipt = VALUE_RECEIPTS.get(value);
+  if (receipt === undefined) return false;
+  const declared = value as DeclaredEvidence<unknown>;
+  return refKey(receipt.projection) === refKey(declared.projection) && receipt.payloadDigest === sealedPayloadDigest(declared.payload);
 }
 
 export function assertDeclaredEvidence(value: unknown): asserts value is DeclaredEvidence<unknown> {

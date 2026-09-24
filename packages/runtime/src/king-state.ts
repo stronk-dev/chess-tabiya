@@ -2,8 +2,9 @@ import { Chess, normalizeMove } from "chessops/chess";
 import type { Color, Piece, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { squareControlReading, type SquareController } from "./square-control.js";
+import { memoByInput } from "./fen-memo.js";
 
 export const KING_ZONE_CONVENTION = "king-zone@1" as const;
 export const KING_SHELTER_CONVENTION = "king-shelter@1" as const;
@@ -118,6 +119,10 @@ function shelter(position: ReturnType<typeof positionFromFen>, color: Color, kin
 
 /** King-zone operands consume the all-square pseudo-controller topology. */
 export function kingZoneReading(fen: string): KingZoneReading {
+  return memoByInput("kingZoneReading", fen, computeKingZoneReading);
+}
+
+function computeKingZoneReading(fen: string): KingZoneReading {
   const position = positionFromFen(fen);
   const canonical = canonicalFen(position);
   const control = squareControlReading(canonical);

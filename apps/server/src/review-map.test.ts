@@ -63,14 +63,20 @@ function eventKinds(path: string, runId: string): readonly string[] {
 describe("review map through createApplication", { timeout: 30_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
   let directory: string | undefined;
-  // close() drains the longitudinal worker, which finishes its in-flight imported-game projection
-  // (~10 s for the fixture game); the hook gets the same budget as the tests. See D3300.
+  // Detach this test's application and directory before awaiting close(): a teardown that outlives
+  // its hook must never close or delete the next test's live database (D3300). close() is bounded by
+  // the longitudinal drain grace, so the default hook budget holds.
   afterEach(async () => {
-    await application?.close();
+    const closing = application;
+    const removing = directory;
     application = undefined;
-    if (directory !== undefined) rmSync(directory, { recursive: true, force: true });
     directory = undefined;
-  }, 30_000);
+    try {
+      await closing?.close();
+    } finally {
+      if (removing !== undefined) rmSync(removing, { recursive: true, force: true });
+    }
+  });
 
   async function start(): Promise<{ origin: string; databasePath: string }> {
     directory = mkdtempSync(join(tmpdir(), "tabiya-review-map-"));

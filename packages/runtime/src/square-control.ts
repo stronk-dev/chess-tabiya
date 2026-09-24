@@ -3,7 +3,8 @@ import { Chess, normalizeMove } from "chessops/chess";
 import type { Color, Piece, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
+import { memoByInput } from "./fen-memo.js";
 
 export interface SquareController {
   readonly square: SquareName;
@@ -96,6 +97,10 @@ function legalFor(fen: string, color: Color): LegalControlSet {
 
 /** All-square pseudo and actual-move controller identities under the RFC's disclosed clone rule. */
 export function squareControlReading(fen: string): SquareControlReading {
+  return memoByInput("squareControlReading", fen, computeSquareControlReading);
+}
+
+function computeSquareControlReading(fen: string): SquareControlReading {
   const position = positionFromFen(fen);
   const canonical = canonicalFen(position);
   return Object.freeze({

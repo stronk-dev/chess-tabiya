@@ -4,10 +4,11 @@ import { makeFen } from "chessops/fen";
 import type { Color, Move, NormalMove, Piece, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
 import { matchesStructuralFeature, vacationReading } from "./structure.js";
 import type { TransitionSemanticFact } from "./transition.js";
+import { memoByInput } from "./fen-memo.js";
 
 const PROMOTIONS: readonly Role[] = Object.freeze(["queen", "rook", "bishop", "knight"]);
 export const THREAT_CONVENTION = "threat@1" as const;
@@ -74,6 +75,10 @@ function samePiece(left: Piece, right: Piece): boolean {
 
 /** Current-occupancy pseudo defence duties. A state never implies that the duty is legally executable. */
 export function defenderDutyReading(fen: string): DefenderDutyReading {
+  return memoByInput("defenderDutyReading", fen, computeDefenderDutyReading);
+}
+
+function computeDefenderDutyReading(fen: string): DefenderDutyReading {
   const position = positionFromFen(fen);
   const raw: Omit<DefenderDuty, "coDefenders">[] = [];
   for (const [defenderSquare, defenderPiece] of position.board) {
@@ -382,6 +387,10 @@ export interface LoosePieceEvent {
 }
 
 export function loosePieceReading(fen: string): LoosePieceReading {
+  return memoByInput("loosePieceReading", fen, computeLoosePieceReading);
+}
+
+function computeLoosePieceReading(fen: string): LoosePieceReading {
   const position = positionFromFen(fen);
   const victimColor = opposite(position.turn);
   const pieces: LoosePieceState[] = [];
@@ -652,6 +661,10 @@ export interface DiscoveredExecutedEvent {
 }
 
 export function discoveredLatencyReading(fen: string): DiscoveredLatencyReading {
+  return memoByInput("discoveredLatencyReading", fen, computeDiscoveredLatencyReading);
+}
+
+function computeDiscoveredLatencyReading(fen: string): DiscoveredLatencyReading {
   const position = positionFromFen(fen);
   const screens: DiscoveredLatencyReading["screens"][number][] = [];
   for (const [screenSquare, screenPiece] of position.board) {

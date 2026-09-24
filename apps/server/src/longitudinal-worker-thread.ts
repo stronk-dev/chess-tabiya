@@ -19,7 +19,8 @@ function post(message: LongitudinalThreadMessage): void {
 function start(): void {
   if (parentPort === null) throw new Error("longitudinal-worker-thread must run inside worker_threads");
   const data = workerData as LongitudinalThreadWorkerData;
-  if (data === null || typeof data !== "object" || typeof data.databasePath !== "string" || typeof data.storageVersion !== "number" || typeof data.workerId !== "string") {
+  if (data === null || typeof data !== "object" || typeof data.databasePath !== "string" || typeof data.storageVersion !== "number" || typeof data.workerId !== "string"
+    || !(data.drainSignal instanceof SharedArrayBuffer) || data.drainSignal.byteLength < Int32Array.BYTES_PER_ELEMENT) {
     post({ type: "error", code: "worker_protocol_invalid", message: "workerData is not the closed longitudinal shape" });
     return;
   }
@@ -32,6 +33,10 @@ function start(): void {
   const database = openLongitudinalDatabase(identity, data.storageVersion);
   const store = new LongitudinalStore(database);
   const workerId = `${data.workerId}:thread-${threadId}`;
+  // The supervisor's drain request, visible mid-projection (the `drain` message is not: a projection
+  // never yields this thread's event loop). [[D3300]]
+  const drainCell = new Int32Array(data.drainSignal, 0, 1);
+  const drainRequested = (): boolean => Atomics.load(drainCell, 0) !== 0;
   let draining = false;
   let timer: NodeJS.Timeout | undefined;
   let scheduled = false;
@@ -46,16 +51,16 @@ function start(): void {
   const tick = (): void => {
     scheduled = false;
     timer = undefined;
-    if (draining) { finish(); return; }
+    if (draining || drainRequested()) { finish(); return; }
     let claimed = 0;
     try {
-      const receipt = runLongitudinalBatch(store, config, workerId);
+      const receipt = runLongitudinalBatch(store, config, workerId, { drainRequested });
       claimed = receipt.claimed;
       if (receipt.claimed > 0) post({ type: "progress", ...receipt });
     } catch (error) {
       post({ type: "error", code: "worker_batch_failed", message: error instanceof Error ? error.message : String(error) });
     }
-    if (draining) { finish(); return; }
+    if (draining || drainRequested()) { finish(); return; }
     schedule(claimed > 0 ? 0 : config.workerPollMs);
   };
 

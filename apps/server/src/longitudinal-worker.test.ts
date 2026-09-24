@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
+import { performance } from "node:perf_hooks";
 import { dirname, join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -17,8 +18,9 @@ import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { parseLongitudinalReadQuery } from "./longitudinal-contract.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { LONGITUDINAL_WORKER_DEFAULTS, fileBackedDatabaseIdentity, validateLongitudinalWorkerConfig } from "./longitudinal-worker-config.js";
-import { LongitudinalProjectionWorker } from "./longitudinal-worker.js";
-import { AT, learner, play, positionRun } from "./longitudinal-test-fixtures.js";
+import { LONGITUDINAL_DRAIN_GRACE_MS, LongitudinalProjectionWorker } from "./longitudinal-worker.js";
+import { AT, importedRun, learner, play, positionRun } from "./longitudinal-test-fixtures.js";
+import { parsePgnMainline } from "./pgn-import.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -26,10 +28,16 @@ const ROOT = resolve(HERE, "..", "..", "..");
 const directories: string[] = [];
 let application: ChessTabiyaApplication | undefined;
 
+// Detach before awaiting: a late teardown must never close or delete the next test's database (D3300).
 afterEach(async () => {
-  await application?.close();
+  const closing = application;
+  const removing = directories.splice(0);
   application = undefined;
-  for (const directory of directories.splice(0)) rmSync(directory, { recursive: true, force: true });
+  try {
+    await closing?.close();
+  } finally {
+    for (const directory of removing) rmSync(directory, { recursive: true, force: true });
+  }
 });
 
 function temp(): string {
@@ -160,6 +168,47 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     const main = readFileSync(join(HERE, "main.ts"), "utf8");
     for (const forbidden of ["in-memory-test-application", "composeApplication", ":memory:", "longitudinal-test-support"]) expect(main).not.toContain(forbidden);
   });
+
+  it("bounds close() by the drain grace mid-projection and completes the abandoned job after restart (D3300)", async () => {
+    const directory = temp();
+    const databasePath = join(directory, "drain.sqlite");
+    // The longest game in the fixed corpus, queued three times: projections are in flight for many
+    // seconds, far longer than the grace, so waiting for the in-flight batch cannot pass.
+    const games = readFileSync(new URL("../../../tools/r2-selection-harness/imported-sample.pgn", import.meta.url), "utf8").split(/\n(?=\[Event )/u);
+    const moves = games.map((game) => { try { return parsePgnMainline(game, { requireMoves: true }).moves.map((move) => move.uci); } catch { return []; } })
+      .reduce((longest, candidate) => candidate.length > longest.length ? candidate : longest, [] as string[]);
+    expect(moves.length).toBeGreaterThanOrEqual(120);
+    const seed = new SQLiteRunStorage(databasePath, { onMigration: () => {} });
+    const owner = learner(seed, "drain");
+    for (const id of ["long-1", "long-2", "long-3"]) {
+      seed.createImportedRun(importedRun(id, moves), owner, id, {
+        runId: id, sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"e".repeat(64)}`, headers: {}, result: "*",
+        pgn: "fixed corpus", licenceNote: "fixture", importedAt: AT,
+      } as never);
+    }
+    seed.close();
+    const jobs = (): readonly { run_id: string; state: string }[] => {
+      const database = new DatabaseSync(databasePath, { readOnly: true });
+      try { return database.prepare("SELECT run_id, state FROM learner_observation_jobs ORDER BY run_id").all() as { run_id: string; state: string }[]; } finally { database.close(); }
+    };
+
+    application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+    const inFlight = await until(() => jobs().find((job) => job.state === "running")?.run_id, 30_000);
+    const closing = application;
+    application = undefined;
+    const started = performance.now();
+    await closing.close();
+    const closeMs = performance.now() - started;
+    expect(closeMs).toBeLessThan(LONGITUDINAL_DRAIN_GRACE_MS);
+    // The thread handed the claim back at a decision checkpoint rather than finishing it.
+    expect(closing.longitudinal.progress()).toMatchObject({ abandoned: 1 });
+    expect(jobs().find((job) => job.run_id === inFlight)?.state).toBe("running");
+
+    // Restart on the same file: the abandoned lease is re-leased at once and every job completes.
+    application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+    await until(() => jobs().every((job) => job.state === "complete") ? true : undefined, 110_000);
+    expect(jobs()).toEqual([{ run_id: "long-1", state: "complete" }, { run_id: "long-2", state: "complete" }, { run_id: "long-3", state: "complete" }]);
+  }, 180_000);
 
   it("supervises the real thread: crash marks degraded; drain waits and closes", async () => {
     const directory = temp();

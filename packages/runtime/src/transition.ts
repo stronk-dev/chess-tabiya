@@ -11,7 +11,7 @@ import {
   type TransitionFeatureKind,
 } from "@chess-tabiya/schema/drill-pack";
 
-import { positionFromFen } from "./chess.js";
+import { positionFromFen } from "./position-cache.js";
 import { DEVELOPMENT_CONVENTION, isDevelopmentHome } from "./phase.js";
 import {
   matchesStructuralExpression,

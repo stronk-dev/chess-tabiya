@@ -2,9 +2,10 @@ import { normalizeMove } from "chessops/chess";
 import type { Color, Role } from "chessops/types";
 import { makeUci, parseUci } from "chessops/util";
 
-import { canonicalFen, positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { structuralReading, type StructuralObservation } from "./structure.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
+import { memoByInput } from "./fen-memo.js";
 
 export const MATERIAL_ROLE_SIGNATURE_CONVENTION = "material-role-signature@1" as const;
 const COLORS = Object.freeze(["white", "black"] as const);
@@ -55,6 +56,10 @@ function magnitude(value: MaterialRoleVector): number {
 
 /** Exact P/N/B/R/Q count vectors projected from structuralReading's piece_count authority. */
 export function materialRoleSignatureReading(fen: string): MaterialRoleSignatureReading {
+  return memoByInput("materialRoleSignatureReading", fen, computeMaterialRoleSignatureReading);
+}
+
+function computeMaterialRoleSignatureReading(fen: string): MaterialRoleSignatureReading {
   const reading = structuralReading(fen);
   const colors = COLORS.map((color) => {
     const sources = reading.features.filter((entry) => entry.kind === "piece_count" && entry.color === color && MATERIAL_ROLES.includes(entry.role as MaterialRole));
