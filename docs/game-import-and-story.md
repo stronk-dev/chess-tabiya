@@ -27,15 +27,18 @@ playable.
 
 The sources are deliberately narrow:
 
-- pasted PGN is retained verbatim;
+- pasted PGN is bounded to 64 KiB and re-serialized through `stripPgnAnnotations` before storage,
+  exactly like the lichess fetch: tags and moves are kept; comments, `%eval`/`%clk`/`%cal`
+  commands and NAGs are removed ([[D959]], 2026-09-24);
 - a public `https://lichess.org/<game-id>` URL is fetched without credentials,
   serially, with a bounded timeout and server evaluations disabled;
 - chess.com URLs are refused with guidance to paste the PGN because no supported
   per-game public fetch contract exists.
 
-Before submission, the client states the durable-storage boundary: the original
-PGN is kept verbatim, including player names, tags, comments, and move
-annotations, beside the parsed main line and any rehearsal branches added later.
+Before submission, the client states the durable-storage boundary: the PGN's tags,
+including player names, and its moves are kept beside the parsed main line and any
+rehearsal branches added later, while comments, engine evaluations and move
+annotations are removed before storage.
 It also states that these bytes are included in account export and removed with
 the imported run or account, subject to the documented backup limits. Chess.com
 guidance asks for one completed-game export, not an analysis tree containing
@@ -192,8 +195,9 @@ projection (`reviewMapProjection` in `packages/runtime/src/review-map.ts`): the 
 evaluation job, writes no event and persists no grade.
 
 - **Move list.** Every ply of the line, with number, SAN and side. SAN is regenerated from the
-  legal move, so third-party annotation glyphs, NAGs and comments in a pasted PGN (which the import
-  record keeps verbatim) never reach this surface.
+  legal move, so third-party annotation glyphs, NAGs and comments never reach this surface (the
+  import record has not stored them since [[D959]]; a record imported before that fix may still carry
+  them in its stored PGN).
 - **Grades.** Each move is graded from the mover's side by the `derived.grade.move_quality@1`
   producer — the shipped grader's only production caller — on the `report` ladder (context
   `imported_analysis` for imports, `review` for native runs) from the two recorded evaluations

@@ -1,14 +1,19 @@
+import type { ImportSourceKind, ImportSourceRequestKind } from "@chess-tabiya/runtime";
 import { makePgn, parsePgn, type PgnNodeData, type ChildNode } from "chessops/pgn";
 
 import { ServerError } from "./errors.js";
 
+/** The request union; its discriminants are exactly the `import-source-protocol` request members. */
 export type ImportSource =
-  | { readonly kind: "pgn"; readonly pgn: string }
-  | { readonly kind: "lichess"; readonly url: string };
+  | { readonly kind: Extract<ImportSourceRequestKind, "pgn">; readonly pgn: string }
+  | { readonly kind: Extract<ImportSourceRequestKind, "lichess">; readonly url: string };
+
+/** The byte bound shared by every game-import source, checked before any parse or strip work. */
+export const IMPORT_PGN_MAX_BYTES = 65_536;
 
 export interface ResolvedImportSource {
   readonly pgn: string;
-  readonly sourceKind: "pgn_paste" | "lichess_url";
+  readonly sourceKind: ImportSourceKind;
   readonly sourceUrl: string | null;
   readonly licenceNote: string;
 }
@@ -77,7 +82,18 @@ export async function resolveImportSource(
   fetchImpl: typeof fetch = fetch,
 ): Promise<ResolvedImportSource> {
   if (source.kind === "pgn") {
-    return Object.freeze({ pgn: source.pgn, sourceKind: "pgn_paste", sourceUrl: null, licenceNote: "no-rights-asserted: learner-supplied bytes" });
+    // [[D959]]: the paste door is a record boundary like the lichess fetch. Pasted PGN routinely
+    // carries a third party's comments, engine verdicts and NAGs; the stored record keeps only the
+    // headers and moves, so no annotation the learner did not author is retained or exported.
+    if (new TextEncoder().encode(source.pgn).byteLength > IMPORT_PGN_MAX_BYTES) {
+      throw new ServerError("IMPORT_INVALID_PGN", "PGN exceeds the 64 KiB import limit");
+    }
+    return Object.freeze({
+      pgn: stripPgnAnnotations(source.pgn),
+      sourceKind: "pgn_paste",
+      sourceUrl: null,
+      licenceNote: "no-rights-asserted: learner-supplied bytes; annotations stripped",
+    });
   }
   const normalized = normalizeLichessGameUrl(source.url);
   const task = serial.then(async () => {

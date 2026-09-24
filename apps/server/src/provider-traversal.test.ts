@@ -227,7 +227,9 @@ describe("§5 capability register", () => {
 });
 
 describe("§9 application composition and degradation", () => {
-  it("composes one scheduler; with remote providers off those operations are honestly unavailable", async () => {
+  // Composes the whole application (registries compile at import); under shared-host load this
+  // exceeds the 5 s default.
+  it("composes one scheduler; with remote providers off those operations are honestly unavailable", { timeout: 30_000 }, async () => {
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
     try {

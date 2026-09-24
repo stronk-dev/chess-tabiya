@@ -269,11 +269,12 @@ real Stockfish test proves `stop` is sent.
 
 ## Capabilities
 
-`GET /capabilities` warms the configured engines and returns only modes whose required provider
-is currently executable: Maia for `human_common`/`theory_strict`, the judge for
-`strong_engine`, tablebase for `perfect_tablebase`, and both Maia and tablebase for
-`practical_resistance`. An empty `FixtureTablebaseSource` is treated as provider
-absence rather than as an executable mock. It has the following shape when every provider is ready:
+`GET /capabilities` never probes an engine. `policyModes` lists the modes whose provider is
+configured: Maia for `human_common`/`theory_strict`, `stockfish-play` for `strong_engine`,
+tablebase for `perfect_tablebase`, and both Maia and tablebase for `practical_resistance`. The
+live state of each mode is in `providerHealth.policyModes` (`docs/provider-health.md`). An empty
+`FixtureTablebaseSource` counts as not configured, not as an executable mock. When every provider
+is ready, the response has the following shape:
 
 ```text
 {

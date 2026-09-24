@@ -36,7 +36,10 @@ export interface VoiceEvidenceView {
   readonly scope: VoiceScope;
   readonly rendered: RenderedEvidenceView;
 }
-export interface VoiceProvider { render(view: VoiceEvidenceView, persona: string, deterministicText: string, scope: VoiceScope): Promise<string>; }
+export interface VoiceProvider { render(view: VoiceEvidenceView, persona: string, deterministicText: string, scope: VoiceScope, signal?: AbortSignal): Promise<string>; }
+
+/** The compiled consumer budget both voice attempts and the deterministic fallback share (§5). */
+export const VOICE_OPERATION_BUDGET_MS = 4_000;
 
 const one = (sentence: string): readonly string[] => Object.freeze([sentence]);
 
@@ -205,15 +208,19 @@ export function appendRecordedReadings(text: string, packet: EvidencePacket): st
   return text === "" ? rendered : `${text}\n${rendered}`;
 }
 
-export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading", extra: readonly DeclaredEvidence<unknown>[] = [], includePacket = true): Promise<{ readonly text: string; readonly source: "provider" | "deterministic" }> {
+export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading", extra: readonly DeclaredEvidence<unknown>[] = [], includePacket = true, budgetMs = VOICE_OPERATION_BUDGET_MS): Promise<{ readonly text: string; readonly source: "provider" | "deterministic" }> {
   const view = voiceEvidenceView(packet, scope, extra, includePacket);
   const deterministic = view.rendered.items.flatMap((item) => item.sentences).join("\n");
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  // One total deadline covers both attempts (rfc/provider-health-degradation.md §5): the second
+  // attempt inherits what the first left and never starts a fresh timeout.
+  const deadline = AbortSignal.timeout(Math.max(1, budgetMs));
+  for (let attempt = 0; attempt < 2 && !deadline.aborted; attempt += 1) {
     try {
-      const output = await provider.render(view, persona, deterministic, scope);
+      const output = await provider.render(view, persona, deterministic, scope, deadline);
       if (voiceCheck(view.rendered, output).valid) return Object.freeze({ text: appendRecordedReadings(output, packet), source: "provider" });
     } catch {
-      // Provider failures share the same one-retry then deterministic fallback path.
+      // A provider failure opens its circuit; the next attempt is refused at once, so the
+      // deterministic fallback below is reached inside the same budget.
     }
   }
   return Object.freeze({ text: appendRecordedReadings(deterministic, packet), source: "deterministic" });

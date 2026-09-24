@@ -1,6 +1,6 @@
 # RFC: Theory↔drill current joins
 
-- **Status:** draft — author repair in progress 2026-08-30 after the independent buildability return.
+- **Status:** implementing — read-time joins and the Library/theory journey landed 2026-09-24 at the owner's direction; the persistent half keeps its migration position behind social-play. Prior status: draft — author repair in progress 2026-08-30 after the independent buildability return.
   [[D1879]]–[[D1886]] are repaired below; [[D1887]] remains an explicit owner decision. Fresh
   independent review is required after that decision is recorded; no implementation is authorised.
 - **Author:** claude (on the [[D1310]] mandate read; [[D1330]] live-debt rank 5)

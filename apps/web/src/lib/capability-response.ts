@@ -5,6 +5,7 @@ import {
   BOT_PROFILE_CATALOG,
   BOT_AVAILABILITY_BLOCKERS,
   BOT_AVAILABILITY_CONDITIONS,
+  parseProviderHealthCapabilities,
   resolveBotProfileReference,
 } from "@chess-tabiya/runtime";
 
@@ -148,14 +149,15 @@ function deepFreeze<T>(value: T): T {
 }
 
 export function parseCapabilities(value: unknown): Capabilities {
-  const item = record(value, "capabilities"); exact(item, ["engines", "policyModes", "unsupportedPolicyModes", "feedbackPolicies", "guardBasis", "recordedReadingKinds", "assessmentCategories", "objectiveAssessmentSets", "runSchemaVersion", "policyProfiles", "providers", "surfaces", "evidenceManifest"], "capabilities");
+  const item = record(value, "capabilities"); exact(item, ["engines", "policyModes", "unsupportedPolicyModes", "feedbackPolicies", "guardBasis", "recordedReadingKinds", "assessmentCategories", "objectiveAssessmentSets", "runSchemaVersion", "policyProfiles", "providerHealth", "surfaces", "evidenceManifest"], "capabilities");
   validateEngines(item.engines); uniqueVocabulary(item.policyModes, POLICY_MODES, "capabilities/policyModes");
   if (!Array.isArray(item.unsupportedPolicyModes)) throw new TypeError("capabilities/unsupportedPolicyModes must be an array"); const unsupported = new Set<string>(); item.unsupportedPolicyModes.forEach((raw, index) => { const label = `capabilities/unsupportedPolicyModes/${index}`, row = record(raw, label); exact(row, ["mode", "reason"], label); const mode = nonempty(row.mode, `${label}/mode`); if (unsupported.has(mode)) throw new TypeError("capabilities unsupported policies contain duplicates"); unsupported.add(mode); nonempty(row.reason, `${label}/reason`); });
   uniqueVocabulary(item.feedbackPolicies, ["delayed_checkpoint", "segment_end", "immediate_guard"] as const, "capabilities/feedbackPolicies", 1); uniqueVocabulary(item.guardBasis, ["rules", "engine"] as const, "capabilities/guardBasis", 1);
   if (!Array.isArray(item.recordedReadingKinds)) throw new TypeError("capabilities/recordedReadingKinds must be an array"); const readings = new Set<string>(); item.recordedReadingKinds.forEach((raw, index) => { const label = `capabilities/recordedReadingKinds/${index}`, row = record(raw, label); exact(row, ["kind", "disposition", "reason"], label); const kind = nonempty(row.kind, `${label}/kind`); if (readings.has(kind)) throw new TypeError("capabilities recorded readings contain duplicates"); readings.add(kind); oneOf(row.disposition, ["admitted", "refused"] as const, `${label}/disposition`); nonempty(row.reason, `${label}/reason`); });
   uniqueVocabulary(item.assessmentCategories, ASSESSMENTS, "capabilities/assessmentCategories", 1); const sets = record(item.objectiveAssessmentSets, "capabilities/objectiveAssessmentSets"); exact(sets, ["win", "hold", "save", "resist"], "capabilities/objectiveAssessmentSets"); (["win", "hold", "save", "resist"] as const).forEach((key) => uniqueVocabulary(sets[key], ASSESSMENTS, `capabilities/objectiveAssessmentSets/${key}`, 1));
   const version = nonempty(item.runSchemaVersion, "capabilities/runSchemaVersion"); if (!/^\d+\.\d+(?:\.\d+)?$/u.test(version)) throw new TypeError("capabilities run schema version is invalid"); validateProfiles(item.policyProfiles);
-  const providers = record(item.providers, "capabilities/providers"); exact(providers, ["opponent", "judge", "llm", "corpus", "tts", "tablebase"], "capabilities/providers"); oneOf(providers.opponent, ["maia", "mock", "none"] as const, "capabilities/providers/opponent"); oneOf(providers.judge, ["stockfish", "mock", "none"] as const, "capabilities/providers/judge"); oneOf(providers.llm, ["none", "external"] as const, "capabilities/providers/llm"); oneOf(providers.corpus, ["lichess-explorer", "mock", "none"] as const, "capabilities/providers/corpus"); oneOf(providers.tts, ["none", "external"] as const, "capabilities/providers/tts"); oneOf(providers.tablebase, ["lichess", "mock", "none"] as const, "capabilities/providers/tablebase");
+  // The one shared strict parser the server producer also satisfies (§9, criterion 17).
+  parseProviderHealthCapabilities(item.providerHealth, "capabilities/providerHealth");
   const surfaces = record(item.surfaces, "capabilities/surfaces"); exact(surfaces, SURFACES, "capabilities/surfaces"); SURFACES.forEach((surface) => oneOf(surfaces[surface], ["available", "unavailable-here"] as const, `capabilities/surfaces/${surface}`)); validateManifest(item.evidenceManifest);
   return deepFreeze(structuredClone(item)) as unknown as Capabilities;
 }

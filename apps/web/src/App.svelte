@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { operationConfigured } from "./lib/provider-availability.js";
   import "./lib/theme/base.css";
 
   import { onDestroy, onMount, tick, untrack } from "svelte";
@@ -84,6 +85,7 @@
     type ClassroomSummary,
     type ClassroomDetail,
     type AssignedPack,
+    type AccountExportProgress,
     type DeletionPreview,
     ApiError,
   } from "./lib/api.js";
@@ -1494,10 +1496,10 @@
     });
   }
 
-  async function exportAccountWithPassword(password: string): Promise<void> {
+  async function exportAccountWithPassword(password: string, onProgress?: (progress: AccountExportProgress) => void): Promise<void> {
     if (api.exportAccount === undefined) throw new Error("Account export is unavailable.");
     const generation = loadGeneration;
-    const download = await api.exportAccount(password);
+    const download = await api.exportAccount(password, onProgress);
     if (generation !== loadGeneration || route.name !== "settings") return;
     const url = URL.createObjectURL(download.blob);
     const anchor = document.createElement("a");
@@ -2634,6 +2636,10 @@
         onRematch={session.runState.run.opponentPolicy.profile === undefined ? undefined : () => controller.startDuplicate(session.runState!.run.id)}
         botReply={session.botReply}
         onRetryOpponent={() => controller.retryOpponent()}
+        opponentPause={session.opponentPause}
+        opponentSource={session.opponentSource}
+        opponentChange={session.opponentChange}
+        onChangeOpponent={(mode) => controller.changeOpponent(mode)}
         onClassifyBranches={(branchIds) => api.branchDecidedness(session.runState!.run.id, branchIds)}
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
@@ -2641,7 +2647,7 @@
         importedGuess={session.importedGuess}
         onGuessImportedMove={(uci) => controller.guessImportedMove(uci)}
         onReasoning={(input) => controller.recordReasoning(input)}
-        onReasoningReview={capabilities?.providers.llm === "external" && api.reasoningReview !== undefined ? (checkpointEventSeq) => api.reasoningReview!(session.runState!.run.id, checkpointEventSeq) : undefined}
+        onReasoningReview={operationConfigured(capabilities, "review.reasoning") && api.reasoningReview !== undefined ? (checkpointEventSeq) => api.reasoningReview!(session.runState!.run.id, checkpointEventSeq) : undefined}
         onExport={exportPgn}
         onLoadMarks={api.marks === undefined ? undefined : () => api.marks!(session.runState!.run.id)}
         onSaveMarks={api.replaceMarks === undefined ? undefined : (input) => api.replaceMarks!(session.runState!.run.id, input)}
@@ -2652,7 +2658,7 @@
         onNudge={api.nudge === undefined ? undefined : (nodeId) => api.nudge!(session.runState!.run.id, nodeId)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
-        onCompareVoice={capabilities?.providers.llm === "external" && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}
+        onCompareVoice={operationConfigured(capabilities, "render.voice_compare") && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}
         onSpeech={(nodeId, scope) => api.speech(session.runState!.run.id, nodeId, scope)}
         onCreateGroup={(input) => controller.createGroup(input)}
         onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
@@ -2697,7 +2703,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={capabilities?.providers.llm === "external" && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">
@@ -2710,7 +2716,7 @@
         <label>PGN <textarea rows="6" placeholder="[Event …]" disabled={importBusy||importPreparation!==undefined} bind:value={importPgn}></textarea></label>
         <label>Your side <select disabled={importBusy||importPreparation!==undefined} aria-describedby={importSideHint ? "import-side-hint" : undefined} bind:value={importSide} onchange={() => { importSideTouched = true; }}><option value="white">White</option><option value="black">Black</option></select></label>
         {#if importSideHint}<p id="import-side-hint" class="honest">{#if importSideHint.side && !importSideTouched}Your handle is {importSideHint.side === "white" ? "White" : "Black"} in this PGN, so Your side is set to {importSideHint.side === "white" ? "White" : "Black"}. Change it if you played the other side.{:else}This PGN names White: {importSideHint.white ?? "not given"} and Black: {importSideHint.black ?? "not given"}. Choose the side you played.{/if}</p>{/if}
-        <p id="import-storage-disclosure" class="honest">Import keeps the original PGN verbatim—including player names, tags, comments, and move annotations—alongside its parsed main line and the rehearsal branches you add. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
+        <p id="import-storage-disclosure" class="honest">Import keeps the game’s PGN tags—including player names—and its moves alongside the parsed main line and the rehearsal branches you add. Comments, engine evaluations and move annotations in the PGN are removed before anything is stored. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
         {#if importPreparation}<p role="status">The game is saved. Finish preparing its Story without importing a duplicate.</p>{/if}
         <button class="primary" type="submit" aria-describedby="import-storage-disclosure import-source-guidance" disabled={importBusy||(importPreparation===undefined&&importUrl.trim()===""&&importPgn.trim()==="")}>{importBusy?"Preparing…":importPreparation?"Finish Story setup":"Build game story"}</button>
         {#if importNotice}<p role="status">{importNotice}</p>{/if}
@@ -3256,7 +3262,7 @@
       <AppearanceSettings />
       <AccessibilitySettings />
       <StreamerModeSettings mode={streamerMode} onChange={setStreamerMode} />
-      <AssistanceSettings {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} />
+      <AssistanceSettings {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} loadAccountInventory={api.accountInventory === undefined ? undefined : () => api.accountInventory!()} previewAccountImport={api.previewAccountImport === undefined ? undefined : (bundle) => api.previewAccountImport!(bundle)} commitAccountImport={api.importAccount === undefined ? undefined : (password, bundle) => api.importAccount!(password, bundle)} />
     </main>
   {:else if route.name === "not-found"}
     <main class="shell-view empty-state" aria-labelledby="not-found-title">

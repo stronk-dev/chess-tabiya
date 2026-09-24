@@ -1,5 +1,6 @@
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
+import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -97,7 +98,7 @@ const capabilities: Capabilities = {
       profiles: botRosterFixture(),
     },
   },
-  providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },
+  providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "tablebase-primary": "available" }),
   surfaces: {
     play: "available",
     review: "available",
@@ -662,6 +663,85 @@ describe("DrillSessionController", () => {
       busy: false,
       error: "Tabiya could not complete that action. Reopen the run to check its latest position, then try again.",
       runState: { run: { activeCursor: { nodeId: api.requiredRun().activeCursor.nodeId } } },
+    });
+  });
+
+  describe("paused opponent (rfc/provider-health-degradation.md §10; opponent-recovery-journey live half)", () => {
+    const providerFailure = (): ApiError => new ApiError(503, "PROVIDER_UNAVAILABLE", "Provider operation opponent.maia_inference is unavailable: maia-5m secret detail", {
+      operation: "opponent.maia_inference",
+      availability: { state: "unavailable", instanceIds: ["maia-inference"], reason: "process_exit" },
+      retryAfterMs: null,
+    });
+
+    it("pauses before any opponent move is committed and offers Retry and Change opponent in task copy", async () => {
+      const api = new FakeApi();
+      api.capabilitiesValue = { ...capabilities, providerHealth: fixtureProviderHealth({ "maia-inference": { failed: "process_exit" }, "stockfish-play": "available", "stockfish-analysis": "available" }) };
+      const environment = controller(api);
+      await environment.controller.startPack(pack.id);
+      vi.spyOn(api, "selectMove").mockRejectedValueOnce(providerFailure());
+
+      expect(await environment.controller.move("f2f3")).toBe(true);
+      const state = environment.controller.state;
+      expect(state.error).toBeUndefined();
+      expect(state.busy).toBe(false);
+      // The learner move stays committed; nothing was played for the opponent.
+      expect(api.requiredRun().nodes.at(-1)).toMatchObject({ moveUci: "f2f3", actor: "user" });
+      expect(state.opponentPause).toEqual({
+        reason: "The opponent is unavailable right now: the service has stopped and is being restarted.",
+        retryAfterMs: null,
+        mode: "human_common",
+        alternatives: [{ mode: "strong_engine", label: "the engine opponent", requestable: true, note: "" }],
+      });
+      expect(JSON.stringify(state.opponentPause)).not.toMatch(/maia-5m|secret|process_exit/u);
+    });
+
+    it("Retry re-issues the same selection and clears the pause", async () => {
+      const api = new FakeApi();
+      const environment = controller(api);
+      await environment.controller.startPack(pack.id);
+      const spy = vi.spyOn(api, "selectMove").mockRejectedValueOnce(providerFailure());
+      await environment.controller.move("f2f3");
+      expect(await environment.controller.retryOpponent()).toBe(true);
+      expect(spy.mock.calls).toHaveLength(2);
+      expect(spy.mock.calls[1]![0]).toEqual(spy.mock.calls[0]![0]);
+      expect(environment.controller.state.opponentPause).toBeUndefined();
+      expect(api.requiredRun().nodes.at(-1)).toMatchObject({ actor: "opponent" });
+      expect(environment.controller.state.opponentChange).toBeUndefined();
+    });
+
+    it("Change opponent switches the mode for the rest of the session only and says the run does not retain it", async () => {
+      const api = new FakeApi();
+      const environment = controller(api);
+      await environment.controller.startPack(pack.id);
+      vi.spyOn(api, "selectMove").mockRejectedValueOnce(providerFailure());
+      await environment.controller.move("f2f3");
+      expect(await environment.controller.changeOpponent("strong_engine")).toBe(true);
+      expect(api.selected?.policy.mode).toBe("strong_engine");
+      expect(environment.controller.state.opponentChange).toEqual({ from: "human_common", to: "strong_engine" });
+      expect(environment.controller.state.opponentPause).toBeUndefined();
+      // The run's root policy and digest are not rewritten (the durable half is opponent-recovery-journey).
+      expect(api.requiredRun().opponentPolicy.mode).toBe("human_common");
+      // A mode that was not offered cannot be chosen.
+      expect(await environment.controller.changeOpponent("human_common")).toBe(false);
+    });
+
+    it("discloses an exact cached reply instead of relabelling it live", async () => {
+      const api = new FakeApi();
+      const environment = controller(api);
+      (api as unknown as { selectMoveReceipted: (input: SelectMoveRequest) => Promise<{ selection: OpponentSelection; source: "cached_exact" }> }).selectMoveReceipted = async (input) => ({ selection: await api.selectMove(input), source: "cached_exact" });
+      await environment.controller.startPack(pack.id);
+      await environment.controller.move("f2f3");
+      expect(environment.controller.state.opponentSource).toBe("cached_exact");
+    });
+
+    it("keeps a non-provider opponent failure on the ordinary error path", async () => {
+      const api = new FakeApi();
+      const environment = controller(api);
+      await environment.controller.startPack(pack.id);
+      vi.spyOn(api, "selectMove").mockRejectedValueOnce(new ApiError(422, "POLICY_MODE_UNSUPPORTED", "nope"));
+      await environment.controller.move("f2f3");
+      expect(environment.controller.state.opponentPause).toBeUndefined();
+      expect(environment.controller.state.error).toBe("This opponent is not available here. Choose another opponent or another drill.");
     });
   });
 

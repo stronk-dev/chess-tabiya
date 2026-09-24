@@ -48,7 +48,7 @@ describe("account lifecycle panel", () => {
     } });
     await tick();
 
-    expect(document.body.textContent).toContain("Tabiya cannot import it");
+    expect(document.body.textContent).toContain("other chess products do not read it");
     expect(document.querySelector<HTMLAnchorElement>('a[href="/library"]')?.textContent).toContain("download them as PGN");
     await vi.waitFor(() => expect(loadDeletionPreview).toHaveBeenCalledOnce());
     await vi.waitFor(() => expect(document.body.textContent).toContain("Your data and privacy"));
@@ -58,7 +58,7 @@ describe("account lifecycle panel", () => {
     expect(passwordInputs).toHaveLength(2);
     setInput(passwordInputs[0]!, "export-password");
     document.querySelector<HTMLButtonElement>('button[type="submit"]')!.click();
-    await vi.waitFor(() => expect(onExport).toHaveBeenCalledWith("export-password"));
+    await vi.waitFor(() => expect(onExport).toHaveBeenCalledWith("export-password", expect.any(Function)));
     await vi.waitFor(() => expect(passwordInputs[0]!.value).toBe(""));
     await vi.waitFor(() => expect([...document.querySelectorAll('[role="status"]')].some((status) => status.textContent?.includes("download has started"))).toBe(true));
 

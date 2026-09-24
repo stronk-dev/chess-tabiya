@@ -21357,3 +21357,77 @@ The bootstrap is archived as implemented.
 - 49 findings against the withdrawn register engine are superseded (⛔).
 - D2401 moves to evidence-presentation.
 - Absent-source admission (D2363, D3082) stays open in the routing queue.
+
+### 2026-09-24 — theory Library and principles API
+
+- **Library:** `/library` is rebuilt as a phase-first search over packs,
+  principles, shapes, concepts and named openings. It shows one row per item,
+  lists official material first, and labels community drafts.
+- **Entry pages:** each item has an entry page (principle, shape, opening,
+  pack) with Rehearse, Understand and Return doors.
+- **API:** `GET /theory/*` crosses `createApplication`.
+- **Citations:** theory-knowledge-pipeline lands principle-entry lane 0.2 and a
+  pinned 13-row theory-source register with citation validation. D1892, D1894,
+  D1895 and D1898 close.
+- **Roadmap:** the Library route is now marked live, and the four new entry
+  routes and the `/theory` family are added.
+- **Still open:** no principle cites a source yet, which is authored judgement.
+  The persistent theory-drill joins keep their migration position.
+
+### 2026-09-24 — import-source protocol registered; account import lands
+
+- **Import protocol:** `import-source-protocol` is a catalogue members resource,
+  and every import union derives from it (D2278).
+- **Pasted PGN:** it is capped and stripped of third-party annotations at the
+  record boundary (D959).
+- **Account import:** a learner can now preview and restore their own exported
+  bundle into a fresh installation.
+  - Formats are versioned with upgrade steps.
+  - Derived stats are recomputed, not copied.
+  - Any clash refuses the whole import.
+  - Ratings, marks and anything involving other people are never restored.
+- **Account screens:** a twelve-kind inventory panel and download progress.
+- **Export fix:** a repertoire's original PGN was exported as a list of byte
+  values; it is now text.
+- **Owner decisions:** guest accounts and claiming (O-A2/D1485), and the
+  wording of the twelve kind names.
+
+### 2026-09-24 — provider health and the live opponent-recovery journey
+
+- **Health authority:** provider availability is now a live, typed authority
+  (circuits, Lichess 429 blocking, cached-only states, logged transitions and
+  release receipts) instead of constructor flags.
+- **Capabilities and client:** `/capabilities` carries `providerHealth`.
+  Controls stay visible with a reason and Retry.
+- **Opponent selector:** it runs under one 4 s deadline with an exact cache.
+- **Maia identity:** the sidecar answers a container-identity probe, and bot
+  availability reads the health snapshot.
+- **Opponent recovery:** when the opponent fails, the run pauses and offers
+  Retry or Change opponent.
+- **Intent amendment:** proposed for `design/02` and `design/03`'s "capabilities
+  stay green on Maia loss".
+- **Still open:**
+  - The opponent-recovery schema half (lane 0.26).
+  - Registering the voice/TTS operations.
+  - Release receipts. Until they exist, guarded bot families stay conditional.
+- **Triage deferred:** the 75 author-model rows blocked on these RFCs are left
+  for the consolidation pass.
+
+### 2026-09-24 — storage backup/recovery and safe deployment profiles land
+
+**Storage recovery:**
+- The server holds an exclusive storage lock.
+- `storage-admin` backs up, verifies, restores, rolls back, upgrades through a
+  verified pre-upgrade bundle and recovers from a crash at any journal point.
+- A real backup → restore → boot round trip with the worker running passes, as
+  does an upgrade → rollback.
+
+**Deployment profiles:**
+- Three profiles (local, appliance, hosted), a CPU-only engine tier and a
+  maintenance overlay.
+- A profile is required outside development, cookies are secure behind TLS,
+  and cross-origin writes are refused.
+- The release renderer now fills the Maia container identity that provider
+  health introduced; the merge reconciled the two release-rendering changes.
+- The server image base moves to Node 24.21 for Unicode 17. The CPU Maia image
+  was not built.

@@ -26,6 +26,15 @@ import { afterEach, describe, expect, it } from "vitest";
 import { APPLICATION_PROVIDER_BOUNDS } from "./application.js";
 import { BotOpponentProviders, parseStoredBotEnvelope, type BotAcquisition, type BotOpponentAcquirer } from "./bot-opponent-operation.js";
 import { BotProviderAvailability } from "./bot-opponent-source.js";
+import { ProviderRegistry } from "./provider-health.js";
+
+/** Bot availability over a fresh provider-health registry: local fixtures, no outcome yet. */
+function botTestAvailability(): BotProviderAvailability {
+  return new BotProviderAvailability(new ProviderRegistry({ configured: [
+    { instanceId: "maia-inference", implementation: "local_fixture", endpoint: "mock-maia", identity: "mock maia" },
+    { instanceId: "stockfish-analysis", implementation: "local_fixture", endpoint: "mock-stockfish", identity: "mock stockfish" },
+  ] }));
+}
 import { EvidenceJobQueue, type EvidenceExecutor, type EvidenceJob } from "./evidence-queue.js";
 import type { EngineExchangeCapture, EngineExchangeRequest } from "./engine-supervisor.js";
 import { MockProviderEngineClient, type MockProviderEngineOptions } from "./mock-provider-engine.js";
@@ -60,7 +69,7 @@ afterEach(async () => {
   for (const cleanup of cleanups.splice(0).reverse()) await cleanup();
 });
 
-function providersFor(engine: MockProviderEngineClient, availability = new BotProviderAvailability()): BotOpponentProviders {
+function providersFor(engine: MockProviderEngineClient, availability = botTestAvailability()): BotOpponentProviders {
   const { scheduler } = composeProviderTraversalApplication({ engines: engine, tablebaseFetch: null, explorerFetch: null, explorerToken: null, bounds: APPLICATION_PROVIDER_BOUNDS });
   return new BotOpponentProviders({
     scheduler,
@@ -75,7 +84,7 @@ function providersFor(engine: MockProviderEngineClient, availability = new BotPr
 function setup(options: { readonly engine?: MockProviderEngineClient; readonly engineOptions?: MockProviderEngineOptions; readonly filename?: string; readonly acquirer?: BotOpponentAcquirer; readonly availability?: BotProviderAvailability } = {}) {
   const storage = new SQLiteRunStorage(options.filename);
   const engine = options.engine ?? new CountingEngine(options.engineOptions);
-  const availability = options.availability ?? new BotProviderAvailability();
+  const availability = options.availability ?? botTestAvailability();
   const providers = providersFor(engine, availability);
   const queue = new EvidenceJobQueue(new NoEvidence(), { maxConcurrency: 1 });
   const service = new RunService(storage, {

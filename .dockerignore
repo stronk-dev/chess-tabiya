@@ -5,3 +5,5 @@ node_modules
 test-results
 playwright-report
 tools/maia-harness/out
+data
+backups
