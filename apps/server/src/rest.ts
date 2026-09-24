@@ -68,8 +68,9 @@ function botOperationSummary(envelope: BotPolicyEventEnvelope) {
 import { ServerError } from "./errors.js";
 import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
 import { openingIdentityAt, type OpeningCatalogueAvailability } from "./opening-catalogue.js";
+import { compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
 import type { TtsProvider } from "./external-tts.js";
-import { projectPackDocument } from "./pack-registry.js";
+import { projectPackDocument, type PackRecord } from "./pack-registry.js";
 import {
   OpponentSelector,
   parseSelectMoveRequest,
@@ -837,6 +838,11 @@ export function createRestHandler(
   learnerProfile?: LearnerProfileService,
   theoryLibrary?: TheoryLibrary,
 ): RestHandler {
+  // rfc/phase-source-composition.md §5: the Support call site's phase-source dependencies.
+  const phaseSourcesFor = (pack: PackRecord | undefined): PhaseSourceDependencies => Object.freeze({
+    opening: openingCatalogue ?? Object.freeze({ kind: "unavailable" as const, reason: "artifact_missing" as const }),
+    recorded: compileRecordedEvidenceSnapshot(pack === undefined ? { kind: "no_pack_source" } : { kind: "pack", packId: pack.document.id, packDigest: pack.digest, recordedEvidence: pack.recordedEvidence, positionEvidence: pack.positionEvidence }),
+  });
   return async (request) => {
     try {
       const url = new URL(request.url);
@@ -1665,12 +1671,12 @@ export function createRestHandler(
           const access = service.guidanceAccess(route.runId, principal, comparison.forkNodeId);
           requireGuidanceDisclosure(access);
           const narrative = comparisonNarrative(access.run, comparison, comparisonStrips(access.run, comparison));
-          const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+          const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
           return json(200, { ...(await renderVoice(voiceProvider, base, voicePersona, "compare", narrative.evidence, false)), scope });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
-        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
         return json(200, { ...(await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra)), scope });
@@ -1683,7 +1689,7 @@ export function createRestHandler(
         if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
-        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
         const rendered = renderedEvidenceItems(EVIDENCE_MANIFEST, scope === "story" ? "guidance.voice_story" : "guidance.voice", [...basePacket.declared, ...extra]);

@@ -372,6 +372,8 @@ export {
   syzygyTablebaseDomainEvidence,
   boundedTargetSourceEvidence,
   derivedBoundedTargetPolicyEvidence,
+  invokeRunRecordPosition,
+  phaseReadingEvidence,
   type PackConceptReferencePayload,
   type PositionGuidanceEvidenceInput,
 } from "./evidence-operations.js";

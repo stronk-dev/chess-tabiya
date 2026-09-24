@@ -17,6 +17,8 @@ import type { CandidateFeatureInput, CandidateFeatureVector } from "./candidate-
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { positiveMaterialThreatExchanges, type LegalExchangeEvidence, type SourceLegalMovesEvidence, type ThreatEvidence } from "./bounded-target-chess.js";
 import { threatEvidencePassAnchor } from "./threat-pass-authority.js";
+import type { PhaseBandReadingV2 } from "./phase.js";
+import type { EndgameClassification } from "./endgame.js";
 import { pivotalMarkerEvidenceItems } from "./pivotal.js";
 import type { SourcingLedgerRecord } from "./recorded-reading.js";
 import type { ShapeTriggerSource } from "./shape-firing.js";
@@ -53,6 +55,22 @@ export function derivedBoundedTargetPolicyEvidence(arm: "engine" | "maia", input
     : invokeEvidenceValueRoute("derived.bounded_target.policy_bounds@1", input as never) as BoundedTargetPolicyBoundsFactoryResult;
 }
 
+/**
+ * rfc/phase-source-composition.md §2: the two rules-only phase sources at one exact FEN through
+ * their sole value routes — `rules.phase.reading@2` and the (0-or-1) `rules.endgame.classification@1`.
+ */
+export function phaseReadingEvidence(fen: string): { readonly phase: DeclaredEvidence<PhaseBandReadingV2>; readonly endgame: readonly DeclaredEvidence<EndgameClassification>[] } {
+  return Object.freeze({
+    phase: invokeEvidenceValueRoute("rules.phase.reading@2", { fen }) as DeclaredEvidence<PhaseBandReadingV2>,
+    endgame: invokeEvidenceValueRoute("rules.endgame.classification@1", { fen }) as readonly DeclaredEvidence<EndgameClassification>[],
+  });
+}
+
+/** The exact `run.record.position@1` item for one recorded node (the phase-source join authority). */
+export function invokeRunRecordPosition(run: DrillRun, nodeId: string): DeclaredEvidence<{ readonly nodeId: string; readonly ply: number; readonly fen: string }> {
+  return invokeEvidenceValueRoute("run.record.position@1", { run, nodeId }) as DeclaredEvidence<{ readonly nodeId: string; readonly ply: number; readonly fen: string }>;
+}
+
 const READING_KINDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count" && kind !== "named_structure"));
 
 export interface PositionGuidanceEvidenceInput {
@@ -62,6 +80,11 @@ export interface PositionGuidanceEvidenceInput {
   readonly shapes?: readonly (ShapeTriggerSource & { readonly name?: string })[];
   readonly authored?: readonly AuthoredFeedbackItemRecord[];
   readonly recorded?: readonly DeclaredEvidence<RecordedReading>[];
+  /**
+   * rfc/phase-source-composition.md §5: the Support call site passes the compiled point's exact
+   * rules-phase and endgame items; they are retained, never re-minted beside the point.
+   */
+  readonly phaseSources?: { readonly phase: DeclaredEvidence<unknown>; readonly endgame: readonly DeclaredEvidence<unknown>[] };
 }
 
 /**
@@ -72,12 +95,12 @@ export interface PositionGuidanceEvidenceInput {
 export function positionGuidanceEvidence(input: PositionGuidanceEvidenceInput): readonly DeclaredEvidence<unknown>[] {
   const fen = input.node.fen;
   return Object.freeze([
-    invokeEvidenceValueRoute("rules.phase.reading@2", { fen }),
+    input.phaseSources?.phase ?? invokeEvidenceValueRoute("rules.phase.reading@2", { fen }),
     ...(input.pack === undefined ? [] : [invokeEvidenceValueRoute("pack.authored.phase@1", { pack: input.pack })]),
     ...invokeEvidenceValueRoute("rules.structural.reading.named_structure@2", { fen }),
     ...READING_KINDS.flatMap((kind) => invokeEvidenceValueRoute(`rules.structural.reading.${kind}@1`, { fen })),
     ...pivotalMarkerEvidenceItems(input.run, input.node.branchId).filter((item) => item.payload.nodeId === input.node.id),
-    ...invokeEvidenceValueRoute("rules.endgame.classification@1", { fen }),
+    ...(input.phaseSources?.endgame ?? invokeEvidenceValueRoute("rules.endgame.classification@1", { fen })),
     ...(input.shapes === undefined || input.shapes.length === 0 ? [] : invokeEvidenceValueRoute("theory.shapes.firing@1", { entries: input.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: input.node.id, fen }] })),
     ...(input.authored ?? []).flatMap((item) => invokeEvidenceValueRoute("pack.authored.claim@1", { item })),
     ...(input.recorded ?? []),

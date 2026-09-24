@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -75,6 +76,11 @@ export interface PackRecord {
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
   readonly positionEvidence: PositionEvidenceIndex;
+  /**
+   * rfc/phase-source-composition.md §2.2: the recorded-evidence source state behind
+   * `positionEvidence`, so an unverified or invalid ledger is never read as recorded absence.
+   */
+  readonly recordedEvidence: { readonly state: "verified"; readonly ledgerDigest: string } | { readonly state: "unverified" } | { readonly state: "invalid" };
   readonly boundClaimIds: ReadonlySet<string>;
   readonly claimBackings: ReadonlyMap<string, {
     readonly binding: "ledger_bound" | "author_attributed" | "self_declared";
@@ -325,6 +331,11 @@ export class PackRegistry {
       const positionEvidence = buildPositionEvidenceIndex({ ledger, grounding, packDigest: digest });
       const bindingIssues: SourcingIssue[] = [];
       const validatedLedger = validateLedger(ledger, bindingIssues);
+      const recordedEvidence: PackRecord["recordedEvidence"] = grounding !== "ledger_verified"
+        ? { state: "unverified" }
+        : validatedLedger === undefined || bindingIssues.length > 0 || validatedLedger.packDigest !== digest
+          ? { state: "invalid" }
+          : { state: "verified", ledgerDigest: `sha256:${createHash("sha256").update(JSON.stringify(ledger)).digest("hex")}` };
       const validBindings = validatedLedger === undefined ? [] : validateClaimBindings(document, validatedLedger, bindingIssues);
       const claimBackings = new Map<string, PackRecord["claimBackings"] extends ReadonlyMap<string, infer V> ? V : never>();
       const principleRows = (ids: readonly string[] | undefined) => Object.freeze((ids ?? []).flatMap((id) => {
@@ -359,6 +370,7 @@ export class PackRegistry {
           feedbackPolicy,
           assessmentGrounding: grounding,
           positionEvidence,
+          recordedEvidence: freeze(recordedEvidence),
           boundClaimIds: Object.freeze(new Set(validBindings.map((binding) => binding.claimId))),
           claimBackings,
           channel,
@@ -468,6 +480,7 @@ export class PackRegistry {
       feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
       assessmentGrounding: "unverified",
       positionEvidence: new Map(),
+      recordedEvidence: freeze({ state: "unverified" as const }),
       boundClaimIds: Object.freeze(new Set<string>()),
       claimBackings: new Map<string, never>(),
       channel: "community",
@@ -498,6 +511,7 @@ export class PackRegistry {
       feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
       assessmentGrounding: "unverified",
       positionEvidence: new Map(),
+      recordedEvidence: freeze({ state: "unverified" as const }),
       boundClaimIds: Object.freeze(new Set<string>()),
       claimBackings: new Map<string, never>(),
       channel: "community",

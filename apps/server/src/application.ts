@@ -593,6 +593,7 @@ async function composeServices(
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     botOpponent,
     botAvailability: () => botAvailability.snapshot(),
+    openingCatalogue,
   });
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,

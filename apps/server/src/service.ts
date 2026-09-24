@@ -163,7 +163,8 @@ import {
 } from "./authorization.js";
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
-import { recordedSemanticPathOperation } from "./recorded-semantic-path.js";
+import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
+import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import type { ReviewEvidenceCoordinator } from "./review-evidence.js";
 import { resolveImportSource, type ImportSource } from "./import-source.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
@@ -481,6 +482,7 @@ export class RunService {
   readonly #storage: RunStorage;
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
   readonly #packRegistry: PackRegistry | undefined;
+  readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
   readonly #rating: RatingStorage | undefined;
@@ -520,6 +522,8 @@ export class RunService {
       readonly botOpponent?: BotOpponentAcquirer;
       /** rfc/bot-policy.md §4.3: the exchange-derived provider availability profiles join. */
       readonly botAvailability?: () => BotProviderAvailabilitySnapshot;
+      /** rfc/phase-source-composition.md §5: the opening catalogue the Review arc's points read. */
+      readonly openingCatalogue?: OpeningCatalogueAvailability;
     } = {},
   ) {
     this.#storage = storage;
@@ -531,6 +535,7 @@ export class RunService {
       options.evidenceQueue.attach({ evidenceJobs: storage.evidenceJobs, setEvidenceJobListener: (listener) => storage.setEvidenceJobListener!(listener) });
     }
     this.#packRegistry = options.packRegistry;
+    this.#openingCatalogue = options.openingCatalogue;
     this.#progress = options.progressStorage;
     this.#rating = options.ratingStorage ?? (
       "createRatedRun" in storage && "ratedGame" in storage
@@ -1054,7 +1059,11 @@ export class RunService {
    */
   async review(runId: string, principal: Principal, requestedBranchId?: string) {
     const context = this.#storyContext(runId, principal, requestedBranchId, false);
-    const semanticPath = await recordedSemanticPathOperation(this.#storage)({ principal, runId, branchId: context.branchId });
+    // rfc/phase-source-composition.md §5: Review compiles one ordered PhaseArc over the exact
+    // selected run/branch; the arc invokes the sole recorded-path operation itself, and Review's
+    // evidence panel consumes that same retained path. The server-private arc is never serialized.
+    const phaseArc = compilePhaseArc(context.run, context.branchId, this.#phaseSourceDependencies(context.run));
+    const semanticPath = phaseArc.kind === "arc" ? phaseArc.arc.path : phaseArc.path;
     const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role), packet: context.packet });
     return Object.freeze({
       runId,
@@ -2789,6 +2798,14 @@ export class RunService {
 
   #forWrite(runId: string, principal: Principal, writerId: string) {
     return requireWrite(this.#storage, runId, principal, writerId);
+  }
+
+  #phaseSourceDependencies(run: DrillRun): PhaseSourceDependencies {
+    const pack = this.#registeredPack(run);
+    return Object.freeze({
+      opening: this.#openingCatalogue ?? Object.freeze({ kind: "unavailable" as const, reason: "artifact_missing" as const }),
+      recorded: compileRecordedEvidenceSnapshot(pack === undefined ? { kind: "no_pack_source" } : { kind: "pack", packId: pack.document.id, packDigest: pack.digest, recordedEvidence: pack.recordedEvidence, positionEvidence: pack.positionEvidence }),
+    });
   }
 
   #registeredPack(run: DrillRun): PackRecord | undefined {

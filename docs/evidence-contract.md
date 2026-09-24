@@ -174,6 +174,24 @@ and `reported`:
 `application.ts` over the bounded-target service and the one shared provider scheduler) is the only
 production operation; it keeps no cache or queue of its own and propagates cancellation.
 
+## Phase sources (server-private composition)
+
+`apps/server/src/phase-source-composition.ts` (rfc/phase-source-composition.md) composes one exact
+recorded position (`run.record.position@1`) into a branded `PhaseSourcePoint` with independent
+slots: `openingSources` (current endpoint and catalogue membership, derived once through
+`openingIdentityAt` from the retained occurrence), `rulesPhase` (the sealed `rules.phase.reading@2`
+with its five-arm decision), `rulesEndgame` (`not_applicable` exactly outside the endgame arm, else
+the sealed `rules.endgame.classification@1`), and `tablebase` (`recorded` from a sealed pack
+evidence snapshot — `no_pack_source`, `ledger_unverified` and `ledger_invalid` are distinct from
+recorded absence — plus the live Syzygy provider arm retained exactly: `not_requested`, success,
+local-domain result or source failure). No slot wins, and no root carries a `phase`, `stage`,
+`inBook`, technique, confidence, rank, relevance, hint or selected-source field. `compilePhaseArc(run,
+branchId, deps)` calls the recorded-semantic-path operation itself and emits source-local changes
+only (never `phase_transition`/`left_book`). Support (`guidance.ts#evidencePacket`) consumes the
+current point; Review (`service.review`) compiles the arc and its evidence panel reads the arc's
+retained recorded path. The views never cross the server package. Failures (`PHASE_SOURCE_*`) are
+bugs or corrupt inputs, never "no evidence".
+
 ## Honest homes and raw evidence
 
 Every projection is either bound to a consumer or has one explicit disposition:
