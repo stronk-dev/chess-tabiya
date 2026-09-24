@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:236b8e79b7f7ee8f785ecf16f4f2a6d0fea82c2b068cb49aaba26997a6dec22d",
+    "roadmap": "sha256:deaa92497fe9aaa95b7b7eca0682b9ad4a61f72942280e644ef3aa3c06ae1d64",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
     "workState": "sha256:79aa4c11d96d647c86b93c19d0f453519d80e699ba87b0bd489425a8f6a05cfc",
-    "rfcRegister": "sha256:cbe47ae406f4b043ab20c6c442945f2d1baacc7a8018e3bb13158fd5281d3069",
+    "rfcRegister": "sha256:92dc510800e7847d16a0ff4f40abf5a450a626af478d1e0e44aca57f319a98f6",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:e46fa7287a4c83836b114e80dbb7a72e929f0db7eae5e68eb57be2902c9ee5a1",
-    "application": "sha256:badf7fcb6afb95210a4a3ac56ddeed539d7eb89e22b68ffca686703553cba331",
-    "rest": "sha256:a5f3315a14daf79c086d00af986543a1ee69480691e44939c5ad0f94349965f5"
+    "application": "sha256:bdb15c52d081713ab6815ccc1c0e5354e813710eb92436704e1b5073d5a66c3b",
+    "rest": "sha256:53784af7232b7e105d1263575ab97219ba67913140abcfcadcdfdcb8d43a2d90"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 71,
     "activeRfcLifecycle": {
-      "draft": 33,
+      "draft": 29,
       "accepted": 0,
-      "implementing": 28,
+      "implementing": 32,
       "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
@@ -484,37 +484,35 @@
       ],
       "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
-        "at": "2026-09-23",
-        "summary": "The rebuilt local self-host server image now boots healthy with Maia and the copied draft corpus after D3274/D3275 packaging repairs; a production API capture exercised it across 66 roots. This advances first-boot proof only. The safe-deployment authority remains returned, and clean-host digest-pinned release, backup/restore, upgrade/rollback, official content and complete learner journeys remain unproven.",
+        "at": "2026-09-24",
+        "summary": "Self-hosting now has real operator paths: an exclusive storage lock, verified backup/restore/rollback with crash-safe replacement, upgrade through a verified pre-upgrade bundle, three validated deployment profiles (local, appliance with TLS, hosted ACME) with secure cookies and cross-origin refusal, a CPU-only engine tier, and live provider health with Maia container identity. A real backup-restore-boot round trip and an upgrade-rollback pass; clean-host digest-pinned release proof remains.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/Dockerfile",
-          "tools/verify-packaging.mjs",
-          "planning/semantic-consequence-search/d3262-maia-capture.md",
-          "rfc/semantic-consequence-search.md",
+          "apps/server/src/storage-appliance.test.ts",
+          "rfc/storage-backup-recovery.md",
           "rfc/safe-deployment-profiles.md",
-          "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md"
+          "rfc/provider-health-degradation.md"
         ],
         "anchors": [
           {
-            "kind": "work_state",
-            "id": "D3274",
-            "digest": "sha256:2f1bb8ad4a09be2585a0663bd2ecf8c23afac65fe9a3a4689ca2e63e75bd966b"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3275",
-            "digest": "sha256:f2edb5da7cf95d453087b9beee4dbba7b7c08eeee0012c74d787775530d82280"
-          },
-          {
             "kind": "rfc",
-            "id": "semantic-consequence-search.md",
-            "digest": "sha256:fba22cb1102551d9ceb5de3568e697b93192009827e86de0c79d40f1c13f0403"
+            "id": "storage-backup-recovery.md",
+            "digest": "sha256:3f2a0df32352bbc2b1d744ade544f6d75769d1ebc176ac2daa4ca50012ef3456"
           },
           {
             "kind": "rfc",
             "id": "safe-deployment-profiles.md",
-            "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"
+            "digest": "sha256:b26a1d4a65c50862156d63c5b722bded914ae8fbc48a01f59a590d3b00bff1cb"
+          },
+          {
+            "kind": "rfc",
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:3de1c228e6e548f861e4e89020e982d30328eea3c92d302c9e5050884bb12dd3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1846",
+            "digest": "sha256:bd4878cac3dc3d44721f7af84359c821c3e9def53e46a78e0c1c53dbedf7ba1f"
           }
         ]
       },

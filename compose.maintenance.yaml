@@ -1,0 +1,17 @@
+# rfc/storage-backup-recovery.md §8 — development storage maintenance overlay.
+#   docker compose -f compose.yaml -f compose.maintenance.yaml run --rm storage-admin <operation>
+# It never starts HTTP, publishes no port, has no network and refuses (MAINTENANCE_LOCKED) while a
+# server holds the storage lock. TABIYA_BACKUP_DIRECTORY must be an explicit absolute host path.
+services:
+  storage-admin:
+    profiles: [maintenance]
+    image: chess-tabiya-server:dev
+    entrypoint: ["node", "apps/server/dist/storage-admin.js"]
+    environment:
+      DATABASE_PATH: /data/chess-tabiya.sqlite
+      TABIYA_BACKUP_ROOT: /backup
+    volumes:
+      - tabiya-data:/data
+      - ${TABIYA_BACKUP_DIRECTORY:?set TABIYA_BACKUP_DIRECTORY to an absolute host directory for backups}:/backup
+    network_mode: none
+    restart: "no"

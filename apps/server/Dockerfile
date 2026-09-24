@@ -1,4 +1,4 @@
-FROM node:24.10.0-bookworm-slim AS stockfish
+FROM node:24.21.0-bookworm-slim AS stockfish
 
 ARG TARGETARCH
 RUN apt-get update \
@@ -8,7 +8,7 @@ RUN apt-get update \
 COPY tools/install-stockfish-linux.sh /usr/local/bin/install-stockfish-linux
 RUN install-stockfish-linux /opt/stockfish
 
-FROM node:24.10.0-bookworm-slim AS build
+FROM node:24.21.0-bookworm-slim AS build
 
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
@@ -28,7 +28,12 @@ COPY schemas schemas
 COPY content content
 RUN pnpm build
 
-FROM node:24.10.0-bookworm-slim
+FROM node:24.21.0-bookworm-slim
+
+# rfc/storage-backup-recovery.md §2: the immutable source revision every backup manifest and
+# storage receipt records. Release builds pass the full commit SHA; local builds use dev+<sha>.
+ARG TABIYA_APPLICATION_REVISION=dev+dirty
+LABEL org.opencontainers.image.revision=$TABIYA_APPLICATION_REVISION
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends netcat-openbsd \
@@ -59,10 +64,16 @@ ENV DATABASE_PATH=/data/chess-tabiya.sqlite
 ENV PORT=3000
 ENV STATIC_DIRECTORY=/app/apps/web/dist
 ENV STOCKFISH_PATH=/usr/games/stockfish
+ENV TABIYA_APPLICATION_REVISION=$TABIYA_APPLICATION_REVISION
 
 EXPOSE 3000
 VOLUME ["/data"]
-HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=6 \
-  CMD node -e "fetch('http://127.0.0.1:3000/healthz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+# Readiness, not liveness: storage prepared, current version, representative read, worker live.
+# A pre-upgrade migration runs before HTTP opens, so the start period is generous.
+HEALTHCHECK --interval=10s --timeout=3s --start-period=120s --retries=6 \
+  CMD node -e "fetch('http://127.0.0.1:3000/readyz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
 
+# main.js owns the storage lock for its lifetime: replacement recovery, prepare-start (pre-upgrade
+# snapshot + staged migration) and then HTTP. Maintenance: node apps/server/dist/storage-admin.js.
+# A deployment profile is required (TABIYA_DEPLOYMENT_PROFILE); the Compose files set it.
 CMD ["node", "apps/server/dist/main.js"]

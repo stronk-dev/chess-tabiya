@@ -1,6 +1,6 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** **draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model
+- **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model
   chain is retired as this RFC's acceptance authority and moved to
   `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; durable opponent
   recovery and run-schema lane 0.26 moved to `rfc/opponent-recovery-journey.md`. What remains is the

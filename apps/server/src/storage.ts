@@ -732,7 +732,24 @@ export interface SQLiteRunStorageOptions {
    * and refuses a legacy concept population rather than guessing.
    */
   readonly concepts?: ConceptMigrationAuthority;
+  /**
+   * rfc/storage-backup-recovery.md §6: the HTTP process opens only an absent/empty database or the
+   * exact current storage version. `prepare-start` owns every on-disk migration (staged, snapshotted
+   * and journalled); an older database reaching this constructor under this policy refuses.
+   */
+  readonly requirePreparedStorage?: boolean;
 }
+
+/** A storage open refused because `prepare-start` has not upgraded the database (§6). */
+export class StorageNotPrepared extends Error {
+  constructor(readonly storageVersion: number) {
+    super(`Database schema ${storageVersion} requires storage prepare-start before the server may open it`);
+  }
+}
+
+/** Test/tool-only ceiling for {@link SQLiteRunStorage.materializeStorageVersion}; never an option. */
+let pendingMigrationCeiling: number | undefined;
+const CEILING_REACHED = Symbol("storage migration ceiling reached");
 
 /** Post-commit hints from the durable evidence store to its in-process worker. */
 export interface EvidenceJobListener {
@@ -1041,9 +1058,14 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
    * the database on every unsuccessful exit ([[D2964]], [[D2965]]).
    */
   constructor(filename = ":memory:", options: SQLiteRunStorageOptions = {}) {
+    const ceiling = pendingMigrationCeiling;
+    pendingMigrationCeiling = undefined;
     this.#databasePath = filename;
     this.#database = new DatabaseSync(filename);
     try {
+      const preexistingTables = options.requirePreparedStorage === true
+        ? (this.#database.prepare("SELECT count(*) AS n FROM sqlite_schema WHERE type = 'table'").get() as { readonly n: number }).n
+        : 0;
       this.#now = options.now ?? (() => new Date().toISOString());
       this.#failDeletionAfterEffectGroup = options.failDeletionAfterEffectGroup;
       this.#onMigration =
@@ -1061,7 +1083,15 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           updated_at TEXT NOT NULL
         ) STRICT
       `);
-      this.#migrate();
+      if (options.requirePreparedStorage === true) {
+        const version = userVersion(this.#database);
+        if (version !== STORAGE_VERSION && !(version === 0 && preexistingTables === 0)) {
+          if (version > STORAGE_VERSION) throw new ServerError("STORAGE_FAILURE", `Database schema ${version} is newer than supported schema ${STORAGE_VERSION}`);
+          throw new StorageNotPrepared(version);
+        }
+      }
+      this.#migrate(ceiling ?? STORAGE_VERSION);
+      if (ceiling !== undefined && ceiling < STORAGE_VERSION) throw CEILING_REACHED;
       this.#conceptReceipt = this.#verifyConceptStore();
       this.#longitudinal = new LongitudinalStore(this.#database, options.longitudinalNow === undefined ? {} : { now: options.longitudinalNow });
       this.#evidence = new EvidenceJobStore(this.#database, options.evidenceNow === undefined ? {} : { now: options.evidenceNow });
@@ -1069,6 +1099,38 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       try { this.#database.close(); } catch { /* preserve the primary failure */ }
       throw error;
     }
+  }
+
+  /**
+   * Materializes exactly the historical schema `version` by running the canonical migration chain
+   * 1..version and stopping (rfc/storage-backup-recovery.md §5): the generated historical table
+   * inventories and the prior-release fixtures come from the same migration code the upgrade runs,
+   * never from a hand-maintained guess. Migrations are append-only, so a version's schema is fixed
+   * for every later head.
+   */
+  static materializeStorageVersion(filename: string, version: number, options: Pick<SQLiteRunStorageOptions, "concepts"> = {}): void {
+    if (!Number.isSafeInteger(version) || version < 1 || version > STORAGE_VERSION) {
+      throw new TypeError(`Storage version ${version} is outside 1..${STORAGE_VERSION}`);
+    }
+    pendingMigrationCeiling = version;
+    try {
+      new SQLiteRunStorage(filename, { ...options, onMigration: () => {} }).close();
+    } catch (error) {
+      if (error !== CEILING_REACHED) throw error;
+    } finally {
+      pendingMigrationCeiling = undefined;
+    }
+  }
+
+  /**
+   * The storage half of `/readyz` (rfc/storage-backup-recovery.md §6): the live connection's
+   * `user_version` and one representative application read. Throws when either is unavailable.
+   */
+  readinessProbe(): { readonly storageVersion: number; readonly representativeData: "ok" } {
+    const version = userVersion(this.#database);
+    this.#database.prepare("SELECT count(*) AS n FROM learners").get();
+    this.#database.prepare("SELECT id FROM drill_runs LIMIT 1").all();
+    return Object.freeze({ storageVersion: version, representativeData: "ok" as const });
   }
 
   /** The verified migration-28 receipt this database carries (rfc/concept-registry.md §4 step 7). */
@@ -4345,7 +4407,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     }
   }
 
-  #migrate(): void {
+  #migrate(ceiling: number): void {
     let version = userVersion(this.#database);
     if (version > STORAGE_VERSION) {
       throw new ServerError(
@@ -4502,7 +4564,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {
-      if (migration.version <= version) continue;
+      if (migration.version <= version || migration.version > ceiling) continue;
       const rebuildsReferencedTables = migration.version === 14;
       try {
         if(rebuildsReferencedTables){

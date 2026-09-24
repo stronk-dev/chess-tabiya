@@ -1,6 +1,6 @@
 # RFC: Durable opponent failure and recovery journey
 
-- **Status:** **draft — stub opened 2026-09-06 by the `provider-health-degradation` cut.** Scope and
+- **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — stub opened 2026-09-06 by the `provider-health-degradation` cut.** Scope and
   inherited ledger rows are recorded; the specification is unwritten. It carries the run-schema lane
   its predecessor released so that the persistence decision is owned by a named document rather than
   left to implementation.
