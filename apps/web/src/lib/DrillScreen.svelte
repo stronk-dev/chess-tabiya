@@ -107,6 +107,10 @@
     boardSide?: "white" | "black" | undefined;
     assistanceStorage?: PreferenceStorage | undefined;
     liveSessionKind?: SessionKind | undefined;
+    /** rfc/campaign-core.md §5 / intent-presets D6: the server-verified Campaign encounter context. */
+    campaignEncounter?: boolean | undefined;
+    /** The active campaign encounter's "Declare done" when the rules have ended the game. */
+    campaignTerminalAction?: { readonly label: string; readonly busy: boolean; readonly error?: string | undefined; readonly onAction: () => void } | undefined;
     seatedInContest?: boolean | undefined;
     reviewing?: boolean | undefined;
     firstRehearsal?: boolean | undefined;
@@ -179,6 +183,8 @@
     boardSide,
     assistanceStorage,
     liveSessionKind,
+    campaignEncounter = false,
+    campaignTerminalAction,
     seatedInContest = false,
     reviewing = false,
     firstRehearsal = false,
@@ -823,7 +829,7 @@
   // full operand intersection holds, together with its convention id@version; otherwise the line stays
   // at the material class (rfc/evidence-value-authority.md §3.4).
   let endgameSentences = $derived(endgame === null ? [] : [...renderEndgameClassification(endgame), ...endgameSetupMatches(displayedNode.fen).map(renderEndgameSetupMatch)]);
-  let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
+  let activeAssistanceProfile: AssistanceProfile = $derived(campaignEncounter ? "campaign" : assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
   let assistanceContext = $derived({ workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
   // rfc/module-registration.md §4.5 + rfc/intent-presets.md Checkpoint B: Post-commit Nudge renders only
   // when the server-compiled result carries its automatic post-commit effect (preset ∩ ceiling ∩ access,
@@ -2202,6 +2208,7 @@
 {#if viewportSupport.supported && terminalEvent?.type === "outcome.reached"}
   <TerminalSheet
     {run}
+    campaignAction={campaignTerminalAction}
     outcome={terminalEvent.data.outcome}
     authoredItems={terminalAuthoredItems}
     {shapes}

@@ -155,7 +155,7 @@
               "encounter": {
                 "kind": "boss_game",
                 "start": {
-                  "fen": "r1bqkbnr/ppppp1p1/n4p1p/8/8/4PQ1N/PPPP1PPP/RNB1KB1R w KQkq - 0 4",
+                  "fen": "rnb3k1/pppp1ppp/8/n6N/n1B5/B2Q4/PPP2PPP/4R2K w - - 0 1",
                   "learnerSide": "white"
                 },
                 "opponent": {

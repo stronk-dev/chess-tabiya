@@ -73,7 +73,7 @@ export class CampaignRegistry {
     for (const entry of documents) {
       const result = validateCampaignDocument(entry.value, packs);
       if (!result.valid || result.document === undefined) {
-        throw new CampaignRegistryError("CAMPAIGN_DOCUMENT_INVALID", `campaign ${entry.source} is invalid`, Object.freeze({ source: entry.source, issues: result.issues }));
+        throw new CampaignRegistryError("CAMPAIGN_DOCUMENT_INVALID", `campaign ${entry.source} is invalid: ${result.issues.filter((item) => item.severity === "error").map((item) => `${item.code} at ${item.path} (${item.message})`).join("; ")}`, Object.freeze({ source: entry.source, issues: result.issues }));
       }
       const document = freeze(structuredClone(result.document));
       const identity = key(document.id, document.version);

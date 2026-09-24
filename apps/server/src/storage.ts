@@ -1789,6 +1789,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         },
         step: (name: string) => this.#campaignFault?.(name),
       }));
+      // A campaign encounter start is a run-creating source mutation (longitudinal-store §C row 12).
+      if (created.length > 0) this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#campaignTransaction", effect: "conditional" }, created.map(({ run }) => run.id));
       this.#database.exec("COMMIT");
       for (const { run, lease } of created) {
         this.#snapshots.set(run.id, Object.freeze({ run, activeWriterId: lease.writerId, activeWriterLearnerId: lease.learnerId }));
@@ -1848,7 +1850,6 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     this.#database
       .prepare(`INSERT INTO run_grants (run_id, learner_id, role, granted_at, expires_at, granted_via) VALUES (?, ?, 'host', ?, NULL, NULL)`)
       .run(run.id, lease.learnerId, updatedAt);
-    this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#create", effect: "always" }, [run.id]);
   }
 
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;

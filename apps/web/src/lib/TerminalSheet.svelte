@@ -52,9 +52,11 @@
     repertoireAnswerBusy?: string | undefined;
     repertoireAnswerError?: string | undefined;
     onChooseRepertoireAnswer?: ((repertoireId:string,gapKey:string,moveUci:string,ifMatch:string)=>Promise<void>) | undefined;
+    /** rfc/campaign-core.md §7.1: an active campaign encounter's "Declare done" inside this sheet. */
+    campaignAction?: { readonly label: string; readonly busy: boolean; readonly error?: string | undefined; readonly onAction: () => void } | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
   let heading: HTMLHeadingElement;
   let selectedAssignmentId: string | undefined = $state();
   let submissionBusy = $state(false);
@@ -153,8 +155,14 @@
       <div>
         <p class="eyebrow">What next</p>
         <h3 id="terminal-next-step-title">Keep the attempt, then choose where to return.</h3>
-        <p>Your completed attempt stays saved. Rewinds are free in rehearsals; going back creates another branch without replacing this one.</p>
+        <p>{campaignAction === undefined ? "Your completed attempt stays saved. Rewinds are free in rehearsals; going back creates another branch without replacing this one." : "Your completed attempt stays saved. In this campaign encounter a rewind spends an earned rewind; declaring done records this game on the campaign map."}</p>
       </div>
+      {#if campaignAction}
+        <div class="primary-actions">
+          <button class="primary" type="button" disabled={campaignAction.busy} onclick={campaignAction.onAction}>{campaignAction.busy ? "Declaring…" : campaignAction.label}</button>
+          {#if campaignAction.error}<p role="alert">{campaignAction.error}</p>{/if}
+        </div>
+      {/if}
       <div class="primary-actions">
         <button class="primary" type="button" disabled={!canRewind || rewinding} aria-describedby={rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>
         <HonestControl

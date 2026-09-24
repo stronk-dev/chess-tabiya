@@ -240,8 +240,8 @@ predecessor renegotiates here rather than renumbering unilaterally.
 
 ## Campaign-schema-version register
 
-<!-- register: campaign-schema head=1 -->
-<!-- schema-digest: campaign-schema c03819626fb9 -->
+<!-- register: campaign-schema head=3 -->
+<!-- schema-digest: campaign-schema 7956d6776d06 -->
 
 Opened 2026-08-23 by the register owner. `schemas/campaign.schema.json` shipped at `976d523`
 with a versioned `$id` and no register, and `tools/register-check.mjs` could not notice because
@@ -257,6 +257,8 @@ to compare against, not manufactured here with nothing to read it.
 | version | owner RFC | what it changed | landed at |
 |---|---|---|---|
 | 1 | **none — shipped without one** | established the authored campaign contract and its schema | `976d523` |
+| 2 | `campaign-core.md` | closed three-member run-reward union (`module_unlock`/`theory_unlock`/`resource_grant`), `consumes` reward-reference declarations, `durableRewards` (completion/prestige marks; cosmetics refused until the appearance catalog lands) and the `publication` channel with official curriculum metadata | this landing (migration 30) |
+| 3 | `campaign-boss-games.md` | the `boss_game` encounter arm (start FEN + learner side, exact `bot-profile-catalog@1` reference, optional calibration reference, `rated_when_clean`/`unrated`, `pack_start` briefing reference); no objective, checkpoint, horizon or Elo field admitted | this landing (migration 30) |
 
 `976d523` carries no owning RFC in `rfc/archive/`; it remains registered as landed-without-an-owner
 rather than back-attributed to a document that never governed it. Active changes are serialized in
@@ -266,8 +268,6 @@ the live-claims table below: campaign-core lane 2, boss games lane 3, training m
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| lane 2 | `campaign-core.md` | reward becomes a closed three-member run-reward union; nodes declare exact reward consumers; durable cosmetic awards reference the shared appearance catalog; official publication carries checked curriculum metadata | `tabiya-claims` |
-| lane 3 | `campaign-boss-games.md` | adds the boss_game encounter arm with exact start FEN, learner side, immutable calibrated bot-profile reference, rating policy and briefing reference; no authored objective, checkpoint, success condition or horizon is admitted | `tabiya-claims` |
 | lane 4 | `training-mode-variants.md` | adds prediction and survival encounter arms after campaign-boss-games; pack and boss_game arms remain byte-identical | `tabiya-claims` |
 
 ## Concept-registry-schema-version register
@@ -495,7 +495,7 @@ migrates; v2 is the sealed value `intent-presets.md` landed. The next version cl
 
 ## Migration register
 
-<!-- register: migration head=29 -->
+<!-- register: migration head=30 -->
 
 Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
 migration 2 and `STORAGE_VERSION` 1→2, so neither could land independently. A
@@ -550,12 +550,12 @@ was sound for the same reason — the draft that could not land is the one that 
 | 27 | 26→27 | `evidence-job-durability.md` | **implemented 2026-09-24** — creates `evidence_job_batches`, `evidence_result_sequences`, `evidence_jobs` and `evidence_run_transitions` with the RFC's exact §2 DDL, the two `evidence_run_transitions` append-only triggers and two named indexes (`evidence_jobs_claimable`, `evidence_jobs_run_state`). Additive schema only: no backfill (the in-process queue it replaces never survived a restart) and no run-schema change. The body is table-presence guarded so rewound-version fixtures replay it safely |
 | 28 | 27→28 | `concept-registry.md` | **implemented 2026-09-24** — rebuilds `attempt_concepts` as registered global identities (`concept_key` = `concept:<id>@1` CHECKed against `concept_id`, `registry_schema_version`, `registry_digest`, revision-time `label`, occurrence `pack_id`/`pack_digest`) and creates `attempt_concept_legacy` (closed-reason quarantine) and `concept_registry_migration` (one canonical receipt). A data migration: every legacy `pack:<pack>#<id>` row is resolved through its replayed run, its exact complete-document pack artifact and the compiled registry inside one coordinator-owned transaction, or quarantined; unknown or colliding rows fail closed and roll back to 27. The body is presence-guarded so rewound-version fixtures replay it safely |
 | 29 | 28→29 | `bot-policy.md` | **implemented 2026-09-24** — stamp-only, frozen literals `"0.17"`→`"0.18"` (`#upgradeV017Runs`): run lane 0.18 only adds the optional `RunOpponentPolicy.profile` and `OpponentSelection.policy`, so no event byte is rewritten and no historical run gains a profile. Mandatory because every run read filters on the exact current schema version; prior-release upgrade test in `apps/server/src/bot-opponent-ply.test.ts` |
+| 30 | 29→30 | `campaign-core.md` | **implementing 2026-09-24** — creates `campaign_runs`, `campaign_run_creations`, `campaign_events`, `campaign_mutation_commands`, `campaign_reward_awards` plus `idx_drill_runs_owner_identity`; create-table/index only, STRICT, literal CHECKs, no backfill. The event CHECK also admits `boss_game_committed` (campaign-boss-games §6); `campaign_mutation_commands.play_run_id` carries no RESTRICT key so a sealed encounter run stays deletable (§6.3). Table-presence guarded |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| position behind bot-policy | `campaign-core.md` | campaign_runs; campaign_run_creations; campaign_events; campaign_mutation_commands; campaign_reward_awards | `tabiya-claims` |
 | position behind campaign-core | `campaign-catalogue-progression.md` | learner_catalogue_sightings; learner_catalogue_projection_state | `tabiya-claims` |
 | position behind campaign-catalogue-progression | `live-sources.md` | imported_games.source_kind CHECK gains 'lichess_broadcast' and source_receipt_json retains the typed broadcast receipt (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration) | `tabiya-claims` |
 | position behind live-sources | `recorded-clocks.md` | imported_games.clocks (new typed column holding the per-ply readings sanitizeBroadcastPgn already extracts and does not store) | `tabiya-claims` |

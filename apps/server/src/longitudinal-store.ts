@@ -229,6 +229,10 @@ export const LONGITUDINAL_SOURCE_MUTATION_OPERATIONS = Object.freeze([
   Object.freeze({ symbol: "SQLiteRunStorage#grantRole", effect: "conditional" }),
   Object.freeze({ symbol: "SQLiteRunStorage#deleteOwnedRun", effect: "suppression" }),
   Object.freeze({ symbol: "SQLiteRunStorage#deleteLearner", effect: "suppression" }),
+  // 2026-09-24, rfc/campaign-core.md §5.3: the campaign encounter start creates its play run inside
+  // the campaign transaction; the watermark commits with it (conditional: most campaign commands
+  // create no run).
+  Object.freeze({ symbol: "SQLiteRunStorage#campaignTransaction", effect: "conditional" }),
 ] as const);
 export type LongitudinalMutationDescriptor = (typeof LONGITUDINAL_SOURCE_MUTATION_OPERATIONS)[number];
 

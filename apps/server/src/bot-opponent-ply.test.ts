@@ -422,7 +422,7 @@ describe("migration 29: the stamp-only 0.17 → 0.18 upgrade", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 29, name: "bot profile run schema" }]);
+    expect(log).toEqual([{ version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }]);
     const after = upgraded.read("prior-run")!.run;
     expect(after.schemaVersion).toBe("0.18");
     expect(after.events).toEqual(run.events);

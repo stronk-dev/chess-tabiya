@@ -1,8 +1,10 @@
 # RFC: Campaign boss games — the Act-II rules-terminal encounter
 
-- **Status:** draft 2026-08-31 — first author pass on [[D2249]], [[D962]], [[D2365]]–[[D2367]].
-  No implementation is authorized before fresh independent review, the proposed
-  calibrated-profile choice is owner-accepted, and every dependency below is accepted and landed.
+- **Status:** implementing — **unrated arm landed 2026-09-24 by owner direction** (schema lane 3,
+  the Act-II `boss_game` start/play/terminal seal through campaign-core's routes, browser journey).
+  `rated_when_clean`, `use-support` and the rating seal/void remain open: no exact-digest calibration
+  receipt exists, so the validator refuses rated bosses (`CAMPAIGN_BOSS_CALIBRATION_UNAVAILABLE`).
+  *(Prior: draft 2026-08-31 — first author pass on [[D2249]], [[D962]], [[D2365]]–[[D2367]].)*
 - **Author:** codex, derived from the owner rulings recorded in `rfc/learner-rating.md` §5.3a and
   `design/06-campaign.md`, with exact production seams re-derived at HEAD.
 - **Created:** 2026-08-31
@@ -26,8 +28,12 @@
   `planning/campaign/boss-game-rfc-derivation-2026-08-31.md`.
 
 ```tabiya-claims
-campaign-schema | lane 3 | adds the boss_game encounter arm with exact start FEN, learner side, immutable calibrated bot-profile reference, rating policy and briefing reference; no authored objective, checkpoint, success condition or horizon is admitted
+none
 ```
+
+**Claim discharged 2026-09-24.** Campaign-schema lane 3 (the `boss_game` arm) landed together with
+campaign-core's lane 2; `boss_game_committed` is admitted by migration 30's event CHECK, so this RFC
+still claims no migration position.
 
 ## Summary
 
@@ -362,3 +368,11 @@ rating state or module content changes.
    calibrated profile because it preserves both the owner's human-like-bot vision and the rating's
    evidence standard. Owner ruling required before acceptance; no other state-machine decision is
    open.
+
+## Changelog
+
+- 2026-09-24 (**unrated implementation, owner direction; corrections inline**): `calibration` is
+  optional and allowed only with `rated_when_clean`; `briefingRef` is `{kind:"pack_start",packId}`
+  and the pack's authored start must equal the boss start (the briefing is existing authored text);
+  the boss seal is `boss_game_committed` with `rating: {kind:"unrated"}`; a won game is the node's
+  prestige condition. Rated admission, `use-support` and `boss_support_activated` are not built.

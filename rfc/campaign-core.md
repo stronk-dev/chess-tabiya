@@ -1,21 +1,14 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **seventh fresh independent review returned the sixth repair on
-  [[D2986]]–[[D2992]].** Charged commands can report success without executing their named play
-  mutation or appending a Campaign event; provider and assistance outcomes remain caller-issued;
-  event/document parsing remains open below the envelope; and public local factories mint the
-  purported human-review and curriculum-registry authorities. `make
-  campaign-two-horizon-seventh-fresh-review` retains the complete chain and passes 7/7 new
-  counterexamples plus strict TypeScript. A bounded seventh repair, another genuinely fresh review
-  and accepted dependencies are required. This RFC is
-  explicitly the Campaign foundation, not the whole 1.0. No campaign
-  schema, migration, production route, official
-  campaign or surface may resume before that repair, review and dependency acceptance.
-  *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
-  required. Before that:
-  implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
-  that: accepted — 2026-08-22, by claude as register owner after independent cross-review and 15
-  in-place corrections; draft — 2026-08-22.)*
+- **Status:** implementing — **foundation landed 2026-09-24 by owner direction (implement directly,
+  no review rounds): storage migration 30, campaign-schema lanes 2 (+ boss-games lane 3), the
+  `/campaign` API family, the encounter receipt (intent-presets D6), the web Campaign route and a
+  draft mechanical pilot.** The seventh return's findings are fixed in the implementation (see the
+  2026-09-24 changelog entry). Remaining before archive: the owner/human-authored official campaign
+  (D8, law 8), run-schema lane 0.25 at its register turn, theory/cosmetic rewards behind their
+  authorities, consumer closure through `pack-capability-contract`, and the catalogue, rated-boss and
+  durable-variety milestones. Receipt: `planning/campaign/implementation-receipt-2026-09-24.md`.
+  *(Prior line: seventh fresh independent review returned the sixth repair on [[D2986]]–[[D2992]].)*
 - **Author:** claude (drafted from `planning/campaign/rfc-derivation.md`, the HEAD derivation of
   every seam this document composes; derivation HEAD `c93ae83`, spot-re-verified at drafting HEAD)
 - **Created:** 2026-08-22
@@ -48,10 +41,15 @@
 - **Planning:** `planning/campaign/`
 
 ```tabiya-claims
-migration | position behind bot-policy | campaign_runs; campaign_run_creations; campaign_events; campaign_mutation_commands; campaign_reward_awards
-campaign-schema | lane 2 | reward becomes a closed three-member run-reward union; nodes declare exact reward consumers; durable cosmetic awards reference the shared appearance catalog; official publication carries checked curriculum metadata
 run-schema | lane 0.25 | RunSession.origin gains optional exact campaign encounter identity (campaignRunId, nodeId, campaignDocumentDigest); run.started persists it for Review/export/restore
 ```
+
+**Two claims discharged 2026-09-24 (implementation at the owner's direction).** Storage migration 30
+(the five campaign tables) and campaign-schema lane 2 landed. The run-schema lane 0.25 claim stays
+live and unlanded: lanes 0.19–0.24 are claimed ahead of it and landing 0.25 first would put six live
+claims below the head (register C2). Until its turn, the encounter origin is served from the durable
+`node_entered` join (`GET /runs/:id/graph → campaignOrigin`), which Review, export and the Campaign
+assistance context read today.
 
 ## Summary
 
@@ -1634,6 +1632,32 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-09-24 (**implementation, at the owner's direction; RFC corrections inline**). Landed migration
+  30 (five tables), schema lanes 2/3, `CampaignService` + `/campaign` family, the charged-command
+  gate, the issued `CampaignEncounterReceipt` and the Campaign kit preset, the web Campaign route and
+  in-run strip, and the draft pilot `content/campaigns/draft-pilot-three-phases.json`. The seventh
+  return is fixed at the product boundary: **[[D2986]]** each charged gesture computes its real play
+  mutation from the CAS-owned run *inside* the save transaction and appends `charge_spent` +
+  `campaign_mutation_commands` in the same commit (`commitCampaignChargedMutation`); **[[D2987]]**
+  group providers run before the write lock, and a provider failure is stored as a terminal no-event
+  result from the real exception; **[[D2988]]** assistance authority is derived from the durable
+  campaign/event/pack rows and issued by identity (JSON copies refused); **[[D2989]]** a closed
+  per-kind payload/result parser with canonical instants and whole-envelope digests;
+  **[[D2990]]** the strict schema plus a complete semantic validator; **[[D2991]]/[[D2992]]** there is
+  no local review or registry mint at all — `official` publication is refused until those authorities
+  exist. Corrections: (1) run-schema lane 0.25 stays claimed but unlanded (lanes 0.19–0.24 precede it;
+  landing first breaks C2), so the origin is served from the `node_entered` join; (2)
+  `campaign_mutation_commands.play_run_id` has no RESTRICT key (it would forbid §6.3's sealed-run
+  deletion); (3) the event CHECK admits `boss_game_committed` now, so boss games need no migration;
+  (4) the boss `calibration` reference is required only for `rated_when_clean` and `briefingRef` is a
+  `pack_start` reference whose authored start must equal the boss start (law-8-safe briefing); (5)
+  module consumer reach compiles from the campaign ceiling and suppression until
+  `derivePackCapabilityRequirements` is accepted — theory rewards refuse with
+  `CAMPAIGN_SOURCE_UNAVAILABLE` meanwhile; (6) completion via the authored boundary is
+  `tip.ply ≥ authoredBoundary.plyHorizon`; (7) the in-run "Declare done" also lives in the terminal
+  sheet because that sheet is modal. Finding for bot-policy: a profile bot refuses any position with
+  fewer legal moves than `requestedWidth` (20), so forced replies are unplayable.
 
 - 2026-09-05 (**[[D2736]]–[[D2741]] sixth author repair**): persisted terminal no-event provider
   outcomes; bound charged commands to both aggregates and revisions; completed and sealed Campaign

@@ -6,6 +6,10 @@
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
   import DrillScreen from "./lib/DrillScreen.svelte";
+  import CampaignScreen from "./lib/CampaignScreen.svelte";
+  import CampaignStrip from "./lib/CampaignStrip.svelte";
+  import { CampaignApi } from "./lib/campaign-api.js";
+  import { writerStorageKey } from "./lib/writer-session.js";
   import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
   import LibraryScreen from "./lib/LibraryScreen.svelte";
@@ -134,6 +138,35 @@
   );
   const router = untrack(() => routerProp ?? new HistoryRouter());
   const storage = untrack(() => storageProp);
+  // rfc/campaign-core.md §7.1: the /campaign family client and the charged-gesture envelope source.
+  const campaignApi = new CampaignApi();
+  let campaignCharge: { readonly runId: string; readonly campaignRevision: number } | undefined = $state();
+  let campaignStrip: CampaignStrip | undefined = $state();
+  let campaignSheetBusy = $state(false);
+  let campaignSheetError: string | undefined = $state();
+  async function declareFromTerminalSheet(): Promise<void> {
+    const origin = session.campaignOrigin;
+    if (campaignStrip === undefined || origin == null) return;
+    campaignSheetBusy = true;
+    campaignSheetError = undefined;
+    try {
+      if (await campaignStrip.declareDone()) navigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`);
+      else campaignSheetError = campaignStrip.declareError();
+    } finally {
+      campaignSheetBusy = false;
+    }
+  }
+  $effect(() => {
+    const drill = api as { setCampaignCharging?: DrillApi["setCampaignCharging"] };
+    drill.setCampaignCharging?.((runId) => {
+      const charge = campaignCharge;
+      const run = session.runState?.run;
+      if (charge === undefined || charge.runId !== runId || run === undefined || run.id !== runId) return undefined;
+      return { commandId: `cmd-${globalThis.crypto.randomUUID()}`, expectedCampaignRevision: charge.campaignRevision, expectedPlayRevision: run.events.at(-1)?.seq ?? 0 };
+    }, (runId, result) => {
+      if (campaignCharge?.runId === runId && typeof result.campaignRevision === "number") campaignCharge = { runId, campaignRevision: result.campaignRevision };
+    });
+  });
   const FIRST_REHEARSAL_RUN_KEY = "tabiya.first-rehearsal.v1.run";
   function applicationStorage(): KeyValueStorage | undefined {
     if (storage !== undefined) return storage;
@@ -2569,6 +2602,8 @@
         liveSessionKind={activeLiveDetail?.session.kind}
         seatedInContest={session.viewer?.seatedInContest}
         reviewing={session.viewer?.reviewing}
+        campaignEncounter={session.campaignOrigin != null && session.viewer?.role === "host"}
+        campaignTerminalAction={campaignCharge?.runId === session.runState.run.id ? { label: "Declare done and return to the campaign map", busy: campaignSheetBusy, error: campaignSheetError, onAction: () => void declareFromTerminalSheet() } : undefined}
         firstRehearsal={session.runState.run.id === firstRehearsalRunId}
         onMove={(uci) => controller.move(uci)}
         onReveal={() => controller.reveal()}
@@ -2623,6 +2658,18 @@
       {/if}
       {#if activeLiveDetail}
         <aside class="session-banner" aria-label="Live session rail"><strong>{activeLiveDetail.session.title}</strong>{#if activeLiveDetail.match}{@const seated=learner?.id===activeLiveDetail.match.whiteLearnerId||learner?.id===activeLiveDetail.match.blackLearnerId}<span>{activeLiveDetail.match.pausedAt?"Paused — rehearsal is open":activeLiveDetail.match.pauseProposedBy?"Pause proposed":learnerOwnsActiveMatchTurn()?"Your move":"Their move"}</span><div class="row-actions">{#if activeLiveDetail.match.pausedAt}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("resume")}>Resume main line</button>{:else if seated}{#if activeLiveDetail.match.pauseProposedBy===learner?.id}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("withdraw_pause")}>Withdraw pause</button>{:else if activeLiveDetail.match.pauseProposedBy}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("accept_pause")}>Accept pause</button>{:else}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("propose_pause")}>Propose pause</button>{/if}{:else if activeLiveDetail.role==="host"}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("pause")}>Pause for coaching</button>{/if}</div>{#if activeMatchActionBusy!==undefined}<span id="active-match-action-busy" role="status">Updating the match…</span>{/if}{#if activeMatchActionError}<span role="alert">{activeMatchActionError}</span>{/if}{:else}<span>{liveRoleLabel(activeLiveDetail.role)} · {activeLiveDetail.proposals.filter((item)=>item.status==="open").length} open proposals{activeLiveDetail.vote ? ` · ${activeLiveDetail.vote.total} votes` : ""}</span>{/if}<button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:activeLiveDetail!.session.id}))}>Session</button></aside>
+      {/if}
+      {#if session.campaignOrigin}
+        <CampaignStrip
+          bind:this={campaignStrip}
+          campaigns={campaignApi}
+          origin={session.campaignOrigin}
+          runId={session.runState.run.id}
+          branchId={session.runState.run.activeCursor.branchId}
+          runRevision={session.runState.run.events.length}
+          onNavigate={navigate}
+          onRevision={(state) => { campaignCharge = state === null ? undefined : { runId: session.runState!.run.id, campaignRevision: state.campaignRevision }; }}
+        />
       {/if}
       {#if session.runState.run.sessionKind === "imported"}
         <aside class="session-banner" aria-label="Imported game story"><strong>Imported game</strong><span>The original continuation and your branches share one run.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
@@ -3156,6 +3203,8 @@
         {/if}
       {:else}<p role="alert">Overlay run unavailable.</p>{/if}
     </main>
+  {:else if route.name === "campaign" || route.name === "campaign-run"}
+    <CampaignScreen campaigns={campaignApi} campaignRunId={route.name === "campaign-run" ? route.campaignRunId : undefined} onNavigate={navigate} rememberWriter={(runId, writerId) => applicationStorage()?.setItem(writerStorageKey(runId), writerId)} />
   {:else if route.name === "rating"}
     <RatingScreen {api} onStart={startRatedGame} onOpenProfile={() => navigate(routePath({ name: "profile" }))} />
   {:else if route.name === "profile"}
