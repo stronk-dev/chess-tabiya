@@ -736,6 +736,25 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("gives a returning learner a thread rail ranked on facts about their own runs (ARR-a8)", async () => {
+    history.replaceState(null, "", "/");
+    const missed: RunSummary = { ...runSummary, id: "run-missed", updatedAt: "2026-08-10T21:00:00.000Z", objectiveState: "failed", recordedMoveCount: 7, branchCount: 2 };
+    const returningApi: DrillClientApi = { ...api(), async runs() { return [runSummary, missed]; }, async runPage() { return { runs: [runSummary, missed], selection: { shown: 2, total: 2 } }; } };
+    // Home once loaded a single run, so the rail had nothing to rank beyond the Continue card.
+    const component = mount(App, { target: target(), props: { api: returningApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.getElementById("thread-suggestions-title")?.textContent).toBe("From your own runs."));
+    const rail = document.querySelector<HTMLElement>(".thread-suggestions")!;
+    expect(document.getElementById(rail.getAttribute("aria-describedby")!)?.textContent).toContain("does not judge your play");
+    const card = rail.querySelector<HTMLElement>('[data-suggestion-kind="short_of_objective"]')!;
+    expect(card.textContent).toContain(`Return to ${packSummary.title}`);
+    expect(card.textContent).toContain("objective missed");
+    expect(rail.querySelector(`[data-suggestion-kind="in_progress"]`)).toBeNull();
+    card.querySelector("button")!.click();
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/play/run/run-missed"));
+    await unmount(component);
+  });
+
   it("shows the public catalogue and resumes the chosen rehearsal after registration", async () => {
     history.replaceState(null, "", "/play");
     let authenticated = false;

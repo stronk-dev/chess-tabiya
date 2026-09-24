@@ -14,6 +14,7 @@
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
   import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel, RETURN_STANDING_EXPLANATION } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
+  import { HOME_RUN_WINDOW, HOME_SUGGESTION_RULE, homeSuggestions } from "./lib/home-suggestions.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
   import { validDistilledDraft } from "./lib/distill-response.js";
@@ -418,6 +419,8 @@
       return pack === undefined ? [] : [pack];
     }),
   );
+  // ARR-a8: returning learners get suggestions ranked only on facts about their own runs.
+  let threadSuggestions = $derived(homeSuggestions({ runs, packs, excludeRunId: recentRun?.id, totalRuns: runSelection.total }));
   let firstRehearsalPack = $derived(
     packs.find((pack) => pack.id === "conversion-up-a-piece") ?? phaseStarters[0],
   );
@@ -817,7 +820,8 @@
     try {
       if (next.name === "home") {
         const loaded = await Promise.all([
-          initialRunPage(1),
+          // Continue shows the newest run; the thread rail (ARR-a8) ranks facts over the recent page.
+          initialRunPage(HOME_RUN_WINDOW),
           api.packs(),
           api.dueProgress?.() ?? Promise.resolve(EMPTY_DUE_QUEUE),
           api.assignments?.() ?? Promise.resolve([]),
@@ -2545,7 +2549,22 @@
           <p>Authored explanations and measured evidence keep their source. Generated wording may present those records; it does not invent strategy or grade your move.</p>
         </aside>
       </section>
-      {#if phaseStarters.length > 0}
+      {#if threadSuggestions.length > 0}
+        <section class="phase-starters thread-suggestions" aria-labelledby="thread-suggestions-title" aria-describedby="thread-suggestions-rule">
+          <div><p class="eyebrow">Pick up a thread</p><h2 id="thread-suggestions-title">From your own runs.</h2><p id="thread-suggestions-rule" class="honest">{HOME_SUGGESTION_RULE}</p></div>
+          {#each threadSuggestions as suggestion (suggestion.kind + ("runId" in suggestion ? suggestion.runId : suggestion.packId))}
+            <article data-suggestion-kind={suggestion.kind}>
+              <h3>{suggestion.title}</h3>
+              <p>{suggestion.reason}</p>
+              {#if "runId" in suggestion}
+                <button type="button" onclick={() => navigate(routePath({ name: "run", runId: suggestion.runId }))}>Open the run</button>
+              {:else}
+                <button type="button" onclick={() => controller.startPack(suggestion.packId)}>Start this rehearsal</button>
+              {/if}
+            </article>
+          {/each}
+        </section>
+      {:else if phaseStarters.length > 0}
         <section class="phase-starters" aria-labelledby="phase-starters-title">
           <div><p class="eyebrow">Pick up a thread</p><h2 id="phase-starters-title">Start from the phase you are working on.</h2></div>
           {#each phaseStarters as pack}
@@ -3309,6 +3328,7 @@
   .phase-starters h3 { margin: .75rem 0 .4rem; font: 500 1.25rem var(--display-font); }
   .phase-starters article p { color: var(--muted); font-size: .85rem; }
   .phase-starters article button { margin-top: auto; }
+  .thread-suggestions article { min-height: 10rem; }
   @media (max-width: 60rem) { .rehearsal-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 45rem) { .home-status, .phase-starters, .rehearsal-loop, .evidence-promise { grid-template-columns: 1fr; } .phase-starters > div { grid-column: 1; } }
   @media (max-width: 50rem) { .public-hero { grid-template-columns: 1fr; } .public-boundary { grid-column: 1; } }
