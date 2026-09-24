@@ -495,3 +495,16 @@ describe("through createApplication: choose → play → resume → rematch (A12
     expect(((await rematch.json()) as { run: DrillRun }).run.opponentPolicy.profile).toEqual(reference);
   }, 60_000);
 });
+
+describe("bot replies in positions with fewer legal moves than the sampler width", () => {
+  it("requests min(declared width, legal moves) instead of refusing as a provider failure", async () => {
+    const { handler, storage } = setup();
+    // Black has 19 legal moves here, one fewer than the catalogue's declared width of 20.
+    const fen = "rnbqkbnr/ppppp1pp/5p2/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2";
+    const run = await createBotRun(handler, "bot-narrow", profile("human-baseline.1400@1"), "white", fen);
+    const response = await call(handler, "POST", `/runs/${run.id}/opponent-ply`, plyBody(run, "botreq_narrow_position_000001"));
+    expect(response.status, await response.clone().text()).toBe(200);
+    const [selection] = storedSelections(storage, run.id);
+    expect(JSON.stringify(selection)).toContain('"requestedWidth":19');
+  });
+});

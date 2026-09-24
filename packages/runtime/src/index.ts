@@ -1030,6 +1030,7 @@ export {
   type BotTraitLayer,
   type CandidateBotLayer,
   type PawnMoveClassification,
+  botEffectiveRequestedWidth,
 } from "./bot-profile-catalog.js";
 export {
   BOT_OPPONENT_PLY_RESULTS,
