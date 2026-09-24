@@ -17,6 +17,7 @@ import {
   difficultRootCountSentence,
   difficultRootRuleSentence,
   DUE_FREQUENCY_ORDER_NOTE,
+  RETURN_STANDING_EXPLANATION,
   dueFrequencySentence,
   dueVariationSentence,
   dueWaitingSentence,
@@ -28,6 +29,7 @@ import {
   storyMomentLabel,
   storyOutcomeLabel,
 } from "./learner-copy.js";
+import { RETURN_STANDINGS } from "./api.js";
 
 describe("learner-facing domain copy", () => {
   it("never exposes story and attempt enum identifiers", () => {
@@ -133,12 +135,19 @@ describe("return-queue copy (rfc/return-scheduling.md §§3, 4, 7)", () => {
     difficultRootCountSentence(7),
     dueVariationSentence({ kind: "blocked", variant: null }),
     dueVariationSentence({ kind: "varied", variant: null }),
+    RETURN_STANDING_EXPLANATION,
+    ...RETURN_STANDINGS,
     ...variants.map((variant) => dueVariationSentence({ kind: "varied", variant })),
   ];
 
   // Criterion 7: frequency orders, it never grades. The listed vocabulary is every comparative-quality,
   // importance or verdict word this surface could slide into.
   const VALENCE = /\b(better|best|worse|worst|good|bad|strong(er|est)?|weak(er|est|ness)?|important|importance|priority|critical|essential|key|should|must|correct|incorrect|mistake|error|master(y|ed)?|mature|difficult|level|score|recommended|optimal|sound|dubious)\b|%/iu;
+
+  it("keeps the standing explanation fixed and the standing vocabulary closed (D2)", () => {
+    expect(RETURN_STANDING_EXPLANATION).toBe("based on how many spaced returns you've held");
+    expect(RETURN_STANDINGS).toEqual(["new", "learning", "established"]);
+  });
 
   it("renders no comparative-quality term, ratio or mastery word in the return-queue strings", () => {
     for (const sentence of surface) expect(sentence, sentence).not.toMatch(VALENCE);

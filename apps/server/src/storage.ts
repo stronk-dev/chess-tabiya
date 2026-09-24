@@ -34,10 +34,12 @@ import {
   DIFFICULT_ROOT_RUN_LIMIT,
   DIFFICULT_ROOT_UNSTABLE_THRESHOLD,
   projectAttempts,
+  returnStanding as standingForRung,
   rotatedRetryVariant,
   type AttemptOrigin,
   type AttemptRow,
   type AttemptVerdict,
+  type ReturnStanding,
   type ConceptTagRow,
 } from "./progress.js";
 import {
@@ -566,6 +568,8 @@ export interface ProgressStorage {
   progress(learnerId: string): readonly StoredAttempt[];
   difficultRoots?(learnerId: string): DifficultRootPage;
   dueSchedules(learnerId: string, at?: string): readonly ScheduleRow[];
+  /** The coarse return standing of one root, replayed from `attempts`; the rung itself is never returned. */
+  returnStanding(learnerId: string, rootKey: string): ReturnStanding;
   pendingScheduleForRoot(learnerId: string, rootKey: string): ScheduleRow | undefined;
   createSchedule(input: Omit<ScheduleRow, "state" | "startedRunId">): ScheduleRow;
   markScheduleStarted(scheduleId: string, learnerId: string, runId: string): void;
@@ -3004,13 +3008,16 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     });
   }
 
-  #refreshAutoSchedule(learnerId: string, rootKey: string, retryVariants?: RetryVariantKinds): void {
+  returnStanding(learnerId: string, rootKey: string): ReturnStanding {
+    return standingForRung(this.#ladderReplay(learnerId, rootKey).decision?.ladderIndex);
+  }
+
+  /** The one replay of a root's countable `attempts` history that both the schedule and the standing read. */
+  #ladderReplay(learnerId: string, rootKey: string) {
     const history = this.#database.prepare(
       `SELECT * FROM attempts WHERE learner_id = ? AND root_key = ? AND countable = 1
        ORDER BY ended_at, run_id, branch_id`,
     ).all(learnerId, rootKey) as readonly Record<string, unknown>[];
-    if (history.length === 0) return;
-    const latest = history.at(-1)!;
     const decision = automaticScheduleDecision(history.map((row) => Object.freeze({
       graded: row.graded === 1,
       verdict: String(row.verdict) as AttemptVerdict,
@@ -3018,7 +3025,13 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       rootDueAtStart: row.root_due_at_start === null ? null : String(row.root_due_at_start),
       startedAt: String(row.started_at),
     })));
-    if (decision === undefined) return;
+    return { history, decision };
+  }
+
+  #refreshAutoSchedule(learnerId: string, rootKey: string, retryVariants?: RetryVariantKinds): void {
+    const { history, decision } = this.#ladderReplay(learnerId, rootKey);
+    if (history.length === 0 || decision === undefined) return;
+    const latest = history.at(-1)!;
     const packId = latest.pack_id === null ? null : String(latest.pack_id);
     const variant = rotatedRetryVariant(decision, packId === null ? undefined : retryVariants?.[packId]);
     const dueAt = new Date(Date.parse(String(latest.ended_at)) + decision.days * 86_400_000).toISOString();

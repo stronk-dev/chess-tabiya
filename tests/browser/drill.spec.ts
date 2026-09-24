@@ -987,6 +987,58 @@ test("terminal flip preserves the source and milestones link back into played ru
   await expect(page.getByText("First preserved attempt.")).toBeVisible();
 });
 
+test("Learn shows each due return's standing word beside its due date with its fixed explanation", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Terminal outcome browser fixture" });
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
+  await move(page, "f2", "f3");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await move(page, "g2", "g4");
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+
+  // Travel to a far-future "now" so the return the attempt just scheduled is due; the real server
+  // replays the ladder and serves the word. The payload carries no rung, ratio or mastery field.
+  const future = "9999-12-31T23:59:59.999Z";
+  let served: { schedules: Record<string, unknown>[] } = { schedules: [] };
+  await expect.poll(async () => {
+    served = await (await page.request.get(`/progress/due?at=${future}`)).json() as typeof served;
+    return served.schedules.length;
+  }).toBeGreaterThan(0);
+  for (const schedule of served.schedules) {
+    expect(["new", "learning", "established"]).toContain(schedule.standing);
+    expect(Object.keys(schedule).filter((key) => /ladder|rung|index|level|mastery|maturity|ratio|percent|streak|score/iu.test(key))).toEqual([]);
+  }
+  const standing = String(served.schedules[0]!.standing);
+  const dueRoute = /\/progress\/due$/u;
+  const serve = (rewrite: (item: Record<string, unknown>) => Record<string, unknown>) => page.route(dueRoute, async (route) => {
+    const response = await route.fetch({ url: `${route.request().url()}?at=${future}` });
+    const body = await response.json() as { schedules: Record<string, unknown>[] };
+    await route.fulfill({ response, json: { ...body, schedules: body.schedules.map(rewrite) } });
+  });
+
+  await serve((item) => item);
+  await page.goto("/learn");
+  const due = page.locator('section[aria-labelledby="due-title"]');
+  const label = due.getByRole("article").first().locator(".return-standing");
+  await expect(label).toBeVisible();
+  await expect(label).toHaveAttribute("data-return-standing", standing);
+  await expect(label).toHaveText(`${standing} (based on how many spaced returns you've held)`);
+  // Beside the due date: the word follows the date on the same line.
+  const dueLabel = await page.evaluate((iso) => new Date(iso).toLocaleString(), String(served.schedules[0]!.dueAt));
+  expect(await label.locator("xpath=..").textContent()).toContain(`${dueLabel} · ${standing} (based on`);
+
+  // The page renders whichever closed word the server sends, and refuses a word outside the vocabulary.
+  await page.unroute(dueRoute);
+  await serve((item) => ({ ...item, standing: "established" }));
+  await page.reload();
+  await expect(due.getByRole("article").first().locator(".return-standing")).toHaveText("established (based on how many spaced returns you've held)");
+  await page.unroute(dueRoute);
+  await serve((item) => ({ ...item, standing: "mastered" }));
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "This page is temporarily unavailable." })).toBeVisible();
+  await expect(page.getByText("mastered")).toHaveCount(0);
+  await expect(page.locator(".return-standing")).toHaveCount(0);
+});
+
 test("Outcome Drill resolves a non-terminal hold and remains playable", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Outcome hold browser fixture" });
   await card.getByRole("button", { name: /Rehearse this position/ }).click();

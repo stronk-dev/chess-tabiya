@@ -13,7 +13,11 @@ import {
   isOffScheduleAttempt,
   orderDueByFrequency,
   projectAttempts,
+  RETURN_STANDING_MIN_RUNG,
+  RETURN_STANDINGS,
+  returnStanding,
   rotatedRetryVariant,
+  VARIED_LADDER_DAYS,
   type AttemptOrigin,
   type AttemptRow,
   type ConceptTagRow,
@@ -334,6 +338,62 @@ describe("return scheduling (rfc/return-scheduling.md)", () => {
     expect(() => service.recordPrediction("solitaire", principal, "writer-solitaire", {
       nodeId: imported.run.nodes.at(-1)!.id, checkpointId: IMPORTED_GAME_PREDICTION_CHECKPOINT, predictedUci: "e7e5", distribution,
     })).toThrow(/played next move/u);
+  });
+
+  it("D2: the standing word is a closed three-word map over explicit rung thresholds", () => {
+    expect(RETURN_STANDINGS).toEqual(["new", "learning", "established"]);
+    expect(RETURN_STANDING_MIN_RUNG).toEqual({ learning: 1, established: 3 });
+    // Every rung the ladder can serve, plus "no rung" (blocked, or no countable history).
+    expect([null, undefined, ...VARIED_LADDER_DAYS.keys()].map((rung) => [rung, returnStanding(rung)])).toEqual([
+      [null, "new"], [undefined, "new"], [0, "new"], [1, "learning"], [2, "learning"], [3, "established"], [4, "established"],
+    ]);
+    for (const invalid of [-1, VARIED_LADDER_DAYS.length, 1.5, Number.NaN]) expect(() => returnStanding(invalid)).toThrow(RangeError);
+  });
+
+  it("D2: storage replays the standing from attempts through the same ladder the schedule reads", () => {
+    const histories: readonly { readonly name: string; readonly steps: readonly Step[]; readonly standing: string }[] = [
+      { name: "one-stable", steps: repeat("stable", 1), standing: "new" },
+      { name: "two-stable", steps: repeat("stable", 2), standing: "new" },
+      { name: "three-stable", steps: repeat("stable", 3), standing: "learning" },
+      { name: "four-stable", steps: repeat("stable", 4), standing: "learning" },
+      { name: "five-stable", steps: repeat("stable", 5), standing: "established" },
+      { name: "six-stable", steps: repeat("stable", 6), standing: "established" },
+      // A lapse from the top rung repeats blocked: no rung, so the root is new to spacing again.
+      { name: "five-stable-lapse", steps: [...repeat("stable", 5), { result: "unstable" }], standing: "new" },
+      // Recovery resumes at the retained floor (rung 2), not at the old peak.
+      { name: "lapse-recovered", steps: [...repeat("stable", 5), { result: "unstable" }, ...repeat("stable", 2)], standing: "learning" },
+      // Overstudy cannot advance the ladder, so it cannot advance the word either.
+      { name: "overstudied", steps: [...repeat("stable", 3), ...repeat("stable", 3, "in_run_retry")], standing: "learning" },
+      { name: "three-ungraded", steps: repeat("ungraded", 3), standing: "learning" },
+    ];
+    for (const history of histories) {
+      const store = storage();
+      const { rootKey, days } = play(store, history.name, history.steps);
+      const standing = store.returnStanding("__legacy", rootKey);
+      expect({ name: history.name, standing }).toEqual({ name: history.name, standing: history.standing });
+      const rung = VARIED_LADDER_DAYS.indexOf(days as (typeof VARIED_LADDER_DAYS)[number]);
+      expect(standing, history.name).toBe(returnStanding(rung === -1 ? null : rung));
+    }
+    const empty = storage();
+    expect(empty.returnStanding("__legacy", "position||no-history")).toBe("new");
+    // Learner isolation: another learner's history never lends a root its standing.
+    const isolated = storage();
+    const { rootKey } = play(isolated, "isolated", repeat("stable", 6));
+    expect(isolated.returnStanding("someone-else", rootKey)).toBe("new");
+  });
+
+  it("D2 through the service: every served return carries its root's standing word and no rung", async () => {
+    const store = storage();
+    const service = new RunService(store, { progressStorage: store });
+    play(store, "served-established", repeat("stable", 5));
+    play(store, "served-learning", repeat("stable", 3), { packId: "second-pack" });
+    const queue = await service.dueQueue(principal, "9999-12-31T23:59:59.999Z");
+    expect(queue.schedules.map((schedule) => [schedule.packId, schedule.standing]).sort()).toEqual([
+      ["ladder-pack", "established"], ["second-pack", "learning"],
+    ]);
+    for (const schedule of queue.schedules) {
+      expect(Object.keys(schedule).filter((key) => /ladder|rung|index|level|mastery|ratio|percent|streak/iu.test(key))).toEqual([]);
+    }
   });
 
   it("criterion 11: no attempts or schedules column is added", () => {
