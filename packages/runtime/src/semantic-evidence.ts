@@ -49,6 +49,14 @@ import { squareControlEvents, squareControlReading, type SquareControlEvent } fr
 import { pawnConnectivityReading, structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
 import { checkEvent, defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, loosePieceEvents, replyBreadth, type CheckEvent, type DiscoveredExecutedEvent, type DoubleAttackEvent, type GainedSliderRay, type LoosePieceEvent, type ReplyBreadth } from "./tactics.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
+import {
+  CANDIDATE_EVENTS_SCOPE,
+  assertCandidatePopulationReceipt,
+  candidateAlternatives,
+  candidatePlayedRow,
+  compileCandidatePopulation,
+  type CandidatePopulationReceipt,
+} from "./candidate-population.js";
 
 const SEMANTIC_EVENT: unique symbol = Symbol("tabiya.evidence.semantic_event");
 const SELECTED_EVIDENCE: unique symbol = Symbol("tabiya.evidence.selected");
@@ -120,12 +128,13 @@ export interface SemanticEventInput<T> {
   readonly operands: T;
 }
 
+/**
+ * Selection input: a compiled candidate packet receipt plus the played move in
+ * `MOVE_IDENTITY_CONVENTION`. There is no caller-supplied population (§3.2, §11.2).
+ */
 export interface SemanticSelectionInput {
-  readonly beforeFen: string;
+  readonly receipt: CandidatePopulationReceipt;
   readonly moveUci: string;
-  readonly afterFen: string;
-  readonly playedEvents: readonly SemanticEvidenceEvent[];
-  readonly evaluateAlternative: (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }) => readonly SemanticEvidenceEvent[] | undefined;
 }
 
 export interface StructuralSemanticEventOperands {
@@ -977,9 +986,46 @@ export function semanticDutyEvents(beforeFen: string, moveUci: string, afterFen:
   return Object.freeze([...removed, ...relocated]);
 }
 
-export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
+/** The one typed abstention the local one-edge closure publishes instead of swallowing. */
+export interface LocalSemanticEventAbstention {
+  readonly projection: "rules.tactic.event.loose_piece@1";
+  readonly reason: "invalid_turn_clone";
+}
+
+export interface LocalSemanticEventClosure {
+  readonly events: readonly SemanticEvidenceEvent[];
+  readonly abstentions: readonly LocalSemanticEventAbstention[];
+}
+
+/**
+ * The single code-derived one-edge event closure (shared-candidate-evidence-packet §1.5/§5.4).
+ * `localSemanticEvents`, the candidate packet compiler and local semantic selection all read
+ * this one composition, so no second, narrower enumerator can exist. The loose-piece collector's
+ * `invalid_turn_clone` abstention is returned as a typed value rather than silently dropped.
+ */
+export function localSemanticEventClosure(beforeFen: string, moveUci: string, afterFen: string, structuralCache?: Map<string, StructuralReading>): LocalSemanticEventClosure {
   const transitionEvents = transitionSemanticEvents(beforeFen, moveUci, afterFen);
-  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...pawnIslandSemanticEvents(beforeFen, moveUci, afterFen), ...transitionEvents, ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...(loosePieceSemanticEvents(beforeFen, moveUci, afterFen) ?? []), ...castlingSemanticEvents(beforeFen, moveUci, afterFen), ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...breadthSemanticEvents(beforeFen, moveUci, afterFen), ...semanticDutyEvents(beforeFen, moveUci, afterFen, transitionEvents)]);
+  const loose = loosePieceSemanticEvents(beforeFen, moveUci, afterFen);
+  const events = Object.freeze([
+    ...structuralSemanticEventsCached(beforeFen, moveUci, afterFen, structuralCache),
+    ...pawnIslandSemanticEvents(beforeFen, moveUci, afterFen),
+    ...transitionEvents,
+    ...tacticalSemanticEvents(beforeFen, moveUci, afterFen),
+    ...(loose ?? []),
+    ...castlingSemanticEvents(beforeFen, moveUci, afterFen),
+    ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents),
+    ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents),
+    ...breadthSemanticEvents(beforeFen, moveUci, afterFen),
+    ...semanticDutyEvents(beforeFen, moveUci, afterFen, transitionEvents),
+  ]);
+  const abstentions: readonly LocalSemanticEventAbstention[] = loose === undefined
+    ? Object.freeze([Object.freeze({ projection: "rules.tactic.event.loose_piece@1" as const, reason: "invalid_turn_clone" as const })])
+    : Object.freeze([]);
+  return Object.freeze({ events, abstentions });
+}
+
+export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
+  return localSemanticEventClosure(beforeFen, moveUci, afterFen).events;
 }
 
 export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManifest, input: SemanticEventInput<T>): SemanticEvidenceEvent<T> {
@@ -1062,67 +1108,72 @@ function policyFor(manifest: CompiledEvidenceManifest, policy: VersionedEvidence
 export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, policyRef: VersionedEvidenceId, input: SemanticSelectionInput): EvidenceSelectionResult {
   const policy = policyFor(manifest, policyRef);
   const consumer = policy.consumer;
-  const played = input.playedEvents.filter((event) => eligible(manifest, event, consumer));
-  const alternatives = legalAlternativeEdges(input.beforeFen, input.moveUci);
-  const populations: { edge: (typeof alternatives)[number]; events: readonly SemanticEvidenceEvent[] }[] = [];
-  for (const edge of alternatives) {
-    const values = input.evaluateAlternative(edge);
-    if (values === undefined) return selectedResult(manifest, policy, alternatives.length, populations.length, [], [], ref("counterfactual_population_incomplete"));
-    populations.push({ edge, events: values.filter((event) => eligible(manifest, event, consumer)) });
+  // The population is a compiled packet receipt, never a caller callback (§1.2-§1.4, §3.2).
+  assertCandidatePopulationReceipt(input.receipt);
+  const packet = input.receipt.packet;
+  if (!packet.scope.events) throw new TypeError("Semantic selection requires a candidate packet whose scope retains events");
+  const playedRow = candidatePlayedRow(input.receipt, input.moveUci);
+  const alternativeRows = candidateAlternatives(input.receipt, input.moveUci);
+  for (const row of [playedRow, ...alternativeRows]) for (const event of row.events) {
+    if (event.anchor.beforeFen !== packet.beforeFen || event.anchor.moveUci !== row.moveUci || event.anchor.afterFen !== row.afterFen) genericBypass("candidate packet event is not anchored to the edge it was retained for");
   }
+  const alternatives = alternativeRows.length;
+  // Measured, not asserted: an alternative whose event closure abstained was not evaluated.
+  const evaluated = alternativeRows.filter((row) => row.abstentions.length === 0);
+  if (playedRow.abstentions.length > 0 || evaluated.length !== alternatives) return selectedResult(manifest, policy, alternatives, evaluated.length, [], [], ref("counterfactual_population_incomplete"));
+  const played = playedRow.events.filter((event) => eligible(manifest, event, consumer));
   const byFamily = new Map<string, SemanticEvidenceEvent[]>();
-  for (const population of populations) for (const event of population.events) {
+  for (const row of evaluated) for (const event of row.events.filter((value) => eligible(manifest, value, consumer))) {
     const key = familyKey(event);
     const values = byFamily.get(key) ?? [];
     if (!values.some((candidate) => candidate.anchor.moveUci === event.anchor.moveUci)) values.push(event);
     byFamily.set(key, values);
   }
+  const afterFen = playedRow.afterFen;
   const critical = new Set(policy.criticalEvents.map(refKey));
   const candidates: { fact: SelectedEvidenceFact; support: number; critical: boolean; operandDigest: string }[] = [];
   const rejected: EvidenceSelectionResult["rejected"][number][] = [];
   for (const event of played) {
-    const share = alternatives.length === 0 ? 0 : (byFamily.get(familyKey(event))?.length ?? 0) / alternatives.length;
+    const share = alternatives === 0 ? 0 : (byFamily.get(familyKey(event))?.length ?? 0) / alternatives;
     const isCritical = critical.has(refKey(event.projection));
-    if (!isCritical && alternatives.length < policy.minimumAlternatives) rejected.push({ candidate: { kind: "played_event", id: event.id }, reason: ref("insufficient_alternatives") });
+    if (!isCritical && alternatives < policy.minimumAlternatives) rejected.push({ candidate: { kind: "played_event", id: event.id }, reason: ref("insufficient_alternatives") });
     else if (!isCritical && share > policy.maximumSameFamilyShare) rejected.push({ candidate: { kind: "played_event", id: event.id }, reason: ref("nothing_distinctive") });
     else candidates.push({ fact: { kind: "played_event", event, sameFamilyShare: share }, support: 1 - share, critical: isCritical, operandDigest: evidenceDigest(event.operands) });
   }
-  if (policy.minimumAlternativeOnlyShare !== null && alternatives.length >= policy.minimumAlternatives) for (const [key, events] of byFamily) {
+  if (policy.minimumAlternativeOnlyShare !== null && alternatives >= policy.minimumAlternatives) for (const [key, events] of byFamily) {
     if (played.some((event) => familyKey(event) === key)) continue;
     const [projectionKey, sign] = key.split(":") as [string, SemanticEventSign];
     const suffix = projectionKey.startsWith("rules.structural.event.")
       ? projectionKey.slice("rules.structural.event.".length).replace(/@\d+$/u, "")
       : projectionKey === "rules.tactic.event.loose_piece@1" ? "loose_piece" : undefined;
     if (suffix === undefined) continue;
-    const share = events.length / alternatives.length;
+    const share = events.length / alternatives;
     if (share < policy.minimumAlternativeOnlyShare) continue;
-    const operands: CounterfactualAbsenceOperands = immutable({ relation: "avoided", family: { projection: events[0]!.projection, sign }, legalAlternatives: alternatives.length, alternativesWithFamily: events.length, alternativeEvents: events });
+    const operands: CounterfactualAbsenceOperands = immutable({ relation: "avoided", family: { projection: events[0]!.projection, sign }, legalAlternatives: alternatives, alternativesWithFamily: events.length, alternativeEvents: events });
     const evidence = declareAvoidanceEvidence(suffix, operands);
-    const event = compileSemanticEvidenceEvent(manifest, { evidence, derivationInputs: events.map((value) => value.evidence), anchor: { beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen, side: positionFromFen(input.beforeFen).turn }, sign: "avoided", operands });
+    const event = compileSemanticEvidenceEvent(manifest, { evidence, derivationInputs: events.map((value) => value.evidence), anchor: { beforeFen: packet.beforeFen, moveUci: playedRow.moveUci, afterFen, side: positionFromFen(packet.beforeFen).turn }, sign: "avoided", operands });
     if (eligible(manifest, event, consumer)) candidates.push({ fact: { kind: "counterfactual_absence", event }, support: share, critical: false, operandDigest: evidenceDigest(operands) });
   }
   candidates.sort((left, right) => Number(right.critical) - Number(left.critical) || right.support - left.support || (left.fact.kind === right.fact.kind ? 0 : left.fact.kind === "played_event" ? -1 : 1) || refKey(left.fact.event.projection).localeCompare(refKey(right.fact.event.projection)) || left.operandDigest.localeCompare(right.operandDigest) || left.fact.event.id.localeCompare(right.fact.event.id));
-  if (policy.maxFacts === 0) return selectedResult(manifest, policy, alternatives.length, alternatives.length, [], rejected, ref("budget_zero"));
+  if (policy.maxFacts === 0) return selectedResult(manifest, policy, alternatives, evaluated.length, [], rejected, ref("budget_zero"));
   const selected = candidates.slice(0, policy.maxFacts).map((candidate) => candidate.fact);
   for (const candidate of candidates.slice(policy.maxFacts)) rejected.push({ candidate: { kind: candidate.fact.kind, id: candidate.fact.event.id }, reason: ref(candidate.critical ? "critical_budget_exhausted" : "nothing_distinctive") });
-  const emptyReason = selected.length > 0 ? undefined : played.length === 0 && candidates.length === 0 ? ref("no_eligible_events") : alternatives.length < policy.minimumAlternatives ? ref("insufficient_alternatives") : ref("nothing_distinctive");
-  return selectedResult(manifest, policy, alternatives.length, alternatives.length, selected, rejected, emptyReason);
+  const emptyReason = selected.length > 0 ? undefined : played.length === 0 && candidates.length === 0 ? ref("no_eligible_events") : alternatives < policy.minimumAlternatives ? ref("insufficient_alternatives") : ref("nothing_distinctive");
+  return selectedResult(manifest, policy, alternatives, evaluated.length, selected, rejected, emptyReason);
 }
 
-export function selectLocalSemanticEvidence(policyRef: VersionedEvidenceId, input: Omit<SemanticSelectionInput, "playedEvents" | "evaluateAlternative">): EvidenceSelectionResult {
-  const cache = new Map<string, StructuralReading>();
-  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] | undefined => {
-    const transitions = transitionSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen);
-    const loose = loosePieceSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen);
-    if (loose === undefined) return undefined;
-    return Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...pawnIslandSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...transitions, ...tacticalSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...loose, ...castlingSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...derivedExchangeSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen, transitions), ...discoveredExecutedSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen, transitions)]);
-  };
-  const playedEvents = events(input);
-  return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, policyRef, {
-    ...input,
-    playedEvents: playedEvents ?? [],
-    evaluateAlternative: playedEvents === undefined ? () => undefined : events,
-  });
+/**
+ * Compiles the complete events-scope candidate packet at the root and selects over it. The move
+ * is converted to `MOVE_IDENTITY_CONVENTION` here, at the caller boundary (§4.4); the packet
+ * readers below never normalise.
+ */
+export function selectLocalSemanticEvidence(policyRef: VersionedEvidenceId, input: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): EvidenceSelectionResult {
+  const compiled = compileCandidatePopulation({ beforeFen: input.beforeFen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+  if (compiled.kind !== "ready") throw new TypeError(`Candidate population did not compile: ${compiled.error.code}`);
+  const moveUci = canonicalMoveUci(compiled.receipt.packet.beforeFen, input.moveUci);
+  const row = candidatePlayedRow(compiled.receipt, moveUci);
+  if (row.afterFen !== canonicalFen(positionFromFen(input.afterFen))) throw new TypeError(`Semantic selection after FEN does not match ${moveUci}`);
+  return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, policyRef, { receipt: compiled.receipt, moveUci });
 }
 
 function selectedResult(manifest: CompiledEvidenceManifest, policy: EvidenceSelectionPolicyDeclaration, legalAlternatives: number, evaluatedAlternatives: number, selected: readonly SelectedEvidenceFact[], rejected: readonly EvidenceSelectionResult["rejected"][number][], emptyReason?: VersionedEvidenceId): EvidenceSelectionResult {

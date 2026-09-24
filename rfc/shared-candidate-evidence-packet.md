@@ -1,6 +1,15 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — cut to its blocking contract 2026-09-06 and awaiting owner acceptance; no
+- **Status:** **draft in the register; accepted by the owner in session 2026-09-24 ("just do the work
+  implement a bunch of RFC's"). The foundation contract landed on 2026-09-24, so the body is
+  implementing.** The token stays `draft` only because `status-parity` must match the `rfc/README.md`
+  row. Flipping both to `implementing` is the coordinator's merge closeout.
+  `packages/runtime/src/candidate-population.ts` compiles the receipt, the generated literal closure
+  exists, selection consumes the receipt, and the server child readings moved into the runtime.
+  Every failable criterion owned here is tested except criterion 12. That criterion needs the D2
+  same-`packetId` cold/warm record, and a warm hit needs the D11 service/cache. The criteria map is
+  `planning/evidence-foundation-ux/shared-candidate-evidence-packet-implementation-2026-09-24.md`.
+  *Pre-acceptance status, retained:* **cut to its blocking contract 2026-09-06 and awaiting owner acceptance; no
   further fresh-review round is commissioned.** This document is bounded to the obligation its
   dependents actually carry: one score-free, provider-free, complete legal-candidate event packet,
   compiled from the root position and the shipped move authority, retaining the original sealed
@@ -1617,6 +1626,43 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-09-24 — **Implemented the foundation contract on the owner's in-session acceptance.**
+  `candidate-population.ts` provides the request/scope/packet/receipt types, the private `WeakMap`
+  receipt constructor and assertion, the wide→narrow projector, readers that never normalise,
+  reference-identity event admission, and the closure guard. `candidateChildReadings` moved into the
+  runtime. `candidate-population-projections.generated.ts` has its generator, check and census.
+  `semantic-evidence.ts` now has one `localSemanticEventClosure`, receipt-only selection and a
+  measured `evaluatedAlternatives`. The server Maia guard is closed. Measured at implementation: on
+  the §1.5 fixture, selection now returns `derived.pawn.event.transitions:state` +
+  `rules.structural.event.backward_pawn:gained` with 33/33 evaluated, matching the full-closure
+  figures above. None of the corrections below ships wrong chess truth, loses learner data, breaks a
+  registered resource or widens assistance. Each was fixed inline and is covered by a test:
+  1. **The predecessor route had not landed.** `createRulesMobilityReadingLegalMovesV1Evidence` did
+     not exist at HEAD, and `evidence-factories.ts` does not exist. The exact pinned route (FEN in,
+     one `exactLegalMoveMap` call, that object sealed) landed as a minimal slice in
+     `evidence-source-adapters.ts`. It is not a packet-side definition or alias, and ownership stays
+     with `rfc/evidence-value-authority.md`. `declareExactLegalMovesEvidence` stays for its existing
+     callers until that RFC retires it.
+  2. **The closure has 44 one-edge event identities, not 47.** §3.1's 47 counted the three breadth
+     `.sequence.` projections, which are multi-move and never one-edge outputs. The generator
+     excludes `.sequence.` and `_observed` ids, so the closure is 44 events plus 22 readings.
+  3. **`legalAlternativeEdges` stays an independent enumerator** and is no longer called by
+     selection. Answered question 2 recommended a thin derivation of the packet, but that would make
+     criterion 5's pair comparison compare the packet with itself. Criterion 5 governs.
+  4. **`evaluatedAlternatives` counts alternatives whose event closure did not abstain.** The
+     loose-piece collector's `invalid_turn_clone` used to be dropped by `localSemanticEvents`. It is
+     now a typed row abstention. An in-check root reports 0 evaluated and
+     `counterfactual_population_incomplete`.
+  5. **The synthetic-population selection tests were rewritten against compiled receipts.** §11.2
+     refuses caller populations even in tests. Threshold, grid, avoidance and reason-reachability
+     tests now compute their expectations from the packet's own rows.
+  6. **The compile result has a minimal typed algebra:** `invalid_request`, `unsupported_ruleset`,
+     `invalid_fen`, `non_terminal_empty` and `invariant_failed`. The service algebra (overload,
+     deadline, cancellation) stays D11. `SealedCandidateCollectorOutcome` is the minimal
+     abstention-backing outcome, and the complete per-collector outcome set stays D12.
+  Still open: criterion 12 (D2, needs D11), criterion 11's provider/policy-layer arms (D1/D10),
+  criterion 21(d) (D10) and every D10/D11/D12 item.
 
 - 2026-09-06 — **cut to the blocking contract** ([[D3034]]'s precedent, second application).
   2,786 lines to the contract three consumers join against. The runtime service and cache moved to
