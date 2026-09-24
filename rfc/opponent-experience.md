@@ -354,3 +354,13 @@ as a complete opponent outcome. Criterion 1 makes that condition able to fail.
 - 2026-08-30: fresh independent review returned the draft on [[D2238]]–[[D2242]] and routed the
   excluded 1.0 bot experiences as [[D2243]]. Exact 5-arm reproduction landed; no implementation was
   authorized.
+- 2026-09-24: **partial, bounded implementation at the owner's direction (no review round), under
+  bot-policy/bot-roster's second landing.** Play's opponent step is the catalogue roster from
+  `/capabilities` (three server-ordered family sections × four bands, compiled card text only,
+  uncalibrated, live availability with closed-vocabulary reasons), the full grounded card for the
+  selection, raw rungs and the engine wall under Advanced, the exact profile through create → reply
+  → resume → rematch, a status-bar identity ("Bot · family · model band") and a degraded note when
+  the guard stood aside. **Not implemented:** `GET /opponents` (the `/capabilities` roster is the
+  page), D1610 names/art, the D1611 default (nothing is preselected instead — the learner chooses),
+  recommendation, the fixed identity bar/companion card composition ([[D2239]]), withdrawn-persona
+  rendering ([[D2240]]) and analytics ([[D2242]]).

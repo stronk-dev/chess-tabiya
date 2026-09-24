@@ -815,9 +815,11 @@
         capabilities = loaded[1];
         if(shareRefresh===storyShareGeneration)storyShares = loaded[2];
       } else if (next.name === "play") {
-        const nextPacks = await api.packs();
+        // The Play picker reads the bot roster (and its live availability) from /capabilities.
+        const [nextPacks, nextCapabilities] = await Promise.all([api.packs(), api.capabilities()]);
         if (generation !== loadGeneration) return;
         packs = nextPacks;
+        capabilities = nextCapabilities;
       } else if (next.name === "library") {
         const loaded = await Promise.all([api.packs(), initialRunPage()]);
         if (generation !== loadGeneration) return;
@@ -2529,7 +2531,7 @@
   {:else if route.name === "play"}
     <div class="play-surface">
       <a class="surface-skip" href="#position-catalogue" onclick={(event) => { event.preventDefault(); document.getElementById("position-catalogue")?.focus(); }}>Skip to position catalogue</a>
-      <JustPlayStarter busy={session.busy} onStart={(input) => controller.startPosition(input)} />
+      <JustPlayStarter busy={session.busy} roster={capabilities?.policyProfiles.human_common.profiles ?? []} onStart={(input) => controller.startPosition(input)} />
       <PackList
         {packs}
         loading={session.busy}
@@ -2573,6 +2575,9 @@
         onSwitchBranch={(nodeId, branchId) => controller.switchBranch(nodeId, branchId)}
         onCompare={(branchIds) => controller.compare(branchIds)}
         onReplayResistance={(input) => controller.startPosition({ ...input, mode: "human_common" })}
+        onRematch={session.runState.run.opponentPolicy.profile === undefined ? undefined : () => controller.startDuplicate(session.runState!.run.id)}
+        botReply={session.botReply}
+        onRetryOpponent={() => controller.retryOpponent()}
         onClassifyBranches={(branchIds) => api.branchDecidedness(session.runState!.run.id, branchIds)}
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}

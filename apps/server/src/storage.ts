@@ -765,7 +765,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 28;
+export const STORAGE_VERSION = 29;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -4373,6 +4373,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "registered global concept identities and the legacy concept quarantine",
         apply: () => this.#applyConceptMigration(),
       },
+      {
+        version: 29,
+        name: "bot profile run schema",
+        apply: () => this.#upgradeV017Runs(),
+      },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {
@@ -4970,6 +4975,23 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
       if (snapshot.schemaVersion !== "0.16") continue;
       update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.17" }), row.id);
+    }
+  }
+
+  /**
+   * Migration 29 (rfc/bot-policy.md §4.1, run lane 0.18): stamp-only, frozen literals. 0.18 only
+   * ADDS the optional `RunOpponentPolicy.profile` and `OpponentSelection.policy`; historical runs
+   * carry neither and infer neither, so no event byte is rewritten. Mandatory because every run read
+   * filters on the exact current schema version.
+   */
+  #upgradeV017Runs(): void {
+    const rows = this.#database.prepare("SELECT id, snapshot_json FROM drill_runs WHERE schema_version = '0.17'").all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.18' WHERE id = ?");
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") continue;
+      const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
+      if (snapshot.schemaVersion !== "0.17") continue;
+      update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.18" }), row.id);
     }
   }
 

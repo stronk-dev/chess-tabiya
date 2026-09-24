@@ -634,7 +634,7 @@ function pivotalFixtures(): Readonly<Record<"irreversibility" | "phase_change" |
     const branch = { id: "main", forkNodeId: "n0", label: "Main", seed: 1, origin: "played" } as const;
     const header = { id, sessionKind: "position", packId: null, packDigest: null, sessionDigest: "sha256:test", start: { fen: fens[0]!, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 }, policyConfig } as const;
     const started = { seq: 0, type: "run.started", at, data: { ...header, rootNode: nodes[0]!, branch, activeCursor: { nodeId: nodes[0]!.id, branchId: "main" } } } as const;
-    return Object.freeze({ schemaVersion: "0.17", ...header, nodes, branches: [branch], events: [started, ...events], activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } }) as unknown as DrillRun;
+    return Object.freeze({ schemaVersion: "0.18", ...header, nodes, branches: [branch], events: [started, ...events], activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } }) as unknown as DrillRun;
   };
   const collapse = synthetic("pivotal-collapse", ["4k3/8/8/8/8/8/8/R3K3 w - - 0 1", "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1", "4k3/8/8/8/8/8/3r4/3K4 w - - 0 1"]);
   const engine = { id: "maia2", name: "Maia", version: "2", seedHonored: true };

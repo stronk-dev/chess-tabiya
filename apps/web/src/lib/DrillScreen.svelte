@@ -58,7 +58,7 @@
   import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
-  import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
+  import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, runOpponentStatus } from "./opponent-copy.js";
   import { storyMomentLabel } from "./learner-copy.js";
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
@@ -119,6 +119,11 @@
     onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
     onCloseCompare: () => void;
     onReplayResistance?: ((input: { readonly fen: string; readonly side: "white" | "black"; readonly targetElo: 1000 | 1400 | 1800 | 2200 }) => void | Promise<void>) | undefined;
+    /** Rematch of a bot-profile run: a new run with the exact same profile and a new seed. */
+    onRematch?: (() => void | Promise<void>) | undefined;
+    onRetryOpponent?: (() => void | Promise<unknown>) | undefined;
+    /** Layer actions of the last bot reply (degraded/abstained status only). */
+    botReply?: { readonly layers: readonly { readonly id: string; readonly action: "applied" | "abstained" | "degraded"; readonly reason?: string }[] } | undefined;
     onContinueCheckpoint: () => boolean | void | Promise<boolean | void>;
     onPrediction?: (uci: string) => void | Promise<void>;
     importedGuess?: ImportedGuess | undefined;
@@ -186,6 +191,9 @@
     onClassifyBranches,
     onCloseCompare,
     onReplayResistance,
+    onRematch,
+    botReply,
+    onRetryOpponent,
     onContinueCheckpoint,
     onPrediction = () => {},
     importedGuess,
@@ -406,6 +414,14 @@
   }
 
   let run = $derived(snapshot.run);
+  // rfc/bot-policy.md §4.3: a bot reply whose guard stood aside or whose Maia page fell below the
+  // profile floor keeps the bot's identity and says so; it never renames the opponent.
+  let botReplyNote = $derived.by(() => {
+    if (run.opponentPolicy.profile === undefined || botReply === undefined) return undefined;
+    if (botReply.layers.some((layer) => layer.id === "guard.severe_error@1" && layer.action === "abstained")) return "The Stockfish check stood aside on the last reply";
+    if (botReply.layers.some((layer) => layer.action === "degraded")) return "Maia returned a narrower page than this bot expects on the last reply";
+    return undefined;
+  });
   let compactViewport = $derived(playViewportClass(viewportSupport.width, viewportSupport.height) === "phone");
   let reflowViewport = $derived(compactViewport && viewportSupport.height > 0 && viewportSupport.height < 680);
   let boardEdge = $derived(playBoardEdge(viewportSupport.width, viewportSupport.height));
@@ -1762,10 +1778,11 @@
   <main class="drill" class:compact={compactViewport} class:reflow={reflowViewport} tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
-      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}. ${run.opponentPolicy.mode === "human_common" ? HUMAN_MODEL_RUNG_DISCLAIMER : ""} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Watching" : busy ? "Updating" : "Your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Commentary opens at a checkpoint" : ""}`} />
+      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${runOpponentStatus(run.opponentPolicy)}. ${run.opponentPolicy.mode === "human_common" && run.opponentPolicy.profile === undefined ? HUMAN_MODEL_RUNG_DISCLAIMER : ""}${botReplyNote === undefined ? "" : ` ${botReplyNote}.`} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Watching" : busy ? "Updating" : "Your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Commentary opens at a checkpoint" : ""}`} />
       <div class="status visually-hidden-on-phone" aria-hidden="true">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
-        <span>{opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}</span>
+        <span>{runOpponentStatus(run.opponentPolicy)}</span>
+        {#if botReplyNote !== undefined}<span class="bot-reply-note">{botReplyNote}</span>{/if}
         <span>{consequenceHorizon(pack)}</span>
         <span class:readonly={snapshot.access === "read_only"}>
           {snapshot.access === "read_only" ? "Watching" : busy ? "Updating…" : "Your move"}
@@ -1775,6 +1792,7 @@
         {/if}
       </div>
       <div class="topbar-actions">
+        {#if run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" onclick={() => void onRematch()}>Play this bot again</button>{/if}
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
         <details class="assistance-control" bind:open={assistanceMenuOpen}>
           <summary aria-label={`Support style: ${presetPillLabel}`}><span class="preset-pill" data-preset-mode={compiledAssistance?.displayMode ?? "pending"}>{presetPillLabel}</span></summary>
@@ -1798,7 +1816,7 @@
       </div>
     </header>
 
-    {#if error && branchSwitchError === undefined}<p class="error" role="alert">{error}</p>{/if}
+    {#if error && branchSwitchError === undefined}<p class="error" role="alert">{error}{#if run.opponentPolicy.profile !== undefined && onRetryOpponent !== undefined && snapshot.access !== "read_only"} <button class="retry-opponent" type="button" onclick={() => void onRetryOpponent()}>Ask the bot again</button>{/if}</p>{/if}
     {#if branchSwitchBusy}<p id="branch-switch-status" class="operation-status" role="status">Opening {branchSwitchBusy.label}. Other branch navigation waits until it finishes.</p>{/if}
     {#if branchSwitchError}<p class="error" role="alert">{branchSwitchError}</p>{/if}
     {#if snapshot.access === "read_only"}
