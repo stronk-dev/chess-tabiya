@@ -121,6 +121,7 @@ test("Settings native controls share the token-driven application baseline", asy
   await page.goto("/settings");
   await expect(page.locator("select").first()).toBeVisible();
   // Raw switches sit under each context's Advanced disclosure (rfc/intent-presets.md §7).
+  await page.locator("details.activity-help > summary").click();
   await page.locator("details.advanced-assistance summary").first().click();
   await expect(page.locator('input[type="checkbox"]').first()).toBeVisible();
   await expect(page.locator('input[type="password"]').first()).toBeVisible();

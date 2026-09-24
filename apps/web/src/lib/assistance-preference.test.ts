@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SILENT_ASSISTANCE, parseWorkflowPreferenceV2, selectNamedPreset, setPreferenceField, setPreferenceModule } from "@chess-tabiya/runtime";
+import { SILENT_ASSISTANCE, parseWorkflowPreferenceV2, presetDeclaration, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule } from "@chess-tabiya/runtime";
 import { ASSISTANCE_PROFILES, assistanceProfile, loadWorkflowPreference, requestedAssistanceConfig, saveWorkflowPreference, workflowPreferenceKey } from "./assistance-preference.js";
 import AssistanceSettings from "./AssistanceSettings.svelte";
 
@@ -35,6 +35,19 @@ describe("workflow preference receipt (rfc/intent-presets.md §5.3, criterion 17
     expect(loadWorkflowPreference("pack", storage)).toEqual({ kind: "unset" });
     expect(requestedAssistanceConfig("onramp", { kind: "unset" })).toEqual({ ...SILENT_ASSISTANCE, markers: "live", guided: "live", boardLighting: "sight", arrows: "sight", ambient: "on" });
     expect(loadWorkflowPreference("pack", undefined)).toEqual({ kind: "unset" });
+  });
+
+  it("opens an unset academy session on one default layer: the Guide me preset, never silence (TCH-a30)", () => {
+    // ux-teacher-and-classroom.md §8: presets said `guided` while a second default layer shipped
+    // SILENT, so a first academy session promised pattern naming and delivered nothing.
+    const { storage } = memory();
+    const receipt = loadWorkflowPreference("academy", storage);
+    expect(receipt).toEqual({ kind: "unset" });
+    expect(requestedPreset(receipt, "academy") ?? "guided").toBe("guided");
+    expect(requestedAssistanceConfig("academy", receipt)).toEqual({ version: 4, ...presetDeclaration("guided").config });
+    expect(requestedAssistanceConfig("academy", receipt)).not.toEqual(SILENT_ASSISTANCE);
+    expect(requestedAssistanceConfig("academy", receipt).guided).toBe("live");
+    expect(requestedModules(receipt, "guided")).toEqual(expect.arrayContaining(["postcommit_nudge", "structure_nudge"]));
   });
 
   it("migrates a v1 workflow key alone to explicit with no overrides", () => {
@@ -122,40 +135,58 @@ describe("workflow preference receipt (rfc/intent-presets.md §5.3, criterion 17
 
 describe("settings: preset first, primitives under Advanced", () => {
   const contexts = () => [...document.querySelectorAll<HTMLFieldSetElement>("fieldset[data-assistance-context]")];
+  const chooseActivity = async (kind: string) => {
+    const activity = document.querySelector<HTMLSelectElement>("details.activity-help > label select")!;
+    activity.value = kind;
+    activity.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+  };
 
-  it("renders every context with a help-style choice and keeps the 72 primitives plus modules under Advanced", async () => {
+  it("never shows a person the activity matrix or the word context; Advanced edits one activity at a time (SET-a14)", async () => {
     const component = mount(AssistanceSettings, { target: target(), props: {
       onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn(),
     } });
     await tick();
 
-    expect(contexts().map((fieldset) => fieldset.querySelector(":scope > legend")?.textContent?.trim())).toEqual(["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp", "Campaign"]);
-    for (const fieldset of contexts()) {
-      const style = [...fieldset.querySelectorAll<HTMLSelectElement>(":scope > label select")];
-      expect(style).toHaveLength(1);
-      const advanced = fieldset.querySelector<HTMLDetailsElement>("details.advanced-assistance")!;
-      expect(advanced.open).toBe(false);
-      expect(advanced.querySelectorAll('.assistance-fields input[type="checkbox"]')).toHaveLength(6);
-      expect(advanced.querySelectorAll(".assistance-fields select")).toHaveLength(3);
-      expect(advanced.querySelectorAll('.module-toggles input[type="checkbox"]')).toHaveLength(10);
-    }
-    expect(document.querySelectorAll(".assistance-fields input, .assistance-fields select")).toHaveLength(ASSISTANCE_PROFILES.length * 9);
-    // Only allowedPresets are offered, per context.
-    const optionsFor = (kind: string) => [...document.querySelector(`fieldset[data-assistance-context="${kind}"] > label select`)!.querySelectorAll("option")].map((option) => option.value);
-    expect(optionsFor("position")).toEqual(["quiet", "guided", "theory_only", "support", "analysis"]);
-    expect(optionsFor("pack")).toEqual(["quiet", "guided", "theory_only", "analysis"]);
-    expect(optionsFor("match")).toEqual(["quiet"]);
-    expect(optionsFor("academy")).toEqual(["quiet", "guided", "theory_only"]);
-    for (const fieldset of contexts()) {
-      const match = fieldset.dataset.assistanceContext === "match";
+    const playing = document.getElementById("playing-settings")!;
+    expect(playing.textContent).not.toMatch(/\bcontexts?\b/iu);
+    expect(document.getElementById("playing-help-summary")?.textContent).toContain("remembers your last choice for each kind of activity");
+    const activityHelp = playing.querySelector<HTMLDetailsElement>("details.activity-help")!;
+    expect(activityHelp.open).toBe(false);
+    expect(contexts()).toHaveLength(1);
+    expect(contexts()[0]!.closest("details.activity-help")).toBe(activityHelp);
+    const activity = activityHelp.querySelector<HTMLSelectElement>(":scope > label select")!;
+    expect([...activity.options].map((option) => option.textContent)).toEqual(["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp", "Campaign"]);
+    expect(activity.value).toBe("position");
+
+    const optionsFor = () => [...contexts()[0]!.querySelectorAll(":scope > label select option")].map((option) => (option as HTMLOptionElement).value);
+    const expectedOptions: Partial<Record<string, readonly string[]>> = {
+      position: ["quiet", "guided", "theory_only", "support", "analysis"],
+      pack: ["quiet", "guided", "theory_only", "analysis"],
+      match: ["quiet"],
+      academy: ["quiet", "guided", "theory_only"],
+    };
+    for (const kind of ASSISTANCE_PROFILES) {
+      await chooseActivity(kind);
+      expect(contexts()).toHaveLength(1);
+      const fieldset = contexts()[0]!;
+      expect(fieldset.dataset.assistanceContext).toBe(kind);
+      expect(fieldset.querySelectorAll(":scope > label select")).toHaveLength(1);
+      const channels = fieldset.querySelector<HTMLDetailsElement>("details.advanced-assistance")!;
+      expect(channels.open).toBe(false);
+      expect(channels.querySelectorAll('.assistance-fields input[type="checkbox"]')).toHaveLength(6);
+      expect(channels.querySelectorAll(".assistance-fields select")).toHaveLength(3);
+      expect(channels.querySelectorAll('.module-toggles input[type="checkbox"]')).toHaveLength(10);
+      expect(document.querySelectorAll(".assistance-fields input, .assistance-fields select")).toHaveLength(9);
+      if (expectedOptions[kind] !== undefined) expect(optionsFor()).toEqual(expectedOptions[kind]);
       const control = [...fieldset.querySelectorAll<HTMLInputElement>('.assistance-fields input[type="checkbox"]')]
         .find((input) => input.parentElement?.textContent?.includes("External voice"))!;
       expect(control.disabled).toBe(true);
       const reason = document.getElementById(control.getAttribute("aria-describedby")!)!;
-      expect(reason.textContent).toContain(match ? "legal board interaction only" : "External voice is unavailable");
+      expect(reason.textContent).toContain(kind === "match" ? "legal board interaction only" : "External voice is unavailable");
+      if (kind === "match") expect([...fieldset.querySelectorAll("select, input")].every((item) => (item as HTMLInputElement | HTMLSelectElement).disabled)).toBe(true);
+      expect(playing.textContent).not.toMatch(/\bcontexts?\b/iu);
     }
-    const match = contexts().find((fieldset) => fieldset.dataset.assistanceContext === "match")!;
-    expect([...match.querySelectorAll("select, input")].every((control) => (control as HTMLInputElement | HTMLSelectElement).disabled)).toBe(true);
     expect(document.querySelectorAll("#external-voice-unavailable")).toHaveLength(1);
     await unmount(component);
   });

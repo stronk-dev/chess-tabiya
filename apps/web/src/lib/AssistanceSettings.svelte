@@ -7,6 +7,7 @@
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import { assertAccountDeletionPreview } from "./account-deletion-preview.js";
+  import { recordedDataRows } from "./account-record-inventory.js";
 
   interface Props {
     capabilities?: Capabilities | undefined;
@@ -22,6 +23,9 @@
   const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp", campaign: "Campaign" };
   let receipts: Record<AssistanceProfile, WorkflowPreferenceReceipt> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadWorkflowPreference(profile, storage())])) as Record<AssistanceProfile, WorkflowPreferenceReceipt>);
   let unsaved = $state(false);
+  // ux-settings-and-identity.md §6C (SET-a14): the per-activity memory is never drawn as a matrix.
+  // Advanced shows one activity at a time, chosen by its learner-facing name.
+  let activityKind: AssistanceProfile = $state("position");
   let password = $state("");
   let exportPassword = $state("");
   let exportStatus = $state<string | undefined>();
@@ -191,10 +195,17 @@
 
 <section id="playing-settings" aria-labelledby="assistance-settings-title">
   <h2 id="assistance-settings-title">Playing</h2>
+  <p id="playing-help-summary">Choose how much help you want from the <strong>support style</strong> control beside the board. Tabiya remembers your last choice for each kind of activity.</p>
   <p class="honest">Saved in this browser only. Deployment providers are controlled by the server environment.</p>
   {#if unsaved}<p class="honest" role="status">This browser is not saving help settings, so these choices last only until you leave.</p>{/if}
-  <div class="context-grid">
-    {#each ASSISTANCE_PROFILES as kind}
+  <details class="activity-help">
+    <summary>Advanced: set help before you start</summary>
+    <label>Activity
+      <select value={activityKind} onchange={(event) => { activityKind = event.currentTarget.value as AssistanceProfile; }}>
+        {#each ASSISTANCE_PROFILES as kind (kind)}<option value={kind} selected={kind === activityKind}>{labels[kind]}</option>{/each}
+      </select>
+    </label>
+    {#each [activityKind] as kind (kind)}
       {@const refusal = profileRefusal(kind)}
       {@const permissions = profilePermissions(kind)}
       {@const policy = workflowContextPolicy(kind)}
@@ -213,7 +224,7 @@
         </label>
         <p id={`custom-help-${kind}`} class="honest">{isCustom ? "Custom help. Choosing a style replaces it." : presetDeclaration(selected).promise}</p>
         <details class="advanced-assistance">
-          <summary>Advanced</summary>
+          <summary>Individual help channels</summary>
           <AssistanceControlFields
             config={requestedAssistanceConfig(kind, receipts[kind])}
             {permissions}
@@ -234,7 +245,7 @@
         </details>
       </fieldset>
     {/each}
-  </div>
+  </details>
 </section>
 
 {#if learner}
@@ -251,6 +262,19 @@
     {:else if previewError}
       <p role="alert">{previewError}</p><button type="button" onclick={() => void previewDeletion()}>Try loading again</button>
     {:else if deletionPreview}
+      <section class="recorded-data" aria-labelledby="recorded-data-title">
+        <h4 id="recorded-data-title">What Tabiya has recorded</h4>
+        <p class="honest">Each row counts stored records and says what happens to them. Tabiya does not summarise or interpret what they say about you.</p>
+        <ul>
+          {#each recordedDataRows(deletionPreview) as row (row.kind)}
+            <li data-recorded-kind={row.kind}>
+              <p class="recorded-heading"><strong>{row.noun}</strong> <span class="recorded-count">{row.count === undefined ? "Not counted in this summary" : records(row.count)}</span></p>
+              <p>{row.holds}</p>
+              <dl><div><dt>In your download</dt><dd>{row.inDownload}</dd></div><div><dt>If you delete your account</dt><dd>{row.onDeletion}</dd></div></dl>
+            </li>
+          {/each}
+        </ul>
+      </section>
       <div class="deletion-preview">
         <StatusAnnouncement message={`Account data summary loaded. ${records(effectCount(deletionPreview.hardDelete))} would be permanently deleted. ${records(effectCount(deletionPreview.tombstone))} would remain read-only as shared history. ${records(effectCount(deletionPreview.revoke))} would have access revoked. ${records(effectCount(deletionPreview.retainedPublished))} would remain as published work.`} />
         {#if effectCount(deletionPreview.hardDelete) > 0}<h4>Private account data</h4><ul>{#each deletionPreview.hardDelete as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}
@@ -266,7 +290,8 @@
     <h3>Download my data</h3>
     <p class="honest">A portable copy of your runs, progress, authored drafts, publications, and account-scoped activity. Passwords, sessions, provider credentials, and preferences stored only on this device are excluded.</p>
     <p class="honest">This Tabiya account archive is for safekeeping and inspection. Tabiya cannot import it, and other chess products do not read it. To move games between chess tools, <a href="/library">download them as PGN</a>.</p>
-    <label>Current password <input type="password" autocomplete="current-password" bind:value={exportPassword} /></label>
+    <p id="export-password-limit" class="honest"><strong>Keep a copy while you can.</strong> Downloading asks for your current password, and there is no password recovery yet: if the password is lost, this download is no longer possible. A copy you have already downloaded is the only safeguard.</p>
+    <label>Current password <input type="password" autocomplete="current-password" aria-describedby="export-password-limit" bind:value={exportPassword} /></label>
     <button type="submit" disabled={exportBusy} aria-describedby={exportBusy ? "account-export-busy" : undefined}>{exportBusy ? "Preparing download…" : "Download my data"}</button>
     {#if exportBusy}<p id="account-export-busy" role="status">Preparing one private account archive.</p>{/if}
     {#if exportStatus}<p role="status">{exportStatus}</p>{/if}
@@ -302,5 +327,6 @@
 </section>
 
 <style>
-  section{margin:2rem 0}.data-summary{max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.data-summary h4{margin-bottom:.35rem}.data-summary ul{margin-top:0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.technical-details{margin-top:1rem}.technical-details summary{cursor:pointer;font-weight:700}.honest{color:var(--muted);font-size:.8rem}.advanced-assistance{display:grid;gap:.5rem}.advanced-assistance summary{cursor:pointer;font-weight:700}.module-toggles{padding:.6rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}
+  .recorded-data{margin:0 0 1rem}.recorded-data ul{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}.recorded-data li{padding:.6rem .75rem;border:1px solid var(--line);border-radius:.6rem;min-width:0}.recorded-data li p{margin:.15rem 0;overflow-wrap:anywhere}.recorded-heading{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.25rem .75rem}.recorded-count{color:var(--muted)}.recorded-data dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.25rem .75rem;margin:.35rem 0 0}.recorded-data dt{font-size:.8rem;color:var(--muted)}.recorded-data dd{margin:0}
+  section{margin:2rem 0}.data-summary{max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.data-summary h4{margin-bottom:.35rem}.data-summary ul{margin-top:0}.activity-help{max-width:44rem}.activity-help>*+*{margin-top:.8rem}.activity-help>summary{cursor:pointer;font-weight:700}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.technical-details{margin-top:1rem}.technical-details summary{cursor:pointer;font-weight:700}.honest{color:var(--muted);font-size:.8rem}.advanced-assistance{display:grid;gap:.5rem}.advanced-assistance summary{cursor:pointer;font-weight:700}.module-toggles{padding:.6rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}
 </style>
