@@ -822,7 +822,7 @@ const parseEngine = (value: unknown): { readonly name: string; readonly version:
 
 function parseConvention(value: unknown): ConventionReceipt {
   const item = exact(value, ["producer", "sourceProjection", "sourceEvidenceDigest", "perspective", "basis"], [], "convention");
-  const basisRecord = exact(item.basis, ["kind"], ["execution", "convention"], "convention.basis");
+  const basisRecord = exact(item.basis, ["kind"], ["execution", "convention", "engine", "depth", "source", "model", "band", "population", "sampleSize"], "convention.basis");
   let basis: ConventionBasis;
   if (basisRecord.kind === "search") {
     const wrapper = exact(item.basis, ["kind", "execution"], [], "convention.basis");
