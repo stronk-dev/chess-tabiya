@@ -83,7 +83,9 @@ describe("candidate packet repository census", () => {
     expect(sources.filter((rel) => rel.startsWith("apps/server/") && /function childReadings\b/u.test(read(rel)))).toEqual([]);
     expect(sources.filter((rel) => rel.startsWith("packages/runtime/") && /from "[^"]*(apps\/server|@chess-tabiya\/server)/u.test(read(rel)))).toEqual([]);
     expect(sources.filter((rel) => !rel.startsWith("packages/runtime/") && /from "[^"]*packages\/runtime\/src\/candidate-population/u.test(read(rel)))).toEqual([]);
-    for (const successor of ["candidate-population-cache.ts", "cooperative-yield.ts", "candidate-collector-registry.ts", "candidate-population-service.ts"]) {
+    // cooperative-yield.ts now exists as rfc/bounded-policy-targets.md §7's shared dependency-free
+    // MessageChannel adapter ([[D2029]]); it is not a candidate-packet successor module.
+    for (const successor of ["candidate-population-cache.ts", "candidate-collector-registry.ts", "candidate-population-service.ts"]) {
       expect(existsSync(join(ROOT, "packages/runtime/src", successor)), successor).toBe(false);
     }
     const generated = read("packages/runtime/src/candidate-population-projections.generated.ts");

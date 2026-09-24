@@ -250,6 +250,11 @@ describe("semantic-validation cases and execution", () => {
     expect(resolveError(cited)).toMatch(/no registered immutable source manifest/u);
   });
 
+  it("records a stray exception as SEMANTIC_VALIDATION_EXECUTION_FAILED, never as a pass or negative", async () => {
+    const receipt = await executeSemanticValidationCase(CASE_MAP.get("transition.short-castle.castled")!, { ...SEMANTIC_VALIDATION_RESOLVERS, resolveProposition: () => { throw new Error("store unreadable"); } }, CASE_MAP);
+    expect(receipt).toMatchObject({ status: "failed", invocations: 0, failure: { code: "SEMANTIC_VALIDATION_EXECUTION_FAILED" } });
+  });
+
   it("[17] maps an unavailable child to that subject's abstention — never an empty completed result", () => {
     const completed: SemanticValidationOperationResult = { kind: "completed", observations: [], abstentions: [{ projection: { id: "rules.tactic.event.loose_piece", version: 1 }, reason: "source_predicate_unavailable" }] };
     expect(subjectSemanticResult(completed, event("rules.tactic.event.loose_piece"))).toEqual({ kind: "unavailable", reason: "source_predicate_unavailable" });
