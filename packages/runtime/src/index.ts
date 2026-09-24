@@ -135,7 +135,7 @@ export {
 export { compileModulePacket, type ModulePacket, type ModulePacketRefusal, type ModulePacketRequest } from "./module-packets.js";
 export {
   MODULE_QUERY_OPERATION, MODULE_QUERY_PROTOCOL, ModuleQueryError, fitModulePresentation, inspectorFamily, moduleDecisionStamp, moduleDisclosureDigest,
-  moduleQueryProjections, parseModuleQueryRequest, passFen, queryModules, sightScope,
+  moduleQueryProjections, parseModuleQueryRequest, passFen, queryModules, sightScope, witnessedEvidence,
   type InspectorFamilyState, type ModuleBudgetReceipt, type ModuleBudgetTuple, type ModuleDecisionStamp, type ModuleDisclosureReceipt, type ModuleEmptyState,
   type ModuleQueryErrorCode, type ModuleQueryInput, type ModuleQueryPacket, type ModuleQueryPage, type ModuleQueryRequest, type ModuleSourceContext,
   type ModuleSourceResult, type ModuleSuppressionReason,

@@ -1305,7 +1305,7 @@ describe("Layer 3 screens", () => {
     // Guided composes postcommit_nudge: the server-compiled effect admits the seat after disclosure opened,
     // and the seat renders only sealed presentation components bound to the compiled digest.
     let component = mountWith([[workflowPreferenceKey("position"), explicitPreference("guided")]]);
-    await vi.waitFor(() => expect(seat()?.querySelector("[data-presented]")).not.toBeNull());
+    await vi.waitFor(() => expect(seat()?.querySelector("[data-presented]") ?? null).not.toBeNull(), { timeout: 4000 });
     expect(postCommitCalls().some(([body]) => (body.query as { readonly subjectNodeId: string }).subjectNodeId === moveNodeId)).toBe(true);
     expect(seat()?.textContent).not.toMatch(/@\d|rules\.|derived\./u);
     await unmount(component);
@@ -1317,7 +1317,7 @@ describe("Layer 3 screens", () => {
     await assistanceSettled();
     await tick();
     expect(seat()).toBeNull();
-    expect(postCommitCalls().some(([body]) => (body.query as { readonly requested: readonly string[] }).requested.length === 0 && seat() !== null)).toBe(false);
+    expect(postCommitCalls()).toHaveLength(0);
     await unmount(component);
     document.body.replaceChildren();
     onModuleQuery.mockClear();

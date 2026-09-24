@@ -197,22 +197,42 @@ export function sightScope(evidence: DeclaredEvidence<unknown>): readonly Square
   return [];
 }
 
-/** A reading carries a concrete witness only when its population is non-empty (no all-clear facts). */
-function witnessed(evidence: DeclaredEvidence<unknown>): boolean {
+/**
+ * A reading carries a concrete witness only when its population is non-empty: an empty population
+ * is never presented as a fact (no all-clear), it stays the module's declared empty state.
+ */
+export function witnessedEvidence(evidence: DeclaredEvidence<unknown>): boolean {
   const payload = evidence.payload as Readonly<Record<string, unknown>>;
+  const nonEmpty = (field: string): boolean => !Array.isArray(payload[field]) || (payload[field] as readonly unknown[]).length > 0;
   switch (evidence.projection.id) {
-    case "rules.tactic.consequence.threat": return payload.kind === "threats" && (payload.threats as readonly unknown[]).length > 0;
-    case "rules.tactic.consequence.mate_in_one": return (payload.mates as readonly unknown[]).length > 0;
-    case "rules.tactic.reading.loose_piece": return (payload.pieces as readonly { readonly enPrise: boolean; readonly loose: boolean; readonly underDefended: boolean }[]).some((entry) => entry.enPrise); // an undefended but unattacked piece is not a threat
+    case "rules.tactic.consequence.threat": return payload.kind === "threats" && nonEmpty("threats");
+    case "rules.tactic.consequence.mate_in_one": return nonEmpty("mates");
+    // An undefended but unattacked piece is not a threat: only a piece capturable at a gain is.
+    case "rules.tactic.reading.loose_piece": return (payload.pieces as readonly { readonly enPrise: boolean }[]).some((entry) => entry.enPrise);
     case "rules.tactic.reading.back_rank": return (payload.susceptible as readonly { readonly accessingHeavyPieces: readonly unknown[] }[]).some((entry) => entry.accessingHeavyPieces.length > 0);
-    case "rules.tactic.reading.trapped_piece": return payload.kind === "pieces" && (payload.pieces as readonly unknown[]).length > 0;
-    case "rules.tactic.reading.ray_classification": return (payload.rays as readonly unknown[]).length > 0;
-    case "rules.tactic.reading.rook_on_seventh": return (payload.rooks as readonly unknown[]).length > 0;
-    case "rules.pawn.reading.contacts": return (payload.contacts as readonly unknown[]).length > 0;
-    case "rules.structural.reading.space": return true;
+    case "rules.tactic.reading.trapped_piece": return payload.kind === "pieces" && (payload.pieces as readonly { readonly attackers: readonly unknown[] }[]).some((entry) => entry.attackers.length > 0);
+    case "rules.tactic.reading.ray_classification": return nonEmpty("rays");
+    case "rules.tactic.reading.rook_on_seventh": return nonEmpty("rooks");
+    case "rules.pawn.reading.contacts": return nonEmpty("contacts");
+    case "rules.pawn.reading.candidate_majority": return nonEmpty("candidates");
+    case "rules.tactic.reading.discovered_latency": return nonEmpty("screens");
+    case "derived.tactic.promotion_pressure": return nonEmpty("pawns");
+    case "rules.structural.reading.space": return (payload.colors as readonly { readonly zones: readonly { readonly squares: readonly unknown[] }[] }[]).some((entry) => entry.zones.some((zone) => zone.squares.length > 0));
+    case "rules.phase.development": { const undeveloped = payload.undeveloped as { readonly white: readonly unknown[]; readonly black: readonly unknown[] }; return undeveloped.white.length + undeveloped.black.length > 0; }
+    case "rules.mobility.reading.piece_destinations": return (payload.colors as readonly { readonly kind: string; readonly pieces?: readonly { readonly legal: readonly unknown[] }[] }[]).some((entry) => entry.kind === "available" && (entry.pieces ?? []).some((unit) => unit.legal.length > 0));
+    case "rules.structural.reading.pawn_connectivity": return (payload.colors as readonly { readonly islandCount: number }[]).some((entry) => entry.islandCount > 0);
+    case "rules.tactic.reading.defender_duty_set": return nonEmpty("duties");
+    case "rules.king.reading.zone_state": return nonEmpty("kings");
+    // A king-zone event with no change is not an event: it would read as an all-clear.
+    case "rules.king.event.zone_state": {
+      const event = payload as { readonly king: { readonly relocated: boolean }; readonly attackers: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly defenders: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly shelter: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly escapes: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] } };
+      return event.king.relocated || [event.attackers, event.defenders, event.shelter, event.escapes].some((change) => change.gained.length + change.lost.length > 0);
+    }
+    case "human.explorer.population": return (payload.result as { readonly kind: string }).kind === "stats";
     default: return true;
   }
 }
+const witnessed = witnessedEvidence;
 
 const SIGHT_READINGS = SIGHT_SOURCE_ROUTES;
 

@@ -917,6 +917,15 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
   both(V("derived.tactic.square_clearance_observed"), BOARD4, squareClearance);
   add(NUDGE, V("derived.grade.move_quality"), PS, grade);
 
+  // Review Map v2 recorded windows: the board-bound compositions (Checkpoint A's statement-only rows
+  // could not serve their bindings' arrows / lit squares).
+  add(MAP, V("derived.pawn.sequence.contact_timing", 2), BOARD5, contactTiming);
+  add(MAP, V("derived.pawn.sequence.harassment_pressure", 2), BOARD5, harassment);
+  add(MAP, V("derived.tactic.sequence.defender_consequence", 2), BOARD4, defenderConsequence);
+  for (const id of ["attraction", "check_zwischenzug", "deflection", "interference", "line_blocker_clearance", "overload_exploitation", "square_clearance"] as const) {
+    add(MAP, V(`derived.tactic.${id}_observed`, 2), BOARD4, { attraction, check_zwischenzug: zwischenzug, deflection, interference, line_blocker_clearance: lineClearance, overload_exploitation: overload, square_clearance: squareClearance }[id]);
+  }
+
   // Review Map only (beyond Checkpoint A's list).
   add(MAP, V("derived.material.event.role_asymmetry"), BOARD5, roleAsymmetry);
   add(MAP, V("derived.opening.deepest_reached"), LPS, openingReached);

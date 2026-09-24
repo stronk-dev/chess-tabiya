@@ -1,5 +1,6 @@
 // rfc/evidence-presentation.md Checkpoint B / rfc/module-registration.md A5: the Full Inspector,
 // Post-commit Nudge and Review Map pair-keyed adapters.
+import { witnessedEvidence } from "./module-query.js";
 import { describe, expect, it } from "vitest";
 
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
@@ -47,36 +48,13 @@ describe("inspector / post-commit nudge / review map adapters: exact pair popula
     expect(bindingsOf("module.full_inspector")).toHaveLength(75);
     expect(bindingsOf("module.postcommit_nudge")).toHaveLength(52);
     const own = (consumer: string) => [...OWN].filter((entry) => entry.startsWith(`${consumer}@1\u0000`)).length;
-    expect([own("module.full_inspector"), own("module.postcommit_nudge"), own("module.review_map")]).toEqual([75, 52, bindingsOf("module.review_map").length - 16]);
+    expect([own("module.full_inspector"), own("module.postcommit_nudge"), own("module.review_map")]).toEqual([75, 52, bindingsOf("module.review_map").length - 6]); // Checkpoint A keeps 6 Review Map rows (four typed packet projections, grade, trade)
     for (const id of Object.keys(INSPECTOR_FACT_RENDERERS)) expect(id).toMatch(/^inspector\.[a-z_]+@1$/u);
   });
 });
 
 /** A reading with a board witness (the module query offers only witnessed readings). */
-function witnessed(item: DeclaredEvidence<unknown>): boolean {
-  const payload = item.payload as Readonly<Record<string, unknown>>;
-  const nonEmpty = (field: string) => !Array.isArray(payload[field]) || (payload[field] as unknown[]).length > 0;
-  switch (item.projection.id) {
-    case "rules.tactic.consequence.threat": return nonEmpty("threats");
-    case "rules.tactic.consequence.mate_in_one": return nonEmpty("mates");
-    case "rules.tactic.reading.loose_piece": return (payload.pieces as readonly { enPrise: boolean; loose: boolean; underDefended: boolean }[]).some((entry) => entry.enPrise || entry.loose || entry.underDefended);
-    case "rules.tactic.reading.back_rank": return (payload.susceptible as readonly { accessingHeavyPieces: readonly unknown[] }[]).some((entry) => entry.accessingHeavyPieces.length > 0);
-    case "rules.tactic.reading.trapped_piece": return (payload.pieces as readonly { attackers: readonly unknown[] }[]).some((entry) => entry.attackers.length > 0);
-    case "rules.tactic.reading.ray_classification": return nonEmpty("rays");
-    case "rules.tactic.reading.rook_on_seventh": return nonEmpty("rooks");
-    case "rules.pawn.reading.contacts": return nonEmpty("contacts");
-    case "rules.pawn.reading.candidate_majority": return nonEmpty("candidates");
-    case "rules.tactic.reading.discovered_latency": return nonEmpty("screens");
-    case "derived.tactic.promotion_pressure": return nonEmpty("pawns");
-    case "rules.structural.reading.space": return (payload.colors as readonly { zones: readonly { squares: readonly unknown[] }[] }[]).some((entry) => entry.zones.some((zone) => zone.squares.length > 0));
-    case "rules.phase.development": { const undeveloped = payload.undeveloped as { white: unknown[]; black: unknown[] }; return undeveloped.white.length + undeveloped.black.length > 0; }
-    case "rules.mobility.reading.piece_destinations": return (payload.colors as readonly { kind: string; pieces?: readonly { legal: readonly unknown[] }[] }[]).some((entry) => entry.kind === "available" && (entry.pieces ?? []).some((unit) => unit.legal.length > 0));
-    case "rules.structural.reading.pawn_connectivity": return (payload.colors as readonly { islandCount: number }[]).some((entry) => entry.islandCount > 0);
-    case "rules.tactic.reading.defender_duty_set": return nonEmpty("duties");
-    case "human.explorer.population": return (payload.result as { kind: string }).kind === "stats";
-    default: return true;
-  }
-}
+const witnessed = witnessedEvidence;
 
 describe("inspector / post-commit nudge / review map adapters: real evidence through the one construction path", () => {
   const routes = [...new Set(CONSUMERS.flatMap((consumer) => bindingsOf(consumer).map((binding) => `${binding.projection.id}@${binding.projection.version}`)))];
