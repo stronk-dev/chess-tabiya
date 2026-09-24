@@ -1053,8 +1053,9 @@ describe("Layer 3 screens", () => {
     await tick();
     const endgameEvidence = document.querySelector('[aria-label="Current-position endgame evidence"]')!;
     expect(endgameEvidence.textContent).toContain("Rook and pawn versus rook");
-    // rfc/evidence-value-authority §3.4: material classification never names a technique; setup
-    // applicability stays honest-unavailable until a registered, cited setup convention exists.
+    // rfc/evidence-value-authority §3.4: material classification never names a technique, and this
+    // KRPKR position fails every registered setup convention (lucena-setup@1,
+    // philidor-third-rank-setup@1, vancura-setup@1), so no technique is named.
     expect(endgameEvidence.textContent).not.toMatch(/Lucena|Philidor|Vancura|Vančura/u);
     const revoice = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Revoice current-position evidence")!;
     revoice.click();

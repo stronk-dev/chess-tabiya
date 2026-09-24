@@ -18,6 +18,8 @@ import { castlingLegality, castlingRights, castlingRightsLost } from "./castling
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { recordedBranchFacts, type BranchComparison, type ComparisonEvidenceEntry, type ComparisonScore, type RecordedBranchFacts } from "./compare.js";
 import { endgameClassification } from "./endgame.js";
+import { endgameMethodConvention, replayEndgameMethod, type MethodStage } from "./endgame-method.js";
+import { endgameSetupConvention, endgameSetupMatch, type EndgameSetupMatch, type EndgameTechnique } from "./endgame-setup.js";
 import { captureClassEvent, legalExchange, type LegalExchangeResult } from "./exchange.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES, TRANSITION_GEOMETRY_EVENT_FAMILIES, TRANSITION_RULE_EVENT_FAMILIES } from "./evidence-catalog.js";
 import {
@@ -1218,12 +1220,22 @@ export const createTheoryShapesFiringV1Evidence = (() => {
   });
 })();
 
+/** `theory.endgame.setup_match@1` result: a sealed positive, an explicit operand-level miss, or unavailable. */
+export type EndgameSetupMatchAvailability =
+  | { readonly kind: "available"; readonly value: DeclaredEvidence<EndgameSetupMatch> }
+  | { readonly kind: "not_matched"; readonly convention: VersionedEvidenceId; readonly failedOperandIds: readonly string[] }
+  | { readonly kind: "unavailable"; readonly reason: string; readonly dependency?: string };
+
+const SETUP_CONVENTION_PENDING = "The three cited, versioned setup conventions are registered in-code (endgame-setup.ts) because semantic-convention-register/provenance are still drafts; the shared register descriptor/closure receipt lands with semantic-convention-provenance.";
+
 export const createTheoryEndgameSetupMatchV1Evidence = (() => {
   const route = "theory.endgame.setup_match@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN, convention: value("a versioned setup convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance", pending: "No registered, cited and versioned Lucena/Philidor/Vancura setup convention exists; every request is honest-unavailable and no setup sentence can render." }, ({ fen, convention }: { readonly fen: string; readonly convention: VersionedEvidenceId }): EvidenceAvailability<DeclaredEvidence<unknown>> => {
-    validFen(fen);
-    return unavailable(`setup_convention_unregistered:${convention.id}@${convention.version}`, "semantic-convention-provenance");
+  return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN, convention: value("a versioned setup convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance", pending: SETUP_CONVENTION_PENDING }, ({ fen, convention }: { readonly fen: string; readonly convention: VersionedEvidenceId }): EndgameSetupMatchAvailability => {
+    const result = endgameSetupMatch(validFen(fen), convention);
+    if (result.kind === "unavailable") return Object.freeze({ kind: "unavailable", reason: result.reason, dependency: "semantic-convention-provenance" });
+    if (result.kind === "not_matched") return result;
+    return Object.freeze({ kind: "available", value: mint(route, symbol, result.value, { fen, convention }, [evidenceDigest(endgameSetupConvention(convention))]) });
   });
 })();
 
@@ -1353,12 +1365,57 @@ export const createDerivedTacticOverloadExploitationObservedV2Evidence = recorde
   return overloadExploitationObservedOperands(anchors).filter((payload) => sameDigest(payload.secondTargetCapture, (input.exchange as DeclaredEvidence<unknown>).payload));
 }, (input) => [...edgesOf(input), ...others(input, "duty", "captures", "exchange")]);
 
+/** `theory.endgame.method_stage@1` payload (MethodStageV1). */
+export interface MethodStageV1 {
+  readonly technique: EndgameTechnique;
+  readonly stage: MethodStage;
+  readonly beneficiary: "white" | "black";
+  readonly convention: VersionedEvidenceId;
+  readonly pathId: string;
+  readonly startNodeId: string;
+  readonly endNodeId: string;
+  readonly edgeIds: readonly string[];
+  readonly beforeFen: string;
+  readonly afterFen: string;
+  readonly triggeringUci: string;
+}
+
+export type EndgameMethodStageAvailability =
+  | { readonly kind: "available"; readonly value: readonly DeclaredEvidence<MethodStageV1>[] }
+  | { readonly kind: "no_stage" }
+  | { readonly kind: "unavailable"; readonly reason: string; readonly dependency?: string };
+
 export const createTheoryEndgameMethodStageV1Evidence = (() => {
   const route = "theory.endgame.method_stage@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ setup: sealed("theory.endgame.setup_match@1"), edges: EDGES(1, null), convention: value("a versioned method convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance", pending: "No registered, cited and versioned method convention (or setup convention) exists; every request is honest-unavailable and no Lucena/Philidor/Vančura stage can render." }, ({ edges, convention }: { readonly setup: DeclaredEvidence<unknown>; readonly edges: readonly DeclaredEvidence<unknown>[]; readonly convention: VersionedEvidenceId }): EvidenceAvailability<readonly DeclaredEvidence<unknown>[]> => {
-    recordedEdgeAnchors(edges);
-    return unavailable(`method_convention_unregistered:${convention.id}@${convention.version}`, "semantic-convention-provenance");
+  return factory({ route, symbol, shape: "derived", arms: [{ setup: sealed("theory.endgame.setup_match@1"), edges: EDGES(1, null), convention: value("a versioned method convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance", pending: "The three cited, versioned method conventions are registered in-code (endgame-method.ts) pending semantic-convention-provenance. A stage is a retrospective observation only; reachability/forceability needs a quantified game-graph provider that does not exist (D2497), so no reachability projection is minted." }, ({ setup, edges, convention }: { readonly setup: DeclaredEvidence<unknown>; readonly edges: readonly DeclaredEvidence<unknown>[]; readonly convention: VersionedEvidenceId }): EndgameMethodStageAvailability => {
+    const anchors = recordedEdgeAnchors(edges);
+    const method = endgameMethodConvention(convention);
+    if (method === undefined) return Object.freeze({ kind: "unavailable", reason: `method_convention_unregistered:${convention.id}@${convention.version}`, dependency: "semantic-convention-provenance" });
+    const match = setup.payload as EndgameSetupMatch;
+    if (match.technique !== method.technique || match.convention.id !== method.setup.id || match.convention.version !== method.setup.version) throw new TypeError(`Method convention ${method.id}@${method.version} requires a ${method.setup.id}@${method.setup.version} setup match`);
+    if (match.fen !== anchors[0]!.beforeFen) throw new TypeError("Method replay setup match is not the exact start of the recorded edge window");
+    const payloads = edges.map((edge) => edge.payload as RecordedEdge);
+    const observed = replayEndgameMethod(method, anchors);
+    if (observed.length === 0) return Object.freeze({ kind: "no_stage" });
+    return Object.freeze({ kind: "available", value: Object.freeze(observed.map((stage) => {
+      const window = anchors.slice(0, stage.stepIndex + 1);
+      const trigger = anchors[stage.stepIndex]!;
+      const payload: MethodStageV1 = Object.freeze({
+        technique: stage.technique,
+        stage: stage.stage,
+        beneficiary: stage.beneficiary,
+        convention: Object.freeze({ id: method.id, version: method.version }),
+        pathId: payloads[0]!.runId,
+        startNodeId: anchors[0]!.beforeNodeId,
+        endNodeId: trigger.afterNodeId,
+        edgeIds: Object.freeze(window.map((edge) => `${edge.beforeNodeId}>${edge.afterNodeId}`)),
+        beforeFen: trigger.beforeFen,
+        afterFen: trigger.afterFen,
+        triggeringUci: trigger.moveUci,
+      });
+      return mint(route, symbol, payload, { setup, edges: edges.slice(0, stage.stepIndex + 1), convention }, [setup, ...edges.slice(0, stage.stepIndex + 1), evidenceDigest(method)]);
+    })) });
   });
 })();
 

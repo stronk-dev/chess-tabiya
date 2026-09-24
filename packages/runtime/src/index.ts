@@ -101,6 +101,8 @@ export {
   type TransitionSemanticFact,
 } from "./transition.js";
 export { ENDGAME_CLASSIFICATION_CONVENTION, endgameClassification, renderEndgameClassification, type EndgameClassification, type EndgameTypeId } from "./endgame.js";
+export { ENDGAME_CONVENTION_SOURCES, ENDGAME_SETUP_CONVENTIONS, endgameSetupConvention, endgameSetupMatch, endgameSetupMatches, renderEndgameSetupMatch, type EndgameConventionRef, type EndgameConventionSource, type EndgameSetupConvention, type EndgameSetupMatch, type EndgameSetupMatchResult, type EndgameTechnique } from "./endgame-setup.js";
+export { ENDGAME_METHOD_CONVENTIONS, endgameMethodConvention, type EndgameMethodConvention, type MethodStage } from "./endgame-method.js";
 export { retrospectivePivot } from "./adaptive.js";
 export { STORY_MATE_CP, STORY_PIVOT_CP, rankStoryMoments, storyEvaluation, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationChange, renderStoryEvaluationTrajectory, reviewStoryTitle, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryMomentSelection, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {

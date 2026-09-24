@@ -318,17 +318,17 @@ describe("value authority: corrected successors", () => {
     expect(JSON.stringify(values[0]!.payload)).not.toMatch(/nodeId|runId/u);
   });
 
-  it("keeps Lucena/Philidor/Vancura setup and method stage honest-unavailable (criterion 10)", () => {
+  it("names Lucena/Philidor/Vancura only from a registered, cited setup convention's computed intersection (criterion 10)", () => {
     const lucenaLike = "1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1";
     const classification = invoke("rules.endgame.classification@1", { fen: lucenaLike }) as readonly DeclaredEvidence<Record<string, unknown>>[];
     expect(classification.map((value) => (value.payload.type as { id: string } | null)?.id)).toEqual(["rook-and-pawn-vs-rook"]);
     expect(JSON.stringify(classification[0]!.payload)).not.toMatch(/lucena|philidor|vancura|technique/iu);
-    for (const technique of ["lucena-setup", "philidor-setup", "vancura-setup"]) {
-      expect(invoke("theory.endgame.setup_match@1", { fen: lucenaLike, convention: { id: technique, version: 1 } })).toMatchObject({ kind: "unavailable", dependency: "semantic-convention-provenance" });
-    }
+    const outcome = (id: string) => (invoke("theory.endgame.setup_match@1", { fen: lucenaLike, convention: { id, version: 1 } }) as { kind: string }).kind;
+    expect([outcome("lucena-setup"), outcome("philidor-third-rank-setup"), outcome("vancura-setup")]).toEqual(["available", "not_matched", "not_matched"]);
+    expect(invoke("theory.endgame.setup_match@1", { fen: lucenaLike, convention: { id: "lucena", version: 1 } })).toMatchObject({ kind: "unavailable", dependency: "semantic-convention-provenance" });
     expect(() => invoke("theory.endgame.setup_match@1", { fen: lucenaLike, convention: { id: "lucena-setup", version: 1 }, technique: "lucena" })).toThrow(/extra: technique/u);
     const forgedSetup = identitySealedEvidenceWithoutValueReceipt({ id: "theory.endgame", version: 1 }, { id: "theory.endgame.setup_match", version: 1 }, { fen: lucenaLike, technique: "lucena" });
-    expect(() => invoke("theory.endgame.method_stage@1", { setup: forgedSetup, edges: [], convention: { id: "lucena-method", version: 1 } })).toThrow(/value-authority receipt/u);
+    expect(() => invoke("theory.endgame.method_stage@1", { setup: forgedSetup, edges: [], convention: { id: "lucena-bridge-method", version: 1 } })).toThrow(/value-authority receipt/u);
     expect(PRIMARY_EVIDENCE_MANIFEST.projections.some((value) => value.id === "derived.endgame.setup_reachable")).toBe(false);
   });
 
@@ -727,8 +727,11 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const tradeFirst = sealedOne("rules.transition.event.capture@1", { beforeFen: mainPath[2]!.fen, moveUci: mainPath[3]!.moveUci!, afterFen: mainPath[3]!.fen });
   const tradeSecond = sealedOne("rules.transition.event.capture@1", { beforeFen: mainPath[3]!.fen, moveUci: mainPath[4]!.moveUci!, afterFen: mainPath[4]!.fen });
   profiles.set("derived.exchange.trade_completed@2", { valid: { first: tradeFirst, second: tradeSecond, firstEdge: edgeOf(3), secondEdge: edgeOf(4) }, falsify: refused("derived.exchange.trade_completed@2", { first: tradeFirst, second: tradeSecond, firstEdge: tradeMoves[0], secondEdge: tradeMoves[1] }) });
-  profiles.set("theory.endgame.method_stage@1", { valid: undefined, falsify: refused("theory.endgame.method_stage@1", { setup: identity(capture), edges, convention: { id: "lucena-method", version: 1 } }) });
-  profiles.set("theory.endgame.setup_match@1", { valid: { fen: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1", convention: { id: "lucena-setup", version: 1 } }, falsify: refused("theory.endgame.setup_match@1", { fen: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1", convention: { id: "lucena-setup", version: 1 }, technique: "lucena" }) });
+  const vancuraFen = "R7/6k1/P4r2/8/2K5/8/8/8 w - - 0 1";
+  const vancuraSetup = (invoke("theory.endgame.setup_match@1", { fen: vancuraFen, convention: { id: "vancura-setup", version: 1 } }) as { readonly value: DeclaredEvidence<unknown> }).value;
+  const vancuraEdges = lineEdges("vancura", vancuraFen, ["a6a7", "f6a6"]);
+  profiles.set("theory.endgame.method_stage@1", { valid: { setup: vancuraSetup, edges: vancuraEdges, convention: { id: "vancura-method", version: 1 } }, falsify: refused("theory.endgame.method_stage@1", { setup: identity(capture), edges, convention: { id: "lucena-bridge-method", version: 1 } }) });
+  profiles.set("theory.endgame.setup_match@1", { valid: { fen: "1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1", convention: { id: "lucena-setup", version: 1 } }, falsify: refused("theory.endgame.setup_match@1", { fen: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1", convention: { id: "lucena-setup", version: 1 }, technique: "lucena" }) });
 
   // Counterfactual absence: complete sealed alternative populations.
   const playedEdges = [edge("r3k2r/pppq1ppp/2npbn2/4p3/2B1P3/2NP1N2/PPPQ1PPP/R3K2R w KQkq - 0 1", "e1g1"), edge("4k3/pp4pp/8/2p5/1pP5/1P6/PP4PP/4K3 w - - 0 1", "e1d2"), edge("r1bqkb1r/5ppp/p1np1n2/1p2p3/4P3/N7/PPP2PPP/R2QKB1R b KQkq - 0 1", "h7h6"), edge("4k3/8/8/8/8/8/P1P5/4K3 w - - 0 1", "e1d1")];
@@ -836,7 +839,7 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect(observed).toEqual(pinned);
     // Honest-unavailable routes are exactly the declared dependency gaps.
     const unavailable = Object.entries(observed).filter(([, outcome]) => outcome.availability === "unavailable").map(([route]) => route).sort();
-    expect(unavailable).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "theory.endgame.method_stage@1", "theory.endgame.setup_match@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(unavailable).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
     // Empty valid populations are pinned too; the positives above prove each family can emit.
     const empty = Object.entries(observed).filter(([, outcome]) => outcome.availability === "empty").map(([route]) => route).sort();
     expect(empty).toEqual(EXPECTED_EMPTY);

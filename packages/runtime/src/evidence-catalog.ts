@@ -876,14 +876,14 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       limitations: ["A material family is not a technique, outcome or recommendation."],
     }),
   ]),
-  producer("theory.endgame", "theory", "packages/runtime/src/evidence-factories.ts", "local", [
+  producer("theory.endgame", "theory", "packages/runtime/src/endgame-setup.ts; packages/runtime/src/endgame-method.ts; packages/runtime/src/evidence-factories.ts", "local", [
     projection("theory.endgame", "theory.endgame.setup_match", "theory", {
       payloadType: "EndgameSetupMatch", grounding: "cited_theory", exactness: "convention",
-      semantics: "Positive static Lucena/Philidor/Vancura setup match computed from one canonical FEN under one registered, cited and versioned setup convention.",
+      semantics: "Positive static Lucena/Philidor/Vancura setup match computed from one canonical FEN under one registered, cited and versioned setup convention (lucena-setup@1, philidor-third-rank-setup@1, vancura-setup@1); every operand is computed and the full intersection must hold.",
       operands: ["fen", "technique", "convention", "operands"], answerContent: ["fact", "theory"], forms: ["sentence", "panel"],
       abstention: { possible: true, reasons: ["setup_convention_unregistered", "not_matched"] },
-      limitations: ["A static setup match carries no reachability, advice, significance, correctness or outcome preservation."],
-      disposition: { kind: "inspector_only", reason: "Honest-unavailable until the registered, cited and versioned setup convention exists (semantic-convention-provenance)." },
+      limitations: ["A static setup match carries no reachability, advice, significance, correctness or outcome preservation.", "Geometry is not outcome: in a seeded uniform sample the Syzygy result departs from the named technique's canonical result in 7/100 Lucena, 23/100 Philidor and 19/100 Vancura matches (design/research/endgame-setup-conventions.md)."],
+      disposition: { kind: "inspector_only", reason: "Rendered only in the current-position endgame inspector, with its convention id@version; Support/Review eligibility is not established." },
     }),
     projection("theory.endgame", "theory.endgame.method_stage", "derived", {
       role: "event", payloadType: "MethodStageV1", grounding: "declared_convention", exactness: "convention",
@@ -893,7 +893,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       abstention: { possible: true, reasons: ["input_abstained", "method_convention_unregistered", "no_stage"] },
       derivation: { inputs: [ref("theory.endgame.setup_match"), ref("run.record.edge")] },
       limitations: ["A witnessed stage carries no tablebase category, result preservation, correctness, advice, reachability or significance."],
-      disposition: { kind: "inspector_only", reason: "Honest-unavailable until the setup and method conventions are registered (semantic-convention-provenance)." },
+      disposition: { kind: "inspector_only", reason: "No consumer binding: the factory replays registered method conventions, but ordinary-player wording and module eligibility are not established." },
     }),
   ]),
   producer("theory.shapes", "theory", "packages/runtime/src/shape-firing.ts; apps/server/src/shape-registry.ts", "local", [projection("theory.shapes", "theory.shapes.firing", "theory", { payloadType: "ShapeFiring", grounding: "authored_claim", exactness: "authored", operands: ["entryId", "firstNodeId", "lastNodeId", "openEnded"], answerContent: ["pattern", "theory", "plan"], forms: ["sentence", "panel", "timeline_marker"], limitations: ["A trigger match does not infer an uncited strategic consequence."] })]),

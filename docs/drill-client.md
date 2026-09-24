@@ -238,8 +238,10 @@ Inspector retains the guard event's exact references in a dedicated attributed s
 from the active node's general evidence list.
 
 Inspector also exposes current-position endgame reading and provider rendering independently of
-pivotal markers. A position classified as rook-and-pawn versus rook can therefore name its recorded
-Lucena/Philidor/Vancura evidence even when no forward detector produced a timeline moment. Provider
+pivotal markers. The endgame line states the material class. It names Lucena, Philidor or Vancura
+only when a registered setup convention matches (`theory.endgame.setup_match@1`), and it always
+cites that convention's id and version. This works even when no forward detector produced a
+timeline moment. Provider
 renderings and speech requests retain the requested `reading` or `marker` scope, and a returned
 rendering is shown only while its source node remains the position displayed on the board.
 

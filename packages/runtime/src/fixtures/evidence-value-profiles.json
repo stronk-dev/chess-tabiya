@@ -1697,16 +1697,19 @@
     ]
   },
   "theory.endgame.method_stage@1": {
-    "availability": "unavailable",
-    "cardinality": 0,
-    "payloadDigests": [],
-    "reason": "authority_not_constructible"
+    "availability": "available",
+    "cardinality": 2,
+    "payloadDigests": [
+      "11f70eea1f8add179dfa89d886c7ecc6f719aaa70d248ca6a44b211c2cbf101f",
+      "5bb48631ed76dbee341d795485482c3b6bfe6570137c714197fbdd7fdabf731e"
+    ]
   },
   "theory.endgame.setup_match@1": {
-    "availability": "unavailable",
-    "cardinality": 0,
-    "payloadDigests": [],
-    "reason": "setup_convention_unregistered:lucena-setup@1"
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "9f3e375d40aa9c0997cc2833d5bed2a680db41651d2bf4540b9322ac21ab3405"
+    ]
   },
   "theory.opening_identity.record@1": {
     "availability": "available",
