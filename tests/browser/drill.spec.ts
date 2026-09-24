@@ -194,6 +194,8 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
 1. d4 *`);
   await page.getByRole("button", { name: "Build game story" }).click();
   await expect(page.getByRole("alert")).toContainText("one game at a time");
+  // IMP-a9: the refusal names the repertoire importer that does accept several games.
+  await expect(page.getByRole("alert")).toContainText("Import repertoire under Learn › Repertoire gaps");
   await page.getByLabel("PGN").fill(`[Event "Browser import"]
 [Site "https://lichess.org/abcd1234"]
 [White "Alice"]
@@ -201,6 +203,7 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
 [Result "1-0"]
 
 1. e4 e5 2. Nf3 Nc6 1-0`);
+  await expect(page.getByLabel("Your side")).toHaveAccessibleDescription(/This PGN names White: Alice and Black: Bob/u);
   await page.getByRole("button", { name: "Build game story" }).click();
   await expect(page).toHaveURL(/\/review\/game\/import-/);
   await expect(page.getByRole("heading", { name: "Alice – Bob" })).toBeVisible();

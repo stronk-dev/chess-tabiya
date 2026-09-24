@@ -2313,6 +2313,34 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("sets Your side from the PGN's player headers and never overrides the learner's own choice (IMP-a5)", async () => {
+    history.replaceState(null, "", "/review");
+    const importGame = vi.fn(async (input: Parameters<NonNullable<DrillClientApi["importGame"]>>[0]) => ({
+      run: { ...run, id: input.id }, importRecord: {} as never, evidencePass: { jobs: 0 },
+    }));
+    const component = mount(App, { target: target(), props: { api: { ...api(), importGame, reveal: vi.fn(async () => ({} as never)) }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Import one game"));
+    const pgn = document.querySelector<HTMLTextAreaElement>("textarea[placeholder='[Event …]']")!;
+    const side = [...document.querySelectorAll<HTMLLabelElement>("form.import-game label")].find((label) => label.textContent?.startsWith("Your side"))!.querySelector("select")!;
+    expect(side.value).toBe("white");
+    pgn.value = `[Event "Club"]\n[White "Magnus"]\n[Black "Test"]\n[Result "*"]\n\n1. e4 *`;
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(side.value).toBe("black"));
+    expect(document.getElementById("import-side-hint")?.textContent).toContain("Your handle is Black in this PGN");
+    expect(side.getAttribute("aria-describedby")).toBe("import-side-hint");
+    side.value = "white";
+    side.dispatchEvent(new Event("change", { bubbles: true }));
+    pgn.value = `[Event "Club"]\n[White "Magnus"]\n[Black "Test"]\n[Result "*"]\n\n1. d4 *`;
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    await tick();
+    expect(side.value).toBe("white");
+    expect(document.getElementById("import-side-hint")?.textContent).toContain("This PGN names White: Magnus and Black: Test");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Build game story")!.click();
+    await vi.waitFor(() => expect(importGame).toHaveBeenCalledOnce());
+    expect(importGame.mock.calls[0]![0]).toMatchObject({ side: "white" });
+    await unmount(component);
+  });
+
   it("does not navigate or permit a duplicate when an import crosses a Review departure", async () => {
     history.replaceState(null, "", "/review");
     const storage = new MemoryStorage();

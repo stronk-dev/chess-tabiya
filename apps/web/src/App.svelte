@@ -100,7 +100,7 @@
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
   import { loadWorkflowPreference, requestedAssistanceConfig } from "./lib/assistance-preference.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
-  import { importFailureCopy } from "./lib/import-presentation.js";
+  import { importFailureCopy, pgnSideHint, REPERTOIRE_IMPORT_POINTER } from "./lib/import-presentation.js";
   import { assertFlipResponse } from "./lib/flip-response.js";
   import {
     arenaLegState,
@@ -288,6 +288,8 @@
   let importPgn = $state("");
   let importUrl = $state("");
   let importSide: "white" | "black" = $state("white");
+  // IMP-a5: the PGN headers usually answer the side question; a learner choice always wins.
+  let importSideTouched = $state(false);
   let importError: string | undefined = $state();
   let importNotice: string | undefined = $state();
   let importBusy = $state(false);
@@ -304,6 +306,8 @@
   let routeError: string | undefined = $state();
   let shellHelpOpen = $state(false);
   let learner: Learner | undefined = $state();
+  let importSideHint = $derived(pgnSideHint(importPgn, learner?.handle));
+  $effect(() => { const side = importSideHint?.side; if (side !== undefined && !untrack(() => importSideTouched)) importSide = side; });
   let authLoading = $state(true);
   let authError: string | undefined = $state();
   let authHandle = $state("");
@@ -1169,7 +1173,7 @@
         return;
       }
       if (action === importGeneration) importPreparation = undefined;
-      if (action === importGeneration && source.kind === "pgn" && importPgn === source.pgn) importPgn = "";
+      if (action === importGeneration && source.kind === "pgn" && importPgn === source.pgn) { importPgn = ""; importSideTouched = false; }
       if (action === importGeneration && source.kind === "lichess" && importUrl === source.url) importUrl = "";
       if (stillOwnsReview()) {
         navigate(routePath({ name: "story", runId }));
@@ -2651,13 +2655,14 @@
         <label>Lichess game URL <input type="url" placeholder="https://lichess.org/abcdefgh" disabled={importBusy||importPreparation!==undefined} bind:value={importUrl} /></label>
         <span>or paste PGN</span>
         <label>PGN <textarea rows="6" placeholder="[Event …]" disabled={importBusy||importPreparation!==undefined} bind:value={importPgn}></textarea></label>
-        <label>Your side <select disabled={importBusy||importPreparation!==undefined} bind:value={importSide}><option value="white">White</option><option value="black">Black</option></select></label>
+        <label>Your side <select disabled={importBusy||importPreparation!==undefined} aria-describedby={importSideHint ? "import-side-hint" : undefined} bind:value={importSide} onchange={() => { importSideTouched = true; }}><option value="white">White</option><option value="black">Black</option></select></label>
+        {#if importSideHint}<p id="import-side-hint" class="honest">{#if importSideHint.side && !importSideTouched}Your handle is {importSideHint.side === "white" ? "White" : "Black"} in this PGN, so Your side is set to {importSideHint.side === "white" ? "White" : "Black"}. Change it if you played the other side.{:else}This PGN names White: {importSideHint.white ?? "not given"} and Black: {importSideHint.black ?? "not given"}. Choose the side you played.{/if}</p>{/if}
         <p id="import-storage-disclosure" class="honest">Import keeps the original PGN verbatim—including player names, tags, comments, and move annotations—alongside its parsed main line and the rehearsal branches you add. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
         {#if importPreparation}<p role="status">The game is saved. Finish preparing its Story without importing a duplicate.</p>{/if}
         <button class="primary" type="submit" aria-describedby="import-storage-disclosure import-source-guidance" disabled={importBusy||(importPreparation===undefined&&importUrl.trim()===""&&importPgn.trim()==="")}>{importBusy?"Preparing…":importPreparation?"Finish Story setup":"Build game story"}</button>
         {#if importNotice}<p role="status">{importNotice}</p>{/if}
         {#if importError}<p role="alert">{importError}</p>{/if}
-        <p id="import-source-guidance" class="honest">Chess.com: export one completed game's PGN and paste it here. Export the game, not an analysis tree with variations. Tabiya never links or mines your account.</p>
+        <p id="import-source-guidance" class="honest">Chess.com: export one completed game's PGN and paste it here. Export the game, not an analysis tree with variations. Tabiya never links or mines your account. {REPERTOIRE_IMPORT_POINTER}</p>
       </form>
       <div class="item-list">
         {#each runs as run}
