@@ -30,7 +30,7 @@
     <div class="signature-list">
       {#each draft.plans as plan, index}
         <article>
-          <div><strong>{plan.label}</strong> <code>{plan.id}</code></div>
+          <div><strong>{plan.label}</strong></div>
           {#if plan.state === "uncheckable"}
             <p><strong>Honest refusal:</strong> this plan is deliberately not graded from one structural position.</p>
             <label>Why it cannot be expressed structurally
@@ -67,5 +67,4 @@
   article { display: grid; gap: .5rem; padding: .7rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--panel); }
   label, details { display: grid; gap: .35rem; }
   textarea { min-height: 4.5rem; padding: .55rem; border: 1px solid var(--line); border-radius: .45rem; resize: vertical; }
-  code { overflow-wrap: anywhere; }
 </style>

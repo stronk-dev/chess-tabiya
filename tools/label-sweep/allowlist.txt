@@ -1,0 +1,2 @@
+# label-sweep allowlist (rfc/evidence-presentation.md §8.1): one `file:line: expression` per line.
+# Ships EMPTY at landing (criterion 4); an entry here is a declared, ledgered exception.

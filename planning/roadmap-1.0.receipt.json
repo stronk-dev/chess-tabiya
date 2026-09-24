@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:deaa92497fe9aaa95b7b7eca0682b9ad4a61f72942280e644ef3aa3c06ae1d64",
+    "roadmap": "sha256:ae9950b5d11b61c6d1172279832f40607db48a200d172a574d83fe8b145a8310",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:79aa4c11d96d647c86b93c19d0f453519d80e699ba87b0bd489425a8f6a05cfc",
-    "rfcRegister": "sha256:92dc510800e7847d16a0ff4f40abf5a450a626af478d1e0e44aca57f319a98f6",
+    "workState": "sha256:79bde54e1b5b58d0f74959171b6751f0e026afc701fe292a1f9cc8e71f8cacb8",
+    "rfcRegister": "sha256:df4f2c94a24e853a906ff65252fbd2df77ac22ea1ead8f733e95f2da093a31ec",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:e46fa7287a4c83836b114e80dbb7a72e929f0db7eae5e68eb57be2902c9ee5a1",
     "application": "sha256:bdb15c52d081713ab6815ccc1c0e5354e813710eb92436704e1b5073d5a66c3b",
-    "rest": "sha256:53784af7232b7e105d1263575ab97219ba67913140abcfcadcdfdcb8d43a2d90"
+    "rest": "sha256:d2c74a907a0fecdccb801f6d69906c285009f5b005e2441ce5e4f9b00dcc2c53"
   },
   "summary": {
     "capabilities": 14,
@@ -33,7 +33,7 @@
       "todo": 620,
       "doing": 0,
       "blocked": 1061,
-      "done": 1208,
+      "done": 1209,
       "refused": 160
     },
     "workItems": {
@@ -229,15 +229,26 @@
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Presets now drive the product: Quiet, Guide me, Theory only, Support and Analyze each compile a module set and config narrowed by context ceiling and viewer access with worded suppressions, the server re-derives the exchange, the pill offers only the context's presets and shows Custom when Advanced changes a field, and the 72 primitives stay under Advanced. Checkpoint B, five emitter-dependent composition states and executable Campaign remain.",
+        "summary": "Learner modules now render in play: sight, threat radar, blunder prevention with a staged-move head slot, post-commit and structure nudges, theory breadcrumb, compare coach and the Full Inspector each show admitted facts through sealed presentation receipts, only when the compiled preset carries them, with delivery bound to the final assistance digest. The stable board and one-expanded seat model hold across the matrix. Guided Hint's seat and legacy renderer migration remain.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/assistance-exchange.ts",
-          "planning/intent-presets/checkpoint-a-implementation-2026-09-24.md",
+          "packages/runtime/src/module-query.ts",
+          "rfc/evidence-presentation.md",
+          "rfc/module-registration.md",
           "rfc/intent-presets.md",
           "rfc/play-composition.md"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "evidence-presentation.md",
+            "digest": "sha256:b98b144e97684b62e10e3e4982436a4fcb19f02dbc2a9410dd9d2ab8583c4804"
+          },
+          {
+            "kind": "rfc",
+            "id": "module-registration.md",
+            "digest": "sha256:28111fa1f05d31c2547573de43a348459dd355c2562b002f72c039421296a15d"
+          },
           {
             "kind": "rfc",
             "id": "intent-presets.md",

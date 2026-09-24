@@ -315,6 +315,17 @@ export function catalogEntryFor(id: string): BotProfileCatalogEntry | undefined 
  * reference must equal one catalog member — a genuine id/digest carrying a substituted family,
  * band, sampler or layer list is invalid, not a weaker profile ([[D3025]]).
  */
+/**
+ * The Maia page width a profile actually requests at one position: its declared sampler width,
+ * capped by the legal moves available there. A position with fewer legal moves than the declared
+ * width (e.g. 19 of 20) is ordinary play, not a provider failure; the page can never be wider.
+ */
+export function botEffectiveRequestedWidth(declaredWidth: number, legalMoveCount: number): number {
+  if (!Number.isSafeInteger(declaredWidth) || declaredWidth < 1) throw new BotProfileError("Bot sampler width must be a positive integer");
+  if (!Number.isSafeInteger(legalMoveCount) || legalMoveCount < 1) throw new BotProfileError("A bot move needs at least one legal move");
+  return Math.min(declaredWidth, legalMoveCount);
+}
+
 export function resolveBotProfileReference(value: unknown): BotProfileCatalogEntry {
   if (!plain(value) || !exactKeys(value, ["id", "family", "band", "version", "digest", "model", "sampler", "orderedLayers"])) {
     throw new BotProfileError("Bot profile reference has an invalid shape");
