@@ -49,6 +49,20 @@ compile into `/app/runtime-content/facts.json`; with `TABIYA_RUNTIME_CONTENT_FAC
 admission answers from those facts (`apps/server/src/runtime-content-facts.ts`), so no prose file
 ships. The bundle is temporary (`finalDischarge: false`) until F12-E2 (D2).
 
+## Deployment files
+
+`tools/render-deployment.mjs` (safe-deployment-profiles, storage-backup-recovery) remains the one
+renderer. The release templates add the read-only release-index mount, `TABIYA_SERVER_IMAGE` and the
+§5 limits (server 512 MiB, Maia 1,536 MiB, no swap). The manifest records the three Compose files as
+the `local`/`appliance`/`hosted` profiles, joins only Tabiya artifact subjects (the digest-pinned
+Caddy edge stays a third-party pin), and lists the maintenance overlay and both Caddyfiles in
+`files`, so SHA256SUMS and the release attestations cover all six. A release that withholds
+maia-cpu (D1) strips the sidecar (`withoutMaia`). The rendered Maia identity (read by the sidecar's
+`tabiya-identity` probe) carries the pushed index digest and the amd64 config digest; one value per
+file is the renderer's contract, so arm64 reports the amd64 config digest until that contract is
+per-platform. The Node TCP bridge only carries UCI traffic; the identity probe is a separate
+connection and is unaffected.
+
 ## Licence and source surface (§9)
 
 Every chrome shell and the public landing link **Licence & source** to `/about`, a server-rendered
@@ -57,7 +71,8 @@ and `/about/release-manifest.json` serve the embedded files. Release Compose mou
 `release-manifest.json` read-only at `/run/chess-tabiya/release-manifest.json` and sets
 `TABIYA_SERVER_IMAGE`; startup parses it with the shared v1 parser
 (`packages/schema/src/release-manifest`) and refuses on any revision, content, policy or image
-mismatch (`RELEASE_INDEX_REFUSED`). Without a mounted index About reports `not_attached`.
+mismatch (`RELEASE_INDEX_REFUSED`). Without a mounted index (or when Compose created an empty
+directory because the file was not downloaded) About reports `not_attached`.
 
 ## Release manifest v1
 
@@ -76,7 +91,9 @@ D1 gate) → `verify` (`make verify`, `make release-policy-check`, base-image pl
 tree) → native `build` on `ubuntu-24.04` and `ubuntu-24.04-arm` without registry authority →
 `publish` (push platform manifests by digest, candidate index; `packages: write`) → `native-proof`
 (pull by platform digest; census, SBOM, enforced licence gate, traced boot, enforced envelope) →
-`release-set` (drift check, Compose, manifest once, SHA256SUMS) → `sign-attest` (cosign keyless,
+`release-set` (drift check, the six deployment files rendered by `tools/render-deployment.mjs` —
+`compose.yaml`, `compose.appliance.yaml`, `compose.hosted.yaml`, `compose.maintenance.yaml`,
+`Caddyfile.appliance`, `Caddyfile.hosted` — each Compose validated, manifest once, SHA256SUMS) → `sign-attest` (cosign keyless,
 build-provenance and SBOM attestations, release-artifact attestations, version tags) →
 `verify-release` (fresh job: checksums, manifest, signature identity, foreign-identity negative,
 attestations, offline bundles) → `github-release` (`contents: write`). Every action is a reviewed

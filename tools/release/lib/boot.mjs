@@ -3,6 +3,7 @@
 // and measure cold-ready, steady RSS and cgroup peak. Optionally preloads the loader trace.
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { createServer } from "node:net";
 import { dirname, join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
@@ -25,6 +26,17 @@ async function waitFor(check, timeoutMs, intervalMs = 250) {
   throw new Error(`timed out after ${timeoutMs} ms${last === undefined ? "" : `: ${last.message}`}`);
 }
 
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      const { port } = server.address();
+      server.close(() => resolve(port));
+    });
+  });
+}
+
 function exitedWith(name) {
   const state = JSON.parse(docker(["inspect", name, "--format", "{{json .State}}"]));
   return state.Running ? undefined : state.ExitCode;
@@ -36,8 +48,11 @@ function exitedWith(name) {
  */
 export async function startServer({ image, name, memoryMiB = 512, env = {}, mounts = [], traceModule, traceLog = "/tmp/fs-trace.log", readyTimeoutMs = 30_000, expectRefusal = false }) {
   try { docker(["rm", "-f", name], { stdio: "ignore" }); } catch { /* not present */ }
-  const args = ["run", "-d", "--name", name, "--memory", `${memoryMiB}m`, "--memory-swap", `${memoryMiB}m`, "-p", "127.0.0.1::3000"];
-  for (const [key, value] of Object.entries(env)) args.push("-e", `${key}=${value}`);
+  // The server runs under the release `local` deployment profile (rfc/safe-deployment-profiles.md):
+  // loopback publication on one known port, which is also the Host/Origin the boundary admits.
+  const hostPort = await freePort();
+  const args = ["run", "-d", "--name", name, "--memory", `${memoryMiB}m`, "--memory-swap", `${memoryMiB}m`, "-p", `127.0.0.1:${hostPort}:3000`];
+  for (const [key, value] of Object.entries({ TABIYA_DEPLOYMENT_PROFILE: "local", TABIYA_LISTEN_HOST: "0.0.0.0", TABIYA_PUBLIC_PORT: String(hostPort), ...env })) args.push("-e", `${key}=${value}`);
   for (const mount of mounts) args.push("-v", mount);
   if (traceModule !== undefined) {
     args.push("-v", `${dirname(traceModule)}:/trace:ro`, "-e", `TABIYA_FS_TRACE=${traceLog}`, "--entrypoint", "node", image, "--import", "/trace/fs-trace.mjs", "apps/server/dist/main.js");
@@ -52,8 +67,7 @@ export async function startServer({ image, name, memoryMiB = 512, env = {}, moun
     docker(["rm", "-f", name]);
     return { refused: code !== 0, exitCode: code, logs: `${logs.stdout}${logs.stderr}` };
   }
-  const port = docker(["port", name, "3000/tcp"]).trim().split("\n")[0].split(":").at(-1);
-  const base = `http://127.0.0.1:${port}`;
+  const base = `http://127.0.0.1:${hostPort}`;
   try {
     await waitFor(async () => {
       if (exitedWith(name) !== undefined) throw new Error(`container exited: ${docker(["logs", name])}`);

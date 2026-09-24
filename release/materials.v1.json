@@ -33,6 +33,16 @@
       }
     },
     {
+      "id": "proxy-edge",
+      "repository": "docker.io/library/caddy",
+      "tag": "2.11.4-alpine",
+      "index": "sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648",
+      "platforms": {
+        "linux/amd64": "sha256:98eb57d882ccd5213d1688764db10c1ca2c58a1ca3a6717a3411ad798f7a423a",
+        "linux/arm64": "sha256:1172d4213087d3fc30bafc7ff2c2896180eb0c41ff7f75f315568fb36cabdcba"
+      }
+    },
+    {
       "id": "sbom-scanner",
       "repository": "docker.io/anchore/syft",
       "tag": "v1.33.0",

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // rfc/verifiable-runtime-distribution.md §1/§8 — post-image release-set commands.
 //
-//   compose   --out DIR --version V --server SUBJECT [--maia SUBJECT]
+//   compose   --out DIR --server SUBJECT [--maia SUBJECT --maia-manifest-digest D --maia-config-digest D]
 //   manifest  --dir DIR --version V --revision SHA --created-at ISO --images FILE
 //             --pre-image FILE --source-archive NAME [--receipts FILE] [--repository URL]
 //   checksums --dir DIR
@@ -16,11 +16,11 @@ import { REPO_ROOT, readJson } from "./lib/common.mjs";
 import { DEFAULT_REPOSITORY } from "./lib/pre-image.mjs";
 import {
   CHECKSUMS_NAME,
-  COMPOSE_PROFILES,
+  DEPLOYMENT_FILES,
   RELEASE_MANIFEST_NAME,
   generateReleaseManifest,
   renderChecksums,
-  renderCompose,
+  writeReleaseDeployment,
   verifyReleaseSet,
 } from "./lib/release-set.mjs";
 
@@ -36,6 +36,8 @@ const { values } = parseArgs({
     repository: { type: "string", default: DEFAULT_REPOSITORY },
     server: { type: "string" },
     maia: { type: "string" },
+    "maia-manifest-digest": { type: "string" },
+    "maia-config-digest": { type: "string" },
     images: { type: "string" },
     receipts: { type: "string" },
     "pre-image": { type: "string" },
@@ -54,10 +56,9 @@ switch (command) {
   case "compose": {
     const out = resolve(values.out);
     mkdirSync(out, { recursive: true });
-    for (const profile of COMPOSE_PROFILES) {
-      writeFileSync(join(out, `compose.${profile}.yaml`), renderCompose({ profile, serverSubject: values.server, maiaSubject: values.maia ?? null, version: values.version }));
-    }
-    console.log(`wrote ${COMPOSE_PROFILES.length} digest-pinned Compose profiles to ${values.out}`);
+    const maia = values.maia === undefined ? null : { subject: values.maia, manifestDigest: values["maia-manifest-digest"], configDigest: values["maia-config-digest"] };
+    writeReleaseDeployment(out, { serverSubject: values.server, maia });
+    console.log(`wrote ${DEPLOYMENT_FILES.length} deployment files to ${values.out}`);
     break;
   }
   case "manifest": {

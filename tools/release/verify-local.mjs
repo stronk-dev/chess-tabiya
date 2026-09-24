@@ -25,7 +25,7 @@ import { startServer } from "./lib/boot.mjs";
 import { canonicalJson, readJson, repoPath } from "./lib/common.mjs";
 import { generatePreImage } from "./lib/pre-image.mjs";
 import { proveMaiaImage, proveServerImage } from "./lib/prove.mjs";
-import { generateReleaseManifest, renderChecksums, renderCompose, verifyReleaseSet } from "./lib/release-set.mjs";
+import { DEPLOYMENT_FILES, generateReleaseManifest, renderChecksums, verifyReleaseSet, writeReleaseDeployment } from "./lib/release-set.mjs";
 import { loadFossPolicy } from "./lib/spdx.mjs";
 import { releasePolicyFindings } from "./release-policy.mjs";
 
@@ -65,7 +65,7 @@ console.log(`notice ${summary.notice}\nbuild metadata ${summary.buildMetadata}\n
 const serverImage = "chess-tabiya-server:release-local";
 if (!values["skip-build"]) {
   step(`build ${serverImage} (${platform})`);
-  execFileSync("docker", ["build", "--platform", platform, "-f", "apps/server/Dockerfile", "--build-arg", `TABIYA_VERSION=${version}`, "--build-arg", `SOURCE_REVISION=${revision}`, "-t", serverImage, "."], { cwd: repoPath("."), stdio: "inherit" });
+  execFileSync("docker", ["build", "--platform", platform, "-f", "apps/server/Dockerfile", "--build-arg", `TABIYA_VERSION=${version}`, "--build-arg", `SOURCE_REVISION=${revision}`, "--build-arg", `TABIYA_APPLICATION_REVISION=${revision}`, "-t", serverImage, "."], { cwd: repoPath("."), stdio: "inherit" });
 }
 const imageId = execFileSync("docker", ["image", "inspect", serverImage, "--format", "{{.Id}}"], { encoding: "utf8" }).trim();
 const subject = `localhost/chess-tabiya-server@${imageId}`;
@@ -86,7 +86,7 @@ copyFileSync(join(preImage, "doc/NOTICE.txt"), join(release, "NOTICE.txt"));
 copyFileSync(proof.sbomPath, join(release, "sbom", `server-${platform.replace("/", "-")}.spdx.json`));
 const archive = `chess-tabiya-${version}-source.tar.gz`;
 writeFileSync(join(release, archive), execFileSync("git", ["archive", "--format=tar.gz", `--prefix=chess-tabiya-${version}/`, revision], { cwd: repoPath("."), maxBuffer: 1024 * 1024 * 1024 }));
-for (const profile of ["local", "appliance", "hosted"]) writeFileSync(join(release, `compose.${profile}.yaml`), renderCompose({ profile, serverSubject: subject, version }));
+writeReleaseDeployment(release, { serverSubject: subject });
 writeFileSync(join(release, "release-manifest.json"), generateReleaseManifest({
   dir: release,
   version,
@@ -98,7 +98,7 @@ writeFileSync(join(release, "release-manifest.json"), generateReleaseManifest({
   fossPolicy: { version: 1, digest: summary.fossPolicy },
   sourceArchive: archive,
 }));
-writeFileSync(join(release, "SHA256SUMS"), renderChecksums(release, ["LICENSE", "NOTICE.txt", archive, "release-manifest.json", "compose.local.yaml", "compose.appliance.yaml", "compose.hosted.yaml", `sbom/server-${platform.replace("/", "-")}.spdx.json`]));
+writeFileSync(join(release, "SHA256SUMS"), renderChecksums(release, ["LICENSE", "NOTICE.txt", archive, "release-manifest.json", ...DEPLOYMENT_FILES, `sbom/server-${platform.replace("/", "-")}.spdx.json`]));
 const verified = verifyReleaseSet(release);
 console.log(`verified ${verified.release.version} @ ${verified.release.sourceRevision}`);
 

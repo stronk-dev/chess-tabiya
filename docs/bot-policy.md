@@ -111,16 +111,21 @@ catalogue profile and those deliveries, and the whole stored decision and operat
 caller selection bytes on a profile run, and branch groups are refused on profile runs until their
 wrapper calls the same core.
 
-**Availability** (`BotProviderAvailability`). Each operation's state is `unverified` until the
-exchange returns a delivery (`available`) or `provider_unavailable`/`identity_mismatch`
-(`unavailable`); transient outcomes change nothing. A startup probe makes one ordinary shared
-request per operation from the start position; every bot move updates it too. The §4.3 join
-(`botProfileStartability`): baseline needs only Maia; guarded and pawn-forward need Stockfish too
-and stay `conditional` (`guard_release_receipt_absent`) because provider health's release receipt
-does not exist yet. An `unavailable` profile cannot be created. There is no configuration input.
-The production Maia sidecar exposes no container identity to the exchange, so in `ENGINE_MODE=maia`
-Maia deliveries — and therefore every bot — are honestly unavailable until it does. Mock-engine
-deployments serve a labelled "Mock Maia" through the same exchange.
+**Availability** (`BotProviderAvailability`). The roster reads the provider-health registry
+(`docs/provider-health.md`); there is no bot-private health state and no configuration input.
+`maia.policy_page@1` takes the state of `maia-inference`, gated by its container identity.
+`stockfish.legal_root_table@1` takes the state of `stockfish-analysis`, the instance the exchange
+runs it on. `available` maps to available and `unavailable` to unavailable. Every other state maps
+to `unverified`, because a roster card has no request with which to prove a cached hit. Every shared-exchange outcome
+the bot observes (the startup probe and every bot move) settles into that registry. A sealed live
+delivery heals the instance; a retained hit or a local-domain answer does not change it. The §4.3 join
+(`botProfileStartability`): baseline needs only Maia. Guarded and pawn-forward also need Stockfish,
+and they stay `conditional` (`guard_release_receipt_absent`) until a current provider-health
+release receipt exists. A forged, cross-registry or stale receipt makes them unavailable
+(`guard_release_receipt_invalid`). An `unavailable` profile cannot be created. In
+`ENGINE_MODE=maia` the networked sidecar reports its injected OCI identity (`maiaContainerProbe`).
+Without that identity, Maia deliveries, and therefore every bot, are unavailable (`protocol`).
+Mock-engine deployments serve a labelled "Mock Maia" through the same exchange.
 
 **Play.** `apps/web/src/lib/JustPlayStarter.svelte` shows the roster as three family sections of
 four band cards from `/capabilities` (title, one compiled mechanism sentence, `Uncalibrated`,
@@ -164,9 +169,8 @@ the compiler's `features` rows are empty until a Stage-B trait passes its own me
 
 ## What is not wired yet
 
-- Provider health (`rfc/provider-health-degradation.md`) is a draft: availability is the
-  exchange-observed snapshot above, and guarded families stay `conditional` without a release
-  receipt. The A11 shared-route latency benchmark and calibration receipts do not exist, so every
+- No provider-health release receipt is issued yet (it needs the release-concurrency benchmark),
+  so guarded families stay `conditional`. The A11 shared-route latency benchmark and calibration receipts do not exist, so every
   card is `uncalibrated`.
 - Branch groups, simulations and live matches do not play profile replies.
 - The `bot-profile-catalog` shared-resource register row waits on absent-source admission

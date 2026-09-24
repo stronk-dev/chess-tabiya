@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { DatabaseSync } from "node:sqlite";
+import { DatabaseSync, type SQLInputValue } from "node:sqlite";
 
 import {
   RuntimeError,
@@ -8,6 +8,7 @@ import {
   type ConceptLabelView,
   type DrillRun,
   type DrillRunEvent,
+  type ImportSourceKind,
   type ObjectiveState,
   type RunMark,
 } from "@chess-tabiya/runtime";
@@ -45,7 +46,9 @@ import {
   type RecordedGuardAuthority,
 } from "./evidence-job-store.js";
 import { EvidenceJobCorrupt, evidenceJobCorrupt } from "./evidence-jobs.js";
+import { ACCOUNT_IMPORT_WRITER_ID, type AccountRestorePlan } from "./account-import.js";
 import {
+  ACCOUNT_TAGGED_RECORD_FIELDS,
   buildAccountBundle,
   planDeletion,
   storedRunExport,
@@ -200,7 +203,7 @@ export interface StoredRunMark extends RunMark {
 
 export interface ImportedGameRecord {
   readonly runId: string;
-  readonly sourceKind: "pgn_paste" | "lichess_url";
+  readonly sourceKind: ImportSourceKind;
   readonly sourceUrl: string | null;
   readonly movetextDigest: string;
   readonly headers: Readonly<Record<string, string>>;
@@ -392,6 +395,7 @@ export interface RunStorage {
   applicationTableNames(): readonly string[];
   applicationIdentityFields(): readonly string[];
   accountBundle(learnerId: string): AccountBundleV1;
+  restoreAccountBundle(learnerId: string, plan: AccountRestorePlan, options: { readonly commit: boolean; readonly at: string }): readonly string[];
   deletionPreview(learnerId: string, scope: DeletionPreviewV1["scope"], at: string): DeletionPreviewV1;
   deleteOwnedRun(learnerId: string, runId: string, at: string, expectedPreviewDigest: string): void;
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
@@ -728,7 +732,24 @@ export interface SQLiteRunStorageOptions {
    * and refuses a legacy concept population rather than guessing.
    */
   readonly concepts?: ConceptMigrationAuthority;
+  /**
+   * rfc/storage-backup-recovery.md §6: the HTTP process opens only an absent/empty database or the
+   * exact current storage version. `prepare-start` owns every on-disk migration (staged, snapshotted
+   * and journalled); an older database reaching this constructor under this policy refuses.
+   */
+  readonly requirePreparedStorage?: boolean;
 }
+
+/** A storage open refused because `prepare-start` has not upgraded the database (§6). */
+export class StorageNotPrepared extends Error {
+  constructor(readonly storageVersion: number) {
+    super(`Database schema ${storageVersion} requires storage prepare-start before the server may open it`);
+  }
+}
+
+/** Test/tool-only ceiling for {@link SQLiteRunStorage.materializeStorageVersion}; never an option. */
+let pendingMigrationCeiling: number | undefined;
+const CEILING_REACHED = Symbol("storage migration ceiling reached");
 
 /** Post-commit hints from the durable evidence store to its in-process worker. */
 export interface EvidenceJobListener {
@@ -1037,9 +1058,14 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
    * the database on every unsuccessful exit ([[D2964]], [[D2965]]).
    */
   constructor(filename = ":memory:", options: SQLiteRunStorageOptions = {}) {
+    const ceiling = pendingMigrationCeiling;
+    pendingMigrationCeiling = undefined;
     this.#databasePath = filename;
     this.#database = new DatabaseSync(filename);
     try {
+      const preexistingTables = options.requirePreparedStorage === true
+        ? (this.#database.prepare("SELECT count(*) AS n FROM sqlite_schema WHERE type = 'table'").get() as { readonly n: number }).n
+        : 0;
       this.#now = options.now ?? (() => new Date().toISOString());
       this.#failDeletionAfterEffectGroup = options.failDeletionAfterEffectGroup;
       this.#onMigration =
@@ -1057,7 +1083,15 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           updated_at TEXT NOT NULL
         ) STRICT
       `);
-      this.#migrate();
+      if (options.requirePreparedStorage === true) {
+        const version = userVersion(this.#database);
+        if (version !== STORAGE_VERSION && !(version === 0 && preexistingTables === 0)) {
+          if (version > STORAGE_VERSION) throw new ServerError("STORAGE_FAILURE", `Database schema ${version} is newer than supported schema ${STORAGE_VERSION}`);
+          throw new StorageNotPrepared(version);
+        }
+      }
+      this.#migrate(ceiling ?? STORAGE_VERSION);
+      if (ceiling !== undefined && ceiling < STORAGE_VERSION) throw CEILING_REACHED;
       this.#conceptReceipt = this.#verifyConceptStore();
       this.#longitudinal = new LongitudinalStore(this.#database, options.longitudinalNow === undefined ? {} : { now: options.longitudinalNow });
       this.#evidence = new EvidenceJobStore(this.#database, options.evidenceNow === undefined ? {} : { now: options.evidenceNow });
@@ -1065,6 +1099,38 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       try { this.#database.close(); } catch { /* preserve the primary failure */ }
       throw error;
     }
+  }
+
+  /**
+   * Materializes exactly the historical schema `version` by running the canonical migration chain
+   * 1..version and stopping (rfc/storage-backup-recovery.md §5): the generated historical table
+   * inventories and the prior-release fixtures come from the same migration code the upgrade runs,
+   * never from a hand-maintained guess. Migrations are append-only, so a version's schema is fixed
+   * for every later head.
+   */
+  static materializeStorageVersion(filename: string, version: number, options: Pick<SQLiteRunStorageOptions, "concepts"> = {}): void {
+    if (!Number.isSafeInteger(version) || version < 1 || version > STORAGE_VERSION) {
+      throw new TypeError(`Storage version ${version} is outside 1..${STORAGE_VERSION}`);
+    }
+    pendingMigrationCeiling = version;
+    try {
+      new SQLiteRunStorage(filename, { ...options, onMigration: () => {} }).close();
+    } catch (error) {
+      if (error !== CEILING_REACHED) throw error;
+    } finally {
+      pendingMigrationCeiling = undefined;
+    }
+  }
+
+  /**
+   * The storage half of `/readyz` (rfc/storage-backup-recovery.md §6): the live connection's
+   * `user_version` and one representative application read. Throws when either is unavailable.
+   */
+  readinessProbe(): { readonly storageVersion: number; readonly representativeData: "ok" } {
+    const version = userVersion(this.#database);
+    this.#database.prepare("SELECT count(*) AS n FROM learners").get();
+    this.#database.prepare("SELECT id FROM drill_runs LIMIT 1").all();
+    return Object.freeze({ storageVersion: version, representativeData: "ok" as const });
   }
 
   /** The verified migration-28 receipt this database carries (rfc/concept-registry.md §4 step 7). */
@@ -1337,7 +1403,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       if (value === null || typeof value === "string" || typeof value === "boolean") return value;
       if (typeof value === "number") return value;
       if (typeof value === "bigint") return Number(value);
-      if (Buffer.isBuffer(value)) return value.toString("utf8");
+      // node:sqlite returns BLOB columns as plain Uint8Array, not Buffer; without this arm the
+      // repertoire's original PGN exported as an index-keyed object of byte values.
+      if (value instanceof Uint8Array) return Buffer.from(value.buffer, value.byteOffset, value.byteLength).toString("utf8");
       if (Array.isArray(value)) return Object.freeze(value.map(jsonValue));
       if (typeof value === "object") {
         const result: Record<string, JsonValue> = {};
@@ -1635,6 +1703,121 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#rollback();
       if (error instanceof ServerError) throw error;
       throw storageFailure("Could not export learner account data", error);
+    }
+  }
+
+  /**
+   * Account import (apps/server/src/account-import.ts). `commit: false` is a read-only conflict probe;
+   * `commit: true` recomputes the same probe inside one `BEGIN IMMEDIATE` and writes the whole plan or
+   * nothing. Every restored row is owned by `learnerId`; position statistics and the longitudinal
+   * projections are rebuilt from the restored attempts/runs rather than copied from the file.
+   */
+  restoreAccountBundle(learnerId: string, plan: AccountRestorePlan, options: { readonly commit: boolean; readonly at: string }): readonly string[] {
+    const database = this.#database;
+    const exists = (sql: string, ...parameters: readonly string[]): boolean => database.prepare(sql).get(...parameters) !== undefined;
+    const conflicts = (): readonly string[] => {
+      const found: string[] = [];
+      const probe = (label: string, sql: string, values: Iterable<string>) => {
+        for (const value of new Set(values)) if (exists(sql, value)) found.push(`${label}:${value}`);
+      };
+      probe("run", "SELECT 1 FROM drill_runs WHERE id=?", plan.runs.map((run) => run.id));
+      probe("derivation", "SELECT 1 FROM run_derivations WHERE derived_run_id=?", plan.derivations.map((item) => item.derivedRunId));
+      probe("mark", "SELECT 1 FROM run_marks WHERE id=?", plan.records.run_marks.map((row) => String(row.id)));
+      probe("schedule", "SELECT 1 FROM schedules WHERE id=?", plan.records.schedules.map((row) => String(row.id)));
+      probe("repertoire", "SELECT 1 FROM repertoires WHERE id=?", plan.records.repertoires.map((row) => String(row.id)));
+      probe("repertoire-gap-run", "SELECT 1 FROM repertoire_gap_runs WHERE run_id=?", plan.records.repertoire_gap_runs.map((row) => String(row.run_id)));
+      probe("pack-draft", "SELECT 1 FROM pack_drafts WHERE id=?", plan.records.pack_drafts.map((row) => String(row.id)));
+      probe("playtest", "SELECT 1 FROM playtest_documents WHERE digest=?", plan.records.playtest_documents.map((row) => String(row.digest)));
+      probe("shape-draft", "SELECT 1 FROM shape_drafts WHERE id=?", plan.records.shape_drafts.map((row) => String(row.id)));
+      return Object.freeze(found.sort());
+    };
+    const account = database.prepare("SELECT 1 AS found FROM learners WHERE id=? AND id<>?").get(learnerId, LEGACY_ID);
+    if (account === undefined) throw new ServerError("UNAUTHENTICATED", "Authentication required");
+    if (!options.commit) return conflicts();
+    const column = (value: JsonValue | undefined): SQLInputValue => {
+      if (value === undefined || value === null) return null;
+      if (typeof value === "boolean") return value ? 1 : 0;
+      if (typeof value === "string" || typeof value === "number") return value;
+      return JSON.stringify(value);
+    };
+    const insert = (table: string, columns: readonly string[], values: readonly SQLInputValue[]) => {
+      database.prepare(`INSERT INTO ${table} (${columns.join(",")}) VALUES (${columns.map(() => "?").join(",")})`).run(...values);
+    };
+    /** Inverse of the export's portable record: known fields only, JSON/boolean columns restored. */
+    const restoreRows = (table: string, rows: readonly Readonly<Record<string, JsonValue>>[], renames: Readonly<Record<string, string>>, owner?: string, transform?: (row: Readonly<Record<string, JsonValue>>) => Readonly<Record<string, SQLInputValue>>) => {
+      const fields = (ACCOUNT_TAGGED_RECORD_FIELDS as Readonly<Record<string, readonly (readonly string[])[]>>)[table]![0]!;
+      for (const row of rows) {
+        const converted: Record<string, SQLInputValue> = transform === undefined
+          ? Object.fromEntries(fields.map((field) => [renames[field] ?? field, column(row[field])]))
+          : { ...transform(row) };
+        if (owner !== undefined) converted[owner] = learnerId;
+        const columns = Object.keys(converted);
+        insert(table, columns, columns.map((name) => converted[name]!));
+      }
+    };
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const found = conflicts();
+      if (found.length > 0) {
+        throw new ServerError("ACCOUNT_IMPORT_CONFLICT", `${found.length} object${found.length === 1 ? "" : "s"} in the file already exist in this installation`, { details: { conflicts: found } });
+      }
+      const at = options.at;
+      for (const restored of plan.runs) {
+        insert("drill_runs", ["id", "snapshot_json", "active_writer_id", "updated_at", "summary_json", "owner_learner_id", "active_writer_learner_id", "schema_version", "longitudinal_structure_attribution"], [
+          restored.id, JSON.stringify(restored.run), ACCOUNT_IMPORT_WRITER_ID, at,
+          JSON.stringify(summaryFields(restored.run, restored.title, at)), learnerId, learnerId, restored.run.schemaVersion, "single_player",
+        ]);
+        database.prepare(`INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via)
+          VALUES (?,?,'host',?,NULL,NULL)`).run(restored.id, learnerId, at);
+        const game = restored.importedGame;
+        if (game !== null) {
+          insert("imported_games", ["run_id", "source_kind", "source_url", "movetext_digest", "headers_json", "result", "pgn", "licence_note", "imported_at"], [
+            restored.id, game.sourceKind, game.sourceUrl, game.movetextDigest, JSON.stringify(game.headers), game.result, game.pgn, game.licenceNote, game.importedAt,
+          ]);
+        }
+      }
+      for (const item of plan.derivations) {
+        insert("run_derivations", ["derived_run_id", "source_run_id", "source_branch_id", "source_node_id", "kind", "created_at"], [
+          item.derivedRunId, item.sourceRunId, item.sourceBranchId, item.sourceNodeId, item.kind, item.createdAt,
+        ]);
+      }
+      restoreRows("run_marks", plan.records.run_marks, {}, "author_learner_id");
+      restoreRows("attempts", plan.records.attempts, { checkpointIds: "checkpoint_ids" }, "learner_id");
+      restoreRows("attempt_concepts", plan.records.attempt_concepts, {}, undefined, (row) => {
+        const concept = row.concept as Readonly<Record<string, JsonValue>>;
+        return {
+          run_id: column(row.run_id), branch_id: column(row.branch_id), pack_id: column(row.pack_id), pack_digest: column(row.pack_digest),
+          concept_key: column(row.concept_key), concept_id: column(concept.id), registry_schema_version: column(concept.registrySchemaVersion),
+          registry_digest: column(concept.registryDigest), label: column(row.label),
+        };
+      });
+      restoreRows("attempt_concept_legacy", plan.records.attempt_concept_legacy, {});
+      restoreRows("schedules", plan.records.schedules, {}, "learner_id");
+      restoreRows("repertoires", plan.records.repertoires, {}, "owner_learner_id", (row) => ({
+        ...Object.fromEntries(ACCOUNT_TAGGED_RECORD_FIELDS.repertoires[0].map((field) => [field, column(row[field])])),
+        original_pgn: Buffer.from(String(row.original_pgn), "utf8"),
+      }));
+      restoreRows("repertoire_moves", plan.records.repertoire_moves, {});
+      restoreRows("repertoire_scans", plan.records.repertoire_scans, { population: "population_json", gaps: "gaps_json", alternateGaps: "alternate_gaps_json", unknown: "unknown_json" });
+      restoreRows("repertoire_gap_runs", plan.records.repertoire_gap_runs, {});
+      restoreRows("pack_drafts", plan.records.pack_drafts, { document: "document_json" }, "owner_learner_id");
+      restoreRows("playtest_documents", plan.records.playtest_documents, { document: "document_json" });
+      restoreRows("shape_drafts", plan.records.shape_drafts, { document: "document_json" }, "owner_learner_id");
+      this.#rebuildPositionStats(learnerId);
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#restoreAccountBundle", effect: "always" }, plan.runs.map((run) => run.id));
+      this.#database.exec("COMMIT");
+      this.#flushLongitudinalWake();
+      return Object.freeze([]);
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      if (error instanceof Error && /UNIQUE constraint failed|PRIMARY KEY/.test(error.message)) {
+        throw new ServerError("ACCOUNT_IMPORT_CONFLICT", "An object in the file already exists in this installation", { cause: error });
+      }
+      if (error instanceof Error && /constraint failed|cannot store/i.test(error.message)) {
+        throw new ServerError("ACCOUNT_IMPORT_INVALID", "The account download contains a record this installation cannot store", { cause: error });
+      }
+      throw storageFailure("Could not import account data", error);
     }
   }
 
@@ -4224,7 +4407,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     }
   }
 
-  #migrate(): void {
+  #migrate(ceiling: number): void {
     let version = userVersion(this.#database);
     if (version > STORAGE_VERSION) {
       throw new ServerError(
@@ -4381,7 +4564,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {
-      if (migration.version <= version) continue;
+      if (migration.version <= version || migration.version > ceiling) continue;
       const rebuildsReferencedTables = migration.version === 14;
       try {
         if(rebuildsReferencedTables){

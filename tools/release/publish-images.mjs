@@ -31,7 +31,10 @@ if (values.images !== undefined) {
     }
     run("docker", ["buildx", "imagetools", "create", "-t", `${repositories[role]}:candidate-${values.sha}`, ...Object.values(platforms).map((digest) => `${repositories[role]}@${digest}`)]);
     const index = JSON.parse(run("docker", ["buildx", "imagetools", "inspect", `${repositories[role]}:candidate-${values.sha}`, "--format", "{{json .Manifest}}"])).digest;
-    images[role] = { subject: `${repositories[role]}@${index}`, platforms, fossEligible: true };
+    // The provider-health identity probe reports a config digest; record the amd64 platform's
+    // (the rendered Compose carries one value, as tools/render-deployment.mjs defines it).
+    const config = JSON.parse(run("docker", ["buildx", "imagetools", "inspect", "--raw", `${repositories[role]}@${platforms["linux/amd64"]}`])).config.digest;
+    images[role] = { subject: `${repositories[role]}@${index}`, platforms, fossEligible: true, configDigest: config };
   }
   output([`images=${JSON.stringify(images)}`]);
   console.log(JSON.stringify(images, null, 2));

@@ -2329,14 +2329,135 @@ engine-walk:
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/engine-walk.ts --bundle --platform=node --format=esm --outfile=dist/engine-walk.js
 	node apps/server/dist/engine-walk.js --file "$(abspath $(FILE))" $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(ENUMERATE),--enumerate "$(ENUMERATE)",) $(if $(MAX_QUERIES),--max-queries "$(MAX_QUERIES)",)
 
+# ---------------------------------------------------------------------------------------------
+# Deployment profiles (rfc/safe-deployment-profiles.md, docs/deployment.md) and storage
+# maintenance (rfc/storage-backup-recovery.md, docs/storage-backup-and-recovery.md).
+# Thin wrappers: validation lives in the server image; these only assert inputs and call Compose.
+
+TABIYA_APPLICATION_REVISION ?= $(shell if git diff --quiet HEAD -- 2>/dev/null; then echo "dev+$$(git rev-parse HEAD)"; else echo "dev+dirty"; fi)
+export TABIYA_APPLICATION_REVISION
+DEPLOY_RENDER_DIR := .cache/deploy/local-build
+LOCAL_SERVER_IMAGE := chess-tabiya-server:dev
+LOCAL_MAIA_IMAGE := chess-tabiya-maia:dev
+MAINTENANCE_COMPOSE := docker compose -f compose.yaml -f compose.maintenance.yaml
+STORAGE_ADMIN := $(MAINTENANCE_COMPOSE) run --rm storage-admin
+
+.PHONY: up up-engines down deployment-render deployment-check up-appliance up-hosted appliance-ca-export verify-deployment
+.PHONY: storage-maintenance-check storage-backup storage-verify storage-restore storage-restore-replace storage-rollback storage-upgrade-rehearsal storage-recover
+
+# `local`: loopback-only HTTP at http://127.0.0.1:$${TABIYA_PORT:-3000}. Zero configuration.
 up:
 	docker compose up --build --detach
+	@echo "Tabiya (local profile): http://127.0.0.1:$${TABIYA_PORT:-3000}"
 
+# The default FOSS `cpu` tier: Stockfish plus CPU-only Maia.
 up-engines:
 	ENGINE_MODE=maia docker compose --profile engines up --build --detach
+	@echo "Tabiya (local profile, cpu tier): http://127.0.0.1:$${TABIYA_PORT:-3000}"
 
 down:
-	docker compose --profile engines --profile devcontainer down
+	docker compose --profile engines --profile devcontainer down --remove-orphans
+
+deployment-render:
+	node tools/render-deployment.mjs --out $(DEPLOY_RENDER_DIR) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE)
+
+# PROFILE=local|appliance|hosted; proxied profiles need TABIYA_PUBLIC_HOSTNAME (and hosted TABIYA_ACME_EMAIL).
+deployment-check: deployment-render
+	@case "$(PROFILE)" in local|appliance|hosted) ;; *) echo "Usage: make deployment-check PROFILE=<local|appliance|hosted> [TABIYA_PUBLIC_HOSTNAME=<name>] [TABIYA_ACME_EMAIL=<email>]" >&2; exit 2;; esac
+	@if [ "$(PROFILE)" = local ]; then \
+		docker compose -f $(DEPLOY_RENDER_DIR)/compose.yaml config --quiet; \
+	else \
+		test -n "$(TABIYA_PUBLIC_HOSTNAME)" || { echo "TABIYA_PUBLIC_HOSTNAME is required for $(PROFILE)" >&2; exit 2; }; \
+		node tools/render-deployment.mjs --out $(DEPLOY_RENDER_DIR) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE) --check-hostname "$(TABIYA_PUBLIC_HOSTNAME)"; \
+		TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.$(PROFILE).yaml config --quiet; \
+		docker run --rm --network none -e TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" -e TABIYA_ACME_EMAIL="$(or $(TABIYA_ACME_EMAIL),operator@example.org)" \
+			-v "$(abspath $(DEPLOY_RENDER_DIR))/Caddyfile.$(PROFILE):/etc/caddy/Caddyfile:ro" \
+			$$(node -e 'import("./tools/render-deployment.mjs").then((m) => console.log(m.CADDY_IMAGE))') \
+			caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile; \
+	fi
+	@echo "deployment-check $(PROFILE): OK"
+
+up-appliance:
+	@$(MAKE) --no-print-directory deployment-check PROFILE=appliance
+	docker compose build server
+	TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.appliance.yaml up --detach
+	@echo "Tabiya (appliance profile): https://$(TABIYA_PUBLIC_HOSTNAME) — trust the root from 'make appliance-ca-export OUT=<file>' on every device"
+
+up-hosted:
+	@test -n "$(TABIYA_ACME_EMAIL)" || { echo "TABIYA_ACME_EMAIL is required for hosted" >&2; exit 2; }
+	@$(MAKE) --no-print-directory deployment-check PROFILE=hosted
+	docker compose build server
+	TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.hosted.yaml up --detach
+	@echo "Tabiya (hosted profile): https://$(TABIYA_PUBLIC_HOSTNAME)"
+
+# Copies only the PUBLIC root certificate of the appliance's internal CA (never its key).
+appliance-ca-export:
+	@case "$(OUT)" in /*) ;; *) echo "Usage: make appliance-ca-export OUT=<absolute-file>" >&2; exit 2;; esac
+	TABIYA_PUBLIC_HOSTNAME="$(or $(TABIYA_PUBLIC_HOSTNAME),unused.example.org)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.appliance.yaml cp caddy:/data/caddy/pki/authorities/local/root.crt "$(OUT)"
+	@echo "Install $(OUT) as a trusted root on each device (docs/deployment.md)."
+
+# Docker-tier deployment verification (not part of `make verify`): renders and validates every
+# profile with the pinned Caddy, including `caddy validate`.
+verify-deployment:
+	node tools/verify-packaging.mjs
+	@$(MAKE) --no-print-directory deployment-check PROFILE=local
+	@$(MAKE) --no-print-directory deployment-check PROFILE=appliance TABIYA_PUBLIC_HOSTNAME=tabiya.example.org
+	@$(MAKE) --no-print-directory deployment-check PROFILE=hosted TABIYA_PUBLIC_HOSTNAME=tabiya.example.org TABIYA_ACME_EMAIL=operator@example.org
+
+# Release-tier drills over the built image; each uses its own Compose project and volumes.
+.PHONY: storage-drill appliance-drill
+storage-drill:
+	docker compose build server
+	node tools/appliance-drill.mjs storage --image $(LOCAL_SERVER_IMAGE)
+
+appliance-drill:
+	docker compose build server
+	node tools/appliance-drill.mjs appliance --image $(LOCAL_SERVER_IMAGE)
+
+storage-maintenance-check:
+	@case "$(TABIYA_BACKUP_DIRECTORY)" in /*) ;; *) echo "Set TABIYA_BACKUP_DIRECTORY to an absolute host directory (e.g. TABIYA_BACKUP_DIRECTORY=$$HOME/tabiya-backups)" >&2; exit 2;; esac
+	@mkdir -p "$(TABIYA_BACKUP_DIRECTORY)" && chmod 700 "$(TABIYA_BACKUP_DIRECTORY)"
+
+bundle_id = $(notdir $(patsubst %/,%,$(BACKUP)))
+
+# Manual backup: stops the server (backup needs a quiesced database), backs up, restarts it if it was running.
+storage-backup: storage-maintenance-check
+	@running=$$(docker compose ps --quiet --status running server); \
+	docker compose stop server >/dev/null 2>&1 || true; \
+	$(STORAGE_ADMIN) backup; status=$$?; \
+	if [ -n "$$running" ]; then docker compose start server >/dev/null; fi; \
+	exit $$status
+
+storage-verify: storage-maintenance-check
+	@test -n "$(BACKUP)" || { echo "Usage: make storage-verify BACKUP=<bundle-directory>" >&2; exit 2; }
+	$(STORAGE_ADMIN) verify /backup/$(bundle_id)
+
+# Restore into a fresh named volume; start it with TABIYA_DATA_VOLUME=<volume> make up.
+storage-restore: storage-maintenance-check
+	@test -n "$(BACKUP)" -a -n "$(RESTORE_VOLUME)" || { echo "Usage: make storage-restore BACKUP=<bundle-directory> RESTORE_VOLUME=<fresh-volume>" >&2; exit 2; }
+	@if docker volume inspect "$(RESTORE_VOLUME)" >/dev/null 2>&1; then echo "RESTORE_VOLUME $(RESTORE_VOLUME) already exists; choose a fresh name" >&2; exit 2; fi
+	TABIYA_DATA_VOLUME="$(RESTORE_VOLUME)" $(STORAGE_ADMIN) restore /backup/$(bundle_id)
+	@echo "Start the restored installation with: TABIYA_DATA_VOLUME=$(RESTORE_VOLUME) make up"
+
+storage-restore-replace: storage-maintenance-check
+	@test -n "$(BACKUP)" -a -n "$(CONFIRM_DATABASE)" || { echo "Usage: make storage-restore-replace BACKUP=<bundle-directory> CONFIRM_DATABASE=/data/chess-tabiya.sqlite" >&2; exit 2; }
+	docker compose stop server
+	$(STORAGE_ADMIN) restore /backup/$(bundle_id) --replace-existing --confirm-database "$(CONFIRM_DATABASE)"
+
+# Last-known-good: installs a (pre_upgrade) bundle's bytes unchanged; then start the PRIOR release.
+storage-rollback: storage-maintenance-check
+	@test -n "$(BACKUP)" -a -n "$(CONFIRM_DATABASE)" || { echo "Usage: make storage-rollback BACKUP=<bundle-directory> CONFIRM_DATABASE=/data/chess-tabiya.sqlite" >&2; exit 2; }
+	docker compose stop server
+	$(STORAGE_ADMIN) rollback /backup/$(bundle_id) --confirm-database "$(CONFIRM_DATABASE)"
+	@echo "Now start the release named by compatibleApplicationRevision above; this release would upgrade the database again."
+
+storage-upgrade-rehearsal: storage-maintenance-check
+	@test -n "$(BACKUP)" || { echo "Usage: make storage-upgrade-rehearsal BACKUP=<bundle-directory>" >&2; exit 2; }
+	$(STORAGE_ADMIN) rehearsal /backup/$(bundle_id)
+
+storage-recover: storage-maintenance-check
+	docker compose stop server
+	$(STORAGE_ADMIN) recover
 
 provider-protocol-author-repair:
 	node --test tools/d2361-provider-protocol-author-repair/*.test.mjs

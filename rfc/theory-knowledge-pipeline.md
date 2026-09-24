@@ -1,6 +1,6 @@
 # RFC: Theory knowledge pipeline
 
-- **Status:** draft — **returned 2026-08-27 by independent buildability review on
+- **Status:** implementing — principle-entry lane 0.2, the pinned theory-source register and citation validation landed 2026-09-24 at the owner's direction; passage/extractor/FTS work stays blocked (see changelog). Prior status: draft — **returned 2026-08-27 by independent buildability review on
   [[D1888]]–[[D1898]]**. The exact/offline F4 direction survives; author amendment and repeat
   review are required before implementation. O5 and F3 remain separate acceptance dependencies
 - **Author:** claude (on the [[D1310]] mandate read; [[D1330]] live-debt **rank 8**)

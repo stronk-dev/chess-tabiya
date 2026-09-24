@@ -80,7 +80,8 @@ LABEL org.opencontainers.image.title="chess-tabiya-maia-cpu" \
       org.opencontainers.image.documentation="${TABIYA_REPOSITORY}/blob/${SOURCE_REVISION}/workers/maia/README.md" \
       org.opencontainers.image.licenses="AGPL-3.0-only" \
       org.chess-tabiya.maia3.commit="${MAIA3_COMMIT}" \
-      org.chess-tabiya.maia3.model="maia3-5m@${MAIA3_MODEL_REVISION}"
+      org.chess-tabiya.maia3.model="maia3-5m@${MAIA3_MODEL_REVISION}" \
+      org.chess-tabiya.resource-tier="cpu"
 
 # History conditioning is mandatory for every production request.
 ENTRYPOINT ["maia3-uci", "--model", "5m", "--checkpoint-path", "/opt/maia3-models/maia3-5m.pt", "--use-uci-history"]

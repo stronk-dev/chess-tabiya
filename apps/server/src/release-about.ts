@@ -5,7 +5,7 @@
 // the one shared v1 parser and joined to the embedded build metadata and the deployed image
 // subject. A mounted index that fails the parser or the join refuses startup. About never fetches
 // mutable release metadata from the network and never reports host paths, secrets or learner data.
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 import { parseReleaseManifest, type ReleaseManifestV1 } from "@chess-tabiya/schema/release-manifest";
@@ -100,7 +100,11 @@ export function loadReleaseAbout(options: ReleaseAboutOptions & { readonly engin
   const manifestPath = options.releaseManifestPath ?? DEFAULT_RELEASE_MANIFEST_PATH;
   let manifest: ReleaseManifestV1 | null = null;
   let manifestText: string | null = null;
-  if (existsSync(manifestPath)) {
+  // Compose creates an empty directory for a bind-mounted file the operator did not download; that
+  // is "not attached" (About says so), never a verified index.
+  if (existsSync(manifestPath) && statSync(manifestPath).isDirectory()) {
+    console.warn(JSON.stringify({ event: "release_index_absent", reason: "the mounted release-manifest.json path is a directory; download the release index next to the Compose file" }));
+  } else if (existsSync(manifestPath)) {
     manifestText = readFileSync(manifestPath, "utf8");
     try {
       manifest = parseReleaseManifest(manifestText);

@@ -7,8 +7,9 @@ import {
 } from "node:crypto";
 
 import { ServerError } from "./errors.js";
-import { serializeAccountBundle } from "./account-data.js";
+import { accountInventory, serializeAccountBundle, type AccountInventoryV1 } from "./account-data.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
+import { ACCOUNT_REDERIVED_TABLES, planAccountRestore, readPortableAccountBundle, restoredCounts, type AccountImportReceiptV1 } from "./account-import.js";
 import type { Learner, RunStorage, StoredLearner } from "./storage.js";
 import type { Principal } from "./authorization.js";
 
@@ -69,6 +70,8 @@ export class IdentityService {
   readonly #randomUUID: () => string;
   readonly #derive: (password: string, salt: Buffer) => Promise<Buffer>;
   readonly #cookieSecure: boolean;
+  /** rfc/safe-deployment-profiles.md §7: host-only `__Host-` cookie wherever it is Secure. */
+  readonly #cookieName: string;
   readonly #dummyHash: Promise<string>;
 
   constructor(storage: RunStorage, options: IdentityOptions = {}) {
@@ -86,6 +89,7 @@ export class IdentityService {
           });
         }));
     this.#cookieSecure = options.cookieSecure ?? true;
+    this.#cookieName = this.#cookieSecure ? "__Host-tabiya_session" : "tabiya_session";
     const salt = this.#randomBytes(16);
     this.#dummyHash = this.#encodeHash(this.#randomBytes(32).toString("base64url"), salt);
   }
@@ -184,6 +188,41 @@ export class IdentityService {
     return Object.freeze({ ...serialized, filename: `tabiya-account-${principal.handle}.json` });
   }
 
+  /** The standing twelve-class inventory: counts only, from the export projection. */
+  accountInventory(principal: Principal): AccountInventoryV1 {
+    return accountInventory(this.#storage.accountBundle(principal.learnerId));
+  }
+
+  /**
+   * Read-only: what importing this file would restore, decline and collide with. No password —
+   * like the deletion preview it discloses nothing the learner does not already hold.
+   */
+  previewAccountImport(principal: Principal, value: unknown): AccountImportReceiptV1 {
+    return this.#accountImport(principal, value, false);
+  }
+
+  async importAccount(principal: Principal, password: string, value: unknown): Promise<AccountImportReceiptV1> {
+    await this.#confirmPassword(principal, password);
+    return this.#accountImport(principal, value, true);
+  }
+
+  #accountImport(principal: Principal, value: unknown, commit: boolean): AccountImportReceiptV1 {
+    const bundle = readPortableAccountBundle(value);
+    const plan = planAccountRestore(bundle);
+    const conflicts = this.#storage.restoreAccountBundle(principal.learnerId, plan, { commit, at: this.#now().toISOString() });
+    return Object.freeze({
+      version: 1 as const,
+      mode: commit ? "committed" as const : "preview" as const,
+      bundleDigest: serializeAccountBundle(bundle).digest,
+      bundleFormatVersion: bundle.formatVersion,
+      sourceStorageVersion: bundle.source.storageVersion,
+      restored: restoredCounts(plan),
+      rederived: Object.freeze([...ACCOUNT_REDERIVED_TABLES]),
+      notRestored: plan.notRestored,
+      conflicts,
+    });
+  }
+
   async #confirmPassword(principal: Principal, password: string): Promise<void> {
     validatePassword(password);
     const stored = this.#storage.learnerByHandle(principal.handle);
@@ -203,7 +242,7 @@ export class IdentityService {
   }
 
   expiredCookie(): string {
-    return `tabiya_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${this.#cookieSecure ? "; Secure" : ""}`;
+    return `${this.#cookieName}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${this.#cookieSecure ? "; Secure" : ""}`;
   }
 
   async #encodeHash(password: string, salt: Buffer): Promise<string> {
@@ -219,14 +258,14 @@ export class IdentityService {
   }
 
   #cookie(token: string): string {
-    return `tabiya_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_SECONDS}${this.#cookieSecure ? "; Secure" : ""}`;
+    return `${this.#cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_SECONDS}${this.#cookieSecure ? "; Secure" : ""}`;
   }
 
   #sessionToken(header: string | null): string | undefined {
     if (header === null) return undefined;
     for (const part of header.split(";")) {
       const [name, ...rest] = part.trim().split("=");
-      if (name === "tabiya_session") return rest.join("=") || undefined;
+      if (name === this.#cookieName) return rest.join("=") || undefined;
     }
     return undefined;
   }

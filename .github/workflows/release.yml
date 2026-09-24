@@ -137,6 +137,7 @@ jobs:
         run: >-
           docker buildx build --platform "${{ matrix.platform }}" --file apps/server/Dockerfile
           --build-arg TABIYA_VERSION="$VERSION" --build-arg SOURCE_REVISION="$GITHUB_SHA"
+          --build-arg TABIYA_APPLICATION_REVISION="$GITHUB_SHA"
           --build-arg TABIYA_REPOSITORY="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
           --build-arg SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
           --provenance=false --sbom=false
@@ -271,6 +272,13 @@ jobs:
           node tools/release/assemble-release.mjs --images "$IMAGES" --version "$VERSION" --revision "$GITHUB_SHA"
           --repository "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" --pre-image "$RUNNER_TEMP/pre-image"
           --proof "$RUNNER_TEMP/proof" --out "$RUNNER_TEMP/release"
+      - name: Every rendered deployment file is valid Compose (rfc/safe-deployment-profiles.md)
+        working-directory: ${{ runner.temp }}/release
+        run: |
+          docker compose -f compose.yaml config --quiet
+          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org docker compose -f compose.appliance.yaml config --quiet
+          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org TABIYA_ACME_EMAIL=operator@example.org docker compose -f compose.hosted.yaml config --quiet
+          TABIYA_BACKUP_DIRECTORY=/srv/tabiya-backups docker compose -f compose.yaml -f compose.maintenance.yaml config --quiet
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: release-set
@@ -373,6 +381,8 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             tools/release
+            tools/render-deployment.mjs
+            deploy
             packages/schema/src/release-manifest
             release
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0

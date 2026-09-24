@@ -16,6 +16,8 @@ export const SERVER_DIST_ENTRIES = Object.freeze([
   "apps/server/dist/longitudinal-worker-once.js",
   "apps/server/dist/longitudinal-worker-thread.js",
   "apps/server/dist/main.js",
+  // rfc/storage-backup-recovery.md §8: the maintenance entry point the compose overlay runs.
+  "apps/server/dist/storage-admin.js",
 ]);
 
 const COMMON_FORBIDDEN = Object.freeze([

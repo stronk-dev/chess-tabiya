@@ -102,6 +102,12 @@ describe("rfc/verifiable-runtime-distribution.md §4/§9 About surface", () => {
     expect(body.releaseIndex).toBe("verified");
   });
 
+  it("treats a Compose-created empty directory at the mount path as not attached", () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-absent-index-"));
+    const about = loadReleaseAbout({ engineMode: "mock", legalDirectory: legalDirectory(), releaseManifestPath: directory, serverImage: serverSubject });
+    expect(about.body.releaseIndex).toBe("not_attached");
+  });
+
   it("refuses startup on a malformed index, a revision/content/policy mismatch or a different server image", () => {
     const options = { engineMode: "mock", legalDirectory: legalDirectory(), serverImage: serverSubject } as const;
     expect(() => loadReleaseAbout({ ...options, releaseManifestPath: mounted(`${JSON.stringify(manifest())}\n`) })).toThrow(/RELEASE_INDEX_REFUSED/u);

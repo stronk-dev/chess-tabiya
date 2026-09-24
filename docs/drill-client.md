@@ -68,9 +68,9 @@ run or consulting the pack registry. Both those summaries and
 `GET /runs/:id/graph` include `activeWriterId`, allowing a browser to determine
 its access mode without attempting a mutation.
 
-`GET /capabilities` derives the opponent, judge, and LLM providers from the
-configured engine mode and live supervisor health. Mock is a first-class
-provider for both opponent and judge when mock evidence is wired. Deployment
+`GET /capabilities` carries the live provider-health snapshot (`docs/provider-health.md`). Mock
+providers are first-class `local_fixture` instances. When the opponent provider fails mid-run, the
+client pauses before any opponent move and offers Retry and Change opponent instead of an error. Deployment
 surfaces emit only `available` or `unavailable-here`; `planned` is roadmap
 information and exists only as a client constant.
 Opponent modes are likewise provider-derived. The client refuses a pack whose authored mode is

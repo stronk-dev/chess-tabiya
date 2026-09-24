@@ -39,6 +39,12 @@ test("criterion 4 falsifier: FROM node:24… by tag, a mutable ADD, live apt, gi
   for (const [name, text] of Object.entries(cases)) assert.notEqual(dockerfileFindings(text, materials, name).length, 0, name);
 });
 
+test("criterion 4: the rendered Caddy edge is the reviewed digest recorded in the materials", async () => {
+  const { CADDY_IMAGE } = await import("../render-deployment.mjs");
+  const caddy = materials.baseImages.find((image) => image.id === "proxy-edge");
+  assert.equal(CADDY_IMAGE, `${caddy.repository}:${caddy.tag}@${caddy.index}`);
+});
+
 test("criterion 4: every material URL is digest-locked; a URL without a digest fails", () => {
   assert.deepEqual(materialFindings(materials), []);
   const mutable = structuredClone(materials);

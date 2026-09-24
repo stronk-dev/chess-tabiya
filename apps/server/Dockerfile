@@ -90,6 +90,9 @@ FROM docker.io/library/node:24.21.0-bookworm-slim@sha256:0e0ff40c39bc087845bfb27
 ARG TABIYA_VERSION=0.0.0-dev
 ARG SOURCE_REVISION=0000000000000000000000000000000000000000
 ARG TABIYA_REPOSITORY=https://github.com/stronk-dev/chess-tabiya
+# rfc/storage-backup-recovery.md §2: the immutable source revision every backup manifest and
+# storage receipt records. Release builds pass the full commit SHA; local builds use dev+<sha>.
+ARG TABIYA_APPLICATION_REVISION=dev+dirty
 
 # The base image's JavaScript package managers are not runtime components.
 RUN rm -rf /usr/local/lib/node_modules /opt/yarn-v* \
@@ -100,7 +103,7 @@ COPY --from=stockfish /opt/stockfish/bin/stockfish /usr/games/stockfish
 COPY --from=stockfish /opt/stockfish/source /usr/share/doc/stockfish/source
 
 WORKDIR /app
-COPY --from=build /app/apps/server/dist/main.js /app/apps/server/dist/longitudinal-worker-thread.js /app/apps/server/dist/longitudinal-worker-once.js /app/apps/server/dist/longitudinal-rebuild.js apps/server/dist/
+COPY --from=build /app/apps/server/dist/main.js /app/apps/server/dist/longitudinal-worker-thread.js /app/apps/server/dist/longitudinal-worker-once.js /app/apps/server/dist/longitudinal-rebuild.js /app/apps/server/dist/storage-admin.js apps/server/dist/
 COPY --from=build /app/apps/web/dist apps/web/dist
 COPY --from=release-inputs /release/app/ /app/
 COPY --from=release-inputs /release/doc/ /usr/share/doc/chess-tabiya/
@@ -113,11 +116,12 @@ ENV STATIC_DIRECTORY=/app/apps/web/dist
 ENV STOCKFISH_PATH=/usr/games/stockfish
 ENV TABIYA_RUNTIME_CONTENT_FACTS=/app/runtime-content/facts.json
 ENV TABIYA_LEGAL_DIRECTORY=/usr/share/doc/chess-tabiya
+ENV TABIYA_APPLICATION_REVISION=$TABIYA_APPLICATION_REVISION
 
 LABEL org.opencontainers.image.title="chess-tabiya-server" \
       org.opencontainers.image.description="Tabiya chess phase rehearsal server (core tier)" \
       org.opencontainers.image.version="${TABIYA_VERSION}" \
-      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      org.opencontainers.image.revision=$TABIYA_APPLICATION_REVISION \
       org.opencontainers.image.source="${TABIYA_REPOSITORY}" \
       org.opencontainers.image.url="${TABIYA_REPOSITORY}" \
       org.opencontainers.image.documentation="${TABIYA_REPOSITORY}/blob/${SOURCE_REVISION}/docs/release.md" \
@@ -125,7 +129,14 @@ LABEL org.opencontainers.image.title="chess-tabiya-server" \
 
 EXPOSE 3000
 VOLUME ["/data"]
-HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=6 \
-  CMD node -e "fetch('http://127.0.0.1:3000/healthz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+# Readiness, not liveness: storage prepared, current version, representative read, worker live.
+# A pre-upgrade migration runs before HTTP opens, so the start period is generous.
+# Readiness, not liveness: storage prepared, current version, representative read, worker live.
+# A pre-upgrade migration runs before HTTP opens, so the start period is generous.
+HEALTHCHECK --interval=10s --timeout=3s --start-period=120s --retries=6 \
+  CMD node -e "fetch('http://127.0.0.1:3000/readyz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
 
+# main.js owns the storage lock for its lifetime: replacement recovery, prepare-start (pre-upgrade
+# snapshot + staged migration) and then HTTP. Maintenance: node apps/server/dist/storage-admin.js.
+# A deployment profile is required (TABIYA_DEPLOYMENT_PROFILE); the Compose files set it.
 CMD ["node", "apps/server/dist/main.js"]

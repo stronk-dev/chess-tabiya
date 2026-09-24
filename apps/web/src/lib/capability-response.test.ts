@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import { parseCapabilities } from "./capability-response.js";
 import { botRosterFixture } from "./bot-roster.test-support.js";
 
@@ -28,7 +29,7 @@ const capabilities = Object.freeze({
       profiles: botRosterFixture(),
     },
   },
-  providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },
+  providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "explorer-primary": "available", "tablebase-primary": "available" }, { "explorer-primary": "local_fixture", "tablebase-primary": "local_fixture" }),
   surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
   evidenceManifest: {
     digest: "c".repeat(64),
@@ -55,7 +56,7 @@ describe("capability response authority", () => {
 
   it.each([
     [{ ...capabilities, capabilityDispositions: [] }],
-    [{ ...capabilities, providers: { ...capabilities.providers, opponent: "stockfish" } }],
+    [{ ...capabilities, providerHealth: { ...capabilities.providerHealth, providers: capabilities.providerHealth.providers.slice(1) } }],
     [{ ...capabilities, engines: [capabilities.engines[0], capabilities.engines[0]] }],
     [{ ...capabilities, policyProfiles: { ...capabilities.policyProfiles, human_common: { ...capabilities.policyProfiles.human_common, elo: { ...capabilities.policyProfiles.human_common.elo, min: 2000, max: 1000 } } } }],
     [{ ...capabilities, evidenceManifest: { ...capabilities.evidenceManifest, counts: { ...capabilities.evidenceManifest.counts, producers: 2 } } }],

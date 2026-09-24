@@ -11,12 +11,14 @@ import { RELEASE_MANIFEST_SCHEMA, canonicalReleaseManifest, parseReleaseManifest
 import { REPO_ROOT } from "./lib/common.mjs";
 import {
   CHECKSUMS_NAME,
+  DEPLOYMENT_FILES,
   RELEASE_GRAPH,
   RELEASE_MANIFEST_NAME,
   composeImages,
+  withoutMaia,
+  writeReleaseDeployment,
   generateReleaseManifest,
   renderChecksums,
-  renderCompose,
   topologicalOrder,
   verifyReleaseSet,
 } from "./lib/release-set.mjs";
@@ -39,9 +41,7 @@ function fixture({ version = "1.0.0", withMaia = true, finalDischarge = true, re
   for (const [role, image] of Object.entries(images)) {
     for (const platform of Object.keys(image.platforms)) writeFileSync(join(dir, "sbom", `${role}-${platform.replace("/", "-")}.spdx.json`), `{"spdxVersion":"SPDX-2.3","role":"${role}"}\n`);
   }
-  for (const profile of ["local", "appliance", "hosted"]) {
-    writeFileSync(join(dir, `compose.${profile}.yaml`), renderCompose({ profile, serverSubject: server, maiaSubject: withMaia ? maia : null, version }));
-  }
+  writeReleaseDeployment(dir, { serverSubject: server, maia: withMaia ? { subject: maia, manifestDigest: digest("2"), configDigest: digest("a") } : null });
   const coreReceipt = (platform) => ({ platform, tier: "core", imageDigests: [server], journeyId: "core.release_journey@1", productionProfileDigest: null, candidateWindow: null, steadyRssMiB: 80, peakRssMiB: 200, unpackedImageBytes: 500 * 1024 * 1024, coldReadyMs: 4_000 });
   const cpuReceipt = (platform) => ({ platform, tier: "cpu", imageDigests: [maia, server].sort(), journeyId: "bot.production_selection@1", productionProfileDigest: digest("7"), candidateWindow: { operation: "maia.policy_page@1", requested: 20, observed: 20, coverage: "bounded_top_k" }, steadyRssMiB: 1_000, peakRssMiB: 1_500, unpackedImageBytes: 1_900 * 1024 * 1024, coldReadyMs: 60_000 });
   const text = generateReleaseManifest({
@@ -57,7 +57,7 @@ function fixture({ version = "1.0.0", withMaia = true, finalDischarge = true, re
     sourceArchive: `chess-tabiya-${version}-source.tar.gz`,
   });
   writeFileSync(join(dir, RELEASE_MANIFEST_NAME), text);
-  const files = ["LICENSE", "NOTICE.txt", RELEASE_MANIFEST_NAME, `chess-tabiya-${version}-source.tar.gz`, "compose.local.yaml", "compose.appliance.yaml", "compose.hosted.yaml",
+  const files = ["LICENSE", "NOTICE.txt", RELEASE_MANIFEST_NAME, `chess-tabiya-${version}-source.tar.gz`, ...DEPLOYMENT_FILES,
     ...Object.entries(images).flatMap(([role, image]) => Object.keys(image.platforms).map((platform) => `sbom/${role}-${platform.replace("/", "-")}.spdx.json`))];
   writeFileSync(join(dir, CHECKSUMS_NAME), renderChecksums(dir, files));
   return { dir, manifest: JSON.parse(text), text };
@@ -135,7 +135,7 @@ test("§1 the JSON Schema projection is exact and agrees with the TypeScript val
 });
 
 test("§8 changing one byte of any release file fails before install; SHA256SUMS never hashes itself", () => {
-  for (const path of ["NOTICE.txt", "compose.appliance.yaml", RELEASE_MANIFEST_NAME, "sbom/server-linux-arm64.spdx.json"]) {
+  for (const path of ["NOTICE.txt", "compose.appliance.yaml", "Caddyfile.hosted", RELEASE_MANIFEST_NAME, "sbom/server-linux-arm64.spdx.json"]) {
     const { dir } = fixture();
     appendFileSync(join(dir, path), " ");
     assert.throws(() => verifyReleaseSet(dir), /release set verification failed/u, path);
@@ -145,14 +145,18 @@ test("§8 changing one byte of any release file fails before install; SHA256SUMS
   assert.equal(renderChecksums(dir, [CHECKSUMS_NAME, "LICENSE"]).includes(CHECKSUMS_NAME), false);
 });
 
-test("§1 Compose contains no tag-only image reference and never an optional accelerated artifact", () => {
-  const text = renderCompose({ profile: "appliance", serverSubject: server, maiaSubject: maia, version: "1.0.0" });
-  assert.deepEqual(composeImages(text), { subjects: [maia, server].sort(), tagOnly: [] });
-  assert.match(text, /mem_limit: 512m\n\s+memswap_limit: 512m/u);
-  assert.match(text, /mem_limit: 1536m\n\s+memswap_limit: 1536m/u);
-  assert.match(text, /internal: true/u, "the Maia sidecar has no egress network");
-  assert.throws(() => renderCompose({ profile: "local", serverSubject: "ghcr.io/stronk-dev/chess-tabiya-server:v1", version: "1.0.0" }), /digest-pinned/u);
+test("§1 the six rendered deployment files are covered; Compose records only Tabiya artifacts and never a tag-only image", () => {
+  const { dir, manifest } = fixture();
+  assert.deepEqual(manifest.compose.map((item) => [item.profile, item.path]), [["appliance", "compose.appliance.yaml"], ["hosted", "compose.hosted.yaml"], ["local", "compose.yaml"]]);
+  for (const path of ["Caddyfile.appliance", "Caddyfile.hosted", "compose.maintenance.yaml"]) assert.ok(manifest.files.some((file) => file.path === path), path);
+  const appliance = readFileSync(join(dir, "compose.appliance.yaml"), "utf8");
+  assert.ok(composeImages(appliance).subjects.some((subject) => subject.includes("caddy")), "the pinned Caddy edge is present");
+  assert.deepEqual(manifest.compose[0].imageDigests, [maia, server].sort(), "third-party pins stay outside the artifact join");
+  assert.match(appliance, /mem_limit: 512m\n\s+memswap_limit: 512m/u);
+  assert.match(appliance, /\.\/release-manifest\.json:\/run\/chess-tabiya\/release-manifest\.json:ro/u);
   assert.deepEqual(composeImages("services:\n  a:\n    image: nginx:latest\n").tagOnly, ["nginx:latest"]);
+  const core = withoutMaia(appliance);
+  assert.equal(core.includes(maia) || /^ {2}maia:/mu.test(core) || /MAIA_HOST/u.test(core), false, "a withheld Maia leaves no reference");
 });
 
 test("§8 the release graph is acyclic; embedding the index, regenerating the notice or self-hashing is a cycle", () => {
