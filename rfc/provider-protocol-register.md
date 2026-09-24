@@ -1,20 +1,19 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **owner-approved process cut authored on [[D3128]] after the sixth review
-  returned [[D2956]]–[[D2959]].** The active obligation is now only one absent descriptor/register
-  population through the generic bootstrap. The provider-local Git/acceptance/resource validator
-  and its six-round author chain are retained as historical evidence but removed as acceptance
-  authority. [[D2956]]–[[D2958]] belong to the generic staged-transition dependency; [[D2959]] and
-  durable operation-specific provider parsing belong to `provider-exchange-and-execution.md`.
-  `make provider-protocol-cut-contract` checks the bounded active surface. One fresh review of this
-  cut and accepted/implemented generic bootstrap still precede implementation.
+- **Status:** implemented 2026-09-24 at the owner's direction to implement ready RFCs without
+  further review rounds (D2 not run). The eight active criteria were corrected to the implemented
+  bootstrap (see Changelog): `provider-protocol` is one `members` row read by the existing
+  `string_tuple` reader over a present, initially empty `PROVIDER_PROTOCOL_MEMBERS` tuple, with its
+  checked README register; `provider-exchange-and-execution.md` claims the five operation members.
+  Previously: owner-approved process cut authored on [[D3128]] after the sixth review returned
+  [[D2956]]–[[D2959]].
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
 - **Exploration gate:** [[D2189]] and the fresh buildability review establish the cross-package
   collision/drift problem and the failed bespoke solution
-- **Depends on:** accepted and implemented `rfc/shared-resource-register-bootstrap.md`
-- **Parent / amends:** adds one descriptor/register through the generic engine
+- **Depends on:** implemented `rfc/shared-resource-register-bootstrap.md` (catalogue + checker)
+- **Parent / amends:** adds one data row to the generic catalogue
 - **Supersedes / superseded by:** supersedes the former C11/`RESOURCE_NAMES` plan
 - **Planning:** `planning/provider-protocol-register/`
 
@@ -23,25 +22,23 @@ none
 ```
 
 ```tabiya-resource-descriptor-source
-planning/provider-protocol-register/catalogue-additions.v1.json
+rfc/shared-resource-registers.json#provider-protocol
 ```
 
 ```tabiya-resource-roots
-provider-protocol | sequential/canonical_resource@1/absent | packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE | none
+provider-protocol | members/string_tuple@present | packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_MEMBERS | none
 ```
 
 ## Summary
 
-This RFC introduces one absent `provider-protocol` catalogue root and a human-owned, mechanically
-checked README register.
-The future product RFC will create a single atomic
-`packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_RESOURCE` object. Runtime operation and
-digest-domain identities derive from that object; request/result type relations are checked beside
-it at compile time.
+This RFC introduces one `provider-protocol` catalogue row and a human-owned, mechanically checked
+README register. The row uses the implemented bootstrap's existing `string_tuple` reader: the source
+bytes `packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_MEMBERS` are created first (as an
+empty literal tuple) so the resource is *present*, and absent-source admission ([[D3082]]) is not
+needed. The product RFC then claims one member per provider operation and, when it lands, adds them.
 
-This process document does not create provider bytes, add C11, edit the generic checker, allocate a
-second Git history reader or decide provider semantics. It applies the accepted generic
-`sequential/canonical_resource@1` profile.
+This process document does not decide provider semantics, add a reader, edit the generic checker's
+logic, or allocate a Git history reader.
 
 ## Active cut contract and acceptance criteria
 
@@ -49,34 +46,43 @@ This section is the complete active contract. The historical product/receipt des
 rounds below remain evidence for why the cut exists; they are not implementation or acceptance
 authority.
 
-1. `planning/provider-protocol-register/catalogue-additions.v1.json` contributes exactly one
-   `provider-protocol` descriptor with lifecycle `sequential`, adapter `canonical_resource@1`,
-   introduction `absent`, claim mode `whole_projection` and the exact atomic selector declared in
-   the metadata root above.
-2. The human-owned `rfc/README.md` register gains exactly `provider-protocol head=absent`, an empty
-   Landed table and an empty Live-claims table. It is checked, never generated.
-3. The generic bootstrap's accepted catalogue, projection and staged-transition operations are the
-   only authorities. This RFC adds no provider-specific Git reader, status parser, canonicalizer,
-   acceptance receipt, resource issuer or validation hook.
-4. The process landing changes only the descriptor source, checked README register, its focused
-   population fixture, docs and required ledger/log/roadmap closeout. It creates no runtime provider
-   resource, type, API, schema, migration, content or web byte.
-5. The generic engine must already be accepted, implemented and archived. The focused fixture uses
-   its opaque staged `canonical_resource@1` projection and build-composition-owned repository
-   authority; no raw repository path or caller-built resource is accepted here ([[D2956]]–[[D2959]]).
-6. The exact absent image, unrelated-export absence, malformed atomic root, same-transition process
-   introduction plus product claim, wrong first claimant and landed-to-missing regression all fail
-   through the generic engine. No process-local duplicate of those semantics counts.
-7. After this RFC implements and archives, `provider-exchange-and-execution.md` atomically claims
-   `provider-protocol | first lane 1 | whole projection` and owns the literal resource, type
-   relations, complete operation/digest-domain populations, durable operation-specific provider
-   parsers and consumer closure. That product landing, not this process row, discharges [[D2959]]
-   and bot-policy [[D3030]].
-8. `make provider-protocol-cut-contract` proves the exact bounded source/register/handoff and
-   exclusion of the retired provider-local authority from stable governance. Full normal
-   verification must pass before implementation and archival.
+1. `rfc/shared-resource-registers.json` gains exactly one `provider-protocol` row with claim kind
+   `members` and source `{ kind: "string_tuple", path: "packages/runtime/src/provider-protocol.ts",
+   exportName: "PROVIDER_PROTOCOL_MEMBERS" }`. The historical
+   `planning/provider-protocol-register/catalogue-additions.v1.json` descriptor is retained as
+   evidence only; its `canonical_resource@1`/`absent` vocabulary does not exist in the implemented
+   bootstrap.
+2. The human-owned `rfc/README.md` register gains exactly `provider-protocol members=0`, an empty
+   Landed table and a Live-claims table. It is checked, never generated.
+3. The implemented bootstrap's catalogue parser and C1–C8 are the only authorities. This RFC adds no
+   provider-specific Git reader, status parser, canonicalizer, acceptance receipt, resource issuer
+   or validation hook.
+4. The process landing changes only the catalogue row, the one present source tuple (empty), the
+   checked README register, its focused register-check fixture and this RFC's closeout. It creates
+   no provider operation, type, API, schema, migration, content or web byte.
+5. The source is present before the row is admitted: `parseResourceCatalogue` requires a regular
+   repository file, and the empty tuple derives zero members. Absent-source admission ([[D3082]])
+   remains unneeded and unbuilt.
+6. Claim grammar is the generic `members` grammar. A dotted `ProviderOperationId`, a lane claim and a
+   second claimant of one member all fail through the generic checker; a register head that
+   disagrees with the tuple length fails C6; a tuple member without a landed row fails C4. No
+   process-local duplicate of those semantics counts.
+7. In the same landing `provider-exchange-and-execution.md` claims
+   `provider-protocol | members lichess_explorer_position_page_v1, maia_policy_page_v1,
+   stockfish_legal_root_table_v1, stockfish_position_evaluation_v1, syzygy_position_v1`, and owns
+   the resource payload, type relations, operation/digest-domain populations,
+   durable operation-specific provider parsers and consumer closure. That product landing, not this process
+   row, discharges [[D2959]] and bot-policy [[D3030]].
+8. `make register-check` and `make shared-resource-catalogue` prove the row, register and claim;
+   `make provider-protocol-cut-contract` keeps the retired provider-local authority out of stable
+   governance.
 
 ## 1. Exact descriptor and absent image
+
+> **Superseded 2026-09-24 (historical).** §§1, 4, 5 and 6 describe the withdrawn
+> projection/lifecycle engine (`canonical_resource@1`, `absent`, first-parent history). The
+> implemented bootstrap has none of it; the active contract above is the `members`/`string_tuple`
+> row over a present source. These sections are retained as evidence only.
 
 The catalogue entry is:
 
@@ -400,10 +406,10 @@ review and the generic bootstrap dependency still gate acceptance and implementa
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Generic register engine lands first | shared-resource-register-bootstrap | archived SHA | |
-| D2 | Fresh independent review executes the ten process fixtures | claude | review receipt plus acceptance/corrections | |
-| D3 | Absent descriptor/register lands with full verification | codex | implementation SHA plus green `make verify` | |
-| D4 | Product RFC publishes accepted obligations, claims lane 1 and later lands the atomic image | provider-exchange-and-execution | accepted preimage plus product SHA | |
+| D1 | Generic register engine lands first | shared-resource-register-bootstrap | archived SHA | **2026-09-24** — the catalogue + catalogue-driven checker are implemented (bootstrap status `awaiting D3`, not archived); this RFC needs only the implemented parser/C1–C8 |
+| D2 | Fresh independent review executes the ten process fixtures | claude | review receipt plus acceptance/corrections | **2026-09-24 — not run**: owner directed implementation of ready RFCs without review rounds; the corrected criteria 5–6 execute in `tools/register-check.test.mjs` |
+| D3 | Present descriptor/register lands with full verification | claude | implementation SHA plus green verification | **2026-09-24** — process landing commit on branch `worktree-agent-aaf2b7e1cd919efdb`; see `planning/provider-protocol-register/implementation-2026-09-24.md` |
+| D4 | Product RFC claims the five members and later lands them | provider-exchange-and-execution | claim plus product SHA | claim declared in the same landing; product landing follows |
 
 ## Third fresh independent return (2026-09-06)
 
@@ -559,6 +565,14 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-24: implemented (claude) at the owner's direction, with one genuine-defect correction
+  inline: the cut assumed a generic `canonical_resource@1` adapter, an `absent` introduction and a
+  `first lane 1 | whole projection` claim grammar, none of which exist in the implemented
+  `shared-resource-register-bootstrap` (its §5 explicitly removes them). Criteria 1, 2 and 4–8 are
+  rewritten to the smallest honest shape that bootstrap allows: one `members` row over the existing
+  `string_tuple` reader, the source bytes created first (an empty tuple) so the resource is present
+  and absent-source admission ([[D3082]]) is not built. The product claim becomes five `members`
+  rather than a lane. Criterion count stays eight; the historical §§1/4/5/6 are marked superseded.
 - 2026-09-07: owner-approved process cut on [[D3128]]. The active contract is eight criteria for
   one absent generic catalogue/register population. [[D2956]]–[[D2958]] route to the shared generic
   transition engine; [[D2959]] and durable provider parsing route to

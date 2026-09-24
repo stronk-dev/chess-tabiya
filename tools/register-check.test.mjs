@@ -37,6 +37,7 @@ const tree = {
   "campaign-schema": { head: "1" },
   migration: { head: 4 },
   "evidence-kinds": { members: ["alpha", "beta"] },
+  "provider-protocol": { members: ["gamma"] },
 };
 
 const declaration = (body = "none") => `# RFC: fixture
@@ -59,11 +60,11 @@ const claim = (overrides = {}) => ({
 
 const registers = () => Object.entries(tree).map(([resource, value]) => ({
   resource,
-  head: String(resource === "evidence-kinds" ? value.members.length : value.head),
+  head: String(value.members !== undefined ? value.members.length : value.head),
   body: "",
   headCount: 1,
   digest: resource === "pack-schema" ? "aaaaaaaaaaaa" : resource === "campaign-schema" ? "bbbbbbbbbbbb" : null,
-  landed: resource === "evidence-kinds"
+  landed: value.members !== undefined
     ? value.members.map((member) => ({ key: member, text: `${member} | seed | pre-register` }))
     : [{ key: String(value.head), text: `${value.head} | seed | landed` }],
   claims: [],
@@ -272,14 +273,21 @@ function syntheticRepository({ extraSchema = true, extraRow = true, extraRegiste
 
 test("§7.1 the exact seven-row seed parses, sorted and unique", () => {
   const ids = catalogue.resources.map(({ id }) => id);
-  assert.deepEqual(ids, [
+  const seven = [
     "campaign-schema", "evidence-kinds", "migration", "pack-schema",
     "principle-entry-schema", "run-schema", "shape-entry-schema",
-  ]);
-  assert.deepEqual(
-    seed(),
-    JSON.parse(fs.readFileSync(path.join(repoRoot, "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json"), "utf8")),
-  );
+  ];
+  // The reviewed seed's seven rows survive unchanged; every row added since is one data row from a
+  // later RFC (§1 extension property): provider-protocol-register.md adds `provider-protocol`.
+  const reviewedSeed = JSON.parse(fs.readFileSync(path.join(repoRoot, "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json"), "utf8"));
+  assert.deepEqual(reviewedSeed.resources.map(({ id }) => id), seven);
+  assert.deepEqual(seed().resources.filter(({ id }) => seven.includes(id)), reviewedSeed.resources);
+  assert.deepEqual(ids, [...seven, "provider-protocol"].sort());
+  assert.deepEqual(seed().resources.find(({ id }) => id === "provider-protocol"), {
+    id: "provider-protocol",
+    claimKind: "members",
+    source: { kind: "string_tuple", path: "packages/runtime/src/provider-protocol.ts", exportName: "PROVIDER_PROTOCOL_MEMBERS" },
+  });
 });
 
 test("§7.2 deleting, duplicating, renaming, extra keys and aliases fail", () => {
@@ -392,7 +400,7 @@ test("§7.13 caller mutation after admission leaves the admitted image unchanged
   value.resources[0].id = "mutated";
   value.resources[0].source.schemaSlug = "mutated";
   value.resources.pop();
-  assert.equal(admitted.resources.length, 7);
+  assert.equal(admitted.resources.length, 8);
   assert.equal(admitted.resources[0].id, "campaign-schema");
   assert.equal(admitted.resources[0].source.schemaSlug, "campaign");
   assert.ok(Object.isFrozen(admitted.resources[0].source));
@@ -405,4 +413,17 @@ test("§7.14 the implementation carries no removed scope or speculative root", (
     "first-parent", "release-manifest", "concept-registry-schema", "source-attribution-registry",
   ]) assert.doesNotMatch(source, new RegExp(forbidden), forbidden);
   assert.doesNotMatch(source, /child_process|git /);
+});
+
+// provider-protocol-register.md: the resource enters through the existing string_tuple reader.
+test("provider-protocol members: the real source derives, one operation claimed twice collides, dotted ids are refused", () => {
+  const real = deriveTree(repoRoot);
+  assert.ok(Array.isArray(real["provider-protocol"].members), "the committed tuple is present and derives");
+  const body = "provider-protocol | members maia_policy_page_v1 | one operation";
+  const first = checkC1({ "one.md": declaration(body) }, catalogue);
+  const second = checkC1({ "two.md": declaration(body) }, catalogue);
+  assert.deepEqual([...first.errors, ...second.errors], []);
+  assert.match(checkC3([...first.claims, ...second.claims], [], catalogue).join("\n"), /collision: one\.md and two\.md both claim provider-protocol\|maia_policy_page_v1/);
+  assert.match(checkC1({ "one.md": declaration("provider-protocol | members maia.policy_page@1 | dotted") }, catalogue).errors[0], /invalid member claim/);
+  assert.match(checkC1({ "one.md": declaration("provider-protocol | first lane 1 | whole projection") }, catalogue).errors[0], /invalid member claim/);
 });

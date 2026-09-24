@@ -29,13 +29,14 @@
 - **Planning:** `planning/provider-exchange-and-execution/` once implementing
 
 ```tabiya-claims
-none
+provider-protocol | members lichess_explorer_position_page_v1, maia_policy_page_v1, stockfish_legal_root_table_v1, stockfish_position_evaluation_v1, syzygy_position_v1 | the five shared provider-exchange operations
 ```
 
-**Why `none` is temporarily honest.** `provider-protocol` is not yet a checker-recognized resource.
-The process-only prerequisite introduces its pre-landing register; in that implementation commit
-this block atomically changes to the exact lane-1 claim specified there. This RFC cannot be accepted
-or implemented while the claim is absent.
+**The claim (corrected 2026-09-24).** `provider-protocol-register.md` introduced the resource empty
+through the implemented catalogue's `string_tuple` reader. The implemented bootstrap has no lane,
+`canonical_resource` or `whole projection` claim grammar, so the former "lane 1" wording is replaced
+by the resource's real `members` grammar: one member per `ProviderOperationId`, spelled
+`<provider>_<operation>_v<version>`.
 
 ## Summary
 
