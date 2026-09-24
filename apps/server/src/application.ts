@@ -49,6 +49,8 @@ import { ClassroomService } from "./classroom.js";
 import type { TtsProvider } from "./external-tts.js";
 import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } from "./tablebase.js";
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
+import { binaryArtifactProbe } from "./engine-supervisor.js";
+import { composeProviderTraversalApplication, type ProviderTraversalApplication } from "./provider-traversal.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -76,6 +78,11 @@ export interface ApplicationOptions {
 export interface ChessTabiyaApplication {
   readonly server: ReturnType<typeof createHttpServer>;
   readonly engineMode: EngineMode;
+  /**
+   * The one shared provider exchange (rfc/provider-exchange-and-execution.md §9): one scheduler
+   * over the five operations. Process-local operator/research door only; no HTTP route.
+   */
+  readonly providers: ProviderTraversalApplication;
   close(): Promise<void>;
 }
 
@@ -323,7 +330,11 @@ export async function createApplication(
       maiaNetworkSpec(options.maiaHost ?? "maia", options.maiaPort ?? 7000),
       stockfishPlaySpec({ command: stockfish }),
       analysisSpec,
-    ]);
+    ], {
+      // Provider exchanges need the launched artifact of the analysis generation. The networked
+      // Maia sidecar exposes no container identity, so Maia exchanges stay honestly unavailable.
+      artifactProbe: (spec) => spec.id === analysisSpec.id ? binaryArtifactProbe(spec) : Promise.resolve(null),
+    });
     await supervisor.startAll();
     assertAdvertisedCapabilityDispositions([
       supervisor.health("stockfish-play"),
@@ -353,6 +364,13 @@ export async function createApplication(
     evidenceExecutor = new MockEvidenceExecutor();
   }
 
+  const providerFetch = (url: string, init: { readonly signal: AbortSignal; readonly headers: Readonly<Record<string, string>> }): Promise<Response> => fetch(url, { signal: init.signal, headers: { ...init.headers } });
+  const providers = composeProviderTraversalApplication({
+    engines: supervisor ?? null,
+    tablebaseFetch: tablebaseSource instanceof LichessTablebaseSource ? providerFetch : null,
+    explorerFetch: engineMode === "maia" && options.corpusToken !== undefined ? providerFetch : null,
+    explorerToken: options.corpusToken ?? null,
+  });
   const evidenceQueue = new EvidenceJobQueue(evidenceExecutor, {
     maxConcurrency: 2,
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
@@ -387,6 +405,7 @@ export async function createApplication(
   return Object.freeze({
     server,
     engineMode,
+    providers,
     async close() {
       await new Promise<void>((resolveClose, reject) => {
         server.close((error) => (error === undefined ? resolveClose() : reject(error)));

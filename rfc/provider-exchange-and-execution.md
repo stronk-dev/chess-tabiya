@@ -1,13 +1,16 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — durable-delivery parsing author-amended 2026-09-07 on [[D3030]], atop the
-  request-digest repair on [[D2548]] and the 2026-08-30 [[D2184]]–[[D2188]] repair. [[D2189]] is
-  routed to the bounded process prerequisite `provider-protocol-register.md`. Runtime subjects now
-  close node/edge/prefix grains; engine digests have launched-byte/handshake authorities;
-  operation-keyed parsers bind both live captures and stored delivery images to their exact
-  operation; and all five traversals end at sole evidence factories. Fresh independent review and
-  implementation remain forbidden until the register prerequisite lands and this RFC declares its
-  lane-1 claim.
+- **Status:** implementing 2026-09-24 (claude, at the owner's direction to implement without review
+  rounds). §§3–9 core ships: `provider-protocol` members landed; one digest registry; the five
+  operation-keyed normalizers, descriptors and parsers; scheduler-sealed receipts and deliveries;
+  the bounded scheduler; the five value-authority source factories plus the Syzygy local-domain
+  adapter (the D2 receipts of `evidence-value-authority.md`); the durable
+  `parsePersistedProviderDelivery` boundary for [[D3030]]; the application composition; and the
+  operator CLI. **Not yet:** §1–§2 F1 execution metadata/confidence and binding algebra, the
+  `/capabilities` path reach and `POST /evidence/availability` with the run-subject digests, the
+  Maia occurrence and Explorer summary derived projections, and the migration of existing learner
+  callers. Receipt: `planning/provider-exchange-and-execution/implementation-2026-09-24.md`.
+  Previously: draft — durable-delivery parsing author-amended 2026-09-07 on [[D3030]].
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -29,14 +32,18 @@
 - **Planning:** `planning/provider-exchange-and-execution/` once implementing
 
 ```tabiya-claims
-provider-protocol | members lichess_explorer_position_page_v1, maia_policy_page_v1, stockfish_legal_root_table_v1, stockfish_position_evaluation_v1, syzygy_position_v1 | the five shared provider-exchange operations
+none
 ```
 
-**The claim (corrected 2026-09-24).** `provider-protocol-register.md` introduced the resource empty
-through the implemented catalogue's `string_tuple` reader. The implemented bootstrap has no lane,
-`canonical_resource` or `whole projection` claim grammar, so the former "lane 1" wording is replaced
-by the resource's real `members` grammar: one member per `ProviderOperationId`, spelled
-`<provider>_<operation>_v<version>`.
+**The claim (corrected 2026-09-24, then landed).** `provider-protocol-register.md` introduced the
+resource empty through the implemented catalogue's `string_tuple` reader. The implemented bootstrap
+has no lane, `canonical_resource` or `whole projection` claim grammar, so the former "lane 1"
+wording became the resource's real `members` grammar — one member per `ProviderOperationId`,
+spelled `<provider>_<operation>_v<version>` — and was declared at `67d208c6`:
+`provider-protocol | members lichess_explorer_position_page_v1, maia_policy_page_v1,
+stockfish_legal_root_table_v1, stockfish_position_evaluation_v1, syzygy_position_v1`. The
+implementing checkpoint lands those five members in `PROVIDER_PROTOCOL_MEMBERS` and moves them to
+the register's Landed table, so the live claim closes (as `pack-population-provenance.md` did).
 
 ## Summary
 
@@ -1991,14 +1998,14 @@ provider scheduler, source projections or learner bindings in the authoring comm
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | [[D1390]] projection-effective latency, not a producer-wide replacement | `provider-exchange-and-execution` | implementation commit + F1 census | |
-| D2 | [[D1647]] same-exchange identity and generation | `provider-exchange-and-execution` | engine exchange fixture + implementation commit | |
+| D2 | [[D1647]] same-exchange identity and generation | `provider-exchange-and-execution` | engine exchange fixture + implementation commit | **2026-09-24** — `EngineSupervisor.exchange` captures generation, identity, option image and launched artifact in one serialized task; `engine-supervisor-exchange.test.ts`, scheduler stale-generation fixture |
 | D3 | [[D1654]] literal compiled execution/confidence contract | `provider-exchange-and-execution` | manifest fixtures + implementation commit | |
-| D4 | [[D1655]] named production operations and composition | `provider-exchange-and-execution` | application/source census + implementation commit | |
-| D5 | [[D1658]] bounded scheduler/cache/cancellation identity | `provider-exchange-and-execution` | scheduler fixtures + implementation commit | |
+| D4 | [[D1655]] named production operations and composition | `provider-exchange-and-execution` | application/source census + implementation commit | **2026-09-24** — five descriptors, one composed scheduler, five `providerTraversal*` callables and the built CLI; `provider-traversal.test.ts`, `provider-protocol.test.ts` |
+| D5 | [[D1658]] bounded scheduler/cache/cancellation identity | `provider-exchange-and-execution` | scheduler fixtures + implementation commit | **2026-09-24** — `apps/server/src/provider-exchange.test.ts` |
 | D6 | [[D1700]] mixed derived-producer execution paths | `provider-exchange-and-execution` | mixed-producer fixture + implementation commit | |
 | D7 | [[D1701]] transitive provider fallback checking | `provider-exchange-and-execution` | binding census + implementation commit | |
 | D8 | [[D1702]] reported-confidence fixed point | `provider-exchange-and-execution` | confidence census + implementation commit | |
-| D9 | [[D1703]]–[[D1709]] Explorer source identity, validation, scheduling and migration | `provider-exchange-and-execution` | source/migration fixtures + implementation commit | |
+| D9 | [[D1703]]–[[D1709]] Explorer source identity, validation, scheduling and migration | `provider-exchange-and-execution` | source/migration fixtures + implementation commit | partial 2026-09-24 — closed request, parser, source identity and scheduling shipped; migration of the corpus/repertoire callers remains |
 
 D1652/D1653 are source rows implemented here but close only after the returned
 `bounded-policy-targets` RFC is amended to point at them. D963/D1699 remain dependent consumer work.
@@ -2011,6 +2018,31 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-09-24: implementing (claude). §§3–9 core shipped; §§1–2 and the derived/migration work
+  remain (Status). Genuine defects corrected inline while implementing, none widening authority:
+  (a) **claim grammar** — the implemented shared-resource bootstrap has no lane/whole-projection
+  grammar; the claim became five `members` and landed at the implementing checkpoint.
+  (b) **Explorer endpoint** — `https://explorer.lichess.ovh` is not the shipped client's origin;
+  `ProviderEndpointMap` and the resource use `https://explorer.lichess.org` (`sourcing/explorer.ts`).
+  (c) **factory symbols** — `make*Evidence` / `declareSyzygyTablebaseDomainEvidence` contradict the
+  implemented value-authority convention `symbol = evidenceFactorySymbol(route)`; the six factories
+  are `createLiveStockfishLegalRootTableV1Evidence`, `createLiveStockfishPositionEvalV1Evidence`,
+  `createHumanMaiaPolicyPageV1Evidence`, `createLiveSyzygyPositionResultV1Evidence`,
+  `createHumanExplorerPositionPageV1Evidence` and `createRulesEndgameTablebaseDomainV1Evidence`.
+  (d) **parser input** — `parse(capture)` cannot build payloads that embed their request; parsers
+  take `(capture, requestedIdentity)`, and the payload-receipt constructor runs the registered parser
+  itself, so the scheduler constructor takes no substitutable parser set. (e) **`engine.binary.v1`**
+  hashes the raw launched bytes after the domain prefix (a JSON image of a 100 MB executable is
+  neither exact nor affordable). (f) **durable save half** — a reload boundary that re-runs the parser
+  needs the response bytes, so `serializeProviderDelivery` is the one save boundary beside
+  `parsePersistedProviderDelivery`. (g) **bounded lines** — §5.1 both "admits only" unbounded lines
+  and makes any bounded line invalid; real Stockfish emits aspiration-window bounds each iteration, so
+  bounded lines are inadmissible (never selected or combined) and the response fails only when no
+  exact line satisfies the selection or a legal-root index has no exact line at the requested depth.
+  (h) **`EngineIdentity`** stays the shipped wire type; the launched-artifact/option-image/generation
+  capture is a separate same-task `EngineExchangeCapture`. (i) live-only Maia bound violations
+  (advertised band/option range) reject the exact-key waiters with `INVALID_REQUEST` rather than
+  invent a seventh failure reason. Each correction is pinned by a test named in the receipt.
 - 2026-09-07: author-amended the shared durable-delivery boundary for [[D3030]]. One
   operation-specific parser now owns save/reload reconstruction of request, response, payload,
   acquisition, cache and engine-generation authority and then issues fresh process-local seals.

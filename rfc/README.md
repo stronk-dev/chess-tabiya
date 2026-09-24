@@ -324,7 +324,7 @@ name the B-gates they complete before code begins.
 
 ## Provider-protocol register
 
-<!-- register: provider-protocol members=0 -->
+<!-- register: provider-protocol members=5 -->
 
 The provider operations sealed by one shared exchange. The tree source is the literal tuple
 `PROVIDER_PROTOCOL_MEMBERS` in `packages/runtime/src/provider-protocol.ts`, read by the catalogue's
@@ -337,12 +337,16 @@ checked by `make register-check`, never generated.
 
 | member | added by | added at |
 |---|---|---|
+| lichess_explorer_position_page_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| maia_policy_page_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| stockfish_legal_root_table_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| stockfish_position_evaluation_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
+| syzygy_position_v1 | `provider-exchange-and-execution.md` | implementing checkpoint 2026-09-24 |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| members lichess_explorer_position_page_v1, maia_policy_page_v1, stockfish_legal_root_table_v1, stockfish_position_evaluation_v1, syzygy_position_v1 | `provider-exchange-and-execution.md` | the five shared provider-exchange operations | 2026-09-24 |
 
 ## Migration register
 

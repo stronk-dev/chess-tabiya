@@ -231,11 +231,78 @@ export {
   humanSplitPageEvidence,
   opponentProviderEvidence,
   positionGuidanceEvidence,
+  providerSourceEvidence,
   recordedEdgeEvidence,
   recordedReadingEvidence,
   sourcingRecordEvidence,
+  syzygyTablebaseDomainEvidence,
   type PositionGuidanceEvidenceInput,
 } from "./evidence-operations.js";
+// rfc/provider-exchange-and-execution.md: shared provider exchange types, request identity,
+// receipts and the durable boundary. The scheduler-only constructors are NOT exported here; they
+// live behind a dedicated scheduler-only subpath (census in provider-protocol.test.ts).
+export * from "./provider-types.js";
+export {
+  PROVIDER_DIGEST_DOMAINS,
+  canonicalProviderJson,
+  digestEngineBinary,
+  digestEngineContainer,
+  digestEngineOptionImage,
+  digestProviderCommands,
+  digestProviderPath,
+  digestProviderPending,
+  digestProviderResponse,
+  digestProviderRetained,
+  providerUtf8,
+  type EngineBinaryDigest,
+  type EngineContainerDigest,
+  type EngineContainerImage,
+  type EngineOptionImage,
+  type EngineOptionImageDigest,
+  type ProviderActualDigest,
+  type ProviderCacheIdentity,
+  type ProviderCommandsDigest,
+  type ProviderDigestDomain,
+  type ProviderPendingDigest,
+  type ProviderRequestDigest,
+  type ProviderResponseDigest,
+  type ProviderRetainedDigest,
+} from "./provider-digest.js";
+export {
+  PROVIDER_REQUEST_NORMALIZERS,
+  ProviderRequestInvalid,
+  STOCKFISH_RESET_COMMANDS,
+  explorerRequestUrl,
+  maiaCommandImage,
+  maiaReachedFen,
+  normalizeProviderRequest,
+  syzygyPieceCount,
+  syzygyPreflight,
+  syzygyRequestUrl,
+} from "./provider-requests.js";
+export { PROVIDER_RESPONSE_PARSERS, ProviderResponseInvalid, type ProviderResponseParser, type ProviderResponseParsers } from "./provider-parsers.js";
+export { PROVIDER_OPERATION_IDS, PROVIDER_PROTOCOL_MEMBERS, PROVIDER_PROTOCOL_RESOURCE, providerProtocolMember, providerProtocolRow, type ProviderCliName, type ProviderProtocolMember, type ProviderProtocolOperationRow } from "./provider-protocol.js";
+export {
+  PERSISTED_PROVIDER_DELIVERY_SCHEMA,
+  ProviderIdentityMismatch,
+  ProviderSealRefused,
+  assertProviderAcquisitionReceipt,
+  assertProviderDelivery,
+  assertProviderLocalDomainResult,
+  assertProviderParsedPayloadReceipt,
+  cacheIdentityOf,
+  digestProviderActual,
+  digestProviderRequest,
+  isCanonicalUtcIso,
+  normalizedProviderRequestDigest,
+  parsePersistedProviderDelivery,
+  parserImplementationDigest,
+  pendingKeyOf,
+  providerOf,
+  retainedIdentityOf,
+  serializeProviderDelivery,
+  type PersistedProviderDelivery,
+} from "./provider-exchange.js";
 export type { AuthoredFeedbackItemRecord, EvidenceAvailability } from "./evidence-factories.js";
 export { RECORDED_ASSESSMENT_CATEGORIES, recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 export { evidenceSentenceTable, resolveEvidenceReference, type EvidenceReferenceResolution, type EvidenceSentence } from "./evidence-ref-resolution.js";

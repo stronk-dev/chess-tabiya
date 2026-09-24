@@ -57,6 +57,12 @@ import {
   createDerivedTacticSequenceDefenderConsequenceV1Evidence,
   createDerivedTacticSquareClearanceObservedV1Evidence,
   createHumanExplorerPopulationV1Evidence,
+  createHumanExplorerPositionPageV1Evidence,
+  createHumanMaiaPolicyPageV1Evidence,
+  createLiveStockfishLegalRootTableV1Evidence,
+  createLiveStockfishPositionEvalV1Evidence,
+  createLiveSyzygyPositionResultV1Evidence,
+  createRulesEndgameTablebaseDomainV1Evidence,
   createHumanExplorerPositionStatsV1Evidence,
   createHumanMaiaCandidateWdlV1Evidence,
   createHumanMaiaEventV1Evidence,
@@ -280,6 +286,14 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "derived.tactic.check_zwischenzug_observed@2": createDerivedTacticCheckZwischenzugObservedV2Evidence,
   "derived.tactic.overload_exploitation_observed@2": createDerivedTacticOverloadExploitationObservedV2Evidence,
   "theory.endgame.method_stage@1": createTheoryEndgameMethodStageV1Evidence,
+  // rfc/provider-exchange-and-execution.md §9: the five operation-keyed provider source factories
+  // and the Syzygy local-domain adapter.
+  "live.stockfish.legal_root_table@1": createLiveStockfishLegalRootTableV1Evidence,
+  "live.stockfish.position_eval@1": createLiveStockfishPositionEvalV1Evidence,
+  "human.maia.policy_page@1": createHumanMaiaPolicyPageV1Evidence,
+  "live.syzygy.position_result@1": createLiveSyzygyPositionResultV1Evidence,
+  "human.explorer.position_page@1": createHumanExplorerPositionPageV1Evidence,
+  "rules.endgame.tablebase_domain@1": createRulesEndgameTablebaseDomainV1Evidence,
 });
 
 type Routes = typeof EVIDENCE_VALUE_ROUTES;

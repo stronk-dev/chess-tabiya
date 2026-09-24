@@ -528,6 +528,13 @@
       "37b29ba3be839744bacac819789c91966c09ee4a5a6aee929ca5426a71020216"
     ]
   },
+  "human.explorer.position_page@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "04d4336cc5925eb4c2c2775205be167ff1c2ee21b87052e1dc7dcfbd44ff58e5"
+    ]
+  },
   "human.explorer.position_stats@1": {
     "availability": "available",
     "cardinality": 1,
@@ -549,6 +556,13 @@
       "b983c0d5f91fa1c3516f17827aa81fecbe14305a16f880d1e21bea03bc8a85be"
     ]
   },
+  "human.maia.policy_page@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "6376abd462f3244d30f8ce2da54fc11b2db91be4208301fe33d2b345d1ed6e6f"
+    ]
+  },
   "human.maia.policy@1": {
     "availability": "available",
     "cardinality": 1,
@@ -568,6 +582,20 @@
     "cardinality": 1,
     "payloadDigests": [
       "7042079ee3d4943836216f1973c4768b48e11941033e685e209f9cd60b9eb37e"
+    ]
+  },
+  "live.stockfish.legal_root_table@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "e664e8251527ff916e79da8164d4c5b3367f2eaf9b77e8ddfa930d140220f139"
+    ]
+  },
+  "live.stockfish.position_eval@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "f7968af198a910d5475857fbc6ce8f6803496e862e90706714b066b77c5143ee"
     ]
   },
   "live.stockfish.pv@1": {
@@ -603,6 +631,13 @@
     "cardinality": 1,
     "payloadDigests": [
       "874fe92dbb70eebd097de1d4eb522a39283e5d69416db940c25bcced8ae7d42b"
+    ]
+  },
+  "live.syzygy.position_result@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "9ed275c47379670bc27aa3497d5c93b03599293354b766c2a83bea098b5f5776"
     ]
   },
   "live.syzygy.probe_result@1": {
@@ -684,6 +719,13 @@
     "cardinality": 1,
     "payloadDigests": [
       "2dda5f1824a4dbc9dd2f5322c3007d646eed4e4d32f36c424d0b3904b7a6a5bf"
+    ]
+  },
+  "rules.endgame.tablebase_domain@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "89ecc633dd2ee6a66c6ba345cf32a631a918509cb97cf7b8e6a05eb74669a1cb"
     ]
   },
   "rules.exchange.predicate.legal_exchange@1": {
