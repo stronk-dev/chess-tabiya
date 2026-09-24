@@ -41,14 +41,12 @@ async function enableEndgamePolicies(page: Page): Promise<void> {
     const response = await route.fetch();
     const descriptor = await response.json() as {
       policyModes: string[];
-      providers: Record<string, string>;
     };
     await route.fulfill({
       response,
       json: {
         ...descriptor,
         policyModes: [...descriptor.policyModes, "perfect_tablebase"],
-        providers: { ...descriptor.providers, tablebase: "mock" },
       },
     });
   });
@@ -183,7 +181,7 @@ test("a first learner enters the real rehearsal loop with a persistent event-der
 
 test("imports one game, opens a grounded story, re-enters play, and exports original plus branch", async ({ page }) => {
   await page.getByRole("link", { name: "Review" }).click();
-  await expect(page.getByText("Import keeps the original PGN verbatim", { exact: false })).toBeVisible();
+  await expect(page.getByText("Comments, engine evaluations and move annotations in the PGN are removed before anything is stored", { exact: false })).toBeVisible();
   await expect(page.getByText("Export the game, not an analysis tree with variations.", { exact: false })).toBeVisible();
   await page.getByLabel("PGN").fill(`[Event "First"]
 [Result "*"]
@@ -372,7 +370,7 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   ], runId)).toEqual([null, null]);
 
   await page.goto("/settings");
-  await expect(page.getByText("Tabiya cannot import it", { exact: false })).toBeVisible();
+  await expect(page.getByText("other chess products do not read it", { exact: false })).toBeVisible();
   await expect(page.getByRole("link", { name: "download them as PGN" })).toHaveAttribute("href", "/library");
   await page.getByLabel("Current password").fill("browser-test-password");
   const downloadPromise = page.waitForEvent("download");

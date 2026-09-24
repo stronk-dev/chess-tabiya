@@ -18,7 +18,8 @@
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
   import ImportedGuessPanel from "./ImportedGuessPanel.svelte";
-  import { importedNextMove, type ImportedGuess } from "./session-controller.js";
+  import { importedNextMove, type ImportedGuess, type OpponentPause, type SelectableOpponentMode } from "./session-controller.js";
+  import { operationConfigured, operationNotice } from "./provider-availability.js";
   import ShapePanel from "./ShapePanel.svelte";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import GroupPanel from "./GroupPanel.svelte";
@@ -126,6 +127,13 @@
     /** Rematch of a bot-profile run: a new run with the exact same profile and a new seed. */
     onRematch?: (() => void | Promise<void>) | undefined;
     onRetryOpponent?: (() => void | Promise<unknown>) | undefined;
+    /** The paused opponent after a provider failure (rfc/provider-health-degradation.md §10). */
+    opponentPause?: OpponentPause | undefined;
+    /** Whether the last opponent reply was live or an exact saved response for this position. */
+    opponentSource?: "live" | "cached_exact" | undefined;
+    /** The session-only opponent change; the run record does not retain it. */
+    opponentChange?: { readonly from: SelectableOpponentMode; readonly to: SelectableOpponentMode } | undefined;
+    onChangeOpponent?: ((mode: SelectableOpponentMode) => void | Promise<unknown>) | undefined;
     /** Layer actions of the last bot reply (degraded/abstained status only). */
     botReply?: { readonly layers: readonly { readonly id: string; readonly action: "applied" | "abstained" | "degraded"; readonly reason?: string }[] } | undefined;
     onContinueCheckpoint: () => boolean | void | Promise<boolean | void>;
@@ -200,6 +208,10 @@
     onRematch,
     botReply,
     onRetryOpponent,
+    opponentPause,
+    opponentSource,
+    opponentChange,
+    onChangeOpponent,
     onContinueCheckpoint,
     onPrediction = () => {},
     importedGuess,
@@ -440,9 +452,13 @@
       .map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads))
       .filter((sentence) => sentence.sourceLabel === "Engine"),
   );
+  // rfc/provider-health-degradation.md §10: provider-backed controls read live provider health and
+  // stay in the layout with their reason; they never disappear when a provider drops.
+  let corpusNotice = $derived(operationNotice(capabilities, "evidence.explorer_query"));
+  let voiceNotice = $derived(operationNotice(capabilities, "render.voice"));
   let analysisUnavailableReason = $derived.by(() => {
     if (!canWrite) return "This read-only view cannot request a new calculation.";
-    if (onAnalyzeMissing === undefined || capabilities?.providers.judge === "none") {
+    if (onAnalyzeMissing === undefined || !operationConfigured(capabilities, "evidence.stockfish_analysis")) {
       return "A calculation engine is not available from this deployment.";
     }
     if (!feedbackDeliveryOpen(run)) {
@@ -1822,6 +1838,17 @@
       </div>
     </header>
 
+    {#if opponentPause !== undefined}
+      <section class="opponent-pause" role="alert" aria-label="Opponent paused" data-testid="opponent-pause">
+        <p><strong>The opponent is paused.</strong> {opponentPause.reason} Your move is kept; no opponent move was played for you.</p>
+        <div class="opponent-pause-actions">
+          {#if onRetryOpponent !== undefined}<button type="button" disabled={busy} onclick={() => void onRetryOpponent()}>Retry</button>{/if}
+          {#if onChangeOpponent !== undefined}{#each opponentPause.alternatives as alternative (alternative.mode)}<button type="button" disabled={busy || !alternative.requestable} aria-describedby={alternative.requestable ? undefined : `opponent-alt-${alternative.mode}`} onclick={() => void onChangeOpponent(alternative.mode)}>Change opponent: {alternative.label}</button>{#if !alternative.requestable}<span id={`opponent-alt-${alternative.mode}`} class="honest">{alternative.note}</span>{/if}{/each}{/if}
+        </div>
+      </section>
+    {/if}
+    {#if opponentSource === "cached_exact"}<p class="honest provider-notice" data-testid="opponent-cached">Using a saved response for this position.</p>{/if}
+    {#if opponentChange !== undefined}<p class="honest provider-notice" data-testid="opponent-change">This session changed opponent after a provider failure; the run record does not retain it.</p>{/if}
     {#if error && branchSwitchError === undefined}<p class="error" role="alert">{error}{#if run.opponentPolicy.profile !== undefined && onRetryOpponent !== undefined && snapshot.access !== "read_only"} <button class="retry-opponent" type="button" onclick={() => void onRetryOpponent()}>Ask the bot again</button>{/if}</p>{/if}
     {#if branchSwitchBusy}<p id="branch-switch-status" class="operation-status" role="status">Opening {branchSwitchBusy.label}. Other branch navigation waits until it finishes.</p>{/if}
     {#if branchSwitchError}<p class="error" role="alert">{branchSwitchError}</p>{/if}
@@ -2148,7 +2175,7 @@
           <select bind:value={groupSource} disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined}>
             <option value="hand_picked">My candidate moves</option>
             <option value="authored" disabled={pack === undefined}>Authored variations</option>
-            <option value="human_replies" disabled={capabilities?.providers.opponent === "none" || assistancePermission.humanSplit === "locked_off"}>Recorded human replies</option>
+            <option value="human_replies" disabled={!operationConfigured(capabilities, "opponent.maia_inference") || assistancePermission.humanSplit === "locked_off"}>Recorded human replies</option>
             <option value="engine_top_n" disabled={!capabilities?.policyModes.includes("strong_engine") || assistancePermission.humanSplit === "locked_off"}>Engine lines</option>
           </select>
         </label>
@@ -2268,10 +2295,10 @@
             />
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" disabled={humanSplitBusyNodeId === displayedNode.id} onclick={() => void requestHumanSplit()}>{humanSplitBusyNodeId === displayedNode.id ? "Loading human move choices…" : "Load human move-model evidence"}</button>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
-            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading human game counts…" : "Load human-game corpus evidence"}</button>{/if}
+            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<span class="honest provider-notice" data-provider-state="not_configured">{corpusNotice.reason}</span>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading human game counts…" : corpusNotice.requestable ? "Load human-game corpus evidence" : "Retry human-game corpus evidence"}</button>{#if !corpusNotice.requestable}<span class="honest provider-notice" data-provider-state={corpusNotice.tone}>{corpusNotice.reason}</span>{/if}{/if}{/if}
             {#if assistancePermission.humanSplit === "locked_off" || assistancePermission.corpus === "locked_off"}<span id="advanced-support-locked" class="honest">Requested evidence is available only after this run opens feedback, and never to participants or spectators.</span>{/if}
-            {#if capabilities?.providers.llm !== "external"}<span id="advanced-support-external-voice-unavailable" class="honest">External voice is unavailable from this deployment.</span>{/if}
-            {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
+            {#if voiceNotice.notConfigured}<span id="advanced-support-external-voice-unavailable" class="honest">External voice is unavailable from this deployment.</span>{:else if !voiceNotice.requestable}<span id="advanced-support-external-voice-unavailable" class="honest provider-notice" data-provider-state={voiceNotice.tone}>{voiceNotice.reason} Written guidance stays grounded and unchanged.</span>{/if}
+            {#if !speechAvailable && !operationConfigured(capabilities, "render.speech")}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
           <fieldset class="module-toggles" aria-describedby="advanced-module-note">
             <legend>Help modules</legend>
@@ -2304,7 +2331,7 @@
         </section>
         <section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">
           <h3>Human corpus</h3>
-          {#if assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading game counts…" : "Load corpus counts"}</button>{/if}
+          {#if assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<p class="honest provider-notice" data-provider-state="not_configured">{corpusNotice.reason}</p>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading game counts…" : corpusNotice.requestable ? "Load corpus counts" : "Retry corpus counts"}</button>{#if !corpusNotice.requestable}<p class="honest provider-notice" data-provider-state={corpusNotice.tone} data-testid="corpus-provider-notice">{corpusNotice.reason}</p>{/if}{/if}{/if}
           {#if corpusBusyNodeId === corpusQueryNodeId}<p role="status">Loading human game counts for this position…</p>{/if}
           {#if corpusError?.nodeId === corpusQueryNodeId}<p role="alert">{corpusError.text}</p>{/if}
           {#if corpusPage?.nodeId === corpusQueryNodeId}{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{:else if corpusBusyNodeId !== corpusQueryNodeId && corpusError?.nodeId !== corpusQueryNodeId}<p class="honest">No corpus page loaded for this position.</p>{/if}
@@ -2317,7 +2344,7 @@
             <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · {rehearsalStepLabel(openPivotalNode?.ply ?? 0).toLocaleLowerCase()}</p>
             {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
             {#each renderEndgameClassification(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
-            {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
+            {#if assistance.voice === "persona" && !voiceNotice.notConfigured && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
             {#if voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"}<p role="status">Preparing an explanation of this moment…</p>{/if}
             {#if voiceError?.nodeId === openPivotalNodeId && voiceError.scope === "marker"}<p role="alert">{voiceError.text}</p>{/if}
             {#if voiceNodeId === openPivotalNodeId && voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
@@ -2327,7 +2354,7 @@
         <section aria-label="Current-position evidence rendering" data-evidence-consumer="inspector.current_position_voice">
           <h3>Current-position rendering</h3>
           <p class="honest">Render the evidence attached to the position now on the board. This does not require a pivotal marker.</p>
-          {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}
+          {#if assistance.voice === "persona" && !voiceNotice.notConfigured && onVoice !== undefined}
             <button type="button" disabled={voiceBusy?.nodeId === displayedNode.id && voiceBusy.scope === "reading"} onclick={() => void requestVoice("reading")}>{voiceBusy?.nodeId === displayedNode.id && voiceBusy.scope === "reading" ? "Explaining this position…" : "Revoice current-position evidence"}</button>
           {:else}
             <p class="honest">External rewording is not enabled for this workflow.</p>
@@ -2995,4 +3022,7 @@
   @media (max-width: 719px) {
     .inspector-grid { grid-template-columns: 1fr; }
   }
+  .opponent-pause { border: 1px solid var(--warning); border-radius: .5rem; padding: .6rem .8rem; display: grid; gap: .45rem; }
+  .opponent-pause p { margin: 0; }
+  .opponent-pause-actions { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
 </style>

@@ -1,6 +1,6 @@
 # RFC: Durable opponent failure and recovery journey
 
-- **Status:** **draft — stub opened 2026-09-06 by the `provider-health-degradation` cut.** Scope and
+- **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — stub opened 2026-09-06 by the `provider-health-degradation` cut.** Scope and
   inherited ledger rows are recorded; the specification is unwritten. It carries the run-schema lane
   its predecessor released so that the persistence decision is owned by a named document rather than
   left to implementation.
@@ -86,3 +86,17 @@ none
 ## Open questions
 
 Deferred with the specification. None require an owner ruling to open drafting.
+
+## Changelog
+
+- 2026-09-24 — the **live, non-schema half** landed with `rfc/provider-health-degradation.md` §10.
+  A typed provider failure during opponent selection now pauses the run before any opponent move is
+  committed. The learner can press *Retry*, which re-issues the same request, or *Change opponent*,
+  which switches to the engine or human-style opponent for the rest of the session only, in memory.
+  The surface says "this session changed opponent after a provider failure; the run record does
+  not retain it." An exact cached reply is disclosed as "Using a saved response for this position."
+  (`apps/web/src/lib/session-controller.ts`, `DrillScreen.svelte`,
+  `tests/browser/provider-health.spec.ts`). **Nothing in this RFC's scope is discharged.** The two
+  run events, `POST /runs/:id/opponent-recovery`, `opponentSelection.acquisition`, the
+  effective-policy projection and run-schema lane 0.26 are still unwritten and unclaimed, and every
+  inherited row stays open.

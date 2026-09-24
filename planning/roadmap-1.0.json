@@ -565,23 +565,34 @@
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Famous-game sourcing is implemented as an authoring path: one cited master game at a time becomes a stripped, attribution-bearing candidate through the shared explorer fetch path, index enumeration and learner masters import stay refused, and capability rows state exactly what is and is not available. No official pack has graduated; the sourceGame schema lane waits on lane 0.30.",
+          "summary": "The theory/library workflow exists: a phase-first Library searches packs, principles, shapes, concepts and named openings with one row per item, official material first and drafts labelled; entry pages join each item to rehearse, understand and return doors over GET /theory; principles gain a pinned, rights-reviewed citation register; pasted games are stripped of third-party annotations. No official pack has graduated and no principle cites a source yet — authored content remains the gate.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/sourcing/masters.ts",
-            "planning/famous-games/implementation-2026-09-24.md",
-            "rfc/famous-games.md"
+            "apps/server/src/theory-library.test.ts",
+            "rfc/theory-knowledge-pipeline.md",
+            "rfc/theory-drill-current-joins.md",
+            "rfc/import-source-protocol-register.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "famous-games.md",
-              "digest": "sha256:8f19c11e9fcbcbb299cdf78535615e0d961c53abc417c1ec01224e97ddb71144"
+              "id": "theory-knowledge-pipeline.md",
+              "digest": "sha256:a9bace0ec4438edc6a9dbadc1a461ccdedd6c3fb3fef1b17a482a140bbdc8cae"
+            },
+            {
+              "kind": "rfc",
+              "id": "theory-drill-current-joins.md",
+              "digest": "sha256:4195698ca5705574716fe919f0a0061095b8ef9e469eb57ee1cf037a9865d6ff"
+            },
+            {
+              "kind": "rfc",
+              "id": "import-source-protocol-register.md",
+              "digest": "sha256:094f8370441b6d9d09fa7dc8e1f5a934f07bb2285605313934c152bdbae57172"
             },
             {
               "kind": "work_state",
-              "id": "D959",
-              "digest": "sha256:555ea1424ca4c7171b7c42f158ca4bb0880fc37b3b4cfbfeb22a991f7ddcbd35"
+              "id": "D1046",
+              "digest": "sha256:04caac94e14fa6e8bd24f444a6ef649fd70d027c07d01bb4eb02729f7d31fdff"
             }
           ]
         },
@@ -595,11 +606,32 @@
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-09-23",
-          "summary": "The rebuilt local self-host server image now boots healthy with Maia and the copied draft corpus after D3274/D3275 packaging repairs; a production API capture exercised it across 66 roots. This advances first-boot proof only. The safe-deployment authority remains returned, and clean-host digest-pinned release, backup/restore, upgrade/rollback, official content and complete learner journeys remain unproven.",
+          "at": "2026-09-24",
+          "summary": "Provider health is a live typed authority: capabilities report real provider state instead of constructor flags, controls degrade visibly with a reason and Retry, the opponent selector runs under a bounded deadline with an exact cache, a failed opponent pauses the run with Retry or Change opponent, and the Maia sidecar proves its container identity so bots can be available in production. Clean-host install, backup/restore and release receipts are still to be proven.",
           "impact": "advanced",
-          "evidence": ["apps/server/Dockerfile", "tools/verify-packaging.mjs", "planning/semantic-consequence-search/d3262-maia-capture.md", "rfc/semantic-consequence-search.md", "rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md"],
-          "anchors": [{"kind": "work_state", "id": "D3274", "digest": "sha256:2f1bb8ad4a09be2585a0663bd2ecf8c23afac65fe9a3a4689ca2e63e75bd966b"}, {"kind": "work_state", "id": "D3275", "digest": "sha256:f2edb5da7cf95d453087b9beee4dbba7b7c08eeee0012c74d787775530d82280"}, {"kind": "rfc", "id": "semantic-consequence-search.md", "digest": "sha256:fba22cb1102551d9ceb5de3568e697b93192009827e86de0c79d40f1c13f0403"}, {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"}]
+          "evidence": [
+            "apps/server/src/provider-health.ts",
+            "planning/provider-health-degradation/implementation-receipt-2026-09-24.md",
+            "rfc/provider-health-degradation.md",
+            "rfc/opponent-recovery-journey.md"
+          ],
+          "anchors": [
+            {
+              "kind": "rfc",
+              "id": "provider-health-degradation.md",
+              "digest": "sha256:3de1c228e6e548f861e4e89020e982d30328eea3c92d302c9e5050884bb12dd3"
+            },
+            {
+              "kind": "rfc",
+              "id": "opponent-recovery-journey.md",
+              "digest": "sha256:3008ca4d42a9811c8d0c516d6e9d5ce7ce1d11d5f203c3c533dbd97d25c4531c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D1910",
+              "digest": "sha256:a26813010cf59b6291b8d760402feec641087818d31c450161e284f46923faf6"
+            }
+          ]
         },
         "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
       }
@@ -656,7 +688,11 @@
     ["learn", "learner_model", "live"],
     ["live", "social_play", "live"],
     ["create", "theory_content", "live"],
-    ["library", "theory_content", "live_but_inadequate"],
+    ["library", "theory_content", "live"],
+    ["pack", "theory_content", "live"],
+    ["shape-entry", "theory_content", "live"],
+    ["principle-entry", "theory_content", "live"],
+    ["opening-entry", "theory_content", "live"],
     ["settings", "support", "live_but_inadequate"],
     ["run", "rehearsal", "live"],
     ["story", "review", "live_but_inadequate"],
@@ -685,6 +721,7 @@
     ["/marks", "learner_model", "live"],
     ["/cohorts", "learner_model", "live"],
     ["/principles", "theory_content", "live"],
+    ["/theory", "theory_content", "live"],
     ["/campaign", "campaign", "missing"],
     ["/healthz", "operations", "live_direct"]
   ]

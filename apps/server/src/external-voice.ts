@@ -1,6 +1,7 @@
 import { assertRenderedEvidenceView } from "@chess-tabiya/runtime";
 
 import type { VoiceEvidenceView, VoiceProvider, VoiceScope } from "./guidance.js";
+import { ProviderHttpError } from "./provider-health.js";
 
 export interface ReasoningReviewRequest {
   readonly task: string;
@@ -10,7 +11,17 @@ export interface ReasoningReviewRequest {
 }
 
 export interface ReasoningReviewProvider {
-  review(request: ReasoningReviewRequest): Promise<string>;
+  review(request: ReasoningReviewRequest, signal?: AbortSignal): Promise<string>;
+}
+
+/** One provider call's abort: its own timeout joined to the caller's operation deadline. */
+export function providerSignal(timeoutMs: number, signal?: AbortSignal): { readonly signal: AbortSignal; readonly dispose: () => void } {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const onAbort = (): void => controller.abort();
+  if (signal?.aborted === true) controller.abort();
+  signal?.addEventListener("abort", onAbort, { once: true });
+  return { signal: controller.signal, dispose: () => { clearTimeout(timeout); signal?.removeEventListener("abort", onAbort); } };
 }
 
 export interface ExternalHttpVoiceOptions {
@@ -33,10 +44,9 @@ export class ExternalHttpVoiceProvider implements VoiceProvider, ReasoningReview
     this.#fetch = options.fetch ?? fetch;
   }
 
-  async render(view: VoiceEvidenceView, persona: string, _deterministicText: string, scope: VoiceScope): Promise<string> {
+  async render(view: VoiceEvidenceView, persona: string, _deterministicText: string, scope: VoiceScope, signal?: AbortSignal): Promise<string> {
     assertRenderedEvidenceView(view.rendered);
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.#timeoutMs);
+    const controller = providerSignal(this.#timeoutMs, signal);
     try {
       const response = await this.#fetch(this.#url, {
         method: "POST",
@@ -47,20 +57,19 @@ export class ExternalHttpVoiceProvider implements VoiceProvider, ReasoningReview
         body: JSON.stringify({ personaPrompt: persona, scope, items: view.rendered.items.map((item) => ({ evidence: item.evidence, sentences: item.sentences })) }),
         signal: controller.signal,
       });
-      if (!response.ok) throw new Error(`Voice provider returned ${response.status}`);
+      if (!response.ok) throw new ProviderHttpError(response.status, response.headers.get("retry-after"), `Voice provider returned ${response.status}`);
       const body: unknown = await response.json();
       if (body === null || typeof body !== "object" || Array.isArray(body) || typeof (body as Record<string, unknown>).text !== "string") {
         throw new Error("Voice provider response must be {text:string}");
       }
       return (body as { text: string }).text;
     } finally {
-      clearTimeout(timeout);
+      controller.dispose();
     }
   }
 
-  async review(request: ReasoningReviewRequest): Promise<string> {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.#timeoutMs);
+  async review(request: ReasoningReviewRequest, signal?: AbortSignal): Promise<string> {
+    const controller = providerSignal(this.#timeoutMs, signal);
     try {
       const response = await this.#fetch(this.#url, {
         method: "POST",
@@ -71,12 +80,12 @@ export class ExternalHttpVoiceProvider implements VoiceProvider, ReasoningReview
         body: JSON.stringify({ personaPrompt: "Quote only contiguous learner text; do not add chess claims.", ...request }),
         signal: controller.signal,
       });
-      if (!response.ok) throw new Error(`Reasoning review provider returned ${response.status}`);
+      if (!response.ok) throw new ProviderHttpError(response.status, response.headers.get("retry-after"), `Reasoning review provider returned ${response.status}`);
       const body: unknown = await response.json();
       if (body === null || typeof body !== "object" || Array.isArray(body) || typeof (body as Record<string, unknown>).text !== "string") throw new Error("Reasoning review provider response must be {text:string}");
       return (body as { text: string }).text;
     } finally {
-      clearTimeout(timeout);
+      controller.dispose();
     }
   }
 }

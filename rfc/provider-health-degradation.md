@@ -1,6 +1,6 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** **draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model
+- **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model
   chain is retired as this RFC's acceptance authority and moved to
   `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; durable opponent
   recovery and run-schema lane 0.26 moved to `rfc/opponent-recovery-journey.md`. What remains is the
@@ -806,6 +806,23 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 
 ## Changelog
 
+- 2026-09-24 — **implemented at the one claim-free checkpoint** on the owner's direct-implementation
+  ruling, with no review round. Receipt:
+  `planning/provider-health-degradation/implementation-receipt-2026-09-24.md`. It maps each criterion
+  to its tests and lists what did not land. Two RFC defects are fixed here:
+  (1) **§8 / criterion 14, legal-root host.** The table routes `stockfish.legal_root_table@1` through
+  `stockfish-play`, but the landed exchange (`apps/server/src/provider-operations.ts`) runs every
+  Stockfish operation, the legal-root table included, on `stockfish-analysis`. Opponent Stockfish
+  selection does not use the exchange at all. So the *application* operation
+  `opponent.stockfish_play` stays on `stockfish-play`, while the exchange-operation availability
+  that bot policy consumes (D7) reads `stockfish-analysis`, which is the instance that actually
+  serves it. It does not read the instance a table row names.
+  (2) **§4 / criterion 8, where settlement is sealed.** Voice, reasoning review and TTS have no
+  registered exchange identity until the provider-protocol lane for the three external operations
+  is claimed, and opponent selection still calls the supervisor directly. Until then, state changes
+  only through a registry-issued, single-use, generation-bound admission ticket, or through a sealed
+  live `ProviderDelivery` checked by `assertProviderDelivery`. A caller-authored value cannot
+  change state either way.
 - 2026-09-06 — **cut from 1,666 lines to its blocking obligation.** All 75 items carrying this RFC as
   their blocker were defect rows against its own twelve-round author model, not downstream product
   work. The review-round history, routing table, round-by-round changelog and the twenty-two

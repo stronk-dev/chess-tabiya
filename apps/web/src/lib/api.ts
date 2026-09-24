@@ -1,3 +1,4 @@
+import type { ProviderHealthCapabilities } from "@chess-tabiya/runtime";
 import { parseConceptCatalogueView, type ConceptCatalogueView, type ConceptLabelView } from "@chess-tabiya/runtime";
 import type {
   DrillPackDefinition,
@@ -41,6 +42,8 @@ import type {
   BotDegradationReason,
   FinalizedAssistanceV1,
   RequestedAssistanceV1,
+  ImportSourceKind,
+  ImportSourceRequestKind,
 } from "@chess-tabiya/runtime";
 import { parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseReviewStoryReceipt } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
@@ -207,6 +210,40 @@ export interface DeletionEffect {
   readonly count: number;
   readonly objectIds: readonly string[];
   readonly label: string;
+}
+
+/** `GET /auth/account-inventory`: one row per data class, counted from the export projection. */
+export interface AccountInventory {
+  readonly version: 1;
+  readonly classes: readonly {
+    readonly dataClass: string;
+    readonly count: number;
+    readonly stores: readonly {
+      readonly store: string;
+      readonly exportDisposition: "project" | "reference" | "metadata_only" | "exclude";
+      readonly deletionDisposition: "hard_delete" | "classify_run" | "tombstone" | "retain" | "clear_browser";
+      readonly count: number | null;
+    }[];
+  }[];
+}
+
+/** `POST /auth/import-preview` and `POST /auth/import`. */
+export interface AccountImportReceipt {
+  readonly version: 1;
+  readonly mode: "preview" | "committed";
+  readonly bundleDigest: string;
+  readonly bundleFormatVersion: number;
+  readonly sourceStorageVersion: number;
+  readonly restored: readonly { readonly table: string; readonly count: number }[];
+  readonly rederived: readonly string[];
+  readonly notRestored: readonly { readonly kind: string; readonly count: number; readonly reason: string }[];
+  readonly conflicts: readonly string[];
+}
+
+export interface AccountExportProgress {
+  readonly receivedBytes: number;
+  /** Null when the server did not state a length; the client then shows bytes only. */
+  readonly totalBytes: number | null;
 }
 
 export interface DeletionPreview {
@@ -515,6 +552,12 @@ export interface BotCardWire {
   readonly decorative: null;
 }
 
+/** One opponent selection and whether it was served live or from the exact-request cache. */
+export interface ReceiptedSelection {
+  readonly selection: OpponentSelection;
+  readonly source: "live" | "cached_exact";
+}
+
 export interface BotRosterRow {
   readonly reference: BotProfileReference;
   readonly behaviorDigest: `sha256:${string}`;
@@ -579,14 +622,8 @@ export interface Capabilities {
       readonly profiles: readonly BotRosterRow[];
     };
   };
-  readonly providers: {
-    readonly opponent: "maia" | "mock" | "none";
-    readonly judge: "stockfish" | "mock" | "none";
-    readonly llm: "none" | "external";
-    readonly corpus: "lichess-explorer" | "mock" | "none";
-    readonly tts: "none" | "external";
-    readonly tablebase: "lichess" | "mock" | "none";
-  };
+  /** The live provider-health snapshot (rfc/provider-health-degradation.md §9), parsed by the runtime. */
+  readonly providerHealth: ProviderHealthCapabilities;
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
   readonly evidenceManifest: {
     readonly digest: string;
@@ -629,7 +666,7 @@ export interface VoicePage { readonly text: string; readonly source: "provider" 
 
 export interface ImportedGameRecord {
   readonly runId: string;
-  readonly sourceKind: "pgn_paste" | "lichess_url";
+  readonly sourceKind: ImportSourceKind;
   readonly sourceUrl: string | null;
   readonly movetextDigest: string;
   readonly headers: Readonly<Record<string, string>>;
@@ -644,7 +681,7 @@ export interface ImportGameRequest {
   readonly opponentPolicy: { readonly mode: "human_common" | "strong_engine"; readonly targetElo?: number };
   readonly policyConfig: PolicyConfig;
   readonly seed: number;
-  readonly source: { readonly kind: "pgn"; readonly pgn: string } | { readonly kind: "lichess"; readonly url: string };
+  readonly source: { readonly kind: Extract<ImportSourceRequestKind, "pgn">; readonly pgn: string } | { readonly kind: Extract<ImportSourceRequestKind, "lichess">; readonly url: string };
 }
 /** The imported or native source summary carried by the Review Map header. */
 export type ReviewSourceSummary = { readonly kind: "native" } | { readonly kind: ImportedGameRecord["sourceKind"]; readonly url?: string; readonly headers: Readonly<Record<string, string>>; readonly result: ImportedGameRecord["result"]; readonly importedAt: string };
@@ -1015,7 +1052,10 @@ export interface DrillClientApi extends RunApi {
   register?(handle: string, password: string, displayName?: string): Promise<Learner>;
   login?(handle: string, password: string): Promise<Learner>;
   logout?(): Promise<void>;
-  exportAccount?(password: string): Promise<{ readonly blob: Blob; readonly filename: string; readonly digest: string }>;
+  exportAccount?(password: string, onProgress?: (progress: AccountExportProgress) => void): Promise<{ readonly blob: Blob; readonly filename: string; readonly digest: string }>;
+  accountInventory?(): Promise<AccountInventory>;
+  previewAccountImport?(bundle: unknown): Promise<AccountImportReceipt>;
+  importAccount?(password: string, bundle: unknown): Promise<AccountImportReceipt>;
   accountDeletionPreview?(): Promise<DeletionPreview>;
   deleteAccount?(password: string, previewDigest: string): Promise<void>;
   capabilities(): Promise<Capabilities>;
@@ -1036,6 +1076,8 @@ export interface DrillClientApi extends RunApi {
   runDeletionPreview?(runId: string): Promise<DeletionPreview>;
   deleteRun?(runId: string, previewDigest: string): Promise<void>;
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
+  /** Optional: the selection with its live/cached-exact receipt (provider health §10). */
+  selectMoveReceipted?(input: SelectMoveRequest): Promise<ReceiptedSelection>;
   graph(runId: string, writerId?: string): Promise<RunGraph>;
   claimLease?(runId: string, writerId: string): Promise<void>;
   grants?(runId: string): Promise<readonly RunGrant[]>;
@@ -1218,17 +1260,48 @@ export class DrillApi implements DrillClientApi {
     await this.#json("/auth/logout", { method: "POST", body: {} });
   }
 
-  async exportAccount(password: string): Promise<{ readonly blob: Blob; readonly filename: string; readonly digest: string }> {
+  async exportAccount(password: string, onProgress?: (progress: AccountExportProgress) => void): Promise<{ readonly blob: Blob; readonly filename: string; readonly digest: string }> {
     const response = await this.#response("/auth/export", { method: "POST", body: { password } });
     const digest = response.headers.get("x-tabiya-export-sha256");
     if (digest === null || !/^sha256:[a-f0-9]{64}$/u.test(digest)) {
       throw new ApiError(502, "INVALID_RESPONSE", "Account export omitted its digest");
     }
+    const declared = Number(response.headers.get("content-length") ?? Number.NaN);
+    const totalBytes = Number.isSafeInteger(declared) && declared >= 0 ? declared : null;
+    let blob: Blob;
+    if (onProgress === undefined || response.body === null) {
+      blob = await response.blob();
+    } else {
+      const reader = response.body.getReader();
+      const chunks: Uint8Array<ArrayBuffer>[] = [];
+      let receivedBytes = 0;
+      onProgress(Object.freeze({ receivedBytes, totalBytes }));
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value as Uint8Array<ArrayBuffer>);
+        receivedBytes += value.byteLength;
+        onProgress(Object.freeze({ receivedBytes, totalBytes }));
+      }
+      blob = new Blob(chunks, { type: response.headers.get("content-type") ?? "application/json" });
+    }
     return Object.freeze({
-      blob: await response.blob(),
+      blob,
       filename: attachmentFilename(response.headers.get("content-disposition"), "tabiya-account.json"),
       digest,
     });
+  }
+
+  accountInventory(): Promise<AccountInventory> {
+    return this.#json("/auth/account-inventory");
+  }
+
+  async previewAccountImport(bundle: unknown): Promise<AccountImportReceipt> {
+    return (await this.#json<{ readonly receipt: AccountImportReceipt }>("/auth/import-preview", { method: "POST", body: { bundle } })).receipt;
+  }
+
+  async importAccount(password: string, bundle: unknown): Promise<AccountImportReceipt> {
+    return (await this.#json<{ readonly receipt: AccountImportReceipt }>("/auth/import", { method: "POST", body: { password, bundle } })).receipt;
   }
 
   accountDeletionPreview(): Promise<DeletionPreview> {
@@ -1542,7 +1615,15 @@ export class DrillApi implements DrillClientApi {
   redeemSessionLink(token:string):Promise<{readonly session:LiveSession;readonly runId:string}>{return this.#json(`/api/shared/${encoded(token)}/join`,{method:"POST",body:{}});}
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
-    return this.#json<unknown>("/select-move", { method: "POST", body: input }).then((value) => parseOpponentSelection(value, input));
+    return this.selectMoveReceipted(input).then((result) => result.selection);
+  }
+
+  /** The selection plus its provider receipt: `cached_exact` is disclosed, never relabelled live. */
+  async selectMoveReceipted(input: SelectMoveRequest): Promise<ReceiptedSelection> {
+    const response = await this.#response("/select-move", { method: "POST", body: input });
+    const selection = parseOpponentSelection(await response.json(), input);
+    const source = response.headers.get("x-tabiya-provider-source") === "cached_exact" ? "cached_exact" : "live";
+    return Object.freeze({ selection, source });
   }
 
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage> {

@@ -527,6 +527,72 @@ export function validateAccountBundleV1(value: unknown): asserts value is Accoun
   }
 }
 
+/**
+ * The standing account-data inventory (IMP-a12): one row per learner-facing data class, projected
+ * from `ACCOUNT_DATA_INVENTORY` and counted from the same bundle export produces, so the disclosure
+ * cannot name a class the privacy boundary lacks or count a row export would not emit. Installation
+ * state is not account data and is omitted. A count is `null` where the store is never exported
+ * (credentials, run-owned operational evidence state, device-local preferences).
+ */
+export interface AccountInventoryStore {
+  readonly store: string;
+  readonly exportDisposition: AccountDataInventoryEntry["exportDisposition"];
+  readonly deletionDisposition: AccountDataInventoryEntry["deletionDisposition"];
+  readonly count: number | null;
+}
+
+export interface AccountInventoryClass {
+  readonly dataClass: string;
+  readonly count: number;
+  readonly stores: readonly AccountInventoryStore[];
+}
+
+export interface AccountInventoryV1 {
+  readonly version: 1;
+  readonly classes: readonly AccountInventoryClass[];
+}
+
+export function accountInventory(bundle: AccountBundleV1): AccountInventoryV1 {
+  validateAccountBundleV1(bundle);
+  const counts = new Map<string, number>();
+  const add = (store: string, count = 1) => counts.set(store, (counts.get(store) ?? 0) + count);
+  add("learners");
+  for (const run of bundle.ownedRuns.value) {
+    add("drill_runs");
+    if (run.importedGame !== null) add("imported_games");
+    add("run_grants", run.grants.length);
+  }
+  add("run_derivations", new Set(bundle.ownedRuns.value.flatMap((run) => run.derivations.map((item) => item.derivedRunId))).size);
+  add("run_grants", bundle.sharedAccess.value.length);
+  const tagged = [
+    ...bundle.progress.value, ...bundle.marks.value, ...bundle.repertoires.value, ...bundle.drafts.value,
+    ...bundle.publications.value, ...bundle.liveAndSocial.value, ...bundle.behavioralProfiles.value,
+    ...bundle.sharedAccess.value.flatMap((shared) => shared.contributions),
+  ];
+  for (const item of tagged) add(item.table);
+  const classes = new Map<string, AccountInventoryStore[]>();
+  for (const entry of ACCOUNT_DATA_INVENTORY) {
+    if (entry.dataClass === "installation") continue;
+    const exported = entry.exportDisposition !== "exclude";
+    const stores = classes.get(entry.dataClass) ?? [];
+    stores.push(Object.freeze({
+      store: entry.store,
+      exportDisposition: entry.exportDisposition,
+      deletionDisposition: entry.deletionDisposition,
+      count: exported ? counts.get(entry.store) ?? 0 : null,
+    }));
+    classes.set(entry.dataClass, stores);
+  }
+  return Object.freeze({
+    version: 1 as const,
+    classes: Object.freeze([...classes.entries()].map(([dataClass, stores]) => Object.freeze({
+      dataClass,
+      count: stores.reduce((total, store) => total + (store.count ?? 0), 0),
+      stores: Object.freeze(stores),
+    }))),
+  });
+}
+
 export type DeletionEffectKind =
   | "run"
   | "shared_run"

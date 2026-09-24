@@ -17,7 +17,9 @@ import {
   compileAuthoritativeAssistance,
   finalizeAssistanceEffects,
   parseRequestedAssistanceV1,
-  serverAvailabilityFromProviders,
+  serverAvailabilityFromProviderHealth,
+  capabilityOperationAvailability,
+  availabilityAdmitsNewRequest,
   comparisonNarrative,
   comparisonStrips,
   suggestTitle,
@@ -65,6 +67,7 @@ function botOperationSummary(envelope: BotPolicyEventEnvelope) {
   });
 }
 
+import { ACCOUNT_IMPORT_MAX_BYTES } from "./account-import.js";
 import { CAMPAIGN_ERROR_STATUS, ServerError, isCampaignErrorCode } from "./errors.js";
 import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
 import { openingIdentityAt, type OpeningCatalogueAvailability } from "./opening-catalogue.js";
@@ -450,6 +453,37 @@ function parsePolicyConfig(value: unknown): PolicyConfig {
   };
 }
 
+/** A JSON body read under a byte ceiling; used where a learner uploads a file. */
+async function parseBoundedBody(request: Request, maxBytes: number): Promise<Record<string, unknown>> {
+  const tooLarge = () => new ServerError("ACCOUNT_IMPORT_TOO_LARGE", `The upload exceeds the ${Math.floor(maxBytes / (1024 * 1024))} MiB limit`, { details: { maxBytes } });
+  const declared = Number(request.headers.get("content-length") ?? Number.NaN);
+  if (Number.isFinite(declared) && declared > maxBytes) throw tooLarge();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  if (request.body !== null) {
+    const reader = request.body.getReader();
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel().catch(() => undefined);
+        throw tooLarge();
+      }
+      chunks.push(value);
+    }
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  try {
+    return record(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)) as unknown);
+  } catch (error) {
+    if (error instanceof ServerError) throw error;
+    throw invalid("Request body must be valid JSON");
+  }
+}
+
 async function parseBody(request: Request): Promise<Record<string, unknown>> {
   try {
     return record(await request.json());
@@ -669,7 +703,7 @@ export function errorResponse(error: unknown): Response {
         ? 401
         : error.code === "FORBIDDEN"
           ? 403
-      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "TTS_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE" || error.code === "TABLEBASE_UNAVAILABLE" || error.code === "REPERTOIRE_SCAN_UNAVAILABLE"
+      : error.code === "ENGINE_UNAVAILABLE" || error.code === "PROVIDER_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "TTS_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE" || error.code === "TABLEBASE_UNAVAILABLE" || error.code === "REPERTOIRE_SCAN_UNAVAILABLE"
         ? 503
         : error.code === "IMPORT_SOURCE_UNAVAILABLE"
           ? 503
@@ -677,11 +711,14 @@ export function errorResponse(error: unknown): Response {
           ? 503
         : error.code === "POLICY_MODE_UNSUPPORTED" ||
             (error.code === "IMPORT_INVALID_PGN" || error.code === "IMPORT_INVALID") ||
+            error.code === "ACCOUNT_IMPORT_INVALID" || error.code === "ACCOUNT_IMPORT_UNSUPPORTED_VERSION" ||
             error.code === "IMPORT_SOURCE_UNSUPPORTED"
             || error.code === "REPERTOIRE_IMPORT_LIMIT"
           ? 422
           : error.code === "INVALID_REQUEST"
             ? 400
+          : error.code === "ACCOUNT_IMPORT_TOO_LARGE"
+            ? 413
             : error.code === "SIMULATION_EXPIRED"
               ? 410
             : error.code === "RUN_NOT_FOUND" ||
@@ -707,6 +744,7 @@ export function errorResponse(error: unknown): Response {
                 error.code === "SHAPE_ID_NOT_YOURS" ||
                 error.code === "DRAFT_STALE" ||
                 error.code === "DELETION_PREVIEW_STALE" ||
+                error.code === "ACCOUNT_IMPORT_CONFLICT" ||
                 error.code === "REPERTOIRE_STALE" ||
                 error.code === "BOARD_HELD" ||
                 error.code === "MATCH_LIVE" ||
@@ -830,6 +868,21 @@ function parsePagination(url: URL): { readonly limit: number; readonly offset: n
   return { limit, offset: parse("offset", 0) };
 }
 
+/** A bounded record of the text the voice route displayed, keyed by run, node and scope. */
+class DisplayedVoiceText {
+  readonly #entries = new Map<string, string>();
+  constructor(private readonly capacity: number) {}
+  remember(runId: string, nodeId: string, scope: string, text: string): void {
+    const key = `${runId}\u0000${nodeId}\u0000${scope}`;
+    this.#entries.delete(key);
+    this.#entries.set(key, text);
+    while (this.#entries.size > this.capacity) this.#entries.delete(this.#entries.keys().next().value!);
+  }
+  recall(runId: string, nodeId: string, scope: string): string | undefined {
+    return this.#entries.get(`${runId}\u0000${nodeId}\u0000${scope}`);
+  }
+}
+
 export function createRestHandler(
   service: RunService,
   selector?: OpponentSelector,
@@ -852,6 +905,8 @@ export function createRestHandler(
   theoryLibrary?: TheoryLibrary,
   campaigns?: CampaignService,
 ): RestHandler {
+  // The text each voice render displayed, so speech can speak exactly it (bounded, per process).
+  const displayedVoice = new DisplayedVoiceText(512);
   return async (request) => {
     try {
       const url = new URL(request.url);
@@ -870,10 +925,25 @@ export function createRestHandler(
           const principal = authenticate();
           return json(200, { learner: identity.learner(principal) });
         }
+        if (request.method === "GET" && url.pathname === "/auth/account-inventory") {
+          const principal = authenticate();
+          return json(200, identity.accountInventory(principal));
+        }
         if (request.method !== "POST") {
           return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
         }
         requireJson(request);
+        if (url.pathname === "/auth/import-preview" || url.pathname === "/auth/import") {
+          // Authenticate before reading an upload so an anonymous body is never buffered.
+          const principal = authenticate();
+          const commit = url.pathname === "/auth/import";
+          const body = closedRecord(await parseBoundedBody(request, ACCOUNT_IMPORT_MAX_BYTES), "/", commit ? ["password", "bundle"] : ["bundle"]);
+          if (body.bundle === undefined) throw invalid("bundle is required");
+          const receipt = commit
+            ? await identity.importAccount(principal, requiredString(body.password, "password"), body.bundle)
+            : identity.previewAccountImport(principal, body.bundle);
+          return json(commit ? 201 : 200, { receipt });
+        }
         const value = await parseBody(request);
         if (url.pathname === "/auth/register") {
           const session = await identity.register({
@@ -907,6 +977,9 @@ export function createRestHandler(
               "cache-control": "no-store",
               "content-type": "application/vnd.tabiya.account+json; version=1",
               "content-disposition": `attachment; filename="${exported.filename}"`,
+              // The bytes are canonicalized in memory before streaming, so the length is exact and the
+              // client can show download progress.
+              "content-length": String(exported.bytes.byteLength),
               "x-tabiya-export-sha256": exported.digest,
             },
           });
@@ -1472,14 +1545,20 @@ export function createRestHandler(
         }
         const parsed = parseSelectMoveRequest(await parseBody(request));
         const pack = parsed.packId === undefined ? undefined : service.pack(parsed.packId);
-        const selection = await selector.select({
+        const { selection, receipt } = await selector.selectWithReceipt({
           ...parsed,
           policy: {
             ...parsed.policy,
             ...(pack?.document.spine === undefined ? {} : { spine: pack.document.spine }),
           },
         });
-        return json(200, selection);
+        // rfc/provider-health-degradation.md §10: an exact cached reply continues only with its
+        // `cached_exact` receipt retained. The receipt travels beside, not inside, the selection
+        // (the persisted selection shape is run-schema; its durable half is opponent-recovery).
+        const response = json(200, selection);
+        response.headers.set("x-tabiya-provider-source", receipt.source);
+        response.headers.set("x-tabiya-provider-produced-at", receipt.producedAt);
+        return response;
       }
 
       const sessionRoute = parseSessionRoute(url.pathname);
@@ -1614,7 +1693,8 @@ export function createRestHandler(
         const permission = permittedAssistance({ workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.humanSplit === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution is withheld in this context");
         const available = await capabilities.get();
-        if (available.providers.opponent === "none") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
+        const maia = capabilityOperationAvailability(available.providerHealth, "opponent.maia_inference");
+        if (maia.state === "unavailable" && maia.reason === "not_configured") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
         const authored = access.pack === undefined
           ? access.run.opponentPolicy
           : trajectoryPolicyAt(access.pack.document, access.run, access.node.id)?.policy ?? access.run.opponentPolicy;
@@ -1674,8 +1754,8 @@ export function createRestHandler(
         // state are re-derived here; the browser's request is untrusted intent only.
         requireJson(request);
         const authority = service.assistanceAuthority(route.runId, principal);
-        const providers = capabilities === undefined ? { opponent: "none", judge: "none", llm: "none", corpus: "none", tts: "none", tablebase: "none" } : (await capabilities.get()).providers;
-        const availability = serverAvailabilityFromProviders(providers);
+        // The live provider-health snapshot, never constructor presence (§8, criterion 18).
+        const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
         try {
           const authoritative = compileAuthoritativeAssistance(parseRequestedAssistanceV1(value), { origin: authority.origin, access: authority.access, availability });
           return json(200, { assistance: finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability }) });
@@ -1711,9 +1791,15 @@ export function createRestHandler(
         const access = service.reasoningReviewAccess(route.runId, principal, requiredSafeInteger(body.checkpointEventSeq, "checkpointEventSeq"));
         requireGuidanceDisclosure(service.guidanceAccess(route.runId, principal, access.node.id));
         const reviewRequest = Object.freeze({ task: "Quote only contiguous learner text that may express each not-detected authored point.", transcript: access.event.data.transcript, keyPoints: access.keyPoints.map((point) => ({ id: point.id, label: point.label, phrases: point.phrases })), detections: access.event.data.detections });
-        for (let attempt = 0; attempt < 2; attempt += 1) {
+        // One total deadline for both attempts; a provider failure is the typed unavailable outcome,
+        // never rewritten to a valid external empty answer ([[D2575]]).
+        const reviewDeadline = AbortSignal.timeout(4_000);
+        let providerAnswered = false;
+        let lastFailure: unknown;
+        for (let attempt = 0; attempt < 2 && !reviewDeadline.aborted; attempt += 1) {
           try {
-            const raw = await reasoningReviewProvider.review(reviewRequest);
+            const raw = await reasoningReviewProvider.review(reviewRequest, reviewDeadline);
+            providerAnswered = true;
             const parsed = JSON.parse(raw) as unknown;
             if (!Array.isArray(parsed)) continue;
             const proposals = parsed.map((item) => {
@@ -1724,7 +1810,14 @@ export function createRestHandler(
             if (accepted === undefined) continue;
             const labels = new Map(access.keyPoints.map((point) => [point.id, point.label]));
             return json(200, { provider: "external", proposals: accepted.map((proposal) => ({ ...proposal, text: `Possible mention, proposed by the configured language model and not a detection: you wrote "${proposal.quotation}" — the author's point "${labels.get(proposal.keyPointId)}".` })) });
-          } catch { /* one retry, then silence */ }
+          } catch (error) {
+            if (!(error instanceof SyntaxError) && !(error instanceof ServerError && error.code === "INVALID_REQUEST")) lastFailure = error;
+            else providerAnswered = true;
+          }
+        }
+        if (!providerAnswered) {
+          if (lastFailure instanceof ServerError) throw lastFailure;
+          throw new ServerError("VOICE_UNAVAILABLE", "The reasoning review provider did not answer", { details: { retryAfterMs: 0 } });
         }
         return json(200, { provider: "external", proposals: [] });
       }
@@ -1741,14 +1834,18 @@ export function createRestHandler(
           requireGuidanceDisclosure(access);
           const narrative = comparisonNarrative(access.run, comparison, comparisonStrips(access.run, comparison));
           const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
-          return json(200, { ...(await renderVoice(voiceProvider, base, voicePersona, "compare", narrative.evidence, false)), scope });
+          const rendered = await renderVoice(voiceProvider, base, voicePersona, "compare", narrative.evidence, false);
+          displayedVoice.remember(route.runId, comparison.forkNodeId, "compare", rendered.text);
+          return json(200, { ...rendered, scope });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
-        return json(200, { ...(await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra)), scope });
+        const rendered = await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra);
+        displayedVoice.remember(route.runId, access.node.id, scope, rendered.text);
+        return json(200, { ...rendered, scope });
       }
       if (route.action === "speech") {
         requireJson(request);
@@ -1763,7 +1860,10 @@ export function createRestHandler(
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
         const rendered = renderedEvidenceItems(EVIDENCE_MANIFEST, scope === "story" ? "guidance.voice_story" : "guidance.voice", [...basePacket.declared, ...extra]);
         const deterministic = rendered.items.flatMap((item) => item.sentences).join("\n");
-        const checkedText = voiceProvider === undefined ? appendRecordedReadings(deterministic, basePacket) : (await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra)).text;
+        // Speech never calls external voice again (rfc/provider-health-degradation.md §8, [[D2576]]):
+        // it speaks the text this server already rendered and displayed for this run/node/scope,
+        // or the deterministic rendering when nothing else was displayed.
+        const checkedText = displayedVoice.recall(route.runId, access.node.id, scope) ?? appendRecordedReadings(deterministic, basePacket);
         const audio = await ttsProvider.synthesize(checkedText);
         return new Response(Uint8Array.from(audio.bytes).buffer, { status: 200, headers: { "content-type": audio.contentType, "cache-control": "no-store" } });
       }
