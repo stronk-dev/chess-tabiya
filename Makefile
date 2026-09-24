@@ -1031,6 +1031,12 @@ bot-roster-fresh-review:
 bot-roster-author-repair:
 	node --test tools/d2234-bot-roster-author-repair/contract.test.mjs
 
+# rfc/bot-roster.md criterion 1: the registered catalogue is set-equal to FAMILIES x BANDS; also
+# pins its generated digests, measurements and grounded cards. Runs inside test-software too.
+.PHONY: bot-roster-census
+bot-roster-census:
+	pnpm exec vitest run --config vitest.software.config.ts packages/runtime/src/bot-profile-catalog.test.ts apps/server/src/bot-profile-catalog.test.ts apps/server/src/bot-policy-measurements.test.ts apps/server/src/bot-card.test.ts
+
 .PHONY: bot-calibration-verdict-contract
 bot-calibration-verdict-contract:
 	node --test tools/d2236-bot-calibration-verdict-contract/contract.test.mjs

@@ -129,46 +129,6 @@ export interface PolicyMassRow {
   readonly finalMass: number;
 }
 
-export interface BotPolicyCandidateInput {
-  readonly moveUci: string;
-  readonly rawMass: number;
-  readonly guardLossCp?: number;
-  readonly traits?: readonly string[];
-  readonly repertoirePrior?: number;
-  readonly features?: readonly { readonly id: string; readonly value: string | number | boolean }[];
-}
-
-export interface BotPolicyDecisionRecord {
-  readonly profileId: string;
-  readonly profileVersion: number;
-  readonly profileDigest: string;
-  readonly samplerId: string;
-  readonly applied: boolean;
-  readonly degradedReason?: string;
-  readonly completeness: number;
-  readonly seed: number;
-  readonly layers: readonly {
-    readonly id: string;
-    readonly action: "applied" | "abstained" | "fallthrough";
-    readonly reason?: string;
-    readonly parameters?: Readonly<Record<string, number | string>>;
-  }[];
-  readonly considered: readonly {
-    readonly moveUci: string;
-    readonly rawMass?: number;
-    readonly sampledMass?: number;
-    readonly finalMass?: number;
-    readonly guardLossCp?: number;
-    readonly features?: readonly { readonly id: string; readonly value: string | number | boolean }[];
-  }[];
-  readonly chosenFinalMass?: number;
-}
-
-export interface ComposedBotPolicySelection {
-  readonly moveUci: string;
-  readonly policy: BotPolicyDecisionRecord;
-}
-
 const LEARNER_INPUT = /(?:learner|habit|style|rating|run_record|learner_history)/iu;
 const REFUSED_PERSONA_CLAIM = /\b(?:human-like|aggressive|solid|tactical|positional|tricky|adaptive|plays like)\b/iu;
 const SINGLETON_KINDS = new Set<BotLayerKind>([
@@ -295,7 +255,10 @@ export function compileBotPolicyCatalog(profiles: readonly BotProfileDeclaration
   return Object.freeze(compiled.sort((left, right) => left.id.localeCompare(right.id) || left.version - right.version));
 }
 
-// D970 keeps the concrete band/profile roster closed until the accepted RFC pins it.
+// Legacy layer-declaration seam behind public /select-move. It stays EMPTY on purpose: public
+// /select-move is not the production authority for profile play (rfc/bot-policy.md §4.1). The
+// registered twelve-profile roster is `BOT_PROFILE_CATALOG` in @chess-tabiya/runtime, and the
+// bare-loss/trait-string composer that used to live here was deleted (bot-roster D1).
 export const BOT_POLICY_PROFILES = compileBotPolicyCatalog([]);
 
 export function botPolicyProfile(id: string, version: number): CompiledBotProfile | undefined {
@@ -383,155 +346,4 @@ export function seededPolicyUnit(seed: number, drawKey: string): number {
   if (drawKey.length === 0) fail("composed selection draw key must not be empty");
   const bytes = createHash("sha256").update(`${seed}\0${drawKey}`).digest();
   return bytes.readUInt32BE(0) / 0x1_0000_0000;
-}
-
-function canonicalParameters(parameters: Readonly<Record<string, string | number | boolean>>): Readonly<Record<string, string | number>> | undefined {
-  const entries = Object.entries(parameters)
-    .filter((entry): entry is [string, string | number] => typeof entry[1] === "string" || typeof entry[1] === "number")
-    .sort(([left], [right]) => left.localeCompare(right));
-  return entries.length === 0 ? undefined : Object.freeze(Object.fromEntries(entries));
-}
-
-function canonicalFeatures(features: BotPolicyCandidateInput["features"]): BotPolicyCandidateInput["features"] {
-  if (features === undefined || features.length === 0) return undefined;
-  return Object.freeze([...features]
-    .sort((left, right) => left.id.localeCompare(right.id) || String(left.value).localeCompare(String(right.value)))
-    .map((feature) => Object.freeze({ ...feature })));
-}
-
-function recordLayer(
-  layer: BotLayerDeclaration,
-  action: "applied" | "abstained" | "fallthrough",
-  reason?: string,
-): BotPolicyDecisionRecord["layers"][number] {
-  const parameters = canonicalParameters(layer.parameters);
-  return Object.freeze({
-    id: layer.id,
-    action,
-    ...(reason === undefined ? {} : { reason }),
-    ...(parameters === undefined ? {} : { parameters }),
-  });
-}
-
-/**
- * Applies one already-compiled profile to a complete provider vector. The caller owns provider
- * acquisition and the position-pure tiebreak; this function owns the single ordered policy stack,
- * seeded draw, degraded-path record, and byte-stable considered rows.
- */
-export function composeBotPolicySelection(input: {
-  readonly profile: CompiledBotProfile;
-  readonly candidates: readonly BotPolicyCandidateInput[];
-  readonly baseBestMove: string;
-  readonly seed: number;
-  readonly drawKey: string;
-  readonly compareEqualMass?: (leftUci: string, rightUci: string) => number;
-}): ComposedBotPolicySelection {
-  if (input.candidates.length === 0) fail("composed selection requires at least one provider candidate");
-  const drawUnit = seededPolicyUnit(input.seed, input.drawKey);
-  const compare = input.compareEqualMass ?? ((left: string, right: string) => left.localeCompare(right));
-  const sampler = input.profile.layers.find((layer): layer is SamplerLayer => layer.kind === "sampler");
-  if (sampler === undefined) fail("compiled profile has no sampler");
-  const reconstructed = reconstructMaiaDistribution(
-    input.candidates.map((candidate) => ({ moveUci: candidate.moveUci, mass: candidate.rawMass })),
-    sampler.temperature,
-    sampler.topP,
-    compare,
-  );
-  const orderedCandidates = [...input.candidates].sort((left, right) => compare(left.moveUci, right.moveUci));
-  const layers: Array<BotPolicyDecisionRecord["layers"][number]> = [];
-
-  const considered = (rows: readonly PolicyMassRow[], includeDerived: boolean): BotPolicyDecisionRecord["considered"] => {
-    const massByMove = new Map(rows.map((row) => [row.moveUci, row]));
-    return Object.freeze(orderedCandidates.map((candidate) => {
-      const row = massByMove.get(candidate.moveUci);
-      const features = canonicalFeatures(candidate.features);
-      return Object.freeze({
-        moveUci: candidate.moveUci,
-        rawMass: candidate.rawMass,
-        ...(includeDerived && row !== undefined ? { sampledMass: row.sampledMass, finalMass: row.finalMass } : {}),
-        ...(candidate.guardLossCp === undefined ? {} : { guardLossCp: candidate.guardLossCp }),
-        ...(features === undefined ? {} : { features }),
-      });
-    }));
-  };
-
-  if (reconstructed.completeness < sampler.completenessThreshold) {
-    for (const layer of input.profile.layers) {
-      if (layer.kind === "human_policy_model") layers.push(recordLayer(layer, "applied"));
-      else if (layer.kind === "sampler") layers.push(recordLayer(layer, "abstained", "incomplete_vector"));
-      else layers.push(recordLayer(layer, "fallthrough", "stack_not_applied"));
-    }
-    return Object.freeze({
-      moveUci: input.baseBestMove,
-      policy: Object.freeze({
-        profileId: input.profile.id,
-        profileVersion: input.profile.version,
-        profileDigest: input.profile.digest,
-        samplerId: sampler.id,
-        applied: false,
-        degradedReason: "incomplete_vector",
-        completeness: reconstructed.completeness,
-        seed: input.seed,
-        layers: Object.freeze(layers),
-        considered: considered(reconstructed.rows, false),
-      }),
-    });
-  }
-
-  let rows = reconstructed.rows;
-  for (const layer of input.profile.layers) {
-    if (layer.kind === "human_policy_model" || layer.kind === "sampler" || layer.kind === "presentation") {
-      layers.push(recordLayer(layer, "applied"));
-      continue;
-    }
-    if (layer.kind === "repertoire") {
-      const hasPrior = input.candidates.some((candidate) => (candidate.repertoirePrior ?? 0) > 0);
-      if (!hasPrior) layers.push(recordLayer(layer, "fallthrough", "no_book_entry"));
-      else {
-        rows = applyPolicyMultiplier(rows, (moveUci) => input.candidates.find((candidate) => candidate.moveUci === moveUci)?.repertoirePrior ?? 0);
-        layers.push(recordLayer(layer, "applied"));
-      }
-      continue;
-    }
-    if (layer.kind === "error_guard") {
-      const priced = input.candidates.every((candidate) => Number.isFinite(candidate.guardLossCp));
-      if (!priced) {
-        layers.push(recordLayer(layer, "abstained", "provider_unavailable"));
-        continue;
-      }
-      const admitted = new Set(input.candidates.filter((candidate) => candidate.guardLossCp! < layer.thresholdCp).map((candidate) => candidate.moveUci));
-      if (admitted.size === 0) {
-        layers.push(recordLayer(layer, "abstained", "empty_after_mask"));
-        continue;
-      }
-      rows = applyPolicyMultiplier(rows, (moveUci) => admitted.has(moveUci) ? 1 : 0);
-      layers.push(recordLayer(layer, "applied"));
-      continue;
-    }
-    if (layer.kind === "controlled_trait") {
-      rows = applyPolicyMultiplier(rows, (moveUci) => input.candidates.find((candidate) => candidate.moveUci === moveUci)?.traits?.includes(layer.classifier) === true ? layer.multiplier : 1);
-      layers.push(recordLayer(layer, "applied"));
-      continue;
-    }
-    layers.push(recordLayer(layer, "abstained", "unsupported_layer"));
-  }
-
-  const moveUci = drawPolicyMoveBy(rows, drawUnit, compare);
-  if (moveUci === undefined) fail("composed selection produced no move");
-  const chosenFinalMass = rows.find((row) => row.moveUci === moveUci)?.finalMass;
-  return Object.freeze({
-    moveUci,
-    policy: Object.freeze({
-      profileId: input.profile.id,
-      profileVersion: input.profile.version,
-      profileDigest: input.profile.digest,
-      samplerId: sampler.id,
-      applied: true,
-      completeness: reconstructed.completeness,
-      seed: input.seed,
-      layers: Object.freeze(layers),
-      considered: considered(rows, true),
-      ...(chosenFinalMass === undefined ? {} : { chosenFinalMass }),
-    }),
-  });
 }

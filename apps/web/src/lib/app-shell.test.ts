@@ -36,6 +36,7 @@ import type {
 import { saveAssistance } from "./assistance-preference.js";
 import { HistoryRouter } from "./router.js";
 import { WriterSession, writerStorageKey, type KeyValueStorage } from "./writer-session.js";
+import { botRosterFixture } from "./bot-roster.test-support.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const E4_FEN = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
@@ -147,6 +148,7 @@ const capabilities: Capabilities = {
         slowestLosingRate: { min: 0.611, max: 0.689, uniformBaseline: 0.227 },
         fastestLosingRate: { value: 0.033, uniformBaseline: 0.313 },
       },
+      profiles: botRosterFixture(),
     },
   },
   providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },

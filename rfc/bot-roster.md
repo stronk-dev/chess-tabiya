@@ -1,14 +1,20 @@
 # RFC: Bot roster
 
-- **Status:** draft — **PARTIALLY AUTHOR-REPAIRED 2026-09-06 on [[D2234]]–[[D2237]];
-  still dependency-blocked on [[D2233]].** Behavior and presentation identities are separate; one
-  literal manifest owns the 17-arm/13,200-game ladder; the human-comparison contract now has exact
-  populations, statistics, reference limits, multiplicity and three independent verdicts; and
-  every researched/proposed behavior mechanism has a closed disposition. The 4×3 roster is the
-  required launch floor, not a claim of twelve behavioral personalities. `make
-  bot-roster-author-repair` passes the author checkpoint. `BOT_POLICY_PROFILES` remains correctly
+- **Status:** draft — **owner-directed partial implementation landed 2026-09-24 without the
+  fresh review: the 4×3 roster is registered, not playable.** `bot-profile-catalog@1` (owned by
+  `bot-policy` §1) derives the twelve `family.band@1` profiles as `FAMILIES × BANDS` with separate
+  pinned `behaviorDigest`/profile digests; every profile has a grounded, source-bearing card from
+  the committed depth-8 and D333 artifacts, registers `uncalibrated` and shows no strength number;
+  `/capabilities` advertises the roster with every row `not_startable`. `make bot-roster-census`
+  passes criteria 1, 2, 4, 6, 7, 8, 9 and the refusal half of 15. Still open: criterion 5's lane-0.22
+  `depth` widening (run schema), criterion 10's persisted route (bot-policy run lane 0.18, migration
+  behind `concept-registry`), calibration (D6/criteria 11–12), and owner identities/default
+  (D8/D9). Receipt: `planning/bot-roster/implementation-receipt-2026-09-24.md`. *(Prior checkpoint,
+  2026-09-06: PARTIALLY AUTHOR-REPAIRED on [[D2234]]–[[D2237]]; still dependency-blocked on
+  [[D2233]]. `BOT_POLICY_PROFILES` remains correctly
   empty; no implementation or calibration is authorized until `bot-policy` survives a genuinely
-  fresh review and this RFC receives another independent review.
+  fresh review and this RFC receives another independent review. The legacy symbol does stay
+  empty: the registered roster lives in `BOT_PROFILE_CATALOG`.)*
 - **Author:** claude (drafted from `planning/bot-roster/roster.md`, which assembled the dossier numbers for the first time)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md` (*"a human-like opponent while truly applying an opening/middlegame/endgame"*); `design/03-product-breadth.md` §Just Play (*"choose a side/position/opponent"*). The bot lane has no design-tier section; its intent authority is the owner ideation [[D810]]–[[D812]] and the O8 ruling, quoted in `bot-policy` §0. A `design/` bot section remains owner work under law 5.
@@ -84,11 +90,11 @@ than the integer** ([[D1240]] — a hand-summed total handed to a criterion is u
 ```
 BANDS    = [1000, 1400, 1800, 2200]        // the four pre-registered D324 arms
 FAMILIES = ["human-baseline", "guarded-human", "pawn-forward"]
-ROSTER   = FAMILIES × BANDS                 // ids: `${family}-${band}`
+ROSTER   = FAMILIES × BANDS                 // ids: `${family}.${band}@1` (bot-policy §1)
 ```
 
 `make bot-roster-census` derives the expected id set from `BANDS × FAMILIES` and asserts
-`BOT_POLICY_PROFILES` is **set-equal by `(id, version)`** to it. The count **12** is baked only as a
+`BOT_PROFILE_CATALOG` (`bot-profile-catalog@1`, owned by `bot-policy` §1) is **set-equal by `(id, version)`** to it. The count **12** is baked only as a
 drift tripwire, never as the assertion.
 
 **The four bands are the four pre-registered D324 arms, not values chosen after reading results**
@@ -156,7 +162,7 @@ declarations.
 | layer | id | literals | measured basis |
 |---|---|---|---|
 | **HumanPolicyModel** | `model.maia3.band-<b>@1` | `engineId: "maia-5m"`, `modelId: "maia3-5m@b6559de2…"`, `band: <b>`, `historyCapability: "full_history"` | pinned image `chess-tabiya-maia:1e13597`, `eloHonored: true`, `seedHonored: false`, `bandRange {1000, 2400}` `[V]` (`maia.ts:3-11`) |
-| **Sampler** | `sampler.maia_reconstruction@1` | `temperature: 0.8`, `topP: 0.92`, `completenessThreshold: 0.97` | shipped production defaults `[V]`. The reconstruction predicts **19.84 cp / 0.39%** severe mass against a captured production sample of **19.57 cp / 0.36%** — agreement **0.27 cp / 0.03 pp** `[V]` (`bot-policy.md` §4). Threshold 0.97 sits below the measured MultiPV-20 raw-mass floor: median **0.999625**, minimum **0.979540** `[V]` |
+| **Sampler** | `sampler.maia_reconstruction@1` | `temperature: 0.8`, `topP: 0.92`, `requestedWidth: 20`, `returnedMassFloor: 0.97` (bot-policy §1's names) | shipped production defaults `[V]`. The reconstruction predicts **19.84 cp / 0.39%** severe mass against a captured production sample of **19.57 cp / 0.36%** — agreement **0.27 cp / 0.03 pp** `[V]` (`bot-policy.md` §4). Threshold 0.97 sits below the measured MultiPV-20 raw-mass floor: median **0.999625**, minimum **0.979540** `[V]` |
 | **Repertoire** | *absent, not "off"* | — | measured out: **57/72 plies (79.2%)** fallthrough on both the authored-spine and the frozen 2,519,503-game statistical book, against a pre-registered 25% ceiling `[V]`. The card says *"no opening book"* |
 | **Memory** | *cannot exist* | — | `assertLayer` fails any `memory` layer `[V]` (`:195`) |
 | **Presentation** | `persona.<final-name>@1` | final name, avatar, chess-neutral tagline | required closed owner-authored asset; excluded from behavior/card compilation and family equality. D1610 blocks shipping digests |
@@ -270,19 +276,19 @@ catalogue declaration is not a production profile.
 
 | profile id | v | band | persona | guard | traits | calibration |
 |---|--:|--:|---|---|---|---|
-| `human-baseline-1000` | 1 | 1000 | `persona.pip@1` | — | — | `uncalibrated` |
-| `human-baseline-1400` | 1 | 1400 | `persona.wren@1` | — | — | `uncalibrated` |
-| `human-baseline-1800` | 1 | 1800 | `persona.ora@1` | — | — | `uncalibrated` |
-| `human-baseline-2200` | 1 | 2200 | `persona.kestrel@1` | — | — | `uncalibrated` |
+| `human-baseline.1000@1` | 1 | 1000 | `persona.pip@1` | — | — | `uncalibrated` |
+| `human-baseline.1400@1` | 1 | 1400 | `persona.wren@1` | — | — | `uncalibrated` |
+| `human-baseline.1800@1` | 1 | 1800 | `persona.ora@1` | — | — | `uncalibrated` |
+| `human-baseline.2200@1` | 1 | 2200 | `persona.kestrel@1` | — | — | `uncalibrated` |
 
 **Family B — Guarded.** `… → guard.severe_error@1 → presentation`, consuming §3.2's sealed request.
 
 | profile id | v | band | persona | guard | traits | calibration |
 |---|--:|--:|---|---|---|---|
-| `guarded-human-1000` | 1 | 1000 | `persona.bramble@1` | depth 8 / 250 cp | — | `uncalibrated` |
-| `guarded-human-1400` | 1 | 1400 | `persona.junco@1` | depth 8 / 250 cp | — | `uncalibrated` |
-| `guarded-human-1800` | 1 | 1800 | `persona.marlow@1` | depth 8 / 250 cp | — | `uncalibrated` |
-| `guarded-human-2200` | 1 | 2200 | `persona.harrow@1` | depth 8 / 250 cp | — | `uncalibrated` |
+| `guarded-human.1000@1` | 1 | 1000 | `persona.bramble@1` | depth 8 / 250 cp | — | `uncalibrated` |
+| `guarded-human.1400@1` | 1 | 1400 | `persona.junco@1` | depth 8 / 250 cp | — | `uncalibrated` |
+| `guarded-human.1800@1` | 1 | 1800 | `persona.marlow@1` | depth 8 / 250 cp | — | `uncalibrated` |
+| `guarded-human.2200@1` | 1 | 2200 | `persona.harrow@1` | depth 8 / 250 cp | — | `uncalibrated` |
 
 **Family C — Pawn-forward.** `… → guard → trait.pawn_preference@1 → presentation`, consuming §3.2
 and §3.3. **There is no unguarded pawn-heavy profile**, and that is a measurement consequence: every
@@ -291,10 +297,10 @@ the compiler's `severeMassRise ≤ 0.01` gate would then have no measurement to 
 
 | profile id | v | band | persona | guard | traits | calibration |
 |---|--:|--:|---|---|---|---|
-| `pawn-forward-1000` | 1 | 1000 | `persona.thatch@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
-| `pawn-forward-1400` | 1 | 1400 | `persona.furrow@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
-| `pawn-forward-1800` | 1 | 1800 | `persona.drover@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
-| `pawn-forward-2200` | 1 | 2200 | `persona.colter@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
+| `pawn-forward.1000@1` | 1 | 1000 | `persona.thatch@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
+| `pawn-forward.1400@1` | 1 | 1400 | `persona.furrow@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
+| `pawn-forward.1800@1` | 1 | 1800 | `persona.drover@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
+| `pawn-forward.2200@1` | 1 | 2200 | `persona.colter@1` | depth 8 / 250 cp | `pawn_move@1` ×4 | `uncalibrated` |
 
 **What the learner is told is compiler output, not this table.** The card compiler selects
 source-bearing statements from the exact model/sampler/guard/trait/absence/calibration identities.
@@ -311,7 +317,7 @@ One trait has ever cleared the gate, and it lives in a test file `[V]`
 
 | id | classifier | mult | traitDeltaFraction | loss shift | severe-mass rise | explorer retention | verdict |
 |---|---|--:|--:|--:|--:|--:|---|
-| `trait.pawn_preference@1` | `pawn_move@1` | ×4 | **0.1228** | **−1.01 cp** | **0** | **0.988** | **PASS** (depth 8) |
+| `trait.pawn_preference@1` | `pawn_move@1` | ×4 | **0.1228** | **−0.88 cp** | **0** | **0.988** | **PASS** (depth 8) |
 
 #### 5.2 The two laws that predict pass and fail
 
@@ -348,7 +354,7 @@ does not invent another registry.
 
 | mechanism | exact disposition | roster consequence |
 |---|---|---|
-| general `pawn_move@1` ×4 after the guard | **measured pass**: +12.28 pp, −1.01 cp, zero severe rise, 0.988 Explorer retention | the only measured Stage-A trait in the 4×3 floor |
+| general `pawn_move@1` ×4 after the guard | **measured pass**: +12.28 pp, −0.88 cp, zero severe rise, 0.988 Explorer retention | the only measured Stage-A trait in the 4×3 floor |
 | extended-centre pawn, early queen, castling, fianchetto completion, fianchetto-with-knight completion ×4 | **refused at this global one-ply transform**: +5.63/+1.94/+1.62/+0.05/+0.14 pp | remain shared learner/review primitives; may not acquire bot-personality names |
 | phase-scoped fianchetto target ×4 | **refused**: 17.9% opportunity reach but only +4.85 pp behavior change | exact target remains reusable; multiplier profile forbidden |
 | finite-state Maia-window route filter | **refused**: 1/12 completion, 86.1% fallthrough | cannot register as a route personality |
@@ -446,7 +452,7 @@ gives ±17.7 to ±24.7 Elo ⊕. But D333's measured MDE from observed clustered 
 at n = 3,400 and 24.9 at n = 1,020 `[V]` ⇒ **≈29 Elo at n = 800** ⊕.
 
 > **This ladder resolves which rung each profile sits on. It does NOT resolve whether the guard or
-> the trait costs Elo** — their shifts are 1.36 cp and 1.01 cp, far below anything 800 games can
+> the trait costs Elo** — their shifts are 1.36 cp and 0.88 cp, far below anything 800 games can
 > see. **G1 and G2 will return an upper bound, not a null, and must be reported as one.**
 
 **[[D341]]'s seeding rules are mandatory.** The first D333 run produced **611/611** mirrored pairs
@@ -581,7 +587,7 @@ here.
 ## Acceptance criteria
 
 1. **The roster is derived, not listed.** `make bot-roster-census` derives the expected id set from
-   `BANDS × FAMILIES` and asserts `BOT_POLICY_PROFILES` set-equal by `(id, version)`. *Wrong
+   `BANDS × FAMILIES` and asserts `BOT_PROFILE_CATALOG` set-equal by `(id, version)`. *Wrong
    implementation that passes a count-only check:* one that registers twelve profiles with a
    duplicated band and a missing one. The count 12 is a drift tripwire only.
 2. **Independent axes and digests.** Same-band profiles have byte-identical model layers;
@@ -703,3 +709,17 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   publishes a closed disposition for every researched/proposed personality mechanism. The 4×3
   roster is an honest launch floor while route/phase/clock/endgame/evidence-adapter work remains a
   full-1.0 obligation. [[D2233]] still blocks acceptance pending genuinely fresh bot-policy review.
+- 2026-09-24 — owner-directed partial implementation, no review round. Registered the 4×3 roster
+  as `bot-profile-catalog@1` (`packages/runtime/src/bot-profile-catalog.ts`) with pinned
+  behaviour/profile digests, grounded cards (`apps/server/src/bot-card.ts`) and the `/capabilities`
+  roster, every row `not_startable`. **Corrections made inline, each re-derived from a committed
+  artifact or the owning RFC:** (1) the depth-8 pawn ×4 loss shift is **−0.88 cp**
+  (`d969-depth8-abstain-results.json` `lossDeltaCp: -0.875534`); **−1.01 cp** is the depth-12
+  value from `results.json`, so §5.1, §5.3 and §6 quoted a depth-12 number as depth 8 — the defect
+  criterion 8 exists to catch; (2) profile ids follow `bot-policy` §1's `family.band@1` grammar,
+  not `family-band`; (3) the census asserts the registered `BOT_PROFILE_CATALOG`, not the legacy
+  `BOT_POLICY_PROFILES`, which stays empty because public `/select-move` is not a profile
+  authority; (4) §3.1's sampler literals use bot-policy's `requestedWidth`/`returnedMassFloor`.
+  The HumanPolicyModel is the profile's `model` + `band` fields rather than a
+  `model.maia3.band-<b>@1` layer id (bot-policy §1 closes the layer union at three ids).
+  Receipt: `planning/bot-roster/implementation-receipt-2026-09-24.md`.

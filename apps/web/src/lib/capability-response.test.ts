@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { parseCapabilities } from "./capability-response.js";
+import { botRosterFixture } from "./bot-roster.test-support.js";
 
 const capabilities = Object.freeze({
   engines: [{ id: "maia-5m", kind: "opponent", name: "Maia", version: "1", modelId: "maia-1500", seedHonored: true, eloHonored: true }],
@@ -24,6 +25,7 @@ const capabilities = Object.freeze({
         slowestLosingRate: { min: 0.611, max: 0.689, uniformBaseline: 0.227 },
         fastestLosingRate: { value: 0.033, uniformBaseline: 0.313 },
       },
+      profiles: botRosterFixture(),
     },
   },
   providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },
@@ -61,5 +63,30 @@ describe("capability response authority", () => {
     [{ ...capabilities, surfaces: { ...capabilities.surfaces, campaign: "available" } }],
   ])("refuses internal, crossed, inconsistent, or unknown capability bytes", (value) => {
     expect(() => parseCapabilities(value)).toThrow(TypeError);
+  });
+
+  describe("bot-profile-catalog@1 roster (rfc/bot-policy.md §8)", () => {
+    const withProfiles = (profiles: unknown) => ({ ...capabilities, policyProfiles: { ...capabilities.policyProfiles, human_common: { ...capabilities.policyProfiles.human_common, profiles } } });
+    const rows = botRosterFixture();
+    const first = rows[0]!;
+
+    it("accepts the roster that is set-equal to the runtime catalog", () => {
+      expect(parseCapabilities(withProfiles(rows)).policyProfiles.human_common.profiles.map((row) => row.reference.id)).toEqual(rows.map((row) => row.reference.id));
+    });
+
+    it.each([
+      ["a missing profile", () => rows.slice(1)],
+      ["a duplicated profile", () => [...rows.slice(1), rows[1]]],
+      ["a substituted family on a genuine id", () => [{ ...first, reference: { ...first.reference, family: "pawn-forward" } }, ...rows.slice(1)]],
+      ["a foreign behaviour digest", () => [{ ...first, behaviorDigest: rows[1]!.behaviorDigest }, ...rows.slice(1)]],
+      ["a card for another profile", () => [{ ...first, card: rows[1]!.card }, ...rows.slice(1)]],
+      ["an unregistered statement id", () => [{ ...first, card: { ...first.card, statements: [{ id: "card.persona", text: "Loves attacking chess.", sources: ["catalog.profile"] }] } }, ...rows.slice(1)]],
+      ["a statement without a source", () => [{ ...first, card: { ...first.card, statements: [{ ...first.card.statements[0]!, sources: [] }] } }, ...rows.slice(1)]],
+      ["decorative identity before owner assets exist", () => [{ ...first, card: { ...first.card, decorative: { name: "Pip" } } }, ...rows.slice(1)]],
+      ["an unknown blocker", () => [{ ...first, startable: { kind: "not_startable", blockedBy: ["tuesday"] } }, ...rows.slice(1)]],
+      ["a startable claim", () => [{ ...first, startable: { kind: "available", blockedBy: [] } }, ...rows.slice(1)]],
+    ])("refuses %s", (_label, build) => {
+      expect(() => parseCapabilities(withProfiles(build()))).toThrow(TypeError);
+    });
   });
 });
