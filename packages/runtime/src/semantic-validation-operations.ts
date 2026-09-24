@@ -13,7 +13,9 @@
 import { makeUci, parseUci } from "chessops/util";
 import { normalizeMove } from "chessops/chess";
 
+import { createBoundedTargetBackgroundService } from "./bounded-target.js";
 import { compileCandidatePopulation, CANDIDATE_EVENTS_SCOPE } from "./candidate-population.js";
+import { boundedTargetSourceEvidence } from "./evidence-operations.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES, TRANSITION_GEOMETRY_EVENT_FAMILIES, TRANSITION_RULE_EVENT_FAMILIES } from "./evidence-catalog.js";
 import type { DeclaredEvidence, VersionedEvidenceId } from "./evidence-contract.js";
 import { canonicalFen, positionFromFen } from "./position-cache.js";
@@ -32,6 +34,7 @@ import {
 import {
   SemanticValidationError,
   semanticValidationOperationRef,
+  type SemanticBoundedTargetInput,
   type SemanticCompleteAlternativesInput,
   type SemanticEdgeInput,
   type SemanticRecordedPathInput,
@@ -49,7 +52,18 @@ import {
 
 export type SemanticValidationObservation =
   | { readonly kind: "event"; readonly item: SemanticEvidenceEvent<unknown> }
+  /** An inspector-only event projection (explicit event root): declared evidence, no compiled event. */
+  | { readonly kind: "declared_event"; readonly item: DeclaredEvidence<unknown> }
   | { readonly kind: "reading"; readonly item: DeclaredEvidence<unknown> };
+
+/** The subject kind an observation answers to. */
+export function observationSubjectKind(observation: SemanticValidationObservation): "event" | "reading" {
+  return observation.kind === "reading" ? "reading" : "event";
+}
+
+export function observationEvidence(observation: SemanticValidationObservation): DeclaredEvidence<unknown> {
+  return observation.kind === "event" ? observation.item.evidence : observation.item;
+}
 
 /** A projection whose own source abstained inside an otherwise completed invocation. */
 export interface SemanticValidationProjectionAbstention {
@@ -177,6 +191,32 @@ function completeAlternativesOperation(input: SemanticCompleteAlternativesInput)
   return completed(selection.selected.filter((fact) => fact.kind === "counterfactual_absence").map((fact) => fact.event));
 }
 
+/**
+ * R1: one sealed batch through the production service; named-target and bounded-return evidence
+ * become reading observations, immediate evidence event observations (sealed as a semantic event
+ * would be is not possible for an inspector-only projection, so the observation carries the
+ * declared evidence and its subject kind). Typed batch abstentions map to `unavailable`.
+ */
+async function boundedTargetBatchOperation(input: SemanticBoundedTargetInput): Promise<SemanticValidationOperationResult> {
+  const service = createBoundedTargetBackgroundService();
+  try {
+    const result = await service.submit({ kind: "source_position_batch", ...boundedTargetSourceEvidence(input.sourceFen) }, new AbortController().signal);
+    if (result.kind !== "completed") return unavailable("source_predicate_unavailable");
+    const observations: SemanticValidationObservation[] = [];
+    for (const target of result.targets) {
+      observations.push(Object.freeze({ kind: "reading" as const, item: target.target }));
+      for (const candidate of target.candidates) {
+        if (candidate.kind === "abstained") continue;
+        observations.push(Object.freeze({ kind: "declared_event" as const, item: candidate.immediate }));
+        if (candidate.kind === "removed" && candidate.boundedReturn.kind === "evidence") observations.push(Object.freeze({ kind: "reading" as const, item: candidate.boundedReturn.item }));
+      }
+    }
+    return Object.freeze({ kind: "completed", observations: Object.freeze(observations), abstentions: Object.freeze([]) });
+  } finally {
+    await service.close();
+  }
+}
+
 // ---------------------------------------------------------------------------------------------
 // The registry
 // ---------------------------------------------------------------------------------------------
@@ -232,6 +272,11 @@ export const SEMANTIC_VALIDATION_OPERATIONS: Registry = Object.freeze({
     reach: Object.freeze({ kind: "required" as const, owner: "D1716", discharge: "The avoidance subject/outcome identity successor is unlanded; the current projection-and-sign relation is known unsound, so no avoidance event can pass through this operation." }),
     population: "complete_alternatives" as const, invoke: completeAlternativesOperation,
   }),
+  "runtime.semantic.bounded_target_batch": Object.freeze({
+    ref: semanticValidationOperationRef("runtime.semantic.bounded_target_batch"), productionSymbol: "BoundedTargetBackgroundService.submit", resultAdapter: "boundedTargetBatchOperation", implementationEntries: Object.freeze(["packages/runtime/src/bounded-target.ts"]),
+    reach: Object.freeze({ kind: "required" as const, owner: "bounded-policy-targets §4.2", discharge: "The producer-operation census has zero production callers by design (inspector-only); a consumer RFC must bind a caller before this reach is direct." }),
+    population: "bounded_target_sources" as const, invoke: boundedTargetBatchOperation,
+  }),
 }) as Registry;
 
 // ---------------------------------------------------------------------------------------------
@@ -261,6 +306,7 @@ export function semanticValidationBlockedFamily(projection: VersionedEvidenceId)
 export function semanticValidationPopulationOperation(subject: { readonly kind: "event" | "reading"; readonly projection: VersionedEvidenceId }): SemanticValidationOperationId | undefined {
   const { projection } = subject;
   if (semanticValidationBlockedFamily(projection) !== undefined) return undefined;
+  if (projection.id.startsWith("derived.bounded_target.")) return "runtime.semantic.bounded_target_batch";
   if (projection.version === 2 && RECORDED_SEQUENCE_PROJECTIONS.some((value) => value.id === projection.id)) return "runtime.semantic.recorded_path";
   if (subject.kind === "event" && projection.version === 1 && !V1_WINDOW_EVENT_IDS.includes(projection.id)) return "runtime.semantic.local_edge";
   return undefined;

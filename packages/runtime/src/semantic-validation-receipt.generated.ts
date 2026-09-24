@@ -5,7 +5,7 @@ import type { SemanticValidationVerdictTable } from "./semantic-validation.js";
 
 export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
   "schemaVersion": 1,
-  "receiptSha256": "627b359c41108df81bf726d33afaa04052b42414f363ef6cf6f1856dc830ff49",
+  "receiptSha256": "ee5f103f7a5efefc8f3d06afab63b1778ac21177de163616f3dc4d235dc8ab02",
   "verdicts": [
     {
       "subject": {
@@ -19,6 +19,22 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "open": [
         "semantic_negative",
         "orientation"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
       ]
     },
     {
@@ -1183,6 +1199,38 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
       ]
     }
   ]

@@ -20,6 +20,7 @@ import { SEMANTIC_VALIDATION_PROFILES, SEMANTIC_VALIDATION_ROOTS, admitValidated
 import { SEMANTIC_VALIDATION_RECEIPT } from "./semantic-validation-receipt.generated.js";
 import { assertSemanticReachRetained, executeSemanticValidationCase, subjectSemanticResult } from "./semantic-validation-runner.js";
 import {
+  SEMANTIC_READING_VALIDATION_DECLARATIONS,
   SEMANTIC_VALIDATION_ARMS,
   SemanticValidationError,
   assertSemanticValidationFourWayEquality,
@@ -70,7 +71,7 @@ describe("semantic-validation roots, profiles and verdicts", () => {
     // Provider-reported live.* events are source reports, not repository predicates (changelog 2026-09-24).
     expect(SEMANTIC_VALIDATION_ROOTS.some((subject) => subject.projection.id.startsWith("live."))).toBe(false);
     const roots = SEMANTIC_VALIDATION_ROOTS;
-    const declarations = SEMANTIC_EVENT_DECLARATIONS.map((declaration) => declaration.validation.profile);
+    const declarations = [...SEMANTIC_EVENT_DECLARATIONS.map((declaration) => declaration.validation.profile), ...SEMANTIC_READING_VALIDATION_DECLARATIONS.map((declaration) => declaration.subject)];
     const profiles = SEMANTIC_VALIDATION_PROFILES.map((profile) => profile.subject);
     const verdicts = SEMANTIC_VALIDATION_RECEIPT.verdicts.map((row) => row.subject);
     expect(() => assertSemanticValidationFourWayEquality({ roots, declarations, profiles, verdicts })).not.toThrow();
@@ -431,6 +432,26 @@ describe("semantic-validation owner authority store", () => {
 
   it("[34] the protected store is absent: the D0 bootstrap is an owner discharge, never created here", () => {
     expect(resolveError(parseSemanticValidationCase({ ...rawCase("transition.short-castle.castled"), authority: { kind: "owner_authored", id: "any", version: 1 } }))).toMatch(/D0/u);
+  });
+});
+
+describe("semantic-validation bounded-target roots (R1, criterion 26)", () => {
+  it("[26] admits both readings and the inspector-only immediate event through one batch operation", async () => {
+    const keys = SEMANTIC_VALIDATION_ROOTS.map(semanticValidationSubjectKey);
+    expect(keys).toEqual(expect.arrayContaining(["reading:derived.bounded_target.named_material_target@1", "reading:derived.bounded_target.bounded_return@1", "event:derived.bounded_target.immediate@1"]));
+    const result = await SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.bounded_target_batch"].invoke({ kind: "bounded_target_source", sourceFen: "8/8/8/7k/n7/8/2B5/4K3 b - - 0 1" });
+    if (result.kind !== "completed") throw new Error("expected completed");
+    const kinds = new Set(result.observations.map((observation) => `${observation.kind}:${observation.item.projection.id}`));
+    expect([...kinds].sort()).toEqual(["declared_event:derived.bounded_target.immediate", "reading:derived.bounded_target.bounded_return", "reading:derived.bounded_target.named_material_target"]);
+    // An event subject cannot be answered by a reading observation, nor a reading by an event.
+    const asReading = { kind: "reading" as const, projection: { id: "derived.bounded_target.immediate", version: 1 } };
+    expect(result.observations.filter((observation) => observation.kind === "reading" && observation.item.projection.id === asReading.projection.id)).toHaveLength(0);
+    for (const subject of SEMANTIC_VALIDATION_ROOTS.filter((root) => root.projection.id.startsWith("derived.bounded_target."))) {
+      const verdict = semanticValidationVerdict(subject)!;
+      expect(verdict.verdict).toBe("unvalidated");
+      expect(verdict.open).toEqual(expect.arrayContaining(["positive", "semantic_negative", "orientation", "imported_population"]));
+    }
+    expect(SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.bounded_target_batch"].reach.kind).toBe("required");
   });
 });
 

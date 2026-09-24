@@ -14,6 +14,8 @@ import { canonicalFen, positionFromFen } from "./position-cache.js";
 import {
   SEMANTIC_VALIDATION_OPERATIONS,
   canonicalSemanticEdge,
+  observationEvidence,
+  observationSubjectKind,
   type SemanticValidationObservation,
   type SemanticValidationOperationResult,
 } from "./semantic-validation-operations.js";
@@ -107,6 +109,9 @@ export function assertSemanticValidationFixture(value: SemanticValidationCase): 
       });
       return;
     }
+    case "bounded_target_source":
+      if (canonicalFen(positionFromFen(input.sourceFen)) !== input.sourceFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", `${value.id} source FEN is not canonical`);
+      return;
     case "complete_alternatives": {
       const rootFen = canonicalFen(positionFromFen(input.rootFen));
       if (rootFen !== input.rootFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", `${value.id} root FEN is not canonical`);
@@ -134,17 +139,13 @@ export function semanticValidationSoleFactory(projection: VersionedEvidenceId): 
   return soleFactories.get(refKey(projection));
 }
 
-function observationEvidence(observation: SemanticValidationObservation): DeclaredEvidence<unknown> {
-  return observation.kind === "event" ? observation.item.evidence : observation.item;
-}
-
 function observationProjection(observation: SemanticValidationObservation): VersionedEvidenceId {
-  return observation.kind === "event" ? observation.item.evidence.projection : observation.item.projection;
+  return observationEvidence(observation).projection;
 }
 
 export function selectSemanticTargets(result: SemanticValidationOperationResult, subject: SemanticValidationSubject): readonly SemanticValidationObservation[] {
   if (result.kind !== "completed") return [];
-  return result.observations.filter((observation) => observation.kind === subject.kind && refKey(observationProjection(observation)) === refKey(subject.projection));
+  return result.observations.filter((observation) => observationSubjectKind(observation) === subject.kind && refKey(observationProjection(observation)) === refKey(subject.projection));
 }
 
 /** The value-authority conjunct: sole factory, exact projection and reproduced payload digest. */

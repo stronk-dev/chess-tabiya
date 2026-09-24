@@ -27,6 +27,8 @@ import {
 import { CONVENTION_REGISTRY } from "./evidence-conventions.js";
 import { attachEvidence } from "./evidence.js";
 import { evidenceFactorySymbol } from "./evidence-factories.js";
+import { createBoundedTargetBatchCounter, createBoundedTargetTraversalAuthority } from "./bounded-target-chess.js";
+import { boundedTargetSourceEvidence } from "./evidence-operations.js";
 import { invokeEvidenceValueRoute, evidenceValueRouteRegistry, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { ENDGAME_MATERIAL_MAX, phaseBandReading } from "./phase.js";
 import { branchPath } from "./branch-path.js";
@@ -191,7 +193,8 @@ describe("value authority: registry equality", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
     // 216 + the five typed Review projections, forced-mate v2, the concept reference and the
     // principal-variation source, less the retired Story eval shift.
-    expect(ACTIVE).toHaveLength(223);
+    // + the three bounded-target routes (rfc/bounded-policy-targets.md §4).
+    expect(ACTIVE).toHaveLength(226);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -263,7 +266,8 @@ describe("value authority: registry equality", () => {
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
-    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    // Plus rfc/bounded-policy-targets.md §4's three bounded-target routes.
+    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -579,7 +583,9 @@ function outcomeOf(result: unknown): Outcome {
   };
   const digests = (values: readonly unknown[]) => values.map((value) => evidenceValueReceipt(sealed(value)).payloadDigest);
   if (Array.isArray(result)) return { availability: result.length === 0 ? "empty" : "available", cardinality: result.length, payloadDigests: digests(result) };
-  const record = result as { readonly kind?: string; readonly value?: unknown; readonly reason?: string };
+  const record = result as { readonly kind?: string; readonly value?: unknown; readonly reason?: string; readonly item?: unknown };
+  if (record.kind === "evidence") return { availability: "available", cardinality: 1, payloadDigests: digests([record.item]) };
+  if (record.kind === "abstained") return { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: record.reason! };
   if (record.kind === "unavailable") return { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: record.reason! };
   if (record.kind === "available") {
     const values = Array.isArray(record.value) ? record.value : [record.value];
@@ -641,7 +647,7 @@ function firstNonEmpty(route: string, candidates: readonly unknown[]): unknown {
   return candidates[0];
 }
 
-interface Profile { readonly valid: unknown; readonly falsify: () => void }
+interface Profile { readonly valid: unknown; readonly falsify: () => void; /** An async route's valid result, awaited at module load. */ readonly resolved?: unknown }
 
 function runFixtures() {
   let run = createRun({ id: "value-authority", packId: "p", packDigest: `sha256:${"a".repeat(64)}`, startFen: "r3k2r/pppq1ppp/2npbn2/4p3/2B1P3/2NP1N2/PPPQ1PPP/R3K2R w KQkq - 0 1", seed: 1, createdAt: at, policyConfig });
@@ -938,8 +944,26 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   }
   const outside = PROVIDER_EXCHANGE_AUTHORITY.makeProviderLocalDomainResult(normalizeProviderRequest("syzygy.position@1", syzygyRequest(INITIAL)), FIXTURE_AT);
   profiles.set("rules.endgame.tablebase_domain@1", { valid: { result: outside }, falsify: refused("rules.endgame.tablebase_domain@1", { result: { ...outside } }) });
+  // rfc/bounded-policy-targets.md §4: the three bounded-target routes.
+  const bounded = boundedTargetSourceEvidence(BOUNDED_FEN);
+  const namedInputs = { threat: bounded.threat, exchange: bounded.exchanges[0]!, sourcePosition: bounded.sourcePosition };
+  profiles.set("derived.bounded_target.named_material_target@1", { valid: namedInputs, falsify: refused("derived.bounded_target.named_material_target@1", { ...namedInputs, threat: identity(bounded.threat) }) });
+  const named = (invoke("derived.bounded_target.named_material_target@1", namedInputs) as { readonly item: DeclaredEvidence<unknown> }).item;
+  const candidate = bounded.sourcePosition.payload.pieces.flatMap((entry) => entry.moves).find((move) => move.uci === "a4b2")!;
+  profiles.set("derived.bounded_target.immediate@1", { valid: { target: named, candidate }, falsify: refused("derived.bounded_target.immediate@1", { target: named, candidate, afterFen: "x" }) });
+  profiles.set("derived.bounded_target.bounded_return@1", { valid: { immediate: BOUNDED_RETURN.immediate }, resolved: BOUNDED_RETURN.result, falsify: refused("derived.bounded_target.bounded_return@1", { immediate: BOUNDED_RETURN.immediate, traversal: { candidateLimit: 99_999 } }) });
   return profiles;
 }
+
+const BOUNDED_FEN = "8/8/8/7k/n7/8/2B5/4K3 b - - 0 1";
+const BOUNDED_RETURN = await (async () => {
+  const bounded = boundedTargetSourceEvidence(BOUNDED_FEN);
+  const named = (invokeEvidenceValueRoute("derived.bounded_target.named_material_target@1", { threat: bounded.threat, exchange: bounded.exchanges[0]!, sourcePosition: bounded.sourcePosition }) as { readonly item: DeclaredEvidence<unknown> }).item;
+  const candidate = bounded.sourcePosition.payload.pieces.flatMap((entry) => entry.moves).find((move) => move.uci === "a4b2")!;
+  const immediate = (invokeEvidenceValueRoute("derived.bounded_target.immediate@1", { target: named as never, candidate }) as { readonly item: DeclaredEvidence<unknown> }).item;
+  const traversal = createBoundedTargetTraversalAuthority({ requestDigest: "value-authority-profile", signal: new AbortController().signal, candidateLimit: 25_000, yieldEvery: 64, batchCounter: createBoundedTargetBatchCounter(100_000), yieldNow: async () => undefined });
+  return { immediate, result: await invokeEvidenceValueRoute("derived.bounded_target.bounded_return@1", { immediate: immediate as never, traversal }) };
+})();
 
 const PROFILE_FILE = new URL("fixtures/evidence-value-profiles.json", import.meta.url);
 /** Routes whose chosen fixture legitimately emits nothing (recorded-pack or rare-structure events). */
@@ -951,7 +975,7 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
     const observed: Record<string, Outcome> = {};
     for (const [route, profile] of [...profiles].sort(([left], [right]) => left.localeCompare(right))) {
-      observed[route] = profile.valid === undefined ? { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: "authority_not_constructible" } : outcomeOf(invoke(route, profile.valid));
+      observed[route] = profile.valid === undefined ? { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: "authority_not_constructible" } : outcomeOf(profile.resolved ?? invoke(route, profile.valid));
       profile.falsify();
     }
     if (process.env.UPDATE_EVIDENCE_VALUE_PROFILES === "1") writeFileSync(PROFILE_FILE, `${JSON.stringify(observed, null, 2)}\n`);

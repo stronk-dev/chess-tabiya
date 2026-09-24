@@ -11,7 +11,7 @@ import { PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_DECLARATIONS } from "../packa
 import { evidenceDigest, evidenceValueReceipt, type VersionedEvidenceId } from "../packages/runtime/src/evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS, semanticValidationImportClosure } from "../packages/runtime/src/semantic-validation-authorities.js";
 import { semanticPopulationReceiptId } from "../packages/runtime/src/semantic-validation-law.js";
-import { SEMANTIC_VALIDATION_OPERATIONS, semanticValidationPopulationOperation, type SemanticValidationObservation, type SemanticValidationOperationResult } from "../packages/runtime/src/semantic-validation-operations.js";
+import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence, observationSubjectKind, semanticValidationPopulationOperation, type SemanticValidationObservation, type SemanticValidationOperationResult } from "../packages/runtime/src/semantic-validation-operations.js";
 import { executeSemanticValidationCase, semanticValidationSoleFactory, type SemanticCaseExecutionReceipt } from "../packages/runtime/src/semantic-validation-runner.js";
 import {
   SEMANTIC_VALIDATION_ARMS,
@@ -72,13 +72,13 @@ interface PopulationRow {
 }
 
 function observationKey(observation: SemanticValidationObservation): { readonly subject: string; readonly key: string } {
-  const evidence = observation.kind === "event" ? observation.item.evidence : observation.item;
+  const evidence = observationEvidence(observation);
   const projection = evidence.projection;
   // Value authority is part of the census: a target minted by another factory fails the build.
   const receipt = evidenceValueReceipt(evidence);
   const factory = semanticValidationSoleFactory(projection);
   if (receipt.factory !== factory) throw new Error(`SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING: ${refKey(projection)} minted by ${receipt.factory}, not ${factory ?? "(none)"}`);
-  return { subject: `${observation.kind}:${refKey(projection)}`, key: observation.kind === "event" ? observation.item.id : receipt.payloadDigest };
+  return { subject: `${observationSubjectKind(observation)}:${refKey(projection)}`, key: observation.kind === "event" ? observation.item.id : receipt.payloadDigest };
 }
 
 async function runCensus(operation: SemanticValidationOperationId, population: SemanticValidationPopulation): Promise<{ readonly projection: string; readonly inputSha: string; readonly invocations: number; readonly observations: ReadonlyMap<string, string[]>; readonly unavailable: readonly string[]; readonly abstained: ReadonlyMap<string, string[]> }> {

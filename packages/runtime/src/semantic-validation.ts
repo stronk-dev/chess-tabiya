@@ -300,6 +300,7 @@ export const SEMANTIC_VALIDATION_OPERATION_IDS = Object.freeze([
   "runtime.semantic.recorded_path",
   "runtime.semantic.recorded_sequence",
   "runtime.semantic.complete_alternatives",
+  "runtime.semantic.bounded_target_batch",
 ] as const);
 export type SemanticValidationOperationId = (typeof SEMANTIC_VALIDATION_OPERATION_IDS)[number];
 
@@ -371,6 +372,7 @@ export type SemanticValidationOperationInputMap = {
   readonly "runtime.semantic.recorded_path": SemanticRecordedPathInput;
   readonly "runtime.semantic.recorded_sequence": SemanticRecordedSequenceInput;
   readonly "runtime.semantic.complete_alternatives": SemanticCompleteAlternativesInput;
+  readonly "runtime.semantic.bounded_target_batch": SemanticBoundedTargetInput;
 };
 export type SemanticValidationOperationInput<K extends SemanticValidationOperationId> = SemanticValidationOperationInputMap[K];
 
@@ -436,6 +438,11 @@ export function parseSemanticValidationOperationInput<K extends SemanticValidati
       if (semanticLegalSetDigest(rootFen, alternatives.map((edge) => edge.moveUci)) !== legalSetDigest) fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", "legal set digest does not match the alternatives");
       if (!alternatives.some((edge) => edge.moveUci === played.moveUci)) fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", "complete alternatives must include the played move");
       return Object.freeze({ kind: "complete_alternatives", rootFen, played, alternatives, legalSetDigest }) as SemanticValidationOperationInput<K>;
+    }
+    case "runtime.semantic.bounded_target_batch": {
+      const record = exactKeys(value, ["kind", "sourceFen"], [], "bounded target source", "SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID");
+      if (record.kind !== "bounded_target_source") fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", `bounded target input kind must be bounded_target_source (got ${String(record.kind)})`);
+      return Object.freeze({ kind: "bounded_target_source", sourceFen: parseText(record.sourceFen, "sourceFen") }) as SemanticValidationOperationInput<K>;
     }
     default:
       return fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", `operation ${operation} has no input arm`);
@@ -770,14 +777,25 @@ export const SEMANTIC_READING_VALIDATION_ROOTS: readonly VersionedEvidenceId[] =
   Object.freeze({ id: "derived.bounded_target.bounded_return", version: 1 }),
 ]);
 
-/** §R1: the literal reading-side declaration register (profile reference only). */
+/**
+ * Explicit event roots (changelog 2026-09-24). §2's event predicate admits only disposition-free
+ * events, yet `bounded-policy-targets` lands `derived.bounded_target.immediate@1` inspector-only
+ * and requires it to enter validation. An inspector-only event opts in here exactly like a
+ * reading root; it has no `SemanticEventDeclaration` (the F1 compiler refuses a disposed event).
+ */
+export const SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS: readonly VersionedEvidenceId[] = Object.freeze([
+  Object.freeze({ id: "derived.bounded_target.immediate", version: 1 }),
+]);
+
+/** §R1: the literal explicit-root declaration register (profile reference only). */
 export interface SemanticReadingValidationDeclaration {
-  readonly subject: SemanticValidationSubject & { readonly kind: "reading" };
+  readonly subject: SemanticValidationSubject;
 }
 
-export const SEMANTIC_READING_VALIDATION_DECLARATIONS: readonly SemanticReadingValidationDeclaration[] = Object.freeze(
-  SEMANTIC_READING_VALIDATION_ROOTS.map((projection) => Object.freeze({ subject: Object.freeze({ kind: "reading" as const, projection }) })),
-);
+export const SEMANTIC_READING_VALIDATION_DECLARATIONS: readonly SemanticReadingValidationDeclaration[] = Object.freeze([
+  ...SEMANTIC_READING_VALIDATION_ROOTS.map((projection) => Object.freeze({ subject: Object.freeze({ kind: "reading" as const, projection }) })),
+  ...SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS.map((projection) => Object.freeze({ subject: Object.freeze({ kind: "event" as const, projection }) })),
+]);
 
 function activeMachineCondition(projection: ProjectionDeclaration): boolean {
   return projection.disposition === undefined || projection.disposition.kind !== "retired";
@@ -800,6 +818,14 @@ export function semanticValidationRoots(manifest: CompiledEvidenceManifest, read
       fail("SEMANTIC_VALIDATION_ROOT_MISMATCH", `reading root ${refKey(root)} is not an active machine-condition reading with a sole value factory`);
     }
     readings.push(Object.freeze({ kind: "reading", projection: Object.freeze({ id: root.id, version: root.version }) }));
+  }
+  for (const root of SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS) {
+    const projection = manifest.projections.find((candidate) => refKey(candidate) === refKey(root));
+    if (projection === undefined || projection.disposition === undefined) continue; // unlanded, or already an ordinary root
+    if (projection.role !== "event" || !projection.forms.includes("machine_condition") || projection.disposition.kind !== "inspector_only" || !soleFactory(root)) {
+      fail("SEMANTIC_VALIDATION_ROOT_MISMATCH", `explicit event root ${refKey(root)} is not an inspector-only machine-condition event with a sole value factory`);
+    }
+    readings.push(Object.freeze({ kind: "event", projection: Object.freeze({ id: root.id, version: root.version }) }));
   }
   return Object.freeze([
     ...events.map((projection) => Object.freeze({ kind: "event" as const, projection: Object.freeze({ id: projection.id, version: projection.version }) })),

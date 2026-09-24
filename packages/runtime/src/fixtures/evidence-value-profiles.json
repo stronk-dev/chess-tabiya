@@ -13,6 +13,27 @@
       "459828f5e5e68c9510db25a11cf1b2236c07eb0ac4e3a908c19461f889e5bb38"
     ]
   },
+  "derived.bounded_target.bounded_return@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "46ae14c4400c45fd572f190dfaea957b8c3f0d0e77ccc1a8ca01b59bbb81cc21"
+    ]
+  },
+  "derived.bounded_target.immediate@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "a6d22557e69d9d8656a61ecafd726103253db82054d92896ab5da5279d8ae48d"
+    ]
+  },
+  "derived.bounded_target.named_material_target@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "5da63bf4747329ea7c67f94c76bf83e00e7ee7f747b31772e8705f3f00f6ba90"
+    ]
+  },
   "derived.compare.engine_trajectory@1": {
     "availability": "available",
     "cardinality": 2,

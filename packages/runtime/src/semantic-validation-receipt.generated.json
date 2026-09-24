@@ -1,18 +1,108 @@
 {
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
-  "rootDigest": "ec625d06baa75a1b413e64390b5c045e93a8b6883b016bdcb4f382a0004c442c",
-  "profileDigest": "4d3cf7cf5c004478a4bfd671b0c97009eb91838ef8678081994c2f1e055ec0a3",
+  "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
+  "profileDigest": "f8a2c630de5aa126e4ae15aa7352df6a3ca40d47d657bb104e0c23bc039bb38c",
   "caseDigest": "3142c702f98b7886f7080c0314dfe7ba259f180f1e36a27002c366cbf2953e0c",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
-      "id": "runtime.semantic.breadth_edge",
+      "id": "runtime.semantic.bounded_target_batch",
       "version": 1,
-      "implementationDigest": "6e53b4390ae0361bf859ed31f5d7ffcb843c8a4b66ff1d9b18b3db3ea61d5254",
+      "implementationDigest": "ecf3ac3e2e4e0f82c49fab50df56973d46b48652f786f0048131f106cb59215d",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
+        "packages/runtime/src/bounded-target.ts",
+        "packages/runtime/src/branch-path.ts",
+        "packages/runtime/src/branch-scale.ts",
+        "packages/runtime/src/candidate-feature-vector.ts",
+        "packages/runtime/src/candidate-population-projections.generated.ts",
+        "packages/runtime/src/candidate-population.ts",
+        "packages/runtime/src/castling.ts",
+        "packages/runtime/src/chess.ts",
+        "packages/runtime/src/compare-strip-values.ts",
+        "packages/runtime/src/compare.ts",
+        "packages/runtime/src/concept-registry.ts",
+        "packages/runtime/src/cooperative-yield.ts",
+        "packages/runtime/src/corpus-result.ts",
+        "packages/runtime/src/endgame-method.ts",
+        "packages/runtime/src/endgame-setup.ts",
+        "packages/runtime/src/endgame.ts",
+        "packages/runtime/src/errors.ts",
+        "packages/runtime/src/events.ts",
+        "packages/runtime/src/evidence-catalog.ts",
+        "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
+        "packages/runtime/src/evidence-factories.ts",
+        "packages/runtime/src/evidence-producer-operations.ts",
+        "packages/runtime/src/evidence-ref-resolution.ts",
+        "packages/runtime/src/evidence-ref.ts",
+        "packages/runtime/src/exchange.ts",
+        "packages/runtime/src/fen-memo.ts",
+        "packages/runtime/src/grade-reading.ts",
+        "packages/runtime/src/grade.ts",
+        "packages/runtime/src/internal/evidence-value-routes.ts",
+        "packages/runtime/src/king-state.ts",
+        "packages/runtime/src/legal-moves.ts",
+        "packages/runtime/src/line.ts",
+        "packages/runtime/src/mate-proof.ts",
+        "packages/runtime/src/material-state.ts",
+        "packages/runtime/src/mobility.ts",
+        "packages/runtime/src/module-contract.ts",
+        "packages/runtime/src/module-policy.ts",
+        "packages/runtime/src/objective-state.ts",
+        "packages/runtime/src/objective.ts",
+        "packages/runtime/src/outcome.ts",
+        "packages/runtime/src/pawn-dynamics.ts",
+        "packages/runtime/src/phase.ts",
+        "packages/runtime/src/pivotal.ts",
+        "packages/runtime/src/position-cache.ts",
+        "packages/runtime/src/presentation-contract.ts",
+        "packages/runtime/src/presets.ts",
+        "packages/runtime/src/provider-digest.ts",
+        "packages/runtime/src/provider-exchange.ts",
+        "packages/runtime/src/provider-parser-implementation.generated.ts",
+        "packages/runtime/src/provider-parsers.ts",
+        "packages/runtime/src/provider-protocol.ts",
+        "packages/runtime/src/provider-requests.ts",
+        "packages/runtime/src/provider-types.ts",
+        "packages/runtime/src/recorded-edge.ts",
+        "packages/runtime/src/recorded-reading.ts",
+        "packages/runtime/src/recorded-semantic-path.ts",
+        "packages/runtime/src/replay.ts",
+        "packages/runtime/src/review-evidence.ts",
+        "packages/runtime/src/review-points.ts",
+        "packages/runtime/src/runtime.ts",
+        "packages/runtime/src/semantic-evidence.ts",
+        "packages/runtime/src/session.ts",
+        "packages/runtime/src/shape-firing.ts",
+        "packages/runtime/src/square-control.ts",
+        "packages/runtime/src/story.ts",
+        "packages/runtime/src/structural-evidence.ts",
+        "packages/runtime/src/structure.ts",
+        "packages/runtime/src/tactics.ts",
+        "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
+        "packages/runtime/src/trajectory.ts",
+        "packages/runtime/src/transition.ts",
+        "packages/runtime/src/types.ts",
+        "packages/runtime/src/voice.ts"
+      ],
+      "reach": "required"
+    },
+    {
+      "id": "runtime.semantic.breadth_edge",
+      "version": 1,
+      "implementationDigest": "1a756568f6e13fcf2932a6de99af38afa00cb741d6b53e61484dac5e9f28a67e",
+      "files": [
+        "packages/runtime/src/assistance-exchange.ts",
+        "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -31,6 +121,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -79,6 +171,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -89,10 +182,12 @@
     {
       "id": "runtime.semantic.complete_alternatives",
       "version": 1,
-      "implementationDigest": "61bdc824a74720dcb6c03dc2151b1f0fb713fe015833868c00d9c8c5ffca84a0",
+      "implementationDigest": "8e109c7b3b236d1503678f6a763735f1e65ece1b76fb6e3e7f074b3c65688379",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -111,6 +206,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -159,6 +256,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -169,10 +267,12 @@
     {
       "id": "runtime.semantic.duty_edge",
       "version": 1,
-      "implementationDigest": "c61b92c9ec3064a696d09024c913a5b3888000a334ab3b99b444255b397593fb",
+      "implementationDigest": "010cb1024ab9b1531ecd3b53bdad7904b3a43b43f874e7bbf2e1905379432367",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -191,6 +291,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -239,6 +341,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -249,10 +352,12 @@
     {
       "id": "runtime.semantic.local_edge",
       "version": 1,
-      "implementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "implementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -271,6 +376,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -319,6 +426,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -329,10 +437,12 @@
     {
       "id": "runtime.semantic.recorded_path",
       "version": 1,
-      "implementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "implementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -351,6 +461,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -399,6 +511,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -409,10 +522,12 @@
     {
       "id": "runtime.semantic.recorded_sequence",
       "version": 1,
-      "implementationDigest": "3b1f0f47ebbbb8c89a5dd645c0416420c209ed966e166aa1b36761eabfda6419",
+      "implementationDigest": "2d282a566bea0e39a440fac71fb94135bb431e89b1709d90e39df5ebbec29ede",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -431,6 +546,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -479,6 +596,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -489,10 +607,12 @@
     {
       "id": "runtime.semantic.structural_edge",
       "version": 1,
-      "implementationDigest": "4e031342172728fa6e6b2d27407abcad3e3af6a281d2e952c48843460c6caf51",
+      "implementationDigest": "4875244de2113641a0adb6bff74bafb20d798bfae8148adadea1c7efd6b29212",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -511,6 +631,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -559,6 +681,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -569,10 +692,12 @@
     {
       "id": "runtime.semantic.transition_edge",
       "version": 1,
-      "implementationDigest": "b1f9dc895386d1d8f844c6201477ce73e5f34102817bad562fa4f2bcb0f7b453",
+      "implementationDigest": "eb28e4f9eb511a327354f0e013ef7adc955516356aa6e1f6cfba803c3bb2a376",
       "files": [
         "packages/runtime/src/assistance-exchange.ts",
         "packages/runtime/src/assistance.ts",
+        "packages/runtime/src/bot-profile-catalog.ts",
+        "packages/runtime/src/bounded-target-chess.ts",
         "packages/runtime/src/branch-path.ts",
         "packages/runtime/src/branch-scale.ts",
         "packages/runtime/src/candidate-feature-vector.ts",
@@ -591,6 +716,8 @@
         "packages/runtime/src/events.ts",
         "packages/runtime/src/evidence-catalog.ts",
         "packages/runtime/src/evidence-contract.ts",
+        "packages/runtime/src/evidence-convention-closure.ts",
+        "packages/runtime/src/evidence-conventions.ts",
         "packages/runtime/src/evidence-factories.ts",
         "packages/runtime/src/evidence-ref-resolution.ts",
         "packages/runtime/src/evidence-ref.ts",
@@ -639,6 +766,7 @@
         "packages/runtime/src/structure.ts",
         "packages/runtime/src/tactics.ts",
         "packages/runtime/src/tempo.ts",
+        "packages/runtime/src/threat-pass-authority.ts",
         "packages/runtime/src/trajectory.ts",
         "packages/runtime/src/transition.ts",
         "packages/runtime/src/types.ts",
@@ -2538,7 +2666,7 @@
       "id": "r2-2026-07.5784f239aa95f0d5",
       "subject": "event:derived.activity.event.open_file_occupancy@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2557,7 +2685,7 @@
       "id": "r2-2026-07.58a2be554bac66f3",
       "subject": "event:derived.exchange.capture_class@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2576,7 +2704,7 @@
       "id": "r2-2026-07.27727cd17a507246",
       "subject": "event:derived.exchange.trade_completed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2595,7 +2723,7 @@
       "id": "r2-2026-07.a0ef006747b77301",
       "subject": "event:derived.king.captured_zone_defender@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2614,7 +2742,7 @@
       "id": "r2-2026-07.83bc6900aa710e62",
       "subject": "event:derived.material.event.role_asymmetry@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2633,7 +2761,7 @@
       "id": "r2-2026-07.71de92b55c362adb",
       "subject": "event:derived.pawn.event.transitions@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2652,7 +2780,7 @@
       "id": "r2-2026-07.2022a70c8e62c21f",
       "subject": "event:derived.pawn.sequence.contact_timing@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2671,7 +2799,7 @@
       "id": "r2-2026-07.6c35e5dd94ce25ab",
       "subject": "event:derived.pawn.sequence.harassment_pressure@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2690,7 +2818,7 @@
       "id": "r2-2026-07.cdbc2a90a40374b6",
       "subject": "event:derived.tactic.attraction_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2709,7 +2837,7 @@
       "id": "r2-2026-07.a7f7f9ddcfff8923",
       "subject": "event:derived.tactic.check_zwischenzug_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2728,7 +2856,7 @@
       "id": "r2-2026-07.d76bf668ef6dd177",
       "subject": "event:derived.tactic.defender_exposure@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2747,7 +2875,7 @@
       "id": "r2-2026-07.74e6e797d09c71f5",
       "subject": "event:derived.tactic.deflection_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2766,7 +2894,7 @@
       "id": "r2-2026-07.9da87bd56355e6a2",
       "subject": "event:derived.tactic.discovered_executed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2785,7 +2913,7 @@
       "id": "r2-2026-07.aa64d339c15f1332",
       "subject": "event:derived.tactic.interference_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2804,7 +2932,7 @@
       "id": "r2-2026-07.a8bb0a8280423d83",
       "subject": "event:derived.tactic.line_blocker_clearance_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2823,7 +2951,7 @@
       "id": "r2-2026-07.8d2d920dfe4f71d4",
       "subject": "event:derived.tactic.overload_exploitation_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2842,7 +2970,7 @@
       "id": "r2-2026-07.09594c49b39b8b61",
       "subject": "event:derived.tactic.sequence.defender_consequence@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2861,7 +2989,7 @@
       "id": "r2-2026-07.b6b2ed672c753ebb",
       "subject": "event:derived.tactic.square_clearance_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "746523c92c825dc19bbe89c7a2158be8425891263d932fd2fdc62e3ececb867b",
+      "predicateImplementationDigest": "d10a65fcb98851772248ed4637eb29bf34637f9a92db905ef9a830fb1069a623",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2880,7 +3008,7 @@
       "id": "r2-2026-07.0543e291a34186ab",
       "subject": "event:rules.castling.event.rights_lost@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2899,7 +3027,7 @@
       "id": "r2-2026-07.e274b77e7afa23b7",
       "subject": "event:rules.king.event.zone_state@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2918,7 +3046,7 @@
       "id": "r2-2026-07.659965fb5f65047a",
       "subject": "event:rules.mobility.event.piece_destinations@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2937,7 +3065,7 @@
       "id": "r2-2026-07.2f9851d75b706f58",
       "subject": "event:rules.pawn.event.dynamics@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2956,7 +3084,7 @@
       "id": "r2-2026-07.b4260187a4dd4291",
       "subject": "event:rules.square.event.control@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2975,7 +3103,7 @@
       "id": "r2-2026-07.1cb6ff2f33c3a9dc",
       "subject": "event:rules.structural.event.backward_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -2994,7 +3122,7 @@
       "id": "r2-2026-07.6ab973cae6defe3b",
       "subject": "event:rules.structural.event.direct_attack_count@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3013,7 +3141,7 @@
       "id": "r2-2026-07.2b07823cefbc89d3",
       "subject": "event:rules.structural.event.doubled_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3032,7 +3160,7 @@
       "id": "r2-2026-07.db44c7a5f6108d05",
       "subject": "event:rules.structural.event.half_open_file@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3051,7 +3179,7 @@
       "id": "r2-2026-07.829fa6115d1c1e60",
       "subject": "event:rules.structural.event.isolated_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3070,7 +3198,7 @@
       "id": "r2-2026-07.f3e6969bbb11723f",
       "subject": "event:rules.structural.event.king_zone@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3089,7 +3217,7 @@
       "id": "r2-2026-07.838944582d167420",
       "subject": "event:rules.structural.event.line_blockers@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3108,7 +3236,7 @@
       "id": "r2-2026-07.3cfd842bf25ca64c",
       "subject": "event:rules.structural.event.open_file@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3127,7 +3255,7 @@
       "id": "r2-2026-07.03a67da8e9180882",
       "subject": "event:rules.structural.event.passed_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3146,7 +3274,7 @@
       "id": "r2-2026-07.50ebf1291fd64b7d",
       "subject": "event:rules.structural.event.pawn_islands@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3165,7 +3293,7 @@
       "id": "r2-2026-07.52d3ff0c83458e23",
       "subject": "event:rules.structural.event.piece_count@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3184,7 +3312,7 @@
       "id": "r2-2026-07.196874b275300e57",
       "subject": "event:rules.tactic.consequence.reply_breadth@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3203,7 +3331,7 @@
       "id": "r2-2026-07.e204e1cee4ebfde1",
       "subject": "event:rules.tactic.event.check@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3222,7 +3350,7 @@
       "id": "r2-2026-07.f0e39cf297e3a8e3",
       "subject": "event:rules.tactic.event.defender_duty_relocated@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3241,7 +3369,7 @@
       "id": "r2-2026-07.ece3eb09023f9f43",
       "subject": "event:rules.tactic.event.defender_removed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3260,7 +3388,7 @@
       "id": "r2-2026-07.fcbc89975a869759",
       "subject": "event:rules.tactic.event.double_attack@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3279,7 +3407,7 @@
       "id": "r2-2026-07.18505960aa940541",
       "subject": "event:rules.tactic.event.loose_piece@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3298,7 +3426,7 @@
       "id": "r2-2026-07.13d0d64d74548b64",
       "subject": "event:rules.transition.event.capture@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3317,7 +3445,7 @@
       "id": "r2-2026-07.5bc27d00667b386e",
       "subject": "event:rules.transition.event.castled@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3336,7 +3464,7 @@
       "id": "r2-2026-07.8e1cfbd072bfd2a0",
       "subject": "event:rules.transition.event.checkmate@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3355,7 +3483,7 @@
       "id": "r2-2026-07.96f1ad7ece12a739",
       "subject": "event:rules.transition.event.clock_reset@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3374,7 +3502,7 @@
       "id": "r2-2026-07.bb30d2307214ef97",
       "subject": "event:rules.transition.event.defended_duty@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3393,7 +3521,7 @@
       "id": "r2-2026-07.be25b2ca0f470d72",
       "subject": "event:rules.transition.event.developed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3412,7 +3540,7 @@
       "id": "r2-2026-07.811a4e0292e9a51d",
       "subject": "event:rules.transition.event.last_of_role@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3431,7 +3559,7 @@
       "id": "r2-2026-07.c1686b9e6c58958e",
       "subject": "event:rules.transition.event.occupied_attack@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3450,7 +3578,7 @@
       "id": "r2-2026-07.d06d6e7543a3c910",
       "subject": "event:rules.transition.event.occupied_defence@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3469,7 +3597,7 @@
       "id": "r2-2026-07.55e8a71ee53306d4",
       "subject": "event:rules.transition.event.pawn_contact@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3488,7 +3616,7 @@
       "id": "r2-2026-07.b1cf552d974b5b30",
       "subject": "event:rules.transition.event.piece_escape@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3507,7 +3635,7 @@
       "id": "r2-2026-07.54fe2dfc7a7b90bc",
       "subject": "event:rules.transition.event.promotion@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3526,7 +3654,7 @@
       "id": "r2-2026-07.f26a98c0a305b801",
       "subject": "event:rules.transition.event.slider_ray@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "1f2277b6b2535427e357b112725719f028641bfdf21ff77352390f47edc1531f",
+      "predicateImplementationDigest": "26e4baa46d63b3335f4b436e9a03e677b28beb4e221eecdab25ee3490b30aebf",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -3827,6 +3955,58 @@
       "open": [
         "semantic_negative",
         "orientation"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "verdict": "unvalidated",
+      "cells": [
+        {
+          "arm": "positive",
+          "status": "required",
+          "owner": "semantic-validation D4/D5",
+          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        },
+        {
+          "arm": "semantic_negative",
+          "status": "required",
+          "owner": "semantic-validation D4/D5",
+          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        },
+        {
+          "arm": "orientation",
+          "status": "required",
+          "owner": "semantic-validation D5",
+          "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+        },
+        {
+          "arm": "counterfactual",
+          "status": "not_applicable",
+          "reason": "literal_or_observed_event_makes_no_alternative_claim"
+        },
+        {
+          "arm": "imported_population",
+          "status": "required",
+          "owner": "bounded-policy-targets §4.2",
+          "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
+        },
+        {
+          "arm": "external_label",
+          "status": "not_applicable",
+          "reason": "no_independent_external_taxonomy"
+        }
+      ],
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
       ]
     },
     {
@@ -7889,6 +8069,110 @@
         "positive",
         "semantic_negative",
         "orientation"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "verdict": "unvalidated",
+      "cells": [
+        {
+          "arm": "positive",
+          "status": "required",
+          "owner": "semantic-validation D4/D5",
+          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        },
+        {
+          "arm": "semantic_negative",
+          "status": "required",
+          "owner": "semantic-validation D4/D5",
+          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        },
+        {
+          "arm": "orientation",
+          "status": "required",
+          "owner": "semantic-validation D5",
+          "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+        },
+        {
+          "arm": "counterfactual",
+          "status": "not_applicable",
+          "reason": "literal_or_observed_event_makes_no_alternative_claim"
+        },
+        {
+          "arm": "imported_population",
+          "status": "required",
+          "owner": "bounded-policy-targets §4.2",
+          "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
+        },
+        {
+          "arm": "external_label",
+          "status": "not_applicable",
+          "reason": "no_independent_external_taxonomy"
+        }
+      ],
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "verdict": "unvalidated",
+      "cells": [
+        {
+          "arm": "positive",
+          "status": "required",
+          "owner": "semantic-validation D4/D5",
+          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        },
+        {
+          "arm": "semantic_negative",
+          "status": "required",
+          "owner": "semantic-validation D4/D5",
+          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        },
+        {
+          "arm": "orientation",
+          "status": "required",
+          "owner": "semantic-validation D5",
+          "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+        },
+        {
+          "arm": "counterfactual",
+          "status": "not_applicable",
+          "reason": "literal_or_observed_event_makes_no_alternative_claim"
+        },
+        {
+          "arm": "imported_population",
+          "status": "required",
+          "owner": "bounded-policy-targets §4.2",
+          "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
+        },
+        {
+          "arm": "external_label",
+          "status": "not_applicable",
+          "reason": "no_independent_external_taxonomy"
+        }
+      ],
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
       ]
     }
   ]

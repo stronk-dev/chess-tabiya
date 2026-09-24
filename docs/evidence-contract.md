@@ -126,6 +126,33 @@ gate: an AST census of `declareEvidence` callers and factory/invoker importers, 
 equality with the non-retired catalogue, the frozen migration receipt, and one pinned valid case and
 falsifier per factory.
 
+## Bounded material targets (local layer)
+
+`rfc/bounded-policy-targets.md` adds one producer, `derived.bounded_target@1`, declared
+`local/background` through the explicit checked `producer(id, plane, implementation, availability,
+latency, outputs)` constructor (legal pairs: local→sync|background, recorded→sync,
+provider→interactive, build_time→offline). Its three projections are inspector-only:
+
+- `derived.bounded_target.named_material_target@1` — one positive material capture of `threat@1`,
+  joined to the exact sealed threat reading (whose wrapper carries the source `ThreatPassAnchor`
+  bound by the sole threat factory), one legal-exchange item and the source `legal_moves@1` map.
+- `derived.bounded_target.immediate@1` — the outcome of one exact legal candidate: `preserved`, or
+  `removed` by `attacker_captured`, `target_moved`, `capture_illegal` or `exchange_neutralized`
+  (the last two correlated with the deterministic `legal-exchange-for-move@1` post-candidate check).
+- `derived.bounded_target.bounded_return@1` — within three plies, `not_reintroduced`,
+  `reintroduced` (witness plus same-preparation refutation) or `survives_every_defence`.
+
+Application code never mints these: `BoundedTargetBackgroundService.submit` owns the complete set
+(every positive threat exchange × every legal candidate, ≤512 pairs), runs one active and eight
+queued jobs with authority-exact dedup, yields every 64 visited positions through
+`messageChannelMacrotaskYield`, caps 25,000 positions per candidate (typed `budget_exhausted`) and
+100,000 per job, and publishes evidence only when a whole batch completes. `submit` never throws;
+malformed input is the digest-free `rejected/invalid_request` arm. The service is the one
+registered background producer operation (`RUNTIME_EVIDENCE_PRODUCER_OPERATIONS`, checked by
+`evidence-manifest-check`). The facts say nothing about quality, intent or significance; the
+directionless all-defences field may not select a moment. `make bounded-target-census` reruns the
+D1023 populations through these production symbols.
+
 ## Honest homes and raw evidence
 
 Every projection is either bound to a consumer or has one explicit disposition:

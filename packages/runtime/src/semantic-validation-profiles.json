@@ -69,6 +69,43 @@
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "bounded-policy-targets §4.2",
+        "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.exchange.capture_class",
           "version": 1
         }
@@ -4258,6 +4295,80 @@
             "resultVersion": 1
           }
         ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "bounded-policy-targets §4.2",
+        "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "bounded-policy-targets §4.2",
+        "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
       },
       "externalLabel": {
         "disposition": "not_applicable",

@@ -55,6 +55,8 @@ export function semanticValidationLawProfile(subject: SemanticValidationSubject,
     ? required(blocked.owner, blocked.discharge)
     : populationOperation === undefined
       ? required("recorded-semantic-path D1870", "v1 multi-edge window events have no production operation; only their exact-edge v2 successors are emitted and census-executed")
+      : SEMANTIC_VALIDATION_OPERATIONS[populationOperation].reach.kind === "required"
+        ? required((SEMANTIC_VALIDATION_OPERATIONS[populationOperation].reach as { readonly owner: string }).owner, "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution")
       : Object.freeze({ disposition: "present", refs: Object.freeze([Object.freeze({ kind: "population_receipt", id: semanticPopulationReceiptId(subject), version: 1, subject, inputVersion: 1, resultVersion: 1 }) as SemanticPopulationReceiptRef]) });
   const externalId = externalIds.get(key);
   const externalLabel: SemanticValidationCell<"external_label"> = externalId !== undefined

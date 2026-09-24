@@ -1485,7 +1485,10 @@ review remains outstanding; implementation is still unauthorized.
   is split into the full JSON artifact and a compact verdict module, so browser bundles carry no
   case receipts; (f) `SemanticEventDeclaration.validation` is `{ profile: { kind: "event",
   projection } }`. The ninth operation (`runtime.semantic.bounded_target_batch`) lands with
-  `bounded-policy-targets`, per R1. D0 remains the owner's.
+  `bounded-policy-targets`, per R1, together with (g) an explicit inspector-only event-root register:
+  §2's disposition-free event rule could not admit that RFC's inspector-only `immediate@1`; the
+  observation algebra gains a `declared_event` arm for an event with no compiled semantic event.
+  D0 remains the owner's.
 
 - 2026-08-31: fifth fresh independent review returned the fourth repair on [[D2445]]–[[D2449]].
   Proposition types, wildcard constraint semantics, derived owner chronology, one-row-per-subject
