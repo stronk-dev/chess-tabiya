@@ -21412,3 +21412,22 @@ The bootstrap is archived as implemented.
   - Release receipts. Until they exist, guarded bot families stay conditional.
 - **Triage deferred:** the 75 author-model rows blocked on these RFCs are left
   for the consolidation pass.
+
+### 2026-09-24 — storage backup/recovery and safe deployment profiles land
+
+**Storage recovery:**
+- The server holds an exclusive storage lock.
+- `storage-admin` backs up, verifies, restores, rolls back, upgrades through a
+  verified pre-upgrade bundle and recovers from a crash at any journal point.
+- A real backup → restore → boot round trip with the worker running passes, as
+  does an upgrade → rollback.
+
+**Deployment profiles:**
+- Three profiles (local, appliance, hosted), a CPU-only engine tier and a
+  maintenance overlay.
+- A profile is required outside development, cookies are secure behind TLS,
+  and cross-origin writes are refused.
+- The release renderer now fills the Maia container identity that provider
+  health introduced; the merge reconciled the two release-rendering changes.
+- The server image base moves to Node 24.21 for Unicode 17. The CPU Maia image
+  was not built.
