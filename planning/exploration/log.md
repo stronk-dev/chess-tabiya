@@ -20935,3 +20935,18 @@ six on exact ties. [[D3298]] and the checked
 record the abstention result. This blocks a tempting false prevention story
 in Why/Guided Hint, while the provider-based four-ply proof/cost and engine
 causality work remain [[D3262]].
+
+### 2026-09-24 — D3299 measures the 1.0 critical path as an acceptance blocker
+
+Taking over the paused 1.0 effort, claude traced the shortest learner journey
+to a production boundary. Whole-game Review needs six draft RFCs (7,934 lines)
+accepted and landed before any UI. Every residual of the six implementing RFCs
+waits on a draft or on the owner. [[D3262]] is not a dependency of
+`review-evidence-compiler` or `review-map`, so the five-arm comparison was not
+resumed. No RFC has been accepted since 2026-08-22. Since 2026-09-01 there have
+been 458 commits and 170 fresh-review documents added; ~84 of ~88 verdicted
+reviews returned the RFC. Two passed items sit unaccepted: D921 since
+2026-09-12 and the candidate packet since 2026-09-06. [[D3299]] and
+`planning/release-truth/acceptance-convergence-2026-09-24.md` ask the owner for
+those two acceptances and for a boundary-finding review convergence rule with
+delegated register-owner acceptance. No code, intent or RFC text changed.

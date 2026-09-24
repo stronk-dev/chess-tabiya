@@ -27078,6 +27078,16 @@
       "sourceDigest": "sha256:d446f097cabd4bba00819410dc819d8cdfd307fbd775f59856d3ab1b940eb545",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3299",
+      "state": "blocked",
+      "sourceGlyph": "⚖️",
+      "sourceDigest": "sha256:aef1a0543640205e0917746c47bc7f213b87d41c138a6b876af74ac7af83995f",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Accept D921 and the candidate packet, and adopt the boundary-finding review convergence rule with delegated register-owner acceptance?"
     }
   ]
 }
