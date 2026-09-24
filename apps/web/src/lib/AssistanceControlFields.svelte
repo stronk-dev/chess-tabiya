@@ -29,13 +29,19 @@
     onChange,
   }: Props = $props();
 
+  const uid = $props.id();
+  const evidenceNoteId = `assistance-evidence-ceiling-${uid}`;
+  let evidenceWithheld = $derived(!disabled && (permissions.boardLighting !== "evidence" || permissions.arrows !== "evidence"));
+  const lockedNoteId = `assistance-locked-${uid}`;
+  let lockedWithoutReason = $derived(!disabled && describedBy === undefined && lockedReasonId === undefined && Object.values(permissions).includes("locked_off"));
+
   function blocked(field: AssistanceField): boolean {
     return disabled || permissions[field] === "locked_off";
   }
 
   function reason(field: AssistanceField): string | undefined {
     if (describedBy !== undefined) return describedBy;
-    if (permissions[field] === "locked_off") return lockedReasonId;
+    if (permissions[field] === "locked_off") return lockedReasonId ?? lockedNoteId;
     if (field === "voice" && capabilities?.providers.llm !== "external") return externalVoiceReasonId;
     return undefined;
   }
@@ -51,14 +57,14 @@
       <option value="off">Off</option>
       <option value="legal">Legal moves</option>
       <option value="sight">Structural sight</option>
-      <option value="evidence" disabled={!disabled && permissions.boardLighting !== "evidence"}>Disclosed evidence</option>
+      <option value="evidence" disabled={!disabled && permissions.boardLighting !== "evidence"} aria-describedby={!disabled && permissions.boardLighting !== "evidence" ? evidenceNoteId : undefined}>Disclosed evidence</option>
     </select>
   </label>
   <label>Arrows
     <select value={config.arrows} disabled={disabled} aria-describedby={reason("arrows")} onchange={(event) => update("arrows", event.currentTarget.value as AssistanceConfig["arrows"])}>
       <option value="off">Off</option>
       <option value="sight">Structural sight</option>
-      <option value="evidence" disabled={!disabled && permissions.arrows !== "evidence"}>Disclosed evidence</option>
+      <option value="evidence" disabled={!disabled && permissions.arrows !== "evidence"} aria-describedby={!disabled && permissions.arrows !== "evidence" ? evidenceNoteId : undefined}>Disclosed evidence</option>
     </select>
   </label>
   <label><input type="checkbox" checked={config.markers === "live"} disabled={blocked("markers")} aria-describedby={reason("markers")} onchange={(event) => update("markers", event.currentTarget.checked ? "live" : "off")} /> Passive markers</label>
@@ -74,6 +80,8 @@
     </select>
   </label>
   <label><input type="checkbox" checked={config.ambient === "on"} disabled={blocked("ambient")} aria-describedby={reason("ambient")} onchange={(event) => update("ambient", event.currentTarget.checked ? "on" : "off")} /> Ambient presence</label>
+  {#if lockedWithoutReason}<p id={lockedNoteId} class="honest">Switches this workflow never offers stay off here.</p>{/if}
+  {#if evidenceWithheld}<p id={evidenceNoteId} class="honest">Disclosed evidence is not offered to you here; structural sight is the ceiling.</p>{/if}
 </div>
 
 <style>

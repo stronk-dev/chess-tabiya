@@ -24,7 +24,7 @@ describe("pivotal marker consumer boundary", () => {
 
     const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 1 }, items);
     expect(consumePivotalMarkers(view)).toEqual(items.map((item) => item.payload));
-    const free = { sessionKind: "position" as const, workflowContext: "position" as const, deliveryOpen: true, role: "solo" as const, seatedInContest: false, reviewing: false };
+    const free = { workflowContext: "position" as const, deliveryOpen: true, role: "solo" as const, seatedInContest: false, reviewing: false };
     expect(pivotalMarkerEvidence(queen, branchId, free).map((marker) => marker.kind)).toEqual(["irreversibility"]);
     if (false) {
       // @ts-expect-error Marker delivery rejects a bare marker list.

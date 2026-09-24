@@ -12,6 +12,12 @@ import {
   feedbackDeliveryOpen,
   historyFrom,
   permittedAssistance,
+  AssistanceExchangeError,
+  MODULE_SOURCE_AUTHORITY,
+  compileAuthoritativeAssistance,
+  finalizeAssistanceEffects,
+  parseRequestedAssistanceV1,
+  serverAvailabilityFromProviders,
   comparisonNarrative,
   comparisonStrips,
   suggestTitle,
@@ -118,7 +124,6 @@ function invalid(message: string): ServerError {
 
 function requireGuidanceDisclosure(access: GuidanceAccess): void {
   const permission = permittedAssistance({
-    sessionKind: access.run.sessionKind,
     workflowContext: access.workflowContext,
     deliveryOpen: feedbackDeliveryOpen(access.run),
     role: access.role,
@@ -698,7 +703,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -1412,7 +1417,7 @@ export function createRestHandler(
           throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
-        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
+        const permission = permittedAssistance({ workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.humanSplit === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution is withheld in this context");
         const available = await capabilities.get();
         if (available.providers.opponent === "none") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
@@ -1431,7 +1436,7 @@ export function createRestHandler(
       if (request.method === "GET" && route.action === "corpus") {
         if (corpusSource === undefined) throw new ServerError("CORPUS_UNAVAILABLE", "Corpus evidence is unavailable");
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
-        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
+        const permission = permittedAssistance({ workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.corpus === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Corpus evidence is withheld in this context");
         const authored = access.pack === undefined
           ? access.run.opponentPolicy
@@ -1470,6 +1475,21 @@ export function createRestHandler(
       }
 
       const value = await parseBody(request);
+      if (route.action === "assistance") {
+        // rfc/intent-presets.md §5.1: stage 1 in, stages 2+3 out. Context, access and provider
+        // state are re-derived here; the browser's request is untrusted intent only.
+        requireJson(request);
+        const authority = service.assistanceAuthority(route.runId, principal);
+        const providers = capabilities === undefined ? { opponent: "none", judge: "none", llm: "none", corpus: "none", tts: "none", tablebase: "none" } : (await capabilities.get()).providers;
+        const availability = serverAvailabilityFromProviders(providers);
+        try {
+          const authoritative = compileAuthoritativeAssistance(parseRequestedAssistanceV1(value), { origin: authority.origin, access: authority.access, availability });
+          return json(200, { assistance: finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability }) });
+        } catch (error) {
+          if (error instanceof AssistanceExchangeError) throw invalid(error.message);
+          throw error;
+        }
+      }
       if (route.action === "deletion-preview") {
         requireJson(request);
         closedRecord(value, "/", []);

@@ -58,31 +58,39 @@ shape is currently:
 }
 ```
 
-Six contexts start from `SILENT_ASSISTANCE`; its rules-tier `boardLighting: "legal"` is the
-single named exception to literal off. The `immediate_guard` on-ramp differs only by starting
-named-pattern guidance live. A stored preference remains authoritative as a whole, so an explicit
-on-ramp `guided: "off"` is never overwritten by that fallback. Preferences live in `localStorage`; they are not events,
-run fields, or server-side learner state. A profile selects what the learner asked for, never
-what the viewer may receive. The shared `permittedAssistance` function separately projects that
-permission ceiling and guards the server-owned human-split and corpus seams. A human split is
-unavailable while a run's feedback-delivery window is closed and to live participants or
-spectators. Markers and named-pattern guidance are client projections of data the viewer already
-holds, so pretending to withhold them server-side would be theatre.
+Preferences live in `localStorage`; they are not events, run fields, or server-side learner
+state. A preference selects what the learner asked for, never what the viewer may receive.
+`permittedAssistance` is the pointwise minimum of `accessPermission` (delivery window, role,
+contest seat, reviewing grant) and the workflow context's literal `configClamp`, and it guards the
+server-owned human-split and corpus seams. A human split is unavailable while a run's
+feedback-delivery window is closed, to live participants or spectators, and in any context whose
+module ceiling excludes the full inspector (Match, Academy, On-ramp).
 
-### Workflow preset foundation
+### Intent presets (rfc/intent-presets.md, Checkpoint A)
 
-The preset foundation names seven workflow contexts and five candidate learner intents: Quiet,
-Guide me, Theory only, Support, and Analyze. Their declared module sets close over all eleven
-registered learner modules, while the context matrix admits 24 of the 35 context/preset pairs
-and refuses the remaining 11. `deriveWorkflowContext` is shared by client and server, gives the
-on-ramp precedence, and keeps Academy distinct from an ordinary pack. Preset choices use the
-separate `tabiya.workflow.v1.<context>` local-storage namespace; they do not overwrite the raw
-v4 assistance preference.
+Eight workflow contexts × five candidate presets (Quiet, Guide me, Theory only, Support, Analyze)
+admit 28 pairs and refuse 12. Each preset carries a literal nine-field `config` projection and each
+context a literal nine-field `configClamp`; `assertPresetFoundation` re-derives both tables from the
+per-module presentation facts at import time. Those facts are transcribed from
+`learner-modules` §4 until `module-registration` lands a sealed registry. Quiet's projection is
+`SILENT_ASSISTANCE` byte-for-byte. Unset preferences default per context: Quiet for Just Play,
+drills, imports, matches and streams; Guide me for Academy, On-ramp and Campaign.
 
-This is a foundation checkpoint, not the active preset UI. The accepted RFC does not yet state
-the exact nine-field `AssistanceConfig` projection for each preset or the literal seven-row
-configuration clamp. D971 blocks the final compiler, preset pill, and footer until those tables
-are amended and reviewed; the implementation does not guess them.
+The learner's choice is one v2 receipt per context at `tabiya.workflow.v2.<context>`:
+`unset | explicit | migrated_snapshot | invalid_fallback`. The v1 workflow and assistance keys are
+read-only migration inputs. The first load seals the same intent arm, and nothing writes v1 any
+more. Choosing a named preset clears module deltas and keeps only explicit field choices no
+higher than the new projection. A raw field above the projection, a module include/exclude, or a
+migrated snapshot makes the workflow **Custom**.
+
+Compilation is staged. The browser builds a digest-bound `RequestedAssistanceV1` and posts it to
+`POST /runs/:id/assistance`. There, the server re-derives context and access, then compiles
+modules, config, effects, typed suppressions and the D1639 hint ceiling (marked proposed). It
+finalizes against the module source authority, recording `MODULE_AUTHORITY_NOT_ACCEPTED` while the
+module artifacts are requirements-only. The browser strict-parses the result and may only narrow
+browser speech. While the query is pending or unavailable, the run renders the silent floor. Campaign
+requests fail with `CONTEXT_DECLARED_AWAITING` until campaign-core exports its encounter receipt.
+No module renders through `compiled.modules` yet (Checkpoint B).
 
 `guided` owns the named-shape timeline channel and its attributed `ShapePanel`; `markers` owns the
 separate pivotal-moment channel. The two controls do not depend on each other. When guidance is

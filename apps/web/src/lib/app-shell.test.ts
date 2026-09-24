@@ -3,7 +3,7 @@
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { REVIEW_MAP_CONVENTION, SILENT_ASSISTANCE, commitMove, createRun, fork as forkRun, rewind as rewindRun } from "@chess-tabiya/runtime";
+import { REVIEW_MAP_CONVENTION, commitMove, createRun, fork as forkRun, rewind as rewindRun } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -33,7 +33,8 @@ import type {
   DeletionPreview,
   Learner,
 } from "./api.js";
-import { saveAssistance } from "./assistance-preference.js";
+import { saveWorkflowPreference } from "./assistance-preference.js";
+import { setPreferenceField } from "@chess-tabiya/runtime";
 import { HistoryRouter } from "./router.js";
 import { WriterSession, writerStorageKey, type KeyValueStorage } from "./writer-session.js";
 import { botRosterFixture } from "./bot-roster.test-support.js";
@@ -287,7 +288,7 @@ describe("application shell", () => {
     document.body.replaceChildren();
 
     const personaStorage = new MemoryStorage();
-    saveAssistance("imported", { ...SILENT_ASSISTANCE, voice: "persona" }, personaStorage);
+    saveWorkflowPreference("imported", setPreferenceField("imported", { kind: "unset" }, "voice", "persona"), personaStorage);
     const persona = mount(App, { target: target(), props: { api: storyApi, router: new HistoryRouter(window), storage: personaStorage } });
     const narrate = await vi.waitFor(() => {
       const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Explain this moment");

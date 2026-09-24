@@ -94,7 +94,7 @@
   import { repertoireEntryDecision } from "./lib/repertoire-entry.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
-  import { loadAssistance } from "./lib/assistance-preference.js";
+  import { loadWorkflowPreference, requestedAssistanceConfig } from "./lib/assistance-preference.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
   import { importFailureCopy } from "./lib/import-presentation.js";
   import { assertFlipResponse } from "./lib/flip-response.js";
@@ -2582,6 +2582,7 @@
         onSaveMarks={api.replaceMarks === undefined ? undefined : (input) => api.replaceMarks!(session.runState!.run.id, input)}
         onRescopeMarks={api.rescopeMarks === undefined ? undefined : (input) => api.rescopeMarks!(session.runState!.run.id,input)}
         onStop={() => navigate("/play")}
+        onAssistanceQuery={api.assistance === undefined ? undefined : (request) => api.assistance!(session.runState!.run.id, request)}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
         onNudge={api.nudge === undefined ? undefined : (nodeId) => api.nudge!(session.runState!.run.id, nodeId)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
@@ -2631,7 +2632,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={capabilities?.providers.llm === "external" && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

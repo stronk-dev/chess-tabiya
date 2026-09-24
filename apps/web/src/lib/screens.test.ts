@@ -14,9 +14,17 @@ import {
   revealFeedback,
   rewind,
   transitionObjective,
+  MODULE_SOURCE_AUTHORITY,
+  compileAuthoritativeAssistance,
+  finalizeAssistanceEffects,
+  serverAvailabilityFromProviders,
   type DrillRun,
+  type FinalizedAssistanceV1,
+  type OrdinaryWorkflowContextOrigin,
+  type RequestedAssistanceV1,
   type RunMark,
 } from "@chess-tabiya/runtime";
+import type { ComponentProps } from "svelte";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -51,7 +59,35 @@ import type {
   RegisterKeyboardRegion,
 } from "./keyboard.js";
 import { latestCheckpoint } from "./screen-model.js";
-import { assistanceKey, workflowKey } from "./assistance-preference.js";
+import { workflowPreferenceKey } from "./assistance-preference.js";
+
+const assistanceKey = (context: string): string => `tabiya.assistance.v1.${context}`;
+const workflowKey = (context: string): string => `tabiya.workflow.v1.${context}`;
+
+/** Test double for the server stage (rest.ts `POST /runs/:id/assistance`): same runtime functions, permissive host access. */
+const TEST_ORIGINS: Readonly<Record<string, OrdinaryWorkflowContextOrigin>> = {
+  pack: { sessionKind: "pack", feedbackPolicy: "attempt_end" },
+  position: { sessionKind: "position", feedbackPolicy: "attempt_end" },
+  imported: { sessionKind: "imported", feedbackPolicy: "attempt_end" },
+  onramp: { sessionKind: "pack", feedbackPolicy: "immediate_guard" },
+  match: { sessionKind: "position", feedbackPolicy: "attempt_end", liveKind: "match" },
+  stream: { sessionKind: "position", feedbackPolicy: "attempt_end", liveKind: "stream" },
+  academy: { sessionKind: "position", feedbackPolicy: "attempt_end", liveKind: "academy" },
+};
+async function testAssistanceAuthority(request: RequestedAssistanceV1): Promise<FinalizedAssistanceV1> {
+  const availability = serverAvailabilityFromProviders({ opponent: "mock", judge: "mock", llm: "external", corpus: "mock", tts: "external", tablebase: "none" });
+  const authoritative = compileAuthoritativeAssistance(request, { origin: TEST_ORIGINS[request.contextHint]!, access: { deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }, availability });
+  return finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability });
+}
+function explicitPreference(preset: string, overrides: Record<string, string> = {}): string {
+  return JSON.stringify({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset, overrides, moduleOverrides: { include: [], exclude: [] } } });
+}
+async function assistanceSettled(): Promise<void> {
+  await vi.waitFor(() => expect(document.querySelector("[data-preset-state]")?.getAttribute("data-preset-state")).toBe("ready"));
+}
+function mountDrill(options: { readonly target: HTMLElement; readonly props: ComponentProps<typeof DrillScreen> }) {
+  return mount(DrillScreen, { target: options.target, props: { onAssistanceQuery: testAssistanceAuthority, ...options.props } });
+}
 import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
@@ -232,7 +268,7 @@ describe("Layer 3 screens", () => {
     run = reachCheckpoint(run, "internal-stop", at).run;
     const withoutLabel = { ...pack, checkpoints: [{ id: "internal-stop", trigger: { atPly: 1 } }] } as DrillPackDefinition;
     const checkpoint = latestCheckpoint(withoutLabel, run);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack: withoutLabel,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       checkpoint,
@@ -277,7 +313,7 @@ describe("Layer 3 screens", () => {
     const run = branchedRun();
     const onCompare = vi.fn();
     const onFirstRehearsalComplete = vi.fn();
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       firstRehearsal: true,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -318,7 +354,7 @@ describe("Layer 3 screens", () => {
     run = commitMove(run, "c1e3", { actor: "system", at }).run;
     run = commitMove(run, "e7e6", { actor: "system", at }).run;
     const onSimulate = vi.fn();
-    let component = mount(DrillScreen, { target: target(), props: {
+    let component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -344,7 +380,7 @@ describe("Layer 3 screens", () => {
     };
     const onEnterSimulation = vi.fn(async () => true);
     const onCloseSimulation = vi.fn();
-    component = mount(DrillScreen, { target: target(), props: {
+    component = mountDrill({ target: target(), props: {
       pack,
       simulation,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -388,7 +424,7 @@ describe("Layer 3 screens", () => {
     let settle!: (accepted: boolean) => void;
     const onEnterSimulation = vi.fn(() => new Promise<boolean>((resolve) => { settle = resolve; }));
     const onCloseSimulation = vi.fn();
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       simulation,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -436,7 +472,7 @@ describe("Layer 3 screens", () => {
     run = commitMove(run, "e7e6", { actor: "system", at }).run;
     let settle!: (accepted: boolean) => void;
     const onSimulate = vi.fn(() => new Promise<boolean>((resolve) => { settle = resolve; }));
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -470,7 +506,7 @@ describe("Layer 3 screens", () => {
     vi.useFakeTimers();
     const run = branchedRun();
     const onSaveMarks = vi.fn(() => new Promise<never>(() => {}));
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
       onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
@@ -504,7 +540,7 @@ describe("Layer 3 screens", () => {
     const onSaveMarks = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockImplementationOnce(() => second.promise);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
       onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
@@ -551,7 +587,7 @@ describe("Layer 3 screens", () => {
     const onSaveMarks = vi.fn()
       .mockRejectedValueOnce(new Error("sqlite write failed at /private/data"))
       .mockResolvedValueOnce(persisted);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
       onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
@@ -596,7 +632,7 @@ describe("Layer 3 screens", () => {
     const onRescopeMarks = vi.fn()
       .mockRejectedValueOnce(new Error("private rescope detail"))
       .mockResolvedValueOnce([branchMark]);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
       onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
@@ -631,7 +667,7 @@ describe("Layer 3 screens", () => {
     const onRewind = vi.fn();
     const onFork = vi.fn();
     const onCreateGroup = vi.fn();
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind, onFork, onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
@@ -677,7 +713,7 @@ describe("Layer 3 screens", () => {
         run,
         group: { sourceNodeId: run.activeCursor.nodeId },
       } as unknown as import("./api.js").CreateGroupResult);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -729,7 +765,7 @@ describe("Layer 3 screens", () => {
       run: { ...run, id: "crossed-run" },
       group: { sourceNodeId: run.activeCursor.nodeId },
     } as unknown as import("./api.js").CreateGroupResult);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -764,7 +800,7 @@ describe("Layer 3 screens", () => {
     const onFork = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork, onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -810,7 +846,7 @@ describe("Layer 3 screens", () => {
     const onContinueCheckpoint = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       checkpoint,
@@ -847,7 +883,7 @@ describe("Layer 3 screens", () => {
     const onRewind = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind, onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -884,7 +920,7 @@ describe("Layer 3 screens", () => {
     const onRewind = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       checkpoint,
@@ -920,7 +956,7 @@ describe("Layer 3 screens", () => {
     const onCompare = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       checkpoint,
@@ -956,7 +992,7 @@ describe("Layer 3 screens", () => {
     const onCompare = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare,
@@ -990,17 +1026,19 @@ describe("Layer 3 screens", () => {
     const assistanceStorage = { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } };
     const capabilities = { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities;
     const onVoice = vi.fn(async () => ({ text: "Recorded reading at this position: fixture fact.", source: "provider" as const, scope: "marker" as const }));
-    const component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, capabilities, onVoice, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion } });
-    await tick();
-    expect(document.querySelector(".pivotal-marker")).not.toBeNull();
+    const component = mountDrill({ target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, capabilities, onVoice, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion } });
+    await vi.waitFor(() => expect(document.querySelector(".pivotal-marker")).not.toBeNull());
+    // A stale tab's legacy write is not an authority any more (rfc/intent-presets.md §5.3).
     preferences.set(assistanceKey("position"), JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }));
     globalThis.dispatchEvent(new StorageEvent("storage", { key: assistanceKey("position") }));
     await tick();
-    expect(document.querySelector(".pivotal-marker")).toBeNull();
-    preferences.set(assistanceKey("position"), JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }));
-    globalThis.dispatchEvent(new StorageEvent("storage", { key: assistanceKey("position") }));
-    await tick();
     expect(document.querySelector(".pivotal-marker")).not.toBeNull();
+    preferences.set(workflowPreferenceKey("position"), explicitPreference("quiet", { markers: "off", voice: "persona" }));
+    globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("position") }));
+    await vi.waitFor(() => expect(document.querySelector(".pivotal-marker")).toBeNull());
+    preferences.set(workflowPreferenceKey("position"), explicitPreference("quiet", { markers: "live", voice: "persona" }));
+    globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("position") }));
+    await vi.waitFor(() => expect(document.querySelector(".pivotal-marker")).not.toBeNull());
     expect(document.querySelector('.guidance-panel[role="dialog"]')).toBeNull();
     document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click(); await tick();
     expect(document.querySelector(".guidance-panel")?.textContent).toContain("This move changed something concrete");
@@ -1013,7 +1051,7 @@ describe("Layer 3 screens", () => {
     await vi.waitFor(() => expect([...document.querySelectorAll("p")].filter((element) => element.textContent === RECORDED_READING_GUARD)).toHaveLength(1));
     const checkbox = document.querySelector<HTMLInputElement>('.assistance-grid input[type="checkbox"]')!;
     checkbox.click(); await tick();
-    expect(document.querySelector(".pivotal-marker")).toBeNull();
+    await vi.waitFor(() => expect(document.querySelector(".pivotal-marker")).toBeNull());
     document.querySelector<HTMLButtonElement>(".inspector-surface header button")!.click(); await tick();
     await unmount(component);
   });
@@ -1039,10 +1077,10 @@ describe("Layer 3 screens", () => {
       source: "provider" as const,
       scope,
     }));
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       capabilities: { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
-      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onVoice,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
@@ -1087,14 +1125,14 @@ describe("Layer 3 screens", () => {
       if (onVoice.mock.calls.length === 2) return readingResponse;
       return Promise.resolve({ text: "crossed-scope payload", source: "provider" as const, scope: scope === "reading" ? "marker" as const : "reading" as const });
     });
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       capabilities: { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
-      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onVoice,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
-    await tick();
+    await vi.waitFor(() => expect(document.querySelector(".pivotal-marker")).not.toBeNull());
     document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click();
     await tick();
     document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click();
@@ -1134,10 +1172,10 @@ describe("Layer 3 screens", () => {
       createdAt: at,
     });
     const onSpeech = vi.fn().mockRejectedValue(new Error("tts endpoint detail"));
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       capabilities: { providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "none", tts: "external", tablebase: "none" } } as Capabilities,
-      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "provider", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "provider", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onSpeech,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
@@ -1164,15 +1202,15 @@ describe("Layer 3 screens", () => {
       createdAt: at,
     });
     const assistanceStorage = {
-      getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "on" }),
+      getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "on" }),
       setItem: vi.fn(),
     };
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
-    await tick();
+    await vi.waitFor(() => expect(document.querySelector('button[aria-label="Open assistance"]')).not.toBeNull());
 
     const ambient = document.querySelector<HTMLButtonElement>('button[aria-label="Open assistance"]')!;
     const tabs = [...document.querySelectorAll<HTMLButtonElement>(".compact-tabs button:not(.sheet-close)")];
@@ -1211,7 +1249,7 @@ describe("Layer 3 screens", () => {
       getItem: (key: string) => preferences.get(key) ?? null,
       setItem: (key: string, value: string) => { preferences.set(key, value); },
     };
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -1219,18 +1257,129 @@ describe("Layer 3 screens", () => {
     await tick();
 
     const selector = document.querySelector<HTMLDetailsElement>("details.assistance-control")!;
+    // The pill shows the learner's requested style at once; the promise waits for the compiled truth.
     expect(selector.querySelector("summary")?.getAttribute("aria-label")).toBe("Support style: Support");
     expect(selector.querySelector(".preset-pill")?.textContent).toBe("Support");
     const promise = "Staged-move risk warnings, on request, before you commit. Never the best move.";
-    expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain(promise);
+    await vi.waitFor(() => expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain(promise));
     expect(selector.querySelectorAll('input[type="checkbox"]')).toHaveLength(0);
+    // Support activates its modules: the ambient opener and lit sight are on without any raw switch.
+    expect(document.querySelector('button[aria-label="Open assistance"]')).not.toBeNull();
 
-    preferences.set(workflowKey("position"), JSON.stringify({ version: 1, preset: "theory_only" }));
-    globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowKey("position") }));
-    await tick();
-    expect(selector.querySelector("summary")?.getAttribute("aria-label")).toBe("Support style: Theory only");
-    expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain("no evaluation, no candidates, no line");
+    preferences.set(workflowPreferenceKey("position"), explicitPreference("theory_only"));
+    globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("position") }));
+    await vi.waitFor(() => expect(selector.querySelector("summary")?.getAttribute("aria-label")).toBe("Support style: Theory only"));
+    await vi.waitFor(() => expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain("no evaluation, no candidates, no line"));
     await unmount(component);
+  });
+
+  it("delivers the Post-commit Nudge only through the compiled effect, never retroactively on a preset raise (Checkpoint B, criterion 9)", async () => {
+    const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const initial = createRun({ id: "nudge-seat", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    const run = revealFeedback(commitMove(initial, "e2e4", { at }).run, at).run;
+    const moveNodeId = run.nodes.find((node) => node.moveUci === "e2e4")!.id;
+    const onNudge = vi.fn(async (nodeId: string) => ({ runId: run.id, kind: "packet" as const, nodeId, facts: [{ projection: "rules.fixture.fact@1", sentence: "Fixture consequence.", source: "fixture" }], headline: "After e4", closing: "Try the other idea.", receipt: { offered: 1, admitted: 1, afterReducers: 1, noveltyAbstained: false } }));
+    const mountWith = (entries: readonly (readonly [string, string])[]) => {
+      const preferences = new Map<string, string>(entries);
+      return mountDrill({ target: target(), props: {
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onNudge,
+        assistanceStorage: { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } },
+        onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+        onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+    };
+    const seat = () => document.querySelector('[data-module="postcommit_nudge"]');
+
+    // Guided composes postcommit_nudge: the server-compiled effect admits the seat after disclosure opened.
+    let component = mountWith([[workflowPreferenceKey("position"), explicitPreference("guided")]]);
+    await vi.waitFor(() => expect(seat()?.textContent).toContain("Fixture consequence."));
+    expect(onNudge).toHaveBeenCalledWith(moveNodeId);
+    await unmount(component);
+    document.body.replaceChildren();
+    onNudge.mockClear();
+
+    // Guided with an explicit markers:"off" removes exactly the governed automatic effect.
+    component = mountWith([[workflowPreferenceKey("position"), explicitPreference("guided", { markers: "off" })]]);
+    await assistanceSettled();
+    expect(seat()).toBeNull();
+    expect(onNudge).not.toHaveBeenCalled();
+    await unmount(component);
+    document.body.replaceChildren();
+
+    // Quiet → Guided mid-run with no new learner move renders nothing new (criterion 9 arm a).
+    component = mountWith([]);
+    await assistanceSettled();
+    [...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')].find((input) => input.value === "guided")!.click();
+    await vi.waitFor(() => expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain("After you commit"));
+    await tick();
+    expect(onNudge).not.toHaveBeenCalled();
+    expect(seat()).toBeNull();
+    await unmount(component);
+  });
+
+  it("activates each preset's modules from the pill, offers only allowed presets, and states suppressions (criteria 2, 7, 16)", async () => {
+    const make = (id: string, liveKind?: "match" | "academy") => ({ run: createRun({
+      id,
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"4".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    }), liveKind });
+    const preferences = new Map<string, string>();
+    const assistanceStorage = { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } };
+    const queries: RequestedAssistanceV1[] = [];
+    const onAssistanceQuery = (request: RequestedAssistanceV1) => { queries.push(request); return testAssistanceAuthority(request); };
+    const { run } = make("preset-activation");
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, onAssistanceQuery,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    const footer = () => document.querySelector('[aria-label="Active support promise"]')?.textContent ?? "";
+    await vi.waitFor(() => expect(footer()).toContain("no chess guidance appears unless you ask"));
+    expect(document.querySelector('button[aria-label="Open assistance"]')).toBeNull();
+    const options = [...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')];
+    expect(options.map((input) => input.value)).toEqual(["quiet", "guided", "theory_only", "support", "analysis"]);
+    expect(options.find((input) => input.value === "quiet")?.checked).toBe(true);
+
+    // Guided: the ambient opener (on_request modules) and the named-pattern / marker effects turn on.
+    options.find((input) => input.value === "guided")!.click();
+    await vi.waitFor(() => expect(footer()).toContain("After you commit, a small consequence nudge"));
+    expect(document.querySelector('button[aria-label="Open assistance"]')).not.toBeNull();
+    expect(JSON.parse(preferences.get(workflowPreferenceKey("position"))!).intent).toEqual({ kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } });
+    expect([...preferences.keys()].filter((key) => key.includes(".v1."))).toEqual([]);
+    expect(queries.at(-1)?.preference).toEqual({ kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } });
+
+    // Advanced stays complete: a raw field above Guided's projection is visibly Custom, never "Guide me".
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
+    await tick();
+    const advanced = document.querySelector<HTMLElement>('[aria-label="Advanced support controls"]')!;
+    const lighting = advanced.querySelector<HTMLSelectElement>(".assistance-fields select")!;
+    expect(lighting.value).toBe("sight");
+    lighting.value = "evidence";
+    lighting.dispatchEvent(new Event("change", { bubbles: true }));
+    await vi.waitFor(() => expect(document.querySelector(".preset-pill")?.textContent).toBe("Custom"));
+    expect(advanced.querySelectorAll('.module-toggles input[type="checkbox"]')).toHaveLength(10);
+    const inspectorToggle = [...advanced.querySelectorAll<HTMLInputElement>('.module-toggles input[type="checkbox"]')].find((input) => input.parentElement?.textContent?.includes("Full inspector"))!;
+    expect(inspectorToggle.checked).toBe(false);
+    inspectorToggle.click();
+    await vi.waitFor(() => expect(JSON.parse(preferences.get(workflowPreferenceKey("position"))!).intent.moduleOverrides).toEqual({ include: ["full_inspector"], exclude: [] }));
+    await unmount(component);
+    document.body.replaceChildren();
+
+    // Match: only Quiet is offered and wider stored intent is stated as a context suppression.
+    const matchRun = make("preset-match").run;
+    preferences.set(workflowPreferenceKey("match"), explicitPreference("quiet", { arrows: "sight" }));
+    const match = mountDrill({ target: target(), props: {
+      snapshot: { run: matchRun, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, liveSessionKind: "match",
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await vi.waitFor(() => expect(footer()).toContain("Arrows is limited to off in a match."));
+    expect(footer()).not.toContain("no chess guidance appears unless you ask");
+    expect([...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')].map((input) => input.value)).toEqual(["quiet"]);
+    await unmount(match);
   });
 
   it("keeps individual evidence controls out of the ordinary Support menu", async () => {
@@ -1242,7 +1391,7 @@ describe("Layer 3 screens", () => {
       seed: 1,
       createdAt: at,
     });
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -1295,10 +1444,10 @@ describe("Layer 3 screens", () => {
       candidates: [{ moveUci: "e1e2", mass: .4, rank: 1 }],
     }));
     const assistanceStorage = {
-      getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }),
+      getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }),
       setItem: vi.fn(),
     };
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
@@ -1355,9 +1504,9 @@ describe("Layer 3 screens", () => {
         population: { source: "lichess-explorer" as const, ratings: [1600], speeds: ["rapid"], since: "2020-01", until: "2026-09" },
       },
     }));
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
-      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "on_request", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "on_request", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       capabilities: { providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "none" } } as Capabilities,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
@@ -1384,22 +1533,24 @@ describe("Layer 3 screens", () => {
     const session = (fen: string) => ({ kind: "position" as const, start: { fen, side: "white" as const }, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } });
     const props = (run: DrillRun) => ({
       snapshot: { run, access: "writer" as const, pendingEvidence: 0, withheld: false },
-      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     });
 
     const castleRoot = createRun({ id: "live-castle", session: session("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"), sessionDigest: `sha256:${"d".repeat(64)}`, policyConfig: config, seed: 1, createdAt: at });
     const castle = commitMove(castleRoot, "e1g1", { at }).run;
-    let component = mount(DrillScreen, { target: target(), props: props(castle) });
+    let component = mountDrill({ target: target(), props: props(castle) });
     await tick();
+    await assistanceSettled();
     expect(document.querySelectorAll(".pivotal-marker")).toHaveLength(0);
     await unmount(component);
     document.body.replaceChildren();
 
     const queenRoot = createRun({ id: "live-queens-off", session: session("4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1"), sessionDigest: `sha256:${"e".repeat(64)}`, policyConfig: config, seed: 1, createdAt: at });
     const queen = commitMove(queenRoot, "e2e7", { at }).run;
-    component = mount(DrillScreen, { target: target(), props: props(queen) });
+    component = mountDrill({ target: target(), props: props(queen) });
     await tick();
+    await assistanceSettled();
     expect(document.querySelectorAll(".pivotal-marker")).toHaveLength(1);
     document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click();
     await tick();
@@ -1417,12 +1568,13 @@ describe("Layer 3 screens", () => {
       sessionDigest: `sha256:${"b".repeat(64)}`,
       policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at,
     });
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, shapes: [carlsbad],
-      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
     await tick();
+    await assistanceSettled();
     expect(document.body.textContent).toContain("Nothing is authored about this position — Tabiya reads it as you play");
     const marker = document.querySelector<HTMLButtonElement>(".shape-marker")!;
     expect(marker.textContent).toContain("Carlsbad structure");
@@ -1457,7 +1609,7 @@ describe("Layer 3 screens", () => {
     });
     const onReveal = vi.fn();
     const shared = { onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion };
-    let component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
+    let component = mountDrill({ target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
     await tick();
     const reveal = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Show support for this position")!;
     expect(reveal.disabled).toBe(false);
@@ -1470,7 +1622,7 @@ describe("Layer 3 screens", () => {
     await unmount(component);
 
     document.body.replaceChildren();
-    component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
+    component = mountDrill({ target: target(), props: { snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
     await tick();
     expect(document.body.textContent).not.toContain("Show support for this position");
     await unmount(component);
@@ -1485,7 +1637,7 @@ describe("Layer 3 screens", () => {
       seed: 1,
       createdAt: at,
     });
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -1508,7 +1660,7 @@ describe("Layer 3 screens", () => {
     const capabilities = {
       providers: { opponent: "mock", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "none" },
     } as Capabilities;
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       capabilities,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -1541,7 +1693,7 @@ describe("Layer 3 screens", () => {
     const onAnalyzeMissing = vi.fn()
       .mockRejectedValueOnce(new Error("provider transport detail"))
       .mockResolvedValueOnce(false);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       capabilities: { providers: { opponent: "mock", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -1572,7 +1724,7 @@ describe("Layer 3 screens", () => {
     const onAnalyzeMissing = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -1647,7 +1799,7 @@ describe("Layer 3 screens", () => {
       .mockImplementationOnce(() => rewindAttempt.promise)
       .mockResolvedValueOnce(true);
     const onScheduleReturn = vi.fn(async () => true);
-    const component = mount(DrillScreen, {
+    const component = mountDrill({
       target: target(),
       props: {
         pack: terminalPack,
@@ -1821,7 +1973,7 @@ describe("Layer 3 screens", () => {
     const relatedPack = { ...structuredClone(pack), id: "related-pack", title: "Bishop and knight mate" };
     const run = createRun({ id: "variant-run", packId: related.id, packDigest: `sha256:${"b".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: related.start.fen, seed: 1, createdAt: at });
     const onSelectPack = vi.fn();
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack: related,
       relatedPack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -1845,7 +1997,7 @@ describe("Layer 3 screens", () => {
       start: { ...pack.start, fen: "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1", side: "black" as const },
     };
     const run = createRun({ id: "root-after-move-run", packId: related.id, packDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: related.start.fen, seed: 1, createdAt: at });
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack: related,
       relatedPack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -1863,7 +2015,7 @@ describe("Layer 3 screens", () => {
     const run = branchedRun();
     const checkpoint = latestCheckpoint(pack, run)!;
     const onRewind = vi.fn();
-    const component = mount(DrillScreen, {
+    const component = mountDrill({
       target: target(),
       props: {
         pack,
@@ -2053,7 +2205,7 @@ describe("Layer 3 screens", () => {
         admitted: true,
         shortfall: false,
       })])))));
-    const component = mount(DrillScreen, { target: target(), props: {
+    const component = mountDrill({ target: target(), props: {
       pack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
@@ -2415,7 +2567,7 @@ describe("Layer 3 screens", () => {
       .mockImplementationOnce(() => secondCompare.promise);
     const onCloseCompare = vi.fn();
     const onExport = vi.fn();
-    const component = mount(DrillScreen, {
+    const component = mountDrill({
       target: target(),
       props: {
         pack,
@@ -2560,7 +2712,7 @@ describe("Layer 3 screens", () => {
     const onSwitchBranch = vi.fn()
       .mockImplementationOnce(() => first.promise)
       .mockResolvedValueOnce(true);
-    const component = mount(DrillScreen, {
+    const component = mountDrill({
       target: target(),
       props: {
         pack,
