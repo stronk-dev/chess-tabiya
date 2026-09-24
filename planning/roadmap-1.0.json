@@ -474,35 +474,35 @@
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Four durable migrations landed in register order today: longitudinal store (26), evidence jobs (27), concept registry (28) and bot-policy's run lane 0.18 (29), which stores the chosen bot profile and every bot decision with its provider deliveries so bots resume and rematch exactly. Campaign-core now holds the next position.",
+          "summary": "Five durable migrations landed in register order today — longitudinal store (26), evidence jobs (27), concept registry (28), bot run lane (29) and campaign-core (30) — so learner history, queued evidence, concept identity, chosen bots and campaign runs all survive restart, backup/restore and upgrade/rollback. Catalogue progression (31) and the social/clock lanes remain.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/bot-opponent-ply.test.ts",
-            "planning/bot-policy/implementation-receipt-2026-09-24-playable.md",
-            "rfc/bot-policy.md",
-            "rfc/bot-roster.md",
-            "rfc/opponent-experience.md"
+            "apps/server/src/campaign-storage.test.ts",
+            "planning/campaign/implementation-receipt-2026-09-24.md",
+            "rfc/campaign-core.md",
+            "rfc/campaign-boss-games.md",
+            "rfc/intent-presets.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "bot-policy.md",
-              "digest": "sha256:a65db5a0f082a3c56e55c4ab1f752fa46e194fb4b9d4e37af799c922dc222508"
+              "id": "campaign-core.md",
+              "digest": "sha256:d9b7f08ab1d65857b881d97f766e84bd1ff8e08989ed33458c163401d16160cd"
             },
             {
               "kind": "rfc",
-              "id": "bot-roster.md",
-              "digest": "sha256:f3b6cc6e7fe35ebe6db3019278c630a3d98226933f5b78fb1530f3cfb4d95b83"
+              "id": "campaign-boss-games.md",
+              "digest": "sha256:354479e91a0133881d1183e206448c6e546a1e87d4a5fb045cd71d2b50b01d8a"
             },
             {
               "kind": "rfc",
-              "id": "opponent-experience.md",
-              "digest": "sha256:84f2bc773bfa7fd5af4f1417ea670f876d8b1c630dd5625f404967f83e7c6876"
+              "id": "intent-presets.md",
+              "digest": "sha256:4f022f0fcf5bb604a757f39aa1754f2c4e472cbefc5b4304a8419a5358b4fa6f"
             },
             {
               "kind": "work_state",
-              "id": "D1610",
-              "digest": "sha256:40b950bf031f0aac48bd5604711a003dd660236a7df268d43a6bc6f008829cae"
+              "id": "D2991",
+              "digest": "sha256:0538e872b3ef7b98b15ef22efb071daccd9b5c0334f643cc815d163e4a786f92"
             }
           ]
         },
@@ -714,7 +714,8 @@
     ["story", "review", "live_but_inadequate"],
     ["live-session", "social_play", "live_but_inadequate"],
     ["live-overlay", "professional", "live_but_inadequate"],
-    ["campaign", "campaign", "missing"]
+    ["campaign", "campaign", "live"],
+    ["campaign-run", "campaign", "live"]
   ],
   "apiFamilies": [
     ["/auth", "account_data", "live"],
@@ -738,7 +739,7 @@
     ["/cohorts", "learner_model", "live"],
     ["/principles", "theory_content", "live"],
     ["/theory", "theory_content", "live"],
-    ["/campaign", "campaign", "missing"],
+    ["/campaign", "campaign", "live"],
     ["/healthz", "operations", "live_direct"]
   ]
 }

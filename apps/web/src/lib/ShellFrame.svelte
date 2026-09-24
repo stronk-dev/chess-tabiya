@@ -26,6 +26,7 @@
   const destinations = [
     ["Home", "/", "home"],
     ["Play", "/play", "play"],
+    ["Campaign", "/campaign", "campaign"],
     ["Learn", "/learn", "learn"],
     ["Review & import", "/review", "review"],
     ["Rating", "/rating", "rating"],
@@ -36,7 +37,7 @@
   ] as const;
 
   function active(name: string): boolean {
-    return route.name === name || (name === "play" && (route.name === "run" || route.name === "pack")) || (name === "library" && (route.name === "shape-entry" || route.name === "principle-entry" || route.name === "opening-entry")) || (name === "rating" && route.name === "profile") || (name === "review" && route.name === "story") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
+    return route.name === name || (name === "campaign" && route.name === "campaign-run") || (name === "play" && (route.name === "run" || route.name === "pack")) || (name === "library" && (route.name === "shape-entry" || route.name === "principle-entry" || route.name === "opening-entry")) || (name === "rating" && route.name === "profile") || (name === "review" && route.name === "story") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
   }
 
   let runStatus = $derived(

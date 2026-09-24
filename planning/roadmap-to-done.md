@@ -2056,14 +2056,14 @@ fresh review; receipt:
 | Create | Live; author tooling/parity incomplete | Theory/content |
 | Library | Live but wrong: duplicate listings, no theory/library workflow | Theory/content |
 | Settings | Live but primitive-first; presets/defaults/Advanced hierarchy incomplete | Support |
-| Campaign | **Missing** despite ruling and partial backend | Campaign |
+| Campaign | Live 2026-09-24: map, encounters, boss game, result and resume over a draft pilot; official campaign content and rated boss incomplete | Campaign |
 
 ### API families
 
 | State | Families |
 |---|---|
 | Production-routed | `/auth`, `/capabilities`, `/packs`, `/shapes`, `/principles`, `/runs`, `/progress`, `/repertoires`, `/classrooms`, `/assignments`, `/api/shared`, `/shared`, `/select-move`, `/sessions`, `/rated-games`, `/rating`, `/marks`, `/cohorts`; `/healthz` direct |
-| Required and missing | `/campaign` |
+| Required and missing | none (`/campaign` production-routed 2026-09-24) |
 
 This is a family inventory, not a completeness claim. Each capability exit names remaining verbs,
 authorization, errors, availability and journey proof.

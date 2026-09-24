@@ -277,7 +277,7 @@ describe("teacher-surface consent storage", () => {
     const deletes = source.match(/DELETE FROM run_grants/g)?.length ?? 0;
     const definitions = source.match(/CREATE TABLE run_grants|CREATE INDEX run_grants|columns\("run_grants"\)|ALTER TABLE run_grants/g)?.length ?? 0;
     expect({ references, readers: references - inserts - roleUpdates - deletes - definitions, writers: inserts + roleUpdates })
-      .toEqual({ references: 41, readers: 15, writers: 16 });
+      .toEqual({ references: 42, readers: 15, writers: 17 }); // +1 writer: the campaign encounter start (campaign-core §5.3)
 
     const classroomMigration = source.slice(
       source.lastIndexOf("#addClassroomTables"),

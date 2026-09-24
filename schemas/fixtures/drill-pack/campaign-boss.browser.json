@@ -1,0 +1,75 @@
+{
+  "id": "campaign-boss-browser-fixture",
+  "version": "0.1.0",
+  "title": "Campaign boss browser fixture",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1000,
+    "maxOnlineRapid": 2000,
+    "label": "Test fixture",
+    "branchLengthTarget": 4
+  },
+  "start": {
+    "fen": "rnb3k1/pppp1ppp/8/n6N/n1B5/B2Q4/PPP2PPP/4R2K w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "play_until_checkpoint",
+    "summary": "Exercise the campaign boss-game route without making a chess claim."
+  },
+  "spine": [
+    {
+      "id": "kg1",
+      "moveUci": "h1g1",
+      "moveSan": "Kg1",
+      "children": [
+        {
+          "id": "a6",
+          "moveUci": "a7a6",
+          "moveSan": "a6",
+          "children": [
+            {
+              "id": "re8",
+              "moveUci": "e1e8",
+              "moveSan": "Re8#",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "after-reply",
+      "label": "After the reply",
+      "trigger": {
+        "atSpineNode": "a6"
+      },
+      "actions": []
+    }
+  ],
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "seedMode": "fixed"
+  },
+  "feedbackPolicy": "delayed_checkpoint",
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [],
+    "graduationBlockers": [
+      {
+        "id": "test-only-fixture",
+        "state": "accepted",
+        "statement": "Test-only fixture; never publish as authored chess content.",
+        "accepted": {
+          "kind": "out_of_scope",
+          "ruling": "The graduation-clearance owner ruling classifies browser-only mechanical fixtures as outside publishable chess content.",
+          "rulingRef": "rfc/archive/graduation-clearance.md#L472",
+          "unreachableBecause": "The graduation-clearance owner ruling classifies browser-only mechanical fixtures as outside publishable chess content."
+        }
+      }
+    ]
+  }
+}

@@ -1376,6 +1376,15 @@ named in its own text, never this list.
   from the finalized assistance it renders. Criterion 9 holds through the new path (a mid-run preset
   raise queries nothing until the next learner move). D5 discharged. Archival still waits on D1, D4, D6
   and the campaign phase.
+- 2026-09-24 (**Discharge D6 executed by campaign-core's implementation**): `campaign-core` exports
+  `CampaignEncounterReceipt` with `issueCampaignEncounterReceipt`/`verifyCampaignEncounterReceipt`
+  (identity-verified, whole-body digest). `ServerAssistanceAuthority.origin` admits
+  `{kind:"campaign_encounter", receipt}`; `compileAuthoritativeAssistance` derives `campaign` only from
+  a verified receipt and intersects the module ceiling with the receipt's effective kit (three new
+  closed suppression reasons: `campaign_not_earned`, `campaign_not_equipped`,
+  `campaign_boss_suppressed`). A campaign hint on an ordinary run is `CONTEXT_MISMATCH`. The Campaign
+  context's candidate default becomes the new Campaign-only **Campaign kit** preset (29 admitted /
+  19 refused context-preset pairs; Position's allowed list is now the explicit five).
 
 - 2026-09-24 (**Checkpoint A implementation**, owner-directed, no review round): runtime `presets.ts`
   carries the literal projection/clamp tables plus their import-time re-derivation, the v2 parser,

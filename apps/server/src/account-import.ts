@@ -88,6 +88,7 @@ export type AccountNotRestoredKind =
   | "publication"
   | "live_and_social"
   | "rating_record"
+  | "campaign_record"
   | "orphan_record";
 
 export const ACCOUNT_NOT_RESTORED_REASONS: Readonly<Record<AccountNotRestoredKind, string>> = Object.freeze({
@@ -97,6 +98,7 @@ export const ACCOUNT_NOT_RESTORED_REASONS: Readonly<Record<AccountNotRestoredKin
   publication: "Published packs and shapes belong to the installation that registered them; your drafts are restored instead.",
   live_and_social: "Live sessions, classrooms and assignments involve other people and are not recreated from a file.",
   rating_record: "Ratings, rated-game records, standings and earned marks are measured by an installation and are not restored from a file.",
+  campaign_record: "Campaign runs, their event history and campaign marks are not recreated from a file; the encounter runs themselves are restored as ordinary runs.",
   orphan_record: "These records belong to a run or attempt that is not in the file, so there is nothing to attach them to.",
 });
 
@@ -187,6 +189,8 @@ export function planAccountRestore(bundle: AccountBundleV1): AccountRestorePlan 
     counted("publication", bundle.publications.value.length),
     counted("live_and_social", bundle.liveAndSocial.value.length),
     counted("rating_record", bundle.behavioralProfiles.value.filter((item) => ratingTables.has(item.table)).length),
+    // rfc/campaign-core.md §6.2: Campaign adds no account import/merge; its rows are counted, never dropped silently.
+    counted("campaign_record", progress.filter((item) => item.table.startsWith("campaign_")).length),
     counted("orphan_record", orphanCount),
   ].filter((item) => item.count > 0);
   return Object.freeze({

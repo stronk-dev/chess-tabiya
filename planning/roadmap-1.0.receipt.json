@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ae9950b5d11b61c6d1172279832f40607db48a200d172a574d83fe8b145a8310",
+    "roadmap": "sha256:1ac8debba91ab12b42f7d2ef17ab83976f1c2e56cf90408060eed12bacf4f99c",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:79bde54e1b5b58d0f74959171b6751f0e026afc701fe292a1f9cc8e71f8cacb8",
-    "rfcRegister": "sha256:df4f2c94a24e853a906ff65252fbd2df77ac22ea1ead8f733e95f2da093a31ec",
+    "workState": "sha256:27329d9edacc91061632775f56df8fded2fdaf5d92895c21c67454ec92a2afc3",
+    "rfcRegister": "sha256:4b7ab765eea3333f58a5c870cd08eaafc8b8577373befe9c42f8d23b6b3584c2",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
-    "router": "sha256:e46fa7287a4c83836b114e80dbb7a72e929f0db7eae5e68eb57be2902c9ee5a1",
-    "application": "sha256:bdb15c52d081713ab6815ccc1c0e5354e813710eb92436704e1b5073d5a66c3b",
-    "rest": "sha256:d2c74a907a0fecdccb801f6d69906c285009f5b005e2441ce5e4f9b00dcc2c53"
+    "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
+    "application": "sha256:643c564b422b3329ca2045969f6ce507a8db577db8b578c6da37df6d2bfa51b0",
+    "rest": "sha256:614dc50af846d3c72d4f26f3f4af82ca3b31aa352ac4075e5c4d0434ab7f4fc4"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 71,
     "activeRfcLifecycle": {
-      "draft": 29,
+      "draft": 27,
       "accepted": 0,
-      "implementing": 32,
+      "implementing": 34,
       "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 620,
       "doing": 0,
-      "blocked": 1061,
-      "done": 1209,
+      "blocked": 1056,
+      "done": 1214,
       "refused": 160
     },
     "workItems": {
@@ -52,15 +52,15 @@
       "not_applicable": 8
     },
     "appRoutes": {
-      "live": 14,
+      "live": 16,
       "live_but_inadequate": 4,
-      "missing": 1
+      "missing": 0
     },
     "apiFamilies": {
-      "live": 21,
+      "live": 22,
       "live_direct": 1,
       "implemented_but_unreachable": 0,
-      "missing": 1
+      "missing": 0
     }
   },
   "milestones": [
@@ -286,35 +286,35 @@
       "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Four durable migrations landed in register order today: longitudinal store (26), evidence jobs (27), concept registry (28) and bot-policy's run lane 0.18 (29), which stores the chosen bot profile and every bot decision with its provider deliveries so bots resume and rematch exactly. Campaign-core now holds the next position.",
+        "summary": "Five durable migrations landed in register order today — longitudinal store (26), evidence jobs (27), concept registry (28), bot run lane (29) and campaign-core (30) — so learner history, queued evidence, concept identity, chosen bots and campaign runs all survive restart, backup/restore and upgrade/rollback. Catalogue progression (31) and the social/clock lanes remain.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/src/bot-opponent-ply.test.ts",
-          "planning/bot-policy/implementation-receipt-2026-09-24-playable.md",
-          "rfc/bot-policy.md",
-          "rfc/bot-roster.md",
-          "rfc/opponent-experience.md"
+          "apps/server/src/campaign-storage.test.ts",
+          "planning/campaign/implementation-receipt-2026-09-24.md",
+          "rfc/campaign-core.md",
+          "rfc/campaign-boss-games.md",
+          "rfc/intent-presets.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "bot-policy.md",
-            "digest": "sha256:a65db5a0f082a3c56e55c4ab1f752fa46e194fb4b9d4e37af799c922dc222508"
+            "id": "campaign-core.md",
+            "digest": "sha256:d9b7f08ab1d65857b881d97f766e84bd1ff8e08989ed33458c163401d16160cd"
           },
           {
             "kind": "rfc",
-            "id": "bot-roster.md",
-            "digest": "sha256:f3b6cc6e7fe35ebe6db3019278c630a3d98226933f5b78fb1530f3cfb4d95b83"
+            "id": "campaign-boss-games.md",
+            "digest": "sha256:354479e91a0133881d1183e206448c6e546a1e87d4a5fb045cd71d2b50b01d8a"
           },
           {
             "kind": "rfc",
-            "id": "opponent-experience.md",
-            "digest": "sha256:84f2bc773bfa7fd5af4f1417ea670f876d8b1c630dd5625f404967f83e7c6876"
+            "id": "intent-presets.md",
+            "digest": "sha256:4f022f0fcf5bb604a757f39aa1754f2c4e472cbefc5b4304a8419a5358b4fa6f"
           },
           {
             "kind": "work_state",
-            "id": "D1610",
-            "digest": "sha256:40b950bf031f0aac48bd5604711a003dd660236a7df268d43a6bc6f008829cae"
+            "id": "D2991",
+            "digest": "sha256:0538e872b3ef7b98b15ef22efb071daccd9b5c0334f643cc815d163e4a786f92"
           }
         ]
       },
@@ -1017,15 +1017,15 @@
         "retired": 4
       },
       "routes": {
-        "live": 0,
+        "live": 2,
         "live_but_inadequate": 0,
-        "missing": 1
+        "missing": 0
       },
       "apiFamilies": {
-        "live": 0,
+        "live": 1,
         "live_direct": 0,
         "implemented_but_unreachable": 0,
-        "missing": 1
+        "missing": 0
       },
       "completion": {
         "evidence": [

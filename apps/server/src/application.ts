@@ -5,7 +5,7 @@ import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 
-import { canonicalFen, exactLegalMoves, packConceptReferenceEvidence, PRIMARY_EVIDENCE_MANIFEST, validateValenceRegister, VALENCE_REGISTER_FORMAT, type EvidencePayload, type ValenceRegister } from "@chess-tabiya/runtime";
+import { botProfileIsStartable, botProfileStartability, canonicalFen, exactLegalMoves, packConceptReferenceEvidence, PRIMARY_EVIDENCE_MANIFEST, validateValenceRegister, VALENCE_REGISTER_FORMAT, type EvidencePayload, type PolicyConfig, type ValenceRegister } from "@chess-tabiya/runtime";
 
 import { LearnerProfileService } from "./learner-profile.js";
 
@@ -75,6 +75,8 @@ import { binaryArtifactProbe } from "./engine-supervisor.js";
 import { OPERATOR_PROVIDER_BOUNDS, composeProviderTraversalApplication, type ProviderExchangeBounds, type ProviderTraversalApplication } from "./provider-traversal.js";
 import { BotOpponentProviders } from "./bot-opponent-operation.js";
 import { BotProviderAvailability } from "./bot-opponent-source.js";
+import { CampaignRegistry } from "./campaign-registry.js";
+import { CampaignService } from "./campaign-service.js";
 
 /** rfc/review-evidence-compiler.md §4.1: the 1.0 Review enrichment profile (explicit bounds). */
 export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
@@ -109,6 +111,8 @@ export interface ApplicationOptions {
   readonly development?: boolean;
   readonly draftPackFile?: string;
   readonly draftPackFiles?: readonly string[];
+  /** Development only: extra campaign documents (browser fixtures) beside content/campaigns/. */
+  readonly draftCampaignFiles?: readonly string[];
   readonly engineMode?: EngineMode;
   readonly staticDirectory?: string;
   readonly maiaHost?: string;
@@ -389,6 +393,10 @@ function isApiPath(pathname: string): boolean {
     pathname.startsWith("/learner-profile/") ||
     pathname === "/cohorts" ||
     pathname.startsWith("/cohorts/") ||
+    pathname === "/campaigns" ||
+    pathname.startsWith("/campaigns/") ||
+    pathname === "/campaign-rewards" ||
+    pathname.startsWith("/campaign-runs/") ||
     pathname.startsWith("/api/shared/") ||
     pathname.startsWith("/shared/") ||
     pathname === "/select-move"
@@ -745,7 +753,35 @@ async function composeServices(
     ratedResults: (learnerId) => new Map(storage.ratedGames(learnerId).flatMap((game) => game.result === null ? [] : [[game.runId, game.result] as const])),
     valenceRegister: await loadValenceRegister(options.valenceRegisterPath ?? join(process.cwd(), "content", "valence", "register.json")),
   });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }));
+  // rfc/campaign-core.md §6.0/§7.1: the installed campaign registry (content/campaigns/ plus, in
+  // development only, explicit fixture documents) and the ONE campaign service.
+  if (options.draftCampaignFiles !== undefined && options.development !== true) throw new TypeError("Draft campaign files may only be loaded in development mode");
+  const campaignRegistry = await CampaignRegistry.loadDefault(
+    Object.freeze({ get: (id: string) => registry.get(id)?.document }),
+    undefined,
+    options.draftCampaignFiles ?? [],
+  );
+  const campaigns = new CampaignService({
+    storage,
+    registry: campaignRegistry,
+    runs: service,
+    packs: registry,
+    botStartable: (entry) => botProfileIsStartable(botProfileStartability(entry, botAvailability.snapshot())),
+    policyConfig: async (pack): Promise<PolicyConfig> => {
+      const engines = (await capabilities.get()).engines;
+      const authored = pack?.document.opponentPolicy as { readonly seedMode?: unknown } | undefined;
+      const seedMode = authored?.seedMode === "per_run" || authored?.seedMode === "per_branch" ? authored.seedMode : "fixed";
+      return Object.freeze({
+        seedMode,
+        locus: Object.freeze({
+          executedAt: "server" as const,
+          engineIds: Object.freeze(engines.map((engine) => ({ id: engine.id, version: engine.version }))),
+          modelIds: Object.freeze(engines.flatMap((engine) => engine.modelId === undefined ? [] : [{ id: engine.modelId, version: engine.version }])),
+        }),
+      }) as PolicyConfig;
+    },
+  });
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }), campaigns);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });

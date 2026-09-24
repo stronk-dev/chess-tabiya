@@ -56,6 +56,10 @@ if ((process.env.DRAFT_PACK_FILE !== undefined || process.env.DRAFT_PACK_FILES !
   throw new TypeError("Explicit draft pack files require NODE_ENV=development");
 }
 const draftPackFiles = process.env.DRAFT_PACK_FILES?.split(",").map((path) => path.trim()).filter((path) => path.length > 0);
+if (process.env.DRAFT_CAMPAIGN_FILES !== undefined && !development) {
+  throw new TypeError("Explicit draft campaign files require NODE_ENV=development");
+}
+const draftCampaignFiles = process.env.DRAFT_CAMPAIGN_FILES?.split(",").map((path) => path.trim()).filter((path) => path.length > 0);
 const externalVoice = voiceMode !== "external_http" ? undefined : new ExternalHttpVoiceProvider({
   url: process.env.TABIYA_VOICE_PROVIDER_URL!,
   ...(process.env.TABIYA_VOICE_PROVIDER_KEY === undefined ? {} : { key: process.env.TABIYA_VOICE_PROVIDER_KEY }),
@@ -106,6 +110,7 @@ const application = await createApplication({
     ? {}
     : { draftPackFile: process.env.DRAFT_PACK_FILE }),
   ...(draftPackFiles === undefined ? {} : { draftPackFiles }),
+  ...(draftCampaignFiles === undefined ? {} : { draftCampaignFiles }),
   ...(process.env.STATIC_DIRECTORY === undefined
     ? {}
     : { staticDirectory: process.env.STATIC_DIRECTORY }),

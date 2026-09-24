@@ -17,21 +17,23 @@ import {
 } from "./presets.js";
 
 describe("intent preset foundation", () => {
-  it("closes the five presets over all eleven module ids", () => {
-    expect(PRESET_IDS).toEqual(["quiet", "guided", "theory_only", "support", "analysis"]);
+  it("closes the six presets over all eleven module ids", () => {
+    // 2026-09-24: rfc/campaign-core.md §5 adds the Campaign kit preset (Campaign-only).
+    expect(PRESET_IDS).toEqual(["quiet", "guided", "theory_only", "support", "analysis", "campaign_kit"]);
     expect(new Set(PRESET_DECLARATIONS.flatMap((preset) => preset.modules))).toEqual(new Set(MODULE_IDS));
     expect(() => assertPresetFoundation()).not.toThrow();
   });
 
-  it("admits 28 context/preset pairs and refuses 12", () => {
+  it("admits 29 context/preset pairs and refuses 19", () => {
     expect(WORKFLOW_CONTEXTS).toHaveLength(8);
-    expect(WORKFLOW_CONTEXT_POLICIES.reduce((sum, context) => sum + context.allowedPresets.length, 0)).toBe(28);
-    expect(40 - 28).toBe(12);
+    expect(WORKFLOW_CONTEXT_POLICIES.reduce((sum, context) => sum + context.allowedPresets.length, 0)).toBe(29);
+    expect(48 - 29).toBe(19);
     expect(WORKFLOW_CONTEXT_POLICIES.find((context) => context.id === "match")?.allowedPresets).toEqual(["quiet"]);
-    expect(WORKFLOW_CONTEXT_POLICIES.find((context) => context.id === "position")?.allowedPresets).toEqual(PRESET_IDS);
+    expect(WORKFLOW_CONTEXT_POLICIES.find((context) => context.id === "position")?.allowedPresets).toEqual(PRESET_IDS.filter((id) => id !== "campaign_kit"));
+    expect(WORKFLOW_CONTEXT_POLICIES.filter((context) => context.allowedPresets.includes("campaign_kit")).map((context) => context.id)).toEqual(["campaign"]);
     expect(WORKFLOW_CONTEXT_POLICIES.find((context) => context.id === "campaign")).toEqual(expect.objectContaining({
-      defaultPreset: "guided",
-      allowedPresets: ["quiet", "guided", "theory_only", "analysis"],
+      defaultPreset: "campaign_kit",
+      allowedPresets: ["campaign_kit", "quiet", "guided", "theory_only", "analysis"],
     }));
   });
 
@@ -57,13 +59,14 @@ describe("intent preset foundation", () => {
   // Criterion 12: transcribed, not invented — row for row against the RFC's §4a and §3.2 tables…
   const FIELDS = ["markers", "guided", "humanSplit", "corpus", "voice", "spoken", "boardLighting", "arrows", "ambient"] as const;
   const row = (values: string) => Object.fromEntries(values.split(" ").map((value, index) => [FIELDS[index], value]));
-  it("transcribes §4a's projection table exactly (45 cells)", () => {
+  it("transcribes §4a's projection table exactly (54 cells with the Campaign kit)", () => {
     expect(Object.fromEntries(PRESET_DECLARATIONS.map((preset) => [preset.id, preset.config]))).toEqual({
       quiet: row("off off off off authored off legal off off"),
       guided: row("live live off off authored off sight sight on"),
       theory_only: row("off off off off authored off legal off on"),
       support: row("live off off off authored off sight sight on"),
       analysis: row("live off on_request on_request authored off evidence evidence on"),
+      campaign_kit: row("live live on_request on_request authored off evidence evidence on"),
     });
   });
 

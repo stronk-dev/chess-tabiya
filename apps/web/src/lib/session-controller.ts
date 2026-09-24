@@ -60,6 +60,8 @@ export interface DrillSessionState {
   readonly reasoning?: ReasoningPage;
   readonly simulation?: SimulationResult;
   readonly viewer?: RunGraph["viewer"];
+  /** rfc/campaign-core.md §5.3: the durable campaign origin the server reports for this run. */
+  readonly campaignOrigin?: RunGraph["campaignOrigin"];
   readonly importedGuess?: ImportedGuess;
   /** The last bot reply's layer actions (degraded/abstained status), never its evidence. */
   readonly botReply?: { readonly layers: BotOpponentPlyOperation["layers"]; readonly replayed: boolean };
@@ -361,7 +363,7 @@ export class DrillSessionController {
         this.#capabilities = capabilities;
         this.#attachStore(this.#newStore(session, run), document, digest, shapes);
       }
-      this.#patch({ viewer: graph.viewer });
+      this.#patch({ viewer: graph.viewer, campaignOrigin: graph.campaignOrigin ?? null });
       await this.#playOpponentIfNeeded(false, generation);
       if (!this.#attachmentIsCurrent(generation)) return;
       await this.#refreshAuthoredFeedback();

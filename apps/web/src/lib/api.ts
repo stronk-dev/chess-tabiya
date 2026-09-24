@@ -174,6 +174,8 @@ export interface RunGraph {
   readonly nodes: readonly Node[];
   readonly branches: DrillRun["branches"];
   readonly activeCursor: DrillRun["activeCursor"];
+  /** rfc/campaign-core.md §5.3: the durable campaign origin of this run, when it was an encounter. */
+  readonly campaignOrigin?: { readonly campaignRunId: string; readonly nodeId: string; readonly campaignDocumentDigest: string } | null;
 }
 
 export interface RunSummary {
@@ -1207,9 +1209,34 @@ function attachmentFilename(header: string | null, fallback: string): string {
   return match?.[1] ?? fallback;
 }
 
+/** rfc/campaign-core.md §2.2: the charged-command envelope a campaign encounter's gestures carry. */
+export interface CampaignCommandEnvelope {
+  readonly commandId: string;
+  readonly expectedCampaignRevision: number;
+  readonly expectedPlayRevision: number;
+}
+
 export class DrillApi implements DrillClientApi {
   readonly #baseUrl: string;
   readonly #fetch: Fetcher;
+  #campaignCommand: ((runId: string) => CampaignCommandEnvelope | undefined) | undefined;
+  #campaignSettled: ((runId: string, result: Readonly<Record<string, unknown>>) => void) | undefined;
+
+  /**
+   * While a run is an ACTIVE campaign encounter, rewind/fork/group/line-entry carry the campaign
+   * command envelope and the settled charge result is reported back (rfc/campaign-core.md §2.2).
+   */
+  setCampaignCharging(source: ((runId: string) => CampaignCommandEnvelope | undefined) | undefined, settled?: (runId: string, result: Readonly<Record<string, unknown>>) => void): void {
+    this.#campaignCommand = source;
+    this.#campaignSettled = settled;
+  }
+
+  async #charged<T>(runId: string, path: string, writerId: string, body: Readonly<Record<string, unknown>>): Promise<T> {
+    const campaignCommand = this.#campaignCommand?.(runId);
+    const result = await this.#json<T & { readonly campaign?: Readonly<Record<string, unknown>> }>(path, { method: "POST", writerId, body: campaignCommand === undefined ? body : { ...body, campaignCommand } });
+    if (campaignCommand !== undefined && result.campaign !== undefined) this.#campaignSettled?.(runId, result.campaign);
+    return result;
+  }
 
   constructor(baseUrl = "", fetcher: Fetcher = browserFetch) {
     this.#baseUrl = baseUrl.replace(/\/$/, "");
@@ -1649,7 +1676,7 @@ export class DrillApi implements DrillClientApi {
   }
 
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult> {
-    return this.#json(`/runs/${encoded(runId)}/group`, { method: "POST", writerId, body: input });
+    return this.#charged(runId, `/runs/${encoded(runId)}/group`, writerId, input as unknown as Readonly<Record<string, unknown>>);
   }
 
   groupReply(runId: string, groupId: string, writerId: string, request: SelectMoveRequest): Promise<GroupReplyResult> {
@@ -1676,9 +1703,7 @@ export class DrillApi implements DrillClientApi {
   }
 
   enterSimulation(runId: string, simulationId: string, branchIndex: number, writerId: string): Promise<MutationResult> {
-    return this.#json(`/runs/${encoded(runId)}/simulate-enter`, {
-      method: "POST", writerId, body: { simulationId, branchIndex },
-    });
+    return this.#charged(runId, `/runs/${encoded(runId)}/simulate-enter`, writerId, { simulationId, branchIndex });
   }
 
   move(
@@ -1736,11 +1761,7 @@ export class DrillApi implements DrillClientApi {
     input: RewindRequest,
     writerId: string,
   ): Promise<MutationResult> {
-    return this.#json(`/runs/${encoded(runId)}/rewind`, {
-      method: "POST",
-      writerId,
-      body: input,
-    });
+    return this.#charged(runId, `/runs/${encoded(runId)}/rewind`, writerId, input as unknown as Readonly<Record<string, unknown>>);
   }
 
   fork(
@@ -1748,11 +1769,7 @@ export class DrillApi implements DrillClientApi {
     input: ForkRequest,
     writerId: string,
   ): Promise<MutationResult> {
-    return this.#json(`/runs/${encoded(runId)}/fork`, {
-      method: "POST",
-      writerId,
-      body: input,
-    });
+    return this.#charged(runId, `/runs/${encoded(runId)}/fork`, writerId, input as unknown as Readonly<Record<string, unknown>>);
   }
 
   async graph(runId: string, writerId?: string): Promise<RunGraph> {

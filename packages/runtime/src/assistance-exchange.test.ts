@@ -203,7 +203,9 @@ describe("rfc/intent-presets.md — the ∩ algebra, compiled", () => {
   it("criterion 6: presets.ts and the exchange import no eligibility, event or evidence-packet symbol", () => {
     for (const file of ["presets.ts", "assistance-exchange.ts"]) {
       const imports = [...readFileSync(join(__dirname, file), "utf8").matchAll(/from "(\.\/[^"]+)"/gu)].map((match) => match[1]);
-      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
+      // 2026-09-24: the digest moved to its own module and the exchange now imports the campaign
+      // encounter receipt verifier (campaign-core §5.1) — neither is an eligibility/event/packet symbol.
+      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js", "./assistance-exchange-digest.js", "./campaign-receipt.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
     }
   });
 
@@ -289,11 +291,12 @@ describe("rfc/intent-presets.md — the ∩ algebra, compiled", () => {
     expect([available.config.voice, available.config.spoken]).toEqual(["persona", "provider"]);
   });
 
-  it("criterion 21: Campaign is declared-awaiting at every seat", () => {
-    expect(code(() => compileAssistanceRequest({ contextHint: "campaign" as OrdinaryWorkflowContextId, preference: { kind: "unset" } }))).toBe("CONTEXT_DECLARED_AWAITING");
+  it("criterion 21 (expanded, Discharge D6): Campaign derives only from an issued encounter receipt", () => {
+    // campaign-core now exports the receipt; the browser may ask for Campaign, but an ordinary run
+    // (no receipt) refuses it as a context mismatch — no query parameter or client object derives it.
+    expect(compileAssistanceRequest({ contextHint: "campaign" as OrdinaryWorkflowContextId, preference: { kind: "unset" } }).contextHint).toBe("campaign");
     const body = { stage: "requested", schemaVersion: 1, contextHint: "campaign", preference: { kind: "unset" } };
-    // A correctly digested hand-built Campaign request still fails closed at the server.
-    expect(code(() => compileAuthoritativeAssistance({ ...body, requestDigest: assistanceDigest(body) } as never, authority("pack")))).toBe("CONTEXT_DECLARED_AWAITING");
+    expect(code(() => compileAuthoritativeAssistance({ ...body, requestDigest: assistanceDigest(body) } as never, authority("pack")))).toBe("CONTEXT_MISMATCH");
   });
 });
 
