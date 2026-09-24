@@ -28,7 +28,18 @@ import {
   type TaggedAccountRecord,
   type DeletionPreviewV1,
 } from "./account-data.js";
-import { automaticScheduleDecision, projectAttempts, type AttemptRow, type AttemptVerdict, type ConceptTagRow } from "./progress.js";
+import {
+  automaticScheduleDecision,
+  DIFFICULT_ROOT_DISPLAY_LIMIT,
+  DIFFICULT_ROOT_RUN_LIMIT,
+  DIFFICULT_ROOT_UNSTABLE_THRESHOLD,
+  projectAttempts,
+  rotatedRetryVariant,
+  type AttemptOrigin,
+  type AttemptRow,
+  type AttemptVerdict,
+  type ConceptTagRow,
+} from "./progress.js";
 import {
   BOARD_CONTROLS,
   SESSION_JOURNAL_KINDS,
@@ -507,9 +518,53 @@ export interface ScheduleRow {
   readonly startedRunId: string | null;
 }
 
+/** Pack id → the pack's declared `retryVariants` kinds, read only to name a varied return. */
+export type RetryVariantKinds = Readonly<Record<string, readonly string[]>>;
+
+/**
+ * A root the learner has repeatedly left unstable (rfc/return-scheduling.md §3). Counts are
+ * published on the surface; there is deliberately no attempt total, ratio or ladder position.
+ */
+export interface DifficultRoot {
+  readonly rootKey: string;
+  readonly sessionKind: "pack" | "position";
+  readonly packId: string | null;
+  readonly unstableCount: number;
+  readonly lastUnstableAt: string;
+  readonly runs: readonly { readonly runId: string; readonly endedAt: string }[];
+}
+
+export interface DifficultRootPage {
+  readonly threshold: number;
+  readonly roots: readonly DifficultRoot[];
+  readonly total: number;
+}
+
+/**
+ * The difficult-roots source is `attempts`, never `learner_position_stats` (which holds seen_count
+ * only). Exported so the source of the selection is assertable (rfc/return-scheduling.md criterion 5).
+ */
+export const DIFFICULT_ROOTS_SQL = `
+  SELECT root_key, MIN(session_kind) AS session_kind, MIN(pack_id) AS pack_id,
+    COUNT(*) AS unstable_count, MAX(ended_at) AS last_unstable_at
+  FROM attempts
+  WHERE learner_id = ? AND countable = 1 AND graded = 1 AND verdict = 'unstable'
+  GROUP BY root_key
+  HAVING COUNT(*) >= ?
+  ORDER BY last_unstable_at DESC, root_key`;
+
+export const DIFFICULT_ROOT_RUNS_SQL = `
+  SELECT run_id, MAX(ended_at) AS ended_at
+  FROM attempts
+  WHERE learner_id = ? AND root_key = ? AND countable = 1 AND graded = 1 AND verdict = 'unstable'
+  GROUP BY run_id
+  ORDER BY ended_at DESC, run_id
+  LIMIT ?`;
+
 export interface ProgressStorage {
-  upsertAttempts(attempts: readonly AttemptRow[], concepts: readonly ConceptTagRow[]): void;
+  upsertAttempts(attempts: readonly AttemptRow[], concepts: readonly ConceptTagRow[], retryVariants?: RetryVariantKinds): void;
   progress(learnerId: string): readonly StoredAttempt[];
+  difficultRoots?(learnerId: string): DifficultRootPage;
   dueSchedules(learnerId: string, at?: string): readonly ScheduleRow[];
   pendingScheduleForRoot(learnerId: string, rootKey: string): ScheduleRow | undefined;
   createSchedule(input: Omit<ScheduleRow, "state" | "startedRunId">): ScheduleRow;
@@ -2572,7 +2627,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     return typeof row?.owner_learner_id === "string" ? row.owner_learner_id : undefined;
   }
 
-  upsertAttempts(attempts: readonly AttemptRow[], concepts: readonly ConceptTagRow[]): void {
+  upsertAttempts(attempts: readonly AttemptRow[], concepts: readonly ConceptTagRow[], retryVariants?: RetryVariantKinds): void {
     if (attempts.length === 0) return;
     const affected = new Set<string>();
     try {
@@ -2627,7 +2682,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           "UPDATE attempts SET attempt_no = ? WHERE run_id = ? AND branch_id = ?",
         );
         rows.forEach((row, index) => number.run(index + 1, row.run_id, row.branch_id));
-        this.#refreshAutoSchedule(learnerId, rootKey);
+        this.#refreshAutoSchedule(learnerId, rootKey, retryVariants);
       }
       for (const learnerId of new Set(attempts.map((attempt) => attempt.learnerId))) {
         this.#rebuildPositionStats(learnerId);
@@ -2673,6 +2728,25 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
        ORDER BY CASE kind WHEN 'blocked' THEN 0 ELSE 1 END, due_at, id`,
     ).all(...(at === undefined ? [learnerId] : [learnerId, at])) as readonly Record<string, unknown>[];
     return Object.freeze(rows.map((row) => this.#scheduleRow(row)));
+  }
+
+  difficultRoots(learnerId: string): DifficultRootPage {
+    const rows = this.#database.prepare(DIFFICULT_ROOTS_SQL)
+      .all(learnerId, DIFFICULT_ROOT_UNSTABLE_THRESHOLD) as readonly Record<string, unknown>[];
+    const runs = this.#database.prepare(DIFFICULT_ROOT_RUNS_SQL);
+    return Object.freeze({
+      threshold: DIFFICULT_ROOT_UNSTABLE_THRESHOLD,
+      total: rows.length,
+      roots: Object.freeze(rows.slice(0, DIFFICULT_ROOT_DISPLAY_LIMIT).map((row) => Object.freeze({
+        rootKey: String(row.root_key),
+        sessionKind: row.session_kind as "pack" | "position",
+        packId: row.pack_id === null ? null : String(row.pack_id),
+        unstableCount: Number(row.unstable_count),
+        lastUnstableAt: String(row.last_unstable_at),
+        runs: Object.freeze((runs.all(learnerId, String(row.root_key), DIFFICULT_ROOT_RUN_LIMIT) as readonly Record<string, unknown>[])
+          .map((run) => Object.freeze({ runId: String(run.run_id), endedAt: String(run.ended_at) }))),
+      }))),
+    });
   }
 
   pendingScheduleForRoot(learnerId: string, rootKey: string): ScheduleRow | undefined {
@@ -2930,7 +3004,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     });
   }
 
-  #refreshAutoSchedule(learnerId: string, rootKey: string): void {
+  #refreshAutoSchedule(learnerId: string, rootKey: string, retryVariants?: RetryVariantKinds): void {
     const history = this.#database.prepare(
       `SELECT * FROM attempts WHERE learner_id = ? AND root_key = ? AND countable = 1
        ORDER BY ended_at, run_id, branch_id`,
@@ -2940,20 +3014,24 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     const decision = automaticScheduleDecision(history.map((row) => Object.freeze({
       graded: row.graded === 1,
       verdict: String(row.verdict) as AttemptVerdict,
+      origin: String(row.origin) as AttemptOrigin,
+      rootDueAtStart: row.root_due_at_start === null ? null : String(row.root_due_at_start),
+      startedAt: String(row.started_at),
     })));
     if (decision === undefined) return;
+    const packId = latest.pack_id === null ? null : String(latest.pack_id);
+    const variant = rotatedRetryVariant(decision, packId === null ? undefined : retryVariants?.[packId]);
     const dueAt = new Date(Date.parse(String(latest.ended_at)) + decision.days * 86_400_000).toISOString();
     this.#database.prepare(`
       INSERT INTO schedules (id, learner_id, root_key, session_kind, pack_id,
         root_transpose_key, kind, variant, origin, state, due_at, created_at,
         source_run_id, source_node_id, started_run_id)
-      VALUES (?, ?, ?, ?, ?, ?, ?, NULL, 'auto', 'pending', ?, ?, ?, ?, NULL)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'auto', 'pending', ?, ?, ?, ?, NULL)
       ON CONFLICT(learner_id, root_key) WHERE state = 'pending' AND origin = 'auto'
-      DO UPDATE SET kind=excluded.kind, due_at=excluded.due_at,
+      DO UPDATE SET kind=excluded.kind, variant=excluded.variant, due_at=excluded.due_at,
         source_run_id=excluded.source_run_id, source_node_id=excluded.source_node_id
     `).run(randomUUID(), learnerId, rootKey, String(latest.session_kind),
-      latest.pack_id === null ? null : String(latest.pack_id),
-      String(latest.root_transpose_key), decision.kind, dueAt, this.#now(),
+      packId, String(latest.root_transpose_key), decision.kind, variant, dueAt, this.#now(),
       String(latest.run_id), String(latest.root_node_id));
   }
 

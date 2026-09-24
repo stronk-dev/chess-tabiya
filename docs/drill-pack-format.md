@@ -125,7 +125,8 @@ learner-facing authored objective-assessment note retains its 400-character cap.
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability
 and is therefore absent from `/capabilities`. `retryVariants` remains authoring catalogue
-metadata but emits `RETRY_VARIANTS_NOT_EXECUTABLE`; `SIMULATE_BUDGET_EXCEEDED` is retired;
+metadata and is not a run modifier; the return scheduler reads its kinds only to name a varied
+return (see `docs/return-and-progression.md`), and the field still emits `RETRY_VARIANTS_NOT_EXECUTABLE`; `SIMULATE_BUDGET_EXCEEDED` is retired;
 system-drawn arrows remain a reachable setting with an `unmeasured` producer gap.
 
 The already-declared `practical_resistance` opponent policy is executable

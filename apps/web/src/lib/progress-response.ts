@@ -1,6 +1,9 @@
 import { CORPUS_GUARD } from "@chess-tabiya/runtime";
 
+import { parseCorpusPopulation } from "./human-evidence-response.js";
 import type {
+  DifficultRootPage,
+  DueQueuePage,
   ProgressAttempt,
   ProgressMilestone,
   ProgressRecommendation,
@@ -13,6 +16,7 @@ type RecordValue = Readonly<Record<string, unknown>>;
 
 const ATTEMPT_KEYS = Object.freeze(["runId", "branchId", "packId", "branchLabel", "attemptNo", "countable", "graded", "verdict", "result", "userPlyCount", "origin", "endedAt"] as const);
 const SCHEDULE_KEYS = Object.freeze(["id", "sessionKind", "packId", "kind", "variant", "dueAt", "sourceRunId"] as const);
+const DUE_SCHEDULE_KEYS = Object.freeze([...SCHEDULE_KEYS, "frequency"] as const);
 const MILESTONE_KEYS = Object.freeze(["kind", "occurredAt", "link"] as const);
 const RELATED_KEYS = Object.freeze(["relation", "runId", "branchId", "attemptCount"] as const);
 const REPERTOIRE_RECOMMENDATION_KEYS = Object.freeze(["kind", "repertoireId", "repertoireName", "gapKey", "replySan", "line", "gamesUntilSeen"] as const);
@@ -112,10 +116,69 @@ export function parseProgressAttempts(value: unknown): readonly ProgressAttempt[
 
 export function parseProgressSchedules(value: unknown): readonly ProgressSchedule[] {
   const envelope = record(value, "due response"); exact(envelope, ["schedules"], "due response");
-  if (!Array.isArray(envelope.schedules)) throw new TypeError("due schedules must be an array");
+  return parseScheduleItems(envelope.schedules, SCHEDULE_KEYS);
+}
+
+/**
+ * The served due queue (rfc/return-scheduling.md §§4, 6). Frequency may re-order returns only
+ * inside one kind and one UTC due date, so the parser refuses a queue that moved a later day ahead
+ * of an earlier one or a varied return ahead of a blocked repair.
+ */
+export function parseDueQueue(value: unknown): DueQueuePage {
+  const envelope = record(value, "due response"); exact(envelope, ["schedules", "waiting", "intakeLimit"], "due response");
+  const base = parseScheduleItems(envelope.schedules, DUE_SCHEDULE_KEYS);
+  const raw = envelope.schedules as readonly RecordValue[];
+  const schedules = base.map((schedule, index) => {
+    const frequency = raw[index]!.frequency;
+    if (frequency === null) return Object.freeze({ ...schedule, frequency: null });
+    const item = record(frequency, `schedules/${index}/frequency`); exact(item, ["games", "population"], `schedules/${index}/frequency`);
+    return Object.freeze({ ...schedule, frequency: Object.freeze({
+      games: integer(item.games, `schedules/${index}/frequency/games`),
+      population: parseCorpusPopulation(item.population, `schedules/${index}/frequency/population`),
+    }) });
+  });
+  for (let index = 1; index < schedules.length; index += 1) {
+    const previous = schedules[index - 1]!, current = schedules[index]!;
+    const rank = (schedule: ProgressSchedule) => (schedule.kind === "blocked" ? 0 : 1);
+    if (rank(previous) > rank(current) || (rank(previous) === rank(current) && previous.dueAt.slice(0, 10) > current.dueAt.slice(0, 10))) {
+      throw new TypeError("due schedules are re-ordered across a due date");
+    }
+  }
+  const intakeLimit = integer(envelope.intakeLimit, "due response/intakeLimit", 1);
+  if (schedules.length > intakeLimit) throw new TypeError("due response exceeds its intake limit");
+  const waiting = integer(envelope.waiting, "due response/waiting");
+  if (waiting > 0 && schedules.length < intakeLimit) throw new TypeError("due response holds work back below its intake limit");
+  return Object.freeze({ schedules: Object.freeze(schedules), waiting, intakeLimit });
+}
+
+export function parseDifficultRoots(value: unknown): DifficultRootPage {
+  const envelope = record(value, "difficult roots response"); exact(envelope, ["threshold", "total", "roots"], "difficult roots response");
+  const threshold = integer(envelope.threshold, "difficult roots/threshold", 1);
+  const total = integer(envelope.total, "difficult roots/total");
+  if (!Array.isArray(envelope.roots)) throw new TypeError("difficult roots must be an array");
+  if (envelope.roots.length > total) throw new TypeError("difficult roots exceed their eligible total");
+  const roots = envelope.roots.map((raw, index) => {
+    const item = record(raw, `roots/${index}`); exact(item, ["sessionKind", "packId", "unstableCount", "lastUnstableAt", "runs"], `roots/${index}`);
+    const sessionKind = oneOf(item.sessionKind, ["pack", "position"] as const, `roots/${index}/sessionKind`);
+    const packId = nullableString(item.packId, `roots/${index}/packId`);
+    if ((sessionKind === "pack") !== (packId !== null)) throw new TypeError(`roots/${index} has an inconsistent pack identity`);
+    const unstableCount = integer(item.unstableCount, `roots/${index}/unstableCount`, threshold);
+    if (!Array.isArray(item.runs) || item.runs.length === 0) throw new TypeError(`roots/${index}/runs must be a non-empty array`);
+    const runs = item.runs.map((entry, runIndex) => {
+      const run = record(entry, `roots/${index}/runs/${runIndex}`); exact(run, ["runId", "endedAt"], `roots/${index}/runs/${runIndex}`);
+      return Object.freeze({ runId: string(run.runId, `roots/${index}/runs/${runIndex}/runId`), endedAt: timestamp(run.endedAt, `roots/${index}/runs/${runIndex}/endedAt`) });
+    });
+    if (new Set(runs.map((run) => run.runId)).size !== runs.length) throw new TypeError(`roots/${index}/runs contain a duplicate run`);
+    return Object.freeze({ sessionKind, packId, unstableCount, lastUnstableAt: timestamp(item.lastUnstableAt, `roots/${index}/lastUnstableAt`), runs: Object.freeze(runs) });
+  });
+  return Object.freeze({ threshold, total, roots: Object.freeze(roots) });
+}
+
+function parseScheduleItems(value: unknown, keys: readonly string[]): readonly ProgressSchedule[] {
+  if (!Array.isArray(value)) throw new TypeError("due schedules must be an array");
   const ids = new Set<string>();
-  return Object.freeze(envelope.schedules.map((raw, index) => {
-    const item = record(raw, `schedules/${index}`); exact(item, SCHEDULE_KEYS, `schedules/${index}`);
+  return Object.freeze(value.map((raw, index) => {
+    const item = record(raw, `schedules/${index}`); exact(item, keys, `schedules/${index}`);
     const id = string(item.id, `schedules/${index}/id`);
     if (ids.has(id)) throw new TypeError("due schedules contain a duplicate id"); ids.add(id);
     const sessionKind = oneOf(item.sessionKind, ["pack", "position"] as const, `schedules/${index}/sessionKind`);

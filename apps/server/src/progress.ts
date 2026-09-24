@@ -13,26 +13,126 @@ export interface AutoScheduleDecision {
   readonly days: number;
   readonly ladderIndex: number | null;
   readonly trailingStable: number;
+  /** Retained step-down floor (rfc/return-scheduling.md §2.3); 0 when the root never lapsed after climbing. */
+  readonly floor: number;
 }
 
+export interface LadderAttempt {
+  readonly graded: boolean;
+  readonly verdict: AttemptVerdict;
+  /** Absent means an on-schedule attempt, so the pure ladder can be driven by verdicts alone. */
+  readonly origin?: AttemptOrigin;
+  readonly rootDueAtStart?: string | null;
+  readonly startedAt?: string;
+}
+
+/**
+ * Overstudy (rfc/return-scheduling.md §5): an attempt the learner timed themselves may demote the
+ * ladder position but never advance it. `scheduled` attempts are on schedule by construction. An
+ * in-run retry is a rewind in the same sitting and is always off schedule. Any other origin is off
+ * schedule only when the root already had a pending return that was not yet due when it started —
+ * reviewing early. A first-time attempt, or one started after the root came due, is on schedule, so
+ * a learner who returns through the pack shelf is not locked out of the ladder.
+ */
+export function isOffScheduleAttempt(attempt: LadderAttempt): boolean {
+  if (attempt.origin === undefined || attempt.origin === "scheduled") return false;
+  if (attempt.origin === "in_run_retry") return true;
+  return attempt.rootDueAtStart !== undefined && attempt.rootDueAtStart !== null &&
+    attempt.startedAt !== undefined && attempt.startedAt < attempt.rootDueAtStart;
+}
+
+const LAST_RUNG = VARIED_LADDER_DAYS.length - 1;
+const clampRung = (value: number): number => Math.min(Math.max(value, 0), LAST_RUNG);
+
+/**
+ * The varied/blocked return decision (rfc/archive/return-and-progression.md §7 as amended by
+ * rfc/return-scheduling.md §§2 and 5). The ungraded arm counts attempts; the graded arm counts the
+ * trailing stable streak, never both. The countable history is replayed in order so the retained
+ * floor (`peak - 1` after a lapse) and the overstudy cap derive from `attempts` alone.
+ */
 export function automaticScheduleDecision(
-  history: readonly { readonly graded: boolean; readonly verdict: AttemptVerdict }[],
+  history: readonly LadderAttempt[],
 ): AutoScheduleDecision | undefined {
   if (history.length === 0) return undefined;
   let trailingStable = 0;
-  for (let index = history.length - 1; index >= 0 && history[index]!.verdict === "stable"; index -= 1) {
-    trailingStable += 1;
+  let served: number | null | undefined;
+  let peak = -1;
+  let lapsedSincePeak = false;
+  let floor = 0;
+  for (const [index, attempt] of history.entries()) {
+    trailingStable = attempt.verdict === "stable" ? trailingStable + 1 : 0;
+    if (attempt.graded && attempt.verdict !== "stable") lapsedSincePeak = true;
+    floor = peak >= 0 && lapsedSincePeak ? clampRung(peak - 1) : 0;
+    const previous = index === 0 ? undefined : history[index - 1];
+    let rung: number | null = attempt.graded === false
+      ? clampRung(index)
+      : attempt.verdict === "stable" && previous?.verdict === "stable"
+        ? clampRung(Math.max(trailingStable - 2, floor))
+        : null;
+    if (served !== undefined && isOffScheduleAttempt(attempt) && (rung ?? -1) > (served ?? -1)) rung = served;
+    served = rung;
+    if (rung !== null && rung >= peak) {
+      peak = rung;
+      lapsedSincePeak = false;
+    }
   }
-  const latest = history.at(-1)!;
-  const previous = history.at(-2);
-  const ladderIndex = latest.graded === false
-    ? Math.min(Math.max(history.length - 1, 0), VARIED_LADDER_DAYS.length - 1)
-    : latest.verdict === "stable" && previous?.verdict === "stable"
-      ? Math.min(Math.max(trailingStable - 2, 0), VARIED_LADDER_DAYS.length - 1)
-      : null;
+  const ladderIndex = served ?? null;
   return ladderIndex === null
-    ? Object.freeze({ kind: "blocked", days: 0, ladderIndex, trailingStable })
-    : Object.freeze({ kind: "varied", days: VARIED_LADDER_DAYS[ladderIndex]!, ladderIndex, trailingStable });
+    ? Object.freeze({ kind: "blocked", days: 0, ladderIndex, trailingStable, floor })
+    : Object.freeze({ kind: "varied", days: VARIED_LADDER_DAYS[ladderIndex]!, ladderIndex, trailingStable, floor });
+}
+
+/**
+ * The retry variant a varied return names (rfc/return-scheduling.md §7): a rotation through the
+ * pack's declared `retryVariants` kinds by ladder index. Blocked returns repeat the same attempt and
+ * name none; a pack declaring none names none, and the surface says the variation is a fresh seed.
+ * Naming is all it does — `retryVariants` does not become a run modifier.
+ */
+export function rotatedRetryVariant(
+  decision: Pick<AutoScheduleDecision, "kind" | "ladderIndex">,
+  kinds: readonly string[] | undefined,
+): string | null {
+  if (decision.kind !== "varied" || decision.ladderIndex === null || kinds === undefined || kinds.length === 0) return null;
+  return kinds[decision.ladderIndex % kinds.length]!;
+}
+
+/** Published difficult-roots rule (rfc/return-scheduling.md §3): stated on the surface, never hidden. */
+export const DIFFICULT_ROOT_UNSTABLE_THRESHOLD = 3;
+/** Display budgets for the difficult-roots projection; the eligible total is always returned. */
+export const DIFFICULT_ROOT_DISPLAY_LIMIT = 10;
+export const DIFFICULT_ROOT_RUN_LIMIT = 5;
+
+/**
+ * Vacation-safe intake (rfc/return-scheduling.md §6): at most this many due returns are served at
+ * once; the rest stay pending in their order and are counted as waiting. Nothing is rescheduled or
+ * dropped and the learner chooses no interval. The value is an unevidenced, legible parameter,
+ * revisable on the same stated-evidence trigger as the ladder constants.
+ */
+export const DUE_INTAKE_LIMIT = 20;
+
+/**
+ * Corpus-frequency tie-break (rfc/return-scheduling.md §4). Frequency orders only within one group
+ * of the existing order — the same kind and the same UTC due date — so a return due on an earlier
+ * day always stays ahead. Unknown frequency sorts after known; ties keep the prior order.
+ * Frequency orders, it never grades.
+ */
+export function orderDueByFrequency<T extends { readonly kind: "blocked" | "varied"; readonly dueAt: string }>(
+  schedules: readonly T[],
+  games: (schedule: T) => number | undefined,
+): readonly T[] {
+  const indexed = schedules.map((schedule, index) => ({
+    schedule,
+    index,
+    games: games(schedule),
+    group: `${schedule.kind === "blocked" ? 0 : 1}|${schedule.dueAt.slice(0, 10)}`,
+  }));
+  const groupOrder = new Map<string, number>();
+  for (const item of indexed) if (!groupOrder.has(item.group)) groupOrder.set(item.group, groupOrder.size);
+  return Object.freeze([...indexed].sort((left, right) =>
+    groupOrder.get(left.group)! - groupOrder.get(right.group)! ||
+    (right.games ?? -1) - (left.games ?? -1) ||
+    left.index - right.index,
+  ).map((item) => item.schedule));
 }
 
 export interface AttemptRow {

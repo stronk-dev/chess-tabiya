@@ -27,14 +27,36 @@ attempt is varied; two consecutive stable graded attempts are varied; other hist
 blocked. Varied repetitions use the 1, 3, 7, 16, and 35 day ladder. Ungraded histories advance
 that ladder by countable-attempt count; graded histories advance it only by the current trailing
 stable streak, with two stable attempts earning the first rung. A prior lapse therefore cannot
-inflate the next interval. Learners may also
+inflate the next interval.
+
+`rfc/return-scheduling.md` adds three rules, all derived by replaying the countable `attempts`
+history with no new column. **Step-down:** a root that lapses after reaching ladder index `k`
+keeps a floor of `k - 1`, so a root that had reached 16 days and then recovered returns at 7 days
+rather than 1; a root that never climbed keeps a floor of 0, and re-reaching the peak clears the
+floor. **Overstudy:** an attempt the learner timed may demote but never advance the ladder. In-run
+retries are always off schedule; any other non-`scheduled` attempt is off schedule only when the
+root already had a pending return that was not yet due when it started. **Named variation:** the
+automatic varied return rotates `schedules.variant` through the pack's declared `retryVariants`
+kinds by ladder index; a blocked return, or a pack declaring none, stores `NULL`, which Learn
+describes as a fresh opponent seed. `retryVariants` is still not a run modifier.
+
+Learners may also
 schedule a node explicitly. That operation persists a schedule and appends
 `transfer.scheduled`; callers without the writer lease cannot create either.
 
 The HTTP surface is:
 
 - `GET /progress` — learner-scoped attempt history.
-- `GET /progress/due` — due pending schedules, blocked first.
+- `GET /progress/due` — the served due queue: blocked first, then by due date. Within one kind and
+  one UTC due date only, returns are ordered by how many Lichess games reach the root position at
+  the source run's authored band (`corpusPopulation`); each item carries that population count or
+  `null`. Frequency orders and never grades. At most `DUE_INTAKE_LIMIT` (20) returns are served;
+  the response counts the rest as `waiting`, which keep their order and pending state (vacation
+  safety — nothing is rescheduled and the learner chooses no interval).
+- `GET /progress/difficult` — roots with at least three unstable graded attempts, read from
+  `attempts` (never `learner_position_stats`), with the unstable count and the latest runs where
+  it happened. The rule is published with the response; there is no attempt total, ratio or
+  ladder position.
 - `GET /progress/related` — at most three of the learner's own least-rehearsed related attempts.
 - `POST /progress/schedules/:id` with `dismiss` — learner-scoped dismissal.
 - `POST /runs/:id/duplicate` — a new owned run without mutating the source.
@@ -64,6 +86,17 @@ schedule id, refuses duplicates, removes the card only after server success, kee
 retry, and cannot mutate a newly loaded Learn route after departure. Due and retry starts continue
 through the run controller's single-flight lifecycle and now expose its pending state to assistive
 technology while their controls are disabled.
+
+Due cards name the variation (the pack's retry-variant kind in words, or a fresh opponent seed)
+and, when the corpus answered, the population count that ordered them. When intake holds work back,
+Learn says how many returns are waiting. *Positions with repeated unstable attempts* lists the
+difficult roots with the published rule and one *Open run* control per preserved run.
+
+Imported games support guess-the-move: at a source-game position with a played next move, the
+learner plays a guess on a separate board; the server records `prediction.recorded` under the
+reserved checkpoint `imported-game:next-move` against the human-move model's distribution, and the
+run does not advance. The drill screen then names the move the game played and the model rank of the
+guess, never a grade.
 
 It deliberately presents no mastery percentage: the stored data is an attempt history and
 a return queue, not proof of mastery. It also lists derived event-shaped milestones linking

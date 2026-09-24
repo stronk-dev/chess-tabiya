@@ -97,14 +97,17 @@ import {
   type PackSummary,
 } from "./pack-registry.js";
 import type { ImportedGameRecord, PublicTokenRecord, RepertoireGapRunRecord, RunDerivation, RunStorage, RunSummary, StoredRun } from "./storage.js";
-import type { ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
+import type { DifficultRootPage, ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
 import type { RatingStorage, RatedGameTerminalReason } from "./storage.js";
 import type { ClassroomStorage } from "./storage.js";
 import {
+  DUE_INTAKE_LIMIT,
+  orderDueByFrequency,
   projectAttempts,
   rootKey as progressRootKey,
   type AttemptOriginInput,
 } from "./progress.js";
+import { corpusPopulation, type CorpusPopulation, type CorpusSource } from "./corpus.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 import { OpponentSelector, type SelectMoveRequest } from "./opponent-selector.js";
 import type { TablebaseSource } from "./tablebase.js";
@@ -138,6 +141,27 @@ import {
   type ReasoningPage,
   type ReasoningPreviousView,
 } from "./reasoning.js";
+
+/** Upper bound on corpus lookups per due-queue read; beyond it frequency is unknown and the stored order holds. */
+export const DUE_FREQUENCY_LOOKUP_LIMIT = 40;
+
+export interface DueFrequency {
+  readonly games: number;
+  readonly population: CorpusPopulation;
+}
+
+export interface DueQueue {
+  readonly schedules: readonly (ScheduleRow & { readonly frequency: DueFrequency | null })[];
+  readonly waiting: number;
+  readonly intakeLimit: number;
+}
+
+/**
+ * The reserved checkpoint id under which an imported game records a guess of the move actually
+ * played (rfc/return-scheduling.md §8). Imported games carry no pack, so no authored checkpoint
+ * exists; the reference is the source game's own next move.
+ */
+export const IMPORTED_GAME_PREDICTION_CHECKPOINT = "imported-game:next-move";
 
 export interface RunViewer {
   readonly role: RunRole;
@@ -1548,9 +1572,23 @@ export class RunService {
   ): MutationResult {
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
-    const pack = this.#requiredRegisteredPack(stored.run);
-    if (pack === undefined || !pack.document.checkpoints.some((checkpoint) => checkpoint.id === input.checkpointId && checkpoint.interaction?.type === "prediction")) {
-      throw new ServerError("INVALID_REQUEST", "Unknown prediction checkpoint");
+    if (stored.run.sessionKind === "imported") {
+      // Guess-the-move on an imported game (rfc/return-scheduling.md §8): the reference is the move
+      // the source game actually played, so the gate is the source mainline, not a pack checkpoint.
+      if (input.checkpointId !== IMPORTED_GAME_PREDICTION_CHECKPOINT) {
+        throw new ServerError("INVALID_REQUEST", `Imported games record predictions only at ${IMPORTED_GAME_PREDICTION_CHECKPOINT}`);
+      }
+      const primary = stored.run.branches[0];
+      const node = stored.run.nodes.find((candidate) => candidate.id === input.nodeId);
+      if (primary === undefined || node === undefined || node.branchId !== primary.id ||
+        !stored.run.nodes.some((candidate) => candidate.branchId === primary.id && candidate.parentId === node.id)) {
+        throw new ServerError("INVALID_REQUEST", "Imported-game predictions need a source-game position with a played next move");
+      }
+    } else {
+      const pack = this.#requiredRegisteredPack(stored.run);
+      if (pack === undefined || !pack.document.checkpoints.some((checkpoint) => checkpoint.id === input.checkpointId && checkpoint.interaction?.type === "prediction")) {
+        throw new ServerError("INVALID_REQUEST", "Unknown prediction checkpoint");
+      }
     }
     if (stored.run.activeCursor.nodeId !== input.nodeId) {
       throw new ServerError("INVALID_REQUEST", "Prediction node is not the active cursor");
@@ -1988,6 +2026,50 @@ export class RunService {
     return this.#requiredProgress().dueSchedules(principal.learnerId, at);
   }
 
+  /**
+   * The served return queue (rfc/return-scheduling.md §§4, 6): due work in the stored order, with
+   * corpus frequency at the root's authored band as a tie-break inside one due day only, then cut
+   * to the vacation-safe intake. Frequency orders; it never grades and never crosses a due date.
+   */
+  async dueQueue(principal: Principal, at = new Date().toISOString(), corpus?: CorpusSource): Promise<DueQueue> {
+    const all = this.due(principal, at);
+    const group = (schedule: ScheduleRow) => `${schedule.kind}|${schedule.dueAt.slice(0, 10)}`;
+    const windowGroups = new Set(all.slice(0, DUE_INTAKE_LIMIT).map(group));
+    const frequencies = new Map<string, DueFrequency>();
+    if (corpus !== undefined) {
+      let lookups = 0;
+      for (const schedule of all) {
+        if (!windowGroups.has(group(schedule)) || lookups >= DUE_FREQUENCY_LOOKUP_LIMIT) continue;
+        lookups += 1;
+        const population = this.#duePopulation(schedule);
+        try {
+          const result = await corpus.stats({ ...population, fen: `${schedule.rootTransposeKey} 0 1` });
+          if (result.kind === "stats") frequencies.set(schedule.id, Object.freeze({ games: result.total, population: result.population }));
+        } catch {
+          // Frequency is only a tie-break; an unavailable corpus leaves the stored order intact.
+        }
+      }
+    }
+    const ordered = orderDueByFrequency(all, (schedule) => frequencies.get(schedule.id)?.games);
+    const served = ordered.slice(0, DUE_INTAKE_LIMIT);
+    return Object.freeze({
+      schedules: Object.freeze(served.map((schedule) => Object.freeze({ ...schedule, frequency: frequencies.get(schedule.id) ?? null }))),
+      waiting: ordered.length - served.length,
+      intakeLimit: DUE_INTAKE_LIMIT,
+    });
+  }
+
+  #duePopulation(schedule: ScheduleRow): CorpusPopulation {
+    const source = schedule.sourceRunId === null ? undefined : this.#storage.read(schedule.sourceRunId)?.run;
+    const policy = source?.opponentPolicy;
+    return corpusPopulation(policy?.mode === "human_common" ? policy.targetElo : undefined);
+  }
+
+  difficultRoots(principal: Principal): DifficultRootPage {
+    return this.#requiredProgress().difficultRoots?.(principal.learnerId)
+      ?? Object.freeze({ threshold: 3, roots: Object.freeze([]), total: 0 });
+  }
+
   dismissSchedule(scheduleId: string, principal: Principal): void {
     this.#requiredProgress().dismissSchedule(scheduleId, principal.learnerId);
   }
@@ -2223,7 +2305,10 @@ export class RunService {
       const match=this.#matchContext(run.id);
       const primary=run.branches[0]?.id;
       const attempts=match===undefined||primary===undefined?projection.attempts:Object.freeze(projection.attempts.map((attempt)=>attempt.branchId===primary?Object.freeze({...attempt,countable:false}):attempt));
-      this.#progress.upsertAttempts(attempts, projection.conceptTags);
+      const retryVariants = pack?.retryVariants === undefined || pack.retryVariants.length === 0
+        ? undefined
+        : Object.freeze({ [pack.id]: Object.freeze(pack.retryVariants.map((variant) => variant.kind)) });
+      this.#progress.upsertAttempts(attempts, projection.conceptTags, retryVariants);
     }
     this.#projectRatedGame(run);
   }
