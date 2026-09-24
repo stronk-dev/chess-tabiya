@@ -111,7 +111,7 @@ callers cannot smuggle a pre-rendered sentence under a structured projection.
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 40 producers, 216 projections, 25 consumers and 243 bindings, plus
+The primary manifest contains 40 producers, 216 projections, 34 consumers and 501 bindings, plus
 78 semantic events, 78 eligibility rows, 15 reasons and one selection policy. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
 startup and by `make semantic-evidence-check`.

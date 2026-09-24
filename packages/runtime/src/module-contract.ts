@@ -9,9 +9,19 @@ export const MODULE_IDS = Object.freeze([
 export type ModuleId = (typeof MODULE_IDS)[number];
 export type ModuleTiming = "pre_commit" | "at_commit" | "post_commit" | "checkpoint" | "review";
 export type ModuleInitiative = "ambient" | "proactive" | "on_request" | "explicit_mode";
-export type ModuleAnswerCeiling = "none" | "fact" | "pattern" | "threat" | "candidate_move" | "move" | "principal_variation";
 export type ModuleSeatClass = "board_input" | "board_adjacent" | "rail" | "timeline" | "explicit_surface";
 export type ModuleForm = "sentence" | "card" | "square" | "arrow" | "timeline_mark" | "panel" | "spoken_voice";
+
+/**
+ * rfc/module-registration.md §2.3(a) ([[D1445]], [[D1859]]): answer distance is a branched capability
+ * set, not a total ladder. Theory and evaluation are incomparable; `move` implies neither ranking,
+ * theory nor evaluation. A module declares a non-empty literal union; compilation unions the images.
+ */
+export const MODULE_ANSWER_CAPABILITIES = Object.freeze([
+  "observation", "pattern", "threat", "theory", "evaluation",
+  "candidates", "ranked_candidates", "move", "principal_variation",
+] as const);
+export type ModuleAnswerCapability = (typeof MODULE_ANSWER_CAPABILITIES)[number];
 
 export interface ModuleAcceptanceDeclaration {
   readonly projection: VersionedEvidenceId;
@@ -20,19 +30,37 @@ export interface ModuleAcceptanceDeclaration {
   readonly denominatorRequired?: boolean;
 }
 
+/** One named upstream dependency that keeps a module from executing. */
+export interface ModuleDependencyBlocker {
+  /** The owning RFC or lane, e.g. `hint-distance`. */
+  readonly owner: string;
+  /** The ledger or discharge row that records the dependency, e.g. `D1639`. */
+  readonly ledger: string;
+  readonly reason: string;
+}
+
 export type ModuleEvidenceDeclaration =
   | { readonly kind: "none"; readonly awaiting: readonly VersionedEvidenceId[] }
-  | { readonly kind: "manifest"; readonly projections: readonly ModuleAcceptanceDeclaration[]; readonly awaiting: readonly VersionedEvidenceId[] };
+  | { readonly kind: "manifest"; readonly projections: readonly ModuleAcceptanceDeclaration[]; readonly awaiting: readonly VersionedEvidenceId[] }
+  /**
+   * The module's literal acceptance list cannot be written yet because an upstream registry it must
+   * import does not exist. It registers no consumer and admits nothing; its blockers are explicit.
+   */
+  | { readonly kind: "blocked_dependencies"; readonly blockers: readonly ModuleDependencyBlocker[]; readonly awaiting: readonly VersionedEvidenceId[] };
 
 export interface ModuleTimingDeclaration {
   readonly timing: ModuleTiming;
   readonly initiative: ModuleInitiative;
 }
 
-export interface ModuleAnswerContract {
-  readonly ceiling: ModuleAnswerCeiling;
-  readonly stages?: readonly { readonly stage: 1 | 2 | 3; readonly ceiling: ModuleAnswerCeiling }[];
-}
+/**
+ * `none` belongs to `rules_floor` alone and `guided_hint@1` to `guided_hint` alone: its exact
+ * family×rung disclosure image is owned by `hint-distance`, never a broad fallback ([[D1569]]).
+ */
+export type ModuleAnswerContract =
+  | { readonly kind: "none" }
+  | { readonly kind: "capabilities"; readonly capabilities: readonly ModuleAnswerCapability[] }
+  | { readonly kind: "guided_hint@1" };
 
 export interface ModuleCeilings {
   readonly disclosure: readonly EvidenceTiming[];
@@ -53,10 +81,17 @@ export interface ModuleSelectionDeclaration {
   readonly familyPrecedence: readonly VersionedEvidenceId[];
 }
 
+/** rfc/module-registration.md §5.2: the eight evidence families Full Inspector states separately. */
+export const INSPECTOR_FAMILY_IDS = Object.freeze([
+  "local_rules", "authored_theory", "recorded_run", "stockfish", "syzygy", "maia", "explorer", "derived",
+] as const);
+export type InspectorFamilyId = (typeof INSPECTOR_FAMILY_IDS)[number];
+
 export type ModuleEmptyBehavior =
   | { readonly kind: "silent" }
   | { readonly kind: "stated_absence"; readonly sentence: string }
-  | { readonly kind: "unavailable_source"; readonly sentence: string };
+  | { readonly kind: "unavailable_source"; readonly sentence: string }
+  | { readonly kind: "family_partitioned"; readonly families: readonly InspectorFamilyId[] };
 
 /** The fourteen-field learner-module contract. It selects no chess facts by itself. */
 export interface ModuleDeclaration {
@@ -79,18 +114,27 @@ export interface ModuleDeclaration {
 export interface ModuleEvidenceClosure {
   readonly projections: readonly VersionedEvidenceId[];
   readonly consumers: readonly { readonly consumer: VersionedEvidenceId; readonly accepts: readonly VersionedEvidenceId[] }[];
+  /**
+   * Declared answer content of every compiled projection. When supplied, the compiler derives each
+   * module's accepted answer union from it and refuses a union outside the declared capability image
+   * or a declared capability with no accepted witness (§2.3(a), criterion A4).
+   */
+  readonly answerContent?: readonly { readonly projection: VersionedEvidenceId; readonly answerContent: readonly AnswerDistance[] }[];
 }
 
 export interface CompiledModuleRegistry {
   readonly modules: readonly ModuleDeclaration[];
   readonly byId: ReadonlyMap<ModuleId, ModuleDeclaration>;
+  /** The compiled answer image (the union of the declared capability images) of each module. */
+  readonly answerImages: ReadonlyMap<ModuleId, readonly AnswerDistance[]>;
 }
 
 export const MODULE_CONTRACT_ERROR_CODES = Object.freeze([
   "MODULE_REGISTRY_INCOMPLETE", "MODULE_DECLARATION_INCOMPLETE", "MODULE_ID_DUPLICATE",
   "MODULE_EVIDENCE_UNRESOLVED", "MODULE_CONSUMER_MISMATCH", "MODULE_CEILING_INVALID",
   "MODULE_FORM_UNMAPPED", "MODULE_ANSWER_WIDENS", "MODULE_AVOIDANCE_TIMING",
-  "MODULE_BOARD_ADJACENT_COUNT", "MODULE_STAGE_INVALID",
+  "MODULE_BOARD_ADJACENT_COUNT", "MODULE_STAGE_INVALID", "MODULE_CAPABILITY_UNWITNESSED",
+  "MODULE_DEPENDENCY_BLOCKED",
 ] as const);
 export type ModuleContractErrorCode = (typeof MODULE_CONTRACT_ERROR_CODES)[number];
 
@@ -126,15 +170,37 @@ export const MODULE_FORM_IMAGE: Readonly<Record<ModuleForm, readonly EvidenceFor
   spoken_voice: ["audio"],
 } satisfies Record<ModuleForm, readonly EvidenceForm[]>);
 
-export const MODULE_ANSWER_IMAGE: Readonly<Record<ModuleAnswerCeiling, readonly AnswerDistance[]>> = Object.freeze({
-  none: [],
-  fact: ["fact"],
-  pattern: ["pattern"],
-  threat: ["threat"],
-  candidate_move: ["candidate_moves"],
-  move: ["move"],
-  principal_variation: ["principal_variation"],
-} satisfies Record<ModuleAnswerCeiling, readonly AnswerDistance[]>);
+/** §2.3(a): the explicit branched image. Every branch carries the common `fact` member. */
+export const MODULE_ANSWER_CAPABILITY_IMAGE: Readonly<Record<ModuleAnswerCapability, readonly AnswerDistance[]>> = Object.freeze({
+  observation: ["fact"],
+  pattern: ["fact", "pattern"],
+  threat: ["fact", "threat"],
+  theory: ["fact", "pattern", "theory", "principle", "plan"],
+  evaluation: ["fact", "evaluation"],
+  candidates: ["fact", "candidate_moves"],
+  ranked_candidates: ["fact", "candidate_moves", "ranked_moves"],
+  move: ["fact", "move"],
+  principal_variation: ["fact", "candidate_moves", "ranked_moves", "move", "principal_variation"],
+} satisfies Record<ModuleAnswerCapability, readonly AnswerDistance[]>);
+
+/**
+ * The compiled answer image of one contract. `guided_hint@1` has no image until `hint-distance`
+ * publishes its sealed family×rung registry, so that module is blocked rather than widened.
+ */
+export function moduleAnswerImage(contract: ModuleAnswerContract): readonly AnswerDistance[] {
+  if (contract.kind !== "capabilities") return Object.freeze([]);
+  return Object.freeze([...new Set(contract.capabilities.flatMap((capability) => MODULE_ANSWER_CAPABILITY_IMAGE[capability] ?? []))]);
+}
+
+/** The literal evidence-timing image of a module's declared timings (`ceilings.disclosure`'s maximum). */
+export function moduleEvidenceTimings(module: Pick<ModuleDeclaration, "timings">): readonly EvidenceTiming[] {
+  return Object.freeze([...new Set(module.timings.flatMap((value) => MODULE_TIMING_IMAGE[value.timing]))]);
+}
+
+/** The literal evidence-form image of a module's declared forms. */
+export function moduleEvidenceForms(module: Pick<ModuleDeclaration, "forms">): readonly EvidenceForm[] {
+  return Object.freeze([...new Set(module.forms.flatMap((form) => MODULE_FORM_IMAGE[form]))]);
+}
 
 function fail(code: ModuleContractErrorCode, message: string): never {
   throw new ModuleContractError(code, message);
@@ -147,17 +213,23 @@ function assertDeclaration(module: ModuleDeclaration): void {
   if (![module.budgets.maxFacts, module.budgets.maxWords, module.budgets.maxArrows].every((value) => Number.isSafeInteger(value) && value >= 0) || module.budgets.maxMarks !== null && (!Number.isSafeInteger(module.budgets.maxMarks) || module.budgets.maxMarks < 0)) fail("MODULE_CEILING_INVALID", `${module.id} has an invalid backstop budget`);
   if (!Number.isSafeInteger(module.noveltyWindow) || module.noveltyWindow < 0) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has an invalid novelty window`);
   for (const form of module.forms) if (MODULE_FORM_IMAGE[form] === undefined) fail("MODULE_FORM_UNMAPPED", `${module.id} uses unmapped form ${form}`);
-  const timingImage = module.timings.flatMap((value) => MODULE_TIMING_IMAGE[value.timing]);
-  if (!subset(module.ceilings.disclosure, timingImage)) fail("MODULE_CEILING_INVALID", `${module.id} disclosure ceiling exceeds its module timing image`);
-  const answerImage = MODULE_ANSWER_IMAGE[module.answerCeiling.ceiling];
-  if (answerImage === undefined) fail("MODULE_ANSWER_WIDENS", `${module.id} has no answer-distance image`);
-  const stages = module.answerCeiling.stages;
-  if (stages !== undefined) {
-    if (module.answerCeiling.ceiling !== "move" || stages.length !== 3 || stages.map((value) => `${value.stage}:${value.ceiling}`).join("|") !== "1:pattern|2:fact|3:move") fail("MODULE_STAGE_INVALID", `${module.id} has an invalid progressive stage ceiling`);
-  } else if (module.id === "guided_hint") fail("MODULE_STAGE_INVALID", "guided_hint requires all three typed stage ceilings");
-  if (module.id !== "guided_hint" && stages !== undefined) fail("MODULE_STAGE_INVALID", `${module.id} cannot declare guided-hint stages`);
-  if (module.accepts.kind === "none") {
-    if (module.id !== "rules_floor" || module.accepts.awaiting.length !== 0 || module.budgets.maxFacts !== 0 || module.answerCeiling.ceiling !== "none" || module.seatClass !== "board_input") fail("MODULE_DECLARATION_INCOMPLETE", "rules_floor is the sole registry-only affordance module");
+  if (!subset(module.ceilings.disclosure, moduleEvidenceTimings(module))) fail("MODULE_CEILING_INVALID", `${module.id} disclosure ceiling exceeds its module timing image`);
+  const contract = module.answerCeiling;
+  if (contract === undefined || !["none", "capabilities", "guided_hint@1"].includes(contract.kind)) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has no answer contract`);
+  if (module.id === "rules_floor" ? contract.kind !== "none" : contract.kind === "none") fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} ${module.id === "rules_floor" ? "must declare" : "may not declare"} the none answer contract`);
+  if (module.id === "guided_hint" ? contract.kind !== "guided_hint@1" : contract.kind === "guided_hint@1") fail("MODULE_STAGE_INVALID", `${module.id} ${module.id === "guided_hint" ? "requires" : "cannot declare"} the guided_hint@1 disclosure contract`);
+  if (contract.kind === "capabilities" && (contract.capabilities.length === 0 || !unique(contract.capabilities) || contract.capabilities.some((capability) => !MODULE_ANSWER_CAPABILITIES.includes(capability)))) fail("MODULE_ANSWER_WIDENS", `${module.id} needs a non-empty literal union of known answer capabilities`);
+  if (contract.kind === "guided_hint@1" && module.accepts.kind !== "blocked_dependencies") fail("MODULE_DEPENDENCY_BLOCKED", "guided_hint@1 cannot admit evidence until hint-distance publishes HINT_DISCLOSURE_PROJECTION_IDS");
+  const answerImage = moduleAnswerImage(contract);
+  if (module.emptyBehavior.kind === "family_partitioned") {
+    const families = module.emptyBehavior.families;
+    if (module.id !== "full_inspector" || families.length !== INSPECTOR_FAMILY_IDS.length || !unique(families) || !subset(families, INSPECTOR_FAMILY_IDS)) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} may not declare a family-partitioned empty state other than Full Inspector's eight families`);
+  }
+  if (module.accepts.kind === "blocked_dependencies") {
+    if (module.id === "rules_floor" || module.accepts.blockers.length === 0 || module.accepts.blockers.some((blocker) => !nonEmpty(blocker.owner) || !nonEmpty(blocker.ledger) || !nonEmpty(blocker.reason))) fail("MODULE_DEPENDENCY_BLOCKED", `${module.id} blocked dependencies must name an owner, a ledger row and a reason`);
+    if (module.selection.familyPrecedence.length !== 0) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} is blocked and cannot declare a family precedence`);
+  } else if (module.accepts.kind === "none") {
+    if (module.id !== "rules_floor" || module.accepts.awaiting.length !== 0 || module.budgets.maxFacts !== 0 || module.seatClass !== "board_input") fail("MODULE_DECLARATION_INCOMPLETE", "rules_floor is the sole registry-only affordance module");
   } else {
     if (module.id === "rules_floor" || module.accepts.projections.length === 0 || !unique(module.accepts.projections.map((value) => refKey(value.projection)))) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has an invalid manifest acceptance list`);
     const precedence = module.selection.familyPrecedence.map(refKey);
@@ -175,16 +247,40 @@ function assertDeclaration(module: ModuleDeclaration): void {
 function assertClosure(modules: readonly ModuleDeclaration[], closure: ModuleEvidenceClosure): void {
   const projections = new Set(closure.projections.map(refKey));
   const consumers = new Map(closure.consumers.map((value) => [refKey(value.consumer), value.accepts.map(refKey)]));
+  const answers = closure.answerContent === undefined ? undefined : new Map(closure.answerContent.map((value) => [refKey(value.projection), value.answerContent]));
   for (const module of modules) {
     if (module.accepts.kind === "none") {
       if (consumers.has(`module.${module.id}@1`)) fail("MODULE_CONSUMER_MISMATCH", "rules_floor must not register an evidence consumer");
       continue;
     }
-    const accepted = module.accepts.projections.map((value) => refKey(value.projection));
     const awaiting = module.accepts.awaiting.map(refKey);
+    if (module.accepts.kind === "blocked_dependencies") {
+      if (consumers.has(`module.${module.id}@1`)) fail("MODULE_CONSUMER_MISMATCH", `${module.id} is blocked and must not register an evidence consumer`);
+      if (awaiting.some((value) => projections.has(value))) fail("MODULE_EVIDENCE_UNRESOLVED", `${module.id} awaits a projection that already compiles`);
+      continue;
+    }
+    const accepted = module.accepts.projections.map((value) => refKey(value.projection));
     if (accepted.some((value) => !projections.has(value)) || awaiting.some((value) => projections.has(value))) fail("MODULE_EVIDENCE_UNRESOLVED", `${module.id} compiled/awaiting projection partition is false`);
     const consumer = consumers.get(`module.${module.id}@1`);
     if (consumer === undefined || consumer.join("|") !== accepted.join("|")) fail("MODULE_CONSUMER_MISMATCH", `${module.id} consumer is absent or not order-equal to accepts`);
+    if (answers !== undefined) {
+      const image = moduleAnswerImage(module.answerCeiling);
+      const union = new Set<AnswerDistance>();
+      for (const key of accepted) {
+        const declared = answers.get(key);
+        if (declared === undefined) fail("MODULE_EVIDENCE_UNRESOLVED", `${module.id} accepts ${key} with no declared answer content`);
+        for (const answer of declared) union.add(answer);
+      }
+      const widened = [...union].filter((answer) => !image.includes(answer));
+      if (widened.length > 0) fail("MODULE_ANSWER_WIDENS", `${module.id} accepts answer content outside its capabilities: ${widened.join(", ")}`);
+      if (module.answerCeiling.kind === "capabilities") {
+        for (const capability of module.answerCeiling.capabilities) {
+          const branch = MODULE_ANSWER_CAPABILITY_IMAGE[capability];
+          const witness = capability === "observation" ? branch : branch.filter((answer) => answer !== "fact");
+          if (!witness.some((answer) => union.has(answer))) fail("MODULE_CAPABILITY_UNWITNESSED", `${module.id} declares ${capability} with no accepted witness`);
+        }
+      }
+    }
   }
 }
 
@@ -199,5 +295,6 @@ export function compileModuleRegistry(declarations: readonly ModuleDeclaration[]
   if ([...byId.values()].filter((value) => value.seatClass === "board_adjacent").length !== 1) fail("MODULE_BOARD_ADJACENT_COUNT", "exactly one module must occupy the board-adjacent seat");
   if (closure !== undefined) assertClosure([...byId.values()], closure);
   const modules = Object.freeze(MODULE_IDS.map((id) => byId.get(id)!));
-  return Object.freeze({ modules, byId: byId as ReadonlyMap<ModuleId, ModuleDeclaration> });
+  const answerImages = new Map(modules.map((module) => [module.id, moduleAnswerImage(module.answerCeiling)] as const));
+  return Object.freeze({ modules, byId: byId as ReadonlyMap<ModuleId, ModuleDeclaration>, answerImages: answerImages as ReadonlyMap<ModuleId, readonly AnswerDistance[]> });
 }

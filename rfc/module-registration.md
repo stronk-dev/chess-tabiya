@@ -1,6 +1,18 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — bounded discharge-coverage repair complete; not acceptable.** The artifacts are
+- **Status:** **draft in the register until the coordinator's closeout flips its `rfc/README.md` row to implementing — the production registry landed 2026-09-24 at the owner's direction
+  (implement directly, no review round); receipt
+  `planning/learner-modules/implementation-2026-09-24.md`.** `MODULE_REGISTRY` compiles all eleven
+  declarations at import against the evidence manifest (`packages/runtime/src/module-registry.ts`);
+  nine `module.*` consumers bind 258 exact pairs; the capability repair (§2.3(a)/(b)), the derived
+  disposition transfer (31, §2.4), the §1.3.1 successor rebase and the D3065 cover-or-refuse closure
+  are enforced at import. **Executable today:** Review Map (grade, recorded evaluation, the eleven
+  recorded-path v2 events) and Post-commit Nudge (grade + one-edge closure), both through
+  `compileModulePacket`. **Blocked, by name, per pair (`MODULE_PAIR_EXECUTION`):** Guided Hint
+  (hint-distance D1639 / D7), pre-/at-commit modules (intent-presets disclosure receipt, A16),
+  every seat's pair-keyed presentation (evidence-presentation, A5), the general module query route
+  and exact-operation resolution (D8), and two declared-awaiting refs. Open: A5, A7–A11, A13, A16–A20,
+  A23–A25 and Discharges D1–D8. *Prior status, retained for history:* **draft — bounded discharge-coverage repair complete; not acceptable.** The artifacts are
   `completionClaim: requirements_only` and all 229 binding rows are `blocked_dependencies`, so no
   module becomes executable and no implementation is authorised. Standing blockers: the
   `evidence-value-authority` successor rebase (§1.3.1), the `hint-distance` measured family×rung
@@ -448,13 +460,29 @@ lands, the generator—not a hand edit—applies this exact set replacement:
 | `rules.endgame.reading@1` | `rules.endgame.classification@1`; `theory.endgame.setup_match@1` | Structure Nudge, Review Map | +2 |
 | `rules.pivotal.marker@1` | `derived.pivotal.irreversibility@1`; `derived.pivotal.phase_change@1`; `derived.pivotal.human_divergence@1`; `derived.pivotal.option_collapse@1` | Review Map, Full Inspector | +6 |
 
-The replacement is set-equal over the four retired and eight successor refs. No v1/v2 pair may
-coexist in one module. The post-dependency drift tripwires are **declared `239 + R` / compiled
-`237 + R` / awaiting `2`**, and the unique requirement projection population is **136**, not 132.
-The two awaiting rows are unchanged; successor availability cannot be hidden as a third awaiting
-wildcard. The generated execution/binding JSON, digests, family witness, D1865 assembly fixture and
-all counts regenerate in one author-repair commit before fresh review. Until then the current
-artifacts remain evidence of the old manifest and cannot authorize implementation.
+The replacement is set-equal over the four retired and eight successor refs. No retired v1 ref
+and its successor may coexist in one module. The post-dependency drift tripwires are **declared
+`239 + R` / compiled `237 + R` / awaiting `2`**, and the unique requirement projection population
+is **136**, not 132. The two awaiting rows are unchanged; successor availability cannot be hidden
+as a third awaiting wildcard.
+
+**Implemented 2026-09-24 (the dependency had landed).** `MODULE_SUCCESSOR_REBASE` in
+`evidence-catalog.ts` applies exactly this replacement to the production acceptance image. One
+further correction was needed and is applied there, not hand-edited here: the
+`recorded-semantic-path` compiler emits only the **eleven exact v2 successors**
+(`RECORDED_PATH_SUCCESSOR_REFS`), and the production Review operation reads only that compiler, so
+a review-timed module that accepted only `@1` would admit nothing the Review Map shows. Each
+review-timed module (`review_map`, `full_inspector`) therefore accepts the exact v2 successor
+immediately after every v1 recorded-path predecessor it already accepts (+11 Review, +10
+Inspector). This is not v1/v2 coexistence of a retired ref: both versions are live, from different
+sources (narrative move vs exact recorded edge), and no production operation emits both in one
+packet. Post-commit Nudge reads one committed edge, never a window, and takes no v2 ref. The
+implemented tripwires are **declared `260 + R` / compiled `258 + R` / awaiting `2`**, **147** unique
+compiled projections, `R = 0` while Guided Hint is blocked. The checked-in
+`module-*-plan-v1.json` artifacts remain the historical pre-rebase requirements image; their
+generator no longer runs against the current manifest (it cannot resolve the retired
+`rules.pivotal.marker` presentation family), and the production registry supersedes them as the
+executable authority.
 
 Here `H = HINT_HORIZON_PROJECTION_IDS.length` and
 `R = HINT_DISCLOSURE_PROJECTION_IDS.length = H × HINT_RUNGS.length`; both are derived from the
@@ -721,7 +749,9 @@ not delete its warning**: each row's `limitations` array retains the measured ca
 `:395`), which is where a caveat belongs once a consumer exists.
 
 Named non-module dispositions retained at the original decision boundary include
-`rules.exchange.predicate.legal_exchange` and `derived.story.title`. Named so that the deletion set is
+`rules.exchange.predicate.legal_exchange`, `run.record.position` and `theory.endgame.method_stage`
+(`derived.story.title` was named here in error: it is bound to `review.story` and carries no
+disposition — corrected 2026-09-24). Named so that the deletion set is
 a decision with a boundary rather than a sweep. The acceptance gate derives the complete retained
 complement from the manifest; this prose list is illustrative, not a second cardinality authority.
 
@@ -1931,6 +1961,33 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-09-24 (implementation, owner-directed, no review round): landed the production registry
+  (`module-policy.ts` one policy authority; `MODULE_CONSUMER_ACCEPTS` one exact acceptance image;
+  `module-registry.ts` compiled at import; `module-packets.ts` `compileModulePacket`, the one
+  operation every `module.*` consumer names; `postcommit-nudge.ts`), the §2.3(a) branched
+  capability image with compile-time union/witness checks and the §2.3(b) admission check, the
+  derived disposition transfer, and the Review Map and Post-commit Nudge callers. RFC defects fixed
+  inline or recorded here, each now a test: **(1)** the §1.3.1 successor rebase was due — the
+  dependency had landed — and is applied by `MODULE_SUCCESSOR_REBASE`; **(2)** review-timed modules
+  accepted only `@1` recorded-path events while the recorded-path compiler emits only their exact
+  `@2` successors, so they now also take the v2 successor beside each v1 predecessor (+21 pairs;
+  §1.3.1 note; image 258 compiled / 2 awaiting / 147 projections); **(3)** the §2.4 transfer is 31
+  projections at this image, not 23 (the rebase adds `theory.endgame.setup_match@1`; the Wave-C
+  primitives and legal moves were already counted in the harness's 30), derived rather than listed;
+  **(4)** §2.4 named `derived.story.title` as a retained disposition, but it is bound to
+  `review.story` — corrected inline; **(5)** Guided Hint cannot declare a non-empty manifest before
+  `HINT_DISCLOSURE_PROJECTION_IDS` exists, so the contract gains an explicit
+  `blocked_dependencies` evidence arm (blockers name owner, ledger row, reason; registers no
+  consumer) and `guided_hint@1` is only legal on it — the old three-stage `stages` field is deleted;
+  **(6)** the reducer read an avoidance denominator from `payload.denominator`, but
+  `CounterfactualAbsenceOperands` declares it as `legalAlternatives` — admission now reads the
+  declared operand; **(7)** §2.1 invariant 4 (novelty-identity closure) is not implementable until
+  the D1164 stable-field matrix lands in code; the reducer keeps its honest novelty abstention and
+  the invariant slot now asserts module-binding set-equality (A2) instead, with cover-or-refuse
+  (D3065) as a fifth invariant; **(8)** `full_inspector.forms` follows §1.4 (`card` included); the
+  author fixture had dropped it and now derives from `MODULE_POLICIES` ([[D3066]]). The Review Map
+  refuses grades, evaluations and relations for a viewer or workflow context outside
+  `review_map`'s derived ceilings (Match, onramp) with a stated sentence.
 - 2026-09-07 ([[D3129]] / [[D921]] literal Wave-C rebase): imported the accepted-parent
   amendment's exact 26-pair subset. The seven observed named tactics retain Nudge, Review and
   Inspector homes; defender-duty reading/removal/relocation, strict overload conflict and bounded

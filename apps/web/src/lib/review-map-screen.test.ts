@@ -21,7 +21,7 @@ function payload(options: { readonly mayWrite?: boolean; readonly evaluated?: (i
   const run = reviewFixtureRun({ id: "web-review", ...(options.evaluated === undefined ? {} : { evaluated: options.evaluated }), ...(options.plies === undefined ? {} : { plies: options.plies }) });
   const branchId = run.activeCursor.branchId;
   const story = options.noMoments === true ? { moments: [], rank: [] } : storyMoments(run, branchId, { recordedResult: "1-0" });
-  const projection: ReviewMapProjection = reviewMapProjection({ run, branchId, story, context: "imported_analysis" });
+  const projection: ReviewMapProjection = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "learner", session: "imported" } });
   // A JSON round trip: the component renders exactly what crosses the wire.
   return JSON.parse(JSON.stringify({
     runId: run.id, branchId, side: "white", ready: true, pendingEvidence: 0,

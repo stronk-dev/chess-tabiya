@@ -159,6 +159,26 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(graphAfter.nodes.filter((node) => node.branchId === review.branchId).map((node) => node.id)).toEqual(mainline);
     expect((await read()).rows).toHaveLength(PLIES);
   });
+
+  it("[module-registration §4.5] serves Post-commit Nudge through module.postcommit_nudge@1 without writing", async () => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "nudge_owner");
+    const runId = await importReviewedGame(origin, cookie, "writer-nudge");
+    const review = await (await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } })).json() as ReviewPayload;
+    const nudge = (nodeId: string) => fetch(`${origin}/runs/${runId}/nudge?nodeId=${encodeURIComponent(nodeId)}`, { headers: { cookie } });
+    const before = tableSnapshot(databasePath);
+    const white = review.rows[4]!;
+    const response = await nudge(white.nodeId);
+    expect(response.status, await response.clone().text()).toBe(200);
+    const packet = await response.json() as { kind: string; nodeId: string; facts: { projection: string; sentence: string }[]; receipt: { admitted: number } };
+    expect(packet).toMatchObject({ kind: "packet", nodeId: white.nodeId });
+    expect(packet.facts.length).toBeLessThanOrEqual(2);
+    expect(packet.facts.every((fact) => /@\d+$/u.test(fact.projection))).toBe(true);
+    // The opponent's move is not the learner's commit: a typed refusal, not a packet.
+    expect(await (await nudge(review.rows[5]!.nodeId)).json()).toMatchObject({ kind: "refused", reason: "not_a_learner_move" });
+    expect((await nudge("missing-node")).status).toBe(400);
+    expect(tableSnapshot(databasePath)).toEqual(before);
+  });
 });
 
 describe("review map service boundary", () => {

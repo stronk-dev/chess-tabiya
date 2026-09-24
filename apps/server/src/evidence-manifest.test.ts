@@ -38,7 +38,7 @@ describe("server evidence manifest aggregate", () => {
   it("exposes only consumer-safe binding summaries, never payloads or provider secrets", () => {
     const value = evidenceManifestCapabilities({ opponent: "mock", judge: "mock", llm: "external", corpus: "mock", tts: "none", tablebase: "mock" });
     expect(value.digest).toMatch(/^[a-f0-9]{64}$/);
-    expect(value.counts).toEqual({ producers: 40, projections: 216, consumers: 25, bindings: 243, semanticEvents: 78, eligibility: 78, reasons: 15, selectionPolicies: 1 });
+    expect(value.counts).toEqual({ producers: 40, projections: 216, consumers: 34, bindings: 501, semanticEvents: 78, eligibility: 78, reasons: 15, selectionPolicies: 1 });
     expect(JSON.stringify(value)).not.toMatch(/bestMoveUci|principalVariation|apiKey|authoredText/);
     expect(value.bindings.every((binding) => binding.consumerId.length > 0 && binding.projectionId.length > 0)).toBe(true);
   });

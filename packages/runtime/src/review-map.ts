@@ -5,7 +5,8 @@
 // principal variation and no praise class (§7).
 
 import { branchPath } from "./branch-path.js";
-import type { DeclaredEvidence } from "./evidence-contract.js";
+import type { DeclaredEvidence, EvidenceRole } from "./evidence-contract.js";
+import { compileModulePacket } from "./module-packets.js";
 import { GRADE_CONVENTION, assertMoveQualityGradeSentence, renderMoveQualityGrade, type GradeContext, type GradeSide, type MoveQualityClass, type MoveQualityGrade } from "./grade.js";
 import { gradeReadingFromPayload, moverWinPercent } from "./grade-reading.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
@@ -89,7 +90,35 @@ export interface ReviewMapInput {
   readonly context: ReviewMapContext;
   /** The recorded-semantic-path result for the same run/branch, when the caller compiled it. */
   readonly semanticPath?: RecordedSemanticPathResult;
+  /**
+   * The viewer, for `module.review_map@1` admission (rfc/module-registration.md §1.2): the evidence
+   * role (through `moduleEvidenceRole`) and the run's workflow context. Every grade, evaluation and
+   * recorded-path relation on this surface is admitted by the compiled Review Map module first.
+   */
+  readonly viewer: { readonly role: EvidenceRole; readonly session: string };
 }
+
+type ReviewModuleRefusal = "role_outside_ceiling" | "session_outside_ceiling" | "not_admitted";
+const MODULE_REFUSAL_TEMPLATES: Readonly<Record<ReviewModuleRefusal, ReviewTemplateId>> = Object.freeze({
+  role_outside_ceiling: "module.refusal.role_outside_ceiling",
+  session_outside_ceiling: "module.refusal.session_outside_ceiling",
+  not_admitted: "module.refusal.not_admitted",
+});
+
+/**
+ * One exact `module.review_map@1` admission (`compileModulePacket`, admit mode: the row is not the
+ * budgeted unit — moments are). Returns the admitted evidence, or the stated refusal.
+ */
+function admitForReview<T>(viewer: ReviewMapInput["viewer"], evidence: readonly DeclaredEvidence<T>[]): { readonly admitted: ReadonlySet<DeclaredEvidence<T>> } | { readonly refused: ReviewModuleRefusal } {
+  const packet = compileModulePacket({ module: "review_map", timing: "review", role: viewer.role, session: viewer.session, evidence, mode: "admit" });
+  if (packet.kind === "refused") {
+    if (packet.reason === "role_outside_ceiling" || packet.reason === "session_outside_ceiling") return { refused: packet.reason };
+    throw new TypeError(`module.review_map@1 refused its own review timing: ${packet.reason}`);
+  }
+  return { admitted: new Set(packet.facts.map((fact) => fact.evidence)) };
+}
+
+const withheld = (reason: ReviewModuleRefusal): string => reviewText("evidence.module.withheld", { reason: reviewText(MODULE_REFUSAL_TEMPLATES[reason]) });
 
 const SAN_GLYPH = /[?!]|\$\d/u;
 const MOMENT_KIND_TEMPLATES: Readonly<Record<StoryMomentKind, ReviewTemplateId>> = Object.freeze({
@@ -145,7 +174,13 @@ function evaluationPacket(run: DrillRun, node: Node): EvidencePayload | undefine
   return Object.freeze({ kind, source, values });
 }
 
-function evaluationSentence(packet: EvidencePayload | undefined, sideToMove: GradeSide): string {
+function evaluationSentence(viewer: ReviewMapInput["viewer"], packet: EvidencePayload | undefined, sideToMove: GradeSide): string {
+  if (packet !== undefined) {
+    const sealed = invokeEvidenceValueRoute("live.stockfish.eval@1", { packet });
+    const admission = admitForReview(viewer, [sealed]);
+    if ("refused" in admission) return withheld(admission.refused);
+    if (!admission.admitted.has(sealed)) return withheld("not_admitted");
+  }
   const reading = packet === undefined ? undefined : gradeReadingFromPayload(packet, sideToMove);
   if (reading === undefined || "abstained" in reading) return reviewText("evidence.eval.missing");
   const score = reading.score.kind === "cp"
@@ -158,11 +193,13 @@ function evaluationSentence(packet: EvidencePayload | undefined, sideToMove: Gra
 interface Decision {
   readonly grade?: MoveQualityGrade;
   readonly abstention?: string;
+  /** The Review Map module refused the minted grade for this viewer. */
+  readonly withheld?: ReviewModuleRefusal;
   /** The mover's win-point drop, clamped at zero, when the decision is evaluated. */
   readonly drop?: number;
 }
 
-function decide(context: ReviewMapContext, mover: GradeSide, before: EvidencePayload | undefined, after: EvidencePayload | undefined): Decision {
+function decide(viewer: ReviewMapInput["viewer"], context: ReviewMapContext, mover: GradeSide, before: EvidencePayload | undefined, after: EvidencePayload | undefined): Decision {
   if (before === undefined || after === undefined) return { abstention: "missing_eval" };
   const sealedBefore = invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: before });
   const sealedAfter = invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: after });
@@ -173,7 +210,11 @@ function decide(context: ReviewMapContext, mover: GradeSide, before: EvidencePay
   if ("abstained" in readingBefore || "abstained" in readingAfter) return { abstention: "input_abstained" };
   const drop = Math.max(0, moverWinPercent(readingBefore, mover) - moverWinPercent(readingAfter, mover));
   const evidence = graded.value[0] as DeclaredEvidence<MoveQualityGrade> | undefined;
-  return evidence === undefined ? { drop } : { drop, grade: evidence.payload };
+  if (evidence === undefined) return { drop };
+  // rfc/move-quality-grades.md D1: the grade reaches this surface only through module.review_map@1.
+  const admission = admitForReview(viewer, [evidence]);
+  if ("refused" in admission) return { drop, withheld: admission.refused };
+  return admission.admitted.has(evidence) ? { drop, grade: evidence.payload } : { drop, withheld: "not_admitted" };
 }
 
 function accuracyFor(side: GradeSide, decisions: readonly Decision[]): ReviewAccuracy {
@@ -205,8 +246,11 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
   const semantic = input.semanticPath;
   const relationsByNode = new Map<string, string[]>();
   const relationLabels = new Set<string>();
-  if (semantic?.kind === "available") {
+  // Recorded-path events are exact v2 refs; module.review_map@1 admits each before it renders.
+  const relationAdmission = semantic?.kind === "available" ? admitForReview(input.viewer, semantic.events.map((event) => event.evidence)) : undefined;
+  if (semantic?.kind === "available" && relationAdmission !== undefined && "admitted" in relationAdmission) {
     for (const event of semantic.events) {
+      if (!relationAdmission.admitted.has(event.evidence)) continue;
       const nodeId = event.anchor.nodeId;
       if (nodeId === undefined) continue;
       const source = evidenceGroundingLabel(event.basis.grounding);
@@ -225,7 +269,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
     if (SAN_GLYPH.test(san)) throw new TypeError(`Review Map SAN ${san} carries an annotation glyph`);
     const side = sideOfMove(parent.fen);
     const moveNumber = moveNumberOf(node.ply);
-    const decision = decide(input.context, side, packets.get(parent.id), packets.get(node.id));
+    const decision = decide(input.viewer, input.context, side, packets.get(parent.id), packets.get(node.id));
     decisions[side].push(decision);
     const grade = decision.grade === undefined ? undefined : (() => {
       const sentence = renderMoveQualityGrade(decision.grade!);
@@ -233,17 +277,21 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
       graded = true;
       return Object.freeze({ klass: decision.grade!.klass, sentence });
     })();
-    const gradeFact = grade?.sentence ?? (decision.abstention === undefined
-      ? reviewText("evidence.grade.none")
-      : reviewText("evidence.grade.abstained", { reason: reviewText(GRADE_ABSTENTIONS[decision.abstention] ?? "grade.abstention.input_abstained") }));
+    const gradeFact = grade?.sentence ?? (decision.withheld !== undefined
+      ? withheld(decision.withheld)
+      : decision.abstention === undefined
+        ? reviewText("evidence.grade.none")
+        : reviewText("evidence.grade.abstained", { reason: reviewText(GRADE_ABSTENTIONS[decision.abstention] ?? "grade.abstention.input_abstained") }));
     const relationFacts = semantic === undefined
       ? [reviewText("evidence.relation.absent")]
       : semantic.kind === "refused"
         ? [reviewText("evidence.relation.refused", { reason: semantic.reason })]
-        : relationsByNode.get(node.id) ?? [reviewText("evidence.relation.none")];
+        : relationAdmission !== undefined && "refused" in relationAdmission
+          ? [withheld(relationAdmission.refused)]
+          : relationsByNode.get(node.id) ?? [reviewText("evidence.relation.none")];
     const facts = Object.freeze([
       gradeFact,
-      evaluationSentence(packets.get(node.id), side === "white" ? "black" : "white"),
+      evaluationSentence(input.viewer, packets.get(node.id), side === "white" ? "black" : "white"),
       ...(notesByNode.get(node.id) ?? []),
       ...relationFacts,
       reviewText("evidence.packet.abstained"),

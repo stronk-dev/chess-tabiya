@@ -74,7 +74,11 @@ export const REVIEW_MAP_TEMPLATES = Object.freeze({
   "evidence.relation.none": "The recorded-path compiler detected no relation starting on this move.",
   "evidence.relation.refused": "Recorded-path relations are unavailable for this line: the compiler refused it ({reason}).",
   "evidence.relation.absent": "Recorded-path relations were not compiled for this view.",
-  "evidence.packet.abstained": "No per-position review packet is admitted here: its compiler, rfc/review-evidence-compiler.md, is still a draft.",
+  "evidence.module.withheld": "Review Map evidence is withheld for this view: {reason}.",
+  "module.refusal.role_outside_ceiling": "this viewer's role is outside the Review Map module's declared roles",
+  "module.refusal.session_outside_ceiling": "this workflow context does not admit the Review Map module",
+  "module.refusal.not_admitted": "the Review Map module does not admit this evidence",
+  "evidence.packet.abstained":"No per-position review packet is admitted here: its compiler, rfc/review-evidence-compiler.md, is still a draft.",
   // Moment map (§5)
   "moments.title": "Moments",
   "moments.caption": "Up to three recorded moments, at most one per game phase, from {considered} admitted story moments. This is not a ranking of the play.",
