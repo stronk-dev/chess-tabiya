@@ -21439,3 +21439,21 @@ profile asked Maia for 20 candidates, and any position with fewer legal moves
 was refused as a provider failure. Bots now request min(declared width, legal
 moves), and the compiler admits exactly that width. A regression test covers a
 19-move position, and the browser journey passes 6/6.
+
+### 2026-09-24 — learner modules render in play (evidence-presentation Checkpoint B)
+
+- **Modules in play:** each module renders its admitted facts through sealed
+  presentation receipts, only when the compiled preset carries it:
+  - Guide me: sight, nudges, theory breadcrumb and compare coach.
+  - Support: adds blunder prevention with a staged-move slot, and threat radar.
+  - Analyze: adds compare coach and the Full Inspector.
+  Workflow ceilings still apply, so Match shows nothing.
+- **Presentation:** all 14 components ship. Every presented pair has an exact
+  adapter, and the label registry and three sweeps gate `verify-software`.
+- **Digest binding:** intent-presets Checkpoint B binds delivery to the final
+  assistance digest.
+- **Remaining:**
+  - Migrating CompareView, the voice path and the legacy Inspector sections to
+    receipts.
+  - Fixing hyphenated raw-id leaks in two sentences.
+  - The Guided Hint seat, which is merging next.
