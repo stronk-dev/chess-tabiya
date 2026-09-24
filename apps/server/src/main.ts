@@ -1,7 +1,22 @@
-import { createApplication, type EngineMode } from "./application.js";
-import { cookieSecureFromEnv } from "./config.js";
+import { mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+
+import { createApplication, createStorageMigrator, DEFAULT_DATABASE_PATH, type EngineMode } from "./application.js";
+import { deploymentBoundaryFromEnv } from "./config.js";
 import { ExternalHttpVoiceProvider } from "./external-voice.js";
 import { ExternalHttpTtsProvider } from "./external-tts.js";
+import { fileBackedDatabaseIdentity } from "./longitudinal-worker-config.js";
+import {
+  applicationRevisionFromEnv,
+  errorReceipt,
+  generateStorageOperationId,
+  prepareStartOperation,
+  ReceiptClock,
+  recoverStorage,
+  resolveStoragePaths,
+  StorageLock,
+  type StorageAdminReceiptV1,
+} from "./storage-admin.js";
 
 function integer(value: string | undefined, fallback: number): number {
   const parsed = value === undefined ? fallback : Number(value);
@@ -16,9 +31,9 @@ if (engineMode !== "mock" && engineMode !== "maia") {
   throw new TypeError(`Unsupported ENGINE_MODE: ${engineMode}`);
 }
 
-const port = integer(process.env.PORT, 3000);
 const development = process.env.NODE_ENV === "development";
-const cookieSecure = cookieSecureFromEnv(process.env.TABIYA_COOKIE_SECURE);
+// rfc/safe-deployment-profiles.md: one closed boundary; hybrids refuse before storage or HTTP opens.
+const deployment = deploymentBoundaryFromEnv(process.env, { development });
 const voiceMode = process.env.TABIYA_VOICE_PROVIDER;
 if (voiceMode !== undefined && voiceMode !== "external_http") {
   throw new TypeError(`Unsupported TABIYA_VOICE_PROVIDER: ${voiceMode}`);
@@ -46,11 +61,44 @@ const externalVoice = voiceMode !== "external_http" ? undefined : new ExternalHt
   ...(process.env.TABIYA_VOICE_PROVIDER_KEY === undefined ? {} : { key: process.env.TABIYA_VOICE_PROVIDER_KEY }),
   timeoutMs: voiceTimeout,
 });
+
+// rfc/storage-backup-recovery.md §§1, 5a, 6: this process owns the storage lock for its whole
+// lifetime — through replacement recovery, prepare-start (pre-upgrade snapshot + staged migration)
+// and HTTP service — so there is no unlock/relock boundary a maintenance command could enter.
+const databasePath = fileBackedDatabaseIdentity(process.env.DATABASE_PATH ?? DEFAULT_DATABASE_PATH()).absolutePath;
+mkdirSync(dirname(databasePath), { recursive: true });
+const storagePaths = resolveStoragePaths({ database: databasePath, backupRoot: process.env.TABIYA_BACKUP_ROOT ?? join(dirname(databasePath), "backups") });
+const storageBase = { operationId: generateStorageOperationId(), applicationRevision: applicationRevisionFromEnv(), clock: new ReceiptClock() };
+let storageLock: StorageLock;
+let prepared: StorageAdminReceiptV1;
+try {
+  storageLock = StorageLock.acquire(storagePaths);
+} catch (error) {
+  console.error(JSON.stringify({ event: "storage_prepare_receipt", receipt: errorReceipt(storageBase, "prepare_start", error) }));
+  process.exit(2);
+}
+try {
+  const recovery = recoverStorage({ lock: storageLock, paths: storagePaths });
+  if (recovery !== "none") console.info(JSON.stringify({ event: "storage_replacement_recovered", recovery }));
+  const migrate = await createStorageMigrator({ development, ...(draftPackFiles === undefined ? {} : { draftPackFiles }), ...(process.env.DRAFT_PACK_FILE === undefined ? {} : { draftPackFile: process.env.DRAFT_PACK_FILE }) });
+  prepared = await prepareStartOperation({ ...storageBase, lock: storageLock, paths: storagePaths, migrate });
+} catch (error) {
+  console.error(`storage prepare-start: ${error instanceof Error ? error.stack ?? error.message : String(error)}`);
+  prepared = errorReceipt(storageBase, "prepare_start", error);
+}
+console.info(JSON.stringify({ event: "storage_prepare_receipt", receipt: prepared }));
+if (prepared.result !== "succeeded") {
+  console.error("Storage preflight refused to start the server. The live database is unchanged; see docs/storage-backup-and-recovery.md (failed upgrade / last-known-good recovery).");
+  storageLock.release();
+  process.exit(prepared.result === "refused" ? 2 : 3);
+}
+
 const application = await createApplication({
   development,
   engineMode,
-  ...(process.env.DATABASE_PATH === undefined ? {} : { databasePath: process.env.DATABASE_PATH }),
-  cookieSecure,
+  databasePath,
+  requirePreparedStorage: true,
+  deployment,
   ...(process.env.DRAFT_PACK_FILE === undefined
     ? {}
     : { draftPackFile: process.env.DRAFT_PACK_FILE }),
@@ -81,15 +129,20 @@ console.info(JSON.stringify({ event: "startup_receipt", ...application.startupRe
 
 await new Promise<void>((resolve, reject) => {
   application.server.once("error", reject);
-  application.server.listen(port, "0.0.0.0", () => resolve());
+  application.server.listen(deployment.listenPort, deployment.listenHost, () => resolve());
 });
-console.log(`chess-tabiya listening on http://0.0.0.0:${port} (${engineMode})`);
+console.log(`chess-tabiya ${deployment.profile} profile listening on ${deployment.listenHost}:${deployment.listenPort}; public origin ${deployment.publicOrigin} (${engineMode})`);
+if (deployment.profile === "local") console.warn("The local profile is single-host HTTP: open it only at its loopback origin. Use appliance or hosted for other devices (docs/deployment.md).");
 
 let closing = false;
 async function shutdown(): Promise<void> {
   if (closing) return;
   closing = true;
-  await application.close();
+  try {
+    await application.close();
+  } finally {
+    storageLock.release();
+  }
 }
 
 process.once("SIGINT", () => void shutdown());

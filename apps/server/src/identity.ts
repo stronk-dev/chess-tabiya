@@ -69,6 +69,8 @@ export class IdentityService {
   readonly #randomUUID: () => string;
   readonly #derive: (password: string, salt: Buffer) => Promise<Buffer>;
   readonly #cookieSecure: boolean;
+  /** rfc/safe-deployment-profiles.md §7: host-only `__Host-` cookie wherever it is Secure. */
+  readonly #cookieName: string;
   readonly #dummyHash: Promise<string>;
 
   constructor(storage: RunStorage, options: IdentityOptions = {}) {
@@ -86,6 +88,7 @@ export class IdentityService {
           });
         }));
     this.#cookieSecure = options.cookieSecure ?? true;
+    this.#cookieName = this.#cookieSecure ? "__Host-tabiya_session" : "tabiya_session";
     const salt = this.#randomBytes(16);
     this.#dummyHash = this.#encodeHash(this.#randomBytes(32).toString("base64url"), salt);
   }
@@ -203,7 +206,7 @@ export class IdentityService {
   }
 
   expiredCookie(): string {
-    return `tabiya_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${this.#cookieSecure ? "; Secure" : ""}`;
+    return `${this.#cookieName}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${this.#cookieSecure ? "; Secure" : ""}`;
   }
 
   async #encodeHash(password: string, salt: Buffer): Promise<string> {
@@ -219,14 +222,14 @@ export class IdentityService {
   }
 
   #cookie(token: string): string {
-    return `tabiya_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_SECONDS}${this.#cookieSecure ? "; Secure" : ""}`;
+    return `${this.#cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_SECONDS}${this.#cookieSecure ? "; Secure" : ""}`;
   }
 
   #sessionToken(header: string | null): string | undefined {
     if (header === null) return undefined;
     for (const part of header.split(";")) {
       const [name, ...rest] = part.trim().split("=");
-      if (name === "tabiya_session") return rest.join("=") || undefined;
+      if (name === this.#cookieName) return rest.join("=") || undefined;
     }
     return undefined;
   }

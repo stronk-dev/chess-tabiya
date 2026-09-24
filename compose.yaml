@@ -1,21 +1,28 @@
 name: chess-tabiya
 
+# Development / local profile (rfc/safe-deployment-profiles.md §3): plain HTTP published on host
+# loopback only, never 0.0.0.0. Other devices use the appliance or hosted profile (docs/deployment.md).
 services:
   server:
     image: chess-tabiya-server:dev
     build:
       context: .
       dockerfile: apps/server/Dockerfile
+      args:
+        TABIYA_APPLICATION_REVISION: ${TABIYA_APPLICATION_REVISION:-dev+dirty}
     environment:
       DATABASE_PATH: /data/chess-tabiya.sqlite
       ENGINE_MODE: ${ENGINE_MODE:-mock}
-      TABIYA_COOKIE_SECURE: "false"
+      TABIYA_DEPLOYMENT_PROFILE: local
+      # Inside the private container namespace only; the host publish below is loopback.
+      TABIYA_LISTEN_HOST: 0.0.0.0
+      TABIYA_PUBLIC_PORT: ${TABIYA_PORT:-3000}
       MAIA_HOST: maia
       MAIA_PORT: "7000"
       PORT: "3000"
       STOCKFISH_PATH: /usr/games/stockfish
     ports:
-      - "${TABIYA_PORT:-3000}:3000"
+      - "127.0.0.1:${TABIYA_PORT:-3000}:3000"
     volumes:
       - tabiya-data:/data
     depends_on:
@@ -24,6 +31,7 @@ services:
         required: false
     restart: unless-stopped
 
+  # The default FOSS `cpu` tier (D655): Stockfish ships in the server image; this is CPU-only Maia.
   maia:
     profiles: [engines]
     image: chess-tabiya-maia:dev
@@ -54,3 +62,5 @@ services:
 
 volumes:
   tabiya-data:
+    # A restore into a fresh volume switches installations by name (docs/storage-backup-and-recovery.md).
+    name: ${TABIYA_DATA_VOLUME:-chess-tabiya_tabiya-data}

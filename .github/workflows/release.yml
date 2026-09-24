@@ -48,6 +48,8 @@ jobs:
           context: .
           file: apps/server/Dockerfile
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            TABIYA_APPLICATION_REVISION=${{ github.sha }}
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/chess-tabiya-server:${{ github.ref_name }}
@@ -84,14 +86,21 @@ jobs:
       MAIA_IMAGE: ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia@${{ needs.maia.outputs.digest }}
     steps:
       - uses: actions/checkout@v7
-      - name: Render digest-pinned Compose release
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Render digest-pinned deployment profiles
         run: |
-          mkdir -p release
-          sed -e "s|__SERVER_IMAGE__|${SERVER_IMAGE}|g" \
-              -e "s|__MAIA_IMAGE__|${MAIA_IMAGE}|g" \
-              deploy/compose.release.template.yaml > release/compose.yaml
+          node tools/render-deployment.mjs --out release --server-image "${SERVER_IMAGE}" --maia-image "${MAIA_IMAGE}"
           docker compose -f release/compose.yaml config --quiet
-      - name: Publish release Compose file
+          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org docker compose -f release/compose.appliance.yaml config --quiet
+          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org TABIYA_ACME_EMAIL=operator@example.org docker compose -f release/compose.hosted.yaml config --quiet
+          TABIYA_BACKUP_DIRECTORY=/srv/tabiya-backups docker compose -f release/compose.yaml -f release/compose.maintenance.yaml config --quiet
+      - name: Publish release deployment files
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "${GITHUB_REF_NAME}" release/compose.yaml --generate-notes
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            release/compose.yaml release/compose.appliance.yaml release/compose.hosted.yaml \
+            release/compose.maintenance.yaml release/Caddyfile.appliance release/Caddyfile.hosted \
+            --generate-notes

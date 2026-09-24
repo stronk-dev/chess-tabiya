@@ -978,6 +978,31 @@ Another genuinely fresh independent review is required before acceptance or impl
 
 ## Changelog
 
+- 2026-09-24: implemented on the owner's direct-implementation ruling (no further review round);
+  see `docs/storage-backup-and-recovery.md`. The fifth-review returns are closed by construction:
+  every check runs inside the operation that owns the SQLite handle and compiles from a private
+  ledger ([[D2972]], [[D2973]]); the replacement image is a pure function of the journal and every
+  step is one rename, so restart compares digests against the committed generation or its one
+  successor ([[D2974]]); journal publication is real temp/fsync/rename/dir-fsync with crash points
+  ([[D2975]]); a leftover temp is parsed and must be this operation's next generation, else refused
+  ([[D2976]]); readiness is the live `/readyz` route over the live connection ([[D2977]]). Inline
+  defect fixes: (a) **lock mechanism** — Node cannot call `flock(2)` on an inherited FD, so the
+  FD-3 shell supervisor is replaced by `main.js` owning an exclusive SQLite (POSIX advisory) lock
+  for its whole lifetime through recovery, prepare-start and HTTP; there is still no
+  unlock/relock boundary and process death releases it; (b) §1's "backup root outside the database
+  directory" contradicted §8's "normal startup does not fail on a missing backup setting" for the
+  automatic pre-upgrade snapshot — the root may not *be* the database directory or contain the
+  database, and pre-upgrade snapshots default to `<data>/backups`; (c) rollback to the prior
+  release needed an operation that installs a bundle *without* migrating, since restore on the
+  current image re-upgrades — added `rollback` (receipt names `compatibleApplicationRevision`);
+  (d) compatibility and historical inventories are derived at runtime from the append-only
+  migration chain (any head) instead of build-embedded digests, which cannot drift from it;
+  (e) migration invariants default to strictest (no undeclared row-count change) so a new
+  migration cannot join silently; (f) install-into-live uses atomic rename after verified
+  quarantine instead of link+unlink; (g) rehearsal runs in-process in the maintenance container,
+  so `imageDigest` may be null outside a release. Remaining: D1 release-candidate drill and
+  per-architecture release-tier CI; `make storage-drill` exercises the built image locally.
+
 - 2026-09-05: fourth author repair completed [[D2724]]–[[D2729]]. Exact digest-bearing filesystem
   images, subject/action-bound checks, fixed atomic journal publication/discovery, v4-only operation
   identity, canonical `/readyz` and parsed immutable application revision now compose under `make

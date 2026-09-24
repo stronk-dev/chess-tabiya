@@ -1101,6 +1101,21 @@ implementation detail.
 
 ## Changelog
 
+- 2026-09-24: implemented the directed slice — loopback-only `local` default, `appliance`
+  (internal CA) and `hosted` (ACME) Compose profiles behind the digest-pinned Caddy with the
+  three-edge network graph, profile-derived Secure `__Host-` cookies outside local HTTP, Host /
+  forwarded-header / Origin + Fetch-Metadata refusal before routing, `/readyz` as the proxy
+  health, the CPU-only Maia `cpu` tier, operator Make targets and `docs/deployment.md`. Defect
+  fixes/deviations: (a) the selectors are a closed validated environment set compiled once at
+  startup rather than a mounted compiled JSON image (the renderer-digest attestation is deferred);
+  (b) a profile is **required** outside development so no packaged default issues an insecure
+  cookie; (c) loopback `local` admits `localhost` as well as `127.0.0.1` and admits an absent
+  `Origin` (browsers always send it on writes; non-browser clients carry no ambient cookie);
+  (d) proxied profiles add a server-only `egress` network because the app reads the Lichess
+  explorer/tablebase — the RFC's graph left the app no outbound path. Not implemented here:
+  per-route body budgets and streaming egress (D1846/D1847), `deployment-admin` receipts and the
+  profile-migration journal, the hosted file-certificate arm, CSP, D1/D2 discharges.
+
 - 2026-09-05: third author repair completed [[D2730]]–[[D2735]]. Expected-digest mounted-image
   validation now covers the complete profile relation; one sealed deployment subject owns checks
   and receipts; the full canonical terminal union enforces immutable revisions and safe elapsed
