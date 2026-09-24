@@ -61,12 +61,10 @@ describe("grounded game story", () => {
   });
 
   it("renders shape firings as learner labels without exposing catalogue keys", () => {
-    const declared = declareShapeFiringEvidence([{
-      entryId: "carlsbad-minority-attack",
-      firstNodeId: "n1",
-      lastNodeId: "n2",
-      openEnded: false,
-    }]);
+    const declared = declareShapeFiringEvidence(
+      [{ id: "carlsbad-minority-attack", trigger: { kind: "feature", feature: { kind: "open_file", file: "a" } } }],
+      [{ id: "n1", fen: "rnbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1" }],
+    );
     const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "review.story", version: 1 }, declared);
     const sentences = renderReviewStoryEvidence(view).items.flatMap((item) => item.sentences);
     expect(sentences).toEqual(["Recognized position pattern: Carlsbad minority attack."]);

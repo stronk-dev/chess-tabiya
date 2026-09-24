@@ -1,12 +1,12 @@
 import { branchPath } from "./branch-path.js";
-import { endgameReading, renderEndgameReading, type EndgameReading } from "./endgame.js";
+import { renderEndgameClassification, type EndgameClassification } from "./endgame.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
-import { pivotalMarkers, renderPivotalMarker, type PivotalKind } from "./pivotal.js";
-import { renderShapeFiring, shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
+import { pivotalMarkerEvidenceItems, renderPivotalMarker, type PivotalKind, type PivotalMarker } from "./pivotal.js";
+import { renderShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, Node, RunOutcome } from "./types.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, renderEvidenceItems, type ConsumerEvidenceView, type DeclaredEvidence, type EvidenceRendererRegistry, type RenderedEvidenceView } from "./evidence-contract.js";
-import { declareEndgameReadingEvidence, declarePivotalMarkerEvidence, declareRunRecordEvidence, declareSerializedReviewStoryEvidence, declareShapeFiringSourceEvidence, declareStoryDerivedEvidence } from "./evidence-source-adapters.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 export type StoryMomentKind = PivotalKind | "eval_pivot" | "last_level" | "endgame_entry" | "shape_span" | "outcome";
 export interface StoryEvaluation {
@@ -26,7 +26,7 @@ export interface StoryMoment {
   readonly evalBefore?: StoryEvaluation;
   readonly evalAfter?: StoryEvaluation;
   readonly phase: DetectedPhase;
-  readonly endgame?: EndgameReading;
+  readonly endgame?: EndgameClassification;
 }
 export interface StoryProjection { readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; readonly evidence: readonly DeclaredEvidence<unknown>[]; }
 export interface StoryMomentSelection { readonly moments: readonly StoryMoment[]; readonly shown: number; readonly total: number; readonly limit: number; }
@@ -45,9 +45,10 @@ const STORY_MOMENT_PRIORITY: Readonly<Record<StoryMomentKind, number>> = Object.
   irreversibility: 8,
 });
 const ref = (id: string) => ({ id, version: 1 } as const);
-const storyEvidence = (kind: "eval_shift" | "last_level" | "title", values: Readonly<Record<string, unknown>>): DeclaredEvidence<unknown> => declareStoryDerivedEvidence(kind, Object.freeze({ ...values }));
 
-function renderRecordedOutcome(evidence: DeclaredEvidence<unknown>): readonly string[] {
+type StoryRenderable = Pick<DeclaredEvidence<unknown>, "projection" | "payload">;
+
+function renderRecordedOutcome(evidence: StoryRenderable): readonly string[] {
   const payload = evidence.payload as { readonly context?: unknown; readonly terminal?: unknown; readonly outcome?: unknown; readonly result?: unknown };
   if (payload.context !== "story") throw new TypeError(`${evidence.projection.id} has the wrong rendering context`);
   if (evidence.projection.id === "run.record.imported_result") return Object.freeze([`The PGN records the game result as ${String(payload.result)}; the board is not terminal here.`]);
@@ -74,23 +75,28 @@ export function renderStoryEvaluationTrajectory(beforeCentipawns: number, afterC
   return `Recorded evaluation from the learner's side: ${signedStoryPawns(beforeCentipawns)} → ${signedStoryPawns(afterCentipawns)} pawns.`;
 }
 
-function renderStoryEvalShift(evidence: DeclaredEvidence<unknown>): readonly string[] {
+function renderStoryEvalShift(evidence: StoryRenderable): readonly string[] {
   const payload = evidence.payload as { readonly after?: StoryEvaluation; readonly delta?: unknown };
   if (payload.after === undefined || !Number.isSafeInteger(payload.delta)) throw new TypeError("Story evaluation shift omitted structured operands");
   return Object.freeze([renderStoryEvaluationChange(payload.after, payload.delta as number)]);
 }
 
-const REVIEW_STORY_RENDERERS: EvidenceRendererRegistry = Object.freeze({
-  "rules.pivotal.marker@1": (evidence) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]),
+const renderMarker = (evidence: StoryRenderable) => renderPivotalMarker(evidence.payload as PivotalMarker);
+const STORY_PAYLOAD_RENDERERS: Readonly<Record<string, (evidence: StoryRenderable) => readonly string[]>> = Object.freeze({
+  "derived.pivotal.irreversibility@1": renderMarker,
+  "derived.pivotal.phase_change@1": renderMarker,
+  "derived.pivotal.human_divergence@1": renderMarker,
+  "derived.pivotal.option_collapse@1": renderMarker,
   "theory.shapes.firing@1": (evidence) => renderShapeFiring(evidence.payload as Parameters<typeof renderShapeFiring>[0]),
   "run.record.consequence@1": renderRecordedOutcome,
   "run.record.imported_result@1": renderRecordedOutcome,
-  "rules.endgame.reading@1": (evidence) => renderEndgameReading(evidence.payload as EndgameReading),
+  "rules.endgame.classification@1": (evidence) => renderEndgameClassification(evidence.payload as EndgameClassification),
   "derived.story.eval_shift@1": renderStoryEvalShift,
   "derived.story.last_level@1": () => Object.freeze(["The last recorded moment within a pawn of level — Tabiya's recorded-evaluation convention."]),
   "derived.story.rank@1": () => Object.freeze([]),
   "derived.story.title@1": (evidence) => { const title = (evidence.payload as { readonly title?: unknown }).title; if (typeof title !== "string") throw new TypeError("Story title payload omitted title"); return Object.freeze([title]); },
 });
+const REVIEW_STORY_RENDERERS: EvidenceRendererRegistry = STORY_PAYLOAD_RENDERERS;
 
 export function renderReviewStoryEvidence(view: ConsumerEvidenceView<unknown>): RenderedEvidenceView<unknown> {
   assertConsumerEvidenceView(view);
@@ -98,14 +104,33 @@ export function renderReviewStoryEvidence(view: ConsumerEvidenceView<unknown>): 
   return renderEvidenceItems(view, REVIEW_STORY_RENDERERS);
 }
 
-/** Rebuilds and renders the exact review-story evidence carried across a JSON boundary. */
+/**
+ * Re-renders review-story evidence carried across a JSON boundary, for a byte-consistency check of
+ * the server's sentences only. Transport payloads are NEVER sealed or admitted as evidence here:
+ * rfc/evidence-value-authority.md removes every caller-payload rehydration route. Each item must
+ * name an exact producer/projection pair that review.story@1 binds.
+ */
 export function renderSerializedReviewStoryEvidence(values: readonly unknown[]): readonly string[] {
   if (!Array.isArray(values)) throw new TypeError("Serialized Story evidence must be an array");
-  const declared = values.map(declareSerializedReviewStoryEvidence);
-  const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "review.story", version: 1 }, declared);
-  if (view.items.length !== declared.length) throw new TypeError("Serialized Story evidence is not admitted by review.story@1");
-  const rendered = renderReviewStoryEvidence(view);
-  return Object.freeze([...new Set(rendered.items.flatMap((item) => item.sentences))]);
+  const bound = new Set(PRIMARY_EVIDENCE_MANIFEST.bindings.filter((binding) => binding.consumer.id === "review.story" && binding.consumer.version === 1).map((binding) => `${binding.producer.id}@${binding.producer.version}:${binding.projection.id}@${binding.projection.version}`));
+  const sentences = values.flatMap((value) => {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) throw new TypeError("Serialized Story evidence must be an object");
+    const item = value as Record<string, unknown>;
+    if (Object.keys(item).some((key) => !["producer", "projection", "payload"].includes(key)) || !("payload" in item)) throw new TypeError("Serialized Story evidence has an open shape");
+    const versioned = (candidate: unknown, label: string): { readonly id: string; readonly version: number } => {
+      if (typeof candidate !== "object" || candidate === null || Array.isArray(candidate)) throw new TypeError(`Serialized Story ${label} is invalid`);
+      const record = candidate as Record<string, unknown>;
+      if (Object.keys(record).some((key) => key !== "id" && key !== "version") || typeof record.id !== "string" || !Number.isSafeInteger(record.version)) throw new TypeError(`Serialized Story ${label} is invalid`);
+      return { id: record.id, version: record.version as number };
+    };
+    const producer = versioned(item.producer, "producer");
+    const projection = versioned(item.projection, "projection");
+    const key = `${producer.id}@${producer.version}:${projection.id}@${projection.version}`;
+    if (!bound.has(key)) throw new TypeError(`Serialized Story evidence ${key} is not bound to review.story@1`);
+    if (typeof item.payload !== "object" || item.payload === null || Array.isArray(item.payload)) throw new TypeError("Serialized Story payload must be an object");
+    return STORY_PAYLOAD_RENDERERS[`${projection.id}@${projection.version}`]!({ projection, payload: item.payload });
+  });
+  return Object.freeze([...new Set(sentences)]);
 }
 
 function reviewStoryEvidence(declared: readonly DeclaredEvidence<unknown>[]): RenderedEvidenceView<unknown> {
@@ -124,8 +149,11 @@ export function suggestTitle(story: StoryTitleInput): string {
 }
 
 export function storyDeclaredEvidence(story: StoryTitleInput & { readonly evidence?: readonly DeclaredEvidence<unknown>[] }): readonly DeclaredEvidence<unknown>[] {
-  const title = suggestTitle(story);
-  return Object.freeze([storyEvidence("title", { title, rank: story.rank, outcome: story.outcome }), ...(story.evidence ?? story.moments.flatMap((moment) => moment.evidence))]);
+  const carried = story.evidence ?? story.moments.flatMap((moment) => moment.evidence);
+  const rank = carried.find((item) => item.projection.id === "derived.story.rank" && item.projection.version === 1)
+    ?? invokeEvidenceValueRoute("derived.story.rank@1", { moments: story.moments });
+  const title = invokeEvidenceValueRoute("derived.story.title@1", { story: { side: story.side, outcome: story.outcome, moments: story.moments, rank: story.rank }, rank: rank as DeclaredEvidence<{ readonly rank: readonly string[] }> });
+  return Object.freeze([title, ...carried]);
 }
 
 export function reviewStoryTitle(story: StoryTitleInput): string {
@@ -203,7 +231,8 @@ export function storyEvidenceSourceLabels(
   return Object.freeze([...labels]);
 }
 
-function evaluation(run: DrillRun, node: Node): StoryEvaluation | undefined {
+/** The learner-side recorded engine evaluation at one node, from the run's engine_validated events. */
+export function storyEvaluation(run: DrillRun, node: Node): StoryEvaluation | undefined {
   const event = [...run.events].reverse().find((candidate) =>
     candidate.type === "evidence.attached" && candidate.data.nodeId === node.id &&
     candidate.data.payload.kind === "eval" && candidate.data.payload.source === "engine_validated",
@@ -234,42 +263,39 @@ export function storyMoments(
 ): StoryProjection {
   const path = branchPath(run, branchId);
   const byId = new Map(path.map((node) => [node.id, node]));
-  const accum = new Map<string, { kinds: Set<StoryMomentKind>; evidence: DeclaredEvidence<unknown>[]; before?: StoryEvaluation; after?: StoryEvaluation; endgame?: EndgameReading }>();
+  const accum = new Map<string, { kinds: Set<StoryMomentKind>; evidence: DeclaredEvidence<unknown>[]; before?: StoryEvaluation; after?: StoryEvaluation; endgame?: EndgameClassification }>();
   const item = (nodeId: string) => {
     let value = accum.get(nodeId);
     if (value === undefined) { value = { kinds: new Set(), evidence: [] }; accum.set(nodeId, value); }
     return value;
   };
-  for (const marker of pivotalMarkers(run, branchId)) {
-    const value = item(marker.nodeId); value.kinds.add(marker.kind); value.evidence.push(declarePivotalMarkerEvidence(marker));
+  for (const marker of pivotalMarkerEvidenceItems(run, branchId)) {
+    const value = item(marker.payload.nodeId); value.kinds.add(marker.payload.kind); value.evidence.push(marker);
   }
-  const evaluations = path.map((node) => evaluation(run, node));
-  for (let index = 1; index < path.length; index += 1) {
-    const before = evaluations[index - 1], after = evaluations[index];
-    if (before === undefined || after === undefined) continue;
-    const delta = after.centipawns - before.centipawns;
-    if (Math.abs(delta) < STORY_PIVOT_CP) continue;
-    const value = item(path[index]!.id); value.kinds.add("eval_pivot"); value.before = before; value.after = after;
-    value.evidence.push(storyEvidence("eval_shift", { before, after, delta }));
+  for (const shift of invokeEvidenceValueRoute("derived.story.eval_shift@1", { run, branchId })) {
+    const payload = shift.evidence.payload as { readonly before: StoryEvaluation; readonly after: StoryEvaluation };
+    const value = item(shift.nodeId); value.kinds.add("eval_pivot"); value.before = payload.before; value.after = payload.after;
+    value.evidence.push(shift.evidence);
   }
-  if (learnerLost(options.recordedResult, run.start.side)) {
-    let last = -1;
-    for (let index = 0; index < evaluations.length; index += 1) if ((evaluations[index]?.centipawns ?? -101) >= -100) last = index;
-    if (last >= 0) { const value = item(path[last]!.id); value.kinds.add("last_level"); value.evidence.push(storyEvidence("last_level", { recordedResult: options.recordedResult, evaluation: evaluations[last] })); }
+  if (options.recordedResult !== undefined && options.recordedResult !== "*") {
+    for (const level of invokeEvidenceValueRoute("derived.story.last_level@1", { run, branchId, recordedResult: options.recordedResult })) {
+      const value = item(level.nodeId); value.kinds.add("last_level"); value.evidence.push(level.evidence);
+    }
   }
-  let endgameSeen = false;
   for (const node of path) {
-    const reading = endgameReading(node.fen);
-    if (!endgameSeen && reading !== null) { endgameSeen = true; const value = item(node.id); value.kinds.add("endgame_entry"); value.endgame = reading; value.evidence.push(declareEndgameReadingEvidence(reading)); }
+    const reading = invokeEvidenceValueRoute("rules.endgame.classification@1", { fen: node.fen })[0];
+    if (reading !== undefined) { const value = item(node.id); value.kinds.add("endgame_entry"); value.endgame = reading.payload as EndgameClassification; value.evidence.push(reading); break; }
   }
-  for (const firing of shapeFirings(options.shapes ?? [], path)) {
-    const value = item(firing.firstNodeId); value.kinds.add("shape_span"); value.evidence.push(declareShapeFiringSourceEvidence(firing));
+  for (const firing of invokeEvidenceValueRoute("theory.shapes.firing@1", { entries: options.shapes ?? [], path: path.map((node) => ({ id: node.id, fen: node.fen })) })) {
+    const value = item((firing.payload as { readonly firstNodeId: string }).firstNodeId); value.kinds.add("shape_span"); value.evidence.push(firing);
   }
   const outcome = [...run.events].reverse().find((event) => event.type === "outcome.reached" && byId.has(event.data.nodeId));
-  if (outcome?.type === "outcome.reached") {
-    const value = item(outcome.data.nodeId); value.kinds.add("outcome"); value.evidence.push(declareRunRecordEvidence("consequence", Object.freeze({ context: "story", terminal: true, outcome: outcome.data.outcome })));
+  const consequence = invokeEvidenceValueRoute("run.record.consequence@1", { run, branchId })[0];
+  if (consequence !== undefined) {
+    const value = item(consequence.nodeId); value.kinds.add("outcome"); value.evidence.push(consequence.evidence);
   } else if (options.recordedResult !== undefined && options.recordedResult !== "*") {
-    const leaf = path.at(-1)!; const value = item(leaf.id); value.kinds.add("outcome"); value.evidence.push(declareRunRecordEvidence("imported_result", Object.freeze({ context: "story", result: options.recordedResult })));
+    const imported = invokeEvidenceValueRoute("run.record.imported_result@1", { run, branchId, recordedResult: options.recordedResult })[0]!;
+    const value = item(imported.nodeId); value.kinds.add("outcome"); value.evidence.push(imported.evidence);
   }
   const moments = [...accum.entries()].flatMap(([nodeId, value]) => {
     const node = byId.get(nodeId); if (node === undefined) return [];
@@ -291,7 +317,8 @@ export function storyMoments(
     })];
   }).sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId));
   const rank = rankStoryMoments(moments);
-  const rankEvidence = declareStoryDerivedEvidence("rank", Object.freeze({ rank: Object.freeze(rank) }));
+  const rankEvidence = invokeEvidenceValueRoute("derived.story.rank@1", { moments });
+  if ((rankEvidence.payload as { readonly rank: readonly string[] }).rank.join("|") !== rank.join("|")) throw new TypeError("Story rank factory disagrees with the moment ranking");
   const renderedRank = reviewStoryEvidence([rankEvidence]);
   const admittedRank = (renderedRank.items[0]!.evidence.payload as { readonly rank: readonly string[] }).rank;
   const evidence = Object.freeze([...moments.flatMap((moment) => moment.evidence), renderedRank.items[0]!.evidence]);

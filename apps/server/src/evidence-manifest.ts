@@ -66,11 +66,11 @@ export const RECORDED_READING_PROJECTION_MAP = Object.freeze({
 } as const);
 
 export const PACKET_FIELD_PROJECTION_MAP = Object.freeze({
-  phase: "rules.phase.reading|pack.authored.phase",
-  structures: "rules.structural.reading.named_structure",
+  phase: "rules.phase.reading@2|pack.authored.phase",
+  structures: "rules.structural.reading.named_structure@2",
   observations: "rules.structural.reading.piece_count",
-  markers: "rules.pivotal.marker",
-  endgame: "rules.endgame.reading",
+  markers: "derived.pivotal.irreversibility|derived.pivotal.phase_change|derived.pivotal.human_divergence|derived.pivotal.option_collapse",
+  endgame: "rules.endgame.classification",
   plans: "theory.shapes.firing",
   authored: "pack.authored.claim",
   readings: "recorded.engine.eval|recorded.tablebase.result",

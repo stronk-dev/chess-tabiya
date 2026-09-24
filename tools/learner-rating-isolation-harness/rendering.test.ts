@@ -5,7 +5,7 @@ import {
   classifyPhase,
   commitMove,
   createRun,
-  declarePhaseReadingEvidence,
+  positionGuidanceEvidence,
   type EvidencePacket,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
@@ -46,7 +46,8 @@ function renderingSnapshot(): string {
     phase: Object.freeze({ source: "detector" as const, value: detected.phase }),
     structures: Object.freeze([]), observations: Object.freeze([]), markers: Object.freeze([]),
     endgame: null, plans: Object.freeze([]), authored: Object.freeze([]), readings: Object.freeze([]),
-    declared: Object.freeze([declarePhaseReadingEvidence(detected)]),
+    // The phase reading is minted by its runtime factory from the recorded node (value authority).
+    declared: Object.freeze(positionGuidanceEvidence({ run, node: run.nodes.at(-1)! }).filter((item) => item.projection.id === "rules.phase.reading")),
   });
   return JSON.stringify({
     guard: guarded.events.filter((event) => event.type === "feedback.generated"),

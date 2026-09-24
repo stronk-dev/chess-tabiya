@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, liveMarkers, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presetDeclaration, renderEndgameReading, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameClassification, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -697,7 +697,7 @@
   );
   let entries = $derived(timelineEntries(run, pack));
   let path = $derived(historyFrom(run, run.activeCursor.nodeId));
-  let firings = $derived(shapeFiringEvidence(shapeFirings(shapes, path)));
+  let firings = $derived(shapeFiringEvidence(shapes, path));
   let shapeMarkers = $derived((assistance.guided === "live" ? firings : []).map((firing) => {
     const entry = shapes.find((candidate) => candidate.id === firing.entryId)!;
     return { nodeId: firing.firstNodeId, entryId: entry.id, label: entry.name, channel: entry.channel };
@@ -789,7 +789,7 @@
     return reading === null ? null : { ...reading, observations: moveTransitionEvidence(reading) };
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
-  let endgame = $derived(endgameReading(displayedNode.fen));
+  let endgame = $derived(endgameClassification(displayedNode.fen));
   let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
   let activePreset = $derived(presetDeclaration(workflowPreset));
   let assistanceContext = $derived({ sessionKind: run.sessionKind, workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
@@ -798,7 +798,7 @@
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
   let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
   let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
-  let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(liveMarkers(run, run.activeCursor.branchId, assistanceContext)) : []);
+  let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(run, run.activeCursor.branchId, assistanceContext) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
   let openPivotalNode = $derived(openPivotalNodeId === undefined ? undefined : run.nodes.find((node) => node.id === openPivotalNodeId));
@@ -2151,7 +2151,7 @@
           {:else}
             <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · {rehearsalStepLabel(openPivotalNode?.ply ?? 0).toLocaleLowerCase()}</p>
             {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
-            {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+            {#each renderEndgameClassification(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
             {#if voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"}<p role="status">Preparing an explanation of this moment…</p>{/if}
             {#if voiceError?.nodeId === openPivotalNodeId && voiceError.scope === "marker"}<p role="alert">{voiceError.text}</p>{/if}
@@ -2179,9 +2179,9 @@
           {#if endgame === null}
             <p class="honest">The position is not classified as an endgame.</p>
           {:else}
-            {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+            {#each renderEndgameClassification(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.spoken !== "off"}
-              <button type="button" disabled={speechBusyNodeId === displayedNode.id} onclick={() => void speakSentences(renderEndgameReading(endgame), "reading")}>{speechBusyNodeId === displayedNode.id ? "Preparing spoken guidance…" : "Speak current-position endgame evidence"}</button>
+              <button type="button" disabled={speechBusyNodeId === displayedNode.id} onclick={() => void speakSentences(renderEndgameClassification(endgame), "reading")}>{speechBusyNodeId === displayedNode.id ? "Preparing spoken guidance…" : "Speak current-position endgame evidence"}</button>
             {/if}
             {#if speechBusyNodeId === displayedNode.id}<p role="status">Preparing spoken guidance for this position…</p>{/if}
             {#if speechError?.nodeId === displayedNode.id}<p role="alert">{speechError.text}</p>{/if}

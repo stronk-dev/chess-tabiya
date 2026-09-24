@@ -1,7 +1,7 @@
 import type { PackPhase } from "@chess-tabiya/schema/drill-pack";
 
 import type { AssessmentCategory } from "./branch-scale.js";
-import type { EndgameReading } from "./endgame.js";
+import type { EndgameClassification } from "./endgame.js";
 import type { DetectedPhase } from "./phase.js";
 import type { PivotalMarker } from "./pivotal.js";
 import type { StructuralObservation, StructureMatch } from "./structure.js";
@@ -47,7 +47,8 @@ export type RecordedReading =
       readonly values: TablebaseReadingValues;
     };
 
-export type PositionEvidenceIndex = ReadonlyMap<string, readonly RecordedReading[]>;
+/** Transpose-key index of recorded readings, each derived from its exact sealed ledger record. */
+export type PositionEvidenceIndex = ReadonlyMap<string, readonly DeclaredEvidence<RecordedReading>[]>;
 
 export interface EvidencePacket {
   readonly fen: string;
@@ -55,7 +56,7 @@ export interface EvidencePacket {
   readonly structures: readonly StructureMatch[];
   readonly observations: readonly StructuralObservation[];
   readonly markers: readonly PivotalMarker[];
-  readonly endgame: EndgameReading | null;
+  readonly endgame: EndgameClassification | null;
   readonly plans: readonly ShapeEntryRef[];
   readonly authored: readonly { readonly id: string; readonly text: string; readonly attribution: string }[];
   readonly readings: readonly RecordedReading[];

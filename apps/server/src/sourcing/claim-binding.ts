@@ -2,7 +2,7 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
-import { assertConsumerEvidenceView, declareSourcingRecordEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, sourcingRecordEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 import type { TablebaseCategory } from "../tablebase.js";
 import { EVIDENCE_MANIFEST } from "../evidence-manifest.js";
@@ -181,7 +181,7 @@ export function consumeClaimBindingRecords(view: ConsumerEvidenceView<EvidenceRe
 function claimBindingLedger(ledger: EvidenceLedger): EvidenceLedger {
   const declared = ledger.records.flatMap((record) => {
     const projection = CLAIM_RECORD_PROJECTION[record.kind];
-    const declared = projection === undefined ? undefined : declareSourcingRecordEvidence(record);
+    const declared = projection === undefined ? undefined : sourcingRecordEvidence(record);
     return declared === undefined ? [] : [declared];
   });
   const records = consumeClaimBindingRecords(evidenceForConsumer(

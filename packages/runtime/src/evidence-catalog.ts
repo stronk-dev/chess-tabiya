@@ -32,6 +32,7 @@ const retired = (reason: string): EvidenceDispositionDeclaration => Object.freez
 const producer = (id: string, plane: EvidencePlane, implementation: string, availability: ProducerDeclaration["availability"], outputs: readonly ProjectionDeclaration[]): ProducerDeclaration => Object.freeze({ id, version: 1, plane, implementation, availability, latency: availability === "provider" ? "interactive" : availability === "build_time" ? "offline" : "sync", outputs: Object.freeze(outputs) });
 
 interface ProjectionOptions {
+  readonly version?: number;
   readonly role?: ProjectionRole;
   readonly grounding?: EvidenceGrounding;
   readonly payloadType?: string;
@@ -55,7 +56,7 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
   const forms: readonly EvidenceForm[] = options.forms ?? ["list", "panel"];
   return Object.freeze({
     id,
-    version: 1,
+    version: options.version ?? 1,
     producer: ref(producerId),
     role: options.role ?? "reading",
     plane,
@@ -111,8 +112,8 @@ function withRecordedPathSuccessors(outputs: readonly ProjectionDeclaration[]): 
 }
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([
-  "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame",
-  "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
+  "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame",
+  "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
   "derived.semantic_avoidance",
@@ -292,6 +293,7 @@ const structuralOutputs = [
     forms: ["machine_condition"],
     dependsOn: [ref("authored.structural_condition.input")],
     limitations: ["plan_signature must be expanded before runtime evaluation, matching the structural evaluator contract."],
+    disposition: retired("rfc/evidence-value-authority.md §3.4: replaced by derived.structural.predicate_result@1, computed only from the sealed authored condition."),
   }),
   ...STRUCTURAL_FEATURE_KINDS.map((kind) => projection("rules.structural", `rules.structural.reading.${kind}`, "rules", {
     payloadType: kind === "named_structure" ? "StructureMatch | StructuralObservation.named_structure" : "StructuralObservation",
@@ -306,7 +308,16 @@ const structuralOutputs = [
           ? ["Strict outpost inherits maximal_pawn_reach@1 and does not establish permanence, strategic value or relevance."]
           : ["State alone does not establish relevance or learner valence."],
     ...(kind === "pawn_count" ? { disposition: retired("Zero emitted observations over the executable committed-corpus census; matcher-only at F1.") } : {}),
+    ...(kind === "named_structure" ? { disposition: retired("rfc/evidence-value-authority.md §3.3 ([[D1727]]): the one-operand prose-only route is replaced by rules.structural.reading.named_structure@2.") } : {}),
   })),
+  projection("rules.structural", "rules.structural.reading.named_structure", "rules", {
+    version: 2,
+    payloadType: "StructureMatch",
+    semantics: "Exact registered structure-catalogue match computed from FEN: catalogue id, catalogue name and the catalogue's own provenance note. No run node, relevance or plan is retained.",
+    operands: ["id", "name", "provenanceNote"], grounding: "declared_convention", exactness: "convention",
+    forms: ["sentence", "list", "panel", "lit_squares", "piece_halo"],
+    limitations: ["A catalogue detector match names a registered pawn skeleton; it is not a plan, evaluation or recommendation."],
+  }),
   projection("rules.structural", "rules.structural.reading.pawn_connectivity", "rules", {
     payloadType: "PawnConnectivityReading", semantics: "Exact per-color pawn islands, adjacent-file connected pairs, directed literal pawn-support edges, and maximal weak support chains with every base retained.",
     operands: ["fen", "colors"], answerContent: ["fact", "pattern"], forms: ["list", "panel", "lit_squares", "machine_condition"],
@@ -807,7 +818,15 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("rules.pawn", "rules", "packages/runtime/src/pawn-dynamics.ts", "local", pawnOutputs),
   producer("rules.king", "rules", "packages/runtime/src/king-state.ts", "local", kingOutputs),
   producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", [
-    projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", operands: ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"], forms: ["sentence", "panel"] }),
+    projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", operands: ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"], forms: ["sentence", "panel"], disposition: retired("rfc/evidence-value-authority.md §3.3 ([[D2484]]): a product classifier is not position-rule truth; replaced by rules.phase.reading@2.") }),
+    projection("rules.phase", "rules.phase.reading", "rules", {
+      version: 2,
+      payloadType: "PhaseBandReadingV2",
+      semantics: "phase-bands@1: the phase label and exactly one of five decision arms computed together from one FEN. Margins are non-negative integer operand distances inside the selected band; gap distances are positive integer operand distances to the two adjacent bands.",
+      operands: ["fen", "phase", "material", "undevelopedMinors", "conventionId", "decision"], grounding: "declared_convention", exactness: "convention",
+      forms: ["sentence", "panel"],
+      limitations: ["Margins and distances are never a probability, accuracy estimate, number of moves to transition, opening identity or provider-availability signal."],
+    }),
     projection("rules.phase", "rules.phase.development", "rules", {
       payloadType: "DevelopmentReading", semantics: "development@1 state: role-matched knights on b/g home squares and bishops on c/f home squares are retained per color. This intentionally differs from the role-agnostic count used only by the phase band classifier.",
       operands: ["fen", "conventionId", "undeveloped"], grounding: "declared_convention", exactness: "convention",
@@ -816,11 +835,79 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       disposition: { kind: "inspector_only", reason: "Exact convention state lands before learner-module and bot-feature selection." },
     }),
   ]),
-  producer("rules.pivotal", "rules", "packages/runtime/src/pivotal.ts", "local", [projection("rules.pivotal", "rules.pivotal.marker", "rules", { payloadType: "PivotalMarker", operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"] })]),
-  producer("rules.endgame", "rules", "packages/runtime/src/endgame.ts", "local", [projection("rules.endgame", "rules.endgame.reading", "rules", { payloadType: "EndgameReading", operands: ["type", "techniques", "provenanceNote"], forms: ["sentence", "panel"] })]),
+  producer("rules.pivotal", "rules", "packages/runtime/src/pivotal.ts", "local", [projection("rules.pivotal", "rules.pivotal.marker", "rules", { payloadType: "PivotalMarker", operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"], disposition: retired("rfc/evidence-value-authority.md §3.4: one projection joined four authorities; replaced by the four derived.pivotal.* projections.") })]),
+  producer("derived.pivotal", "derived", "packages/runtime/src/pivotal.ts", "local", [
+    projection("derived.pivotal", "derived.pivotal.irreversibility", "derived", {
+      payloadType: "PivotalMarker.irreversibility", grounding: "declared_convention", exactness: "convention",
+      semantics: "Tabiya's pivotal-marker convention over one exact move-irreversibility transition reading at one recorded run node.",
+      operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"],
+      derivation: { anyOf: (["castled", "last_of_role", "pawn_break"] as const).map((subkind) => [ref(`rules.transition.reading.move_irreversibility.${subkind}`), ref("run.record.position")]) },
+      limitations: ["Marks an irreversible rules event; it is not a grade, plan or significance claim."],
+    }),
+    projection("derived.pivotal", "derived.pivotal.phase_change", "derived", {
+      payloadType: "PivotalMarker.phase_change", grounding: "declared_convention", exactness: "convention",
+      semantics: "A change between two definite phase-bands@1 labels along one recorded branch path.",
+      operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"],
+      derivation: { inputs: [ref2("rules.phase.reading"), ref("run.record.position")] },
+      limitations: ["A phase-band transition is a product convention, not a claim about the game's character."],
+    }),
+    projection("derived.pivotal", "derived.pivotal.human_divergence", "derived", {
+      payloadType: "PivotalMarker.human_divergence", grounding: "declared_convention", exactness: "measured", confidence: "reported",
+      semantics: "Tabiya's split convention over one recorded human-model policy distribution at one recorded run node.",
+      operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"],
+      abstention: { possible: true, reasons: ["input_abstained"] },
+      derivation: { inputs: [ref("human.maia.policy"), ref("run.record.position")] },
+      limitations: ["Model policy mass describes model choice, never move quality; it is not a position-rule marker."],
+    }),
+    projection("derived.pivotal", "derived.pivotal.option_collapse", "derived", {
+      payloadType: "PivotalMarker.option_collapse", grounding: "declared_convention", exactness: "convention",
+      semantics: "Tabiya's sustained legal-continuation convention over three exact same-side legal-move readings on one recorded branch path.",
+      operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"],
+      derivation: { inputs: [ref("rules.mobility.reading.legal_moves"), ref("run.record.position")] },
+      limitations: ["A legal-move count is not forcing, quality or difficulty."],
+    }),
+  ]),
+  producer("rules.endgame", "rules", "packages/runtime/src/endgame.ts", "local", [
+    projection("rules.endgame", "rules.endgame.reading", "rules", { payloadType: "EndgameReading", operands: ["type", "techniques", "provenanceNote"], forms: ["sentence", "panel"], disposition: retired("rfc/evidence-value-authority.md §3.4: material classification and technique applicability are split; replaced by rules.endgame.classification@1 and theory.endgame.setup_match@1.") }),
+    projection("rules.endgame", "rules.endgame.classification", "rules", {
+      payloadType: "EndgameClassification", grounding: "declared_convention", exactness: "convention",
+      semantics: "endgame-material-census@1: material-family classification of a phase-bands@1 endgame position. It carries no technique record.",
+      operands: ["fen", "type", "conventionId", "provenanceNote"], forms: ["sentence", "panel"],
+      limitations: ["A material family is not a technique, outcome or recommendation."],
+    }),
+  ]),
+  producer("theory.endgame", "theory", "packages/runtime/src/evidence-factories.ts", "local", [
+    projection("theory.endgame", "theory.endgame.setup_match", "theory", {
+      payloadType: "EndgameSetupMatch", grounding: "cited_theory", exactness: "convention",
+      semantics: "Positive static Lucena/Philidor/Vancura setup match computed from one canonical FEN under one registered, cited and versioned setup convention.",
+      operands: ["fen", "technique", "convention", "operands"], answerContent: ["fact", "theory"], forms: ["sentence", "panel"],
+      abstention: { possible: true, reasons: ["setup_convention_unregistered", "not_matched"] },
+      limitations: ["A static setup match carries no reachability, advice, significance, correctness or outcome preservation."],
+      disposition: { kind: "inspector_only", reason: "Honest-unavailable until the registered, cited and versioned setup convention exists (semantic-convention-provenance)." },
+    }),
+    projection("theory.endgame", "theory.endgame.method_stage", "derived", {
+      role: "event", payloadType: "MethodStageV1", grounding: "declared_convention", exactness: "convention",
+      semantics: "Retrospective [[D2496]] method stage replayed by a registered, cited and versioned method convention over one matching setup match and an exact ordered, contiguous, same-path window of run.record.edge@1 inputs. The beneficiary is computed, never supplied.",
+      operands: ["technique", "stage", "beneficiary", "convention", "pathId", "startNodeId", "endNodeId", "edgeIds", "beforeFen", "afterFen", "triggeringUci"], signs: ["state"],
+      answerContent: ["fact", "theory"], forms: ["sentence", "panel", "timeline_marker"],
+      abstention: { possible: true, reasons: ["input_abstained", "method_convention_unregistered", "no_stage"] },
+      derivation: { inputs: [ref("theory.endgame.setup_match"), ref("run.record.edge")] },
+      limitations: ["A witnessed stage carries no tablebase category, result preservation, correctness, advice, reachability or significance."],
+      disposition: { kind: "inspector_only", reason: "Honest-unavailable until the setup and method conventions are registered (semantic-convention-provenance)." },
+    }),
+  ]),
   producer("theory.shapes", "theory", "packages/runtime/src/shape-firing.ts; apps/server/src/shape-registry.ts", "local", [projection("theory.shapes", "theory.shapes.firing", "theory", { payloadType: "ShapeFiring", grounding: "authored_claim", exactness: "authored", operands: ["entryId", "firstNodeId", "lastNodeId", "openEnded"], answerContent: ["pattern", "theory", "plan"], forms: ["sentence", "panel", "timeline_marker"], limitations: ["A trigger match does not infer an uncited strategic consequence."] })]),
   producer("authored.structural_condition", "authored", "packages/runtime/src/structural-evidence.ts; apps/server/src/pack-orchestrator.ts; apps/server/src/shape-registry.ts", "recorded", [
     projection("authored.structural_condition", "authored.structural_condition.input", "authored", { role: "predicate", payloadType: "AuthoredStructuralCondition", grounding: "authored_claim", exactness: "authored", operands: ["source", "documentId", "pointer", "expression"], answerContent: ["fact"], forms: ["machine_condition"], limitations: ["Source identifies pack or shape authority; authored input is not a computed truth value or learner guidance."] }),
+  ]),
+  producer("derived.structural", "derived", "packages/runtime/src/structural-evidence.ts", "local", [
+    projection("derived.structural", "derived.structural.predicate_result", "derived", {
+      role: "predicate", payloadType: "StructuralPredicateResult", grounding: "authored_claim", exactness: "authored",
+      semantics: "Total computed result of exactly the sealed authored StructuralExpression on the retained FEN, with the exact path/node/result evaluation trace. The proposition remains the author's; evaluation never upgrades it to position-rule truth.",
+      operands: ["fen", "condition", "matched", "trace"], forms: ["machine_condition"],
+      derivation: { inputs: [ref("authored.structural_condition.input")] },
+      limitations: ["plan_signature must be expanded before runtime evaluation, matching the structural evaluator contract."],
+    }),
   ]),
   producer("pack.authored", "authored", "apps/server/src/authored-feedback.ts", "recorded", [
     projection("pack.authored", "pack.authored.claim", "authored", { payloadType: "AuthoredClaimEvidence", grounding: "authored_claim", exactness: "authored", operands: ["id", "text", "attribution"], answerContent: ["fact", "pattern", "theory", "principle", "plan"], forms: ["sentence", "panel"], limitations: ["Normalized rendered claim; delivery-sheet binding metadata travels under pack.authored.claim_delivery."] }),
@@ -876,15 +963,15 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   ]),
   producer("derived.compare_narrative", "derived", "packages/runtime/src/compare-strips.ts:comparisonNarrative", "local", [
     projection("derived.compare_narrative", "derived.compare.engine_trajectory", "derived", { payloadType: "ComparisonEvidenceEntry", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["nodeId", "plyOffset", "evidenceRefs", "kind", "source", "score"], answerContent: ["evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("live.stockfish.eval")] }, limitations: ["Recorded run-relative point; provider-only fields omitted and no best-move claim retained."] }),
-    projection("derived.compare_narrative", "derived.compare.structure_delta", "derived", { payloadType: "StructuralObservationChange", grounding: "position_rules", operands: ["observation"], forms: ["sentence", "list", "panel"], derivation: { inputs: STRUCTURAL_READER_WITNESSES.map((kind) => ref(`rules.structural.reading.${kind}`)) } }),
+    projection("derived.compare_narrative", "derived.compare.structure_delta", "derived", { payloadType: "StructuralObservationChange", grounding: "declared_convention", exactness: "convention", semantics: "A structural observation newly present on one branch after the fork. Its inputs include the named-structure catalogue convention, so the delta is convention-grounded as a whole.", operands: ["observation"], forms: ["sentence", "list", "panel"], derivation: { inputs: STRUCTURAL_READER_WITNESSES.map((kind) => (kind === "named_structure" ? ref2 : ref)(`rules.structural.reading.${kind}`)) } }),
     projection("derived.compare_narrative", "derived.compare.piece_route", "derived", { payloadType: "PieceRoute", grounding: "recorded_run", operands: ["pieceId", "squares"], answerContent: ["fact", "move"], forms: ["list", "panel"], derivation: { inputs: [ref("run.record.move")] }, limitations: ["Route restates recorded moves after the fork; it is not a plan, threat or recommendation."] }),
     projection("derived.compare_narrative", "derived.compare.eval_delta", "derived", { payloadType: "RecordedEvalDelta", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["delta", "plyOffset"], answerContent: ["evaluation"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("live.stockfish.eval")] } }),
   ]),
   producer("derived.story", "derived", "packages/runtime/src/story.ts:storyMoments; suggestTitle", "local", [
     projection("derived.story", "derived.story.eval_shift", "derived", { payloadType: "StoryEvaluationShift", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["before", "after", "delta"], semantics: "Learner-side signed difference of two recorded Stockfish evaluations; learner side is an orientation parameter.", answerContent: ["evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("live.stockfish.eval")] } }),
     projection("derived.story", "derived.story.last_level", "derived", { payloadType: "StoryLastLevel", grounding: "declared_convention", exactness: "convention", confidence: "reported", operands: ["recordedResult", "evaluation"], semantics: "Within-one-pawn threshold gated by whether the imported result says the learner lost.", answerContent: ["fact", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("live.stockfish.eval"), ref("run.record.imported_result")] } }),
-    projection("derived.story", "derived.story.rank", "derived", { payloadType: "StoryRank", grounding: "declared_convention", exactness: "convention", confidence: "reported", operands: ["rank"], semantics: "Fixed kind-priority order with absolute recorded-evaluation delta as a tiebreak; presentation prominence, not chess significance.", answerContent: ["fact", "pattern", "evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.eval_shift"), ref("derived.story.last_level"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.pivotal.marker"), ref("rules.endgame.reading"), ref("theory.shapes.firing")] } }),
-    projection("derived.story", "derived.story.title", "derived", { payloadType: "StoryTitle", grounding: "declared_convention", exactness: "convention", confidence: "reported", operands: ["title", "rank", "outcome"], semantics: "Fixed title composition over rank, recorded outcome/result, learner side, and endgame label; imported result verbs are learner-relative.", answerContent: ["fact", "pattern", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.rank"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.endgame.reading")] } }),
+    projection("derived.story", "derived.story.rank", "derived", { payloadType: "StoryRank", grounding: "declared_convention", exactness: "convention", confidence: "reported", operands: ["rank"], semantics: "Fixed kind-priority order with absolute recorded-evaluation delta as a tiebreak; presentation prominence, not chess significance.", answerContent: ["fact", "pattern", "evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.eval_shift"), ref("derived.story.last_level"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("derived.pivotal.irreversibility"), ref("derived.pivotal.phase_change"), ref("derived.pivotal.human_divergence"), ref("derived.pivotal.option_collapse"), ref("rules.endgame.classification"), ref("theory.shapes.firing")] } }),
+    projection("derived.story", "derived.story.title", "derived", { payloadType: "StoryTitle", grounding: "declared_convention", exactness: "convention", confidence: "reported", operands: ["title", "rank", "outcome"], semantics: "Fixed title composition over rank, recorded outcome/result, learner side, and endgame label; imported result verbs are learner-relative.", answerContent: ["fact", "pattern", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.rank"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.endgame.classification")] } }),
   ]),
   producer("derived.opening", "derived", "apps/server/src/opening-catalogue.ts", "local", [
     projection("derived.opening", "derived.opening.deepest_reached", "derived", { payloadType: "DeepestOpeningReached", semantics: "Greatest recorded matched ply with lowest node id as the deterministic tie break; all matched visits are retained.", grounding: "declared_convention", exactness: "exact", confidence: "exact", operands: ["deepest", "visits", "catalogue"], answerContent: ["fact", "theory"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, dependsOn: [ref("theory.opening.current_endpoint"), ref("run.record.position")], derivation: { inputs: [ref("theory.opening.current_endpoint"), ref("run.record.position")] }, limitations: ["Retrospective deepest match never labels the current position and never infers move order from FEN."], disposition: { kind: "inspector_only", reason: "Retrospective opening identity lands before Review and theory module bindings." } }),
@@ -943,34 +1030,36 @@ const DEFAULT_LATENCY: ConsumerDeclaration["latency"] = Object.freeze({ mode: "i
 const DEFAULT_BUDGET: ConsumerDeclaration["budget"] = Object.freeze({ maxFacts: 64, maxForms: 4 });
 
 const allPredicateIds = STRUCTURAL_PREDICATE_PROJECTION_IDS;
-const structuralPredicateResultId = "rules.structural.predicate.result";
+const structuralPredicateResultId = "derived.structural.predicate_result";
 const authoredStructuralConditionId = "authored.structural_condition.input";
-const allStructuralReadingIds = STRUCTURAL_READING_PROJECTION_IDS.filter((id) => !id.endsWith(".pawn_count"));
+const allStructuralReadingIds = STRUCTURAL_READING_PROJECTION_IDS.filter((id) => !id.endsWith(".pawn_count")).map((id) => id.endsWith(".named_structure") ? ref2(id) : id);
+const PIVOTAL_MARKER_IDS = Object.freeze(["derived.pivotal.irreversibility", "derived.pivotal.phase_change", "derived.pivotal.human_divergence", "derived.pivotal.option_collapse"]);
+const POSITION_GUIDANCE_IDS = Object.freeze([ref2("rules.phase.reading"), "pack.authored.phase", ref2("rules.structural.reading.named_structure"), ...PIVOTAL_MARKER_IDS, "rules.endgame.classification", "pack.authored.claim"]);
 const allTransitionReadingIds = TRANSITION_READING_PROJECTION_IDS;
 const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "authoring.predicate", implementation: "structuralEvidenceForAuthoring", projections: [authoredStructuralConditionId, structuralPredicateResultId, ...allPredicateIds], timing: ["analysis"], roles: ["author"], forms: ["machine_condition"], answerContent: ["fact"] },
   { id: "runtime.objective_condition", implementation: "structuralEvidenceForObjective", projections: [structuralPredicateResultId, "live.stockfish.eval", "live.syzygy.category"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },
   { id: "runtime.guard_condition", implementation: "consumeGuardCondition", projections: ["live.stockfish.eval", "live.syzygy.category", "live.syzygy.distance"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },
-  { id: "guidance.deterministic", implementation: "renderedEvidenceItems", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim"], forms: ["sentence"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
-  { id: "guidance.voice", implementation: "voiceEvidenceView", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan"], providerOff: "available" },
+  { id: "guidance.deterministic", implementation: "renderedEvidenceItems", projections: POSITION_GUIDANCE_IDS, forms: ["sentence"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
+  { id: "guidance.voice", implementation: "voiceEvidenceView", projections: POSITION_GUIDANCE_IDS, forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan"], providerOff: "available" },
   { id: "guidance.recorded_reading", implementation: "renderRecordedReadingEvidence", projections: ["recorded.engine.eval", "recorded.tablebase.result"], timing: ["postcommit", "checkpoint", "attempt_end", "terminal", "review"], forms: ["sentence"], answerContent: ["fact", "evaluation"] },
   { id: "runtime.evidence_ref", implementation: "renderDeclaredEvidenceRef", projections: ["run.record.evidence_ref_resolution", "live.stockfish.eval", "live.stockfish.wdl", "live.stockfish.pv", "live.syzygy.result", "human.maia.event"], forms: ["sentence", "list", "panel", "machine_condition"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"] },
   { id: "inspector.position_structure", implementation: "consumePositionStructure", projections: allStructuralReadingIds },
   { id: "inspector.move_transition", implementation: "consumeMoveTransition", projections: allTransitionReadingIds },
   { id: "board.selected_square_sight", implementation: "consumeSelectedSquareSight", projections: allStructuralReadingIds, timing: ["precommit", "postcommit"], forms: ["lit_squares", "piece_halo"], answerContent: ["fact"], budget: { maxFacts: 16, maxForms: 2 } },
   { id: "theory.shape_firing", implementation: "consumeShapeFiring", projections: ["theory.shapes.firing"], forms: ["sentence", "panel", "timeline_marker"], answerContent: ["pattern", "theory", "plan"] },
-  { id: "compare.structure_strip", implementation: "consumeComparisonStripEvidence", projections: ["run.record.checkpoint_hit", "run.record.objective_transition", "rules.pivotal.marker", "derived.compare.structure_delta", "derived.compare.piece_route"], timing: ["review"], forms: ["sentence", "list", "timeline_marker", "panel"], answerContent: ["fact", "move"] },
+  { id: "compare.structure_strip", implementation: "consumeComparisonStripEvidence", projections: ["run.record.checkpoint_hit", "run.record.objective_transition", ...PIVOTAL_MARKER_IDS, "derived.compare.structure_delta", "derived.compare.piece_route"], timing: ["review"], forms: ["sentence", "list", "timeline_marker", "panel"], answerContent: ["fact", "move"] },
   { id: "compare.engine_trajectory", implementation: "consumeComparisonEngineTrajectory", projections: ["derived.compare.engine_trajectory"], timing: ["review"], forms: ["list", "panel"], answerContent: ["evaluation"] },
   { id: "inspector.human_split", implementation: "consumeHumanSplit", projections: ["human.maia.policy"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["candidate_moves"], providerOff: "unavailable" },
   { id: "inspector.corpus", implementation: "consumeCorpus", projections: ["human.explorer.population"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["fact", "candidate_moves"], providerOff: "honest_empty" },
   { id: "opponent.selection", implementation: "consumeOpponentSelectionEvidence", projections: ["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result", "derived.opponent.candidate_feature_vector"], timing: ["analysis"], roles: ["operator"], forms: ["list", "panel", "machine_condition"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable" },
   { id: "guidance.authored_claim", implementation: "claimProvenanceDeclared", projections: ["pack.authored.claim_delivery"], forms: ["sentence", "panel"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
-  { id: "board.pivotal_marker", implementation: "consumePivotalMarkers", projections: ["rules.pivotal.marker"], forms: ["timeline_marker", "sentence", "panel"], answerContent: ["fact"] },
-  { id: "review.story", implementation: "renderReviewStoryEvidence", projections: ["rules.pivotal.marker", "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "rules.endgame.reading", "derived.story.eval_shift", "derived.story.last_level", "derived.story.rank", "derived.story.title"], timing: ["review"], roles: ["learner", "host", "participant", "spectator"], forms: ["sentence", "timeline_marker", "list", "panel"], answerContent: ["fact", "pattern", "evaluation"] },
+  { id: "board.pivotal_marker", implementation: "consumePivotalMarkers", projections: PIVOTAL_MARKER_IDS, forms: ["timeline_marker", "sentence", "panel"], answerContent: ["fact"] },
+  { id: "review.story", implementation: "renderReviewStoryEvidence", projections: [...PIVOTAL_MARKER_IDS, "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "rules.endgame.classification", "derived.story.eval_shift", "derived.story.last_level", "derived.story.rank", "derived.story.title"], timing: ["review"], roles: ["learner", "host", "participant", "spectator"], forms: ["sentence", "timeline_marker", "list", "panel"], answerContent: ["fact", "pattern", "evaluation"] },
   { id: "runtime.repertoire_scan", implementation: "consumeRepertoireCorpus", projections: ["human.explorer.position_stats"], timing: ["analysis"], roles: ["operator"], forms: ["list", "panel"], answerContent: ["fact"], budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty" },
   { id: "authoring.claim_binding", implementation: "consumeClaimBindingRecords", projections: ["sourcing.ledger.engine_eval", "sourcing.ledger.tablebase_result", "sourcing.ledger.explorer_position_census", "sourcing.ledger.citable_text", "theory.opening_identity.record"], timing: ["analysis"], roles: ["author"], forms: ["list", "panel"], answerContent: ["fact", "theory", "principle", "plan", "evaluation"], latency: { mode: "offline", maxMs: null }, budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty" },
-  { id: "guidance.voice_compare", implementation: "comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", "rules.pivotal.marker", "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
-  { id: "guidance.voice_story", implementation: "storyDeclaredEvidence", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim", "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "derived.story.eval_shift", "derived.story.last_level", "derived.story.title"], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
+  { id: "guidance.voice_compare", implementation: "comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", ...PIVOTAL_MARKER_IDS, "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
+  { id: "guidance.voice_story", implementation: "storyDeclaredEvidence", projections: [...POSITION_GUIDANCE_IDS, "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "derived.story.eval_shift", "derived.story.last_level", "derived.story.title"], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
   { id: "assistance.arrows", implementation: "experimentalProducerlessArrows", disposition: { kind: "experimental", reason: "D546: migrated preference has no producer and no renderer; F5 or an owner ruling decides activation or retirement." } },
   { id: "research.semantic_selection", implementation: "selectLocalSemanticEvidence", projections: SEMANTIC_EVENT_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
 ];

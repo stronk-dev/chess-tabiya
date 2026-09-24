@@ -22,8 +22,8 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
-The current compiled closure is 37 producers, 193 projections, 25 consumers and 210 bindings,
-plus 67 semantic-event declarations, 67 eligibility rows, 15 refusal reasons and one selection
+The current compiled closure is 40 producers, 216 projections, 25 consumers and 243 bindings,
+plus 78 semantic-event declarations, 78 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
 The additional inert projection is `derived.grade.move_quality@1`: it thresholds paired,
@@ -45,9 +45,58 @@ that later delivery decision.
 It accepts a FEN string and never a caller payload. It calls `exactLegalMoveMap` once and seals that
 exact returned object. The candidate evidence packet (`docs/semantic-evidence.md`) reaches the legal
 authority only through this route. The older `declareExactLegalMovesEvidence(payload)` validator
-remains for its existing callers until `rfc/evidence-value-authority.md` retires it. The packet is an
+is retired (see §Value authority). The packet is an
 internal execution receipt, not an F1 projection. It adds no catalogue projection, binding or consumer
 view, and every retained event and reading keeps its own exact F1 identity.
+
+## Value authority
+
+A sealed value is trustworthy only if its **payload** was produced by the authority its projection
+declares, not merely stamped with the right identity (`rfc/evidence-value-authority.md`). There is
+therefore no generic mint API and no caller-payload adapter:
+
+- `declareEvidence` (in `evidence-contract.ts`) is called only by the package-private
+  `packages/runtime/src/evidence-factories.ts`, through one local `mint`. Besides the identity seal it
+  records a private **value receipt** — projection, factory symbol, input digest, payload digest and
+  the digests of every sealed source value. `assertDeclaredEvidence` (and so `evidenceForConsumer`,
+  semantic selection, module reducers, deterministic renderers and voice requests) refuses a value
+  with no receipt or whose payload digest disagrees with it. It does not claim to reconstruct the
+  inputs the factory discarded.
+- Every non-retired catalogue projection has exactly one factory,
+  `create{Projection}V{version}Evidence`, of one of four shapes. **Computed** factories take authority
+  inputs (a FEN, a validated edge, a recorded run) and compute the payload themselves. **Derived**
+  factories take exact sealed inputs, check their projection, version and coherence, and name them as
+  source digests. **Source receipt** factories take a provider/corpus/sourcing record and project it.
+  **Authored authority** factories take the authored document and compute attribution; caller prose,
+  attribution or applicability cannot be appended. None accepts a result payload, boolean, count,
+  event operands or caller-chosen cause.
+- Factories are reachable only through the package-internal
+  `internal/evidence-value-routes.ts#invokeEvidenceValueRoute(route, inputs)`, a literal route table
+  with generated input/result types and runtime admission (unknown route, missing/extra keys, and a
+  validator per input kind). Production operations that server and web need are exported from
+  `evidence-operations.ts` as named authority-input functions (for example
+  `positionGuidanceEvidence`, `recordedReadingEvidence`, `claimDeliveryEvidence`); neither the
+  factories nor the invoker is a package export.
+- Where the authority a projection needs is not yet registered, the factory returns an explicit
+  `EvidenceAvailability` `unavailable` arm with a reason and the dependency it waits on, or carries a
+  `pending` dependency note; it never mints a best guess. Today that covers the endgame setup and
+  method-stage successors, the grade, and the opening endpoint/membership/deepest-reached
+  projections.
+
+Corrected projection identities replaced the false or mixed v1 rows: `rules.phase.reading@2`
+(five-arm `PhaseBandReadingV2` decision computed with the phase from one FEN),
+`rules.structural.reading.named_structure@2` (`{id, name, provenanceNote}`),
+`rules.endgame.classification@1` (material census; technique naming is gone),
+`theory.endgame.setup_match@1` and `theory.endgame.method_stage@1` (unavailable until a cited setup
+convention is registered), the four `derived.pivotal.*@1` markers, and
+`derived.structural.predicate_result@1` (derived from the sealed authored condition). The v1
+projections are retired with zero consumer bindings.
+
+Tests build renderer fixtures through `testing/evidence-fixture.test-support.ts` (a test-only
+authority that production code may not import). `make evidence-value-authority` is the permanent
+gate: an AST census of `declareEvidence` callers and factory/invoker importers, registry set
+equality with the non-retired catalogue, the frozen migration receipt, and one pinned valid case and
+falsifier per factory.
 
 ## Honest homes and raw evidence
 
@@ -107,7 +156,9 @@ before traffic is served.
 1. Start with the product operation that needs the information. Do not start with a raw toggle.
 2. Add or version the producer projection with its literal semantics, operands, grounding,
    exactness, abstention, answer content, forms, dependencies, and limitations.
-3. Add an exact consumer acceptance and adapter whose constraints only narrow both endpoints.
+3. Add its value factory in `evidence-factories.ts` and its row in the route table, with a valid case
+   and falsifier in the value-authority profiles; then add an exact consumer acceptance and adapter
+   whose constraints only narrow both endpoints.
 4. Add a producer-off test when any endpoint depends on a provider.
 5. Add the production symbol to the operation closure (or deliberately extend that census) and
    run `make evidence-manifest-check` plus `make verify`.

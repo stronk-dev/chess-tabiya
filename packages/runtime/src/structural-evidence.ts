@@ -4,7 +4,7 @@ import {
   type ConsumerEvidenceView,
   type DeclaredEvidence,
 } from "./evidence-contract.js";
-import { declareAuthoredStructuralConditionEvidence, declareStructuralPredicateFeatureEvidence, declareStructuralPredicateResultEvidence } from "./evidence-source-adapters.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import {
   matchesStructuralExpression,
@@ -13,10 +13,9 @@ import {
   type StructuralFeature,
 } from "./structure.js";
 
-const RULES_PRODUCER = Object.freeze({ id: "rules.structural", version: 1 });
-const AUTHORED_PRODUCER = Object.freeze({ id: "authored.structural_condition", version: 1 });
+const RESULT_PRODUCER = Object.freeze({ id: "derived.structural", version: 1 });
 const CONDITION_PROJECTION = Object.freeze({ id: "authored.structural_condition.input", version: 1 });
-const RESULT_PROJECTION = Object.freeze({ id: "rules.structural.predicate.result", version: 1 });
+const RESULT_PROJECTION = Object.freeze({ id: "derived.structural.predicate_result", version: 1 });
 
 export interface StructuralPredicateTraceNode {
   readonly path: string;
@@ -61,13 +60,14 @@ function evaluateNode(
   effective: StructuralExpression,
   path: string,
   trace: StructuralPredicateTraceNode[],
+  features?: StructuralFeature[],
 ): boolean {
   let matched: boolean;
   if (authored.kind === "all" && effective.kind === "all") {
     matched = true;
     for (let index = 0; index < authored.of.length; index += 1) {
       const child = effective.of[index];
-      if (child === undefined || !evaluateNode(fen, authored.of[index]!, child, `${path}.of.${index}`, trace)) {
+      if (child === undefined || !evaluateNode(fen, authored.of[index]!, child, `${path}.of.${index}`, trace, features)) {
         matched = false;
         break;
       }
@@ -76,20 +76,21 @@ function evaluateNode(
     matched = false;
     for (let index = 0; index < authored.of.length; index += 1) {
       const child = effective.of[index];
-      if (child !== undefined && evaluateNode(fen, authored.of[index]!, child, `${path}.of.${index}`, trace)) {
+      if (child !== undefined && evaluateNode(fen, authored.of[index]!, child, `${path}.of.${index}`, trace, features)) {
         matched = true;
         break;
       }
     }
   } else if (authored.kind === "not" && effective.kind === "not") {
-    matched = !evaluateNode(fen, authored.of, effective.of, `${path}.of`, trace);
+    matched = !evaluateNode(fen, authored.of, effective.of, `${path}.of`, trace, features);
   } else if (authored.kind === "mirrored") {
     const transformed = effective.kind === "mirrored"
       ? mirrorExpression(effective.of, effective.axis)
       : effective;
-    matched = evaluateNode(fen, authored.of, transformed, `${path}.of`, trace);
+    matched = evaluateNode(fen, authored.of, transformed, `${path}.of`, trace, features);
   } else {
     matched = matchesStructuralExpression(fen, effective);
+    if (effective.kind === "feature") features?.push(effective.feature);
   }
   trace.push(Object.freeze({ path, expression: authored, matched }));
   return matched;
@@ -104,18 +105,28 @@ export function evaluateStructuralPredicate(
   return Object.freeze({ fen, condition, matched, trace: Object.freeze(trace) });
 }
 
+/** The effective (mirror-expanded) feature leaves the evaluator actually tested. */
+function evaluatedFeatures(fen: string, condition: StructuralExpression): readonly StructuralFeature[] {
+  const features: StructuralFeature[] = [];
+  evaluateNode(fen, condition, condition, "$", [], features);
+  return Object.freeze(features);
+}
+
+/**
+ * Seals the authored condition, then derives the predicate result from exactly that sealed
+ * condition, and computes each evaluated feature leaf through its own predicate factory.
+ */
 export function declareStructuralPredicateEvidence(
   fen: string,
   condition: StructuralExpression,
   origin: Omit<AuthoredStructuralCondition, "expression">,
 ): DeclaredStructuralPredicateEvidence {
-  const result = evaluateStructuralPredicate(fen, condition);
-  const featureResults = result.trace.flatMap((node) => node.expression.kind === "feature"
-    ? [declareStructuralPredicateFeatureEvidence({ fen, feature: node.expression.feature, matched: node.matched })]
-    : []);
+  const sealedCondition = invokeEvidenceValueRoute("authored.structural_condition.input@1", { source: origin.source, documentId: origin.documentId, pointer: origin.pointer, expression: condition as unknown as Readonly<Record<string, unknown>> }) as DeclaredEvidence<AuthoredStructuralCondition>;
+  const result = invokeEvidenceValueRoute("derived.structural.predicate_result@1", { condition: sealedCondition as never, fen }) as DeclaredEvidence<StructuralPredicateResult>;
+  const featureResults = evaluatedFeatures(fen, condition).map((feature) => invokeEvidenceValueRoute(`rules.structural.predicate.${feature.kind}@1`, { fen, feature }) as DeclaredEvidence<StructuralFeaturePredicateResult>);
   return Object.freeze({
-    condition: declareAuthoredStructuralConditionEvidence(Object.freeze({ ...origin, expression: condition })),
-    result: declareStructuralPredicateResultEvidence(result),
+    condition: sealedCondition,
+    result,
     featureResults: Object.freeze(featureResults),
   });
 }
@@ -123,9 +134,9 @@ export function declareStructuralPredicateEvidence(
 export function matchesDeclaredStructuralPredicate(
   evidence: DeclaredEvidence<StructuralPredicateResult>,
 ): boolean {
-  if (evidence.producer.id !== RULES_PRODUCER.id || evidence.producer.version !== 1
+  if (evidence.producer.id !== RESULT_PRODUCER.id || evidence.producer.version !== 1
     || evidence.projection.id !== RESULT_PROJECTION.id || evidence.projection.version !== 1) {
-    throw new TypeError("Expected rules.structural.predicate.result@1 declared evidence");
+    throw new TypeError("Expected derived.structural.predicate_result@1 declared evidence");
   }
   return evidence.payload.matched;
 }

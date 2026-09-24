@@ -313,3 +313,53 @@ export function compareBranches(
     consequences,
   });
 }
+
+/** Recorded per-branch comparison facts relative to one fork node, recomputed from the run alone. */
+export interface RecordedBranchFacts {
+  readonly branchId: string;
+  readonly fork: Node;
+  readonly ownForkOffset: number;
+  readonly leafNodeId: string;
+  readonly objectiveTimeline: readonly ObjectiveTimelineEntry[];
+  readonly checkpointHits: readonly CheckpointHit[];
+  readonly evidence: readonly ComparisonEvidenceEntry[];
+  readonly decision: BranchConsequence["decision"];
+  readonly plies: number;
+  readonly objectiveState: ObjectiveState;
+  readonly terminal: boolean;
+  readonly outcome: RunOutcome | null;
+}
+
+/**
+ * The value authority behind the comparison run-record factories: every fact is recomputed from
+ * the recorded run for one branch and the named fork node, which must lie on that branch's path.
+ */
+export function recordedBranchFacts(run: DrillRun, forkNodeId: string, branchId: string): RecordedBranchFacts {
+  const branch = run.branches.find((candidate) => candidate.id === branchId);
+  if (!branch) throw new BranchQueryError("UNKNOWN_BRANCH", `Unknown branch ${branchId}`);
+  const path = branchPath(run, branchId);
+  const fork = path.find((node) => node.id === forkNodeId);
+  if (fork === undefined) throw new BranchQueryError("NO_COMMON_FORK", `Fork ${forkNodeId} is not on branch ${branchId}`);
+  const ownForkOffset = Math.max(0, run.nodes.find((node) => node.id === branch.forkNodeId)!.ply - fork.ply);
+  const tail = path.filter((node) => node.ply > fork.ply);
+  const decision = tail.find((node) => node.ply > fork.ply + ownForkOffset);
+  const leaf = path.at(-1)!;
+  const outcome = [...run.events].reverse().find((event) =>
+    event.type === "outcome.reached" && path.some((node) => node.id === event.data.nodeId) &&
+    run.nodes.find((node) => node.id === event.data.nodeId)!.ply > fork.ply,
+  );
+  return deepFreeze({
+    branchId,
+    fork,
+    ownForkOffset,
+    leafNodeId: leaf.id,
+    objectiveTimeline: objectiveTimeline(run, path, fork),
+    checkpointHits: checkpointHits(run, path, fork),
+    evidence: evidenceOverlay(run, path, fork),
+    decision: decision?.moveSan && decision.moveUci ? { nodeId: decision.id, plyOffset: decision.ply - fork.ply, moveSan: decision.moveSan, moveUci: decision.moveUci } : null,
+    plies: tail.length,
+    objectiveState: leaf.objectiveState,
+    terminal: ["achieved", "failed", "transitioned"].includes(leaf.objectiveState),
+    outcome: outcome?.type === "outcome.reached" ? outcome.data.outcome : null,
+  });
+}

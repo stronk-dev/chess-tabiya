@@ -45,7 +45,8 @@ describe("recorded evidence at runtime", () => {
       Array.from({ length: 8 }, (_file, file) => `${String.fromCharCode(97 + file)}${rank + 1}`),
     ).flat();
     for (const record of indexed) for (const rows of record.positionEvidence.values()) for (const reading of rows) {
-      const sentence = renderRecordedReading(reading).join(" ").toLowerCase();
+      expect(reading.projection.id).toMatch(/^recorded\./u);
+      const sentence = renderRecordedReading(reading.payload).join(" ").toLowerCase();
       expect(squares.some((square) => sentence.includes(square))).toBe(false);
     }
 
@@ -85,7 +86,7 @@ describe("recorded evidence at runtime", () => {
     const duplicate = [...record.positionEvidence.values()].find((readings) => readings.length === 2)!;
     expect(duplicate).toHaveLength(2);
 
-    const reading = duplicate[0] as Extract<RecordedReading, { kind: "tablebase_result" }>;
+    const reading = duplicate[0]!.payload as Extract<RecordedReading, { kind: "tablebase_result" }>;
     let run = createRun({ id: "reading", packId: record.document.id, packDigest: record.digest, startFen: reading.fen, seed: 1, createdAt: "2026-08-16T00:00:00.000Z", policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
     const node = run.nodes[0]!;
     expect(recordedReadingsAt(record.positionEvidence, node, run)).toHaveLength(1);

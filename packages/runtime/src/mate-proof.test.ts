@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { declareForcedMateAfterMoveEvidence } from "./evidence-source-adapters.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { forcedMateAfterMove } from "./mate-proof.js";
 import { replyBreadth } from "./tactics.js";
 
@@ -21,7 +21,13 @@ describe("bounded mate proof", () => {
     });
     if (result.kind === "proof") {
       expect(result.proof.proofDigest).toMatch(/^[0-9a-f]{64}$/u);
-      expect(declareForcedMateAfterMoveEvidence(result.proof).projection.id).toBe("rules.tactic.consequence.forced_mate_after_move");
+      const sealedBreadth = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", { beforeFen: fen, moveUci: "f7g7", afterFen: "7k/6Q1/6K1/8/8/8/8/8 b - - 1 1" });
+      const sealed = invokeEvidenceValueRoute("rules.tactic.consequence.forced_mate_after_move@1", { beforeFen: fen, breadth: sealedBreadth, maxAttackerMoves: 1 });
+      expect(sealed.kind === "available" ? sealed.value.projection.id : undefined).toBe("rules.tactic.consequence.forced_mate_after_move");
+      expect(sealed.kind === "available" ? sealed.value.payload : undefined).toEqual(result.proof);
+      expect(invokeEvidenceValueRoute("rules.tactic.consequence.forced_mate_after_move@1", { beforeFen: fen, breadth: sealedBreadth, maxAttackerMoves: 5 })).toMatchObject({ kind: "unavailable", reason: "horizon_above_four" });
+      // A caller cannot hand the proof itself (or an unsealed breadth) to the factory.
+      expect(() => invokeEvidenceValueRoute("rules.tactic.consequence.forced_mate_after_move@1", { beforeFen: fen, breadth: breadth as never, maxAttackerMoves: 1 })).toThrow(/refused its authority inputs/u);
     }
   });
 

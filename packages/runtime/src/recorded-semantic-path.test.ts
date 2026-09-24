@@ -4,8 +4,20 @@ import { describe, expect, it } from "vitest";
 
 import { branchPath, branchPaths, resolveBranchPath } from "./branch-path.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_FAMILY_IDS, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
-import { EvidenceManifestError, compileEvidenceManifest, declareEvidence, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
-import { declareDefenderDutyEvidence, declareLegalExchangeEvidence, declareRecordedEdgeEvidence, type RecordedEdge } from "./evidence-source-adapters.js";
+import { EvidenceManifestError, compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceDigest, identitySealedEvidenceWithoutValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import type { LegalExchangeResult } from "./exchange.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import type { RecordedEdge } from "./recorded-edge.js";
+
+/** Test-only compiler fixture: a correctly-shaped wrapper whose receipt names a non-edge factory. */
+const declareEvidence = <T>(producer: VersionedEvidenceId, projection: VersionedEvidenceId, payload: T): DeclaredEvidence<T> => declareWithAuthority(producer, projection, payload, { factory: "test:recorded-path-fixture", inputDigest: "0".repeat(64), sourceDigests: [] });
+const declareRecordedEdgeEvidence = (run: DrillRun, parent: Node, child: Node): DeclaredEvidence<RecordedEdge> => invokeEvidenceValueRoute("run.record.edge@1", { run, parent, child });
+const declareDefenderDutyEvidence = (fen: string): DeclaredEvidence<unknown> => invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen });
+function declareLegalExchangeEvidence(result: LegalExchangeResult): DeclaredEvidence<unknown> {
+  const sealed = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: result.beforeFen, captureUci: result.captureUci })[0]!;
+  if (evidenceDigest(sealed.payload) !== evidenceDigest(result)) throw new Error("exchange fixture is not reproduced by its authority");
+  return sealed;
+}
 import {
   assertRecordedPathTableClosure,
   recordedPathEvaluatorRows,
@@ -296,7 +308,7 @@ describe("recorded semantic path compiler", () => {
     const edges = path.slice(1).map((node, index) => declareRecordedEdgeEvidence(run, path[index]!, node));
     const anchors = edges.map((edge) => ({ beforeNodeId: edge.payload.beforeNodeId, afterNodeId: edge.payload.afterNodeId, beforeFen: edge.payload.beforeFen, moveUci: edge.payload.moveUci, afterFen: edge.payload.afterFen }));
     const operands = deflectionObservedOperands(anchors)[0]!;
-    const duty = declareDefenderDutyEvidence(defenderDutyReading(anchors[0]!.beforeFen));
+    const duty = declareDefenderDutyEvidence(anchors[0]!.beforeFen);
     const captures = anchors.flatMap((anchor) => transitionSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen).filter((event) => event.operands.family === "capture").map((event) => event.evidence));
     const exchange = declareLegalExchangeEvidence(operands.targetCapture);
     const seal = (values: readonly DeclaredEvidence<unknown>[]) => recordedDeflectionObservedSemanticEvent(operands, values, duty, captures, exchange);
@@ -308,6 +320,8 @@ describe("recorded semantic path compiler", () => {
     expect(() => seal([forged, edges[1]!, edges[2]!])).toThrow(/minted from an actual run edge/u);
     const pv = declareEvidence({ id: "live.stockfish", version: 1 }, { id: "live.stockfish.pv", version: 1 }, { kind: "bestline", source: "engine_validated", values: { pv: fixture.moves } });
     expect(() => seal([pv, edges[1]!, edges[2]!])).toThrow(/run.record.edge@1/u);
+    const identityOnly = identitySealedEvidenceWithoutValueReceipt({ id: "run.record", version: 1 }, { id: "run.record.edge", version: 1 }, { ...edges[0]!.payload });
+    expect(() => seal([identityOnly, edges[1]!, edges[2]!])).toThrow(/value-authority receipt/u);
     const twin = recordedRun("crossing-twin", fixture.fen, fixture.moves);
     const twinPath = branchPath(twin, twin.activeCursor.branchId);
     const twinEdge = declareRecordedEdgeEvidence(twin, twinPath[1]!, twinPath[2]!);
@@ -372,7 +386,7 @@ describe("recorded semantic path compiler", () => {
     expect(() => recordedSemanticPath({ kind: "bestline", values: { pv: ["e2e4"] } } as unknown as DrillRun, "main")).toThrow(/only a recorded DrillRun/u);
     const pv = PRIMARY_EVIDENCE_MANIFEST.projections.find((value) => value.id === "live.stockfish.pv")!;
     expect(pv.grounding).toBe("bounded_search");
-    expect(PRIMARY_EVIDENCE_MANIFEST.projections.filter((value) => value.version === 2).every((value) => !JSON.stringify(value.derivation).includes("live.stockfish"))).toBe(true);
+    expect(PRIMARY_EVIDENCE_MANIFEST.projections.filter((value) => value.version === 2).every((value) => !(JSON.stringify(value.derivation) ?? "").includes("live.stockfish"))).toBe(true);
   });
 
   it("[criterion 15] moves result identity with every exact edge, value and convention receipt", () => {

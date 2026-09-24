@@ -390,9 +390,73 @@ function immutable<T>(value: T): T {
   return value;
 }
 
-export function declareEvidence<T>(producer: VersionedEvidenceId, projection: VersionedEvidenceId, payload: T): DeclaredEvidence<T> {
+/**
+ * Package-private value-authority receipt (rfc/evidence-value-authority.md §5). It is held in a
+ * private WeakMap beside the identity seal, never serialized, and never claims durable provenance.
+ */
+export interface EvidenceValueReceipt {
+  readonly projection: VersionedEvidenceId;
+  /** Exact factory symbol; diagnostic only. */
+  readonly factory: string;
+  /** Canonical digest of the authority inputs the factory actually used. */
+  readonly inputDigest: string;
+  /** Canonical digest of the sealed payload. */
+  readonly payloadDigest: string;
+  /** Declared-input payload digests (derived) or sealed receipt/document digests (source/authored). */
+  readonly sourceDigests: readonly string[];
+}
+
+/** What the sole mint boundary supplies when it seals a factory-computed payload. */
+export interface EvidenceMintAuthority {
+  readonly factory: string;
+  readonly inputDigest: string;
+  readonly sourceDigests: readonly string[];
+}
+
+const VALUE_RECEIPTS = new WeakMap<object, EvidenceValueReceipt>();
+const SEALED_PAYLOAD_DIGESTS = new WeakMap<object, string>();
+const DIGEST = /^[0-9a-f]{64}$/u;
+
+function sealedPayloadDigest(payload: unknown): string {
+  if (payload === null || typeof payload !== "object") return evidenceDigest(payload);
+  const cached = SEALED_PAYLOAD_DIGESTS.get(payload);
+  if (cached !== undefined) return cached;
+  const digest = evidenceDigest(payload);
+  // The payload is deep-frozen before this point; its canonical bytes cannot change afterwards.
+  SEALED_PAYLOAD_DIGESTS.set(payload, digest);
+  return digest;
+}
+
+/**
+ * Seals one factory-computed payload. Only `evidence-factories.ts` may call this outside tests
+ * (enforced by `make evidence-value-authority`); it is absent from every package export.
+ */
+export function declareEvidence<T>(producer: VersionedEvidenceId, projection: VersionedEvidenceId, payload: T, authority: EvidenceMintAuthority): DeclaredEvidence<T> {
   assertLiteral(producer, "declared-evidence producer");
   assertLiteral(projection, "declared-evidence projection");
+  if (typeof authority !== "object" || authority === null || typeof authority.factory !== "string" || authority.factory.trim() === ""
+    || typeof authority.inputDigest !== "string" || !DIGEST.test(authority.inputDigest)
+    || !Array.isArray(authority.sourceDigests) || authority.sourceDigests.some((digest) => typeof digest !== "string" || !DIGEST.test(digest))) {
+    fail("EVIDENCE_GENERIC_BYPASS", "evidence mint lacks an exact value-authority receipt", ["declared-evidence:receiptless"]);
+  }
+  const value = immutable({ [DECLARED]: true as const, producer: { ...producer }, projection: { ...projection }, payload });
+  const receipt = immutable({
+    projection: { ...projection },
+    factory: authority.factory,
+    inputDigest: authority.inputDigest,
+    payloadDigest: sealedPayloadDigest(value.payload),
+    sourceDigests: [...authority.sourceDigests],
+  });
+  DECLARED_VALUES.add(value);
+  VALUE_RECEIPTS.set(value, receipt);
+  return value;
+}
+
+/**
+ * Negative-control helper: an identity seal WITHOUT a value receipt, i.e. exactly what the retired
+ * caller-payload adapters produced. Every admission path rejects it. Only tests may call it.
+ */
+export function identitySealedEvidenceWithoutValueReceipt<T>(producer: VersionedEvidenceId, projection: VersionedEvidenceId, payload: T): DeclaredEvidence<T> {
   const value = immutable({ [DECLARED]: true as const, producer: { ...producer }, projection: { ...projection }, payload });
   DECLARED_VALUES.add(value);
   return value;
@@ -402,6 +466,20 @@ export function assertDeclaredEvidence(value: unknown): asserts value is Declare
   if (typeof value !== "object" || value === null || (value as { readonly [DECLARED]?: unknown })[DECLARED] !== true || !DECLARED_VALUES.has(value)) {
     fail("EVIDENCE_GENERIC_BYPASS", "evidence was not constructed by an exact declared-evidence adapter", ["declared-evidence:unsealed"]);
   }
+  const receipt = VALUE_RECEIPTS.get(value);
+  if (receipt === undefined) {
+    fail("EVIDENCE_GENERIC_BYPASS", "evidence is identity-sealed but has no value-authority receipt", ["declared-evidence:value-unverified"]);
+  }
+  const declared = value as DeclaredEvidence<unknown>;
+  if (refKey(receipt.projection) !== refKey(declared.projection) || receipt.payloadDigest !== sealedPayloadDigest(declared.payload)) {
+    fail("EVIDENCE_GENERIC_BYPASS", "evidence value receipt disagrees with its sealed projection or payload", ["declared-evidence:receipt-mismatch"]);
+  }
+}
+
+/** Package-internal read of the value receipt; absent from the package barrel. */
+export function evidenceValueReceipt(value: DeclaredEvidence<unknown>): EvidenceValueReceipt {
+  assertDeclaredEvidence(value);
+  return VALUE_RECEIPTS.get(value)!;
 }
 
 export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId, values: readonly DeclaredEvidence<T>[]): ConsumerEvidenceView<T> {

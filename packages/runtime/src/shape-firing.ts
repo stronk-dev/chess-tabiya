@@ -1,7 +1,7 @@
 import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
-import { declareShapeFiringSourceEvidence } from "./evidence-source-adapters.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 export interface ShapeTriggerSource {
   readonly id: string;
@@ -51,10 +51,12 @@ export function shapeFirings(
   return Object.freeze(output);
 }
 
+/** Shape firings minted by the theory.shapes.firing factory from registered triggers and a recorded path. */
 export function declareShapeFiringEvidence(
-  firings: readonly ShapeFiring[],
+  entries: readonly ShapeTriggerSource[],
+  path: readonly { readonly id: string; readonly fen: string }[],
 ): readonly DeclaredEvidence<ShapeFiring>[] {
-  return Object.freeze(firings.map(declareShapeFiringSourceEvidence));
+  return invokeEvidenceValueRoute("theory.shapes.firing@1", { entries, path: path.map((node) => ({ id: node.id, fen: node.fen })) }) as readonly DeclaredEvidence<ShapeFiring>[];
 }
 
 export function consumeShapeFiring(
@@ -67,10 +69,13 @@ export function consumeShapeFiring(
   return Object.freeze(view.items.map((item) => item.payload));
 }
 
-export function shapeFiringEvidence(firings: readonly ShapeFiring[]): readonly ShapeFiring[] {
+export function shapeFiringEvidence(
+  entries: readonly ShapeTriggerSource[],
+  path: readonly { readonly id: string; readonly fen: string }[],
+): readonly ShapeFiring[] {
   return consumeShapeFiring(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "theory.shape_firing", version: 1 },
-    declareShapeFiringEvidence(firings),
+    declareShapeFiringEvidence(entries, path),
   ));
 }

@@ -96,17 +96,22 @@ emit it.
 ## Sealed construction
 
 Declared evidence, semantic events and selected results carry runtime construction identity in
-addition to TypeScript types. Object spread and double casts do not preserve authority. Production
-callers use named source adapters; the generic constructor is not exported by the runtime package.
-Each object adapter checks that its required keys are set-equal to the projection operands in the
-manifest and rejects malformed bytes. Registered Compare and Story renderers receive structured
-operands and derive prose themselves; callers cannot smuggle a pre-rendered sentence under a
-structured projection. The exact 14-file migration census is executable in
-`evidence-adapter-closure.test.ts`.
+addition to TypeScript types. Object spread and double casts do not preserve authority. Since
+`rfc/evidence-value-authority.md` (2026-09-24) there are no source adapters: every value is minted by
+its one factory in `evidence-factories.ts`, reached only through the package-internal
+`invokeEvidenceValueRoute`, and carries a private value receipt (see `docs/evidence-contract.md`
+§Value authority). Structural and transition events are computed by their factories from the FEN or
+validated edge; avoidance is computed from the edge plus the complete sealed alternative events.
+
+`compileSemanticEvidenceEvent` no longer accepts `operands`. The event's operands **are** the sealed
+evidence payload, and its `derivationInputs` digests must equal exactly the source digests named by
+that evidence's factory receipt, so a caller cannot pair a sealed value with a different ancestry.
+Registered Compare and Story renderers receive structured operands and derive prose themselves;
+callers cannot smuggle a pre-rendered sentence under a structured projection.
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 37 producers, 206 projections, 25 consumers and 222 bindings, plus
+The primary manifest contains 40 producers, 216 projections, 25 consumers and 243 bindings, plus
 78 semantic events, 78 eligibility rows, 15 reasons and one selection policy. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
 startup and by `make semantic-evidence-check`.
@@ -128,14 +133,16 @@ engine principal variation.
   `run.started`, a present fork, every same-branch node reaching that fork through present parents
   without a cycle, and exactly one graph tip. Node-array order is never trusted and a broken chain is
   refused, not truncated (`BranchQueryError` `INVALID_BRANCH_GRAPH` with its `reason`).
-- **Exact edge source.** `declareRecordedEdgeEvidence(run, parent, child)` is the only constructor of
+- **Exact edge source.** The `run.record.edge@1` factory (`{ run, parent, child }`, reached through
+  `recordedEdgeEvidence` or the invoker) is the only constructor of
   `run.record.edge@1` (inspector-only, no sentence renderer). It replays the move and refuses any
   parent, ply, canonical UCI, canonical SAN or FEN disagreement. Its payload carries the child's
   actual recorded branch, so a shared ancestral edge has one identity for every descendant path.
 - **v2 successors.** The eleven sequence projections have `@2` successors that keep the v1 operands,
   signs, conventions and limitations and replace `run.record.move@1` with `run.record.edge@1`. Their
   constructors bind every edge value-for-value to the operand anchors and refuse edges not minted
-  from an actual run. v1 declarations and constructors are unchanged and have no production caller.
+  from an actual run (the edge's value receipt names `createRunRecordEdgeV1Evidence`). v1 declarations
+  and factories remain and have no production caller.
 - **Receipts.** Every edge start receives exactly one receipt per evaluator row (eleven projections,
   thirteen rows): `emitted`, `no_witness` (an evaluated negative) or `insufficient_continuation`
   (not a negative). Any path or edge corruption refuses the whole path before any detector runs.
@@ -166,7 +173,7 @@ promotion-seam review.
 
 ## Adding a product module
 
-F5 must add a named consumer, literal eligibility rows, exact adapters, a versioned production
+F5 must add a named consumer, literal eligibility rows, exact bindings, a versioned production
 policy and workflow defaults together. Raw producer toggles are not a product configuration
 surface. Presets decide which module is appropriate in Just Play, drills, campaign or review while
 the advanced inspector may expose the underlying inventory.

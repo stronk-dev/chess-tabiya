@@ -59,7 +59,7 @@
   let zoom: ComparisonZoomBand = $state(defaultComparisonZoom(comparison.columns.length));
   let strips = $derived(comparisonStrips(run, comparison));
   let narrative = $derived(comparisonNarrative(run, comparison, strips));
-  let trajectories = $derived(Object.fromEntries(comparison.columns.map((column) => [column.branchId, comparisonEngineTrajectory(comparison, column.branchId)])));
+  let trajectories = $derived(Object.fromEntries(comparison.columns.map((column) => [column.branchId, comparisonEngineTrajectory(run, comparison, column.branchId)])));
   let evaluationRows = $derived.by(() => {
     const offsets = new Set<number>();
     for (const column of comparison.columns) {

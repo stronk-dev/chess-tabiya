@@ -3,7 +3,7 @@ import { parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
-import { declareOverloadedDefenderConflictEvidence } from "./evidence-source-adapters.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { localSemanticEvents } from "./semantic-evidence.js";
 import { defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, overloadedDefenderResponseConflict } from "./tactics.js";
 import { transitionSemanticFacts } from "./transition.js";
@@ -67,7 +67,13 @@ describe("semantic tactic anchors", () => {
     const conflict = overloadedDefenderResponseConflict(conflictFen, "b8a7", conflictAfter, conflictCapture);
     expect(conflict).toMatchObject({ kind: "conflicts", conflicts: [expect.objectContaining({ soleDefender: expect.objectContaining({ square: "c6" }), capturedTarget: expect.objectContaining({ square: "a7" }), retainedTargets: [expect.objectContaining({ square: "e7" })] })] });
     if (conflict.kind !== "conflicts") throw new TypeError("fixture did not produce overload conflict");
-    expect(declareOverloadedDefenderConflictEvidence(conflict.conflicts[0]!).projection.id).toBe("derived.tactic.overloaded_defender_response_conflict");
+    const capture = invokeEvidenceValueRoute("rules.transition.event.capture@1", { beforeFen: conflictFen, moveUci: "b8a7", afterFen: conflictAfter })[0]!;
+    const duties = invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: conflictFen });
+    const sealed = invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", { duties, capture });
+    expect(sealed.kind === "available" ? sealed.value.map((item) => item.projection.id) : []).toEqual(["derived.tactic.overloaded_defender_response_conflict"]);
+    expect(sealed.kind === "available" ? sealed.value[0]!.payload : undefined).toEqual(conflict.conflicts[0]);
+    // Duties read at a different position cannot be joined to this capture.
+    expect(() => invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", { duties: invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: conflictAfter }), capture })).toThrow(/before position/u);
 
     const alternateFen = "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1";
     const alternateAfter = after(alternateFen, "b8a7");
