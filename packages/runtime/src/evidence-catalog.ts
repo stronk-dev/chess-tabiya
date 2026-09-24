@@ -578,7 +578,7 @@ const derivedTacticOutputs = [
   }),
   projection("derived.tactic", "derived.tactic.deflection_observed", "derived", {
     role: "event", payloadType: "DeflectionObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A defender is displaced by capturing the bait or answering its check, loses a named duty, and the retained target is positively captured on the third edge.`,
-    operands: ["baitMove", "defenderBefore", "defenderAfter", "lostDuty", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    operands: ["anchors", "baitMove", "defenderBefore", "defenderAfter", "lostDuty", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
     dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange"), ref("rules.tactic.event.check")],
@@ -590,7 +590,7 @@ const derivedTacticOutputs = [
   }),
   projection("derived.tactic", "derived.tactic.attraction_observed", "derived", {
     role: "event", payloadType: "AttractionObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A king, queen or rook captures bait onto its destination; the opponent re-attacks that square and the retained heavy piece is checked on edge three or captured there on edge five.`,
-    operands: ["baitMove", "heavyPiece", "arrivalSquare", "checkOrCaptureConsequence"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    operands: ["anchors", "baitMove", "heavyPiece", "arrivalSquare", "checkOrCaptureConsequence"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
     dependsOn: [ref("run.record.move"), ref("rules.transition.event.capture"), ref("rules.tactic.event.check")],
@@ -602,7 +602,7 @@ const derivedTacticOutputs = [
   }),
   projection("derived.tactic", "derived.tactic.line_blocker_clearance_observed", "derived", {
     role: "event", payloadType: "LineBlockerClearanceObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A friendly sole blocker vacates the exact slider-target between-set; the unchanged slider later captures the retained non-king target with a positive legal-exchange@1 result.`,
-    operands: ["blocker", "slider", "ray", "target", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    operands: ["anchors", "blocker", "slider", "ray", "target", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
     dependsOn: [ref("run.record.move"), ref("rules.exchange.predicate.legal_exchange")],
@@ -611,7 +611,7 @@ const derivedTacticOutputs = [
   }),
   projection("derived.tactic", "derived.tactic.square_clearance_observed", "derived", {
     role: "event", payloadType: "SquareClearanceObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} An exact square is vacated and a same-side B/R/Q later makes a quiet move to or through it from another source square.`,
-    operands: ["vacatedSquare", "vacatingPiece", "laterSlider", "laterMove"], signs: ["state"], grounding: "recorded_run", exactness: "exact",
+    operands: ["anchors", "vacatedSquare", "vacatingPiece", "laterSlider", "laterMove"], signs: ["state"], grounding: "recorded_run", exactness: "exact",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
     dependsOn: [ref("run.record.move")], derivation: { inputs: [ref("run.record.move")] },
@@ -619,7 +619,7 @@ const derivedTacticOutputs = [
   }),
   projection("derived.tactic", "derived.tactic.interference_observed", "derived", {
     role: "event", payloadType: "InterferenceObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} The attacking side interposes on an enemy slider's exact defence-duty between-set; the retained target is later captured with a positive legal-exchange@1 result.`,
-    operands: ["interposingMove", "slider", "betweenSquare", "target", "brokenDuty", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    operands: ["anchors", "interposingMove", "slider", "betweenSquare", "target", "brokenDuty", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
     dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.exchange.predicate.legal_exchange")],
@@ -628,7 +628,7 @@ const derivedTacticOutputs = [
   }),
   projection("derived.tactic", "derived.tactic.check_zwischenzug_observed", "derived", {
     role: "event", payloadType: "CheckZwischenzugObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A legal recapture exists; its mover instead gives check, the opponent answers, and the same recapturer then makes a positive legal-exchange@1 capture on the retained square.`,
-    operands: ["expectedRecapture", "intermediateCheck", "reply", "retainedRecapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    operands: ["anchors", "expectedRecapture", "intermediateCheck", "reply", "retainedRecapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
     dependsOn: [ref("run.record.move"), ref("rules.transition.event.capture"), ref("rules.tactic.event.check"), ref("rules.exchange.predicate.legal_exchange")],
@@ -637,7 +637,7 @@ const derivedTacticOutputs = [
   }),
   projection("derived.tactic", "derived.tactic.overload_exploitation_observed", "derived", {
     role: "event", payloadType: "OverloadExploitationObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A multi-duty defender's first target is captured, that defender recaptures, and a different retained target is then positively captured.`,
-    operands: ["firstCapture", "defenderRecapture", "secondTargetCapture", "dutySet"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    operands: ["anchors", "firstCapture", "defenderRecapture", "secondTargetCapture", "dutySet"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
     dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
@@ -711,7 +711,7 @@ const pawnOutputs = [
   }),
   projection("rules.pawn", "rules.pawn.reading.candidate_majority", "rules", {
     payloadType: "CandidateMajorityReading", semantics: BREADTH_CONVENTION_TEXT.candidateMajority,
-    operands: ["fen", "conventionId", "candidates"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,
+    operands: ["fen", "conventionId", "candidates"], grounding: "declared_convention", exactness: "convention", forms: ["list", "panel", "lit_squares", "piece_halo"],
     limitations: ["The convention deliberately omits a backward-pawn classifier and emits no plan or conversion verdict."],
   }),
   projection("rules.pawn", "rules.pawn.event.dynamics", "rules", {
@@ -760,7 +760,7 @@ const derivedPawnOutputs = [
 const derivedMaterialOutputs = [
   projection("derived.material", "derived.material.reading.role_signature", "derived", {
     payloadType: "MaterialRoleSignatureReading", semantics: BREADTH_CONVENTION_TEXT.materialRole,
-    operands: ["fen", "conventionId", "colors", "asymmetry", "magnitude"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
+    operands: ["fen", "conventionId", "colors", "asymmetry", "magnitude"], grounding: "position_rules", exactness: "exact", forms: ["list", "panel"],
     dependsOn: [ref("rules.structural.reading.piece_count")], derivation: { inputs: [ref("rules.structural.reading.piece_count")] },
     limitations: ["No scalar material advantage, imbalance quality, or exchange advice is emitted."],
   }),
@@ -947,7 +947,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("live.syzygy", "live.syzygy.probe_result", "search", { role: "source_record", payloadType: "TablebasePosition", grounding: "tablebase_exact", operands: ["category", "moves"], answerContent: ["fact", "evaluation", "candidate_moves", "move"], forms: ["machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] }, limitations: ["Raw position-and-move probe used by opponent selection; not an attached run event."] }),
     projection("live.syzygy", "live.syzygy.result", "search", { role: "event", payloadType: "EvidencePayload.tablebase", grounding: "tablebase_exact", operands: ["kind", "source", "values"], answerContent: ["fact", "evaluation"], forms: ["panel"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] }, limitations: ["Whole attached tablebase event retained for evidence-reference delivery; category/distance consumers use their narrower projections."] }),
     projection("live.syzygy", "live.syzygy.category", "search", { role: "event", payloadType: "Tablebase category", grounding: "tablebase_exact", operands: ["category"], answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] } }),
-    projection("live.syzygy", "live.syzygy.distance", "search", { role: "event", payloadType: "Tablebase distances", grounding: "tablebase_exact", operands: ["category"], answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] }, limitations: ["Distance is a measurement; no optimality-boundary verdict is inferred."] }),
+    projection("live.syzygy", "live.syzygy.distance", "search", { role: "event", payloadType: "Tablebase distances", grounding: "tablebase_exact", operands: ["category", "dtz"], answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] }, limitations: ["Distance is a measurement; no optimality-boundary verdict is inferred."] }),
     projection("live.syzygy", "live.syzygy.position_result", "search", { role: "source_record", payloadType: "ProviderEvidenceDelivery<LiveSyzygyPosition, \"syzygy.position@1\">", grounding: "tablebase_exact", exactness: "exact", confidence: "exact", semantics: "One exact in-domain tablebase probe of the full canonical FEN, with legal-move identities validated and the same-exchange receipts sealed.", operands: PROVIDER_DELIVERY_OPERANDS, answerContent: ["fact", "evaluation", "candidate_moves", "move"], forms: ["list", "panel"], abstention: { possible: true, reasons: PROVIDER_SOURCE_REASONS }, limitations: ["Outside-domain is the separate local rules.endgame.tablebase_domain@1 fact; provider absence is never a draw."], disposition: PROVIDER_OPERATOR_ONLY }),
   ]),
   producer("human.maia", "human", "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts", "provider", [
