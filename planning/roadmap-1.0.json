@@ -367,11 +367,10 @@
         "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "The recorded semantic path compiler is implemented: a strict branch resolver, an exact replay-validated recorded-edge source, versioned v2 multi-edge successors and an exact id@version event inventory compile any recorded branch into events with per-edge receipts. Its first production consumer (the Review compiler) and the convention predecessor remain open; the shared candidate packet landed alongside it.",
+          "summary": "The recorded semantic path now reaches a real consumer: the Review Map compiles each run's recorded branch into exact versioned tactic events and shows them per ply, discharging the compiler's first-caller obligation. The shared candidate packet feeds semantic selection. The Review compiler packet, module registry and convention provenance remain open.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/recorded-semantic-path.ts",
-            "planning/recorded-semantic-path/implementation-2026-09-24.md",
+            "apps/server/src/review-map.test.ts",
             "rfc/recorded-semantic-path.md",
             "rfc/shared-candidate-evidence-packet.md"
           ],
@@ -379,7 +378,7 @@
             {
               "kind": "rfc",
               "id": "recorded-semantic-path.md",
-              "digest": "sha256:37cb3035db519a343c4e4958fef74e0a356e485aba478db3135b5897c07a0214"
+              "digest": "sha256:4ef59cd6ddd764286753545e129c4dc4f8256a98bd827a943fe28b104caa3fb2"
             },
             {
               "kind": "rfc",
@@ -388,8 +387,8 @@
             },
             {
               "kind": "work_state",
-              "id": "D1067",
-              "digest": "sha256:718bc3ed0920635fb01c51614ae3f23940eff604866887d3750bbd631659b589"
+              "id": "D1710",
+              "digest": "sha256:07490821e6fc8582bd758865e92da093edadfa8556235a7edf9cccf978d463e3"
             }
           ]
         },
@@ -464,14 +463,20 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Return scheduling reaches learners end to end: the ladder replays from attempts with lapse step-down and an overstudy cap, difficult roots link preserved runs, the due queue serves a bounded intake with frequency tie-breaks and a waiting count, each due return carries the owner-ruled three-word standing with a fixed explanation, varied returns rotate authored retry variants, and imported games record guess-the-move predictions. Four cross-RFC discharges remain with their owners.",
+          "summary": "Whole-game Review is a working learner journey: the Review Map lists every ply with grounded report-ladder grades, offers Retry from here on every row and moment through a preserving fork, selects 0..3 moments from one projection shared by private review, share and card, gates accuracy on full coverage, and shows recorded semantic events per ply. Return scheduling reaches Learn with the owner-ruled standing words. Eval graph, Compare handoff and the Review compiler packet remain.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/return-scheduling-application.test.ts",
-            "planning/training-methods/implementation-2026-09-24.md",
+            "apps/server/src/review-map.test.ts",
+            "planning/review/implementation-2026-09-24.md",
+            "rfc/review-map.md",
             "rfc/return-scheduling.md"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "review-map.md",
+              "digest": "sha256:4a5337e911a419072302b92edc00b87095b429f48718667aa34283db3d4d184b"
+            },
             {
               "kind": "rfc",
               "id": "return-scheduling.md",
@@ -479,8 +484,8 @@
             },
             {
               "kind": "work_state",
-              "id": "D868",
-              "digest": "sha256:5f88afcd1473f649026dda7cf14325249a39e1043fbebf2fb8a02785b44fa3d4"
+              "id": "D880",
+              "digest": "sha256:dc5fd5f8f578a60fd1e223e48f96d6330d1610acefc0b06d2d7bd4eaa9118947"
             }
           ]
         },

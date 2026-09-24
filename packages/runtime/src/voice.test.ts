@@ -1,6 +1,40 @@
 import { describe, expect, it } from "vitest";
 
-import { renderRecordedReading } from "./voice.js";
+import { EVIDENCE_CONTRACT_DECLARATIONS } from "./evidence-catalog.js";
+import { compileEvidenceManifest, evidenceForConsumer, renderEvidenceItems } from "./evidence-contract.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { judgementWordsOutsideGrounding, renderRecordedReading, ungroundedResidue, voiceCheck } from "./voice.js";
+
+describe("licence-by-span for judgement words ([[D1409]])", () => {
+  const grade = "Mistake — the recorded evaluation moved +1.00 (59.1%) → −1.00 (40.9%) across this move, a drop of 18.2 win-points against a threshold of 10 (grade-convention@1/review).";
+  const view = (() => {
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const evidence = invokeEvidenceValueRoute("pack.authored.claim@1", { item: { kind: "annotation", id: "d1409-fixture", text: "Grade fixture.", revealedBy: { kind: "fixture", eventSeq: 1 } } })[0]!;
+    const admitted = evidenceForConsumer(manifest, { id: "guidance.voice", version: 1 }, [evidence]);
+    return renderEvidenceItems(admitted, { "pack.authored.claim@1": () => [grade, "The evaluation is losing for the side to move."] });
+  })();
+
+  it("reproduces [[D1406]] as red: one grade sentence no longer licenses its word across the output", () => {
+    expect(voiceCheck(view, "That was a blunder and a mistake; the plan was bad.").violations).toEqual(expect.arrayContaining(["judgement:bad", "judgement:blunder", "judgement:mistake"]));
+  });
+
+  it("admits a judgement word only by quoting the exact grounding sentence, byte for byte", () => {
+    expect(voiceCheck(view, `Here is the record. ${grade}`).valid).toBe(true);
+    expect(voiceCheck(view, `${grade} So it was a mistake.`).violations).toContain("judgement:mistake");
+    expect(voiceCheck(view, grade.replace("—", "-")).violations).toContain("judgement:mistake");
+    expect(voiceCheck(view, grade.toLowerCase()).violations).toContain("judgement:mistake");
+  });
+
+  it("bans a word licensed by another sentence of the same packet outside that sentence", () => {
+    expect(voiceCheck(view, "The evaluation is losing for the side to move.").violations).not.toContain("judgement:losing");
+    expect(voiceCheck(view, "Black is losing.").violations).toContain("judgement:losing");
+  });
+
+  it("takes the longest byte-exact span at each position and leaves the rest as residue", () => {
+    expect(ungroundedResidue(["good", "good line"], "a good line").trim()).toBe("a");
+    expect(judgementWordsOutsideGrounding(["It was bad."], "It was bad. It was bad")).toEqual(["bad"]);
+  });
+});
 
 describe("recorded-reading sentences", () => {
   it("renders attributed engine and tablebase values without move tokens", () => {

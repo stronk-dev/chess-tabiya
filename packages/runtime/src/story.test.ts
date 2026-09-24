@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, declareShapeFiringEvidence, evidenceForConsumer, PRIMARY_EVIDENCE_MANIFEST, rankStoryMoments, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationTrajectory, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment, type StoryMomentKind } from "./index.js";
+import { attachEvidence, commitMove, createRun, declareShapeFiringEvidence, evidenceForConsumer, PRIMARY_EVIDENCE_MANIFEST, rankStoryMoments, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationTrajectory, storyDeclaredEvidence, storyEvidenceSourceLabels, storyEvaluation, storyMoments, suggestTitle, type StoryMoment, type StoryMomentKind } from "./index.js";
 
 if (false) {
   // @ts-expect-error review story rendering consumes only a compiled evidence view.
@@ -71,20 +71,16 @@ describe("grounded game story", () => {
     expect(sentences.join(" ")).not.toMatch(/carlsbad-minority-attack|catalogue trigger|\bShape\b/u);
   });
 
-  it("selects by rank before restoring chronology", () => {
-    const moment = (nodeId: string, ply: number): StoryMoment => ({
-      nodeId, entryNodeId: nodeId, ply, san: null, fen: "8/8/8/8/8/8/8/8 w - - 0 1",
-      kinds: [], sentences: [], evidence: [], phase: "endgame",
-    });
-    const moments = [moment("early", 2), moment("unranked", 3), moment("late", 8), moment("middle", 5)];
-    expect(selectedStoryMoments({ moments, rank: ["late", "middle", "early", "unranked"] }, 3).map((item) => item.nodeId)).toEqual(["early", "middle", "late"]);
-    expect(storyMomentSelection({ moments, rank: ["missing", "late", "middle", "early", "unranked"] }, 3)).toMatchObject({
-      shown: 3,
-      total: 4,
-      limit: 3,
-      moments: [{ nodeId: "early" }, { nodeId: "middle" }, { nodeId: "late" }],
-    });
-    expect(() => selectedStoryMoments({ moments, rank: [] }, -1)).toThrow(/non-negative/u);
+  it("orients a White-perspective Stockfish reading to the learner at a black-to-move node", () => {
+    let run = commitMove(imported(), "e2e4", { actor: "user", at }).run;
+    const blackToMove = run.nodes.find((node) => node.ply === 1)!;
+    run = attachEvidence(run, blackToMove.id, ["engine:w"], { kind: "eval", source: "engine_validated", values: { centipawns: 80, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 } }, at).run;
+    // White is the learner and White's side is +0.80: the learner reading must be +80, not -80.
+    expect(storyEvaluation(run, blackToMove)?.centipawns).toBe(80);
+    let asBlack = commitMove(createRun({ id: "story-black", session: { kind: "imported", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "black" }, movetextDigest: digest, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: digest, policyConfig: config, seed: 1, createdAt: at }), "e2e4", { actor: "system", at }).run;
+    const node = asBlack.nodes.find((candidate) => candidate.ply === 1)!;
+    asBlack = attachEvidence(asBlack, node.id, ["engine:b"], { kind: "eval", source: "engine_validated", values: { centipawns: 80, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 } }, at).run;
+    expect(storyEvaluation(asBlack, node)?.centipawns).toBe(-80);
   });
 
   it("selects an irreversibility-only moment after every other story family", () => {

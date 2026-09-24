@@ -21093,3 +21093,29 @@ shows a fixed explanation beside the due date. D864 closes.
   recorded edges. It has no learner binding yet.
 - **Ledger:** D2495 and D2496 close. Reachability ([[D2497]]) stays unavailable.
 - **Intent:** `design/03` B10 is amended again on the owner's ruling.
+
+### 2026-09-24 — review-map implemented: the whole-game Review screen
+
+`/review/game/:runId` replaces Game Story with the Review Map.
+
+- **Move list:** every ply is listed. A report-ladder grade appears only inside
+  its full grounding sentence.
+- **Retry:** *Retry from here* on every row and moment card forks a
+  `story-reentry` branch, so the original line survives.
+- **One moment selection:** 0..3 moments come from one projection shared by the
+  private review, the share page and the card.
+- **Accuracy:** shown only at full evaluation coverage. It is clamped at zero
+  drop so that a rising evaluation cannot push it above 100.
+- **Evidence panel:** shows recorded-semantic-path events, and the draft
+  compiler packet as explicit abstention.
+- **D1409:** `voiceCheck` now enforces that a judgement word appears only inside
+  its byte-exact grounding sentence.
+- **Mock perspective fix:** the mock engine's evaluations now declare
+  white-perspective as the real engine does.
+- **Discharges:** recorded-semantic-path D1 is discharged, with Review as its
+  first production caller. D689, D1067 and D1409 close. D880 keeps the eval
+  graph open.
+- **Merge fixes:** the merge resolved the value-profile unavailable list, which
+  is now only the three opening routes. The refusal-debt register loses
+  FORBIDDEN and SOURCE_UNAVAILABLE, which are now tested. MASTERS_PGN_INVALID
+  gains a direct test.

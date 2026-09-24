@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { storyMomentSelection } from "@chess-tabiya/runtime";
+import { selectReviewMoments } from "@chess-tabiya/runtime";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { RunService } from "./service.js";
@@ -57,9 +57,9 @@ describe("adoption wave server contracts", () => {
     const card = service.publicStory(share.token);
     expect(card).toMatchObject({ title: expect.any(String), outcome: { kind: "board_terminal" } });
     expect(card.productLink).toBe("/play");
-    expect(Object.keys(card).sort()).toEqual(["moments", "outcome", "productLink", "selection", "title"]);
-    const storySelection = storyMomentSelection(story);
-    expect(card.selection).toEqual({ shown: storySelection.shown, total: storySelection.total });
+    expect(Object.keys(card).sort()).toEqual(["considered", "footer", "moments", "momentsSentence", "outcome", "productLink", "title"]);
+    const storySelection = selectReviewMoments(story);
+    expect(card.considered).toBe(storySelection.considered);
     expect(card.moments.map((moment) => moment.nodeId)).toEqual(storySelection.moments.map((moment) => moment.nodeId));
     const milestones = service.milestones(principal);
     expect(milestones.map((item) => item.kind)).toContain("first_attempt");
@@ -76,19 +76,24 @@ describe("adoption wave server contracts", () => {
     expect(() => service.publicStory(share.token)).toThrowError(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
   });
 
-  it("carries a bounded story denominator through public JSON and HTML", async () => {
-    const moments = Array.from({ length: 8 }, (_, index) => Object.freeze({
+  it("carries the review's moment denominator and computed footer through public JSON and HTML", async () => {
+    const moments = Array.from({ length: 3 }, (_, index) => Object.freeze({
       nodeId: `moment-${index + 1}`,
       ply: index + 1,
       san: "e4",
       fen: FEN,
+      heading: "Evaluation shift",
+      moveLabel: `Move ${index + 1}`,
       sentences: Object.freeze([`Moment ${index + 1}.`]),
+      sourceLabels: Object.freeze(["Board rules"]),
     }));
     const service = {
       publicStory: () => Object.freeze({
         title: "A bounded story",
         outcome: Object.freeze({ kind: "recorded_result", result: "1-0" }),
-        selection: Object.freeze({ shown: 8, total: 12 }),
+        considered: 12,
+        momentsSentence: "Up to three recorded moments, at most one per game phase, from 12 admitted story moments. This is not a ranking of the play.",
+        footer: Object.freeze({ labels: Object.freeze(["Recorded game", "Board rules"]), sentence: "Sources on this review: Recorded game · Board rules." }),
         moments: Object.freeze(moments),
         productLink: "/play",
       }),
@@ -96,9 +101,13 @@ describe("adoption wave server contracts", () => {
     const handler = createRestHandler(service);
 
     const jsonResponse = await handler(new Request("http://tabiya.test/api/shared/token/story"));
-    expect(await jsonResponse.json()).toMatchObject({ selection: { shown: 8, total: 12 } });
+    expect(await jsonResponse.json()).toMatchObject({ considered: 12, moments: [{ nodeId: "moment-1" }, { nodeId: "moment-2" }, { nodeId: "moment-3" }] });
     const htmlResponse = await handler(new Request("http://tabiya.test/shared/token"));
-    expect(await htmlResponse.text()).toContain("Showing 8 of 12 recorded moments selected for this story.");
+    const html = await htmlResponse.text();
+    expect(html).toContain("3 moments selected from 12 admitted story moments.");
+    expect(html).toContain("Sources on this review: Recorded game · Board rules.");
+    expect(html).toContain("Sources: Board rules.");
+    expect(html).not.toMatch(/engine/iu);
   });
 
   it("creates an opposite-side position run atomically without changing the source", async () => {

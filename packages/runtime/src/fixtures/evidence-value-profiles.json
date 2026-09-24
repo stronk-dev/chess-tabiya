@@ -143,10 +143,11 @@
     ]
   },
   "derived.grade.move_quality@1": {
-    "availability": "unavailable",
-    "cardinality": 0,
-    "payloadDigests": [],
-    "reason": "paired_instrument_receipt_unavailable"
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "b4fd31cf7282bca53e71ffc5ff138a4e4ad427d7267f9b72670576a05dd46273"
+    ]
   },
   "derived.king.captured_zone_defender@1": {
     "availability": "available",

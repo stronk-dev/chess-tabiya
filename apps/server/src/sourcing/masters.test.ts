@@ -61,6 +61,12 @@ describe("famous-games masters sourcing (rfc/famous-games.md)", () => {
     expect(sourceGameIssues(parsed.sourceGame)).toEqual([]);
   });
 
+  it("refuses an unparseable masters PGN at the record boundary with MASTERS_PGN_INVALID", () => {
+    const body = new TextEncoder().encode('[Event "x"]\n[White "A"]\n[Black "B"]\n\n1. e4 e5 2. Ke3 *\n');
+    expect(() => parseMastersGame(body, "aAbqI4ey")).toThrow(expect.objectContaining({ code: "MASTERS_PGN_INVALID" }));
+    expect(() => parseMastersGame(new TextEncoder().encode("*\n"), "aAbqI4ey")).toThrow(expect.objectContaining({ code: "MASTERS_PGN_INVALID" }));
+  });
+
   it("criterion 4: a missing roster field is refused, never defaulted to an empty string", () => {
     const headers = { White: "A", Black: "B", Date: "1999.01.20", Result: "1-0" };
     expect(() => sourceGameFromHeaders({ ...headers, White: "" }, "lichess-masters:aAbqI4ey", "no-rights-asserted")).toThrow(expect.objectContaining({ code: "MASTERS_PGN_HEADER_INVALID" }));

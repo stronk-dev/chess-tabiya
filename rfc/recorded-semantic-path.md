@@ -1,6 +1,6 @@
 # RFC: Recorded semantic path compiler
 
-- **Status:** awaiting D1 — implemented 2026-09-24 at the owner's direction to implement ready RFCs
+- **Status:** awaiting D2 — implemented 2026-09-24 at the owner's direction to implement ready RFCs; D1 discharged the same day when the Review Map became the first production caller
   (compiler, exact edge source, v2 successors, exact ref inventory, server operation, checker);
   criterion 13's production consumer (D1 via [[D1870]]/[[D1710]]) and the [[D1921]]/[[D1929]]
   convention predecessor (explicit abstention in the result) remain open. Receipt:
@@ -456,7 +456,7 @@ only evidence-catalogue changes in scope.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | [[D1067]] recorded-run path compiler and real production caller | `recorded-semantic-path` | implementation plus criterion-13 consumer witness | |
+| D1 | [[D1067]] recorded-run path compiler and real production caller | `recorded-semantic-path` | implementation plus criterion-13 consumer witness | **2026-09-24** — `RunService.review()` calls `recordedSemanticPathOperation` (`apps/server/src/review-map.test.ts`) |
 | D2 | [[D1710]] execution disposition for the eleven isolated sequence projections changes from helper-only to live only when criterion 13 passes | `recorded-semantic-path` | set-equal execution receipt plus consumer witness | |
 | D3 | [[D1870]] adds exact learner-module consumer pairs for the observed semantic tactics | `module-registration` | accepted pair declarations plus implementation commit | |
 | D4 | [[D1870]] adds exact pair-keyed presentation for the observed semantic tactics | `evidence-presentation` | accepted component declarations plus implementation commit | |

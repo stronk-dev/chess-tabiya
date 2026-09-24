@@ -7,8 +7,6 @@ import {
   opponentMoveCount,
   rehearsalStepLabel,
   rehearsalTurnCount,
-  storyMoveLabel,
-  storyReentryCopy,
 } from "./chronology-copy.js";
 import {
   attemptVerdictLabel,
@@ -27,7 +25,6 @@ import {
   ratingPublicationStateLabel,
   repertoireGapStateLabel,
   storyMomentLabel,
-  storyOutcomeLabel,
 } from "./learner-copy.js";
 import { RETURN_STANDINGS } from "./api.js";
 
@@ -40,21 +37,8 @@ describe("learner-facing domain copy", () => {
     expect(attemptVerdictLabel("open")).toBe("Objective unresolved");
   });
 
-  it("frames story re-entry from recorded outcome and ply without exposing an evaluation", () => {
+  it("labels rehearsal steps without exposing an evaluation", () => {
     expect(rehearsalStepLabel(8)).toBe("Rehearsal step 8");
-    expect(storyMoveLabel(17)).toBe("Move 9");
-    expect(storyReentryCopy("white", "0-1", 17)).toBe(
-      "You lost this game. Pick it up at move 9 and play the consequence another way.",
-    );
-    expect(storyReentryCopy("black", "0-1", 8)).toBe(
-      "You won this game. Pick it up at move 4 and test another continuation.",
-    );
-    expect(storyReentryCopy("white", "1/2-1/2", 0)).toBe(
-      "This game was drawn. Pick it up at move 1 and test another continuation.",
-    );
-    expect(storyReentryCopy("white", undefined, 3)).toBe(
-      "Pick this game up at move 2 and play the consequence.",
-    );
   });
 
   it("names the comparison fork separately from consequence rows", () => {
@@ -72,14 +56,6 @@ describe("learner-facing domain copy", () => {
     expect(learnerMoveCount(3)).toBe("3 learner moves");
     expect(opponentMoveCount(1)).toBe("1 opponent move");
     expect(opponentMoveCount(3)).toBe("3 opponent moves");
-  });
-
-  it("renders story outcomes from the learner's side without PGN or runtime tokens", () => {
-    expect(storyOutcomeLabel("white", { kind: "recorded_result", result: "1-0" })).toBe("You won · recorded PGN result");
-    expect(storyOutcomeLabel("black", { kind: "recorded_result", result: "1-0" })).toBe("You lost · recorded PGN result");
-    expect(storyOutcomeLabel("black", { kind: "recorded_result", result: "1/2-1/2" })).toBe("Game drawn · recorded PGN result");
-    expect(storyOutcomeLabel("white", { kind: "board_terminal", result: "loss" })).toBe("You lost · board-terminal result");
-    expect(storyOutcomeLabel("white", { kind: "unfinished", result: "*" })).toBe("Game unfinished · no final result recorded");
   });
 
   it("turns the explorer population into a readable disclosure", () => {

@@ -23,6 +23,7 @@ import type {
   ReasoningTranscript,
   RunMark,
   StoryMoment,
+  ReviewMapProjection,
 } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
@@ -579,6 +580,19 @@ export interface GameStory {
   readonly rank: readonly string[];
   readonly evidence?: StoryMoment["evidence"];
 }
+/** rfc/review-map.md: the whole-game Review Map payload from `GET /runs/:id/review`. */
+export type ReviewMap = ReviewMapProjection & {
+  readonly runId: string;
+  readonly branchId: string;
+  readonly side: "white" | "black";
+  readonly ready: boolean;
+  readonly pendingEvidence: number;
+  readonly source: GameStory["source"];
+  readonly outcome: GameStory["outcome"];
+  readonly storyTitle: string;
+  readonly viewer: { readonly mayWrite: boolean };
+  readonly semanticPath: { readonly kind: "available"; readonly events: number } | { readonly kind: "refused"; readonly reason: string };
+};
 export interface StoryShare { readonly id: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdAt: string; readonly revokedAt: string | null; }
 export interface CreatedStoryShare extends Omit<StoryShare, "revokedAt"> { readonly token: string; readonly url: string; readonly revokedAt: null; }
 export interface RevokedStoryShare { readonly revoked: true; readonly runId: string; readonly tokenId: string; readonly revokedAt: string; }
@@ -927,6 +941,7 @@ export interface DrillClientApi extends RunApi {
   importGame?(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }>;
   importRecord?(runId: string): Promise<ImportedGameRecord>;
   story?(runId: string, branchId?: string): Promise<GameStory>;
+  review?(runId: string, branchId?: string): Promise<ReviewMap>;
   shareStory?(runId: string, branchId: string): Promise<CreatedStoryShare>;
   storyShares?(runId: string): Promise<readonly StoryShare[]>;
   revokeStoryShare?(runId: string, tokenId: string): Promise<RevokedStoryShare>;
@@ -1131,6 +1146,11 @@ export class DrillApi implements DrillClientApi {
   async importRecord(runId: string): Promise<ImportedGameRecord> {
     const body = await this.#json<{ readonly importRecord: ImportedGameRecord }>(`/runs/${encoded(runId)}/import`);
     return body.importRecord;
+  }
+
+  review(runId: string, branchId?: string): Promise<ReviewMap> {
+    const query = branchId === undefined ? "" : `?branch=${encoded(branchId)}`;
+    return this.#json(`/runs/${encoded(runId)}/review${query}`);
   }
 
   story(runId: string, branchId?: string): Promise<GameStory> {

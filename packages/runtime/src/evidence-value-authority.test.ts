@@ -805,7 +805,7 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const tablebaseLedger = sealedOne("sourcing.ledger.tablebase_result@1", tablebaseRecord);
   profiles.set("recorded.engine.eval@1", { valid: { ledger: engineLedger }, falsify: refused("recorded.engine.eval@1", { ledger: tablebaseLedger }) });
   profiles.set("recorded.tablebase.result@1", { valid: { ledger: tablebaseLedger }, falsify: refused("recorded.tablebase.result@1", { ledger: engineLedger }) });
-  profiles.set("derived.grade.move_quality@1", { valid: { before: sealedOne("live.stockfish.eval@1", packet("eval")), after: sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns: -300 })) }, falsify: refused("derived.grade.move_quality@1", { before: engineLedger, after: engineLedger }) });
+  profiles.set("derived.grade.move_quality@1", { valid: { before: sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns: 20, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 })), after: sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns: -300, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 })), mover: "white", context: "review" }, falsify: refused("derived.grade.move_quality@1", { before: engineLedger, after: engineLedger, mover: "white", context: "review" }) });
   profiles.set("run.record.evidence_ref_resolution@1", { valid: { reference: "rules:checkmate" }, falsify: refused("run.record.evidence_ref_resolution@1", { reference: "rules:checkmate", text: "caller prose" }) });
   const deliveryItem = { kind: "claim", id: "claim#one", revealedBy: { kind: "outcome", eventSeq: 4 }, anchor: { claimId: "one" }, text: "Authored sentence.", evidenceTypes: ["tablebase_exact"], earnedEvidenceTypes: ["tablebase_exact"], binding: "ledger_bound", authorSpans: [], principles: [] };
   profiles.set("pack.authored.claim_delivery@1", { valid: { item: deliveryItem }, falsify: refused("pack.authored.claim_delivery@1", { item: { ...deliveryItem, note: "prose" } }) });
@@ -839,7 +839,7 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect(observed).toEqual(pinned);
     // Honest-unavailable routes are exactly the declared dependency gaps.
     const unavailable = Object.entries(observed).filter(([, outcome]) => outcome.availability === "unavailable").map(([route]) => route).sort();
-    expect(unavailable).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(unavailable).toEqual(["derived.opening.deepest_reached@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
     // Empty valid populations are pinned too; the positives above prove each family can emit.
     const empty = Object.entries(observed).filter(([, outcome]) => outcome.availability === "empty").map(([route]) => route).sort();
     expect(empty).toEqual(EXPECTED_EMPTY);

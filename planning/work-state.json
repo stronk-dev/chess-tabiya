@@ -5590,11 +5590,12 @@
     },
     {
       "id": "D689",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:82c6ed39b0c0f8749568d7e0b4862b9b16783002c0bfb1bbfdd443ec247cd228",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:14b741b27be02a8756ea3b72cfe5f0263ff15469ab21a32529ec815f389d5f40",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D690",
@@ -7240,7 +7241,7 @@
       "id": "D880",
       "state": "todo",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:e23b311d4172a280e134040bf088032eeab62bebc0dfc7f66ea1ec5fab088f89",
+      "sourceDigest": "sha256:dc5fd5f8f578a60fd1e223e48f96d6330d1610acefc0b06d2d7bd4eaa9118947",
       "uxItems": [],
       "owner": "assistance-and-presentation"
     },
@@ -8758,12 +8759,12 @@
     },
     {
       "id": "D1067",
-      "state": "blocked",
-      "sourceGlyph": "📜",
-      "sourceDigest": "sha256:718bc3ed0920635fb01c51614ae3f23940eff604866887d3750bbd631659b589",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:87a6d335a0834cecd7dc1cca93dbcb937403300e761da80179b360d3974fe58d",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:recorded-semantic-path.md"
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1068",
@@ -10654,12 +10655,12 @@
     },
     {
       "id": "D1409",
-      "state": "blocked",
-      "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:e7e07c2d31d451784a39de2618b6d263a6dcc12af4404fc2b746afc785b79add",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1eb35886e055f16c272bede694a00d94f5cc7be10b909fd2488f3d303d6e9bea",
       "uxItems": [],
-      "owner": "review-and-return",
-      "blocker": "rfc:review-map.md"
+      "evidence": "packages/runtime/src/voice.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1410",

@@ -203,42 +203,45 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   await page.getByRole("button", { name: "Build game story" }).click();
   await expect(page).toHaveURL(/\/review\/game\/import-/);
   await expect(page.getByRole("heading", { name: "Alice – Bob" })).toBeVisible();
-  await expect(page.getByText("grounded story", { exact: false })).toBeVisible();
-  await expect(page.getByText("These are the moments the game review can explain, in game order. This is not a ranking of your play.")).toBeVisible();
-  await expect(page.getByText(/You won this game\. Pick it up at move \d+ and test another continuation\./)).toBeVisible();
-  await page.setViewportSize({ width: 1280, height: 720 });
-  const storyLayout = await page.evaluate(() => {
-    const stage = document.querySelector<HTMLElement>(".stage")!;
-    const detail = document.querySelector<HTMLElement>(".moment-detail")!;
-    const board = document.querySelector<HTMLElement>('.stage [aria-label="Chessboard"]')!;
-    const before = board.getBoundingClientRect();
-    const filler = document.createElement("p");
-    filler.dataset.storyLayoutProbe = "true";
-    filler.textContent = "Grounded explanation region. ".repeat(300);
-    detail.append(filler);
-    const after = board.getBoundingClientRect();
-    const stageBounds = stage.getBoundingClientRect();
-    const result = {
-      stageOverflowY: getComputedStyle(stage).overflowY,
-      detailOverflowY: getComputedStyle(detail).overflowY,
-      detailScrolls: detail.scrollHeight > detail.clientHeight,
-      before: { x: before.x, y: before.y, width: before.width, height: before.height },
-      after: { x: after.x, y: after.y, width: after.width, height: after.height },
-      boardInsideStage: after.top >= stageBounds.top - 1 && after.bottom <= stageBounds.bottom + 1,
-    };
-    filler.remove();
-    return result;
-  });
-  expect(storyLayout.stageOverflowY).toBe("hidden");
-  expect(storyLayout.detailOverflowY).toBe("auto");
-  expect(storyLayout.detailScrolls).toBe(true);
-  expect(storyLayout.after).toEqual(storyLayout.before);
-  expect(storyLayout.boardInsideStage).toBe(true);
-  const enter = page.getByRole("button", { name: "Pick it up from here" });
-  await expect(enter).toBeEnabled({ timeout: 15_000 });
+  await expect(page.getByText("Imported game · review")).toBeVisible();
+  // [criterion 1] every ply is a row; the board and evidence panel follow the selected row.
+  const moveList = page.getByRole("list", { name: "Move list" });
+  await expect(moveList.getByRole("listitem")).toHaveCount(4);
+  await expect(moveList.getByRole("button", { name: /^2\. Nf3/u })).toBeVisible();
+  await expect(moveList.getByRole("button", { name: /^2… Nc6/u })).toBeVisible();
+  // [criterion 6] once the recorded pass completes, the imported game carries full coverage and accuracy renders.
+  await expect(page.getByText("Evaluation coverage: 5 of 5 positions on this line carry a recorded engine evaluation.")).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/^White: \d+\.\d% under grade-convention@1 — 100 minus the mean win-point drop across all 2 of White's evaluated decisions/u)).toBeVisible();
+  await expect(page.getByText(/^Sources on this review: Recorded game · Recorded engine analysis/u)).toBeVisible();
+  await expect(page.getByRole("region", { name: "Moments" }).or(page.locator("section.moments"))).toContainText("Up to three recorded moments");
+  await moveList.getByRole("button", { name: /^1\. e4/u }).click();
+  await expect(page.getByText("Position after 1. e4")).toBeVisible();
+  await page.getByRole("button", { name: "Next move" }).click();
+  await expect(page.getByText("Position after 1… e5")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recorded facts at this move" })).toBeVisible();
+  await expect(page.getByText("No per-position review packet is admitted here", { exact: false })).toBeVisible();
+  // [criterion 12] no recommendation, PV or praise in the ordinary map.
+  await expect(page.locator("main")).not.toContainText(/\bbest\b|principal variation|brilliant|excellent/iu);
+  // [criteria 4, 5] Retry is on every row and every moment card; it works from another device (no stored writer id).
+  await expect(page.getByRole("button", { name: /^Retry from before move \d+ \(/u })).toHaveCount(4);
+  const momentRetries = await page.locator(".moment-card").getByRole("button", { name: /^Retry from this moment/u }).count();
+  expect(momentRetries).toBe(await page.locator(".moment-card").count());
   const runId = page.url().split("/").at(-1)!;
   await page.evaluate((id) => localStorage.removeItem(`chess-tabiya:run:${id}:writer-id`), runId);
-  await enter.click();
+  const retry = page.getByRole("button", { name: "Retry from before move 2 (Nf3)" });
+  await expect(retry).toBeEnabled();
+  await retry.click();
+  await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
+  await expect(page.getByLabel("Chessboard").first()).toBeVisible();
+  const forked = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: { branches: { label: string }[]; nodes: { moveUci: string | null }[] } };
+  expect(forked.graph.branches.map((branch) => branch.label)).toContain("story-reentry");
+  // Forked before the run opened: the original continuation is still whole.
+  expect(forked.graph.nodes.map((node) => node.moveUci)).toEqual(expect.arrayContaining(["e2e4", "e7e5", "g1f3", "b8c6"]));
+  // The moment card's Retry re-enters at its own entry node (here the recorded leaf).
+  await page.goto(`/review/game/${runId}`);
+  await expect(page.getByRole("heading", { name: "Alice – Bob" })).toBeVisible();
+  await page.evaluate((id) => localStorage.removeItem(`chess-tabiya:run:${id}:writer-id`), runId);
+  await page.locator(".moment-card").last().getByRole("button", { name: /^Retry from this moment/u }).click();
   await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   const committedMove = page.waitForResponse((response) => {
@@ -252,6 +255,9 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   const graph = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: { branches: unknown[]; nodes: { moveUci: string | null }[] } };
   expect(graph.graph.branches.length).toBeGreaterThanOrEqual(2);
   expect(graph.graph.nodes.filter((node) => node.moveUci !== null).length).toBeGreaterThanOrEqual(5);
+  // The original continuation survives the retry: the imported line is intact beside the new branch.
+  expect(graph.graph.nodes.map((node) => node.moveUci)).toEqual(expect.arrayContaining(["e2e4", "e7e5", "g1f3", "b8c6", "f1b5"]));
+  expect(graph.graph.branches.length).toBeGreaterThanOrEqual(3);
   const exported = await page.request.get(`/runs/${runId}/pgn`);
   const text = await exported.text();
   expect(text).toContain('[White "Alice"]');
@@ -963,11 +969,12 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   await expect(terminal.getByRole("button", { name: "Play it again from here" })).toBeVisible();
   await terminal.getByRole("button", { name: "Review the whole game" }).click();
   await expect(page).toHaveURL(/\/review\/game\//);
-  await expect(page.getByRole("heading", { name: "Story of this run" })).toBeVisible();
-  await expect(page.getByText("A public story link does not expire.", { exact: false })).toBeVisible();
-  await expect(page.getByText("No public story links yet.")).toBeVisible();
-  await page.getByRole("button", { name: "Share story" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Public story link created" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Review of this run" })).toBeVisible();
+  await expect(page.getByText("A public review link does not expire.", { exact: false })).toBeVisible();
+  await expect(page.getByText("No public review links yet.")).toBeVisible();
+  const privateMoments = await page.locator(".moment-card").evaluateAll((cards) => cards.map((card) => (card as HTMLElement).dataset.momentId));
+  await page.getByRole("button", { name: "Share review" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Public review link created" })).toBeVisible();
   const publicLink = page.getByRole("link", { name: /\/shared\// });
   const href = await publicLink.getAttribute("href");
   expect(href).not.toBeNull();
@@ -975,12 +982,16 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   const anonymous = await browser.newContext();
   const publicPage = await anonymous.newPage();
   await publicPage.goto(absolute);
-  await expect(publicPage.getByRole("heading")).toContainText(/The turning point|Held|Won|A game story/);
-  await expect(publicPage.getByLabel("Chessboard")).toBeVisible();
-  await expect(page.getByRole("list", { name: "Story share links" })).toContainText("public");
+  await expect(publicPage.getByRole("heading", { level: 1 })).toContainText(/The turning point|Held|Won|A game story/);
+  // [criterion 8] the public card carries the same moments, in the same order, as the private map.
+  const publicStory = await (await page.request.get(new URL(href!.replace("/shared/", "/api/shared/") + "/story", page.url()).href)).json() as { moments: { nodeId: string }[] };
+  expect(publicStory.moments.map((moment) => moment.nodeId)).toEqual(privateMoments);
+  if (privateMoments.length > 0) await expect(publicPage.getByLabel("Chessboard")).toBeVisible();
+  await expect(publicPage.getByText(/^Sources on this review:/u)).toBeVisible();
+  await expect(page.getByRole("list", { name: "Review share links" })).toContainText("public");
   await page.getByRole("button", { name: "Revoke this link" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Future reads through that public link are blocked" })).toBeVisible();
-  await expect(page.getByRole("list", { name: "Story share links" })).toContainText("revoked");
+  await expect(page.getByRole("list", { name: "Review share links" })).toContainText("revoked");
   await publicPage.reload();
   await expect(publicPage.getByText("Route not found")).toBeVisible();
   await anonymous.close();
