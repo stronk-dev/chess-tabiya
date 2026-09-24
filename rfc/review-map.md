@@ -1,6 +1,6 @@
 # RFC: Review Map — the learner-facing review surface
 
-- **Status:** awaiting D1–D6 — implemented 2026-09-24 at the owner's direction in session (build now as a parallel agent, no further review cycle); acceptance criteria 1–14 have able-to-fail tests and [[D1409]] is enforced in `voiceCheck` (judgement arm). The owner rulings (D1, D2), the cross-lane amendments (D3, D4, D6) and the module-registry invocation (D5, blocked by [[D1445]]) remain open. Receipt: `planning/review/implementation-2026-09-24.md`. Drafted 2026-08-23 on owner ruling [[D1273]] (*"Full surface plus accuracy and longitudinal"*).
+- **Status:** awaiting D1–D6 — implemented 2026-09-24 at the owner's direction in session (build now as a parallel agent, no further review cycle); acceptance criteria 1–14 have able-to-fail tests and [[D1409]] is enforced in `voiceCheck` (judgement arm). The owner rulings (D1, D2) and the cross-lane amendments (D3, D4, D6) remain open; D5 (the module-registry invocation) is discharged at `63902370`. Receipt: `planning/review/implementation-2026-09-24.md`. Drafted 2026-08-23 on owner ruling [[D1273]] (*"Full surface plus accuracy and longitudinal"*).
 - **Author:** claude (drafted from `planning/review/rfc-derivation.md`, 646 lines, the HEAD derivation of every surface this document consumes)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md:134-138` (the failure shape this surface must not become), `design/03-product-breadth.md:57-67`, `:290` (the intent tier's "Review" is branch-compare — see Deviations)
@@ -380,7 +380,7 @@ Each names the wrong implementation that would otherwise pass.
 | D2 | The `design/03-product-breadth.md` amendment giving game review a home in the intent tier (law 5 — proposed here, written by the owner or by claude on the ruling) | OWNER | the amendment's landing commit | |
 | D3 | Cross-game longitudinal trends: the store additions this surface requires (per-decision refs retained at review grain), specified as an obligation on the accepted store rather than a claim here | `longitudinal-store.md` | the store's implementing commit | |
 | D4 | The literal Wave-C id amendment ([[D921]]) that `review-evidence-compiler` acceptance waits on, and which this surface's packet consumes | `learner-modules.md` | the amendment's landing commit | |
-| D5 | `compileModuleRegistry`'s first production invocation and the `ModuleDeclaration[]` roster it compiles | codex | the implementing commit | |
+| D5 | `compileModuleRegistry`'s first production invocation and the `ModuleDeclaration[]` roster it compiles | codex | the implementing commit | ✅ `63902370` (2026-09-24): `MODULE_REGISTRY` compiles the eleven declarations at import; `reviewMapProjection` admits its grade, evaluation and recorded-path relations through `module.review_map@1` ([[D1445]] repaired by the capability image) |
 | D6 | The [[D971]] preset-config projections, if this surface's disclosure is to depend on `compileAssistance` output rather than the module list alone | `intent-presets.md` | the D971 amendment's landing commit | |
 
 ## Open questions
@@ -418,6 +418,8 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
    an owner.
 
 ## Changelog
+
+- **2026-09-24** — D5 discharged by `63902370` (module-registration implementation). The Review Map now requires its viewer (`{ role, session }`): outside `review_map`'s derived role/session ceilings (Match, onramp, an operator) grades, evaluations and relations render as a stated withholding sentence.
 
 - **2026-08-23** — drafted on owner ruling [[D1273]] (*full surface plus accuracy and longitudinal*),
   from `planning/review/rfc-derivation.md`. Every load-bearing claim re-verified at HEAD before use:
