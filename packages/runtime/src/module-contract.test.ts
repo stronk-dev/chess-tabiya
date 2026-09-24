@@ -5,12 +5,17 @@ import {
   MODULE_TIMING_IMAGE,
   ModuleContractError,
   compileModuleRegistry,
+  type ModuleAcceptanceDeclaration,
   type ModuleDeclaration,
   type ModuleId,
   type ModuleTiming,
 } from "./module-contract.js";
 
 const evidenceRef = Object.freeze({ id: "rules.phase.reading", version: 1 });
+/** rfc/hint-distance.md §9: one exact family x rung disclosure projection and its registry image. */
+const hintRef = Object.freeze({ id: "derived.hint.disclosure.double_attack.pattern", version: 1 });
+const hintMoveRef = Object.freeze({ id: "derived.hint.disclosure.double_attack.move", version: 1 });
+const hintDisclosure = Object.freeze({ vocabulary: "guided_hint@1" as const, ceiling: "move" as const, compiler: Object.freeze({ id: "compileHintDisclosure", version: 1 }) });
 const policyRef = Object.freeze({ id: "production.module_local", version: 1 });
 
 function timing(id: ModuleId): ModuleTiming {
@@ -26,7 +31,7 @@ function declaration(id: ModuleId): ModuleDeclaration {
   const accepts: ModuleDeclaration["accepts"] = id === "rules_floor"
     ? { kind: "none" as const, awaiting: Object.freeze([]) }
     : id === "guided_hint"
-      ? { kind: "blocked_dependencies" as const, blockers: Object.freeze([{ owner: "hint-distance", ledger: "D1639", reason: "No disclosure registry." }]), awaiting: Object.freeze([]) }
+      ? { kind: "manifest" as const, projections: Object.freeze([{ projection: hintRef, answerContent: Object.freeze(["threat" as const]) }]), awaiting: Object.freeze([]) }
       : { kind: "manifest" as const, projections: Object.freeze([{ projection: evidenceRef }]), awaiting: Object.freeze([]) };
   return Object.freeze({
     id,
@@ -37,16 +42,17 @@ function declaration(id: ModuleId): ModuleDeclaration {
     answerCeiling: id === "rules_floor"
       ? Object.freeze({ kind: "none" as const })
       : id === "guided_hint"
-        ? Object.freeze({ kind: "guided_hint@1" as const })
+        ? Object.freeze({ kind: "capabilities" as const, capabilities: Object.freeze(["threat" as const]) })
         : Object.freeze({ kind: "capabilities" as const, capabilities: Object.freeze(["observation" as const]) }),
     ceilings: Object.freeze({ disclosure: MODULE_TIMING_IMAGE[moduleTiming], sessions: Object.freeze(["pack"]), roles: Object.freeze(["learner" as const]), visibleBoardParity: true as const }),
     budgets: Object.freeze({ maxFacts: id === "rules_floor" ? 0 : 1, maxWords: id === "rules_floor" ? 0 : 20, maxMarks: id === "rules_floor" ? null : 1, maxArrows: 0 }),
-    selection: Object.freeze({ policy: policyRef, familyPrecedence: id === "rules_floor" || id === "guided_hint" ? Object.freeze([]) : Object.freeze([evidenceRef]) }),
+    selection: Object.freeze({ policy: policyRef, familyPrecedence: id === "rules_floor" ? Object.freeze([]) : id === "guided_hint" ? Object.freeze([hintRef]) : Object.freeze([evidenceRef]) }),
     emptyBehavior: id === "blunder_prevention" ? Object.freeze({ kind: "silent" as const }) : Object.freeze({ kind: "stated_absence" as const, sentence: "No admitted evidence." }),
     seatClass: id === "rules_floor" ? "board_input" as const : id === "blunder_prevention" ? "board_adjacent" as const : id === "review_map" ? "timeline" as const : id === "full_inspector" ? "explicit_surface" as const : "rail" as const,
     forms: Object.freeze([id === "rules_floor" ? "square" as const : "sentence" as const]),
     rendering: "deterministic" as const,
     noveltyWindow: id === "rules_floor" || id === "blunder_prevention" ? 0 : 3,
+    ...(id === "guided_hint" ? { disclosure: hintDisclosure } : {}),
   });
 }
 
@@ -56,8 +62,8 @@ function valid(): readonly ModuleDeclaration[] {
 
 function closure() {
   return {
-    projections: [evidenceRef],
-    consumers: MODULE_IDS.filter((id) => id !== "rules_floor" && id !== "guided_hint").map((id) => ({ consumer: { id: `module.${id}`, version: 1 }, accepts: [evidenceRef] })),
+    projections: [evidenceRef, hintRef, hintMoveRef],
+    consumers: MODULE_IDS.filter((id) => id !== "rules_floor").map((id) => ({ consumer: { id: `module.${id}`, version: 1 }, accepts: [id === "guided_hint" ? hintRef : evidenceRef] })),
   } as const;
 }
 
@@ -93,17 +99,26 @@ describe("learner module contract compiler", () => {
     expect(() => compileModuleRegistry(valid(), missing)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_CONSUMER_MISMATCH" }));
   });
 
-  it("refuses a guided hint outside its own disclosure contract, and that contract anywhere else", () => {
-    const widened = valid().map((module) => module.id === "guided_hint" ? { ...module, answerCeiling: { kind: "capabilities" as const, capabilities: ["principal_variation" as const] } } : module);
-    expect(() => compileModuleRegistry(widened)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_STAGE_INVALID" }));
-    const stolen = valid().map((module) => module.id === "threat_radar" ? { ...module, answerCeiling: { kind: "guided_hint@1" as const } } : module);
-    expect(() => compileModuleRegistry(stolen)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_STAGE_INVALID" }));
-    const unblocked = valid().map((module) => module.id === "guided_hint" ? { ...module, accepts: { kind: "manifest" as const, projections: [{ projection: evidenceRef }], awaiting: [] }, selection: { ...module.selection, familyPrecedence: [evidenceRef] } } : module);
-    expect(() => compileModuleRegistry(unblocked)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_DEPENDENCY_BLOCKED" }));
-    const anonymous = valid().map((module) => module.id === "guided_hint" && module.accepts.kind === "blocked_dependencies" ? { ...module, accepts: { ...module.accepts, blockers: [] } } : module);
-    expect(() => compileModuleRegistry(anonymous)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_DEPENDENCY_BLOCKED" }));
-    const registered = { ...closure(), consumers: [...closure().consumers, { consumer: { id: "module.guided_hint", version: 1 }, accepts: [] }] };
-    expect(() => compileModuleRegistry(valid(), registered)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_CONSUMER_MISMATCH" }));
+  it("refuses a guided hint outside its own disclosure contract, and that contract anywhere else (rfc/hint-distance.md §9, criterion 14)", () => {
+    const stage = expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_STAGE_INVALID" });
+    const widens = expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_ANSWER_WIDENS" });
+    const hint = (change: (module: ModuleDeclaration) => ModuleDeclaration) => valid().map((module) => module.id === "guided_hint" ? change(module) : module);
+    const rows = (...projections: ModuleAcceptanceDeclaration[]) => (module: ModuleDeclaration): ModuleDeclaration => ({ ...module, accepts: { kind: "manifest", projections, awaiting: [] }, selection: { ...module.selection, familyPrecedence: projections.map((row) => row.projection) } });
+    // Omitting the declaration, or declaring it on any other module, fails.
+    expect(() => compileModuleRegistry(hint(({ disclosure: _disclosure, ...module }) => module))).toThrowError(stage);
+    expect(() => compileModuleRegistry(valid().map((module) => module.id === "threat_radar" ? { ...module, disclosure: hintDisclosure } : module))).toThrowError(stage);
+    // A non-registry projection (a raw source, a horizon) cannot be a hint row.
+    expect(() => compileModuleRegistry(hint(rows({ projection: evidenceRef, answerContent: ["fact"] })))).toThrowError(stage);
+    expect(() => compileModuleRegistry(hint(rows({ projection: { id: "derived.hint.horizon.double_attack", version: 1 }, answerContent: ["threat"] })))).toThrowError(stage);
+    // Every row declares exactly its registry image: omission and widening both fail.
+    expect(() => compileModuleRegistry(hint(rows({ projection: hintRef })))).toThrowError(widens);
+    expect(() => compileModuleRegistry(hint(rows({ projection: hintRef, answerContent: ["threat", "move"] })))).toThrowError(widens);
+    // The move rung above the declared ceiling, or at a pre-commit timing, fails compilation.
+    expect(() => compileModuleRegistry(hint((module) => ({ ...rows({ projection: hintMoveRef, answerContent: ["threat", "move"] })(module), disclosure: { ...hintDisclosure, ceiling: "distance" as const } })))).toThrowError(stage);
+    expect(() => compileModuleRegistry(hint((module) => ({ ...rows({ projection: hintMoveRef, answerContent: ["threat", "move"] })(module), timings: [{ timing: "pre_commit", initiative: "on_request" }], ceilings: { ...module.ceilings, disclosure: MODULE_TIMING_IMAGE.pre_commit } })))).toThrowError(stage);
+    // The compiled consumer must bind exactly the declared rows.
+    const drifted = { ...closure(), consumers: closure().consumers.map((value) => value.consumer.id === "module.guided_hint" ? { ...value, accepts: [hintMoveRef] } : value) };
+    expect(() => compileModuleRegistry(valid(), drifted)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_CONSUMER_MISMATCH" }));
   });
 
   it("keeps principal variations out of a module whose capabilities do not include one", () => {
@@ -116,8 +131,8 @@ describe("learner module contract compiler", () => {
 
   it("[A4] derives each accepted answer union and refuses a widening or an unwitnessed capability", () => {
     type Answer = "fact" | "evaluation" | "theory" | "threat";
-    const answers = (answerContent: readonly Answer[]) => ({ ...closure(), answerContent: [{ projection: evidenceRef, answerContent }] });
-    const withCapabilities = (...capabilities: ("theory" | "evaluation" | "threat")[]) => valid().map((module) => module.answerCeiling.kind === "capabilities" ? { ...module, answerCeiling: { kind: "capabilities" as const, capabilities } } : module);
+    const answers = (answerContent: readonly Answer[]) => ({ ...closure(), answerContent: [{ projection: evidenceRef, answerContent }, { projection: hintRef, answerContent: ["threat" as const] }] });
+    const withCapabilities = (...capabilities: ("theory" | "evaluation" | "threat")[]) => valid().map((module) => module.answerCeiling.kind === "capabilities" && module.id !== "guided_hint" ? { ...module, answerCeiling: { kind: "capabilities" as const, capabilities } } : module);
     expect(() => compileModuleRegistry(valid(), answers(["fact"]))).not.toThrow();
     // A grade (evaluation) offered to observation-only modules widens them.
     expect(() => compileModuleRegistry(valid(), answers(["evaluation"]))).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_ANSWER_WIDENS" }));

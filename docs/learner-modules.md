@@ -43,8 +43,10 @@ Every compiled pair is either `executable` through a named production operation 
   committed learner move's one-edge semantic closure plus, when both recorded evaluations exist,
   its grade — admitted, ordered and backstopped at two facts, with one `reduction_quality@1`
   observation on overflow. It is withheld until `feedbackDeliveryOpen`. Empty is silent.
-- **Blocked:** Guided Hint registers no consumer until `hint-distance` publishes its family×rung
-  disclosure registry. Pre-/at-commit modules wait on the ephemeral disclosure receipt
+- **Guided Hint** (`compileGuidedHintPacket`, served at `POST|GET|DELETE /runs/:id/hints`): one
+  learner-requested family×rung disclosure per request, admitted through `module.guided_hint@1` at
+  the checkpoint (open disclosure boundary) timing. See [Guided Hint](guided-hint.md).
+- **Blocked:** Pre-/at-commit modules wait on the ephemeral disclosure receipt
   (`intent-presets`); every seat waits on pair-keyed presentation adapters
   (`evidence-presentation`); the general module query route waits on
   `compileModuleExactOperationResolution` (module-registration D8). Two declared-awaiting refs —

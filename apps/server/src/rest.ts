@@ -18,6 +18,9 @@ import {
   finalizeAssistanceEffects,
   parseRequestedAssistanceV1,
   serverAvailabilityFromProviders,
+  HINT_RUNGS,
+  hintPolicyDecision,
+  type HintRung,
   comparisonNarrative,
   comparisonStrips,
   suggestTitle,
@@ -70,6 +73,7 @@ import type { ClassroomService } from "./classroom.js";
 import type { PrincipleRegistry } from "./principle-registry.js";
 import { vocabularyUsage } from "./authoring-vocabulary.js";
 import type { LearnerProfileService } from "./learner-profile.js";
+import type { HintService } from "./hint-service.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -640,6 +644,7 @@ export function errorResponse(error: unknown): Response {
                 error.code === "PACK_NOT_FOUND" ||
                 error.code === "SHAPE_NOT_FOUND" ||
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
+                || error.code === "HINT_REQUEST_NOT_FOUND"
                 || error.code === "UNKNOWN_GROUP" ||
                 error.code === "IMPORT_SOURCE_NOT_FOUND"
                 || error.code === "REPERTOIRE_NOT_FOUND"
@@ -705,7 +710,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -800,7 +805,20 @@ export function createRestHandler(
   openingCatalogue?: OpeningCatalogueAvailability,
   principles?: PrincipleRegistry,
   learnerProfile?: LearnerProfileService,
+  hints?: HintService,
 ): RestHandler {
+  /** rfc/intent-presets.md §5.1: stages 1 -> 2 with server-derived context, access and provider state. */
+  const authoritativeAssistance = async (runId: string, principal: Principal, requested: unknown) => {
+    const authority = service.assistanceAuthority(runId, principal);
+    const providers = capabilities === undefined ? { opponent: "none", judge: "none", llm: "none", corpus: "none", tts: "none", tablebase: "none" } : (await capabilities.get()).providers;
+    const availability = serverAvailabilityFromProviders(providers);
+    try {
+      return { availability, authoritative: compileAuthoritativeAssistance(parseRequestedAssistanceV1(requested), { origin: authority.origin, access: authority.access, availability }) };
+    } catch (error) {
+      if (error instanceof AssistanceExchangeError) throw invalid(error.message);
+      throw error;
+    }
+  };
   return async (request) => {
     try {
       const url = new URL(request.url);
@@ -1387,6 +1405,16 @@ export function createRestHandler(
         return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
       }
 
+      // rfc/hint-distance.md §7 steps 3-4: poll or cancel one exact hint operation. The decision stamp
+      // is recomputed from the stored run on every poll; a moved decision answers `stale`.
+      const hintItem = /^\/runs\/([^/]+)\/hints\/([0-9a-f]{32})$/.exec(url.pathname);
+      if (hintItem !== null && (request.method === "GET" || request.method === "DELETE")) {
+        const principal = authenticate();
+        if (hints === undefined) throw new ServerError("ENGINE_UNAVAILABLE", "Guided hints are not configured", { details: { engineId: "stockfish-analysis", retryAfterMs: 0 } });
+        const runId = decodeURIComponent(hintItem[1]!);
+        const access = service.hintAccess(runId, principal);
+        return json(200, { hint: request.method === "GET" ? hints.poll(runId, hintItem[2]!, access.decision) : hints.cancel(runId, hintItem[2]!) });
+      }
       const shareDelete = /^\/runs\/([^/]+)\/share\/([^/]+)$/.exec(url.pathname);
       if (request.method === "DELETE" && shareDelete !== null) {
         const principal = authenticate();
@@ -1531,16 +1559,35 @@ export function createRestHandler(
         // rfc/intent-presets.md §5.1: stage 1 in, stages 2+3 out. Context, access and provider
         // state are re-derived here; the browser's request is untrusted intent only.
         requireJson(request);
-        const authority = service.assistanceAuthority(route.runId, principal);
-        const providers = capabilities === undefined ? { opponent: "none", judge: "none", llm: "none", corpus: "none", tts: "none", tablebase: "none" } : (await capabilities.get()).providers;
-        const availability = serverAvailabilityFromProviders(providers);
-        try {
-          const authoritative = compileAuthoritativeAssistance(parseRequestedAssistanceV1(value), { origin: authority.origin, access: authority.access, availability });
-          return json(200, { assistance: finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability }) });
-        } catch (error) {
-          if (error instanceof AssistanceExchangeError) throw invalid(error.message);
-          throw error;
+        const { authoritative, availability } = await authoritativeAssistance(route.runId, principal, value);
+        return json(200, { assistance: finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability }) });
+      }
+      if (route.action === "hints") {
+        // rfc/hint-distance.md §5/§7 steps 1-2. The body names the decision, the requested rung and the
+        // learner's stage-1 assistance intent; the ceiling, context, access, boundary and module
+        // activation are all re-derived here. Caller-supplied policy bytes do not exist on this wire.
+        requireJson(request);
+        const body = closedRecord(value, "/", ["nodeId", "rung", "decisionDigest", "assistance"]);
+        const rung = requiredString(body.rung, "rung") as HintRung;
+        if (!HINT_RUNGS.includes(rung)) throw invalid("rung must be one of the five hint rungs");
+        const nodeId = requiredString(body.nodeId, "nodeId");
+        const decisionDigest = requiredString(body.decisionDigest, "decisionDigest");
+        if (hints === undefined) throw new ServerError("ENGINE_UNAVAILABLE", "Guided hints are not configured", { details: { engineId: "stockfish-analysis", retryAfterMs: 0 } });
+        const access = service.hintAccess(route.runId, principal, writerId(request));
+        const { authoritative } = await authoritativeAssistance(route.runId, principal, body.assistance);
+        const policy = hintPolicyDecision({
+          rung,
+          ceiling: authoritative.hintCeiling.rung,
+          moduleActive: authoritative.modules.includes("guided_hint"),
+          deliveryOpen: access.deliveryOpen,
+          learnerToMove: access.learnerToMove,
+          ratedGameOpen: false,
+        });
+        if (policy.kind === "refused") return json(200, { hint: { state: "policy_refused", rung, reason: policy.reason } });
+        if (nodeId !== access.decision.cursor.nodeId || decisionDigest !== access.decision.digest) {
+          return json(200, { hint: { state: "stale", requestId: hints.requestIdFor(decisionDigest, rung), rung } });
         }
+        return json(200, { hint: hints.request({ run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: access.session, voiceRequested: authoritative.config.voice === "persona" }, rung) });
       }
       if (route.action === "deletion-preview") {
         requireJson(request);

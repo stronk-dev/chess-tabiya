@@ -28,6 +28,9 @@
   import { renderCorpusPage } from "./corpus-sentences.js";
   import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
   import type { PostcommitNudge } from "./nudge-response.js";
+  import GuidedHintSeat from "./GuidedHintSeat.svelte";
+  import type { GuidedHintClient } from "./api.js";
+  import type { HintDeliveryMarks } from "@chess-tabiya/runtime";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -133,6 +136,8 @@
     onAssistanceQuery?: ((request: RequestedAssistanceV1) => Promise<FinalizedAssistanceV1>) | undefined;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
     onNudge?: ((nodeId: string) => Promise<PostcommitNudge>) | undefined;
+    /** rfc/hint-distance.md §7: the Guided Hint seat's request/poll/cancel operations. */
+    hints?: GuidedHintClient | undefined;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     onCompareVoice?: (() => Promise<VoicePage>) | undefined;
@@ -200,6 +205,7 @@
     onAssistanceQuery,
     onHumanSplit,
     onNudge,
+    hints,
     onCorpus,
     onVoice,
     onCompareVoice,
@@ -841,6 +847,19 @@
     const request = ++nudgeRequest;
     void load(nodeId).then((page) => { if (request === nudgeRequest) nudge = page; }).catch(() => { if (request === nudgeRequest) nudge = undefined; });
   });
+  // rfc/hint-distance.md §5/§7: the Guided Hint seat is shown exactly when the server-compiled preset
+  // carries `guided_hint` under a non-off ceiling. The ceiling is the D1639 table, marked proposed.
+  let hintCeiling = $derived(compiledAssistance?.modules.includes("guided_hint") === true ? compiledAssistance.hintCeiling.rung : "off");
+  let hintMarks: HintDeliveryMarks | undefined = $state();
+  function hintAssistanceRequest(): RequestedAssistanceV1 | undefined {
+    try { return compileAssistanceRequest({ contextHint: activeAssistanceProfile, preference }); } catch { return undefined; }
+  }
+  const hintKey = (square: string): DrawShape["orig"] => square as DrawShape["orig"];
+  let hintOverlays: readonly DrawShape[] = $derived(hintMarks === undefined || hintMarks.rung === "pattern" || displayedNode.id !== run.activeCursor.nodeId ? [] : [
+    ...hintMarks.squares.map((square) => ({ orig: hintKey(square), brush: "yellow" })),
+    ...(hintMarks.rung === "square" ? [] : [{ orig: hintKey(hintMarks.piece.square), brush: "green" }]),
+    ...(hintMarks.rung === "move" ? [{ orig: hintKey(hintMarks.arrow.from), dest: hintKey(hintMarks.arrow.to), brush: "green" }] : []),
+  ]);
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let contextPolicy = $derived(workflowContextPolicy(activeAssistanceProfile));
   let requestedPresetId = $derived(requestedPreset(preference, activeAssistanceProfile) ?? contextPolicy.defaultPreset);
@@ -853,7 +872,7 @@
   let presetSentences = $derived(presetDisclosure?.sentences ?? []);
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
-  let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
+  let boardOverlays = $derived([...((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []), ...hintOverlays]);
   let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
   let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(run, run.activeCursor.branchId, assistanceContext) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
@@ -1981,6 +2000,9 @@
                 </div>
                 {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
               </section>
+            {/if}
+            {#if hints !== undefined && hintCeiling !== "off"}
+              <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} />
             {/if}
             {#if nudge?.kind === "packet" && nudge.nodeId === nudgeNodeId && nudge.facts.length > 0}
               <section class="module-seat" aria-label="Post-commit nudge" data-module="postcommit_nudge">

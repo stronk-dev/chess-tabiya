@@ -3,6 +3,7 @@ import {
   projectRun,
   type DrillRun,
   type DrillRunEvent,
+  type HintResponse,
   type MutationResult,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
@@ -10,6 +11,7 @@ import {
 import {
   ApiError,
   type ForkRequest,
+  type HintRequestBody,
   type MoveOptions,
   type PlayerMoveRequest,
   type PredictionRequest,
@@ -193,6 +195,25 @@ export class RunStateStore {
     return this.#mutate(() =>
       this.#api.reveal(this.#session.runId, this.#session.writerId),
     );
+  }
+
+  /**
+   * rfc/hint-distance.md §7: one learner-requested Guided Hint rung for the exact current decision.
+   * It never mutates the run; the server re-derives ceiling, context, boundary and decision stamp.
+   */
+  requestHint(body: HintRequestBody): Promise<HintResponse> {
+    if (this.#api.hint === undefined) return Promise.reject(new Error("Guided hints are not available"));
+    return this.#api.hint(this.#session.runId, body, this.#session.writerId);
+  }
+
+  pollHint(requestId: string): Promise<HintResponse> {
+    if (this.#api.hintPoll === undefined) return Promise.reject(new Error("Guided hints are not available"));
+    return this.#api.hintPoll(this.#session.runId, requestId);
+  }
+
+  cancelHint(requestId: string): Promise<HintResponse> {
+    if (this.#api.hintCancel === undefined) return Promise.reject(new Error("Guided hints are not available"));
+    return this.#api.hintCancel(this.#session.runId, requestId);
   }
 
   appendOpponentPly(

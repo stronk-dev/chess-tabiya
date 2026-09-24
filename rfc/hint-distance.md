@@ -1,10 +1,13 @@
 # RFC: Guided-hint disclosure distance
 
-- **Status:** draft amended 2026-08-27 — technical returns [[D1638]], [[D1640]]–[[D1643]] are
-  repaired against the shared provider/execution draft, the candidate-packet authority and the
-  amended module/presentation contracts. [[D1639]] remains an explicit owner table awaiting
-  ruling; independent D1 and implementation remain forbidden until it is answered and the
-  dependency drafts pass their own reviews
+- **Status:** implementing — Checkpoint A landed 2026-09-24 at the owner's direction (implement
+  directly, no review rounds). The registry, sealed horizon, per-rung disclosures, module amendment,
+  REST/service/client/seat path, rated common-boundary guard and D1638–D1643 repairs are implemented
+  and tested (`docs/guided-hint.md`). [[D1639]]'s table is used exactly as written and stays marked
+  **proposed**, so criterion 20 remains RED. The v5 `hintDistance` field and codec (D12), the §10
+  latency receipt (D7), durable analytics (D8) and the owner-use verdict (D9) remain open.
+  Earlier line, kept for history: draft amended 2026-08-27, with technical returns [[D1638]] and
+  [[D1640]]–[[D1643]] repaired and [[D1639]] awaiting an owner ruling
 - **Author:** codex, amending claude's 2026-08-23 draft on the owner's [[D1061]] ruling and
   [[D1456]] product correction
 - **Created:** 2026-08-23; rebuilt 2026-08-26
@@ -715,3 +718,49 @@ validation.
   parser/migrator consumed by web and a TypeChecker-derived domain conformance matrix; prose saying
   migrations default the new field is no longer the only guard against a registered field being
   silently discarded by browser persistence.
+- 2026-09-24 (**Checkpoint A implementation**, owner-directed, no review round). The runtime adds
+  `hint-registry.ts` (families, rungs, `HINT_DECLARATION_MATRIX`, projection registries),
+  `hint-horizon.ts` (the value computations), `hint-distance.ts` (selector, disclosure compiler and
+  brand, renderers, module packet, voice check, receipt compiler) and `hint-exchange.ts` (decision
+  stamp, request id, closed response/receipt parsers, ceiling gate, ladder progression). The
+  catalogue gains producer `derived.hint` with 7 operator-only horizons and 35 disclosures, compiled
+  through the real F1 manifest compiler. `module.guided_hint@1` binds exactly those 35. The server
+  adds `CandidatePopulationService`, `HintService` and `POST|GET|DELETE /runs/:id/hints`. The web
+  adds `GuidedHintSeat` in the Support region, shown when the compiled preset carries
+  `guided_hint`. **Inline corrections of genuine defects:**
+  **(1)** §1 names `live.stockfish.legal_root_table@1` as the search source. The selector reads
+  exactly one line (the D1363/D1397 harnesses scanned the engine's single PV), and the shared packet
+  already supplies the complete legal population. The source is therefore the bounded
+  `live.stockfish.principal_variation@1` delivery (provider exchange §5.2, `maxPlies` 4). An
+  all-legal MultiPV search would be run only to be thrown away. The root legal-set check becomes
+  exact membership of every scanned edge in its packet's legal population.
+  **(2)** §2's precedence put `double_attack` before `fork_survives_reply`. Fork survival derives
+  from that same double attack on the same edge, so under that order `fork_survives_reply` could
+  never be selected: a registered family unreachable by construction. `HINT_SELECTION_ORDER` now puts
+  the more specific survival statement first. The registry order is unchanged. The research note
+  said D1397's only fork-survival occurrence was opponent-side; the frozen population actually has
+  one root-side matched fork survival (depth-12 row 43). Replaying the population shows the swap
+  relabels exactly that one selection (same edge, same targets) and leaves every reach tripwire at
+  10/16 and 10/10.
+  **(3)** §7's POST body `{nodeId, rung, decisionDigest}` could not compute the ceiling, because the
+  preset is learner intent stored in the browser. The body therefore also carries the stage-1
+  `RequestedAssistanceV1` receipt. The server recompiles it with server-derived context, access and
+  availability, exactly as `/assistance` does. No ceiling, source or policy byte is accepted from
+  the client.
+  **(4)** The §1 source table's mate-in-one is a *before-position* reading, while the packet retains
+  only child readings, which are the opponent's view. The mate reading and the bounded mate proof
+  are therefore minted by their own registered value routes over the exact searched edge; the proof
+  takes the packet's retained reply-breadth event. The proof horizon is two attacker moves, which
+  keeps it inside the interaction budget; a deeper horizon is §10's measurement question. Every
+  other family source is the packet's original retained value, checked by reference.
+  **(5)** `module-policy`'s `guided_hint` empty sentence still promised "engine, tablebase or
+  authored ground", which is the shared ladder §6 withdrew. It now states the honest empty of this
+  one source. The singular `guided_hint@1` answer-contract arm is removed, as §9/[[D1642]] requires.
+  **(6)** `loose_piece` targets name the capturable piece's current square, not its destination;
+  otherwise the square rung would leak the first move's destination.
+  **(7)** The closed `HintPolicyReason` union is `module_inactive | above_ceiling | disclosure_closed
+  | not_your_decision | rated_game_open`. Under `immediate_guard` the disclosure boundary is the
+  run's first event, because the pack consented to delivery for the whole run.
+  **Findings kept as tests, not changed:** D1639's table is used exactly as written and is still
+  marked proposed (criterion 20 RED). Advanced cannot store a ceiling yet, because v5/D12 is not
+  implemented. There is no §10 latency receipt yet (D7).

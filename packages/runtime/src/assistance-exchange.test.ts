@@ -203,7 +203,7 @@ describe("rfc/intent-presets.md — the ∩ algebra, compiled", () => {
   it("criterion 6: presets.ts and the exchange import no eligibility, event or evidence-packet symbol", () => {
     for (const file of ["presets.ts", "assistance-exchange.ts"]) {
       const imports = [...readFileSync(join(__dirname, file), "utf8").matchAll(/from "(\.\/[^"]+)"/gu)].map((match) => match[1]);
-      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
+      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js", "./hint-registry.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
     }
   });
 

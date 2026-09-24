@@ -24,6 +24,16 @@ import type {
   SemanticEventDeclaration,
   VersionedEvidenceId,
 } from "./evidence-contract.js";
+import {
+  HINT_ABSTENTION_REASONS,
+  HINT_DECLARATION_MATRIX,
+  HINT_DISCLOSURE_PROJECTION_IDS,
+  HINT_RUNGS,
+  HINT_RUNG_FORMS,
+  HINT_SEARCH_SOURCE,
+  hintDisclosureProjectionId,
+  hintHorizonProjectionId,
+} from "./hint-registry.js";
 import { MODULE_IDS, type ModuleId } from "./module-contract.js";
 import { moduleConsumerCeilings } from "./module-policy.js";
 
@@ -123,7 +133,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
-  "derived.semantic_avoidance",
+  "derived.semantic_avoidance", "derived.hint",
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
@@ -138,13 +148,13 @@ export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
 
 /**
  * rfc/module-registration.md §2.2: one `module.*` consumer per evidence-bearing module whose literal
- * acceptance list exists. `rules_floor` consumes no evidence and `guided_hint` is blocked on
- * hint-distance's disclosure registry, so neither registers one. Checked set-equal to
- * MODULE_CONSUMER_ACCEPTS below and to the compiled registry.
+ * acceptance list exists. `rules_floor` consumes no evidence, so it registers none; `guided_hint`
+ * binds hint-distance's literal disclosure registry. Checked set-equal to MODULE_CONSUMER_ACCEPTS
+ * below and to the compiled registry.
  */
 export const MODULE_CONSUMER_IDS = Object.freeze([
   "module.sight_on_request", "module.blunder_prevention", "module.threat_radar", "module.postcommit_nudge",
-  "module.structure_nudge", "module.theory_breadcrumb", "module.compare_coach", "module.review_map", "module.full_inspector",
+  "module.structure_nudge", "module.theory_breadcrumb", "module.guided_hint", "module.compare_coach", "module.review_map", "module.full_inspector",
 ] as const);
 
 export const EVIDENCE_CONSUMER_IDS = Object.freeze([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"] as const);
@@ -813,6 +823,38 @@ const derivedOpponentOutputs = [projection("derived.opponent", "derived.opponent
   limitations: ["The vector re-anchors registered results to hypothetical legal moves. Presence is not importance; absence is not safety; engine score and collector payloads do not grade the learner or establish a personality trait."],
 })];
 
+/**
+ * rfc/hint-distance.md §1.1/§3 ([[D1641]]): the literal Guided Hint graph, compiled from
+ * `HINT_DECLARATION_MATRIX`. Each family horizon derives from its exact source AND the searched
+ * line, so it inherits the weakest tuple: declared_convention / measured / reported, abstention
+ * including `input_abstained`. Every learner rung derives from its family horizon alone and declares
+ * only its row's answer image and forms. Horizons are operator-only and never bound to a learner.
+ */
+function hintOutputs(): readonly ProjectionDeclaration[] {
+  const abstention = Object.freeze({ possible: true, reasons: HINT_ABSTENTION_REASONS });
+  const horizons = HINT_DECLARATION_MATRIX.map((row) => projection("derived.hint", hintHorizonProjectionId(row.family), "derived", {
+    payloadType: "HintHorizonOccurrence",
+    semantics: `One relation-safe ${row.family} occurrence (${row.status}) on one exact searched principal-variation edge: the root side's own ply 1 (root_direct) or ply 3 (root_followup_in_line) of the scanned four-ply line, joined to the exact family source evaluated at that edge. Opponent-line occurrences are refused before minting.`,
+    operands: ["family", "sourceRole", "relation", "occurrencePly", "rootSide", "edgeSide", "signOrStatus", "actor", "targetSquares", "firstMove", "search"],
+    grounding: "declared_convention", exactness: "measured", confidence: "reported", abstention,
+    answerContent: row.horizonAnswers, forms: ["machine_condition", "panel"],
+    dependsOn: [row.source, HINT_SEARCH_SOURCE], derivation: { inputs: [row.source, HINT_SEARCH_SOURCE] },
+    limitations: ["Bounded search: the line is one engine's searched continuation at one bound, never a proof, recommendation, best move or cause.", "Operator-only: the full occurrence never reaches a learner, renderer, browser or voice provider."],
+    disposition: { kind: "operator_only", reason: "rfc/hint-distance.md §1: the full occurrence is operator-only; learners receive only a separately sealed per-rung disclosure." },
+  }));
+  const disclosures = HINT_DECLARATION_MATRIX.flatMap((row) => HINT_RUNGS.map((rung) => projection("derived.hint", hintDisclosureProjectionId(row.family, rung), "derived", {
+    payloadType: `HintDisclosure${rung.slice(0, 1).toUpperCase()}${rung.slice(1)}Packet`,
+    semantics: `The ${rung} rung of one ${row.family} hint horizon: a new frozen packet whose bytes carry only what the ${rung} rung may reveal (cumulative in meaning, never by inheritance).`,
+    operands: ["rung", "family", "attribution", ...(HINT_RUNGS.indexOf(rung) >= 1 ? ["targetSquares"] : []), ...(HINT_RUNGS.indexOf(rung) >= 2 ? ["actor"] : []), ...(HINT_RUNGS.indexOf(rung) >= 3 ? ["relation", "occurrencePly"] : []), ...(rung === "move" ? ["firstMove"] : [])],
+    grounding: "declared_convention", exactness: "measured", confidence: "reported", abstention,
+    answerContent: row.rungAnswers[rung], forms: HINT_RUNG_FORMS[rung],
+    dependsOn: [ref(hintHorizonProjectionId(row.family))], derivation: { inputs: [ref(hintHorizonProjectionId(row.family))] },
+    limitations: ["A disclosure of a searched line's occurrence; it never says best, strongest, forced unless proved, or why the first move works."],
+  })));
+  if (disclosures.length !== HINT_DISCLOSURE_PROJECTION_IDS.length) throw new TypeError("hint disclosure projections are not the registry product");
+  return Object.freeze([...horizons, ...disclosures]);
+}
+
 export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze([
   producer("rules.structural", "rules", "packages/runtime/src/structure.ts", "local", structuralOutputs),
   producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", [...transitionOutputs, ...transitionEventOutputs]),
@@ -1039,6 +1081,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("sourcing.ledger", "sourcing.ledger.citable_text", "record", { role: "source_record", payloadType: "citable_text EvidenceRecord", grounding: "cited_theory", exactness: "authored", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values", "supports"], answerContent: ["fact", "theory", "principle", "plan"], forms: ["list", "panel"], limitations: ["Grounds authored prose only; it is neither a measurement nor a learner-facing runtime reading."] }),
   ]),
   producer("derived.semantic_avoidance", "derived", "packages/runtime/src/semantic-evidence.ts", "local", avoidanceOutputs),
+  producer("derived.hint", "derived", "packages/runtime/src/hint-distance.ts", "local", hintOutputs()),
 ]);
 
 // ---------------------------------------------------------------------------------------------
@@ -1098,9 +1141,9 @@ export const WAVE_C_MODULE_PROJECTION_REFS: readonly VersionedEvidenceId[] = Obj
 
 /**
  * The exact compiled acceptance list of every evidence-bearing learner module. `rules_floor`
- * consumes interaction affordances (no evidence); `guided_hint` is blocked on hint-distance's
- * literal disclosure registry and therefore has no list. Declared-awaiting refs that do not
- * compile yet live beside the declarations in `module-registry.ts`, never here.
+ * consumes interaction affordances (no evidence); `guided_hint` accepts exactly hint-distance's
+ * literal family x rung disclosure registry. Declared-awaiting refs that do not compile yet live
+ * beside the declarations in `module-registry.ts`, never here.
  */
 export const MODULE_CONSUMER_ACCEPTS = Object.freeze({
   sight_on_request: rebased([
@@ -1120,6 +1163,9 @@ export const MODULE_CONSUMER_ACCEPTS = Object.freeze({
     "rules.structural.reading.pawn_connectivity", "rules.phase.reading", "rules.endgame.reading",
   ]),
   theory_breadcrumb: rebased(["pack.authored.claim", "theory.shapes.firing", "theory.opening.current_endpoint"]),
+  // rfc/hint-distance.md §3/§9: the literal family x rung disclosure registry, never a horizon,
+  // raw PV, Syzygy, authored claim or endgame reading ([[D1569]]).
+  guided_hint: HINT_DISCLOSURE_PROJECTION_IDS,
   compare_coach: rebased([
     "derived.compare.structure_delta", "derived.compare.eval_delta", "derived.compare.engine_trajectory", "derived.compare.piece_route",
     "run.record.fork", "run.record.consequence", "run.record.objective_transition", "run.record.checkpoint_hit",

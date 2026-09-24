@@ -1,4 +1,5 @@
 import type { AssistanceConfig, AssistancePermission } from "./assistance.js";
+import { minHintDistance, type HintDistance } from "./hint-registry.js";
 import { MODULE_IDS, type ModuleId } from "./module-contract.js";
 import type { LiveSessionKind, RunFeedbackPolicy, RunSessionKind } from "./types.js";
 
@@ -246,32 +247,32 @@ export const WORKFLOW_CONTEXT_POLICIES: readonly WorkflowContextPolicy[] = Objec
 // ---------------------------------------------------------------------------------------------
 // D1639 hint-distance ceiling — PROPOSED, NOT RULED. Transcribed from rfc/hint-distance.md §5's
 // proposed owner table so the per-context hint ceiling is computable. It is not a v4 config field
-// (§9a refuses the tenth field); it rides beside the compiled config and carries its status.
-
-export const HINT_RUNGS = Object.freeze(["off", "pattern", "square", "piece", "distance", "move"] as const);
-export type HintRung = (typeof HINT_RUNGS)[number];
+// (§9a refuses the tenth field); it rides beside the compiled config and carries its status. The
+// rung vocabulary is hint-distance's registry (`hint-registry.ts`), never a second copy.
 
 export const HINT_CEILING_TABLE = Object.freeze({
   validation: "proposed" as const,
   ruling: "D1639" as const,
   source: "rfc/hint-distance.md §5",
-  presets: Object.freeze({ quiet: "off", guided: "distance", theory_only: "off", support: "distance", analysis: "off" } satisfies Record<PresetId, HintRung>),
-  contexts: Object.freeze({ position: "move", pack: "distance", imported: "move", match: "off", stream: "distance", academy: "distance", onramp: "move", campaign: "distance" } satisfies Record<WorkflowContextId, HintRung>),
+  presets: Object.freeze({ quiet: "off", guided: "distance", theory_only: "off", support: "distance", analysis: "off" } satisfies Record<PresetId, HintDistance>),
+  contexts: Object.freeze({ position: "move", pack: "distance", imported: "move", match: "off", stream: "distance", academy: "distance", onramp: "move", campaign: "distance" } satisfies Record<WorkflowContextId, HintDistance>),
 });
 
-const minRung = (...rungs: readonly HintRung[]): HintRung => rungs.reduce((low, next) => HINT_RUNGS.indexOf(next) < HINT_RUNGS.indexOf(low) ? next : low, "move" as HintRung);
-
-/** Effective hint ceiling: preset ∩ context ∩ access, and `off` unless `guided_hint` survived compilation. */
+/**
+ * Effective hint ceiling: preset ∩ context ∩ access, and `off` unless `guided_hint` survived compilation.
+ * Runtime source availability is deliberately not a term ([[D1371]]): an absent search source is an
+ * honest `source_unavailable`, never a lowered ceiling.
+ */
 export function hintCeiling(input: {
   readonly preset: PresetId;
   readonly context: WorkflowContextId;
   readonly role: "solo" | "host" | "participant" | "spectator";
   readonly seatedInContest: boolean;
   readonly modules: readonly ModuleId[];
-}): HintRung {
+}): HintDistance {
   if (!input.modules.includes("guided_hint")) return "off";
-  const access: HintRung = input.role === "spectator" || input.seatedInContest ? "off" : "move";
-  return minRung(HINT_CEILING_TABLE.presets[input.preset], HINT_CEILING_TABLE.contexts[input.context], access);
+  const access: HintDistance = input.role === "spectator" || input.seatedInContest ? "off" : "move";
+  return minHintDistance(HINT_CEILING_TABLE.presets[input.preset], HINT_CEILING_TABLE.contexts[input.context], access);
 }
 
 // ---------------------------------------------------------------------------------------------

@@ -122,7 +122,9 @@ import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdenti
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
 import { providerProtocolRow } from "./provider-protocol.js";
-import type { ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
+import type { FixedBoundPrincipalVariation, ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
+import { hintDisclosurePayload, hintHorizonOccurrence, type HintDisclosurePayload, type HintHorizonOccurrence } from "./hint-horizon.js";
+import { HINT_FAMILIES, HINT_RUNGS, HINT_SEARCH_SOURCE, hintDeclarationRow, hintDisclosureProjectionId, hintHorizonProjectionId, type HintDisclosureProjectionId, type HintFamily, type HintRung } from "./hint-registry.js";
 
 // ---------------------------------------------------------------------------------------------
 // Public (package-internal) shapes. None of these is re-exported by the package barrel.
@@ -1667,3 +1669,36 @@ export const createDerivedPivotalIrreversibilityV1Evidence = pivotalFactory("irr
 export const createDerivedPivotalPhaseChangeV1Evidence = pivotalFactory("phase_change");
 export const createDerivedPivotalHumanDivergenceV1Evidence = pivotalFactory("human_divergence");
 export const createDerivedPivotalOptionCollapseV1Evidence = pivotalFactory("option_collapse");
+
+// ---------------------------------------------------------------------------------------------
+// Guided Hint (rfc/hint-distance.md §1–§3, [[D1640]]/[[D1641]]): seven family horizons and 35
+// family x rung disclosures. The horizon payload is computed here from one sealed searched line and
+// one sealed family source at an explicit root-side ply; a disclosure is computed from one sealed
+// horizon. No caller ever supplies either payload.
+// ---------------------------------------------------------------------------------------------
+
+type HintLineEvidence = DeclaredEvidence<ProviderEvidenceDelivery<FixedBoundPrincipalVariation, "stockfish.principal_variation@1">>;
+
+function hintHorizonFactory(family: HintFamily): EvidenceValueFactory<{ readonly line: HintLineEvidence; readonly source: DeclaredEvidence<unknown>; readonly ply: 1 | 3 }, EvidenceAvailability<DeclaredEvidence<HintHorizonOccurrence>>> {
+  const route = `${hintHorizonProjectionId(family)}@1`;
+  const symbol = evidenceFactorySymbol(route);
+  const row = hintDeclarationRow(family);
+  return factory({ route, symbol, shape: "derived", arms: [{ line: sealed(`${HINT_SEARCH_SOURCE.id}@${HINT_SEARCH_SOURCE.version}`), source: sealed(`${row.source.id}@${row.source.version}`), ply: value("the searched root-side ply 1 or 3", (candidate) => candidate === 1 || candidate === 3) }], result: "availability" }, ({ line, source, ply }: { readonly line: HintLineEvidence; readonly source: DeclaredEvidence<unknown>; readonly ply: 1 | 3 }): EvidenceAvailability<DeclaredEvidence<HintHorizonOccurrence>> => {
+    const occurrence = hintHorizonOccurrence(family, line.payload, source.payload, ply);
+    if (occurrence === undefined) return unavailable("no_admitted_occurrence");
+    return available(mint(route, symbol, occurrence, { line, source, ply }, [line, source]));
+  });
+}
+
+/** One availability factory per hint family (seven). */
+export const HINT_HORIZON_FACTORIES = Object.freeze(Object.fromEntries(HINT_FAMILIES.map((family) => [`${hintHorizonProjectionId(family)}@1`, hintHorizonFactory(family)])) as Readonly<Record<`derived.hint.horizon.${HintFamily}@1`, ReturnType<typeof hintHorizonFactory>>>);
+
+function hintDisclosureFactory(family: HintFamily, rung: HintRung): EvidenceValueFactory<{ readonly horizon: DeclaredEvidence<HintHorizonOccurrence> }, DeclaredEvidence<HintDisclosurePayload>> {
+  const route = `${hintDisclosureProjectionId(family, rung)}@1`;
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ horizon: sealed(`${hintHorizonProjectionId(family)}@1`) }], result: "single" }, ({ horizon }: { readonly horizon: DeclaredEvidence<HintHorizonOccurrence> }) =>
+    mint(route, symbol, hintDisclosurePayload(horizon.payload, rung), { horizon }, [horizon]));
+}
+
+/** One single-value factory per hint family x rung (thirty-five). */
+export const HINT_DISCLOSURE_FACTORIES = Object.freeze(Object.fromEntries(HINT_FAMILIES.flatMap((family) => HINT_RUNGS.map((rung) => [`${hintDisclosureProjectionId(family, rung)}@1`, hintDisclosureFactory(family, rung)]))) as Readonly<Record<`${HintDisclosureProjectionId}@1`, ReturnType<typeof hintDisclosureFactory>>>);

@@ -9,6 +9,7 @@ import {
   type DrillRunEvent,
   type PolicyConfig,
   type BranchGroup,
+  type HintResponse,
 } from "@chess-tabiya/runtime";
 
 import {
@@ -16,6 +17,7 @@ import {
   type Capabilities,
   type AuthoredFeedbackPage,
   type DrillClientApi,
+  type HintRequestBody,
   type PgnDownload,
   type RunGraph,
   type ShapeEntryView,
@@ -472,6 +474,13 @@ export class DrillSessionController {
       return learnerMoveCommitted;
     }
   }
+
+  /** rfc/hint-distance.md §7: the Guided Hint seat's three operations over the attached run store. */
+  readonly hints = Object.freeze({
+    request: (body: HintRequestBody): Promise<HintResponse> => this.#requiredStore().requestHint(body),
+    poll: (requestId: string): Promise<HintResponse> => this.#requiredStore().pollHint(requestId),
+    cancel: (requestId: string): Promise<HintResponse> => this.#requiredStore().cancelHint(requestId),
+  });
 
   async reveal(): Promise<void> {
     if (this.#state.busy) return;

@@ -54,6 +54,8 @@ Current completion state is deliberately not copied here. Use the
   counterfactual population rules.
 - [Learner modules](learner-modules.md) — the compiled eleven-module registry, its capability
   image, what executes today and what is blocked by name.
+- [Guided Hint](guided-hint.md) — the learner-requested five-rung disclosure ladder, its sealed
+  horizon and per-rung packets, the proposed D1639 ceiling and the hint request protocol.
 - [Recorded evidence](recorded-evidence.md) — durable evidence shapes and their source identity.
 - [Claim backing](claim-backing.md) — authored-claim evidence bindings and validation.
 - [Explanation grounds](explanation-grounds.md) — disclosure, grounded sentences, score

@@ -34,13 +34,19 @@ const read = (rel: string) => readFileSync(join(ROOT, rel), "utf8");
 describe("candidate packet repository census", () => {
   const sources = productionSources();
 
-  it("criteria 18/19/23: zero product consumers — only the compiler, the research selection contract, the barrel and the verification CLI name the packet", () => {
+  it("criteria 18/19/23: the compiler, the research selection contract, the barrel, the verification CLI and exactly one product consumer — Guided Hint through the one injected service — name the packet", () => {
     const readers = sources.filter((rel) => PACKET_SYMBOLS.test(read(rel)));
+    // rfc/hint-distance.md §10/criterion 15: Guided Hint is the first product consumer. It reaches the
+    // packet only through the application-lifetime CandidatePopulationService (server) and the
+    // horizon selector (runtime); its test fixture is test support, not a product path.
     expect(readers).toEqual([
+      "apps/server/src/candidate-population-service.ts",
       "apps/server/src/semantic-evidence-check.ts",
       "packages/runtime/src/candidate-population.ts",
+      "packages/runtime/src/hint-distance.ts",
       "packages/runtime/src/index.ts",
       "packages/runtime/src/semantic-evidence.ts",
+      "packages/runtime/src/testing/hint-fixture.ts",
     ]);
     for (const rel of ["apps/server/src/application.ts", "apps/server/src/rest.ts", "apps/server/src/main.ts", "apps/server/src/opponent-selector.ts", "packages/runtime/src/voice.ts", "packages/runtime/src/evidence-contract.ts"]) {
       expect(PACKET_SYMBOLS.test(read(rel))).toBe(false);
@@ -90,7 +96,11 @@ describe("candidate packet repository census", () => {
   it("criteria 22/23/24: no aggregate evidence identity, no consumer view, and no module or per-request cache", () => {
     expect(read("packages/runtime/src/evidence-catalog.ts")).not.toContain("derived.candidate.event_population");
     expect(sources.filter((rel) => /ConsumerEvidenceView<\s*CandidateEventPopulation/u.test(read(rel)))).toEqual([]);
-    expect(sources.filter((rel) => /new CandidatePopulationCache\b|CandidatePopulationService\b/u.test(read(rel)))).toEqual([]);
+    // rfc/hint-distance.md criterion 15: one application-lifetime service, declared once, constructed only
+    // by createApplication and injected into its one consumer; never a request-local or runtime cache.
+    expect(sources.filter((rel) => /new CandidatePopulationCache\b/u.test(read(rel)))).toEqual([]);
+    expect(sources.filter((rel) => /CandidatePopulationService\b/u.test(read(rel)))).toEqual(["apps/server/src/application.ts", "apps/server/src/candidate-population-service.ts", "apps/server/src/hint-service.ts"]);
+    expect(sources.filter((rel) => /new CandidatePopulationService\b/u.test(read(rel)))).toEqual(["apps/server/src/application.ts"]);
     const topLevel = read("packages/runtime/src/candidate-population.ts").split("\n").filter((line) => /^(const|let|var|export const|export let)\b/u.test(line));
     const state = topLevel.filter((line) => /new Map\b|^let\b|^var\b|^export let\b/u.test(line));
     expect(state).toEqual([]);

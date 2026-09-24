@@ -17,8 +17,9 @@ import {
 import { compileEvidenceManifest, EvidenceManifestError, type VersionedEvidenceId } from "./evidence-contract.js";
 import { MODULE_ANSWER_CAPABILITY_IMAGE, MODULE_IDS, ModuleContractError, compileModuleRegistry, type ModuleDeclaration } from "./module-contract.js";
 import { MODULE_POLICIES, moduleEvidenceRole, moduleSessions } from "./module-policy.js";
+import { HINT_DISCLOSURE_PROJECTION_IDS, HINT_HORIZON_PROJECTION_IDS, hintDeclarationRow, hintDisclosureIdentity } from "./hint-registry.js";
 import {
-  GUIDED_HINT_BLOCKERS,
+  GUIDED_HINT_DISCLOSURE,
   MODULE_AWAITING,
   MODULE_COVERAGE_REFUSALS,
   MODULE_DECLARATIONS,
@@ -42,7 +43,8 @@ const replace = (id: string, change: (module: ModuleDeclaration) => ModuleDeclar
 describe("module registration — the compiled production registry", () => {
   it("[A1] compiles all eleven fourteen-field declarations at import, in MODULE_IDS order", () => {
     expect(MODULE_REGISTRY.modules.map((module) => module.id)).toEqual(MODULE_IDS);
-    for (const module of MODULE_REGISTRY.modules) expect(Object.keys(module).sort()).toHaveLength(14);
+    // Fourteen fields; Guided Hint alone carries the fifteenth `disclosure` declaration (rfc/hint-distance.md §9).
+    for (const module of MODULE_REGISTRY.modules) expect(Object.keys(module).sort()).toHaveLength(module.id === "guided_hint" ? 15 : 14);
     // The registry is compiled by the production module, not by a test.
     const registry = readFileSync(new URL("packages/runtime/src/module-registry.ts", ROOT), "utf8");
     expect(registry).toMatch(/^export const MODULE_REGISTRY: CompiledModuleRegistry = compileModuleRegistry\(MODULE_DECLARATIONS, moduleEvidenceClosure\(PRIMARY_EVIDENCE_MANIFEST\)\);$/mu);
@@ -90,7 +92,7 @@ describe("module registration — the compiled production registry", () => {
     expect(declared).toEqual({
       rules_floor: "none", sight_on_request: ["pattern", "candidates"], blunder_prevention: ["threat"],
       threat_radar: ["pattern", "threat"], postcommit_nudge: ["threat", "evaluation"], structure_nudge: ["theory"],
-      theory_breadcrumb: ["theory"], guided_hint: "guided_hint@1", compare_coach: ["move", "evaluation"],
+      theory_breadcrumb: ["theory"], guided_hint: ["observation", "pattern", "threat", "candidates", "move"], compare_coach: ["move", "evaluation"],
       review_map: ["threat", "theory", "evaluation"], full_inspector: ["threat", "theory", "evaluation", "principal_variation"],
     });
     const projections = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [key(projection), projection]));
@@ -104,6 +106,8 @@ describe("module registration — the compiled production registry", () => {
       postcommit_nudge: ["evaluation", "fact", "threat"],
       structure_nudge: ["fact", "pattern", "plan", "theory"],
       theory_breadcrumb: ["fact", "pattern", "plan", "principle", "theory"],
+      // rfc/hint-distance.md §9: exactly the union of §1.1's disclosure rows — no rank, eval, theory or PV.
+      guided_hint: ["candidate_moves", "fact", "move", "pattern", "threat"],
       compare_coach: ["evaluation", "fact", "move"],
       review_map: ["evaluation", "fact", "theory", "threat"],
       full_inspector: ["candidate_moves", "evaluation", "fact", "move", "pattern", "plan", "principal_variation", "theory", "threat"],
@@ -136,13 +140,14 @@ describe("module registration — the compiled production registry", () => {
     const bound = PRIMARY_EVIDENCE_MANIFEST.bindings.filter((binding) => binding.consumer.id.startsWith("module.")).map((binding) => `${binding.consumer.id.slice("module.".length)}\u0000${key(binding.projection)}`).sort();
     expect([...pairs].sort()).toEqual(bound);
     // Drift tripwires, derived: 237 post-rebase + 21 recorded-path successors + 5 typed Review
-    // projections (rfc/review-evidence-compiler.md) compiled; 2 awaiting; R = 0 (guided hint blocked).
-    expect(pairs).toHaveLength(263);
-    expect(pairs.length + awaiting.length).toBe(265);
-    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(152);
+    // projections (rfc/review-evidence-compiler.md) + 35 Guided Hint disclosures (rfc/hint-distance.md)
+    // compiled; 2 awaiting.
+    expect(pairs).toHaveLength(298);
+    expect(pairs.length + awaiting.length).toBe(300);
+    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(187);
     expect(Object.fromEntries(MODULE_REGISTRY.modules.map((module) => [module.id, accepted(module).length]))).toEqual({
       rules_floor: 0, sight_on_request: 23, blunder_prevention: 3, threat_radar: 7, postcommit_nudge: 52, structure_nudge: 7,
-      theory_breadcrumb: 3, guided_hint: 0, compare_coach: 8, review_map: 85, full_inspector: 75,
+      theory_breadcrumb: 3, guided_hint: 35, compare_coach: 8, review_map: 85, full_inspector: 75,
     });
     // Semantic eligibility and the research selection policy are untouched (§2.2).
     expect(PRIMARY_EVIDENCE_MANIFEST.eligibility.every((row) => row.consumer.id === "research.semantic_selection")).toBe(true);
@@ -233,10 +238,10 @@ describe("module registration — the compiled production registry", () => {
     expect(covered.has("rules.mobility.reading.legal_moves@1")).toBe(true);
   });
 
-  it("marks what is executable versus blocked, per pair, and blocks guided hint by name", () => {
+  it("marks what is executable versus blocked, per pair, and executes Guided Hint through its disclosure registry", () => {
     expect(MODULE_PAIR_EXECUTION).toHaveLength(pairs.length);
     const executable = MODULE_PAIR_EXECUTION.filter((pair) => pair.status === "executable");
-    expect(new Set(executable.map((pair) => pair.module))).toEqual(new Set(["review_map", "postcommit_nudge"]));
+    expect(new Set(executable.map((pair) => pair.module))).toEqual(new Set(["review_map", "postcommit_nudge", "guided_hint"]));
     for (const id of ["review_map", "postcommit_nudge"] as const) {
       expect(executable.some((pair) => pair.module === id && key(pair.projection) === "derived.grade.move_quality@1")).toBe(true);
     }
@@ -245,10 +250,23 @@ describe("module registration — the compiled production registry", () => {
     }
     // Pre-/at-commit pairs are blocked on the ephemeral disclosure receipt.
     expect(MODULE_PAIR_EXECUTION.filter((pair) => pair.module === "blunder_prevention").every((pair) => pair.status === "blocked_dependencies" && pair.blockers.some((blocker) => blocker.owner === "intent-presets"))).toBe(true);
+    // rfc/hint-distance.md §3/§9 (criteria 6, 8, 14): the module accepts exactly the 35 disclosure
+    // projections, each row with its exact registry answer image; no horizon, raw PV, Syzygy, authored
+    // claim or endgame reading is a learner binding.
     const hint = MODULE_REGISTRY.byId.get("guided_hint")!;
-    expect(hint.accepts).toEqual({ kind: "blocked_dependencies", blockers: GUIDED_HINT_BLOCKERS, awaiting: [] });
-    expect(PRIMARY_EVIDENCE_MANIFEST.consumers.some((consumer) => consumer.id === "module.guided_hint")).toBe(false);
-    expect(PRIMARY_EVIDENCE_MANIFEST.projections.some((projection) => projection.id.startsWith("derived.hint.disclosure."))).toBe(false);
+    expect(hint.disclosure).toEqual(GUIDED_HINT_DISCLOSURE);
+    expect(accepted(hint)).toEqual(HINT_DISCLOSURE_PROJECTION_IDS.map(key));
+    if (hint.accepts.kind !== "manifest") throw new Error("guided_hint must be manifest-backed");
+    for (const row of hint.accepts.projections) {
+      const identity = hintDisclosureIdentity(row.projection.id)!;
+      expect(row.answerContent).toEqual(hintDeclarationRow(identity.family).rungAnswers[identity.rung]);
+    }
+    const hintPairs = MODULE_PAIR_EXECUTION.filter((pair) => pair.module === "guided_hint");
+    expect(hintPairs.every((pair) => pair.status === "executable" && pair.operation === "compileGuidedHintPacket" && pair.timing === "checkpoint")).toBe(true);
+    const horizons = new Set(HINT_HORIZON_PROJECTION_IDS.map(key));
+    expect(pairs.filter((pair) => horizons.has(pair.split("\u0000")[1]!))).toEqual([]);
+    expect(accepted(hint).some((projection) => /^(live\.|pack\.authored\.|rules\.endgame\.)/u.test(projection))).toBe(false);
+    for (const projection of HINT_HORIZON_PROJECTION_IDS) expect(PRIMARY_EVIDENCE_MANIFEST.projections.find((value) => key(value) === key(projection))?.disposition?.kind).toBe("operator_only");
     // Every declared operation projection is accepted by its module; the one-edge set excludes windows and avoidance.
     for (const operation of MODULE_OPERATIONS) {
       const module = accepted(MODULE_REGISTRY.byId.get(operation.module)!);
@@ -268,6 +286,6 @@ describe("module registration — the compiled production registry", () => {
       expect([...consumer!.sessions].sort()).toEqual([...module.ceilings.sessions].sort());
       expect([...consumer!.answerContent].sort()).toEqual([...MODULE_REGISTRY.answerImages.get(module.id)!].sort());
     }
-    expect(Object.keys(MODULE_CONSUMER_ACCEPTS)).not.toContain("guided_hint");
+    expect(MODULE_CONSUMER_ACCEPTS.guided_hint).toBe(HINT_DISCLOSURE_PROJECTION_IDS);
   });
 });

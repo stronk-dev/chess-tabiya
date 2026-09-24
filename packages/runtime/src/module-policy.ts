@@ -103,9 +103,9 @@ export const MODULE_POLICIES: readonly ModulePolicy[] = Object.freeze([
   }),
   policy({
     id: "guided_hint", intent: "I am stuck — reveal the least that will unstick me.", learnerAction: "request the next rung",
-    timings: [{ timing: "checkpoint", initiative: "on_request" }], answer: Object.freeze({ kind: "guided_hint@1" }),
+    timings: [{ timing: "checkpoint", initiative: "on_request" }], answer: capabilities("observation", "pattern", "threat", "candidates", "move"),
     roles: PLAY_ROLES, budgets: { maxFacts: 1, maxWords: 40, maxMarks: 2, maxArrows: 1 },
-    emptyBehavior: { kind: "unavailable_source", sentence: "No engine, tablebase or authored ground covers this position." },
+    emptyBehavior: { kind: "stated_absence", sentence: "The searched line from here shows no admitted pattern to hint at." },
     seatClass: "rail", forms: ["sentence", "square", "arrow"], noveltyWindow: 0,
   }),
   policy({
