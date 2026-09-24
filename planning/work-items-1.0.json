@@ -624,16 +624,20 @@
     {
       "id": "A11-b1",
       "sourceState": "blocked_owner",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "a11y §5 Q1",
       "sourceHeading": "Intent-tier sentences that are false, and gate rows that outran the client",
       "summary": "Does the phone get one region at a time, and **may the drawer cover the board**? It covers ~42% of it today",
       "legacyRoute": "ledger",
-      "sourceDigest": "sha256:2dc7e4f4c162164329cfb334b291e7a507c37d2e124f9a71f4fcd25b6a9f5e12"
+      "sourceDigest": "sha256:2dc7e4f4c162164329cfb334b291e7a507c37d2e124f9a71f4fcd25b6a9f5e12",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c257a8ed: phone shows the board plus one region; the open region takes only the space below the pinned board; @matrix play composition asserts drawer top >= board bottom at every phone projection; docs/app-shell.md"
+      }
     },
     {
       "id": "A11-b2",
@@ -690,30 +694,38 @@
     {
       "id": "A11-b5",
       "sourceState": "blocked_owner",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "a11y §5 Q5",
       "sourceHeading": "Intent-tier sentences that are false, and gate rows that outran the client",
       "summary": "Is there an Accessibility settings family, and does it include a **high-contrast board skin**? `design/03:294` names the family and nothing implements it. The two board skins are 1.58:1 and 1.99:1 internally, so the paints carry the whole signal",
       "legacyRoute": "ledger",
-      "sourceDigest": "sha256:0a9798f05cc05b6f5181966c5e22ba934b6bf14a2808d69c144e42e20ef4704c"
+      "sourceDigest": "sha256:0a9798f05cc05b6f5181966c5e22ba934b6bf14a2808d69c144e42e20ef4704c",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c257a8ed: Settings Accessibility section with a High-contrast board toggle (3:1 square luminance skin, registered and bundled) and device-preference facts; AccessibilitySettings.test.ts and theme.test.ts skin-contrast test"
+      }
     },
     {
       "id": "A11-b6",
       "sourceState": "blocked_owner",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "a11y §5 Q6 / §3.4 C",
       "sourceHeading": "Intent-tier sentences that are false, and gate rows that outran the client",
       "summary": "**Does board semantic paint carry a second luminance/greyscale floor alongside ΔE?** `last-move` passes at ΔE 36.3 while measuring **1.02:1 luminance** — a greyscale distance of 3 out of 441",
       "legacyRoute": "ledger",
-      "sourceDigest": "sha256:2bf079b19a4334c19e07454ef569d0d5facc1d014c37924aff37646326de0d58"
+      "sourceDigest": "sha256:2bf079b19a4334c19e07454ef569d0d5facc1d014c37924aff37646326de0d58",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c257a8ed: board paint carries a 1.5:1 WCAG luminance floor beside ΔE 20 across every theme, mode and skin; theme.test.ts proves it rejects the old 1.02:1 last-move paint; docs/theming.md"
+      }
     },
     {
       "id": "A11-b7",
@@ -5323,16 +5335,20 @@
     {
       "id": "IMP-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.4c2",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Side is a select set *before* parsing, though the PGN headers usually answer it",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:f43050664e0d0c2e5a446acd57522457af01766ca24f3c98575b4ec7fc74fa80"
+      "sourceDigest": "sha256:f43050664e0d0c2e5a446acd57522457af01766ca24f3c98575b4ec7fc74fa80",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "2e0ce62c: Review import reads pasted PGN White/Black headers, presets Your side when exactly one names the learner, explains otherwise, never overrides a learner choice; import-presentation.test.ts and app-shell.test.ts IMP-a5"
+      }
     },
     {
       "id": "IMP-a6",
@@ -5386,16 +5402,20 @@
     {
       "id": "IMP-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.3-2",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Forms 1 and 2 disagree about whether a variation-bearing multi-game PGN is acceptable (`repertoire.ts:81` vs `pgn-import.ts:26-31`)",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:3b0e4266f8eb51ca0625e95e506d18c425ee37a7b0cdb5335a199973dd5ab125"
+      "sourceDigest": "sha256:3b0e4266f8eb51ca0625e95e506d18c425ee37a7b0cdb5335a199973dd5ab125",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "2e0ce62c: game-import multi-game and variation refusals plus standing guidance name the repertoire importer that accepts both; import-presentation.test.ts and import browser journey. Accepting them in the game importer stays IMP-a1/IMP-a2 (RFC)"
+      }
     },
     {
       "id": "IMP-b1",
