@@ -323,7 +323,8 @@ describe("criterion 14 — reachability boundaries", () => {
     }
     // No production module outside the store/storage/account inventory reads the tables directly.
     const readers = [...sources.entries()].filter(([name, text]) => /learner_observations|learner_observation_denominators|learner_structure_stats|learner_observation_jobs/u.test(text)).map(([name]) => name).sort();
-    expect(readers).toEqual(["account-data.ts", "longitudinal-store.ts", "storage.ts"]);
+    // account-import.ts names the four tables only to declare them re-derived (never copied) on import.
+    expect(readers).toEqual(["account-data.ts", "account-import.ts", "longitudinal-store.ts", "storage.ts"]);
   });
 });
 

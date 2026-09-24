@@ -29,6 +29,15 @@
       }
     },
     {
+      "id": "import-source-protocol",
+      "claimKind": "members",
+      "source": {
+        "kind": "string_tuple",
+        "path": "packages/runtime/src/import-source-protocol.ts",
+        "exportName": "IMPORT_SOURCE_PROTOCOL_MEMBERS"
+      }
+    },
+    {
       "id": "migration",
       "claimKind": "migration_position",
       "source": {
