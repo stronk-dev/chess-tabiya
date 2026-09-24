@@ -8,12 +8,12 @@
     children: Snippet<[string | undefined]>;
   }
 
-  let { disabled, reasonId, reason, children }: Props = $props();
+  let { disabled, reasonId, reason: reasonText, children }: Props = $props();
 </script>
 
 <span class="honest-control">
   {@render children(disabled ? reasonId : undefined)}
-  {#if disabled}<span class="reason" id={reasonId}>{reason}</span>{/if}
+  {#if disabled}<span class="reason" id={reasonId}>{reasonText}</span>{/if}
 </span>
 
 <style>

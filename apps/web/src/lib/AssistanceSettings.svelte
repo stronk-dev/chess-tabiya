@@ -33,7 +33,7 @@
   let unsaved = $state(false);
   let password = $state("");
   let exportPassword = $state("");
-  let exportStatus = $state<string | undefined>();
+  let exportMessage = $state<string | undefined>();
   let exportError = $state<string | undefined>();
   let exportBusy = $state(false);
   let deleteError = $state<string | undefined>();
@@ -149,9 +149,9 @@
   }
   async function downloadAccount(): Promise<void> {
     if (exportBusy) return;
-    exportStatus = undefined;
+    exportMessage = undefined;
     exportError = undefined;
-    if (exportPassword.length === 0) { exportStatus = "Re-enter your password to download your data."; return; }
+    if (exportPassword.length === 0) { exportMessage = "Re-enter your password to download your data."; return; }
     const request = ++exportRequest;
     const submittedPassword = exportPassword;
     exportPassword = "";
@@ -159,7 +159,7 @@
     exportProgress = undefined;
     try {
       await onExport(submittedPassword, (progress) => { if (mounted && request === exportRequest) exportProgress = progress; });
-      if (mounted && request === exportRequest) exportStatus = "Your account data download has started.";
+      if (mounted && request === exportRequest) exportMessage = "Your account data download has started.";
     } catch {
       if (mounted && request === exportRequest) exportError = "Your account download could not be prepared. Re-enter your password and try again.";
     } finally {
@@ -284,7 +284,7 @@
       <progress class="export-progress" max={exportProgress.totalBytes ?? undefined} value={exportProgress.receivedBytes} aria-label="Account download progress">{progressText(exportProgress)}</progress>
       <p class="honest">{progressText(exportProgress)}</p>
     {/if}
-    {#if exportStatus}<p role="status">{exportStatus}</p>{/if}
+    {#if exportMessage}<p role="status">{exportMessage}</p>{/if}
     {#if exportError}<p role="alert">{exportError}</p>{/if}
   </form>
   {#if previewAccountImport && commitAccountImport}
@@ -311,9 +311,9 @@
 <section id="about-deployment" aria-labelledby="about-deployment-title">
   <h2 id="about-deployment-title">About this deployment</h2>
   {#if capabilities}
-    <h3>Available services</h3><dl id="deployment-services">{#each providerRows(capabilities) as row (row.id)}<div data-provider={row.id}><dt>{row.label}</dt><dd>{row.state}</dd></div>{/each}</dl>
+    <h3>Available services</h3><dl id="deployment-services">{#each providerRows(capabilities) as row (row.id)}<div data-provider={row.id}><dt>{row.label}</dt><dd>{row.stateLabel}</dd></div>{/each}</dl>
     <h3>App areas</h3><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li><strong>{surfaceLabels[id as keyof Capabilities["surfaces"]]}</strong>: {surfaceState(id as keyof Capabilities["surfaces"], availability as Capabilities["surfaces"][keyof Capabilities["surfaces"]])}</li>{/each}</ul>
-    <details class="technical-details"><summary>Technical details</summary><p>Run format {capabilities.runSchemaVersion}</p><p>Opponent policies: {capabilities.policyModes.join(", ")}</p><p>Provider snapshot {capabilities.providerHealth.generatedAt}</p><dl>{#each providerInspectorRows(capabilities) as row (row.id)}<div><dt>{row.id}</dt><dd>{row.detail}</dd></div>{/each}</dl></details>
+    <details class="technical-details"><summary>Technical details</summary><p>Run format {capabilities.runSchemaVersion}</p><p>Opponent policies: {capabilities.policyModes.join(", ")}</p><p>Provider snapshot {capabilities.providerHealth.generatedAt}</p><dl>{#each providerInspectorRows(capabilities) as row (row.id)}<div data-provider={row.id}><dt>{row.label}</dt><dd>{row.detail}</dd></div>{/each}</dl></details>
   {:else}<p>Deployment status is unavailable.</p>{/if}
   {#if !operationConfigured(capabilities, "render.voice")}<p class="honest" id="external-voice-unavailable">External voice is unavailable because this deployment has no configured provider.</p>{:else if !operationNotice(capabilities, "render.voice").requestable}<p class="honest" id="external-voice-unavailable">{operationNotice(capabilities, "render.voice").reason} Written guidance stays grounded and unchanged.</p>{/if}
   <p class="honest">These are status facts, not account controls. Whoever runs this Tabiya server chooses which optional services are available.</p>

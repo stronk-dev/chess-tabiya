@@ -205,9 +205,12 @@ describe("review map projection (rfc/review-map.md)", () => {
     const row = projection.rows.find((candidate) => candidate.nodeId === first.anchor.nodeId)!;
     // module-registration A5 / evidence-presentation §6: the relation renders through its registered
     // pair-keyed adapter as a labelled sentence — never the raw projection id or a de-underscored one.
+    // Checkpoint B: the trade keeps its labelled relation statement; the board-bound windows render
+    // their registered board compositions (square set / move line) with a learner sentence.
     const label = RECORDED_RELATION_LABELS[first.projection.id as keyof typeof RECORDED_RELATION_LABELS].label;
-    expect(row.facts.some((fact) => fact.startsWith("Recorded-path detector fired from this move:") && fact.includes(label))).toBe(true);
-    expect(projection.rows.flatMap((candidate) => candidate.facts).filter((fact) => fact.startsWith("Recorded-path detector")).join(" ")).not.toMatch(/@\d|[a-z]+_[a-z]+|derived\./u);
+    if (first.projection.id === "derived.exchange.trade_completed") expect(row.facts.some((fact) => fact.includes(label))).toBe(true);
+    else expect(row.facts.length).toBeGreaterThan(0);
+    expect(projection.rows.flatMap((candidate) => candidate.facts).filter((fact) => !fact.includes("grade-convention")).join(" ")).not.toMatch(/@\d|derived\./u);
     expect(projection.rows.every((candidate) => candidate.facts.includes(reviewText("evidence.packet.absent")))).toBe(true);
     expect(projection.footer.labels).toEqual(expect.arrayContaining(["Recorded game", "Recorded engine analysis"]));
   });

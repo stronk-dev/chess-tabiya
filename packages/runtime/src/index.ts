@@ -133,6 +133,13 @@ export {
   type ModuleRegistryInvariantInput,
 } from "./module-registry.js";
 export { compileModulePacket, type ModulePacket, type ModulePacketRefusal, type ModulePacketRequest } from "./module-packets.js";
+export {
+  MODULE_QUERY_OPERATION, MODULE_QUERY_PROTOCOL, ModuleQueryError, fitModulePresentation, inspectorFamily, moduleDecisionStamp, moduleDisclosureDigest,
+  moduleQueryProjections, parseModuleQueryRequest, passFen, queryModules, sightScope, witnessedEvidence,
+  type InspectorFamilyState, type ModuleBudgetReceipt, type ModuleBudgetTuple, type ModuleDecisionStamp, type ModuleDisclosureReceipt, type ModuleEmptyState,
+  type ModuleQueryErrorCode, type ModuleQueryInput, type ModuleQueryPacket, type ModuleQueryPage, type ModuleQueryRequest, type ModuleSourceContext,
+  type ModuleSourceResult, type ModuleSuppressionReason,
+} from "./module-query.js";
 export { POSTCOMMIT_NUDGE_TEMPLATES, postcommitNudgePacket, type PostcommitNudgeFact, type PostcommitNudgeInput, type PostcommitNudgePacket } from "./postcommit-nudge.js";
 export {
   ArrayReductionQualityRecorder,
@@ -172,6 +179,7 @@ export { ENDGAME_METHOD_CONVENTIONS, endgameMethodConvention, type EndgameMethod
 export { retrospectivePivot } from "./adaptive.js";
 export { STORY_MOMENT_KINDS, STORY_PIVOT_CP, evidenceGroundingLabel, parseReviewStoryReceipt, projectPublicReviewStory, rankStoryMoments, renderReviewStoryComponents, renderReviewStoryReceipt, reviewStoryMoments, storyDeclaredEvidence, storyMomentsForRun, storyEvidenceSourceLabels, suggestTitle, type ParsedReviewStory, type PublicReviewStoryReceipt, type ReviewStoryMomentReceipt, type ReviewStoryReceipt, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {
+  CLAIM_EVIDENCE_TYPE_LABELS, SIDE_LABELS, type ClaimEvidenceType, type LabelVocabularyMembers, type ReviewSide,
   COMPONENT_DECLARATIONS, COMPONENT_IDS, GROUNDING_LABELS, LABEL_VOCABULARIES, OBJECTIVE_STATE_LABELS, PRESENTATION_ADAPTERS, PRESENTATION_CONVENTIONS,
   PRESENTATION_QUESTIONS, PRESENTATION_SELECTION_ONLY, PRESENTATION_SOURCE_REASONS, PresentationError, RECORDED_RELATION_LABELS, RUN_OUTCOME_LABELS,
   assertPresentationText, assertPresentedEvidenceItem, citationFromEvidence, isPresentedAbstention, parsePresentationReceipt, presentEvidenceItems,
@@ -179,6 +187,11 @@ export {
   type AbstentionOperand, type CitationOperand, type ClaimOperand, type ComponentDeclaration, type ComponentId, type ComponentValue, type ConventionReceipt,
   type EnumStateOperand, type FactStatementOperand, type LabelEntry, type LabelVocabulary, type MagnitudeOperand, type PresentationReceipt,
   type PresentedEvidenceItem, type ProjectionPresentationAdapter,
+  BOARD_RELATION_KINDS, DENOMINATOR_MEANINGS, DISTRIBUTION_RESIDUAL_LABELS, MAGNITUDE_SCALE_POLICIES, RELATION_PHRASES, STRUCTURED_DOCUMENT_SCHEMAS,
+  adapterComponents, componentValueSentence, conventionAttribution, factStatementOperand, formatShare, parseComponentValue,
+  type AdapterSpec, type BoardRelationKind, type ConventionBasis, type CountWithDenominatorOperand, type DistributionOperand, type MagnitudeScalePolicyId,
+  type MagnitudeTrailOperand, type MovePathOperand, type OutcomeSplitOperand, type PopulationDescriptor, type PresentationComposition, type PresentationKit,
+  type RelationOverlayOperand, type SquareSetOperand, type StructuredDocumentOperand,
 } from "./presentation-contract.js";
 export {
   REVIEW_PACKET_SOURCE_ADAPTERS, REVIEW_PACKET_SOURCE_PROJECTION_IDS, REVIEW_SOURCE_FAMILIES, REVIEW_UNAVAILABLE_REASONS, ReviewEvidenceError,
