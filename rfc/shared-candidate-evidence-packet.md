@@ -1,9 +1,6 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft in the register; accepted by the owner in session 2026-09-24 ("just do the work
-  implement a bunch of RFC's"). The foundation contract landed on 2026-09-24, so the body is
-  implementing.** The token stays `draft` only because `status-parity` must match the `rfc/README.md`
-  row. Flipping both to `implementing` is the coordinator's merge closeout.
+- **Status:** **implementing — the foundation contract landed 2026-09-24 at the owner's direction to implement ready RFCs, without a further review round.**
   `packages/runtime/src/candidate-population.ts` compiles the receipt, the generated literal closure
   exists, selection consumes the receipt, and the server child readings moved into the runtime.
   Every failable criterion owned here is tested except criterion 12. That criterion needs the D2

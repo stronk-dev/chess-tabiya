@@ -1,6 +1,6 @@
 # RFC: Return scheduling — repairing the ladder, and the return queue the training tradition asks for
 
-- **Status:** implementing — 2026-09-24. Accepted by the owner in session 2026-09-24 (*"just do the work implement a bunch of RFC's"*). All twelve acceptance criteria and D1 are implemented and tested; D2-D7 stay open with their named owners, so the RFC is not yet `implemented` under status-parity P5. Register row and ledger closeout are the coordinator's.
+- **Status:** implementing — 2026-09-24. Implemented at the owner's direction to implement ready RFCs. All twelve acceptance criteria and D1 are implemented and tested; D2-D7 stay open with their named owners, so the RFC is not yet `implemented` under status-parity P5. Register row and ledger closeout are the coordinator's.
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/01-training-model.md` §blocked/varied repetition (`:55-79`); `docs/return-and-progression.md` (the shipped surface contract)

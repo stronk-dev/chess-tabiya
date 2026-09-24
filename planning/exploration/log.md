@@ -20964,3 +20964,26 @@ shared-resource-catalogue` runs the fourteen §7 controls in
 fresh review. D3131–D3133 close; D3034 stays live as the staged-discharge
 foundation until the D3 rebases of D2454/D2455/D2466. Absent-source
 admission remains [[D3082]].
+
+### 2026-09-24 — shared-candidate-evidence-packet implementing; return-scheduling implementing
+
+**Candidate packet.** `packages/runtime/src/candidate-population.ts` compiles one
+sealed, score-free, complete legal-candidate receipt from the root FEN through
+the exact legal-move authority. Admission is by compiled-object identity, so
+copies and byte-identical reconstructions are refused. Narrowing never
+recomputes. Semantic selection consumes the receipt through one
+`localSemanticEventClosure` and reports a measured evaluated-alternatives
+count. D1072, D1385–D1387 and D1412 close. The cold/warm latency record
+(criterion 12, [[D1071]]) waits on `candidate-population-service.md`.
+
+**Return scheduling.** Reaches the Learn page through `createApplication` with
+no migration. The ladder replays from `attempts` with a lapse step-down floor
+and an overstudy cap. `/progress/difficult` links unstable roots to their
+preserved runs. `/progress/due` serves a 20-item intake with a `waiting`
+count and frequency tie-breaks. `schedules.variant` rotates `retryVariants`,
+and imported games record guess-the-move predictions. D860, D865, D866 and
+D1302 close. D864's maturity vocabulary awaits the RFC's owner discharge D2.
+The RFC's lead double-bug had already been fixed at `4f8ba581`.
+
+Both RFCs were implemented at the owner's direction, without a further review
+round. Their register rows are now `implementing`.

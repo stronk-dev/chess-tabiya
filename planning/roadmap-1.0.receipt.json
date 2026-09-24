@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:bf558f1dba48ef09ec5578755467767b57c92a5edf6a4a55625390f9a2e7b6e9",
+    "roadmap": "sha256:8477a2617b8b23cdfed18b1c8957a54675facec91c6c77832f32eb395281ed6b",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:4a81e15788c418df0b8231b2e6a5c974a8e95bb4fbb5b2fc20c0ce5456101f50",
-    "rfcRegister": "sha256:6d63710acc115768a393df2856fc3d1a8fbd3ee9837c9cef74b90df50a4af6fc",
+    "workState": "sha256:4ede81b283687eb59d8ef1b56e88ca3302ee8b83bb6ed30e972d27cd5bf5539d",
+    "rfcRegister": "sha256:5842c1faace8a70541b966c8f5f218eddb119324b7b423358b948f60c7fd988b",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
-    "rest": "sha256:4c3249bb8f3bc11deec95d895aad715cbf042d05fa1d59c8b5a5a83850cd0b8e"
+    "rest": "sha256:3990ec8319b18e53276cb78fb387307161b52791b6bca8f147da4388de5e0b78"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 58,
+      "draft": 56,
       "accepted": 0,
-      "implementing": 6,
+      "implementing": 8,
       "awaiting": 8,
       "implemented": 0,
       "superseded": 0,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1228,
-      "done": 1082,
+      "blocked": 1219,
+      "done": 1091,
       "refused": 111
     },
     "workItems": {
@@ -162,24 +162,24 @@
       ],
       "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
-        "at": "2026-09-13",
-        "summary": "The fifth Review-compiler return is repaired as a composed authoring boundary: multi-adapter families retain every source, node/edge/window grain drives invocation planning, started cancellations count toward retry exhaustion, parsed storage authority binds the complete prefix, adapter payload parsers execute, and Story keeps decision/evidence/stop identities distinct. The retained predecessor chain caught and corrected a public-signature regression; fresh independent review and declared dependencies still gate production.",
+        "at": "2026-09-24",
+        "summary": "The shared candidate evidence packet is implemented: one sealed, score-free, complete legal-candidate receipt compiled from the root position through the exact legal-move authority, admitted only by compiled-object identity, narrowable without recomputation, and consumed by semantic selection with a measured evaluated-alternatives count. Criterion 12's cold/warm record and the service/collector-registry successors remain open; no production consumer was added.",
         "impact": "advanced",
         "evidence": [
-          "planning/evidence-foundation-ux/review-evidence-compiler-fifth-author-repair-2026-09-13.md",
-          "tools/d3184-review-evidence-fifth-author-repair/contract.test.mts",
-          "rfc/review-evidence-compiler.md"
+          "packages/runtime/src/candidate-population.ts",
+          "planning/evidence-foundation-ux/shared-candidate-evidence-packet-implementation-2026-09-24.md",
+          "rfc/shared-candidate-evidence-packet.md"
         ],
         "anchors": [
           {
-            "kind": "work_state",
-            "id": "D3184",
-            "digest": "sha256:cdfebe0250d47e91157797244c8813bf6696465aaf6be4e0757642deb80ffb6b"
+            "kind": "rfc",
+            "id": "shared-candidate-evidence-packet.md",
+            "digest": "sha256:fbe3488b8a3ba3dcadc73eb262aa9ad63b25da8113b7c1c939f26a84d726c23e"
           },
           {
-            "kind": "rfc",
-            "id": "review-evidence-compiler.md",
-            "digest": "sha256:41d6a1849ceab0a2d26c476113986fd362821eb396d33df146ea55c5766a8020"
+            "kind": "work_state",
+            "id": "D1071",
+            "digest": "sha256:c040ef7f72be185276a865742219ae67c09754f49f76f88049ba4bbf6d8c09c7"
           }
         ]
       },
@@ -373,21 +373,24 @@
       ],
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-09-13",
-        "summary": "The shipped Game Story now presents explainable review moments in game order, waits for review preparation and offers to explain a selected moment without exposing evidence-job terminology. Its grounding, chronological selection, no-ranking boundary, fixed board and return point remain intact. Full Review, module presets, durable state and the remaining route-level journeys are still foundation-blocked.",
+        "at": "2026-09-24",
+        "summary": "Return scheduling now reaches learners end to end without a migration: the ladder replays from attempts with a lapse step-down floor and an overstudy cap, difficult roots link their preserved runs, the due queue serves a bounded intake with frequency tie-breaks and a waiting count, varied returns rotate authored retry variants, and imported games record guess-the-move predictions. The maturity vocabulary and five cross-RFC discharges remain with their owners.",
         "impact": "advanced",
         "evidence": [
-          "apps/web/src/lib/GameStoryScreen.svelte",
-          "apps/web/src/lib/game-story-screen.test.ts",
-          "apps/web/src/lib/app-shell.test.ts",
-          "tests/browser/drill.spec.ts",
-          "docs/game-import-and-story.md"
+          "apps/server/src/return-scheduling-application.test.ts",
+          "planning/training-methods/implementation-2026-09-24.md",
+          "rfc/return-scheduling.md"
         ],
         "anchors": [
           {
+            "kind": "rfc",
+            "id": "return-scheduling.md",
+            "digest": "sha256:e0d2ffeb4b6d79f3197c9e15d0bc46148a19166df4a592565a67e724636b31c4"
+          },
+          {
             "kind": "work_state",
-            "id": "D3183",
-            "digest": "sha256:63363b5d60f9d02da0af131a263d3b0c66ae992838672e0b7d2ae65dc82d6eee"
+            "id": "D864",
+            "digest": "sha256:547c18b74efc2682cfb497a86a23894e7695ff628405dab6c4fedd2b114e33d4"
           }
         ]
       },

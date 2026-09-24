@@ -7064,12 +7064,12 @@
     },
     {
       "id": "D860",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:c9b37954b550a0e446f71eecd3a3d73fc1f555c950664d1d023d30239bc59eea",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b7d437244c01d957a68114a337a0e8064a0bcef1dc1207a14022ac3736c62682",
       "uxItems": [],
-      "owner": "learner-history",
-      "blocker": "rfc:longitudinal-store.md"
+      "evidence": "apps/server/src/return-scheduling.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D861",
@@ -7101,28 +7101,28 @@
       "id": "D864",
       "state": "blocked",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:82ee84d5a32489417fea1adccbf9dca6e88001a28d767af8a1fd99c4f78c469b",
+      "sourceDigest": "sha256:547c18b74efc2682cfb497a86a23894e7695ff628405dab6c4fedd2b114e33d4",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:return-scheduling.md"
     },
     {
       "id": "D865",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:001a4bf3d9fdcfd84d110b08bd3ec51a563173f9538e0ba4cd48c1a04b8a34ea",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c0088038578478276a90fd278215e50a44f6143656347f5d16fd9604be955ad4",
       "uxItems": [],
-      "owner": "learner-history",
-      "blocker": "rfc:longitudinal-store.md"
+      "evidence": "apps/server/src/return-scheduling.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D866",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:482712b50e6d050e811b9ef6de0dd31133697326715da597cca61776c8046060",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:274498c625994842da60edd1e5b9eb46379f58856d6161ee404be16455dc5708",
       "uxItems": [],
-      "owner": "review-and-return",
-      "blocker": "rfc:return-scheduling.md"
+      "evidence": "apps/server/src/return-scheduling.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D867",
@@ -8795,19 +8795,19 @@
       "id": "D1071",
       "state": "blocked",
       "sourceGlyph": "📊",
-      "sourceDigest": "sha256:ee8fe3f4f42e6abd2f2de8225f770097ce52896ef6c2be041e24537f141f1264",
+      "sourceDigest": "sha256:c040ef7f72be185276a865742219ae67c09754f49f76f88049ba4bbf6d8c09c7",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
     {
       "id": "D1072",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec3be19128b4d0333e0a0efc1f23a3869eebdde322aa865b2ac5903106b8b1cb",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e9e90fc92b62ecc17becf587c40273e538613159e2d5a05455603208a0eb5c77",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "evidence": "packages/runtime/src/candidate-population.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1073",
@@ -9831,12 +9831,12 @@
     },
     {
       "id": "D1302",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:80afa1ba2178f8ab78ddbf2e55e5e2dbaaa03dc822de9682bb11869a48f93146",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:28acc37ad49c3dd158631bdd010e9b0da628383721b1753e8b55e47ebb3271c9",
       "uxItems": [],
-      "owner": "review-and-return",
-      "blocker": "rfc:return-scheduling.md"
+      "evidence": "apps/server/src/return-scheduling.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1303",
@@ -10438,30 +10438,30 @@
     },
     {
       "id": "D1385",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9b98e0655dca82aef4fb24caff4bade2dc4a3a3d04f73870440121fe15a1c090",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4c1aa1fc66bbf90b45add3a25676bb522f3485950658a877915240ecd649500d",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "evidence": "packages/runtime/src/candidate-population.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1386",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c86ddffcc190fe0a49f4cd554061830eed03f25b63ba291e774578309021a856",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c0778fe1a3b5d2fa20f06bbd40cc30f2961e322b9080d576fd34ac4ac1414d17",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "evidence": "packages/runtime/src/candidate-population.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1387",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:be8c1f5d4bd5886bfeb547e2a526b886d5e2b8fd44e34f0891b6e930c6fed55d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f3aac1069b26145ae6d1d016746cb7cb757b954e3f3afebff9b3154fcfbfbb14",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "evidence": "packages/runtime/src/candidate-population.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1388",
@@ -10681,12 +10681,12 @@
     },
     {
       "id": "D1412",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f6c2ffe0092588bf70ade3882a095dfd688479d74f9e42ca2cf3f4c43d210083",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ffc304db6f7e4f45dc1c7cb4fb58f28de9248b6ebfa3a90f46cd35e10defc97c",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "evidence": "packages/runtime/src/candidate-population.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1413",
