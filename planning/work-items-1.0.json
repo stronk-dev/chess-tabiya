@@ -3004,17 +3004,21 @@
     {
       "id": "AUT-b2",
       "sourceState": "blocked_owner",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "authoring §13 d-6",
       "sourceHeading": "O-D2 / O-E1 / 11.6 — who owns the pre-run start form, and where does the opponent ladder live in the IA?",
       "summary": "Is Create's nav rank right? Depends entirely on decision 1",
       "legacyRoute": "none",
       "tournamentReady": true,
-      "sourceDigest": "sha256:4185291de39554e0b791d41b3a9e41a5a2cea83fa272e69676ac02afd0dda0e4"
+      "sourceDigest": "sha256:4185291de39554e0b791d41b3a9e41a5a2cea83fa272e69676ac02afd0dda0e4",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "26186a13: D1563 ruled Create secondary to learner Play/Learn; the shipped primary navigation already ranks it after Play, Learn and Review, now pinned in app-shell.test.ts. Library-to-Knowledge remains AUT-b1"
+      }
     },
     {
       "id": "AUT-b3",
@@ -8853,10 +8857,10 @@
     {
       "id": "TCH-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§5.3 rule",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
@@ -8864,7 +8868,11 @@
       "legacyRoute": "ledger",
       "note": "[[D1479]] — a doctrine sharpening, not a repair",
       "tournamentReady": true,
-      "sourceDigest": "sha256:448fe426f60c542c7ad4a18ff73b5c3a5bf19ff09711a057653475cac7da499d"
+      "sourceDigest": "sha256:448fe426f60c542c7ad4a18ff73b5c3a5bf19ff09711a057653475cac7da499d",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "26186a13: Live wall orders boards by elapsed time since last move (paused, closed after) through a comparator typed to clock facts; live-wall.test.ts proves evaluation cannot change the order; rule stated beside the wall"
+      }
     },
     {
       "id": "TCH-a7",
