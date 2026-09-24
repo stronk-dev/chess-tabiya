@@ -27,7 +27,7 @@ import {
 import { CANDIDATE_COLLECTOR_PROJECTION_KEYS } from "./candidate-population-projections.generated.js";
 import { BREADTH_COLLECTOR_PROJECTION_IDS, PRIMARY_EVIDENCE_MANIFEST, TACTICAL_COLLECTOR_PROJECTION_IDS } from "./evidence-catalog.js";
 import { evidenceDigest } from "./evidence-contract.js";
-import { createRulesMobilityReadingLegalMovesV1Evidence, declareMaiaCandidateWdlEvidence } from "./evidence-source-adapters.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { MOVE_IDENTITY_CONVENTION, exactLegalMoves } from "./legal-moves.js";
 import { assertSemanticEvidenceEvent, compileSemanticEvidenceEvent, legalAlternativeEdges, localSemanticEvents, selectLocalSemanticEvidence, selectSemanticEvidence } from "./semantic-evidence.js";
 
@@ -217,7 +217,7 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     const receipt = compiled(INITIAL_FEN, CANDIDATE_EVENTS_SCOPE);
     const row = candidatePlayedRow(receipt, "e2e4");
     const original = row.events[0]!;
-    const rebuilt = compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: original.evidence, derivationInputs: original.derivationInputs, anchor: original.anchor, sign: original.sign, operands: original.operands });
+    const rebuilt = compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: original.evidence, derivationInputs: original.derivationInputs, anchor: original.anchor, sign: original.sign });
     expect(() => assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, rebuilt)).not.toThrow();
     expect(rebuilt.id).toBe(original.id);
     expect(evidenceDigest(rebuilt.basis)).toBe(evidenceDigest(original.basis));
@@ -357,7 +357,7 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
   it("criteria 22/24: the receipt authority refuses forgeries, crossed members, removed references and raw packets", () => {
     const receipt = compiled(INITIAL_FEN, CANDIDATE_WIDE_SCOPE);
     expect(() => assertCandidatePopulationReceipt(receipt)).not.toThrow();
-    const rebuiltLegal = createRulesMobilityReadingLegalMovesV1Evidence(INITIAL_FEN);
+    const rebuiltLegal = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: INITIAL_FEN });
     const forgeries: unknown[] = [
       { ...receipt },
       { ...receipt, selectedMember: "events" },
@@ -381,7 +381,9 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
   });
 
   it("criterion 16: the Maia leak is closed and the closure is the local declared set, not the collector id union", () => {
-    const maia = declareMaiaCandidateWdlEvidence({ nodeId: "n", engine: { id: "maia" }, targetElo: 1500, candidates: [{ moveUci: "e2e4", rank: 1, wdl: { win: 0.4, draw: 0.3, loss: 0.3 } }] })!;
+    const wdl = invokeEvidenceValueRoute("human.maia.candidate_wdl@1", { page: { nodeId: "n", engine: { id: "maia" }, targetElo: 1500, candidates: [{ moveUci: "e2e4", rank: 1, wdl: { win: 0.4, draw: 0.3, loss: 0.3 } }] } });
+    if (wdl.kind !== "available") throw new Error("expected candidate WDL evidence");
+    const maia = wdl.value;
     expect(() => assertCandidatePacketProjection(maia, "readings")).toThrow(/outside the local collector closure: human\.maia\.candidate_wdl@1/u);
     const closure = new Set<string>([...LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS, ...LOCAL_CANDIDATE_READING_PROJECTION_KEYS]);
     expect(closure).toEqual(new Set(Object.values(CANDIDATE_COLLECTOR_PROJECTION_KEYS).flat()));

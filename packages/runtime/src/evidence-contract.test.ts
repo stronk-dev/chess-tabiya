@@ -6,8 +6,12 @@ import {
   assertConsumerEvidenceView,
   assertRenderedEvidenceView,
   compileEvidenceManifest,
-  declareEvidence,
+  assertDeclaredEvidence,
+  declareEvidence as declareWithAuthority,
+  evidenceDigest,
   evidenceForConsumer,
+  evidenceValueReceipt,
+  identitySealedEvidenceWithoutValueReceipt,
   renderEvidenceItems,
   type AdapterDeclaration,
   type ConsumerDeclaration,
@@ -15,6 +19,11 @@ import {
   type ProducerDeclaration,
   type ProjectionDeclaration,
 } from "./evidence-contract.js";
+
+// Test-only compiler fixture (rfc/evidence-value-authority.md §1): wrappers for the contract's own
+// fixture manifest carry an explicit test authority; production mints only through factories.
+const FIXTURE_AUTHORITY = Object.freeze({ factory: "test:evidence-contract-fixture", inputDigest: "0".repeat(64), sourceDigests: Object.freeze([]) as readonly string[] });
+const declareEvidence = <T>(producer: { id: string; version: number }, projection: { id: string; version: number }, payload: T) => declareWithAuthority(producer, projection, payload, FIXTURE_AUTHORITY);
 
 const ERROR_TABLE = Object.freeze([
   "EVIDENCE_PRODUCER_DUPLICATE", "EVIDENCE_PROJECTION_DUPLICATE", "EVIDENCE_PROJECTION_ORPHANED",
@@ -209,6 +218,21 @@ describe("evidence manifest compiler", () => {
       { minimumAlternativeOnlyShare: -0.01 }, { minimumAlternativeOnlyShare: 1.01 },
       { maxFacts: -1 }, { maxFacts: 1.5 },
     ]) expect(code({ ...valid, selectionPolicies: [{ ...basePolicy, ...override }] })).toBe("EVIDENCE_POLICY_INVALID");
+  });
+
+  it("requires a value receipt atomically with the identity seal (value authority §5)", () => {
+    const manifest = compileEvidenceManifest(base());
+    const sealed = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 });
+    const receipt = evidenceValueReceipt(sealed);
+    expect(receipt).toMatchObject({ projection: { id: "p.output", version: 1 }, factory: "test:evidence-contract-fixture", payloadDigest: evidenceDigest({ value: 1 }), sourceDigests: [] });
+    expect(Object.isFrozen(receipt)).toBe(true);
+    const identityOnly = identitySealedEvidenceWithoutValueReceipt({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 });
+    expect(() => assertDeclaredEvidence(identityOnly)).toThrow(/no value-authority receipt/u);
+    expect(() => evidenceForConsumer(manifest, { id: "c", version: 1 }, [identityOnly])).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+    expect(() => declareWithAuthority({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 }, undefined as never)).toThrow(/value-authority receipt/u);
+    expect(() => declareWithAuthority({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 }, { factory: "x", inputDigest: "not-a-digest", sourceDigests: [] })).toThrow(/value-authority receipt/u);
+    expect(() => declareWithAuthority({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 }, { factory: "", inputDigest: "0".repeat(64), sourceDigests: [] })).toThrow(/value-authority receipt/u);
+    expect(() => declareWithAuthority({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 }, { factory: "x", inputDigest: "0".repeat(64), sourceDigests: ["short"] })).toThrow(/value-authority receipt/u);
   });
 });
 

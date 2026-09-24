@@ -1,26 +1,18 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   PRIMARY_EVIDENCE_MANIFEST,
-  RULES_EVIDENCE_FACTS,
-  THEORY_EVIDENCE_FACTS,
   assertConsumerEvidenceView,
-  declareEvidenceReferenceResolution,
-  declareLivePacketEvidence,
   evidenceForConsumer,
-  packEvidenceRef,
-  packAbsentEvidenceRef,
-  rulesEvidenceRef,
-  tempoEvidenceRef,
+  evidenceReferenceEvidence,
   type EvidencePayload,
   type ConsumerEvidenceView,
-  type DeclaredEvidence,
-  type RulesEvidenceFact,
-  type TheoryEvidenceFact,
+  type EvidenceReferenceResolution,
+  type EvidenceSentence,
 } from "@chess-tabiya/runtime";
 
 import type { StagedEvidence } from "./api.js";
 
-export type { EvidenceSentence } from "@chess-tabiya/runtime";
+export type { EvidenceReferenceResolution, EvidenceSentence } from "@chess-tabiya/runtime";
 export { evidenceSentenceTable } from "@chess-tabiya/runtime";
 
 export function evidencePayloadTable(
@@ -38,17 +30,7 @@ export function evidencePayloadTable(
   return table;
 }
 
-export interface EvidenceReferenceResolution {
-  readonly reference: string;
-  readonly text: string;
-  readonly sourceLabel: EvidenceSentence["sourceLabel"];
-}
-
 type EvidenceReferencePayload = EvidenceReferenceResolution | EvidencePayload;
-
-function declaredSource(payload: EvidencePayload): DeclaredEvidence<EvidencePayload> {
-  return declareLivePacketEvidence(payload);
-}
 
 export function renderDeclaredEvidenceRef(
   view: ConsumerEvidenceView<EvidenceReferencePayload>,
@@ -70,18 +52,19 @@ export function renderDeclaredEvidenceRef(
   });
 }
 
+/**
+ * The web never mints: the runtime `run.record.evidence_ref_resolution@1` factory computes the
+ * resolution from the reference, pack and attached payloads, and the attached packet (if any) is
+ * sealed under its exact live projection (rfc/evidence-value-authority.md §1).
+ */
 export function renderEvidenceRef(
   reference: string,
   pack?: DrillPackDefinition,
   payloads: ReadonlyMap<string, EvidencePayload> = new Map(),
 ): EvidenceSentence {
-  const resolved = resolveEvidenceSentence(reference, pack, payloads);
-  const resolution = declareEvidenceReferenceResolution<EvidenceReferencePayload>(Object.freeze({ reference: resolved.reference, text: resolved.text, sourceLabel: resolved.sourceLabel }));
-  const declared: DeclaredEvidence<EvidenceReferencePayload>[] = [resolution];
-  if (resolved.payload !== undefined) declared.push(declaredSource(resolved.payload));
   return renderDeclaredEvidenceRef(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "runtime.evidence_ref", version: 1 },
-    declared,
+    evidenceReferenceEvidence(reference, pack, payloads) as readonly never[],
   ));
 }

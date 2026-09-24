@@ -112,11 +112,11 @@ function withRecordedPathSuccessors(outputs: readonly ProjectionDeclaration[]): 
 }
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([
-  "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame",
-  "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
+  "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame",
+  "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
-  "derived.semantic_avoidance", "derived.pivotal", "derived.structural", "theory.endgame",
+  "derived.semantic_avoidance",
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
@@ -885,7 +885,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       limitations: ["A static setup match carries no reachability, advice, significance, correctness or outcome preservation."],
       disposition: { kind: "inspector_only", reason: "Honest-unavailable until the registered, cited and versioned setup convention exists (semantic-convention-provenance)." },
     }),
-    projection("theory.endgame", "theory.endgame.method_stage", "theory", {
+    projection("theory.endgame", "theory.endgame.method_stage", "derived", {
       role: "event", payloadType: "MethodStageV1", grounding: "declared_convention", exactness: "convention",
       semantics: "Retrospective [[D2496]] method stage replayed by a registered, cited and versioned method convention over one matching setup match and an exact ordered, contiguous, same-path window of run.record.edge@1 inputs. The beneficiary is computed, never supplied.",
       operands: ["technique", "stage", "beneficiary", "convention", "pathId", "startNodeId", "endNodeId", "edgeIds", "beforeFen", "afterFen", "triggeringUci"], signs: ["state"],

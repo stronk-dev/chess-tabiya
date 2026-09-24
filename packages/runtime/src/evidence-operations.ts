@@ -70,7 +70,11 @@ export function recordedReadingEvidence(record: SourcingLedgerRecord): DeclaredE
 }
 
 /** A sourcing-ledger record sealed under the exact projection its own kind names. */
-export function sourcingRecordEvidence(record: SourcingLedgerRecord): DeclaredEvidence<SourcingLedgerRecord> | undefined {
+export function sourcingRecordEvidence<T extends SourcingLedgerRecord>(record: T): DeclaredEvidence<T> | undefined {
+  return sourcingRecordEvidenceUntyped(record) as DeclaredEvidence<T> | undefined;
+}
+
+function sourcingRecordEvidenceUntyped(record: SourcingLedgerRecord): DeclaredEvidence<SourcingLedgerRecord> | undefined {
   switch (record.kind) {
     case "engine_eval": return invokeEvidenceValueRoute("sourcing.ledger.engine_eval@1", { record });
     case "tablebase_result": return invokeEvidenceValueRoute("sourcing.ledger.tablebase_result@1", { record });
@@ -99,10 +103,10 @@ export function guardConditionEvidence(kind: "engine_eval" | "tablebase_category
 }
 
 /** Opponent-selection provider responses (typed response bytes). */
-export function opponentProviderEvidence(source: "maia" | "stockfish" | "syzygy", payload: readonly string[] | Readonly<Record<string, unknown>>): DeclaredEvidence<unknown> {
-  if (source === "maia") return invokeEvidenceValueRoute("human.maia.uci_response@1", { lines: payload as readonly string[] });
-  if (source === "stockfish") return invokeEvidenceValueRoute("live.stockfish.uci_response@1", { lines: payload as readonly string[] });
-  return invokeEvidenceValueRoute("live.syzygy.probe_result@1", { position: payload as Readonly<Record<string, unknown>> });
+export function opponentProviderEvidence<T extends object>(source: "maia" | "stockfish" | "syzygy", payload: T): DeclaredEvidence<T> {
+  if (source === "maia") return invokeEvidenceValueRoute("human.maia.uci_response@1", { lines: payload as unknown as readonly string[] }) as unknown as DeclaredEvidence<T>;
+  if (source === "stockfish") return invokeEvidenceValueRoute("live.stockfish.uci_response@1", { lines: payload as unknown as readonly string[] }) as unknown as DeclaredEvidence<T>;
+  return invokeEvidenceValueRoute("live.syzygy.probe_result@1", { position: payload as unknown as Readonly<Record<string, unknown>> }) as unknown as DeclaredEvidence<T>;
 }
 
 /** Explorer per-position result used by repertoire scanning. */

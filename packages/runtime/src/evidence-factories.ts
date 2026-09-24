@@ -16,7 +16,7 @@ import { parseUci } from "chessops/util";
 
 import { castlingLegality, castlingRights, castlingRightsLost } from "./castling.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
-import { compareBranches, type BranchComparison, type ComparisonEvidenceEntry, type ComparisonScore } from "./compare.js";
+import { recordedBranchFacts, type BranchComparison, type ComparisonEvidenceEntry, type ComparisonScore, type RecordedBranchFacts } from "./compare.js";
 import { endgameClassification } from "./endgame.js";
 import { captureClassEvent, legalExchange, type LegalExchangeResult } from "./exchange.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES, TRANSITION_GEOMETRY_EVENT_FAMILIES, TRANSITION_RULE_EVENT_FAMILIES } from "./evidence-catalog.js";
@@ -560,6 +560,14 @@ export const createDerivedExchangeTradeCompletedV1Evidence = (() => {
   return factory({ route, symbol, shape: "derived", arms: [{ first: sealed("rules.transition.event.capture@1"), second: sealed("rules.transition.event.capture@1"), firstMove: sealed("run.record.move@1"), secondMove: sealed("run.record.move@1") }], result: "population" }, ({ first, second, firstMove, secondMove }: { readonly first: DeclaredEvidence<unknown>; readonly second: DeclaredEvidence<unknown>; readonly firstMove: DeclaredEvidence<unknown>; readonly secondMove: DeclaredEvidence<unknown> }) => {
     const a = first.payload as CapturePayload, b = second.payload as CapturePayload;
     if (a.after_fen !== b.before_fen || a.to !== b.to) return Object.freeze([] as DeclaredEvidence<unknown>[]);
+    // The recorded-move anchors must be the path anchors of exactly these two capture edges.
+    const anchored = (move: DeclaredEvidence<unknown>, capture: CapturePayload): boolean => {
+      const context = (move.payload as { readonly context?: unknown }).context as Partial<RecordedMoveAnchor> | undefined;
+      return isRecord(context) && context.beforeFen === capture.before_fen && context.moveUci === capture.move_uci && context.afterFen === capture.after_fen;
+    };
+    if (!anchored(firstMove, a) || !anchored(secondMove, b)) throw new TypeError("Trade completion recorded-move anchors are not the two capture edges");
+    const firstContext = (firstMove.payload as { readonly context: RecordedMoveAnchor }).context, secondContext = (secondMove.payload as { readonly context: RecordedMoveAnchor }).context;
+    if (firstContext.afterNodeId !== secondContext.beforeNodeId) throw new TypeError("Trade completion recorded moves are not contiguous");
     const payload = Object.freeze({
       startFen: a.before_fen, firstMoveUci: a.move_uci, boundaryFen: a.after_fen, secondMoveUci: b.move_uci, endFen: b.after_fen,
       landingSquare: a.to, first: a, second: b, moveAnchors: Object.freeze([firstMove.payload, secondMove.payload]),
@@ -800,17 +808,14 @@ function validRecordedPath(path: unknown): readonly RecordedMoveAnchor[] {
   return anchors;
 }
 
-function recomputedComparison(run: DrillRun, comparison: BranchComparison): BranchComparison {
-  const branchIds = comparison.columns.map((column) => column.branchId);
-  const recomputed = compareBranches(run, branchIds);
-  if (recomputed.forkNodeId !== comparison.forkNodeId) throw new TypeError("Comparison fork is not the recorded run's fork for these branches");
-  return recomputed;
-}
-
-function columnFor(comparison: BranchComparison, branchId: string) {
-  const column = comparison.columns.find((candidate) => candidate.branchId === branchId);
-  if (column === undefined) throw new TypeError(`Comparison has no branch ${branchId}`);
-  return column;
+/**
+ * The comparison supplies only its fork node and branch set; every recorded fact is recomputed from
+ * the run for that fork and branch. The fork must lie on every compared branch path.
+ */
+function comparisonFacts(run: DrillRun, comparison: BranchComparison, branchId: string): RecordedBranchFacts {
+  if (!comparison.columns.some((column) => column.branchId === branchId)) throw new TypeError(`Comparison has no branch ${branchId}`);
+  for (const column of comparison.columns) recordedBranchFacts(run, comparison.forkNodeId, column.branchId);
+  return recordedBranchFacts(run, comparison.forkNodeId, branchId);
 }
 
 export const createRunRecordMoveV1Evidence = (() => {
@@ -823,10 +828,8 @@ export const createRunRecordMoveV1Evidence = (() => {
       if (anchor === undefined) throw new TypeError("Recorded path offset is outside the path");
       return mint(route, symbol, Object.freeze({ context: Object.freeze({ ...anchor }), offset: input.offset, moveSan: anchor.moveUci }), input);
     }
-    const recomputed = recomputedComparison(input.run, input.comparison);
-    const column = columnFor(recomputed, input.branchId);
-    const decision = recomputed.consequences[input.branchId]?.decision;
-    return mint(route, symbol, Object.freeze({ context: "compare", offset: column.ownForkOffset, moveSan: decision?.moveSan ?? null }), input);
+    const facts = comparisonFacts(input.run, input.comparison, input.branchId);
+    return mint(route, symbol, Object.freeze({ context: "compare", offset: facts.ownForkOffset, moveSan: facts.decision?.moveSan ?? null }), input);
   });
 })();
 
@@ -834,8 +837,8 @@ export const createRunRecordForkV1Evidence = (() => {
   const route = "run.record.fork@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, comparison: COMPARISON }], result: "single", dependency: "recorded-semantic-path", pending: RUN_PENDING }, ({ run, comparison }: { readonly run: DrillRun; readonly comparison: BranchComparison }) => {
-    const recomputed = recomputedComparison(run, comparison);
-    return mint(route, symbol, Object.freeze({ context: "compare", forkNodeId: recomputed.forkNodeId, sharedPly: runNode(run, recomputed.forkNodeId).ply }), { run, comparison });
+    for (const column of comparison.columns) recordedBranchFacts(run, comparison.forkNodeId, column.branchId);
+    return mint(route, symbol, Object.freeze({ context: "compare", forkNodeId: comparison.forkNodeId, sharedPly: runNode(run, comparison.forkNodeId).ply }), { run, comparison });
   });
 })();
 
@@ -843,8 +846,7 @@ export const createRunRecordCheckpointHitV1Evidence = (() => {
   const route = "run.record.checkpoint_hit@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }], result: "items", dependency: "recorded-semantic-path", pending: RUN_PENDING }, ({ run, comparison, branchId }: { readonly run: DrillRun; readonly comparison: BranchComparison; readonly branchId: string }): readonly RunEvidenceItem<unknown>[] => {
-    const recomputed = recomputedComparison(run, comparison);
-    return Object.freeze((recomputed.checkpointHits[branchId] ?? []).map((hit) => Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "compare", checkpointId: hit.checkpointId, plyOffset: hit.plyOffset }), { run, comparison, branchId, eventSeq: hit.eventSeq }), nodeId: hit.nodeId, plyOffset: hit.plyOffset })));
+    return Object.freeze(comparisonFacts(run, comparison, branchId).checkpointHits.map((hit) => Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "compare", checkpointId: hit.checkpointId, plyOffset: hit.plyOffset }), { run, comparison, branchId, eventSeq: hit.eventSeq }), nodeId: hit.nodeId, plyOffset: hit.plyOffset })));
   });
 })();
 
@@ -852,8 +854,7 @@ export const createRunRecordObjectiveTransitionV1Evidence = (() => {
   const route = "run.record.objective_transition@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }], result: "items", dependency: "recorded-semantic-path", pending: RUN_PENDING }, ({ run, comparison, branchId }: { readonly run: DrillRun; readonly comparison: BranchComparison; readonly branchId: string }): readonly RunEvidenceItem<unknown>[] => {
-    const recomputed = recomputedComparison(run, comparison);
-    return Object.freeze((recomputed.objectiveTimelines[branchId] ?? []).map((entry) => Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "compare", from: entry.from, to: entry.to }), { run, comparison, branchId, eventSeq: entry.eventSeq }), nodeId: entry.nodeId, plyOffset: entry.plyOffset })));
+    return Object.freeze(comparisonFacts(run, comparison, branchId).objectiveTimeline.map((entry) => Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "compare", from: entry.from, to: entry.to }), { run, comparison, branchId, eventSeq: entry.eventSeq }), nodeId: entry.nodeId, plyOffset: entry.plyOffset })));
   });
 })();
 
@@ -862,10 +863,8 @@ export const createRunRecordConsequenceV1Evidence = (() => {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }, { run: RUN, branchId: value("a branch id", isText) }], result: "items", dependency: "recorded-semantic-path", pending: RUN_PENDING }, (input: { readonly run: DrillRun; readonly comparison?: BranchComparison; readonly branchId: string }): readonly RunEvidenceItem<unknown>[] => {
     if (input.comparison !== undefined) {
-      const recomputed = recomputedComparison(input.run, input.comparison);
-      const consequence = recomputed.consequences[input.branchId];
-      if (consequence === undefined) return Object.freeze([]);
-      const leaf = columnFor(recomputed, input.branchId).leafNodeId;
+      const consequence = comparisonFacts(input.run, input.comparison, input.branchId);
+      const leaf = consequence.leafNodeId;
       const payload = consequence.terminal
         ? Object.freeze({ context: "compare", terminal: true, outcome: consequence.outcome })
         : Object.freeze({ context: "compare", terminal: false, plies: consequence.plies, objectiveState: consequence.objectiveState });
@@ -906,8 +905,7 @@ export const createRunRecordEvidenceRefResolutionV1Evidence = (() => {
 function scoreCp(score: ComparisonScore): number { return score.kind === "cp" ? score.value : score.movesTo < 0 ? -STORY_MATE_CP : STORY_MATE_CP; }
 
 function verifiedTrail(run: DrillRun, comparison: BranchComparison, branchId: string): readonly ComparisonEvidenceEntry[] {
-  const recomputed = recomputedComparison(run, comparison);
-  const recorded = new Set((recomputed.evidence[branchId] ?? []).map((entry) => evidenceDigest(entry)));
+  const recorded = new Set(comparisonFacts(run, comparison, branchId).evidence.map((entry) => evidenceDigest(entry)));
   const claimed = comparison.evidence[branchId] ?? [];
   for (const entry of claimed) if (!recorded.has(evidenceDigest(entry))) throw new TypeError("Comparison engine entry is not an engine-validated evidence event of the recorded run");
   return claimed;
@@ -938,8 +936,8 @@ export const createDerivedCompareStructureDeltaV1Evidence = (() => {
   const route = "derived.compare.structure_delta@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }], result: "items" }, ({ run, comparison, branchId }: { readonly run: DrillRun; readonly comparison: BranchComparison; readonly branchId: string }): readonly RunEvidenceItem<unknown>[] => {
-    const recomputed = recomputedComparison(run, comparison);
-    return Object.freeze(structureDeltaEntries(run, recomputed, branchId, cachedStructuralReading).map((entry) => Object.freeze({ evidence: mint(route, symbol, Object.freeze({ observation: entry.observation }), { run, branchId, nodeId: entry.nodeId }), nodeId: entry.nodeId, plyOffset: entry.plyOffset })));
+    comparisonFacts(run, comparison, branchId);
+    return Object.freeze(structureDeltaEntries(run, comparison, branchId, cachedStructuralReading).map((entry) => Object.freeze({ evidence: mint(route, symbol, Object.freeze({ observation: entry.observation }), { run, branchId, nodeId: entry.nodeId }), nodeId: entry.nodeId, plyOffset: entry.plyOffset })));
   });
 })();
 
@@ -947,8 +945,7 @@ export const createDerivedComparePieceRouteV1Evidence = (() => {
   const route = "derived.compare.piece_route@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }], result: "population", dependency: "recorded-semantic-path", pending: RUN_PENDING }, ({ run, comparison, branchId }: { readonly run: DrillRun; readonly comparison: BranchComparison; readonly branchId: string }) => {
-    const recomputed = recomputedComparison(run, comparison);
-    const fork = runNode(run, recomputed.forkNodeId);
+    const fork = comparisonFacts(run, comparison, branchId).fork;
     const path = branchPath(run, branchId).filter((node) => node.ply >= fork.ply);
     return Object.freeze(recordedPieceRoutes(path).map((routeValue) => mint(route, symbol, routeValue, { run, branchId })));
   });
@@ -1193,7 +1190,7 @@ export const createPackAuthoredClaimV1Evidence = (() => {
   });
 })();
 
-const CLAIM_BINDINGS = new Set(["ledger_bound", "author_attributed", "author_declared"]);
+const CLAIM_BINDINGS = new Set(["ledger_bound", "author_attributed", "self_declared"]);
 export const createPackAuthoredClaimDeliveryV1Evidence = (() => {
   const route = "pack.authored.claim_delivery@1";
   const symbol = evidenceFactorySymbol(route);
@@ -1263,7 +1260,7 @@ export const createDerivedOpeningDeepestReachedV1Evidence = (() => {
 export const createDerivedOpponentCandidateFeatureVectorV1Evidence = (() => {
   const route = "derived.opponent.candidate_feature_vector@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ beforeFen: FEN, engine: value("a fixed-bound engine identity", isRecord), candidates: value("a non-empty candidate list", (candidate) => Array.isArray(candidate) && candidate.length > 0) }], result: "single", dependency: "provider-exchange-and-execution", pending: "Candidate scores are the bounded Stockfish reading supplied with the request; the exchange receipt lands with provider-exchange-and-execution. Collector results are recomputed by their factories." }, (input: { readonly beforeFen: string; readonly engine: SelectionEngineIdentity; readonly candidates: readonly CandidateFeatureInput[] }): DeclaredEvidence<CandidateFeatureVector> => {
+  return factory({ route, symbol, shape: "derived", arms: [{ beforeFen: FEN, engine: value("a fixed-bound engine identity", isRecord), candidates: value("a candidate list", Array.isArray) }], result: "single", dependency: "provider-exchange-and-execution", pending: "Candidate scores are the bounded Stockfish reading supplied with the request; the exchange receipt lands with provider-exchange-and-execution. Collector results are recomputed by their factories." }, (input: { readonly beforeFen: string; readonly engine: SelectionEngineIdentity; readonly candidates: readonly CandidateFeatureInput[] }): DeclaredEvidence<CandidateFeatureVector> => {
     const built = candidateCollectorResults(input, COLLECTOR_FACTORIES);
     return mint(route, symbol, built.vector, { beforeFen: input.beforeFen, engine: input.engine, candidates: input.candidates }, built.sources);
   });
@@ -1271,28 +1268,6 @@ export const createDerivedOpponentCandidateFeatureVectorV1Evidence = (() => {
 
 /** Collector factories the candidate vector recomputes on each hypothetical child. */
 const COLLECTOR_FACTORIES = Object.freeze({
-  childReadings: (fen: string): readonly DeclaredEvidence<unknown>[] => Object.freeze([
-    createRulesCastlingReadingRightsV1Evidence({ fen }),
-    ...createRulesCastlingReadingLegalityV1Evidence({ fen }),
-    createRulesTacticReadingLoosePieceV1Evidence({ fen }),
-    createRulesTacticReadingRayClassificationV1Evidence({ fen }),
-    createRulesTacticConsequenceThreatV1Evidence({ fen }),
-    createRulesStructuralReadingPawnConnectivityV1Evidence({ fen }),
-    createRulesPhaseDevelopmentV1Evidence({ fen }),
-    createRulesTacticReadingRookOnSeventhV1Evidence({ fen }),
-    createRulesStructuralReadingSpaceV1Evidence({ fen }),
-    createRulesTacticReadingDiscoveredLatencyV1Evidence({ fen }),
-    createRulesTacticReadingTrappedPieceV1Evidence({ fen }),
-    createRulesTacticReadingBackRankV1Evidence({ fen }),
-    createRulesTacticConsequenceMateInOneV1Evidence({ fen }),
-    createDerivedTacticPromotionPressureV1Evidence({ fen }),
-    createRulesSquareReadingControlV1Evidence({ fen }),
-    createRulesMobilityReadingPieceDestinationsV1Evidence({ fen }),
-    createRulesPawnReadingContactsV1Evidence({ fen }),
-    createRulesPawnReadingCandidateMajorityV1Evidence({ fen }),
-    createDerivedMaterialReadingRoleSignatureV1Evidence({ fen }),
-    createRulesKingReadingZoneStateV1Evidence({ fen }),
-  ]),
   exchange: (fen: string, moveUci: string) => createRulesExchangePredicateLegalExchangeV1Evidence({ fen, captureUci: moveUci }),
   forkSurvival: (doubleAttack: DeclaredEvidence<DoubleAttackEvent>, edge: EvidenceEdge) => createDerivedTacticForkSurvivesReplyV1Evidence({ doubleAttack, breadth: createRulesTacticConsequenceReplyBreadthV1Evidence(edge) }),
 });

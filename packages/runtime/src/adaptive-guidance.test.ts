@@ -1,3 +1,4 @@
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
 import { readFileSync } from "node:fs";
@@ -11,8 +12,7 @@ import {
   compileEvidenceManifest,
   commitMove,
   createRun,
-  declareAuthoredClaimEvidence,
-  endgameReading,
+  endgameClassification,
   evidenceForConsumer,
   EVIDENCE_CONTRACT_DECLARATIONS,
   liveAdmitted,
@@ -20,7 +20,7 @@ import {
   permittedAssistance,
   reviewingGrant,
   pivotalMarkers,
-  renderEndgameReading,
+  renderEndgameClassification,
   renderPhaseReading,
   renderPivotalMarker,
   renderEvidenceItems,
@@ -164,15 +164,19 @@ describe("adaptive guidance runtime", () => {
     expect(permittedAssistance({ sessionKind: "pack", workflowContext: "pack", deliveryOpen: true, role: "host", seatedInContest: true, reviewing: true }).humanSplit).toBe("locked_off");
   });
 
-  it("recognizes exact endgame census families and honest missing technique entries", () => {
-    const center = endgameReading("4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1");
+  it("classifies endgame census families without any technique applicability claim", () => {
+    const center = endgameClassification("4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1");
     expect(center?.type?.id).toBe("rook-and-pawn-vs-rook");
-    expect(center?.techniques.map((item) => item.id)).toEqual(["lucena", "philidor"]);
-    const edge = endgameReading("4k2r/8/8/8/8/8/P7/R3K3 w - - 0 1");
-    expect(edge?.techniques.map((item) => item.id)).toEqual(["lucena", "philidor", "vancura"]);
-    const fourThree = endgameReading("6k1/5ppp/8/8/8/8/4RPPP/6K1 w - - 0 1");
+    expect(center).not.toHaveProperty("techniques");
+    const edge = endgameClassification("4k2r/8/8/8/8/8/P7/R3K3 w - - 0 1");
+    expect(edge?.type?.id).toBe("rook-and-pawn-vs-rook");
+    expect(renderEndgameClassification(edge).join(" ")).not.toMatch(/lucena|philidor|vancura/iu);
+    // Technique applicability is theory.endgame.setup_match@1: honest-unavailable, never rendered.
+    const setup = invokeEvidenceValueRoute("theory.endgame.setup_match@1", { fen: "4k2r/8/8/8/8/8/P7/R3K3 w - - 0 1", convention: { id: "vancura-setup", version: 1 } });
+    expect(setup.kind).toBe("unavailable");
+    const fourThree = endgameClassification("6k1/5ppp/8/8/8/8/4RPPP/6K1 w - - 0 1");
     expect(fourThree?.type).toBeNull();
-    expect(renderEndgameReading(fourThree).join(" ")).toContain("outside Tabiya's material-census convention");
+    expect(renderEndgameClassification(fourThree).join(" ")).toContain("outside Tabiya's material-census convention");
   });
 
   it("selects the largest recorded centipawn swing and abstains with one point", () => {
@@ -183,7 +187,7 @@ describe("adaptive guidance runtime", () => {
 
   it("checks voice introductions while pinning the known plain-English leak", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
-    const evidence = declareAuthoredClaimEvidence({ id: "fixture-claim", text: "A backward pawn is recorded.", attribution: "fixture:authored" });
+    const evidence = invokeEvidenceValueRoute("pack.authored.claim@1", { item: { kind: "annotation", id: "fixture-claim", text: "A backward pawn is recorded.", revealedBy: { kind: "fixture", eventSeq: 1 } } })[0]!;
     const admitted = evidenceForConsumer(manifest, { id: "guidance.voice", version: 1 }, [evidence]);
     const view = renderEvidenceItems(admitted, { "pack.authored.claim@1": () => ["A backward pawn is recorded."] });
     expect(voiceCheck(view, "A weak pawn is recorded.").violations).toContain("judgement:weak");
@@ -218,11 +222,11 @@ describe("adaptive guidance runtime", () => {
         const active = candidate.nodes.find((item) => item.id === candidate.activeCursor.nodeId)!;
         classifyPhase(active.fen);
         pivotalMarkers(candidate, candidate.activeCursor.branchId);
-        endgameReading(active.fen);
+        endgameClassification(active.fen);
       }
       classifyPhase(sixty.nodes.at(-1)!.fen);
       pivotalMarkers(sixty, "main");
-      endgameReading(sixty.nodes.at(-1)!.fen);
+      endgameClassification(sixty.nodes.at(-1)!.fen);
       durations.push(performance.now() - started);
     }
     durations.sort((left, right) => left - right);

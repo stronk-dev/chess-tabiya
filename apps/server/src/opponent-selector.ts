@@ -7,7 +7,7 @@ import { parseUci } from "chessops/util";
 
 import {
   assertConsumerEvidenceView,
-  declareOpponentProviderEvidence,
+  opponentProviderEvidence as declareOpponentProviderEvidence,
   evidenceForConsumer,
   PolicyMassError,
   humanConcessionMass,

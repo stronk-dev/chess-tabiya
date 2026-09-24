@@ -5,8 +5,8 @@ import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_DECLARATIONS } from "./evidence-catalog.js";
-import { compileEvidenceManifest, declareEvidence, type EvidenceSelectionPolicyDeclaration } from "./evidence-contract.js";
-import { declareRunRecordEvidence } from "./evidence-source-adapters.js";
+import { compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceValueReceipt, type DeclaredEvidence, type EvidenceSelectionPolicyDeclaration } from "./evidence-contract.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import {
   CANDIDATE_EVENTS_SCOPE,
   CANDIDATE_READINGS_SCOPE,
@@ -39,6 +39,26 @@ import {
 
 const ref = (id: string) => ({ id, version: 1 } as const);
 
+/**
+ * Test-only compiler fixture (value authority §1): exercises compile-path mechanics with synthetic
+ * operands. Its receipt names the fixture's exact sealed sources, as every factory receipt must.
+ */
+function declareEvidence<T>(producer: { id: string; version: number }, projection: { id: string; version: number }, payload: T, sources: readonly DeclaredEvidence<unknown>[] = []): DeclaredEvidence<T> {
+  return declareWithAuthority(producer, projection, payload, { factory: "test:semantic-evidence-fixture", inputDigest: "0".repeat(64), sourceDigests: sources.map((source) => evidenceValueReceipt(source).payloadDigest) });
+}
+
+/** Recorded-path run.record.move evidence for a contiguous played line from `fen`. */
+function pathMoves(fen: string, moves: readonly string[]): readonly DeclaredEvidence<unknown>[] {
+  let current = canonicalFen(positionFromFen(fen));
+  const path = moves.map((moveUci, index) => {
+    const afterFen = after(current, moveUci);
+    const anchor = { beforeNodeId: `n${index}`, afterNodeId: `n${index + 1}`, beforeFen: current, moveUci: canonicalMoveUci(current, moveUci), afterFen };
+    current = afterFen;
+    return anchor;
+  });
+  return path.map((_, offset) => invokeEvidenceValueRoute("run.record.move@1", { path, offset }));
+}
+
 function after(fen: string, uci: string): string {
   const position = positionFromFen(fen);
   const parsed = parseUci(uci)!;
@@ -52,7 +72,7 @@ function event(fen: string, uci: string, projection = "rules.structural.event.op
   const afterFen = after(fen, uci);
   const payload = Object.freeze({ before_fen: canonicalFen(positionFromFen(fen)), move_uci: canonicalMoveUci(fen, uci), after_fen: afterFen, family: projection.split(".").at(-1), before: [], after: ["fixture"] });
   const declared = declareEvidence(ref("rules.structural"), ref(projection), payload);
-  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign, operands: payload });
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign });
 }
 
 function ruleEvent(fen: string, uci: string, family: "castled" | "promotion" | "checkmate" | "last_of_role"): SemanticEvidenceEvent {
@@ -60,7 +80,7 @@ function ruleEvent(fen: string, uci: string, family: "castled" | "promotion" | "
   const canonical = canonicalMoveUci(fen, uci);
   const payload = Object.freeze({ before_fen: canonicalFen(positionFromFen(fen)), move_uci: canonical, after_fen: afterFen, mover: "fixture", from: canonical.slice(0, 2), to: canonical.slice(2, 4), detail: family });
   const declared = declareEvidence(ref("rules.transition"), ref(`rules.transition.event.${family}`), payload);
-  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign: "state", operands: payload });
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign: "state" });
 }
 
 function policy(overrides: Partial<EvidenceSelectionPolicyDeclaration> = {}) {
@@ -129,17 +149,17 @@ describe("semantic evidence runtime", () => {
                     : operand === "family" ? declaration.projection.id.split(".").at(-1)
                       : "fixture",
       ])));
-      const evidence = declareEvidence(projection.producer, declaration.projection, operands);
       const derivationMember = declaration.derivationAnyOf?.[0] ?? declaration.derivationInputs ?? [];
       const derivationInputs = derivationMember.map((input) => {
         const source = PRIMARY_EVIDENCE_MANIFEST.projections.find((candidate) => candidate.id === input.id && candidate.version === input.version)!;
-        return declareEvidence(source.producer, input, Object.freeze({ fixture: true }));
+        return declareEvidence(source.producer, input, Object.freeze({ fixture: true, input: `${input.id}@${input.version}` }));
       });
-      expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence, derivationInputs, anchor, sign: declaration.allowedSigns[0]!, operands })).not.toThrow();
+      const evidence = declareEvidence(projection.producer, declaration.projection, operands, derivationInputs);
+      expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence, derivationInputs, anchor, sign: declaration.allowedSigns[0]! })).not.toThrow();
 
       const missing = Object.freeze(Object.fromEntries(Object.entries(operands).slice(1)));
-      const missingEvidence = declareEvidence(projection.producer, declaration.projection, missing);
-      expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: missingEvidence, derivationInputs, anchor, sign: declaration.allowedSigns[0]!, operands: missing })).toThrowError(expect.objectContaining({ code: "EVIDENCE_EVENT_OPERAND_MISSING" }));
+      const missingEvidence = declareEvidence(projection.producer, declaration.projection, missing, derivationInputs);
+      expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: missingEvidence, derivationInputs, anchor, sign: declaration.allowedSigns[0]! })).toThrowError(expect.objectContaining({ code: "EVIDENCE_EVENT_OPERAND_MISSING" }));
 
       // v1 fixture labels are byte-unchanged; recorded-path v2 successors carry their exact version.
       const label = declaration.projection.version === 1 ? declaration.projection.id : `${declaration.projection.id}@${declaration.projection.version}`;
@@ -252,8 +272,7 @@ describe("semantic evidence runtime", () => {
     const end = after(boundary, "e6d5");
     const first = transitionSemanticEvents(start, "e4d5", boundary).find((value) => value.operands.family === "capture")!;
     const second = transitionSemanticEvents(boundary, "e6d5", end).find((value) => value.operands.family === "capture")!;
-    const firstMove = declareRunRecordEvidence("move", { context: { nodeId: "n1" }, offset: 1, moveSan: "exd5" });
-    const secondMove = declareRunRecordEvidence("move", { context: { nodeId: "n2" }, offset: 2, moveSan: "exd5" });
+    const [firstMove, secondMove] = pathMoves(start, ["e4d5", "e6d5"]) as [DeclaredEvidence<unknown>, DeclaredEvidence<unknown>];
     const trade = tradeCompletedSemanticEvent(first, second, firstMove, secondMove);
     expect(trade).toMatchObject({
       projection: { id: "derived.exchange.trade_completed" },
@@ -278,7 +297,10 @@ describe("semantic evidence runtime", () => {
       const finish = after(middle, fixture.second);
       const openingCapture = transitionSemanticEvents(fixture.start, fixture.first, middle).find((value) => value.operands.family === "capture")!;
       const recapture = transitionSemanticEvents(middle, fixture.second, finish).find((value) => value.operands.family === "capture")!;
-      const specialTrade = tradeCompletedSemanticEvent(openingCapture, recapture, firstMove, secondMove);
+      const [specialFirst, specialSecond] = pathMoves(fixture.start, [fixture.first, fixture.second]) as [DeclaredEvidence<unknown>, DeclaredEvidence<unknown>];
+      const specialTrade = tradeCompletedSemanticEvent(openingCapture, recapture, specialFirst, specialSecond);
+      // Recorded moves of a different line are a crossed ancestry, never a trade anchor.
+      expect(() => tradeCompletedSemanticEvent(openingCapture, recapture, firstMove, secondMove)).toThrow(/anchors are not the two capture edges/u);
       expect(openingCapture.operands).toMatchObject({ family: "capture", enPassant: fixture.enPassant });
       expect(specialTrade).toMatchObject({ operands: { landingSquare: fixture.first.slice(2, 4), firstMoveUci: fixture.first, secondMoveUci: fixture.second } });
     }

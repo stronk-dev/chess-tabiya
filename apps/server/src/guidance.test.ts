@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, declareAuthoredClaimEvidence, declareCompareDerivedEvidence, declareNamedStructureEvidence, declarePackPhaseEvidence, declarePhaseReadingEvidence, declareRunRecordEvidence, declareShapeFiringEvidence, declareStoryDerivedEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, phaseBandReading, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+// Test-only compiler fixture for renderer tests (rfc/evidence-value-authority.md §1).
+import { fixtureEvidence, fixtureEvidenceList } from "../../../packages/runtime/src/testing/evidence-fixture.test-support.js";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import type { SquareName } from "chessops/types";
 import * as ts from "typescript";
@@ -45,7 +47,7 @@ const capabilities: CapabilitiesProvider = {
 function request(path: string, method = "GET", body?: unknown, cookie?: string): Request { return new Request(`http://tabiya.test${path}`, { method, headers: { ...(body === undefined ? {} : { "content-type": "application/json" }), ...(cookie === undefined ? {} : { cookie }) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); }
 function fixturePacket(): EvidencePacket {
   const detected = classifyPhase(FEN);
-  return Object.freeze({ fen: FEN, phase: { source: "detector" as const, value: detected.phase }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], declared: [declarePhaseReadingEvidence(detected)] });
+  return Object.freeze({ fen: FEN, phase: { source: "detector" as const, value: detected.phase }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], declared: [fixtureEvidence("rules.phase.reading@2", phaseBandReading(FEN))] });
 }
 
 function voiceAssemblyCensus(sourceText: string): readonly { readonly name: string; readonly arguments: readonly string[] }[] {
@@ -65,10 +67,10 @@ function voiceAssemblyCensus(sourceText: string): readonly { readonly name: stri
 describe("adaptive guidance server seams", () => {
   it("renders base guidance without reveal keys or detector plumbing", () => {
     const evidence = [
-      declarePhaseReadingEvidence(classifyPhase(FEN)),
-      declarePackPhaseEvidence("middlegame"),
-      declareNamedStructureEvidence({ name: "Isolated queen's pawn", provenanceNote: "rules.structural:iqp-v1" }),
-      declareAuthoredClaimEvidence({ id: "claim-one", text: "Keep the pawn protected.", attribution: "authored:checkpoint:17" }),
+      fixtureEvidence("rules.phase.reading@2", phaseBandReading(FEN)),
+      fixtureEvidence("pack.authored.phase@1", "middlegame"),
+      fixtureEvidence("rules.structural.reading.named_structure@2", { id: "iqp-white", name: "Isolated queen's pawn", provenanceNote: "rules.structural:iqp-v1" }),
+      fixtureEvidence("pack.authored.claim@1", { id: "claim-one", text: "Keep the pawn protected.", attribution: "authored:checkpoint:17" }),
     ];
     const rendered = voiceEvidenceView(fixturePacket(), "reading", evidence, false).rendered;
     const text = rendered.items.flatMap((item) => item.sentences).join(" ");
@@ -79,19 +81,19 @@ describe("adaptive guidance server seams", () => {
     expect(text).not.toMatch(/authored:|checkpoint:17|rules\.structural|phase bands|provenance|pack declares/iu);
   });
   it("voices compare structure operands instead of raw detector ids", () => {
-    const evidence = declareCompareDerivedEvidence("structure_delta", { observation: { kind: "isolated_pawn", color: "white", file: "d", squares: [] } });
+    const evidence = fixtureEvidence("derived.compare.structure_delta@1", { observation: { kind: "isolated_pawn", color: "white", file: "d", squares: [] } });
     const rendered = voiceEvidenceView(fixturePacket(), "compare", [evidence], false).rendered;
     expect(rendered.items[0]!.sentences).toEqual(["White isolated pawn appeared on the d-file. Source: Tabiya structural detector."]);
     expect(rendered.items[0]!.sentences.join(" ")).not.toContain("isolated_pawn");
   });
   it("voices comparison records in learner units without protocol vocabulary", () => {
     const evidence = [
-      declareRunRecordEvidence("fork", { context: "compare", forkNodeId: "n0", sharedPly: 4 }),
-      declareRunRecordEvidence("move", { context: "compare", offset: 1, moveSan: "Nf3" }),
-      declareRunRecordEvidence("checkpoint_hit", { context: "compare", checkpointId: "reply-seen", plyOffset: 2 }),
-      declareRunRecordEvidence("objective_transition", { context: "compare", from: "active", to: "preserved" }),
-      declareRunRecordEvidence("consequence", { context: "compare", terminal: false, plies: 3, objectiveState: "preserved" }),
-      declareCompareDerivedEvidence("eval_delta", { delta: -165, plyOffset: 2 }),
+      fixtureEvidence("run.record.fork@1", { context: "compare", forkNodeId: "n0", sharedPly: 4 }),
+      fixtureEvidence("run.record.move@1", { context: "compare", offset: 1, moveSan: "Nf3" }),
+      fixtureEvidence("run.record.checkpoint_hit@1", { context: "compare", checkpointId: "reply-seen", plyOffset: 2 }),
+      fixtureEvidence("run.record.objective_transition@1", { context: "compare", from: "active", to: "preserved" }),
+      fixtureEvidence("run.record.consequence@1", { context: "compare", terminal: false, plies: 3, objectiveState: "preserved" }),
+      fixtureEvidence("derived.compare.eval_delta@1", { delta: -165, plyOffset: 2 }),
     ];
     const rendered = voiceEvidenceView(fixturePacket(), "compare", evidence, false).rendered;
     const text = rendered.items.flatMap((item) => item.sentences).join(" ");
@@ -104,7 +106,7 @@ describe("adaptive guidance server seams", () => {
     expect(text).not.toMatch(/\bcp\b|\bplies\b|\boffset\b|reply-seen|\b(active|preserved)\b/u);
   });
   it("voices Story evaluation changes in learner-oriented pawn units", () => {
-    const evidence = declareStoryDerivedEvidence("eval_shift", {
+    const evidence = fixtureEvidence("derived.story.eval_shift@1", {
       before: { centipawns: -25, engineId: "sf", requestedMovetimeMs: 100 },
       after: { centipawns: 240, engineId: "sf", requestedMovetimeMs: 100 },
       delta: 265,
@@ -115,7 +117,7 @@ describe("adaptive guidance server seams", () => {
     expect(sentence).not.toMatch(/\bcp\b/u);
   });
   it("voices shape firings without exposing catalogue keys or trigger plumbing", () => {
-    const evidence = declareShapeFiringEvidence([{
+    const evidence = fixtureEvidenceList("theory.shapes.firing@1", [{
       entryId: "carlsbad-minority-attack",
       firstNodeId: "n1",
       lastNodeId: "n2",
@@ -222,7 +224,7 @@ describe("adaptive guidance server seams", () => {
       !voiceCheck(view, square).violations.includes(`square:${square}`);
     expect(markIsSpeakable(packets[1]!.rendered, markedSquare)).toBe(false);
 
-    const groundedSquare = voiceEvidenceView(fixturePacket(), "compare", [declareCompareDerivedEvidence("structure_delta", {
+    const groundedSquare = voiceEvidenceView(fixturePacket(), "compare", [fixtureEvidence("derived.compare.structure_delta@1", {
       observation: { kind: "piece_reach_count", color: "black", role: "knight", squares: [markedSquare], count: 1 },
     })], false).rendered;
     expect(groundedSquare.items.flatMap((item) => item.sentences).join("\n")).toContain(markedSquare);

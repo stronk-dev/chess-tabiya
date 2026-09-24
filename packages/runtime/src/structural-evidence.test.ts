@@ -27,7 +27,7 @@ describe("declared structural predicate evidence", () => {
     const evidence = declareStructuralPredicateEvidence(fen, condition, { source: "shape", documentId: "shape-a", pointer: "/trigger" });
     expect(evidence.condition.projection.id).toBe("authored.structural_condition.input");
     expect(evidence.condition.payload).toMatchObject({ source: "shape", documentId: "shape-a", pointer: "/trigger", expression: condition });
-    expect(evidence.result.projection.id).toBe("rules.structural.predicate.result");
+    expect(evidence.result.projection.id).toBe("derived.structural.predicate_result");
     expect(evidence.result.payload).toMatchObject({ fen, condition, matched: true });
     expect(evidence.featureResults.map((item) => item.projection.id)).toEqual([
       "rules.structural.predicate.open_file",

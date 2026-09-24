@@ -366,17 +366,14 @@ export function transitionSemanticEventPayloads(beforeFen: string, moveUci: stri
   }));
 }
 
-const TRANSITION_EVENT_FAMILY_ORDER = Object.freeze(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty", "castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture", "developed"] as const);
+/** transitionSemanticFacts sorts by family name first; visiting families alphabetically keeps its order. */
+const TRANSITION_EVENT_FAMILY_ORDER = Object.freeze(["capture", "castled", "checkmate", "clock_reset", "defended_duty", "developed", "last_of_role", "occupied_attack", "occupied_defence", "pawn_contact", "piece_escape", "promotion", "slider_ray"] as const);
 
 export function transitionSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<TransitionSemanticEventOperands>[] {
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
-  const byPayload = new Map<unknown, DeclaredEvidence<TransitionSemanticEventOperands>>();
-  for (const family of TRANSITION_EVENT_FAMILY_ORDER) for (const evidence of invokeEvidenceValueRoute(`rules.transition.event.${family}@1`, edgeOf(anchor))) byPayload.set(evidence.payload, evidence as DeclaredEvidence<TransitionSemanticEventOperands>);
-  // Retain the producer's own emission order: the factories filter one memoized population.
-  return Object.freeze(transitionSemanticEventPayloads(anchor.beforeFen, anchor.moveUci, anchor.afterFen).map((payload) => {
-    const evidence = byPayload.get(payload);
-    if (evidence === undefined) throw new TypeError(`Transition event ${payload.family} lost its factory evidence`);
-    return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence, anchor, sign: payload.sign });
+  return Object.freeze(TRANSITION_EVENT_FAMILY_ORDER.flatMap((family) => invokeEvidenceValueRoute(`rules.transition.event.${family}@1`, edgeOf(anchor))).map((evidence) => {
+    const payload = evidence.payload as TransitionSemanticEventOperands;
+    return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: evidence as DeclaredEvidence<TransitionSemanticEventOperands>, anchor, sign: payload.sign });
   }));
 }
 

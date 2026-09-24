@@ -13,7 +13,7 @@ vi.mock("./legal-moves.js", async (importOriginal) => {
 });
 
 const { CANDIDATE_EVENTS_SCOPE, CANDIDATE_READINGS_SCOPE, CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, compileCandidatePopulationForContract, projectCandidatePopulationReceipt } = await import("./candidate-population.js");
-const { createRulesMobilityReadingLegalMovesV1Evidence } = await import("./evidence-source-adapters.js");
+const { invokeEvidenceValueRoute } = await import("./internal/evidence-value-routes.js");
 
 const spy = vi.mocked(legalMoves.exactLegalMoveMap);
 const rootCalls = (fen: string) => spy.mock.calls.filter(([argument]) => argument === fen).length;
@@ -36,11 +36,12 @@ describe("criterion 36: one exact-map call owns the packet's legal population", 
   it("the factory accepts a FEN string only and refuses objects before the authority runs", () => {
     const map = legalMoves.exactLegalMoveMap(INITIAL_FEN);
     spy.mockClear();
-    expect(() => createRulesMobilityReadingLegalMovesV1Evidence(map as unknown as string)).toThrow(/FEN string/u);
-    expect(() => createRulesMobilityReadingLegalMovesV1Evidence({ ...map } as unknown as string)).toThrow(/FEN string/u);
-    expect(() => createRulesMobilityReadingLegalMovesV1Evidence(42 as unknown as string)).toThrow(/FEN string/u);
+    expect(() => invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", map as never)).toThrow(/refused its authority inputs/u);
+    expect(() => invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: map } as never)).toThrow(/refused its authority inputs/u);
+    expect(() => invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: 42 } as never)).toThrow(/refused its authority inputs/u);
+    expect(() => invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", 42 as never)).toThrow(/plain authority-input record/u);
     expect(spy).not.toHaveBeenCalled();
-    const declared = createRulesMobilityReadingLegalMovesV1Evidence(INITIAL_FEN);
+    const declared = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: INITIAL_FEN });
     expect(spy).toHaveBeenCalledTimes(1);
     expect(declared.payload).toBe(spy.mock.results[0]!.value);
     expect(declared.projection).toEqual({ id: "rules.mobility.reading.legal_moves", version: 1 });
@@ -74,13 +75,14 @@ describe("criterion 36: one exact-map call owns the packet's legal population", 
     const compiler = source("./candidate-population.ts");
     const imports = [...compiler.matchAll(/import\s+(?:type\s+)?\{([^}]*)\}\s+from\s+"([^"]+)"/gu)];
     const importedNames = imports.flatMap((match) => match[1]!.split(",").map((name) => name.trim().replace(/^type\s+/u, "")));
-    expect(importedNames.filter((name) => name === "createRulesMobilityReadingLegalMovesV1Evidence")).toHaveLength(1);
+    // rfc/evidence-value-authority §2: production reaches factories only through the one dispatcher.
+    expect(importedNames).toContain("invokeEvidenceValueRoute");
+    expect(importedNames).not.toContain("createRulesMobilityReadingLegalMovesV1Evidence");
     expect(importedNames).not.toContain("exactLegalMoveMap");
     expect(importedNames).not.toContain("exactLegalMoves");
-    expect(compiler).not.toMatch(/function\s+createRulesMobilityReadingLegalMovesV1Evidence/u);
     expect(compiler).not.toMatch(/declareExactLegalMovesEvidence/u);
-    expect(compiler.match(/createRulesMobilityReadingLegalMovesV1Evidence\(/gu)).toHaveLength(1);
-    const definitions = ["./evidence-source-adapters.ts", "./candidate-population.ts", "./semantic-evidence.ts", "./index.ts"].map(source).join("\n").match(/function\s+createRulesMobilityReadingLegalMovesV1Evidence\b/gu);
+    expect(compiler.match(/invokeEvidenceValueRoute\("rules\.mobility\.reading\.legal_moves@1"/gu)).toHaveLength(1);
+    const definitions = ["./evidence-factories.ts", "./candidate-population.ts", "./semantic-evidence.ts", "./index.ts"].map(source).join("\n").match(/createRulesMobilityReadingLegalMovesV1Evidence\s*=/gu);
     expect(definitions).toHaveLength(1);
   });
 });

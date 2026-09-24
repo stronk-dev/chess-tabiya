@@ -6,7 +6,8 @@ import { canonicalFen, positionFromFen } from "./chess.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { pawnContactTimingSequence } from "./pawn-dynamics.js";
-import { declareOpenFileOccupancyEvidence, declareRunRecordEvidence, declareStructuralReadingSourceEvidence } from "./evidence-source-adapters.js";
+import { identitySealedEvidenceWithoutValueReceipt } from "./evidence-contract.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { breadthSemanticEvents, capturedZoneDefenderOperands, compileSemanticEvidenceEvent, defenderConsequenceOperands, defenderExposureOperands, openFileOccupancyOperands, pawnContactTimingSemanticEvent } from "./semantic-evidence.js";
 
 function after(fen: string, uci: string): string {
@@ -99,23 +100,23 @@ describe("breadth semantic joins", () => {
     expect(halfOpenEvent).toMatchObject({ derivationInputs: [{ projection: { id: "rules.structural.reading.half_open_file" } }] });
   });
 
-  it("seals exactly one declared open-file derivation member at runtime", () => {
+  it("seals exactly the one open-file derivation member the factory computed", () => {
     const halfOpen = "4k3/8/3p4/8/8/8/P7/R3K3 w - - 0 1";
     const afterFen = after(halfOpen, "a1d1");
-    const payload = openFileOccupancyOperands(halfOpen, "a1d1", afterFen)!;
-    const halfEvidence = declareStructuralReadingSourceEvidence(payload.sourceReading);
+    const item = invokeEvidenceValueRoute("derived.activity.event.open_file_occupancy@1", { beforeFen: halfOpen, moveUci: "a1d1", afterFen })[0]!;
+    expect(item.inputs.map((value) => value.projection.id)).toEqual(["rules.structural.reading.half_open_file"]);
+    const halfEvidence = item.inputs[0]!;
     const open = "4k3/8/8/8/8/8/P7/R3K3 w - - 0 1";
-    const openPayload = openFileOccupancyOperands(open, "a1d1", after(open, "a1d1"))!;
-    const openEvidence = declareStructuralReadingSourceEvidence(openPayload.sourceReading);
-    const input = {
-      evidence: declareOpenFileOccupancyEvidence(payload), anchor: { beforeFen: halfOpen, moveUci: "a1d1", afterFen, side: "white" as const }, sign: "gained" as const, operands: payload,
-    };
-    const admitted = compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [halfEvidence] });
-    const otherMember = compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [openEvidence] });
-    expect(admitted.id).not.toBe(otherMember.id);
-    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [] })).toThrow(/derivation inputs disagree/u);
-    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [halfEvidence, openEvidence] })).toThrow(/derivation inputs disagree/u);
-    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [declareRunRecordEvidence("move", { context: "wrong authority", offset: 0, moveSan: "Ra1-d1" })] })).toThrow(/derivation inputs disagree/u);
+    const openEvidence = invokeEvidenceValueRoute("derived.activity.event.open_file_occupancy@1", { beforeFen: open, moveUci: "a1d1", afterFen: after(open, "a1d1") })[0]!.inputs[0]!;
+    expect(openEvidence.projection.id).toBe("rules.structural.reading.open_file");
+    const input = { evidence: item.evidence, anchor: { beforeFen: halfOpen, moveUci: "a1d1", afterFen, side: "white" as const }, sign: "gained" as const };
+    expect(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [halfEvidence] }).operands).toBe(item.evidence.payload);
+    // The other anyOf member is a declared member, but not the ancestry this value was computed from.
+    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [openEvidence] })).toThrow(/exact sealed inputs/u);
+    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [] })).toThrow(/exact sealed inputs/u);
+    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [halfEvidence, openEvidence] })).toThrow(/exact sealed inputs|derivation inputs disagree/u);
+    const forged = identitySealedEvidenceWithoutValueReceipt(item.evidence.producer, item.evidence.projection, item.evidence.payload);
+    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, evidence: forged, derivationInputs: [halfEvidence] })).toThrow(/value-authority receipt/u);
   });
 
   it("retains promotion-only and capture-promotion authorities for material-role events", () => {
@@ -135,7 +136,7 @@ describe("breadth semantic joins", () => {
   it("seals a retained contact sequence only with the required recorded-move evidence", () => {
     const path = anchors("4k3/8/8/3p4/8/8/4P3/4K3 w - - 0 1", ["e2e4", "e8f7"]);
     const payload = pawnContactTimingSequence(path)!;
-    const evidence = path.map((_, offset) => declareRunRecordEvidence("move", { context: "fixture", offset, moveSan: `m${offset}` }));
+    const evidence = path.map((_, offset) => invokeEvidenceValueRoute("run.record.move@1", { path, offset }));
     expect(pawnContactTimingSemanticEvent(payload, evidence)).toMatchObject({ projection: { id: "derived.pawn.sequence.contact_timing", version: 1 }, sign: "state" });
     expect(() => pawnContactTimingSemanticEvent(payload, evidence.slice(0, 1))).toThrow(/one run.record.move evidence item per anchor/u);
   });

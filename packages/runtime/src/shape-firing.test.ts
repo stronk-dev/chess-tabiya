@@ -33,9 +33,11 @@ describe("shapeFirings", () => {
 
   it("admits detected spans at the theory consumer boundary", () => {
     const firings = shapeFirings([openA], [{ id: "n", fen: aOpen }]);
-    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 }, declareShapeFiringEvidence(firings));
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 }, declareShapeFiringEvidence([openA], [{ id: "n", fen: aOpen }]));
     expect(consumeShapeFiring(view)).toEqual(firings);
-    expect(shapeFiringEvidence(firings)).toEqual(firings);
+    expect(shapeFiringEvidence([openA], [{ id: "n", fen: aOpen }])).toEqual(firings);
+    // Firings are recomputed from the registered trigger and recorded path; none fires on a closed file.
+    expect(shapeFiringEvidence([openA], [{ id: "n", fen: initial }])).toEqual([]);
     if (false) {
       // @ts-expect-error Shape delivery refuses a bare firing list.
       consumeShapeFiring(firings);

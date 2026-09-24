@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { declareRunRecordEvidence, declareStoryDerivedEvidence } from "@chess-tabiya/runtime";
+import type { DeclaredEvidence } from "@chess-tabiya/runtime";
 import { storyCardDocument } from "./story-card.js";
 
 describe("grounded story card", () => {
@@ -9,8 +9,9 @@ describe("grounded story card", () => {
       fen: "8/8/8/8/8/8/8/8 w - - 0 1",
       sentences: ["First grounded fact.", "Second <grounded> fact."],
       evidence: [
-        declareStoryDerivedEvidence("eval_shift", { before: {}, after: {}, delta: 1 }),
-        declareRunRecordEvidence("imported_result", { context: "story", result: "0-1" }),
+        // Provenance labels read only the declared projection identity; the card never admits evidence.
+        { producer: { id: "derived.story", version: 1 }, projection: { id: "derived.story.eval_shift", version: 1 }, payload: { before: {}, after: {}, delta: 1 } } as unknown as DeclaredEvidence<unknown>,
+        { producer: { id: "run.record", version: 1 }, projection: { id: "run.record.imported_result", version: 1 }, payload: { context: "story", result: "0-1" } } as unknown as DeclaredEvidence<unknown>,
       ],
     });
     expect(card.svg).toContain("A &amp; B");

@@ -52,7 +52,7 @@ export {
 export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { consumeShapeFiring, declareShapeFiringEvidence, renderShapeFiring, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
-export { classifyPhase, developmentReading, isDevelopmentHome, renderPhaseReading, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
+export { classifyPhase, developmentReading, isDevelopmentHome, phaseBandReading, renderPhaseReading, PHASE_BAND_CONVENTION, type PhaseBandDecision, type PhaseBandReadingV2, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
 export { backRankReading, defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, discoveredExecutedEvents, discoveredLatencyReading, loosePieceEvents, loosePieceReading, mateInOne, overloadedDefenderResponseConflict, promotionPressureReading, rayClassificationReading, rookOnSeventhReading, trappedPieceReading, BACK_RANK_CONVENTION, DEFENCE_DUTY_CONVENTION, TRAPPED_CONVENTION, type BackRankReading, type DefenderDuty, type DefenderDutyReading, type DefenderDutyRelocatedEvent, type DefenderRemovedEvent, type DiscoveredExecutedEvent, type DiscoveredLatencyReading, type GainedSliderRay, type LoosePieceEvent, type LoosePieceEventResult, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type OverloadedDefenderConflict, type OverloadedDefenderConflictResult, type PromotionAvailability, type PromotionPressureReading, type RayClassification, type RayClassificationKind, type RayClassificationReading, type RookOnSeventhReading, type TrappedPieceReading, type TrappedPieceState } from "./tactics.js";
 export { forcedMateAfterMove, MATE_PROOF_CONVENTION, MATE_PROOF_NODE_CAP, type ForcedMateAfterMoveProof, type ForcedMateAfterMoveResult, type MateProofStatus } from "./mate-proof.js";
 export {
@@ -237,7 +237,7 @@ export {
 export type { AuthoredFeedbackItemRecord, EvidenceAvailability } from "./evidence-factories.js";
 export { RECORDED_ASSESSMENT_CATEGORIES, recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 export { evidenceSentenceTable, resolveEvidenceReference, type EvidenceReferenceResolution, type EvidenceSentence } from "./evidence-ref-resolution.js";
-export { type CandidateCollectorResult, type CandidateFeatureInput, type CandidateFeatureRow, type CandidateFeatureVector } from "./candidate-feature-vector.js";
+export { candidateCollectorIds, type CandidateCollectorResult, type CandidateFeatureInput, type CandidateFeatureRow, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 export {
   CANDIDATE_EVENTS_SCOPE,
   CANDIDATE_PACKET_COMPILER_VERSION,

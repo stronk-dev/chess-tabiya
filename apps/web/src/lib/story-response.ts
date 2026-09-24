@@ -81,29 +81,16 @@ function evaluation(value: unknown): boolean {
       || (Number.isSafeInteger(item.requestedMovetimeMs) && (item.requestedMovetimeMs as number) > 0));
 }
 
+/** `rules.endgame.classification@1`: material family only; no technique applicability travels. */
 function endgame(value: unknown): boolean {
   const item = record(value);
-  if (item === undefined || !closed(item, ["type", "techniques", "provenanceNote"]) || !text(item.provenanceNote) || !Array.isArray(item.techniques)) return false;
-  if (item.type !== null) {
-    const type = record(item.type);
-    if (type === undefined
-      || !closed(type, ["id", "label"])
-      || !new Set(["pawn", "rook-and-pawn-vs-rook", "rook", "queen", "minor"]).has(String(type.id))
-      || !text(type.label)) return false;
-  }
-  return item.techniques.every((value) => {
-    const technique = record(value);
-    const provenance = record(technique?.provenance);
-    return technique !== undefined
-      && closed(technique, ["id", "name", "forSide", "provenance", "shapeEntryId"])
-      && new Set(["lucena", "philidor", "vancura"]).has(String(technique.id))
-      && text(technique.name)
-      && (technique.forSide === "attacker" || technique.forSide === "defender")
-      && provenance !== undefined
-      && closed(provenance, ["note"])
-      && text(provenance.note)
-      && text(technique.shapeEntryId);
-  });
+  if (item === undefined || !closed(item, ["fen", "type", "conventionId", "provenanceNote"]) || !validFen(item.fen) || item.conventionId !== "endgame-material-census@1" || !text(item.provenanceNote)) return false;
+  if (item.type === null) return true;
+  const type = record(item.type);
+  return type !== undefined
+    && closed(type, ["id", "label"])
+    && new Set(["pawn", "rook-and-pawn-vs-rook", "rook", "queen", "minor"]).has(String(type.id))
+    && text(type.label);
 }
 
 function moment(value: unknown): value is GameStory["moments"][number] {

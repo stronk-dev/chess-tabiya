@@ -2,6 +2,7 @@ import { isNormal } from "chessops/types";
 import { makeUci, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
+import { LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS, LOCAL_CANDIDATE_READING_PROJECTION_KEYS, candidateChildReadings } from "./candidate-population.js";
 import { BREADTH_COLLECTOR_PROJECTION_IDS, TACTICAL_COLLECTOR_PROJECTION_IDS } from "./evidence-catalog.js";
 import type { DeclaredEvidence, VersionedEvidenceId } from "./evidence-contract.js";
 import type { CandidateCollectorFactories } from "./evidence-factories.js";
@@ -34,10 +35,15 @@ export interface CandidateFeatureVector {
   readonly candidates: readonly CandidateFeatureRow[];
 }
 
-const CANDIDATE_COLLECTOR_IDS = new Set<string>([
-  ...TACTICAL_COLLECTOR_PROJECTION_IDS,
-  ...BREADTH_COLLECTOR_PROJECTION_IDS,
-]);
+/**
+ * The declared tactical/breadth inventory intersected with the candidate packet's code-derived
+ * local closure (rfc/shared-candidate-evidence-packet.md §8.2): the provider-only
+ * `human.maia.candidate_wdl` is not a local collector result and cannot pass this guard.
+ */
+export function candidateCollectorIds(): ReadonlySet<string> {
+  const local = new Set<string>([...LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS, ...LOCAL_CANDIDATE_READING_PROJECTION_KEYS].map((key) => key.slice(0, key.lastIndexOf("@"))));
+  return new Set<string>([...TACTICAL_COLLECTOR_PROJECTION_IDS, ...BREADTH_COLLECTOR_PROJECTION_IDS].filter((id) => local.has(id)));
+}
 
 function fixedBoundEngine(engine: SelectionEngineIdentity): SelectionEngineIdentity {
   if (engine.id.trim() === "" || engine.name.trim() === "" || engine.version.trim() === "") {
@@ -69,6 +75,7 @@ export function candidateCollectorResults(
   if (input.candidates.length === 0) throw new TypeError("Candidate evidence requires at least one candidate");
   const seen = new Set<string>();
   const sources: DeclaredEvidence<unknown>[] = [];
+  const CANDIDATE_COLLECTOR_IDS = candidateCollectorIds();
   const candidates = input.candidates.map((candidate) => {
     if (!Number.isFinite(candidate.scoreCp)) throw new TypeError(`Candidate evidence score is not finite: ${candidate.moveUci}`);
     const move = parseUci(candidate.moveUci);
@@ -81,7 +88,7 @@ export function candidateCollectorResults(
     seen.add(moveUci);
     const events = localSemanticEvents(beforeFen, moveUci, afterFen);
     const declared: DeclaredEvidence<unknown>[] = [
-      ...factories.childReadings(afterFen),
+      ...candidateChildReadings(afterFen),
       ...events.filter((event) => CANDIDATE_COLLECTOR_IDS.has(event.projection.id)).map((event) => event.evidence),
       ...factories.exchange(beforeFen, moveUci),
     ];

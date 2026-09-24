@@ -2,12 +2,17 @@ import { describe, expect, it } from "vitest";
 
 import {
   compileEvidenceManifest,
-  declareEvidence,
+  declareEvidence as declareWithAuthority,
   evidenceForConsumer,
+  identitySealedEvidenceWithoutValueReceipt,
   type CompiledEvidenceManifest,
   type ProjectionDeclaration,
 } from "./evidence-contract.js";
 import { MODULE_TIMING_IMAGE, type ModuleDeclaration } from "./module-contract.js";
+
+// Test-only compiler fixture for the reducer's synthetic manifest (value authority §1).
+const declareEvidence = <T>(producer: { id: string; version: number }, projection: { id: string; version: number }, payload: T) =>
+  declareWithAuthority(producer, projection, payload, { factory: "test:module-reducers-fixture", inputDigest: "0".repeat(64), sourceDigests: [] });
 import {
   ArrayReductionQualityRecorder,
   applyBackstop,
@@ -154,6 +159,8 @@ describe("learner module semantic reducers", () => {
       ? { color: "white", file: "d", nodeId: "n1" }
       : { color: "white", file: "e", nodeId: "n1" }));
     const view = evidenceForConsumer(compiled, consumer, declared);
+    // Identity-sealed but value-unverified wrappers never reach a reducer.
+    expect(() => evidenceForConsumer(compiled, consumer, [identitySealedEvidenceWithoutValueReceipt(producer, { id: ids[0]!, version: 1 }, { color: "white", file: "e", nodeId: "n1" })])).toThrow(/value-authority receipt/u);
     const module = declaration({
       accepts: { kind: "manifest", projections: [
         { projection: { id: ids[0]!, version: 1 } },

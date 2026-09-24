@@ -1,21 +1,12 @@
 import {
   classifyPhase,
   assertConsumerEvidenceView,
-  declareAuthoredClaimEvidence,
-  declareEndgameReadingEvidence,
-  declareNamedStructureEvidence,
-  declarePackPhaseEvidence,
-  declarePhaseReadingEvidence,
-  declarePivotalMarkerEvidence,
-  declareRecordedEngineEvidence,
-  declareRecordedTablebaseEvidence,
-  declareShapeFiringSourceEvidence,
-  declareStructuralReadingSourceEvidence,
-  endgameReading,
+  endgameClassification,
   evidenceForConsumer,
   matchesStructuralExpression,
   pivotalMarkers,
-  renderEndgameReading,
+  positionGuidanceEvidence,
+  renderEndgameClassification,
   renderPivotalMarker,
   renderRecordedReading,
   renderShapeFiring,
@@ -137,12 +128,14 @@ function renderStoryDerived(evidence: DeclaredEvidence<unknown>): readonly strin
   if (evidence.projection.id === "derived.story.title") return one(String(payload.title));
   return one(renderStoryEvaluationChange(payload.after as StoryEvaluation, payload.delta as number));
 }
+const renderMarker = (evidence: DeclaredEvidence<unknown>) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]);
+const PIVOTAL_ROUTES = Object.freeze(["derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@1", "derived.pivotal.human_divergence@1", "derived.pivotal.option_collapse@1"] as const);
 const RENDERERS = Object.freeze({
-  "rules.phase.reading@1": renderGuidancePhase,
+  "rules.phase.reading@2": renderGuidancePhase,
   "pack.authored.phase@1": (evidence: DeclaredEvidence<unknown>) => one(`Rehearsal focus: ${phaseCopy(evidence.payload)}.`),
-  "rules.structural.reading.named_structure@1": renderGuidanceStructure,
-  "rules.pivotal.marker@1": (evidence: DeclaredEvidence<unknown>) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]),
-  "rules.endgame.reading@1": (evidence: DeclaredEvidence<unknown>) => renderEndgameReading(evidence.payload as Parameters<typeof renderEndgameReading>[0]),
+  "rules.structural.reading.named_structure@2": renderGuidanceStructure,
+  ...Object.fromEntries(PIVOTAL_ROUTES.map((route) => [route, renderMarker])),
+  "rules.endgame.classification@1": (evidence: DeclaredEvidence<unknown>) => renderEndgameClassification(evidence.payload as Parameters<typeof renderEndgameClassification>[0]),
   "pack.authored.claim@1": renderGuidanceClaim,
   "theory.shapes.firing@1": (evidence: DeclaredEvidence<unknown>) => renderShapeFiring(evidence.payload as Parameters<typeof renderShapeFiring>[0]),
   "run.record.fork@1": renderRunRecord,
@@ -160,7 +153,7 @@ const RENDERERS = Object.freeze({
 
 export function renderedEvidenceItems(manifest: CompiledEvidenceManifest, consumerId: string, declared: readonly DeclaredEvidence<unknown>[]): RenderedEvidenceView {
   const admitted = evidenceForConsumer(manifest, { id: consumerId, version: 1 }, declared);
-  const renderers = consumerId === "guidance.voice_compare" ? Object.freeze({ ...RENDERERS, "rules.pivotal.marker@1": (evidence: DeclaredEvidence<unknown>) => Object.freeze([`${renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]).join(" ")} Source: Tabiya product convention.`]) }) : RENDERERS;
+  const renderers = consumerId === "guidance.voice_compare" ? Object.freeze({ ...RENDERERS, ...Object.fromEntries(PIVOTAL_ROUTES.map((route) => [route, (evidence: DeclaredEvidence<unknown>) => Object.freeze([`${renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]).join(" ")} Source: Tabiya product convention.`])])) }) : RENDERERS;
   return renderEvidenceItems(admitted, renderers);
 }
 
@@ -173,40 +166,26 @@ export function voiceEvidenceView(packet: EvidencePacket, scope: VoiceScope = "r
   return Object.freeze({ scope, rendered: renderedEvidenceItems(EVIDENCE_MANIFEST, consumerForScope(scope), declared) });
 }
 
-function authoredText(item: AuthoredFeedbackPage["items"][number]): string | undefined {
-  if (item.kind === "annotation") return item.text;
-  if (item.kind === "deviation") return item.note;
-  if (item.kind === "plan_class") return item.description ?? item.label;
-  return undefined;
-}
-
 export function evidencePacket(input: { readonly run: DrillRun; readonly node: Node; readonly pack?: DrillPackDefinition; readonly packEvidence?: PositionEvidenceIndex; readonly authored: AuthoredFeedbackPage; readonly shapes?: ShapeRegistry }): EvidencePacket {
   const reading = structuralReading(input.node.fen);
   const detected = classifyPhase(input.node.fen);
   const phase = input.pack === undefined ? { source: "detector" as const, value: detected.phase } : { source: "author" as const, value: input.pack.phase as PackPhase };
   const markers = pivotalMarkers(input.run, input.node.branchId).filter((marker) => marker.nodeId === input.node.id);
-  const endgame = endgameReading(input.node.fen);
-  const plans = input.shapes === undefined ? [] : input.shapes.list().flatMap((summary) => {
-    const record = input.shapes!.get(summary.id)!;
-    return matchesStructuralExpression(input.node.fen, record.document.trigger) ? [{ id: record.document.id, name: record.document.name, attribution: `${record.channel}:${record.document.provenance.licence}` }] : [];
+  const endgame = endgameClassification(input.node.fen);
+  const shapeRecords = input.shapes === undefined ? [] : input.shapes.list().map((summary) => input.shapes!.get(summary.id)!);
+  const plans = shapeRecords.flatMap((record) => matchesStructuralExpression(input.node.fen, record.document.trigger) ? [{ id: record.document.id, name: record.document.name, attribution: `${record.channel}:${record.document.provenance.licence}` }] : []);
+  const recorded = recordedReadingsAt(input.packEvidence, input.node, input.run);
+  // Every sealed item is minted by its runtime factory from authority inputs, never a payload here.
+  const declared = positionGuidanceEvidence({
+    run: input.run,
+    node: input.node,
+    ...(input.pack === undefined ? {} : { pack: input.pack }),
+    shapes: shapeRecords.map((record) => ({ id: record.document.id, trigger: record.document.trigger })),
+    authored: input.authored.items,
+    recorded,
   });
-  const authored = input.authored.items.flatMap((item) => {
-    const text = authoredText(item);
-    return text === undefined ? [] : [{ id: item.id, text, attribution: `authored:${item.revealedBy.kind}:${item.revealedBy.eventSeq}` }];
-  });
-  const readings = recordedReadingsAt(input.packEvidence, input.node, input.run);
-  const declared = Object.freeze([
-    declarePhaseReadingEvidence(detected),
-    ...(input.pack === undefined ? [] : [declarePackPhaseEvidence(input.pack.phase as PackPhase)]),
-    ...reading.structures.map(declareNamedStructureEvidence),
-    ...reading.features.filter((item) => item.kind !== "pawn_count").map(declareStructuralReadingSourceEvidence),
-    ...markers.map(declarePivotalMarkerEvidence),
-    ...(endgame === null ? [] : [declareEndgameReadingEvidence(endgame)]),
-    ...plans.map((plan) => declareShapeFiringSourceEvidence(Object.freeze({ entryId: plan.id, firstNodeId: input.node.id, lastNodeId: input.node.id, openEnded: true }))),
-    ...authored.map(declareAuthoredClaimEvidence),
-    ...readings.map((item) => item.kind === "engine_eval" ? declareRecordedEngineEvidence(item) : declareRecordedTablebaseEvidence(item)),
-  ]);
-  return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), readings, declared });
+  const authored = declared.filter((item) => item.projection.id === "pack.authored.claim").map((item) => item.payload as { readonly id: string; readonly text: string; readonly attribution: string });
+  return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), readings: Object.freeze(recorded.map((item) => item.payload)), declared });
 }
 
 export function renderRecordedReadingEvidence(view: ConsumerEvidenceView<unknown>): readonly string[] {

@@ -47,7 +47,8 @@ export type RecordedReading =
       readonly values: TablebaseReadingValues;
     };
 
-export type PositionEvidenceIndex = ReadonlyMap<string, readonly RecordedReading[]>;
+/** Transpose-key index of recorded readings, each derived from its exact sealed ledger record. */
+export type PositionEvidenceIndex = ReadonlyMap<string, readonly DeclaredEvidence<RecordedReading>[]>;
 
 export interface EvidencePacket {
   readonly fen: string;
