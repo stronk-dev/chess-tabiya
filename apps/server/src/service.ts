@@ -34,7 +34,7 @@ import {
   isMachineEvidenceRef,
   rewind,
   rewindToCheckpoint,
-  storyMomentSelection,
+  reviewMapProjection,
   storyMoments,
   reviewStoryTitle,
   trajectoryPolicyAt,
@@ -122,6 +122,7 @@ import {
 } from "./authorization.js";
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
+import { recordedSemanticPathOperation } from "./recorded-semantic-path.js";
 import { resolveImportSource, type ImportSource } from "./import-source.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
 
@@ -914,7 +915,46 @@ export class RunService {
   }
 
   story(runId: string, principal: Principal, requestedBranchId?: string) {
-    const run = requireRead(this.#storage, runId, principal).stored.run;
+    const context = this.#storyContext(runId, principal, requestedBranchId, true);
+    return Object.freeze({
+      runId,
+      ready: context.pass.ready,
+      pendingEvidence: context.pass.pending,
+      branchId: context.branchId,
+      side: context.run.start.side,
+      source: context.source,
+      outcome: context.outcome,
+      ...context.projection,
+    });
+  }
+
+  /**
+   * rfc/review-map.md: the whole-game Review Map for one recorded branch. A read-only projection:
+   * it enqueues no evaluation job, writes no event and persists no grade (criterion 14). The per-move
+   * evidence panel consumes the recorded-semantic-path operation (its D1 production consumer).
+   */
+  async review(runId: string, principal: Principal, requestedBranchId?: string) {
+    const context = this.#storyContext(runId, principal, requestedBranchId, false);
+    const semanticPath = await recordedSemanticPathOperation(this.#storage)({ principal, runId, branchId: context.branchId });
+    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath });
+    return Object.freeze({
+      runId,
+      branchId: context.branchId,
+      side: context.run.start.side,
+      ready: context.pass.ready,
+      pendingEvidence: context.pass.pending,
+      source: context.source,
+      outcome: context.outcome,
+      storyTitle: reviewStoryTitle({ side: context.run.start.side, outcome: context.outcome, ...context.projection }),
+      viewer: Object.freeze({ mayWrite: mayWrite(context.role) }),
+      semanticPath: Object.freeze(semanticPath.kind === "available" ? { kind: "available" as const, events: semanticPath.events.length } : { kind: "refused" as const, reason: semanticPath.reason }),
+      ...projection,
+    });
+  }
+
+  #storyContext(runId: string, principal: Principal, requestedBranchId: string | undefined, enqueue: boolean) {
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    const run = stored.run;
     const outcomeEvents = run.events.filter((event): event is Extract<DrillRunEvent,{type:"outcome.reached"}> => event.type === "outcome.reached");
     const recordedMainline = importedMainlineBranchId(run);
     const defaultBranch = recordedMainline ?? [...outcomeEvents].reverse().map((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId).find((id)=>id!==undefined);
@@ -924,7 +964,7 @@ export class RunService {
     if (branchId === undefined || (!importedMainline && branchOutcome === undefined)) throw new ServerError("STORY_UNAVAILABLE","This branch has no terminal story");
     if (!feedbackDisclosed(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal the finished game before opening its story");
     const record = run.sessionKind === "imported" ? this.importRecord(runId, principal) : undefined;
-    const pass = this.#ensureStoryEvidence(run, branchId);
+    const pass = this.#ensureStoryEvidence(run, branchId, enqueue);
     const shapes = this.#shapes?.list().map((summary) => {
       const document = this.#shapes!.required(summary.id).document;
       return { id: document.id, trigger: document.trigger };
@@ -934,20 +974,15 @@ export class RunService {
       ...(shapes === undefined ? {} : { shapes }),
     });
     const terminal = branchOutcome !== undefined;
-    return Object.freeze({
-      runId,
-      ready: pass.ready,
-      pendingEvidence: pass.pending,
-      branchId,
-      side: run.start.side,
+    return {
+      run, role, branchId, record, pass, projection,
       source: record===undefined?Object.freeze({kind:"native" as const}):Object.freeze({ kind: record.sourceKind, ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }), headers: record.headers, result: record.result, importedAt: record.importedAt }),
       outcome: Object.freeze(terminal
         ? { kind: "board_terminal" as const, result: branchOutcome.data.outcome }
         : record?.result === "*" || record===undefined
           ? { kind: "unfinished" as const }
           : { kind: "recorded_result" as const, result: record.result }),
-      ...projection,
-    });
+    };
   }
 
   share(runId:string,principal:Principal,branchId:string,at=new Date().toISOString()){
@@ -959,7 +994,24 @@ export class RunService {
   }
   shares(runId:string,principal:Principal){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may list shares");return this.#storage.publicTokens?.(runId,principal.learnerId).map(({tokenHash:_tokenHash,createdBy:_createdBy,...record})=>record)??[];}
   revokeShare(runId:string,principal:Principal,tokenId:string,at=new Date().toISOString()){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may revoke shares");if(this.#storage.revokePublicToken?.(runId,tokenId,principal.learnerId,at)!==true)throw new ServerError("RUN_NOT_FOUND","Story share not found");return Object.freeze({revoked:true as const,runId,tokenId,revokedAt:at});}
-  publicStory(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record?.scope!=="story_read")throw new ServerError("RUN_NOT_FOUND","Shared story not found");const learner=this.#storage.learnerById(record.createdBy);if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const story=this.story(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId),selection=storyMomentSelection(story);return Object.freeze({title:reviewStoryTitle(story),outcome:story.outcome,selection:Object.freeze({shown:selection.shown,total:selection.total}),moments:selection.moments.map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,sentences:moment.sentences})),productLink:"/play"});}
+  publicStory(token:string){
+    const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));
+    if(record?.scope!=="story_read")throw new ServerError("RUN_NOT_FOUND","Shared story not found");
+    const learner=this.#storage.learnerById(record.createdBy);
+    if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");
+    const context=this.#storyContext(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId,false);
+    // rfc/review-map.md §5 ([[D688]]): the public card reads the same moment selection as the private review.
+    const review=reviewMapProjection({run:context.run,branchId:context.branchId,story:context.projection,context:context.record===undefined?"review":"imported_analysis"});
+    return Object.freeze({
+      title:reviewStoryTitle({side:context.run.start.side,outcome:context.outcome,...context.projection}),
+      outcome:context.outcome,
+      considered:review.considered,
+      momentsSentence:review.momentsSentence,
+      footer:review.footer,
+      moments:review.moments.map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,heading:moment.heading,moveLabel:moment.moveLabel,sentences:moment.sentences,sourceLabels:moment.sourceLabels})),
+      productLink:"/play",
+    });
+  }
 
   async flip(runId:string,principal:Principal,nodeId:string,resistance?:"human_common"|"strong_engine"){
     const access=requireRead(this.#storage,runId,principal);if(!mayWrite(access.role))throw new ServerError("FORBIDDEN","This learner may not create a replay from this run");
@@ -2178,7 +2230,7 @@ export class RunService {
     return Object.freeze({ schedule, result });
   }
 
-  #ensureStoryEvidence(run: DrillRun, branchId: string): { readonly ready: boolean; readonly pending: number; readonly enqueued: number } {
+  #ensureStoryEvidence(run: DrillRun, branchId: string, enqueue = true): { readonly ready: boolean; readonly pending: number; readonly enqueued: number } {
     const path = branchPath(run, branchId);
     const durable = new Set(run.events.flatMap((event) =>
       event.type === "evidence.attached" && event.data.payload.kind === "eval" &&
@@ -2194,7 +2246,7 @@ export class RunService {
     const outstanding = new Set(queue.outstanding(run.id).filter((job) => job.kind === "eval").map((job) => job.nodeId));
     let enqueued = 0;
     for (const node of path) {
-      if (durable.has(node.id) || failed.has(node.id) || outstanding.has(node.id)) continue;
+      if (!enqueue || durable.has(node.id) || failed.has(node.id) || outstanding.has(node.id)) continue;
       queue.enqueue({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "eval", movetime: this.#evidenceMovetimeMs });
       outstanding.add(node.id);
       enqueued += 1;

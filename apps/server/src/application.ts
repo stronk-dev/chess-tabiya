@@ -181,6 +181,7 @@ class MockEvidenceExecutor implements EvidenceExecutor {
           engineId: "mock-evidence",
           requestedMovetimeMs: job.movetime,
           centipawns: 0,
+          perspective: "white",
         }),
       }),
     );

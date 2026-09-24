@@ -65,15 +65,14 @@ A resignation, agreement, or flag remains only the PGN's recorded result; the
 server never fabricates a terminal event for a playable board. `Result "*"` is
 reported as unfinished.
 
-The Story header translates both forms at the presentation boundary. It says **You won**, **You
-lost**, or **Game drawn** from the declared learner side and identifies whether that is a recorded
-PGN result or a board-terminal result. `1-0`, `0-1`, `recorded_result`, and `board_terminal` remain
-wire/export values; an unfinished import says that no final result was recorded.
+The review header keeps the two forms apart. A recorded PGN result is stated as recorded
+(`Recorded result: 1-0.`) — it does not assert that the historic player is the learner
+(rfc/review-map.md §8) — and a board-terminal result is stated for the declared side (`Result on the
+board: loss for White.`); an unfinished line says that it has no recorded result.
 
-On desktop, the selected-position board owns a fixed square field. Longer evidence, narration, or
-return copy scrolls inside the adjacent moment-detail region; it cannot enlarge or resize the board
-column. The chronological moment rail owns its own horizontal overflow. On narrow screens the same
-regions stack into the route's normal vertical reading order.
+The learner-facing surface for both forms is the Review Map (below). On desktop it lays out the
+move list, the selected-position board with its evidence panel, and the moment cards as three
+columns; on narrow screens the same regions stack into the route's normal vertical reading order.
 
 After persistence, the server enqueues one evaluation job per mainline node,
 including the root. An 80-ply game therefore requests 81 jobs; the 300-ply import
@@ -85,7 +84,7 @@ story.
 Evidence remains single-writer. Story reads never apply staged results or acquire a
 lease; the active writer uses the normal evidence endpoint while delivery is open.
 Until every mainline node has durable evaluation or a current recorded failure, the
-story says how many positions remain and disables re-entry.
+review says how many positions remain; grades and accuracy stay coverage-gated meanwhile.
 
 ## Grounded moments
 
@@ -109,10 +108,10 @@ was recorded there.
 Every moment contains deterministic attributed sentences, FEN, ply/SAN, phase,
 and separate `nodeId` and `entryNodeId`. A terminal fact stays grounded at its
 terminal node but enters its playable parent. The payload returns all moments plus
-a deterministic rank. One shared reducer selects the ranked eight for both the
-private and public story, reports the exact selected and eligible counts, then restores game
-chronology for display. Both surfaces state the denominator whenever the selection is bounded;
-sharing can therefore neither silently omit a reviewed moment nor promote an unrelated early moment.
+a deterministic rank. The Review Map's single selector (`selectReviewMoments`) walks that rank and
+keeps at most three moments, one per represented phase, then restores game chronology. The private
+review, the public share and the downloadable card all read that one selection, so their moment ids
+and order are byte-identical; each states the denominator of admitted story moments.
 An irreversibility-only marker is the selector's final family. If that same moment also carries a
 stronger grounded signal such as an outcome or evaluation pivot, the stronger family still decides
 selection. Irreversibility remains available as evidence, but its high-volume marker cannot crowd a
@@ -131,8 +130,9 @@ rules or authored-catalogue fact as engine analysis.
 
 ## Re-entry and export
 
-The story is not a read-only review. Selecting a moment claims the run's writer
-lease for the current device, rewinds to its `entryNodeId`, and explicitly creates
+The review is not read-only. `Retry from here` — on every move-list row (entering the position
+before that move) and on every moment card (entering its `entryNodeId`) — claims the run's writer
+lease for the current device, rewinds to the entry node, and explicitly creates
 a `story-reentry` branch before opening the run screen. Creating the branch
 immediately preserves the imported continuation even when the selected moment is
 the original leaf; claiming the lease makes the primary action work when the story
@@ -143,15 +143,14 @@ branch-group machinery.
 That three-stage action owns one retained subject. The client observes a provisional writer
 without storing it, persists that writer only after the server confirms the lease, and validates
 that both the rewind and the new `story-reentry` branch describe the requested run and entry node.
-A response completing after the learner leaves the Story may finish the requested server mutation,
-but it cannot navigate from the learner's newer route. Lease rejection leaves no local writer claim,
-and every failure returns to the same bounded, retryable Story action without provider diagnostics.
+A response completing after the learner leaves the review may finish the requested server mutation,
+but it cannot navigate from the learner's newer route. Lease rejection leaves no local writer claim.
+A viewer without write access sees every Retry control disabled with its stated reason, and a failed
+attempt (another learner holds the board, access denied, anything else) renders its reason beside
+the control instead of throwing.
 
-Before that action, the selected moment frames the return from only the recorded game result,
-the learner's declared side, and the exact ply. It says whether the learner won, lost, drew, or
-has no recorded result and invites them to pick the game up at that move. It never reveals or
-infers an evaluation. The action is learner-facing “Pick it up from here”; `story-reentry` remains
-an internal branch kind rather than interface vocabulary.
+The action is learner-facing “Retry from here”; `story-reentry` remains an internal branch kind
+rather than interface vocabulary.
 
 Imported-run PGN export defaults to all branches. It retains Tabiya's run/session
 headers, restores the original White, Black, Date, and Result, records the original
@@ -177,6 +176,39 @@ Provider and storage diagnostics never become learner-facing copy.
 
 Boards use the learner's declared orientation. Re-entry is browser-tested
 end to end: paste, derive, reveal, select, branch, play, and export.
+
+## Review Map
+
+`GET /runs/:id/review` (rfc/review-map.md) is the whole-game Review Map for the same branch the
+story reads, rendered at `/review/game/:runId` by `ReviewMapScreen`. It is a read-only, recomputed
+projection (`reviewMapProjection` in `packages/runtime/src/review-map.ts`): the read enqueues no
+evaluation job, writes no event and persists no grade.
+
+- **Move list.** Every ply of the line, with number, SAN and side. SAN is regenerated from the
+  legal move, so third-party annotation glyphs, NAGs and comments in a pasted PGN (which the import
+  record keeps verbatim) never reach this surface.
+- **Grades.** Each move is graded from the mover's side by the `derived.grade.move_quality@1`
+  producer — the shipped grader's only production caller — on the `report` ladder (context
+  `imported_analysis` for imports, `review` for native runs) from the two recorded evaluations
+  around the move, compared only when engine and requested search limit match. Below threshold
+  nothing is emitted, so most rows carry no chip, and a chip is always the complete grounding
+  sentence: both evaluations, the drop, the threshold and `grade-convention@1/<context>`.
+- **Accuracy.** Per side, `100 − mean(max(0, dropWinPercent))` over that side's decisions through
+  the one exported `winPercentFromCp`. It renders only when every decision of that side has paired
+  recorded evaluations; otherwise it abstains and states the evaluated fraction.
+- **Moments.** Up to three, one per represented phase, from the story rank; zero is a stated outcome.
+- **Evidence panel.** For the selected move: the grade (or why there is none), the recorded
+  evaluation with its engine and search limit, any story sentences at that node, and the detectors
+  the recorded-semantic-path compiler fired from that move (its first production consumer). The
+  per-position review packet of the draft `review-evidence-compiler` is shown as an explicit
+  abstention.
+- **Prose.** Every authored string is a registered template (`REVIEW_MAP_TEMPLATES`); none carries a
+  judgement word. The footer names the grounding sources of the admitted items actually on the page.
+  No best move, principal variation or praise class appears.
+
+`voiceCheck` enforces licence-by-span for judgement words ([[D1409]]): a judgement word is valid only
+inside a byte-exact grounding sentence of the rendered view, never elsewhere in the output. Squares,
+moves, chess nouns and prescriptive verbs remain packet-relative pending [[D1419]]'s follow-up.
 
 ## Limits
 

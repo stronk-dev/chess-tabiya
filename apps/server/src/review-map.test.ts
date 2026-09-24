@@ -1,0 +1,217 @@
+// rfc/review-map.md — server acceptance through `createApplication` (the production boundary).
+
+import { mkdtempSync, rmSync } from "node:fs";
+import type { AddressInfo } from "node:net";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { DatabaseSync } from "node:sqlite";
+
+import { afterEach, describe, expect, it } from "vitest";
+
+import { createApplication, type ChessTabiyaApplication } from "./application.js";
+import { RunService } from "./service.js";
+import { SQLiteRunStorage } from "./storage.js";
+import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
+
+// A pasted broadcast-style PGN: third-party SAN glyphs outside comments, a NAG, and a third-party
+// eval comment. None of it may reach the review surface (§8).
+const GLYPHED_PGN = `[Event "Broadcast"]
+[Site "?"]
+[White "Alice"]
+[Black "Bob"]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3?! Nc6 3. Bb5 a6?? 4. Ba4 Nf6! 5. O-O Be7 $2 6. Re1 b5 {[%eval 5.2] Stockfish says this loses} 7. Bb3 d6? 8. c3 O-O 9. h3 Nb8!? 10. d4 Nbd7 11. Nbd2 Bb7 12. Bc2 Re8 13. Nf1 Bf8 14. Ng3 g6 15. a4 c5 16. d5 c4 17. Bg5 h6 18. Be3 Nc5 19. Qd2 h5 20. Bg5 Be7 1-0`;
+const PLIES = 40;
+const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
+
+interface ReviewPayload {
+  readonly branchId: string;
+  readonly ready: boolean;
+  readonly viewer: { readonly mayWrite: boolean };
+  readonly semanticPath: { readonly kind: string };
+  readonly rows: readonly { readonly nodeId: string; readonly entryNodeId: string; readonly san: string; readonly ply: number; readonly grade?: { readonly sentence: string }; readonly facts: readonly string[] }[];
+  readonly moments: readonly { readonly nodeId: string; readonly entryNodeId: string }[];
+  readonly accuracy: { readonly white: { readonly kind: string; readonly sentence: string; readonly value?: number }; readonly black: { readonly kind: string } };
+  readonly footer: { readonly sentence: string };
+}
+
+function tableSnapshot(path: string): Readonly<Record<string, number>> {
+  const database = new DatabaseSync(path, { readOnly: true });
+  try {
+    const tables = (database.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all() as { name: string }[]).map((row) => row.name);
+    return Object.fromEntries(tables.map((name) => [name, (database.prepare(`SELECT count(*) AS count FROM "${name.replaceAll("\"", "\"\"")}"`).get() as { count: number }).count]));
+  } finally {
+    database.close();
+  }
+}
+
+function eventKinds(path: string, runId: string): readonly string[] {
+  const database = new DatabaseSync(path, { readOnly: true });
+  try {
+    const row = database.prepare("SELECT snapshot_json FROM drill_runs WHERE id=?").get(runId) as { snapshot_json: string };
+    return (JSON.parse(row.snapshot_json) as { events: { type: string }[] }).events.map((event) => event.type);
+  } finally {
+    database.close();
+  }
+}
+
+describe("review map through createApplication", { timeout: 30_000 }, () => {
+  let application: ChessTabiyaApplication | undefined;
+  let directory: string | undefined;
+  afterEach(async () => {
+    await application?.close();
+    application = undefined;
+    if (directory !== undefined) rmSync(directory, { recursive: true, force: true });
+    directory = undefined;
+  });
+
+  async function start(): Promise<{ origin: string; databasePath: string }> {
+    directory = mkdtempSync(join(tmpdir(), "tabiya-review-map-"));
+    const databasePath = join(directory, "review.sqlite");
+    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath });
+    await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
+    return { origin: `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`, databasePath };
+  }
+
+  async function register(origin: string, handle: string): Promise<string> {
+    const response = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle, password: `${handle}-password-long` }) });
+    expect(response.status).toBe(201);
+    return response.headers.get("set-cookie")!.split(";", 1)[0]!;
+  }
+
+  async function importReviewedGame(origin: string, cookie: string, writer: string): Promise<string> {
+    const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": writer }, body: JSON.stringify(body) });
+    const imported = await post("/runs/import", { id: "review-import", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 7, source: { kind: "pgn", pgn: GLYPHED_PGN } });
+    expect(imported.status, await imported.clone().text()).toBe(201);
+    const runId = "review-import";
+    expect((await post(`/runs/${runId}/reveal`, {})).status).toBe(200);
+    let results: { seq: number }[] = [];
+    for (let attempt = 0; attempt < 100 && results.length < PLIES + 1; attempt += 1) {
+      results = ((await (await fetch(`${origin}/runs/${runId}/evidence?sinceSeq=0`, { headers: { cookie } })).json()) as { results: { seq: number }[] }).results;
+      if (results.length < PLIES + 1) await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    expect(results.length).toBeGreaterThanOrEqual(PLIES + 1);
+    for (const result of results) expect((await post(`/runs/${runId}/evidence`, { resultSeq: result.seq })).status).toBe(200);
+    return runId;
+  }
+
+  it("serves every ply, glyph-free, with coverage-gated accuracy; writes nothing; one projection feeds share; retry forks before opening", async () => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "review_owner");
+    const runId = await importReviewedGame(origin, cookie, "writer-review");
+    const read = async (): Promise<ReviewPayload> => {
+      const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+      expect(response.status, await response.clone().text()).toBe(200);
+      return await response.json() as ReviewPayload;
+    };
+
+    // [criterion 14] nothing persisted: every table and the run's event log are unchanged by review reads.
+    const before = tableSnapshot(databasePath);
+    const eventsBefore = eventKinds(databasePath, runId);
+    const review = await read();
+    await read();
+    expect(tableSnapshot(databasePath)).toEqual(before);
+    expect(eventKinds(databasePath, runId)).toEqual(eventsBefore);
+
+    // [criterion 1] every ply; [§8] third-party glyphs, NAGs and eval comments never reach the payload.
+    expect(review.rows).toHaveLength(PLIES);
+    expect(review.rows.map((row) => row.ply)).toEqual(Array.from({ length: PLIES }, (_, index) => index + 1));
+    const serialized = JSON.stringify({ rows: review.rows, moments: review.moments, accuracy: review.accuracy, footer: review.footer });
+    for (const glyph of ["?!", "??", "!?", "$2", "%eval", "5.2", "Stockfish says", "loses"]) expect(serialized).not.toContain(glyph);
+    expect(review.rows.map((row) => row.san).slice(0, 6)).toEqual(["e4", "e5", "Nf3", "Nc6", "Bb5", "a6"]);
+    expect(review.rows.every((row) => !/[?!]/u.test(row.san))).toBe(true);
+
+    // [criterion 6] imported game: full recorded coverage, so accuracy renders with its denominator.
+    expect(review.ready).toBe(true);
+    expect(review.accuracy.white).toMatchObject({ kind: "rendered", value: 100 });
+    expect(review.accuracy.white.sentence).toContain("across all 20 of White's evaluated decisions");
+    expect(review.rows.filter((row) => row.grade !== undefined)).toEqual([]);
+    expect(review.semanticPath.kind).toBe("available");
+    expect(review.viewer.mayWrite).toBe(true);
+    expect(review.footer.sentence).toMatch(/^Sources on this review: Recorded game · Recorded engine analysis/u);
+
+    // [criterion 8] the public share reads the same moment ids in the same order.
+    const shared = await fetch(`${origin}/runs/${runId}/share`, { method: "POST", headers: { "content-type": "application/json", cookie }, body: JSON.stringify({ branchId: review.branchId }) });
+    expect(shared.status).toBe(201);
+    const token = (await shared.json() as { token: string }).token;
+    const publicStory = await (await fetch(`${origin}/api/shared/${token}/story`)).json() as { moments: { nodeId: string }[] };
+    expect(publicStory.moments.map((moment) => moment.nodeId)).toEqual(review.moments.map((moment) => moment.nodeId));
+    const card = await (await fetch(`${origin}/shared/${token}`)).text();
+    expect(card).not.toContain(["rendered from recorded", "engine evidence"].join(" "));
+    expect(card).toContain("Sources on this review:");
+
+    // [criterion 4] Retry from here forks a story-reentry branch before opening; the original line survives.
+    const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "writer-other-device" }, body: JSON.stringify(body) });
+    const graphBefore = (await (await fetch(`${origin}/runs/${runId}/graph`, { headers: { cookie } })).json() as { graph: { branches: { id: string }[]; nodes: { id: string; branchId: string }[] } }).graph;
+    const mainline = graphBefore.nodes.filter((node) => node.branchId === review.branchId).map((node) => node.id);
+    const targets = [review.rows[10]!.entryNodeId, review.rows.at(-1)!.entryNodeId, ...review.moments.map((moment) => moment.entryNodeId)];
+    for (const [index, entry] of targets.entries()) {
+      // A second device: it has no stored writer id; the lease is claimed with its own.
+      expect((await post(`/runs/${runId}/lease`, {})).status).toBe(200);
+      expect((await post(`/runs/${runId}/rewind`, { nodeId: entry })).status).toBe(200);
+      const fork = await post(`/runs/${runId}/fork`, { nodeId: entry, label: "story-reentry", intent: `Retry ${index}` });
+      expect(fork.status, await fork.clone().text()).toBe(200);
+    }
+    const graphAfter = (await (await fetch(`${origin}/runs/${runId}/graph`, { headers: { cookie } })).json() as { graph: { branches: { id: string; label: string }[]; nodes: { id: string; branchId: string }[] } }).graph;
+    expect(graphAfter.branches.filter((branch) => branch.label === "story-reentry")).toHaveLength(targets.length);
+    expect(graphAfter.branches.map((branch) => branch.id)).toContain(review.branchId);
+    expect(graphAfter.nodes.filter((node) => node.branchId === review.branchId).map((node) => node.id)).toEqual(mainline);
+    expect((await read()).rows).toHaveLength(PLIES);
+  });
+});
+
+describe("review map service boundary", () => {
+  const stores: SQLiteRunStorage[] = [];
+  afterEach(() => { for (const store of stores.splice(0)) store.close(); });
+
+  it("[criterion 5] tells a read-only viewer that retry is unavailable instead of offering a dead control", async () => {
+    const at = "2026-09-24T12:00:00.000Z";
+    const executor: EvidenceExecutor = { async execute(job) { return { kind: "eval", source: "engine_validated", values: { centipawns: 0, perspective: "white", engineId: "mock", requestedMovetimeMs: job.movetime } }; } };
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {}, now: () => at });
+    stores.push(storage);
+    storage.createLearner({ id: "owner", handle: "owner", passwordHash: "!", createdAt: at });
+    storage.createLearner({ id: "reader", handle: "reader", passwordHash: "!", createdAt: at });
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const owner = { learnerId: "owner", handle: "owner" } as const;
+    const imported = await service.importGame({ id: "shared-review", side: "black", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: GLYPHED_PGN } }, { writerId: "owner-writer", learnerId: "owner" });
+    await queue.whenIdle();
+    service.reveal(imported.run.id, owner, "owner-writer");
+    for (const result of queue.page(imported.run.id).results) service.applyEvidence(imported.run.id, owner, "owner-writer", result.seq);
+    storage.grantRole(imported.run.id, "reader", "spectator", { writerId: "owner-writer", learnerId: "owner" }, at);
+    const asOwner = await service.review(imported.run.id, owner);
+    const asReader = await service.review(imported.run.id, { learnerId: "reader", handle: "reader" });
+    expect(asOwner.viewer.mayWrite).toBe(true);
+    expect(asReader.viewer.mayWrite).toBe(false);
+    expect(asReader.rows.map((row) => row.nodeId)).toEqual(asOwner.rows.map((row) => row.nodeId));
+    expect(() => service.claimLease(imported.run.id, { learnerId: "reader", handle: "reader" }, "reader-writer")).toThrowError(expect.objectContaining({ code: "FORBIDDEN" }));
+    await expect(service.review(imported.run.id, { learnerId: "stranger", handle: "stranger" })).rejects.toMatchObject({ code: "RUN_NOT_FOUND" });
+  });
+
+  it("[criterion 6] a line whose evaluation pass has not completed abstains and states the fraction; the read enqueues nothing", async () => {
+    const at = "2026-09-24T12:00:00.000Z";
+    let executed = 0;
+    const executor: EvidenceExecutor = { async execute(job) { executed += 1; return { kind: "eval", source: "engine_validated", values: { centipawns: 0, engineId: "mock", requestedMovetimeMs: job.movetime } }; } };
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {}, now: () => at });
+    stores.push(storage);
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const imported = await service.importGame({ id: "pending-review", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: GLYPHED_PGN } }, "writer");
+    await queue.whenIdle();
+    service.reveal(imported.run.id, "writer");
+    // Apply only the first eight results: the rest of the line has no durable evaluation.
+    for (const result of queue.page(imported.run.id).results.slice(0, 8)) service.applyEvidence(imported.run.id, "writer", result.seq);
+    const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
+    const runs = executed;
+    const outstanding = queue.outstanding(imported.run.id).length;
+    const review = await service.review(imported.run.id, principal);
+    await queue.whenIdle();
+    expect(executed).toBe(runs);
+    expect(queue.outstanding(imported.run.id)).toHaveLength(outstanding);
+    expect(review.ready).toBe(false);
+    expect(review.accuracy.white.kind).toBe("abstained");
+    expect(review.accuracy.white.sentence).toMatch(/^White: no accuracy figure\. \d+ of 20 of White's decisions have paired recorded evaluations/u);
+    expect(review.coverage.sentence).toBe(`Evaluation coverage: 8 of ${PLIES + 1} positions on this line carry a recorded engine evaluation.`);
+  });
+});

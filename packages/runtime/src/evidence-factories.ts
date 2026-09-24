@@ -34,6 +34,8 @@ import { kingZoneEvents, kingZoneReading } from "./king-state.js";
 import { exactLegalMoveMap, exactMoveIdentity } from "./legal-moves.js";
 import { materialRoleAsymmetryEvent, materialRoleSignatureReading } from "./material-state.js";
 import { forcedMateAfterMove } from "./mate-proof.js";
+import { moveQualityGrade, type GradeContext, type GradeSide, type MoveQualityGrade } from "./grade.js";
+import { gradeReadingFromPayload } from "./grade-reading.js";
 import { pieceDestinationEvents, pieceDestinationsReading } from "./mobility.js";
 import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReading, pawnContactTimingSequence, pawnDynamicsEvents, pawnTransitionEvents, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { developmentReading, phaseBandReading } from "./phase.js";
@@ -1231,10 +1233,24 @@ export const createTheoryEndgameSetupMatchV1Evidence = (() => {
 // No-route projections gaining factories (§4): unavailable until their upstream authority lands
 // ---------------------------------------------------------------------------------------------
 
+const GRADE_CONTEXTS: ReadonlySet<unknown> = new Set(["drill", "review", "imported_analysis"]);
+const isGradeSide = (candidate: unknown): candidate is GradeSide => candidate === "white" || candidate === "black";
+
+/**
+ * rfc/move-quality-grades.md D1 / rfc/review-map.md §3: the single production caller of the shipped
+ * grader. It grades one move from two sealed evaluation readings of the positions before and after it,
+ * from the mover's side, under the context's ladder. Below threshold it emits nothing ("good is the
+ * absence of a grade"); an abstention is returned as an unavailable reason, never as a class.
+ */
 export const createDerivedGradeMoveQualityV1Evidence = (() => {
   const route = "derived.grade.move_quality@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("recorded.engine.eval@1", "live.stockfish.eval@1"), after: sealed("recorded.engine.eval@1", "live.stockfish.eval@1") }], result: "availability", dependency: "provider-exchange-and-execution", pending: "Paired-instrument identity (engine, lane, search limit) needs the accepted exchange receipt; the grade stays honest-unavailable." }, (): EvidenceAvailability<DeclaredEvidence<unknown>> => unavailable("paired_instrument_receipt_unavailable", "provider-exchange-and-execution"));
+  return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("recorded.engine.eval@1", "live.stockfish.eval@1"), after: sealed("recorded.engine.eval@1", "live.stockfish.eval@1"), mover: value("the moving side", isGradeSide), context: value("a grade context", (candidate) => GRADE_CONTEXTS.has(candidate)) }], result: "availability", dependency: "provider-exchange-and-execution", pending: "Paired-instrument identity (engine id, lane, requested search limit) is checked value-for-value from the two sealed readings; the provider exchange receipt that would attest each request lands with provider-exchange-and-execution." }, ({ before, after, mover, context }: { readonly before: DeclaredEvidence<unknown>; readonly after: DeclaredEvidence<unknown>; readonly mover: GradeSide; readonly context: GradeContext }): EvidenceAvailability<readonly DeclaredEvidence<MoveQualityGrade>[]> => {
+    const result = moveQualityGrade(gradeReadingFromPayload(before.payload, mover), gradeReadingFromPayload(after.payload, mover === "white" ? "black" : "white"), context, mover);
+    if (result === undefined) return available(Object.freeze([]));
+    if ("abstained" in result) return unavailable(result.reason);
+    return available(Object.freeze([mint(route, symbol, result, { mover, context }, [before, after])]));
+  });
 })();
 
 export const createTheoryOpeningCurrentEndpointV1Evidence = (() => {

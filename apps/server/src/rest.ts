@@ -16,6 +16,7 @@ import {
   comparisonStrips,
   suggestTitle,
   storyDeclaredEvidence,
+  reviewText,
   trajectoryPolicyAt,
   RUN_OPPONENT_MODES,
   type OpponentSelection,
@@ -697,7 +698,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -988,9 +989,9 @@ export function createRestHandler(
         const token=decodeURIComponent(publicCardRoute[1]!);
         const escape = escapeHtml;
         try{
-          const card=service.publicStory(token),moments=card.moments.map((moment) => `<li>${escape(moment.sentences.join(" "))}</li>`).join("");
-          const budget=card.selection.shown<card.selection.total?`<p>Showing ${card.selection.shown} of ${card.selection.total} recorded moments selected for this story.</p>`:"";
-          return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}${budget}<ol>${moments}</ol><a href="${escape(card.productLink)}">Rehearse positions in Tabiya</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
+          const card=service.publicStory(token),moments=card.moments.map((moment) => `<li><h2>${escape(moment.heading)}</h2><p>${escape(moment.moveLabel)}</p>${moment.sentences.map((sentence)=>`<p>${escape(sentence)}</p>`).join("")}<p>${escape(reviewText("moment.sources",{labels:moment.sourceLabels.join(" · ")}))}</p></li>`).join("");
+          const selection=card.moments.length===0?card.momentsSentence:reviewText("public.selection",{shown:card.moments.length,considered:card.considered});
+          return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}<p>${escape(selection)}</p><ol>${moments}</ol><p>${escape(card.footer.sentence)}</p><a href="${escape(card.productLink)}">${escape(reviewText("public.link"))}</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
         }catch{
           try{if(live===undefined)throw new Error();return sessionJoinPage(token,live.publicJoin(token));}catch{return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});}
         }
@@ -1373,6 +1374,9 @@ export function createRestHandler(
       }
       if (request.method === "GET" && route.action === "story") {
         return json(200, service.story(route.runId, principal, url.searchParams.get("branch") ?? undefined));
+      }
+      if (request.method === "GET" && route.action === "review") {
+        return json(200, await service.review(route.runId, principal, url.searchParams.get("branch") ?? undefined));
       }
       if (request.method === "GET" && route.action === "share") {
         return json(200, { shares: service.shares(route.runId, principal) });

@@ -3,7 +3,7 @@
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { SILENT_ASSISTANCE, commitMove, createRun, fork as forkRun, rewind as rewindRun } from "@chess-tabiya/runtime";
+import { REVIEW_MAP_CONVENTION, SILENT_ASSISTANCE, commitMove, createRun, fork as forkRun, rewind as rewindRun } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -29,7 +29,7 @@ import type {
   RunPage,
   RunSummary,
   ShapeDraft,
-  GameStory,
+  ReviewMap,
   DeletionPreview,
   Learner,
 } from "./api.js";
@@ -38,6 +38,26 @@ import { HistoryRouter } from "./router.js";
 import { WriterSession, writerStorageKey, type KeyValueStorage } from "./writer-session.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
+const E4_FEN = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
+/** A minimal valid Review Map payload with one moment card (rfc/review-map.md). */
+function reviewPayload(options: { readonly runId: string; readonly branchId: string; readonly source: ReviewMap["source"]; readonly ready?: boolean; readonly nodeId?: string; readonly entryNodeId?: string; readonly ply?: number; readonly fen?: string }): ReviewMap {
+  const ready = options.ready ?? true;
+  return {
+    runId: options.runId, branchId: options.branchId, side: "white", ready, pendingEvidence: ready ? 0 : 1,
+    source: options.source, outcome: { kind: "unfinished" }, storyTitle: "A game story at move 1",
+    viewer: { mayWrite: true }, semanticPath: { kind: "available", events: 0 },
+    convention: REVIEW_MAP_CONVENTION, context: "review", rows: [],
+    moments: [{ nodeId: options.nodeId ?? "moment-1", entryNodeId: options.entryNodeId ?? "entry-1", ply: options.ply ?? 1, san: "e4", fen: options.fen ?? E4_FEN, phase: "opening", kinds: ["eval_pivot"], heading: "Evaluation shift", moveLabel: "Move 1 · e4", sentences: ["A recorded fact."], sourceLabels: ["Recorded engine analysis"], sourcesSentence: "Sources: Recorded engine analysis." }],
+    momentsSentence: "Up to three recorded moments, at most one per game phase, from 1 admitted story moments. This is not a ranking of the play.", considered: 1,
+    accuracy: {
+      white: { side: "white", kind: "no_decisions", decisions: 0, evaluated: 0, sentence: "White: no accuracy figure, because White made no move on this line." },
+      black: { side: "black", kind: "no_decisions", decisions: 0, evaluated: 0, sentence: "Black: no accuracy figure, because Black made no move on this line." },
+    },
+    coverage: { evaluated: 0, positions: 1, sentence: "Evaluation coverage: 0 of 1 positions on this line carry a recorded engine evaluation." },
+    footer: { labels: ["Recorded game"], sentence: "Sources on this review: Recorded game." },
+  };
+}
+
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const digest = `sha256:${"a".repeat(64)}`;
 const run = createRun({
@@ -246,22 +266,12 @@ afterEach(() => {
 describe("application shell", () => {
   it("offers imported-story narration only after persona voice is selected", async () => {
     history.replaceState(null, "", "/review/game/route-run");
-    const story: GameStory = {
-      runId: "route-run",
-      ready: true,
-      pendingEvidence: 0,
-      branchId: "main",
-      side: "white",
-      source: { kind: "pgn_paste", headers: { White: "Ada", Black: "Mina" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
-      outcome: { kind: "unfinished" },
-      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [], evidence: [], phase: "opening" }],
-      rank: ["moment-1"],
-    };
+    const story = reviewPayload({ runId: "route-run", branchId: "main", source: { kind: "pgn_paste", headers: { White: "Ada", Black: "Mina" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" } });
     const voice = vi.fn(async () => ({ text: "Grounded narration.", source: "provider" as const, scope: "story" as const }));
     const storyApi: DrillClientApi = {
       ...api(),
       async capabilities() { return { ...capabilities, providers: { ...capabilities.providers, llm: "external" } }; },
-      async story() { return story; },
+      async review() { return story; },
       voice,
     };
 
@@ -288,27 +298,7 @@ describe("application shell", () => {
 
   it("keeps a crossed Story document and share receipt out of the route, then retries the same game", async () => {
     history.replaceState(null, "", "/review/game/route-run");
-    const valid: GameStory = {
-      runId: "route-run",
-      ready: true,
-      pendingEvidence: 0,
-      branchId: "main",
-      side: "white",
-      source: { kind: "native" },
-      outcome: { kind: "unfinished" },
-      moments: [{
-        nodeId: "moment-1",
-        entryNodeId: "entry-1",
-        ply: 1,
-        san: "e4",
-        fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
-        kinds: ["eval_pivot"],
-        sentences: [],
-        evidence: [],
-        phase: "opening",
-      }],
-      rank: ["moment-1"],
-    };
+    const valid = reviewPayload({ runId: "route-run", branchId: "main", source: { kind: "native" } });
     let storyReads = 0;
     const shareStory = vi.fn(async () => ({
       id: "crossed-share",
@@ -325,7 +315,7 @@ describe("application shell", () => {
       props: {
         api: {
           ...api(),
-          async story() {
+          async review() {
             storyReads += 1;
             return storyReads === 1 ? { ...valid, runId: "another-run" } : valid;
           },
@@ -339,15 +329,15 @@ describe("application shell", () => {
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("This page could not be loaded. Check your connection and try again."));
     expect(location.pathname).toBe("/review/game/route-run");
-    expect(document.body.textContent).not.toContain("Story of this run");
+    expect(document.body.textContent).not.toContain("Review of this run");
     [...document.querySelectorAll<HTMLButtonElement>("button")]
       .find((button) => button.textContent === "Try again")!
       .click();
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Story of this run"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Review of this run"));
     expect(storyReads).toBe(2);
 
     [...document.querySelectorAll<HTMLButtonElement>("button")]
-      .find((button) => button.textContent === "Share story")!
+      .find((button) => button.textContent === "Share review")!
       .click();
     await vi.waitFor(() => expect(document.querySelector(".share-management [role='alert']")?.textContent).toContain("could not be created"));
     expect(document.body.textContent).not.toContain("/shared/crossed-token");
@@ -358,23 +348,13 @@ describe("application shell", () => {
   it("keeps the newest Story poll when an older refresh resolves last", async () => {
     vi.useFakeTimers();
     history.replaceState(null, "", "/review/game/route-run");
-    const storyWith = (white: string, ready: boolean): GameStory => ({
-      runId: "route-run",
-      ready,
-      pendingEvidence: ready ? 0 : 1,
-      branchId: "main",
-      side: "white",
-      source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
-      outcome: { kind: "unfinished" },
-      moments: [{ nodeId: "moment-1", entryNodeId: "entry-1", ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [], evidence: [], phase: "opening" }],
-      rank: ["moment-1"],
-    });
-    const older = deferred<GameStory>();
-    const newer = deferred<GameStory>();
+    const storyWith = (white: string, ready: boolean): ReviewMap => reviewPayload({ runId: "route-run", branchId: "main", ready, source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" } });
+    const older = deferred<ReviewMap>();
+    const newer = deferred<ReviewMap>();
     let storyCalls = 0;
     const storyApi: DrillClientApi = {
       ...api(),
-      async story() {
+      async review() {
         storyCalls += 1;
         if (storyCalls === 1) return storyWith("Initial", false);
         if (storyCalls === 2) return older.promise;
@@ -406,17 +386,7 @@ describe("application shell", () => {
 
   it("does not publish a departed Story share into the next game", async () => {
     history.replaceState(null, "", "/review/game/route-run");
-    const storyWith = (runId: string, white: string): GameStory => ({
-      runId,
-      ready: true,
-      pendingEvidence: 0,
-      branchId: `branch-${runId}`,
-      side: "white",
-      source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" },
-      outcome: { kind: "unfinished" },
-      moments: [{ nodeId: `moment-${runId}`, entryNodeId: `entry-${runId}`, ply: 1, san: "e4", fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", kinds: ["eval_pivot"], sentences: [], evidence: [], phase: "opening" }],
-      rank: [`moment-${runId}`],
-    });
+    const storyWith = (runId: string, white: string): ReviewMap => reviewPayload({ runId, branchId: `branch-${runId}`, nodeId: `moment-${runId}`, entryNodeId: `entry-${runId}`, source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" } });
     const oldShare = deferred<import("./api.js").CreatedStoryShare>();
     const storyShares = vi.fn(async (runId: string) => runId === "other-run" ? [{
       id: "other-share", scope: "story_read" as const, runId, branchId: "branch-other-run",
@@ -425,7 +395,7 @@ describe("application shell", () => {
     const shareStory = vi.fn(() => oldShare.promise);
     const storyApi: DrillClientApi = {
       ...api(),
-      async story(runId) { return storyWith(runId, runId === "route-run" ? "Old game" : "Current game"); },
+      async review(runId) { return storyWith(runId, runId === "route-run" ? "Old game" : "Current game"); },
       storyShares,
       shareStory,
       async revokeStoryShare(runId, tokenId) {
@@ -436,11 +406,11 @@ describe("application shell", () => {
     const component = mount(App, { target: target(), props: { api: storyApi, router, storage: new MemoryStorage() } });
     await vi.waitFor(() => expect(document.body.textContent).toContain("Old game – Black"));
 
-    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Share story")!.click();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Share review")!.click();
     await vi.waitFor(() => expect(shareStory).toHaveBeenCalledWith("route-run", "branch-route-run"));
     router.navigate("/review/game/other-run");
     await vi.waitFor(() => expect(document.body.textContent).toContain("Current game – Black"));
-    expect(document.querySelectorAll("[aria-label='Story share links'] li")).toHaveLength(1);
+    expect(document.querySelectorAll("[aria-label='Review share links'] li")).toHaveLength(1);
 
     oldShare.resolve({
       id: "departed-share",
@@ -457,41 +427,21 @@ describe("application shell", () => {
     expect(storyShares.mock.calls.map(([runId]) => runId)).toEqual(["route-run", "other-run"]);
     expect(document.body.textContent).toContain("Current game – Black");
     expect(document.body.textContent).not.toContain("/stories/departed");
-    expect(document.querySelectorAll("[aria-label='Story share links'] li")).toHaveLength(1);
+    expect(document.querySelectorAll("[aria-label='Review share links'] li")).toHaveLength(1);
     await unmount(component);
   });
 
   it("does not persist Story writer authority when taking the lease fails", async () => {
     history.replaceState(null, "", "/review/game/route-run");
     const storage = new MemoryStorage();
-    const story: GameStory = {
-      runId: "route-run",
-      ready: true,
-      pendingEvidence: 0,
-      branchId: run.branches[0]!.id,
-      side: "white",
-      source: { kind: "native" },
-      outcome: { kind: "unfinished" },
-      moments: [{
-        nodeId: run.nodes[0]!.id,
-        entryNodeId: run.nodes[0]!.id,
-        ply: 0,
-        san: null,
-        fen: run.nodes[0]!.fen,
-        kinds: ["eval_pivot"],
-        sentences: [],
-        evidence: [],
-        phase: "opening",
-      }],
-      rank: [run.nodes[0]!.id],
-    };
+    const story = reviewPayload({ runId: "route-run", branchId: run.branches[0]!.id, source: { kind: "native" }, nodeId: run.nodes[0]!.id, entryNodeId: run.nodes[0]!.id, ply: 0, fen: run.nodes[0]!.fen });
     const rewind = vi.fn();
     const component = mount(App, {
       target: target(),
       props: {
         api: {
           ...api(),
-          async story() { return story; },
+          async review() { return story; },
           async claimLease() { throw new Error("private lease holder detail"); },
           rewind,
         },
@@ -501,12 +451,12 @@ describe("application shell", () => {
     });
 
     const enter = await vi.waitFor(() => {
-      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Pick it up from here");
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Retry from here");
       expect(button).toBeDefined();
       return button!;
     });
     enter.click();
-    await vi.waitFor(() => expect(document.body.textContent).toContain("The story is still here; try again."));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The review is still here; try again."));
     expect(document.body.textContent).not.toContain("private lease holder detail");
     expect(storage.values.size).toBe(0);
     expect(rewind).not.toHaveBeenCalled();
@@ -521,30 +471,10 @@ describe("application shell", () => {
     const rewound = rewindRun(run, run.nodes[0]!.id, "2026-09-13T13:10:00.000Z");
     const branched = forkRun(rewound.run, run.nodes[0]!.id, {
       label: "story-reentry",
-      intent: "Play a different continuation from this story moment",
+      intent: "Retry from this reviewed position",
       at: "2026-09-13T13:11:00.000Z",
     });
-    const story: GameStory = {
-      runId: "route-run",
-      ready: true,
-      pendingEvidence: 0,
-      branchId: run.branches[0]!.id,
-      side: "white",
-      source: { kind: "native" },
-      outcome: { kind: "unfinished" },
-      moments: [{
-        nodeId: run.nodes[0]!.id,
-        entryNodeId: run.nodes[0]!.id,
-        ply: 0,
-        san: null,
-        fen: run.nodes[0]!.fen,
-        kinds: ["eval_pivot"],
-        sentences: [],
-        evidence: [],
-        phase: "opening",
-      }],
-      rank: [run.nodes[0]!.id],
-    };
+    const story = reviewPayload({ runId: "route-run", branchId: run.branches[0]!.id, source: { kind: "native" }, nodeId: run.nodes[0]!.id, entryNodeId: run.nodes[0]!.id, ply: 0, fen: run.nodes[0]!.fen });
     const claimLease = vi.fn(async () => undefined);
     const rewind = vi.fn(() => pendingRewind.promise);
     const fork = vi.fn(async () => branched);
@@ -552,14 +482,14 @@ describe("application shell", () => {
     const component = mount(App, {
       target: target(),
       props: {
-        api: { ...api(), async story() { return story; }, claimLease, rewind, fork },
+        api: { ...api(), async review() { return story; }, claimLease, rewind, fork },
         router,
         storage,
       },
     });
 
     const enter = await vi.waitFor(() => {
-      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Pick it up from here");
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Retry from here");
       expect(button).toBeDefined();
       return button!;
     });
@@ -573,7 +503,7 @@ describe("application shell", () => {
     pendingRewind.resolve(rewound);
     await vi.waitFor(() => expect(fork).toHaveBeenCalledWith(
       run.id,
-      { nodeId: run.nodes[0]!.id, label: "story-reentry", intent: "Play a different continuation from this story moment" },
+      { nodeId: run.nodes[0]!.id, label: "story-reentry", intent: "Retry from this reviewed position" },
       writerId,
     ));
     expect(window.location.pathname).toBe("/review");

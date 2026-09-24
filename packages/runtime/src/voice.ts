@@ -107,14 +107,47 @@ const SQUARE = /\b[a-h][1-8]\b/gi;
 function tokens(pattern: RegExp, text: string): readonly string[] { return [...text.matchAll(new RegExp(pattern.source, pattern.flags))].map((match) => match[0]!.toLowerCase()); }
 function absentWords(words: readonly string[], packet: string, output: string): readonly string[] { const allowed = packet.toLowerCase(); return words.filter((word) => new RegExp(`\\b${word}\\b`, "i").test(output) && !new RegExp(`\\b${word}\\b`, "i").test(allowed)); }
 
+/**
+ * Licence-by-span ([[D1409]], `planning/platform-alignment/d1409-word-guard-repair.md` §2): scan
+ * `output` left to right for byte-exact, non-overlapping occurrences of the individual grounding
+ * sentences, taking the longest match at each position, and return the output with every grounded
+ * span deleted. No case folding, normalisation or whitespace tolerance: a sentence is grounded only
+ * when its exact bytes, as a registered renderer emitted them, appear.
+ */
+export function ungroundedResidue(sentences: readonly string[], output: string): string {
+  const candidates = [...new Set(sentences.filter((sentence) => sentence.length > 0))].sort((left, right) => right.length - left.length);
+  let residue = "";
+  let index = 0;
+  while (index < output.length) {
+    const match = candidates.find((sentence) => output.startsWith(sentence, index));
+    if (match === undefined) { residue += output[index]; index += 1; continue; }
+    residue += " ";
+    index += match.length;
+  }
+  return residue;
+}
+
+/**
+ * [[D1409]]: a judgement word is permitted only inside the exact rendered sentence that grounds it,
+ * and is a violation anywhere else in the output, including when another sentence of the same packet
+ * contains it. Returns the sorted distinct judgement words found in the ungrounded residue.
+ */
+export function judgementWordsOutsideGrounding(sentences: readonly string[], output: string): readonly string[] {
+  const residue = ungroundedResidue(sentences, output);
+  return Object.freeze(BANNED_JUDGEMENTS.filter((word) => new RegExp(`\\b${word}\\b`, "i").test(residue)).sort());
+}
+
 export interface VoiceCheckResult { readonly valid: boolean; readonly violations: readonly string[]; }
 export function voiceCheck(view: RenderedEvidenceView, output: string): VoiceCheckResult {
   assertRenderedEvidenceView(view);
-  const source = view.items.flatMap((item) => item.sentences).join("\n");
+  const grounding = view.items.flatMap((item) => item.sentences);
+  const source = grounding.join("\n");
   const violations: string[] = [];
   for (const [label, pattern] of [["square", SQUARE], ["move", UCI], ["move", SAN]] as const) for (const token of tokens(pattern, output)) if (!source.toLowerCase().includes(token)) violations.push(`${label}:${token}`);
   for (const word of absentWords(CHESS_LEXICON, source, output)) violations.push(`noun:${word}`);
-  for (const word of absentWords(BANNED_JUDGEMENTS, source, output)) violations.push(`judgement:${word}`);
+  // The judgement arm is span-licensed ([[D1409]]); the other three arms stay packet-relative until
+  // [[D1419]]'s follow-up lands.
+  for (const word of judgementWordsOutsideGrounding(grounding, output)) violations.push(`judgement:${word}`);
   for (const word of absentWords(PRESCRIPTIVE_VERBS, source, output)) violations.push(`prescription:${word}`);
   return Object.freeze({ valid: violations.length === 0, violations: Object.freeze([...new Set(violations)].sort()) });
 }

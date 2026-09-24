@@ -9,7 +9,7 @@
   import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
-  import GameStoryScreen from "./lib/GameStoryScreen.svelte";
+  import ReviewMapScreen from "./lib/ReviewMapScreen.svelte";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
   import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
@@ -61,7 +61,7 @@
     type SessionJournalEntry,
     type SessionKind,
     type BoardControl,
-    type GameStory,
+    type ReviewMap,
     type StoryShare,
     type CreatedStoryShare,
     type ProgressMilestone,
@@ -86,7 +86,8 @@
   import { assertStoryForkResponse, assertStoryRewindResponse } from "./lib/story-reentry-response.js";
   import { assertRunDeletionPreview } from "./lib/run-deletion-preview.js";
   import { assertRunPageResponse, legacyRunPage } from "./lib/run-page-response.js";
-  import { assertCreatedStoryShare, assertGameStoryResponse, assertRevokedStoryShare, assertStoryShares } from "./lib/story-response.js";
+  import { assertCreatedStoryShare, assertRevokedStoryShare, assertStoryShares } from "./lib/story-response.js";
+  import { assertReviewMapResponse } from "./lib/review-response.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -285,7 +286,7 @@
   let importBusy = $state(false);
   let importPreparation: { readonly runId: string; readonly writerId: string } | undefined = $state();
   let importGeneration = 0;
-  let story: GameStory | undefined = $state();
+  let story: ReviewMap | undefined = $state();
   let storyShares: readonly StoryShare[] = $state([]);
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
@@ -1024,28 +1025,31 @@
     storyPoll = setInterval(() => void refreshStory(next.runId, false), 1_000);
   }
 
-  async function fetchStory(runId: string, allowReveal: boolean): Promise<GameStory> {
-    if (api.story === undefined) throw new Error("Game stories are unavailable");
+  async function fetchStory(runId: string, allowReveal: boolean): Promise<ReviewMap> {
+    if (api.review === undefined) throw new Error("Game reviews are unavailable");
     const writer = WriterSession.peek(runId, storage);
-    const readStory = async (): Promise<GameStory> => {
-      const value = await api.story!(runId);
-      assertGameStoryResponse(value, { runId });
+    const readReview = async (): Promise<ReviewMap> => {
+      const value = await api.review!(runId);
+      assertReviewMapResponse(value, { runId });
       return value;
     };
-    let nextStory: GameStory;
+    let nextReview: ReviewMap;
     try {
-      nextStory = await readStory();
+      nextReview = await readReview();
     } catch (error) {
       if (!(allowReveal && error instanceof ApiError && error.code === "ASSISTANCE_WITHHELD" && writer !== undefined)) throw error;
       await api.reveal(runId, writer.writerId);
-      nextStory = await readStory();
+      nextReview = await readReview();
     }
-    if (writer !== undefined && !nextStory.ready) {
+    if (writer !== undefined && !nextReview.ready) {
+      // Completing the evaluation pass is the evidence pipeline's write, not the review's: the story
+      // read enqueues any missing jobs and this device, as writer, applies the finished results.
+      await api.story?.(runId);
       const page = await api.evidence(runId, 0);
       for (const result of page.results) await api.applyEvidence(runId, result.seq, writer.writerId);
-      nextStory = await readStory();
+      nextReview = await readReview();
     }
-    return nextStory;
+    return nextReview;
   }
 
   async function refreshStory(runId: string, allowReveal: boolean): Promise<void> {
@@ -1191,7 +1195,7 @@
     WriterSession.claimFor(runId, storage, () => writer.writerId);
     const rewindResult = await api.rewind(runId, { nodeId }, writer.writerId);
     assertStoryRewindResponse(rewindResult, subject);
-    const forkResult = await api.fork(runId, { nodeId, label: "story-reentry", intent: "Play a different continuation from this story moment" }, writer.writerId);
+    const forkResult = await api.fork(runId, { nodeId, label: "story-reentry", intent: "Retry from this reviewed position" }, writer.writerId);
     assertStoryForkResponse(forkResult, subject);
     if (generation === loadGeneration && route.name === "story" && route.runId === runId) {
       navigate(routePath({ name: "run", runId }));
@@ -2605,7 +2609,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<GameStoryScreen {story} shares={storyShares} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

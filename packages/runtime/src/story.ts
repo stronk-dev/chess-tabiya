@@ -29,7 +29,6 @@ export interface StoryMoment {
   readonly endgame?: EndgameClassification;
 }
 export interface StoryProjection { readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; readonly evidence: readonly DeclaredEvidence<unknown>[]; }
-export interface StoryMomentSelection { readonly moments: readonly StoryMoment[]; readonly shown: number; readonly total: number; readonly limit: number; }
 export interface StoryTitleInput { readonly side: "white" | "black"; readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: RunOutcome | "1-0" | "0-1" | "1/2-1/2" | "*" }; readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
 export const STORY_MATE_CP = 1000;
 export const STORY_PIVOT_CP = 150;
@@ -161,27 +160,6 @@ export function reviewStoryTitle(story: StoryTitleInput): string {
   return reviewStoryEvidence([titleEvidence]).items[0]!.sentences[0]!;
 }
 
-/** Selects the bounded ranked set, reports its denominator, then restores game chronology for rendering. */
-export function storyMomentSelection(
-  story: Pick<StoryProjection, "moments" | "rank">,
-  limit = 8,
-): StoryMomentSelection {
-  if (!Number.isSafeInteger(limit) || limit < 0) throw new TypeError("Story moment limit must be a non-negative integer");
-  const byId = new Map(story.moments.map((moment) => [moment.nodeId, moment]));
-  const eligible = story.rank.flatMap((nodeId) => byId.get(nodeId) ?? []);
-  const moments = Object.freeze(eligible.slice(0, limit)
-    .sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId)));
-  return Object.freeze({ moments, shown: moments.length, total: eligible.length, limit });
-}
-
-/** Compatibility projection for consumers that only need the selected moments. */
-export function selectedStoryMoments(
-  story: Pick<StoryProjection, "moments" | "rank">,
-  limit = 8,
-): readonly StoryMoment[] {
-  return storyMomentSelection(story, limit).moments;
-}
-
 /** Ranks only for bounded selection. Irreversibility alone is deliberately the final family. */
 export function rankStoryMoments(moments: readonly StoryMoment[]): readonly string[] {
   const priority = (moment: StoryMoment): number => moment.kinds.length === 0
@@ -206,6 +184,11 @@ const STORY_SOURCE_LABELS = Object.freeze({
   authored_claim: "Authored catalogue",
   recorded_run: "Recorded game",
 } as const);
+
+/** The learner-facing label of one declared grounding class, shared by story and review footers. */
+export function evidenceGroundingLabel(grounding: keyof typeof STORY_SOURCE_LABELS): string {
+  return STORY_SOURCE_LABELS[grounding];
+}
 
 /** Resolves each admitted story fact to the leaf grounding sources declared by the evidence manifest. */
 export function storyEvidenceSourceLabels(
@@ -244,7 +227,10 @@ export function storyEvaluation(run: DrillRun, node: Node): StoryEvaluation | un
   else if (Number.isSafeInteger(values.mateIn)) cp = (values.mateIn as number) < 0 ? -STORY_MATE_CP : STORY_MATE_CP;
   if (cp === undefined) return undefined;
   const sideToMove = node.fen.split(" ")[1] === "w" ? "white" : "black";
-  const learnerCp = Math.max(-STORY_MATE_CP, Math.min(STORY_MATE_CP, sideToMove === run.start.side ? cp : -cp));
+  // The Stockfish evidence executor declares White's perspective; readings without a declared
+  // perspective follow the recorded-run convention (side to move).
+  const orientedBy = values.perspective === "white" ? "white" : sideToMove;
+  const learnerCp = Math.max(-STORY_MATE_CP, Math.min(STORY_MATE_CP, orientedBy === run.start.side ? cp : -cp));
   return Object.freeze({
     centipawns: learnerCp,
     engineId: typeof values.engineId === "string" ? values.engineId : "recorded engine",

@@ -102,7 +102,7 @@ export {
 } from "./transition.js";
 export { ENDGAME_CLASSIFICATION_CONVENTION, endgameClassification, renderEndgameClassification, type EndgameClassification, type EndgameTypeId } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { STORY_MATE_CP, STORY_PIVOT_CP, rankStoryMoments, storyEvaluation, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationChange, renderStoryEvaluationTrajectory, reviewStoryTitle, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryMomentSelection, type StoryProjection, type StoryTitleInput } from "./story.js";
+export { STORY_MATE_CP, STORY_PIVOT_CP, evidenceGroundingLabel, rankStoryMoments, storyEvaluation, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationChange, renderStoryEvaluationTrajectory, reviewStoryTitle, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {
   voiceCheck,
   renderRecordedReading,
@@ -734,3 +734,19 @@ export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",
   runSchemaVersion: DRILL_RUN_SCHEMA_VERSION,
 });
+export {
+  REVIEW_MAP_CONVENTION,
+  REVIEW_MOMENT_BUDGET,
+  reviewMapProjection,
+  selectReviewMoments,
+  type ReviewAccuracy,
+  type ReviewMapContext,
+  type ReviewMapGrade,
+  type ReviewMapInput,
+  type ReviewMapMoment,
+  type ReviewMapProjection,
+  type ReviewMapRow,
+  type ReviewMomentSelection,
+} from "./review-map.js";
+export { REVIEW_MAP_TEMPLATES, reviewText, type ReviewTemplateId } from "./review-map-templates.js";
+export { judgementWordsOutsideGrounding, ungroundedResidue } from "./voice.js";

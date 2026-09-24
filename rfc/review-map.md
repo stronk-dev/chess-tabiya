@@ -1,6 +1,6 @@
 # RFC: Review Map — the learner-facing review surface
 
-- **Status:** draft — 2026-08-23, drafted on owner ruling [[D1273]] (*"Full surface plus accuracy and longitudinal"*), which resolves the review lane's self-block on its central question. Remaining O7 sub-choices ride here as registered open questions, not blockers.
+- **Status:** awaiting D1–D6 — implemented 2026-09-24 at the owner's direction in session (build now as a parallel agent, no further review cycle); acceptance criteria 1–14 have able-to-fail tests and [[D1409]] is enforced in `voiceCheck` (judgement arm). The owner rulings (D1, D2), the cross-lane amendments (D3, D4, D6) and the module-registry invocation (D5, blocked by [[D1445]]) remain open. Receipt: `planning/review/implementation-2026-09-24.md`. Drafted 2026-08-23 on owner ruling [[D1273]] (*"Full surface plus accuracy and longitudinal"*).
 - **Author:** claude (drafted from `planning/review/rfc-derivation.md`, 646 lines, the HEAD derivation of every surface this document consumes)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md:134-138` (the failure shape this surface must not become), `design/03-product-breadth.md:57-67`, `:290` (the intent tier's "Review" is branch-compare — see Deviations)
@@ -197,7 +197,7 @@ derivation's measured caution becomes **how** it is defined, not whether.
 
 **Definition — derived from our own ladder, not imported.**
 
-> **Accuracy** = `100 − mean(dropWinPercent)` over the side's **evaluated decisions**, where
+> **Accuracy** = `100 − mean(max(0, dropWinPercent))` over the side's **evaluated decisions**, where
 > `dropWinPercent` is the same quantity the grade ladder thresholds, computed through the single
 > exported logistic `winPercentFromCp` (`grade.ts:95`, coefficient `0.00368208`, centipawns clamped
 > ±1000).
@@ -350,8 +350,8 @@ Each names the wrong implementation that would otherwise pass.
    *Wrong implementation caught:* estimating over evaluated plies only, which produces a flattering
    number from a 0/29 sample.
 7. **Accuracy reuses `winPercentFromCp`.** A grep-able assertion that this surface introduces no
-   second logistic and no second coefficient. *Fails if* `0.00368208` appears anywhere outside
-   `grade.ts`.
+   second logistic and no second coefficient. *Fails if* `0.00368208` appears anywhere in the code
+   trees (`apps/`, `packages/`, `tools/`, `tests/`) outside `grade.ts`.
 8. **One projection feeds private, share and card.** The moment id list and order are byte-identical
    across all three. *Wrong implementation caught:* the current two-slice divergence at
    `service.ts:915` versus `GameStoryScreen.svelte:14`.
@@ -427,3 +427,33 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
   provenance footer; and the `report` ladder constants read from source (5/10/15). Two citations in
   the derivation had drifted and are corrected here: the O7 self-block is `o7-handoff.md:5`, and the
   share cap is a `moments.slice(0,8)` inside `service.ts:915`'s `publicStory`.
+- **2026-09-24** — implemented at the owner's direction (build now, no further review cycle); receipt
+  `planning/review/implementation-2026-09-24.md`. Corrections made inline because the text was wrong,
+  not because the design changed:
+  - **§6 definition clamps the drop at zero.** `100 − mean(dropWinPercent)` is unbounded above: a
+    move whose recorded evaluation *rises* has a negative drop and would push accuracy past 100. A
+    drop is a loss, so the definition is `100 − mean(max(0, dropWinPercent))`; the grade ladder is
+    unaffected (a negative drop never crosses a threshold).
+  - **Criterion 7 is scoped to the code trees.** As written it was permanently red: this RFC,
+    `rfc/move-quality-grades.md`, two planning notes and two research dossiers quote the constant.
+    The assertion now covers `apps/`, `packages/`, `tools/` and `tests/`.
+  - **Stale HEAD claims.** By implementation time [[D687]] and [[D688]] had already been closed
+    (2026-08-25): the footer literal was gone and both Story surfaces called one ranked-eight reducer.
+    This implementation deletes that reducer (`storyMomentSelection`/`selectedStoryMoments`) and
+    `GameStoryScreen.svelte` outright; `selectReviewMoments` is now the only selector and the card
+    builder reads the same moments. §4's *"`App.svelte:369-371` throws"* was also stale — re-entry
+    already claimed the writer lease cross-device — so criterion 5's live case is a viewer without
+    write access or a board held by another learner, which now renders the reason instead of
+    throwing.
+  - **§2 "the board is live".** Implemented as a navigable board (every row, previous/next and arrow
+    keys select the ply; the evidence panel follows) rather than a piece-moving one: moving a piece on
+    a reviewed position is exactly what `Retry from here` does, through the fork protocol.
+  - **Ladder version.** [[D1422]]'s 2.5/10/15 ladder lands as `grade-convention@2` through the
+    move-quality-grades register amendment, which has not landed; this surface renders the shipped
+    `grade-convention@1` (5/10/15) and names the version in every grade sentence, so it picks the
+    amendment up without a change here.
+  - **[[D1423]] tiers.** Implemented as [[D1475]] reads it: every admitted story sentence at a node
+    renders as a brief note in that move's evidence panel (uncapped); the 0..3 moment cards are the
+    full review-this-move doors. The evidence panel also carries the recorded-semantic-path detector
+    events for the move (that RFC's first production consumer) and renders the draft
+    review-evidence-compiler packet as an explicit abstention.
