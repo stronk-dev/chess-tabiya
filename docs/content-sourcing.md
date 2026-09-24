@@ -195,6 +195,43 @@ pack. The checker re-derives counts, shares, outcomes, population, and window fr
 census. Explorer evidence cannot infer difficulty, grade a deviation, or turn a population result
 into a move verdict.
 
+## Masters games (famous-games)
+
+`rfc/famous-games.md` lifted the bundled `topGames / recentGames / masters database` refusal
+into four capability records: `topGames`/`recentGames` stay refused on corpus-panel product scope
+alone (no licence claim; revisitable as the RFC's D5); masters aggregates and masters per-game PGN
+are reached in the authoring sourcing lane; third-party annotations, NAGs and move verdicts are
+refused for every imported source.
+
+The masters database uses the explorer client — the same source lock, User-Agent, optional
+operator token, 60/120/240 s retry schedule on 429/5xx and `source_unavailable` abstention — via
+`ExplorerClient.masterGame(id)` and `ExplorerClient.mastersStats(query)`. Every request passes
+`assertMastersRequest`: only `/masters/pgn/{id}` and `topGames=0` aggregates are admitted, and any
+other `/masters` request throws `MASTERS_INDEX_REFUSED`. The per-game endpoint answered
+unauthenticated on 2026-08-23 and 2026-09-24; the aggregate endpoint returns 401 without a token
+and abstains.
+
+```sh
+make candidate-emit PIPELINE=masters ARGS='--game aAbqI4ey --learner-side white --phase opening --split-ply 6 --to-ply 20'
+```
+
+One game id per invocation; a comma list throws `MASTERS_ENUMERATION_REFUSED` before any request
+(Directive 96/9/EC Art. 7(5) constrains the harvesting method, not the game). `OFFLINE=1` reads
+the recorded capture of `aAbqI4ey` and refuses any other id. The fetched bytes pass the shipped D410
+record-boundary strip (`stripPgnAnnotations`) and `parsePgnMainline`, and SAN is re-rendered from
+the legal move, so no comment, NAG or suffix glyph reaches the pack. The emitter writes a draft
+`line` pack whose objective is the mechanical placeholder, one `position_legality` record for the
+replayed start, the masters source line in `provenance.sources`, and `source-game.json`: the typed
+`sourceGame` (white, black, date, result from the Seven-Tag-Roster; event, site, round when present;
+`sourceId` `lichess-masters:<id>`; `licenceBasis` from the source entry). `make sourcing-check`
+validates that sidecar as a closed object. It is a sidecar because the pack-schema half
+(`$defs/provenance.sourceGame`, lane 0.31) is queued behind the unlanded lane 0.30.
+`candidate-attach` refuses a masters-sourced pack whose `provenance.sources` lacks the masters
+rationale (`ATTACH_SOURCE_LINE_MISSING`), before querying.
+
+There is no learner-facing masters import: a masters URL at `/runs/import` is
+`IMPORT_SOURCE_UNSUPPORTED`. A pasted masters score imports like any other PGN.
+
 ## Puzzle-derived consequence seeds
 
 The `position-seeds` emitter consumes the exact eleven-column Lichess puzzle CSV format. It

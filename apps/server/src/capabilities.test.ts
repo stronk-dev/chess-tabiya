@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+
 import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
@@ -54,13 +57,30 @@ function healthClient(
 }
 
 describe("engine capabilities", () => {
-  it("reports owner-lifted variant and famous-game capabilities as pending rather than refused", () => {
-    for (const capability of ["UCI_Chess960", "topGames / recentGames / masters database"]) {
-      expect(CAPABILITY_DISPOSITIONS.find((row) => row.capability === capability)).toMatchObject({
-        disposition: "unmeasured",
-        experiment: expect.any(String),
-      });
-    }
+  it("reports the owner-lifted variant capability as pending rather than refused", () => {
+    expect(CAPABILITY_DISPOSITIONS.find((row) => row.capability === "UCI_Chess960")).toMatchObject({
+      disposition: "unmeasured",
+      experiment: expect.any(String),
+    });
+  });
+
+  it("replaces the bundled famous-game row with the four rfc/famous-games.md §1 records (criterion 1)", async () => {
+    const source = await readFile(resolve("apps/server/src/capabilities.ts"), "utf8");
+    expect(source).not.toContain('"topGames / recentGames / masters database"');
+    expect(CAPABILITY_DISPOSITIONS.filter((row) => /masters database/.test(row.capability) && /topGames/.test(row.capability))).toEqual([]);
+    const rows = CAPABILITY_DISPOSITIONS.filter((row) => /topGames|recentGames|masters|third-party annotations/.test(row.capability));
+    expect(rows.map((row) => [row.instrument, row.capability, row.disposition])).toEqual([
+      ["Explorer", "topGames / recentGames", "refused"],
+      ["Explorer", "masters database position and per-move aggregates", "reached"],
+      ["Explorer", "masters per-game PGN (explorer.lichess.org/masters/pgn/{id})", "reached"],
+      ["Imported game", "third-party annotations, NAGs and move verdicts", "refused"],
+    ]);
+  });
+
+  it("refuses topGames/recentGames on corpus-panel scope alone, with no licence claim (criterion 2)", () => {
+    const row = CAPABILITY_DISPOSITIONS.find((value) => value.capability === "topGames / recentGames")!;
+    expect(row.reason).toMatch(/corpus panel/);
+    for (const word of ["licence", "license", "rights"]) expect(row.reason.toLowerCase()).not.toContain(word);
   });
 
   it("binds admitted recorded readings to reached instrument dispositions", () => {
