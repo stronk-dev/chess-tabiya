@@ -1432,7 +1432,7 @@ joins before acceptance; no production/schema/migration/content byte is authoriz
 | D5 | Owner-use roster validation via the retained 42-branch blind packet (O8.5) — validates or rejects profiles by use; cannot clear H5/C5 population claims | OWNER | `planning/platform-alignment/bot-policy/` + ledger | |
 | D6 | Exact atomic production route benchmark at release concurrency clears the 400/500-ms operating contract or returns the guarded families for revision | `bot-policy` | release receipt with image/profile digests and total/Maia/guard/composition distributions | |
 | D7 | Provider health is accepted and its claim-free [[D2364]] runtime snapshot/result/release authority lands; bot policy imports those exact symbols and no health copy | `provider-health-degradation.md` | provider-health checkpoint receipt + symbol-level bot join | |
-| D8 | Shared-resource bootstrap is accepted/implemented, registers `bot-profile-catalog` as absent, and this RFC atomically adds the unique first-lane-1 claim before acceptance | `shared-resource-register-bootstrap.md` + `bot-policy` | register/check receipt and byte-joined claims block | |
+| D8 | Shared-resource bootstrap is accepted/implemented, registers `bot-profile-catalog` as absent, and this RFC atomically adds the unique first-lane-1 claim before acceptance (re-owned 2026-09-24: the bootstrap half is implemented and archived at `rfc/archive/shared-resource-register-bootstrap.md`; it has no absent registration ([[D3082]]), so the remaining registration is this RFC's — create the source first and add one catalogue row, as `provider-protocol` did) | `bot-policy` | register/check receipt and byte-joined claims block | |
 
 ## Open questions
 

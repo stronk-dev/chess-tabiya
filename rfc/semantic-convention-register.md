@@ -12,7 +12,7 @@
 - **Design refs:** none. This is repository process and changes no evidence meaning or learner UX.
 - **Exploration gate:** [[D1722]] and the executable 39-member census in
   `tools/d1722-convention-identity-harness/initial-member-census.test.ts`
-- **Depends on:** implemented `rfc/shared-resource-register-bootstrap.md` (catalogue + checker)
+- **Depends on:** implemented `rfc/archive/shared-resource-register-bootstrap.md` (catalogue + checker)
 - **Parent / amends:** adds one data row to the generic catalogue
 - **Supersedes / superseded by:** supersedes the former assistance-C9/C10/`RESOURCE_NAMES` plan
 - **Planning:** `planning/semantic-convention-register/`
@@ -76,7 +76,7 @@ reader, parser branch or resource-name literal to `tools/register-check.mjs` ([[
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Generic register engine lands first | shared-resource-register-bootstrap | archived SHA | **2026-09-24** — the catalogue + catalogue-driven checker are implemented; the bootstrap archives in the same series once its three D3 rebases land |
+| D1 | Generic register engine lands first | shared-resource-register-bootstrap | archived SHA | **2026-09-24** — the catalogue + catalogue-driven checker are implemented; the bootstrap archived in the same series once its three D3 rebases landed |
 | D2 | Fresh independent review of the process population | claude | review receipt plus acceptance/corrections | **2026-09-24 — not run**: the owner directed implementation of ready RFCs without review rounds; criteria 3–6 execute in `tools/register-check.test.mjs` and `packages/runtime/src/evidence-conventions.test.ts` |
 | D3 | Present descriptor/register lands with full verification | claude | implementation SHA plus green verification | **2026-09-24** — process landing commit on branch `worktree-agent-ad09667cb734eccf8` |
 | D4 | Product RFC claims the members and lands declarations/history | semantic-convention-provenance | claim plus product SHA | claim declared in the same landing; product landing follows in the same series |

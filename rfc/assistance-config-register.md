@@ -14,7 +14,7 @@
 - **Exploration gate:** passed by `design/research/assistance-config-shared-resource.md`,
   `design/research/assistance-shared-resource-boundaries.md`, [[D1581]], [[D2328]] and the sixth
   fresh review
-- **Depends on:** implemented `rfc/shared-resource-register-bootstrap.md` (catalogue + checker)
+- **Depends on:** implemented `rfc/archive/shared-resource-register-bootstrap.md` (catalogue + checker)
 - **Parent / amends:** adds two data rows to the generic catalogue; does not amend its parser or
   readers
 - **Supersedes / superseded by:** supersedes every C9/`RESOURCE_NAMES` proposal in earlier revisions
@@ -94,7 +94,7 @@ resource-name literal to `tools/register-check.mjs`, and it changes no assistanc
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Generic register engine is accepted/implemented first | shared-resource-register-bootstrap | archived implementing SHA | **2026-09-24** — the catalogue and catalogue-driven checker are implemented; the bootstrap archives in the same series once its three D3 rebases land |
+| D1 | Generic register engine is accepted/implemented first | shared-resource-register-bootstrap | archived implementing SHA | **2026-09-24** — the catalogue and catalogue-driven checker are implemented; the bootstrap archived in the same series once its three D3 rebases landed |
 | D2 | Fresh independent review of the population | claude | review receipt plus acceptance/corrections | **2026-09-24 — not run**: the owner directed implementation of ready RFCs without review rounds; criteria 2–5 execute in `assistance-register.test.ts` and `tools/register-check.test.mjs` |
 | D3 | Descriptors/registers land without assistance behavior change and verification passes | claude | implementing SHA plus green verification | **2026-09-24** — landing commit on branch `worktree-agent-ad09667cb734eccf8` |
 | D4 | Intent presets later claims and lands workflow, permission-contract and exchange lanes | intent-presets.md | register transitions and product receipts | |
