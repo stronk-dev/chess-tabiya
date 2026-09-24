@@ -188,8 +188,8 @@ describe("value authority: registry equality", () => {
   it("is set-equal to every non-retired catalogue projection, with bindings a subset (§8.3, criterion 13)", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
     // 216 + the five typed Review projections, forced-mate v2, the concept reference and the
-    // principal-variation source, less the retired Story eval shift.
-    expect(ACTIVE).toHaveLength(223);
+    // principal-variation source and the Checkpoint-P source-bound citation, less the retired Story eval shift.
+    expect(ACTIVE).toHaveLength(224);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -261,7 +261,8 @@ describe("value authority: registry equality", () => {
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
-    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    // Plus rfc/evidence-presentation.md Checkpoint P's source-bound citation derivation.
+    expect(extra).toEqual(["derived.citation.attribution@1", "derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -296,7 +297,8 @@ describe("value authority: registry equality", () => {
       expect(ROUTES.get(route)!.pending).toMatch(/semantic-convention-provenance/u);
     }
     expect(projection("rules.phase.reading@2")).toMatchObject({ grounding: "declared_convention", exactness: "convention" });
-    expect(projection("rules.structural.reading.named_structure@2")).toMatchObject({ grounding: "declared_convention", exactness: "convention", operands: ["id", "name", "provenanceNote"] });
+    // rfc/evidence-presentation.md Checkpoint P ([[D2047]]): the exact matched-witness squares are retained.
+    expect(projection("rules.structural.reading.named_structure@2")).toMatchObject({ grounding: "declared_convention", exactness: "convention", operands: ["id", "name", "provenanceNote", "squares"] });
     for (const route of ["rules.endgame.classification@1", "theory.endgame.setup_match@1", "derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@1", "derived.pivotal.human_divergence@1", "derived.pivotal.option_collapse@1", "derived.structural.predicate_result@1"]) expect(ROUTES.has(route), route).toBe(true);
     expect(projection("derived.pivotal.human_divergence@1").grounding).not.toBe("position_rules");
     expect(projection("derived.structural.predicate_result@1")).toMatchObject({ grounding: "authored_claim", derivation: { inputs: [{ id: "authored.structural_condition.input", version: 1 }] } });
@@ -361,11 +363,12 @@ describe("value authority: corrected successors", () => {
     }
   });
 
-  it("computes named-structure@2 from the registered catalogue with exactly id/name/provenanceNote (criterion 26)", () => {
+  it("computes named-structure@2 from the registered catalogue with exactly id/name/provenanceNote and the witness squares (criterion 26, Checkpoint P)", () => {
     const carlsbad = "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10";
     const values = invoke("rules.structural.reading.named_structure@2", { fen: carlsbad }) as readonly DeclaredEvidence<Record<string, string>>[];
     expect(values.map((value) => value.payload.id)).toEqual(["carlsbad"]);
-    expect(Object.keys(values[0]!.payload).sort()).toEqual(["id", "name", "provenanceNote"]);
+    expect(Object.keys(values[0]!.payload).sort()).toEqual(["id", "name", "provenanceNote", "squares"]);
+    expect(values[0]!.payload.squares).toEqual(["c6", "d4", "d5"]);
     expect(() => invoke("rules.structural.reading.named_structure@2", { fen: carlsbad, provenanceNote: "arbitrary prose" })).toThrow(/refused its authority inputs/u);
     expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some((binding) => exact(binding.projection) === "rules.structural.reading.named_structure@1")).toBe(false);
     expect(JSON.stringify(values[0]!.payload)).not.toMatch(/nodeId|runId/u);
@@ -870,6 +873,11 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   profiles.set("recorded.tablebase.result@1", { valid: { ledger: tablebaseLedger }, falsify: refused("recorded.tablebase.result@1", { ledger: engineLedger }) });
   profiles.set("derived.grade.move_quality@1", { valid: { before: sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns: 20, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 })), after: sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns: -300, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 })), mover: "white", context: "review" }, falsify: refused("derived.grade.move_quality@1", { before: engineLedger, after: engineLedger, mover: "white", context: "review" }) });
   profiles.set("run.record.evidence_ref_resolution@1", { valid: { reference: "rules:checkmate" }, falsify: refused("run.record.evidence_ref_resolution@1", { reference: "rules:checkmate", text: "caller prose" }) });
+  // rfc/evidence-presentation.md Checkpoint P: the source-bound citation joins one resolution to exactly one source item.
+  const tablebasePacket = { kind: "tablebase", source: "tablebase_exact", values: { category: "win", pieceCount: 4, dtz: 3 } } as const;
+  const citedResolution = sealedOne("run.record.evidence_ref_resolution@1", { reference: "tablebase:probe-1", payloads: new Map([["tablebase:probe-1", tablebasePacket]]) });
+  const citedSource = sealedOne("live.syzygy.result@1", { packet: tablebasePacket });
+  profiles.set("derived.citation.attribution@1", { valid: { resolution: citedResolution, source: citedSource, sourceMetadata: { kind: "remote_endpoint", endpointId: "lichess_tablebase" } }, falsify: refused("derived.citation.attribution@1", { resolution: citedResolution, source: citedResolution }) });
   const deliveryItem = { kind: "claim", id: "claim#one", revealedBy: { kind: "outcome", eventSeq: 4 }, anchor: { claimId: "one" }, text: "Authored sentence.", evidenceTypes: ["tablebase_exact"], earnedEvidenceTypes: ["tablebase_exact"], binding: "ledger_bound", authorSpans: [], principles: [] };
   profiles.set("pack.authored.claim_delivery@1", { valid: { item: deliveryItem }, falsify: refused("pack.authored.claim_delivery@1", { item: { ...deliveryItem, note: "prose" } }) });
   profiles.set("pack.authored.claim@1", { valid: { item: { kind: "annotation", id: "a1", text: "Watch the d-file.", revealedBy: { kind: "checkpoint", eventSeq: 7 } } }, falsify: refused("pack.authored.claim@1", { item: { kind: "annotation", id: "a1", text: "x" } }) });
