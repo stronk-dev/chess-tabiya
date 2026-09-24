@@ -2,6 +2,7 @@ import type { Color, Move, Role, Square } from "chessops/types";
 import { parseUci } from "chessops/util";
 
 import { positionFromFen } from "./chess.js";
+import { isRegisteredConvention } from "./evidence-conventions.js";
 import { endgameSetupMatch, krpkrPlacement, rankFor, type EndgameConventionQuote, type EndgameConventionRef, type EndgameTechnique } from "./endgame-setup.js";
 
 /**
@@ -10,7 +11,8 @@ import { endgameSetupMatch, krpkrPlacement, rankFor, type EndgameConventionQuote
  * A method stage is a retrospective observation over an exact recorded path: "this stage of the
  * named method happened on these edges". It says nothing about whether the stage was best, whether
  * the outcome was preserved, whether the setup could have been reached or forced, or what to play.
- * Home and sources as for the setup conventions (`endgame-setup.ts`).
+ * Registration and sources as for the setup conventions (`endgame-setup.ts`): each method convention
+ * is a member of the shared semantic-convention register and is usable only while registered.
  */
 
 export type MethodStage =
@@ -95,6 +97,7 @@ function deepFreeze<T>(value: T): T {
 }
 
 export function endgameMethodConvention(ref: EndgameConventionRef): EndgameMethodConvention | undefined {
+  if (!isRegisteredConvention(ref)) return undefined;
   return ENDGAME_METHOD_CONVENTIONS.find((convention) => convention.id === ref.id && convention.version === ref.version);
 }
 
