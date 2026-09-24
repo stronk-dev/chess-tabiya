@@ -336,29 +336,23 @@
         "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Evidence value authority is implemented: every declared value carries a factory receipt checked at the consumer boundary, one factory file mints all 210 projections behind a single route invoker, the public payload adapters are deleted, and phase, named-structure, endgame and predicate successors replace retired v1 rows. Convention provenance (D1) and provider exchange receipts (D2) remain; endgame technique naming is withdrawn until a cited setup convention lands. The shared-resource register catalogue also landed.",
+          "summary": "Evidence value authority is implemented and its first withdrawn capability is rebuilt grounded: endgame technique names now render only when a cited, versioned setup convention matches, validated against tablebase results and hard negatives, while reachability stays honestly unavailable. Convention provenance (D1) and provider exchange receipts (D2) remain.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/evidence-factories.ts",
-            "planning/evidence-value-authority/implementation-2026-09-24.md",
-            "rfc/evidence-value-authority.md",
-            "rfc/shared-resource-register-bootstrap.md"
+            "packages/runtime/src/endgame-setup.ts",
+            "design/research/endgame-setup-conventions.md",
+            "rfc/evidence-value-authority.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "evidence-value-authority.md",
-              "digest": "sha256:d6b0266b61bc8e8d62b57a81255813357ff1be95c0d7c95ae8263b0a58801eaa"
-            },
-            {
-              "kind": "rfc",
-              "id": "shared-resource-register-bootstrap.md",
-              "digest": "sha256:1b40a0821db8a9070bb0b318c4e47ff5487df0a6586e09d4d46f395ddf412304"
+              "digest": "sha256:cd1213b83d242964a33c7bae43940b8adb2823de28cb0c016dc05b0dcd40486a"
             },
             {
               "kind": "work_state",
-              "id": "D2327",
-              "digest": "sha256:e4c9d0ef8e99fe1ead87d9a4e67850fbb78b54340735f23c3c42683c5b5b813d"
+              "id": "D2497",
+              "digest": "sha256:c2a9e7c4edf7791f0a54a6085b676b3cc60134e69396dc1a87ff092fca28ed2b"
             }
           ]
         },

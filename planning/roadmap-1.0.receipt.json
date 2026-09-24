@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c2cfc97bb29874a13ea0eb97795688be7f2f540f4bd00b365247404c5a3e358c",
+    "roadmap": "sha256:88e8956dd3309dca35915b9cb4a4918de10ea7f199c2de92600ad3833930a117",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:b20d4668a8aa8e5958d3cf1c27c7a645d0b93bdda311f3ee83803cf90f203d96",
-    "rfcRegister": "sha256:1221bf11222bf02098914f7a8099e288c525894363ed810f5cf8d33419a2456e",
+    "workState": "sha256:8571d198f751e3cabe646add43c71a792cf72bd838e09e0096b39ad23acba263",
+    "rfcRegister": "sha256:80136dd9de47980f62b404c136a25b1c8e818a81ae40c58234a5549d5897dc2d",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1208,
-      "done": 1102,
+      "blocked": 1206,
+      "done": 1104,
       "refused": 111
     },
     "workItems": {
@@ -124,29 +124,23 @@
       "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Evidence value authority is implemented: every declared value carries a factory receipt checked at the consumer boundary, one factory file mints all 210 projections behind a single route invoker, the public payload adapters are deleted, and phase, named-structure, endgame and predicate successors replace retired v1 rows. Convention provenance (D1) and provider exchange receipts (D2) remain; endgame technique naming is withdrawn until a cited setup convention lands. The shared-resource register catalogue also landed.",
+        "summary": "Evidence value authority is implemented and its first withdrawn capability is rebuilt grounded: endgame technique names now render only when a cited, versioned setup convention matches, validated against tablebase results and hard negatives, while reachability stays honestly unavailable. Convention provenance (D1) and provider exchange receipts (D2) remain.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/evidence-factories.ts",
-          "planning/evidence-value-authority/implementation-2026-09-24.md",
-          "rfc/evidence-value-authority.md",
-          "rfc/shared-resource-register-bootstrap.md"
+          "packages/runtime/src/endgame-setup.ts",
+          "design/research/endgame-setup-conventions.md",
+          "rfc/evidence-value-authority.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:d6b0266b61bc8e8d62b57a81255813357ff1be95c0d7c95ae8263b0a58801eaa"
-          },
-          {
-            "kind": "rfc",
-            "id": "shared-resource-register-bootstrap.md",
-            "digest": "sha256:1b40a0821db8a9070bb0b318c4e47ff5487df0a6586e09d4d46f395ddf412304"
+            "digest": "sha256:cd1213b83d242964a33c7bae43940b8adb2823de28cb0c016dc05b0dcd40486a"
           },
           {
             "kind": "work_state",
-            "id": "D2327",
-            "digest": "sha256:e4c9d0ef8e99fe1ead87d9a4e67850fbb78b54340735f23c3c42683c5b5b813d"
+            "id": "D2497",
+            "digest": "sha256:c2a9e7c4edf7791f0a54a6085b676b3cc60134e69396dc1a87ff092fca28ed2b"
           }
         ]
       },

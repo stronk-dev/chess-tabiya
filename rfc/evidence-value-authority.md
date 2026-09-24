@@ -633,6 +633,7 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-09-24 (later): correction (g) is superseded. `setup_match@1` and `method_stage@1` are live over the cited `lucena-setup@1`, `philidor-third-rank-setup@1` and `vancura-setup@1` conventions and their method conventions (`packages/runtime/src/endgame-setup.ts`, `endgame-method.ts`; dossier `design/research/endgame-setup-conventions.md`). Setup reachability stays unavailable ([[D2497]]).
 - 2026-09-24: implemented (claude, worktree `agent-ab369751c08788e1a`). Corrections made while
   implementing, none widening authority: (a) the migration receipt was re-derived by main's
   recorded-semantic-path to 204 routes / 200 projections / 198 used / 6 export-only / 60 callable

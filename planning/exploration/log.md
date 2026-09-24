@@ -21074,3 +21074,22 @@ shows a fixed explanation beside the due date. D864 closes.
 - **No learner surface:** the RFC specifies none, and none was built.
 - **Waiting:** the `sourceGame` pack-schema half waits on lane 0.30.
 - **Ledger:** D1086 closes.
+
+### 2026-09-24 — endgame technique names rebuilt on cited conventions
+
+- **Conventions:** `lucena-setup@1`, `philidor-third-rank-setup@1` and
+  `vancura-setup@1` are frozen, versioned records. Each operand is quoted from
+  a fetched source (pinned Wikipedia revisions, Chess.com, ChessBase). Where
+  sources disagreed, the disagreement is recorded rather than averaged.
+- **Rendering:** the inspector names a technique only when every operand
+  holds, and the sentence carries the convention id and says "geometry only;
+  not an outcome or advice".
+- **Tablebase validation:** the 15 published diagrams and mirrors give the
+  expected results. Seeded 100-position samples hold at 93% (Lucena), 77%
+  (Philidor) and 81% (Vančura). The Lucena and Philidor exceptions are all
+  immediate rook captures; 13 of the Vančura exceptions turn on the attacking
+  king's zone. This is why the rendered claim stays geometric.
+- **Method stages:** `method_stage@1` replays cited stage rules over exact
+  recorded edges. It has no learner binding yet.
+- **Ledger:** D2495 and D2496 close. Reachability ([[D2497]]) stays unavailable.
+- **Intent:** `design/03` B10 is amended again on the owner's ruling.

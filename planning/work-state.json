@@ -19878,21 +19878,21 @@
     },
     {
       "id": "D2495",
-      "state": "blocked",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:c78cc8bc0de6e0837443c2a3aa152381e668055a6e5eb86fac56fc5723649f50",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ba009995b11a94aead4c9613bd8920cb842d92d0146efdf6ae330d361503181a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-value-authority.md"
+      "evidence": "packages/runtime/src/endgame-setup.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2496",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-value-authority.md",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:20e7eee9965c84ec30fed298289761d4889c6a3bee27e48ad56791f6ba5c00aa",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d7caa2f9fe2a0be5f7f618f82fc76f2726e123928c461926308d2c49e38184a8",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/endgame-setup.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2497",
