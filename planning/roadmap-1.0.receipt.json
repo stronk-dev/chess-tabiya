@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:18cd3858c3a566785c2de6ddeebe33e4c38702ca791dd23f3dc5bd03bc9bc7c2",
+    "roadmap": "sha256:9b37f9d0725b1acb0cc119a907ec87e855f73bfaa2d0054326b86a28c011485e",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:833cab9bf4f06a9d7a33dddc30ea6118cabd6f970bfc5dca5ca75e8e535d865b",
-    "rfcRegister": "sha256:195658e500edc2aa656f89424c84e9d5890a3fd826fb4fc8052bdf2c35ab4b2a",
+    "workState": "sha256:c4c2790b068db70c8437b760585dbe25e59081ab410fba6ec55a37c89fc2d636",
+    "rfcRegister": "sha256:a3129e4b4e2449a55be8e369b3061247497a110ebd381acdc5cc5744fd7cd7f6",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:afc6dfb524c9c901e5368ae1191db359acb151121d677244495b6eefb9832540",
-    "application": "sha256:c8a14dd0b777590f8d2acf948b4ce13ac55cb8d4e8e9ac0a4a175b704a96c412",
-    "rest": "sha256:533976b41e30b44eaa5c19352abfff2a3713f47ff8e5c87127089d44b821e468"
+    "application": "sha256:2665e30d6ef12a2d786e2f83bafb22987f7bb41c4f5836dd16394df922b0af29",
+    "rest": "sha256:c55d790dcf2cc005a4084c29806a5572b8207ecd1c884d92a5be51f9842a9008"
   },
   "summary": {
     "capabilities": 14,
@@ -18,23 +18,23 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 72,
+    "assignedRfcs": 71,
     "activeRfcLifecycle": {
-      "draft": 39,
+      "draft": 36,
       "accepted": 0,
-      "implementing": 22,
-      "awaiting": 11,
+      "implementing": 25,
+      "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
       "withdrawn": 0
     },
     "workState": {
       "untriaged": 0,
-      "todo": 622,
+      "todo": 624,
       "doing": 0,
-      "blocked": 1132,
-      "done": 1184,
-      "refused": 111
+      "blocked": 1063,
+      "done": 1202,
+      "refused": 160
     },
     "workItems": {
       "queued": 112,
@@ -124,23 +124,40 @@
       "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Evidence value authority is implemented and its first withdrawn capability is rebuilt grounded: endgame technique names now render only when a cited, versioned setup convention matches, validated against tablebase results and hard negatives, while reachability stays honestly unavailable. Convention provenance (D1) and provider exchange receipts (D2) remain.",
+        "summary": "The shared-resource catalogue is implemented and archived with all three rebases (provider-protocol, semantic-conventions, assistance-config/workflow-preference) registered present-first. Semantic convention provenance landed 48 declarations with append-only history and a value-level ConventionReceipt on every mint, discharging evidence-value-authority D1; endgame setup conventions now live in the register. Provider exchange receipts (EVA D2) remain.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/endgame-setup.ts",
-          "design/research/endgame-setup-conventions.md",
-          "rfc/evidence-value-authority.md"
+          "planning/semantic-convention-provenance/implementation-2026-09-24.md",
+          "rfc/evidence-value-authority.md",
+          "rfc/semantic-convention-register.md",
+          "rfc/semantic-convention-provenance.md",
+          "rfc/assistance-config-register.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:cd1213b83d242964a33c7bae43940b8adb2823de28cb0c016dc05b0dcd40486a"
+            "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-convention-register.md",
+            "digest": "sha256:e587e4114585176b6666aa006691460e7bcce278fd2333c030472a4ced14c8ad"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-convention-provenance.md",
+            "digest": "sha256:cd69d2b53499b99274e7bb6e43f306d478d65a816902536401c7df8cfea2bc8d"
+          },
+          {
+            "kind": "rfc",
+            "id": "assistance-config-register.md",
+            "digest": "sha256:7ba5cf434bbb957d4d082e4f1079f872ed6a252b7ebd5f2c499b60acdbaac0d7"
           },
           {
             "kind": "work_state",
-            "id": "D2497",
-            "digest": "sha256:c2a9e7c4edf7791f0a54a6085b676b3cc60134e69396dc1a87ff092fca28ed2b"
+            "id": "D2363",
+            "digest": "sha256:4189ba577880b0e4275efb8af2e515d325c9d9e8083a9d6e19ab8e768b5a8a33"
           }
         ]
       },
@@ -258,28 +275,35 @@
       "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Three durable foundations landed in register order today: the longitudinal store (26), evidence-job durability (27) and the concept registry (28). The longitudinal worker now drains within 2 s by abandoning its claim for re-lease, and its projector is ~5.8x faster with byte-identical output. Bot-policy's run lane 0.18 holds the next position, then campaign.",
+        "summary": "Four durable migrations landed in register order today: longitudinal store (26), evidence jobs (27), concept registry (28) and bot-policy's run lane 0.18 (29), which stores the chosen bot profile and every bot decision with its provider deliveries so bots resume and rematch exactly. Campaign-core now holds the next position.",
         "impact": "advanced",
         "evidence": [
-          "planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md",
-          "rfc/longitudinal-store.md",
-          "rfc/concept-registry.md"
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "planning/bot-policy/implementation-receipt-2026-09-24-playable.md",
+          "rfc/bot-policy.md",
+          "rfc/bot-roster.md",
+          "rfc/opponent-experience.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "longitudinal-store.md",
-            "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+            "id": "bot-policy.md",
+            "digest": "sha256:a65db5a0f082a3c56e55c4ab1f752fa46e194fb4b9d4e37af799c922dc222508"
           },
           {
             "kind": "rfc",
-            "id": "concept-registry.md",
-            "digest": "sha256:e371f8263638667cbbaf86b1e60858c21ef40fbd7f68bb85056b51395a1ed8b0"
+            "id": "bot-roster.md",
+            "digest": "sha256:f3b6cc6e7fe35ebe6db3019278c630a3d98226933f5b78fb1530f3cfb4d95b83"
+          },
+          {
+            "kind": "rfc",
+            "id": "opponent-experience.md",
+            "digest": "sha256:84f2bc773bfa7fd5af4f1417ea670f876d8b1c630dd5625f404967f83e7c6876"
           },
           {
             "kind": "work_state",
-            "id": "D3300",
-            "digest": "sha256:05039110c08731062f3da449d882bcf214a73b64f340ccb19257b3acfd2e406a"
+            "id": "D1610",
+            "digest": "sha256:40b950bf031f0aac48bd5604711a003dd660236a7df268d43a6bc6f008829cae"
           }
         ]
       },
@@ -492,7 +516,7 @@
       "name": "Work truth, measurement, and release accounting",
       "release": "core",
       "owner": "coordinator",
-      "rfcCount": 2,
+      "rfcCount": 1,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

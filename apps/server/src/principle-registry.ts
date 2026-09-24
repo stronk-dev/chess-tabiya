@@ -6,6 +6,7 @@ import { digestPrincipleEntry, type PrincipleEntryDefinition } from "@chess-tabi
 
 import { ServerError } from "./errors.js";
 import { validatePrincipleEntry } from "./principle-validation.js";
+import type { JoinedCitation } from "./theory-sources.js";
 
 export interface PrincipleSummary {
   readonly id: string;
@@ -21,6 +22,8 @@ export interface PrincipleRecord {
   readonly document: PrincipleEntryDefinition;
   readonly digest: string;
   readonly summary: PrincipleSummary;
+  /** Structured citations joined to their accepted register rows (principle-entry 0.2). */
+  readonly citations: readonly JoinedCitation[];
 }
 
 function freeze<T>(value: T): T { return Object.freeze(value); }
@@ -36,7 +39,7 @@ function project(document: PrincipleEntryDefinition): PrincipleEntryDefinition {
     counterCase: document.counterCase,
     provenance: freeze({
       licence: document.provenance.licence,
-      sources: freeze([...document.provenance.sources]),
+      sources: freeze(document.provenance.sources.map((source) => typeof source === "string" ? source : freeze({ ...source }))),
       attribution: freeze(document.provenance.attribution.map((row) => freeze({ ...row }))),
     }),
   });
@@ -56,7 +59,7 @@ export class PrincipleRegistry {
       const raw = JSON.parse(await readFile(file, "utf8"));
       const result = validatePrincipleEntry(raw);
       if (!result.valid || result.document === undefined) throw new ServerError("PACK_INVALID", `Invalid principle entry ${file}`, { details: { issues: result.issues } });
-      await registry.add(result.document);
+      await registry.add(result.document, result.citations ?? []);
     }
     return registry;
   }
@@ -66,13 +69,16 @@ export class PrincipleRegistry {
   required(id: string): PrincipleRecord { const record = this.get(id); if (record === undefined) throw new ServerError("PACK_INVALID", `Unknown principle: ${id}`); return record; }
   byDigest(digest: string): PrincipleRecord | undefined { return this.#digests.get(digest); }
 
-  async add(document: PrincipleEntryDefinition): Promise<PrincipleRecord> {
+  async add(document: PrincipleEntryDefinition, citations: readonly JoinedCitation[] = []): Promise<PrincipleRecord> {
+    const structured = document.provenance.sources.filter((source) => typeof source !== "string").length;
+    if (structured !== citations.length) throw new ServerError("PACK_INVALID", `Principle ${document.id} carries ${structured} structured citations but ${citations.length} joined records; join them through validatePrincipleEntry`);
     const digest = await digestPrincipleEntry(document);
     const frozen = project(structuredClone(document));
     const record = freeze({
       document: frozen,
       digest,
       summary: freeze({ id: frozen.id, version: frozen.version, digest, name: frozen.name, statement: frozen.statement, phases: frozen.phases, licence: frozen.provenance.licence }),
+      citations: freeze([...citations]),
     });
     if (this.#records.has(frozen.id)) throw new ServerError("PACK_INVALID", `Duplicate principle id ${frozen.id}`);
     this.#records.set(frozen.id, record);

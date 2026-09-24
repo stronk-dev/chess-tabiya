@@ -29,6 +29,7 @@ import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { projectBotRoster, type BotRosterRow } from "./bot-roster.js";
 import { projectPackCapabilities, runtimeSupportedCapabilities, type RuntimeCapabilitySupport } from "./capability/pack-capabilities.js";
 import type { PackCapabilitiesPublicProjectionV1 } from "@chess-tabiya/schema";
+import type { BotProviderAvailabilitySnapshot } from "@chess-tabiya/runtime";
 
 export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
 
@@ -352,6 +353,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #tablebase: CapabilityProviders["tablebase"];
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
   readonly #packCapabilities: RuntimeCapabilitySupport;
+  readonly #botAvailability: (() => BotProviderAvailabilitySnapshot) | undefined;
 
   constructor(
     client: CapabilityEngineClient,
@@ -365,6 +367,8 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly tablebase?: CapabilityProviders["tablebase"];
       readonly openingCatalogue?: OpeningCatalogueAvailability;
       readonly packCapabilities?: RuntimeCapabilitySupport;
+      /** rfc/bot-policy.md §4.3: exchange-observed provider availability for the roster join. */
+      readonly botAvailability?: () => BotProviderAvailabilitySnapshot;
     },
   ) {
     this.#client = client;
@@ -376,6 +380,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
     this.#tablebase = options.tablebase ?? "none";
     this.#openingCatalogue = options.openingCatalogue;
     this.#packCapabilities = options.packCapabilities ?? runtimeSupportedCapabilities();
+    this.#botAvailability = options.botAvailability;
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -437,7 +442,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
         human_common: Object.freeze({
           elo,
           resistance: HUMAN_COMMON_RESISTANCE_PROFILE,
-          profiles: projectBotRoster().profiles,
+          profiles: projectBotRoster(this.#botAvailability?.()).profiles,
         }),
       }),
       providers: providerState,

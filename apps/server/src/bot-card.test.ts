@@ -2,7 +2,6 @@ import {
   BOT_CARD_SOURCE_IDS,
   BOT_CARD_STATEMENT_IDS,
   BOT_PROFILE_CATALOG,
-  BOT_ROSTER_BLOCKERS,
   type BotProfileCatalogEntry,
   type BotProfileId,
 } from "@chess-tabiya/runtime";
@@ -106,14 +105,28 @@ describe("grounded bot cards (bot-policy §7 / A9; bot-roster §7 / criterion 4)
 });
 
 describe("roster projection (bot-policy §8; bot-roster §6.1)", () => {
-  it("advertises exactly the catalog, uncalibrated, and not startable for its named blockers", () => {
+  it("advertises exactly the catalog, uncalibrated, and conditional before any provider outcome is observed", () => {
     const roster = projectBotRoster();
     expect(roster.catalog).toEqual({ id: "bot-profile-catalog", version: 1 });
     expect(roster.profiles.map((row) => row.reference)).toEqual(BOT_PROFILE_CATALOG.map((entry) => entry.reference));
     for (const row of roster.profiles) {
-      expect(row.startable).toEqual({ kind: "not_startable", blockedBy: BOT_ROSTER_BLOCKERS });
+      const guarded = row.reference.family !== "human-baseline";
+      expect(row.startable).toEqual({ kind: "conditional", conditions: guarded ? ["maia_unverified", "stockfish_unverified", "guard_release_receipt_absent"] : ["maia_unverified"] });
       expect(row.card.strength.kind).toBe("uncalibrated");
     }
+  });
+
+  // A10 / opponent-experience criterion 5: the provider matrix. Baseline ignores Stockfish; guarded
+  // families need both operations and stay conditional without a provider-health release receipt.
+  it.each([
+    ["Maia on, guard on", "available", "available", { kind: "available" }, { kind: "conditional", conditions: ["guard_release_receipt_absent"] }],
+    ["Maia on, guard off", "available", "unavailable", { kind: "available" }, { kind: "unavailable", blockedBy: ["stockfish_unavailable"] }],
+    ["Maia off, guard on", "unavailable", "available", { kind: "unavailable", blockedBy: ["maia_unavailable"] }, { kind: "unavailable", blockedBy: ["maia_unavailable"] }],
+    ["both off", "unavailable", "unavailable", { kind: "unavailable", blockedBy: ["maia_unavailable"] }, { kind: "unavailable", blockedBy: ["maia_unavailable", "stockfish_unavailable"] }],
+  ] as const)("%s projects the exact startability per family", (_label, maia, stockfish, baseline, guarded) => {
+    const roster = projectBotRoster({ revision: 1, maia, stockfish });
+    for (const row of roster.profiles) expect(row.startable).toEqual(row.reference.family === "human-baseline" ? baseline : guarded);
+    expect(() => validateRoster(JSON.parse(JSON.stringify(roster.profiles)))).not.toThrow();
   });
 
   it("crosses the web capability parser unchanged", () => {
@@ -122,7 +135,7 @@ describe("roster projection (bot-policy §8; bot-roster §6.1)", () => {
 
   it("attaches a receipt only to the matching behaviour digest", () => {
     const entry = profile("pawn-forward.1400@1");
-    const roster = projectBotRoster({ [entry.behaviorDigest]: receipt(entry) });
+    const roster = projectBotRoster(undefined, { [entry.behaviorDigest]: receipt(entry) });
     expect(roster.profiles.filter((row) => row.card.strength.kind === "calibrated").map((row) => row.reference.id)).toEqual(["pawn-forward.1400@1"]);
   });
 });

@@ -860,7 +860,7 @@ describe("application shell", () => {
     expect(document.body.textContent).not.toContain("private library topology");
     const retry = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Try again")!;
     retry.click();
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Packs and run artifacts"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Find it, understand it, rehearse it, come back to it."));
 
     router.navigate("/review");
     await vi.waitFor(() => expect(location.pathname).toBe("/review"));
@@ -1251,13 +1251,17 @@ describe("application shell", () => {
     router.navigate("/play");
     await vi.waitFor(() => expect(packCalls).toBe(2));
     router.navigate("/library");
-    await vi.waitFor(() => expect(document.body.textContent).toContain(currentPack.title));
+    // The Library lists the server catalogue through /theory/search; the loaded pack list only
+    // titles exact joins, so the stale /play response is asserted by its absence.
+    await vi.waitFor(() => expect(packCalls).toBe(3));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Find it, understand it, rehearse it, come back to it."));
 
     slowPlay.resolve([oldPack]);
     await tick();
     await Promise.resolve();
-    expect(document.body.textContent).toContain(currentPack.title);
+    expect(document.body.textContent).toContain("Find it, understand it, rehearse it, come back to it.");
     expect(document.body.textContent).not.toContain(oldPack.title);
+    expect(document.body.textContent).not.toContain("Choose the game you want to understand.");
     expect(location.pathname).toBe("/library");
     await unmount(component);
   });
@@ -1303,7 +1307,7 @@ describe("application shell", () => {
       ["/rating", "Your measured record"],
       ["/live", "Rehearse with other people"],
       ["/create", "Author against the real validator"],
-      ["/library", "Packs and run artifacts"],
+      ["/library", "Find it, understand it, rehearse it, come back to it."],
       ["/settings", "Settings"],
       ["/missing", "This route is not part of Tabiya"],
     ] as const;

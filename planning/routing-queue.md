@@ -15,6 +15,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D2363, D3082 | coordinator — shared-resource catalogue successor | Absent-source admission is unbuilt; every rebase so far created its source first. Build only when a resource genuinely cannot exist before its claim |
 | D3300 | `rfc/longitudinal-store.md` worker (learner-history) | Drain bound and flake fixed; remaining ~5 s/game projection needs fewer sealed values per candidate edge, an evidence-contract change routed through `rfc/evidence-value-authority.md` |
 | D1737, D1738, D1739 | source-identity closeout → D1736 shared wave + bounded-target/theory/variant siblings | Consume `evidence-source-identity-closeout.md` and its executable 30-family/16-owner receipt. Keep the 14 landed / 7 version-repair / 9 specified-unlanded distinction; preserve the literal seventeen-handoff plus two-reader inventory; absorb the style-atom handoff without style prose; do not call source research complete product completion. |
 | D1728, D1729 | exact pawn-file successor → structural collector / D1711/D1718/D1710 | Consume `pawn-file-identity-author-repair-2026-08-26.md`: derive exact isolated/doubled group reading/event from `pawnConnectivityReading`, support unbounded group size and membership-only/cross-subject changes, replace the false v1 identity claim, and preserve author predicates. |
