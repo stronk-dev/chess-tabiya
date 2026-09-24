@@ -16734,39 +16734,39 @@
     },
     {
       "id": "D2144",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8338ae03c72c9828a3549b8fc736343853e4ded0c23d8aa565f6bf91573cf82c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bcf80b3af6ac6dc4177ef7e08bde789a15b9e24737cf34205b8c0e2ee71fb760",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-value-authority.md"
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2145",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b258b77c8f2dbbbf85e4a26de38624c26bb71bc6d558fa839cfdd374686799c3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:433270ada0b3c00661583ed2db5a7108ff7d1b2406c99c1692801e3894cc9021",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-value-authority.md"
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2146",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6cc1ae069d82c5442921f0f10a413b5dae91fd2f75938afee19232dbbf7a008c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:015d87421f06048da871a068df565760e29429512115ffe058df97335af5314d",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-value-authority.md"
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2147",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5c050f785738cc9b3afaf393ef024bc89641e6419e1c69cda66010d548294fe1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ac4337ce205777b876672f5600afab9c2d2d0a7e65c80828bb3deccfb45ce938",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:evidence-value-authority.md"
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2148",

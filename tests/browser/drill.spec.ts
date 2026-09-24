@@ -492,8 +492,10 @@ test("endgame evidence is inspectable without a pivotal marker", async ({ page }
   await page.getByRole("button", { name: "Inspector" }).click();
   const evidence = page.getByRole("region", { name: "Current-position endgame evidence" });
   await expect(evidence).toContainText("Rook and pawn versus rook");
-  await expect(evidence).toContainText("Lucena");
-  await expect(evidence).toContainText("Philidor");
+  // rfc/evidence-value-authority.md: no cited setup convention grounds a technique name yet, so the
+  // census names the material class only (theory.endgame.setup_match@1 abstains).
+  await expect(evidence).not.toContainText("Lucena");
+  await expect(evidence).not.toContainText("Philidor");
 });
 
 test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {

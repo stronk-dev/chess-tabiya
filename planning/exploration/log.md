@@ -21009,3 +21009,29 @@ round. Their register rows are now `implementing`.
 - **Harness fallout:** several draft-RFC evidence harnesses with stale pins now
   fail (`evidence-value-authority-author-contract`, D1710, D1711). None is in
   `make verify`.
+
+### 2026-09-24 — evidence-value-authority implemented (awaiting D1); browser break repaired
+
+- **Value receipts:** every declared evidence value now carries a factory
+  receipt that `assertDeclaredEvidence` checks.
+- **One mint:** `evidence-factories.ts` is the sole mint for 210 projections,
+  behind one package-internal route invoker. The public payload adapters are
+  deleted.
+- **Successors:** phase `@2`, `named_structure@2`, endgame classification and
+  predicate-result succeed the retired v1 rows.
+- **Endgame names withdrawn:** technique naming (Lucena/Philidor) is withdrawn
+  until a cited setup convention lands ([[D2495]]–[[D2497]]). The endgame
+  inspector names the material class only.
+- **Intent amendment:** `design/03` B10 is now false, and the amendment is filed
+  at `planning/platform-alignment/evidence-value-authority-intent-amendment-2026-09-24.md`.
+- **Ledger:** D2144–D2147 close.
+- **Still open:** D1 (convention provenance) and D2 (provider exchange
+  receipts).
+
+**Browser regression, found at closeout.** The recorded-semantic-path merge
+broke every run-opening browser journey: 39 of 41 smoke tests failed, and no
+agent had run the browser tier. The web capability parser keyed evidence
+bindings by projection id without version. Once `@2` successors were bound
+beside `@1`, it rejected `/capabilities` and pack starts failed. Bindings are
+now keyed by consumer and projection version, with a unit regression. Smoke is
+40 passed, 1 skipped.

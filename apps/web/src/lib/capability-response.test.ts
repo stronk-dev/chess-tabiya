@@ -44,6 +44,13 @@ describe("capability response authority", () => {
     expect(Object.isFrozen(parsed.evidenceManifest.bindings[0])).toBe(true);
   });
 
+  it("admits two versions of one projection bound to the same consumer as distinct edges", () => {
+    // rfc/recorded-semantic-path.md: an `@2` successor is bound beside its retained `@1` predecessor.
+    const [binding] = capabilities.evidenceManifest.bindings;
+    const value = { ...capabilities, evidenceManifest: { ...capabilities.evidenceManifest, bindings: [binding, { ...binding, projectionVersion: 2 }], counts: { ...capabilities.evidenceManifest.counts, bindings: 2 } } };
+    expect(parseCapabilities(value).evidenceManifest.bindings).toHaveLength(2);
+  });
+
   it.each([
     [{ ...capabilities, capabilityDispositions: [] }],
     [{ ...capabilities, providers: { ...capabilities.providers, opponent: "stockfish" } }],

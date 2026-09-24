@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:34424abed403b75b72b547e7ee72a277b70dd900160e1d48e873cb17c1c8b03f",
+    "roadmap": "sha256:2e68277b2ef11c58b209c714f84e6c9e1b7736c1a6a99d77616033d2ebc69afe",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:3c9913ea33774443f9269e199b35edbd0cc6d8f5ab646a5e01f0f7a16f2dafaa",
-    "rfcRegister": "sha256:d43a9fc02445c8d4743b8131ee2870ff0540c0ef88e5d5d9e7093ce87e00baf9",
+    "workState": "sha256:be7c8e6591304d049da9aa7094f51e1b0632aae452a997319172fcc8984f5818",
+    "rfcRegister": "sha256:80cc5b0c7e8c2da14ba96cb4d59de5f6ab62c22b9f17ea2b29295635c55b71dd",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -20,10 +20,10 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 55,
+      "draft": 54,
       "accepted": 0,
       "implementing": 8,
-      "awaiting": 9,
+      "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
       "withdrawn": 0
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1214,
-      "done": 1096,
+      "blocked": 1210,
+      "done": 1100,
       "refused": 111
     },
     "workItems": {
@@ -123,23 +123,30 @@
       ],
       "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
       "latestCheckpoint": {
-        "at": "2026-09-08",
-        "summary": "Pack schema 0.29 and the citable-text evidence path are implemented. Corpus state is typed and cross-checked against actual Explorer records, citations require hashed HTTP sources and prose-only support, provenance_note has a real claim-binding reader, and timing-window notes are widened and reported. All 92 committed draft/candidate documents remain valid with intentional missing-state warnings; owner-authored population is retained as an explicit discharge rather than silently inferred.",
+        "at": "2026-09-24",
+        "summary": "Evidence value authority is implemented: every declared value carries a factory receipt checked at the consumer boundary, one factory file mints all 210 projections behind a single route invoker, the public payload adapters are deleted, and phase, named-structure, endgame and predicate successors replace retired v1 rows. Convention provenance (D1) and provider exchange receipts (D2) remain; endgame technique naming is withdrawn until a cited setup convention lands. The shared-resource register catalogue also landed.",
         "impact": "advanced",
         "evidence": [
-          "rfc/pack-population-provenance.md",
-          "schemas/drill_pack.schema.json",
-          "apps/server/src/pack-validation.ts",
-          "apps/server/src/sourcing/check.ts",
-          "apps/server/src/sourcing/claim-binding.ts",
-          "packages/runtime/src/evidence-catalog.ts",
-          "planning/exploration/log.md"
+          "packages/runtime/src/evidence-factories.ts",
+          "planning/evidence-value-authority/implementation-2026-09-24.md",
+          "rfc/evidence-value-authority.md",
+          "rfc/shared-resource-register-bootstrap.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "pack-population-provenance.md",
-            "digest": "sha256:45fa49b6e0cd60a147f83f9ecadad77eebc9fc7100e6c15f06c43ac41444df3a"
+            "id": "evidence-value-authority.md",
+            "digest": "sha256:d6b0266b61bc8e8d62b57a81255813357ff1be95c0d7c95ae8263b0a58801eaa"
+          },
+          {
+            "kind": "rfc",
+            "id": "shared-resource-register-bootstrap.md",
+            "digest": "sha256:1b40a0821db8a9070bb0b318c4e47ff5487df0a6586e09d4d46f395ddf412304"
+          },
+          {
+            "kind": "work_state",
+            "id": "D2327",
+            "digest": "sha256:e4c9d0ef8e99fe1ead87d9a4e67850fbb78b54340735f23c3c42683c5b5b813d"
           }
         ]
       },

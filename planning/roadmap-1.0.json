@@ -335,12 +335,31 @@
         "dependsOn": ["release-truth"],
         "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
         "latestCheckpoint": {
-          "at": "2026-09-08",
-          "summary": "Pack schema 0.29 and the citable-text evidence path are implemented. Corpus state is typed and cross-checked against actual Explorer records, citations require hashed HTTP sources and prose-only support, provenance_note has a real claim-binding reader, and timing-window notes are widened and reported. All 92 committed draft/candidate documents remain valid with intentional missing-state warnings; owner-authored population is retained as an explicit discharge rather than silently inferred.",
+          "at": "2026-09-24",
+          "summary": "Evidence value authority is implemented: every declared value carries a factory receipt checked at the consumer boundary, one factory file mints all 210 projections behind a single route invoker, the public payload adapters are deleted, and phase, named-structure, endgame and predicate successors replace retired v1 rows. Convention provenance (D1) and provider exchange receipts (D2) remain; endgame technique naming is withdrawn until a cited setup convention lands. The shared-resource register catalogue also landed.",
           "impact": "advanced",
-          "evidence": ["rfc/pack-population-provenance.md", "schemas/drill_pack.schema.json", "apps/server/src/pack-validation.ts", "apps/server/src/sourcing/check.ts", "apps/server/src/sourcing/claim-binding.ts", "packages/runtime/src/evidence-catalog.ts", "planning/exploration/log.md"],
+          "evidence": [
+            "packages/runtime/src/evidence-factories.ts",
+            "planning/evidence-value-authority/implementation-2026-09-24.md",
+            "rfc/evidence-value-authority.md",
+            "rfc/shared-resource-register-bootstrap.md"
+          ],
           "anchors": [
-            {"kind": "rfc", "id": "pack-population-provenance.md", "digest": "sha256:45fa49b6e0cd60a147f83f9ecadad77eebc9fc7100e6c15f06c43ac41444df3a"}
+            {
+              "kind": "rfc",
+              "id": "evidence-value-authority.md",
+              "digest": "sha256:d6b0266b61bc8e8d62b57a81255813357ff1be95c0d7c95ae8263b0a58801eaa"
+            },
+            {
+              "kind": "rfc",
+              "id": "shared-resource-register-bootstrap.md",
+              "digest": "sha256:1b40a0821db8a9070bb0b318c4e47ff5487df0a6586e09d4d46f395ddf412304"
+            },
+            {
+              "kind": "work_state",
+              "id": "D2327",
+              "digest": "sha256:e4c9d0ef8e99fe1ead87d9a4e67850fbb78b54340735f23c3c42683c5b5b813d"
+            }
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
