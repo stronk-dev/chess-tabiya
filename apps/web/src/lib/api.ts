@@ -59,6 +59,7 @@ import {
   type StyleCardPage,
 } from "./profile-response.js";
 import { parseEvidencePage } from "./evidence-page-response.js";
+import { EVIDENCE_KIND_LABELS } from "./labels/evidence-kind.js";
 import { parsePostcommitNudge, type PostcommitNudge } from "./nudge-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
 import { parseGroupReplyResult, parsePredictionResult } from "./opponent-path-response.js";
@@ -1731,6 +1732,7 @@ export class DrillApi implements DrillClientApi {
   }
 }
 
+/** rfc/evidence-presentation.md rule 6c: total over `EvidenceKind` through the label registry. */
 export function evidenceKindLabel(kind: EvidenceKind): string {
-  return kind === "bestline" ? "best line" : kind;
+  return EVIDENCE_KIND_LABELS[kind].label;
 }

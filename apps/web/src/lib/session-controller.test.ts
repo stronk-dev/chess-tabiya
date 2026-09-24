@@ -36,6 +36,7 @@ import type {
   SelectMoveRequest,
 } from "./api.js";
 import { ApiError } from "./api.js";
+import { OBJECTIVE_TYPE_LABELS } from "./labels/index.js";
 import type { PollScheduler } from "./run-state.js";
 import { DrillSessionController, sessionErrorMessage } from "./session-controller.js";
 import {
@@ -185,7 +186,7 @@ class FakeApi implements DrillClientApi {
         mode: this.document.mode as string,
         phase: "opening",
         difficulty: this.document.difficulty,
-        objectiveSummary: this.document.objective.summary ?? this.document.objective.type.replaceAll("_", " "),
+        objectiveSummary: this.document.objective.summary ?? OBJECTIVE_TYPE_LABELS[this.document.objective.type].label,
         concepts: (this.document.concepts ?? []).map((id) => ({ id, label: id, status: "active" as const })),
         reviewStatus: "schema_example",
         channel: "official",

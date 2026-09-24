@@ -37,6 +37,6 @@ describe("claim provenance", () => {
 
   it("states the absence of a record for self-declared claims", () => {
     expect(claimProvenance(claim({ binding: "self_declared", evidenceTypes: ["derived_feature"], earnedEvidenceTypes: [], principles: [] })))
-      .toBe("Author's claim, author-declared: board-feature detector. No machine record is attached.");
+      .toBe("Author's claim, author-declared: board-feature reading. No machine record is attached.");
   });
 });

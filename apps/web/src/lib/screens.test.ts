@@ -54,6 +54,7 @@ import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
 import WhyBanner from "./WhyBanner.svelte";
 import type { Capabilities, PackSummary, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
+import { OBJECTIVE_TYPE_LABELS } from "./labels/index.js";
 import type {
   RegionKeyboardHandler,
   RegisterKeyboardRegion,
@@ -1888,7 +1889,7 @@ describe("Layer 3 screens", () => {
       mode: pack.mode as string,
       phase: "opening",
       difficulty: pack.difficulty,
-      objectiveSummary: pack.objective.summary ?? pack.objective.type.replaceAll("_", " "),
+      objectiveSummary: pack.objective.summary ?? OBJECTIVE_TYPE_LABELS[pack.objective.type].label,
       concepts: (pack.concepts ?? []).map((id) => ({ id, label: id, status: "active" as const })),
       reviewStatus: "draft",
       channel: "community",

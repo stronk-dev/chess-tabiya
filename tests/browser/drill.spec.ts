@@ -1160,7 +1160,9 @@ test("terminal flip preserves the source and milestones link back into played ru
   await page.getByRole("button", { name: "Replay this as Black" }).click();
   await expect(page).toHaveURL(/\/play\/run\/flip-/);
   await expect(page.getByRole("heading", { name: /Nothing is authored about this position/ })).toBeVisible();
-  await expect(page.getByLabel("Opposite-side replay source")).toContainText(sourceId);
+  // rfc/evidence-presentation.md §6a: the source is named, never shown as its raw run id.
+  await expect(page.getByLabel("Opposite-side replay source")).toContainText("Mirror of the source run");
+  await expect(page.getByLabel("Opposite-side replay source")).not.toContainText(sourceId);
   await page.goto("/learn");
   await expect(page.getByRole("heading", { name: "Milestones" })).toBeVisible();
   await expect(page.getByText("First preserved attempt.")).toBeVisible();

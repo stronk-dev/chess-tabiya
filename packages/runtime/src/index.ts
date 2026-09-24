@@ -172,6 +172,7 @@ export { ENDGAME_METHOD_CONVENTIONS, endgameMethodConvention, type EndgameMethod
 export { retrospectivePivot } from "./adaptive.js";
 export { STORY_MOMENT_KINDS, STORY_PIVOT_CP, evidenceGroundingLabel, parseReviewStoryReceipt, projectPublicReviewStory, rankStoryMoments, renderReviewStoryComponents, renderReviewStoryReceipt, reviewStoryMoments, storyDeclaredEvidence, storyMomentsForRun, storyEvidenceSourceLabels, suggestTitle, type ParsedReviewStory, type PublicReviewStoryReceipt, type ReviewStoryMomentReceipt, type ReviewStoryReceipt, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {
+  CLAIM_EVIDENCE_TYPE_LABELS, SIDE_LABELS, type ClaimEvidenceType, type LabelVocabularyMembers, type ReviewSide,
   COMPONENT_DECLARATIONS, COMPONENT_IDS, GROUNDING_LABELS, LABEL_VOCABULARIES, OBJECTIVE_STATE_LABELS, PRESENTATION_ADAPTERS, PRESENTATION_CONVENTIONS,
   PRESENTATION_QUESTIONS, PRESENTATION_SELECTION_ONLY, PRESENTATION_SOURCE_REASONS, PresentationError, RECORDED_RELATION_LABELS, RUN_OUTCOME_LABELS,
   assertPresentationText, assertPresentedEvidenceItem, citationFromEvidence, isPresentedAbstention, parsePresentationReceipt, presentEvidenceItems,

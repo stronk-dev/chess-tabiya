@@ -60,6 +60,7 @@
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
   import { storyMomentLabel } from "./learner-copy.js";
+  import { labelOrFallback, learnerProse } from "./labels/index.js";
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
   import { rehearsalGuideStep } from "./rehearsal-guide.js";
@@ -1743,7 +1744,7 @@
   <section class="viewport-refusal" role="alert" aria-labelledby="viewport-refusal-title">
     <p>More room needed</p>
     <h1 id="viewport-refusal-title">This screen is too small for a playable board.</h1>
-    <p>{viewportSupport.reason}</p>
+    <p>{learnerProse(viewportSupport.reason ?? "")}</p>
     <button type="button" onclick={onStop}>Return to Play</button>
   </section>
 {:else if comparison}
@@ -2334,7 +2335,7 @@
           {:else}
             <h4>{inspectedShape.name}</h4>
             <p class="guidance-sentence">{renderStructuralExpressionSpec(inspectedShape.trigger)}</p>
-            <p class="honest">{inspectedShape.id}@{inspectedShape.version} · {inspectedShape.channel} · {inspectedShape.provenance.licence}</p>
+            <p class="honest">Version {inspectedShape.version} · {inspectedShape.channel} · {inspectedShape.provenance.licence}</p>
             {#each inspectedShape.provenance.attribution as source}<p>{source.title} — {source.author} ({source.licence}){#if source.url} · <a href={source.url} rel="noreferrer">source</a>{/if}</p>{/each}
             {#each inspectedShape.provenance.sources as source}<p>{source}</p>{/each}
             {#each inspectedShape.plans.filter((plan) => plan.success.signature !== null) as plan}<p class="guidance-sentence">{plan.label}: {renderStructuralExpressionSpec(plan.success.signature!)}.</p>{/each}
@@ -2344,7 +2345,7 @@
           <h3>Run trajectory</h3>
           {#if trajectory}
             <div class="trajectory-status">
-              {#each trajectory.legs as leg}<div class:active-leg={leg.legId === trajectory.activeLegId}><strong>{leg.legId}</strong><span>{leg.status === "not_entered" ? "not entered" : leg.state}</span></div>{/each}
+              {#each trajectory.legs as leg, legIndex}<div class:active-leg={leg.legId === trajectory.activeLegId}><strong>Leg {legIndex + 1}</strong><span>{leg.status === "not_entered" ? "not entered" : labelOrFallback("objective_state", leg.state)}</span></div>{/each}
             </div>
           {:else}<p class="honest">This run has no trajectory legs.</p>{/if}
         </section>
