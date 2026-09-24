@@ -1297,17 +1297,21 @@
     {
       "id": "ARR-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§3.3 B3",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "A suggestion rail ranked on facts about the learner's own runs (permitted by `03` §Learn and return; nowhere near the rejected v1 identity)",
       "legacyRoute": "none",
       "note": "needs a law-8-honest ranking rule",
-      "sourceDigest": "sha256:fa2a19078c9c3e92a799fd5572908ce5c987d132177e48dccad2bbde1f0d1bcd"
+      "sourceDigest": "sha256:fa2a19078c9c3e92a799fd5572908ce5c987d132177e48dccad2bbde1f0d1bcd",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "38f4bd76: Home thread rail ranks up to three suggestions on facts about the learner's own hosted runs (short of objective, in progress, untouched phase) with the rule stated; home-suggestions.test.ts and app-shell ARR-a8 test"
+      }
     },
     {
       "id": "ARR-a9",
@@ -6229,17 +6233,21 @@
     {
       "id": "LIV-a14",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§6 E1–E4",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
       "summary": "**Streamer mode**: a three-state chrome preference on the existing keybinding registry that hides handles, ratings, the assistance rail, evidence panels, authored markers and shell chrome, states what it does *not* do, and stops the word *\"Stream\"* meaning two things",
       "legacyRoute": "none",
       "note": "depends on nothing; the dossier's own #1 sequenced item",
-      "sourceDigest": "sha256:c2ca0563545e3d7c43f8ad71afcff1dc313cd1c437acca87cd45c1b1123facc4"
+      "sourceDigest": "sha256:c2ca0563545e3d7c43f8ad71afcff1dc313cd1c437acca87cd45c1b1123facc4",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "eb637e27: three-state streamer mode (Settings + Z keybinding) hides navigation, handles, rating card, support/inspector controls, Support region and authored markers; hide-only fence, selector census and limit copy in streamer-mode.test.ts; theme.spec LIV-a14 browser journey"
+      }
     },
     {
       "id": "LIV-a15",
@@ -6386,7 +6394,7 @@
     {
       "id": "LIV-a22",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
       "assignment": "capability:social_play",
