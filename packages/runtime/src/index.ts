@@ -109,6 +109,7 @@ export {
   type AssistanceDigest, type AssistanceExchangeErrorCode, type AuthoritativeAssistanceV1, type AvailabilityState, type BrowserChannelReceiptV1, type BrowserNarrowedAssistanceV1,
   type CompiledAssistanceEffect, type FieldAdapterEntry, type FinalizedAssistanceV1, type HintCeilingReceipt, type LocalPreferenceInput, type ModuleSourceAuthority,
   type RequestedAssistanceV1, type SealedModuleSourceReceipts, type ServerAssistanceAuthority, type ServerEvidenceAvailabilityReceipt, type SuppressionReason, type SuppressionRecord,
+  type CampaignWorkflowOrigin,
 } from "./assistance-exchange.js";
 export { MODULE_POLICIES, moduleConsumerCeilings, moduleEvidenceRole, modulePolicy, moduleSessions, type ModulePolicy } from "./module-policy.js";
 export {
@@ -150,8 +151,26 @@ export {
   type ReductionQualityObservation,
   type ReductionQualityRecorder,
 } from "./module-reducers.js";
-export { CAMPAIGN_ACT_IDS, CampaignModuleError, assertCampaignUnlockAllowed, campaignModuleInventory, effectiveCampaignModules, isUnlockableModuleId, type CampaignAct, type CampaignActId, type CampaignDocument, type CampaignEconomy, type CampaignLayer, type CampaignNode, type CampaignNodeReward, type UnlockableModuleId } from "./campaign-contract.js";
-export { CampaignStateError, campaignRunState, prestigeEligible, type CampaignChargeEarnedEvent, type CampaignChargeSpentEvent, type CampaignCursor, type CampaignEvent, type CampaignModuleUnlockedEvent, type CampaignNodeEnteredEvent, type CampaignNodeSeal, type CampaignNodeSealedEvent, type CampaignNodeVerdict, type CampaignRunState, type CampaignStateErrorCode } from "./campaign-state.js";
+export {
+  CAMPAIGN_ACT_IDS, CAMPAIGN_MODULE_REASONS, CAMPAIGN_REWIND_RESOURCE, CAMPAIGN_RUN_REWARD_KINDS, CAMPAIGN_THEORY_REASONS, CampaignModuleError,
+  assertCampaignUnlockAllowed, campaignModuleCeiling, campaignModuleInventory, campaignModuleShelf, campaignRewardRef, campaignRewardRefKey,
+  effectiveCampaignModules, isUnlockableModuleId, locateCampaignNodes,
+  type CampaignAct, type CampaignActId, type CampaignBossGameEncounter, type CampaignDocument, type CampaignEconomy, type CampaignEncounter, type CampaignLayer,
+  type CampaignModuleReason, type CampaignModuleShelfRow, type CampaignNode, type CampaignNodeReward, type CampaignPackEncounter, type CampaignRunReward,
+  type CampaignRunRewardRef, type CampaignTheoryReason, type DurableCampaignReward, type DurableRewardGrant, type LocatedCampaignNode, type UnlockableModuleCount,
+  type UnlockableModuleId,
+} from "./campaign-contract.js";
+export {
+  CAMPAIGN_CHARGED_OPERATIONS, CAMPAIGN_EVENT_KINDS, CAMPAIGN_NODE_VERDICTS, CampaignStateError, campaignPrestigeEligible, campaignRunState, prestigeEligible,
+  type CampaignActIncome, type CampaignActiveEncounter, type CampaignBossOutcome, type CampaignBossRatingDisposition, type CampaignBossTerminalReason,
+  type CampaignChargedOperation, type CampaignCursor, type CampaignEvent, type CampaignEventKind, type CampaignEventPayloads, type CampaignNodeSeal,
+  type CampaignNodeVerdict, type CampaignParticipationWitness, type CampaignRunState, type CampaignStateErrorCode, type ChargeLedgerEntry,
+} from "./campaign-state.js";
+export { deriveCampaignParticipationWitness, type CampaignBoundaryDefinition, type CampaignParticipationRefusal, type CampaignParticipationResult } from "./campaign-participation.js";
+export {
+  CampaignReceiptError, issueCampaignEncounterReceipt, verifyCampaignEncounterReceipt,
+  type CampaignAssistanceSubject, type CampaignEncounterReceipt, type CampaignReceiptErrorCode,
+} from "./campaign-receipt.js";
 export { PIVOTAL_MARKER_ROUTES, consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkerEvidenceItems, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
   TRANSITION_FEATURE_KINDS,

@@ -1,13 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:campaign:1",
+  "$id": "urn:chess-tabiya:schema:campaign:3",
   "title": "Tabiya Campaign Document",
   "type": "object",
-  "required": ["id", "title", "version", "acts", "economy", "startingModules"],
+  "required": ["id", "title", "version", "publication", "acts", "economy", "startingModules", "durableRewards"],
   "properties": {
     "id": { "$ref": "#/$defs/id" },
     "title": { "$ref": "#/$defs/nonEmptyString" },
     "version": { "type": "integer", "minimum": 1 },
+    "publication": { "$ref": "#/$defs/publication" },
     "acts": {
       "type": "array",
       "minItems": 3,
@@ -24,12 +25,18 @@
       "type": "array",
       "uniqueItems": true,
       "items": { "$ref": "#/$defs/unlockableModule" }
+    },
+    "durableRewards": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/durableRewardGrant" }
     }
   },
   "additionalProperties": false,
   "$defs": {
     "nonEmptyString": { "type": "string", "minLength": 1 },
     "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
     "unlockableModule": {
       "enum": [
         "sight_on_request",
@@ -44,7 +51,125 @@
         "full_inspector"
       ]
     },
-    "encounter": {
+    "publication": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["channel"],
+          "properties": { "channel": { "const": "community" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["channel", "curriculum"],
+          "properties": {
+            "channel": { "const": "official" },
+            "curriculum": { "$ref": "#/$defs/curriculum" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "nodeIdList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "curriculum": {
+      "type": "object",
+      "required": ["targetLearner", "expectedEnvelope", "phaseCoverage", "formCoverage", "theoryProvenance", "dependencyAvailability", "reviewReceipt"],
+      "properties": {
+        "targetLearner": {
+          "type": "object",
+          "required": ["bracketId", "prerequisites"],
+          "properties": {
+            "bracketId": { "$ref": "#/$defs/nonEmptyString" },
+            "prerequisites": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+          },
+          "additionalProperties": false
+        },
+        "expectedEnvelope": {
+          "type": "object",
+          "required": ["minimumMinutes", "maximumMinutes"],
+          "properties": {
+            "minimumMinutes": { "type": "integer", "minimum": 1 },
+            "maximumMinutes": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "phaseCoverage": {
+          "type": "object",
+          "required": ["opening", "middlegame", "endgame"],
+          "properties": {
+            "opening": { "$ref": "#/$defs/nodeIdList" },
+            "middlegame": { "$ref": "#/$defs/nodeIdList" },
+            "endgame": { "$ref": "#/$defs/nodeIdList" }
+          },
+          "additionalProperties": false
+        },
+        "formCoverage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["encounterKind", "nodeIds"],
+            "properties": {
+              "encounterKind": { "enum": ["pack", "boss_game"] },
+              "nodeIds": { "$ref": "#/$defs/nodeIdList" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "theoryProvenance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["nodeId", "passage", "evidenceRefs"],
+            "properties": {
+              "nodeId": { "$ref": "#/$defs/id" },
+              "passage": { "$ref": "#/$defs/theoryPassageRef" },
+              "evidenceRefs": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+            },
+            "additionalProperties": false
+          }
+        },
+        "dependencyAvailability": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["requirement", "requiredAt", "unavailableAction", "sourceAvailable"],
+            "properties": {
+              "requirement": { "$ref": "#/$defs/nonEmptyString" },
+              "requiredAt": { "$ref": "#/$defs/nodeIdList" },
+              "unavailableAction": { "enum": ["refuse_start", "honest_degradation"] },
+              "fallbackOperation": { "$ref": "#/$defs/nonEmptyString" },
+              "sourceAvailable": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "reviewReceipt": {
+          "type": "object",
+          "required": ["authority", "documentDigest", "reviewedAt"],
+          "properties": {
+            "authority": { "const": "owner_human_chess_review" },
+            "documentDigest": { "$ref": "#/$defs/digest" },
+            "reviewedAt": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "theoryPassageRef": {
+      "type": "object",
+      "required": ["bundleId", "passageId"],
+      "properties": {
+        "bundleId": { "$ref": "#/$defs/nonEmptyString" },
+        "passageId": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "packEncounter": {
       "type": "object",
       "required": ["kind", "packId"],
       "properties": {
@@ -53,12 +178,193 @@
       },
       "additionalProperties": false
     },
-    "reward": {
+    "botProfileReference": {
       "type": "object",
-      "required": ["kind", "moduleId"],
+      "required": ["id", "family", "band", "version", "digest", "model", "sampler", "orderedLayers"],
       "properties": {
-        "kind": { "const": "module_unlock" },
-        "moduleId": { "$ref": "#/$defs/unlockableModule" }
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "family": { "$ref": "#/$defs/nonEmptyString" },
+        "band": { "type": "integer" },
+        "version": { "const": 1 },
+        "digest": { "$ref": "#/$defs/digest" },
+        "model": {
+          "type": "object",
+          "required": ["id", "version"],
+          "properties": {
+            "id": { "$ref": "#/$defs/nonEmptyString" },
+            "version": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "sampler": {
+          "type": "object",
+          "required": ["temperature", "topP", "requestedWidth", "returnedMassFloor"],
+          "properties": {
+            "temperature": { "type": "number" },
+            "topP": { "type": "number" },
+            "requestedWidth": { "type": "integer" },
+            "returnedMassFloor": { "type": "number" }
+          },
+          "additionalProperties": false
+        },
+        "orderedLayers": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+      },
+      "additionalProperties": false
+    },
+    "bossGameEncounter": {
+      "type": "object",
+      "required": ["kind", "start", "opponent", "rating", "briefingRef"],
+      "properties": {
+        "kind": { "const": "boss_game" },
+        "start": {
+          "type": "object",
+          "required": ["fen", "learnerSide"],
+          "properties": {
+            "fen": { "$ref": "#/$defs/nonEmptyString" },
+            "learnerSide": { "enum": ["white", "black"] }
+          },
+          "additionalProperties": false
+        },
+        "opponent": {
+          "type": "object",
+          "required": ["profile"],
+          "properties": {
+            "profile": { "$ref": "#/$defs/botProfileReference" },
+            "calibration": {
+              "type": "object",
+              "required": ["profileDigest", "calibrationId", "timeControlScope", "harnessReceipt"],
+              "properties": {
+                "profileDigest": { "$ref": "#/$defs/digest" },
+                "calibrationId": { "$ref": "#/$defs/nonEmptyString" },
+                "timeControlScope": { "$ref": "#/$defs/nonEmptyString" },
+                "harnessReceipt": { "$ref": "#/$defs/nonEmptyString" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "rating": { "enum": ["rated_when_clean", "unrated"] },
+        "briefingRef": {
+          "type": "object",
+          "required": ["kind", "packId"],
+          "properties": {
+            "kind": { "const": "pack_start" },
+            "packId": { "$ref": "#/$defs/id" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "encounter": {
+      "oneOf": [
+        { "$ref": "#/$defs/packEncounter" },
+        { "$ref": "#/$defs/bossGameEncounter" }
+      ]
+    },
+    "runReward": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "moduleId"],
+          "properties": {
+            "kind": { "const": "module_unlock" },
+            "moduleId": { "$ref": "#/$defs/unlockableModule" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "bundleId", "passageId"],
+          "properties": {
+            "kind": { "const": "theory_unlock" },
+            "bundleId": { "$ref": "#/$defs/nonEmptyString" },
+            "passageId": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "resourceId", "amount"],
+          "properties": {
+            "kind": { "const": "resource_grant" },
+            "resourceId": { "const": "campaign_rewind_charge" },
+            "amount": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "runRewardRef": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "moduleId"],
+          "properties": {
+            "kind": { "const": "module_unlock" },
+            "moduleId": { "$ref": "#/$defs/unlockableModule" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "bundleId", "passageId"],
+          "properties": {
+            "kind": { "const": "theory_unlock" },
+            "bundleId": { "$ref": "#/$defs/nonEmptyString" },
+            "passageId": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "resourceId"],
+          "properties": {
+            "kind": { "const": "resource_grant" },
+            "resourceId": { "const": "campaign_rewind_charge" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "durableReward": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "campaignId", "campaignVersion"],
+          "properties": {
+            "kind": { "enum": ["completion_mark", "prestige_mark"] },
+            "campaignId": { "$ref": "#/$defs/id" },
+            "campaignVersion": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "target"],
+          "properties": {
+            "kind": { "const": "cosmetic_unlock" },
+            "target": {
+              "type": "object",
+              "required": ["kind", "id"],
+              "properties": {
+                "kind": { "enum": ["app_theme", "board_theme", "piece_set"] },
+                "id": { "$ref": "#/$defs/nonEmptyString" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "durableRewardGrant": {
+      "type": "object",
+      "required": ["when", "reward"],
+      "properties": {
+        "when": { "enum": ["completed", "prestige"] },
+        "reward": { "$ref": "#/$defs/durableReward" }
       },
       "additionalProperties": false
     },
@@ -73,7 +379,11 @@
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/unlockableModule" }
         },
-        "reward": { "$ref": "#/$defs/reward" },
+        "reward": { "$ref": "#/$defs/runReward" },
+        "consumes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runRewardRef" }
+        },
         "boss": { "const": true }
       },
       "additionalProperties": false

@@ -1,0 +1,364 @@
+{
+  "id": "draft-pilot-three-phases",
+  "title": "Draft pilot: three phases (mechanical structure, not official)",
+  "version": 1,
+  "publication": {
+    "channel": "community"
+  },
+  "acts": [
+    {
+      "id": "act1",
+      "layers": [
+        {
+          "choices": [
+            {
+              "id": "a1-open-white",
+              "encounter": {
+                "kind": "pack",
+                "packId": "opening-principles-white"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "sight_on_request"
+              }
+            },
+            {
+              "id": "a1-open-black",
+              "encounter": {
+                "kind": "pack",
+                "packId": "opening-principles-black"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "sight_on_request"
+              }
+            },
+            {
+              "id": "a1-london",
+              "encounter": {
+                "kind": "pack",
+                "packId": "london-system-white"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "postcommit_nudge"
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "a1-caro-black",
+              "encounter": {
+                "kind": "pack",
+                "packId": "caro-kann-advance-black"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            },
+            {
+              "id": "a1-french-black",
+              "encounter": {
+                "kind": "pack",
+                "packId": "french-advance-black"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "threat_radar"
+              }
+            },
+            {
+              "id": "a1-anti-caro",
+              "encounter": {
+                "kind": "pack",
+                "packId": "anti-caro-advance-early-c5"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "postcommit_nudge"
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "a1-boss",
+              "encounter": {
+                "kind": "pack",
+                "packId": "italian-center-attack-white"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 2
+              },
+              "boss": true,
+              "suppress": [
+                "guided_hint"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act2",
+      "layers": [
+        {
+          "choices": [
+            {
+              "id": "a2-panov",
+              "encounter": {
+                "kind": "pack",
+                "packId": "iqp-white-panov-attack"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "guided_hint"
+              }
+            },
+            {
+              "id": "a2-carlsbad",
+              "encounter": {
+                "kind": "pack",
+                "packId": "carlsbad-minority-attack"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "compare_coach"
+              }
+            },
+            {
+              "id": "a2-berlin",
+              "encounter": {
+                "kind": "pack",
+                "packId": "berlin-queenless-press"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "structure_nudge"
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "a2-french-chain",
+              "encounter": {
+                "kind": "pack",
+                "packId": "french-advance-chain-white"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            },
+            {
+              "id": "a2-maroczy",
+              "encounter": {
+                "kind": "pack",
+                "packId": "maroczy-bind-white-squeeze"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "review_map"
+              }
+            },
+            {
+              "id": "a2-nimzo",
+              "encounter": {
+                "kind": "pack",
+                "packId": "nimzo-doubled-c-pawns"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "theory_breadcrumb"
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "a2-boss",
+              "boss": true,
+              "suppress": [
+                "threat_radar"
+              ],
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 2
+              },
+              "encounter": {
+                "kind": "boss_game",
+                "start": {
+                  "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 1 9",
+                  "learnerSide": "white"
+                },
+                "opponent": {
+                  "profile": {
+                    "id": "human-baseline.1400@1",
+                    "family": "human-baseline",
+                    "band": 1400,
+                    "version": 1,
+                    "digest": "sha256:8441145ea4a9276a91560a736442b4bbce21bfb3b7ebd2a737b2dcb9b6cff467",
+                    "model": {
+                      "id": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+                      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2"
+                    },
+                    "sampler": {
+                      "temperature": 0.8,
+                      "topP": 0.92,
+                      "requestedWidth": 20,
+                      "returnedMassFloor": 0.97
+                    },
+                    "orderedLayers": [
+                      "sampler.maia_reconstruction@1"
+                    ]
+                  }
+                },
+                "rating": "unrated",
+                "briefingRef": {
+                  "kind": "pack_start",
+                  "packId": "kid-mar-del-plata-white"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act3",
+      "layers": [
+        {
+          "choices": [
+            {
+              "id": "a3-lucena",
+              "encounter": {
+                "kind": "pack",
+                "packId": "lucena-bridge-convert"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "guided_hint"
+              }
+            },
+            {
+              "id": "a3-philidor-hold",
+              "encounter": {
+                "kind": "pack",
+                "packId": "philidor-third-rank-hold"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            },
+            {
+              "id": "a3-opposition",
+              "encounter": {
+                "kind": "pack",
+                "packId": "pawn-opposition-convert"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "compare_coach"
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "a3-rook-hold",
+              "encounter": {
+                "kind": "pack",
+                "packId": "rook-4v3-same-side-hold"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            },
+            {
+              "id": "a3-bishops-hold",
+              "encounter": {
+                "kind": "pack",
+                "packId": "opposite-bishops-fortress-hold"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "review_map"
+              }
+            },
+            {
+              "id": "a3-up-a-piece",
+              "encounter": {
+                "kind": "pack",
+                "packId": "conversion-up-a-piece"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "structure_nudge"
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "a3-boss",
+              "encounter": {
+                "kind": "pack",
+                "packId": "queen-vs-pawn-seventh-convert"
+              },
+              "boss": true,
+              "suppress": [
+                "sight_on_request"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "economy": {
+    "startingCharges": 3,
+    "actGrants": {
+      "act1": 2,
+      "act2": 1,
+      "act3": 1
+    },
+    "validation": "candidate"
+  },
+  "startingModules": [],
+  "durableRewards": [
+    {
+      "when": "completed",
+      "reward": {
+        "kind": "completion_mark",
+        "campaignId": "draft-pilot-three-phases",
+        "campaignVersion": 1
+      }
+    },
+    {
+      "when": "prestige",
+      "reward": {
+        "kind": "prestige_mark",
+        "campaignId": "draft-pilot-three-phases",
+        "campaignVersion": 1
+      }
+    }
+  ]
+}

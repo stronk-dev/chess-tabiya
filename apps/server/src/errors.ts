@@ -69,7 +69,37 @@ export type ServerErrorCode =
   | "PRACTICAL_RESISTANCE_UNMEASURED"
   | "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID"
   | "TARGET_ELO_REQUIRED"
-  | "TARGET_ELO_OUT_OF_RANGE";
+  | "TARGET_ELO_OUT_OF_RANGE"
+  | CampaignErrorCode;
+
+/**
+ * rfc/campaign-core.md §7.1: the closed campaign error algebra. Each member has exactly one HTTP
+ * mapping (`CAMPAIGN_ERROR_STATUS`) and a typed body; no handler returns a generic 500 for one.
+ */
+export const CAMPAIGN_ERROR_STATUS = Object.freeze({
+  CAMPAIGN_NOT_FOUND: 404,
+  CAMPAIGN_FORBIDDEN: 403,
+  CAMPAIGN_RUN_ACTIVE_EXISTS: 409,
+  CAMPAIGN_REVISION_STALE: 409,
+  CAMPAIGN_COMMAND_REUSED: 409,
+  CAMPAIGN_RUN_TERMINAL: 409,
+  CAMPAIGN_NODE_UNAVAILABLE: 409,
+  CAMPAIGN_ACTIVE_ENCOUNTER_MISMATCH: 409,
+  CAMPAIGN_LOADOUT_INVALID: 422,
+  CAMPAIGN_LOADOUT_FAMILY_INVALID: 422,
+  CAMPAIGN_SUBMIT_INVALID: 422,
+  CAMPAIGN_PARTICIPATION_REQUIRED: 422,
+  CAMPAIGN_ACTIVE_ENCOUNTER_DELETE: 409,
+  CAMPAIGN_CONSUMER_AUTHORITY_UNAVAILABLE: 503,
+  CAMPAIGN_SOURCE_UNAVAILABLE: 503,
+  CAMPAIGN_REWIND_EXHAUSTED: 409,
+  CAMPAIGN_UNLOCK_OUTSIDE_CEILING: 422,
+} as const);
+export type CampaignErrorCode = keyof typeof CAMPAIGN_ERROR_STATUS;
+
+export function isCampaignErrorCode(code: string): code is CampaignErrorCode {
+  return Object.hasOwn(CAMPAIGN_ERROR_STATUS, code);
+}
 
 export class ServerError extends Error {
   readonly code: ServerErrorCode;

@@ -7,6 +7,7 @@ import {
   WORKFLOW_CONTEXTS,
   clampFieldValue,
   contextClamp,
+  deriveContextClamp,
   deriveWorkflowContext,
   fieldRank,
   hintCeiling,
@@ -40,70 +41,10 @@ import {
 // (the deleted monolith) does not exist.
 
 // ---------------------------------------------------------------------------------------------
-// Canonical JSON + synchronous SHA-256 (browser and server compute identical digests).
-
-function canonicalJson(value: unknown): string {
-  if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value);
-  if (typeof value === "number") {
-    if (!Number.isFinite(value)) throw new TypeError("canonical JSON numbers must be finite");
-    return JSON.stringify(value);
-  }
-  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
-  if (typeof value === "object") {
-    const entries = Object.entries(value as Record<string, unknown>).filter(([, item]) => item !== undefined).sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0);
-    return `{${entries.map(([key, item]) => `${JSON.stringify(key)}:${canonicalJson(item)}`).join(",")}}`;
-  }
-  throw new TypeError(`canonical JSON cannot encode ${typeof value}`);
-}
-
-const K = new Uint32Array([
-  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
-]);
-
-/** FIPS 180-4 SHA-256 over UTF-8, synchronous so both stages can seal inside pure functions. */
-export function sha256Hex(text: string): string {
-  const bytes = new TextEncoder().encode(text);
-  const length = bytes.length;
-  const padded = new Uint8Array(((length + 9 + 63) >> 6) << 6);
-  padded.set(bytes);
-  padded[length] = 0x80;
-  const view = new DataView(padded.buffer);
-  view.setUint32(padded.length - 8, Math.floor(length / 0x20000000));
-  view.setUint32(padded.length - 4, (length << 3) >>> 0);
-  const h = new Uint32Array([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]);
-  const w = new Uint32Array(64);
-  const rotr = (x: number, n: number) => (x >>> n) | (x << (32 - n));
-  for (let offset = 0; offset < padded.length; offset += 64) {
-    for (let i = 0; i < 16; i += 1) w[i] = view.getUint32(offset + i * 4);
-    for (let i = 16; i < 64; i += 1) {
-      const a = w[i - 15]!, b = w[i - 2]!;
-      const s0 = rotr(a, 7) ^ rotr(a, 18) ^ (a >>> 3);
-      const s1 = rotr(b, 17) ^ rotr(b, 19) ^ (b >>> 10);
-      w[i] = (w[i - 16]! + s0 + w[i - 7]! + s1) >>> 0;
-    }
-    let [a, b, c, d, e, f, g, hh] = [h[0]!, h[1]!, h[2]!, h[3]!, h[4]!, h[5]!, h[6]!, h[7]!];
-    for (let i = 0; i < 64; i += 1) {
-      const t1 = (hh + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[i]! + w[i]!) >>> 0;
-      const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
-      hh = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
-    }
-    h[0] = (h[0]! + a) >>> 0; h[1] = (h[1]! + b) >>> 0; h[2] = (h[2]! + c) >>> 0; h[3] = (h[3]! + d) >>> 0;
-    h[4] = (h[4]! + e) >>> 0; h[5] = (h[5]! + f) >>> 0; h[6] = (h[6]! + g) >>> 0; h[7] = (h[7]! + hh) >>> 0;
-  }
-  return [...h].map((word) => word.toString(16).padStart(8, "0")).join("");
-}
-
-export type AssistanceDigest = `sha256:${string}`;
-export function assistanceDigest(value: unknown): AssistanceDigest {
-  return `sha256:${sha256Hex(canonicalJson(value))}`;
-}
+// Canonical JSON + synchronous SHA-256 live in assistance-exchange-digest.ts (re-exported here).
+import { assistanceDigest, sha256Hex, type AssistanceDigest } from "./assistance-exchange-digest.js";
+import { verifyCampaignEncounterReceipt, type CampaignEncounterReceipt } from "./campaign-receipt.js";
+export { assistanceDigest, sha256Hex, type AssistanceDigest };
 
 // ---------------------------------------------------------------------------------------------
 // Errors.
@@ -142,8 +83,18 @@ export const SERVER_EVIDENCE_SOURCES = Object.freeze(["llm", "tts", "stockfish",
 export type ServerEvidenceSource = (typeof SERVER_EVIDENCE_SOURCES)[number];
 export type ServerEvidenceAvailabilityReceipt = Readonly<Record<ServerEvidenceSource, AvailabilityState>>;
 
+/**
+ * rfc/intent-presets.md Discharge D6 / rfc/campaign-core.md §5.1: the executable Campaign origin. The
+ * server derives it from the durable campaign join and the issued encounter receipt; no request
+ * field, query parameter or client object can construct it.
+ */
+export interface CampaignWorkflowOrigin {
+  readonly kind: "campaign_encounter";
+  readonly receipt: CampaignEncounterReceipt;
+}
+
 export interface ServerAssistanceAuthority {
-  readonly origin: OrdinaryWorkflowContextOrigin;
+  readonly origin: OrdinaryWorkflowContextOrigin | CampaignWorkflowOrigin;
   readonly access: AssistanceAccess;
   readonly availability: ServerEvidenceAvailabilityReceipt;
 }
@@ -155,12 +106,14 @@ export type SuppressionReason =
   | "context_forbids_module" | "role_forbids_module" | "delivery_closed"
   | "explicitly_disabled" | "context_clamped_field" | "access_clamped_field"
   | "source_pending" | "source_unavailable" | "source_failed"
-  | "browser_channel_unavailable" | "invalid_preference_recovered";
+  | "browser_channel_unavailable" | "invalid_preference_recovered"
+  | "campaign_not_earned" | "campaign_not_equipped" | "campaign_boss_suppressed";
 export const SUPPRESSION_REASONS: readonly SuppressionReason[] = Object.freeze([
   "context_forbids_module", "role_forbids_module", "delivery_closed",
   "explicitly_disabled", "context_clamped_field", "access_clamped_field",
   "source_pending", "source_unavailable", "source_failed",
   "browser_channel_unavailable", "invalid_preference_recovered",
+  "campaign_not_earned", "campaign_not_equipped", "campaign_boss_suppressed",
 ]);
 
 export type EffectSubSurface = "human_split" | "raw_corpus";
@@ -261,7 +214,7 @@ function compileEffects(modules: readonly ModuleId[], config: AssistancePreferen
 // Stage 1 — requested (browser).
 
 export interface LocalPreferenceInput {
-  readonly contextHint: OrdinaryWorkflowContextId;
+  readonly contextHint: WorkflowContextId;
   readonly preference: WorkflowPreferenceReceipt;
 }
 
@@ -286,7 +239,6 @@ function parseReceipt(value: unknown): WorkflowPreferenceReceipt {
 
 export function compileAssistanceRequest(input: LocalPreferenceInput): RequestedAssistanceV1 {
   if (!(WORKFLOW_CONTEXTS as readonly string[]).includes(input.contextHint)) fail("EXCHANGE_SHAPE_INVALID", "unknown context");
-  if (input.contextHint === ("campaign" as string)) fail("CONTEXT_DECLARED_AWAITING", "Campaign awaits campaign-core's encounter receipt");
   const body = { stage: "requested" as const, schemaVersion: 1 as const, contextHint: input.contextHint, preference: parseReceipt(JSON.parse(JSON.stringify(input.preference))) };
   return Object.freeze({ ...body, requestDigest: assistanceDigest(body) });
 }
@@ -314,7 +266,7 @@ export interface HintCeilingReceipt {
 interface AuthoritativeBody {
   readonly stage: "authoritative";
   readonly schemaVersion: 1;
-  readonly context: OrdinaryWorkflowContextId;
+  readonly context: WorkflowContextId;
   readonly preset: PresetId;
   readonly displayMode: "named" | "custom";
   readonly modules: readonly ModuleId[];
@@ -323,6 +275,8 @@ interface AuthoritativeBody {
   readonly effects: readonly CompiledAssistanceEffect[];
   readonly suppressed: readonly SuppressionRecord[];
   readonly hintCeiling: HintCeilingReceipt;
+  /** Present only for a Campaign encounter: the issued receipt this compile consumed. */
+  readonly campaignReceipt?: { readonly receiptDigest: AssistanceDigest; readonly inventoryEventSeq: number; readonly phase: CampaignEncounterReceipt["phase"] };
   readonly requestedDigest: AssistanceDigest;
 }
 export interface AuthoritativeAssistanceV1 extends AuthoritativeBody {
@@ -345,8 +299,17 @@ function assertSuppressions(records: readonly SuppressionRecord[]): void {
 
 export function compileAuthoritativeAssistance(requestInput: RequestedAssistanceV1, authority: ServerAssistanceAuthority): AuthoritativeAssistanceV1 {
   const request = parseRequestedAssistanceV1(requestInput);
-  if (request.contextHint === "campaign") fail("CONTEXT_DECLARED_AWAITING", "Campaign awaits campaign-core's encounter receipt");
-  const context = deriveWorkflowContext(authority.origin);
+  // Campaign is derived ONLY from an issued encounter receipt (campaign-core §5.1); a forged or
+  // structurally copied receipt refuses before any context is compiled.
+  let campaign: CampaignEncounterReceipt | undefined;
+  if (authority.origin.kind === "campaign_encounter") {
+    try {
+      campaign = verifyCampaignEncounterReceipt(authority.origin.receipt);
+    } catch (error) {
+      return fail("EXCHANGE_SHAPE_INVALID", `campaign receipt: ${(error as Error).message}`);
+    }
+  }
+  const context: WorkflowContextId = campaign !== undefined ? "campaign" : deriveWorkflowContext(authority.origin as OrdinaryWorkflowContextOrigin);
   // Rule 0: the client's hint must equal the server-derived context.
   if (context !== request.contextHint) fail("CONTEXT_MISMATCH", `request names ${request.contextHint}; the run is ${context}`);
   const receipt = request.preference;
@@ -354,19 +317,26 @@ export function compileAuthoritativeAssistance(requestInput: RequestedAssistance
   const policy = workflowContextPolicy(context);
   const suppressed: SuppressionRecord[] = [];
 
-  // Rule 1 — preset ∪ include − exclude, ∩ module ceiling; the floor is reinserted.
+  // Rule 1 — preset ∪ include − exclude, ∩ module ceiling; the floor is reinserted. In Campaign the
+  // ceiling is further intersected with the receipt's effective kit (owned ∩ equipped − suppressed).
   const wanted = requestedModules(receipt, preset);
-  const modules = Object.freeze(MODULE_IDS.filter((id) => wanted.includes(id) && (policy.moduleCeiling.includes(id) || id === "rules_floor")));
+  const campaignEffective = campaign === undefined ? undefined : new Set<ModuleId>(campaign.modules.effective);
+  const ceiling = (id: ModuleId): boolean => id === "rules_floor" || (policy.moduleCeiling.includes(id) && (campaignEffective === undefined || campaignEffective.has(id)));
+  const modules = Object.freeze(MODULE_IDS.filter((id) => wanted.includes(id) && ceiling(id)));
   const presetModules = presetDeclaration(preset).modules;
+  const campaignReason = (id: ModuleId): SuppressionReason => campaign === undefined ? "context_forbids_module"
+    : campaign.modules.suppressed.includes(id as never) ? "campaign_boss_suppressed"
+    : campaign.modules.owned.includes(id as never) ? "campaign_not_equipped" : "campaign_not_earned";
   for (const id of MODULE_IDS) {
-    if (wanted.includes(id) && !modules.includes(id)) suppressed.push({ kind: "module", moduleId: id, requested: true, effective: false, by: "context_ceiling", reason: "context_forbids_module" });
+    if (wanted.includes(id) && !modules.includes(id)) suppressed.push({ kind: "module", moduleId: id, requested: true, effective: false, by: "context_ceiling", reason: policy.moduleCeiling.includes(id) ? campaignReason(id) : "context_forbids_module" });
     else if (presetModules.includes(id) && !wanted.includes(id) && policy.moduleCeiling.includes(id)) suppressed.push({ kind: "module", moduleId: id, requested: true, effective: false, by: "stored_choice", reason: "explicitly_disabled" });
   }
 
   // Rules 2 and 4 — requested fields ∩ context ∩ access, each record labelled by the lower term.
   const requestedFields = requestedAssistanceFields(receipt, preset);
   const projectionFields = presetDeclaration(preset).config;
-  const contextTerm = contextClamp(context);
+  // Campaign: the field ceiling also narrows to what the earned kit can drive (every term narrows).
+  const contextTerm = campaign === undefined ? contextClamp(context) : pointwiseMin(contextClamp(context), deriveContextClamp(MODULE_IDS.filter(ceiling)));
   const accessTerm = accessPermission(authority.access);
   const config = { version: 4 } as Record<string, string | number>;
   for (const field of ASSISTANCE_PREFERENCE_FIELDS) {
@@ -415,6 +385,7 @@ export function compileAuthoritativeAssistance(requestInput: RequestedAssistance
     effects: compileEffects(modules, fields),
     suppressed: records,
     hintCeiling: Object.freeze({ rung: hintCeiling({ preset, context, role: authority.access.role, seatedInContest: authority.access.seatedInContest, modules }), validation: "proposed", ruling: "D1639" }),
+    ...(campaign === undefined ? {} : { campaignReceipt: Object.freeze({ receiptDigest: campaign.receiptDigest, inventoryEventSeq: campaign.subject.inventoryEventSeq, phase: campaign.phase }) }),
     requestedDigest: request.requestDigest,
   };
   return Object.freeze({ ...body, effectiveDigest: assistanceDigest(body) });
@@ -490,7 +461,7 @@ export function parseFinalizedAssistanceV1(value: unknown): FinalizedAssistanceV
   if (value.stage !== "finalized") return fail("EXCHANGE_STAGE_MISMATCH", "expected the finalized stage");
   const { finalDigest, ...body } = value;
   if (typeof finalDigest !== "string" || assistanceDigest(body) !== finalDigest) return fail("EXCHANGE_DIGEST_MISMATCH", "finalized bytes do not match their digest");
-  if (!(WORKFLOW_CONTEXTS as readonly unknown[]).includes(value.context) || value.context === "campaign") fail("EXCHANGE_SHAPE_INVALID", "unknown context");
+  if (!(WORKFLOW_CONTEXTS as readonly unknown[]).includes(value.context)) fail("EXCHANGE_SHAPE_INVALID", "unknown context");
   if (!(PRESET_IDS as readonly unknown[]).includes(value.preset)) fail("EXCHANGE_SHAPE_INVALID", "unknown preset");
   if (value.displayMode !== "named" && value.displayMode !== "custom") fail("EXCHANGE_SHAPE_INVALID", "unknown display mode");
   if (!Array.isArray(value.modules) || value.modules.some((id) => !(MODULE_IDS as readonly unknown[]).includes(id)) || !value.modules.includes("rules_floor")) fail("EXCHANGE_SHAPE_INVALID", "modules must be registered ids including the rules floor");
@@ -572,6 +543,9 @@ export const SUPPRESSION_RENDERERS: Readonly<Record<SuppressionRecord["kind"], R
     role_forbids_module: (record) => `${moduleText(record)} isn't available to your seat.`,
     delivery_closed: (record) => `${moduleText(record)} waits until this run opens help.`,
     explicitly_disabled: (record) => `You turned off ${moduleText(record)}.`,
+    campaign_not_earned: (record) => `${moduleText(record)} isn't in your campaign kit yet.`,
+    campaign_not_equipped: (record) => `You left ${moduleText(record)} out of your campaign loadout.`,
+    campaign_boss_suppressed: (record) => `This boss sets ${moduleText(record)} aside for this encounter.`,
   }),
   field: table({
     context_clamped_field: (record, context) => { const text = fieldText(record); return `${text.name} is limited to ${text.effective} in ${CONTEXT_PHRASES[context]}.`; },

@@ -65,7 +65,7 @@ function botOperationSummary(envelope: BotPolicyEventEnvelope) {
   });
 }
 
-import { ServerError } from "./errors.js";
+import { CAMPAIGN_ERROR_STATUS, ServerError, isCampaignErrorCode } from "./errors.js";
 import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
 import { openingIdentityAt, type OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import type { TtsProvider } from "./external-tts.js";
@@ -81,7 +81,9 @@ import {
   type GuidanceAccess,
   type ImportGameRequest,
   type RewindTarget,
+  type CampaignCommandInput,
 } from "./service.js";
+import type { CampaignService } from "./campaign-service.js";
 import { IdentityService } from "./identity.js";
 import type { Principal } from "./authorization.js";
 import type { RunRole } from "./storage.js";
@@ -186,6 +188,17 @@ function closedRecord(
     throw invalid(`Unknown field ${pointer === "/" ? "" : pointer}/${unknown}`);
   }
   return result;
+}
+
+/** rfc/campaign-core.md §2.2: the charged-command envelope on rewind/fork/group/simulate-enter. */
+function parseCampaignCommand(value: unknown): CampaignCommandInput | undefined {
+  if (value === undefined) return undefined;
+  const body = closedRecord(value, "/campaignCommand", ["commandId", "expectedCampaignRevision", "expectedPlayRevision"]);
+  return Object.freeze({
+    commandId: requiredString(body.commandId, "campaignCommand.commandId"),
+    expectedCampaignRevision: requiredSafeInteger(body.expectedCampaignRevision, "campaignCommand.expectedCampaignRevision"),
+    expectedPlayRevision: requiredSafeInteger(body.expectedPlayRevision, "campaignCommand.expectedPlayRevision"),
+  });
 }
 
 function requiredString(value: unknown, label: string): string {
@@ -649,8 +662,9 @@ export function errorResponse(error: unknown): Response {
     message =
       error.code === "STORAGE_FAILURE" ? "Storage operation failed" : error.message;
     details = error.details;
-    status =
-      error.code === "UNAUTHENTICATED"
+    status = isCampaignErrorCode(error.code)
+      ? CAMPAIGN_ERROR_STATUS[error.code]
+      : error.code === "UNAUTHENTICATED"
         ? 401
         : error.code === "FORBIDDEN"
           ? 403
@@ -833,6 +847,7 @@ export function createRestHandler(
   openingCatalogue?: OpeningCatalogueAvailability,
   principles?: PrincipleRegistry,
   learnerProfile?: LearnerProfileService,
+  campaigns?: CampaignService,
 ): RestHandler {
   return async (request) => {
     try {
@@ -909,6 +924,66 @@ export function createRestHandler(
           return jsonWithCookie(200, {}, cookie);
         }
         return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
+      }
+      // rfc/campaign-core.md §7.1 — the closed authenticated campaign family. Learner identity always
+      // comes from authentication; no request accepts a learnerId.
+      if (url.pathname === "/campaigns" || url.pathname.startsWith("/campaigns/") || url.pathname === "/campaign-rewards" || url.pathname.startsWith("/campaign-runs/")) {
+        if (campaigns === undefined) throw new ServerError("STORAGE_FAILURE", "Campaign service is not configured");
+        const principal = authenticate();
+        const decode = (value: string): string => {
+          try { return decodeURIComponent(value); } catch { throw invalid("Campaign path contains invalid URL encoding"); }
+        };
+        if (url.pathname === "/campaigns") {
+          if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          return json(200, campaigns.catalogue(principal));
+        }
+        if (url.pathname === "/campaigns/active") {
+          if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          return json(200, campaigns.active(principal));
+        }
+        if (url.pathname === "/campaign-rewards") {
+          if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          return json(200, campaigns.rewards(principal));
+        }
+        const createRoute = /^\/campaigns\/([^/]+)\/runs$/u.exec(url.pathname);
+        if (createRoute !== null) {
+          if (request.method !== "POST") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          requireJson(request);
+          const body = closedRecord(await parseBody(request), "/", ["campaignVersion", "commandId"]);
+          const created = campaigns.create(principal, decode(createRoute[1]!), { campaignVersion: requiredSafeInteger(body.campaignVersion, "campaignVersion"), commandId: requiredString(body.commandId, "commandId") });
+          return json(201, created);
+        }
+        const runRoute = /^\/campaign-runs\/([^/]+)(?:\/(loadout|abandon|result)|\/nodes\/([^/]+)\/(start|submit|review))?$/u.exec(url.pathname);
+        if (runRoute === null) return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
+        const campaignRunId = decode(runRoute[1]!);
+        const action = runRoute[2] ?? runRoute[4];
+        const nodeId = runRoute[3] === undefined ? undefined : decode(runRoute[3]);
+        if (action === undefined) {
+          if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          return json(200, campaigns.read(principal, campaignRunId));
+        }
+        if (action === "result" || action === "review") {
+          if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          return json(200, action === "result" ? campaigns.result(principal, campaignRunId) : campaigns.review(principal, campaignRunId, nodeId!));
+        }
+        if (action === "loadout") {
+          if (request.method !== "PUT") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          requireJson(request);
+          const body = closedRecord(await parseBody(request), "/", ["equippedModuleIds", "expectedRevision", "commandId"]);
+          return json(200, campaigns.loadout(principal, campaignRunId, { equippedModuleIds: body.equippedModuleIds, expectedRevision: body.expectedRevision, commandId: body.commandId }));
+        }
+        if (request.method !== "POST") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        requireJson(request);
+        if (action === "abandon") {
+          const body = closedRecord(await parseBody(request), "/", ["expectedRevision", "commandId"]);
+          return json(200, campaigns.abandon(principal, campaignRunId, { expectedRevision: body.expectedRevision, commandId: body.commandId }));
+        }
+        if (action === "start") {
+          const body = closedRecord(await parseBody(request), "/", ["expectedRevision", "commandId"]);
+          return json(201, await campaigns.start(principal, campaignRunId, nodeId!, { expectedRevision: body.expectedRevision, commandId: body.commandId }, writerId(request)));
+        }
+        const body = closedRecord(await parseBody(request), "/", ["runId", "branchId", "expectedRevision", "commandId"]);
+        return json(200, campaigns.submit(principal, campaignRunId, nodeId!, { runId: body.runId, ...(body.branchId === undefined ? {} : { branchId: body.branchId }), expectedRevision: body.expectedRevision, commandId: body.commandId }));
       }
       if (url.pathname === "/classrooms") {
         if (classrooms === undefined) throw new ServerError("STORAGE_FAILURE", "Classroom service is not configured");
@@ -1730,7 +1805,7 @@ export function createRestHandler(
       }
       if (route.action === "group") {
         requireJson(request);
-        const body = closedRecord(value, "/", ["source", "resistance", "candidates", "size", "at"]);
+        const body = closedRecord(value, "/", ["source", "resistance", "candidates", "size", "at", "campaignCommand"]);
         const source = requiredString(body.source, "source");
         if (source !== "hand_picked" && source !== "authored" && source !== "human_replies" && source !== "engine_top_n") {
           throw invalid("source is unsupported");
@@ -1748,7 +1823,7 @@ export function createRestHandler(
           ...(body.candidates === undefined ? {} : { candidates: body.candidates as string[] }),
           ...(body.size === undefined ? {} : { size: requiredSafeInteger(body.size, "size") }),
           ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }),
-        }));
+        }, parseCampaignCommand(body.campaignCommand)));
       }
       if (route.action === "group-reply") {
         requireJson(request);
@@ -1837,6 +1912,7 @@ export function createRestHandler(
             writerId(request),
             target,
             optionalString(value.at, "at"),
+            parseCampaignCommand(value.campaignCommand),
           ),
         );
       }
@@ -1859,6 +1935,7 @@ export function createRestHandler(
                 ? {}
                 : { at: requiredString(value.at, "at") }),
             },
+            parseCampaignCommand(value.campaignCommand),
           ),
         );
       }
@@ -1910,7 +1987,7 @@ export function createRestHandler(
         }));
       }
       if (route.action === "simulate-enter") {
-        const body = closedRecord(value, "/", ["simulationId", "branchIndex", "at"]);
+        const body = closedRecord(value, "/", ["simulationId", "branchIndex", "at", "campaignCommand"]);
         return json(200, service.enterSimulation(
           route.runId,
           principal,
@@ -1918,6 +1995,7 @@ export function createRestHandler(
           requiredString(body.simulationId, "simulationId"),
           requiredSafeInteger(body.branchIndex, "branchIndex"),
           body.at === undefined ? undefined : requiredString(body.at, "at"),
+          parseCampaignCommand(body.campaignCommand),
         ));
       }
       if (route.action === "prediction") {

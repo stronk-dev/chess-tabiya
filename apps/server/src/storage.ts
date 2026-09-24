@@ -18,6 +18,8 @@ import {
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
+import { CAMPAIGN_MIGRATION_SQL, CAMPAIGN_TABLES, CampaignStore } from "./campaign-store.js";
+import { CampaignEventCorrupt } from "./campaign-events.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import {
   CONCEPT_MIGRATION_SQL,
@@ -728,6 +730,20 @@ export interface SQLiteRunStorageOptions {
    * and refuses a legacy concept population rather than guessing.
    */
   readonly concepts?: ConceptMigrationAuthority;
+  /**
+   * Test-only fault hook for campaign transactions (rfc/campaign-core.md criteria 20/21/26/27/32):
+   * called with each named write step after it executes and before COMMIT; throwing rolls back.
+   */
+  readonly campaignFault?: (step: string) => void;
+}
+
+/** One campaign write transaction's surface (rfc/campaign-core.md §5.3/§6): no raw SQL, no COMMIT. */
+export interface CampaignTransaction {
+  readonly store: CampaignStore;
+  /** Inserts a new play run (drill_runs + host grant) inside this transaction. */
+  insertRun(run: DrillRun, lease: LeaseHolder, title: string): void;
+  /** Names a completed write step for fault injection. */
+  step(name: string): void;
 }
 
 /** Post-commit hints from the durable evidence store to its in-process worker. */
@@ -765,7 +781,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 29;
+export const STORAGE_VERSION = 30;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -1024,6 +1040,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   readonly #databasePath: string;
   readonly #concepts: ConceptMigrationAuthority;
   readonly #conceptReceipt: ConceptMigrationReceipt;
+  readonly #campaigns: CampaignStore;
+  readonly #campaignFault: ((step: string) => void) | undefined;
   #longitudinalWakePending = false;
   #longitudinalWake: (() => void) | undefined;
   #evidenceListener: EvidenceJobListener | undefined;
@@ -1061,6 +1079,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#conceptReceipt = this.#verifyConceptStore();
       this.#longitudinal = new LongitudinalStore(this.#database, options.longitudinalNow === undefined ? {} : { now: options.longitudinalNow });
       this.#evidence = new EvidenceJobStore(this.#database, options.evidenceNow === undefined ? {} : { now: options.evidenceNow });
+      this.#campaigns = new CampaignStore(this.#database);
+      this.#campaignFault = options.campaignFault;
     } catch (error) {
       try { this.#database.close(); } catch { /* preserve the primary failure */ }
       throw error;
@@ -1461,6 +1481,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         ...tagged("attempt_concept_legacy", rows("SELECT q.run_id,q.branch_id,q.pack_id,q.raw_key,q.label,q.reason FROM attempt_concept_legacy q JOIN attempts a ON a.run_id=q.run_id AND a.branch_id=q.branch_id WHERE a.learner_id=? ORDER BY q.run_id,q.branch_id,q.raw_key", learnerId)),
         ...tagged("schedules", rows("SELECT * FROM schedules WHERE learner_id=? ORDER BY id", learnerId)),
         ...tagged("learner_position_stats", rows("SELECT * FROM learner_position_stats WHERE learner_id=? ORDER BY transpose_key", learnerId)),
+        // rfc/campaign-core.md §6.2: campaign run, create receipt, event, charged-command and award history.
+        ...tagged("campaign_runs", rows("SELECT id,campaign_id,campaign_version,campaign_document_digest,campaign_document,status,active_encounter_run_id,created_at FROM campaign_runs WHERE learner_id=? ORDER BY id", learnerId)),
+        ...tagged("campaign_run_creations", rows("SELECT campaign_id,command_id,campaign_version,operands_digest,campaign_run_id,result_payload,created_at FROM campaign_run_creations WHERE learner_id=? ORDER BY campaign_run_id", learnerId)),
+        ...tagged("campaign_events", rows("SELECT e.campaign_run_id,e.seq,e.kind,e.command_id,e.expected_revision,e.operands_digest,e.result_payload,e.payload,e.at FROM campaign_events e JOIN campaign_runs r ON r.id=e.campaign_run_id WHERE r.learner_id=? ORDER BY e.campaign_run_id,e.seq", learnerId)),
+        ...tagged("campaign_mutation_commands", rows("SELECT c.campaign_run_id,c.command_id,c.play_run_id,c.expected_campaign_revision,c.expected_play_revision,c.operation,c.operands_digest,c.result_payload,c.settled_at FROM campaign_mutation_commands c JOIN campaign_runs r ON r.id=c.campaign_run_id WHERE r.learner_id=? ORDER BY c.campaign_run_id,c.command_id", learnerId)),
+        ...tagged("campaign_reward_awards", rows("SELECT a.campaign_run_id,a.durable_reward_id,a.reward_payload,a.awarded_at FROM campaign_reward_awards a JOIN campaign_runs r ON r.id=a.campaign_run_id WHERE r.learner_id=? ORDER BY a.campaign_run_id,a.durable_reward_id", learnerId)),
       ];
       const marks = tagged("run_marks", rows("SELECT id,run_id,scope,scope_key,brush,orig,dest,relayed,created_at FROM run_marks WHERE author_learner_id=? ORDER BY id", learnerId));
       const repertoireRows = rows("SELECT * FROM repertoires WHERE owner_learner_id=? ORDER BY id", learnerId);
@@ -1739,6 +1765,90 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       retainedPublished,
       stateFingerprint: Object.freeze({ runs: fingerprint, publications: retainedPublished, classrooms: classroomEffects }),
     });
+  }
+
+  /** rfc/campaign-core.md §6: the campaign row authority (reads; writes only inside campaignTransaction). */
+  get campaigns(): CampaignStore {
+    return this.#campaigns;
+  }
+
+  /**
+   * One campaign write transaction (§5.3 start, §4.1 submit, §4.4 abandon, §4.5 loadout, §6.0 create).
+   * Every effect — play-run rows, campaign event, materialized pointer/status, awards, command
+   * receipts — commits together or not at all.
+   */
+  campaignTransaction<T>(work: (tx: CampaignTransaction) => T): T {
+    const created: { run: DrillRun; lease: LeaseHolder }[] = [];
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const result = work(Object.freeze({
+        store: this.#campaigns,
+        insertRun: (run: DrillRun, lease: LeaseHolder, title: string) => {
+          this.#insertRunRows(run, lease, title);
+          created.push({ run, lease });
+        },
+        step: (name: string) => this.#campaignFault?.(name),
+      }));
+      this.#database.exec("COMMIT");
+      for (const { run, lease } of created) {
+        this.#snapshots.set(run.id, Object.freeze({ run, activeWriterId: lease.writerId, activeWriterLearnerId: lease.learnerId }));
+      }
+      if (created.length > 0) this.#flushLongitudinalWake();
+      return result;
+    } catch (error) {
+      this.#rollback();
+      this.#longitudinalWakePending = false;
+      if (error instanceof CampaignEventCorrupt) throw new ServerError("STORAGE_FAILURE", "A stored campaign event failed its closed parse", { cause: error });
+      if (error instanceof Error && /UNIQUE constraint failed: campaign_runs\.learner_id, campaign_runs\.campaign_id/u.test(error.message)) {
+        throw new ServerError("CAMPAIGN_RUN_ACTIVE_EXISTS", "An active run of this campaign already exists", { cause: error });
+      }
+      // Only SQLite failures become storage failures; typed and control-flow errors pass through.
+      if ((error as { readonly code?: unknown } | null)?.code === "ERR_SQLITE_ERROR") throw storageFailure("Could not commit the campaign transaction", error);
+      throw error;
+    }
+  }
+
+  /**
+   * rfc/campaign-core.md §2.2 [[D2986]]: a charged play-run mutation and its campaign `charge_spent`
+   * event commit in ONE transaction. `compute` runs against the CAS-owned run inside that
+   * transaction; it either declines to write (a stored replay) or returns the next run image, the
+   * rewind's pruned nodes and the campaign rows to append. No path reports a committed charge
+   * without the play mutation, and no mutation lands without its charge.
+   */
+  commitCampaignChargedMutation(runId: string, lease: LeaseHolder, compute: (before: DrillRun, store: CampaignStore) => { readonly write: false } | { readonly write: true; readonly run: DrillRun; readonly prunedNodeIds: readonly string[]; readonly plans: readonly InternalEvidencePlan[]; readonly campaign: () => void }): void {
+    this.save({ kind: "run_save_transition", runId, compute: (before) => {
+      const next = compute(before, this.#campaigns);
+      if (!next.write) return { write: false };
+      return { write: true, run: next.run, effect: () => {
+        if (next.plans.length > 0) this.#admitInternal(next.plans, next.run.id);
+        if (next.prunedNodeIds.length > 0) this.#evidenceCancelled.push(...this.#evidence.cancelPrunedInTransaction(next.run.id, next.prunedNodeIds));
+        next.campaign();
+        this.#campaignFault?.("charge_spent");
+      } };
+    } }, lease);
+  }
+
+  /** Stores a terminal no-event charged-command result (provider failure) in its own transaction. */
+  settleCampaignCommandWithoutEvent(work: (store: CampaignStore) => void): void {
+    this.campaignTransaction(({ store }) => work(store));
+  }
+
+  #insertRunRows(run: DrillRun, lease: LeaseHolder, title: string): void {
+    const updatedAt = this.#now();
+    const summary = summaryFields(run, title, updatedAt);
+    this.#database
+      .prepare(
+        `INSERT INTO drill_runs
+           (id, snapshot_json, active_writer_id, updated_at, summary_json,
+            owner_learner_id, active_writer_learner_id, schema_version,
+            longitudinal_structure_attribution)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'single_player')`,
+      )
+      .run(run.id, JSON.stringify(run), lease.writerId, updatedAt, JSON.stringify(summary), lease.learnerId, lease.learnerId, run.schemaVersion);
+    this.#database
+      .prepare(`INSERT INTO run_grants (run_id, learner_id, role, granted_at, expires_at, granted_via) VALUES (?, ?, 'host', ?, NULL, NULL)`)
+      .run(run.id, lease.learnerId, updatedAt);
+    this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#create", effect: "always" }, [run.id]);
   }
 
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
@@ -2570,6 +2680,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     const legacyWriterId = `writer-legacy-${randomUUID()}`;
     try {
       this.#database.exec("BEGIN IMMEDIATE");
+      // rfc/campaign-core.md §6.3: an ACTIVE campaign encounter cannot be deleted; nothing changes.
+      if (this.#campaigns.activeByPlayRun(runId) !== undefined) {
+        throw new ServerError("CAMPAIGN_ACTIVE_ENCOUNTER_DELETE", "This run is the active encounter of a campaign. Declare it done or abandon the campaign first.");
+      }
       const preview = this.deletionPreview(learnerId, { kind: "run", runId }, at);
       if (preview.digest !== expectedPreviewDigest) throw new ServerError("DELETION_PREVIEW_STALE", "Deletion preview is stale; review the current effects before trying again", { details: { digest: preview.digest } });
       this.#insertLegacy(at);
@@ -2625,6 +2739,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         throw new ServerError("DELETION_PREVIEW_STALE", "Deletion preview is stale; review the current effects before trying again", { details: { digest: preview.digest } });
       }
       this.#insertLegacy(at);
+      // rfc/campaign-core.md §6.2: hard deletion cascades all five campaign tables. They go first so
+      // the active-encounter RESTRICT key never blocks the run deletions below.
+      this.#database.prepare("DELETE FROM campaign_runs WHERE learner_id=?").run(learnerId);
       const departing = this.#database.prepare("SELECT handle FROM learners WHERE id=?").get(learnerId) as { readonly handle: string };
       const hardRunIds = preview.hardDelete.filter((effect) => effect.kind === "run").flatMap((effect) => effect.objectIds);
       const tombstoneRunIds = preview.tombstone.filter((effect) => effect.kind === "shared_run").flatMap((effect) => effect.objectIds);
@@ -4378,6 +4495,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "bot profile run schema",
         apply: () => this.#upgradeV017Runs(),
       },
+      {
+        version: 30,
+        name: "campaign runs, creations, events, charged commands and durable awards",
+        apply: () => this.#addCampaignTables(),
+      },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {
@@ -5246,6 +5368,16 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     const columns = new Set((this.#database.prepare("PRAGMA table_info(drill_runs)").all() as unknown as readonly { readonly name: string }[]).map((column) => column.name));
     for (const [column, sql] of Object.entries(LONGITUDINAL_RUN_COLUMNS_SQL)) if (!columns.has(column)) this.#database.exec(sql);
     this.#database.exec(LONGITUDINAL_MIGRATION_SQL);
+  }
+
+  /**
+   * Migration 30 (rfc/campaign-core.md §6): create-table/index only, STRICT, literal CHECKs, no
+   * backfill — nothing historical is a campaign run. Table-presence guarded for rewound fixtures.
+   */
+  #addCampaignTables(): void {
+    const present = new Set((this.#database.prepare("SELECT name FROM sqlite_schema WHERE type='table'").all() as unknown as readonly { readonly name: string }[]).map((row) => row.name));
+    if (CAMPAIGN_TABLES.every((table) => present.has(table))) return;
+    this.#database.exec(CAMPAIGN_MIGRATION_SQL);
   }
 
   /**

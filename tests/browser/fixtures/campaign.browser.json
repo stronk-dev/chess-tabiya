@@ -1,0 +1,294 @@
+{
+  "id": "browser-fixture-campaign",
+  "title": "Browser fixture campaign",
+  "version": 1,
+  "publication": {
+    "channel": "community"
+  },
+  "acts": [
+    {
+      "id": "act1",
+      "layers": [
+        {
+          "choices": [
+            {
+              "id": "f1-a",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "postcommit_nudge"
+              }
+            },
+            {
+              "id": "f1-b",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "f2-a",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "sight_on_request"
+              }
+            },
+            {
+              "id": "f2-b",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "f3-boss",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              },
+              "boss": true,
+              "suppress": [
+                "guided_hint"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act2",
+      "layers": [
+        {
+          "choices": [
+            {
+              "id": "f4-a",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "guided_hint"
+              }
+            },
+            {
+              "id": "f4-b",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "f5-a",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "compare_coach"
+              }
+            },
+            {
+              "id": "f5-b",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "f6-boss",
+              "boss": true,
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              },
+              "encounter": {
+                "kind": "boss_game",
+                "start": {
+                  "fen": "r1bqkbnr/ppppp1p1/n4p1p/8/8/4PQ1N/PPPP1PPP/RNB1KB1R w KQkq - 0 4",
+                  "learnerSide": "white"
+                },
+                "opponent": {
+                  "profile": {
+                    "id": "human-baseline.1400@1",
+                    "family": "human-baseline",
+                    "band": 1400,
+                    "version": 1,
+                    "digest": "sha256:8441145ea4a9276a91560a736442b4bbce21bfb3b7ebd2a737b2dcb9b6cff467",
+                    "model": {
+                      "id": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+                      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2"
+                    },
+                    "sampler": {
+                      "temperature": 0.8,
+                      "topP": 0.92,
+                      "requestedWidth": 20,
+                      "returnedMassFloor": 0.97
+                    },
+                    "orderedLayers": [
+                      "sampler.maia_reconstruction@1"
+                    ]
+                  }
+                },
+                "rating": "unrated",
+                "briefingRef": {
+                  "kind": "pack_start",
+                  "packId": "campaign-boss-browser-fixture"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act3",
+      "layers": [
+        {
+          "choices": [
+            {
+              "id": "f7-a",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "review_map"
+              }
+            },
+            {
+              "id": "f7-b",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "f8-a",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "module_unlock",
+                "moduleId": "structure_nudge"
+              }
+            },
+            {
+              "id": "f8-b",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "reward": {
+                "kind": "resource_grant",
+                "resourceId": "campaign_rewind_charge",
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "id": "f9-boss",
+              "encounter": {
+                "kind": "pack",
+                "packId": "line-boundary-browser"
+              },
+              "boss": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "economy": {
+    "startingCharges": 1,
+    "actGrants": {
+      "act1": 1,
+      "act2": 1,
+      "act3": 1
+    },
+    "validation": "candidate"
+  },
+  "startingModules": [],
+  "durableRewards": [
+    {
+      "when": "completed",
+      "reward": {
+        "kind": "completion_mark",
+        "campaignId": "browser-fixture-campaign",
+        "campaignVersion": 1
+      }
+    },
+    {
+      "when": "prestige",
+      "reward": {
+        "kind": "prestige_mark",
+        "campaignId": "browser-fixture-campaign",
+        "campaignVersion": 1
+      }
+    }
+  ]
+}
