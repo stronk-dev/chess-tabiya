@@ -79,7 +79,7 @@ async function main(argv: readonly string[]): Promise<number> {
     const failures: string[] = [];
     for (const path of documents) {
       const document = planInputs.readDocument(path) as Readonly<Record<string, unknown>>;
-      for (const issue of packRequirementIssues(document, { schema: planInputs.schema, shapes: planInputs.shapes, principles: planInputs.principles })) failures.push(`${path} ${issue.code}: ${issue.message}`);
+      for (const issue of packRequirementIssues(document, { schema: planInputs.schema, ...(planInputs.shapes === undefined ? {} : { shapes: planInputs.shapes }), ...(planInputs.principles === undefined ? {} : { principles: planInputs.principles }) })) failures.push(`${path} ${issue.code}: ${issue.message}`);
     }
     for (const failure of failures) console.error(failure);
     if (failures.length > 0) { console.error("pack-capability-check: run make pack-stamp FILE=<path> after editing pack content"); return EXIT_MALFORMED; }

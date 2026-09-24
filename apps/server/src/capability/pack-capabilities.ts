@@ -224,16 +224,16 @@ export function projectPackCapabilities(support: RuntimeCapabilitySupport, reach
     if (declaration === undefined) continue;
     const disposition = declaration.disposition;
     if (disposition.kind !== "active" && disposition.kind !== "deprecated") continue;
-    const unreachable = declaration.availability === "provider" && declaration.providerFamily !== undefined ? reachability.unreachable?.[declaration.providerFamily] : undefined;
+    const outage = declaration.availability === "provider" && declaration.providerFamily !== undefined ? reachability.unreachable?.[declaration.providerFamily] : undefined;
     rows.push(Object.freeze({
       capability: declaration.id,
       semanticDisposition: disposition.kind === "active"
         ? Object.freeze({ kind: "active" as const })
         : Object.freeze({ kind: "deprecated" as const, successor: disposition.successor, reasonCode: disposition.reasonCode }),
       availability: declaration.availability,
-      reachability: unreachable === undefined
+      reachability: outage === undefined
         ? Object.freeze({ kind: "supported" as const })
-        : Object.freeze({ kind: "temporarily_unavailable" as const, providerFamily: declaration.providerFamily!, ...(unreachable.retryAfterMs === undefined ? {} : { retryAfterMs: unreachable.retryAfterMs }) }),
+        : Object.freeze({ kind: "temporarily_unavailable" as const, providerFamily: declaration.providerFamily!, ...(outage.retryAfterMs === undefined ? {} : { retryAfterMs: outage.retryAfterMs }) }),
     }));
   }
   const published = new Set(rows.map((row) => capabilityKey(row.capability)));

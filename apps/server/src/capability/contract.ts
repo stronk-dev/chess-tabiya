@@ -89,9 +89,10 @@ export function renderApplicability(rows: readonly CapabilityApplicability[], au
     `export const CAPABILITY_METADATA_EXCLUSIONS: readonly string[] = Object.freeze(${JSON.stringify(authority.metadataExclusions)});`,
     `export const CAPABILITY_METADATA_INSTANCE_EXCLUSIONS: readonly string[] = Object.freeze(["/requires"]);`,
     "",
-    "export const CAPABILITY_APPLICABILITY: readonly CapabilityApplicability[] = [",
-    ...rows.map((row) => `  ${JSON.stringify(row)},`),
-    "];",
+    "// One row per line inside a JSON string: parsed once at load, and cheap for the type checker.",
+    "export const CAPABILITY_APPLICABILITY: readonly CapabilityApplicability[] = Object.freeze(JSON.parse(String.raw`[",
+    ...rows.map((row, index) => `${JSON.stringify(row).replaceAll("`", "\\u0060").replaceAll("${", "$\\u007b")}${index === rows.length - 1 ? "" : ","}`),
+    "]`) as CapabilityApplicability[]);",
     "",
   ].join("\n");
 }
@@ -102,9 +103,10 @@ export function renderDeclarations(rows: readonly GeneratedCapabilityDeclaration
     "// current semantics digest from the tree and fails when one no longer matches at the same version.",
     'import type { GeneratedCapabilityDeclaration } from "./registry.js";',
     "",
-    "export const GENERATED_CAPABILITY_DECLARATIONS: readonly GeneratedCapabilityDeclaration[] = [",
-    ...rows.map((row) => `  ${JSON.stringify(row)},`),
-    "];",
+    "// One declaration per line inside a JSON string: parsed once at load, and cheap for the type checker.",
+    "export const GENERATED_CAPABILITY_DECLARATIONS: readonly GeneratedCapabilityDeclaration[] = Object.freeze(JSON.parse(String.raw`[",
+    ...rows.map((row, index) => `${JSON.stringify(row).replaceAll("`", "\\u0060").replaceAll("${", "$\\u007b")}${index === rows.length - 1 ? "" : ","}`),
+    "]`) as GeneratedCapabilityDeclaration[]);",
     "",
   ].join("\n");
 }

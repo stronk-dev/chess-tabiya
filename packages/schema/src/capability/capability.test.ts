@@ -238,6 +238,7 @@ describe("criterion 4 / 18 — the closed inventory and stable identity", () => 
   it("a collision is a hard failure, never an implementer-chosen suffix", () => {
     const colliding = { properties: { a: { properties: { b: { enum: ["c"] } } } }, $defs: { a: { properties: { b: { enum: ["c"] } } } } };
     expect(() => mapSchemaMembers(colliding, closedSchemaInventory(colliding))).toThrow(SchemaIdentityError);
+    expect(() => mapSchemaMembers(colliding, closedSchemaInventory(colliding))).toThrow(/CAPABILITY_IDENTITY_COLLISION/u);
   });
 
   it("strict AJV rejects a capability keyword added to the pack schema", () => {

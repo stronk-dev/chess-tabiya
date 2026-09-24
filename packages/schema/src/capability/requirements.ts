@@ -107,8 +107,9 @@ function branchMatches(root: unknown, node: unknown, value: unknown, depth: numb
     schema = resolveSchemaRef(root, schema.$ref).node;
   }
   if (schema === true || !isObject(schema)) return true;
-  if (Object.hasOwn(schema, "const") && canonicalJson(schema.const) !== canonicalJson(value)) return false;
-  if (Array.isArray(schema.enum) && !schema.enum.some((member) => canonicalJson(member) === canonicalJson(value))) return false;
+  const same = (left: unknown, right: unknown): boolean => left === right || (typeof left === "object" && left !== null && canonicalJson(left) === canonicalJson(right));
+  if (Object.hasOwn(schema, "const") && !same(schema.const, value)) return false;
+  if (Array.isArray(schema.enum) && !schema.enum.some((member) => same(member, value))) return false;
   if (schema.type !== undefined && !typeMatches(schema.type, value)) return false;
   if (Array.isArray(schema.oneOf) && !schema.oneOf.some((branch) => branchMatches(root, branch, value, depth))) return false;
   if (Array.isArray(schema.anyOf) && !schema.anyOf.some((branch) => branchMatches(root, branch, value, depth))) return false;
@@ -131,6 +132,8 @@ function branchMatches(root: unknown, node: unknown, value: unknown, depth: numb
 }
 
 const memberKey = (pointer: string, member: SchemaScalar): string => canonicalJson({ member, schemaPointer: pointer });
+const UNION_CACHE = new WeakMap<object, Map<string, ClosedUnionForm | undefined>>();
+const MEMBER_CACHE = new WeakMap<readonly CapabilityApplicability[], ReadonlyMap<string, CapabilityId>>();
 
 export interface SchemaMemberWalk {
   readonly member: SchemaMemberIdentity;
@@ -149,18 +152,20 @@ export function walkSchemaMembers(
 ): readonly SchemaMemberWalk[] {
   const out: SchemaMemberWalk[] = [];
   const excluded = options.excludedInstancePointers ?? [];
-  const unionCache = new Map<string, ClosedUnionForm | undefined>();
+  let unionCache = UNION_CACHE.get(schema as object);
+  if (unionCache === undefined) { unionCache = new Map<string, ClosedUnionForm | undefined>(); UNION_CACHE.set(schema as object, unionCache); }
+  // An enum that discriminates a value union is that union's member list, not a member of its own
+  // (the inventory counts it once, at the union).
+  const isDiscriminatorEnum = (pointer: string): boolean => {
+    const match = /^(.*)\/oneOf\/\d+\/properties\/([^/]+)$/u.exec(pointer);
+    if (match === null) return false;
+    const form = unionAt(match[1]!, valueAtSchema(schema, match[1]!));
+    return form?.form === "value" && escapePointerToken(form.discriminator) === match[2];
+  };
   const unionAt = (pointer: string, node: unknown): ClosedUnionForm | undefined => {
     if (!unionCache.has(pointer)) unionCache.set(pointer, classifyUnion(node));
     return unionCache.get(pointer);
   };
-  const discriminatorEnums = (pointer: string, node: JsonObject): Set<string> => {
-    const form = unionAt(pointer, node);
-    const set = new Set<string>();
-    if (form?.form === "value") (node.oneOf as readonly unknown[]).forEach((_branch, index) => set.add(`${pointer}/oneOf/${index}/properties/${escapePointerToken(form.discriminator)}`));
-    return set;
-  };
-  const skipEnum = new Set<string>();
   const visit = (node: unknown, pointer: string, value: unknown, path: string, depth: number): void => {
     if (depth > 256) throw new RangeError(`schema member walk exceeded depth at ${path}`);
     if (excluded.some((root) => path === root || path.startsWith(`${root}/`))) return;
@@ -173,12 +178,11 @@ export function walkSchemaMembers(
       schemaPath = resolved.pointer;
     }
     if (!isObject(schemaNode)) return;
-    if (Array.isArray(schemaNode.enum) && isScalar(value) && !skipEnum.has(schemaPath) && schemaNode.enum.includes(value)) {
+    if (Array.isArray(schemaNode.enum) && isScalar(value) && schemaNode.enum.includes(value) && !isDiscriminatorEnum(schemaPath)) {
       out.push({ member: { schemaPointer: schemaPath, member: value }, instancePointer: path });
     }
     if (Array.isArray(schemaNode.oneOf)) {
       const form = unionAt(schemaPath, schemaNode);
-      for (const pointerOfDiscriminator of discriminatorEnums(schemaPath, schemaNode)) skipEnum.add(pointerOfDiscriminator);
       let candidates = schemaNode.oneOf.map((_branch, index) => index);
       if (form?.form === "value" && isObject(value) && isScalar(value[form.discriminator])) {
         const selected = value[form.discriminator] as SchemaScalar;
@@ -298,20 +302,24 @@ export function deriveRequirements(
   authority: RequirementDerivationAuthority,
   resolver: RequirementResolver,
 ): RequirementDerivation {
-  const direct = new Map<CapabilityKey, { capability: CapabilityId; pointers: string[] }>();
+  const direct = new Map<CapabilityKey, { capability: CapabilityId; pointers: Set<string> }>();
   const add = (capability: CapabilityId, pointer?: string): void => {
     const key = capabilityKey(capability);
-    const row = direct.get(key) ?? { capability, pointers: [] };
-    if (pointer !== undefined && !row.pointers.includes(pointer)) row.pointers.push(pointer);
-    direct.set(key, row);
+    let row = direct.get(key);
+    if (row === undefined) { row = { capability, pointers: new Set() }; direct.set(key, row); }
+    if (pointer !== undefined) row.pointers.add(pointer);
   };
-  const members = new Map<string, CapabilityId>();
-  for (const row of authority.applicability) {
-    const selector = row.selector;
-    if (selector.kind === "schema_member") {
+  let members = MEMBER_CACHE.get(authority.applicability);
+  if (members === undefined) {
+    const built = new Map<string, CapabilityId>();
+    for (const row of authority.applicability) {
+      const selector = row.selector;
+      if (selector.kind !== "schema_member") continue;
       if (row.capability === undefined) throw new RequirementDerivationError("CAPABILITY_APPLICABILITY_ORPHAN", selector.sourceIdentity.schemaPointer, "a schema_member row carries no capability");
-      members.set(memberKey(selector.sourceIdentity.schemaPointer, selector.sourceIdentity.member), row.capability);
+      built.set(memberKey(selector.sourceIdentity.schemaPointer, selector.sourceIdentity.member), row.capability);
     }
+    members = built;
+    MEMBER_CACHE.set(authority.applicability, built);
   }
   for (const walked of walkSchemaMembers(authority.schema, "", pack, { excludedInstancePointers: authority.excludedInstancePointers })) {
     const capability = members.get(memberKey(walked.member.schemaPointer, walked.member.member));

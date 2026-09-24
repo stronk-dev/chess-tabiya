@@ -122,8 +122,8 @@ documents and planning logs rather than duplicated in this index.
 
 ## Pack-schema-version register
 
-<!-- register: pack-schema head=0.29 -->
-<!-- schema-digest: pack-schema 88db01823f23 -->
+<!-- register: pack-schema head=0.32 -->
+<!-- schema-digest: pack-schema 7915fcac771b -->
 
 Instituted 2026-08-13 after `pack-studio.md` (then named `pack-studio-and-review.md`) and
 `return-and-progression.md` were
@@ -165,14 +165,14 @@ landing order, not lost data.
 | 0.27 | `archive/pack-graduation.md` | `provenance.graduationBlockers` states and closed `provenance` |
 | 0.28 | `archive/graduation-clearance.md` | implemented — closed typed clearance on blocking/resolved entries, cited unreachability on accepted entries, and `clearedBy` removed; atomically migrated across all 92 draft/candidate documents |
 | 0.29 | `pack-population-provenance.md` | implementing checkpoint — typed corpus-evidence state, citable prose records, provenance-note claim binding, and widened reported timing notes; owner-authored corpus population remains |
+| 0.30 | `pack-capability-contract.md` | implemented 2026-09-24 — required canonical `requires` (structured `{id, version}` capability requirements, byte-equal to the derivation from the document's own content) and `$defs/capabilityRequirement`/`$defs/capabilityVersion`; the 0.30 stage re-based on the shipped 0.29 schema; all 92 draft/candidate documents (86 production + 6 browser fixtures), the schema example and its fixtures stamped mechanically in the same commit under [[D3033]], 68 evidence-ledger `packDigest`s re-stamped |
+| 0.31 | `famous-games.md` | implemented 2026-09-24 — optional closed `$defs/provenance.sourceGame` (white, black, event, site, date, round, result, sourceId, licenceBasis; six required). The masters emitter writes it into the pack; the interim `source-game.json` sidecar is retired (`SOURCE_GAME_SIDECAR_RETIRED`). Its two closed vocabularies join the capability applicability authority; no committed pack carries it, so no stamp moved |
+| 0.32 | `pack-training-forms.md` | implemented 2026-09-24 — optional `assistanceCeilingRamp` (ordered `{throughAttempt, ceilingRung 0–5}`; rung 6 refused; ordered and only-tightening, checked in the single reader) and `$defs/trainingSet`, the sibling set artefact with its own `formatVersion` 0.1 (ordered members, pass mark, tempo cycles), validated by `validateTrainingSet`. `digestDrillPack` is not extended; no pack digest moved |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| lane 0.30 | `pack-capability-contract.md` | requires (new, required array of capability requirement objects on the pack root); $defs/capabilityRequirement (new, closed object: id, version) | `tabiya-claims` |
-| lane 0.31 | `famous-games.md` | $defs/provenance.sourceGame (new, closed object: white, black, event, site, date, round, result, sourceId, licenceBasis) | `tabiya-claims` |
-| lane 0.32 | `pack-training-forms.md` | DrillPackDefinition.assistanceCeilingRamp (new, optional) + $defs/trainingSet (new sibling artefact, own formatVersion 0.1) | `tabiya-claims` |
 | lane 0.33 | `foundation-source-identity.md` | optional closed structuralFeature.conventionRef plus conditional kind/convention compatibility; absence preserves legacy v1 semantics | `tabiya-claims` |
 
 Landing order follows the numbers. A draft that cannot land behind its

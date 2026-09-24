@@ -163,8 +163,9 @@ export interface PlanInputs {
   readonly schema: unknown;
   readonly population: MigrationPopulation;
   readonly readDocument: (path: string) => unknown;
-  readonly shapes: CapabilityEntryLookup;
-  readonly principles: CapabilityEntryLookup;
+  /** Loaded registries; absent means the installed content registries (the generated declarations). */
+  readonly shapes?: CapabilityEntryLookup;
+  readonly principles?: CapabilityEntryLookup;
   readonly registry?: CapabilityRegistry;
   readonly baseline?: typeof MIGRATION_POPULATION_BASELINE;
 }
@@ -181,7 +182,7 @@ export function buildMigrationPlan(inputs: PlanInputs): MigrationPlan {
   assertPopulationBaseline(inputs.population, inputs.baseline);
   const registry = inputs.registry ?? CAPABILITY_REGISTRY;
   const histories = new Map(registry.histories.map((history) => [history.subjectId, history]));
-  const context = { schema: inputs.schema, shapes: inputs.shapes, principles: inputs.principles, registry };
+  const context = { schema: inputs.schema, registry, ...(inputs.shapes === undefined ? {} : { shapes: inputs.shapes }), ...(inputs.principles === undefined ? {} : { principles: inputs.principles }) };
   const mechanical: MechanicalRow[] = [];
   const judgement: JudgementRow[] = [];
   const refusals: RefusalRow[] = [];
@@ -330,7 +331,7 @@ export function applyMigrationPlan(plan: MigrationPlan, inputs: PlanInputs, sele
   if (!readiness.ready) throw new TypeError(`MIGRATION_NOT_READY: ${readiness.reasons.join("; ")}`);
   const rows = plan.mechanical.filter((row) => selection.documents === "all" || selection.documents.includes(row.document));
   if (selection.documents !== "all" && rows.length !== selection.documents.length) throw new TypeError("MIGRATION_SELECTION_UNKNOWN: a selected document has no mechanical row");
-  const context = { schema: inputs.schema, shapes: inputs.shapes, principles: inputs.principles, ...(inputs.registry === undefined ? {} : { registry: inputs.registry }) };
+  const context = { schema: inputs.schema, ...(inputs.shapes === undefined ? {} : { shapes: inputs.shapes }), ...(inputs.principles === undefined ? {} : { principles: inputs.principles }), ...(inputs.registry === undefined ? {} : { registry: inputs.registry }) };
   const writes: { readonly path: string; readonly text: string }[] = [];
   for (const row of rows) {
     const document = inputs.readDocument(row.document) as Readonly<Record<string, unknown>>;

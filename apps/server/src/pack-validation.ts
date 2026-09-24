@@ -1601,6 +1601,14 @@ export function validatePackDocument(value: unknown, options: {
     ),
     ...runtimeIssues(document, options.shapes, options.packs, options.principles, options.compileObjectiveRules),
     ...packConceptIssues(document, options.concepts ?? installedConceptRegistry()),
+    // rfc/pack-training-forms.md §3.1: the ramp is ordered by attempt and only tightens.
+    ...(document.assistanceCeilingRamp ?? []).flatMap((step, index, steps) => {
+      const previous = steps[index - 1];
+      if (previous === undefined) return [];
+      if (step.throughAttempt <= previous.throughAttempt) return [runtimeIssue("ASSISTANCE_RAMP_NOT_INCREASING", `/assistanceCeilingRamp/${index}/throughAttempt`, "ramp steps must be ordered by strictly increasing throughAttempt")];
+      if (step.ceilingRung > previous.ceilingRung) return [runtimeIssue("ASSISTANCE_RAMP_WIDENS", `/assistanceCeilingRamp/${index}/ceilingRung`, "a later attempt may not permit a higher rung than an earlier one; the ramp only tightens")];
+      return [];
+    }),
     // rfc/pack-capability-contract.md §4.1: the declared capability requirements byte-equal the
     // derivation from this document's own content (criterion 3).
     ...packRequirementIssues(document as unknown as Readonly<Record<string, unknown>>, {

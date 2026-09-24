@@ -306,8 +306,17 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
     });
   }
   for (const subject of authority.lifecycleSubjects) {
-    for (const version of subject.versions) {
+    // A lifecycle transition past the authored versions re-declares the subject at its new current
+    // version with the latest authored sites; the older version is retained frozen.
+    const current = currentVersion(lifecycle, subject.subjectId);
+    const authored = subject.versions.map((version) => version.version);
+    const versions = current.kind === "integer" && !authored.includes(current.value) && current.value > Math.max(...authored)
+      ? [{ version: current.value, sites: subject.versions.at(-1)!.sites }]
+      : subject.versions;
+    for (const version of versions) {
       const id = capabilityId(subject.subjectId, version.version);
+      // An authored version that is no longer current keeps its frozen digest once generated.
+      if (version.version !== (current.kind === "integer" ? current.value : -1) && inputs.previous.some((row) => capabilityKey(row.id) === capabilityKey(id))) continue;
       const draft: Draft = {
         subjectId: subject.subjectId,
         id,
@@ -368,6 +377,7 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
   const all = [...drafts.values()];
   const draftByKey = new Map<CapabilityKey, Draft>(all.map((draft) => [capabilityKey(draft.id), draft]));
   const reachedSites = new Set<string>();
+  const familyBoundaries = new Set(authority.meaningAuthority.interpreterRoots.flatMap((family) => family.sites));
   const digests = new Map<CapabilityKey, string>();
   const packageCache = new Map<string, CapabilityMeaningSource>();
   const digestOf = (key: CapabilityKey, stack: readonly CapabilityKey[]): string => {
@@ -386,7 +396,7 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
     for (const source of draft.sources) {
       if (source.kind === "ast") {
         images.push(index.siteImage(source.site as CapabilitySiteRef));
-        const closure = index.closure(source.site as CapabilitySiteRef);
+        const closure = index.closure(source.site as CapabilitySiteRef, { boundaries: familyBoundaries });
         for (const site of closure.sites) closureSites.add(site);
         for (const name of closure.packages) packages.add(name);
       } else if (source.kind === "package_dependency") continue;

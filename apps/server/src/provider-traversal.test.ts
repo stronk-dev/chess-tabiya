@@ -248,7 +248,9 @@ describe("§9 application composition and degradation", () => {
     } finally {
       await application.close();
     }
-  });
+    // Composing the whole application (every built-in pack validated, its capability stamp derived)
+    // takes ~4 s alone; the 5 s default is a machine-load lottery under the two-worker suite.
+  }, 30_000);
 });
 
 // ---------------------------------------------------------------------------------------------

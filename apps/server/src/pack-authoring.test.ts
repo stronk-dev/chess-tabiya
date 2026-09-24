@@ -17,7 +17,25 @@ import {
   SUPPORTED_POLICY_MODES,
 } from "./capabilities.js";
 import { PackRegistry, SIDECAR_BASENAMES } from "./pack-registry.js";
-import { assessmentAdmissionCode, validatePackDocument } from "./pack-validation.js";
+import { assessmentAdmissionCode, validatePackDocument as validateStamped } from "./pack-validation.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
+
+/**
+ * These fixtures edit pack content and then validate it the way an author's save does: the capability
+ * stamp is derived first (rfc/pack-capability-contract.md §4.1), so each case isolates its own rule.
+ */
+function stamp(value: unknown, options: Parameters<typeof validateStamped>[1] = {}): unknown {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return value;
+  try {
+    return withDerivedRequires(value as Record<string, unknown>, {
+      ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
+      ...(options.principles === undefined ? {} : { principles: options.principles as never }),
+    });
+  } catch {
+    return value;
+  }
+}
+const validatePackDocument: typeof validateStamped = (value, options = {}) => validateStamped(stamp(value, options), options);
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { makeUci, parseUci } from "chessops/util";
@@ -575,12 +593,12 @@ describe("development draft registry", () => {
 
     for (const documents of [
       [
-        { source: "official.json", value: official, channel: "official" as const },
-        { source: "draft.json", value: draft, channel: "community" as const },
+        { source: "official.json", value: stamp(official), channel: "official" as const },
+        { source: "draft.json", value: stamp(draft), channel: "community" as const },
       ],
       [
-        { source: "draft.json", value: draft, channel: "community" as const },
-        { source: "official.json", value: official, channel: "official" as const },
+        { source: "draft.json", value: stamp(draft), channel: "community" as const },
+        { source: "official.json", value: stamp(official), channel: "official" as const },
       ],
     ]) {
       const registry = await PackRegistry.fromDocuments(documents);
@@ -642,7 +660,7 @@ describe("development draft registry", () => {
       title: "Development-only pack",
       provenance: { ...structuredClone(fixture.provenance), reviewStatus: "draft" },
     };
-    await writeFile(join(directory, "draft.json"), JSON.stringify(draft), "utf8");
+    await writeFile(join(directory, "draft.json"), JSON.stringify(stamp(draft)), "utf8");
 
     const production = await PackRegistry.loadDefault({
       development: false,

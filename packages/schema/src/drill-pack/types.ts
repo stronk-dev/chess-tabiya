@@ -255,6 +255,8 @@ export interface DrillPackDefinition {
     readonly attribution?: readonly Readonly<Record<string, unknown>>[];
     readonly graduationBlockers?: readonly (GraduationEntry | string)[];
     readonly corpusEvidence?: CorpusEvidence;
+    /** rfc/famous-games.md §3 (lane 0.31): the typed identity of a cited game. */
+    readonly sourceGame?: SourceGame;
   };
   readonly timingWindows?: readonly TimingWindowDefinition[];
   readonly guard?: {
@@ -300,7 +302,42 @@ export interface DrillPackDefinition {
    * from this document's own content and byte-equal to that derivation. Required; absence is refusal.
    */
   readonly requires: readonly CapabilityId[];
+  /**
+   * rfc/pack-training-forms.md §3 (lane 0.32): a ceiling that tightens with attempt number. It only
+   * narrows — a pack cannot grant assistance — and rung 6 is not a legal ceiling (ADR-0005).
+   */
+  readonly assistanceCeilingRamp?: readonly AssistanceRampStep[];
   readonly [key: string]: unknown;
+}
+
+export type AssistanceCeilingRung = 0 | 1 | 2 | 3 | 4 | 5;
+
+export interface AssistanceRampStep {
+  readonly throughAttempt: number;
+  readonly ceilingRung: AssistanceCeilingRung;
+}
+
+/** rfc/pack-training-forms.md §1.2 — the set grain: an ordered sibling artefact, never a pack field. */
+export interface TrainingSetDefinition {
+  readonly id: string;
+  readonly formatVersion: "0.1";
+  readonly title: string;
+  readonly members: readonly { readonly packId: string; readonly ordinal: number }[];
+  readonly passMark?: { readonly require: number; readonly of: "all" | readonly string[]; readonly onFail: "repeat_set" };
+  readonly tempo?: { readonly cycles: readonly { readonly ordinal: number; readonly budgetScale: number }[] };
+  readonly provenance: DrillPackDefinition["provenance"];
+}
+
+export interface SourceGame {
+  readonly white: string;
+  readonly black: string;
+  readonly event?: string;
+  readonly site?: string;
+  readonly date: string;
+  readonly round?: string;
+  readonly result: "1-0" | "0-1" | "1/2-1/2" | "*";
+  readonly sourceId: string;
+  readonly licenceBasis: "no-rights-asserted" | "cc0" | "cc-by-sa-4.0" | "public-domain";
 }
 
 export type ShapeReference = string | { readonly shape: string; readonly relation: "present" | "prospective" };

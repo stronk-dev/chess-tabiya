@@ -3,27 +3,43 @@
   "artifact": "tabiya.pack-capability-applicability.authority.v3",
   "schema": {
     "path": "schemas/drill_pack.schema.json",
-    "sha256": "04318fdbd8c7aa4b18f06145ceee14f6d5af1941b1bfb6d364376d80ce8d65e8",
+    "sha256": "7915fcac771bfe7f22fbd8eaaf3487e03d21dbf996ae0fd382083e5c80133c24",
     "targetTransition": "rfc/contracts/pack-capability-schema-transition-v1.json",
-    "canonicalSha256": "4a8efaf85c0f7d7c73f8542bc91e993a844f5bfcd6454d98d02a2186836270fa"
+    "canonicalSha256": "ead208d1689d9ee3e5965493b11b11494561007f2d53026a7d3c91825313f2ce"
   },
   "closedVocabulary": {
     "inventoryAlgorithm": "closed-schema-members-v2",
     "mappingAlgorithm": "stable-schema-member-v3",
     "generator": "tools/d2152-pack-capability-author-repair/contract.mjs",
-    "inventorySha256": "5186074789f60799d492a174d29a8c337978883be2f07fa6a7058c8f979cc403",
-    "expandedMappingSha256": "a6c3a36934e88eae1a762954085028f71eca03c52850584cc739e78b7d881658",
+    "inventorySha256": "352bce1865e96b4c5e3fb1bdfe7c4c7a2ba3605e885c7c6671c3f5f6a7ffa7fc",
+    "expandedMappingSha256": "b7813c569037ac3460ae6aca81371db9618389eea0eb4bd6137328edb0fb2ff4",
     "counts": {
-      "enumNodes": 104,
-      "enumMembers": 315,
+      "enumNodes": 108,
+      "enumMembers": 330,
       "valueUnionNodes": 20,
       "valueUnionMembers": 104,
       "keyUnionNodes": 6,
       "keyUnionMembers": 19,
-      "mappedMembers": 438,
+      "mappedMembers": 453,
       "excludedMembers": 0
     },
     "sourceInventory": [
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "*"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "0-1"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "1-0"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "1/2-1/2"
+      },
       {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence",
         "member": "abstained"
@@ -459,6 +475,14 @@
       {
         "schemaPointer": "/$defs/deviationCost",
         "member": "category"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "cc-by-sa-4.0"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "cc0"
       },
       {
         "schemaPointer": "/$defs/successCondition/oneOf/3/properties/fact",
@@ -1057,6 +1081,10 @@
         "member": "named_structure"
       },
       {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "no-rights-asserted"
+      },
+      {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
         "member": "no_data_at_band"
       },
@@ -1325,6 +1353,10 @@
         "member": "provenance_note"
       },
       {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "public-domain"
+      },
+      {
         "schemaPointer": "/$defs/provenance/properties/reviewStatus",
         "member": "published"
       },
@@ -1383,6 +1415,10 @@
       {
         "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/direction",
         "member": "released"
+      },
+      {
+        "schemaPointer": "/$defs/trainingSet/properties/passMark/properties/onFail",
+        "member": "repeat_set"
       },
       {
         "schemaPointer": "/$defs/deviation/properties/class",
@@ -1775,6 +1811,30 @@
       {
         "schemaPointer": "/$defs/successCondition/oneOf/1/properties/result",
         "member": "win"
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 0
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 1
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 2
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 3
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 4
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 5
       }
     ]
   },
@@ -2387,9 +2447,9 @@
         {
           "version": 2,
           "sites": [
-            "apps/server/src/pack-validation.ts#runtimeIssues"
+            "apps/server/src/pack-registry.ts#projectPackDocument"
           ],
-          "note": "the variantOf catalogue form"
+          "note": "the variantOf catalogue form, published by the pack projection"
         }
       ]
     },
@@ -2474,5 +2534,5 @@
       "source file location"
     ]
   },
-  "expandedAuthoritySha256": "ddb815b6e25f83bcfd6ba37833be2b00ecc093168a64a36971e133e5cf28d820"
+  "expandedAuthoritySha256": "6b5615fb9af04e84bdfd4c21f5ec18e244fdb299816cd394cae997df05f0f39d"
 }

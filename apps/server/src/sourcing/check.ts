@@ -16,7 +16,6 @@ import {
 } from "./claim-binding.js";
 import { EXPLORER_TEMPLATE_ID, RATING_GROUPS, SPEEDS } from "./explorer.js";
 import { pinnedRevision } from "./revision-pin.js";
-import { sourceGameSidecarIssues } from "./source-game.js";
 import {
   type EvidenceLedger,
   type EvidenceRecord,
@@ -419,12 +418,10 @@ export async function checkSourcingDirectory(directory: string, options: { reado
   if (manifest && ledger) linkage(manifest, ledger, issues);
   corpusEvidenceStateIssues(pack, ledger, issues);
   offlineJobProvenance(job, manifest, issues);
-  if (await exists(resolve(absolute, "source-game.json"))) {
-    try {
-      const sidecar = await readJson(resolve(absolute, "source-game.json"));
-      for (const message of sourceGameSidecarIssues(sidecar, object(pack) ? pack.id : undefined)) issues.push(issue("SOURCE_GAME_INVALID", "/source-game.json", message));
-    } catch (error) { issues.push(issue("SOURCE_GAME_INVALID", "/source-game.json", error instanceof Error ? error.message : String(error))); }
-  }
+  // rfc/famous-games.md: the interim source-game.json sidecar was relocated into
+  // provenance.sourceGame at lane 0.31; a leftover sidecar would be a stale second authority.
+  if (await exists(resolve(absolute, "source-game.json"))) issues.push(issue("SOURCE_GAME_SIDECAR_RETIRED", "/source-game.json", "sourceGame lives in the pack's provenance.sourceGame since pack schema 0.31; delete the sidecar"));
+
   if (manifest && !ledger && await exists(resolve(absolute, "priority.json"))) {
     try {
       priorityLinkage(manifest, await readJson(resolve(absolute, "priority.json")), issues);

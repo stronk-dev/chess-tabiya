@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.29; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.30; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -121,6 +121,29 @@ manifest entry; and support authored prose only. Citations are available to auth
 and the advanced evidence inspector, never as position readings or measurements. Timing-window
 notes now allow 2,000 characters and remain printed verbatim by `make graduation-report`; the
 learner-facing authored objective-assessment note retains its 400-character cap.
+
+Version 0.30 (`rfc/pack-capability-contract.md`) makes every pack declare the evaluator meaning it
+depends on. The root `requires` array is **required** and holds canonical structured capability
+requirements — `{ "id": "structuralFeature.outpost", "version": { "kind": "integer", "value": 1 } }`,
+or a `semver` arm for a resolved `shape.<id>`/`principle.<id>` — ordered by id with no duplicates. It
+is derived, never authored: the single drill-pack reader (`validatePackDocument`) re-derives it from
+the document's own content through the generated applicability image
+(`packages/schema/src/capability/applicability.generated.ts`) and refuses a missing, duplicated,
+reordered, under- or over-declared array. Every writer — the sourcing emitters, Studio saves and
+registration, graduation clearance — stamps it through the one function; an author runs
+`make pack-stamp FILE=<pack.json>` after editing content. The stamp is inside `digestDrillPack`.
+
+Each capability is a declaration in `packages/runtime/src/capability/` with a semantics digest over
+the schema member, the interpreter arms and constant tables that define it (closed through
+TypeScript symbol references), its convention prose, its F1 projection or resolved entry, and the
+lockfile-pinned packages it reaches. `make capability-check` fails when a meaning changes at the same
+version; the remedy is to revert or add a version transition to `lifecycle.ts` and run
+`make capability-declarations`, after which `make migration-plan` names every pack or shape whose
+requirement was superseded as judgement debt (`make migration-apply-ready` refuses while any exists).
+`GET /capabilities` publishes `packCapabilities`: the configured active/deprecated capabilities with a
+separate `supported`/`temporarily_unavailable` reachability. A pack requiring a capability this
+deployment does not carry is refused at registration (HTTP 422 `PACK_CAPABILITY_UNSUPPORTED`) and
+excluded from the listing; the boot survives it.
 
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability

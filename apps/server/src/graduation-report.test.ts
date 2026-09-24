@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 import { graduationReport, runGraduationReport } from "./graduation-report.js";
 import { validatePackDocument } from "./pack-validation.js";
 import { checkSourcingFile } from "./sourcing/check.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 async function packFiles(root: string, includeBrowser = false): Promise<string[]> {
   return (await readdir(root)).filter((name) => name.endsWith(".json") && !/\.(?:evidence|graduation|job|sources)\.json$/u.test(name) && (includeBrowser || !name.endsWith(".browser.json"))).map((name) => resolve(root, name));
@@ -133,6 +134,7 @@ describe("pack graduation", () => {
       published.provenance.reviewStatus = "published";
       published.provenance.corpusEvidence = { state: "ledger" };
       published.provenance.graduationBlockers = published.provenance.graduationBlockers.filter((entry: { state: string }) => entry.state !== "blocking");
+      published.requires = withDerivedRequires(published).requires;
       await writeFile(draftPath, `${JSON.stringify(published, null, 2)}\n`);
       for (const suffix of ["evidence", "sources"] as const) await copyFile(source.replace(/\.json$/u, `.${suffix}.json`), draftPath.replace(/\.json$/u, `.${suffix}.json`));
       const ledgerPath = draftPath.replace(/\.json$/u, ".evidence.json");

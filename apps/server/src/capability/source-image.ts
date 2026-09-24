@@ -55,7 +55,8 @@ function listSources(root: string): string[] {
       const path = resolve(directory, entry);
       const stat = statSync(path);
       if (stat.isDirectory()) {
-        if (entry === "node_modules" || entry === "dist" || entry === "fixtures") continue;
+        // `testing/` holds test-only helpers (imported by *.test.ts alone): not production meaning.
+        if (entry === "node_modules" || entry === "dist" || entry === "fixtures" || entry === "testing") continue;
         walk(path);
       } else if (entry.endsWith(".ts") && !entry.endsWith(".test.ts") && !entry.endsWith(".d.ts") && !entry.endsWith(".generated.ts")) out.push(path);
     }
@@ -170,6 +171,16 @@ export interface SourceIndexOptions {
   readonly root: string;
   /** Exact repo-relative source replacements used by mutation fixtures (criterion 13). */
   readonly overrides?: Readonly<Record<string, string>>;
+}
+
+/**
+ * Capability boundaries: interpreter sites whose meaning is its own capability family. A closure
+ * stops at them — a `structuralExpression.feature` node dispatches to the feature evaluator, and the
+ * specific feature's meaning is carried by that feature's own capability (which the same document
+ * also requires), not copied into every node that can reach it.
+ */
+export interface ClosureOptions {
+  readonly boundaries?: ReadonlySet<string>;
 }
 
 export class CapabilitySourceIndex {
@@ -318,9 +329,10 @@ export class CapabilitySourceIndex {
   }
 
   /** Symbol-reference closure of one site (arm-scoped for an arm site). */
-  closure(site: CapabilitySite): SiteClosure {
+  closure(site: CapabilitySite, options: ClosureOptions = {}): SiteClosure {
     const rootKey = `${site.module}#${site.kind === "symbol" ? site.symbol : site.owner}`;
-    const cacheKey = canonicalizeJson(site);
+    const boundaries = options.boundaries ?? new Set<string>();
+    const cacheKey = `${canonicalizeJson(site)}|${[...boundaries].sort().join(",")}`;
     const cached = this.#closureCache.get(cacheKey);
     if (cached !== undefined) return cached;
     const sites = new Set<string>([rootKey]);
@@ -335,7 +347,7 @@ export class CapabilitySourceIndex {
       const { key, elided } = queue.shift()!;
       const references = this.#directReferences(key, elided);
       for (const name of references.packages) packages.add(name);
-      for (const next of references.sites) if (!sites.has(next)) { sites.add(next); queue.push({ key: next, elided: new Set() }); }
+      for (const next of references.sites) if (!sites.has(next) && !boundaries.has(next)) { sites.add(next); queue.push({ key: next, elided: new Set() }); }
     }
     const result = Object.freeze({ sites: Object.freeze([...sites].sort()), packages: Object.freeze([...packages].sort()) });
     this.#closureCache.set(cacheKey, result);
@@ -481,8 +493,13 @@ export class CapabilitySourceIndex {
           const parent = node.parent;
           let violation = false;
           if (ts.isCallExpression(parent) && parent.arguments[0] === node) {
-            const callee = parent.expression.getText(file);
-            if (/(^|\.)(capabilityId|semverCapabilityId)$/u.test(callee)) violation = true;
+            // Call identity, not spelling: an aliased import of the constructor is still the constructor.
+            const calleeNode = ts.isPropertyAccessExpression(parent.expression) ? parent.expression.name : parent.expression;
+            let callee = this.#checker.getSymbolAtLocation(calleeNode);
+            if (callee !== undefined && (callee.flags & ts.SymbolFlags.Alias) !== 0) {
+              try { callee = this.#checker.getAliasedSymbol(callee); } catch { /* unresolved alias */ }
+            }
+            if (callee !== undefined && ["capabilityId", "semverCapabilityId"].includes(callee.name)) violation = true;
           }
           if (ts.isPropertyAssignment(parent) && parent.initializer === node && ts.isIdentifier(parent.name) && parent.name.text === "id") {
             const contextual = this.#checker.getContextualType(parent.parent as ts.ObjectLiteralExpression);

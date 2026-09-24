@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.30",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.32",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.30 format with required semantic capability declarations.",
+  "description": "Living v0.32 format with required semantic capability declarations, typed source-game provenance and training forms.",
   "type": "object",
   "required": [
     "id",
@@ -146,6 +146,19 @@
       "items": { "$ref": "#/$defs/trajectoryLeg" }
     },
     "provenance": { "$ref": "#/$defs/provenance" },
+    "assistanceCeilingRamp": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["throughAttempt", "ceilingRung"],
+        "properties": {
+          "throughAttempt": { "type": "integer", "minimum": 1, "maximum": 100 },
+          "ceilingRung": { "enum": [0, 1, 2, 3, 4, 5] }
+        },
+        "additionalProperties": false
+      }
+    },
     "requires": {
       "type": "array",
       "items": { "$ref": "#/$defs/capabilityRequirement" },
@@ -1182,6 +1195,22 @@
             ]
           }
         },
+        "sourceGame": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["white", "black", "date", "result", "sourceId", "licenceBasis"],
+          "properties": {
+            "white": { "type": "string", "minLength": 1, "maxLength": 120 },
+            "black": { "type": "string", "minLength": 1, "maxLength": 120 },
+            "event": { "type": "string", "maxLength": 200 },
+            "site": { "type": "string", "maxLength": 200 },
+            "date": { "type": "string", "maxLength": 10 },
+            "round": { "type": "string", "maxLength": 20 },
+            "result": { "enum": ["1-0", "0-1", "1/2-1/2", "*"] },
+            "sourceId": { "type": "string", "minLength": 1, "maxLength": 120 },
+            "licenceBasis": { "enum": ["no-rights-asserted", "cc0", "cc-by-sa-4.0", "public-domain"] }
+          }
+        },
         "corpusEvidence": {
           "oneOf": [
             { "type": "object", "required": ["state"], "properties": { "state": { "const": "ledger" } }, "additionalProperties": false },
@@ -1189,6 +1218,54 @@
             { "type": "object", "required": ["state"], "properties": { "state": { "const": "unsourced" } }, "additionalProperties": false }
           ]
         }
+      },
+      "additionalProperties": false
+    },
+    "trainingSet": {
+      "type": "object",
+      "required": ["id", "formatVersion", "title", "members", "provenance"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "formatVersion": { "const": "0.1" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["packId", "ordinal"],
+            "properties": { "packId": { "$ref": "#/$defs/id" }, "ordinal": { "type": "integer", "minimum": 1 } },
+            "additionalProperties": false
+          }
+        },
+        "passMark": {
+          "type": "object",
+          "required": ["require", "of", "onFail"],
+          "properties": {
+            "require": { "type": "integer", "minimum": 1 },
+            "of": { "oneOf": [{ "const": "all" }, { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }] },
+            "onFail": { "enum": ["repeat_set"] }
+          },
+          "additionalProperties": false
+        },
+        "tempo": {
+          "type": "object",
+          "required": ["cycles"],
+          "properties": {
+            "cycles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["ordinal", "budgetScale"],
+                "properties": { "ordinal": { "type": "integer", "minimum": 1 }, "budgetScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 } },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "provenance": { "$ref": "#/$defs/provenance" }
       },
       "additionalProperties": false
     },

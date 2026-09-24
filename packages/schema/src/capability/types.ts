@@ -120,13 +120,12 @@ export function capabilityEquals(left: CapabilityId, right: CapabilityId): boole
   return left.id === right.id && left.version.kind === right.version.kind && left.version.value === right.version.value;
 }
 
+/**
+ * Bytewise order of NFC ids. `CAPABILITY_ID_PATTERN` admits ASCII only, where UTF-16 code-unit order
+ * equals UTF-8 byte order, so the comparison needs no encoding.
+ */
 function compareBytes(left: string, right: string): number {
-  const a = new TextEncoder().encode(left.normalize("NFC"));
-  const b = new TextEncoder().encode(right.normalize("NFC"));
-  for (let index = 0; index < Math.min(a.length, b.length); index += 1) {
-    if (a[index] !== b[index]) return a[index]! - b[index]!;
-  }
-  return a.length - b.length;
+  return left < right ? -1 : left > right ? 1 : 0;
 }
 
 export function compareCapabilityVersions(left: CapabilityVersion, right: CapabilityVersion): number {
