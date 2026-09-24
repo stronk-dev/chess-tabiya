@@ -40,6 +40,23 @@ automatic varied return rotates `schedules.variant` through the pack's declared 
 kinds by ladder index; a blocked return, or a pack declaring none, stores `NULL`, which Learn
 describes as a fresh opponent seed. `retryVariants` is still not a run modifier.
 
+**Return standing** (Discharge D2, owner ruling 2026-09-24). Each root has a coarse standing word
+from a closed three-word vocabulary, derived only from the ladder index the same replay serves.
+The mapping lives in one place, `returnStanding` in `apps/server/src/progress.ts`, with explicit
+thresholds in `RETURN_STANDING_MIN_RUNG`:
+
+| Ladder index (interval) | Standing |
+|---|---|
+| none — a blocked repeat, or no countable history | `new` |
+| 0 (1 day) | `new` |
+| 1-2 (3 and 7 days) | `learning` |
+| 3-4 (16 and 35 days) | `established` |
+
+The word describes spaced-recall standing — how far apart returns have been held — never mastery
+or a verdict. Because it reads the replayed index, step-down and overstudy move it exactly as they
+move the interval: a lapse from the top rung repeats blocked and reads `new`, and recovery resumes
+at the retained floor's word. The index itself never leaves the server.
+
 Learners may also
 schedule a node explicitly. That operation persists a schedule and appends
 `transfer.scheduled`; callers without the writer lease cannot create either.
@@ -52,7 +69,9 @@ The HTTP surface is:
   the source run's authored band (`corpusPopulation`); each item carries that population count or
   `null`. Frequency orders and never grades. At most `DUE_INTAKE_LIMIT` (20) returns are served;
   the response counts the rest as `waiting`, which keep their order and pending state (vacation
-  safety — nothing is rescheduled and the learner chooses no interval).
+  safety — nothing is rescheduled and the learner chooses no interval). Each item carries
+  `standing`, one of `new`, `learning` or `established`; there is no ladder index, ratio or
+  mastery number, and the client parser refuses any other word and any extra field.
 - `GET /progress/difficult` — roots with at least three unstable graded attempts, read from
   `attempts` (never `learner_position_stats`), with the unstable count and the latest runs where
   it happened. The rule is published with the response; there is no attempt total, ratio or
@@ -87,8 +106,9 @@ retry, and cannot mutate a newly loaded Learn route after departure. Due and ret
 through the run controller's single-flight lifecycle and now expose its pending state to assistive
 technology while their controls are disabled.
 
-Due cards name the variation (the pack's retry-variant kind in words, or a fresh opponent seed)
-and, when the corpus answered, the population count that ordered them. When intake holds work back,
+Due cards name the variation (the pack's retry-variant kind in words, or a fresh opponent seed),
+the due date with the root's standing word beside it and the fixed explanation *"based on how many
+spaced returns you've held"*, and, when the corpus answered, the population count that ordered them. When intake holds work back,
 Learn says how many returns are waiting. *Positions with repeated unstable attempts* lists the
 difficult roots with the published rule and one *Open run* control per preserved run.
 
@@ -98,7 +118,8 @@ reserved checkpoint `imported-game:next-move` against the human-move model's dis
 run does not advance. The drill screen then names the move the game played and the model rank of the
 guess, never a grade.
 
-It deliberately presents no mastery percentage: the stored data is an attempt history and
+It deliberately presents no mastery percentage — the standing word is a closed-vocabulary word
+about return spacing, not a number or a level: the stored data is an attempt history and
 a return queue, not proof of mastery. It also lists derived event-shaped milestones linking
 to preserved runs. Those record firsts and one explicit attempt-count event; they never add
 a skill percentage, score, streak, rating, ranking, or cross-learner comparison.

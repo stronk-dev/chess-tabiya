@@ -34,9 +34,26 @@ describe("progress response authority", () => {
 
 describe("return-scheduling response authority (rfc/return-scheduling.md)", () => {
   const population = { source: "lichess-explorer", ratings: [1600], speeds: ["blitz"], since: "2023-10", until: "2026-09" };
-  const due = (id: string, kind: "blocked" | "varied", dueAt: string, games: number | null) => ({
+  const due = (id: string, kind: "blocked" | "varied", dueAt: string, games: number | null, standing: unknown = "learning") => ({
     id, sessionKind: "position", packId: null, kind, variant: null, dueAt, sourceRunId: null,
-    frequency: games === null ? null : { games, population },
+    frequency: games === null ? null : { games, population }, standing,
+  });
+
+  it("accepts exactly the three standing words and refuses any other word, a number or a rung field (D2)", () => {
+    for (const standing of ["new", "learning", "established"]) {
+      expect(parseDueQueue({ schedules: [due("a", "varied", at, null, standing)], waiting: 0, intakeLimit: 20 }).schedules[0]!.standing).toBe(standing);
+      expect(parseDueQueue({ schedules: [due("a", "varied", at, 5, standing)], waiting: 0, intakeLimit: 20 }).schedules[0]!.standing).toBe(standing);
+    }
+    for (const standing of ["mature", "mastered", "difficult", "young", "New", "", 2, 0.5, null]) {
+      expect(() => parseDueQueue({ schedules: [due("a", "varied", at, null, standing)], waiting: 0, intakeLimit: 20 }), String(standing))
+        .toThrow(/closed vocabulary/u);
+    }
+    const { standing: _omitted, ...missing } = due("a", "varied", at, null);
+    expect(() => parseDueQueue({ schedules: [missing], waiting: 0, intakeLimit: 20 })).toThrow(/invalid shape/u);
+    // The criterion-12 refusal holds beside the word: a rung, ratio or maturity number is an unknown field.
+    for (const extra of [{ ladderIndex: 2 }, { rung: 2 }, { maturity: 0.5 }, { ratio: "2/3" }, { masteryPct: 40 }]) {
+      expect(() => parseDueQueue({ schedules: [{ ...due("a", "varied", at, null), ...extra }], waiting: 0, intakeLimit: 20 })).toThrow(/invalid shape/u);
+    }
   });
 
   it("accepts a queue re-ordered by frequency only within one due date", () => {

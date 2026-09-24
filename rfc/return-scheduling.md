@@ -1,6 +1,6 @@
 # RFC: Return scheduling — repairing the ladder, and the return queue the training tradition asks for
 
-- **Status:** implementing — 2026-09-24. Implemented at the owner's direction to implement ready RFCs. All twelve acceptance criteria and D1 are implemented and tested; D2-D7 stay open with their named owners, so the RFC is not yet `implemented` under status-parity P5. Register row and ledger closeout are the coordinator's.
+- **Status:** implementing — 2026-09-24. Implemented at the owner's direction to implement ready RFCs. All twelve acceptance criteria and D1 are implemented and tested; D2 is discharged by the owner's 2026-09-24 ruling and implemented; D3-D7 stay open with their named owners, so the RFC is not yet `implemented` under status-parity P5. Register row and ledger closeout are the coordinator's.
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/01-training-model.md` §blocked/varied repetition (`:55-79`); `docs/return-and-progression.md` (the shipped surface contract)
@@ -307,6 +307,9 @@ learner, refused twice (`rfc/skills.md:434-435`, and by [[D1151]]'s reasoning). 
 `rfc/skills.md:378-381` admits a mark, and is what `/learn` shows.
 
 **The categorical word is unruled and this RFC does not decide it** — open question 1.
+*(Ruled 2026-09-24 by the owner, Discharge D2: a closed three-word standing derived from the ladder
+rung renders beside the due date; it is a word, not a level or number, so this section's refusals
+stand.)*
 
 ## §10. The pack census, as a procedure
 
@@ -405,7 +408,7 @@ than amending it, so no intent-tier change is requested.
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | The ladder repair and step-down, over the real `#refreshAutoSchedule` | codex | this RFC's implementing commit | ✅ 2026-09-24 (arithmetic 4f8ba581; step-down and overstudy with this implementation) |
-| D2 | The categorical maturity vocabulary — open question 1 | OWNER | `planning/platform-alignment/decision-queue.md` | |
+| D2 | The categorical maturity vocabulary — open question 1 | OWNER | `planning/platform-alignment/decision-queue.md` | ✅ 2026-09-24 — discharged by the owner's in-session ruling: a coarse per-root word renders on Learn. Closed vocabulary `new` / `learning` / `established`, derived only from the replayed ladder index (none or 0 → `new`; 1-2 → `learning`; 3-4 → `established`), always beside the next due date with the fixed explanation *"based on how many spaced returns you've held"*. No index, ratio or number renders; criterion 12 stands |
 | D3 | `retryVariants` becomes a declared capability under `rfc/pack-capability-contract.md`, since the runtime now reads it | claude | that RFC's capability census | |
 | D4 | Repair `rfc/longitudinal-store.md:229`'s stale `service.ts:1204` citation | claude | the amending commit | |
 | D5 | The pack-format half — pass marks, guided first pass, tempo sets | claude | `rfc/pack-training-forms.md` | |
@@ -423,7 +426,9 @@ than amending it, so no intent-tier change is requested.
    **(b)** categorical words derived from counted verdicts, each reopening its runs;
    **(c)** words plus the ladder position shown — which is (b) plus the refused number.
    **Not acceptance-blocking:** §§2-8 ship under (a), which is the shipped surface's current
-   behaviour.
+   behaviour. **Answered 2026-09-24 by the owner (Discharge D2):** a coarse word renders, derived
+   from the ladder rung only — `new` / `learning` / `established` — beside the due date with a
+   fixed explanation; no number. See the changelog.
 2. **Does the due queue re-order by frequency, or gain a second surface?**
    `storage.ts:2644` is one `ORDER BY`; changing it changes every learner's queue, and adding
    a surface duplicates it. §4 specifies the tie-break reading; a reviewer may prefer the
@@ -505,3 +510,14 @@ Proposed — id assigned at landing; head was **D1310** at drafting.
   - **Clock-shaped work:** none is in this RFC's scope; tempo sets stay with
     `rfc/pack-training-forms.md` and `rfc/enforced-clocks.md` and were left out.
   - Discharge **D1** is discharged by this implementation; D2-D7 remain with their named owners.
+- **2026-09-24** — **D2 discharged by owner ruling** (Marco, in session, no review cycle): the Learn
+  page gets a coarse per-root standing word — open question 1 is answered as option (b) narrowed to
+  the ladder, not to counted verdicts. `returnStanding` in `apps/server/src/progress.ts` maps the
+  rung the §2.3 replay serves to `new` (none or 0) / `learning` (1-2) / `established` (3-4);
+  `GET /progress/due` carries it as `standing`; the web parser refuses any other word and still
+  refuses ladder-index, ratio and mastery fields; Learn renders it beside each due date with *"based
+  on how many spaced returns you've held"*. The words name spaced-recall standing, never mastery;
+  `mature` and `difficult` from the question's example list were not adopted. §9.2's "no per-root
+  maturity level" holds — the word is not a number. Tests: `return-scheduling.test.ts` "D2 …" (map,
+  storage replay, service), `return-scheduling-application.test.ts`, `progress-response.test.ts`,
+  `learner-copy.test.ts`, `app-shell.test.ts`, and the browser check in `tests/browser/drill.spec.ts`.

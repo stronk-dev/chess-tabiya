@@ -646,9 +646,17 @@ export interface ProgressSchedule {
   readonly sourceRunId: string | null;
 }
 
+/**
+ * The coarse return standing (rfc/return-scheduling.md Discharge D2): a closed vocabulary word the
+ * server derives from the return-ladder rung. It describes spaced-recall standing, never mastery.
+ */
+export const RETURN_STANDINGS = Object.freeze(["new", "learning", "established"] as const);
+export type ReturnStanding = (typeof RETURN_STANDINGS)[number];
+
 /** A served due return (rfc/return-scheduling.md §§4, 6): frequency is a population count that orders, never grades. */
 export interface DueSchedule extends ProgressSchedule {
   readonly frequency: { readonly games: number; readonly population: CorpusPopulation } | null;
+  readonly standing: ReturnStanding;
 }
 
 export interface DueQueuePage {

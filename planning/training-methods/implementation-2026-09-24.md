@@ -42,11 +42,14 @@ while verifying the RFC against HEAD are in the RFC's changelog, not repeated he
   `make status-parity` reports P2 until the register row reads `implementing`. `design/BACKLOG.md`
   rows [[D1302]] (retry-variant rotation), [[D864]], [[D865]], [[D866]] and [[D860]] are shipped by
   this change and are the coordinator's to flip, with the exploration-log entry.
-- **Discharges D2-D7** stay with their named owners: D2 the owner's maturity-vocabulary ruling (the
-  surface ships under option (a), events only); D3 declaring `retryVariants` as a scheduler-read
+- **D2 discharged (later the same day)** by the owner's ruling: the coarse standing word
+  `new` / `learning` / `established`, mapped from the ladder rung in `returnStanding`
+  (`apps/server/src/progress.ts`), served as `standing` on `GET /progress/due` and rendered on Learn
+  beside the due date with *"based on how many spaced returns you've held"*.
+- **Discharges D3-D7** stay with their named owners: D3 declaring `retryVariants` as a scheduler-read
   capability in `rfc/pack-capability-contract.md` (the disposition register still says `refused`);
   D4 the stale `service.ts:1204` citation in `rfc/longitudinal-store.md:229`; D5-D7 in their RFCs.
-- **Open questions 1 and 3** remain open (maturity vocabulary; floor decay). Question 2 is answered
+- **Open question 3** remains open (floor decay); question 1 is answered by the D2 ruling. Question 2 is answered
   by §4's tie-break reading as implemented.
 - **Unevidenced parameters to revisit on evidence:** `DUE_INTAKE_LIMIT = 20`, the three-unstable
   threshold, and the 40-lookup corpus bound per due read.

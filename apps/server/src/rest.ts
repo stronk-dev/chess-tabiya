@@ -1222,7 +1222,7 @@ export function createRestHandler(
         return json(200, {
           schedules: queue.schedules.map((item) => Object.freeze({
             id: item.id, sessionKind: item.sessionKind, packId: item.packId, kind: item.kind,
-            variant: item.variant, dueAt: item.dueAt, sourceRunId: item.sourceRunId,
+            variant: item.variant, dueAt: item.dueAt, sourceRunId: item.sourceRunId, standing: item.standing,
             frequency: item.frequency === null ? null : Object.freeze({ games: item.frequency.games, population: item.frequency.population }),
           })),
           waiting: queue.waiting,

@@ -64,19 +64,43 @@ describe("return scheduling through the production application", { timeout: 20_0
     expect(due.body).toMatchObject({ waiting: 0, intakeLimit: 20 });
     const schedules = due.body!.schedules as Record<string, unknown>[];
     expect(schedules).toHaveLength(1);
-    expect(Object.keys(schedules[0]!).sort()).toEqual(["dueAt", "frequency", "id", "kind", "packId", "sessionKind", "sourceRunId", "variant"]);
+    expect(Object.keys(schedules[0]!).sort()).toEqual(["dueAt", "frequency", "id", "kind", "packId", "sessionKind", "sourceRunId", "standing", "variant"]);
     // The mock corpus reports the start position; frequency is a population count with its population.
     expect(schedules[0]).toMatchObject({ kind: "varied", variant: null, frequency: { games: 120, population: { source: "lichess-explorer" } } });
+    // Discharge D2: one ungraded attempt serves rung 0, which is the word "new" — a word, never the rung.
+    expect(schedules[0]!.standing).toBe("new");
+
+    // An early fresh attempt is overstudy: it cannot advance the ladder, so the word stays "new".
+    const early = await call("POST", "/runs", {
+      id: "return-position-early",
+      session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      policyConfig, seed: 5,
+    });
+    expect(early.status, early.text).toBe(201);
+    expect((await call("POST", "/runs/return-position-early/moves", { uci: "e2e4" })).status).toBe(200);
+    const overstudied = await call("GET", "/progress/due?at=9999-12-31T23:59:59.999Z");
+    const pending = overstudied.body!.schedules as Record<string, unknown>[];
+    expect(pending.map((schedule) => schedule.standing)).toEqual(["new"]);
+
+    // Taking the return from the queue is on schedule: the ladder climbs to rung 1 and the word follows the replay.
+    const again = await call("POST", "/runs/return-position/duplicate", { id: "return-position-again", seed: 6, scheduleId: pending[0]!.id });
+    expect(again.status, again.text).toBe(201);
+    expect((await call("POST", "/runs/return-position-again/moves", { uci: "e2e4" })).status).toBe(200);
+    const climbed = await call("GET", "/progress/due?at=9999-12-31T23:59:59.999Z");
+    const climbedSchedules = climbed.body!.schedules as Record<string, unknown>[];
+    expect(climbedSchedules.map((schedule) => schedule.standing)).toEqual(["learning"]);
+    for (const schedule of climbedSchedules) expect(["new", "learning", "established"]).toContain(schedule.standing);
 
     const difficult = await call("GET", "/progress/difficult");
     expect(difficult.status, difficult.text).toBe(200);
     expect(difficult.body).toEqual({ threshold: 3, total: 0, roots: [] });
 
     const progress = await call("GET", "/progress");
-    for (const payload of [due.body, difficult.body, progress.body]) {
+    for (const payload of [due.body, climbed.body, difficult.body, progress.body]) {
       const { keys, strings } = scan(payload);
       expect(keys.filter((key) => MASTERY_KEY.test(key))).toEqual([]);
       expect(strings.filter((value) => value.includes("%"))).toEqual([]);
+      expect(strings.filter((value) => /^\d+(\.\d+)?$/u.test(value))).toEqual([]);
     }
   });
 

@@ -11,7 +11,7 @@
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
-  import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel } from "./lib/learner-copy.js";
+  import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel, RETURN_STANDING_EXPLANATION } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
@@ -2735,7 +2735,7 @@
             <article>
               <div>
                 <h3>{schedule.packId === null ? "Position rehearsal" : packTitle(schedule.packId)}</h3>
-                <p>{dueVariationSentence(schedule)} · {readableDate(schedule.dueAt)}</p>
+                <p>{dueVariationSentence(schedule)} · {readableDate(schedule.dueAt)} · <span class="return-standing" data-return-standing={schedule.standing}><strong>{schedule.standing}</strong> <span class="honest">({RETURN_STANDING_EXPLANATION})</span></span></p>
                 {#if dueFrequencySentence(schedule.frequency)}<p class="honest">{dueFrequencySentence(schedule.frequency)}</p>{/if}
               </div>
               <div class="row-actions">

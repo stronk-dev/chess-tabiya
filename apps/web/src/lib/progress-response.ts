@@ -1,6 +1,7 @@
 import { CORPUS_GUARD } from "@chess-tabiya/runtime";
 
 import { parseCorpusPopulation } from "./human-evidence-response.js";
+import { RETURN_STANDINGS } from "./api.js";
 import type {
   DifficultRootPage,
   DueQueuePage,
@@ -16,7 +17,12 @@ type RecordValue = Readonly<Record<string, unknown>>;
 
 const ATTEMPT_KEYS = Object.freeze(["runId", "branchId", "packId", "branchLabel", "attemptNo", "countable", "graded", "verdict", "result", "userPlyCount", "origin", "endedAt"] as const);
 const SCHEDULE_KEYS = Object.freeze(["id", "sessionKind", "packId", "kind", "variant", "dueAt", "sourceRunId"] as const);
-const DUE_SCHEDULE_KEYS = Object.freeze([...SCHEDULE_KEYS, "frequency"] as const);
+/*
+ * The exact key set is also the mastery-number refusal (rfc/return-scheduling.md criterion 12): a
+ * ratio, ladder index or level field is an unknown key and the queue is refused. `standing` is a
+ * closed-vocabulary word, parsed below, and an unknown word or a number is refused too.
+ */
+const DUE_SCHEDULE_KEYS = Object.freeze([...SCHEDULE_KEYS, "frequency", "standing"] as const);
 const MILESTONE_KEYS = Object.freeze(["kind", "occurredAt", "link"] as const);
 const RELATED_KEYS = Object.freeze(["relation", "runId", "branchId", "attemptCount"] as const);
 const REPERTOIRE_RECOMMENDATION_KEYS = Object.freeze(["kind", "repertoireId", "repertoireName", "gapKey", "replySan", "line", "gamesUntilSeen"] as const);
@@ -129,10 +135,11 @@ export function parseDueQueue(value: unknown): DueQueuePage {
   const base = parseScheduleItems(envelope.schedules, DUE_SCHEDULE_KEYS);
   const raw = envelope.schedules as readonly RecordValue[];
   const schedules = base.map((schedule, index) => {
+    const standing = oneOf(raw[index]!.standing, RETURN_STANDINGS, `schedules/${index}/standing`);
     const frequency = raw[index]!.frequency;
-    if (frequency === null) return Object.freeze({ ...schedule, frequency: null });
+    if (frequency === null) return Object.freeze({ ...schedule, standing, frequency: null });
     const item = record(frequency, `schedules/${index}/frequency`); exact(item, ["games", "population"], `schedules/${index}/frequency`);
-    return Object.freeze({ ...schedule, frequency: Object.freeze({
+    return Object.freeze({ ...schedule, standing, frequency: Object.freeze({
       games: integer(item.games, `schedules/${index}/frequency/games`),
       population: parseCorpusPopulation(item.population, `schedules/${index}/frequency/population`),
     }) });

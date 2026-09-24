@@ -106,6 +106,7 @@ import {
   projectAttempts,
   rootKey as progressRootKey,
   type AttemptOriginInput,
+  type ReturnStanding,
 } from "./progress.js";
 import { corpusPopulation, type CorpusPopulation, type CorpusSource } from "./corpus.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
@@ -151,7 +152,7 @@ export interface DueFrequency {
 }
 
 export interface DueQueue {
-  readonly schedules: readonly (ScheduleRow & { readonly frequency: DueFrequency | null })[];
+  readonly schedules: readonly (ScheduleRow & { readonly frequency: DueFrequency | null; readonly standing: ReturnStanding })[];
   readonly waiting: number;
   readonly intakeLimit: number;
 }
@@ -2030,6 +2031,7 @@ export class RunService {
    * The served return queue (rfc/return-scheduling.md §§4, 6): due work in the stored order, with
    * corpus frequency at the root's authored band as a tie-break inside one due day only, then cut
    * to the vacation-safe intake. Frequency orders; it never grades and never crosses a due date.
+   * Each served return carries its root's coarse standing word (Discharge D2), never the rung.
    */
   async dueQueue(principal: Principal, at = new Date().toISOString(), corpus?: CorpusSource): Promise<DueQueue> {
     const all = this.due(principal, at);
@@ -2053,7 +2055,11 @@ export class RunService {
     const ordered = orderDueByFrequency(all, (schedule) => frequencies.get(schedule.id)?.games);
     const served = ordered.slice(0, DUE_INTAKE_LIMIT);
     return Object.freeze({
-      schedules: Object.freeze(served.map((schedule) => Object.freeze({ ...schedule, frequency: frequencies.get(schedule.id) ?? null }))),
+      schedules: Object.freeze(served.map((schedule) => Object.freeze({
+        ...schedule,
+        frequency: frequencies.get(schedule.id) ?? null,
+        standing: this.#requiredProgress().returnStanding(principal.learnerId, schedule.rootKey),
+      }))),
       waiting: ordered.length - served.length,
       intakeLimit: DUE_INTAKE_LIMIT,
     });

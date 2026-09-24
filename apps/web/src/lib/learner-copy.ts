@@ -127,6 +127,12 @@ export function dueVariationSentence(schedule: { readonly kind: "blocked" | "var
   return `Varied repetition · the pack names this variation: ${retryVariantLabel(schedule.variant)}`;
 }
 
+/**
+ * The fixed explanation that always accompanies the standing word (Discharge D2). The word is
+ * derived from the return ladder alone; it says how far apart returns have been held, not how well.
+ */
+export const RETURN_STANDING_EXPLANATION = "based on how many spaced returns you've held";
+
 export const DUE_FREQUENCY_ORDER_NOTE = "Returns due on the same day list the position reached in more Lichess games at the rehearsal's rating band first. Earlier due dates always come first.";
 
 export function dueFrequencySentence(frequency: { readonly games: number; readonly population: CorpusPopulation } | null): string | undefined {

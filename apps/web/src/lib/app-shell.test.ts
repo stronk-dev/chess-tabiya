@@ -195,7 +195,7 @@ function api(): DrillClientApi {
 }
 
 function dueQueue(schedules: readonly import("./api.js").ProgressSchedule[], waiting = 0): import("./api.js").DueQueuePage {
-  return { schedules: schedules.map((schedule) => ({ ...schedule, frequency: null })), waiting, intakeLimit: 20 };
+  return { schedules: schedules.map((schedule) => ({ ...schedule, frequency: null, standing: "new" as const })), waiting, intakeLimit: 20 };
 }
 
 function target(): HTMLElement {
@@ -2721,8 +2721,8 @@ describe("application shell", () => {
       async dueProgress() {
         return {
           schedules: [
-            { id: "named", sessionKind: "pack" as const, packId: pack.id, kind: "varied" as const, variant: "opposite_side", dueAt: "2026-09-20T09:00:00.000Z", sourceRunId: run.id, frequency: { games: 12_345, population } },
-            { id: "seeded", sessionKind: "pack" as const, packId: pack.id, kind: "varied" as const, variant: null, dueAt: "2026-09-21T09:00:00.000Z", sourceRunId: run.id, frequency: null },
+            { id: "named", sessionKind: "pack" as const, packId: pack.id, kind: "varied" as const, variant: "opposite_side", dueAt: "2026-09-20T09:00:00.000Z", sourceRunId: run.id, frequency: { games: 12_345, population }, standing: "established" as const },
+            { id: "seeded", sessionKind: "pack" as const, packId: pack.id, kind: "varied" as const, variant: null, dueAt: "2026-09-21T09:00:00.000Z", sourceRunId: run.id, frequency: null, standing: "learning" as const },
           ],
           waiting: 3,
           intakeLimit: 2,
@@ -2741,6 +2741,17 @@ describe("application shell", () => {
     expect(text).toContain("Listed after 3 or more unstable graded attempts at the same starting position.");
     expect(text).toContain("4 unstable attempts recorded");
     expect(text).toContain("Showing 1 of 2 positions that meet this rule.");
+    // Discharge D2: each due card renders its standing word beside its due date, with the fixed explanation.
+    const dueCards = [...document.querySelectorAll<HTMLElement>('section[aria-labelledby="due-title"] article')];
+    expect(dueCards).toHaveLength(2);
+    const expected = [{ standing: "established", dueAt: "2026-09-20T09:00:00.000Z" }, { standing: "learning", dueAt: "2026-09-21T09:00:00.000Z" }] as const;
+    for (const [index, card] of dueCards.entries()) {
+      const { standing, dueAt } = expected[index]!;
+      const label = card.querySelector<HTMLElement>(".return-standing");
+      expect(label?.dataset.returnStanding).toBe(standing);
+      expect(label?.textContent).toBe(`${standing} (based on how many spaced returns you've held)`);
+      expect(label?.parentElement?.textContent).toContain(`${new Date(dueAt).toLocaleString()} · ${standing}`);
+    }
     for (const id of ["due-title", "difficult-title"]) {
       expect(document.querySelector(`section[aria-labelledby="${id}"]`), id).not.toBeNull();
       expect(document.querySelector(`section[aria-labelledby="${id}"]`)?.textContent ?? "", id).not.toMatch(/\d+\s*%|mastery|level \d/iu);

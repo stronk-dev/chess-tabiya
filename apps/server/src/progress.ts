@@ -83,6 +83,33 @@ export function automaticScheduleDecision(
 }
 
 /**
+ * The coarse return standing (rfc/return-scheduling.md Discharge D2, owner ruling 2026-09-24): a
+ * closed three-word vocabulary derived only from the return-ladder rung the replay above serves.
+ * It describes spaced-recall standing — how far apart the returns have been held — and is never a
+ * mastery claim, a verdict or a number. This is the one place the rung maps to a word; the rung
+ * itself never leaves the server.
+ */
+export const RETURN_STANDINGS = Object.freeze(["new", "learning", "established"] as const);
+export type ReturnStanding = (typeof RETURN_STANDINGS)[number];
+
+/**
+ * Explicit rung thresholds over `VARIED_LADDER_DAYS` indices. No rung (a blocked repeat, or a root
+ * with no countable history) and rung 0 (1 day) are `new`; rungs 1-2 (3 and 7 days) are `learning`;
+ * rungs 3-4 (16 and 35 days) are `established`.
+ */
+export const RETURN_STANDING_MIN_RUNG = Object.freeze({ learning: 1, established: 3 } as const);
+
+export function returnStanding(ladderIndex: number | null | undefined): ReturnStanding {
+  if (ladderIndex === null || ladderIndex === undefined) return "new";
+  if (!Number.isSafeInteger(ladderIndex) || ladderIndex < 0 || ladderIndex > LAST_RUNG) {
+    throw new RangeError(`Return-ladder rung out of range: ${ladderIndex}`);
+  }
+  if (ladderIndex >= RETURN_STANDING_MIN_RUNG.established) return "established";
+  if (ladderIndex >= RETURN_STANDING_MIN_RUNG.learning) return "learning";
+  return "new";
+}
+
+/**
  * The retry variant a varied return names (rfc/return-scheduling.md §7): a rotation through the
  * pack's declared `retryVariants` kinds by ladder index. Blocked returns repeat the same attempt and
  * name none; a pack declaring none names none, and the surface says the variation is a fresh seed.
