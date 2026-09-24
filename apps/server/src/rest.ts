@@ -698,7 +698,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|nudge|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -1380,6 +1380,11 @@ export function createRestHandler(
       }
       if (request.method === "GET" && route.action === "nudge") {
         return json(200, service.postcommitNudge(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId")));
+      }
+      if (request.method === "GET" && route.action === "review-analysis") {
+        const nodeId = url.searchParams.get("node");
+        if (nodeId === null || nodeId.trim() === "") throw invalid("node is required");
+        return json(200, service.reviewAnalysis(route.runId, principal, nodeId, url.searchParams.get("branch") ?? undefined));
       }
       if (request.method === "GET" && route.action === "share") {
         return json(200, { shares: service.shares(route.runId, principal) });

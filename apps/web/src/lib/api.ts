@@ -23,7 +23,15 @@ import type {
   ReasoningTranscript,
   RunMark,
   StoryMoment,
+  ReviewAnalysis,
   ReviewMapProjection,
+  BotCardSourceId,
+  BotCardStatementId,
+  BotClassifierId,
+  BotProfileFamily,
+  BotProfileId,
+  BotProfileReference,
+  BotRosterBlocker,
 } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
@@ -443,6 +451,26 @@ export interface CohortStandingView {
   readonly entries: readonly CohortStandingEntry[];
 }
 
+export interface BotCardWire {
+  readonly profileId: BotProfileId;
+  readonly profileDigest: `sha256:${string}`;
+  readonly behaviorDigest: `sha256:${string}`;
+  readonly family: BotProfileFamily;
+  readonly band: number;
+  readonly title: string;
+  readonly controlledTraits: readonly BotClassifierId[];
+  readonly statements: readonly { readonly id: BotCardStatementId; readonly text: string; readonly sources: readonly BotCardSourceId[] }[];
+  readonly strength: { readonly kind: "uncalibrated" } | { readonly kind: "calibrated"; readonly humanLikeLabelAllowed: boolean; readonly [key: string]: unknown };
+  readonly decorative: null;
+}
+
+export interface BotRosterRow {
+  readonly reference: BotProfileReference;
+  readonly behaviorDigest: `sha256:${string}`;
+  readonly card: BotCardWire;
+  readonly startable: { readonly kind: "not_startable"; readonly blockedBy: readonly BotRosterBlocker[] };
+}
+
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
   readonly policyModes: readonly (
@@ -496,6 +524,8 @@ export interface Capabilities {
         readonly slowestLosingRate: { readonly min: number; readonly max: number; readonly uniformBaseline: number };
         readonly fastestLosingRate: { readonly value: number; readonly uniformBaseline: number };
       };
+      /** The registered `bot-profile-catalog@1` roster with grounded cards (rfc/bot-policy.md §8). */
+      readonly profiles: readonly BotRosterRow[];
     };
   };
   readonly providers: {
@@ -594,6 +624,8 @@ export type ReviewMap = ReviewMapProjection & {
   readonly viewer: { readonly mayWrite: boolean };
   readonly semanticPath: { readonly kind: "available"; readonly events: number } | { readonly kind: "refused"; readonly reason: string };
 };
+/** rfc/review-map.md §7 (O7.3): the explicit Analyze reveal from `GET /runs/:id/review-analysis`. */
+export type ReviewAnalysisPage = ReviewAnalysis & { readonly runId: string; readonly branchId: string };
 export interface StoryShare { readonly id: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdAt: string; readonly revokedAt: string | null; }
 export interface CreatedStoryShare extends Omit<StoryShare, "revokedAt"> { readonly token: string; readonly url: string; readonly revokedAt: null; }
 export interface RevokedStoryShare { readonly revoked: true; readonly runId: string; readonly tokenId: string; readonly revokedAt: string; }
@@ -945,6 +977,7 @@ export interface DrillClientApi extends RunApi {
   review?(runId: string, branchId?: string): Promise<ReviewMap>;
   /** rfc/module-registration.md §4.5: Post-commit Nudge for one committed learner move. */
   nudge?(runId: string, nodeId: string): Promise<PostcommitNudge>;
+  reviewAnalysis?(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage>;
   shareStory?(runId: string, branchId: string): Promise<CreatedStoryShare>;
   storyShares?(runId: string): Promise<readonly StoryShare[]>;
   revokeStoryShare?(runId: string, tokenId: string): Promise<RevokedStoryShare>;
@@ -1158,6 +1191,11 @@ export class DrillApi implements DrillClientApi {
 
   nudge(runId: string, nodeId: string): Promise<PostcommitNudge> {
     return this.#json<unknown>(`/runs/${encoded(runId)}/nudge?nodeId=${encoded(nodeId)}`).then((value) => parsePostcommitNudge(value, { runId, nodeId }));
+  }
+
+  reviewAnalysis(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage> {
+    const branch = branchId === undefined ? "" : `&branch=${encoded(branchId)}`;
+    return this.#json(`/runs/${encoded(runId)}/review-analysis?node=${encoded(nodeId)}${branch}`);
   }
 
   story(runId: string, branchId?: string): Promise<GameStory> {

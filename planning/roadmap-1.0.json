@@ -423,17 +423,31 @@
         "dependsOn": ["foundation-contracts"],
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
-          "at": "2026-09-07",
-          "summary": "Bot policy's bounded fifth author repair closes complete-profile identity, independent durable reconstruction, both replay paths, closed request grammar, duplicate guard rows and repository compiler parity. Shared durable provider parsing and the current accepted health checkpoint remain explicit dependencies; longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
+          "at": "2026-09-24",
+          "summary": "Bot policy and roster landed their non-persistent half: a twelve-profile catalogue with exact identity binding, a sealed deterministic compiler with a strict guard and replay from independent inputs, and honest uncalibrated cards exposed as not-startable. Persisting the chosen profile needs run lane 0.18 and a migration queued behind concept-registry, evidence-job-durability and longitudinal-store, which is now the binding constraint for bots, history and campaign.",
           "impact": "advanced",
-          "evidence": ["planning/platform-alignment/bot-policy/fifth-author-repair-2026-09-07.md", "rfc/bot-policy.md", "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts", "rfc/longitudinal-store.md", "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/social-play.md"],
+          "evidence": [
+            "apps/server/src/bot-policy-compiler.ts",
+            "planning/bot-policy/implementation-receipt-2026-09-24.md",
+            "rfc/bot-policy.md",
+            "rfc/bot-roster.md"
+          ],
           "anchors": [
-            {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"},
-            {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"},
-            {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"},
-            {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:d6c2798b7b33d17cd80d2d31c471e0e74f7e175ca76203a30bab16752db2acff"},
-            {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:0d7bcc6d02dfa4b3cdadca0c5141e41207588372b7d28a3fb8837abe04e61e9f"},
-            {"kind": "rfc", "id": "social-play.md", "digest": "sha256:3f81a29ba056944e9b54a9b56b5af9eb5bd5415253aada5eac6c9f862cb39a6b"}
+            {
+              "kind": "rfc",
+              "id": "bot-policy.md",
+              "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
+            },
+            {
+              "kind": "rfc",
+              "id": "bot-roster.md",
+              "digest": "sha256:51f22932e44a8c95ecac0c96c6ccf50861146e946213b04e46b3d205f6cdd27c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3027",
+              "digest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e"
+            }
           ]
         },
         "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
@@ -463,19 +477,18 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Whole-game Review is a working learner journey: the Review Map lists every ply with grounded report-ladder grades, offers Retry from here on every row and moment through a preserving fork, selects 0..3 moments from one projection shared by private review, share and card, gates accuracy on full coverage, and shows recorded semantic events per ply. Return scheduling reaches Learn with the owner-ruled standing words. Eval graph, Compare handoff and the Review compiler packet remain.",
+          "summary": "Whole-game Review is a working learner journey: every ply with grounded grades, Retry from here through a preserving fork and a Compare handoff afterwards, 0..3 shared moments, coverage-gated accuracy and learner-side eval graph, recorded semantic events per ply, and an explicit attributed Analyze action withheld during retries. Return scheduling reaches Learn with the owner-ruled standing words. The Review compiler packet and module presets remain.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/review-map.test.ts",
+            "packages/runtime/src/review-map-remainder.test.ts",
             "planning/review/implementation-2026-09-24.md",
-            "rfc/review-map.md",
-            "rfc/return-scheduling.md"
+            "rfc/review-map.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "review-map.md",
-              "digest": "sha256:4a5337e911a419072302b92edc00b87095b429f48718667aa34283db3d4d184b"
+              "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
             },
             {
               "kind": "rfc",
@@ -484,8 +497,8 @@
             },
             {
               "kind": "work_state",
-              "id": "D880",
-              "digest": "sha256:dc5fd5f8f578a60fd1e223e48f96d6330d1610acefc0b06d2d7bd4eaa9118947"
+              "id": "D1467",
+              "digest": "sha256:da350aa968f6d7aa9bd3506c1fe5e83af8f163bf532bf89be787ed5b6f14d6dc"
             }
           ]
         },

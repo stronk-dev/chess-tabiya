@@ -34,6 +34,7 @@ import {
   isMachineEvidenceRef,
   rewind,
   rewindToCheckpoint,
+  reviewAnalysis,
   reviewMapProjection,
   moduleEvidenceRole,
   postcommitNudgePacket,
@@ -939,7 +940,7 @@ export class RunService {
   async review(runId: string, principal: Principal, requestedBranchId?: string) {
     const context = this.#storyContext(runId, principal, requestedBranchId, false);
     const semanticPath = await recordedSemanticPathOperation(this.#storage)({ principal, runId, branchId: context.branchId });
-    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, viewer: this.#moduleViewer(runId, principal, context.run, context.role) });
+    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role) });
     return Object.freeze({
       runId,
       branchId: context.branchId,
@@ -953,6 +954,23 @@ export class RunService {
       semanticPath: Object.freeze(semanticPath.kind === "available" ? { kind: "available" as const, events: semanticPath.events.length } : { kind: "refused" as const, reason: semanticPath.reason }),
       ...projection,
     });
+  }
+
+  /**
+   * rfc/review-map.md §7 (O7.3): the explicit Analyze reveal for one reviewed move — the recorded
+   * engine line from the position before it, attributed to engine and search bound. Read-only like
+   * `review()`: it enqueues no job and writes nothing. Withheld while a retry from that position is
+   * open; the ordinary review payload never carries a line.
+   */
+  reviewAnalysis(runId: string, principal: Principal, nodeId: string, requestedBranchId?: string) {
+    const context = this.#storyContext(runId, principal, requestedBranchId, false);
+    let analysis: ReturnType<typeof reviewAnalysis>;
+    try {
+      analysis = reviewAnalysis(context.run, context.branchId, nodeId, this.#moduleViewer(runId, principal, context.run, context.role));
+    } catch (error) {
+      throw new ServerError("INVALID_REQUEST", "node is not a reviewed move on this branch", { cause: error });
+    }
+    return Object.freeze({ runId, branchId: context.branchId, ...analysis });
   }
 
   #storyContext(runId: string, principal: Principal, requestedBranchId: string | undefined, enqueue: boolean) {

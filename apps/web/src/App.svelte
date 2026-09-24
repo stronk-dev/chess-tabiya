@@ -87,7 +87,7 @@
   import { assertRunDeletionPreview } from "./lib/run-deletion-preview.js";
   import { assertRunPageResponse, legacyRunPage } from "./lib/run-page-response.js";
   import { assertCreatedStoryShare, assertRevokedStoryShare, assertStoryShares } from "./lib/story-response.js";
-  import { assertReviewMapResponse } from "./lib/review-response.js";
+  import { assertReviewAnalysisResponse, assertReviewMapResponse } from "./lib/review-response.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -288,6 +288,9 @@
   let importGeneration = 0;
   let story: ReviewMap | undefined = $state();
   let storyShares: readonly StoryShare[] = $state([]);
+  // rfc/review-map.md §4: a Compare handoff from the review, opened by the shipped N-way compare once
+  // the run screen has loaded that run. Consumed exactly once.
+  let pendingReviewCompare: { readonly runId: string; readonly branchIds: readonly string[] } | undefined;
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
   let routeHasLoaded = false;
@@ -921,6 +924,12 @@
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
         if(generation!==loadGeneration)return;
+        const handoff = pendingReviewCompare?.runId === next.runId ? pendingReviewCompare : undefined;
+        pendingReviewCompare = undefined;
+        if (handoff !== undefined) {
+          await controller.compare(handoff.branchIds);
+          if(generation!==loadGeneration)return;
+        }
         const relation = session.pack?.variantOf;
         if (relation !== undefined) {
           try {
@@ -1200,6 +1209,18 @@
     if (generation === loadGeneration && route.name === "story" && route.runId === runId) {
       navigate(routePath({ name: "run", runId }));
     }
+  }
+
+  function compareFromReview(runId: string, branchIds: readonly string[]): void {
+    if (route.name !== "story" || route.runId !== runId) return;
+    pendingReviewCompare = Object.freeze({ runId, branchIds: Object.freeze([...branchIds]) });
+    navigate(routePath({ name: "run", runId }));
+  }
+
+  async function analyzeFromReview(runId: string, branchId: string, nodeId: string) {
+    const page = await api.reviewAnalysis!(runId, nodeId, branchId);
+    assertReviewAnalysisResponse(page, { runId, nodeId });
+    return page;
   }
 
   async function exportStory(runId: string): Promise<void> {
@@ -2610,7 +2631,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={capabilities?.providers.llm === "external" && loadAssistance("imported", applicationStorage()).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

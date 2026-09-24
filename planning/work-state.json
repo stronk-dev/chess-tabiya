@@ -7239,11 +7239,12 @@
     },
     {
       "id": "D880",
-      "state": "todo",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:dc5fd5f8f578a60fd1e223e48f96d6330d1610acefc0b06d2d7bd4eaa9118947",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:02eaf31357fb52ccdd4fba3902b90b29ee37d419c7cdcd96902a4dc63f875daf",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "packages/runtime/src/review-map-remainder.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D881",
@@ -24637,21 +24638,21 @@
     },
     {
       "id": "D3025",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a7744fc63c20d8ac32e63e2f7ceeb36cab352d05813eb5f6b481fb788df8c12d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c42d1bf2de3d97852f28b24b2c5d3ff4c852d87c41ee37344449dff835525cff",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "packages/runtime/src/bot-profile-catalog.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3026",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bcaa81e46f921afb5fb9490b2f3114607d8fbfe58dc4525b18c418a8fa97b362",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:58316eea1d9a86bccc58c84a5e95daee9fb86b6fb9c9b2a0bf40ec3a8a8891b1",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "apps/server/src/bot-policy-compiler.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3027",

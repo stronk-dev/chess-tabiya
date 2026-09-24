@@ -60,8 +60,8 @@ finding becomes a test. Status after this commit: **`awaiting D1–D6`** (see *W
   `derived.grade.move_quality@1` admissible to no module, so a `review_map` declaration cannot
   admit the grade it exists to show until `rfc/module-registration.md` fixes the answer image.
 - **D6:** preset-config projections — the surface does not depend on `compileAssistance` output.
-- **Not built:** the eval graph (§6), the Compare handoff after a second branch (§4), and an explicit
-  Analyze/PV action (O7.3; the ordinary map carries none, so nothing is hidden behind it yet).
+- **Not built (at this commit):** the eval graph (§6), the Compare handoff after a second branch (§4),
+  and an explicit Analyze/PV action (O7.3). All three landed in the remainder commit below.
 - **[[D1419]]:** only the judgement arm of `voiceCheck` is span-licensed; squares, moves, nouns and
   prescriptive verbs remain packet-relative. The caption escalation vector is pinned by a test
   (`review-map.test.ts` "[D1409]") but templates are the only guard against it.
@@ -72,3 +72,33 @@ finding becomes a test. Status after this commit: **`awaiting D1–D6`** (see *W
   coordinator's closeout.
 - **Ledger/log closeout** (`design/BACKLOG.md` D880/D687/D688/D689/D1409 rows, `rfc/README.md`,
   `planning/exploration/log.md`): left to the coordinator, as instructed.
+
+## Remainder — eval graph, Compare handoff, Analyze (2026-09-24, second commit)
+
+Authority: owner direction in session — build the three unbuilt pieces directly, no review rounds.
+
+| site | change |
+|---|---|
+| `packages/runtime/src/review-map.ts` | `evalGraph` (per-ply points, per-region gaps, coverage; drawn for the review side through `moverWinPercent`), `compareDoors` (lines leaving the reviewed line with ≥1 own move, reviewed first, ≤ 8), `openRetryEntryNodeId` / `openRetryEntry` |
+| `packages/runtime/src/review-analysis.ts` | `reviewAnalysis`: the recorded engine line at the position before a move (`bestline`, else the eval's recorded search first move), SAN with move numbers, attributed to engine + requested bound; abstains `none` / `unattributed`; `withheld` during an open retry |
+| `packages/runtime/src/review-map-templates.ts` | `graph.*`, `compare.*`, `analysis.*` templates |
+| `apps/server/src/service.ts`, `rest.ts` | `reviewAnalysis()` and `GET /runs/:id/review-analysis?node=` (read-only); `review()` passes the run side |
+| `apps/server/src/application.ts` | the mock evidence executor records `bestMoveUci` on eval readings like the Stockfish executor |
+| `apps/web/src/lib/ReviewEvalGraph.svelte` | the graph: SVG, roving tab stop, arrow/Home/End keys, shaded gaps, text list |
+| `apps/web/src/lib/ReviewMapScreen.svelte` | graph region; *Compare lines from here* on rows and moment cards; the secondary Analyze section (withheld reason, reveal, hide) |
+| `apps/web/src/lib/review-response.ts` | payload checks for the graph, doors and "no engine line in the ordinary map"; `assertReviewAnalysisResponse` (attribution, no advice phrasing) |
+| `apps/web/src/App.svelte`, `api.ts` | compare handoff (navigate to the run, then `controller.compare(ids)` once) and `api.reviewAnalysis` |
+| `docs/game-import-and-story.md` | Review Map section: eval graph, compare handoff, Analyze |
+
+| piece | tests |
+|---|---|
+| eval graph | runtime `review-map-remainder.test.ts` (independent Win% recomputation; Black review mirrors White's reading; partial/unreadable/absent coverage abstains per region with the accuracy gate); web `review-map-remainder.test.ts` (one point per row, single tab stop, arrow/End/Home/click select the row, text list, gaps, no segment bridges a gap, validator refuses a wrong-side graph or a drawn missing point); server (complete graph over HTTP; Black import plots < 50 where White plots > 50); browser remainder journey |
+| compare handoff | runtime (no door for an empty retry; door ids and grouping; eight-column cap with `omitted`); web (button only where a door exists; hands the ids; failure renders); server (door appears after the retry's move; `POST /compare` accepts the ids verbatim with the reviewed entry as fork); browser (handoff opens "Same decision, two consequences.") |
+| Analyze | runtime (attributed PV sentence; first-move sentence with Black numbering; unbounded/illegal/absent abstain; withheld during an open retry and back after leaving it; projection carries no line); web (door only; reveal after click; closes on reselection and on retry; withheld reason; validator refuses unattributed or advice-phrased lines and a map carrying `bestMoveUci`); server (attributed line; read writes nothing; withheld after the fork; 400 on a non-move); browser |
+
+Criterion 9's set-equality derivation now also reads `ReviewEvalGraph.svelte` and `review-analysis.ts`,
+and its no-literal-prose check covers the graph component.
+
+**Still not built:** Analyze reveals only what is recorded — it does not request a fresh search (that
+would make the review write, criterion 14); a deeper line needs the in-run analysis request. The
+open questions and discharges D1–D6 above are unchanged.

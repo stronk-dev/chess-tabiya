@@ -1,19 +1,23 @@
 # RFC: Bot policy
 
-- **Status:** **draft — bounded fifth author repair completed for the six locally owned returns
-  [[D3025]]–[[D3029]] and [[D3032]] plus the concurrent sibling [[D3127]] (2026-09-07).** Exact
-  catalog members now own every profile value; durable decisions are reconstructed from sealed
-  storage root/legal/profile/provider authorities; both replay paths load unknown bytes through that
-  parser; the route grammar is closed; duplicate Stockfish rows refuse; and both author checkpoints
-  inherit the repository TypeScript dialect. `make bot-policy-fifth-author-repair` passes 38 canonical
-  controls plus the six retained fourth-author groups and both repository compiler checkpoints.
-  [[D3030]] remains open on the shared durable operation-specific provider parser, and [[D3031]] is
-  narrowed to the current accepted provider-health checkpoint; neither dependency is simulated here.
-  **Acceptance and implementation remain blocked** on another genuinely fresh review, accepted
-  provider health, the shared durable provider authority, and the shared-resource bootstrap/register claim. No
-  implementation is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
-  implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
-  author-amended.)*
+- **Status:** **implementing — owner-directed partial implementation landed 2026-09-24 without the fresh
+  review; the persisted route stays dependency-blocked.** Shipped: the `bot-profile-catalog@1`
+  runtime catalogue (twelve profiles derived as families × bands, pinned behaviour/profile digests,
+  complete-reference resolution, closed layer/classifier/reason/card/blocker grammar, composition
+  refusals, the legal-board `pawn_move@1` view); the sealed compiler with normalized top-p, whole-guard
+  cp/mate algebra, guard-dependent pawn ×4, seeded draw, deterministic decision, non-circular
+  operation envelope and replay-by-reconstruction parsers; the closed opponent-ply request/result
+  grammar; the grounded card compiler over artifact-checked measurements; and the `/capabilities`
+  roster, every row `not_startable`. Not landed, each named precisely in
+  `planning/bot-policy/implementation-receipt-2026-09-24.md`: run lane 0.18 (profile reference +
+  decision envelope) — its stamp migration is registered behind `concept-registry`, itself behind
+  `evidence-job-durability` → `longitudinal-store`; the mounted atomic route, which needs 0.18 plus
+  the shared provider delivery ([[D3030]]) and provider-health authority ([[D3031]]/D7); the
+  `bot-profile-catalog` register row, which needs absent-source admission ([[D3082]]); the release
+  benchmark (D6) and calibration (D3). *(Prior checkpoint, 2026-09-07: fifth author repair closed
+  [[D3025]]–[[D3029]], [[D3032]] and [[D3127]]; `make bot-policy-fifth-author-repair` passes 38
+  canonical controls. Earlier: implementing; accepted 2026-08-22; draft; D1601–D1609 and
+  D1970–D1976 author-amended.)*
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md`
   Phase 6; executes the completed dependency map
   `planning/platform-alignment/bot-policy/f8-dependency-map.md`)
@@ -770,8 +774,8 @@ packet reserves for the first bot consumer, not a second candidate pipeline ([[D
 
 **Stage A (this RFC's shippable core) does not wait for it.** The v1 roster needs exactly
 three per-candidate facts, none of which is a collector: raw/reconstructed Maia mass
-(provider), fixed-bound Stockfish loss (provider — the guard), and the pawn-move
-predicate (pure board arithmetic on the UCI move). The roster, the record, the seam, and
+(provider), fixed-bound Stockfish loss (provider — the guard), and the registered `pawn_move@1`
+legal-board view (the exact legal move's board role, §2.5 — never UCI-string arithmetic). The roster, the record, the seam, and
 the calibration gate all land Stage A. **What v1 ships if D813 lags is therefore stated,
 not implied: the three O8.2 behavior families at all four ruled bands, with position-level and provider-level features
 only — no feature-weighted persona beyond `trait.pawn_preference@1`, no blind-spot
@@ -1542,3 +1546,18 @@ as a named future measured layer (Open question 4).
   the repository TypeScript dialect are executable under `make bot-policy-fifth-author-repair`.
   [[D3030]] and the remaining health half of [[D3031]] stay dependency-blocked; another fresh review
   still gates acceptance and no production byte changed.
+- 2026-09-24: owner-directed partial implementation, no review round. Landed
+  `packages/runtime/src/bot-profile-catalog.ts`, `packages/runtime/src/bot-opponent-ply.ts`,
+  `apps/server/src/bot-policy-compiler.ts`, `apps/server/src/bot-card.ts`,
+  `apps/server/src/bot-policy-measurements.ts`, `apps/server/src/bot-roster.ts` and the
+  `/capabilities` `policyProfiles.human_common.profiles` roster plus its web parser; deleted the
+  caller-fed `composeBotPolicySelection`. **Corrections made inline:** (1) §5 described the Stage-A
+  pawn predicate as "pure board arithmetic on the UCI move", contradicting §2.5's legal-board
+  authority and the [[D2220]] repair — now the registered view; (2) §1's single profile digest is
+  implemented as the whole-declaration digest **plus** the `behaviorDigest` that `bot-roster` §2
+  requires calibration to key, reconciling the two RFCs without changing §1's identity rule.
+  **Held, not taken:** run lane 0.18 and its migration (register order puts the position behind
+  unlanded `concept-registry`), the shared-resource row (absent-source admission [[D3082]] is
+  unlanded), provider delivery/health joins (D7, [[D3030]]). Every roster row is therefore
+  `not_startable` and Play still offers raw Maia rungs. Receipt:
+  `planning/bot-policy/implementation-receipt-2026-09-24.md`.

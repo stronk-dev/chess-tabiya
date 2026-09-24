@@ -17,6 +17,7 @@ import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { projectBotRoster } from "./bot-roster.js";
 
 function ready(identity: EngineIdentity): EngineHealth {
   return {
@@ -196,6 +197,7 @@ describe("engine capabilities", () => {
               slowestLosingRate: { min: 0.611, max: 0.689, uniformBaseline: 0.227 },
               fastestLosingRate: { value: 0.033, uniformBaseline: 0.313 },
             },
+            profiles: projectBotRoster().profiles,
           },
         },
         providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },

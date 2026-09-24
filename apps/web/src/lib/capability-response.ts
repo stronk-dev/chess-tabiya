@@ -1,3 +1,12 @@
+import {
+  BOT_CARD_SOURCE_IDS,
+  BOT_CARD_STATEMENT_IDS,
+  BOT_CLASSIFIER_IDS,
+  BOT_PROFILE_CATALOG,
+  BOT_ROSTER_BLOCKERS,
+  resolveBotProfileReference,
+} from "@chess-tabiya/runtime";
+
 import type { Capabilities } from "./api.js";
 
 type RecordValue = Readonly<Record<string, unknown>>;
@@ -69,7 +78,8 @@ function validateProfiles(value: unknown): void {
   const profiles = record(value, "capabilities/policyProfiles"); exact(profiles, ["strong_engine", "human_common"], "capabilities/policyProfiles");
   const strong = record(profiles.strong_engine, "capabilities/policyProfiles/strong_engine"); exact(strong, ["movetimeMs", "threads", "hashMb", "multiPv"], "capabilities/policyProfiles/strong_engine");
   integer(strong.movetimeMs, "capabilities/policyProfiles/strong_engine/movetimeMs", 1); integer(strong.threads, "capabilities/policyProfiles/strong_engine/threads", 1); integer(strong.hashMb, "capabilities/policyProfiles/strong_engine/hashMb", 1); integer(strong.multiPv, "capabilities/policyProfiles/strong_engine/multiPv", 1);
-  const human = record(profiles.human_common, "capabilities/policyProfiles/human_common"); exact(human, ["elo", "resistance"], "capabilities/policyProfiles/human_common");
+  const human = record(profiles.human_common, "capabilities/policyProfiles/human_common"); exact(human, ["elo", "resistance", "profiles"], "capabilities/policyProfiles/human_common");
+  validateRoster(human.profiles);
   const elo = record(human.elo, "capabilities/policyProfiles/human_common/elo"); exact(elo, ["min", "max", "default", "source", "advertised"], "capabilities/policyProfiles/human_common/elo");
   const min = nullableInteger(elo.min, "capabilities/policyProfiles/human_common/elo/min"), max = nullableInteger(elo.max, "capabilities/policyProfiles/human_common/elo/max"), fallback = nullableInteger(elo.default, "capabilities/policyProfiles/human_common/elo/default");
   oneOf(elo.source, ["advertised", "configured", "advertised+configured", "unpublished"] as const, "capabilities/policyProfiles/human_common/elo/source");
@@ -82,6 +92,34 @@ function validateProfiles(value: unknown): void {
   const range = (raw: unknown, label: string): void => { const item = record(raw, label); exact(item, ["min", "max", "uniformBaseline"], label); const rangeMin = finite(item.min, `${label}/min`, 0, 1), rangeMax = finite(item.max, `${label}/max`, 0, 1); finite(item.uniformBaseline, `${label}/uniformBaseline`, 0, 1); if (rangeMax < rangeMin) throw new TypeError(`${label} is reversed`); };
   range(resistance.dtzPercentile, "capabilities/policyProfiles/human_common/resistance/dtzPercentile"); range(resistance.slowestLosingRate, "capabilities/policyProfiles/human_common/resistance/slowestLosingRate");
   const fastest = record(resistance.fastestLosingRate, "capabilities/policyProfiles/human_common/resistance/fastestLosingRate"); exact(fastest, ["value", "uniformBaseline"], "capabilities/policyProfiles/human_common/resistance/fastestLosingRate"); finite(fastest.value, "capabilities/policyProfiles/human_common/resistance/fastestLosingRate/value", 0, 1); finite(fastest.uniformBaseline, "capabilities/policyProfiles/human_common/resistance/fastestLosingRate/uniformBaseline", 0, 1);
+}
+
+/**
+ * The roster wire is the runtime `bot-profile-catalog@1` projection: every row's reference must
+ * equal its complete catalog member, the id set must be set-equal to the catalog, and card/source/
+ * blocker ids come from the runtime's closed vocabularies — the client declares none of its own.
+ */
+export function validateRoster(value: unknown): void {
+  const label = "capabilities/policyProfiles/human_common/profiles";
+  if (!Array.isArray(value)) throw new TypeError(`${label} must be an array`);
+  const ids = new Set<string>();
+  value.forEach((raw, index) => {
+    const rowLabel = `${label}/${index}`, row = record(raw, rowLabel); exact(row, ["reference", "behaviorDigest", "card", "startable"], rowLabel);
+    let entry: (typeof BOT_PROFILE_CATALOG)[number];
+    try { entry = resolveBotProfileReference(row.reference); } catch { throw new TypeError(`${rowLabel}/reference is not a registered catalog member`); }
+    if (ids.has(entry.reference.id)) throw new TypeError(`${label} contains a duplicate profile`); ids.add(entry.reference.id);
+    if (row.behaviorDigest !== entry.behaviorDigest) throw new TypeError(`${rowLabel}/behaviorDigest does not match the catalog`);
+    const card = record(row.card, `${rowLabel}/card`); exact(card, ["profileId", "profileDigest", "behaviorDigest", "family", "band", "title", "controlledTraits", "statements", "strength", "decorative"], `${rowLabel}/card`);
+    if (card.profileId !== entry.reference.id || card.profileDigest !== entry.reference.digest || card.behaviorDigest !== entry.behaviorDigest || card.family !== entry.reference.family || card.band !== entry.reference.band) throw new TypeError(`${rowLabel}/card does not describe its profile`);
+    nonempty(card.title, `${rowLabel}/card/title`); uniqueVocabulary(card.controlledTraits, BOT_CLASSIFIER_IDS, `${rowLabel}/card/controlledTraits`); if (card.decorative !== null) throw new TypeError(`${rowLabel}/card/decorative must be empty until owner identities exist`);
+    if (!Array.isArray(card.statements) || card.statements.length === 0) throw new TypeError(`${rowLabel}/card/statements must be non-empty`);
+    const statementIds = card.statements.map((rawStatement, statementIndex) => { const statementLabel = `${rowLabel}/card/statements/${statementIndex}`, statement = record(rawStatement, statementLabel); exact(statement, ["id", "text", "sources"], statementLabel); nonempty(statement.text, `${statementLabel}/text`); uniqueVocabulary(statement.sources, BOT_CARD_SOURCE_IDS, `${statementLabel}/sources`, 1); return oneOf(statement.id, BOT_CARD_STATEMENT_IDS, `${statementLabel}/id`); });
+    if (new Set(statementIds).size !== statementIds.length) throw new TypeError(`${rowLabel}/card/statements contain duplicates`);
+    const strength = record(card.strength, `${rowLabel}/card/strength`); const kind = oneOf(strength.kind, ["uncalibrated", "calibrated"] as const, `${rowLabel}/card/strength/kind`);
+    if (kind === "uncalibrated") exact(strength, ["kind"], `${rowLabel}/card/strength`); else boolean(strength.humanLikeLabelAllowed, `${rowLabel}/card/strength/humanLikeLabelAllowed`);
+    const startable = record(row.startable, `${rowLabel}/startable`); exact(startable, ["kind", "blockedBy"], `${rowLabel}/startable`); oneOf(startable.kind, ["not_startable"] as const, `${rowLabel}/startable/kind`); uniqueVocabulary(startable.blockedBy, BOT_ROSTER_BLOCKERS, `${rowLabel}/startable/blockedBy`, 1);
+  });
+  if (ids.size !== BOT_PROFILE_CATALOG.length || BOT_PROFILE_CATALOG.some((entry) => !ids.has(entry.reference.id))) throw new TypeError(`${label} is not set-equal to bot-profile-catalog@1`);
 }
 
 function validateManifest(value: unknown): void {

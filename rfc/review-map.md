@@ -421,6 +421,8 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
 
 - **2026-09-24** — D5 discharged by `63902370` (module-registration implementation). The Review Map now requires its viewer (`{ role, session }`): outside `review_map`'s derived role/session ceilings (Match, onramp, an operator) grades, evaluations and relations render as a stated withholding sentence.
 
+- **2026-09-24 (merge of module registration with the remainder)** — the eval graph draws only evaluations `module.review_map@1` admits (a refused viewer gets the stated `graph.module.withheld` caption and no points), and the Analyze reveal carries principal-variation content, so its line is admitted through `module.full_inspector@1`: spectators, participants and contexts whose ceiling excludes the inspector (academy, onramp, Match) receive `analysis.module.withheld` instead of the line.
+
 - **2026-08-23** — drafted on owner ruling [[D1273]] (*full surface plus accuracy and longitudinal*),
   from `planning/review/rfc-derivation.md`. Every load-bearing claim re-verified at HEAD before use:
   `grade.ts` at 214 lines with **zero production callers**; `derived.grade.move_quality` declared at
@@ -459,3 +461,24 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
     full review-this-move doors. The evidence panel also carries the recorded-semantic-path detector
     events for the move (that RFC's first production consumer) and renders the draft
     review-evidence-compiler packet as an explicit abstention.
+- **2026-09-24 (remainder)** — the three pieces the first implementation left unbuilt, at the owner's
+  direction (build directly, no review round); receipt appended to
+  `planning/review/implementation-2026-09-24.md`. No specification sentence changed; how each was read:
+  - **§6 eval graph.** A per-ply series over the durable evaluations with the accuracy coverage gate
+    (a point is drawn only where the recorded packet reads as a grade operand), plotted as the review
+    side's win-points through `winPercentFromCp` so a Black review is not drawn from White's side. It
+    abstains per region: each stretch without a reading is shaded, left unconnected and stated in
+    words, with a coverage sentence. Every ply is a keyboard stop that selects the move in the list,
+    and a text list mirrors every point.
+  - **§4 Compare handoff.** "A second branch on the same fork" is read as another recorded line that
+    leaves the reviewed line at that position and carries at least one move of its own; an unplayed
+    retry has nothing to compare. The door hands exactly those branch ids (reviewed line first, at
+    most the shipped compare's eight) to the shipped N-way compare.
+  - **§7 / O7.3 Analyze.** Explicit and secondary, served by a separate read-only endpoint so the
+    ordinary map's payload never carries a line (criterion 12 now also has a payload-level guard). It
+    reveals the *recorded* line at the position before the selected move — a `bestline` packet, else
+    the eval packet's recorded search first move — attributed to engine and requested search bound;
+    an unbounded line is not shown. "Verdict hidden during retry" is read as: withheld, server-side,
+    for the position the run's open retry left from (active line diverges there, no outcome yet), and
+    closed while a retry is being opened. Analyze requests no new search; requesting one would make the
+    review write, against criterion 14.

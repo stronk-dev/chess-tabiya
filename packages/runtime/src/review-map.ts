@@ -7,7 +7,7 @@
 import { branchPath } from "./branch-path.js";
 import type { DeclaredEvidence, EvidenceRole } from "./evidence-contract.js";
 import { compileModulePacket } from "./module-packets.js";
-import { GRADE_CONVENTION, assertMoveQualityGradeSentence, renderMoveQualityGrade, type GradeContext, type GradeSide, type MoveQualityClass, type MoveQualityGrade } from "./grade.js";
+import { GRADE_CONVENTION, assertMoveQualityGradeSentence, renderMoveQualityGrade, type GradeContext, type GradeEvaluation, type GradeSide, type MoveQualityClass, type MoveQualityGrade } from "./grade.js";
 import { gradeReadingFromPayload, moverWinPercent } from "./grade-reading.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import type { DetectedPhase } from "./phase.js";
@@ -71,6 +71,46 @@ export type ReviewAccuracy =
   | { readonly side: GradeSide; readonly kind: "abstained"; readonly decisions: number; readonly evaluated: number; readonly sentence: string }
   | { readonly side: GradeSide; readonly kind: "no_decisions"; readonly decisions: 0; readonly evaluated: 0; readonly sentence: string };
 
+/**
+ * One point of the eval graph (§6, [[D880]]): the recorded evaluation of the position after one ply,
+ * read through the same `gradeReadingFromPayload` gate accuracy uses. Recorded evaluations are
+ * White-perspective; `percent` is the reviewed side's win-points through the shipped logistic.
+ */
+export type ReviewEvalPoint =
+  | { readonly nodeId: string; readonly ply: number; readonly kind: "evaluated"; readonly percent: number; readonly sentence: string }
+  | { readonly nodeId: string; readonly ply: number; readonly kind: "missing"; readonly sentence: string };
+
+/** A maximal stretch of plies with no readable recorded evaluation: the graph abstains over it. */
+export interface ReviewEvalGap {
+  readonly fromPly: number;
+  readonly toPly: number;
+  readonly sentence: string;
+}
+
+export interface ReviewEvalGraph {
+  /** `complete` = every ply evaluated; `partial` = abstains per region; `abstained` = nothing to draw. */
+  readonly kind: "complete" | "partial" | "abstained";
+  /** The side the graph is drawn for: the reviewed run's side, never assumed to be White. */
+  readonly side: GradeSide;
+  readonly points: readonly ReviewEvalPoint[];
+  readonly gaps: readonly ReviewEvalGap[];
+  readonly evaluated: number;
+  readonly caption: string;
+  readonly coverage: string;
+}
+
+/**
+ * The Compare handoff (§4): other recorded lines that leave the reviewed line at one position and
+ * carry at least one move of their own. The branch ids are exactly what the shipped N-way compare
+ * takes, reviewed line first; this projection adds no comparison machinery.
+ */
+export interface ReviewCompareDoor {
+  readonly entryNodeId: string;
+  readonly branchIds: readonly string[];
+  /** Lines at this position beyond the shipped compare's eight-column limit, not offered here. */
+  readonly omitted: number;
+}
+
 export interface ReviewMapProjection {
   readonly convention: typeof REVIEW_MAP_CONVENTION;
   readonly context: ReviewMapContext;
@@ -81,6 +121,13 @@ export interface ReviewMapProjection {
   readonly accuracy: { readonly white: ReviewAccuracy; readonly black: ReviewAccuracy };
   readonly coverage: { readonly evaluated: number; readonly positions: number; readonly sentence: string };
   readonly footer: { readonly labels: readonly string[]; readonly sentence: string };
+  readonly evalGraph: ReviewEvalGraph;
+  readonly compareDoors: readonly ReviewCompareDoor[];
+  /**
+   * The position a retry is open from (the run's active line leaves the reviewed line there and has
+   * reached no outcome), or null. The explicit Analyze action is withheld for that position (O7.3).
+   */
+  readonly openRetryEntryNodeId: string | null;
 }
 
 export interface ReviewMapInput {
@@ -96,7 +143,12 @@ export interface ReviewMapInput {
    * recorded-path relation on this surface is admitted by the compiled Review Map module first.
    */
   readonly viewer: { readonly role: EvidenceRole; readonly session: string };
+  /** The side this review follows (default: the run's start side); the eval graph is drawn for it. */
+  readonly side?: GradeSide;
 }
+
+/** The shipped N-way compare's column limit (`MAX_COMPARISON_BRANCHES`). */
+export const REVIEW_COMPARE_LIMIT = 8;
 
 type ReviewModuleRefusal = "role_outside_ceiling" | "session_outside_ceiling" | "not_admitted";
 const MODULE_REFUSAL_TEMPLATES: Readonly<Record<ReviewModuleRefusal, ReviewTemplateId>> = Object.freeze({
@@ -140,7 +192,9 @@ const GRADE_ABSTENTIONS: Readonly<Record<string, ReviewTemplateId>> = Object.fre
 });
 
 const moveNumberOf = (ply: number): number => Math.max(1, Math.ceil(ply / 2));
-const sideOfMove = (parentFen: string): GradeSide => parentFen.split(" ")[1] === "b" ? "black" : "white";
+/** The side to move in a FEN. */
+const sideToMoveOf = (fen: string): GradeSide => fen.split(" ")[1] === "b" ? "black" : "white";
+const sideOfMove = (parentFen: string): GradeSide => sideToMoveOf(parentFen);
 const sideLabel = (side: GradeSide): string => reviewText(side === "white" ? "side.white" : "side.black");
 
 /**
@@ -174,6 +228,24 @@ function evaluationPacket(run: DrillRun, node: Node): EvidencePayload | undefine
   return Object.freeze({ kind, source, values });
 }
 
+/** A White-perspective recorded score as text: `+0.35`, `−1.20`, or a mate count naming the side. */
+export function reviewScoreText(reading: GradeEvaluation): string {
+  return reading.score.kind === "cp"
+    ? `${reading.score.value >= 0 ? "+" : "−"}${(Math.abs(reading.score.value) / 100).toFixed(2)}`
+    : reviewText("evidence.eval.mate", { moves: Math.abs(reading.score.movesTo), side: reading.score.movesTo > 0 ? sideLabel("white") : sideLabel("black") });
+}
+
+/** The search bound a recorded reading was requested under, as `, 100 ms` / `, depth 18` / nothing. */
+export function reviewLimitText(reading: { readonly requestedMovetimeMs?: number; readonly depth?: number }): string {
+  return reading.requestedMovetimeMs !== undefined ? `, ${reading.requestedMovetimeMs} ms` : reading.depth !== undefined ? `, depth ${reading.depth}` : "";
+}
+
+function readingAt(packet: EvidencePayload | undefined, fen: string): GradeEvaluation | undefined {
+  if (packet === undefined) return undefined;
+  const reading = gradeReadingFromPayload(packet, sideToMoveOf(fen));
+  return "abstained" in reading ? undefined : reading;
+}
+
 function evaluationSentence(viewer: ReviewMapInput["viewer"], packet: EvidencePayload | undefined, sideToMove: GradeSide): string {
   if (packet !== undefined) {
     const sealed = invokeEvidenceValueRoute("live.stockfish.eval@1", { packet });
@@ -183,11 +255,91 @@ function evaluationSentence(viewer: ReviewMapInput["viewer"], packet: EvidencePa
   }
   const reading = packet === undefined ? undefined : gradeReadingFromPayload(packet, sideToMove);
   if (reading === undefined || "abstained" in reading) return reviewText("evidence.eval.missing");
-  const score = reading.score.kind === "cp"
-    ? `${reading.score.value >= 0 ? "+" : "−"}${(Math.abs(reading.score.value) / 100).toFixed(2)}`
-    : reviewText("evidence.eval.mate", { moves: Math.abs(reading.score.movesTo), side: reading.score.movesTo > 0 ? sideLabel("white") : sideLabel("black") });
-  const limit = reading.requestedMovetimeMs !== undefined ? `, ${reading.requestedMovetimeMs} ms` : reading.depth !== undefined ? `, depth ${reading.depth}` : "";
-  return reviewText("evidence.eval", { score, engine: reading.engineId, limit });
+  return reviewText("evidence.eval", { score: reviewScoreText(reading), engine: reading.engineId, limit: reviewLimitText(reading) });
+}
+
+/**
+ * The eval graph (§6): one point per ply over the durable evaluations, with the accuracy figure's
+ * coverage gate — a position counts as evaluated only when its recorded packet reads as a grade
+ * operand. Where readings are missing the graph abstains over that stretch and says so.
+ */
+function evalGraphFor(rows: readonly ReviewMapRow[], nodes: ReadonlyMap<string, Node>, packets: ReadonlyMap<string, EvidencePayload | undefined>, side: GradeSide): ReviewEvalGraph {
+  const label = sideLabel(side);
+  const instruments = new Set<string>();
+  const points = rows.map((row): ReviewEvalPoint => {
+    const reading = readingAt(packets.get(row.nodeId), nodes.get(row.nodeId)!.fen);
+    if (reading === undefined) return Object.freeze({ nodeId: row.nodeId, ply: row.ply, kind: "missing" as const, sentence: reviewText("graph.point.missing", { move: row.label }) });
+    instruments.add(`${reading.engineId}${reviewLimitText(reading)}`);
+    const percent = Math.round(moverWinPercent(reading, side) * 10) / 10;
+    return Object.freeze({
+      nodeId: row.nodeId, ply: row.ply, kind: "evaluated" as const, percent,
+      sentence: reviewText("graph.point", { move: row.label, score: reviewScoreText(reading), percent: percent.toFixed(1), side: label }),
+    });
+  });
+  const gaps: ReviewEvalGap[] = [];
+  for (let index = 0; index < points.length; index += 1) {
+    if (points[index]!.kind !== "missing") continue;
+    let end = index;
+    while (end + 1 < points.length && points[end + 1]!.kind === "missing") end += 1;
+    const first = rows[index]!;
+    const last = rows[end]!;
+    gaps.push(Object.freeze({
+      fromPly: first.ply, toPly: last.ply,
+      sentence: index === end ? reviewText("graph.gap.one", { move: first.label }) : reviewText("graph.gap", { from: first.label, to: last.label }),
+    }));
+    index = end;
+  }
+  const evaluated = points.filter((point) => point.kind === "evaluated").length;
+  const kind = evaluated === 0 ? "abstained" as const : evaluated === points.length ? "complete" as const : "partial" as const;
+  return Object.freeze({
+    kind, side, points: Object.freeze(points), gaps: Object.freeze(gaps), evaluated,
+    caption: kind === "abstained" ? reviewText("graph.none") : reviewText("graph.caption", { engines: [...instruments].join("; "), convention: `${GRADE_CONVENTION.id}@${GRADE_CONVENTION.version}`, side: label }),
+    coverage: reviewText("graph.coverage", { evaluated, plies: points.length }),
+  });
+}
+
+/** Where one other recorded line leaves the reviewed line, and the moves of its own it carries. */
+interface Divergence {
+  readonly branchId: string;
+  readonly entryNodeId: string;
+  readonly ownNodeIds: readonly string[];
+}
+
+function divergences(run: DrillRun, reviewed: readonly Node[], reviewedBranchId: string): readonly Divergence[] {
+  const out: Divergence[] = [];
+  for (const branch of run.branches) {
+    if (branch.id === reviewedBranchId) continue;
+    let path: readonly Node[];
+    try { path = branchPath(run, branch.id); } catch { continue; }
+    let common = -1;
+    while (common + 1 < path.length && common + 1 < reviewed.length && path[common + 1]!.id === reviewed[common + 1]!.id) common += 1;
+    if (common < 0) continue;
+    out.push(Object.freeze({ branchId: branch.id, entryNodeId: reviewed[common]!.id, ownNodeIds: Object.freeze(path.slice(common + 1).map((node) => node.id)) }));
+  }
+  return out;
+}
+
+function compareDoorsFor(divergent: readonly Divergence[], reviewedBranchId: string): readonly ReviewCompareDoor[] {
+  const byEntry = new Map<string, string[]>();
+  for (const line of divergent) if (line.ownNodeIds.length > 0) byEntry.set(line.entryNodeId, [...(byEntry.get(line.entryNodeId) ?? []), line.branchId]);
+  return Object.freeze([...byEntry].map(([entryNodeId, others]) => {
+    const offered = others.slice(0, REVIEW_COMPARE_LIMIT - 1);
+    return Object.freeze({ entryNodeId, branchIds: Object.freeze([reviewedBranchId, ...offered]), omitted: others.length - offered.length });
+  }));
+}
+
+/**
+ * O7.3's "verdict hidden during retry": the run's active line is a retry from a reviewed position
+ * when it leaves the reviewed line there and has reached no outcome. Returns that position, or null.
+ */
+export function openRetryEntry(run: DrillRun, reviewedBranchId: string): string | null {
+  const cursor = run.activeCursor.branchId;
+  if (cursor === reviewedBranchId) return null;
+  const line = divergences(run, branchPath(run, reviewedBranchId), reviewedBranchId).find((candidate) => candidate.branchId === cursor);
+  if (line === undefined) return null;
+  const own = new Set(line.ownNodeIds);
+  const finished = run.events.some((event) => event.type === "outcome.reached" && own.has(event.data.nodeId));
+  return finished ? null : line.entryNodeId;
 }
 
 interface Decision {
@@ -329,6 +481,22 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
     ...moments.flatMap((moment) => moment.sourceLabels),
     ...relationLabels,
   ])];
+  const nodes = new Map(path.map((node) => [node.id, node]));
+  // The eval graph draws recorded evaluations, so each point is admitted by module.review_map@1 too.
+  const sealed = new Map(path.flatMap((node) => {
+    const packet = packets.get(node.id);
+    return packet === undefined ? [] : [[node.id, invokeEvidenceValueRoute("live.stockfish.eval@1", { packet })] as const];
+  }));
+  const graphAdmission = admitForReview(input.viewer, [...sealed.values()]);
+  const graphPackets = new Map(path.map((node) => {
+    const evidence = sealed.get(node.id);
+    const admitted = evidence !== undefined && "admitted" in graphAdmission && graphAdmission.admitted.has(evidence);
+    return [node.id, admitted ? packets.get(node.id) : undefined] as const;
+  }));
+  const graph = evalGraphFor(rows, nodes, graphPackets, input.side ?? input.run.start.side);
+  const evalGraph = "refused" in graphAdmission
+    ? Object.freeze({ ...graph, caption: reviewText("graph.module.withheld", { reason: reviewText(MODULE_REFUSAL_TEMPLATES[graphAdmission.refused]) }) })
+    : graph;
   return Object.freeze({
     convention: REVIEW_MAP_CONVENTION,
     context: input.context,
@@ -339,5 +507,8 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
     accuracy: Object.freeze({ white: accuracyFor("white", decisions.white), black: accuracyFor("black", decisions.black) }),
     coverage: Object.freeze({ evaluated, positions: path.length, sentence: reviewText("header.coverage", { evaluated, positions: path.length }) }),
     footer: Object.freeze({ labels: Object.freeze(footerLabels), sentence: reviewText("footer.sources", { labels: footerLabels.join(" · ") }) }),
+    evalGraph,
+    compareDoors: compareDoorsFor(divergences(input.run, path, input.branchId), input.branchId),
+    openRetryEntryNodeId: openRetryEntry(input.run, input.branchId),
   });
 }

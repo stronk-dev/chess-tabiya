@@ -9,6 +9,7 @@ import * as ts from "typescript";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
+import { projectBotRoster } from "./bot-roster.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import type { EngineHealth, EngineRequest } from "./engine-supervisor.js";
 import { evidencePacket, renderRecordedReadingEvidence, renderVoice, voiceEvidenceView, type VoiceEvidenceView, type VoiceProvider } from "./guidance.js";
@@ -38,7 +39,7 @@ const capabilities: CapabilitiesProvider = {
       tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
-      policyProfiles: { strong_engine: { movetimeMs: 100, nodes: 50_000, threads: 1, hashMb: 16, multiPv: 1 }, human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } }, resistance: HUMAN_COMMON_RESISTANCE_PROFILE } },
+      policyProfiles: { strong_engine: { movetimeMs: 100, nodes: 50_000, threads: 1, hashMb: 16, multiPv: 1 }, human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } }, resistance: HUMAN_COMMON_RESISTANCE_PROFILE, profiles: projectBotRoster().profiles } },
       providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "none" },
       surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
     };

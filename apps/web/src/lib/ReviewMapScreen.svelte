@@ -4,8 +4,9 @@
   import { reviewText } from "@chess-tabiya/runtime";
   import { onDestroy } from "svelte";
 
-  import type { ReviewMap, StoryShare } from "./api.js";
+  import type { ReviewAnalysisPage, ReviewMap, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
+  import ReviewEvalGraph from "./ReviewEvalGraph.svelte";
   import { storyCardDocument } from "./story-card.js";
 
   interface Props {
@@ -16,8 +17,12 @@
     shares?: readonly StoryShare[];
     onShare?: (() => Promise<{ readonly id: string; readonly url: string }>) | undefined;
     onRevoke?: ((tokenId: string) => Promise<void>) | undefined;
+    /** §4: hands the listed lines to the shipped N-way compare (reviewed line first). */
+    onCompare?: ((branchIds: readonly string[]) => void | Promise<void>) | undefined;
+    /** §7 / O7.3: the explicit, secondary Analyze reveal for one reviewed move. */
+    onAnalyze?: ((nodeId: string) => Promise<ReviewAnalysisPage>) | undefined;
   }
-  let { review, onRetry, onExport, onVoice, shares = [], onShare, onRevoke }: Props = $props();
+  let { review, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze }: Props = $props();
 
   type RetryFailure = "retry.failed.board_held" | "retry.failed.forbidden" | "retry.failed.other";
   let selectedId = $state<string | undefined>();
@@ -36,6 +41,12 @@
   let shareError = $state<"share.failed" | "share.revoke.failed" | undefined>();
   let cardBusy = $state(false);
   let cardFailed = $state(false);
+  let comparing = $state<string | undefined>();
+  let compareFailed = $state<string | undefined>();
+  let analysis = $state<ReviewAnalysisPage | undefined>();
+  let analysisBusy = $state<string | undefined>();
+  let analysisFailed = $state<string | undefined>();
+  let analysisRequest = 0;
   let mounted = true;
   let request = 0;
 
@@ -44,6 +55,9 @@
   const initial = $derived(review.moments.find((moment) => review.rows.some((row) => row.nodeId === moment.nodeId))?.nodeId ?? review.rows[0]?.nodeId);
   const selectedIndex = $derived(review.rows.findIndex((row) => row.nodeId === (selectedId ?? initial)));
   const selected = $derived(selectedIndex < 0 ? undefined : review.rows[selectedIndex]);
+  const doors = $derived(new Map(review.compareDoors.map((door) => [door.entryNodeId, door])));
+  /** O7.3: the reveal belongs to one selected move and is gone the moment selection or a retry moves on. */
+  const shownAnalysis = $derived(analysis !== undefined && analysis.nodeId === selected?.nodeId && retrying === undefined ? analysis : undefined);
   const sideLabel = (side: "white" | "black"): string => side === "white" ? reviewText("side.white") : reviewText("side.black");
   const resultSentence = $derived(review.outcome.kind === "board_terminal"
     ? reviewText("header.result.board", { result: review.outcome.result, side: sideLabel(review.side) })
@@ -52,13 +66,49 @@
     ? reviewText("header.source.native")
     : reviewText("header.source.imported", { source: imported.kind === "pgn_paste" ? reviewText("source.pgn_paste") : reviewText("source.lichess_url"), date: imported.importedAt.slice(0, 10) }));
 
+  function hideAnalysis(): void {
+    analysisRequest += 1;
+    analysis = undefined;
+    analysisBusy = undefined;
+    analysisFailed = undefined;
+  }
+
   function select(nodeId: string): void {
+    if (nodeId !== selected?.nodeId) hideAnalysis();
     selectedId = nodeId;
   }
 
   function step(delta: number): void {
     const next = review.rows[Math.max(0, Math.min(review.rows.length - 1, selectedIndex + delta))];
-    if (next !== undefined) selectedId = next.nodeId;
+    if (next !== undefined) select(next.nodeId);
+  }
+
+  async function compare(key: string, branchIds: readonly string[]): Promise<void> {
+    if (onCompare === undefined || comparing !== undefined) return;
+    comparing = key;
+    compareFailed = undefined;
+    try {
+      await onCompare(branchIds);
+    } catch {
+      if (mounted) compareFailed = key;
+    } finally {
+      if (mounted) comparing = undefined;
+    }
+  }
+
+  async function analyze(nodeId: string): Promise<void> {
+    if (onAnalyze === undefined || analysisBusy !== undefined || retrying !== undefined) return;
+    const current = ++analysisRequest;
+    analysisBusy = nodeId;
+    analysisFailed = undefined;
+    try {
+      const page = await onAnalyze(nodeId);
+      if (mounted && current === analysisRequest && retrying === undefined) analysis = page;
+    } catch {
+      if (mounted && current === analysisRequest) analysisFailed = nodeId;
+    } finally {
+      if (mounted && current === analysisRequest) analysisBusy = undefined;
+    }
   }
 
   function onListKey(event: KeyboardEvent): void {
@@ -75,6 +125,7 @@
 
   async function retry(key: string, entryNodeId: string): Promise<void> {
     if (!retryAvailable || retrying !== undefined) return;
+    hideAnalysis();
     retrying = key;
     retryError = undefined;
     try {
@@ -213,6 +264,8 @@
     <p data-accuracy={review.accuracy.black.kind}>{review.accuracy.black.sentence}</p>
   </section>
 
+  <ReviewEvalGraph graph={review.evalGraph} selectedId={selected?.nodeId} onSelect={select} />
+
   <div class="review-body">
     <section class="moves" aria-labelledby="review-moves-title">
       <h2 id="review-moves-title">{reviewText("moves.title")}</h2>
@@ -228,6 +281,12 @@
             {#if row.grade}<p class="grade-chip" data-grade={row.grade.klass}>{row.grade.sentence}</p>{/if}
             <button type="button" class="retry" disabled={!retryAvailable || retrying !== undefined} aria-label={reviewText("retry.action.label", { number: row.moveNumber, san: row.san })} aria-describedby={!retryAvailable ? "review-retry-unavailable" : undefined} onclick={() => void retry(`row:${row.nodeId}`, row.entryNodeId)}>{retrying === `row:${row.nodeId}` ? reviewText("retry.busy") : reviewText("retry.action")}</button>
             {#if retryError?.key === `row:${row.nodeId}`}<p class="retry-error" role="alert">{reviewText(retryError.id)}</p>{/if}
+            {#if onCompare && doors.get(row.entryNodeId)}
+              {@const door = doors.get(row.entryNodeId)!}
+              <button type="button" class="compare" disabled={comparing !== undefined || retrying !== undefined} aria-label={reviewText("compare.action.label", { count: door.branchIds.length - 1, number: row.moveNumber, san: row.san })} onclick={() => void compare(`row:${row.nodeId}`, door.branchIds)}>{comparing === `row:${row.nodeId}` ? reviewText("compare.busy") : reviewText("compare.action")}</button>
+              {#if door.omitted > 0}<p class="muted compare-note">{reviewText("compare.omitted", { omitted: door.omitted, shown: door.branchIds.length })}</p>{/if}
+              {#if compareFailed === `row:${row.nodeId}`}<p class="retry-error" role="alert">{reviewText("compare.failed")}</p>{/if}
+            {/if}
           </li>
         {/each}
       </ol>
@@ -246,6 +305,23 @@
           <h2 id="review-evidence-title">{reviewText("evidence.title")}</h2>
           {#each selected.facts as fact}<p>{fact}</p>{/each}
         </article>
+        {#if onAnalyze && retrying === undefined}
+          <section class="analysis" aria-labelledby="review-analysis-title" data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.kind ?? "closed"}>
+            <h3 id="review-analysis-title">{reviewText("analysis.title")}</h3>
+            {#if selected.entryNodeId === review.openRetryEntryNodeId}
+              <p class="muted">{reviewText("analysis.withheld", { move: selected.label })}</p>
+            {:else if shownAnalysis}
+              <div aria-live="polite">
+                <p class="analysis-sentence">{shownAnalysis.sentence}</p>
+                {#if shownAnalysis.kind === "line"}<p class="muted">{shownAnalysis.caveat}</p>{/if}
+              </div>
+              <button type="button" class="secondary" onclick={hideAnalysis}>{reviewText("analysis.hide")}</button>
+            {:else}
+              <button type="button" class="secondary analyze" disabled={analysisBusy !== undefined} aria-label={reviewText("analysis.action.label", { number: selected.moveNumber, san: selected.san })} onclick={() => void analyze(selected!.nodeId)}>{analysisBusy === selected.nodeId ? reviewText("analysis.busy") : reviewText("analysis.action")}</button>
+              {#if analysisFailed === selected.nodeId}<p role="alert">{reviewText("analysis.failed")}</p>{/if}
+            {/if}
+          </section>
+        {/if}
       {/if}
     </section>
 
@@ -264,7 +340,12 @@
             <button type="button" class="primary retry" disabled={!retryAvailable || retrying !== undefined} aria-label={reviewText("retry.moment.label", { number: Math.max(1, Math.ceil(moment.ply / 2)) })} aria-describedby={!retryAvailable ? "review-retry-unavailable" : undefined} onclick={() => void retry(`moment:${moment.nodeId}`, moment.entryNodeId)}>{retrying === `moment:${moment.nodeId}` ? reviewText("retry.busy") : reviewText("retry.action")}</button>
             <button type="button" disabled={review.rows.every((row) => row.nodeId !== moment.nodeId)} onclick={() => select(moment.nodeId)}>{moment.moveLabel}</button>
             {#if onVoice}<button type="button" disabled={explaining === moment.nodeId} onclick={() => void explain(moment.nodeId)}>{explaining === moment.nodeId ? reviewText("moment.explaining") : reviewText("moment.explain")}</button>{/if}
+            {#if onCompare && doors.get(moment.entryNodeId)}
+              {@const door = doors.get(moment.entryNodeId)!}
+              <button type="button" class="compare" disabled={comparing !== undefined || retrying !== undefined} aria-label={reviewText("compare.moment.label", { count: door.branchIds.length - 1, number: Math.max(1, Math.ceil(moment.ply / 2)) })} onclick={() => void compare(`moment:${moment.nodeId}`, door.branchIds)}>{comparing === `moment:${moment.nodeId}` ? reviewText("compare.busy") : reviewText("compare.action")}</button>
+            {/if}
           </div>
+          {#if compareFailed === `moment:${moment.nodeId}`}<p class="retry-error" role="alert">{reviewText("compare.failed")}</p>{/if}
           {#if retryError?.key === `moment:${moment.nodeId}`}<p class="retry-error" role="alert">{reviewText(retryError.id)}</p>{/if}
         </article>
       {/each}
@@ -310,7 +391,12 @@
   .move-select{display:flex;gap:.5rem;align-items:center;text-align:left;background:none;border:0;padding:.2rem;font:inherit;color:inherit;cursor:pointer}
   .moment-marker{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;padding:.05rem .35rem;border:1px solid var(--accent);border-radius:.3rem}
   .grade-chip{grid-column:1 / -1;font-size:.8rem;line-height:1.35;padding:.3rem .45rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--panel))}
-  .retry{font-size:.8rem}
+  .retry,.compare{font-size:.8rem}
+  .move-row .compare{grid-column:1 / -1;justify-self:start}
+  .compare-note{grid-column:1 / -1}
+  .analysis{display:grid;gap:.3rem;padding:.5rem .6rem;border:1px dashed color-mix(in srgb,var(--ink) 25%,transparent);border-radius:.6rem}
+  .analysis h3{font-size:.9rem}
+  .analysis button{justify-self:start;font-size:.8rem}
   .retry-error{grid-column:1 / -1}
   .stage{display:grid;gap:.5rem;min-width:0}
   .board{width:min(100%,56vh);aspect-ratio:1;justify-self:center}

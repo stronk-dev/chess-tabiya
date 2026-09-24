@@ -130,6 +130,9 @@ describe("Review Map — module.review_map@1 admits everything it shows", () => 
     const sentence = reviewText("evidence.module.withheld", { reason: reviewText("module.refusal.session_outside_ceiling") });
     expect(refused.rows.every((row) => row.facts.includes(sentence))).toBe(true);
     // An operator is not a Review Map role (§1.2): the module refuses rather than rendering.
+    // The eval graph draws recorded evaluations, so it is gated by the same module.
+    expect(refused.evalGraph.points.every((point) => point.kind === "missing")).toBe(true);
+    expect(refused.evalGraph.caption).toBe(reviewText("graph.module.withheld", { reason: reviewText("module.refusal.session_outside_ceiling") }));
     const operator = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "operator", session: "imported" } });
     expect(operator.rows.every((row) => row.grade === undefined && row.facts.includes(reviewText("evidence.module.withheld", { reason: reviewText("module.refusal.role_outside_ceiling") })))).toBe(true);
   });

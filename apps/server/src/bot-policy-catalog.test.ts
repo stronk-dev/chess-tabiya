@@ -5,7 +5,6 @@ import {
   applyPolicyMultiplier,
   compileBotPolicyCatalog,
   compileBotProfile,
-  composeBotPolicySelection,
   drawPolicyMove,
   drawPolicyMoveBy,
   reconstructMaiaDistribution,
@@ -141,7 +140,7 @@ describe("compiled bot-policy catalog", () => {
     expect(compileBotProfile(profile([base, sampler, passing, presentation])).controlledTraits).toEqual(["pawn_move"]);
   });
 
-  it("ships no guessed roster while D970 is unresolved", () => {
+  it("keeps the legacy /select-move profile seam empty: profile play is not a public selector authority", () => {
     expect(BOT_POLICY_PROFILES).toEqual([]);
   });
 
@@ -182,57 +181,5 @@ describe("compiled bot-policy catalog", () => {
     ], 1, 1).rows;
     expect(drawPolicyMoveBy(one, 0.25)).toBe("a2a3");
     expect(drawPolicyMoveBy(two, 0.25)).toBe("a2a3");
-  });
-
-  it("composes guard, measured trait, draw, and explainable record once", () => {
-    const guard: BotLayerDeclaration = {
-      id: "guard.severe_error@1", kind: "error_guard", inputs: ["provider.stockfish.fixed_bound_loss"], effect: "mask",
-      parameters: { thresholdCp: 250, nodes: 25000 }, parameterCitation: "design/research/bot-policy.md", fallback: "base_model",
-      abstentions: ["provider_unavailable", "empty_after_mask"], changesStrength: true,
-      disclosure: "Stockfish stockfish-play nodes 25000 masks losses at 250 cp",
-      engineId: "stockfish-play", searchBound: { kind: "nodes", value: 25000 }, thresholdCp: 250,
-    };
-    const trait: BotLayerDeclaration = {
-      id: "trait.pawn_preference@1", kind: "controlled_trait", inputs: [], effect: "weight",
-      parameters: { multiplier: 4 }, parameterCitation: "design/research/bot-policy.md", fallback: "identity",
-      abstentions: [], changesStrength: true, classifier: "pawn_move", multiplier: 4,
-      measurement: { dossier: "design/research/bot-policy.md", population: "R11", metric: "pawn_move_rate", traitDeltaFraction: 0.1197, expectedLossShiftCp: -1.01, severeMassRise: 0, explorerMatchRetention: 0.988 },
-    };
-    const composedProfile = compileBotProfile(profile([base, { ...sampler, topP: 1, parameters: { ...sampler.parameters, topP: 1 } }, guard, trait, presentation]));
-    const candidates = [
-      { moveUci: "g1f3", rawMass: 0.4, guardLossCp: 0 },
-      { moveUci: "e2e4", rawMass: 0.3, guardLossCp: 20, traits: ["pawn_move"] },
-      { moveUci: "f2f3", rawMass: 0.3, guardLossCp: 300, traits: ["pawn_move"] },
-    ] as const;
-    const first = composeBotPolicySelection({ profile: composedProfile, candidates, baseBestMove: "g1f3", seed: 42, drawKey: "position-history" });
-    const permuted = composeBotPolicySelection({ profile: composedProfile, candidates: [candidates[2], candidates[0], candidates[1]], baseBestMove: "g1f3", seed: 42, drawKey: "position-history" });
-    expect(first).toEqual(permuted);
-    expect(["g1f3", "e2e4"]).toContain(first.moveUci);
-    expect(first.policy.applied).toBe(true);
-    expect(first.policy.layers.map((layer) => [layer.id, layer.action])).toEqual([
-      ["model.maia3@1", "applied"],
-      ["sampler.maia_reconstruction@1", "applied"],
-      ["guard.severe_error@1", "applied"],
-      ["trait.pawn_preference@1", "applied"],
-      ["presentation.human_baseline@1", "applied"],
-    ]);
-    expect(first.policy.considered.find((candidate) => candidate.moveUci === "f2f3")?.finalMass).toBe(0);
-    expect(first.policy.considered.find((candidate) => candidate.moveUci === "e2e4")?.finalMass).toBeGreaterThan(0.7);
-    expect(first.policy.chosenFinalMass).toBe(first.policy.considered.find((candidate) => candidate.moveUci === first.moveUci)?.finalMass);
-  });
-
-  it("records the incomplete-vector degraded path without pretending the profile applied", () => {
-    const composedProfile = compileBotProfile(profile());
-    const selection = composeBotPolicySelection({
-      profile: composedProfile,
-      candidates: [{ moveUci: "e2e4", rawMass: 0.4 }, { moveUci: "d2d4", rawMass: 0.3 }],
-      baseBestMove: "d2d4",
-      seed: 9,
-      drawKey: "degraded-history",
-    });
-    expect(selection.moveUci).toBe("d2d4");
-    expect(selection.policy).toEqual(expect.objectContaining({ applied: false, degradedReason: "incomplete_vector", completeness: 0.7 }));
-    expect(selection.policy.layers.find((layer) => layer.id === sampler.id)).toEqual(expect.objectContaining({ action: "abstained", reason: "incomplete_vector" }));
-    expect(selection.policy.considered.every((candidate) => candidate.finalMass === undefined)).toBe(true);
   });
 });

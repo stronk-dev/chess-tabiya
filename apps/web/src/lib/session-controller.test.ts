@@ -42,6 +42,7 @@ import {
   WriterSession,
   type KeyValueStorage,
 } from "./writer-session.js";
+import { botRosterFixture } from "./bot-roster.test-support.js";
 
 const pack = JSON.parse(
   readFileSync(
@@ -90,6 +91,7 @@ const capabilities: Capabilities = {
         slowestLosingRate: { min: 0.611, max: 0.689, uniformBaseline: 0.227 },
         fastestLosingRate: { value: 0.033, uniformBaseline: 0.313 },
       },
+      profiles: botRosterFixture(),
     },
   },
   providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },

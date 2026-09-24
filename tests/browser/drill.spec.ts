@@ -265,6 +265,75 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   expect(text).toContain("Tabiya branch");
 });
 
+test("review map remainder: eval graph by keyboard, explicit Analyze withheld during a retry, and the Compare handoff", async ({ page }) => {
+  await page.getByRole("link", { name: "Review" }).click();
+  await page.getByLabel("PGN").fill(`[Event "Remainder import"]
+[White "Carol"]
+[Black "Dan"]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3 Nc6 1-0`);
+  await page.getByRole("button", { name: "Build game story" }).click();
+  await expect(page).toHaveURL(/\/review\/game\/import-/);
+  const runId = page.url().split("/").at(-1)!;
+  await expect(page.getByText("Evaluation coverage: 5 of 5 positions on this line carry a recorded engine evaluation.")).toBeVisible({ timeout: 15_000 });
+
+  // §6: one keyboard stop per ply; the evaluations are White-perspective and drawn for the imported side.
+  await expect(page.getByRole("heading", { name: "Evaluation graph" })).toBeVisible();
+  await expect(page.getByText("4 of 4 moves have a recorded evaluation after them.")).toBeVisible();
+  const graph = page.getByRole("group", { name: /^Evaluation graph, one point per move/u });
+  const points = graph.getByRole("button");
+  await expect(points).toHaveCount(4);
+  await expect(points.first()).toHaveAccessibleName("1. e4: +0.00 from White's side, 50.0 win-points for White.");
+  await page.getByRole("list", { name: "Move list" }).getByRole("button", { name: /^1\. e4/u }).click();
+  await points.first().focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByText("Position after 1… e5")).toBeVisible();
+  await expect(points.nth(1)).toBeFocused();
+  await expect(points.nth(1)).toHaveAttribute("aria-pressed", "true");
+  await page.keyboard.press("End");
+  await expect(page.getByText("Position after 2… Nc6")).toBeVisible();
+
+  // §7 / O7.3: the ordinary map carries no engine line; Analyze is explicit and attributed.
+  const main = page.locator("main");
+  await expect(main).not.toContainText(/principal variation|first move of its search|\bbest\b/iu);
+  await page.getByRole("list", { name: "Move list" }).getByRole("button", { name: /^2\. Nf3/u }).click();
+  await page.getByRole("button", { name: "Analyze the position before move 2 (Nf3): show the recorded engine line" }).click();
+  await expect(page.locator(".analysis-sentence")).toHaveText(/^mock-evidence \(\d+ ms search\) reported 2\. \S+ as the first move of its search from the position before 2\. Nf3; no longer line is recorded\.$/u);
+  await expect(page.getByText("It is not advice", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "Hide engine line" }).click();
+  await expect(page.locator(".analysis-sentence")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /^Compare lines from here/u })).toHaveCount(0);
+
+  // Retry from before 2. Nf3 and play a different move: a second line now leaves the game there.
+  await page.getByRole("button", { name: "Retry from before move 2 (Nf3)" }).click();
+  await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
+  await expect(page.getByLabel("Chessboard").first()).toBeVisible();
+  // Commit the retry's move as this device's writer (the board path is covered by the import journey).
+  const writer = await page.evaluate((id) => localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
+  expect(writer).not.toBeNull();
+  const played = await page.request.post(`/runs/${runId}/moves`, { headers: { "x-writer-id": writer! }, data: { uci: "f1c4" } });
+  expect(played.ok(), await played.text()).toBe(true);
+
+  await page.goto(`/review/game/${runId}`);
+  await expect(page.getByRole("heading", { name: "Carol – Dan" })).toBeVisible();
+  // The retry is still the open line: its position's engine line stays hidden; others do not.
+  await page.getByRole("list", { name: "Move list" }).getByRole("button", { name: /^2\. Nf3/u }).click();
+  await expect(page.getByText("The engine line for the position before 2. Nf3 stays hidden while a retry from that position is open.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Analyze the position before move 2 \(Nf3\)/u })).toHaveCount(0);
+  await page.getByRole("list", { name: "Move list" }).getByRole("button", { name: /^1… e5/u }).click();
+  await expect(page.getByRole("button", { name: /^Analyze the position before move 1 \(e5\)/u })).toBeVisible();
+
+  // §4: the Compare handoff opens the shipped N-way compare on the reviewed line and the retry.
+  const handoff = page.getByRole("button", { name: "Compare the reviewed line and 1 more from before move 2 (Nf3)" });
+  await expect(handoff).toHaveCount(1);
+  await handoff.click();
+  await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
+  await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
+  const graphAfter = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: { nodes: { moveUci: string | null }[] } };
+  expect(graphAfter.graph.nodes.map((node) => node.moveUci)).toEqual(expect.arrayContaining(["e2e4", "e7e5", "g1f3", "b8c6", "f1c4"]));
+});
+
 test("account lifecycle downloads data, deletes one run, and clears this browser on account deletion", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
