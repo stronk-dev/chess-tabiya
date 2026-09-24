@@ -23,6 +23,7 @@ import type {
   ReasoningTranscript,
   RunMark,
   StoryMoment,
+  ReviewAnalysis,
   ReviewMapProjection,
 } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
@@ -593,6 +594,8 @@ export type ReviewMap = ReviewMapProjection & {
   readonly viewer: { readonly mayWrite: boolean };
   readonly semanticPath: { readonly kind: "available"; readonly events: number } | { readonly kind: "refused"; readonly reason: string };
 };
+/** rfc/review-map.md §7 (O7.3): the explicit Analyze reveal from `GET /runs/:id/review-analysis`. */
+export type ReviewAnalysisPage = ReviewAnalysis & { readonly runId: string; readonly branchId: string };
 export interface StoryShare { readonly id: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdAt: string; readonly revokedAt: string | null; }
 export interface CreatedStoryShare extends Omit<StoryShare, "revokedAt"> { readonly token: string; readonly url: string; readonly revokedAt: null; }
 export interface RevokedStoryShare { readonly revoked: true; readonly runId: string; readonly tokenId: string; readonly revokedAt: string; }
@@ -942,6 +945,7 @@ export interface DrillClientApi extends RunApi {
   importRecord?(runId: string): Promise<ImportedGameRecord>;
   story?(runId: string, branchId?: string): Promise<GameStory>;
   review?(runId: string, branchId?: string): Promise<ReviewMap>;
+  reviewAnalysis?(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage>;
   shareStory?(runId: string, branchId: string): Promise<CreatedStoryShare>;
   storyShares?(runId: string): Promise<readonly StoryShare[]>;
   revokeStoryShare?(runId: string, tokenId: string): Promise<RevokedStoryShare>;
@@ -1151,6 +1155,11 @@ export class DrillApi implements DrillClientApi {
   review(runId: string, branchId?: string): Promise<ReviewMap> {
     const query = branchId === undefined ? "" : `?branch=${encoded(branchId)}`;
     return this.#json(`/runs/${encoded(runId)}/review${query}`);
+  }
+
+  reviewAnalysis(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage> {
+    const branch = branchId === undefined ? "" : `&branch=${encoded(branchId)}`;
+    return this.#json(`/runs/${encoded(runId)}/review-analysis?node=${encoded(nodeId)}${branch}`);
   }
 
   story(runId: string, branchId?: string): Promise<GameStory> {

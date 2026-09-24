@@ -168,7 +168,9 @@ describe("Review Map screen (rfc/review-map.md)", () => {
   it("[criterion 9] resolves every authored string to the frozen template table, by set-equality over the rendered components", () => {
     const sources = {
       screen: readFileSync(resolve(ROOT, "apps/web/src/lib/ReviewMapScreen.svelte"), "utf8"),
+      graph: readFileSync(resolve(ROOT, "apps/web/src/lib/ReviewEvalGraph.svelte"), "utf8"),
       projection: readFileSync(resolve(ROOT, "packages/runtime/src/review-map.ts"), "utf8"),
+      analysis: readFileSync(resolve(ROOT, "packages/runtime/src/review-analysis.ts"), "utf8"),
       card: readFileSync(resolve(ROOT, "apps/web/src/lib/story-card.ts"), "utf8"),
       publicPage: readFileSync(resolve(ROOT, "apps/server/src/rest.ts"), "utf8"),
     };
@@ -185,17 +187,19 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     expect([...referenced].sort()).toEqual([...keys].sort());
 
     // The markup carries no literal prose: strip `{…}` expressions and tags, and nothing readable remains.
-    const markup = sources.screen.slice(sources.screen.indexOf("</script>") + 9, sources.screen.indexOf("<style>"));
-    let depth = 0;
-    let stripped = "";
-    for (const character of markup) {
-      if (character === "{") { depth += 1; continue; }
-      if (character === "}") { depth -= 1; continue; }
-      if (depth === 0) stripped += character;
+    for (const component of [sources.screen, sources.graph]) {
+      const markup = component.slice(component.indexOf("</script>") + 9, component.indexOf("<style>"));
+      let depth = 0;
+      let stripped = "";
+      for (const character of markup) {
+        if (character === "{") { depth += 1; continue; }
+        if (character === "}") { depth -= 1; continue; }
+        if (depth === 0) stripped += character;
+      }
+      const textOnly = stripped.replace(/<[^>]*>/gu, " ");
+      expect(textOnly.replace(/\s+/gu, "")).toBe("");
+      expect(markup).not.toMatch(/\b(?:aria-label|title|placeholder|alt)="[^{]/u);
     }
-    const textOnly = stripped.replace(/<[^>]*>/gu, " ");
-    expect(textOnly.replace(/\s+/gu, "")).toBe("");
-    expect(markup).not.toMatch(/\b(?:aria-label|title|placeholder|alt)="[^{]/u);
   });
 
   it("[criterion 10] computes the footer from admitted items and carries no fixed provenance literal anywhere in source", async () => {
