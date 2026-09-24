@@ -74,6 +74,15 @@
       }
     },
     {
+      "id": "semantic-conventions",
+      "claimKind": "members",
+      "source": {
+        "kind": "string_tuple",
+        "path": "packages/runtime/src/evidence-conventions.ts",
+        "exportName": "SEMANTIC_CONVENTION_MEMBERS"
+      }
+    },
+    {
       "id": "shape-entry-schema",
       "claimKind": "schema_lane",
       "source": {

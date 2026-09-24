@@ -18,6 +18,7 @@
 - **Planning:** `planning/semantic-convention-provenance/`
 
 ```tabiya-claims
+semantic-conventions | members back_rank_susceptible_v1, backward_pawn_legacy_v1, candidate_feature_vector_v1, candidate_majority_v1, chessops_king_takes_rook_v1, defence_duty_v1, development_v1, discovered_latency_v1, double_attack_v1, endgame_material_census_v1, evidence_reference_resolution_v1, fork_survival_v1, grade_convention_v1, king_landing_square_v1, king_opposition_blocker_blind_v1, king_shelter_v1, king_zone_v1, legal_exchange_v1, local_non_losing_v1, loose_piece_v1, lucena_bridge_method_v1, lucena_setup_v1, mate_proof_v1, material_role_signature_v1, maximal_pawn_reach_v1, mover_turn_ep_cleared_v1, named_structure_catalogue_v1, observed_window_v1, opening_deepest_reached_v1, overload_conflict_v1, pawn_relations_v1, phase_bands_v1, philidor_third_rank_method_v1, philidor_third_rank_setup_v1, pressure_line_v1, race_arrival_v1, ray_classification_v1, space_v1, square_control_v1, standard_uci_king_destination_v1, story_last_level_v1, story_rank_v1, story_title_v1, threat_v1, trade_completed_v1, trapped_v1, vancura_method_v1, vancura_setup_v1 | the 39 reviewed initial conventions plus nine authored declarations (phase-bands, endgame-material-census, named-structure-catalogue and the six cited endgame setup/method conventions)
 run-schema | lane 0.24 | EvidenceAttachedEvent gains optional semanticReceipts carrying exact projection/value/convention receipts; schema 0.17 -> 0.24 through the registered lane chain
 ```
 

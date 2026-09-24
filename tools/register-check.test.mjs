@@ -39,6 +39,7 @@ const tree = {
   migration: { head: 4 },
   "evidence-kinds": { members: ["alpha", "beta"] },
   "provider-protocol": { members: ["gamma"] },
+  "semantic-conventions": { members: ["space_v1"] },
 };
 
 const declaration = (body = "none") => `# RFC: fixture
@@ -281,11 +282,17 @@ test("§7.1 the exact seven-row seed parses, sorted and unique", () => {
   ];
   // The reviewed seed's seven rows survive unchanged; every row added since is one data row from a
   // later RFC (§1 extension property): provider-protocol-register.md adds `provider-protocol`, and
-  // concept-registry.md adds `concept-registry-schema` through the existing json_schema reader.
+  // concept-registry.md adds `concept-registry-schema` through the existing json_schema reader, and
+  // semantic-convention-register.md adds `semantic-conventions` through the string_tuple reader.
   const reviewedSeed = JSON.parse(fs.readFileSync(path.join(repoRoot, "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json"), "utf8"));
   assert.deepEqual(reviewedSeed.resources.map(({ id }) => id), seven);
   assert.deepEqual(seed().resources.filter(({ id }) => seven.includes(id)), reviewedSeed.resources);
-  assert.deepEqual(ids, [...seven, "provider-protocol", "concept-registry-schema"].sort());
+  assert.deepEqual(ids, [...seven, "provider-protocol", "concept-registry-schema", "semantic-conventions"].sort());
+  assert.deepEqual(seed().resources.find(({ id }) => id === "semantic-conventions"), {
+    id: "semantic-conventions",
+    claimKind: "members",
+    source: { kind: "string_tuple", path: "packages/runtime/src/evidence-conventions.ts", exportName: "SEMANTIC_CONVENTION_MEMBERS" },
+  });
   assert.deepEqual(seed().resources.find(({ id }) => id === "concept-registry-schema"), {
     id: "concept-registry-schema",
     claimKind: "schema_lane",
@@ -408,7 +415,7 @@ test("§7.13 caller mutation after admission leaves the admitted image unchanged
   value.resources[0].id = "mutated";
   value.resources[0].source.schemaSlug = "mutated";
   value.resources.pop();
-  assert.equal(admitted.resources.length, 9);
+  assert.equal(admitted.resources.length, seed().resources.length);
   assert.equal(admitted.resources[0].id, "campaign-schema");
   assert.equal(admitted.resources[0].source.schemaSlug, "campaign");
   assert.ok(Object.isFrozen(admitted.resources[0].source));
@@ -434,4 +441,20 @@ test("provider-protocol members: the real source derives, one operation claimed 
   assert.match(checkC3([...first.claims, ...second.claims], [], catalogue).join("\n"), /collision: one\.md and two\.md both claim provider-protocol\|maia_policy_page_v1/);
   assert.match(checkC1({ "one.md": declaration("provider-protocol | members maia.policy_page@1 | dotted") }, catalogue).errors[0], /invalid member claim/);
   assert.match(checkC1({ "one.md": declaration("provider-protocol | first lane 1 | whole projection") }, catalogue).errors[0], /invalid member claim/);
+});
+
+// semantic-convention-register.md ([[D2466]]): the lineage resource enters through the existing
+// string_tuple reader. Collision identity is the member (`id_vN`), so two RFCs claiming one next
+// version collide while disjoint ids and disjoint versions do not; `@` refs are refused.
+test("semantic-conventions members: the real source derives, one next version claimed twice collides, raw refs are refused", () => {
+  const real = deriveTree(repoRoot);
+  assert.ok(Array.isArray(real["semantic-conventions"].members), "the committed tuple is present and derives");
+  const first = checkC1({ "one.md": declaration("semantic-conventions | members space_v2 | successor") }, catalogue);
+  const second = checkC1({ "two.md": declaration("semantic-conventions | members space_v2, threat_v2 | successors") }, catalogue);
+  const disjoint = checkC1({ "three.md": declaration("semantic-conventions | members threat_v3 | disjoint") }, catalogue);
+  assert.deepEqual([...first.errors, ...second.errors, ...disjoint.errors], []);
+  const collisions = checkC3([...first.claims, ...second.claims, ...disjoint.claims], [], catalogue).filter((error) => error.startsWith("C3 collision"));
+  assert.deepEqual(collisions, ["C3 collision: one.md and two.md both claim semantic-conventions|space_v2"]);
+  assert.match(checkC1({ "one.md": declaration("semantic-conventions | members space@2 | raw ref") }, catalogue).errors[0], /invalid member claim/);
+  assert.match(checkC1({ "one.md": declaration("semantic-conventions | members defence-duty_v1 | hyphen") }, catalogue).errors[0], /invalid member claim/);
 });
