@@ -133,6 +133,13 @@ Current completion state is deliberately not copied here. Use the
   clearing.
 - [Theming](theming.md) — app, board and piece appearance axes and persistence.
 
+## Operations and self-hosting
+
+- [Deployment profiles](deployment.md) — loopback `local`, LAN `appliance` and Internet `hosted`
+  topologies, the Caddy/TLS edge, cookie and origin policy, and the `core`/`cpu` resource tiers.
+- [Storage backup and recovery](storage-backup-and-recovery.md) — verified backup bundles,
+  restore, migration-safe startup, rollback to the prior release and the maintenance lock.
+
 ## Documentation rule
 
 Every Markdown document directly under `docs/` must appear in this index. `make docs-check` enforces

@@ -1,0 +1,17 @@
+# rfc/storage-backup-recovery.md §8 — release storage maintenance overlay. Same image digest as
+# `server`; /data read-write; /backup an explicit absolute host directory; no port, no network,
+# never starts HTTP. Use with the profile file you run, e.g.:
+#   docker compose -f compose.yaml -f compose.maintenance.yaml run --rm storage-admin backup
+services:
+  storage-admin:
+    profiles: [maintenance]
+    image: __SERVER_IMAGE__
+    entrypoint: ["node", "apps/server/dist/storage-admin.js"]
+    environment:
+      DATABASE_PATH: /data/chess-tabiya.sqlite
+      TABIYA_BACKUP_ROOT: /backup
+    volumes:
+      - tabiya-data:/data
+      - ${TABIYA_BACKUP_DIRECTORY:?set TABIYA_BACKUP_DIRECTORY to an absolute host directory for backups}:/backup
+    network_mode: none
+    restart: "no"
