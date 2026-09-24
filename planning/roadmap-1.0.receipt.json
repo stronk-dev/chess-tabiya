@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:bcdf4ec3b57eeabe2af404ddf23d4ad4f0a5396b88e0c24e1de2a84ebf72eb85",
+    "roadmap": "sha256:2084d31dec01996e4c99cf7c1a07da7d13d24d4f17c397550d2725fa9fdbf4df",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:fdb6c0c123e23af105c60d2809730350f6e00a4a179e1df185d91e2e5acf2030",
-    "rfcRegister": "sha256:4d5b9efc14ee0791245f407de188c14f35f0f8bb319a65c3fffd49959f4b9a9b",
+    "workState": "sha256:a404906b70e7e37d76d6eb9f976179ebe27566fba17b3e57d87ac0460e4eeebe",
+    "rfcRegister": "sha256:3a6607aa4a34d1f7114f42e314aada79c718efccc2c1053b0e9664075ee7aab5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:dcb641a078d62660d013d17b636c9be49026fc3f7eef556070306d408358e946",
-    "rest": "sha256:b67275504e24a0ba0241ca4acec86ff6d00e3ed9f6c068a38a50095c9c826e56"
+    "rest": "sha256:6b9241b40c3d60caf1927e01be2a0e54412499cf9ddf0ece06b4172e4635ac4f"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 47,
+      "draft": 46,
       "accepted": 0,
-      "implementing": 14,
+      "implementing": 15,
       "awaiting": 11,
       "implemented": 0,
       "superseded": 0,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 624,
+      "todo": 623,
       "doing": 0,
       "blocked": 1197,
-      "done": 1116,
+      "done": 1117,
       "refused": 111
     },
     "workItems": {
@@ -230,43 +230,30 @@
       ],
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
-        "at": "2026-09-13",
-        "summary": "The stable board and one-expanded companion remain proven across 64 required desktop/mobile journeys. Just Play names the actual Quiet default and its registry promise before a run. Settings and in-run Advanced now share one ceiling-aware nine-field control component, so every primitive remains reachable without a second vocabulary or silently omitted fields. Ordinary actions describe what the learner gets rather than evidence plumbing. Compiler-backed preset activation, module delivery and five emitter-dependent matrix states remain open.",
+        "at": "2026-09-24",
+        "summary": "Presets now drive the product: Quiet, Guide me, Theory only, Support and Analyze each compile a module set and config narrowed by context ceiling and viewer access with worded suppressions, the server re-derives the exchange, the pill offers only the context's presets and shows Custom when Advanced changes a field, and the 72 primitives stay under Advanced. Checkpoint B, five emitter-dependent composition states and executable Campaign remain.",
         "impact": "advanced",
         "evidence": [
-          "apps/web/src/lib/JustPlayStarter.svelte",
-          "apps/web/src/lib/AssistanceControlFields.svelte",
-          "apps/web/src/lib/AssistanceSettings.svelte",
-          "apps/web/src/lib/DrillScreen.svelte",
-          "apps/web/src/lib/TerminalSheet.svelte",
-          "apps/web/src/lib/screens.test.ts",
-          "apps/web/src/lib/assistance-preference.test.ts",
-          "apps/web/src/lib/terminal-sheet.test.ts",
-          "tests/browser/drill.spec.ts",
-          "planning/work-items-1.0.json",
-          "planning/play-composition/plan.md",
+          "packages/runtime/src/assistance-exchange.ts",
+          "planning/intent-presets/checkpoint-a-implementation-2026-09-24.md",
+          "rfc/intent-presets.md",
           "rfc/play-composition.md"
         ],
         "anchors": [
           {
-            "kind": "work_state",
-            "id": "D582",
-            "digest": "sha256:d4e23b55e4eb8ec07cd8e3c88c29c5c8e3688f066472f3fef07d193badf45ec6"
-          },
-          {
-            "kind": "work_state",
-            "id": "D494",
-            "digest": "sha256:731bb8c42b6d3b8627bfe4d38d94857539cdb7259e6ae8d22fbc61dc50be9754"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3182",
-            "digest": "sha256:6f1c41374f185f9925763d27b1c796bddea8970633484862a78071456cf69fce"
+            "kind": "rfc",
+            "id": "intent-presets.md",
+            "digest": "sha256:4f022f0fcf5bb604a757f39aa1754f2c4e472cbefc5b4304a8419a5358b4fa6f"
           },
           {
             "kind": "rfc",
             "id": "play-composition.md",
             "digest": "sha256:bbaaa789bace5896789d1e3d513f6d75a2abcb64fd81b1cc1bac332455df101f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1639",
+            "digest": "sha256:f8ca05acf47fe5b45f4ba69dc3788e09a0d6469584676b3a3d74104a539d56a0"
           }
         ]
       },

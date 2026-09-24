@@ -1,6 +1,6 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** draft (register token unchanged pending the rfc/README.md owner flip to implementing) — **Checkpoint A landed 2026-09-24 by owner direction (implement
+- **Status:** implementing — **Checkpoint A landed 2026-09-24 by owner direction (implement
   directly, no review rounds).** The literal §4a/§3.2 tables are re-derived at import time; the ∩ algebra
   runs through the four typed, digest-bound stages; the lossless v2 receipt is the only writer;
   `POST /runs/:id/assistance` is the server seat; and the Play pill, footer, Settings and Advanced

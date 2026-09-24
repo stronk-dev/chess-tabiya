@@ -21188,3 +21188,23 @@ shows a fixed explanation beside the due date. D864 closes.
 - The manifest tuple is now 40/222/34/501.
 - A timing race in the standing-word browser test was fixed: it now reads the
   due date from the payload the page was served.
+
+### 2026-09-24 — intent-presets Checkpoint A: presets drive modules
+
+Choosing Quiet, Guide me, Theory only, Support or Analyze now compiles a
+module set and a nine-field config. The context ceiling and viewer access then
+narrow it, and each removal is a typed suppression rendered in words.
+
+- **Server authority:** `POST /runs/:id/assistance` re-derives context, access
+  and availability itself.
+- **Preferences:** `tabiya.workflow.v2` is the only preference writer.
+- **Advanced:** it shows Custom when a field changes. Settings keeps the 72
+  primitives under a collapsed Advanced.
+- **Nudge seat:** Post-commit Nudge renders only when the compiled result
+  carries it.
+- **Hint ceiling:** D1639's hint ceiling uses the proposed table.
+- **Intent amendment:** the landing makes `design/03`'s "no presets" false. The
+  proposed amendment is filed, and it is the owner's to rule.
+- **Ledger:** D484 closes.
+- **Still open:** Checkpoint B (digest-bound nudge delivery) and the five
+  emitter-dependent composition states.

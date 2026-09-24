@@ -3814,8 +3814,9 @@
     },
     {
       "id": "D484",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75290238970c3d1d1752eeff1018135bc9393c2fbc529490755d2c15a34c685a",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d18cdda0b162a453d3e01c16e6d1a70688d1346081cf26b3b2d0d9422a083246",
       "uxItems": [
         "A11-a11",
         "ARR-a18",
@@ -3823,8 +3824,8 @@
         "SET-a16",
         "SET-a17"
       ],
-      "state": "todo",
-      "owner": "core-loop"
+      "evidence": "packages/runtime/src/assistance-exchange.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D485",
