@@ -179,6 +179,11 @@ export {
   type AbstentionOperand, type CitationOperand, type ClaimOperand, type ComponentDeclaration, type ComponentId, type ComponentValue, type ConventionReceipt,
   type EnumStateOperand, type FactStatementOperand, type LabelEntry, type LabelVocabulary, type MagnitudeOperand, type PresentationReceipt,
   type PresentedEvidenceItem, type ProjectionPresentationAdapter,
+  BOARD_RELATION_KINDS, DENOMINATOR_MEANINGS, DISTRIBUTION_RESIDUAL_LABELS, MAGNITUDE_SCALE_POLICIES, RELATION_PHRASES, STRUCTURED_DOCUMENT_SCHEMAS,
+  adapterComponents, conventionAttribution, formatShare,
+  type AdapterSpec, type BoardRelationKind, type ConventionBasis, type CountWithDenominatorOperand, type DistributionOperand, type MagnitudeScalePolicyId,
+  type MagnitudeTrailOperand, type MovePathOperand, type OutcomeSplitOperand, type PopulationDescriptor, type PresentationComposition, type PresentationKit,
+  type RelationOverlayOperand, type SquareSetOperand, type StructuredDocumentOperand,
 } from "./presentation-contract.js";
 export {
   REVIEW_PACKET_SOURCE_ADAPTERS, REVIEW_PACKET_SOURCE_PROJECTION_IDS, REVIEW_SOURCE_FAMILIES, REVIEW_UNAVAILABLE_REASONS, ReviewEvidenceError,

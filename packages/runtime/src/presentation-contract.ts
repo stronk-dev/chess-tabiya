@@ -15,6 +15,7 @@
 // derived convention (§5); no component colours or ranks a move by quality.
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import type { Color, Role, SquareName } from "chessops/types";
 
 import { renderEndgameClassification, type EndgameClassification } from "./endgame.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
@@ -34,7 +35,14 @@ import { assertMoveQualityGradeSentence, renderMoveQualityGrade, type MoveQualit
 import { renderPivotalMarker, type PivotalMarker } from "./pivotal.js";
 import type { ReviewEnginePoint, ReviewEvalDelta, ReviewMateTransition, ReviewScoreReceipt, ReviewSearchBound, ReviewWdlPoint, StockfishPositionEvaluation } from "./review-points.js";
 import { renderShapeFiring, type ShapeFiring } from "./shape-firing.js";
-import type { ObjectiveState, RunOutcome } from "./types.js";
+import { CONSUMER_FACT_RENDERERS, STRUCTURED_DOCUMENT_SCHEMAS, consumerAdapterSpecs } from "./presentation-consumer-adapters.js";
+import { INSPECTOR_FACT_RENDERERS, INSPECTOR_MAGNITUDE_QUANTITIES, inspectorAdapterSpecs } from "./presentation-inspector-adapters.js";
+import { PLAY_FACT_RENDERERS, PLAY_MAGNITUDE_QUANTITIES, playAdapterSpecs } from "./presentation-play-adapters.js";
+import { PresentationSchemaError, ROLE_NAMES, SIDE_NAMES, listPhrase, type FactOperandsOf, type FactRendererDefinition } from "./presentation-schema.js";
+import { MARK_BRUSHES, type MarkBrush, type ObjectiveState, type RunOutcome } from "./types.js";
+
+/** A closed JSON value (no `undefined`, functions or non-finite numbers). */
+export type PresentationJsonValue = string | number | boolean | null | readonly PresentationJsonValue[] | { readonly [key: string]: PresentationJsonValue };
 
 // ---------------------------------------------------------------------------------------------
 // §3 — the fourteen components and their eight declared fields
@@ -62,28 +70,31 @@ export interface ComponentDeclaration {
   readonly forms: readonly Exclude<EvidenceForm, "machine_condition">[];
   readonly equivalentSentence: string;
   readonly tokens: readonly PresentationThemeToken[];
-  /** Checkpoint A honesty: whether this landing ships the runtime operand parser and renderer. */
-  readonly checkpointA: "implemented" | "declared_only";
+  /**
+   * Whether this landing ships the runtime operand parser, the equivalent-sentence renderer and the
+   * client component. Every member is `implemented` since the Checkpoint-B landing (2026-09-24).
+   */
+  readonly implementation: "implemented";
 }
 
 const declaration = (value: ComponentDeclaration): ComponentDeclaration => Object.freeze({ ...value, forms: Object.freeze([...value.forms]), tokens: Object.freeze([...value.tokens]) });
 
 /** Exactly the fourteen §3 ids, frozen; every member declares all eight fields (criterion 1). */
 export const COMPONENT_DECLARATIONS: Readonly<Record<ComponentId, ComponentDeclaration>> = Object.freeze({
-  distribution: declaration({ id: "distribution", renders: "Ranked candidate moves with their share of a stated population or model output.", operand: "DistributionOperand", convention: "required", emptyBehavior: "unavailable_source", forms: ["list", "panel", "sentence"], equivalentSentence: "renderDistributionSentence", tokens: ["ink", "muted", "line", "accent"], checkpointA: "declared_only" }),
-  outcome_split: declaration({ id: "outcome_split", renders: "The three-way result share of a set of games from a stated perspective.", operand: "OutcomeSplitOperand", convention: "required", emptyBehavior: "unavailable_source", forms: ["list", "panel", "sentence"], equivalentSentence: "renderOutcomeSplitSentence", tokens: ["accent", "muted", "line", "ink"], checkpointA: "declared_only" }),
-  magnitude: declaration({ id: "magnitude", renders: "One measured number with its unit, perspective and bound.", operand: "MagnitudeOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "panel", "sentence", "timeline_marker"], equivalentSentence: "renderMagnitudeSentence", tokens: ["ink", "muted"], checkpointA: "implemented" }),
-  magnitude_trail: declaration({ id: "magnitude_trail", renders: "How one measured quantity moved across a branch.", operand: "MagnitudeTrailOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "panel", "timeline_marker"], equivalentSentence: "renderMagnitudeTrailSentence", tokens: ["ink", "muted", "line", "accent"], checkpointA: "declared_only" }),
-  square_set: declaration({ id: "square_set", renders: "Board squares belonging to exactly one admitted fact, with that fact's caption.", operand: "SquareSetOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["list", "panel", "lit_squares", "piece_halo"], equivalentSentence: "renderSquareSetSentence", tokens: ["accent", "accent-soft", "ink"], checkpointA: "declared_only" }),
-  move_path: declaration({ id: "move_path", renders: "An ordered sequence of plies.", operand: "MovePathOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "panel", "arrows", "sentence"], equivalentSentence: "renderMovePathSentence", tokens: ["ink", "accent", "line"], checkpointA: "declared_only" }),
-  relation_overlay: declaration({ id: "relation_overlay", renders: "One admitted directed board relation and only the edges that fact retains.", operand: "RelationOverlayOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["panel", "arrows", "lit_squares", "piece_halo", "sentence"], equivalentSentence: "renderRelationOverlaySentence", tokens: ["accent", "accent-soft", "line", "ink"], checkpointA: "declared_only" }),
-  count_with_denominator: declaration({ id: "count_with_denominator", renders: "A numerator against the base it was drawn from.", operand: "CountWithDenominatorOperand", convention: "required", emptyBehavior: "unavailable_source", forms: ["list", "sentence", "panel"], equivalentSentence: "renderCountSentence", tokens: ["ink", "muted", "accent"], checkpointA: "declared_only" }),
-  citation: declaration({ id: "citation", renders: "One cited passage or authored source with everything the licence requires.", operand: "CitationOperand", convention: "not_applicable", emptyBehavior: "unavailable_source", forms: ["list", "panel", "sentence"], equivalentSentence: "renderCitationSentence", tokens: ["ink", "muted", "line"], checkpointA: "implemented" }),
-  enum_state: declaration({ id: "enum_state", renders: "One member of a closed set, as a human label.", operand: "EnumStateOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["list", "sentence", "panel", "timeline_marker"], equivalentSentence: "renderEnumStateSentence", tokens: ["ink", "muted", "accent", "warning", "danger"], checkpointA: "implemented" }),
-  claim: declaration({ id: "claim", renders: "An authored judgement with its ground attached.", operand: "ClaimOperand", convention: "required", emptyBehavior: "silent", forms: ["list", "panel", "sentence", "audio"], equivalentSentence: "renderClaimSentence", tokens: ["ink", "muted"], checkpointA: "implemented" }),
-  fact_statement: declaration({ id: "fact_statement", renders: "A registered deterministic sentence whose meaning is present in one exact admitted projection.", operand: "FactStatementOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "sentence", "panel", "timeline_marker", "audio"], equivalentSentence: "renderFactStatementSentence", tokens: ["ink", "muted"], checkpointA: "implemented" }),
-  abstention: declaration({ id: "abstention", renders: "The fact that there is nothing to render, and why.", operand: "AbstentionOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["list", "sentence", "panel", "timeline_marker", "lit_squares", "arrows", "piece_halo", "audio"], equivalentSentence: "renderAbstentionSentence", tokens: ["muted", "line"], checkpointA: "implemented" }),
-  structured_document: declaration({ id: "structured_document", renders: "A validated schema-typed object as a read-only labelled viewer.", operand: "StructuredDocumentOperand", convention: "not_applicable", emptyBehavior: "unavailable_source", forms: ["list", "panel"], equivalentSentence: "renderStructuredDocumentSentence", tokens: ["ink", "muted", "line", "panel"], checkpointA: "declared_only" }),
+  distribution: declaration({ id: "distribution", renders: "Ranked candidate moves with their share of a stated population or model output.", operand: "DistributionOperand", convention: "required", emptyBehavior: "unavailable_source", forms: ["list", "panel", "sentence"], equivalentSentence: "renderDistributionSentence", tokens: ["ink", "muted", "line", "accent"], implementation: "implemented" }),
+  outcome_split: declaration({ id: "outcome_split", renders: "The three-way result share of a set of games from a stated perspective.", operand: "OutcomeSplitOperand", convention: "required", emptyBehavior: "unavailable_source", forms: ["list", "panel", "sentence"], equivalentSentence: "renderOutcomeSplitSentence", tokens: ["accent", "muted", "line", "ink"], implementation: "implemented" }),
+  magnitude: declaration({ id: "magnitude", renders: "One measured number with its unit, perspective and bound.", operand: "MagnitudeOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "panel", "sentence", "timeline_marker"], equivalentSentence: "renderMagnitudeSentence", tokens: ["ink", "muted"], implementation: "implemented" }),
+  magnitude_trail: declaration({ id: "magnitude_trail", renders: "How one measured quantity moved across a branch.", operand: "MagnitudeTrailOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "panel", "timeline_marker"], equivalentSentence: "renderMagnitudeTrailSentence", tokens: ["ink", "muted", "line", "accent"], implementation: "implemented" }),
+  square_set: declaration({ id: "square_set", renders: "Board squares belonging to exactly one admitted fact, with that fact's caption.", operand: "SquareSetOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["list", "panel", "lit_squares", "piece_halo"], equivalentSentence: "renderSquareSetSentence", tokens: ["accent", "accent-soft", "ink"], implementation: "implemented" }),
+  move_path: declaration({ id: "move_path", renders: "An ordered sequence of plies.", operand: "MovePathOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "panel", "arrows", "sentence"], equivalentSentence: "renderMovePathSentence", tokens: ["ink", "accent", "line"], implementation: "implemented" }),
+  relation_overlay: declaration({ id: "relation_overlay", renders: "One admitted directed board relation and only the edges that fact retains.", operand: "RelationOverlayOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["panel", "arrows", "lit_squares", "piece_halo", "sentence"], equivalentSentence: "renderRelationOverlaySentence", tokens: ["accent", "accent-soft", "line", "ink"], implementation: "implemented" }),
+  count_with_denominator: declaration({ id: "count_with_denominator", renders: "A numerator against the base it was drawn from.", operand: "CountWithDenominatorOperand", convention: "required", emptyBehavior: "unavailable_source", forms: ["list", "sentence", "panel"], equivalentSentence: "renderCountSentence", tokens: ["ink", "muted", "accent"], implementation: "implemented" }),
+  citation: declaration({ id: "citation", renders: "One cited passage or authored source with everything the licence requires.", operand: "CitationOperand", convention: "not_applicable", emptyBehavior: "unavailable_source", forms: ["list", "panel", "sentence"], equivalentSentence: "renderCitationSentence", tokens: ["ink", "muted", "line"], implementation: "implemented" }),
+  enum_state: declaration({ id: "enum_state", renders: "One member of a closed set, as a human label.", operand: "EnumStateOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["list", "sentence", "panel", "timeline_marker"], equivalentSentence: "renderEnumStateSentence", tokens: ["ink", "muted", "accent", "warning", "danger"], implementation: "implemented" }),
+  claim: declaration({ id: "claim", renders: "An authored judgement with its ground attached.", operand: "ClaimOperand", convention: "required", emptyBehavior: "silent", forms: ["list", "panel", "sentence", "audio"], equivalentSentence: "renderClaimSentence", tokens: ["ink", "muted"], implementation: "implemented" }),
+  fact_statement: declaration({ id: "fact_statement", renders: "A registered deterministic sentence whose meaning is present in one exact admitted projection.", operand: "FactStatementOperand", convention: "required", emptyBehavior: "stated_absence", forms: ["list", "sentence", "panel", "timeline_marker", "audio"], equivalentSentence: "renderFactStatementSentence", tokens: ["ink", "muted"], implementation: "implemented" }),
+  abstention: declaration({ id: "abstention", renders: "The fact that there is nothing to render, and why.", operand: "AbstentionOperand", convention: "not_applicable", emptyBehavior: "stated_absence", forms: ["list", "sentence", "panel", "timeline_marker", "lit_squares", "arrows", "piece_halo", "audio"], equivalentSentence: "renderAbstentionSentence", tokens: ["muted", "line"], implementation: "implemented" }),
+  structured_document: declaration({ id: "structured_document", renders: "A validated schema-typed object as a read-only labelled viewer.", operand: "StructuredDocumentOperand", convention: "not_applicable", emptyBehavior: "unavailable_source", forms: ["list", "panel"], equivalentSentence: "renderStructuredDocumentSentence", tokens: ["ink", "muted", "line", "panel"], implementation: "implemented" }),
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -195,11 +206,42 @@ export const PRESENTATION_CONVENTIONS = Object.freeze({
   "grade-convention@1": { label: "Tabiya's grade convention" },
   "recorded-semantic-path@1": { label: "Tabiya's recorded-path detectors" },
   "authored-claim@1": { label: "the pack author's claim" },
+  // Checkpoint B: the declared conventions module facts render under (learner vocabulary, §6a).
+  "board-rules@1": { label: "the rules of chess" },
+  "pawn-structure@1": { label: "the declared pawn-structure convention" },
+  "piece-geometry@1": { label: "the declared piece-geometry convention" },
+  "threat-convention@1": { label: "the declared one-move threat convention" },
+  "phase-bands@1": { label: "the declared game-phase convention" },
+  "endgame-convention@1": { label: "the declared endgame convention" },
+  "structure-catalogue@1": { label: "the declared structure catalogue" },
+  "shape-catalogue@1": { label: "the cited shape catalogue" },
+  "opening-catalogue@1": { label: "the cited opening catalogue" },
+  "recorded-comparison@1": { label: "the recorded attempts" },
+  "recorded-engine@1": { label: "a stored engine reading" },
 } as const);
 export type PresentationConventionId = keyof typeof PRESENTATION_CONVENTIONS;
 
+/** The exact population a corpus count was drawn from (`CorpusPopulation`, retained whole). */
+export interface PopulationDescriptor {
+  readonly source: "lichess-explorer";
+  readonly ratings: readonly number[];
+  readonly speeds: readonly string[];
+  readonly since: string;
+  readonly until: string;
+}
+
+/**
+ * §5a. Inline correction (2026-09-24, pin encoding): the shipped human-model and corpus pages carry
+ * their model identity/band and their population, not a provider execution receipt, so those arms
+ * retain exactly what the page retains; `recorded_search` is the legacy recorded engine reading that
+ * predates exact provider receipts (its engine identity is retained when the reading carries one).
+ */
 export type ConventionBasis =
   | { readonly kind: "search"; readonly execution: StockfishExecutionReceiptRef }
+  | { readonly kind: "recorded_search"; readonly engine: { readonly name: string; readonly version: string } | null; readonly depth: number | null }
+  | { readonly kind: "tablebase_exact"; readonly source: "syzygy" }
+  | { readonly kind: "human_model"; readonly model: { readonly name: string; readonly version: string }; readonly band: number | null }
+  | { readonly kind: "human_population"; readonly population: PopulationDescriptor; readonly sampleSize: number }
   | { readonly kind: "declared"; readonly convention: PresentationConventionId };
 
 export interface ConventionReceipt {
@@ -224,9 +266,22 @@ export interface MagnitudeOperand {
   readonly convention: ConventionReceipt;
   readonly saturated: boolean;
 }
+/** §3.1 per-row withholding: the row stays visible, its share is not drawn. */
+export type DistributionWithheldReason = "below_outcome_floor";
+export const DISTRIBUTION_RESIDUAL_LABELS = Object.freeze({
+  other_moves: { label: "other moves" },
+  unlisted_mass: { label: "moves the model left unlisted" },
+} as const);
+export type DistributionResidualLabelId = keyof typeof DISTRIBUTION_RESIDUAL_LABELS;
 export interface DistributionOperand {
-  readonly rows: readonly { readonly move: { readonly san: string; readonly uci: string }; readonly share: number; readonly count?: number }[];
-  readonly residual: { readonly share: number; readonly label: string } | null;
+  readonly rows: readonly {
+    readonly move: { readonly san: string; readonly uci: string };
+    /** 0..1, never pre-formatted; for a corpus basis it is recomputed from `count / sampleSize`. */
+    readonly share: number;
+    readonly count?: number;
+    readonly withheld?: DistributionWithheldReason;
+  }[];
+  readonly residual: { readonly share: number; readonly label: DistributionResidualLabelId } | null;
   readonly convention: ConventionReceipt;
   readonly highlight: { readonly uci: string; readonly why: "learner_committed" | "position_in_view" } | null;
 }
@@ -236,21 +291,90 @@ export interface OutcomeSplitOperand {
   readonly convention: ConventionReceipt;
   readonly floor: { readonly threshold: number; readonly met: boolean };
 }
+
+/**
+ * §3.4 `MAGNITUDE_SCALE_POLICIES`: the registered, fixed measurement domain of every trail. The
+ * component derives pixels from the policy; no caller supplies a range ([[D1671]]).
+ */
+export const MAGNITUDE_SCALE_POLICIES = Object.freeze({
+  "centipawn-clamp-800@1": { unit: "centipawn", extent: 800, zero: "centered", saturation: "clamp_to_extent", label: "±8 pawns, clamped" },
+  "mate-distance-10@1": { unit: "mate_in", extent: 10, zero: "centered", saturation: "clamp_to_extent", label: "mate within 10 moves, clamped" },
+} as const);
+export type MagnitudeScalePolicyId = keyof typeof MAGNITUDE_SCALE_POLICIES;
 export interface MagnitudeTrailOperand {
   readonly points: readonly { readonly plyOffset: number; readonly magnitude: MagnitudeOperand }[];
+  /** Asserted equal (canonical bytes) to every point's own convention. */
   readonly convention: ConventionReceipt;
-  readonly scalePolicy: string;
+  readonly scalePolicy: MagnitudeScalePolicyId;
 }
-export interface SquareSetOperand { readonly squares: readonly string[]; readonly brush: string; readonly owner: { readonly factRef: string }; readonly ordered: false }
-export interface MovePathOperand { readonly plies: readonly { readonly ply: number; readonly san: string; readonly uci: string }[]; readonly convention?: ConventionReceipt; readonly answerDistance: AnswerDistance; readonly origin: "recorded" | "authored" | "learner_played" }
+
+/**
+ * §3.5. Inline correction (2026-09-24): the caption "rendered from the sealed component by the
+ * projection adapter's registered sentence renderer" needs the renderer's identity and operands to
+ * travel inside the operand, so `caption` is a sealed `fact_statement` operand recomputed on parse.
+ */
+export interface SquareSetOperand {
+  readonly squares: readonly SquareName[];
+  readonly brush: MarkBrush;
+  readonly owner: { readonly factRef: string };
+  readonly ordered: false;
+  readonly caption: FactStatementOperand;
+}
+export interface MovePathOperand {
+  readonly plies: readonly { readonly ply: number; readonly san: string; readonly uci: string }[];
+  readonly convention?: ConventionReceipt;
+  readonly answerDistance: AnswerDistance;
+  readonly origin: "recorded" | "authored" | "learner_played";
+}
+
+export const BOARD_RELATION_KINDS = Object.freeze(["controls", "attacks", "defends", "screens", "pins", "skewers", "threatens", "moves_to", "opens_ray", "closes_ray"] as const);
+export type BoardRelationKind = (typeof BOARD_RELATION_KINDS)[number];
 export interface RelationOverlayOperand {
-  readonly nodes: readonly { readonly square: string; readonly emphasis: "source" | "target" | "screen" | "context" }[];
-  readonly edges: readonly { readonly from: string; readonly to: string; readonly relation: string; readonly sign: "state" | "gained" | "lost" }[];
+  readonly nodes: readonly {
+    readonly square: SquareName;
+    readonly role?: Role;
+    readonly color?: Color;
+    readonly emphasis: "source" | "target" | "screen" | "context";
+  }[];
+  readonly edges: readonly {
+    readonly from: SquareName;
+    readonly to: SquareName;
+    readonly relation: BoardRelationKind;
+    readonly sign: "state" | "gained" | "lost";
+  }[];
   readonly owner: { readonly factRef: string };
   readonly answerDistance: AnswerDistance;
+  /** Declared-convention relations carry their convention inside the operand (§3.6a). */
+  readonly convention?: ConventionReceipt;
 }
-export interface CountWithDenominatorOperand { readonly numerator: number; readonly denominator: number; readonly denominatorMeaning: string }
-export interface StructuredDocumentOperand { readonly schemaId: string; readonly canonicalBytes: string; readonly digest: string }
+
+/** §3.7: the denominator meaning IS the convention; a registered label keyed by the exact adapter. */
+export const DENOMINATOR_MEANINGS = Object.freeze({
+  games_in_population: { label: "games in this population" },
+  legal_replies: { label: "legal replies" },
+  legal_moves: { label: "legal moves" },
+  attackers: { label: "attacking pieces" },
+} as const);
+export type DenominatorMeaningId = keyof typeof DENOMINATOR_MEANINGS;
+export interface CountWithDenominatorOperand {
+  readonly numerator: number;
+  readonly denominator: number;
+  readonly denominatorMeaning: DenominatorMeaningId;
+  readonly floor?: { readonly threshold: number; readonly met: boolean };
+}
+
+/**
+ * §3.12 `STRUCTURED_DOCUMENT_SCHEMAS` (owned beside the author/operator adapters that construct
+ * them): literal schema ids, each with its role ceiling and a closed field list.
+ */
+export { STRUCTURED_DOCUMENT_SCHEMAS };
+export type StructuredDocumentSchemaId = keyof typeof STRUCTURED_DOCUMENT_SCHEMAS;
+export interface StructuredDocumentOperand {
+  readonly schemaId: StructuredDocumentSchemaId;
+  readonly document: Readonly<Record<string, PresentationJsonValue>>;
+  readonly canonicalBytes: string;
+  readonly digest: string;
+}
 
 /** `EvidenceFieldBinding`: the admitted projection, retained text field and the exact value digests. */
 export interface EvidenceFieldBinding {
@@ -279,7 +403,7 @@ export interface ClaimOperand {
 }
 
 // Fact-statement renderers (§3.10a): literal ids, typed operands, one deterministic template each.
-export interface FactOperandsByRenderer {
+interface BaseFactOperands {
   readonly "story.pivotal_marker@1": PivotalMarker;
   readonly "story.shape_firing@1": Pick<ShapeFiring, "entryId">;
   readonly "story.endgame_classification@1": EndgameClassification;
@@ -292,6 +416,11 @@ export interface FactOperandsByRenderer {
   readonly "module.move_quality_grade@1": MoveQualityGrade;
   readonly "module.recorded_relation@1": { readonly relation: RecordedRelationLabelId; readonly grounding: EvidenceGrounding };
 }
+/** The closed renderer registry: the Checkpoint-A renderers plus every group's registered renderers. */
+export type FactOperandsByRenderer = BaseFactOperands
+  & FactOperandsOf<typeof PLAY_FACT_RENDERERS>
+  & FactOperandsOf<typeof INSPECTOR_FACT_RENDERERS>
+  & FactOperandsOf<typeof CONSUMER_FACT_RENDERERS>;
 export type FactStatementRendererId = keyof FactOperandsByRenderer;
 export type FactStatementOperand = {
   [R in FactStatementRendererId]: Readonly<{
@@ -410,7 +539,23 @@ const MATE_CHANGE_PHRASES: Readonly<Record<ReviewMateTransition["changes"][numbe
 });
 
 type FactRenderer<R extends FactStatementRendererId> = (operands: FactOperandsByRenderer[R]) => string;
+type GroupRenderers = Readonly<Record<string, FactRendererDefinition<unknown>>>;
+const GROUP_FACT_RENDERERS: GroupRenderers = Object.freeze({ ...PLAY_FACT_RENDERERS, ...INSPECTOR_FACT_RENDERERS, ...CONSUMER_FACT_RENDERERS } as unknown as GroupRenderers);
+const groupRender = (): Readonly<Record<string, (operands: unknown) => string>> => Object.fromEntries(Object.entries(GROUP_FACT_RENDERERS).map(([id, definition]) => [id, definition.render]));
+const groupParse = (): Readonly<Record<string, (operands: unknown) => unknown>> => Object.fromEntries(Object.entries(GROUP_FACT_RENDERERS).map(([id, definition]) => [id, (value: unknown) => {
+  try {
+    return definition.parse(value, id);
+  } catch (error) {
+    if (error instanceof PresentationSchemaError) throw new PresentationError("PRESENTATION_INVALID", error.message.replace(/^PRESENTATION_INVALID: /u, ""));
+    throw error;
+  }
+}]));
+{
+  const groups = [PLAY_FACT_RENDERERS, INSPECTOR_FACT_RENDERERS, CONSUMER_FACT_RENDERERS].flatMap((group) => Object.keys(group));
+  if (new Set(groups).size !== groups.length) throw new PresentationError("PRESENTATION_UNREGISTERED", "two renderer groups register the same fact renderer id");
+}
 const FACT_RENDERERS: { readonly [R in FactStatementRendererId]: FactRenderer<R> } = Object.freeze({
+  ...(groupRender() as unknown as { readonly [R in Exclude<FactStatementRendererId, keyof BaseFactOperands>]: FactRenderer<R> }),
   "story.pivotal_marker@1": (marker) => renderPivotalMarker(marker).join(" "),
   "story.shape_firing@1": (firing) => renderShapeFiring(firing).join(" "),
   "story.endgame_classification@1": (reading) => renderEndgameClassification(reading).join(" "),
@@ -437,6 +582,8 @@ function abstentionSentence(operand: AbstentionOperand): string {
 
 function magnitudeSentence(operand: MagnitudeOperand): string {
   const basis = operand.convention.basis;
+  const quantityKey = `${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`;
+  if (quantityKey !== "derived.review.eval_delta@1" && quantityKey !== "derived.review.eval_point@1") return genericMagnitudeSentence(operand);
   if (basis.kind !== "search") throw new PresentationError("PRESENTATION_INVALID", "an engine magnitude requires a search convention");
   const attribution = `${engineLabel(basis.execution.engine)}, ${presentSearchBound(basis.execution.bound)}`;
   const quantity = `${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`;
@@ -466,6 +613,132 @@ function citationSentence(operand: CitationOperand): string {
   return `“${operand.content.text}” — ${source.title}, ${source.locator} (${source.licence}; revision ${source.revision}).`;
 }
 
+// ---------------------------------------------------------------------------------------------
+// The eight Checkpoint-B components' equivalent sentences (§3.1–§3.7, §3.12)
+// ---------------------------------------------------------------------------------------------
+
+/** A share as a whole percentage; never a caller-supplied percentage (criterion 8). */
+export function formatShare(share: number): string {
+  if (share > 0 && share < 0.005) return "under 1%";
+  return `${Math.round(share * 100)}%`;
+}
+
+const SPEED_LABELS: Readonly<Record<string, string>> = Object.freeze({ ultraBullet: "ultra-bullet", bullet: "bullet", blitz: "blitz", rapid: "rapid", classical: "classical", correspondence: "correspondence" });
+
+function populationPhrase(population: PopulationDescriptor): string {
+  const speeds = population.speeds.map((speed) => SPEED_LABELS[speed] ?? "other").join(", ");
+  const ratings = population.ratings.length === 0 ? "all ratings" : `rating bands ${population.ratings.join(", ")}`;
+  return `Lichess opening-explorer games (${ratings}; ${speeds}; ${population.since} to ${population.until})`;
+}
+
+const countOf = (count: number, noun: string): string => `${count} ${count === 1 ? noun : `${noun}s`}`;
+
+/** §5c/§5d: the registered attribution of a convention, rendered inside the component. */
+export function conventionAttribution(convention: ConventionReceipt): string {
+  const basis = convention.basis;
+  switch (basis.kind) {
+    case "search": return `${engineLabel(basis.execution.engine)}, ${presentSearchBound(basis.execution.bound)}`;
+    case "recorded_search": return `${basis.engine === null ? "stored engine reading" : engineLabel(basis.engine)}${basis.depth === null ? "" : `, depth ${basis.depth}`}`;
+    case "tablebase_exact": return "exact Syzygy tablebase";
+    case "human_model": return `${engineLabel(basis.model)}${basis.band === null ? "" : ` at ${basis.band} rating`}`;
+    case "human_population": return `${countOf(basis.sampleSize, "game")} from ${populationPhrase(basis.population)}`;
+    case "declared": return PRESENTATION_CONVENTIONS[basis.convention].label;
+  }
+}
+
+const PERSPECTIVE_PHRASES: Readonly<Record<ConventionReceipt["perspective"], string>> = Object.freeze({
+  white: " from White's side", black: " from Black's side", side_to_move: " from the side to move", learner: " from your side", not_applicable: "",
+});
+
+function magnitudeValueText(operand: MagnitudeOperand): string {
+  switch (operand.unit.kind) {
+    case "centipawn": return pawns(operand.value);
+    case "mate_in": return `mate in ${Math.abs(operand.value)} for ${operand.value > 0 ? "White" : "Black"}`;
+    case "percent": return `${operand.value}%`;
+    case "count": return String(operand.value);
+    case "elo": return `${operand.value} rating`;
+    case "clock_ms": { const seconds = Math.floor(operand.value / 1000); return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`; }
+    case "distance_to_zero": return `distance ${operand.value}`;
+  }
+}
+
+/** Registered quantity labels keyed by exact source projection; no label means unrenderable. */
+const MAGNITUDE_QUANTITIES: Readonly<Record<string, { readonly label: string }>> = Object.freeze({ ...PLAY_MAGNITUDE_QUANTITIES, ...INSPECTOR_MAGNITUDE_QUANTITIES });
+
+function genericMagnitudeSentence(operand: MagnitudeOperand): string {
+  const quantity = MAGNITUDE_QUANTITIES[`${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`];
+  if (quantity === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", "magnitude quantity has no registered sentence");
+  return `${quantity.label}: ${magnitudeValueText(operand)}${operand.saturated ? " (at the instrument's limit)" : ""}${PERSPECTIVE_PHRASES[operand.convention.perspective]} (${conventionAttribution(operand.convention)}).`;
+}
+
+function distributionSentence(operand: DistributionOperand): string {
+  const rows = operand.rows.map((row) => row.withheld === undefined ? `${row.move.san} ${formatShare(row.share)}` : `${row.move.san} (below the outcome floor)`);
+  const residual = operand.residual === null ? [] : [`${DISTRIBUTION_RESIDUAL_LABELS[operand.residual.label].label} ${formatShare(operand.residual.share)}`];
+  const highlighted = operand.highlight === null ? undefined : operand.rows.find((row) => row.move.uci === operand.highlight!.uci);
+  const highlight = operand.highlight === null || highlighted === undefined ? "" : ` ${highlighted.move.san} is ${operand.highlight.why === "learner_committed" ? "the move you played" : "the move in view"}.`;
+  return `Move shares (${conventionAttribution(operand.convention)}): ${listPhrase([...rows, ...residual])}.${highlight}`;
+}
+
+function outcomeSplitSentence(operand: OutcomeSplitOperand): string {
+  if (operand.total === 0) return "No games from this population reached this position.";
+  if (!operand.floor.met) return `${countOf(operand.total, "game")} recorded here — below the ${operand.floor.threshold}-game floor. No frequencies are shown.`;
+  const share = (count: number): string => formatShare(count / operand.total);
+  return `Results of ${countOf(operand.total, "game")} (${conventionAttribution(operand.convention)}): White won ${share(operand.white)}, drawn ${share(operand.draws)}, Black won ${share(operand.black)}.`;
+}
+
+function magnitudeTrailSentence(operand: MagnitudeTrailOperand): string {
+  const points = operand.points.map((point) => `after ply ${point.plyOffset} ${magnitudeValueText(point.magnitude)}`);
+  const quantity = MAGNITUDE_QUANTITIES[`${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`]?.label ?? "Recorded evaluation";
+  return `${quantity} across this branch${PERSPECTIVE_PHRASES[operand.convention.perspective]}: ${points.join("; ")} (${conventionAttribution(operand.convention)}).`;
+}
+
+const MOVE_PATH_ORIGINS: Readonly<Record<MovePathOperand["origin"], string>> = Object.freeze({ recorded: "Recorded line", authored: "Authored line", learner_played: "Your line" });
+
+function movePathSentence(operand: MovePathOperand): string {
+  const line = operand.plies.map((ply) => ply.san).join(" ");
+  return `${MOVE_PATH_ORIGINS[operand.origin]}: ${line}${operand.convention === undefined ? "" : ` (${conventionAttribution(operand.convention)})`}.`;
+}
+
+/** §3.6a: registered relation phrases; the renderer names only retained endpoints. */
+export const RELATION_PHRASES: Readonly<Record<BoardRelationKind, Readonly<Record<"state" | "gained" | "lost", string>>>> = Object.freeze({
+  controls: { state: "controls", gained: "now controls", lost: "no longer controls" },
+  attacks: { state: "attacks", gained: "now attacks", lost: "no longer attacks" },
+  defends: { state: "defends", gained: "now defends", lost: "no longer defends" },
+  screens: { state: "screens", gained: "now screens", lost: "no longer screens" },
+  pins: { state: "pins", gained: "now pins", lost: "no longer pins" },
+  skewers: { state: "skewers", gained: "now skewers", lost: "no longer skewers" },
+  threatens: { state: "can capture", gained: "can now capture", lost: "can no longer capture" },
+  moves_to: { state: "can move to", gained: "can now move to", lost: "can no longer move to" },
+  opens_ray: { state: "has an open line to", gained: "opens a line to", lost: "loses its line to" },
+  closes_ray: { state: "blocks the line to", gained: "now blocks the line to", lost: "no longer blocks the line to" },
+});
+
+function relationNodePhrase(operand: RelationOverlayOperand, square: SquareName): string {
+  const node = operand.nodes.find((candidate) => candidate.square === square);
+  if (node?.role !== undefined && node.color !== undefined) return `${SIDE_NAMES[node.color]}'s ${ROLE_NAMES[node.role]} on ${square}`;
+  return square;
+}
+
+function relationOverlaySentence(operand: RelationOverlayOperand): string {
+  const edges = operand.edges.map((edge) => `${relationNodePhrase(operand, edge.from)} ${RELATION_PHRASES[edge.relation][edge.sign]} ${relationNodePhrase(operand, edge.to)}`);
+  const joined = new Set<string>(operand.edges.flatMap((edge) => [edge.from, edge.to]));
+  const context = operand.nodes.filter((node) => !joined.has(node.square)).map((node) => relationNodePhrase(operand, node.square));
+  const body = `${listPhrase(edges)}${context.length === 0 ? "" : `, with ${listPhrase(context)} on the same line`}`;
+  return `${body.slice(0, 1).toUpperCase()}${body.slice(1)}${operand.convention === undefined ? "" : ` (${conventionAttribution(operand.convention)})`}.`;
+}
+
+function countSentence(operand: CountWithDenominatorOperand): string {
+  const meaning = DENOMINATOR_MEANINGS[operand.denominatorMeaning].label;
+  if (operand.denominator === 0) return `${operand.numerator} of 0 ${meaning}: nothing to count against.`;
+  if (operand.floor !== undefined && !operand.floor.met) return `${operand.numerator} of ${operand.denominator} ${meaning} — below the ${operand.floor.threshold} floor; no share is shown.`;
+  return `${operand.numerator} of ${operand.denominator} ${meaning} (${formatShare(operand.numerator / operand.denominator)}).`;
+}
+
+function structuredDocumentSentence(operand: StructuredDocumentOperand): string {
+  const schema = STRUCTURED_DOCUMENT_SCHEMAS[operand.schemaId];
+  return `${schema.label}: a read-only record with ${countOf(schema.fields.length, "field")}.`;
+}
+
 /** The equivalent sentence of one component, computed only from its operand (criterion 16). */
 function componentSentence(component: ComponentValue): string {
   switch (component.id) {
@@ -475,7 +748,14 @@ function componentSentence(component: ComponentValue): string {
     case "claim": return claimSentence(component.operand);
     case "citation": return citationSentence(component.operand);
     case "enum_state": return (LABEL_VOCABULARIES[component.operand.vocabulary] as LabelVocabulary<string>)[component.operand.value]!.label;
-    default: throw new PresentationError("PRESENTATION_UNREGISTERED", `${component.id} has no Checkpoint-A renderer`);
+    case "distribution": return distributionSentence(component.operand);
+    case "outcome_split": return outcomeSplitSentence(component.operand);
+    case "magnitude_trail": return magnitudeTrailSentence(component.operand);
+    case "square_set": return component.operand.caption.renderedText;
+    case "move_path": return movePathSentence(component.operand);
+    case "relation_overlay": return relationOverlaySentence(component.operand);
+    case "count_with_denominator": return countSentence(component.operand);
+    case "structured_document": return structuredDocumentSentence(component.operand);
   }
 }
 
@@ -552,7 +832,7 @@ function parseConvention(value: unknown): ConventionReceipt {
   } else if (basisRecord.kind === "declared") {
     const wrapper = exact(item.basis, ["kind", "convention"], [], "convention.basis");
     basis = { kind: "declared", convention: oneOf(wrapper.convention, Object.keys(PRESENTATION_CONVENTIONS) as PresentationConventionId[], "convention id") };
-  } else throw new PresentationError("PRESENTATION_INVALID", "convention basis kind is outside search | declared");
+  } else basis = parseConventionBasis(item.basis);
   return { producer: versioned(item.producer, "convention.producer"), sourceProjection: versioned(item.sourceProjection, "convention.sourceProjection"), sourceEvidenceDigest: digestText(item.sourceEvidenceDigest, "sourceEvidenceDigest"), perspective: oneOf(item.perspective, ["white", "black", "side_to_move", "learner", "not_applicable"], "perspective"), basis };
 }
 
@@ -581,6 +861,7 @@ function parseScoreReceipt(value: unknown): ReviewScoreReceipt {
  * renderer needs; the client re-renders and byte-checks `renderedText`.
  */
 const FACT_OPERAND_PARSERS: { readonly [R in FactStatementRendererId]: (value: unknown) => FactOperandsByRenderer[R] } = Object.freeze({
+  ...(groupParse() as unknown as { readonly [R in Exclude<FactStatementRendererId, keyof BaseFactOperands>]: (value: unknown) => FactOperandsByRenderer[R] }),
   "story.pivotal_marker@1": (value) => { const item = exact(value, ["nodeId", "kind", "detail", "provenanceNote"], [], "marker"); oneOf(item.kind, ["irreversibility", "phase_change", "human_divergence", "option_collapse"], "marker.kind"); if (!isRecord(item.detail)) throw new PresentationError("PRESENTATION_INVALID", "marker.detail must be an object"); text(item.nodeId, "marker.nodeId"); text(item.provenanceNote, "marker.provenanceNote"); return item as unknown as PivotalMarker; },
   "story.shape_firing@1": (value) => { const item = exact(value, ["entryId"], [], "shape firing"); return { entryId: text(item.entryId, "entryId") }; },
   "story.endgame_classification@1": (value) => { const item = exact(value, ["fen", "type", "conventionId", "provenanceNote"], [], "endgame"); text(item.fen, "endgame.fen"); if (item.type !== null) { const type = exact(item.type, ["id", "label"], [], "endgame.type"); oneOf(type.id, ["pawn", "rook-and-pawn-vs-rook", "rook", "queen", "minor"], "endgame.type.id"); text(type.label, "endgame.type.label"); } if (item.conventionId !== "endgame-material-census@1") throw new PresentationError("PRESENTATION_INVALID", "endgame convention is not registered"); text(item.provenanceNote, "endgame.provenanceNote"); return item as unknown as EndgameClassification; },
@@ -660,20 +941,173 @@ function parseEnumState(value: unknown): EnumStateOperand {
   return { vocabulary, value: oneOf(item.value, members, `${vocabulary} value`) } as EnumStateOperand;
 }
 
-const COMPONENT_PARSERS: Partial<{ readonly [C in ComponentId]: (value: unknown) => ComponentOperandMap[C] }> = Object.freeze({
+// ---------------------------------------------------------------------------------------------
+// The eight Checkpoint-B component parsers (strict, closed; construction and wire share them)
+// ---------------------------------------------------------------------------------------------
+
+const SQUARE_NAME = /^[a-h][1-8]$/u;
+const UCI_MOVE = /^[a-h][1-8][a-h][1-8][qrbn]?$/u;
+const squareName = (value: unknown, label: string): SquareName => { if (typeof value !== "string" || !SQUARE_NAME.test(value)) throw new PresentationError("PRESENTATION_INVALID", `${label} must be a square name`); return value as SquareName; };
+const uciMove = (value: unknown, label: string): string => { if (typeof value !== "string" || !UCI_MOVE.test(value)) throw new PresentationError("PRESENTATION_INVALID", `${label} must be canonical UCI`); return value; };
+const share01 = (value: unknown, label: string): number => { if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) throw new PresentationError("PRESENTATION_INVALID", `${label} must be a share in [0, 1]`); return value; };
+const nonNegative = (value: unknown, label: string): number => { const number = safeInt(value, label); if (number < 0) throw new PresentationError("PRESENTATION_INVALID", `${label} must be non-negative`); return number; };
+const ANSWER_DISTANCES: readonly AnswerDistance[] = Object.freeze(["fact", "pattern", "threat", "theory", "evaluation", "principle", "plan", "candidate_moves", "ranked_moves", "move", "principal_variation"]);
+
+function parseConventionBasis(value: unknown): ConventionBasis {
+  const record = isRecord(value) ? value : {};
+  switch (record.kind) {
+    case "recorded_search": {
+      const item = exact(value, ["kind", "engine", "depth"], [], "convention.basis");
+      return { kind: "recorded_search", engine: item.engine === null ? null : parseEngine(item.engine), depth: item.depth === null ? null : nonNegative(item.depth, "depth") };
+    }
+    case "tablebase_exact": {
+      const item = exact(value, ["kind", "source"], [], "convention.basis");
+      return { kind: "tablebase_exact", source: oneOf(item.source, ["syzygy"], "tablebase source") };
+    }
+    case "human_model": {
+      const item = exact(value, ["kind", "model", "band"], [], "convention.basis");
+      return { kind: "human_model", model: parseEngine(item.model), band: item.band === null ? null : nonNegative(item.band, "band") };
+    }
+    case "human_population": {
+      const item = exact(value, ["kind", "population", "sampleSize"], [], "convention.basis");
+      const population = exact(item.population, ["source", "ratings", "speeds", "since", "until"], [], "population");
+      if (!Array.isArray(population.ratings) || !Array.isArray(population.speeds)) throw new PresentationError("PRESENTATION_INVALID", "population ratings and speeds are arrays");
+      return {
+        kind: "human_population",
+        population: { source: oneOf(population.source, ["lichess-explorer"], "population.source"), ratings: population.ratings.map((rating) => nonNegative(rating, "rating")), speeds: population.speeds.map((speed) => text(speed, "speed")), since: text(population.since, "since"), until: text(population.until, "until") },
+        sampleSize: nonNegative(item.sampleSize, "sampleSize"),
+      };
+    }
+    default: throw new PresentationError("PRESENTATION_INVALID", "convention basis kind is outside the registered arms");
+  }
+}
+
+function parseDistribution(value: unknown): DistributionOperand {
+  const item = exact(value, ["rows", "residual", "convention", "highlight"], [], "distribution");
+  if (!Array.isArray(item.rows) || item.rows.length === 0) throw new PresentationError("PRESENTATION_INVALID", "a distribution has at least one row; empty is an abstention");
+  const rows = item.rows.map((row, index) => {
+    const entry = exact(row, ["move", "share"], ["count", "withheld"], `rows[${index}]`);
+    const move = exact(entry.move, ["san", "uci"], [], `rows[${index}].move`);
+    return {
+      move: { san: text(move.san, "san"), uci: uciMove(move.uci, "uci") },
+      share: share01(entry.share, "share"),
+      ...(entry.count === undefined ? {} : { count: nonNegative(entry.count, "count") }),
+      ...(entry.withheld === undefined ? {} : { withheld: oneOf(entry.withheld, ["below_outcome_floor"], "withheld") }),
+    };
+  });
+  if (new Set(rows.map((row) => row.move.uci)).size !== rows.length) throw new PresentationError("PRESENTATION_INVALID", "distribution rows repeat a move");
+  const residual = item.residual === null ? null : (() => { const entry = exact(item.residual, ["share", "label"], [], "residual"); return { share: share01(entry.share, "residual.share"), label: oneOf(entry.label, Object.keys(DISTRIBUTION_RESIDUAL_LABELS) as DistributionResidualLabelId[], "residual.label") }; })();
+  const total = rows.reduce((sum, row) => sum + row.share, 0) + (residual?.share ?? 0);
+  if (total > 1.000001) throw new PresentationError("PRESENTATION_INVALID", "distribution shares exceed the whole");
+  const highlight = item.highlight === null ? null : (() => { const entry = exact(item.highlight, ["uci", "why"], [], "highlight"); return { uci: uciMove(entry.uci, "highlight.uci"), why: oneOf(entry.why, ["learner_committed", "position_in_view"], "highlight.why") }; })();
+  return { rows, residual, convention: parseConvention(item.convention), highlight };
+}
+
+function parseOutcomeSplit(value: unknown): OutcomeSplitOperand {
+  const item = exact(value, ["white", "draws", "black", "total", "perspective", "convention", "floor"], [], "outcome_split");
+  const white = nonNegative(item.white, "white"), draws = nonNegative(item.draws, "draws"), black = nonNegative(item.black, "black"), total = nonNegative(item.total, "total");
+  if (white + draws + black !== total) throw new PresentationError("PRESENTATION_INVALID", "outcome split does not sum to its total");
+  const floor = exact(item.floor, ["threshold", "met"], [], "floor");
+  const threshold = nonNegative(floor.threshold, "floor.threshold");
+  if (typeof floor.met !== "boolean" || floor.met !== total >= threshold) throw new PresentationError("PRESENTATION_INVALID", "floor.met disagrees with the total");
+  return { white, draws, black, total, perspective: oneOf(item.perspective, ["white", "black", "side_to_move"], "perspective"), convention: parseConvention(item.convention), floor: { threshold, met: floor.met } };
+}
+
+function parseMagnitudeTrail(value: unknown): MagnitudeTrailOperand {
+  const item = exact(value, ["points", "convention", "scalePolicy"], [], "magnitude_trail");
+  if (!Array.isArray(item.points) || item.points.length < 2) throw new PresentationError("PRESENTATION_INVALID", "a trail has at least two points; one point is a magnitude");
+  const convention = parseConvention(item.convention);
+  const policy = oneOf(item.scalePolicy, Object.keys(MAGNITUDE_SCALE_POLICIES) as MagnitudeScalePolicyId[], "scalePolicy");
+  const conventionBytes = canonicalizeJson(withoutUndefined(convention));
+  const points = item.points.map((point, index) => {
+    const entry = exact(point, ["plyOffset", "magnitude"], [], `points[${index}]`);
+    const magnitude = parseMagnitude(entry.magnitude);
+    if (canonicalizeJson(withoutUndefined(magnitude.convention)) !== conventionBytes) throw new PresentationError("PRESENTATION_INVALID", "a trail mixes two conventions");
+    if (magnitude.unit.kind !== MAGNITUDE_SCALE_POLICIES[policy].unit) throw new PresentationError("PRESENTATION_INVALID", "a trail point's unit is outside its scale policy");
+    return { plyOffset: nonNegative(entry.plyOffset, "plyOffset"), magnitude };
+  });
+  for (let index = 1; index < points.length; index += 1) if (points[index]!.plyOffset <= points[index - 1]!.plyOffset) throw new PresentationError("PRESENTATION_INVALID", "trail points must be ordered by ply");
+  return { points, convention, scalePolicy: policy };
+}
+
+function parseSquareSet(value: unknown): SquareSetOperand {
+  const item = exact(value, ["squares", "brush", "owner", "ordered", "caption"], [], "square_set");
+  if (!Array.isArray(item.squares) || item.squares.length === 0) throw new PresentationError("PRESENTATION_INVALID", "a square set lights at least one square; empty is an abstention");
+  const squares = item.squares.map((square, index) => squareName(square, `squares[${index}]`));
+  if (new Set(squares).size !== squares.length) throw new PresentationError("PRESENTATION_INVALID", "square set squares are deduplicated at construction");
+  if (item.ordered !== false) throw new PresentationError("PRESENTATION_INVALID", "a square set is never ordered");
+  const owner = exact(item.owner, ["factRef"], [], "owner");
+  return { squares, brush: oneOf(item.brush, MARK_BRUSHES, "brush"), owner: { factRef: digestText(owner.factRef, "owner.factRef") }, ordered: false, caption: parseFactStatement(item.caption) };
+}
+
+function parseMovePath(value: unknown): MovePathOperand {
+  const item = exact(value, ["plies", "answerDistance", "origin"], ["convention"], "move_path");
+  if (!Array.isArray(item.plies) || item.plies.length === 0) throw new PresentationError("PRESENTATION_INVALID", "a move path has at least one ply");
+  const plies = item.plies.map((ply, index) => { const entry = exact(ply, ["ply", "san", "uci"], [], `plies[${index}]`); return { ply: nonNegative(entry.ply, "ply"), san: text(entry.san, "san"), uci: uciMove(entry.uci, "uci") }; });
+  const origin = oneOf(item.origin, ["recorded", "authored", "learner_played"], "origin");
+  if (origin !== "learner_played" && item.convention === undefined) throw new PresentationError("PRESENTATION_INVALID", "a recorded or authored path carries its convention");
+  return { plies, answerDistance: oneOf(item.answerDistance, ANSWER_DISTANCES, "answerDistance"), origin, ...(item.convention === undefined ? {} : { convention: parseConvention(item.convention) }) };
+}
+
+function parseRelationOverlay(value: unknown): RelationOverlayOperand {
+  const item = exact(value, ["nodes", "edges", "owner", "answerDistance"], ["convention"], "relation_overlay");
+  if (!Array.isArray(item.nodes) || item.nodes.length === 0 || !Array.isArray(item.edges) || item.edges.length === 0) throw new PresentationError("PRESENTATION_INVALID", "a relation overlay has nodes and at least one retained edge");
+  const nodes = item.nodes.map((node, index) => {
+    const entry = exact(node, ["square", "emphasis"], ["role", "color"], `nodes[${index}]`);
+    return { square: squareName(entry.square, "node.square"), emphasis: oneOf(entry.emphasis, ["source", "target", "screen", "context"], "emphasis"), ...(entry.role === undefined ? {} : { role: oneOf(entry.role, ["pawn", "knight", "bishop", "rook", "queen", "king"] as Role[], "role") }), ...(entry.color === undefined ? {} : { color: oneOf(entry.color, ["white", "black"] as Color[], "color") }) };
+  });
+  const members = new Set(nodes.map((node) => node.square));
+  if (members.size !== nodes.length) throw new PresentationError("PRESENTATION_INVALID", "relation nodes repeat a square");
+  const edges = item.edges.map((edge, index) => {
+    const entry = exact(edge, ["from", "to", "relation", "sign"], [], `edges[${index}]`);
+    const from = squareName(entry.from, "edge.from"), to = squareName(entry.to, "edge.to");
+    // §3.6a: an edge endpoint is always a retained node; the renderer invents no square.
+    if (!members.has(from) || !members.has(to) || from === to) throw new PresentationError("PRESENTATION_INVALID", "a relation edge joins two distinct retained nodes");
+    return { from, to, relation: oneOf(entry.relation, BOARD_RELATION_KINDS, "relation"), sign: oneOf(entry.sign, ["state", "gained", "lost"], "sign") };
+  });
+  const owner = exact(item.owner, ["factRef"], [], "owner");
+  return { nodes, edges, owner: { factRef: digestText(owner.factRef, "owner.factRef") }, answerDistance: oneOf(item.answerDistance, ANSWER_DISTANCES, "answerDistance"), ...(item.convention === undefined ? {} : { convention: parseConvention(item.convention) }) };
+}
+
+function parseCount(value: unknown): CountWithDenominatorOperand {
+  const item = exact(value, ["numerator", "denominator", "denominatorMeaning"], ["floor"], "count_with_denominator");
+  const numerator = nonNegative(item.numerator, "numerator"), denominator = nonNegative(item.denominator, "denominator");
+  if (numerator > denominator) throw new PresentationError("PRESENTATION_INVALID", "a numerator never exceeds its denominator");
+  const floor = item.floor === undefined ? undefined : (() => { const entry = exact(item.floor, ["threshold", "met"], [], "floor"); const threshold = nonNegative(entry.threshold, "floor.threshold"); if (entry.met !== denominator >= threshold) throw new PresentationError("PRESENTATION_INVALID", "floor.met disagrees with the denominator"); return { threshold, met: entry.met as boolean }; })();
+  return { numerator, denominator, denominatorMeaning: oneOf(item.denominatorMeaning, Object.keys(DENOMINATOR_MEANINGS) as DenominatorMeaningId[], "denominatorMeaning"), ...(floor === undefined ? {} : { floor }) };
+}
+
+function parseStructuredDocument(value: unknown): StructuredDocumentOperand {
+  const item = exact(value, ["schemaId", "document", "canonicalBytes", "digest"], [], "structured_document");
+  const schemaId = oneOf(item.schemaId, Object.keys(STRUCTURED_DOCUMENT_SCHEMAS) as StructuredDocumentSchemaId[], "schemaId");
+  const document = exact(item.document, STRUCTURED_DOCUMENT_SCHEMAS[schemaId].fields, [], `${schemaId} document`) as Readonly<Record<string, PresentationJsonValue>>;
+  const canonicalBytes = canonicalizeJson(document);
+  if (canonicalBytes !== item.canonicalBytes) throw new PresentationError("PRESENTATION_INVALID", "structured document canonical bytes disagree with the document");
+  if (presentationDigest("presentation.structured_document@1", { schemaId, canonicalBytes }) !== item.digest) throw new PresentationError("PRESENTATION_INVALID", "structured document digest mismatch");
+  return { schemaId, document: deepFreeze(JSON.parse(canonicalBytes) as Readonly<Record<string, PresentationJsonValue>>), canonicalBytes, digest: item.digest as string };
+}
+
+const COMPONENT_PARSERS: { readonly [C in ComponentId]: (value: unknown) => ComponentOperandMap[C] } = Object.freeze({
   magnitude: parseMagnitude,
   fact_statement: parseFactStatement,
   abstention: parseAbstention,
   claim: parseClaim,
   citation: parseCitation,
   enum_state: parseEnumState,
+  distribution: parseDistribution,
+  outcome_split: parseOutcomeSplit,
+  magnitude_trail: parseMagnitudeTrail,
+  square_set: parseSquareSet,
+  move_path: parseMovePath,
+  relation_overlay: parseRelationOverlay,
+  count_with_denominator: parseCount,
+  structured_document: parseStructuredDocument,
 });
 
 function parseComponent(value: unknown): ComponentValue {
   const item = exact(value, ["id", "operand"], [], "component");
   const id = oneOf(item.id, COMPONENT_IDS, "component id");
-  const parser = COMPONENT_PARSERS[id] as ((candidate: unknown) => unknown) | undefined;
-  if (parser === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", `${id} is declared but not implemented at Checkpoint A`);
+  const parser = COMPONENT_PARSERS[id] as (candidate: unknown) => unknown;
   return deepFreeze({ id, operand: parser(item.operand) } as ComponentValue);
 }
 
@@ -759,17 +1193,29 @@ export function isPresentedAbstention(item: PresentedEvidenceItem): boolean {
 // §2.2 — the exact projection-keyed adapter registry
 // ---------------------------------------------------------------------------------------------
 
+/**
+ * §2.3: a named composition — several components constructed from ONE admitted fact, each serving a
+ * literal subset of the binding's forms; the member forms union to exactly the binding forms.
+ */
+export interface PresentationComposition {
+  readonly id: string;
+  readonly members: readonly { readonly component: ComponentId; readonly forms: readonly EvidenceForm[] }[];
+}
+
 export interface ProjectionPresentationAdapter {
   readonly key: string;
   readonly consumer: VersionedEvidenceId;
   readonly projection: VersionedEvidenceId;
+  /** The single target component, or the first member of `composition`. */
   readonly component: ComponentId;
+  readonly composition?: PresentationComposition;
   readonly forms: readonly EvidenceForm[];
   /** Literal retained operand paths the constructor reads; each must be a declared projection operand. */
   readonly sourceOperands: readonly string[];
   /** Executable retention assertion names (§2.2); an adapter with none does not compile. */
   readonly assertions: readonly ("copied_byte_equal" | "mechanical_transform" | "authored_text_copied" | "retained_convention")[];
-  readonly construct: (evidence: DeclaredEvidence<unknown>) => ComponentValue;
+  /** One component, or exactly the composition's members in member order. */
+  readonly construct: (evidence: DeclaredEvidence<unknown>) => ComponentValue | readonly ComponentValue[];
 }
 
 const V1 = (id: string): VersionedEvidenceId => Object.freeze({ id, version: 1 });
@@ -824,8 +1270,67 @@ function declaredGrounding(projection: VersionedEvidenceId): EvidenceGrounding {
   return declared.grounding;
 }
 
-type AdapterSpec = Omit<ProjectionPresentationAdapter, "key">;
-const adapter = (spec: AdapterSpec): ProjectionPresentationAdapter => Object.freeze({ ...spec, key: adapterKey(spec.consumer, spec.projection), forms: Object.freeze([...spec.forms]), sourceOperands: Object.freeze([...spec.sourceOperands]), assertions: Object.freeze([...spec.assertions]) });
+/** One adapter row before keying; the group files (play, inspector, consumer) return these. */
+export type AdapterSpec = Omit<ProjectionPresentationAdapter, "key">;
+
+/**
+ * The construction kit handed to every group's adapter factory (dependency injection: the group
+ * files import only types from this module, so the registry has no import cycle). Every helper
+ * derives provenance from the admitted evidence item itself; none accepts caller prose.
+ */
+export interface PresentationKit {
+  readonly fact: <R extends FactStatementRendererId>(rendererId: R, binding: "recorded_run" | "declared_convention", convention: PresentationConventionId, operands: FactOperandsByRenderer[R]) => FactStatementOperand;
+  /** `sha256:<payload digest>` of one sealed evidence item — the owner reference of its components. */
+  readonly factRef: (evidence: DeclaredEvidence<unknown>) => string;
+  readonly convention: (evidence: DeclaredEvidence<unknown>, basis: ConventionBasis, perspective: ConventionReceipt["perspective"]) => ConventionReceipt;
+  readonly declared: (evidence: DeclaredEvidence<unknown>, convention: PresentationConventionId, perspective?: ConventionReceipt["perspective"]) => ConventionReceipt;
+  readonly searchConvention: (evidence: DeclaredEvidence<unknown>, delivery: StockfishPositionEvaluation) => ConventionReceipt;
+  /** A deduplicated square set owned by the evidence item, captioned by a sealed fact statement. */
+  readonly squareSet: (evidence: DeclaredEvidence<unknown>, squares: readonly SquareName[], brush: MarkBrush, caption: FactStatementOperand) => ComponentValue;
+  readonly structuredDocument: (schemaId: StructuredDocumentSchemaId, document: Readonly<Record<string, PresentationJsonValue>>) => StructuredDocumentOperand;
+  readonly grounding: (projection: VersionedEvidenceId) => EvidenceGrounding;
+}
+
+const KIT: PresentationKit = Object.freeze({
+  fact: factStatement,
+  factRef: (evidence: DeclaredEvidence<unknown>) => `sha256:${evidenceValueReceipt(evidence).payloadDigest}`,
+  convention: (evidence: DeclaredEvidence<unknown>, basis: ConventionBasis, perspective: ConventionReceipt["perspective"]): ConventionReceipt => ({
+    producer: { ...evidence.producer }, sourceProjection: { ...evidence.projection }, sourceEvidenceDigest: `sha256:${evidenceValueReceipt(evidence).payloadDigest}`, perspective, basis,
+  }),
+  declared: (evidence: DeclaredEvidence<unknown>, convention: PresentationConventionId, perspective: ConventionReceipt["perspective"] = "not_applicable"): ConventionReceipt => ({
+    producer: { ...evidence.producer }, sourceProjection: { ...evidence.projection }, sourceEvidenceDigest: `sha256:${evidenceValueReceipt(evidence).payloadDigest}`, perspective, basis: { kind: "declared", convention },
+  }),
+  searchConvention,
+  squareSet: (evidence: DeclaredEvidence<unknown>, squares: readonly SquareName[], brush: MarkBrush, caption: FactStatementOperand): ComponentValue => ({
+    id: "square_set",
+    operand: { squares: [...new Set(squares)], brush, owner: { factRef: `sha256:${evidenceValueReceipt(evidence).payloadDigest}` }, ordered: false, caption },
+  }),
+  structuredDocument: (schemaId: StructuredDocumentSchemaId, document: Readonly<Record<string, PresentationJsonValue>>): StructuredDocumentOperand => {
+    const canonicalBytes = canonicalizeJson(withoutUndefined(document));
+    return parseStructuredDocument({ schemaId, document, canonicalBytes, digest: presentationDigest("presentation.structured_document@1", { schemaId, canonicalBytes }) });
+  },
+  grounding: declaredGrounding,
+});
+const adapter = (spec: AdapterSpec): ProjectionPresentationAdapter => {
+  if (spec.composition !== undefined) {
+    const members = spec.composition.members;
+    if (members.length < 2 || members[0]!.component !== spec.component) throw new PresentationError("PRESENTATION_UNREGISTERED", `${spec.composition.id} must list at least two members, led by its component`);
+    const union = new Set(members.flatMap((member) => member.forms));
+    if (union.size !== spec.forms.length || spec.forms.some((form) => !union.has(form))) throw new PresentationError("PRESENTATION_UNREGISTERED", `${spec.composition.id} member forms do not union to the adapter forms`);
+    for (const member of members) for (const form of member.forms) if (!(COMPONENT_DECLARATIONS[member.component].forms as readonly EvidenceForm[]).includes(form)) throw new PresentationError("PRESENTATION_UNREGISTERED", `${member.component} cannot serve ${form}`);
+  } else {
+    for (const form of spec.forms) if (!(COMPONENT_DECLARATIONS[spec.component].forms as readonly EvidenceForm[]).includes(form)) throw new PresentationError("PRESENTATION_UNREGISTERED", `${refKey(spec.consumer)} × ${refKey(spec.projection)}: ${spec.component} cannot serve ${form}`);
+  }
+  return Object.freeze({
+    ...spec, key: adapterKey(spec.consumer, spec.projection), forms: Object.freeze([...spec.forms]), sourceOperands: Object.freeze([...spec.sourceOperands]), assertions: Object.freeze([...spec.assertions]),
+    ...(spec.composition === undefined ? {} : { composition: Object.freeze({ id: spec.composition.id, members: Object.freeze(spec.composition.members.map((member) => Object.freeze({ component: member.component, forms: Object.freeze([...member.forms]) }))) }) }),
+  });
+};
+
+/** The component ids one adapter may construct, in order. */
+export function adapterComponents(entry: ProjectionPresentationAdapter): readonly ComponentId[] {
+  return entry.composition === undefined ? [entry.component] : entry.composition.members.map((member) => member.component);
+}
 
 const REVIEW_STORY = V1("review.story");
 const REVIEW_MAP = V1("module.review_map");
@@ -855,6 +1360,11 @@ export const PRESENTATION_ADAPTERS: readonly ProjectionPresentationAdapter[] = O
     const item = evidence.payload as { readonly text: string; readonly binding: ClaimBinding; readonly evidenceTypes: readonly ClaimEvidenceType[]; readonly earnedEvidenceTypes: readonly ClaimEvidenceType[]; readonly principles: readonly { readonly name: string; readonly statement: string; readonly counterCase: string }[] };
     return { id: "claim", operand: { text: item.text, binding: item.binding, evidenceTypes: [...item.evidenceTypes], earnedEvidenceTypes: [...item.earnedEvidenceTypes], principles: item.principles.map((principle) => ({ name: principle.name, statement: principle.statement, counterCase: principle.counterCase })) } };
   } }),
+  // Checkpoint B: the module seats (module-registration A5), the Inspector surface and the
+  // remaining ordinary/author consumer pairs, each group keyed by its exact consumer × projection.
+  ...playAdapterSpecs(KIT).map(adapter),
+  ...inspectorAdapterSpecs(KIT).map(adapter),
+  ...consumerAdapterSpecs(KIT).map(adapter),
 ].sort((left, right) => left.key.localeCompare(right.key)));
 
 const ADAPTERS_BY_KEY: ReadonlyMap<string, ProjectionPresentationAdapter> = new Map(PRESENTATION_ADAPTERS.map((entry) => [entry.key, entry]));
@@ -880,10 +1390,12 @@ export function presentEvidenceItems(view: ConsumerEvidenceView<unknown>): reado
     if (PRESENTATION_SELECTION_ONLY.includes(key)) return [];
     const entry = ADAPTERS_BY_KEY.get(key);
     if (entry === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", `no presentation adapter for ${view.consumer.id}@${view.consumer.version} × ${refKey(evidence.projection)}`);
-    const component = entry.construct(evidence);
-    if (component.id !== entry.component) throw new PresentationError("PRESENTATION_INVALID", `${entry.key} constructed ${component.id}, not ${entry.component}`);
+    const constructed = entry.construct(evidence);
+    const components: readonly ComponentValue[] = Array.isArray(constructed) ? constructed : [constructed as ComponentValue];
+    const expected = adapterComponents(entry);
+    if (components.length !== expected.length || components.some((component, index) => component.id !== expected[index])) throw new PresentationError("PRESENTATION_INVALID", `${entry.key} constructed ${components.map((component) => component.id).join("+")}, not ${expected.join("+")}`);
     const evidenceRef: PresentedEvidenceRef = { producer: { ...evidence.producer }, projection: { ...evidence.projection }, evidenceDigest: `sha256:${evidenceValueReceipt(evidence).payloadDigest}` };
-    return [sealPresentedItemForOwner(evidence, evidenceRef, { consumer: { ...view.consumer }, projection: { ...evidence.projection } }, component)];
+    return components.map((component) => sealPresentedItemForOwner(evidence, evidenceRef, { consumer: { ...view.consumer }, projection: { ...evidence.projection } }, component));
   }));
 }
 
@@ -951,7 +1463,7 @@ export function parsePresentationReceipt(value: unknown): readonly PresentedEvid
     } else {
       const entry = ADAPTERS_BY_KEY.get(adapterKey(adapterRef.consumer, adapterRef.projection));
       if (entry === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", `unregistered adapter ${refKey(adapterRef.consumer)} × ${refKey(adapterRef.projection)}`);
-      if (entry.component !== component.id) throw new PresentationError("PRESENTATION_INVALID", `${entry.key} serves ${entry.component}, not ${component.id}`);
+      if (!adapterComponents(entry).includes(component.id)) throw new PresentationError("PRESENTATION_INVALID", `${entry.key} serves ${adapterComponents(entry).join("+")}, not ${component.id}`);
       const ref = exact(row.evidenceRef, ["producer", "projection", "evidenceDigest"], [], "evidenceRef");
       evidenceRef = { producer: versioned(ref.producer, "evidenceRef.producer"), projection: versioned(ref.projection, "evidenceRef.projection"), evidenceDigest: digestText(ref.evidenceDigest, "evidenceRef.evidenceDigest") };
       if (refKey(evidenceRef.projection) !== refKey(adapterRef.projection)) throw new PresentationError("PRESENTATION_INVALID", "evidence projection and adapter projection disagree");
