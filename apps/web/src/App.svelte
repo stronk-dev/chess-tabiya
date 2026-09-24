@@ -11,7 +11,7 @@
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
-  import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, repertoireGapStateLabel } from "./lib/learner-copy.js";
+  import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
@@ -46,6 +46,8 @@
     type Learner,
     type ProgressAttempt,
     type ProgressSchedule,
+    type DueSchedule,
+    type DifficultRootPage,
     type RelatedProgressAttempt,
     type PackDraft,
     type PackValidation,
@@ -169,7 +171,12 @@
   let runArtifactBusyId: string | undefined = $state();
   let runArtifactGeneration = 0;
   let attempts: readonly ProgressAttempt[] = $state([]);
-  let dueSchedules: readonly ProgressSchedule[] = $state([]);
+  let dueSchedules: readonly DueSchedule[] = $state([]);
+  const EMPTY_DUE_QUEUE = Object.freeze({ schedules: Object.freeze([]), waiting: 0, intakeLimit: 20 });
+  const EMPTY_DIFFICULT_ROOTS: DifficultRootPage = Object.freeze({ threshold: 3, total: 0, roots: Object.freeze([]) });
+  let dueWaiting = $state(0);
+  let dueIntakeLimit = $state(20);
+  let difficultRoots: DifficultRootPage = $state(EMPTY_DIFFICULT_ROOTS);
   let returnActionError: string | undefined = $state();
   let milestones: readonly ProgressMilestone[] = $state([]);
   let derivations: RunDerivationPage | undefined = $state();
@@ -771,11 +778,11 @@
         const loaded = await Promise.all([
           initialRunPage(1),
           api.packs(),
-          api.dueProgress?.() ?? Promise.resolve([]),
+          api.dueProgress?.() ?? Promise.resolve(EMPTY_DUE_QUEUE),
           api.assignments?.() ?? Promise.resolve([]),
         ]);
         if (generation !== loadGeneration) return;
-        [packs, dueSchedules, assignedPacks] = [loaded[1], loaded[2], loaded[3]];
+        [packs, dueSchedules, dueWaiting, dueIntakeLimit, assignedPacks] = [loaded[1], loaded[2].schedules, loaded[2].waiting, loaded[2].intakeLimit, loaded[3]];
         runs = loaded[0].runs;
         runSelection = loaded[0].selection;
       } else if (next.name === "review") {
@@ -828,7 +835,7 @@
         relatedAttempts = {};
         const loaded = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
-          api.dueProgress?.() ?? Promise.resolve([]),
+          api.dueProgress?.() ?? Promise.resolve(EMPTY_DUE_QUEUE),
           api.milestones?.() ?? Promise.resolve([]),
           api.repertoires?.() ?? Promise.resolve([]),
           api.recommendations?.() ?? Promise.resolve({ recommendations: [], selection: { shown: 0, total: 0 } }),
@@ -836,10 +843,12 @@
           initialRunPage(),
           api.packs(),
           api.capabilities(),
+          api.difficultRoots?.() ?? Promise.resolve(EMPTY_DIFFICULT_ROOTS),
         ]);
         const nextRepertoirePages = await loadRepertoirePages(loaded[3]);
         if (generation !== loadGeneration) return;
-        [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs, capabilities] = [loaded[0], loaded[1], loaded[2], loaded[3], loaded[5], loaded[7], loaded[8]];
+        [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs, capabilities] = [loaded[0], loaded[1].schedules, loaded[2], loaded[3], loaded[5], loaded[7], loaded[8]];
+        [dueWaiting, dueIntakeLimit, difficultRoots] = [loaded[1].waiting, loaded[1].intakeLimit, loaded[9]];
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
         recommendations = loaded[4].recommendations;
@@ -2453,7 +2462,7 @@
       {/if}
       <section class="home-status" aria-labelledby="home-status-title">
         <div><p class="eyebrow">Due and open</p><h2 id="home-status-title">What is waiting for you</h2></div>
-        <p><strong>{dueSchedules.length}</strong> {dueSchedules.length === 1 ? "rehearsal is" : "rehearsals are"} due</p>
+        <p><strong>{dueSchedules.length + dueWaiting}</strong> {dueSchedules.length + dueWaiting === 1 ? "rehearsal is" : "rehearsals are"} due</p>
         <p><strong>{openAssignments.length}</strong> {openAssignments.length === 1 ? "coach assignment is" : "coach assignments are"} open</p>
       </section>
       <section class="how-it-works" aria-labelledby="how-it-works-title">
@@ -2539,6 +2548,8 @@
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
         onPrediction={(uci) => controller.recordPrediction(uci)}
+        importedGuess={session.importedGuess}
+        onGuessImportedMove={(uci) => controller.guessImportedMove(uci)}
         onReasoning={(input) => controller.recordReasoning(input)}
         onReasoningReview={capabilities?.providers.llm === "external" && api.reasoningReview !== undefined ? (checkpointEventSeq) => api.reasoningReview!(session.runState!.run.id, checkpointEventSeq) : undefined}
         onExport={exportPgn}
@@ -2717,12 +2728,15 @@
       </section>
       <section aria-labelledby="due-title">
         <h2 id="due-title">Due now</h2>
+        {#if dueSchedules.some((schedule) => schedule.frequency !== null)}<p class="honest">{DUE_FREQUENCY_ORDER_NOTE}</p>{/if}
+        {#if dueWaitingSentence(dueWaiting, dueIntakeLimit)}<p class="honest" role="status">{dueWaitingSentence(dueWaiting, dueIntakeLimit)}</p>{/if}
         <div class="item-list">
           {#each dueSchedules as schedule}
             <article>
               <div>
                 <h3>{schedule.packId === null ? "Position rehearsal" : packTitle(schedule.packId)}</h3>
-                <p>{schedule.kind === "blocked" ? "Repeat the blocked attempt" : "Try a varied repetition"} · {readableDate(schedule.dueAt)}</p>
+                <p>{dueVariationSentence(schedule)} · {readableDate(schedule.dueAt)}</p>
+                {#if dueFrequencySentence(schedule.frequency)}<p class="honest">{dueFrequencySentence(schedule.frequency)}</p>{/if}
               </div>
               <div class="row-actions">
                 <button class="primary" type="button" disabled={session.busy||scheduleDismissBusy!==undefined||(schedule.packId===null&&schedule.sourceRunId===null)} aria-describedby={session.busy?"return-action-busy":scheduleDismissBusy!==undefined?`schedule-dismiss-busy-${scheduleDismissBusy}`:schedule.packId===null&&schedule.sourceRunId===null?`due-source-missing-${schedule.id}`:undefined} onclick={() => void startDueSchedule(schedule)}>Start due attempt</button>
@@ -2733,9 +2747,29 @@
               {#if scheduleDismissBusy===schedule.id}<p id={`schedule-dismiss-busy-${schedule.id}`} role="status">Dismissing this return…</p>{/if}
               {#if scheduleDismissErrors[schedule.id]}<p role="alert">{scheduleDismissErrors[schedule.id]}</p>{/if}
             </article>
-          {:else}<p>Nothing is due yet. Played attempts create this queue.</p>{/each}
+          {:else}<p>{dueWaiting > 0 ? "Clear a return to see the next waiting one." : "Nothing is due yet. Played attempts create this queue."}</p>{/each}
         </div>
       </section>
+      {#if difficultRoots.roots.length > 0}
+        <section aria-labelledby="difficult-title">
+          <h2 id="difficult-title">Positions with repeated unstable attempts</h2>
+          <p class="honest">{difficultRootRuleSentence(difficultRoots.threshold)}</p>
+          {#if difficultRoots.roots.length < difficultRoots.total}<p class="honest">Showing {difficultRoots.roots.length} of {difficultRoots.total} positions that meet this rule.</p>{/if}
+          <div class="item-list">
+            {#each difficultRoots.roots as root}
+              <article>
+                <div>
+                  <h3>{root.packId === null ? "Position rehearsal" : packTitle(root.packId)}</h3>
+                  <p>{difficultRootCountSentence(root.unstableCount)} · latest {readableDate(root.lastUnstableAt)}</p>
+                </div>
+                <div class="row-actions">
+                  {#each root.runs as entry}<button type="button" onclick={() => navigate(routePath({ name: "run", runId: entry.runId }))}>Open run · {readableDate(entry.endedAt)}</button>{/each}
+                </div>
+              </article>
+            {/each}
+          </div>
+        </section>
+      {/if}
       <section aria-labelledby="recorded-title">
         <h2 id="recorded-title">What is recorded</h2>
         <div class="item-list">

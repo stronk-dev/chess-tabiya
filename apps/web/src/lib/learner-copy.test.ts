@@ -14,6 +14,12 @@ import {
   attemptVerdictLabel,
   chessSideLabel,
   corpusPopulationLabel,
+  difficultRootCountSentence,
+  difficultRootRuleSentence,
+  DUE_FREQUENCY_ORDER_NOTE,
+  dueFrequencySentence,
+  dueVariationSentence,
+  dueWaitingSentence,
   publishedBandInterval,
   publishedBandLabel,
   ratedGameResultLabel,
@@ -110,5 +116,39 @@ describe("learner-facing domain copy", () => {
     expect(ratedGameResultLabel({ state: "sealed", voidReason: null, result: null })).toBe("Result pending");
     expect(ratedGameResultLabel({ state: "voided", voidReason: "engine_changed", result: null })).toBe("Not rated — opponent changed");
     expect(ratedGameResultLabel({ state: "voided", voidReason: null, result: null })).toBe("Not rated");
+  });
+});
+
+describe("return-queue copy (rfc/return-scheduling.md §§3, 4, 7)", () => {
+  const population = { source: "lichess-explorer" as const, ratings: [1600], speeds: ["blitz"], since: "2023-10", until: "2026-09" };
+  const variants = ["same_root_new_defense", "alternate_plan_class", "related_position_same_idea", "opposite_side", "different_material_details"];
+  const surface = [
+    DUE_FREQUENCY_ORDER_NOTE,
+    dueFrequencySentence({ games: 1, population })!,
+    dueFrequencySentence({ games: 250_000, population })!,
+    dueWaitingSentence(1, 20)!,
+    dueWaitingSentence(9, 20)!,
+    difficultRootRuleSentence(3),
+    difficultRootCountSentence(1),
+    difficultRootCountSentence(7),
+    dueVariationSentence({ kind: "blocked", variant: null }),
+    dueVariationSentence({ kind: "varied", variant: null }),
+    ...variants.map((variant) => dueVariationSentence({ kind: "varied", variant })),
+  ];
+
+  // Criterion 7: frequency orders, it never grades. The listed vocabulary is every comparative-quality,
+  // importance or verdict word this surface could slide into.
+  const VALENCE = /\b(better|best|worse|worst|good|bad|strong(er|est)?|weak(er|est|ness)?|important|importance|priority|critical|essential|key|should|must|correct|incorrect|mistake|error|master(y|ed)?|mature|difficult|level|score|recommended|optimal|sound|dubious)\b|%/iu;
+
+  it("renders no comparative-quality term, ratio or mastery word in the return-queue strings", () => {
+    for (const sentence of surface) expect(sentence, sentence).not.toMatch(VALENCE);
+  });
+
+  it("names every retry variant kind in words and a missing one as a fresh seed", () => {
+    for (const variant of variants) expect(dueVariationSentence({ kind: "varied", variant })).not.toContain(variant);
+    expect(dueVariationSentence({ kind: "varied", variant: null })).toBe("Varied repetition · the variation is a fresh opponent seed");
+    expect(dueVariationSentence({ kind: "varied", variant: "opposite_side" })).toBe("Varied repetition · the pack names this variation: Same structure, opposite side");
+    expect(dueWaitingSentence(0, 20)).toBeUndefined();
+    expect(dueFrequencySentence(null)).toBeUndefined();
   });
 });

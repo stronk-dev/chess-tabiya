@@ -17,6 +17,8 @@
   import TerminalSheet, { type AssignmentSubmissionOffer, type RepertoireAnswerOffer } from "./TerminalSheet.svelte";
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
+  import ImportedGuessPanel from "./ImportedGuessPanel.svelte";
+  import { importedNextMove, type ImportedGuess } from "./session-controller.js";
   import ShapePanel from "./ShapePanel.svelte";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import GroupPanel from "./GroupPanel.svelte";
@@ -117,6 +119,8 @@
     onReplayResistance?: ((input: { readonly fen: string; readonly side: "white" | "black"; readonly targetElo: 1000 | 1400 | 1800 | 2200 }) => void | Promise<void>) | undefined;
     onContinueCheckpoint: () => boolean | void | Promise<boolean | void>;
     onPrediction?: (uci: string) => void | Promise<void>;
+    importedGuess?: ImportedGuess | undefined;
+    onGuessImportedMove?: ((uci: string) => void | Promise<void>) | undefined;
     onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
     onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
@@ -180,6 +184,8 @@
     onReplayResistance,
     onContinueCheckpoint,
     onPrediction = () => {},
+    importedGuess,
+    onGuessImportedMove,
     onReasoning = () => {},
     onReasoningReview,
     onExport,
@@ -1872,6 +1878,9 @@
             {/if}
             <OutcomeContext {assessment} {resistance} grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
             {#if banner !== undefined}<WhyBanner model={banner} />{/if}
+            {#if run.sessionKind === "imported" && canWrite && onGuessImportedMove !== undefined && importedNextMove(run) !== undefined}
+              <ImportedGuessPanel fen={currentNode.fen} {startSide} lastMove={currentNode.moveUci} {busy} guess={importedGuess?.nodeId === currentNode.id ? importedGuess : undefined} onGuess={onGuessImportedMove} />
+            {/if}
           </section>
 
           <section class="companion-section branch-seat" class:compact-active={compactTab === "branches"} aria-label="Branches">

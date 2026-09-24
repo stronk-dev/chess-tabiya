@@ -1218,10 +1218,25 @@ export function createRestHandler(
         })) });
       }
       if (request.method === "GET" && url.pathname === "/progress/due") {
+        const queue = await service.dueQueue(authenticate(), url.searchParams.get("at") ?? undefined, corpusSource);
         return json(200, {
-          schedules: service.due(authenticate(), url.searchParams.get("at") ?? undefined).map((item) => Object.freeze({
+          schedules: queue.schedules.map((item) => Object.freeze({
             id: item.id, sessionKind: item.sessionKind, packId: item.packId, kind: item.kind,
             variant: item.variant, dueAt: item.dueAt, sourceRunId: item.sourceRunId,
+            frequency: item.frequency === null ? null : Object.freeze({ games: item.frequency.games, population: item.frequency.population }),
+          })),
+          waiting: queue.waiting,
+          intakeLimit: queue.intakeLimit,
+        });
+      }
+      if (request.method === "GET" && url.pathname === "/progress/difficult") {
+        const page = service.difficultRoots(authenticate());
+        return json(200, {
+          threshold: page.threshold,
+          total: page.total,
+          roots: page.roots.map((root) => Object.freeze({
+            sessionKind: root.sessionKind, packId: root.packId, unstableCount: root.unstableCount,
+            lastUnstableAt: root.lastUnstableAt, runs: root.runs,
           })),
         });
       }

@@ -194,6 +194,10 @@ function api(): DrillClientApi {
   } as unknown as DrillClientApi;
 }
 
+function dueQueue(schedules: readonly import("./api.js").ProgressSchedule[], waiting = 0): import("./api.js").DueQueuePage {
+  return { schedules: schedules.map((schedule) => ({ ...schedule, frequency: null })), waiting, intakeLimit: 20 };
+}
+
 function target(): HTMLElement {
   const element = document.createElement("div");
   document.body.append(element);
@@ -2685,7 +2689,7 @@ describe("application shell", () => {
     }));
     const learnApi: DrillClientApi = {
       ...api(),
-      async dueProgress() { return [schedule]; },
+      async dueProgress() { return dueQueue([schedule]); },
       createRun: createRunRequest,
     };
     const component = mount(App, {
@@ -2706,6 +2710,45 @@ describe("application shell", () => {
       expect.objectContaining({ intent: { origin: "fresh", scheduleId: schedule.id } }),
       expect.any(String),
     ));
+    await unmount(component);
+  });
+
+  it("names the variation, the frequency population, waiting returns and difficult positions on Learn", async () => {
+    history.replaceState(null, "", "/learn");
+    const population = { source: "lichess-explorer" as const, ratings: [1600], speeds: ["blitz", "rapid"], since: "2023-10", until: "2026-09" };
+    const learnApi: DrillClientApi = {
+      ...api(),
+      async dueProgress() {
+        return {
+          schedules: [
+            { id: "named", sessionKind: "pack" as const, packId: pack.id, kind: "varied" as const, variant: "opposite_side", dueAt: "2026-09-20T09:00:00.000Z", sourceRunId: run.id, frequency: { games: 12_345, population } },
+            { id: "seeded", sessionKind: "pack" as const, packId: pack.id, kind: "varied" as const, variant: null, dueAt: "2026-09-21T09:00:00.000Z", sourceRunId: run.id, frequency: null },
+          ],
+          waiting: 3,
+          intakeLimit: 2,
+        };
+      },
+      async difficultRoots() {
+        return { threshold: 3, total: 2, roots: [{ sessionKind: "pack" as const, packId: pack.id, unstableCount: 4, lastUnstableAt: "2026-09-19T10:00:00.000Z", runs: [{ runId: run.id, endedAt: "2026-09-19T10:00:00.000Z" }] }] };
+      },
+    };
+    const component = mount(App, { target: target(), props: { api: learnApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("the pack names this variation: Same structure, opposite side"));
+    const text = document.body.textContent ?? "";
+    expect(text).toContain("Varied repetition · the variation is a fresh opponent seed");
+    expect(text).toContain("Position reached in 12,345 games · Lichess games · rating groups 1600");
+    expect(text).toContain("3 more returns are waiting. At most 2 are shown at once");
+    expect(text).toContain("Listed after 3 or more unstable graded attempts at the same starting position.");
+    expect(text).toContain("4 unstable attempts recorded");
+    expect(text).toContain("Showing 1 of 2 positions that meet this rule.");
+    for (const id of ["due-title", "difficult-title"]) {
+      expect(document.querySelector(`section[aria-labelledby="${id}"]`), id).not.toBeNull();
+      expect(document.querySelector(`section[aria-labelledby="${id}"]`)?.textContent ?? "", id).not.toMatch(/\d+\s*%|mastery|level \d/iu);
+    }
+    const open = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.startsWith("Open run ·"));
+    expect(open).toBeDefined();
+    open!.click();
+    await vi.waitFor(() => expect(location.pathname).toBe(`/play/run/${encodeURIComponent(run.id)}`));
     await unmount(component);
   });
 
@@ -2730,7 +2773,7 @@ describe("application shell", () => {
     let dueReads = 0;
     const learnApi: DrillClientApi = {
       ...api(),
-      async dueProgress() { return ++dueReads === 1 ? [retrySchedule, departedSchedule] : [departedSchedule]; },
+      async dueProgress() { return dueQueue(++dueReads === 1 ? [retrySchedule, departedSchedule] : [departedSchedule]); },
       dismissSchedule,
     };
     const router = new HistoryRouter(window);
@@ -2803,7 +2846,7 @@ describe("application shell", () => {
         };
       },
       async dueProgress() {
-        return [{ id: "unknown-schedule", sessionKind: "pack" as const, packId: unknownPackId, kind: "blocked" as const, variant: null, dueAt: "2026-08-23T12:00:00.000Z", sourceRunId: run.id }];
+        return dueQueue([{ id: "unknown-schedule", sessionKind: "pack" as const, packId: unknownPackId, kind: "blocked" as const, variant: null, dueAt: "2026-08-23T12:00:00.000Z", sourceRunId: run.id }]);
       },
     };
     const component = mount(App, {

@@ -33,7 +33,7 @@ import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.
 import { parseGroupReplyResult, parsePredictionResult } from "./opponent-path-response.js";
 import { parseOpponentSelection } from "./opponent-selection-response.js";
 import { parsePackDocument } from "./pack-response.js";
-import { parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseProgressSchedules, parseRelatedProgress } from "./progress-response.js";
+import { parseDifficultRoots, parseDueQueue, parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseRelatedProgress } from "./progress-response.js";
 import { parseShapeDocument } from "./shape-response.js";
 import { parseVoicePage } from "./voice-response.js";
 
@@ -646,6 +646,32 @@ export interface ProgressSchedule {
   readonly sourceRunId: string | null;
 }
 
+/** A served due return (rfc/return-scheduling.md §§4, 6): frequency is a population count that orders, never grades. */
+export interface DueSchedule extends ProgressSchedule {
+  readonly frequency: { readonly games: number; readonly population: CorpusPopulation } | null;
+}
+
+export interface DueQueuePage {
+  readonly schedules: readonly DueSchedule[];
+  readonly waiting: number;
+  readonly intakeLimit: number;
+}
+
+/** Roots with at least `threshold` unstable graded attempts; counts only, never a ratio or level. */
+export interface DifficultRoot {
+  readonly sessionKind: "pack" | "position";
+  readonly packId: string | null;
+  readonly unstableCount: number;
+  readonly lastUnstableAt: string;
+  readonly runs: readonly { readonly runId: string; readonly endedAt: string }[];
+}
+
+export interface DifficultRootPage {
+  readonly threshold: number;
+  readonly total: number;
+  readonly roots: readonly DifficultRoot[];
+}
+
 export interface ScheduledReturnResult {
   readonly schedule: ProgressSchedule;
   readonly result: MutationResult;
@@ -902,7 +928,8 @@ export interface DrillClientApi extends RunApi {
   recommendations?(): Promise<ProgressRecommendationPage>;
   distillRun?(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>;
   progress?(): Promise<readonly ProgressAttempt[]>;
-  dueProgress?(): Promise<readonly ProgressSchedule[]>;
+  dueProgress?(): Promise<DueQueuePage>;
+  difficultRoots?(): Promise<DifficultRootPage>;
   relatedProgress?(runId: string, nodeId: string): Promise<readonly RelatedProgressAttempt[]>;
   dismissSchedule?(scheduleId: string): Promise<void>;
   duplicateRun?(runId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun>;
@@ -1133,8 +1160,12 @@ export class DrillApi implements DrillClientApi {
     return parseProgressAttempts(await this.#json<unknown>("/progress"));
   }
 
-  async dueProgress(): Promise<readonly ProgressSchedule[]> {
-    return parseProgressSchedules(await this.#json<unknown>("/progress/due"));
+  async dueProgress(): Promise<DueQueuePage> {
+    return parseDueQueue(await this.#json<unknown>("/progress/due"));
+  }
+
+  async difficultRoots(): Promise<DifficultRootPage> {
+    return parseDifficultRoots(await this.#json<unknown>("/progress/difficult"));
   }
 
   async relatedProgress(runId: string, nodeId: string): Promise<readonly RelatedProgressAttempt[]> {

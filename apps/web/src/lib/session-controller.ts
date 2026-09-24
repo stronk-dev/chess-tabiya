@@ -25,6 +25,7 @@ import {
   type SimulationResult,
 } from "./api.js";
 import { boardModel } from "./board-model.js";
+import { moveSanFromUci } from "./board-input.js";
 import {
   latestCheckpoint,
   packStartSide,
@@ -51,6 +52,34 @@ export interface DrillSessionState {
   readonly reasoning?: ReasoningPage;
   readonly simulation?: SimulationResult;
   readonly viewer?: RunGraph["viewer"];
+  readonly importedGuess?: ImportedGuess;
+}
+
+/** Must match the server's reserved imported-game checkpoint (rfc/return-scheduling.md §8). */
+export const IMPORTED_GAME_PREDICTION_CHECKPOINT = "imported-game:next-move";
+
+/**
+ * A recorded guess of an imported game's next move. The reference is the move the game actually
+ * played; the human-move model's rank says how human the guess was and never grades it.
+ */
+export interface ImportedGuess {
+  readonly nodeId: string;
+  readonly guessUci: string;
+  readonly guessSan: string;
+  readonly playedUci: string;
+  readonly playedSan: string;
+  readonly rank: number | null;
+  readonly candidateCount: number;
+}
+
+/** The source-game move played from the active cursor, when the cursor sits on an imported game's mainline. */
+export function importedNextMove(run: import("@chess-tabiya/runtime").DrillRun): { readonly uci: string; readonly san: string } | undefined {
+  if (run.sessionKind !== "imported") return undefined;
+  const primary = run.branches[0];
+  const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId);
+  if (primary === undefined || node === undefined || node.branchId !== primary.id) return undefined;
+  const child = run.nodes.find((candidate) => candidate.branchId === primary.id && candidate.parentId === node.id);
+  return child?.moveUci === null || child?.moveSan === null || child === undefined ? undefined : { uci: child.moveUci, san: child.moveSan };
 }
 
 export interface StartedRun {
@@ -518,6 +547,42 @@ export class DrillSessionController {
       this.#patch({ checkpoint: undefined });
       await operation.store.appendOpponentPly(result.selection);
       if (this.#sessionOperationIsCurrent(operation)) this.#patch({ busy: false });
+    } catch (error) {
+      if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
+    }
+  }
+
+  /** Guess-the-move on an imported game: records the guess; the board does not advance. */
+  async guessImportedMove(predictedUci: string): Promise<void> {
+    if (this.#state.busy) return;
+    const operation = this.#sessionOperation();
+    const run = this.#requiredRun().run;
+    const played = importedNextMove(run);
+    if (played === undefined) throw new Error("No source-game move follows this position");
+    const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
+    this.#patch({ busy: true, error: undefined, importedGuess: undefined });
+    try {
+      const result = await operation.store.prediction({
+        ...this.#selectionRequest(),
+        checkpointId: IMPORTED_GAME_PREDICTION_CHECKPOINT,
+        nodeId: node.id,
+        predictedUci,
+      });
+      if (!this.#sessionOperationIsCurrent(operation)) return;
+      const candidates = result.selection.candidates ?? [];
+      const guessed = candidates.find((candidate) => candidate.moveUci === predictedUci);
+      this.#patch({
+        busy: false,
+        importedGuess: Object.freeze({
+          nodeId: node.id,
+          guessUci: predictedUci,
+          guessSan: moveSanFromUci(node.fen, predictedUci) ?? predictedUci,
+          playedUci: played.uci,
+          playedSan: played.san,
+          rank: guessed?.rank ?? null,
+          candidateCount: candidates.length,
+        }),
+      });
     } catch (error) {
       if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);
     }

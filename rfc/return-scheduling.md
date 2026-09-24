@@ -1,6 +1,6 @@
 # RFC: Return scheduling — repairing the ladder, and the return queue the training tradition asks for
 
-- **Status:** draft — 2026-08-23
+- **Status:** implementing — 2026-09-24. Accepted by the owner in session 2026-09-24 (*"just do the work implement a bunch of RFC's"*). All twelve acceptance criteria and D1 are implemented and tested; D2-D7 stay open with their named owners, so the RFC is not yet `implemented` under status-parity P5. Register row and ledger closeout are the coordinator's.
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/01-training-model.md` §blocked/varied repetition (`:55-79`); `docs/return-and-progression.md` (the shipped surface contract)
@@ -404,7 +404,7 @@ than amending it, so no intent-tier change is requested.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | The ladder repair and step-down, over the real `#refreshAutoSchedule` | codex | this RFC's implementing commit | |
+| D1 | The ladder repair and step-down, over the real `#refreshAutoSchedule` | codex | this RFC's implementing commit | ✅ 2026-09-24 (arithmetic 4f8ba581; step-down and overstudy with this implementation) |
 | D2 | The categorical maturity vocabulary — open question 1 | OWNER | `planning/platform-alignment/decision-queue.md` | |
 | D3 | `retryVariants` becomes a declared capability under `rfc/pack-capability-contract.md`, since the runtime now reads it | claude | that RFC's capability census | |
 | D4 | Repair `rfc/longitudinal-store.md:229`'s stale `service.ts:1204` citation | claude | the amending commit | |
@@ -469,3 +469,39 @@ Proposed — id assigned at landing; head was **D1310** at drafting.
   Third defect found during drafting and not present in the derivation: `trailingStable` is
   `-1` for an all-stable history, and the merged `|H|-1` term masks it, so the two bugs
   conceal each other and a partial repair regresses mastered roots.
+- **2026-09-24** — implementing (claude, on the owner's in-session acceptance); every acceptance criterion is implemented. Criteria → tests:
+  `planning/training-methods/implementation-2026-09-24.md`. Verified against HEAD first; the
+  following corrections are recorded here rather than silently absorbed:
+  - **§1 was already repaired.** `4f8ba581` (2026-09-07, [[D1325]]) moved the ladder into
+    `automaticScheduleDecision` in `apps/server/src/progress.ts`, separated the arms and fixed the
+    `findIndex` count, with the eight-history day-delta fixture in `progress.test.ts`. Criteria 1-2
+    were therefore green before this implementation; they are re-driven through the new replay in
+    `apps/server/src/return-scheduling.test.ts`. The `storage.ts:2910-2923` line citations in
+    §§1-2 and §7 are stale; cite `automaticScheduleDecision` and `#refreshAutoSchedule` by symbol.
+  - **§5 as written contradicted criterion 1.** *"An attempt whose `origin` is not `scheduled`
+    may never advance"* would freeze the ladder for every first-time and pack-shelf return, which
+    are all `fresh` — including every fixture criterion 1 names. Implemented as the Chessable
+    semantics §5 cites: an `in_run_retry` is always off schedule; any other non-`scheduled`
+    attempt is off schedule only when the root already had a pending return not yet due when it
+    started (`root_due_at_start > started_at`). Still one condition in the §2.3 replay; no field.
+  - **§2.3 peak semantics pinned:** the peak is the highest index actually served in the replay
+    (after the overstudy cap); a lapse is a graded non-`stable` verdict; re-reaching the peak
+    clears the floor. A root that climbed to 16 days, lapsed and recovered resumes at 7 days.
+  - **§3 threshold published as three unstable graded attempts** (Chessable's count without its
+    hidden review-score term), display budget ten roots and five runs each, total always returned.
+  - **§4 "the learner's band" cannot be the learner rating**, which `docs/return-and-progression.md`
+    says never feeds this scheduler. The band is the source run's authored `human_common`
+    `targetElo` through `corpusPopulation`, else the default population. The tie-break group is the
+    schedule kind plus the UTC due date; corpus lookups are bounded at 40 per read and an absent or
+    failing corpus leaves the stored order. Open question 2 is answered by §4's tie-break reading.
+  - **§6 had no criterion and no number.** Implemented as `DUE_INTAKE_LIMIT = 20`, an unevidenced
+    legible parameter revisable on the ladder's own trigger, with a `waiting` count; a test was
+    added.
+  - **§8 gate shape:** imported games record under the reserved checkpoint id
+    `imported-game:next-move` at a source-mainline position with a played next move; the event
+    schema is unchanged. The drill screen is the first consumer (a separate guess board).
+  - **§10 drift:** HEAD has 357 JSON files under `content/` (404 at drafting); the 92 pack files
+    and every other §10 integer are unchanged.
+  - **Clock-shaped work:** none is in this RFC's scope; tempo sets stay with
+    `rfc/pack-training-forms.md` and `rfc/enforced-clocks.md` and were left out.
+  - Discharge **D1** is discharged by this implementation; D2-D7 remain with their named owners.

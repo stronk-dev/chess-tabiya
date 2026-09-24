@@ -1330,7 +1330,7 @@ function runtimeIssues(
     issues.push(runtimeWarning(
       "RETRY_VARIANTS_NOT_EXECUTABLE",
       `/retryVariants/${index}`,
-      `retryVariants is a catalogue relation, not a run modifier: nothing in the runtime reads it and it names no referent; ${counterpart === undefined ? "no variantOf counterpart exists for this kind yet" : `use variantOf relation ${counterpart} once the successor supports every referenced sibling`}`,
+      `retryVariants is a catalogue relation, not a run modifier: the return scheduler only names it on varied returns and it names no executable referent; ${counterpart === undefined ? "no variantOf counterpart exists for this kind yet" : `use variantOf relation ${counterpart} once the successor supports every referenced sibling`}`,
     ));
   }
   const rootAssessment = pack.objective.grading?.assessedBy;

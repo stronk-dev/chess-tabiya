@@ -1026,6 +1026,49 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.busy).toBe(false);
   });
 
+  it("records guess-the-move on an imported game without advancing the source game", async () => {
+    const api = new FakeApi();
+    const storage = new MemoryStorage();
+    WriterSession.claimFor("imported-guess", storage, () => "writer-a");
+    const environment = controller(api, storage);
+    let imported = createRun({
+      id: "imported-guess",
+      session: {
+        kind: "imported",
+        start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" },
+        movetextDigest: `sha256:${"d".repeat(64)}`,
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common", targetElo: 1500 },
+      },
+      sessionDigest: digest,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 3,
+      createdAt: at,
+    });
+    imported = commitMove(imported, "e2e4", { actor: "user", at }).run;
+    imported = commitMove(imported, "e7e5", { actor: "system", at }).run;
+    imported = commitMove(imported, "g1f3", { actor: "user", at }).run;
+    imported = commitMove(imported, "b8c6", { actor: "system", at }).run;
+    // Guess at a learner-to-move position: resuming at an opponent turn plays the opponent first.
+    const afterE5 = imported.nodes[2]!;
+    imported = rewind(imported, afterE5.id, at).run;
+    api.run = imported;
+    await environment.controller.resume(imported.id);
+    const prediction = vi.spyOn(api, "prediction");
+    { const r = environment.controller.state.runState!.run; console.log("DEBUG", r.sessionKind, JSON.stringify(r.activeCursor), JSON.stringify(r.nodes.map((n) => [n.id, n.branchId, n.parentId, n.moveSan])), JSON.stringify(r.branches.map((b) => b.id))); }
+
+    await environment.controller.guessImportedMove("b1c3");
+
+    expect(prediction).toHaveBeenCalledWith("imported-guess", expect.objectContaining({ checkpointId: "imported-game:next-move", nodeId: afterE5.id, predictedUci: "b1c3" }), expect.any(String));
+    expect(environment.controller.state.importedGuess).toEqual({
+      nodeId: afterE5.id, guessUci: "b1c3", guessSan: "Nc3", playedUci: "g1f3", playedSan: "Nf3", rank: null, candidateCount: 0,
+    });
+    const run = environment.controller.state.runState!.run;
+    expect(run.activeCursor.nodeId).toBe(afterE5.id);
+    expect(run.nodes).toHaveLength(imported.nodes.length);
+    expect(run.events.at(-1)).toMatchObject({ type: "prediction.recorded", data: { checkpointId: "imported-game:next-move" } });
+  });
+
   it("returns an explicit failed fork result instead of collapsing it into void", async () => {
     const api = new FakeApi();
     const environment = controller(api);

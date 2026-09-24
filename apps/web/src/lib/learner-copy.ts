@@ -104,3 +104,64 @@ export function publishedBandLabel(value: PublishedBandValue): string {
 export function publishedBandInterval(publication: RatingPublication): string {
   return `${publishedBandLabel(publication.interval[0])} to ${publishedBandLabel(publication.interval[1])}`;
 }
+
+/*
+ * Return-queue copy (rfc/return-scheduling.md §§3, 4, 7). Frequency orders, it never grades: these
+ * sentences may say a position is reached more often, never that it matters more or is better.
+ */
+const RETRY_VARIANT_LABELS = Object.freeze({
+  same_root_new_defense: "Same position, a new defence",
+  alternate_plan_class: "Same position, a different plan class",
+  related_position_same_idea: "Related position, same idea",
+  opposite_side: "Same structure, opposite side",
+  different_material_details: "Same outcome, different material details",
+} as const);
+
+export function retryVariantLabel(variant: string): string {
+  return (RETRY_VARIANT_LABELS as Readonly<Record<string, string>>)[variant] ?? variant;
+}
+
+export function dueVariationSentence(schedule: { readonly kind: "blocked" | "varied"; readonly variant: string | null }): string {
+  if (schedule.kind === "blocked") return "Repeat the blocked attempt";
+  if (schedule.variant === null) return "Varied repetition · the variation is a fresh opponent seed";
+  return `Varied repetition · the pack names this variation: ${retryVariantLabel(schedule.variant)}`;
+}
+
+export const DUE_FREQUENCY_ORDER_NOTE = "Returns due on the same day list the position reached in more Lichess games at the rehearsal's rating band first. Earlier due dates always come first.";
+
+export function dueFrequencySentence(frequency: { readonly games: number; readonly population: CorpusPopulation } | null): string | undefined {
+  if (frequency === null) return undefined;
+  return `Position reached in ${frequency.games.toLocaleString("en-US")} games · ${corpusPopulationLabel(frequency.population)}`;
+}
+
+export function dueWaitingSentence(waiting: number, intakeLimit: number): string | undefined {
+  if (waiting === 0) return undefined;
+  return `${waiting} more ${waiting === 1 ? "return is" : "returns are"} waiting. At most ${intakeLimit} are shown at once; the rest keep their place and are served as earlier returns are cleared.`;
+}
+
+export function difficultRootRuleSentence(threshold: number): string {
+  return `Listed after ${threshold} or more unstable graded attempts at the same starting position. This counts recorded attempts; it is not a rating of you.`;
+}
+
+/**
+ * Guess-the-move on an imported game (rfc/return-scheduling.md §8). The reference is the move the
+ * game actually played; the model rank says how human the guess was and is never a grade.
+ */
+export function importedGuessSentence(guess: {
+  readonly guessUci: string; readonly guessSan: string; readonly playedUci: string; readonly playedSan: string;
+  readonly rank: number | null; readonly candidateCount: number;
+}): string {
+  const played = guess.guessUci === guess.playedUci
+    ? `The game continued ${guess.playedSan}, the move you guessed.`
+    : `The game continued ${guess.playedSan}. You guessed ${guess.guessSan}.`;
+  const model = guess.candidateCount === 0
+    ? "The human-move model listed no candidates here."
+    : guess.rank === null
+      ? `Your guess was not among the ${guess.candidateCount} moves the human-move model listed here.`
+      : `The human-move model listed your guess at rank ${guess.rank} of ${guess.candidateCount}.`;
+  return `${played} ${model}`;
+}
+
+export function difficultRootCountSentence(unstableCount: number): string {
+  return `${unstableCount} unstable ${unstableCount === 1 ? "attempt" : "attempts"} recorded`;
+}

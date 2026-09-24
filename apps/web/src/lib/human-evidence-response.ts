@@ -57,6 +57,8 @@ function deepFreeze<T>(value: T): T {
   return value;
 }
 
+export function parseCorpusPopulation(value: unknown, label: string): CorpusPopulation { return population(value, label); }
+
 function population(value: unknown, label: string): CorpusPopulation {
   const item = record(value, label); exact(item, ["source", "ratings", "speeds", "since", "until"], label);
   oneOf(item.source, ["lichess-explorer"] as const, `${label}/source`);
