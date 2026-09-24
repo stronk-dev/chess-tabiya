@@ -141,7 +141,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
-  "derived.semantic_avoidance", "derived.bounded_target",
+  "derived.semantic_avoidance", "derived.bounded_target", "derived.bounded_target_policy",
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
@@ -685,6 +685,39 @@ const inspectorOnly = (reason: string): EvidenceDispositionDeclaration => Object
 
 const BOUNDED_TARGET_ABSTENTIONS = ["input_abstained", "position_mismatch", "target_mismatch", "multiplication_limit", "batch_budget_exhausted", "queue_full", "cancelled", "service_closed"] as const;
 
+const BOUNDED_POLICY_LOCAL_INPUTS = [ref("derived.bounded_target.named_material_target"), ref("derived.bounded_target.immediate")];
+
+/**
+ * rfc/bounded-target-policy-composition.md §4.2–4.3. Changelog 2026-09-24: a preserved immediate
+ * target has no bounded-return item, so each row's derivation is anyOf with and without it.
+ */
+const BOUNDED_TARGET_POLICY_OUTPUTS: readonly ProjectionDeclaration[] = Object.freeze([
+  projection("derived.bounded_target_policy", "derived.bounded_target.engine_target_policy", "derived", {
+    role: "reading", payloadType: "EngineTargetPolicyReading",
+    semantics: "depth-stable Stockfish category for next execution and second-opportunity availability over one exact target/candidate pair",
+    operands: ["convention", "target", "immediate", "boundedReturn", "candidateUci", "counterfactualUci", "pairKey", "depths", "tables", "perDepth", "stableCategory"],
+    signs: ["preserved", "removed", "enabled"], grounding: "declared_convention", exactness: "convention", confidence: "reported",
+    answerContent: ["fact", "threat", "evaluation", "candidate_moves", "move"], forms: ["sentence", "list", "timeline_marker", "panel", "machine_condition"],
+    abstention: { possible: true, reasons: ["input_abstained", "position_or_target_mismatch", "counterfactual_invalid", "depth_category_unstable"] },
+    dependsOn: [ref("live.stockfish.legal_root_table"), ...BOUNDED_POLICY_LOCAL_INPUTS, ref("derived.bounded_target.bounded_return")],
+    derivation: { anyOf: [[ref("live.stockfish.legal_root_table"), ...BOUNDED_POLICY_LOCAL_INPUTS], [ref("live.stockfish.legal_root_table"), ...BOUNDED_POLICY_LOCAL_INPUTS, ref("derived.bounded_target.bounded_return")]] },
+    limitations: ["Two fixed depths; reports engine choice, not bestness, intent, human likelihood or strategic meaning."],
+    disposition: inspectorOnly("rfc/bounded-target-policy-composition.md §6: inspector-only; Review, Support, bots and longitudinal need their own binding contracts."),
+  }),
+  projection("derived.bounded_target_policy", "derived.bounded_target.policy_bounds", "derived", {
+    role: "reading", payloadType: "BoundedTargetPolicyBounds",
+    semantics: "one-band lower/upper bounds for next target execution and later target availability under the declared Maia expansion",
+    operands: ["convention", "target", "immediate", "boundedReturn", "candidateUci", "counterfactualUci", "pairKey", "appliedBand", "temperature", "topP", "keptPerNode", "retainedMassFloor", "pages", "nextExecutionMass", "nextExecutionAbsence", "secondOpportunityAvailableMass", "expandedSecondNodes", "minimumSecondKeptMass", "denominator"],
+    signs: ["preserved", "removed", "enabled"], grounding: "declared_convention", exactness: "convention", confidence: "reported",
+    answerContent: ["fact", "threat", "candidate_moves"], forms: ["sentence", "list", "timeline_marker", "panel", "machine_condition"],
+    abstention: { possible: true, reasons: ["input_abstained", "position_or_target_mismatch", "provider_unavailable", "timeout", "cancelled", "identity_or_generation_mismatch", "retained_mass_below_gate", "massless_candidate", "expansion_budget_exhausted"] },
+    dependsOn: [ref("human.maia.policy_page"), ...BOUNDED_POLICY_LOCAL_INPUTS, ref("derived.bounded_target.bounded_return")],
+    derivation: { anyOf: [[ref("human.maia.policy_page"), ...BOUNDED_POLICY_LOCAL_INPUTS], [ref("human.maia.policy_page"), ...BOUNDED_POLICY_LOCAL_INPUTS, ref("derived.bounded_target.bounded_return")]] },
+    limitations: ["One declared band; bounded page/expansion; probability is model choice, not quality, intent or player diagnosis."],
+    disposition: inspectorOnly("rfc/bounded-target-policy-composition.md §6: inspector-only; no learner binding."),
+  }),
+]);
+
 /** rfc/bounded-policy-targets.md §§3.2–3.4: the literal declaration image. */
 const BOUNDED_TARGET_OUTPUTS: readonly ProjectionDeclaration[] = Object.freeze([
   projection("derived.bounded_target", "derived.bounded_target.named_material_target", "derived", {
@@ -1101,6 +1134,8 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("derived.semantic_avoidance", "derived", "packages/runtime/src/semantic-evidence.ts", "local", "sync", avoidanceOutputs),
   // rfc/bounded-policy-targets.md §3: the one local/background producer and its three literal rows.
   producer("derived.bounded_target", "derived", "packages/runtime/src/bounded-target.ts", "local", "background", BOUNDED_TARGET_OUTPUTS),
+  // rfc/bounded-target-policy-composition.md §4: own operation local/sync; both paths provider-bearing.
+  producer("derived.bounded_target_policy", "derived", "apps/server/src/bounded-target-policy.ts", "local", "sync", BOUNDED_TARGET_POLICY_OUTPUTS),
 ]);
 
 // ---------------------------------------------------------------------------------------------

@@ -463,3 +463,47 @@ export async function computeBoundedReturn(immediate: BoundedTargetImmediate & {
   }
   return { kind: "return", visitedPositions: visited, outcome: Object.freeze({ kind: "not_reintroduced", firstRefutation: firstRefutation ?? null }) };
 }
+
+// ---------------------------------------------------------------------------------------------
+// rfc/bounded-target-policy-composition.md: exact availability after a declared line
+// ---------------------------------------------------------------------------------------------
+
+export type TargetLineAvailability =
+  | { readonly kind: "available"; readonly captureUci: string }
+  | { readonly kind: "unavailable" }
+  | { readonly kind: "identity_lost" }
+  | { readonly kind: "illegal" };
+
+/**
+ * Replays an exact legal line (one to three plies) from the target's source position, tracking the
+ * named attacker and victim, and reports whether the same positive capture is available at the
+ * line's end. A captured tracked piece is `unavailable`; an unexplained replacement is
+ * `identity_lost`; an illegal move is `illegal`. Availability is never execution.
+ */
+export function targetAvailabilityAfterLine(target: NamedMaterialTarget, line: readonly string[]): TargetLineAvailability {
+  if (line.length === 0 || line.length > 3) throw new TypeError("A target line has one to three plies");
+  let position = positionFromFen(target.passAnchor.sourceFen);
+  let pair = initialPair(target);
+  for (const [index, uci] of line.entries()) {
+    const parsed = parseUci(uci);
+    if (parsed === undefined || !position.isLegal(parsed)) return { kind: "illegal" };
+    const played = playTracked(position, parsed, pair, (index + 1) as 1 | 2 | 3);
+    if (played.kind === "captured") return { kind: "unavailable" };
+    if (played.kind === "identity_lost") return { kind: "identity_lost" };
+    position = played.position;
+    pair = played.pair;
+  }
+  const capture = positiveCapture(position, pair, target.captureUci);
+  return capture === undefined ? { kind: "unavailable" } : { kind: "available", captureUci: capture.exchange.captureUci };
+}
+
+/** The canonical FEN reached by an exact legal line from the target's source position. */
+export function fenAfterLine(target: NamedMaterialTarget, line: readonly string[]): string {
+  const position = positionFromFen(target.passAnchor.sourceFen);
+  for (const uci of line) {
+    const parsed = parseUci(uci);
+    if (parsed === undefined || !position.isLegal(parsed)) throw new TypeError(`Illegal line move ${uci}`);
+    position.play(parsed);
+  }
+  return canonicalFen(position);
+}

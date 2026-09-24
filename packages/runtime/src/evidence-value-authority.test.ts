@@ -193,8 +193,9 @@ describe("value authority: registry equality", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
     // 216 + the five typed Review projections, forced-mate v2, the concept reference and the
     // principal-variation source, less the retired Story eval shift.
-    // + the three bounded-target routes (rfc/bounded-policy-targets.md §4).
-    expect(ACTIVE).toHaveLength(226);
+    // + the three bounded-target routes (rfc/bounded-policy-targets.md §4) and the two policy routes
+    // (rfc/bounded-target-policy-composition.md §4).
+    expect(ACTIVE).toHaveLength(228);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -267,7 +268,7 @@ describe("value authority: registry equality", () => {
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
     // Plus rfc/bounded-policy-targets.md §4's three bounded-target routes.
-    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -951,11 +952,46 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const named = (invoke("derived.bounded_target.named_material_target@1", namedInputs) as { readonly item: DeclaredEvidence<unknown> }).item;
   const candidate = bounded.sourcePosition.payload.pieces.flatMap((entry) => entry.moves).find((move) => move.uci === "a4b2")!;
   profiles.set("derived.bounded_target.immediate@1", { valid: { target: named, candidate }, falsify: refused("derived.bounded_target.immediate@1", { target: named, candidate, afterFen: "x" }) });
+  // rfc/bounded-target-policy-composition.md §4: the two reported policy routes.
+  const policyLocal = POLICY_FIXTURE.local;
+  profiles.set("derived.bounded_target.engine_target_policy@1", { valid: { ...policyLocal, tables: POLICY_FIXTURE.tables }, falsify: refused("derived.bounded_target.engine_target_policy@1", { ...policyLocal, tables: [POLICY_FIXTURE.tables[0]] }) });
+  profiles.set("derived.bounded_target.policy_bounds@1", { valid: { ...policyLocal, band: 1500, root: POLICY_FIXTURE.root, second: POLICY_FIXTURE.second }, falsify: refused("derived.bounded_target.policy_bounds@1", { ...policyLocal, band: 1500, root: POLICY_FIXTURE.tables[0], second: POLICY_FIXTURE.second }) });
   profiles.set("derived.bounded_target.bounded_return@1", { valid: { immediate: BOUNDED_RETURN.immediate }, resolved: BOUNDED_RETURN.result, falsify: refused("derived.bounded_target.bounded_return@1", { immediate: BOUNDED_RETURN.immediate, traversal: { candidateLimit: 99_999 } }) });
   return profiles;
 }
 
 const BOUNDED_FEN = "8/8/8/7k/n7/8/2B5/4K3 b - - 0 1";
+
+/** Sealed local facts plus scheduler-sealed provider receipts for the two policy routes. */
+const POLICY_FIXTURE = (() => {
+  const seal = <K extends ProviderOperationId>(operation: K, requested: ProviderRequestedIdentityMap[K], capture: ProviderExecutionCapture<K>): DeclaredEvidence<unknown> => {
+    const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt({ operation, requestedIdentity: requested, capture, requestedAt: FIXTURE_AT, retrievedAt: FIXTURE_AT });
+    const { payload, payloadReceipt } = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+    return invokeEvidenceValueRoute(operation === "stockfish.legal_root_table@1" ? "live.stockfish.legal_root_table@1" : "human.maia.policy_page@1", { delivery: PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, payload, payloadReceipt, servedAt: FIXTURE_AT }) } as never) as DeclaredEvidence<unknown>;
+  };
+  const bounded = boundedTargetSourceEvidence(BOUNDED_FEN);
+  const target = (invokeEvidenceValueRoute("derived.bounded_target.named_material_target@1", { threat: bounded.threat, exchange: bounded.exchanges[0]!, sourcePosition: bounded.sourcePosition }) as { readonly item: DeclaredEvidence<unknown> }).item;
+  const candidate = bounded.sourcePosition.payload.pieces.flatMap((entry) => entry.moves).find((move) => move.uci === "h5g5")!;
+  const immediate = (invokeEvidenceValueRoute("derived.bounded_target.immediate@1", { target: target as never, candidate }) as { readonly item: DeclaredEvidence<{ readonly afterFen: string }> }).item;
+  const afterFen = immediate.payload.afterFen;
+  const tables = [8, 10].map((depth) => {
+    const requested = normalizeProviderRequest("stockfish.legal_root_table@1", legalRootRequest(afterFen, depth));
+    const rows = allLegalRows(afterFen).map((row) => ({ ...row, score: row.move === "c2a4" ? "cp 300" : "cp 0" }));
+    return seal("stockfish.legal_root_table@1", requested, legalRootCapture(requested, legalRootLines(afterFen, rows, depth)));
+  });
+  const page = (fen: string): DeclaredEvidence<unknown> => {
+    const legal = allLegalRows(fen).map((row) => row.move);
+    const width = Math.min(8, legal.length);
+    const requested = normalizeProviderRequest("maia.policy_page@1", maiaRequest({ kind: "exact_fen", fen }, { requestedWidth: width, temperature: 0.8, topP: 0.92 }));
+    const lines = legal.slice(0, width).map((move, index) => `info depth 1 multipv ${index + 1} policy ${(0.95 / width).toFixed(6)} pv ${move}`);
+    return seal("maia.policy_page@1", requested, maiaCapture(requested, [...lines, `bestmove ${legal[0]}`]));
+  };
+  const root = page(afterFen);
+  const rootPayload = (root.payload as { readonly payload: { readonly candidates: readonly { readonly moveUci: string; readonly probability: number }[] } }).payload;
+  const moves = [...rootPayload.candidates].sort((left, right) => right.probability - left.probability || left.moveUci.localeCompare(right.moveUci)).slice(0, 8).map((row) => row.moveUci);
+  const second = moves.map((move) => page(after(afterFen, move)));
+  return { local: { target, immediate, counterfactualUci: "a4b2" }, tables, root, second };
+})();
 const BOUNDED_RETURN = await (async () => {
   const bounded = boundedTargetSourceEvidence(BOUNDED_FEN);
   const named = (invokeEvidenceValueRoute("derived.bounded_target.named_material_target@1", { threat: bounded.threat, exchange: bounded.exchanges[0]!, sourcePosition: bounded.sourcePosition }) as { readonly item: DeclaredEvidence<unknown> }).item;

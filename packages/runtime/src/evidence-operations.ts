@@ -9,7 +9,7 @@
 import type { DrillPackDefinition, StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 
 import type { DeclaredEvidence } from "./evidence-contract.js";
-import type { AuthoredFeedbackItemRecord, PackConceptReferencePayload } from "./evidence-factories.js";
+import type { AuthoredFeedbackItemRecord, BoundedTargetPolicyBoundsFactoryResult, EngineTargetPolicyFactoryResult, PackConceptReferencePayload } from "./evidence-factories.js";
 import type { CompiledConceptRegistry } from "./concept-registry.js";
 
 export type { PackConceptReferencePayload } from "./evidence-factories.js";
@@ -38,6 +38,19 @@ export function boundedTargetSourceEvidence(fen: string): { readonly threat: Thr
   const exchanges = passed.kind !== "available" ? [] : positiveMaterialThreatExchanges(threat.payload).flatMap((exchange) => invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: passed.anchor.passedFen, captureUci: exchange.captureUci }) as readonly LegalExchangeEvidence[]);
   const sourcePosition = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen }) as SourceLegalMovesEvidence;
   return Object.freeze({ threat, exchanges: Object.freeze(exchanges), sourcePosition });
+}
+
+/**
+ * rfc/bounded-target-policy-composition.md §5: the two reported policy derivations over sealed local
+ * facts and sealed raw provider receipts. The server operation passes only authority inputs; the
+ * runtime value routes compute and seal the payload.
+ */
+export function derivedBoundedTargetPolicyEvidence(arm: "engine", input: { readonly target: DeclaredEvidence<unknown>; readonly immediate: DeclaredEvidence<unknown>; readonly boundedReturn?: DeclaredEvidence<unknown>; readonly counterfactualUci: string; readonly tables: readonly DeclaredEvidence<unknown>[] }): EngineTargetPolicyFactoryResult;
+export function derivedBoundedTargetPolicyEvidence(arm: "maia", input: { readonly target: DeclaredEvidence<unknown>; readonly immediate: DeclaredEvidence<unknown>; readonly boundedReturn?: DeclaredEvidence<unknown>; readonly counterfactualUci: string; readonly band: number; readonly root: DeclaredEvidence<unknown>; readonly second: readonly DeclaredEvidence<unknown>[] }): BoundedTargetPolicyBoundsFactoryResult;
+export function derivedBoundedTargetPolicyEvidence(arm: "engine" | "maia", input: object): EngineTargetPolicyFactoryResult | BoundedTargetPolicyBoundsFactoryResult {
+  return arm === "engine"
+    ? invokeEvidenceValueRoute("derived.bounded_target.engine_target_policy@1", input as never) as EngineTargetPolicyFactoryResult
+    : invokeEvidenceValueRoute("derived.bounded_target.policy_bounds@1", input as never) as BoundedTargetPolicyBoundsFactoryResult;
 }
 
 const READING_KINDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count" && kind !== "named_structure"));

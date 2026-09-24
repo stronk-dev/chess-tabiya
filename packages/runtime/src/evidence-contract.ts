@@ -895,3 +895,51 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
   const material = { producers, projections, consumers, bindings, semanticEvents, eligibility, reasons, selectionPolicies };
   return immutable({ ...material, digest: sha256(canonical(material)) });
 }
+
+/**
+ * Path-effective execution (rfc/bounded-target-policy-composition.md §4, [[D1700]]): a projection's
+ * own producer may be local/sync while one of its literal derivation paths requires a provider.
+ * Effective availability is `provider` when any transitive derivation member is provider-produced,
+ * and its latency is then `interactive`; a consumer binding cannot advertise sync satisfaction.
+ */
+export interface EffectiveEvidenceExecution {
+  readonly availability: AvailabilityMode;
+  readonly latency: LatencyMode;
+  readonly providerPaths: readonly VersionedEvidenceId[];
+}
+
+export function effectiveEvidenceExecution(manifest: CompiledEvidenceManifest, projection: VersionedEvidenceId): EffectiveEvidenceExecution {
+  const key = (value: VersionedEvidenceId): string => `${value.id}@${value.version}`;
+  const projections = new Map(manifest.projections.map((value) => [key(value), value]));
+  const producers = new Map(manifest.producers.map((value) => [key(value), value]));
+  const providers = new Set<string>();
+  const seen = new Set<string>();
+  const visit = (ref: VersionedEvidenceId): void => {
+    const refKeyValue = key(ref);
+    if (seen.has(refKeyValue)) return;
+    seen.add(refKeyValue);
+    const declaration = projections.get(refKeyValue);
+    if (declaration === undefined) throw new TypeError(`No projection ${refKeyValue}`);
+    const producer = producers.get(key(declaration.producer))!;
+    if (producer.availability === "provider") providers.add(refKeyValue);
+    const members = declaration.derivation?.inputs !== undefined ? [declaration.derivation.inputs] : declaration.derivation?.anyOf ?? [];
+    for (const member of members) for (const input of member) visit(input);
+  };
+  visit(projection);
+  const own = producers.get(key(projections.get(key(projection))!.producer))!;
+  if (providers.size === 0) return Object.freeze({ availability: own.availability, latency: own.latency, providerPaths: Object.freeze([]) });
+  const paths = [...providers].sort().map((value) => { const [id, version] = value.split("@"); return Object.freeze({ id: id!, version: Number(version) }); });
+  return Object.freeze({ availability: "provider", latency: "interactive", providerPaths: Object.freeze(paths) });
+}
+
+/** Refuses a provider-bearing projection bound to a sync consumer or lacking provider-off behavior. */
+export function assertPathEffectiveExecution(manifest: CompiledEvidenceManifest, projections: readonly VersionedEvidenceId[]): void {
+  for (const projection of projections) {
+    const effective = effectiveEvidenceExecution(manifest, projection);
+    if (effective.availability !== "provider") continue;
+    for (const binding of manifest.bindings.filter((value) => value.projection.id === projection.id && value.projection.version === projection.version)) {
+      const consumer = manifest.consumers.find((value) => value.id === binding.consumer.id && value.version === binding.consumer.version)!;
+      if (binding.latency.mode === "sync" || consumer.providerOff === undefined) throw new TypeError(`${projection.id}@${projection.version} is provider-bearing but ${binding.consumer.id} advertises sync satisfaction`);
+    }
+  }
+}

@@ -371,6 +371,7 @@ export {
   sourcingRecordEvidence,
   syzygyTablebaseDomainEvidence,
   boundedTargetSourceEvidence,
+  derivedBoundedTargetPolicyEvidence,
   type PackConceptReferencePayload,
   type PositionGuidanceEvidenceInput,
 } from "./evidence-operations.js";
@@ -739,6 +740,25 @@ export {
   type ThreatEvidence,
   type TrackedPieceIdentity,
 } from "./bounded-target.js";
+export {
+  ENGINE_POLICY_DEPTHS,
+  ENGINE_TARGET_POLICY_CONVENTION,
+  MAIA_POLICY_PARAMETERS,
+  MAIA_TARGET_POLICY_CONVENTION,
+  maiaExpansionMoves,
+  maiaRequestedWidth,
+  selectedRootRow,
+  type BoundedTargetPolicyBounds,
+  type EnginePolicyAbstention,
+  type EngineTargetPolicyReading,
+  type MaiaPageEvidence,
+  type MaiaPolicyAbstention,
+  type ProbabilityInterval,
+  type StockfishTableEvidence,
+  type TargetPolicyCategory,
+} from "./bounded-target-policy.js";
+export type { BoundedTargetPolicyBoundsFactoryResult, EngineTargetPolicyFactoryResult } from "./evidence-factories.js";
+export { assertPathEffectiveExecution, effectiveEvidenceExecution, type EffectiveEvidenceExecution } from "./evidence-contract.js";
 export { assertEvidenceProducerOperations, evidenceProducerOperation, type EvidenceProducerOperation } from "./evidence-producer-operations.js";
 export { threatEvidencePassAnchor } from "./threat-pass-authority.js";
 export { messageChannelMacrotaskYield } from "./cooperative-yield.js";

@@ -20,6 +20,13 @@
       "46ae14c4400c45fd572f190dfaea957b8c3f0d0e77ccc1a8ca01b59bbb81cc21"
     ]
   },
+  "derived.bounded_target.engine_target_policy@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "481396260d3a630643efdc7158f520cfd302d09066bbb47c28af81a7ce2f1697"
+    ]
+  },
   "derived.bounded_target.immediate@1": {
     "availability": "available",
     "cardinality": 1,
@@ -32,6 +39,13 @@
     "cardinality": 1,
     "payloadDigests": [
       "5da63bf4747329ea7c67f94c76bf83e00e7ee7f747b31772e8705f3f00f6ba90"
+    ]
+  },
+  "derived.bounded_target.policy_bounds@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "1da7408717870dd5eca5a745a379e70b1e06860303b8dfe2d5d0e42256810b30"
     ]
   },
   "derived.compare.engine_trajectory@1": {

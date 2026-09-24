@@ -153,6 +153,27 @@ registered background producer operation (`RUNTIME_EVIDENCE_PRODUCER_OPERATIONS`
 directionless all-defences field may not select a moment. `make bounded-target-census` reruns the
 D1023 populations through these production symbols.
 
+### Reported target-policy readings
+
+`rfc/bounded-target-policy-composition.md` adds `derived.bounded_target_policy@1` (own operation
+local/sync; both paths provider-bearing — `effectiveEvidenceExecution` reports `provider/interactive`,
+and `assertPathEffectiveExecution` refuses any sync consumer binding). Both rows are inspector-only
+and `reported`:
+
+- `derived.bounded_target.engine_target_policy@1` — over two complete same-exchange
+  `live.stockfish.legal_root_table@1` receipts (depths 8 and 10) at the after-candidate position:
+  `nextExecution` (the selected root move is the exact target capture) and
+  `secondOpportunityAvailable` (after the selected move and the selected line's declared reply, the
+  exact capture is legal and positive). Disagreeing depths abstain `depth_category_unstable`.
+- `derived.bounded_target.policy_bounds@1` — one applied Maia band, temperature 0.8, top-p 0.92,
+  width min(8, legal): `nextExecutionMass` is `[m, m]`, `[0, missing]` or `[0, 0]` plus the absence
+  cause; `secondOpportunityAvailableMass` is verified available path mass versus `1 − known
+  failure`. Pages below 0.90 retained mass or with a mass-less row refuse the reading.
+
+`apps/server/src/bounded-target-policy.ts#BoundedTargetPolicyCompositionOperation` (composed in
+`application.ts` over the bounded-target service and the one shared provider scheduler) is the only
+production operation; it keeps no cache or queue of its own and propagates cancellation.
+
 ## Honest homes and raw evidence
 
 Every projection is either bound to a consumer or has one explicit disposition:

@@ -120,6 +120,17 @@ import {
 } from "./tactics.js";
 import { bindThreatEvidencePassAnchor } from "./threat-pass-authority.js";
 import {
+  deriveEngineTargetPolicy,
+  deriveMaiaPolicyBounds,
+  type BoundedTargetPolicyBounds,
+  type EnginePolicyAbstention,
+  type EngineTargetPolicyReading,
+  type MaiaPageEvidence,
+  type MaiaPolicyAbstention,
+  type PolicyLocalInputs,
+  type StockfishTableEvidence,
+} from "./bounded-target-policy.js";
+import {
   computeBoundedReturn,
   computeImmediate,
   computeNamedMaterialTarget,
@@ -1802,6 +1813,62 @@ export const createDerivedBoundedTargetBoundedReturnV1Evidence = (() => {
     if (computed.kind === "budget_exhausted") return Object.freeze({ kind: "abstained", projection: Object.freeze({ id: "derived.bounded_target.bounded_return" as const, version: 1 as const }), reason: "budget_exhausted", candidateUci: immediate.candidateUci, visitedPositions: computed.visitedPositions });
     const payload: BoundedTargetReturn = Object.freeze({ immediate: input.immediate as BoundedTargetReturn["immediate"], horizonPlies: 3, visitedPositions: computed.visitedPositions, outcome: computed.outcome });
     const item = mint(route, symbol, payload, { immediate: input.immediate, traversal: input.traversal.requestDigest }, [input.immediate]) as BoundedTargetReturnEvidence;
+    return Object.freeze({ kind: "evidence", item });
+  });
+})();
+
+// ---------------------------------------------------------------------------------------------
+// rfc/bounded-target-policy-composition.md §§2–4: the two reported policy derivations
+// ---------------------------------------------------------------------------------------------
+
+export type EngineTargetPolicyFactoryResult =
+  | { readonly kind: "evidence"; readonly item: DeclaredEvidence<EngineTargetPolicyReading> }
+  | { readonly kind: "abstained"; readonly projection: { readonly id: "derived.bounded_target.engine_target_policy"; readonly version: 1 }; readonly reason: EnginePolicyAbstention };
+
+export type BoundedTargetPolicyBoundsFactoryResult =
+  | { readonly kind: "evidence"; readonly item: DeclaredEvidence<BoundedTargetPolicyBounds> }
+  | { readonly kind: "abstained"; readonly projection: { readonly id: "derived.bounded_target.policy_bounds"; readonly version: 1 }; readonly reason: MaiaPolicyAbstention };
+
+const isUciText = (candidate: unknown): boolean => typeof candidate === "string" && /^[a-h][1-8][a-h][1-8][qrbn]?$/u.test(candidate);
+const POLICY_LOCAL = {
+  target: sealed("derived.bounded_target.named_material_target@1"),
+  immediate: sealed("derived.bounded_target.immediate@1"),
+  boundedReturn: optional(sealed("derived.bounded_target.bounded_return@1")),
+  counterfactualUci: value("a UCI counterfactual", isUciText),
+} as const;
+
+function policyLocal(input: { readonly target: DeclaredEvidence<unknown>; readonly immediate: DeclaredEvidence<unknown>; readonly boundedReturn?: DeclaredEvidence<unknown>; readonly counterfactualUci: string }): PolicyLocalInputs {
+  return { target: input.target as NamedMaterialTargetEvidence, immediate: input.immediate as BoundedTargetImmediateEvidence, boundedReturn: (input.boundedReturn ?? null) as BoundedTargetReturnEvidence | null, counterfactualUci: input.counterfactualUci };
+}
+
+function policyLocalSources(local: PolicyLocalInputs): readonly DeclaredEvidence<unknown>[] {
+  return local.boundedReturn === null ? [local.target, local.immediate] : [local.target, local.immediate, local.boundedReturn];
+}
+
+/** Depth-stable Stockfish category over two complete same-exchange legal-root tables (depths 8, 10). */
+export const createDerivedBoundedTargetEngineTargetPolicyV1Evidence = (() => {
+  const route = "derived.bounded_target.engine_target_policy@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ ...POLICY_LOCAL, tables: sealedList(2, 2, "live.stockfish.legal_root_table@1") }], result: "availability" }, (input: Parameters<typeof policyLocal>[0] & { readonly tables: readonly DeclaredEvidence<unknown>[] }): EngineTargetPolicyFactoryResult => {
+    const local = policyLocal(input);
+    const tables = [input.tables[0], input.tables[1]] as unknown as readonly [StockfishTableEvidence, StockfishTableEvidence];
+    const derived = deriveEngineTargetPolicy(local, tables);
+    if (derived.kind === "abstained") return Object.freeze({ kind: "abstained", projection: Object.freeze({ id: "derived.bounded_target.engine_target_policy" as const, version: 1 as const }), reason: derived.reason });
+    const item = mint(route, symbol, derived.payload, { local: policyLocalSources(local), counterfactualUci: local.counterfactualUci, tables }, [...policyLocalSources(local), ...tables]);
+    return Object.freeze({ kind: "evidence", item });
+  });
+})();
+
+/** One-band Maia execution/availability bounds over the retained root and expansion pages. */
+export const createDerivedBoundedTargetPolicyBoundsV1Evidence = (() => {
+  const route = "derived.bounded_target.policy_bounds@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ ...POLICY_LOCAL, band: value("an applied Maia band", Number.isSafeInteger), root: sealed("human.maia.policy_page@1"), second: sealedList(0, 8, "human.maia.policy_page@1") }], result: "availability" }, (input: Parameters<typeof policyLocal>[0] & { readonly band: number; readonly root: DeclaredEvidence<unknown>; readonly second: readonly DeclaredEvidence<unknown>[] }): BoundedTargetPolicyBoundsFactoryResult => {
+    const local = policyLocal(input);
+    const expansion = { root: input.root as MaiaPageEvidence, second: input.second as readonly MaiaPageEvidence[] };
+    const derived = deriveMaiaPolicyBounds(local, input.band, expansion);
+    if (derived.kind === "abstained") return Object.freeze({ kind: "abstained", projection: Object.freeze({ id: "derived.bounded_target.policy_bounds" as const, version: 1 as const }), reason: derived.reason });
+    const item = mint(route, symbol, derived.payload, { local: policyLocalSources(local), counterfactualUci: local.counterfactualUci, band: input.band, pages: derived.payload.pages }, [...policyLocalSources(local), ...derived.payload.pages]);
     return Object.freeze({ kind: "evidence", item });
   });
 })();

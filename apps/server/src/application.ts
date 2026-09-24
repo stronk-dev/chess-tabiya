@@ -70,6 +70,8 @@ import { binaryArtifactProbe } from "./engine-supervisor.js";
 import { OPERATOR_PROVIDER_BOUNDS, composeProviderTraversalApplication, type ProviderExchangeBounds, type ProviderTraversalApplication } from "./provider-traversal.js";
 import { BotOpponentProviders } from "./bot-opponent-operation.js";
 import { BotProviderAvailability } from "./bot-opponent-source.js";
+import { BoundedTargetPolicyCompositionOperation } from "./bounded-target-policy.js";
+import { createBoundedTargetBackgroundService } from "@chess-tabiya/runtime";
 
 /** rfc/review-evidence-compiler.md §4.1: the 1.0 Review enrichment profile (explicit bounds). */
 export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
@@ -174,6 +176,11 @@ export interface ChessTabiyaApplication {
    * over the five operations. Process-local operator/research door only; no HTTP route.
    */
   readonly providers: ProviderTraversalApplication;
+  /**
+   * rfc/bounded-target-policy-composition.md §5: the composed target-policy operation over the
+   * bounded-target service and the one shared provider scheduler. Operator/research only.
+   */
+  readonly boundedTargetPolicy: BoundedTargetPolicyCompositionOperation;
   readonly startupReceipt: ApplicationStartupReceipt;
   readonly longitudinal: ApplicationLongitudinal;
   close(): Promise<void>;
@@ -548,6 +555,16 @@ async function composeServices(
     availability: botAvailability,
   });
   const botProbe = botOpponent.probe().catch(() => undefined);
+  const boundedTargets = createBoundedTargetBackgroundService();
+  const boundedTargetPolicy = new BoundedTargetPolicyCompositionOperation({
+    targets: boundedTargets,
+    scheduler: providers.scheduler,
+    requestedEngine: async () => {
+      const identity = await providerEngines.start("stockfish-analysis");
+      return Object.freeze({ id: identity.id, version: identity.version });
+    },
+    providerTimeoutMs: 20_000,
+  });
   const evidenceQueue = new EvidenceJobQueue(evidenceExecutor, {
     maxConcurrency: 2,
     retry: APPLICATION_EVIDENCE_RETRY_POLICY,
@@ -673,6 +690,7 @@ async function composeServices(
     server,
     engineMode,
     providers,
+    boundedTargetPolicy,
     startupReceipt,
     longitudinal: Object.freeze({
       health: longitudinalHealth,
@@ -688,6 +706,7 @@ async function composeServices(
       storage.setLongitudinalWakeListener(undefined);
       await worker?.drain();
       // In-flight evidence leases return to retry_wait with a shutdown basis; nothing is lost.
+      await boundedTargets.close();
       await evidenceQueue.close();
       await botProbe;
       await supervisor?.shutdown();
