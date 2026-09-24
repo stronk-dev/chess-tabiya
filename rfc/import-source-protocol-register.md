@@ -1,14 +1,19 @@
 # RFC: Import-source protocol shared-resource registration
 
-- **Status:** draft — first author pass 2026-09-06; fresh independent review and owner acceptance
-  of the generic bootstrap are required before implementation
+- **Status:** implemented 2026-09-24 at the owner's direction to build ready RFCs without further
+  review rounds (the fresh review was not run). The descriptor/claim vocabulary was corrected to the
+  implemented bootstrap (see Changelog): `import-source-protocol` is one `members` row read by the
+  existing `string_tuple` reader over a present `IMPORT_SOURCE_PROTOCOL_MEMBERS` tuple seeded with
+  the four shipped request/source members, with its checked README register; `live-sources.md`
+  claims the broadcast pair. Receipt: `planning/import-source-protocol-register/implementation-2026-09-24.md`.
+  Previously: draft — first author pass 2026-09-06
 - **Author:** Codex
 - **Created:** 2026-09-06
 - **Design refs:** none; this is repository process and changes no learner behavior
 - **Exploration gate:** [[D2278]] reproduced the request/source vocabulary as hand-copied across
   server REST/service/storage/export and web API/client while `live-sources` falsely called it
   server-local
-- **Depends on:** accepted and implemented `shared-resource-register-bootstrap.md`
+- **Depends on:** implemented `archive/shared-resource-register-bootstrap.md` (catalogue + checker)
 - **Parent / amends:** RFC-0000 rule 7, `rfc/README.md`, `rfc/live-sources.md`
 - **Planning:** `planning/import-source-protocol-register/`
 
@@ -17,12 +22,46 @@ none
 ```
 
 ```tabiya-resource-roots
-import-source-protocol | sequential/canonical_resource@1/absent | packages/runtime/src/import-source-protocol.ts#export:IMPORT_SOURCE_PROTOCOL_RESOURCE | none
+import-source-protocol | members/string_tuple@present | packages/runtime/src/import-source-protocol.ts#export:IMPORT_SOURCE_PROTOCOL_MEMBERS | none
 ```
 
 ```tabiya-resource-descriptor-source
-planning/import-source-protocol-register/catalogue-additions.v1.json
+rfc/shared-resource-registers.json#import-source-protocol
 ```
+
+## Implemented contract (2026-09-24)
+
+This section is the active contract; §§1 and 3 below describe the withdrawn
+`canonical_resource@1`/`absent`/lane vocabulary and are retained as the drafted intent they were.
+
+1. `rfc/shared-resource-registers.json` gains exactly one `import-source-protocol` row with claim kind
+   `members` and source `{ kind: "string_tuple", path: "packages/runtime/src/import-source-protocol.ts",
+   exportName: "IMPORT_SOURCE_PROTOCOL_MEMBERS" }`. The historical
+   `planning/import-source-protocol-register/catalogue-additions.v1.json` is evidence only.
+2. The member grammar is `request_<ImportSource.kind>` and `source_<imported_games.source_kind>`. One
+   tuple carrying both faces is how this row keeps the atomicity §2 asks for: a request kind cannot
+   be added without editing the same tuple its durable kind lives in, and both faces are derived
+   from it (`ImportSourceRequestKind`, `ImportSourceKind`, `IMPORT_SOURCE_REQUEST_KINDS`,
+   `IMPORT_SOURCE_KINDS`).
+3. The source is present before the row is admitted and is seeded with the four members the shipped
+   importer already used — `request_lichess`, `request_pgn`, `source_lichess_url`,
+   `source_pgn_paste` — each with a Landed row crediting `archive/game-import-and-story.md` (the
+   evidence-kinds precedent for pre-register members). Absent-source admission ([[D3082]]) is not built.
+4. The copies [[D2278]] counted now derive: the server resolver's `ImportSource` and
+   `ResolvedImportSource.sourceKind`, the storage `ImportedGameRecord.sourceKind`, and the web API's
+   `ImportedGameRecord.sourceKind`/`ImportGameRequest.source`. SQL cannot import TypeScript, so
+   `apps/server/src/import-source-protocol.test.ts` requires the running `imported_games` CHECK to equal
+   the `source_` face and the REST parser to admit every `request_` member and refuse another kind.
+5. `live-sources.md` claims `import-source-protocol | members request_broadcast, source_lichess_broadcast`.
+   A lane claim, a hyphenated member, a renamed resource and a second claimant of the same member all
+   fail through the generic checker (`tools/register-check.test.mjs`).
+6. Existing catalogue rows and registers are byte-identical apart from the appended row/section; the
+   generic checker receives no resource-name branch.
+
+The same landing fixes ledger [[D959]] at the import boundary this resource names: the `pgn` request
+arm is bounded to the shared 64 KiB limit before any work and then re-serialized through the shipped
+`stripPgnAnnotations`, so a pasted game stores and exports headers and moves only, exactly as the
+lichess arm has since [[D410]]. The licence note says `annotations stripped`.
 
 ## Summary
 
@@ -91,7 +130,7 @@ semantics, it must do so through a new measured claim, not a name collision.
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | generic bootstrap accepted and implemented | `shared-resource-register-bootstrap.md` | archived bootstrap receipt | **2026-09-24** — implemented and archived at `rfc/archive/shared-resource-register-bootstrap.md` (owner-directed, without its D1 fresh review). It offers no absent-source admission ([[D3082]]); a present-first `string_tuple` row, as `provider-protocol` used, is the available path |
-| D2 | descriptor/additions/register marker implemented and checked | `import-source-protocol-register.md` | this RFC's implementation commit plus RFC/register/log closeout | |
+| D2 | descriptor/additions/register marker implemented and checked | `import-source-protocol-register.md` | this RFC's implementation commit plus RFC/register/log closeout | **2026-09-24** — present `members` row, seeded tuple, README register and census; see `planning/import-source-protocol-register/implementation-2026-09-24.md`. Log closeout and Active-row flip are left to the consolidating session |
 | D3 | product version 1 created under exact first-lane claim | `live-sources.md` | its accepted implementation | |
 
 ## Open questions
@@ -101,4 +140,12 @@ None. Product semantics stay in `live-sources.md`; this is the mechanical regist
 
 ## Changelog
 
+- 2026-09-24: implemented (claude) at the owner's direction, with one genuine-defect correction inline:
+  the draft assumed a `sequential/canonical_resource@1` adapter, an `absent` introduction and a
+  `first lane 1 | whole projection` claim grammar, none of which exist in the implemented
+  `shared-resource-register-bootstrap`. As `provider-protocol-register.md` did the same day, the row is
+  the implemented `members`/`string_tuple` shape over a present source. Unlike that precedent the tuple
+  is seeded rather than empty, because the four members it names already ship and [[D2278]]'s copies
+  can derive from it now; `live-sources.md` claims only the broadcast pair. [[D959]] fixed in the
+  same landing (pasted PGN stripped at the record boundary).
 - 2026-09-06: drafted from [[D2278]] and the generic bootstrap contract.

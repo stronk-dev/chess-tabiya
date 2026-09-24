@@ -166,7 +166,7 @@ import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { recordedSemanticPathOperation } from "./recorded-semantic-path.js";
 import type { ReviewEvidenceCoordinator } from "./review-evidence.js";
-import { resolveImportSource, type ImportSource } from "./import-source.js";
+import { IMPORT_PGN_MAX_BYTES, resolveImportSource, type ImportSource } from "./import-source.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
 
 function ratingGroup(value: PublishedBandValue): string | number {
@@ -955,7 +955,7 @@ export class RunService {
     const lease = this.#lease(leaseInput);
     if (lease.learnerId === "__legacy") this.#principal("legacy-import");
     const source = await resolveImportSource(input.source, this.#importFetch);
-    if (new TextEncoder().encode(source.pgn).byteLength > 65_536) {
+    if (new TextEncoder().encode(source.pgn).byteLength > IMPORT_PGN_MAX_BYTES) {
       throw new ServerError("IMPORT_INVALID_PGN", "PGN exceeds the 64 KiB import limit");
     }
     let parsed;
