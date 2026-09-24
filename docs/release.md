@@ -62,7 +62,7 @@ mismatch (`RELEASE_INDEX_REFUSED`). Without a mounted index About reports `not_a
 ## Release manifest v1
 
 `packages/schema/src/release-manifest/index.ts` owns the closed schema (projected to
-`schemas/release-manifest.v1.schema.json`, checked by `release-manifest-schema.mjs`), the validator
+`release/release-manifest.v1.schema.json`, checked by `release-manifest-schema.mjs`; it stays out of `schemas/` until the `release-manifest-schema` register claim can enter lawfully, [[D2363]]), the validator
 and the canonical form. Beyond the schema it enforces sorting, role/tier coupling, SBOM file joins,
 tag-bound signature identities, Compose ⊆ artifacts, the §5 ceilings on receipts, and the release
 class: a non-prerelease version requires both roles on both platforms, native receipts for the

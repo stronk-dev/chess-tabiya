@@ -115,7 +115,7 @@ test("§1/§7 a 1.0-class release needs both roles, both platforms, native recei
 });
 
 test("§1 the JSON Schema projection is exact and agrees with the TypeScript validator (ajv 2020)", () => {
-  assert.equal(readFileSync(join(REPO_ROOT, "schemas/release-manifest.v1.schema.json"), "utf8"), projectedSchema());
+  assert.equal(readFileSync(join(REPO_ROOT, "release/release-manifest.v1.schema.json"), "utf8"), projectedSchema());
   const require = createRequire(join(REPO_ROOT, "packages/schema/package.json"));
   const Ajv2020 = require("ajv/dist/2020.js").default;
   const validate = new Ajv2020({ strict: false, allErrors: true }).compile(RELEASE_MANIFEST_SCHEMA);

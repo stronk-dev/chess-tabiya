@@ -110,7 +110,7 @@ export function sameLicence(left, right) {
  * declared, known runtime binaries only, no NOASSERTION outside the OS layer, and no secret, local
  * or builder-only path anywhere in the document.
  */
-export function reconcileSbom(sbom, { dpkg, allowedScannerPackages = [] }) {
+export function reconcileSbom(sbom, { dpkg, allowedScannerPackages = [], deferNoassertion = () => false }) {
   const findings = [];
   const packages = sbom.packages.filter((pkg) => pkg.SPDXID !== "SPDXRef-DOCUMENT");
   const debs = packages.filter((pkg) => purlOf(pkg)?.startsWith("pkg:deb/"));
@@ -126,7 +126,9 @@ export function reconcileSbom(sbom, { dpkg, allowedScannerPackages = [] }) {
     }
     if (purl.startsWith("pkg:deb/") || purl.startsWith("pkg:oci/") || purl === "") continue;
     if (!allowedScannerPackages.some((allowed) => allowed(pkg))) findings.push(`scanner found an undeclared component: ${purl}`);
-    else if ((pkg.licenseDeclared ?? "NOASSERTION") === "NOASSERTION") findings.push(`NOASSERTION licence for non-OS component ${purl}`);
+    // A vendored copy inside another declared distribution keeps NOASSERTION visible to the licence
+    // gate (which refuses it for publication) instead of failing the structural reconciliation.
+    else if ((pkg.licenseDeclared ?? "NOASSERTION") === "NOASSERTION" && !deferNoassertion(pkg)) findings.push(`NOASSERTION licence for non-OS component ${purl}`);
   }
   const text = JSON.stringify(sbom);
   if (SECRET.test(text)) findings.push("the SBOM contains a secret/token pattern");

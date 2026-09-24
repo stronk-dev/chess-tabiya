@@ -1,7 +1,7 @@
 // rfc/verifiable-runtime-distribution.md §1 — `release-manifest.json`, the post-image release index.
 //
 // This module is the single authority for the v1 protocol. `RELEASE_MANIFEST_SCHEMA` is the closed
-// JSON Schema (projected verbatim to schemas/release-manifest.v1.schema.json by
+// JSON Schema (projected verbatim to release/release-manifest.v1.schema.json by
 // `node tools/release/release-manifest-schema.mjs --write`), and `validateReleaseManifest`
 // interprets that same object before applying the cross-field rules a JSON Schema cannot state
 // (sorting, role/tier coupling, compose/artifact joins, resource ceilings, release-class rules).
@@ -119,7 +119,7 @@ const artifact = {
   },
 };
 
-/** The closed v1 JSON Schema. `schemas/release-manifest.v1.schema.json` is its exact projection. */
+/** The closed v1 JSON Schema. `release/release-manifest.v1.schema.json` is its exact projection. */
 export const RELEASE_MANIFEST_SCHEMA = Object.freeze({
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: RELEASE_MANIFEST_SCHEMA_ID,

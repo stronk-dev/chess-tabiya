@@ -172,6 +172,7 @@ export async function proveMaiaImage({ image, subject, platform, out, materials,
       // setuptools' record; they are inventoried and licence-evaluated, never silently dropped.
       (pkg) => purlOf(pkg)?.startsWith("pkg:pypi/") && /site-packages\/setuptools\/_vendor\//u.test(pkg.sourceInfo ?? ""),
     ],
+    deferNoassertion: (pkg) => /site-packages\/setuptools\/_vendor\//u.test(pkg.sourceInfo ?? ""),
   }));
   const sbomPath = join(out, `maia-cpu-${platform.replace("/", "-")}.spdx.json`);
   writeFileSync(sbomPath, `${JSON.stringify(sbom, null, 2)}\n`);

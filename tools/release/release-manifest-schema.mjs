@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// rfc/verifiable-runtime-distribution.md §1: schemas/release-manifest.v1.schema.json is the exact
+// rfc/verifiable-runtime-distribution.md §1: release/release-manifest.v1.schema.json is the exact
 // projection of RELEASE_MANIFEST_SCHEMA in packages/schema/src/release-manifest/index.ts.
 //   node tools/release/release-manifest-schema.mjs --check   (default) fail when the projection drifted
 //   node tools/release/release-manifest-schema.mjs --write   rewrite the projection
@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { RELEASE_MANIFEST_SCHEMA } from "../../packages/schema/src/release-manifest/index.ts";
 import { repoPath } from "./lib/common.mjs";
 
-export const RELEASE_MANIFEST_SCHEMA_PATH = "schemas/release-manifest.v1.schema.json";
+export const RELEASE_MANIFEST_SCHEMA_PATH = "release/release-manifest.v1.schema.json";
 export const projectedSchema = () => `${JSON.stringify(RELEASE_MANIFEST_SCHEMA, null, 2)}\n`;
 
 if (process.argv[1] && import.meta.filename === process.argv[1]) {
