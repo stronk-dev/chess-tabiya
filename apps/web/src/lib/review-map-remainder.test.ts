@@ -15,7 +15,7 @@ afterEach(() => document.body.replaceChildren());
 
 function payloadOf(run: DrillRun, side: "white" | "black" = run.start.side): ReviewMap {
   const branchId = run.branches[0]!.id;
-  const projection = reviewMapProjection({ run, branchId, story: storyMoments(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", side });
+  const projection = reviewMapProjection({ run, branchId, story: storyMoments(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", side, viewer: { role: "learner", session: "imported" } });
   return JSON.parse(JSON.stringify({
     runId: run.id, branchId, side, ready: true, pendingEvidence: 0,
     source: { kind: "pgn_paste", headers: { White: "Alice", Black: "Bob" }, result: "1-0", importedAt: "2026-09-24T12:00:00.000Z" },
@@ -164,7 +164,7 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     return run;
   };
   const answer = (run: DrillRun) => vi.fn(async (nodeId: string): Promise<ReviewAnalysisPage> => {
-    const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId) };
+    const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId, { role: "learner", session: "imported" }) };
     assertReviewAnalysisResponse(page, { runId: run.id, nodeId });
     return page;
   });
@@ -230,7 +230,7 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
   it("refuses an engine line that is unattributed or phrased as advice, and an ordinary map that carries one", () => {
     const run = lined();
     const nodeId = payloadOf(run).rows[2]!.nodeId;
-    const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId) };
+    const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId, { role: "learner", session: "imported" }) };
     expect(() => assertReviewAnalysisResponse(page, { runId: run.id, nodeId })).not.toThrow();
     expect(() => assertReviewAnalysisResponse({ ...page, bound: {} }, { runId: run.id, nodeId })).toThrow(/attributed/u);
     expect(() => assertReviewAnalysisResponse({ ...page, sentence: `stockfish-test (depth 18 search): the best line is ${"3. Nf3"}.` }, { runId: run.id, nodeId })).toThrow(/advice/u);

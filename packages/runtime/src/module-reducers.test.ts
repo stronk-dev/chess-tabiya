@@ -77,7 +77,7 @@ function declaration(overrides: Partial<ModuleDeclaration> = {}): ModuleDeclarat
     learnerAction: "Branch from this move.",
     accepts: { kind: "manifest" as const, projections, awaiting: [] },
     timings: [{ timing: "post_commit", initiative: "proactive" }],
-    answerCeiling: { ceiling: "fact" },
+    answerCeiling: { kind: "capabilities", capabilities: ["observation"] },
     ceilings: { disclosure: MODULE_TIMING_IMAGE.post_commit, sessions: ["pack"], roles: ["learner"], visibleBoardParity: true },
     budgets: { maxFacts: 2, maxWords: 50, maxMarks: 2, maxArrows: 1 },
     selection: { policy: { id: "production.module_local", version: 1 }, familyPrecedence: projections.map((value) => value.projection) },
@@ -173,6 +173,37 @@ describe("learner module semantic reducers", () => {
     const result = reduceModulePacket(module, compiled, view, { timing: "post_commit", ancestorFacts: [] });
     expect(result.admitted).toBe(1);
     expect(result.facts.map((value) => value.projection.id)).toEqual(["rules.structural.event.passed_pawn"]);
+  });
+
+  it("[§2.3(b)] enforces the module capability union at admission without any per-entry restriction", () => {
+    const ids = ["rules.structural.event.passed_pawn", "derived.grade.fixture_grade"];
+    const base = manifest(ids);
+    // The grade-shaped projection declares evaluation; nothing per-entry narrows the module.
+    const compiled = { ...base, projections: base.projections.map((value) => value.id === ids[1] ? { ...value, answerContent: Object.freeze(["evaluation"] as const) } : value) } as CompiledEvidenceManifest;
+    const declared = ids.map((id) => declareEvidence(producer, { id, version: 1 }, { color: "white", file: "e", nodeId: "n1" }));
+    const view = evidenceForConsumer(compiled, consumer, declared);
+    const accepts = { kind: "manifest" as const, projections: ids.map((id) => ({ projection: { id, version: 1 } })), awaiting: [] };
+    const selection = { policy: { id: "production.module_local", version: 1 }, familyPrecedence: ids.map((id) => ({ id, version: 1 })) };
+    const observation = declaration({ accepts, selection, noveltyWindow: 0 });
+    expect(reduceModulePacket(observation, compiled, view, { timing: "post_commit" }).facts.map((value) => value.projection.id)).toEqual([ids[0]]);
+    const evaluation = declaration({ accepts, selection, noveltyWindow: 0, answerCeiling: { kind: "capabilities", capabilities: ["threat", "evaluation"] } });
+    expect(reduceModulePacket(evaluation, compiled, view, { timing: "post_commit" }).facts.map((value) => value.projection.id).sort()).toEqual([...ids].sort());
+    const theory = declaration({ accepts, selection, noveltyWindow: 0, answerCeiling: { kind: "capabilities", capabilities: ["theory"] } });
+    expect(reduceModulePacket(theory, compiled, view, { timing: "post_commit" }).facts.map((value) => value.projection.id)).toEqual([ids[0]]);
+  });
+
+  it("reads a complete-population avoidance denominator from its declared legalAlternatives operand", () => {
+    const id = "derived.semantic_avoidance.isolated_pawn";
+    const base = manifest([id]);
+    const compiled = { ...base, projections: base.projections.map((value) => ({ ...value, operands: Object.freeze(["relation", "family", "legalAlternatives", "alternativesWithFamily", "alternativeEvents"]) })) } as CompiledEvidenceManifest;
+    const module = declaration({
+      accepts: { kind: "manifest", projections: [{ projection: { id, version: 1 }, denominatorRequired: true }], awaiting: [] },
+      selection: { policy: { id: "production.module_local", version: 1 }, familyPrecedence: [{ id, version: 1 }] },
+      noveltyWindow: 0,
+    });
+    const offered = (legalAlternatives: number) => evidenceForConsumer(compiled, consumer, [declareEvidence(producer, { id, version: 1 }, { relation: "avoided", family: {}, legalAlternatives, alternativesWithFamily: 0, alternativeEvents: [] })]);
+    expect(reduceModulePacket(module, compiled, offered(12), { timing: "post_commit" }).admitted).toBe(1);
+    expect(reduceModulePacket(module, compiled, offered(0), { timing: "post_commit" }).admitted).toBe(0);
   });
 
 });

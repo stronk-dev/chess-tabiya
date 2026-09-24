@@ -10,6 +10,7 @@ import {
   BREADTH_CONVENTION_TEXT,
   CURRENT_CONSUMER_OPERATION_IDS,
   EVIDENCE_CONSUMER_IDS,
+  MODULE_CONSUMER_IDS,
   EVIDENCE_CONTRACT_DECLARATIONS,
   EVIDENCE_PRODUCER_IDS,
   EVIDENCE_PRODUCERS,
@@ -48,15 +49,20 @@ describe("primary evidence catalogue", () => {
     expect(EVIDENCE_PRODUCER_IDS).toEqual(EXPECTED_PRODUCERS);
     expect(EVIDENCE_PRODUCERS.map((item) => item.id)).toEqual(EXPECTED_PRODUCERS);
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
-    expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
+    // rfc/module-registration.md §2.2: nine module consumers join (rules_floor has no evidence; guided_hint is blocked).
+    expect(MODULE_CONSUMER_IDS).toHaveLength(9);
+    expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([40, 222, 25, 243]); // +6: rfc/provider-exchange-and-execution.md §§5–9 provider sources and the Syzygy local-domain fact
+    // 258 module pairs = the post-successor-rebase 237 plus the 21 recorded-path v2 successors.
+    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(258);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([40, 222, 34, 501]); // +6 provider-exchange sources (rfc/provider-exchange-and-execution.md §§5–9)
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());
+    // Semantic eligibility stays the single research authority, byte-identical (§2.2, [[D1854]]).
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
     const semanticKeys = new Set(SEMANTIC_EVENT_PROJECTION_REFS.map(exact));
-    expect(manifest.bindings.filter((binding) => semanticKeys.has(exact(binding.projection))).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
+    expect(manifest.bindings.filter((binding) => semanticKeys.has(exact(binding.projection))).every((binding) => binding.consumer.id === "research.semantic_selection" || binding.consumer.id.startsWith("module."))).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
   });
 
@@ -76,22 +82,32 @@ describe("primary evidence catalogue", () => {
     }
   });
 
-  it("registers all four runtime opening projections as inspector-only exact evidence", () => {
+  it("binds the three runtime opening facts to their module homes and keeps the recorded position internal", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const ids = ["theory.opening.current_endpoint", "theory.opening.catalogue_membership", "run.record.position", "derived.opening.deepest_reached"];
     const projections = ids.map((id) => manifest.projections.find((projection) => projection.id === id));
-    expect(projections.every((projection) => projection?.exactness === "exact" && projection.disposition?.kind === "inspector_only")).toBe(true);
-    expect(projections.every((projection) => !manifest.bindings.some((binding) => binding.projection.id === projection?.id))).toBe(true);
+    expect(projections.every((projection) => projection?.exactness === "exact")).toBe(true);
+    const consumersOf = (id: string) => manifest.bindings.filter((binding) => binding.projection.id === id).map((binding) => binding.consumer.id).sort();
+    // runtime-opening-identity D1: endpoint → Theory Breadcrumb; membership → Inspector; deepest → Review + Inspector.
+    expect(consumersOf("theory.opening.current_endpoint")).toEqual(["module.theory_breadcrumb"]);
+    expect(consumersOf("theory.opening.catalogue_membership")).toEqual(["module.full_inspector"]);
+    expect(consumersOf("derived.opening.deepest_reached")).toEqual(["module.full_inspector", "module.review_map"]);
+    expect(projections[2]?.disposition?.kind).toBe("inspector_only");
+    expect(consumersOf("run.record.position")).toEqual([]);
     expect(projections[3]?.derivation).toEqual({ inputs: [{ id: "theory.opening.current_endpoint", version: 1 }, { id: "run.record.position", version: 1 }] });
   });
 
-  it("registers move quality as an inert, evaluation-only derived projection", () => {
+  it("registers move quality as an evaluation-only derived projection bound to exactly its two module consumers", () => {
     const grade = EVIDENCE_PRODUCERS.find((item) => item.id === "derived.grade")?.outputs[0];
     expect(grade).toMatchObject({
       id: "derived.grade.move_quality", version: 1, grounding: "bounded_search",
       exactness: "convention", answerContent: ["evaluation"],
-      disposition: { kind: "experimental" },
     });
+    // rfc/move-quality-grades.md D1: the experimental disposition lifted when the consumers compiled.
+    expect(grade?.disposition).toBeUndefined();
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    expect(manifest.bindings.filter((binding) => binding.projection.id === "derived.grade.move_quality").map((binding) => binding.consumer.id).sort())
+      .toEqual(["module.postcommit_nudge", "module.review_map"]);
     expect(grade?.derivation).toEqual({ anyOf: [
       [{ id: "recorded.engine.eval", version: 1 }],
       [{ id: "live.stockfish.eval", version: 1 }],
@@ -100,7 +116,7 @@ describe("primary evidence catalogue", () => {
     expect(grade?.answerContent).not.toContain("move");
   });
 
-  it("registers exact legal moves without binding an ordinary learner consumer", () => {
+  it("binds exact legal moves only to requested Sight and the explicit Inspector", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const projection = manifest.projections.find((item) => item.id === "rules.mobility.reading.legal_moves");
     expect(projection).toMatchObject({
@@ -108,9 +124,11 @@ describe("primary evidence catalogue", () => {
       exactness: "exact",
       operands: ["fen", "turn", "pieces"],
       answerContent: ["fact", "candidate_moves"],
-      disposition: { kind: "inspector_only" },
     });
-    expect(manifest.bindings.some((binding) => binding.projection.id === projection?.id)).toBe(false);
+    expect(projection?.disposition).toBeUndefined();
+    // exact-legal-mobility D1: the `candidates` capability of requested Sight, never a proactive module.
+    expect(manifest.bindings.filter((binding) => binding.projection.id === projection?.id).map((binding) => binding.consumer.id).sort())
+      .toEqual(["module.full_inspector", "module.sight_on_request"]);
     const old = manifest.projections.find((item) => item.id === "rules.mobility.reading.piece_destinations");
     expect(old).toMatchObject({ grounding: "declared_convention", exactness: "convention" });
   });

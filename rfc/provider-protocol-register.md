@@ -1,6 +1,6 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** implemented 2026-09-24 at the owner's direction to implement ready RFCs without
+- **Status:** implementing 2026-09-24 (landing complete; archival deferred to the consolidation pass) at the owner's direction to implement ready RFCs without
   further review rounds (D2 not run). The eight active criteria were corrected to the implemented
   bootstrap (see Changelog): `provider-protocol` is one `members` row read by the existing
   `string_tuple` reader over a present, initially empty `PROVIDER_PROTOCOL_MEMBERS` tuple, with its

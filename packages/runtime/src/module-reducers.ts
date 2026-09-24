@@ -8,7 +8,7 @@ import {
   type DeclaredEvidence,
   type ProjectionDeclaration,
 } from "./evidence-contract.js";
-import type { ModuleDeclaration, ModuleId, ModuleTiming } from "./module-contract.js";
+import { moduleAnswerImage, type ModuleDeclaration, type ModuleId, type ModuleTiming } from "./module-contract.js";
 
 export const MODULE_REDUCER_VERSION = "module-reducers@1" as const;
 
@@ -161,16 +161,22 @@ export function admitModuleFacts<T>(
   assertConsumerEvidenceView(view);
   if (view.consumer.id !== `module.${module.id}` || view.consumer.version !== 1) throw new TypeError("MODULE_CONSUMER_MISMATCH: packet view does not belong to the module");
   if (!module.timings.some((candidate) => candidate.timing === timing)) return Object.freeze([]);
-  if (module.accepts.kind === "none") return Object.freeze([]);
+  if (module.accepts.kind !== "manifest") return Object.freeze([]);
   const allowed = new Map(module.accepts.projections.map((candidate) => [projectionKey(candidate.projection), candidate]));
+  // rfc/module-registration.md §2.3(b): the module-level capability union is enforced at admission,
+  // independently of any optional per-entry restriction, so no projection can widen the module.
+  const image = moduleAnswerImage(module.answerCeiling);
   return Object.freeze(view.items.flatMap((evidence) => {
     const declaration = allowed.get(projectionKey(evidence.projection));
     if (declaration === undefined || declaration.timings !== undefined && !declaration.timings.includes(timing)) return [];
     const fact = moduleFact(manifest, evidence);
+    if (fact.projection.answerContent.some((answer) => !image.includes(answer))) return [];
     if (declaration.answerContent !== undefined && fact.projection.answerContent.some((answer) => !declaration.answerContent!.includes(answer))) return [];
     if (declaration.denominatorRequired) {
       const payload = objectPayload(evidence.payload);
-      const denominator = payload.denominator;
+      // A complete-population avoidance declares its denominator as the literal `legalAlternatives`
+      // operand (CounterfactualAbsenceOperands); a projection without it names `denominator`.
+      const denominator = fact.projection.operands.includes("legalAlternatives") ? payload.legalAlternatives : payload.denominator;
       if (!Number.isSafeInteger(denominator) || Number(denominator) <= 0) return [];
     }
     return [fact];

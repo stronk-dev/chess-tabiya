@@ -21155,3 +21155,36 @@ shows a fixed explanation beside the due date. D864 closes.
 - **Consequence:** learners cannot choose a bot yet. The durable-state
   migration chain is now the binding constraint for bots, and it also blocks
   longitudinal history and campaign.
+
+### 2026-09-24 — provider exchange, provider protocol and module registration land
+
+**Provider exchange** (implementing):
+- Five sealed operations across Stockfish, Maia, Syzygy and Explorer, each with
+  closed-domain digests, refusing normalizers and pinned parsers.
+- A bounded scheduler, and a serialized engine-supervisor exchange that binds
+  output to the engine generation that produced it.
+- A persisted-delivery save/reload boundary for bot replay.
+- Six evidence factories that accept only sealed deliveries, which discharges
+  value-authority D2 for those sources.
+- Offline providers answer `provider_unavailable`.
+- The `provider-protocol` register lands as a catalogue members row, the first
+  new resource on the register catalogue. It is implementing; archival is
+  deferred to the consolidation pass.
+
+**Module registration** (implementing):
+- `MODULE_REGISTRY` compiles all eleven module declarations at import from one
+  capability authority: 258 pairs, 46 executable, and every other pair names
+  its blocker.
+- Review Map output (grades, evals, relations, eval graph) now renders only
+  through `module.review_map@1`. Analyze renders only through Full Inspector.
+- A new `GET /runs/:id/nudge` serves Post-commit Nudge, which the Support seat
+  shows when the preset includes it.
+- The D921 Wave-C amendment is accepted and implemented. The move-quality-grades
+  D1 consumers compile.
+
+**Ledger:** D921, D2189, D2459, D1647, D3030 and D1445 close.
+
+**Merge fixes:**
+- The manifest tuple is now 40/222/34/501.
+- A timing race in the standing-word browser test was fixed: it now reads the
+  due date from the payload the page was served.

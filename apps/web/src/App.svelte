@@ -2583,6 +2583,7 @@
         onRescopeMarks={api.rescopeMarks === undefined ? undefined : (input) => api.rescopeMarks!(session.runState!.run.id,input)}
         onStop={() => navigate("/play")}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
+        onNudge={api.nudge === undefined ? undefined : (nodeId) => api.nudge!(session.runState!.run.id, nodeId)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
         onCompareVoice={capabilities?.providers.llm === "external" && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}

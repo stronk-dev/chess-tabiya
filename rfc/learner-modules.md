@@ -1,6 +1,6 @@
 # RFC: Learner modules
 
-- **Status:** implementing — the exported contract compiler landed at `2a54d057` and the semantic-reducer checkpoint at `6e52c99c`; production declarations and consumer bindings remain blocked on draft `module-registration.md`. Accepted 2026-08-22 by claude as register owner on the buildability test, after cross-review (nine blockers fixed in place) and the owner's three rulings (D906: radar pre-commit-in-Support; outpost gated on the priority D566 fix; **budgets demoted to backstops, semantic reducers the mechanism**). *The honesty note worked exactly as written: the reducer obligation entered AFTER cross-review on the budgets ruling, the implementer was told to return §OQ1 if underspecified, and codex did (`c4d3c8c`) — correctly, because the three reducers were named and none defined. **Amended 2026-08-23 (reducer amendment, §3a)**: one pipeline, `factIdentity@1`, the closed `SUBSUMPTION@1` table, `positionNovelty@1` as bounded recomputation with a true abstention, `reduction_quality@1` with sink/failure-rule/reader, the `maxFacts` contradiction resolved toward truncate-after-reducers (A9 rewritten), a 14th declaration field `noveltyWindow`, six able-to-fail fixtures (A18) and Discharge D4. **D921 Wave-C amendment authored 2026-09-07 (§4.12, A19) and independently reviewed 2026-09-12:** the twelve shipped semantic projections have a literal 26-pair module delta; the fresh review found no technical blocker, and owner acceptance is the remaining gate. Acceptance of the original contract remains valid; the implementing state records the two shipped checkpoints without claiming the production registry or the pending amendment.* *(Prior line for history: draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is)*
+- **Status:** implementing — the exported contract compiler landed at `2a54d057` and the semantic-reducer checkpoint at `6e52c99c`; the production registry landed 2026-09-24 (`packages/runtime/src/module-registry.ts`, compiled at import against the evidence manifest; receipt `planning/learner-modules/implementation-2026-09-24.md`): all eleven modules declared and nine `module.*` consumers bound (`rules_floor` consumes no evidence), `guided_hint` explicitly `blocked_dependencies` on hint-distance; Review Map and Post-commit Nudge are the first production callers. Accepted 2026-08-22 by claude as register owner on the buildability test, after cross-review (nine blockers fixed in place) and the owner's three rulings (D906: radar pre-commit-in-Support; outpost gated on the priority D566 fix; **budgets demoted to backstops, semantic reducers the mechanism**). *The honesty note worked exactly as written: the reducer obligation entered AFTER cross-review on the budgets ruling, the implementer was told to return §OQ1 if underspecified, and codex did (`c4d3c8c`) — correctly, because the three reducers were named and none defined. **Amended 2026-08-23 (reducer amendment, §3a)**: one pipeline, `factIdentity@1`, the closed `SUBSUMPTION@1` table, `positionNovelty@1` as bounded recomputation with a true abstention, `reduction_quality@1` with sink/failure-rule/reader, the `maxFacts` contradiction resolved toward truncate-after-reducers (A9 rewritten), a 14th declaration field `noveltyWindow`, six able-to-fail fixtures (A18) and Discharge D4. **D921 Wave-C amendment authored 2026-09-07 (§4.12, A19), independently reviewed 2026-09-12, accepted and implemented 2026-09-24 at the owner's direction:** the twelve shipped semantic projections bind through exactly the literal 26 pairs. Acceptance of the original contract remains valid; the implementing state records the two shipped checkpoints; the production registry and the D921 amendment are now implemented, while the preset/seat links (D1, D2) remain open.* *(Prior line for history: draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is)*
   implementing and 2d awaited independent acceptance (2d has since been accepted with its 18
   ids unchanged — Depends-on, §7, changelog); **implementation of this RFC is sequenced
   after both collector waves land** so every eligibility row binds a compiled projection id, per
@@ -771,7 +771,7 @@ closed enumeration.
 - Cap 20 facts / 400 words / 20 marks / 8 arrows. Empty: `stated_absence` per family. All
   rungs, everything attributed.
 
-#### 4.12 D921 — Wave-C literal module amendment (pending fresh review)
+#### 4.12 D921 — Wave-C literal module amendment (accepted and implemented 2026-09-24)
 
 The collector dependency is closed for the population this amendment names. The twelve
 projections below compile in `packages/runtime/src/evidence-catalog.ts`; the two promotion-race
@@ -1059,7 +1059,11 @@ unit and total and match the tables they verify.
     catalogue. The seven `derived.tactic.*_observed@1` members bind to Nudge, Review and Inspector;
     the other five bind only to Inspector. The exact pair set has cardinality 26. A missing pair,
     an extra proactive pair, either withdrawn promotion projection, a placeholder string or a
-    disposition-only Wave-C primitive fails `make wave-c-module-amendment`.
+    disposition-only Wave-C primitive fails `make wave-c-module-amendment`. **Implemented
+    2026-09-24:** the production image (`MODULE_CONSUMER_ACCEPTS`, `WAVE_C_MODULE_PROJECTION_REFS`
+    in `evidence-catalog.ts`) binds exactly these 26 exact `@1` pairs, and
+    `packages/runtime/src/module-registry.test.ts` "[learner-modules A19 / D921]" fails on a missing
+    pair, an extra proactive pair or a retained Wave-C disposition.
 
 ## Discharges
 
@@ -1067,7 +1071,7 @@ unit and total and match the tables they verify.
 |---|---|---|---|---|
 | D1 | Preset/workflow activation of the ordinary modules — this RFC registers production modules with no preset layer by scope; without Phase 5 they are reachable only by fixtures and the explicit inspector/review surfaces, and the chain's last two links stay open | `planning/evidence-foundation-ux/plan.md` | the Phase-5 preset RFC's landing commit | |
 | D2 | Board-protected composition seating the declared seat classes across viewports — the D718/D841 rebuild; module contracts make the play-column placement non-conformant but only Phase 4 relocates it | `planning/evidence-foundation-ux/plan.md` | the Phase-4 composition RFC's landing commit | |
-| D3 | The grade-family projection + versioned per-context convention document ([[D879]]) so the two declared-awaiting rows compile; praise-class refusal and never-rating-conditioned carried into that RFC verbatim | `planning/evidence-foundation-ux/plan.md` | the grade-family RFC's landing commit | |
+| D3 | The grade-family projection + versioned per-context convention document ([[D879]]) so the two declared-awaiting rows compile; praise-class refusal and never-rating-conditioned carried into that RFC verbatim | `planning/evidence-foundation-ux/plan.md` | the grade-family RFC's landing commit | ✅ `63902370` (2026-09-24): both ◇ rows compile — `derived.grade.move_quality@1` binds to `module.postcommit_nudge@1` and `module.review_map@1` |
 | D4 | **Durable novelty and durable reduction pressure** (reducer amendment 2026-08-23) — §3a.4's novelty is bounded to the current branch's ancestor path by recomputation, and §3a.5's instrument measures pressure over the corpus, not per learner over time. Cross-run/cross-session novelty and durable pressure capture need a persisted delivery record, which is `longitudinal-store`'s grain (accepted; it owns durable learner-facing projections and holds its own migration position). This RFC deliberately claims none and defers both | longitudinal-store | the longitudinal-store implementation commit that adds a module-delivery projection | |
 
 The unusual honesty note, stated rather than buried: until D1 discharges, the modules are
@@ -1144,6 +1148,14 @@ this document's to rewrite).
 
 ## Changelog
 
+- 2026-09-24: **accepted and implemented the [[D921]] Wave-C amendment (§4.12, A19)** at the
+  owner's direction (implement directly, no review round). The production registry landed in the
+  same change (`module-registration.md`): the seven `derived.tactic.*_observed@1` events bind to
+  Post-commit Nudge, Review Map and Full Inspector; defender-duty reading, defender removal,
+  duty relocation, overload conflict and bounded mate proof bind to Full Inspector only — 26 exact
+  pairs, their dispositions transferred. The aggregate implementation image additionally binds the
+  exact recorded-path v2 successors to review-timed modules (module-registration changelog); that
+  widens no proactive module and does not count against this literal subset.
 - 2026-09-07: authored the pending [[D921]] Wave-C literal module amendment (§4.12, A19) after
   [[D3069]] removed the held promotion pair from the collector dependency. All twelve shipped
   projections receive an Advanced Inspector home; the seven observed named events additionally

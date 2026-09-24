@@ -52,6 +52,8 @@ Current completion state is deliberately not copied here. Use the
   availability and registration.
 - [Semantic evidence](semantic-evidence.md) — operand-preserving events, research selection and
   counterfactual population rules.
+- [Learner modules](learner-modules.md) — the compiled eleven-module registry, its capability
+  image, what executes today and what is blocked by name.
 - [Recorded evidence](recorded-evidence.md) — durable evidence shapes and their source identity.
 - [Claim backing](claim-backing.md) — authored-claim evidence bindings and validation.
 - [Explanation grounds](explanation-grounds.md) — disclosure, grounded sentences, score

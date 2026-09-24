@@ -7557,13 +7557,12 @@
     },
     {
       "id": "D921",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:2adadc124f484a22979ee0133cd06f55dd7f93989fabb87453a3aa4fa7c37c73",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3a5a081612ac168a6498944b62c9366dc9eaa1d6da8ee6d09d42f7b1cfe89d37",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Accept-the-reviewed-26-pair-Wave-C-amendment"
+      "evidence": "packages/runtime/src/module-registry.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D922",
@@ -10995,14 +10994,15 @@
     },
     {
       "id": "D1445",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9be9deb3743bb70fc52d6c838b9eede8d381cebf4063c1f7f47eb633b17dc572",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b1a9674d0c1d183cb73c6e74d3027eff60e508f7318dcda95649ed20f87573ac",
       "uxItems": [
         "CMP-b11",
         "INR-d3"
       ],
-      "state": "todo",
-      "owner": "campaign"
+      "evidence": "packages/runtime/src/module-registry.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1446",
@@ -12855,12 +12855,12 @@
     },
     {
       "id": "D1647",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ea8688034a76176f395056ee68ece623895033e242e62d3873926c3db7ae50df",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2ea856a33d3ba37f86b3cede7f5aadde88ee57d2f56163894f237312777af39b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-exchange-and-execution.md"
+      "evidence": "apps/server/src/engine-supervisor-exchange.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1648",
@@ -17138,12 +17138,12 @@
     },
     {
       "id": "D2189",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:18e70ef5fcd283d38f810fc441db4020104342cda44da3c15bcfeed365f87ceb",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:50f5f843410773b16d55baf7fc72ba8c91b9073ac6046042faa57faa7776cd95",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-exchange-and-execution.md"
+      "evidence": "packages/runtime/src/provider-protocol.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2190",
@@ -19558,12 +19558,12 @@
     },
     {
       "id": "D2459",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2b8464e63f1f9e673873fde31f318dfe45e90993d43af7e1df701cbf3517754f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a07aa6adb7a7889c14389ea36e5ada8b9a8e720943f658148340527c10a89269",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:provider-protocol-register.md"
+      "evidence": "packages/runtime/src/provider-protocol.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2460",
@@ -24683,12 +24683,12 @@
     },
     {
       "id": "D3030",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f0c301d3546caefc27893ec8a0fc694259013c22aaa9114211d11622bacfdcd2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:387220063cfb1c5923d55b9191b5fa6ba40a7271594a23a15ea040912c878105",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-exchange-and-execution.md"
+      "evidence": "packages/runtime/src/provider-exchange.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3031",
