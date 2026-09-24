@@ -6,7 +6,7 @@ import {
   type ProviderOffBehavior,
 } from "@chess-tabiya/runtime";
 
-import type { CapabilityProviders } from "./capabilities.js";
+import { F1_PROVIDER_PRODUCERS, availabilityAdmitsNewRequest, instanceOperationAvailability, type ProviderHealthCapabilities } from "@chess-tabiya/runtime";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { RECORDED_READING_DISPOSITIONS } from "./position-evidence.js";
 import { EVIDENCE_KINDS } from "./sourcing/types.js";
@@ -88,25 +88,36 @@ export function assertEvidenceManifest(): CompiledEvidenceManifest {
   return EVIDENCE_MANIFEST;
 }
 
-function providerState(producerId: string, providers: CapabilityProviders, openingCatalogue?: OpeningCatalogueAvailability): EvidenceProducerAvailability {
+/**
+ * rfc/provider-health-degradation.md §8: the four provider-backed F1 producers read the live
+ * registry snapshot of their one mapped instance; every other producer is local, recorded or
+ * build-time. Provider-off applies the producer's consumer behavior and never reads as a domain
+ * answer ("no games", "outside tablebase range").
+ */
+function providerState(producerId: string, health: ProviderHealthCapabilities, openingCatalogue?: OpeningCatalogueAvailability): EvidenceProducerAvailability {
   const result = (() => {
-    if (producerId === "live.stockfish") return providers.judge === "none" ? ["unavailable", "Stockfish judge provider is unavailable."] : ["available", `Stockfish judge provider: ${providers.judge}.`];
-    if (producerId === "live.syzygy") return providers.tablebase === "none" ? ["honest_empty", "Tablebase provider is unavailable; out-of-domain and provider-off are explicit."] : ["available", `Tablebase provider: ${providers.tablebase}.`];
-    if (producerId === "human.maia") return providers.opponent === "none" ? ["unavailable", "Human-model opponent provider is unavailable."] : ["available", `Opponent provider: ${providers.opponent}.`];
-    if (producerId === "human.explorer") return providers.corpus === "none" ? ["honest_empty", "Human corpus provider is unavailable."] : ["available", `Corpus provider: ${providers.corpus}.`];
+    const instanceId = (F1_PROVIDER_PRODUCERS as Readonly<Record<string, string>>)[producerId];
+    if (instanceId !== undefined) {
+      const snapshot = health.providers.find((row) => row.instanceId === instanceId);
+      if (snapshot === undefined) throw new TypeError(`provider snapshot for ${instanceId} is missing`);
+      const availability = instanceOperationAvailability(snapshot);
+      const off = producerId === "live.syzygy" || producerId === "human.explorer" ? "honest_empty" : "unavailable";
+      if (availabilityAdmitsNewRequest(availability)) return ["available", `${instanceId} is ${snapshot.state === "unverified" ? "ready to try (not yet verified)" : snapshot.state}.`];
+      return [off, snapshot.state === "not_configured" ? `${instanceId} is not configured on this deployment.` : `${instanceId} is ${snapshot.state.replaceAll("_", " ")}${"reason" in snapshot && snapshot.reason !== null ? ` (${snapshot.reason})` : ""}; this is provider state, not a domain answer.`];
+    }
     if (producerId === "theory.opening.runtime") return openingCatalogue?.kind === "available" ? ["available", "Pinned local runtime opening catalogue is available."] : ["unavailable", openingCatalogue?.reason ?? "artifact_missing"];
     return ["available", "Local, recorded or build-time declaration is available without an external provider."];
   })() as readonly [EvidenceAvailabilityState, string];
   return Object.freeze({ producerId, version: 1, state: result[0], reason: result[1] });
 }
 
-export function evidenceManifestCapabilities(providers: CapabilityProviders, openingCatalogue?: OpeningCatalogueAvailability): EvidenceManifestCapabilities {
+export function evidenceManifestCapabilities(health: ProviderHealthCapabilities, openingCatalogue?: OpeningCatalogueAvailability): EvidenceManifestCapabilities {
   assertEvidenceManifest();
   const consumerById = new Map(EVIDENCE_MANIFEST.consumers.map((consumer) => [consumer.id, consumer]));
   return Object.freeze({
     digest: EVIDENCE_MANIFEST.digest,
     counts: Object.freeze({ producers: EVIDENCE_MANIFEST.producers.length, projections: EVIDENCE_MANIFEST.projections.length, consumers: EVIDENCE_MANIFEST.consumers.length, bindings: EVIDENCE_MANIFEST.bindings.length, semanticEvents: EVIDENCE_MANIFEST.semanticEvents.length, eligibility: EVIDENCE_MANIFEST.eligibility.length, reasons: EVIDENCE_MANIFEST.reasons.length, selectionPolicies: EVIDENCE_MANIFEST.selectionPolicies.length }),
-    availability: Object.freeze(EVIDENCE_MANIFEST.producers.map((producer) => providerState(producer.id, providers, openingCatalogue))),
+    availability: Object.freeze(EVIDENCE_MANIFEST.producers.map((producer) => providerState(producer.id, health, openingCatalogue))),
     bindings: Object.freeze(EVIDENCE_MANIFEST.bindings.map((binding) => Object.freeze({
       consumerId: binding.consumer.id,
       consumerVersion: binding.consumer.version,

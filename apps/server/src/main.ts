@@ -49,6 +49,9 @@ const externalVoice = voiceMode !== "external_http" ? undefined : new ExternalHt
 const application = await createApplication({
   development,
   engineMode,
+  // rfc/provider-health-degradation.md §11: one structured line per provider-health transition
+  // (no FEN, PGN, learner text, prompt, token, query string or account id).
+  providerHealthLog: (event) => console.info(JSON.stringify(event)),
   ...(process.env.DATABASE_PATH === undefined ? {} : { databasePath: process.env.DATABASE_PATH }),
   cookieSecure,
   ...(process.env.DRAFT_PACK_FILE === undefined

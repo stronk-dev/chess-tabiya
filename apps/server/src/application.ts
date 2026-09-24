@@ -28,7 +28,11 @@ import {
   type EngineRequest,
   type EngineSpec,
 } from "./engine-supervisor.js";
-import { maiaNetworkSpec } from "./maia.js";
+import { MAIA3_MODEL_ID, maiaContainerProbe, maiaNetworkSpec } from "./maia.js";
+import { ProviderRegistry, type ProviderHealthLogEvent, type ProviderInstanceConfiguration } from "./provider-health.js";
+import { healthReportedCorpus, healthReportedReasoningReview, healthReportedTablebase, healthReportedTts, healthReportedVoice } from "./provider-health-adapters.js";
+import { ExternalHttpVoiceProvider } from "./external-voice.js";
+import { ExternalHttpTtsProvider } from "./external-tts.js";
 import {
   OpponentSelector,
   type SelectorEngineClient,
@@ -123,6 +127,8 @@ export interface ApplicationOptions {
   readonly longitudinalWorkerEntry?: URL;
   /** rfc/skills.md §2.5 valence register; defaults to `content/valence/register.json`. */
   readonly valenceRegisterPath?: string;
+  /** Structured provider-health transition log (rfc/provider-health-degradation.md §11). */
+  readonly providerHealthLog?: (event: ProviderHealthLogEvent) => void;
 }
 
 /**
@@ -173,6 +179,12 @@ export interface ChessTabiyaApplication {
    * over the five operations. Process-local operator/research door only; no HTTP route.
    */
   readonly providers: ProviderTraversalApplication;
+  /**
+   * The one live provider-health authority (rfc/provider-health-degradation.md): snapshot,
+   * operation availability, admission/settlement and release receipts. Bot policy's roster
+   * availability consumes it through `BotProviderAvailability`.
+   */
+  readonly providerHealth: ProviderRegistry;
   readonly startupReceipt: ApplicationStartupReceipt;
   readonly longitudinal: ApplicationLongitudinal;
   close(): Promise<void>;
@@ -470,42 +482,103 @@ async function composeServices(
   let selector: OpponentSelector;
   let capabilities: EngineCapabilities;
   let evidenceExecutor: EvidenceExecutor;
-  const corpusSource = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : options.corpusToken === undefined ? undefined : new LichessCorpusSource({ token: options.corpusToken }));
-  const candidateTablebaseSource = options.tablebaseSource === null
+  // rfc/provider-health-degradation.md §1: configuration answers only "exists, with which
+  // implementation". Built-in Lichess clients integrate health themselves; anything supplied from
+  // outside (fixtures, test doubles) is labelled `local_fixture` and wrapped by an adapter.
+  const configured: ProviderInstanceConfiguration[] = [];
+  const stockfishCommand = options.stockfishCommand ?? "stockfish";
+  const maiaHost = options.maiaHost ?? "maia";
+  const maiaPort = options.maiaPort ?? 7000;
+  if (engineMode === "maia") {
+    configured.push(
+      { instanceId: "stockfish-play", implementation: "uci_sidecar", endpoint: stockfishCommand, identity: "stockfish-play", options: { ...stockfishPlaySpec({ command: stockfishCommand }).options } },
+      { instanceId: "stockfish-analysis", implementation: "uci_sidecar", endpoint: stockfishCommand, identity: "stockfish-analysis", options: { ...stockfishAnalysisSpec(stockfishCommand).options } },
+      { instanceId: "maia-inference", implementation: "uci_sidecar", endpoint: `${maiaHost}:${maiaPort}`, identity: MAIA3_MODEL_ID },
+    );
+  } else {
+    configured.push(
+      { instanceId: "stockfish-play", implementation: "local_fixture", endpoint: "mock-opponent", identity: "deterministic mock opponent" },
+      { instanceId: "stockfish-analysis", implementation: "local_fixture", endpoint: "mock-evidence", identity: "deterministic mock evidence" },
+      { instanceId: "maia-inference", implementation: "local_fixture", endpoint: "mock-opponent", identity: "deterministic mock opponent" },
+    );
+  }
+  const suppliedTablebase = options.tablebaseSource === null ? undefined : options.tablebaseSource;
+  const builtInTablebase = options.tablebaseSource === undefined && engineMode === "maia";
+  const fixtureTablebase = suppliedTablebase ?? (options.tablebaseSource === undefined && engineMode === "mock" ? new FixtureTablebaseSource() : undefined);
+  const tablebaseConfigured = builtInTablebase || (fixtureTablebase !== undefined && !(fixtureTablebase instanceof FixtureTablebaseSource && !fixtureTablebase.configured));
+  if (tablebaseConfigured) {
+    configured.push(builtInTablebase || fixtureTablebase instanceof LichessTablebaseSource
+      ? { instanceId: "tablebase-primary", implementation: "lichess_http", endpoint: "https://tablebase.lichess.org/standard", identity: "lichess-syzygy-7man" }
+      : { instanceId: "tablebase-primary", implementation: "local_fixture", endpoint: "fixture-tablebase", identity: "fixture tablebase" });
+  }
+  const builtInCorpus = options.corpusSource === undefined && engineMode === "maia" && options.corpusToken !== undefined;
+  const suppliedCorpus = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : undefined);
+  if (builtInCorpus || suppliedCorpus !== undefined) {
+    configured.push(builtInCorpus || suppliedCorpus instanceof LichessCorpusSource
+      ? { instanceId: "explorer-primary", implementation: "lichess_http", endpoint: "https://explorer.lichess.ovh/lichess", identity: "lichess-opening-explorer" }
+      : { instanceId: "explorer-primary", implementation: "local_fixture", endpoint: "fixture-explorer", identity: "fixture explorer" });
+  }
+  if (options.voiceProvider !== undefined || options.reasoningReviewProvider !== undefined) {
+    const voice = options.voiceProvider ?? options.reasoningReviewProvider;
+    configured.push(voice instanceof ExternalHttpVoiceProvider
+      ? { instanceId: "external-voice", implementation: "external_http", endpoint: "external-voice", identity: options.voicePersona ?? "default persona" }
+      : { instanceId: "external-voice", implementation: "local_fixture", endpoint: "fixture-voice", identity: "fixture voice" });
+  }
+  if (options.ttsProvider !== undefined) {
+    configured.push(options.ttsProvider instanceof ExternalHttpTtsProvider
+      ? { instanceId: "external-tts", implementation: "external_http", endpoint: "external-tts", identity: "external tts" }
+      : { instanceId: "external-tts", implementation: "local_fixture", endpoint: "fixture-tts", identity: "fixture tts" });
+  }
+  let exchangeArtifact: (instanceId: string) => boolean = () => true;
+  const providerHealth = new ProviderRegistry({
+    configured,
+    exchangeArtifact: (instanceId) => exchangeArtifact(instanceId),
+    ...(options.providerHealthLog === undefined ? {} : { log: options.providerHealthLog }),
+  });
+  const corpusSource = builtInCorpus
+    ? new LichessCorpusSource({ token: options.corpusToken!, health: providerHealth })
+    : suppliedCorpus === undefined ? undefined : healthReportedCorpus(suppliedCorpus, providerHealth);
+  const tablebaseSource = !tablebaseConfigured
     ? undefined
-    : options.tablebaseSource ?? (engineMode === "mock" ? new FixtureTablebaseSource() : new LichessTablebaseSource());
-  const tablebaseSource = candidateTablebaseSource instanceof FixtureTablebaseSource
-    && !candidateTablebaseSource.configured
-    ? undefined
-    : candidateTablebaseSource;
+    : builtInTablebase
+      ? new LichessTablebaseSource({ health: providerHealth })
+      : healthReportedTablebase(fixtureTablebase!, providerHealth);
+  const voiceProvider = options.voiceProvider === undefined ? undefined : healthReportedVoice(options.voiceProvider, providerHealth);
+  const reasoningReviewProvider = options.reasoningReviewProvider === undefined ? undefined : healthReportedReasoningReview(options.reasoningReviewProvider, providerHealth);
+  const ttsProvider = options.ttsProvider === undefined ? undefined : healthReportedTts(options.ttsProvider, providerHealth);
   const openingCatalogue = await loadOpeningCatalogue(options.openingCataloguePath ?? join(process.cwd(), "apps", "server", "artifacts", "runtime-opening-catalogue.json"));
-  // rfc/bot-policy.md §4.3: profile availability is observed from the shared exchange's own
-  // outcomes (startup probe + every opponent-ply acquisition); nothing configures it.
-  const botAvailability = new BotProviderAvailability();
+  // rfc/bot-policy.md §4.3 / D3031: profile availability is the provider-health authority's
+  // snapshot and release receipt; every shared-exchange outcome settles into that registry.
+  const botAvailability = new BotProviderAvailability(providerHealth);
 
   if (engineMode === "maia") {
-    const stockfish = options.stockfishCommand ?? "stockfish";
+    const stockfish = stockfishCommand;
     const analysisSpec = stockfishAnalysisSpec(stockfish);
-    supervisor = new EngineSupervisor([
-      maiaNetworkSpec(options.maiaHost ?? "maia", options.maiaPort ?? 7000),
+    const maiaProbe = maiaContainerProbe(maiaHost, maiaPort);
+    const engines = new EngineSupervisor([
+      maiaNetworkSpec(maiaHost, maiaPort),
       stockfishPlaySpec({ command: stockfish }),
       analysisSpec,
     ], {
-      // Provider exchanges need the launched artifact of the analysis generation. The networked
-      // Maia sidecar exposes no container identity, so Maia exchanges stay honestly unavailable.
-      artifactProbe: (spec) => spec.id === analysisSpec.id ? binaryArtifactProbe(spec) : Promise.resolve(null),
+      // Provider exchanges need the launched artifact of each generation: the hashed analysis
+      // binary, and the running Maia container's OCI identity reported by its sidecar.
+      artifactProbe: (spec) => spec.id === analysisSpec.id ? binaryArtifactProbe(spec) : spec.id === "maia-5m" ? maiaProbe(spec) : Promise.resolve(null),
+      onLifecycle: providerHealth.engineLifecycleSink({ "maia-5m": "maia-inference", "stockfish-play": "stockfish-play", "stockfish-analysis": "stockfish-analysis" }),
     });
-    await supervisor.startAll();
+    supervisor = engines;
+    exchangeArtifact = (instanceId) => instanceId !== "maia-inference" || engines.artifact("maia-5m")?.kind === "container";
+    // An optional engine that cannot start leaves its instance unavailable; it never blocks startup.
+    await Promise.allSettled([engines.start("maia-5m"), engines.start("stockfish-play"), engines.start("stockfish-analysis")]);
     assertAdvertisedCapabilityDispositions([
-      supervisor.health("stockfish-play"),
-      supervisor.health("stockfish-analysis"),
-      supervisor.health("maia-5m"),
+      engines.health("stockfish-play"),
+      engines.health("stockfish-analysis"),
+      engines.health("maia-5m"),
     ]);
-    selector = new OpponentSelector(supervisor, tablebaseSource === undefined ? {} : { tablebaseSource });
-    capabilities = new EngineCapabilities(supervisor, [
+    selector = new OpponentSelector(engines, { health: providerHealth, ...(tablebaseSource === undefined ? {} : { tablebaseSource }) });
+    capabilities = new EngineCapabilities(engines, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, botAvailability: () => botAvailability.snapshot() });
+    ], { health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot() });
     evidenceExecutor = new StockfishEvidenceExecutor(
       supervisor,
       analysisSpec.id,
@@ -513,13 +586,19 @@ async function composeServices(
     );
   } else {
     const mock = new MockEngineClient();
+    await mock.start();
+    // The local mock processes complete their handshake in-process; they are `local_fixture`.
+    providerHealth.recordHandshake("maia-inference");
+    providerHealth.recordHandshake("stockfish-play");
+    providerHealth.recordHandshake("stockfish-analysis");
     selector = new OpponentSelector(mock, {
       maiaEngineId: "mock-opponent",
       strongEngineId: "mock-opponent",
+      health: providerHealth,
       ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue, botAvailability: () => botAvailability.snapshot(),
+      health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot(),
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }
@@ -529,7 +608,7 @@ async function composeServices(
   const providerEngines = supervisor ?? new MockProviderEngineClient();
   const providers = composeProviderTraversalApplication({
     engines: providerEngines,
-    tablebaseFetch: tablebaseSource instanceof LichessTablebaseSource ? providerFetch : null,
+    tablebaseFetch: builtInTablebase || fixtureTablebase instanceof LichessTablebaseSource ? providerFetch : null,
     explorerFetch: engineMode === "maia" && options.corpusToken !== undefined ? providerFetch : null,
     explorerToken: options.corpusToken ?? null,
     bounds: APPLICATION_PROVIDER_BOUNDS,
@@ -613,7 +692,7 @@ async function composeServices(
     ratedResults: (learnerId) => new Map(storage.ratedGames(learnerId).flatMap((game) => game.result === null ? [] : [[game.runId, game.result] as const])),
     valenceRegister: await loadValenceRegister(options.valenceRegisterPath ?? join(process.cwd(), "content", "valence", "register.json")),
   });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
@@ -660,7 +739,14 @@ async function composeServices(
   healthProbe = () => {
     const longitudinal = longitudinalHealth();
     const ok = longitudinal.status === "ready" || longitudinal.status === "disabled_test";
-    return Response.json({ status: ok ? "ok" : "degraded", engineMode, longitudinal }, { status: ok ? 200 : 503 });
+    // Process liveness: an absent or failed OPTIONAL provider is reported but never fails the probe
+    // (rfc/provider-health-degradation.md §9). The body reads the registry; it probes nothing.
+    const providers = providerHealth.snapshot().providers.map((row) => Object.freeze({
+      instanceId: row.instanceId,
+      state: row.state,
+      ...(row.state === "unavailable" || row.state === "degraded_cached_only" ? { reason: row.reason } : {}),
+    }));
+    return Response.json({ status: ok ? "ok" : "degraded", engineMode, longitudinal, providers }, { status: ok ? 200 : 503, headers: { "cache-control": "no-store" } });
   };
   const startupReceipt: ApplicationStartupReceipt = Object.freeze({
     storageVersion: STORAGE_VERSION,
@@ -671,6 +757,7 @@ async function composeServices(
     server,
     engineMode,
     providers,
+    providerHealth,
     startupReceipt,
     longitudinal: Object.freeze({
       health: longitudinalHealth,
@@ -679,6 +766,7 @@ async function composeServices(
     }),
     async close() {
       draining = true;
+      providerHealth.shutdown();
       await new Promise<void>((resolveClose, reject) => {
         if (!server.listening) { resolveClose(); return; }
         server.close((error) => (error === undefined ? resolveClose() : reject(error)));

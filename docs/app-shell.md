@@ -198,20 +198,12 @@ objective and comparison perspective stay pinned to the run's reference side.
 ## Capability registry
 
 `GET /capabilities` combines static runtime information with live deployment
-health. Provider identities are derived from configured engine mode and
-supervisor readiness:
-
-| Provider | Values | Meaning |
-|---|---|---|
-| `opponent` | `maia`, `mock`, `none` | The selector provider currently able to answer |
-| `judge` | `stockfish`, `mock`, `none` | The executor currently able to produce evidence |
-| `llm` | `none`, `external` | Whether a vendor-neutral external voice provider is configured; no provider implementation ships |
-
-In mock mode the opponent and judge report `mock` when their shipped mock
-implementations are available. They never claim Maia or Stockfish, and the
-judge never reports `none` while mock evidence visibly flows. In engine mode,
-an unhealthy or restarting supervisor is omitted and its provider becomes
-`none`; configured identity alone is not treated as availability.
+health. Provider state is the `providerHealth` section, which is the live registry snapshot
+(`docs/provider-health.md`). Configuration never counts as availability. Mock deployments publish
+their providers as `local_fixture` and never claim Maia or Stockfish. A provider that fails at
+runtime keeps its controls in place with a reason. Only a provider the deployment was started without
+is `not_configured`, and no opponent being configured at all is the only thing that makes Play
+`unavailable-here`.
 
 Deployment surfaces have exactly two server values: `available` and
 `unavailable-here`. A runtime assertion rejects `planned` and unknown surface
@@ -221,8 +213,9 @@ surface as planned without pretending the server reported that state.
 
 The capability response also retains runnable policy modes, healthy engine
 identities, the run-schema version, and the effective strong-engine profile.
-An injected voice provider changes only the `llm` capability to `external`; its
-packet and checking contract is documented in `adaptive-guidance.md`.
+An injected voice provider appears as the `external-voice` instance, first as `unverified` and then
+in whatever state its first real request leaves it. Its packet and checking contract is documented
+in `adaptive-guidance.md`.
 
 ## Viewport and region model
 
