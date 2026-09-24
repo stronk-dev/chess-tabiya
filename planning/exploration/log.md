@@ -21227,3 +21227,22 @@ narrow it, and each removal is a typed suppression rendered in words.
 - **Migration queue:** evidence-job-durability is now next, followed by
   concept-registry, then bot-policy's run lane 0.18.
 - **Still open:** D2 (imported-game player identity).
+
+### 2026-09-24 — player-style and skills subset: the learner profile page
+
+- **Where:** `/profile` is linked from Rating and Learn.
+- **What it reads:** the learner's own played decisions at the longitudinal
+  store's completed cut. Nothing is stored and nothing is shared without
+  consent.
+- **Habit cards:** twelve cards with per-card floors. Below its floor a card
+  shows only the floor and the number of games measured.
+- **Openings:** results are grouped by named opening and shown as counts, never
+  win rates.
+- **Skills:** categories list their stated reasons and candidate shapes.
+- **Abstentions:** opening surprisal and the clock metrics abstain with named
+  reasons.
+- **Intent amendment:** proposed for the `design/06` "no number about the
+  learner" sentence.
+- **D3300 opened:** one imported game takes about 10 s to project, and
+  `close()` waits for it. Test teardowns get a 30 s budget until the projector
+  is profiled and drain is bounded.

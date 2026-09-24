@@ -2021,6 +2021,7 @@ head after that renumbering and **not yet written**:
 
 ## Changelog
 
+- 2026-09-24 (coordinator): [[D3300]] opened — one imported game takes ~10 s to project and `close()` waits for the in-flight batch; profile the projector and bound the drain grace.
 - 2026-09-24: **implementation landed** — migration 26 landed with the storage, projector, worker, read, rebuild
   and export/deletion coverage (`docs/longitudinal-store.md`). Inline corrections of genuine
   defects, each pinned by a test:

@@ -22,7 +22,7 @@ afterEach(async () => {
   await application?.close();
   application = undefined;
   for (const directory of directories.splice(0)) rmSync(directory, { recursive: true, force: true });
-});
+}, 30_000); // close() drains the longitudinal worker's in-flight projection (D3300)
 
 function temp(): string {
   const directory = mkdtempSync(join(tmpdir(), "tabiya-profile-app-"));

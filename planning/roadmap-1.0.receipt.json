@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2fb622b9909845131366825f2a21bd73d7386128654e93148fd0d742da76ffe3",
+    "roadmap": "sha256:81f93fc6e27e327b051d389efadbf9c2f0ad3f51a6fd43a1261b7ec73a9e5841",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:d9e01c26b832ba19778f03e9c8c8c8d474f84ff8d863dec403f237fd08b43964",
-    "rfcRegister": "sha256:9d80e478085e52d02ba4834584b0b0332cd657db0fa73a3507483b45ac21ddaa",
+    "workState": "sha256:500b9379b2f3f927630213bdb17cb71b6d45f80d677a234bdc6e36a8ee4ed7c5",
+    "rfcRegister": "sha256:cd38c38a8eb9dbb95ce552a0157168ad2abfcb20f303665e7c78b912dbed6266",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
-    "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
-    "application": "sha256:ad34bfc07f99a75baea84e3cf1519278bb999f9da605e99610c421081a3e5d2e",
-    "rest": "sha256:6b9241b40c3d60caf1927e01be2a0e54412499cf9ddf0ece06b4172e4635ac4f"
+    "router": "sha256:afc6dfb524c9c901e5368ae1191db359acb151121d677244495b6eefb9832540",
+    "application": "sha256:eb0b073fbd36b5653628dbb937833ba718d9ae0d56acad1556ec021346049ddf",
+    "rest": "sha256:30d7fa4988952896bf09e3720432ecb012b60e5d98394f69d13e580dd0824997"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 45,
+      "draft": 43,
       "accepted": 0,
-      "implementing": 16,
+      "implementing": 18,
       "awaiting": 11,
       "implemented": 0,
       "superseded": 0,
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 623,
+      "todo": 624,
       "doing": 0,
       "blocked": 1189,
       "done": 1125,
@@ -52,12 +52,12 @@
       "not_applicable": 8
     },
     "appRoutes": {
-      "live": 8,
+      "live": 9,
       "live_but_inadequate": 5,
       "missing": 1
     },
     "apiFamilies": {
-      "live": 19,
+      "live": 20,
       "live_direct": 1,
       "implemented_but_unreachable": 0,
       "missing": 1
@@ -366,28 +366,35 @@
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Whole-game Review is a working learner journey: every ply with grounded grades, Retry from here through a preserving fork and a Compare handoff afterwards, 0..3 shared moments, coverage-gated accuracy and learner-side eval graph, recorded semantic events per ply, and an explicit attributed Analyze action withheld during retries. Return scheduling reaches Learn with the owner-ruled standing words. The Review compiler packet and module presets remain.",
+        "summary": "Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph and Analyze; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and skill categories drilled down to their source games, all computed on read from the durable longitudinal store.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/review-map-remainder.test.ts",
-          "planning/review/implementation-2026-09-24.md",
-          "rfc/review-map.md"
+          "apps/server/src/learner-profile-application.test.ts",
+          "planning/style/implementation-2026-09-24.md",
+          "rfc/player-style.md",
+          "rfc/skills.md",
+          "rfc/longitudinal-store.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "review-map.md",
-            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+            "id": "player-style.md",
+            "digest": "sha256:9939e4a13fd7b1b6a1c6ebc52d43f58f82ae3399c9f1af4fcd37a500e231a347"
           },
           {
             "kind": "rfc",
-            "id": "return-scheduling.md",
-            "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
+            "id": "skills.md",
+            "digest": "sha256:9d58a2decab24038dcda1daf29b090b9634aaa61eed220994251dfaf29407359"
+          },
+          {
+            "kind": "rfc",
+            "id": "longitudinal-store.md",
+            "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
           },
           {
             "kind": "work_state",
-            "id": "D1467",
-            "digest": "sha256:da350aa968f6d7aa9bd3506c1fe5e83af8f163bf532bf89be787ed5b6f14d6dc"
+            "id": "D3300",
+            "digest": "sha256:73fefdc741ca314c6a3832598368eed98269963dea2a8e2c3c4bf774017c462e"
           }
         ]
       },
@@ -927,12 +934,12 @@
         "retired": 0
       },
       "routes": {
-        "live": 2,
+        "live": 3,
         "live_but_inadequate": 0,
         "missing": 0
       },
       "apiFamilies": {
-        "live": 5,
+        "live": 6,
         "live_direct": 0,
         "implemented_but_unreachable": 0,
         "missing": 0

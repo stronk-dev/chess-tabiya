@@ -1,6 +1,6 @@
 # RFC: Skills — concepts earned from play, as a progression surface
 
-- **Status:** draft — **the migration-free subset was implemented 2026-09-24 at the owner's direction**
+- **Status:** implementing — **the migration-free subset was implemented 2026-09-24 at the owner's direction**
   (no review round; the Active-row transition is left to consolidation, so the token stays `draft`).
   Shipped over the landed longitudinal store and the private learner profile: the five-category
   navigation with Openings/Strategy's stated reasons, the mechanical valence-admissibility rule and

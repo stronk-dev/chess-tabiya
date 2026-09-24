@@ -27094,6 +27094,14 @@
       "owner": "OWNER",
       "blocker": "owner-ruling",
       "question": "Accept D921 and the candidate packet, and adopt the boundary-finding review convergence rule with delegated register-owner acceptance?"
+    },
+    {
+      "id": "D3300",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:73fefdc741ca314c6a3832598368eed98269963dea2a8e2c3c4bf774017c462e",
+      "uxItems": [],
+      "owner": "learner-history"
     }
   ]
 }
