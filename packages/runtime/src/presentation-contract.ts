@@ -463,6 +463,9 @@ export const PRESENTATION_SOURCE_REASONS = Object.freeze({
   attempt_history_capacity: { absence: "failed", label: "the review service's attempt history is full until it restarts" },
   no_observation: { absence: "empty", label: "the source returned nothing here" },
   outside_domain: { absence: "empty", label: "this position is outside the source's domain" },
+  // §4b's two named states: a value withheld below its declared floor, and an absent provider.
+  floor_not_met: { absence: "withheld", label: "too few recorded games reach this position to show frequencies" },
+  provider_unavailable: { absence: "unavailable", label: "its provider is not available right now" },
 } as const);
 export type PresentationSourceReason = keyof typeof PRESENTATION_SOURCE_REASONS;
 export type PresentationAbsence = "withheld" | "unavailable" | "failed" | "empty";
@@ -822,7 +825,7 @@ const parseEngine = (value: unknown): { readonly name: string; readonly version:
 
 function parseConvention(value: unknown): ConventionReceipt {
   const item = exact(value, ["producer", "sourceProjection", "sourceEvidenceDigest", "perspective", "basis"], [], "convention");
-  const basisRecord = exact(item.basis, ["kind"], ["execution", "convention"], "convention.basis");
+  const basisRecord = isRecord(item.basis) ? item.basis : exact(item.basis, ["kind"], [], "convention.basis");
   let basis: ConventionBasis;
   if (basisRecord.kind === "search") {
     const wrapper = exact(item.basis, ["kind", "execution"], [], "convention.basis");
@@ -1480,3 +1483,19 @@ export function parsePresentationReceipt(value: unknown): readonly PresentedEvid
 
 /** The package-internal abstention seat key; `review.packet_family@1` is owned by the Review packet. */
 export const REVIEW_PACKET_FAMILY_SEAT: VersionedEvidenceId = V1("review.packet_family");
+
+/**
+ * The strict component parser and its equivalent sentence, for component-level tests and the
+ * client component renderers' state matrix (§8.3, criterion 17). Parsing seals nothing: only an
+ * exact adapter or the receipt parser produces a `PresentedEvidenceItem`.
+ */
+export function parseComponentValue(value: unknown): ComponentValue {
+  return parseComponent(value);
+}
+export function componentValueSentence(value: ComponentValue): string {
+  return assertPresentationText(componentSentence(parseComponent(jsonClone(value))));
+}
+/** A fact-statement operand recomputed from its registered renderer (unsealed; for component tests). */
+export function factStatementOperand<R extends FactStatementRendererId>(rendererId: R, binding: "recorded_run" | "declared_convention", convention: PresentationConventionId, operands: FactOperandsByRenderer[R]): FactStatementOperand {
+  return factStatement(rendererId, binding, convention, operands);
+}

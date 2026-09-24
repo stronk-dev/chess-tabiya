@@ -28,10 +28,11 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
-import { evidenceValueRouteRegistry, invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { MODULE_QUERY_OPERATION, PACKET_ROUTE_KINDS, SIGHT_SOURCE_ROUTES, moduleQuerySourceRoutes, routeReads } from "./module-query-sources.js";
 import { MODULE_IDS, type InspectorFamilyId, type ModuleId, type ModuleTiming } from "./module-contract.js";
 import { compileModulePacket } from "./module-packets.js";
-import { MODULE_CONSUMER_ACCEPTS, moduleDeclaration } from "./module-registry.js";
+import { MODULE_CONSUMER_ACCEPTS, MODULE_REGISTRY, moduleDeclaration } from "./module-registry.js";
 import { NULL_REDUCTION_QUALITY_RECORDER, type ModuleFact, type ReductionQualityRecorder } from "./module-reducers.js";
 import {
   presentEvidenceItems,
@@ -213,11 +214,7 @@ function witnessed(evidence: DeclaredEvidence<unknown>): boolean {
   }
 }
 
-const SIGHT_READINGS = Object.freeze([
-  ...["pawn_safe_square", "outpost", "backward_pawn", "isolated_pawn", "doubled_pawn", "passed_pawn", "open_file", "half_open_file", "line_blockers", "direct_attack_count", "piece_reach_count", "bishop_on_shade", "king_opposition", "piece_count", "king_zone", "piece_distance"].map((kind) => `rules.structural.reading.${kind}@1`),
-  "rules.structural.reading.named_structure@2", "rules.castling.reading.rights@1", "rules.castling.reading.legality@1", "rules.tactic.reading.rook_on_seventh@1",
-  "rules.square.reading.control@1", "rules.pawn.reading.contacts@1", "rules.mobility.reading.legal_moves@1",
-]);
+const SIGHT_READINGS = SIGHT_SOURCE_ROUTES;
 
 export interface ModuleSubject {
   readonly node: Node;
@@ -278,9 +275,6 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
   }
 }
 
-const ROUTE_ARMS: ReadonlyMap<string, readonly (readonly string[])[]> = new Map(evidenceValueRouteRegistry().map((meta) => [meta.route, meta.arms.map((arm) => Object.keys(arm).sort())]));
-const armIs = (routeName: string, keys: readonly string[]): boolean => (ROUTE_ARMS.get(routeName) ?? []).some((arm) => arm.join("|") === [...keys].sort().join("|"));
-const PACKET_KINDS: Readonly<Record<string, string>> = Object.freeze({ "live.stockfish.eval@1": "eval", "live.stockfish.wdl@1": "wdl", "live.stockfish.pv@1": "bestline", "live.syzygy.result@1": "tablebase", "live.syzygy.category@1": "tablebase", "live.syzygy.distance@1": "tablebase" });
 
 /**
  * Full Inspector (explicit mode, review timing): the complete census of what the node's exact
@@ -296,10 +290,10 @@ function inspectorSources(run: DrillRun, subject: ModuleSubject): readonly Modul
   return (MODULE_CONSUMER_ACCEPTS.full_inspector as readonly VersionedEvidenceId[]).map((ref): ModuleSourceResult => {
     const name = `${ref.id}@${ref.version}`;
     try {
-      if (armIs(name, ["fen"])) return route(name, { fen: subject.fen });
-      if (armIs(name, ["afterFen", "beforeFen", "moveUci"])) return edge === undefined ? Object.freeze({ kind: "no_witness", projection: name }) : route(name, edge);
-      const kind = PACKET_KINDS[name];
-      if (kind !== undefined && armIs(name, ["packet"])) {
+      if (routeReads(name, "fen")) return route(name, { fen: subject.fen });
+      if (routeReads(name, "afterFen|beforeFen|moveUci")) return edge === undefined ? Object.freeze({ kind: "no_witness", projection: name }) : route(name, edge);
+      const kind = PACKET_ROUTE_KINDS[name];
+      if (kind !== undefined && routeReads(name, "packet")) {
         const matching = packets.filter((packet) => packet.kind === kind);
         const results = matching.map((packet) => route(name, { packet: { kind: packet.kind, source: packet.source, values: packet.values } }));
         const items = results.flatMap((result) => result.kind === "available" ? result.items : []);
@@ -588,6 +582,21 @@ const EMPTY_STATE = (module: ModuleId): ModuleEmptyState => {
 };
 
 /**
+ * evidence-presentation §3.6/criterion 13: an ordered component (a line or a directed relation)
+ * whose answer distance exceeds the seat's module answer image is refused at the render boundary —
+ * the last place a principal variation could leak. It is never truncated into a shorter line.
+ */
+export function assertAnswerCeiling(module: ModuleId, items: readonly PresentedEvidenceItem[]): void {
+  const image = MODULE_REGISTRY.answerImages.get(module) ?? [];
+  for (const item of items) {
+    const component = item.component;
+    if ((component.id === "move_path" || component.id === "relation_overlay") && !image.includes(component.operand.answerDistance)) {
+      throw new ModuleQueryError("MODULE_QUERY_INVALID", `${module} may not render a ${component.id} at answer distance ${component.operand.answerDistance}`);
+    }
+  }
+}
+
+/**
  * The one module query operation. Pure over the run and the finalized assistance: the server
  * derives role/session/context and the finalized digest itself and passes them here.
  */
@@ -622,6 +631,7 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
     if (packet.kind === "refused") { suppressions.push({ module, reason: "not_effective" }); continue; }
     const survivors = packet.facts.map((fact) => fact.evidence);
     const presented = survivors.length === 0 ? [] : presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 1 }, survivors));
+    assertAnswerCeiling(module, presented);
     const fitted = fitModulePresentation(module, presented);
     itemsByModule.set(module, fitted.items);
     const receipt = serializePresentedEvidence(fitted.items);
@@ -650,21 +660,13 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
   return { page, items: itemsByModule };
 }
 
-/** The modules this operation can deliver and the exact projections each acquires (for `MODULE_PAIR_EXECUTION`). */
-export const MODULE_QUERY_OPERATION = "queryModules" as const;
+/** The exact projections this operation acquires for one module (`MODULE_PAIR_EXECUTION`'s source image). */
 export function moduleQueryProjections(module: ModuleId): readonly VersionedEvidenceId[] {
-  const accepted = (MODULE_CONSUMER_ACCEPTS as Readonly<Record<string, readonly VersionedEvidenceId[]>>)[module] ?? [];
-  const acquired = new Set<string>(
-    module === "sight_on_request" ? SIGHT_READINGS
-      : module === "threat_radar" ? ["rules.tactic.consequence.threat@1", "rules.tactic.consequence.mate_in_one@1", "rules.tactic.reading.loose_piece@1", "rules.tactic.reading.back_rank@1", "rules.tactic.reading.trapped_piece@1", "rules.tactic.reading.ray_classification@1", "derived.tactic.defender_exposure@1"]
-        : module === "blunder_prevention" ? ["rules.tactic.consequence.threat@1", "rules.tactic.consequence.mate_in_one@1", "rules.tactic.reading.loose_piece@1"]
-          : module === "structure_nudge" ? ["rules.structural.reading.named_structure@2", "rules.phase.reading@2", "rules.endgame.classification@1", "rules.structural.reading.space@1", "rules.structural.reading.pawn_connectivity@1", "theory.endgame.setup_match@1", "theory.shapes.firing@1"]
-            : module === "theory_breadcrumb" ? ["pack.authored.claim@1", "theory.shapes.firing@1", "theory.opening.current_endpoint@1"]
-              : module === "compare_coach" ? ["run.record.fork@1", "run.record.consequence@1", "run.record.objective_transition@1", "run.record.checkpoint_hit@1", "derived.compare.structure_delta@1", "derived.compare.eval_delta@1", "derived.compare.engine_trajectory@1", "derived.compare.piece_route@1"]
-                : [],
-  );
+  const accepted = ((MODULE_CONSUMER_ACCEPTS as Readonly<Record<string, readonly VersionedEvidenceId[]>>)[module] ?? []);
+  const acquired = new Set(moduleQuerySourceRoutes(module, accepted.map((ref) => `${ref.id}@${ref.version}`)));
   return Object.freeze(accepted.filter((ref) => acquired.has(`${ref.id}@${ref.version}`)));
 }
+export { MODULE_QUERY_OPERATION };
 
 /** Evidence digests of a sealed item, for tests and the disclosure trace. */
 export function presentedFactDigest(item: PresentedEvidenceItem): string | null {

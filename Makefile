@@ -206,6 +206,12 @@ label-sweep:
 	node --test tools/label-sweep/label-sweep.test.mjs
 	node tools/label-sweep/label-sweep.mjs
 
+.PHONY: component-theme-sweep
+# rfc/evidence-presentation.md §8.4 / criterion 11: literal, named, system and color-mix colours over
+# the component tree, with a self-check that the keyword lists stay non-empty.
+component-theme-sweep:
+	./node_modules/.bin/vitest run apps/web/src/lib/evidence/components.test.ts -t "criterion 11"
+
 evidence-manifest-check:
 	./node_modules/.bin/esbuild apps/server/src/evidence-manifest-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/evidence-manifest-check.js
 	node apps/server/dist/evidence-manifest-check.js
@@ -2037,7 +2043,7 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check label-sweep evidence-manifest-check evidence-value-authority semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
+verify-software: typecheck test-software test-performance schema-check label-sweep component-theme-sweep evidence-manifest-check evidence-value-authority semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
 
 verify-governance: register-check shared-resource-catalogue status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 

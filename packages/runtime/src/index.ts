@@ -133,6 +133,13 @@ export {
   type ModuleRegistryInvariantInput,
 } from "./module-registry.js";
 export { compileModulePacket, type ModulePacket, type ModulePacketRefusal, type ModulePacketRequest } from "./module-packets.js";
+export {
+  MODULE_QUERY_OPERATION, MODULE_QUERY_PROTOCOL, ModuleQueryError, fitModulePresentation, inspectorFamily, moduleDecisionStamp, moduleDisclosureDigest,
+  moduleQueryProjections, parseModuleQueryRequest, passFen, queryModules, sightScope,
+  type InspectorFamilyState, type ModuleBudgetReceipt, type ModuleBudgetTuple, type ModuleDecisionStamp, type ModuleDisclosureReceipt, type ModuleEmptyState,
+  type ModuleQueryErrorCode, type ModuleQueryInput, type ModuleQueryPacket, type ModuleQueryPage, type ModuleQueryRequest, type ModuleSourceContext,
+  type ModuleSourceResult, type ModuleSuppressionReason,
+} from "./module-query.js";
 export { POSTCOMMIT_NUDGE_TEMPLATES, postcommitNudgePacket, type PostcommitNudgeFact, type PostcommitNudgeInput, type PostcommitNudgePacket } from "./postcommit-nudge.js";
 export {
   ArrayReductionQualityRecorder,
@@ -181,7 +188,7 @@ export {
   type EnumStateOperand, type FactStatementOperand, type LabelEntry, type LabelVocabulary, type MagnitudeOperand, type PresentationReceipt,
   type PresentedEvidenceItem, type ProjectionPresentationAdapter,
   BOARD_RELATION_KINDS, DENOMINATOR_MEANINGS, DISTRIBUTION_RESIDUAL_LABELS, MAGNITUDE_SCALE_POLICIES, RELATION_PHRASES, STRUCTURED_DOCUMENT_SCHEMAS,
-  adapterComponents, conventionAttribution, formatShare,
+  adapterComponents, componentValueSentence, conventionAttribution, factStatementOperand, formatShare, parseComponentValue,
   type AdapterSpec, type BoardRelationKind, type ConventionBasis, type CountWithDenominatorOperand, type DistributionOperand, type MagnitudeScalePolicyId,
   type MagnitudeTrailOperand, type MovePathOperand, type OutcomeSplitOperand, type PopulationDescriptor, type PresentationComposition, type PresentationKit,
   type RelationOverlayOperand, type SquareSetOperand, type StructuredDocumentOperand,

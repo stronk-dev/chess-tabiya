@@ -27,7 +27,10 @@
   import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
   import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
-  import type { PostcommitNudge } from "./nudge-response.js";
+  import ModuleSeats from "./ModuleSeats.svelte";
+  import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
+  import { composedSeats, effectActive, toggleExpanded, type PlaySeatModule, type StagedCue } from "./module-seats.js";
+  import { boardPaint } from "./evidence/presented-view.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -55,7 +58,7 @@
   } from "./outcome-presentation.js";
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
   import { assistanceProfile, loadWorkflowPreference, requestedAssistanceConfig, requestedPresetLabel, saveWorkflowPreference, workflowPreferenceKey, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
-  import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
+  import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2, type ModuleQueryRequest } from "@chess-tabiya/runtime";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
@@ -133,7 +136,12 @@
     onStop: () => void;
     onAssistanceQuery?: ((request: RequestedAssistanceV1) => Promise<FinalizedAssistanceV1>) | undefined;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
-    onNudge?: ((nodeId: string) => Promise<PostcommitNudge>) | undefined;
+    /**
+     * rfc/module-registration.md §2.5.2: the one module query. Receives the requested-assistance
+     * receipt and the closed timing request; returns the raw page, strict-parsed here against the
+     * finalized digest this screen renders (intent-presets Checkpoint B).
+     */
+    onModuleQuery?: ((body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }) => Promise<unknown>) | undefined;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     onCompareVoice?: (() => Promise<VoicePage>) | undefined;
@@ -200,7 +208,7 @@
     onStop,
     onAssistanceQuery,
     onHumanSplit,
-    onNudge,
+    onModuleQuery,
     onCorpus,
     onVoice,
     onCompareVoice,
@@ -810,37 +818,145 @@
   let endgameSentences = $derived(endgame === null ? [] : [...renderEndgameClassification(endgame), ...endgameSetupMatches(displayedNode.fen).map(renderEndgameSetupMatch)]);
   let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
   let assistanceContext = $derived({ workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
-  // rfc/module-registration.md §4.5 + rfc/intent-presets.md Checkpoint B: Post-commit Nudge renders only
-  // when the server-compiled result carries its automatic post-commit effect (preset ∩ ceiling ∩ access,
-  // with `markers` governing it) and the run's durable feedback-delivery boundary is open.
-  let nudgeEffectActive = $derived(compiledAssistance?.effects.some((effect) => effect.effectId === "postcommit_nudge:post_commit:proactive") === true);
   let latestLearnerMoveId = $derived.by(() => {
     const target = currentNode.actor === "user" ? currentNode : run.nodes.find((node) => node.id === currentNode.parentId);
     return target?.actor === "user" && target.moveUci !== null ? target.id : undefined;
   });
+  // rfc/module-registration.md §2.5.2/§2.6 + rfc/intent-presets.md Checkpoint B: the module seats. A
+  // seat exists only for a module the FINALIZED assistance composed with a play-timing effect; every
+  // delivery comes from the one module query, is strict-parsed against this screen's final digest and
+  // renders only its sealed presentation components. Guided Hint's seat is the hint-distance lane's.
+  let requestedAssistance: RequestedAssistanceV1 | undefined = $state();
+  let seats = $derived(onModuleQuery === undefined ? [] : composedSeats(compiledAssistance));
+  let seatPackets: ReadonlyMap<PlaySeatModule, ParsedModulePacket> = $state.raw(new Map());
+  let seatSubjects: ReadonlyMap<PlaySeatModule, string> = $state.raw(new Map());
+  let seatPending: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
+  let seatFailed: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
+  let seatDoorReasons: Readonly<Partial<Record<PlaySeatModule, string>>> = $state.raw({});
+  let seatExpanded: PlaySeatModule | undefined = $state();
+  let stagedCue: StagedCue | undefined = $state();
+  let stagedUci: string | undefined;
+  let stagedGeneration = 0;
+  let seatFocusSquares: readonly string[] | undefined = $state();
+  const seatRequests = new Map<PlaySeatModule, number>();
+  let seatRequestCounter = 0;
+  let postCommitEffectActive = $derived(effectActive(compiledAssistance, "postcommit_nudge", "post_commit") || effectActive(compiledAssistance, "structure_nudge", "post_commit"));
   // Criterion 9: raising the preset mid-run is not a learner request. The move already on the board when
-  // the nudge effect switches on is held back; the next committed move is the first one nudged.
-  let nudgeHeldNodeId: string | undefined = $state();
-  let nudgeWasActive: boolean | undefined;
+  // a proactive post-commit effect switches on is held back; the next committed move is the first one served.
+  let proactiveHeldNodeId: string | undefined = $state();
+  let proactiveWasActive: boolean | undefined;
   $effect(() => {
-    const active = nudgeEffectActive;
+    const active = postCommitEffectActive;
     if (compiledAssistance === undefined) return;
-    if (nudgeWasActive === false && active) nudgeHeldNodeId = untrack(() => latestLearnerMoveId);
-    nudgeWasActive = active;
+    if (proactiveWasActive === false && active) proactiveHeldNodeId = untrack(() => latestLearnerMoveId);
+    proactiveWasActive = active;
   });
-  let nudgeNodeId = $derived.by(() => {
-    if (onNudge === undefined || !nudgeEffectActive || !feedbackDeliveryOpen(run)) return undefined;
-    return latestLearnerMoveId === nudgeHeldNodeId ? undefined : latestLearnerMoveId;
+
+  function withSeat<T>(collection: ReadonlySet<T>, module: T, present: boolean): ReadonlySet<T> {
+    const next = new Set(collection);
+    if (present) next.add(module); else next.delete(module);
+    return next;
+  }
+
+  /** One module query for `modules`; the result lands only if still current (decision/digest/request). */
+  async function queryModuleSeats(query: ModuleQueryRequest, subjectNodeId: string, modules: readonly PlaySeatModule[]): Promise<ParsedModulePacket[] | undefined> {
+    if (onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined || modules.length === 0) return undefined;
+    const finalDigest = compiledAssistance.finalDigest;
+    const assistanceRequest = requestedAssistance;
+    const tokens = modules.map((module) => { const token = ++seatRequestCounter; seatRequests.set(module, token); return [module, token] as const; });
+    for (const module of modules) { seatPending = withSeat(seatPending, module, true); seatFailed = withSeat(seatFailed, module, false); }
+    try {
+      const page = parseModuleQueryPage(await onModuleQuery({ assistance: assistanceRequest, query }), { runId: run.id, subjectNodeId, finalDigest });
+      if (compiledAssistance?.finalDigest !== finalDigest) return undefined;
+      const packets: ParsedModulePacket[] = [];
+      let nextPackets = new Map(seatPackets), nextSubjects = new Map(seatSubjects), nextDoors = { ...seatDoorReasons };
+      for (const [module, token] of tokens) {
+        if (seatRequests.get(module) !== token) continue;
+        seatPending = withSeat(seatPending, module, false);
+        const packet = page.packets.find((candidate) => candidate.module === module);
+        const suppression = page.suppressions.find((candidate) => candidate.module === module);
+        if (packet !== undefined) { nextPackets.set(module, packet); nextSubjects.set(module, subjectNodeId); packets.push(packet); delete nextDoors[module]; }
+        else {
+          nextPackets.delete(module);
+          if (suppression?.reason === "no_second_attempt") nextDoors = { ...nextDoors, [module]: "Needs a second attempt: rewind to an earlier move and try another idea." };
+        }
+      }
+      seatPackets = nextPackets; seatSubjects = nextSubjects; seatDoorReasons = nextDoors;
+      return packets;
+    } catch {
+      for (const [module, token] of tokens) {
+        if (seatRequests.get(module) !== token) continue;
+        seatPending = withSeat(seatPending, module, false);
+        seatFailed = withSeat(seatFailed, module, true);
+      }
+      return undefined;
+    }
+  }
+
+  function clearSeat(modules: readonly PlaySeatModule[]): void {
+    let next = new Map(seatPackets), subjects = new Map(seatSubjects);
+    for (const module of modules) { next.delete(module); subjects.delete(module); seatRequests.delete(module); seatPending = withSeat(seatPending, module, false); seatFailed = withSeat(seatFailed, module, false); }
+    seatPackets = next; seatSubjects = subjects;
+  }
+
+  // Post-commit proactive seats: one query per new learner move, before any automatic reply is read.
+  let postCommitSubject = $derived.by(() => {
+    if (!postCommitEffectActive || !feedbackDeliveryOpen(run)) return undefined;
+    return latestLearnerMoveId === proactiveHeldNodeId ? undefined : latestLearnerMoveId;
   });
-  let nudge: PostcommitNudge | undefined = $state();
-  let nudgeRequest = 0;
   $effect(() => {
-    const nodeId = nudgeNodeId;
-    const load = onNudge;
-    if (nodeId === undefined || load === undefined) { nudge = undefined; return; }
-    if (nudge?.nodeId === nodeId) return;
-    const request = ++nudgeRequest;
-    void load(nodeId).then((page) => { if (request === nudgeRequest) nudge = page; }).catch(() => { if (request === nudgeRequest) nudge = undefined; });
+    const subject = postCommitSubject;
+    const proactive = untrack(() => seats.filter((seat) => seat.proactive && (seat.module === "postcommit_nudge" || seat.module === "structure_nudge")).map((seat) => seat.module));
+    if (subject === undefined) { untrack(() => clearSeat(["postcommit_nudge", "structure_nudge"])); return; }
+    if (proactive.every((module) => untrack(() => seatSubjects.get(module)) === subject)) return;
+    void untrack(() => queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [] }, subject, proactive)).then((packets) => {
+      // play-composition §4.1: a critical post-commit fact may auto-expand the nudge seat.
+      if (packets?.some((packet) => packet.module === "postcommit_nudge" && packet.items.length > 0) && stagedCue === undefined) seatExpanded = "postcommit_nudge";
+    });
+  });
+  // On-request answers describe one subject: moving on, rewinding or switching branch retires them.
+  $effect(() => {
+    const node = currentNode.id;
+    void node;
+    untrack(() => {
+      const stale = [...seatSubjects].filter(([module, subject]) => module !== "postcommit_nudge" && module !== "structure_nudge" && module !== "sight_on_request" && subject !== latestLearnerMoveId && subject !== currentNode.id).map(([module]) => module);
+      if (stale.length > 0) clearSeat(stale);
+      seatDoorReasons = {};
+    });
+  });
+  // sight_on_request: the square gesture IS the request (module-registration §4.2).
+  let sightActive = $derived(onModuleQuery !== undefined && effectActive(compiledAssistance, "sight_on_request", "pre_commit"));
+  $effect(() => {
+    const square = selectedSquare;
+    const active = sightActive;
+    const node = displayedNode.id;
+    untrack(() => {
+      if (!active || square === undefined || previewNodeId !== undefined) { clearSeat(["sight_on_request"]); return; }
+      seatExpanded = "sight_on_request";
+      void queryModuleSeats({ timing: "pre_commit", nodeId: node, selectedSquare: square, requested: ["sight_on_request"] }, node, ["sight_on_request"]);
+    });
+  });
+
+  function requestSeat(module: PlaySeatModule): void {
+    const learnerToMove = currentNode.actor !== "user";
+    if (module === "sight_on_request") { seatDoorReasons = { ...seatDoorReasons, sight_on_request: "Select a square on the board to ask about it." }; return; }
+    if (module === "compare_coach") { void queryModuleSeats({ timing: "checkpoint", nodeId: currentNode.id, requested: ["compare_coach"] }, currentNode.id, ["compare_coach"]); return; }
+    if (module === "threat_radar" && learnerToMove) { void queryModuleSeats({ timing: "pre_commit", nodeId: currentNode.id, requested: ["threat_radar"] }, currentNode.id, ["threat_radar"]); return; }
+    const subject = latestLearnerMoveId;
+    if (subject === undefined) { seatDoorReasons = { ...seatDoorReasons, [module]: "Available after your first move." }; return; }
+    if (!feedbackDeliveryOpen(run)) { seatDoorReasons = { ...seatDoorReasons, [module]: "Available once this run opens help for the position." }; return; }
+    void queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [module] }, subject, [module]);
+  }
+
+  function toggleSeat(module: PlaySeatModule): void {
+    seatExpanded = toggleExpanded(seatExpanded, module);
+    seatFocusSquares = undefined;
+  }
+
+  // §4.5: board paint is the expanded seat's own facts (or the held cue's); collapsing removes it.
+  let seatPaint = $derived.by(() => {
+    const items = stagedCue?.state === "warning" ? stagedCue.packet.items : seatExpanded === undefined ? [] : seatPackets.get(seatExpanded)?.items ?? [];
+    return boardPaint(items);
   });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let contextPolicy = $derived(workflowContextPolicy(activeAssistanceProfile));
@@ -854,8 +970,16 @@
   let presetSentences = $derived(presetDisclosure?.sentences ?? []);
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
-  let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
-  let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
+  let boardOverlays: readonly DrawShape[] = $derived.by(() => {
+    if (effectiveLighting !== "sight" && effectiveLighting !== "evidence") return [];
+    const squares = seatFocusSquares ?? seatPaint.squares;
+    return [
+      ...squares.map((square) => ({ orig: square as DrawShape["orig"], brush: "blue" })),
+      ...(assistance.arrows === "off" ? [] : seatPaint.arrows.map((arrow) => ({ orig: arrow.orig as DrawShape["orig"], dest: arrow.dest as DrawShape["orig"], brush: "blue" }))),
+    ];
+  });
+  // Without the module query (a harness with no server) the shipped sight caption stays the renderer.
+  let overlayCaption = $derived(onModuleQuery === undefined ? selectedObservations.map(renderStructuralObservation) : []);
   let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(run, run.activeCursor.branchId, assistanceContext) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
@@ -895,6 +1019,7 @@
       if (request !== assistanceQuery) return;
       if (finalized.requestedDigest !== requested.requestDigest || finalized.context !== context) throw new TypeError("Assistance response answers a different request");
       compiledAssistance = narrowBrowserChannels(finalized, browserChannelReceipt(request, speechAvailable ? { state: "available" } : { state: "unavailable", reason: "no_browser_voice" }));
+      requestedAssistance = requested;
       assistanceQueryState = "ready";
     } catch {
       if (request !== assistanceQuery) return;
@@ -1092,12 +1217,63 @@
     if (groupCandidates.length < 8) groupCandidates = [...groupCandidates, uci];
   }
 
+  /**
+   * rfc/module-registration.md §2.7: the one staged-move protocol. Click, drag, touch, keyboard grid
+   * and text entry all converge here with one exact UCI (after promotion choice). An ineffective
+   * module bypasses the check; an honest empty result commits once with no all-clear; a concrete
+   * risk holds the move for Revise or exactly-once Play anyway; a failed check is shown as unavailable
+   * and also needs explicit confirmation. A new gesture or Revise bumps the generation so late
+   * responses are ignored.
+   */
+  async function stageMove(uci: string): Promise<"commit" | "held"> {
+    if (onModuleQuery === undefined || !effectActive(compiledAssistance, "blunder_prevention", "at_commit")) return "commit";
+    const generation = ++stagedGeneration;
+    const move = moveSanFromUci(currentNode.fen, uci) ?? "this move";
+    stagedUci = uci;
+    stagedCue = { state: "checking", move };
+    try {
+      const packets = await queryModuleSeats({ timing: "at_commit", nodeId: currentNode.id, candidateUci: uci, generation }, currentNode.id, ["blunder_prevention"]);
+      if (generation !== stagedGeneration) return "held";
+      if (packets === undefined) { stagedCue = { state: "unavailable", move }; return "held"; }
+      const cue = packets.find((packet) => packet.module === "blunder_prevention");
+      if (cue !== undefined && cue.items.length > 0) { stagedCue = { state: "warning", move, packet: cue }; return "held"; }
+      stagedCue = undefined;
+      stagedUci = undefined;
+      return "commit";
+    } catch {
+      if (generation === stagedGeneration) stagedCue = { state: "unavailable", move };
+      return "held";
+    }
+  }
+
+  function reviseStagedMove(): void {
+    stagedGeneration += 1;
+    stagedCue = undefined;
+    stagedUci = undefined;
+    clearSeat(["blunder_prevention"]);
+    boardFocusRequested = true;
+  }
+
+  async function confirmStagedMove(): Promise<void> {
+    const uci = stagedUci;
+    stagedGeneration += 1;
+    stagedCue = undefined;
+    stagedUci = undefined;
+    clearSeat(["blunder_prevention"]);
+    if (uci !== undefined) await commitBoardMove(uci);
+  }
+
   async function boardMove(uci: string): Promise<boolean> {
     selectedSquare = undefined;
     if (groupOpen && groupSource === "hand_picked") {
       captureGroupMove(uci);
       return false;
     }
+    if (await stageMove(uci) === "held") return false;
+    return commitBoardMove(uci);
+  }
+
+  async function commitBoardMove(uci: string): Promise<boolean> {
     const before = activeGroup;
     const beforeIndex = before?.members.findIndex((member) => member.branchId === run.activeCursor.branchId) ?? -1;
     const committed = await onMove(uci);
@@ -1983,12 +2159,21 @@
                 {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
               </section>
             {/if}
-            {#if nudge?.kind === "packet" && nudge.nodeId === nudgeNodeId && nudge.facts.length > 0}
-              <section class="module-seat" aria-label="Post-commit nudge" data-module="postcommit_nudge">
-                <strong>{nudge.headline}</strong>
-                {#each nudge.facts as fact (fact.projection)}<p data-projection={fact.projection}>{fact.sentence}</p>{/each}
-                <p>{nudge.closing}</p>
-              </section>
+            {#if seats.length > 0}
+              <ModuleSeats
+                {seats}
+                packets={seatPackets}
+                pending={seatPending}
+                failed={seatFailed}
+                expanded={seatExpanded}
+                doorBlocked={seatDoorReasons}
+                staged={stagedCue}
+                onToggle={toggleSeat}
+                onRequest={requestSeat}
+                onConfirmStaged={() => void confirmStagedMove()}
+                onReviseStaged={reviseStagedMove}
+                onFocusSquares={(squares) => seatFocusSquares = squares}
+              />
             {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No extra highlights are available here; basic board guidance remains available.</p>{/if}

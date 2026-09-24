@@ -2591,7 +2591,7 @@
         onStop={() => navigate("/play")}
         onAssistanceQuery={api.assistance === undefined ? undefined : (request) => api.assistance!(session.runState!.run.id, request)}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
-        onNudge={api.nudge === undefined ? undefined : (nodeId) => api.nudge!(session.runState!.run.id, nodeId)}
+        onModuleQuery={api.modules === undefined ? undefined : (body) => api.modules!(session.runState!.run.id, body)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
         onCompareVoice={capabilities?.providers.llm === "external" && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}

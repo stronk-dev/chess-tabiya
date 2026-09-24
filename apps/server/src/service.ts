@@ -38,6 +38,10 @@ import {
   reviewMapProjection,
   moduleEvidenceRole,
   postcommitNudgePacket,
+  queryModules,
+  ModuleQueryError,
+  type FinalizedAssistanceV1,
+  type ModuleQueryRequest,
   compileReviewPacketForSubject,
   exactLegalMoves,
   createReviewPrefixAuthority,
@@ -2348,6 +2352,44 @@ export class RunService {
       throw new ServerError("ASSISTANCE_WITHHELD", `Post-commit Nudge is withheld here (${packet.reason})`);
     }
     return Object.freeze({ runId, ...packet });
+  }
+
+  /**
+   * rfc/module-registration.md §2.5.2 / intent-presets Checkpoint B: the one module query. The
+   * caller hands the FINALIZED assistance it just compiled from server-derived authority; every
+   * delivery is bound to that digest by its disclosure receipt. Read-only (recomputed, never
+   * persisted): post-commit/checkpoint/review receipts join their existing durable boundary events;
+   * pre-/at-commit receipts are the ephemeral request receipts ([[D1866]]).
+   */
+  queryModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest) {
+    this.#refuseRatedAssistance(runId);
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    const run = stored.run;
+    const pack = isPackSession(run) ? this.#requiredRegisteredPack(run) : undefined;
+    const shapes = this.#shapes?.list().map((summary) => {
+      const document = this.#shapes!.required(summary.id).document;
+      return { id: document.id, trigger: document.trigger };
+    }) ?? [];
+    const authored = pack === undefined ? [] : projectAuthoredFeedback(pack, run, this.#shapes).items;
+    const boundaryNodes = new Map<number, string>();
+    for (const event of run.events) {
+      if (event.type === "checkpoint.reached" || event.type === "outcome.reached") boundaryNodes.set(event.seq, event.data.nodeId);
+    }
+    try {
+      return queryModules({
+        run, assistance, request, ...this.#moduleViewer(runId, principal, run, role),
+        sources: {
+          shapes,
+          authoredAt: (nodeId: string) => authored.filter((item) => boundaryNodes.get(item.revealedBy.eventSeq) === nodeId) as never,
+        },
+      }).page;
+    } catch (error) {
+      if (error instanceof ModuleQueryError) {
+        if (error.code === "MODULE_QUERY_WITHHELD") throw new ServerError("ASSISTANCE_WITHHELD", error.message);
+        throw new ServerError("INVALID_REQUEST", error.message);
+      }
+      throw error;
+    }
   }
 
   #assistanceContext(runId: string, principal: Principal, run: DrillRun, role: RunRole) {
