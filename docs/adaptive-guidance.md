@@ -139,15 +139,18 @@ operator-authenticated source. They remain off by default and are documented in
 
 ## Endgame census and named techniques
 
-`endgameReading(fen)` runs only inside the endgame phase band. It recognizes exact material
-multisets for pawn endings, rook-and-pawn versus rook, rook endings, queen endings, and
-single-minor endings. Anything else is rendered as outside Tabiya's material-census convention.
+`endgameClassification(fen)` (`rules.endgame.classification@1`) runs only inside the endgame
+phase band. It recognizes exact material multisets for pawn endings, rook-and-pawn versus rook,
+rook endings, queen endings, and single-minor endings. Anything else is rendered as outside
+Tabiya's material-census convention. The material class never names a technique.
 
-The rook-and-pawn-versus-rook index names Lucena and Philidor; Vancura is additionally named for
-an a- or h-file pawn. These are attributed names, not executable advice. Each points to a shape
-entry for its eventual authored body. If no such entry exists, the surface explicitly says no
-technique entry is available. Other recognized families likewise report that the index has no
-entry. Outcome grading remains the responsibility of the existing outcome objective machinery.
+Technique names come only from `theory.endgame.setup_match@1` (`packages/runtime/src/endgame-setup.ts`).
+Three cited, versioned setup conventions are registered there: `lucena-setup@1`,
+`philidor-third-rank-setup@1` and `vancura-setup@1`. Each operand quotes the published sentence it
+computes. A position is named only when every operand of one convention holds, and the sentence
+carries the convention id and version. A match describes geometry, not outcome or advice. The
+Syzygy validation and the operand choices are in `design/research/endgame-setup-conventions.md`.
+Outcome grading remains the responsibility of the existing outcome objective machinery.
 
 ## Deterministic packet and optional voice
 

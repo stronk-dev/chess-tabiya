@@ -11,8 +11,8 @@ export const ENDGAME_CLASSIFICATION_CONVENTION = "endgame-material-census@1" as 
 /**
  * `rules.endgame.classification@1` payload. It classifies material under a declared product
  * convention and deliberately carries no technique record: Lucena/Philidor/Vančura applicability is
- * `theory.endgame.setup_match@1`, which stays honest-unavailable until a registered, cited and
- * versioned setup convention exists (rfc/evidence-value-authority.md §3.4).
+ * `theory.endgame.setup_match@1`, computed only under a registered, cited and versioned setup
+ * convention (`endgame-setup.ts`; rfc/evidence-value-authority.md §3.4).
  */
 export interface EndgameClassification {
   readonly fen: string;

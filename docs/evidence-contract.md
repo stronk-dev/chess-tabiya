@@ -87,8 +87,10 @@ Corrected projection identities replaced the false or mixed v1 rows: `rules.phas
 (five-arm `PhaseBandReadingV2` decision computed with the phase from one FEN),
 `rules.structural.reading.named_structure@2` (`{id, name, provenanceNote}`),
 `rules.endgame.classification@1` (material census; technique naming is gone),
-`theory.endgame.setup_match@1` and `theory.endgame.method_stage@1` (unavailable until a cited setup
-convention is registered), the four `derived.pivotal.*@1` markers, and
+`theory.endgame.setup_match@1` (`matched | not_matched | unavailable` under the cited, versioned
+conventions in `endgame-setup.ts`) and `theory.endgame.method_stage@1` (retrospective stages
+replayed by the cited method conventions in `endgame-method.ts` over exact `run.record.edge@1`
+windows; no consumer binding), the four `derived.pivotal.*@1` markers, and
 `derived.structural.predicate_result@1` (derived from the sealed authored condition). The v1
 projections are retired with zero consumer bindings.
 

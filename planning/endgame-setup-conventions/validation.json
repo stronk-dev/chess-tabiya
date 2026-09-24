@@ -1,0 +1,2653 @@
+{
+  "schema": "tabiya.research.endgame-setup-conventions.validation.v1",
+  "boundary": "Static setup geometry under the registered conventions, checked against Syzygy WDL via the Lichess tablebase API. A tablebase category is the outcome authority; it is not part of the setup match.",
+  "tablebase": {
+    "api": "https://tablebase.lichess.ovh/standard",
+    "recordedCache": "packages/runtime/src/fixtures/endgame-setup-tablebase.json"
+  },
+  "conventions": [
+    "lucena-setup@1",
+    "philidor-third-rank-setup@1",
+    "vancura-setup@1"
+  ],
+  "fixtures": [
+    {
+      "id": "lucena-diagram-w",
+      "fen": "1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1",
+      "fires": [
+        "lucena"
+      ],
+      "role": "published_diagram",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-diagram-b",
+      "fen": "1K1k4/1P6/8/8/8/8/r7/2R5 b - - 0 1",
+      "fires": [
+        "lucena"
+      ],
+      "role": "published_diagram",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "loss",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-black-attacker-b",
+      "fen": "2r5/R7/8/8/8/8/1p6/1k1K4 b - - 0 1",
+      "fires": [
+        "lucena"
+      ],
+      "role": "colour_mirror",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-black-attacker-w",
+      "fen": "2r5/R7/8/8/8/8/1p6/1k1K4 w - - 0 1",
+      "fires": [
+        "lucena"
+      ],
+      "role": "colour_mirror",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "loss",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-near-pawn-sixth",
+      "fen": "1K1k4/8/1P6/8/8/8/r7/2R5 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "pawn_on_seventh",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-near-king-off-square",
+      "fen": "3k4/1P6/1K6/8/8/8/r7/2R5 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "attacking_king_on_queening_square",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-near-rook-ray-blocked",
+      "fen": "1K1k4/1P6/2r5/8/8/8/8/2R5 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "attacking_rook_cuts_off_defending_king",
+      "rookCaptureAvailable": true,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-near-rook-not-between",
+      "fen": "1K1k4/1P6/8/8/8/8/r7/4R3 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "attacking_rook_cuts_off_defending_king",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "lucena-near-rook-pawn",
+      "fen": "K1k5/P7/8/8/8/8/7r/1R6 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "pawn_not_rook_pawn",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "philidor-diagram-w",
+      "fen": "8/8/8/8/4pk2/R7/7r/4K3 w - - 0 1",
+      "fires": [
+        "philidor"
+      ],
+      "role": "published_diagram",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "philidor-diagram-b",
+      "fen": "8/8/8/8/4pk2/R7/7r/4K3 b - - 0 1",
+      "fires": [
+        "philidor"
+      ],
+      "role": "published_diagram",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "philidor-white-attacker-w",
+      "fen": "4k3/7R/r7/4PK2/8/8/8/8 w - - 0 1",
+      "fires": [
+        "philidor"
+      ],
+      "role": "colour_mirror",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "philidor-white-attacker-b",
+      "fen": "4k3/7R/r7/4PK2/8/8/8/8 b - - 0 1",
+      "fires": [
+        "philidor"
+      ],
+      "role": "colour_mirror",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "philidor-near-pawn-on-third",
+      "fen": "8/8/8/8/5k2/R3p3/7r/4K3 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "pawn_short_of_defender_third_rank",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "philidor-near-rook-second-rank",
+      "fen": "8/8/8/8/4pk2/8/R6r/4K3 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "defending_rook_on_defender_third_rank",
+      "rookCaptureAvailable": true,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "loss"
+    },
+    {
+      "id": "philidor-near-king-far",
+      "fen": "8/8/8/8/4pk2/R7/7r/K7 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "defending_king_on_or_adjacent_to_queening_square",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "loss",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "philidor-near-attacker-king-on-third",
+      "fen": "8/8/8/8/4p3/R4k2/7r/4K3 b - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "attacking_king_beyond_defender_third_rank",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "vancura-diagram-w",
+      "fen": "R7/6k1/P4r2/8/2K5/8/8/8 w - - 0 1",
+      "fires": [
+        "vancura"
+      ],
+      "role": "published_diagram",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "vancura-diagram-b",
+      "fen": "R7/6k1/P4r2/8/2K5/8/8/8 b - - 0 1",
+      "fires": [
+        "vancura"
+      ],
+      "role": "published_diagram",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "vancura-black-attacker-b",
+      "fen": "8/8/8/2k5/8/p4R2/6K1/r7 b - - 0 1",
+      "fires": [
+        "vancura"
+      ],
+      "role": "colour_mirror",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "vancura-h-pawn-w",
+      "fen": "7R/1k6/2r4P/8/5K2/8/8/8 w - - 0 1",
+      "fires": [
+        "vancura"
+      ],
+      "role": "file_mirror",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "vancura-near-rook-not-in-front",
+      "fen": "1R6/6k1/P4r2/8/2K5/8/8/8 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "attacking_rook_in_front_of_pawn",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "vancura-near-king-out-of-zone",
+      "fen": "R7/8/P4rk1/8/2K5/8/8/8 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "defending_king_in_drawing_zone",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "vancura-near-side-attack-blocked",
+      "fen": "R7/6k1/P2K1r2/8/8/8/8/8 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "defending_rook_attacks_pawn_from_side",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "vancura-near-knight-pawn",
+      "fen": "1R6/6k1/1P3r2/8/2K5/8/8/8 w - - 0 1",
+      "fires": [],
+      "role": "near_miss",
+      "fails": "rook_pawn",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "browser-inspector-fen",
+      "fen": "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1",
+      "fires": [],
+      "role": "hard_negative",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "krpkr-pawn-home-kings-central",
+      "fen": "8/3k4/8/2r5/8/3K4/4P3/5R2 w - - 0 1",
+      "fires": [],
+      "role": "hard_negative",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "draw",
+      "attackerOutcome": "draw"
+    },
+    {
+      "id": "krpkr-pawn-seventh-king-beside",
+      "fen": "3k4/1P6/2K5/8/8/8/r7/2R5 w - - 0 1",
+      "fires": [],
+      "role": "hard_negative",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "win"
+    },
+    {
+      "id": "krkr-no-pawn",
+      "fen": "4k2r/8/8/8/8/8/R7/4K3 w - - 0 1",
+      "fires": [],
+      "role": "hard_negative",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "not_krpkr(side-to-move win)"
+    },
+    {
+      "id": "krppkr-extra-pawn",
+      "fen": "1K1k4/1P6/8/8/8/8/r6P/2R5 w - - 0 1",
+      "fires": [],
+      "role": "hard_negative",
+      "rookCaptureAvailable": false,
+      "tablebaseSideToMove": "win",
+      "attackerOutcome": "not_krpkr(side-to-move win)"
+    }
+  ],
+  "populations": {
+    "lucena-setup@1": {
+      "sampled": 100,
+      "attackerOutcome": {
+        "draw": 7,
+        "win": 93
+      },
+      "attackerOutcomeByRookCapture": {
+        "available": {
+          "draw": 7,
+          "win": 17
+        },
+        "unavailable": {
+          "win": 76
+        }
+      },
+      "attackerOutcomeBySideToMove": {
+        "attacker": {
+          "win": 52
+        },
+        "defender": {
+          "draw": 7,
+          "win": 41
+        }
+      },
+      "rows": [
+        {
+          "fen": "1K3R2/1P6/8/3r4/8/6k1/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K3k2/1P6/2R5/8/5r2/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K4k1/1P4r1/8/8/8/8/5R2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P1R4/8/8/5k2/8/8/1r6 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P1R4/8/8/8/8/5k2/3r4 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "1K6/1P2R3/8/8/8/3r1k2/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P2k3/2r5/8/8/3R4/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P3R2/8/8/8/8/8/1r4k1 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P3k2/8/3R4/8/3r4/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P4R1/8/8/8/8/7k/6r1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P5k/8/8/8/8/3R4/7r b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P5k/8/8/8/8/5r2/2R5 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P5r/8/3R4/8/8/6k1/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P5r/8/7k/8/8/4R3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P6/3r3k/8/8/8/8/5R2 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P6/4R3/8/8/r7/7k/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P6/8/1rR5/8/3k4/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "1K6/1P6/8/4R3/8/6r1/5k2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P6/8/5R2/8/1r6/6k1/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P6/8/8/2R5/5k2/7r/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P6/8/8/5k2/7r/2R5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1P6/8/8/5k2/8/3R3r/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1K6/1PR5/8/8/8/3k4/8/7r w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1RK5/2P5/k7/8/3r4/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "1k3K2/5P2/8/2r5/8/8/4R3/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K1R3/1rP5/8/8/8/8/6k1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K2k2/2P1R3/8/8/8/8/4r3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K4k/2P5/8/6R1/8/8/8/5r2 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K4r/2P2R2/8/8/8/8/8/6k1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K5/1rP5/8/6R1/8/7k/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K5/2P1R3/5r1k/8/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K5/2P1R3/8/8/7k/8/5r2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K5/2P1r3/8/6k1/8/8/3R4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K5/2P5/8/2r5/4R3/8/6k1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K5/2P5/8/4r3/8/4R3/8/6k1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2K5/2PR4/6r1/4k3/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2R1K3/4P3/8/1k6/6r1/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2R2K2/5P2/1k5r/8/8/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2k3K1/4R1P1/8/6r1/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2k3K1/6P1/3R4/8/8/8/8/r7 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "2k3K1/6P1/8/8/8/3R4/8/3r4 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3K4/3P4/6k1/4R3/8/8/8/1r6 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "3K4/3P4/7k/r7/8/6R1/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "3K4/3P4/8/1k6/8/8/7r/2R5 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "3K4/3P4/8/5k2/8/8/4Rr2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3KR3/3P2k1/8/4r3/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "3KR3/3P4/8/8/8/1r4k1/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "3rK3/4P3/2k5/8/8/3R4/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K1k1/4P3/5R2/8/8/8/2r5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/1R2P3/8/5r2/8/8/k7/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/1r2P3/8/3R4/k7/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/2r1P3/8/6k1/8/8/8/5R2 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/4P1R1/3r4/8/7k/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/4P2r/8/k7/8/8/8/1R6 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/4P3/1k6/r7/8/2R5/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/4P3/5R2/8/2r4k/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/4P3/8/5r2/8/8/5R2/7k w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/4P3/8/6R1/5r2/7k/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/4P3/8/8/8/7k/5R2/2r5 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/k2rP3/8/8/8/8/1R6/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4K3/k3P3/8/4r3/8/8/1R6/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4R1K1/6P1/3k4/8/8/2r5/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4RK2/3r1P2/8/1k6/8/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4RK2/5P2/8/5r2/2k5/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4RK2/5P2/8/8/8/6r1/3k4/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4RK2/5P2/8/8/k7/r7/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/1r2RP2/8/8/8/8/8/1k6 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/1k6/8/r2R4/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/2r5/6R1/7k/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/8/4R3/8/2r5/8/2k5 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/8/4Rr2/8/k7/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5K2/5P2/8/6R1/7k/8/6r1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/8/6r1/8/2k5/4R3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/8/8/2k5/8/8/3Rr3 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/8/8/4r3/3R4/k7/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5K2/5P2/8/8/8/8/8/krR5 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5K2/5P2/8/8/8/r6k/8/6R1 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/3R2P1/k7/1r6/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/3r2P1/2k5/8/8/4R3/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/4k1P1/8/8/5R2/8/4r3/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/5RP1/6r1/8/8/8/1k6/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/5RP1/8/8/8/2k5/2r5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/5RP1/r3k3/8/8/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/5rP1/8/2R5/1k6/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/2R5/8/8/8/8/1k5r w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/3R4/8/1r6/8/8/2k5 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/8/3k4/7r/5R2/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/8/5R2/3k4/8/2r5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/8/5R2/8/2k3r1/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/8/8/2R5/8/k7/3r4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/8/8/8/8/6r1/4kR2 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6K1/6P1/8/8/8/k7/1r2R3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6K1/6P1/k7/8/8/3R4/3r4/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "k1K5/2P5/8/8/8/r7/1R6/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "k3K3/4P2r/3R4/8/8/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "k4K2/5P1r/8/8/8/4R3/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "k4K2/5P2/2r5/8/4R3/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "k4K2/5P2/4r3/8/8/3R4/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "k4K2/5P2/8/8/4R3/8/r7/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "r3k1K1/6P1/8/8/8/5R2/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        }
+      ]
+    },
+    "philidor-third-rank-setup@1": {
+      "sampled": 100,
+      "attackerOutcome": {
+        "draw": 77,
+        "loss": 11,
+        "win": 12
+      },
+      "attackerOutcomeByRookCapture": {
+        "available": {
+          "draw": 2,
+          "loss": 11,
+          "win": 12
+        },
+        "unavailable": {
+          "draw": 75
+        }
+      },
+      "attackerOutcomeBySideToMove": {
+        "attacker": {
+          "draw": 44,
+          "win": 12
+        },
+        "defender": {
+          "draw": 33,
+          "loss": 11
+        }
+      },
+      "rows": [
+        {
+          "fen": "1k6/6R1/1r6/8/1P6/8/5K2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "1k6/6R1/3r4/8/8/8/1P4K1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "1k6/8/2R3r1/K7/P7/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "1k6/8/3r4/8/2P5/6R1/8/4K3 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "1k6/8/5r2/8/8/4K3/P7/6R1 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "1k6/8/5r2/8/P1K5/3R4/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "2k5/8/2r5/8/8/4K1R1/2P5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "2k5/8/3r3R/8/8/1P6/8/6K1 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "2k5/8/3r4/2P5/8/6K1/R7/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "2k5/8/6r1/8/8/5R2/1P6/6K1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "2k5/8/7r/3R4/8/8/2P5/4K3 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "2k5/8/7r/8/8/K7/3P4/4R3 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3R4/1k6/r7/P7/8/8/4K3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3R4/3k4/2r5/8/8/2P5/K7/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "3k4/8/1r6/4P3/8/8/2R5/K7 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3k4/8/4r3/3P4/5K2/8/3R4/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "3k4/8/4r3/8/2P5/8/8/KR6 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3k4/8/5r2/8/R7/4P3/4K3/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4k3/7R/2r5/8/5K2/5P2/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4k3/8/1r6/8/5P2/R7/8/6K1 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4k3/8/2r5/3P4/8/5R2/1K6/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4k3/8/4r3/1K1P4/8/3R4/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "4k3/8/4r3/8/8/5P2/K2R4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4k3/8/5r2/8/8/5P2/6R1/6K1 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4k3/8/6r1/4P3/8/7R/8/1K6 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5k2/3R4/2r5/8/8/K7/4P3/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5k2/8/1r6/2K5/8/5P2/R7/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5k2/8/1r6/7R/8/8/6P1/3K4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5k2/8/1r6/8/3R1P2/1K6/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5k2/8/3R1r2/8/8/6PK/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5k2/8/3r4/8/8/7K/3R1P2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "5k2/8/7r/8/8/5PR1/8/1K6 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5k2/8/r7/8/5K2/6P1/8/7R w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6R1/1k6/5r2/8/1K6/P7/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/4R3/5r2/5P2/6K1/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/5R2/1r6/8/8/8/6P1/4K3 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/8/4r3/5P2/8/R7/5K2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/8/4r3/6P1/8/8/4K3/R7 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/8/4r3/6P1/R7/K7/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/8/5r2/2R5/2K5/8/6P1/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/8/5r2/3K4/8/7P/4R3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/8/7r/3K4/8/6P1/8/7R b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "6k1/8/R4r2/8/4K3/7P/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "6k1/8/Rr6/8/3K4/8/6P1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "6k1/8/r7/2R4P/1K6/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6k1/8/r7/8/8/2K2P2/3R4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/1k6/r7/8/8/1P6/5K2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7k/5R2/r7/8/6KP/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7k/8/1r6/7P/8/2R5/3K4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7k/8/1r6/7P/8/8/1K4R1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7k/8/6r1/8/6P1/1K6/2R5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7k/8/7r/2R5/8/K6P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7k/8/r7/6P1/5K2/8/2R5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1Rk5/7r/1P6/8/2K5/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "8/1k6/1r6/8/PK6/8/8/3R4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/2rR4/8/K7/1P6/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/1k6/3r4/8/5K1R/1P6/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/4r3/8/R7/8/2P5/6K1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/5r2/P7/8/6K1/8/6R1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/r7/8/4K3/8/P3R3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/2R4k/5r2/8/7K/7P/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/2k5/2r2R2/8/6K1/3P4/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "8/2k5/3r4/8/8/K7/1P1R4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "8/2k5/3r4/8/K7/8/1P6/5R2 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/2k5/4r3/7K/8/1P6/6R1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/2k5/6r1/3K4/1P4R1/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "8/2k5/7r/1P6/8/8/8/3K3R w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/3k4/3r4/1K6/8/8/4P2R/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/3k4/4r3/8/2R5/7K/4P3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/3k4/r7/8/7R/8/3P4/4K3 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4Rk2/3r4/6P1/8/8/5K2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "8/4k3/3r3R/8/4P2K/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4k3/3r4/4R3/8/3P4/8/2K5 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4k3/3r4/6K1/8/8/2RP4/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4k3/4r3/8/4P3/2K5/8/7R b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4k3/4r3/8/8/5R2/1K3P2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4k3/7r/8/1K6/8/5PR1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4k3/7r/8/5P2/8/R1K5/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/4k3/7r/8/5R2/8/3PK3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/5k2/1R2r3/4P3/5K2/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/5k2/1r6/8/4K3/4P3/8/6R1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/5k2/r7/8/8/8/4P2K/1R6 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/1r6/R6K/8/6P1/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/2r5/7P/8/8/2R5/3K4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/6k1/3rR3/8/8/8/7P/1K6 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/6k1/5r2/8/8/3R4/6P1/4K3 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/7r/8/1R3P2/8/7K/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/r7/8/K3R3/8/5P2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/2r5/8/6P1/4K3/8/5R2 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/5r2/5R2/8/5K1P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/7k/6r1/8/2R5/6KP/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/7r/7P/8/8/4K3/1R6 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k2R4/2r5/P7/8/8/8/4K3 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k2R4/6r1/8/8/K7/1P6/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R5k1/8/1r6/8/8/8/5PK1/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "k7/8/1R4r1/8/8/P7/1K6/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "k7/8/4r3/8/1R6/8/P7/5K2 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "k7/8/5r2/8/1P6/5R2/8/K7 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "loss"
+        },
+        {
+          "fen": "k7/8/r7/8/4R3/5K2/1P6/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "k7/8/r7/8/P1K5/8/8/2R5 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        }
+      ]
+    },
+    "vancura-setup@1": {
+      "sampled": 100,
+      "attackerOutcome": {
+        "draw": 81,
+        "win": 19
+      },
+      "attackerOutcomeByRookCapture": {
+        "available": {
+          "win": 6
+        },
+        "unavailable": {
+          "draw": 81,
+          "win": 13
+        }
+      },
+      "attackerOutcomeBySideToMove": {
+        "attacker": {
+          "draw": 41,
+          "win": 15
+        },
+        "defender": {
+          "draw": 40,
+          "win": 4
+        }
+      },
+      "rows": [
+        {
+          "fen": "2K5/7k/R7/8/8/8/Pr6/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3K4/1k6/7R/8/8/4r2P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "3K4/k7/8/8/7R/8/4r2P/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4K2R/1k6/8/8/8/3r3P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4K2R/k7/8/8/3r3P/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4K3/6k1/8/8/R7/8/P2r4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4K3/7k/8/R7/P5r1/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "4K3/k7/8/8/7R/6rP/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "5K1R/1k6/8/3r3P/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "6KR/1k6/8/8/8/2r4P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7K/k7/7R/8/8/8/6rP/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/1k2K3/8/8/8/8/3r3P/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/1k6/3r3P/8/5K2/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/1k6/8/2r4P/8/8/8/7K b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/1k6/8/6rP/8/3K4/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/k6K/8/1r5P/8/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/k7/2r4P/8/8/8/5K2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/k7/3r3P/8/8/2K5/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/k7/8/2r4P/8/8/8/6K1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/k7/8/4r2P/8/5K2/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/k7/8/8/2r4P/K7/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "7R/k7/8/8/3r3P/7K/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "7R/k7/8/K7/8/3r3P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k3K1R/8/8/8/4r2P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/1k5R/6K1/8/5r1P/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/1k5R/8/3K4/5r1P/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k5R/8/7K/8/3r3P/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k5R/8/8/8/5r1P/7K/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/5K2/8/7R/8/2r4P/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/7R/8/8/6rP/5K2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/8/4K3/8/7R/6rP/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/8/7K/7R/6rP/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/8/7R/8/4r2P/8/K7 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/8/7R/8/8/3Kr2P/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/1k6/8/7R/8/K7/2r4P/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/8/8/6KR/2r4P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/1k6/8/8/8/7R/6rP/7K b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/2K3k1/R7/8/8/8/P2r4/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/2K4k/8/R7/8/Pr6/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/6k1/8/8/8/R6K/P3r3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/8/8/R7/P3r3/2K5/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/8/R7/6K1/8/P1r5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/R7/8/8/4K3/P4r2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/6k1/R7/8/8/8/P3r3/5K2 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/R7/8/8/P1r5/4K3/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/R7/8/8/P1r5/8/1K6 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/R7/8/8/P4r2/8/3K4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/6k1/RK6/8/P3r3/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/4K3/8/R7/P1r5/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/8/8/8/R4K2/P5r1/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/7k/8/8/8/R6K/P4r2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/8/8/8/R7/P4r2/6K1 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/7k/8/8/R3K3/8/P1r5/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/8/K7/R7/8/P4r2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/8/R1K5/8/8/P4r2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/8/R7/6K1/P1r5/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/8/R7/8/2K5/P4r2/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/8/R7/P4r2/2K5/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/K7/R7/P5r1/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/R7/8/8/4K3/Pr6/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/7k/R7/8/P2r4/1K6/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/7k/R7/Pr6/8/8/8/4K3 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/K5k1/R7/8/8/8/P3r3/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/R5k1/8/8/8/8/P2r4/5K2 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/R5k1/8/Pr6/8/8/K7/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/R5k1/Pr6/K7/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/R6k/8/P1r5/7K/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/R6k/P4r2/8/8/8/8/K7 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k1K5/7R/8/4r2P/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k3K3/7R/8/6rP/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k6R/8/5r1P/8/8/7K/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/3K3R/8/4r2P/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/k7/4K3/8/7R/8/1r5P/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/k7/5K1R/8/8/8/2r4P/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/7R/3r3P/7K/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "loss",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/k7/7R/5r1P/8/5K2/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/k7/7R/8/4r2P/8/8/3K4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/7R/8/8/3r3P/8/2K5 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/7R/8/8/4r2P/K7/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/7R/8/8/8/1r5P/5K2 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/8/5K2/8/7R/3r3P/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/8/7K/7R/4r2P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/8/7R/1r5P/8/2K5/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/8/7R/6K1/8/2r4P/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/8/7R/6rP/6K1/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/k7/8/7R/7K/2r4P/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "8/k7/8/7R/8/8/5r1P/7K w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "8/k7/8/8/8/7R/3r3P/7K w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/1K4k1/8/8/8/8/P3r3/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/2K3k1/8/8/8/8/P2r4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/4K2k/8/P2r4/8/8/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "R7/6k1/4K3/8/8/8/P4r2/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/6k1/8/8/P4r2/8/8/3K4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/6k1/P2r4/8/8/K7/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/7k/8/8/8/8/P2r4/1K6 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/7k/8/8/8/8/Pr6/3K4 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/7k/8/8/P1r5/1K6/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": true,
+          "tablebaseSideToMove": "win",
+          "attackerOutcome": "win"
+        },
+        {
+          "fen": "R7/7k/K7/8/8/8/P2r4/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/7k/K7/8/8/P5r1/8/8 w - - 0 1",
+          "sideToMove": "attacker",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        },
+        {
+          "fen": "R7/K6k/P4r2/8/8/8/8/8 b - - 0 1",
+          "sideToMove": "defender",
+          "rookCaptureAvailable": false,
+          "tablebaseSideToMove": "draw",
+          "attackerOutcome": "draw"
+        }
+      ]
+    }
+  },
+  "corpus": {
+    "krpkrPositions": 31,
+    "matches": {
+      "lucena": 4,
+      "philidor": 6
+    },
+    "rows": [
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "$start",
+        "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+        "fires": [
+          "lucena"
+        ]
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "b-ke7",
+        "fen": "1K6/1P2k3/8/8/8/8/r7/3R4 w - - 2 2",
+        "fires": [
+          "lucena"
+        ]
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "w-rd4",
+        "fen": "1K6/1P2k3/8/8/3R4/8/r7/8 b - - 3 2",
+        "fires": [
+          "lucena"
+        ]
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "b-ra1",
+        "fen": "1K6/1P2k3/8/8/3R4/8/8/r7 w - - 4 3",
+        "fires": [
+          "lucena"
+        ]
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "$start",
+        "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1",
+        "fires": [
+          "philidor"
+        ]
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "b-rb6",
+        "fen": "4k3/R7/1r6/4K3/4P3/8/8/8 w - - 1 2",
+        "fires": [
+          "philidor"
+        ]
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "w-kd5",
+        "fen": "4k3/R7/1r6/3K4/4P3/8/8/8 b - - 2 2",
+        "fires": [
+          "philidor"
+        ]
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "b-rg6",
+        "fen": "4k3/R7/6r1/3K4/4P3/8/8/8 w - - 3 3",
+        "fires": [
+          "philidor"
+        ]
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "w-e5",
+        "fen": "4k3/R7/6r1/3KP3/8/8/8/8 b - - 0 3",
+        "fires": [
+          "philidor"
+        ]
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "b-rb6-2",
+        "fen": "4k3/R7/1r6/3KP3/8/8/8/8 w - - 1 4",
+        "fires": [
+          "philidor"
+        ]
+      }
+    ]
+  },
+  "authoredMethodPaths": {
+    "paths": 100,
+    "pathsWithStage": 2,
+    "distinctStageEvents": [
+      {
+        "packId": "lucena-bridge-convert",
+        "convention": "lucena-bridge-method@1",
+        "stage": "lucena_bridge_prepared",
+        "nodeId": "w-rd4",
+        "moveUci": "d1d4"
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "convention": "lucena-bridge-method@1",
+        "stage": "lucena_king_excursion_started",
+        "nodeId": "w-kc7",
+        "moveUci": "b8c7"
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "convention": "lucena-bridge-method@1",
+        "stage": "lucena_bridge_interposed",
+        "nodeId": "w-rb4",
+        "moveUci": "d4b4"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "convention": "philidor-third-rank-method@1",
+        "stage": "philidor_pawn_entered_defender_third",
+        "nodeId": "w-e6",
+        "moveUci": "e5e6"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "convention": "philidor-third-rank-method@1",
+        "stage": "philidor_rear_rank_switch",
+        "nodeId": "b-rb1",
+        "moveUci": "b6b1"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "convention": "philidor-third-rank-method@1",
+        "stage": "philidor_rear_check_delivered",
+        "nodeId": "b-rd1",
+        "moveUci": "b1d1"
+      }
+    ],
+    "witnessedSetupArrivals": [
+      {
+        "packId": "lucena-bridge-convert",
+        "setup": "lucena-setup@1",
+        "nodeId": "b-ke7"
+      }
+    ]
+  }
+}

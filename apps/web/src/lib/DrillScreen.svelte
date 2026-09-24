@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameClassification, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameClassification, endgameSetupMatches, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -790,6 +790,10 @@
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameClassification(displayedNode.fen));
+  // theory.endgame.setup_match@1: a technique is named only when a registered, cited setup convention's
+  // full operand intersection holds, together with its convention id@version; otherwise the line stays
+  // at the material class (rfc/evidence-value-authority.md §3.4).
+  let endgameSentences = $derived(endgame === null ? [] : [...renderEndgameClassification(endgame), ...endgameSetupMatches(displayedNode.fen).map(renderEndgameSetupMatch)]);
   let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
   let activePreset = $derived(presetDeclaration(workflowPreset));
   let assistanceContext = $derived({ sessionKind: run.sessionKind, workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
@@ -2179,9 +2183,9 @@
           {#if endgame === null}
             <p class="honest">The position is not classified as an endgame.</p>
           {:else}
-            {#each renderEndgameClassification(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+            {#each endgameSentences as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.spoken !== "off"}
-              <button type="button" disabled={speechBusyNodeId === displayedNode.id} onclick={() => void speakSentences(renderEndgameClassification(endgame), "reading")}>{speechBusyNodeId === displayedNode.id ? "Preparing spoken guidance…" : "Speak current-position endgame evidence"}</button>
+              <button type="button" disabled={speechBusyNodeId === displayedNode.id} onclick={() => void speakSentences(endgameSentences, "reading")}>{speechBusyNodeId === displayedNode.id ? "Preparing spoken guidance…" : "Speak current-position endgame evidence"}</button>
             {/if}
             {#if speechBusyNodeId === displayedNode.id}<p role="status">Preparing spoken guidance for this position…</p>{/if}
             {#if speechError?.nodeId === displayedNode.id}<p role="alert">{speechError.text}</p>{/if}

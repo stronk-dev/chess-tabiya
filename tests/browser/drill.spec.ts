@@ -492,9 +492,24 @@ test("endgame evidence is inspectable without a pivotal marker", async ({ page }
   await page.getByRole("button", { name: "Inspector" }).click();
   const evidence = page.getByRole("region", { name: "Current-position endgame evidence" });
   await expect(evidence).toContainText("Rook and pawn versus rook");
-  // rfc/evidence-value-authority.md: no cited setup convention grounds a technique name yet, so the
-  // census names the material class only (theory.endgame.setup_match@1 abstains).
+  // theory.endgame.setup_match@1: this KRPKR position (pawn b2, kings e1/e8) fails every operand
+  // intersection of lucena-setup@1, philidor-third-rank-setup@1 and vancura-setup@1, so the line
+  // stays at the material class and names no technique.
   await expect(evidence).not.toContainText("Lucena");
+  await expect(evidence).not.toContainText("Philidor");
+  await expect(evidence).not.toContainText("Vančura");
+  await expect(evidence).not.toContainText("setup under convention");
+});
+
+test("endgame evidence names a technique only with its setup convention id and version", async ({ page }) => {
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  // The Lucena diagram from Wikipedia's "Lucena position" (oldid=1356336262): every lucena-setup@1 operand holds.
+  await page.getByLabel("Position FEN").fill("1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await page.getByRole("button", { name: "Inspector" }).click();
+  const evidence = page.getByRole("region", { name: "Current-position endgame evidence" });
+  await expect(evidence).toContainText("Rook and pawn versus rook");
+  await expect(evidence).toContainText("Matches the Lucena position setup under convention lucena-setup@1 (geometry only; not an outcome or advice).");
   await expect(evidence).not.toContainText("Philidor");
 });
 

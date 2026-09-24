@@ -171,9 +171,10 @@ describe("adaptive guidance runtime", () => {
     const edge = endgameClassification("4k2r/8/8/8/8/8/P7/R3K3 w - - 0 1");
     expect(edge?.type?.id).toBe("rook-and-pawn-vs-rook");
     expect(renderEndgameClassification(edge).join(" ")).not.toMatch(/lucena|philidor|vancura/iu);
-    // Technique applicability is theory.endgame.setup_match@1: honest-unavailable, never rendered.
+    // Technique applicability is theory.endgame.setup_match@1 under a registered convention: a rook
+    // pawn alone is not a Vančura setup (rook behind the pawn, no lateral attack, king on the wrong side and off the zone).
     const setup = invokeEvidenceValueRoute("theory.endgame.setup_match@1", { fen: "4k2r/8/8/8/8/8/P7/R3K3 w - - 0 1", convention: { id: "vancura-setup", version: 1 } });
-    expect(setup.kind).toBe("unavailable");
+    expect(setup).toEqual({ kind: "not_matched", convention: { id: "vancura-setup", version: 1 }, failedOperandIds: ["attacking_rook_in_front_of_pawn", "defending_rook_attacks_pawn_from_side", "defending_king_beyond_its_rook", "defending_king_in_drawing_zone"] });
     const fourThree = endgameClassification("6k1/5ppp/8/8/8/8/4RPPP/6K1 w - - 0 1");
     expect(fourThree?.type).toBeNull();
     expect(renderEndgameClassification(fourThree).join(" ")).toContain("outside Tabiya's material-census convention");
