@@ -18,7 +18,7 @@
       "name": "Work truth, measurement, and release accounting",
       "release": "core",
       "owner": "coordinator",
-      "rfcs": ["measurement-records.md", "shared-resource-register-bootstrap.md"],
+      "rfcs": ["measurement-records.md"],
       "completion": {
         "evidence": ["partial", "Measurements retain inputs, revisions, and negative results."],
         "state": ["proven", "Every ledger and UX item has durable validated execution state; live work has a roadmap capability owner or the explicit untriaged/unowned state, and the untriaged ceiling only falls."],
@@ -336,23 +336,40 @@
         "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Evidence value authority is implemented and its first withdrawn capability is rebuilt grounded: endgame technique names now render only when a cited, versioned setup convention matches, validated against tablebase results and hard negatives, while reachability stays honestly unavailable. Convention provenance (D1) and provider exchange receipts (D2) remain.",
+          "summary": "The shared-resource catalogue is implemented and archived with all three rebases (provider-protocol, semantic-conventions, assistance-config/workflow-preference) registered present-first. Semantic convention provenance landed 48 declarations with append-only history and a value-level ConventionReceipt on every mint, discharging evidence-value-authority D1; endgame setup conventions now live in the register. Provider exchange receipts (EVA D2) remain.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/endgame-setup.ts",
-            "design/research/endgame-setup-conventions.md",
-            "rfc/evidence-value-authority.md"
+            "planning/semantic-convention-provenance/implementation-2026-09-24.md",
+            "rfc/evidence-value-authority.md",
+            "rfc/semantic-convention-register.md",
+            "rfc/semantic-convention-provenance.md",
+            "rfc/assistance-config-register.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "evidence-value-authority.md",
-              "digest": "sha256:cd1213b83d242964a33c7bae43940b8adb2823de28cb0c016dc05b0dcd40486a"
+              "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+            },
+            {
+              "kind": "rfc",
+              "id": "semantic-convention-register.md",
+              "digest": "sha256:e587e4114585176b6666aa006691460e7bcce278fd2333c030472a4ced14c8ad"
+            },
+            {
+              "kind": "rfc",
+              "id": "semantic-convention-provenance.md",
+              "digest": "sha256:cd69d2b53499b99274e7bb6e43f306d478d65a816902536401c7df8cfea2bc8d"
+            },
+            {
+              "kind": "rfc",
+              "id": "assistance-config-register.md",
+              "digest": "sha256:7ba5cf434bbb957d4d082e4f1079f872ed6a252b7ebd5f2c499b60acdbaac0d7"
             },
             {
               "kind": "work_state",
-              "id": "D2497",
-              "digest": "sha256:c2a9e7c4edf7791f0a54a6085b676b3cc60134e69396dc1a87ff092fca28ed2b"
+              "id": "D2363",
+              "digest": "sha256:4189ba577880b0e4275efb8af2e515d325c9d9e8083a9d6e19ab8e768b5a8a33"
             }
           ]
         },

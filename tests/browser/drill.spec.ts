@@ -1104,6 +1104,47 @@ test("library exposes phase honestly and survives a malformed pack response", as
   expect(pageErrors).toEqual([]);
 });
 
+test("Library search opens a principle, understands its basis, and rehearses an anchored pack", async ({ page }) => {
+  await page.goto("/library");
+  await expect(page.getByRole("heading", { name: "Find it, understand it, rehearse it, come back to it." })).toBeVisible();
+  // Phase-first: the phase filter is the first control, and packs are one row per id.
+  await page.getByRole("group", { name: "Chess phase" }).getByRole("button", { name: "Endgames" }).click();
+  await expect(page.getByRole("heading", { name: "Rehearsal packs" })).toBeVisible();
+  const packTitles = await page.locator('.item[data-kind="pack"] h3').allTextContents();
+  expect(packTitles.length).toBeGreaterThan(0);
+  expect(new Set(packTitles).size).toBe(packTitles.length);
+  await expect(page.getByText("No official pack has graduated yet.", { exact: false })).toBeVisible();
+  await expect(page.locator('.item[data-kind="pack"] .origin').first()).toHaveText(/Community draft · not yet reviewed/u);
+
+  await page.getByRole("group", { name: "Chess phase" }).getByRole("button", { name: "Every phase" }).click();
+  await page.getByLabel("Search the library").fill("tempo currency");
+  const principle = page.locator('.item[data-kind="principle"]').filter({ hasText: "Tempo is the currency" });
+  await expect(principle).toHaveCount(1);
+  await expect(principle.locator(".origin")).toHaveText("Official");
+  await principle.getByRole("link", { name: "Tempo is the currency", exact: true }).click();
+
+  await expect(page).toHaveURL(/\/library\/principle\/tempo-is-the-currency$/u);
+  await expect(page.getByRole("heading", { level: 1, name: "Tempo is the currency" })).toBeVisible();
+  await expect(page.getByText("Stands on the authors' practice. No external source is cited for it.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Where it stops holding" })).toBeVisible();
+  const anchored = page.locator("section").filter({ has: page.getByRole("heading", { name: "Rehearse it" }) }).locator("li");
+  await expect(anchored.first()).toContainText("Community draft · not yet reviewed");
+  const title = (await anchored.first().locator("a").textContent())!.trim();
+  await anchored.first().getByRole("button", { name: `Rehearse: ${title}` }).click();
+
+  await expect(page).toHaveURL(/\/play\/run\/run-/u);
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+
+  // Return: the pack entry names the learner's return path for the pack just rehearsed.
+  await page.goto("/library");
+  await page.getByLabel("Search the library").fill(title.split(":")[0]!);
+  const card = page.locator('.item[data-kind="pack"]').filter({ hasText: title });
+  await card.getByRole("link", { name: `Plan a return: ${title}` }).click();
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Return" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open your latest rehearsal of this pack" })).toBeVisible();
+});
+
 test("terminal outcome reveals authored commentary, a native story, and a revocable public card", async ({ page, browser }) => {
   const card = page
     .getByRole("article")

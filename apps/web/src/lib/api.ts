@@ -71,6 +71,20 @@ import { parseOpponentSelection } from "./opponent-selection-response.js";
 import { parsePackDocument } from "./pack-response.js";
 import { parseDifficultRoots, parseDueQueue, parseProgressAttempts, parseProgressMilestones, parseProgressRecommendations, parseRelatedProgress } from "./progress-response.js";
 import { parseShapeDocument } from "./shape-response.js";
+import {
+  librarySearchPath,
+  parseLibrarySearch,
+  parseOpeningEntry,
+  parsePackEntry,
+  parsePrincipleEntry,
+  parseShapeEntry,
+  type LibrarySearchQuery,
+  type LibrarySearchResult,
+  type OpeningEntryView,
+  type PackEntryView,
+  type PrincipleEntryView,
+  type ShapeEntryLibraryView,
+} from "./theory-library.js";
 import { parseVoicePage } from "./voice-response.js";
 
 export interface PackSummary {
@@ -1010,6 +1024,12 @@ export interface DrillClientApi extends RunApi {
   principles?(): Promise<readonly PrincipleSummary[]>;
   conceptCatalogue?(): Promise<ConceptCatalogueView>;
   shape(shapeId: string): Promise<ShapeDocument>;
+  /** The Library's `/theory` family (rfc/theory-drill-current-joins.md §4.3). */
+  librarySearch?(query: LibrarySearchQuery): Promise<LibrarySearchResult>;
+  principleEntry?(principleId: string): Promise<PrincipleEntryView>;
+  shapeEntry?(shapeId: string): Promise<ShapeEntryLibraryView>;
+  openingEntry?(positionKey: string): Promise<OpeningEntryView>;
+  packEntry?(packId: string): Promise<PackEntryView>;
   runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
   runPage?(limit?: number, offset?: number): Promise<RunPage>;
   runDeletionPreview?(runId: string): Promise<DeletionPreview>;
@@ -1225,6 +1245,35 @@ export class DrillApi implements DrillClientApi {
 
   async principles(): Promise<readonly PrincipleSummary[]> {
     return parsePrincipleCatalog(await this.#json<unknown>("/principles"));
+  }
+
+  async librarySearch(query: LibrarySearchQuery): Promise<LibrarySearchResult> {
+    return this.#theory(librarySearchPath(query), parseLibrarySearch);
+  }
+
+  async principleEntry(principleId: string): Promise<PrincipleEntryView> {
+    return this.#theory(`/theory/principles/${encoded(principleId)}`, parsePrincipleEntry);
+  }
+
+  async shapeEntry(shapeId: string): Promise<ShapeEntryLibraryView> {
+    return this.#theory(`/theory/shapes/${encoded(shapeId)}`, parseShapeEntry);
+  }
+
+  async openingEntry(positionKey: string): Promise<OpeningEntryView> {
+    return this.#theory(`/theory/openings/${encoded(positionKey)}`, parseOpeningEntry);
+  }
+
+  async packEntry(packId: string): Promise<PackEntryView> {
+    return this.#theory(`/theory/packs/${encoded(packId)}`, parsePackEntry);
+  }
+
+  async #theory<T>(path: string, parse: (value: unknown) => T): Promise<T> {
+    const body = await this.#json<unknown>(path);
+    try {
+      return parse(body);
+    } catch (error) {
+      throw new ApiError(502, "INVALID_RESPONSE", error instanceof Error ? error.message : "Theory response is invalid");
+    }
   }
 
   /** Consumer 6 of rfc/concept-registry.md §2: the registry's typed projection, strictly parsed. */
