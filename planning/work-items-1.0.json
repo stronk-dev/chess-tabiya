@@ -4928,17 +4928,21 @@
     {
       "id": "IMP-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§5.4ii",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "**The standing *\"What Tabiya has recorded\"* section**: twelve rows with live counts and each one's export/deletion fate, generated from `AC38ATA_INVENTORY` (which throws at startup on drift, so it cannot go stale like prose) via `planDeletion` in a non-destructive mode",
       "legacyRoute": "ledger",
       "note": "[[D1484]]; the twelve *labels* need a ruling, the section does not",
-      "sourceDigest": "sha256:efa6a10941d9aa0d80b641cfdaad84758aba7aa74e3e2612f9ee791d4f49c556"
+      "sourceDigest": "sha256:efa6a10941d9aa0d80b641cfdaad84758aba7aa74e3e2612f9ee791d4f49c556",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c1edfbbe: Account settings render What Tabiya has recorded, one row per DeletionEffectKind with live count, holdings, download and deletion fate; behavioural row names abandoned/voided games; fixed storage-fact copy; apps/web/src/lib/account-record-inventory.test.ts"
+      }
     },
     {
       "id": "IMP-a13",
@@ -4962,17 +4966,21 @@
     {
       "id": "IMP-a14",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§5.3",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "**`behavioral_profiles` is the disclosure debt** — six tables named nowhere on the account screen, while [[D604]] measured that behavioural rows re-identify 35 of 36 accounts",
       "legacyRoute": "ledger",
       "note": "[[D604]]",
-      "sourceDigest": "sha256:d55564afb64784e52a4afe2e09fe4d3041304014c7cfb14794d6346982e3aab6"
+      "sourceDigest": "sha256:d55564afb64784e52a4afe2e09fe4d3041304014c7cfb14794d6346982e3aab6",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c1edfbbe: Account settings render What Tabiya has recorded, one row per DeletionEffectKind with live count, holdings, download and deletion fate; behavioural row names abandoned/voided games; fixed storage-fact copy; apps/web/src/lib/account-record-inventory.test.ts"
+      }
     },
     {
       "id": "IMP-a15",
@@ -5015,16 +5023,20 @@
     {
       "id": "IMP-a17",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§5.4 guard",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "The disclosure projects storage facts only — no inference, no profile narration. *That is the account-screen form of the law-8 anti-pattern*",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:c477ac43d21916aa354b480313dfd81e44566522a41e304c2dad80d2edb2d33b"
+      "sourceDigest": "sha256:c477ac43d21916aa354b480313dfd81e44566522a41e304c2dad80d2edb2d33b",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c1edfbbe: Account settings render What Tabiya has recorded, one row per DeletionEffectKind with live count, holdings, download and deletion fate; behavioural row names abandoned/voided games; fixed storage-fact copy; apps/web/src/lib/account-record-inventory.test.ts"
+      }
     },
     {
       "id": "IMP-a18",
@@ -5080,17 +5092,21 @@
     {
       "id": "IMP-a20",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§6-3",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Export re-confirms a password with no recovery, so lockout is permanent data loss",
       "legacyRoute": "none",
       "note": "B8 and the recovery gap meet here",
-      "sourceDigest": "sha256:d0cee4e68eac80d914c1184e0af95099b6515894e2097cec642b09362310f570"
+      "sourceDigest": "sha256:d0cee4e68eac80d914c1184e0af95099b6515894e2097cec642b09362310f570",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c1edfbbe: export control and registration state that a lost password ends the download with no recovery; AssistanceSettings.test.ts export lockout disclosure. Residual: password recovery itself remains the B8 platform gap"
+      }
     },
     {
       "id": "IMP-a21",
@@ -5207,16 +5223,20 @@
     {
       "id": "IMP-a27",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§8",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "The proposed data-tier rule, mirroring `design/05:41`: *presence is stated, never assumed, at the moment keeping starts*",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:d80cae012b63781cc547831ed8c083a7f79c905fbdc55d3f82682bf1c49ccf6b"
+      "sourceDigest": "sha256:d80cae012b63781cc547831ed8c083a7f79c905fbdc55d3f82682bf1c49ccf6b",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c1edfbbe: docs/identity-and-authorization.md records the data-presence rule and its seven keeping-start notices; account-record-inventory.test.ts pins each notice id in source"
+      }
     },
     {
       "id": "IMP-a28",
@@ -6173,7 +6193,7 @@
     {
       "id": "LIV-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
       "assignment": "capability:social_play",
@@ -6223,31 +6243,39 @@
     {
       "id": "LIV-a16",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§9 9-S",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
       "summary": "The worked Stream preamble (five answers, including *no delay, no chat, no anonymous viewer*)",
       "legacyRoute": "none",
       "note": "the contract's *home* needs Q1; this instance does not",
-      "sourceDigest": "sha256:98dfe7aa9626f24b98feab4c9c616775c21c24d50906092ee3bd0cdf98ff33b1"
+      "sourceDigest": "sha256:98dfe7aa9626f24b98feab4c9c616775c21c24d50906092ee3bd0cdf98ff33b1",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "48c165e5: Stream, native match and Position Arena render five-answer preambles at choose and persist moments with the refusal at equal weight; live-preamble.test.ts plus native-match browser journey. Academy remains LIV-b8"
+      }
     },
     {
       "id": "LIV-a17",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§9 9-Ma",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
       "summary": "Match/Arena needs two preambles because it is two features",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:8ed15a5c9ac5392efca076dbe588fe5ecf5f71ee74c49960c6f1620fec946369"
+      "sourceDigest": "sha256:8ed15a5c9ac5392efca076dbe588fe5ecf5f71ee74c49960c6f1620fec946369",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "48c165e5: Stream, native match and Position Arena render five-answer preambles at choose and persist moments with the refusal at equal weight; live-preamble.test.ts plus native-match browser journey. Academy remains LIV-b8"
+      }
     },
     {
       "id": "LIV-a18",
@@ -6305,17 +6333,21 @@
     {
       "id": "LIV-a20",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§12-4",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
       "summary": "`docs/live-sessions.md` wrongly says player and spectator get the same projection",
       "legacyRoute": "none",
       "note": "one clause; flagged as a docs DESIGN-GAP and unrepaired",
-      "sourceDigest": "sha256:3f03cd8951312c871085c7fcfa3af6cf38c8a833f8bd4e09af99be09900a7ebc"
+      "sourceDigest": "sha256:3f03cd8951312c871085c7fcfa3af6cf38c8a833f8bd4e09af99be09900a7ebc",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "48c165e5: docs/live-sessions.md states spectators share the run projection but get narrower assistance; packages/runtime/src/assistance-roles.test.ts pins doc and accessPermission together"
+      }
     },
     {
       "id": "LIV-a21",
@@ -6349,10 +6381,10 @@
     {
       "id": "LIV-a23",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§12-5",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
@@ -6360,7 +6392,11 @@
       "legacyRoute": "ledger",
       "note": "[[D1291]]",
       "tournamentReady": true,
-      "sourceDigest": "sha256:a54487b7660de77f6383cd2890cc958fe78eb38ae3e0c51be186176c50a38910"
+      "sourceDigest": "sha256:a54487b7660de77f6383cd2890cc958fe78eb38ae3e0c51be186176c50a38910",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "48c165e5: vote Voting time field is described as closing the poll and not a board delay; audience output keeps the board-delay sentence; live-copy.test.ts and Live browser journey accessible-description assertion"
+      }
     },
     {
       "id": "LIV-a24",
@@ -7703,16 +7739,20 @@
     {
       "id": "SET-a14",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§6C-3",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "The word *\"context\"* and the matrix must never face a person; the workflow context is already derived",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:6115b32c2cd1771cfc53dea3c0cd8d3b45469ebd3e26629e25fadb3cdaacc541"
+      "sourceDigest": "sha256:6115b32c2cd1771cfc53dea3c0cd8d3b45469ebd3e26629e25fadb3cdaacc541",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c1edfbbe: ordinary Playing settings show one in-flow sentence; Advanced edits one named activity at a time; no matrix or 'context' word; assistance-preference.test.ts and @matrix settings browser test"
+      }
     },
     {
       "id": "SET-a15",
@@ -8676,16 +8716,20 @@
     {
       "id": "TCH-a30",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§8",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The academy's two default layers disagree — `presets` says `guided`, `PROFILE_DEFAULTS.academy` ships SILENT. A guided session that says nothing",
       "legacyRoute": "ledger",
-      "sourceDigest": "sha256:4aec84bd73369969cb72d622d1b4b19948fa0e1626480aaff11d5ea984c5f0b4"
+      "sourceDigest": "sha256:4aec84bd73369969cb72d622d1b4b19948fa0e1626480aaff11d5ea984c5f0b4",
+      "completion": {
+        "completedOn": "2026-09-24",
+        "evidence": "c1edfbbe: PROFILE_DEFAULTS no longer exists (census test); unset academy resolves to the Guide me preset config and modules, pinned in assistance-preference.test.ts"
+      }
     },
     {
       "id": "TCH-a31",
