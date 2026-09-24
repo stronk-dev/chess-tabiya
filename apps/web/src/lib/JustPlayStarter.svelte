@@ -167,7 +167,7 @@
   .ladder > div:first-child { display: grid; gap: .2rem; margin-bottom: .65rem; } .ladder > div:first-child small { color: var(--muted); }
   .engine-choice label { min-height: auto; }
   .honest { margin: .2rem 0 0; color: var(--muted); font-size: .75rem; }
-  .starting-support { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: center; padding: .85rem 1rem; border: 1px solid var(--line); border-radius: .9rem; background: color-mix(in srgb, var(--accent) 6%, var(--paper)); }
+  .starting-support { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: center; padding: .85rem 1rem; border: 1px solid var(--line); border-radius: .9rem; background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
   .starting-support h3 { margin: .15rem 0 .25rem; font: 600 1.15rem var(--display-font); }
   .starting-support div > p:last-child, .support-next-step { margin: 0; color: var(--muted); line-height: 1.4; }
   .support-next-step { max-width: 21rem; font-size: .78rem; text-align: right; }

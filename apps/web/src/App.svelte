@@ -2444,7 +2444,7 @@
 </script>
 
 <svelte:window onkeydown={(event) => keyboardDispatcher.handle(event)} />
-<StatusAnnouncement message={streamerAnnouncement} />
+<span class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-streamer-announcement>{streamerAnnouncement}</span>
 
 {#if authLoading}
   <main class="auth-gate" aria-busy="true"><p>Loading Tabiya…</p></main>
