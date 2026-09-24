@@ -2,7 +2,8 @@ import type { AddressInfo } from "node:net";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createApplication, type ChessTabiyaApplication } from "./application.js";
+import type { ChessTabiyaApplication } from "./application.js";
+import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { IMPORTED_GAME_PREDICTION_CHECKPOINT } from "./service.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -23,7 +24,7 @@ describe("return scheduling through the production application", { timeout: 20_0
   afterEach(async () => { await application?.close(); application = undefined; });
 
   async function start() {
-    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false });
+    application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => {
       application!.server.once("error", reject);
       application!.server.listen(0, "127.0.0.1", resolve);

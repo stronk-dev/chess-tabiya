@@ -17,6 +17,15 @@ import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
 import {
+  LONGITUDINAL_MIGRATION_SQL,
+  LONGITUDINAL_RUN_COLUMNS_SQL,
+  LongitudinalStore,
+  type LongitudinalMutationDescriptor,
+  type LongitudinalReconciliationReceipt,
+} from "./longitudinal-store.js";
+import type { LongitudinalJob, LongitudinalReadResult, ParsedLongitudinalReadQuery } from "./longitudinal-contract.js";
+import type { LongitudinalSourceImageV4 } from "./longitudinal-source.js";
+import {
   buildAccountBundle,
   planDeletion,
   storedRunExport,
@@ -679,6 +688,8 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
   /** Test-only transaction fault hook used to prove destructive-path rollback. */
   readonly failDeletionAfterEffectGroup?: (group: DeletionEffectGroup) => void;
+  /** Wall-clock milliseconds for longitudinal job leases/backoff (tests cross exact boundaries). */
+  readonly longitudinalNow?: () => number;
 }
 
 export type DeletionEffectGroup =
@@ -692,7 +703,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 25;
+export const STORAGE_VERSION = 26;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -946,8 +957,13 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   readonly #now: () => string;
   readonly #onMigration: (entry: StorageMigrationLog) => void;
   readonly #failDeletionAfterEffectGroup: ((group: DeletionEffectGroup) => void) | undefined;
+  readonly #longitudinal: LongitudinalStore;
+  readonly #databasePath: string;
+  #longitudinalWakePending = false;
+  #longitudinalWake: (() => void) | undefined;
 
   constructor(filename = ":memory:", options: SQLiteRunStorageOptions = {}) {
+    this.#databasePath = filename;
     this.#database = new DatabaseSync(filename);
     this.#now = options.now ?? (() => new Date().toISOString());
     this.#failDeletionAfterEffectGroup = options.failDeletionAfterEffectGroup;
@@ -966,6 +982,76 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ) STRICT
     `);
     this.#migrate();
+    this.#longitudinal = new LongitudinalStore(this.#database, options.longitudinalNow === undefined ? {} : { now: options.longitudinalNow });
+  }
+
+  /** The database identity this connection opened; the longitudinal worker must open the same one. */
+  get databasePath(): string {
+    return this.#databasePath;
+  }
+
+  /** Post-commit latency hint for the longitudinal worker; polling remains the recovery authority. */
+  setLongitudinalWakeListener(listener: (() => void) | undefined): void {
+    this.#longitudinalWake = listener;
+  }
+
+  /** rfc/longitudinal-store.md §C — the exported storage-owned V4 source image constructor. */
+  longitudinalSourceImageV4(runId: string, requestedSeq: number): LongitudinalSourceImageV4 {
+    return this.#longitudinal.longitudinalSourceImageV4(runId, requestedSeq);
+  }
+
+  longitudinalSourceDigestV4(image: LongitudinalSourceImageV4): `sha256:${string}` {
+    return this.#longitudinal.sourceDigest(image);
+  }
+
+  /** The sole authenticated consumer snapshot read (§C typed read boundary). */
+  readLongitudinalSnapshot(actorLearnerId: string, query: ParsedLongitudinalReadQuery): LongitudinalReadResult {
+    return this.#longitudinal.readSnapshot(actorLearnerId, query);
+  }
+
+  /** Startup reconciliation: creates/advances/revision-resets jobs; performs no semantic work. */
+  reconcileLongitudinalJobs(batchSize?: number): LongitudinalReconciliationReceipt {
+    const receipt = this.#longitudinal.reconcile(batchSize);
+    this.#longitudinalWakePending = true;
+    this.#flushLongitudinalWake();
+    return receipt;
+  }
+
+  /** Operator/test visibility of one durable job image (parsed through the closed union). */
+  longitudinalJob(runId: string): LongitudinalJob | undefined {
+    return this.#longitudinal.job(runId);
+  }
+
+  /**
+   * The one co-located watermark primitive for the eleven source-mutation operations. It must be
+   * called after the method's literal `BEGIN IMMEDIATE` and before its `COMMIT`; the descriptor is
+   * the census label compiled from the AST, not a second authority.
+   */
+  #upsertLongitudinalWatermark(
+    descriptor: LongitudinalMutationDescriptor,
+    runIds: readonly string[],
+    options: { readonly taintShared?: boolean } = {},
+  ): void {
+    for (const runId of runIds) {
+      if (descriptor.effect === "suppression") {
+        this.#longitudinal.suppressInTransaction(runId);
+        continue;
+      }
+      const outcome = options.taintShared === true
+        ? this.#longitudinal.taintSharedInTransaction(runId)
+        : this.#longitudinal.refreshWatermarkInTransaction(runId);
+      if (outcome !== "unchanged" && outcome !== "ineligible") this.#longitudinalWakePending = true;
+    }
+  }
+
+  #flushLongitudinalWake(): void {
+    if (!this.#longitudinalWakePending) return;
+    this.#longitudinalWakePending = false;
+    try {
+      this.#longitudinalWake?.();
+    } catch {
+      // A wake is only a latency hint; the worker poll recovers a missed signal.
+    }
   }
 
   applicationTableNames(): readonly string[] {
@@ -1028,6 +1114,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       alternate_gaps_json: "alternateGaps",
       unknown_json: "unknown",
       options_json: "options",
+      occurred_refs: "occurredRefs",
+      opportunity_refs: "opportunityRefs",
     });
     const booleanColumns = new Set(["relayed", "countable", "graded", "truncated", "show_record", "show_rating"]);
     const withoutAccountIdentity = (row: Readonly<Record<string, unknown>>): Readonly<Record<string, unknown>> =>
@@ -1270,6 +1358,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         ...tagged("standing_members", rows("SELECT * FROM standing_members WHERE learner_id=? ORDER BY classroom_id", learnerId)),
         ...tagged("learner_marks", rows("SELECT * FROM learner_marks WHERE learner_id=? ORDER BY earned_at,run_id", learnerId)),
         ...tagged("cohort_standings", rows("SELECT * FROM cohort_standings WHERE opened_by_learner_id=? ORDER BY classroom_id", learnerId)),
+        // rfc/longitudinal-store.md Discharge D1: the four private longitudinal classes.
+        ...tagged("learner_observation_denominators", rows("SELECT * FROM learner_observation_denominators WHERE learner_id=? ORDER BY run_id,phase,decision_class", learnerId)),
+        ...tagged("learner_observations", rows("SELECT * FROM learner_observations WHERE learner_id=? ORDER BY run_id,projection_id,projection_version,semantic_sign,source_sign,phase,decision_class", learnerId)),
+        ...tagged("learner_structure_stats", rows("SELECT * FROM learner_structure_stats WHERE learner_id=? ORDER BY run_id,root_key", learnerId)),
+        ...tagged("learner_observation_jobs", rows("SELECT run_id,requested_seq,completed_seq,derived_rev,state,retry_count,failure_code,next_attempt_at,updated_at FROM learner_observation_jobs WHERE learner_id=? ORDER BY run_id", learnerId)),
       ];
       const bundle = buildAccountBundle({
         source: { applicationVersion: "0.0.0", storageVersion: STORAGE_VERSION, runSchemaVersion: DRILL_RUN_SCHEMA_VERSION },
@@ -1320,6 +1413,13 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     });
     const ids = (sql: string, ...parameters: readonly string[]): readonly string[] =>
       Object.freeze((this.#database.prepare(sql).all(...parameters) as unknown as readonly { readonly id: string | number }[]).map((row) => String(row.id)));
+    const longitudinalIds = (where: string, ...parameters: readonly string[]): readonly string[] => [
+      ...ids(`SELECT 'longitudinal-denominator:'||run_id||':'||phase||':'||decision_class AS id FROM learner_observation_denominators WHERE ${where} ORDER BY run_id,phase,decision_class`, ...parameters),
+      ...ids(`SELECT 'longitudinal-observation:'||run_id||':'||projection_id||'@'||projection_version||':'||semantic_sign||':'||source_sign||':'||phase||':'||decision_class AS id
+        FROM learner_observations WHERE ${where} ORDER BY run_id,projection_id,projection_version,semantic_sign,source_sign,phase,decision_class`, ...parameters),
+      ...ids(`SELECT 'longitudinal-structure:'||run_id||':'||root_key AS id FROM learner_structure_stats WHERE ${where} ORDER BY run_id,root_key`, ...parameters),
+      ...ids(`SELECT 'longitudinal-job:'||run_id AS id FROM learner_observation_jobs WHERE ${where} ORDER BY run_id`, ...parameters),
+    ];
     const progressIds = scope.kind === "run" ? [] : [
       ...ids("SELECT 'attempt:'||run_id||':'||branch_id AS id FROM attempts WHERE learner_id=? ORDER BY run_id,branch_id", learnerId),
       ...ids(`SELECT 'concept:'||c.run_id||':'||c.branch_id||':'||c.concept_key AS id FROM attempt_concepts c
@@ -1346,8 +1446,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ...ids("SELECT 'period:'||period_no AS id FROM rating_periods WHERE learner_id=? ORDER BY period_no", learnerId),
       ...ids("SELECT 'standing:'||classroom_id AS id FROM standing_members WHERE learner_id=? ORDER BY classroom_id", learnerId),
       ...ids("SELECT 'mark:'||mark AS id FROM learner_marks WHERE learner_id=? ORDER BY mark", learnerId),
+      ...longitudinalIds("learner_id=?", learnerId),
     ];
-    const hardDelete = scope.kind === "run" ? [] : [
+    const runLongitudinalIds = scope.kind === "run" ? longitudinalIds("run_id=? AND learner_id=?", scope.runId, learnerId) : [];
+    const hardDelete = scope.kind === "run" ? [
+      { kind: "behavioral_profile" as const, count: runLongitudinalIds.length, objectIds: runLongitudinalIds, label: "Longitudinal observations derived from this run are erased with it" },
+    ] : [
       { kind: "progress" as const, count: progressIds.length, objectIds: progressIds, label: "Attempt history, concepts, schedules, and position statistics are permanently deleted" },
       { kind: "mark" as const, count: markIds.length, objectIds: markIds, label: "Private board marks are permanently deleted" },
       { kind: "repertoire" as const, count: repertoireIds.length, objectIds: repertoireIds, label: "Repertoires, moves, scans, and gap links are permanently deleted" },
@@ -1396,8 +1500,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         .prepare(
           `INSERT INTO drill_runs
              (id, snapshot_json, active_writer_id, updated_at, summary_json,
-              owner_learner_id, active_writer_learner_id, schema_version)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+              owner_learner_id, active_writer_learner_id, schema_version,
+              longitudinal_structure_attribution)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'single_player')`,
         )
         .run(
           run.id,
@@ -1415,6 +1520,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
            VALUES (?, ?, 'host', ?, NULL, NULL)`,
         )
         .run(run.id, lease.learnerId, updatedAt);
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#create", effect: "always" }, [run.id]);
       this.#database.exec("COMMIT");
       this.#snapshots.set(
         run.id,
@@ -1424,6 +1530,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           activeWriterLearnerId: lease.learnerId,
         }),
       );
+      this.#flushLongitudinalWake();
     } catch (error) {
       this.#rollback();
       if (error instanceof Error && error.message.includes("UNIQUE constraint failed")) {
@@ -1443,8 +1550,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     try {
       this.#database.exec("BEGIN IMMEDIATE");
       this.#database.prepare(`INSERT INTO drill_runs
-        (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version)
-        VALUES (?,?,?,?,?,?,?,?)`).run(
+        (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version,longitudinal_structure_attribution)
+        VALUES (?,?,?,?,?,?,?,?,'single_player')`).run(
           run.id, JSON.stringify(run), lease.writerId, updatedAt,
           JSON.stringify(summaryFields(run, title, updatedAt)), lease.learnerId,
           lease.learnerId, run.schemaVersion,
@@ -1477,12 +1584,14 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
             initial.rating, initial.rd, initial.volatility,
           );
       }
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#createRatedRun", effect: "always" }, [run.id]);
       this.#database.exec("COMMIT");
       this.#snapshots.set(run.id, Object.freeze({
         run,
         activeWriterId: lease.writerId,
         activeWriterLearnerId: lease.learnerId,
       }));
+      this.#flushLongitudinalWake();
     } catch (error) {
       this.#rollback();
       if (error instanceof Error && error.message.includes("UNIQUE constraint failed")) {
@@ -1803,8 +1912,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     try {
       this.#database.exec("BEGIN IMMEDIATE");
       this.#database.prepare(`INSERT INTO drill_runs
-        (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version)
-        VALUES (?,?,?,?,?,?,?,?)`).run(
+        (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version,longitudinal_structure_attribution)
+        VALUES (?,?,?,?,?,?,?,?,'single_player')`).run(
           run.id, JSON.stringify(run), lease.writerId, updatedAt,
           JSON.stringify(summaryFields(run, title, updatedAt)), lease.learnerId,
           lease.learnerId, run.schemaVersion,
@@ -1818,8 +1927,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           JSON.stringify(record.headers), record.result, record.pgn, record.licenceNote,
           record.importedAt,
         );
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#createImportedRun", effect: "always" }, [run.id]);
       this.#database.exec("COMMIT");
       this.#snapshots.set(run.id, Object.freeze({ run, activeWriterId: lease.writerId, activeWriterLearnerId: lease.learnerId }));
+      this.#flushLongitudinalWake();
     } catch (error) {
       this.#rollback();
       if (error instanceof Error && error.message.includes("UNIQUE constraint failed")) {
@@ -1930,6 +2041,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   save(run: DrillRun, leaseInput: LeaseHolder | string): void {
     const lease = this.#lease(leaseInput);
     try {
+      this.#database.exec("BEGIN IMMEDIATE");
       const row = this.#database
         .prepare("SELECT summary_json FROM drill_runs WHERE id = ?")
         .get(run.id) as { readonly summary_json?: unknown } | undefined;
@@ -1957,6 +2069,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           lease.learnerId,
         );
       if (result.changes === 1) {
+        this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#save", effect: "conditional" }, [run.id]);
+        this.#database.exec("COMMIT");
         this.#snapshots.set(
           run.id,
           Object.freeze({
@@ -1965,9 +2079,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
             activeWriterLearnerId: lease.learnerId,
           }),
         );
+        this.#flushLongitudinalWake();
         return;
       }
+      this.#database.exec("ROLLBACK");
     } catch (error) {
+      this.#rollback();
       if (error instanceof ServerError) throw error;
       throw storageFailure("Could not save run", error);
     }
@@ -2022,10 +2139,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     const updatedAt=this.#now();
     try{
       this.#database.exec("BEGIN IMMEDIATE");
-      this.#database.prepare(`INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version) VALUES (?,?,?,?,?,?,?,?)`).run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);
+      this.#database.prepare(`INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version,longitudinal_structure_attribution) VALUES (?,?,?,?,?,?,?,?,'single_player')`).run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);
       this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)").run(run.id,lease.learnerId,updatedAt);
       this.#database.prepare("INSERT INTO run_derivations (derived_run_id,source_run_id,source_branch_id,source_node_id,kind,created_at) VALUES (?,?,?,?,?,?)").run(derivation.derivedRunId,derivation.sourceRunId,derivation.sourceBranchId,derivation.sourceNodeId,derivation.kind,derivation.createdAt);
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#createDerivedRun", effect: "always" }, [run.id]);
       this.#database.exec("COMMIT"); this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));
+      this.#flushLongitudinalWake();
     }catch(error){this.#rollback();throw storageFailure("Could not create derived run",error);}
   }
 
@@ -2049,7 +2168,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   repertoireScan(id:string):RepertoireScanRecord|undefined{const row=this.#database.prepare("SELECT * FROM repertoire_scans WHERE repertoire_id=?").get(id) as Record<string,unknown>|undefined;if(row===undefined)return undefined;return Object.freeze({repertoireId:String(row.repertoire_id),scannedAt:String(row.scanned_at),repertoireDigest:String(row.repertoire_digest),population:JSON.parse(String(row.population_json)),gaps:JSON.parse(String(row.gaps_json)),alternateGaps:JSON.parse(String(row.alternate_gaps_json)),unknown:JSON.parse(String(row.unknown_json)),uncoveredMass:Number(row.uncovered_mass),truncated:Number(row.truncated)===1,sourceFailures:Number(row.source_failures),queriesUsed:Number(row.queries_used),unreachedKeys:Number(row.unreached_keys)});}
   addRepertoireAnswer(record:RepertoireMoveRecord,expectedDigest:string,nextDigest:string,updatedAt:string):void{try{this.#database.exec("BEGIN IMMEDIATE");const row=this.#database.prepare("SELECT digest FROM repertoires WHERE id=?").get(record.repertoireId) as {digest?:unknown}|undefined;if(row===undefined)throw new ServerError("RUN_NOT_FOUND","Repertoire not found");if(row.digest!==expectedDigest)throw new ServerError("REPERTOIRE_STALE","Repertoire changed while it was being edited",{details:{digest:String(row.digest)}});this.#database.prepare("UPDATE repertoire_moves SET rank=rank+1 WHERE repertoire_id=? AND position_key=?").run(record.repertoireId,record.positionKey);this.#database.prepare("INSERT INTO repertoire_moves (repertoire_id,position_key,move_uci,move_san,representative_fen,rank,origin,created_at) VALUES (?,?,?,?,?,0,'chosen_from_attempt',?) ON CONFLICT(repertoire_id,position_key,move_uci) DO UPDATE SET rank=0,origin='chosen_from_attempt'").run(record.repertoireId,record.positionKey,record.moveUci,record.moveSan,record.representativeFen,record.createdAt);this.#database.prepare("UPDATE repertoires SET digest=?,updated_at=? WHERE id=?").run(nextDigest,updatedAt,record.repertoireId);this.#database.exec("COMMIT");}catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not add repertoire answer",error);}}
   deleteRepertoire(id:string,ownerLearnerId:string):void{try{this.#database.exec("BEGIN IMMEDIATE");const found=this.#database.prepare("SELECT 1 AS found FROM repertoires WHERE id=? AND owner_learner_id=?").get(id,ownerLearnerId);if(found===undefined)throw new ServerError("RUN_NOT_FOUND","Repertoire not found");this.#deleteRepertoireRows(id);this.#database.exec("COMMIT");}catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not delete repertoire",error);}}
-  createRepertoireGapRun(run:DrillRun,lease:LeaseHolder,title:string,link:RepertoireGapRunRecord):void{const updatedAt=this.#now();try{this.#database.exec("BEGIN IMMEDIATE");this.#database.prepare("INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version) VALUES (?,?,?,?,?,?,?,?)").run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)").run(run.id,lease.learnerId,updatedAt);this.#database.prepare("INSERT INTO repertoire_gap_runs (run_id,repertoire_id,gap_key,created_at) VALUES (?,?,?,?)").run(link.runId,link.repertoireId,link.gapKey,link.createdAt);this.#database.exec("COMMIT");this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));}catch(error){this.#rollback();throw storageFailure("Could not create repertoire gap run",error);}}
+  createRepertoireGapRun(run:DrillRun,lease:LeaseHolder,title:string,link:RepertoireGapRunRecord):void{const updatedAt=this.#now();try{this.#database.exec("BEGIN IMMEDIATE");this.#database.prepare("INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version,longitudinal_structure_attribution) VALUES (?,?,?,?,?,?,?,?,'single_player')").run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)").run(run.id,lease.learnerId,updatedAt);this.#database.prepare("INSERT INTO repertoire_gap_runs (run_id,repertoire_id,gap_key,created_at) VALUES (?,?,?,?)").run(link.runId,link.repertoireId,link.gapKey,link.createdAt);this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#createRepertoireGapRun", effect: "always" }, [run.id]);this.#database.exec("COMMIT");this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));this.#flushLongitudinalWake();}catch(error){this.#rollback();throw storageFailure("Could not create repertoire gap run",error);}}
   repertoireGapRun(repertoireId:string,gapKey:string):RepertoireGapRunRecord|undefined{const row=this.#database.prepare("SELECT * FROM repertoire_gap_runs WHERE repertoire_id=? AND gap_key=? ORDER BY created_at LIMIT 1").get(repertoireId,gapKey) as Record<string,unknown>|undefined;return row===undefined?undefined:Object.freeze({runId:String(row.run_id),repertoireId:String(row.repertoire_id),gapKey:String(row.gap_key),createdAt:String(row.created_at)});}
   repertoireGapAttemptCount(runId:string):number{const row=this.#database.prepare("SELECT count(*) AS total FROM attempts WHERE run_id=? AND countable=1").get(runId) as {total?:unknown};return Number(row.total??0);}
   repertoireGapFirstMoves(runId:string):readonly {readonly moveUci:string;readonly moveSan:string}[]{const stored=this.read(runId);if(stored===undefined)return Object.freeze([]);const root=stored.run.nodes[0];if(root===undefined)return Object.freeze([]);const rows=stored.run.nodes.filter((node)=>node.parentId===root.id&&node.actor==="user").map((node)=>({moveUci:node.moveUci!,moveSan:node.moveSan!}));return Object.freeze([...new Map(rows.map((row)=>[row.moveUci,row])).values()]);}
@@ -2164,6 +2283,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const preview = this.deletionPreview(learnerId, { kind: "run", runId }, at);
       if (preview.digest !== expectedPreviewDigest) throw new ServerError("DELETION_PREVIEW_STALE", "Deletion preview is stale; review the current effects before trying again", { details: { digest: preview.digest } });
       this.#insertLegacy(at);
+      // Private longitudinal rows go first and the run is durably suppressed before any owner change.
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#deleteOwnedRun", effect: "suppression" }, [runId]);
       const shared = preview.tombstone.some((effect) => effect.kind === "shared_run" && effect.objectIds.includes(runId));
       if (!shared) {
         this.#database.prepare("DELETE FROM public_tokens WHERE run_id=?").run(runId);
@@ -2220,6 +2341,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const hardClassroomIds = preview.hardDelete.filter((effect) => effect.kind === "classroom").flatMap((effect) => effect.objectIds);
       const sharedClassroomIds = preview.tombstone.filter((effect) => effect.kind === "classroom").flatMap((effect) => effect.objectIds);
       const deletionScopedKey = `deleted-${randomUUID()}`;
+      // Suppress before the `__legacy` reassignment: `ON UPDATE RESTRICT` makes the reverse order fail.
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#deleteLearner", effect: "suppression" }, [...hardRunIds, ...tombstoneRunIds]);
       for (const runId of hardRunIds) {
         this.#database.prepare("DELETE FROM public_tokens WHERE run_id=?").run(runId);
         this.#database.prepare("DELETE FROM run_derivations WHERE source_run_id=? OR derived_run_id=?").run(runId, runId);
@@ -2551,11 +2674,37 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     actor: LeaseHolder,
     at: string,
   ): void {
-    this.#mutateGrant(runId, learnerId, role, actor, at);
+    let transferred = false;
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      transferred = this.#mutateGrantInTransaction(runId, learnerId, role, actor, at);
+      const owner = this.#database.prepare("SELECT owner_learner_id FROM drill_runs WHERE id=?").get(runId) as { readonly owner_learner_id?: unknown } | undefined;
+      // A non-owner first receiving a write-capable role taints the run monotonically ([[D2574]]).
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#grantRole", effect: "conditional" }, [runId], {
+        taintShared: runRoleMayWrite(role) && owner?.owner_learner_id !== learnerId,
+      });
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not update run grant", error);
+    }
+    if (transferred) this.#setCachedLease(runId, actor);
+    this.#flushLongitudinalWake();
   }
 
   revokeGrant(runId: string, learnerId: string, actor: LeaseHolder): void {
-    this.#mutateGrant(runId, learnerId, undefined, actor, this.#now());
+    let transferred = false;
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      transferred = this.#mutateGrantInTransaction(runId, learnerId, undefined, actor, this.#now());
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not update run grant", error);
+    }
+    if (transferred) this.#setCachedLease(runId, actor);
   }
 
   claimLease(runId: string, lease: LeaseHolder, expectedHolderLearnerId?: string): void {
@@ -3101,7 +3250,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         const insert = this.#database.prepare("INSERT INTO arena_legs(session_id,leg) VALUES (?,?)");
         insert.run(input.id, 1); insert.run(input.id, 2);
       }
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#createLiveSession", effect: "conditional" }, [input.runId], { taintShared: true });
       this.#database.exec("COMMIT");
+      this.#flushLongitudinalWake();
       return this.liveSession(input.id)!;
     } catch (error) {
       this.#rollback();
@@ -3371,8 +3522,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         WHERE session_id=? AND leg=? AND branch_id IS NULL`).run(leg.referencePlayerHandle,leg.externalChallengeUrl,leg.pgn,leg.result,leg.branchId,leg.importedAt,leg.sessionId,leg.leg);
       if(changed.changes!==1)throw new ServerError("INVALID_REQUEST","Arena leg was already imported");
       this.#appendSessionJournal(leg.sessionId,"leg.imported",actorLearnerId,run.events.at(-1)?.seq??0,{leg:leg.leg,branchId:leg.branchId},at);
+      this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#saveArenaImport", effect: "conditional" }, [run.id]);
       this.#database.exec("COMMIT");
       this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));
+      this.#flushLongitudinalWake();
     }catch(error){this.#rollback();if(error instanceof ServerError||error instanceof RuntimeError)throw error;throw storageFailure("Could not import arena leg",error);}
   }
 
@@ -3640,15 +3793,15 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     this.#database.close();
   }
 
-  #mutateGrant(
+  /** The grant mutation body; its caller owns the enclosing `BEGIN IMMEDIATE … COMMIT`. */
+  #mutateGrantInTransaction(
     runId: string,
     targetLearnerId: string,
     role: RunRole | undefined,
     actor: LeaseHolder,
     at: string,
-  ): void {
-    try {
-      this.#database.exec("BEGIN IMMEDIATE");
+  ): boolean {
+    {
       const actorRole = this.#roleInTransaction(runId, actor.learnerId);
       if (actorRole !== "host") {
         throw new ServerError(
@@ -3719,12 +3872,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           this.#appendSessionJournal(session.id,"board.granted",actor.learnerId,this.#runSeq(runId),{holderLearnerId:actor.learnerId},at);
         }
       }
-      this.#database.exec("COMMIT");
-      if (transferred) this.#setCachedLease(runId, actor);
-    } catch (error) {
-      this.#rollback();
-      if (error instanceof ServerError) throw error;
-      throw storageFailure("Could not update run grant", error);
+      return transferred;
     }
   }
 
@@ -3898,6 +4046,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         version: 25,
         name: "learner ratings, rated games, periods, standings, and marks",
         apply: () => this.#addLearnerRatingTables(),
+      },
+      {
+        version: 26,
+        name: "longitudinal observation ledger, structure stats, and projection jobs",
+        apply: () => this.#addLongitudinalTables(),
       },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
@@ -4739,6 +4892,17 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         PRIMARY KEY (learner_id, mark)
       ) STRICT;
     `);
+  }
+
+  /**
+   * Migration 26 (rfc/longitudinal-store.md): additive only. No backfill, no snapshot rewrite:
+   * pre-migration runs read `unattributable_legacy`/`profileable` by column default and are queued by
+   * startup reconciliation, never by this body.
+   */
+  #addLongitudinalTables(): void {
+    const columns = new Set((this.#database.prepare("PRAGMA table_info(drill_runs)").all() as unknown as readonly { readonly name: string }[]).map((column) => column.name));
+    for (const [column, sql] of Object.entries(LONGITUDINAL_RUN_COLUMNS_SQL)) if (!columns.has(column)) this.#database.exec(sql);
+    this.#database.exec(LONGITUDINAL_MIGRATION_SQL);
   }
 
   #insertLegacy(at: string): void {

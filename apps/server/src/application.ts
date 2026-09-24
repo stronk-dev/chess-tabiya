@@ -34,7 +34,16 @@ import { PackRegistry } from "./pack-registry.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { PackStudio } from "./pack-studio.js";
-import { SQLiteRunStorage } from "./storage.js";
+import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
+import {
+  LONGITUDINAL_WORKER_DEFAULTS,
+  fileBackedDatabaseIdentity,
+  validateLongitudinalWorkerConfig,
+  type LongitudinalWorkerConfig,
+} from "./longitudinal-worker-config.js";
+import { LongitudinalProjectionWorker, type LongitudinalWorkerProgress, type LongitudinalWorkerStatus } from "./longitudinal-worker.js";
+import type { LongitudinalReconciliationReceipt } from "./longitudinal-store.js";
+import type { LongitudinalReadResult, ParsedLongitudinalReadQuery } from "./longitudinal-contract.js";
 import { IdentityService } from "./identity.js";
 import { stockfishPlaySpec } from "./strong-engine.js";
 import { LiveSessionService } from "./live-session.js";
@@ -71,13 +80,47 @@ export interface ApplicationOptions {
   readonly ttsProvider?: TtsProvider;
   readonly tablebaseSource?: TablebaseSource | null;
   readonly openingCataloguePath?: string;
+  /** Longitudinal worker bounds; validated against the §C closed configuration. */
+  readonly longitudinalWorker?: LongitudinalWorkerConfig;
+  /** Built worker-thread entry override (tests bundle it; production uses the sibling dist file). */
+  readonly longitudinalWorkerEntry?: URL;
+}
+
+export type LongitudinalHealth =
+  | { readonly status: "ready" | "draining" | "disabled_test" }
+  | { readonly status: "degraded"; readonly reason: "worker_start_failed" | "worker_exited" | "worker_protocol_invalid" };
+
+/** The self-hosted appliance startup/upgrade receipt (rfc/longitudinal-store.md §C). */
+export interface ApplicationStartupReceipt {
+  readonly storageVersion: number;
+  readonly databasePath: string;
+  readonly longitudinal: LongitudinalReconciliationReceipt;
+}
+
+/**
+ * The server-side longitudinal store handle. `read` is the sole consumer snapshot read; no HTTP route
+ * or client exposes it at landing (rfc/longitudinal-store.md §Scope boundary). Consumer RFCs
+ * (player-style, skills, campaign) build on this handle through their own registered operations.
+ */
+export interface ApplicationLongitudinal {
+  health(): LongitudinalHealth;
+  /** Closed worker progress totals (claimed/completed/failed/conflicts/renewals); none in disabled_test. */
+  progress(): LongitudinalWorkerProgress | undefined;
+  read(actorLearnerId: string, query: ParsedLongitudinalReadQuery): LongitudinalReadResult;
 }
 
 export interface ChessTabiyaApplication {
   readonly server: ReturnType<typeof createHttpServer>;
   readonly engineMode: EngineMode;
+  readonly startupReceipt: ApplicationStartupReceipt;
+  readonly longitudinal: ApplicationLongitudinal;
   close(): Promise<void>;
 }
+
+/** Composition mode: production always requires the file-backed worker. */
+export type LongitudinalComposition =
+  | { readonly kind: "worker" }
+  | { readonly kind: "disabled_test" };
 
 const CONTENT_TYPES: Readonly<Record<string, string>> = Object.freeze({
   ".css": "text/css; charset=utf-8",
@@ -278,12 +321,36 @@ async function staticResponse(
   }
 }
 
+export const DEFAULT_DATABASE_PATH = (): string => resolve(process.cwd(), "data", "chess-tabiya.sqlite");
+
+/**
+ * Production composition. The database is always file-backed (default `data/chess-tabiya.sqlite`);
+ * startup reconciles longitudinal jobs and awaits the worker's ready message before returning, so
+ * `main.ts` listens only after the semantic executor is live.
+ */
 export async function createApplication(
   options: ApplicationOptions = {},
 ): Promise<ChessTabiyaApplication> {
+  return composeApplication(options, { kind: "worker" });
+}
+
+/** @internal Shared by `createApplication` and the test-only in-memory helper; never by main.ts. */
+export async function composeApplication(
+  options: ApplicationOptions,
+  composition: LongitudinalComposition,
+): Promise<ChessTabiyaApplication> {
   assertEvidenceManifest();
-  const databasePath = options.databasePath ?? ":memory:";
-  if (databasePath !== ":memory:") await mkdir(dirname(databasePath), { recursive: true });
+  const workerConfig = validateLongitudinalWorkerConfig(options.longitudinalWorker ?? LONGITUDINAL_WORKER_DEFAULTS);
+  let databasePath: string;
+  if (composition.kind === "worker") {
+    databasePath = fileBackedDatabaseIdentity(options.databasePath ?? DEFAULT_DATABASE_PATH()).absolutePath;
+    await mkdir(dirname(databasePath), { recursive: true });
+  } else {
+    if (options.databasePath !== undefined && options.databasePath !== ":memory:") {
+      throw new TypeError("The disabled_test composition is in-memory only");
+    }
+    databasePath = ":memory:";
+  }
   const storage = new SQLiteRunStorage(databasePath);
   const shapes = await ShapeRegistry.loadDefault();
   const principles = await PrincipleRegistry.loadDefault();
@@ -378,25 +445,73 @@ export async function createApplication(
   const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
+  let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
   const handler: RestHandler = async (request) => {
     const url = new URL(request.url);
     if (url.pathname === "/healthz") {
-      return Response.json({ status: "ok", engineMode });
+      return healthProbe();
     }
     return isApiPath(url.pathname)
       ? api(request)
       : staticResponse(request, staticDirectory);
   };
   const server = createHttpServer(handler);
+  // Reconcile before the worker starts: queue untouched old native/imported/shared runs, advance
+  // lower high-water marks and replace wrong revisions. No semantic work runs here.
+  const reconciliation = storage.reconcileLongitudinalJobs();
+  let worker: LongitudinalProjectionWorker | undefined;
+  if (composition.kind === "worker") {
+    try {
+      worker = await LongitudinalProjectionWorker.start({
+        database: fileBackedDatabaseIdentity(storage.databasePath),
+        storageVersion: STORAGE_VERSION,
+        config: workerConfig,
+        ...(options.longitudinalWorkerEntry === undefined ? {} : { threadUrl: options.longitudinalWorkerEntry }),
+      });
+    } catch (error) {
+      storage.close();
+      await supervisor?.shutdown();
+      throw error;
+    }
+    const started = worker;
+    storage.setLongitudinalWakeListener(() => started.wake());
+  }
+  let draining = false;
+  const longitudinalHealth = (): LongitudinalHealth => {
+    if (worker === undefined) return { status: "disabled_test" };
+    if (draining) return { status: "draining" };
+    const status: LongitudinalWorkerStatus = worker.status();
+    return status;
+  };
+  healthProbe = () => {
+    const longitudinal = longitudinalHealth();
+    const ok = longitudinal.status === "ready" || longitudinal.status === "disabled_test";
+    return Response.json({ status: ok ? "ok" : "degraded", engineMode, longitudinal }, { status: ok ? 200 : 503 });
+  };
+  const startupReceipt: ApplicationStartupReceipt = Object.freeze({
+    storageVersion: STORAGE_VERSION,
+    databasePath: storage.databasePath,
+    longitudinal: reconciliation,
+  });
   return Object.freeze({
     server,
     engineMode,
+    startupReceipt,
+    longitudinal: Object.freeze({
+      health: longitudinalHealth,
+      progress: () => worker?.totals(),
+      read: (actorLearnerId: string, query: ParsedLongitudinalReadQuery) => storage.readLongitudinalSnapshot(actorLearnerId, query),
+    }),
     async close() {
+      draining = true;
       await new Promise<void>((resolveClose, reject) => {
+        if (!server.listening) { resolveClose(); return; }
         server.close((error) => (error === undefined ? resolveClose() : reject(error)));
       });
-      storage.close();
+      storage.setLongitudinalWakeListener(undefined);
+      await worker?.drain();
       await supervisor?.shutdown();
+      storage.close();
     },
   });
 }

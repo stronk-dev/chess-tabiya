@@ -118,9 +118,12 @@ describe("longitudinal-store eighth fresh independent review", () => {
   it("D2781 accepts unreachable descriptors in caller-provided source while production has none", () => {
     expect(compileSourceMutationTransactions(unreachableStorageSource())).toHaveLength(11);
 
+    // At review time production had no integration. The 2026-09-24 implementation landing composed
+    // the watermark into the real storage transactions (AST-censused in
+    // apps/server/src/longitudinal-store.test.ts), so the absence is now the intended inversion.
     const production = readFileSync("apps/server/src/storage.ts", "utf8");
-    expect(production).not.toContain("#upsertLongitudinalWatermark");
-    expect(production).not.toContain("longitudinalSourceImageV4");
+    expect(production).toContain("#upsertLongitudinalWatermark");
+    expect(production).toContain("longitudinalSourceImageV4");
   });
 
   it("D2782 accepts caller-authored invalid running residue under a caller-authored historical clock", () => {

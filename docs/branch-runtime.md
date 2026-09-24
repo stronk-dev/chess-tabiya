@@ -334,8 +334,9 @@ adapter only if multi-host deployment or measured contention requires it.
 
 SQLite stores one canonical JSON snapshot and active-writer id per run in a
 `STRICT` table. File-backed databases enable WAL and use a five-second busy
-timeout. Supplying no filename creates an in-memory database, so a durable server
-composition must pass a file path.
+timeout. Supplying no filename creates an in-memory database; `createApplication` is
+therefore always file-backed (default `data/chess-tabiya.sqlite`), because its longitudinal
+worker opens a second connection to the same file (`longitudinal-store.md`).
 
 Migration 3 adds a stored run-schema version. Pre-v0.5 rows cannot be upgraded
 honestly because their events do not contain learner side or feedback/opponent

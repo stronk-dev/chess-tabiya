@@ -32,7 +32,7 @@ export default defineConfig({
   },
   webServer: {
     command:
-      `pnpm build && NODE_ENV=development ENGINE_MODE=mock TABIYA_COOKIE_SECURE=false DATABASE_PATH=:memory: ` +
+      `pnpm build && NODE_ENV=development ENGINE_MODE=mock TABIYA_COOKIE_SECURE=false DATABASE_PATH=$(mktemp -d)/tabiya-browser.sqlite ` +
       "DRAFT_PACK_FILES=schemas/drill_pack.example.json,schemas/fixtures/drill-pack/terminal-outcome.browser.json," +
       "content/drafts/immediate-guard.browser.json,content/drafts/line-boundary.browser.json," +
       "content/drafts/outcome-hold.browser.json,content/drafts/outcome-resist.browser.json," +

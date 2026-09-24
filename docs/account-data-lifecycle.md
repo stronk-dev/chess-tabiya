@@ -13,7 +13,9 @@ returns `application/vnd.tabiya.account+json; version=1` as an attachment and su
 `X-Tabiya-Export-Sha256`. Unchanged storage produces byte-identical canonical UTF-8
 JSON. The bundle separates owned run snapshots from references to runs owned by other
 learners. It includes progress, marks, repertoires, authored drafts, immutable
-publications, live/social history, and rating/profile records.
+publications, live/social history, and rating/profile records — including the four
+longitudinal classes (denominators, observations, structure stats and projection jobs),
+which account and per-run deletion previews list and deletion removes.
 
 The server emits the canonical bytes as a 64 KiB-chunked response stream and imposes
 no account-size refusal. It does not create a temporary export file, so account export

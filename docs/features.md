@@ -47,7 +47,7 @@ The categories below own those dimensions end to end.
 |---|---|---|---|
 | Theory, library and content | Theory retrieval, pack/shape/principle authoring, provenance, compatibility, migration and graduation | Searchable theory-to-drill paths and an official opening/middlegame/endgame corpus | `drill-pack-format.md`, `content-sourcing.md`, `pack-studio.md`, `pack-graduation.md`, `shape-library.md` |
 | Human-like bots | Strength bands, policy, repertoire routes, behavior, memory, clocks, roster and fallbacks | Honest named opponents, personalities, rematches, history and local bot events | `engine-workers.md`, `bot-policy.md` |
-| Learner model | Rating, longitudinal observations, skills, style, denominators and recommendations | Progress/profile views, opening performance, earned skills and grounded next steps | `learner-rating.md`, `return-and-progression.md`; active contracts in `../rfc/README.md` |
+| Learner model | Rating, longitudinal observations, skills, style, denominators and recommendations | Progress/profile views, opening performance, earned skills and grounded next steps | `learner-rating.md`, `longitudinal-store.md`, `return-and-progression.md`; active contracts in `../rfc/README.md` |
 | Campaign | Encounters, resources, rewards, failure, unlocks, persistence and authored campaign versions | Structured progression, campaign map, bosses and replayable campaign content | `campaign.md`; active contracts in `../rfc/README.md` |
 
 ## Multi-user and professional workflows

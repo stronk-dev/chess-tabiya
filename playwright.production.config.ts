@@ -24,7 +24,7 @@ export default defineConfig({
     // This is the packaged default, not the authoring server: no NODE_ENV override
     // and no explicit draft/fixture path. ENGINE_MODE=mock matches `make up`.
     command:
-      "pnpm build && ENGINE_MODE=mock TABIYA_COOKIE_SECURE=false DATABASE_PATH=:memory: " +
+      "pnpm build && ENGINE_MODE=mock TABIYA_COOKIE_SECURE=false DATABASE_PATH=$(mktemp -d)/tabiya-browser.sqlite " +
       `PORT=${port} node apps/server/dist/main.js`,
     url: `http://127.0.0.1:${port}/healthz`,
     reuseExistingServer: false,

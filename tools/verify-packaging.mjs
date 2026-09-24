@@ -126,6 +126,20 @@ const runtimeExternals = Object.values(runtimeBundle.metafile.outputs)
   .filter((item) => item.external && !item.path.startsWith("node:"))
   .map((item) => item.path);
 required(runtimeExternals.length === 0, `Server runtime bundle imports packages absent from final image: ${runtimeExternals.join(", ")}`);
+// rfc/longitudinal-store.md criterion 29: the semantic executor ships as its own dist entry that the
+// bundled main resolves relative to itself; the image copies the whole server dist.
+required(serverBuild.includes("src/longitudinal-worker-thread.ts"), "Server build must emit dist/longitudinal-worker-thread.js");
+const mainText = buildSync({
+  entryPoints: ["apps/server/src/main.ts"],
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  external: [...serverBuild.matchAll(/--external:([^\s]+)/gu)].map((match) => match[1]),
+  write: false,
+}).outputFiles[0].text;
+required(mainText.includes('new URL("./longitudinal-worker-thread.js", import.meta.url)'), "Bundled main must resolve the sibling longitudinal worker thread");
+required(!mainText.includes("longitudinalSemanticPopulation") && !/function projectObservations\b/u.test(mainText), "Bundled main must not contain the longitudinal projector");
+required(serverDockerfile.includes("COPY --from=build /app/apps/server/dist apps/server/dist"), "Production image must copy the whole server dist, including the worker thread");
 for (const root of missingGraduationRulingCopies(GRADUATION_RULING_ANCHOR_ROOTS, serverDockerfile)) {
   required(false, `Production image must include the graduation-ruling source ${root}`);
 }

@@ -324,7 +324,7 @@ name the B-gates they complete before code begins.
 
 ## Migration register
 
-<!-- register: migration head=25 -->
+<!-- register: migration head=26 -->
 
 Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
 migration 2 and `STORAGE_VERSION` 1→2, so neither could land independently. A
@@ -375,12 +375,12 @@ was sound for the same reason — the draft that could not land is the one that 
 | 23 | 22→23 | `archive/opponent-contracts.md` | **implemented 2026-08-16** at `6ba0736`, independently approved and archived after the A10 correction plus D452–D458 follow-ups. Stamp-only run schema 0.16→**0.17**; optional `OpponentSelection.orderingBasis`, historical selections remain absent and are never inferred. Body uses frozen literals. **D457 remains open** pending a newly retained precise-DTZ corpus |
 | 24 | 23→24 | `archive/teacher-surface.md` | **implemented 2026-08-22** — creates classrooms, memberships, assignments and submissions; adds expiring/provenanced run grants and optional classroom ownership for live sessions. Additive schema only; no run- or pack-schema change |
 | 25 | 24→25 | `learner-rating.md` | **implementation checkpoint 2026-08-22** — creates learner ratings, rated games, rating periods, cohort standings, standing members and learner marks; additive schema only and deliberately no historical backfill. Writers, projections and service routes are implemented; the RFC remains active for client surfaces and validation |
+| 26 | 25→26 | `longitudinal-store.md` | **implemented 2026-09-24** — adds `drill_runs.longitudinal_profile_disposition` (`profileable` default) and `drill_runs.longitudinal_structure_attribution` (`unattributable_legacy` default; new runs insert `single_player`), the `drill_runs_longitudinal_owner` parent key, and creates `learner_observation_denominators`, `learner_observations`, `learner_structure_stats` and `learner_observation_jobs` with five named indexes. Additive schema only: no backfill and no snapshot rewrite; startup reconciliation queues pre-migration runs. The body is idempotent (column-presence guarded, `IF NOT EXISTS`) so rewound-version fixtures replay it safely |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| position behind learner-rating | `longitudinal-store.md` | drill_runs.longitudinal_profile_disposition; drill_runs.longitudinal_structure_attribution; learner_observation_denominators; learner_observations; learner_structure_stats; learner_observation_jobs | `tabiya-claims` |
 | position behind longitudinal-store | `evidence-job-durability.md` | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows + evidence_result_sequences never-reused per-run allocator | `tabiya-claims` |
 | position behind evidence-job-durability | `concept-registry.md` | rewrite attempt_concepts pack-scoped keys to registered global concept identities and canonical labels; fail closed on unknown or colliding legacy rows | `tabiya-claims` |
 | position behind concept-registry | `bot-policy.md` | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite | `tabiya-claims` |

@@ -3,7 +3,8 @@ import type { AddressInfo } from "node:net";
 import { CORPUS_GUARD } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createApplication, type ChessTabiyaApplication } from "./application.js";
+import type { ChessTabiyaApplication } from "./application.js";
+import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 
 describe("development application mock opponent", { timeout: 15_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
@@ -14,7 +15,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
   });
 
   it("plays the deterministic Pack A opponent spine from its black-to-move root", async () => {
-    application = await createApplication({
+    application = await createInMemoryTestApplication({
       development: true,
       engineMode: "mock",
       cookieSecure: false,
@@ -70,7 +71,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
   });
 
   it("serves the official shape catalogue and only the pack's public shape references", async () => {
-    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false });
+    application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
     const address = application.server.address() as AddressInfo;
     const origin = `http://127.0.0.1:${address.port}`;
@@ -87,7 +88,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
   });
 
   it("serves the sorted principle catalogue through the production boundary", async () => {
-    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false });
+    application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
     const address = application.server.address() as AddressInfo;
     const response = await fetch(`http://127.0.0.1:${address.port}/principles`);
@@ -109,7 +110,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
   });
 
   it("does not advertise tablebase modes for the empty mock provider", async () => {
-    application = await createApplication({ engineMode: "mock", cookieSecure: false });
+    application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => {
       application!.server.once("error", reject);
       application!.server.listen(0, "127.0.0.1", resolve);
@@ -127,7 +128,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
   });
 
   it("routes every rating API family through the production application boundary", async () => {
-    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false });
+    application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => {
       application!.server.once("error", reject);
       application!.server.listen(0, "127.0.0.1", resolve);
@@ -159,7 +160,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
   });
 
   it("serves exact opening identity through the production boundary and reports honest catalogue failure", async () => {
-    application = await createApplication({ engineMode: "mock", cookieSecure: false });
+    application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => {
       application!.server.once("error", reject);
       application!.server.listen(0, "127.0.0.1", resolve);
@@ -176,7 +177,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
     expect(invalidPly.status).toBe(400);
     await application.close();
 
-    application = await createApplication({ engineMode: "mock", cookieSecure: false, openingCataloguePath: "/definitely/missing/runtime-opening-catalogue.json" });
+    application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, openingCataloguePath: "/definitely/missing/runtime-opening-catalogue.json" });
     await new Promise<void>((resolve, reject) => {
       application!.server.once("error", reject);
       application!.server.listen(0, "127.0.0.1", resolve);
@@ -191,7 +192,7 @@ describe("development application mock opponent", { timeout: 15_000 }, () => {
   });
 
   it("imports a private repertoire, scans ranked gaps, and enters one atomically",async()=>{
-    application=await createApplication({development:true,engineMode:"mock",cookieSecure:false});await new Promise<void>((resolve,reject)=>{application!.server.once("error",reject);application!.server.listen(0,"127.0.0.1",resolve);});const address=application.server.address() as AddressInfo,origin=`http://127.0.0.1:${address.port}`;
+    application=await createInMemoryTestApplication({development:true,engineMode:"mock",cookieSecure:false});await new Promise<void>((resolve,reject)=>{application!.server.once("error",reject);application!.server.listen(0,"127.0.0.1",resolve);});const address=application.server.address() as AddressInfo,origin=`http://127.0.0.1:${address.port}`;
     const registered=await fetch(`${origin}/auth/register`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:"repertoire_owner",password:"repertoire-owner-password"})}),cookie=registered.headers.get("set-cookie")!.split(";",1)[0]!;
     const created=await fetch(`${origin}/repertoires`,{method:"POST",headers:{"content-type":"application/json",cookie},body:JSON.stringify({name:"Black repertoire",side:"black",targetElo:1600,coverageDenominator:10,source:{kind:"pgn",pgn:"1. d4 d5 *"}})});expect(created.status,await created.clone().text()).toBe(201);const repertoire=(await created.json() as any).repertoire;
     expect((await fetch(`${origin}/repertoires/${repertoire.id}/scan`,{method:"POST",headers:{"content-type":"application/json",cookie},body:"{}"})).status).toBe(202);

@@ -9,6 +9,7 @@ import { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
+import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
@@ -69,7 +70,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
   async function start(): Promise<{ origin: string; databasePath: string }> {
     directory = mkdtempSync(join(tmpdir(), "tabiya-review-map-"));
     const databasePath = join(directory, "review.sqlite");
-    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath });
+    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
     await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
     return { origin: `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`, databasePath };
   }
