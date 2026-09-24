@@ -270,6 +270,9 @@
     {:else if previewError}
       <p role="alert">{previewError}</p><button type="button" onclick={() => void previewDeletion()}>Try loading again</button>
     {:else if deletionPreview}
+      <!-- The server inventory (AccountInventoryPanel) is canonical; this preview-derived projection
+           is the fallback for a deployment without that endpoint, so one heading never renders twice. -->
+      {#if !loadAccountInventory}
       <section class="recorded-data" aria-labelledby="recorded-data-title">
         <h4 id="recorded-data-title">What Tabiya has recorded</h4>
         <p class="honest">Each row counts stored records and says what happens to them. Tabiya does not summarise or interpret what they say about you.</p>
@@ -283,6 +286,7 @@
           {/each}
         </ul>
       </section>
+      {/if}
       <div class="deletion-preview">
         <StatusAnnouncement message={`Account data summary loaded. ${records(effectCount(deletionPreview.hardDelete))} would be permanently deleted. ${records(effectCount(deletionPreview.tombstone))} would remain read-only as shared history. ${records(effectCount(deletionPreview.revoke))} would have access revoked. ${records(effectCount(deletionPreview.retainedPublished))} would remain as published work.`} />
         {#if effectCount(deletionPreview.hardDelete) > 0}<h4>Private account data</h4><ul>{#each deletionPreview.hardDelete as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}

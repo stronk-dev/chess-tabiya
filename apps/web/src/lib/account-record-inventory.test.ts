@@ -71,6 +71,20 @@ describe("What Tabiya has recorded (IMP-a12, IMP-a14, IMP-a17)", () => {
     for (const id of ids) expect(sources, id).toMatch(new RegExp(`id=(?:"|\\{\`)${id}`, "u"));
   });
 
+  it("yields to the server inventory so the section never renders twice", async () => {
+    const loadAccountInventory = vi.fn(async () => ({ classes: [] }) as never);
+    const component = mount(AssistanceSettings, { target: document.body.appendChild(document.createElement("div")), props: {
+      learner: { id: "learner-a", handle: "alice", createdAt: "2026-08-23T00:00:00.000Z" },
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn(), loadAccountInventory,
+      loadDeletionPreview: async () => preview({ hardDelete: [effect("account", 1)] }),
+    } });
+    await vi.waitFor(() => expect(document.querySelector(".deletion-preview")).not.toBeNull());
+    await vi.waitFor(() => expect(loadAccountInventory).toHaveBeenCalled());
+    expect(document.querySelector("#recorded-data-title")).toBeNull();
+    expect([...document.querySelectorAll("h3, h4")].filter((heading) => heading.textContent === "What Tabiya has recorded")).toHaveLength(1);
+    await unmount(component);
+  });
+
   it("renders the standing section on the account screen without approaching deletion", async () => {
     const onDelete = vi.fn();
     const component = mount(AssistanceSettings, { target: document.body.appendChild(document.createElement("div")), props: {

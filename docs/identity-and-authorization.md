@@ -82,9 +82,10 @@ starts it:
 | Publishing a pack or shape | `pack-publication-retention`, `shape-publication-retention` |
 | Sharing a story link | `review-share-lifetime` — the link has no expiry |
 
-The standing counterpart is **What Tabiya has recorded** in Account settings: one row per deletion
-effect kind (`DeletionEffectKind`), each with its live count from the non-destructive account data
-summary and its fate in the download and on deletion. It projects storage facts only; no row
+The standing counterpart is **What Tabiya has recorded** in Account settings, served from the
+account inventory. A deployment without that endpoint falls back to a projection with one row per
+deletion effect kind (`DeletionEffectKind`), each with its live count from the non-destructive account
+data summary and its fate in the download and on deletion; the two never render together. It projects storage facts only; no row
 summarises or interprets what the records say about the learner. A test pins the row set to the
 server's kind union, so a new kind cannot ship without a disclosure row.
 

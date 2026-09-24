@@ -384,10 +384,10 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   await expect(page.getByLabel("Current password")).toHaveValue("");
 
   await expect(page.getByRole("heading", { name: "Your data and privacy" })).toBeVisible();
-  // IMP-a12: the standing inventory reads the same summary without approaching deletion.
+  // IMP-a12/a14: exactly one standing inventory (the server one), naming abandoned and voided games.
+  await expect(page.getByRole("heading", { name: "What Tabiya has recorded" })).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "What Tabiya has recorded" })).toBeVisible();
-  await expect(page.locator('[data-recorded-kind="account"]')).toContainText("1 record");
-  await expect(page.locator('[data-recorded-kind="behavioral_profile"]')).toContainText("abandoned and voided games");
+  await expect(page.locator('[data-data-class="behavioral_profiles"]')).toContainText("abandoned and voided games");
   await expect(page.locator(".deletion-preview")).toBeVisible();
   await expect(page.getByRole("button", { name: "Refresh data summary" })).toBeVisible();
   await expect(page.getByText("Live data is removed immediately", { exact: false })).toBeVisible();
