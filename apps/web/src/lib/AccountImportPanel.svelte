@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { learnerProse } from "./labels/index.js";
   import { onDestroy } from "svelte";
 
   import type { AccountImportReceipt } from "./api.js";
@@ -111,7 +112,7 @@
       {#if receipt.rederived.length > 0}<p class="honest">Position statistics and play measurements are rebuilt from the imported runs rather than copied from the file.</p>{/if}
       {#if receipt.notRestored.length > 0}
         <h4>Not imported</h4>
-        <ul>{#each receipt.notRestored as item (item.kind)}<li>{item.count} record{item.count === 1 ? "" : "s"}: {item.reason}</li>{/each}</ul>
+        <ul>{#each receipt.notRestored as item (item.kind)}<li>{item.count} record{item.count === 1 ? "" : "s"}: {learnerProse(item.reason)}</li>{/each}</ul>
       {/if}
       {#if receipt.conflicts.length > 0}
         <p role="alert">{receipt.conflicts.length} record{receipt.conflicts.length === 1 ? "" : "s"} in this file already exist in this deployment, so it cannot be imported here. Nothing was changed.</p>
@@ -124,7 +125,7 @@
     </div>
   {/if}
   {#if busy === "importing"}<p id="account-import-busy" role="status">Importing the file into this account…</p>{/if}
-  {#if status}<p role="status">{status}</p>{/if}
+  {#if status}<p role="status">{learnerProse(status)}</p>{/if}
   {#if error}<p role="alert">{error}</p>{/if}
 </form>
 

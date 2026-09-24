@@ -17,6 +17,7 @@
     StyleContributors,
   } from "./profile-response.js";
   import { routePath } from "./router.js";
+  import { labelFor, learnerProse } from "./labels/index.js";
 
   interface Props {
     api: DrillClientApi;
@@ -247,8 +248,8 @@
                 <div><dt>This card's floor</dt><dd>{card.floor} games</dd></div>
                 <div><dt>Window</dt><dd>{readableDate(card.window.from)} to {readableDate(card.window.to)}</dd></div>
                 <div><dt>Scope</dt><dd>{phaseText(card.phaseScope)}; all of your recorded games (time controls are not recorded yet)</dd></div>
-                <div><dt>State</dt><dd>{card.tier.state.replace(/_/gu, " ")} under {card.tier.rule}</dd></div>
-                <div><dt>Metric</dt><dd>{card.featureId} · {card.metricId}@{card.version}{card.reference ? ` · reference ${card.reference.id}@${card.reference.version}` : ""}</dd></div>
+                <div><dt>State</dt><dd>{labelFor("style_tier_state", card.tier.state)} under {labelFor("style_tier_rule", card.tier.rule)}</dd></div>
+                <div><dt>Metric</dt><dd>Version {card.version}{card.reference ? ` · reference population version ${card.reference.version}` : ""}</dd></div>
               </dl>
             {:else}
               <dl>
@@ -307,7 +308,7 @@
     <section aria-labelledby="openings-title">
       <h2 id="openings-title">Openings you played</h2>
       {#if !profile.openings.available}
-        <p>{profile.openings.unavailableReason}</p>
+        <p>{learnerProse(profile.openings.unavailableReason ?? "")}</p>
       {:else}
         <p class="honest">{profile.openings.rateStatement}{profile.openings.source ? ` Names: ${profile.openings.source}` : ""}</p>
         {#if profile.openings.rows.length === 0}
@@ -355,7 +356,7 @@
             <tbody>
               {#each profile.observations.rows as row (row.key)}
                 <tr>
-                  <th scope="row">{row.label}<br /><small>{row.projectionId}@{row.projectionVersion}</small></th>
+                  <th scope="row">{row.label}<br /><small>Version {row.projectionVersion}</small></th>
                   <td>{row.occurred}</td><td>{row.opportunities}</td><td>{row.runs}</td><td>{row.decisions}</td>
                   <td><button type="button" disabled={row.occurred === 0} onclick={() => void openObservation(row.key)}>Show moves</button></td>
                 </tr>
@@ -381,7 +382,7 @@
             {#if category.marks.length > 0}
               <ul>{#each category.marks as mark (mark.kind)}<li>{mark.sentence} {readableDate(mark.occurredAt)} <button type="button" onclick={() => openRun(mark.link.runId, true)}>Open the game</button></li>{/each}</ul>
             {:else if category.emptyReason}
-              <p>{category.emptyReason}</p>
+              <p>{learnerProse(category.emptyReason)}</p>
             {:else}
               <p>Nothing here can be credited yet.</p>
             {/if}
@@ -393,7 +394,7 @@
           <summary>Ideas that could become skills, and what each is waiting on</summary>
           <ul class="leaf-list">
             {#each profile.skills.candidateLeaves as leaf (leaf.leafId)}
-              <li><strong>{leaf.label}</strong><ul>{#each leaf.blockerText as reason}<li>{reason}</li>{/each}</ul></li>
+              <li><strong>{leaf.label}</strong><ul>{#each leaf.blockerText as blocker}<li>{blocker}</li>{/each}</ul></li>
             {/each}
           </ul>
           <p class="honest">{profile.skills.conceptIdentity}</p>

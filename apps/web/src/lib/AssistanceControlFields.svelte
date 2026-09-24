@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { learnerProse } from "./labels/index.js";
   import type { AssistanceConfig, AssistancePermission } from "@chess-tabiya/runtime";
 
   import type { Capabilities } from "./api.js";
@@ -87,7 +88,7 @@
       <option value="provider" disabled={!speechConfigured} aria-describedby={speechConfigured ? undefined : speechReasonId}>Configured provider{speechConfigured ? "" : " (not on this deployment)"}</option>
     </select>
   </label>
-  {#if !speechConfigured}<p id={speechReasonId} class="honest">{speechNotice.reason}</p>{/if}
+  {#if !speechConfigured}<p id={speechReasonId} class="honest">{learnerProse(speechNotice.reason)}</p>{/if}
   <label><input type="checkbox" checked={config.ambient === "on"} disabled={blocked("ambient")} aria-describedby={reason("ambient")} onchange={(event) => update("ambient", event.currentTarget.checked ? "on" : "off")} /> Ambient presence</label>
   {#if lockedWithoutReason}<p id={lockedNoteId} class="honest">Switches this workflow never offers stay off here.</p>{/if}
   {#if evidenceWithheld}<p id={evidenceNoteId} class="honest">Disclosed evidence is not offered to you here; structural sight is the ceiling.</p>{/if}

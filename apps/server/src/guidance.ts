@@ -136,7 +136,7 @@ const renderMarker = (evidence: DeclaredEvidence<unknown>) => renderPivotalMarke
 const PIVOTAL_ROUTES = Object.freeze(["derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@1", "derived.pivotal.human_divergence@1", "derived.pivotal.option_collapse@1"] as const);
 const RENDERERS = Object.freeze({
   "rules.phase.reading@2": renderGuidancePhase,
-  "pack.authored.phase@1": (evidence: DeclaredEvidence<unknown>) => one(`Rehearsal focus: ${phaseCopy(evidence.payload)}.`),
+  "pack.authored.phase@1": (evidence: DeclaredEvidence<unknown>) => one(`Rehearsal focus: ${phaseCopy((evidence.payload as { readonly phase: string }).phase)}.`),
   "rules.structural.reading.named_structure@2": renderGuidanceStructure,
   ...Object.fromEntries(PIVOTAL_ROUTES.map((route) => [route, renderMarker])),
   "rules.endgame.classification@1": (evidence: DeclaredEvidence<unknown>) => renderEndgameClassification(evidence.payload as Parameters<typeof renderEndgameClassification>[0]),

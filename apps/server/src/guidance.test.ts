@@ -71,7 +71,7 @@ describe("adaptive guidance server seams", () => {
   it("renders base guidance without reveal keys or detector plumbing", () => {
     const evidence = [
       fixtureEvidence("rules.phase.reading@2", phaseBandReading(FEN)),
-      fixtureEvidence("pack.authored.phase@1", "middlegame"),
+      fixtureEvidence("pack.authored.phase@1", { phase: "middlegame" }),
       fixtureEvidence("rules.structural.reading.named_structure@2", { id: "iqp-white", name: "Isolated queen's pawn", provenanceNote: "rules.structural:iqp-v1" }),
       fixtureEvidence("pack.authored.claim@1", { id: "claim-one", text: "Keep the pawn protected.", attribution: "authored:checkpoint:17" }),
     ];
@@ -532,7 +532,7 @@ describe("adaptive guidance server seams", () => {
     expect(detector.projection.version).toBe(2);
     expect(detector.payload).toEqual(phaseBandReading(run.nodes[0]!.fen));
     expect((detector.payload as { phase: string }).phase).toBe(classifyPhase(run.nodes[0]!.fen).phase);
-    expect(authored.payload).toBe(reasoningDocument.phase);
+    expect(authored.payload).toEqual({ phase: reasoningDocument.phase });
   });
 
   it("keeps recorded readings out of provider input and appends their frozen prose for the learner", async () => {

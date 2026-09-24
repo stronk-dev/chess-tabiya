@@ -38,6 +38,7 @@ import {
 import { directProjectionConventions } from "./evidence-convention-closure.js";
 import { conventionReceipt, type ConventionReceipt } from "./evidence-conventions.js";
 import { resolveEvidenceReference, type EvidenceReferenceResolution } from "./evidence-ref-resolution.js";
+import { resolveSourceAttribution, type SourceAttributionReceipt } from "./source-attribution.js";
 import { kingZoneEvents, kingZoneReading } from "./king-state.js";
 import { exactLegalMoveMap, exactMoveIdentity } from "./legal-moves.js";
 import { materialRoleAsymmetryEvent, materialRoleSignatureReading } from "./material-state.js";
@@ -92,7 +93,7 @@ import {
   type WhiteWdlPoint,
 } from "./review-points.js";
 import { evaluateStructuralPredicate } from "./structural-evidence.js";
-import { matchesStructuralExpression, pawnConnectivityReading, spaceReading, structuralReading, type StructuralReading } from "./structure.js";
+import { evaluateNamedStructureWithWitness, matchesStructuralExpression, pawnConnectivityReading, spaceReading, structuralReading, type StructuralReading } from "./structure.js";
 import {
   backRankReading,
   checkEvent,
@@ -478,7 +479,7 @@ function cachedStructuralReading(fen: string): StructuralReading {
 }
 
 export const createRulesCastlingReadingLegalityV1Evidence = fenPopulation("rules.castling.reading.legality@1", castlingLegality);
-export const createRulesStructuralReadingNamedStructureV2Evidence = fenPopulation("rules.structural.reading.named_structure@2", (fen) => cachedStructuralReading(fen).structures.map((structure) => Object.freeze({ id: structure.id, name: structure.name, provenanceNote: structure.provenanceNote })), { dependency: "semantic-convention-provenance" });
+export const createRulesStructuralReadingNamedStructureV2Evidence = fenPopulation("rules.structural.reading.named_structure@2", (fen) => cachedStructuralReading(fen).structures.map((structure) => Object.freeze({ id: structure.id, name: structure.name, provenanceNote: structure.provenanceNote, squares: Object.freeze([...evaluateNamedStructureWithWitness(fen, structure.id).squares]) })), { dependency: "semantic-convention-provenance" });
 export const createRulesEndgameClassificationV1Evidence = fenPopulation("rules.endgame.classification@1", (fen) => { const reading = endgameClassification(fen); return reading === null ? [] : [reading]; }, { dependency: "semantic-convention-provenance" });
 
 const STRUCTURAL_READING_KINDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count" && kind !== "named_structure"));
@@ -1002,6 +1003,44 @@ export const createRunRecordImportedResultV1Evidence = (() => {
   });
 })();
 
+/**
+ * rfc/evidence-presentation.md Checkpoint P ([[D2158]]): the one source-bound citation. It takes the
+ * sealed resolution and exactly one sealed source item of the same reference; the resolution's text
+ * must be byte-equal to the text the reference resolves to over THAT source payload (the content
+ * join), and attribution comes only from the versioned registry row plus the exact source receipt.
+ */
+const CITATION_SOURCES = Object.freeze(["live.stockfish.eval@1", "live.stockfish.wdl@1", "live.stockfish.pv@1", "live.syzygy.result@1", "human.maia.event@1"]);
+export const createDerivedCitationAttributionV1Evidence = (() => {
+  const route = "derived.citation.attribution@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ resolution: sealed("run.record.evidence_ref_resolution@1"), source: sealed(...CITATION_SOURCES), sourceMetadata: optional(value("the exact source instance attribution metadata", isRecord)) }], result: "availability", dependency: "shared-resource bootstrap ([[D2401]])", pending: "The source-attribution registry is a registered in-code resource; its shared-resource root claim lands with the bootstrap." }, ({ resolution, source, sourceMetadata }: { readonly resolution: DeclaredEvidence<{ readonly reference: string; readonly text: string; readonly sourceLabel: string }>; readonly source: DeclaredEvidence<unknown>; readonly sourceMetadata?: SourceAttributionReceipt }): EvidenceAvailability<DeclaredEvidence<unknown>> => {
+    const reference = resolution.payload.reference;
+    const joined = resolveEvidenceReference(reference, undefined, new Map([[reference, source.payload as EvidencePayload]]));
+    if (joined.payload === undefined || joined.text !== resolution.payload.text) return unavailable("citation_content_absent");
+    const sourceProjection = `${source.projection.id}@${source.projection.version}`;
+    const attributed = resolveSourceAttribution(sourceProjection, sourceMetadata);
+    if (attributed.kind === "absent") return unavailable(attributed.reason);
+    const text = resolution.payload.text;
+    const citation = Object.freeze({
+      content: Object.freeze({
+        kind: "quoted_passage" as const, text,
+        binding: Object.freeze({ projection: Object.freeze({ ...resolution.projection }), field: "text", evidenceDigest: `sha256:${evidenceValueReceipt(resolution).payloadDigest}`, valueDigest: citationValueDigest(text) }),
+      }),
+      source: Object.freeze({
+        source: Object.freeze({ ...source.projection }), title: attributed.attribution.title, locator: attributed.attribution.locator,
+        licence: attributed.attribution.licence.value, revision: attributed.attribution.revision.value,
+        ...(attributed.attribution.url === undefined ? {} : { url: attributed.attribution.url }),
+      }),
+    });
+    return available(mint(route, symbol, citation, { resolution, source, sourceMetadata: sourceMetadata ?? null }, [resolution, source]));
+  });
+})();
+
+/** The presentation contract's citation value digest (`presentation.citation.value@1`), recomputed here. */
+export function citationValueDigest(text: string): string {
+  return `sha256:${evidenceDigest(`presentation.citation.value@1\n${canonicalizeJson(text)}`)}`;
+}
+
 export const createRunRecordEvidenceRefResolutionV1Evidence = (() => {
   const route = "run.record.evidence_ref_resolution@1";
   const symbol = evidenceFactorySymbol(route);
@@ -1408,7 +1447,8 @@ export const createPackAuthoredPhaseV1Evidence = (() => {
   const route = "pack.authored.phase@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "authored_authority", arms: [{ pack: value("a drill-pack definition with a pack phase", (candidate) => isRecord(candidate) && PACK_PHASES.has(String(candidate.phase))) }], result: "single", dependency: "registered-authored-provenance", pending: AUTHORED_PENDING }, ({ pack }: { readonly pack: DrillPackDefinition }) =>
-    mint(route, symbol, pack.phase, { pack: { id: pack.id, phase: pack.phase } }, [evidenceDigest({ pack: pack.id, phase: pack.phase })]));
+    // rfc/evidence-presentation.md Checkpoint P ([[D2046]]): the exact `{phase}` payload, not a bare scalar.
+    mint(route, symbol, Object.freeze({ phase: pack.phase }), { pack: { id: pack.id, phase: pack.phase } }, [evidenceDigest({ pack: pack.id, phase: pack.phase })]));
 })();
 
 /**

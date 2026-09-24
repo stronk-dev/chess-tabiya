@@ -36,7 +36,7 @@ describe("provider-availability selector (criterion 18)", () => {
   it("keeps ordinary rows plain and puts generation, reason and times only in the inspector rows", () => {
     const capabilities = { providerHealth: fixtureProviderHealth({ "maia-inference": { failed: "timeout", cachedEntries: 2 } }) };
     const maia = providerRows(capabilities).find((row) => row.id === "maia-inference")!;
-    expect(maia).toEqual({ id: "maia-inference", label: "Human-like opponents", state: "Saved responses only" });
+    expect(maia).toEqual({ id: "maia-inference", label: "Human-like opponents", stateLabel: "Saved responses only" });
     const detail = providerInspectorRows(capabilities).find((row) => row.id === "maia-inference")!.detail;
     expect(detail).toContain("reason timeout");
     expect(detail).toContain("2 saved exact responses");

@@ -48,7 +48,9 @@ export function declareTransitionReadingEvidence(
 /** named_structure@2 carries the catalogue match; inspectors keep one observation display shape. */
 function observation(item: DeclaredEvidence<unknown>): StructuralObservation {
   if (item.projection.id === "rules.structural.reading.named_structure" && item.projection.version === 2) {
-    return Object.freeze({ kind: "named_structure", squares: Object.freeze([]), provenanceNote: (item.payload as StructureMatch).provenanceNote }) as StructuralObservation;
+    // Checkpoint P ([[D2047]]): the payload retains the exact matched-witness squares.
+    const match = item.payload as StructureMatch & { readonly squares: readonly string[] };
+    return Object.freeze({ kind: "named_structure", squares: Object.freeze([...match.squares]), provenanceNote: match.provenanceNote }) as StructuralObservation;
   }
   return item.payload as StructuralObservation;
 }

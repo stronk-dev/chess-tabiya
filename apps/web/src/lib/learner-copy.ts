@@ -1,6 +1,7 @@
 import type { PublishedBandValue, RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import type { CorpusPopulation, ProgressAttempt, RatedGameHistoryItem, RepertoireGap } from "./api.js";
+import { labelOrFallback } from "./labels/index.js";
 
 const STORY_MOMENT_LABELS = Object.freeze({
   irreversibility: "Irreversible change",
@@ -68,8 +69,7 @@ export function chessSideLabel(side: "white" | "black"): string {
 }
 
 function readableSpeed(speed: string): string {
-  if (speed === "ultraBullet") return "ultrabullet";
-  return speed.replaceAll("_", " ");
+  return labelOrFallback("explorer_speed", speed, "other time control");
 }
 
 export function corpusPopulationLabel(population: CorpusPopulation): string {

@@ -60,7 +60,7 @@ function evaluationPacket(run: DrillRun, nodeId: string): EvidencePayload | unde
 }
 
 /** The evidence a production operation can seal for one committed edge today. */
-function edgeEvidence(run: DrillRun, parent: Node, node: Node): readonly DeclaredEvidence<unknown>[] {
+export function postcommitEdgeEvidence(run: DrillRun, parent: Node, node: Node): readonly DeclaredEvidence<unknown>[] {
   const events = localSemanticEventClosure(parent.fen, node.moveUci!, node.fen).events.map((event) => event.evidence);
   const before = evaluationPacket(run, parent.id);
   const after = evaluationPacket(run, node.id);
@@ -94,7 +94,7 @@ function renderFact(fact: ModuleFact): PostcommitNudgeFact {
 function ancestorFacts(input: PostcommitNudgeInput, path: readonly Node[], index: number): readonly ModuleFact[] {
   const node = path[index]!;
   const parent = path[index - 1]!;
-  const packet = compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: input.role, session: input.session, evidence: edgeEvidence(input.run, parent, node), mode: "admit" });
+  const packet = compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: input.role, session: input.session, evidence: postcommitEdgeEvidence(input.run, parent, node), mode: "admit" });
   return packet.kind === "packet" ? packet.facts : Object.freeze([]);
 }
 
@@ -112,7 +112,7 @@ export function postcommitNudgePacket(input: PostcommitNudgeInput): PostcommitNu
   }
   const packet = compileModulePacket({
     module: "postcommit_nudge", timing: "post_commit", role: input.role, session: input.session,
-    evidence: edgeEvidence(input.run, path[index - 1]!, node), ancestorFacts: ancestors,
+    evidence: postcommitEdgeEvidence(input.run, path[index - 1]!, node), ancestorFacts: ancestors,
     ...(input.recorder === undefined ? {} : { recorder: input.recorder }),
   });
   if (packet.kind === "refused") return Object.freeze({ kind: "refused" as const, nodeId: node.id, reason: packet.reason });

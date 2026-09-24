@@ -21,6 +21,9 @@
  */
 import {
   BOT_LAYER_DECLARATIONS,
+  botEffectiveRequestedWidth,
+  exactLegalMoves,
+  maiaReachedFen,
   digestProviderActual,
   parsePersistedProviderDelivery,
   serializeProviderDelivery,
@@ -52,13 +55,14 @@ export function botMaiaRequest(input: {
   readonly timeoutMs: number;
 }): MaiaPolicyPageRequest {
   const { profile } = input;
+  const position = Object.freeze({ kind: "history_conditioned" as const, startFen: input.startFen, historyUci: Object.freeze([...input.historyUci]) });
   return Object.freeze({
-    position: Object.freeze({ kind: "history_conditioned", startFen: input.startFen, historyUci: Object.freeze([...input.historyUci]) }),
+    position,
     requestedModel: Object.freeze({ id: profile.model.id, version: profile.model.version }),
     band: profile.band,
     temperature: profile.sampler.temperature,
     topP: profile.sampler.topP,
-    requestedWidth: profile.sampler.requestedWidth,
+    requestedWidth: botEffectiveRequestedWidth(profile.sampler.requestedWidth, exactLegalMoves(maiaReachedFen(position)).length),
     timeoutMs: input.timeoutMs,
   });
 }

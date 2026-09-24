@@ -28,13 +28,13 @@ const serviceSource = readFileSync(new URL("./service.ts", import.meta.url), "ut
 function liveRunRouteBranches(): { readonly actions: ReadonlySet<string>; readonly branches: ReadonlySet<string> } {
   const grammar = /function parseRunRoute[\s\S]*?\/\^\\\/runs\\\/\(\[\^\/\]\+\)\\\/\(([^)]+)\)\$\//u.exec(rest);
   if (grammar === null) throw new Error("parseRunRoute grammar not found");
-  const actions = new Set(grammar[1]!.split("|"));
+  const actions = new Set(grammar[1]!.split("|").map((action) => action.replaceAll("\\/", "/")));
   const start = rest.indexOf("const route = parseRunRoute(url.pathname);");
   const postGate = rest.indexOf('if (request.method !== "POST") {', start);
   const end = rest.indexOf("return errorResponse(error);", postGate);
   const branches = new Set<string>();
   for (const match of rest.slice(start, postGate).matchAll(/request\.method === "(GET|PUT|DELETE|POST)" && route\.action === "([a-z-]+)"/gu)) branches.add(`${match[1]} ${match[2]}`);
-  for (const match of rest.slice(postGate, end).matchAll(/if \(route\.action === "([a-z-]+)"\)/gu)) branches.add(`POST ${match[1]}`);
+  for (const match of rest.slice(postGate, end).matchAll(/if \(route\.action === "([a-z/-]+)"\)/gu)) branches.add(`POST ${match[1]}`);
   return { actions, branches };
 }
 

@@ -1,7 +1,12 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** implementing — **Checkpoint A landed 2026-09-24 by owner direction (implement
-  directly, no review rounds).** The literal §4a/§3.2 tables are re-derived at import time; the ∩ algebra
+- **Status:** implementing — **Checkpoint B landed 2026-09-24 (receipt `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`): every module
+  delivery goes through `POST /runs/:id/modules/query`, which recompiles and finalizes the requested
+  assistance server-side, delivers only modules whose compiled effect exists at the requested timing,
+  and binds each packet's `ModuleDisclosureReceipt` to that final digest; the client renders a page only
+  when its effective digest equals the finalized assistance it holds (D5 discharged).** Checkpoint A landed
+  earlier the same day by owner direction (implement
+  directly, no review rounds). The literal §4a/§3.2 tables are re-derived at import time; the ∩ algebra
   runs through the four typed, digest-bound stages; the lossless v2 receipt is the only writer;
   `POST /runs/:id/assistance` is the server seat; and the Play pill, footer, Settings and Advanced
   surfaces render the compiled result. After module-registration's production registry landed the
@@ -1264,7 +1269,7 @@ are **drift tripwires only** — a fixture may not restate them as its own arith
 | D2 | Server-side per-learner workflow persistence (the personalization era's store) — deferred; localStorage is v1's honest scope. The future RFC claims its own migration position (behind `bot-policy` at HEAD ordering) | `planning/exploration/plan.md` | that RFC's registration | |
 | D3 | Register Campaign as an eighth context without inventing encounter behavior here | `planning/exploration/plan.md` | the campaign RFC's registration | discharged 2026-08-22 — `rfc/campaign-core.md` registered the context; this discharge covers vocabulary only, not executable origin authority |
 | D4 | **The tenth field.** `hintDistance` gets one column in §4a's projection table and one in §3.2's clamp table, both derived by the rules already written there, plus the v4→v5 migration arm. **Genuinely blocked, blocker named:** `rfc/hint-distance.md` is *returned to research* (`planning/rfc-drafting-queue.md:1250`, `85a0584`), so the field's domain and its ordering do not exist to project. Nothing here reserves a slot or shims one (§9a) | claude — `rfc/hint-distance.md`'s author | that RFC's landing commit, which adds both columns in the same commit per the completion protocol | |
-| D5 | **Checkpoint B: the real `compiled.modules` consumer.** Module ids and registered renderers now exist, but the edge is not discharged by registration or by a zero-item fixture. It closes only when a production module operation reads the compiled effects, renders at least one item and records its disclosure receipt. Post-commit/checkpoint/review deliveries use durable receipts. The module-registration amendment's tightly bounded pre/at-commit Support receipts are ephemeral and non-persisted by design; they still carry exact run/node/staged-move/module/form identity and are included in criterion 9's trace, without being mislabeled as run events. Checkpoint A may land config/migration/pill while this row stays open | codex — coordinated `module-registration.md` implementation lane | the non-vacuous production delivery/logging commit | |
+| D5 | **Checkpoint B: the real `compiled.modules` consumer.** Module ids and registered renderers now exist, but the edge is not discharged by registration or by a zero-item fixture. It closes only when a production module operation reads the compiled effects, renders at least one item and records its disclosure receipt. Post-commit/checkpoint/review deliveries use durable receipts. The module-registration amendment's tightly bounded pre/at-commit Support receipts are ephemeral and non-persisted by design; they still carry exact run/node/staged-move/module/form identity and are included in criterion 9's trace, without being mislabeled as run events. Checkpoint A may land config/migration/pill while this row stays open | codex — coordinated `module-registration.md` implementation lane | the non-vacuous production delivery/logging commit || 2026-09-24 — `queryModules` delivers sight, threat radar, staged-move check, post-commit and named-structure nudges, theory pointer, attempt comparison and the Full Inspector only through compiled effects, each with a digest-bound disclosure receipt (durable boundary for post-commit/checkpoint/review, ephemeral request receipt for pre-/at-commit); criterion 9 is `screens.test.ts` "delivers the Post-commit Nudge only through the compiled effect…" |
 | D6 | **Executable Campaign origin.** Import the exact encounter receipt, issuer and verifier from accepted and implemented `campaign-core`; cross start/resume, lifecycle, active-pointer/event join and ordinary-pack refusal. Until then the seven-context phase returns `CONTEXT_DECLARED_AWAITING` and cannot claim eight-context completion | campaign-core.md | the campaign-core implementation commit plus this RFC's expanded criterion 21 | |
 
 **Checkpoint truth.** Checkpoint A closes only the compiler/config/persistence/pill obligations and
@@ -1362,6 +1367,15 @@ named in its own text, never this list.
   §4a's derivation rule and criterion 10.
 
 ## Changelog
+
+- 2026-09-24 — **Checkpoint B.** Receipt: `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`. What renders equals what the preset compiled:
+  the module query route re-derives authority, compiles and finalizes the requested assistance, and
+  delivers only modules with a compiled effect at the requested timing (`not_effective` suppressions
+  otherwise); every packet's `ModuleDisclosureReceipt` names the requested and final digests and the
+  ordered component digests; the client's strict parser refuses a page whose effective digest differs
+  from the finalized assistance it renders. Criterion 9 holds through the new path (a mid-run preset
+  raise queries nothing until the next learner move). D5 discharged. Archival still waits on D1, D4, D6
+  and the campaign phase.
 
 - 2026-09-24 (**Checkpoint A implementation**, owner-directed, no review round): runtime `presets.ts`
   carries the literal projection/clamp tables plus their import-time re-derivation, the v2 parser,
