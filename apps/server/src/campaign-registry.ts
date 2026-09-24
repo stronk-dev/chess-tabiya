@@ -2,12 +2,19 @@ import { readFile, readdir } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { digestCanonicalJson } from "@chess-tabiya/schema/drill-pack";
+import { canonicalizeJson, digestCanonicalJson } from "@chess-tabiya/schema/drill-pack";
 import type { CampaignDocument } from "@chess-tabiya/runtime";
 
 import { validateCampaignDocument, type CampaignPackLookup } from "./campaign-validation.js";
 
-export type CampaignRegistryErrorCode = "CAMPAIGN_DOCUMENT_INVALID" | "CAMPAIGN_DOCUMENT_DUPLICATE" | "CAMPAIGN_DOCUMENT_NOT_FOUND";
+// rfc/campaign-core.md §6.0: the installed registry keys by {id, version, digest}. It is needed for
+// NEW creation and current source availability; historical replay reads the run's pinned snapshot.
+
+export type CampaignRegistryErrorCode =
+  | "CAMPAIGN_DOCUMENT_INVALID"
+  | "CAMPAIGN_DOCUMENT_DUPLICATE"
+  | "CAMPAIGN_DOCUMENT_VERSION_MUTATED"
+  | "CAMPAIGN_DOCUMENT_NOT_FOUND";
 
 export class CampaignRegistryError extends TypeError {
   readonly code: CampaignRegistryErrorCode;
@@ -27,11 +34,14 @@ export interface CampaignSummary {
   readonly title: string;
   readonly digest: string;
   readonly nodeCount: number;
+  readonly channel: "community" | "official";
 }
 
 export interface CampaignRecord {
   readonly source: string;
   readonly document: CampaignDocument;
+  /** RFC-8785 canonical bytes of the validated document — what a CampaignRun pins. */
+  readonly canonical: string;
   readonly digest: string;
   readonly summary: CampaignSummary;
 }
@@ -63,20 +73,27 @@ export class CampaignRegistry {
     for (const entry of documents) {
       const result = validateCampaignDocument(entry.value, packs);
       if (!result.valid || result.document === undefined) {
-        throw new CampaignRegistryError("CAMPAIGN_DOCUMENT_INVALID", `campaign ${entry.source} is invalid`, Object.freeze({ source: entry.source, issues: result.issues }));
+        throw new CampaignRegistryError("CAMPAIGN_DOCUMENT_INVALID", `campaign ${entry.source} is invalid: ${result.issues.filter((item) => item.severity === "error").map((item) => `${item.code} at ${item.path} (${item.message})`).join("; ")}`, Object.freeze({ source: entry.source, issues: result.issues }));
       }
       const document = freeze(structuredClone(result.document));
       const identity = key(document.id, document.version);
-      if (records.has(identity)) throw new CampaignRegistryError("CAMPAIGN_DOCUMENT_DUPLICATE", `duplicate campaign ${identity}`);
+      const canonical = canonicalizeJson(document);
       const digest = await digestCanonicalJson(document);
+      const previous = records.get(identity);
+      if (previous !== undefined) {
+        throw previous.digest === digest
+          ? new CampaignRegistryError("CAMPAIGN_DOCUMENT_DUPLICATE", `duplicate campaign ${identity}`)
+          : new CampaignRegistryError("CAMPAIGN_DOCUMENT_VERSION_MUTATED", `campaign ${identity} has two different byte images`);
+      }
       const summary = freeze({
         id: document.id,
         version: document.version,
         title: document.title,
         digest,
         nodeCount: document.acts.reduce((sum, act) => sum + act.layers.reduce((layerSum, layer) => layerSum + layer.choices.length, 0), 0),
+        channel: document.publication.channel,
       });
-      records.set(identity, freeze({ source: entry.source, document, digest, summary }));
+      records.set(identity, freeze({ source: entry.source, document, canonical, digest, summary }));
     }
     return new CampaignRegistry(records);
   }
@@ -84,15 +101,19 @@ export class CampaignRegistry {
   static async loadDefault(
     packs: CampaignPackLookup,
     directory = fileURLToPath(new URL("../../../content/campaigns/", import.meta.url)),
+    extraFiles: readonly string[] = [],
   ): Promise<CampaignRegistry> {
-    let entries;
+    let entries: import("node:fs").Dirent[];
     try {
       entries = await readdir(directory, { withFileTypes: true });
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "ENOENT") return new CampaignRegistry(new Map());
-      throw error;
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      entries = [];
     }
-    const paths = entries.filter((entry) => entry.isFile() && extname(entry.name) === ".json").map((entry) => join(directory, entry.name)).sort();
+    const paths = [
+      ...entries.filter((entry) => entry.isFile() && extname(entry.name) === ".json").map((entry) => join(directory, entry.name)).sort(),
+      ...extraFiles,
+    ];
     const documents = await Promise.all(paths.map(async (path) => ({ source: path, value: JSON.parse(await readFile(path, "utf8")) as unknown })));
     return CampaignRegistry.fromDocuments(documents, packs);
   }

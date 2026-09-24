@@ -97,8 +97,8 @@ describe("criterion 1 — additive migration with a prior-release upgrade", () =
 
     const log: { version: number; name: string }[] = [];
     const upgraded = new SQLiteRunStorage(path, { onMigration: (entry) => log.push(entry) });
-    expect(STORAGE_VERSION).toBe(29);
-    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }]);
+    expect(STORAGE_VERSION).toBe(30);
+    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }]);
     upgraded.close();
 
     const after = raw(path);

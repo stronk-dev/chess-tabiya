@@ -264,7 +264,10 @@ export function dedupeByFactIdentity<T>(facts: readonly ModuleFact<T>[]): readon
 }
 
 function fieldsEqual(left: ModuleFact, right: ModuleFact, fields: readonly string[]): boolean {
-  return canonicalizeJson(selectedOperands(left, fields)) === canonicalizeJson(selectedOperands(right, fields));
+  // 2026-09-24: an absent compared field is `undefined`, which RFC-8785 cannot encode; compare the
+  // JSON image (absent ≡ omitted) instead of throwing mid-delivery (surfaced by the campaign kit).
+  const image = (fact: ModuleFact) => JSON.parse(JSON.stringify(selectedOperands(fact, fields)) ?? "null") as unknown;
+  return canonicalizeJson(image(left)) === canonicalizeJson(image(right));
 }
 
 export function applyDeclaredSubsumption<T>(facts: readonly ModuleFact<T>[]): readonly ModuleFact<T>[] {

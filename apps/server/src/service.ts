@@ -1,3 +1,4 @@
+import type { CampaignEncounterReceipt } from "@chess-tabiya/runtime";
 import {
   applyObjectiveEvidenceProposal,
   appendOpponentPly,
@@ -336,7 +337,7 @@ function terminalPosition(fen: string): boolean {
   return position.isEnd() || position.halfmoves >= 100;
 }
 
-function ratedTerminalReason(run: DrillRun, nodeId: string): RatedGameTerminalReason {
+export function ratedTerminalReason(run: DrillRun, nodeId: string): RatedGameTerminalReason {
   const node = run.nodes.find((candidate) => candidate.id === nodeId);
   if (node === undefined) throw new ServerError("STORAGE_FAILURE", "Rated outcome references a missing node");
   const position = Chess.fromSetup(parseFen(node.fen).unwrap()).unwrap();
@@ -400,6 +401,46 @@ function botRootIsCurrent(run: DrillRun, request: BotOpponentPlyRequest): boolea
   return run.activeCursor.nodeId === request.expectedNodeId
     && run.activeCursor.branchId === request.expectedBranchId
     && runEventHeadDigest(run) === request.expectedEventHeadDigest;
+}
+
+/** rfc/campaign-core.md §2.2 [[D2620]]: the charged-command envelope the four gestures carry. */
+export interface CampaignCommandInput {
+  readonly commandId: string;
+  readonly expectedCampaignRevision: number;
+  readonly expectedPlayRevision: number;
+}
+
+export type CampaignChargedOutcome = {
+  readonly kind: "committed" | "replayed";
+  readonly run: DrillRun;
+  readonly emitted: readonly DrillRunEvent[];
+  readonly campaign: Readonly<Record<string, unknown>>;
+};
+
+/**
+ * The campaign side of a charged gesture. RunService stays the single play-run authority; the gate
+ * owns the campaign lookup, command replay and the atomic charge (implemented by CampaignService).
+ */
+export interface CampaignChargeGate {
+  /** One indexed lookup: is this play run the ACTIVE encounter of an active campaign run? */
+  isActiveEncounter(runId: string): boolean;
+  /** A stored terminal result for this command (replay before any provider call), or undefined. */
+  replay(input: { readonly runId: string; readonly lease: LeaseHolder; readonly operation: "rewind" | "fork" | "group" | "simulate_enter"; readonly operands: unknown; readonly command: CampaignCommandInput | undefined }): CampaignChargedOutcome | undefined;
+  /** Commits the play mutation and its `charge_spent` event in one transaction. */
+  charge(input: {
+    readonly runId: string;
+    readonly lease: LeaseHolder;
+    readonly operation: "rewind" | "fork" | "group" | "simulate_enter";
+    readonly operands: unknown;
+    readonly command: CampaignCommandInput | undefined;
+    readonly mutate: (before: DrillRun) => { readonly run: DrillRun; readonly prunedNodeIds?: readonly string[]; readonly plans?: readonly InternalEvidencePlan[]; readonly operationResult: unknown };
+  }): CampaignChargedOutcome;
+  /** Stores a no-event provider failure for an asynchronous charged gesture (group creation). */
+  settleProviderFailure(input: { readonly runId: string; readonly lease: LeaseHolder; readonly operation: "group"; readonly operands: unknown; readonly command: CampaignCommandInput | undefined; readonly error: ServerError }): never;
+  /** The issued encounter receipt for assistance (active or historical campaign encounter). */
+  assistanceReceipt(runId: string, learnerId: string): CampaignEncounterReceipt | undefined;
+  /** The durable campaign origin join for a play run, if it was a campaign encounter. */
+  origin(runId: string): { readonly campaignRunId: string; readonly nodeId: string; readonly campaignDocumentDigest: string } | undefined;
 }
 
 export interface CreateRunRequest {
@@ -496,6 +537,7 @@ export class RunService {
   readonly #reviewEvidence: ReviewEvidenceCoordinator | undefined;
   readonly #botOpponent: BotOpponentAcquirer | undefined;
   readonly #botAvailability: (() => BotProviderAvailabilitySnapshot) | undefined;
+  #campaignGate: CampaignChargeGate | undefined;
   readonly #simulations = new Map<string, {
     readonly runId: string;
     readonly writerId: string;
@@ -606,7 +648,7 @@ export class RunService {
     return Object.freeze(this.#storage.rescopeRunMarks({runId,learnerId:principal.learnerId,fromScope:input.fromScope,fromKey:key(input.fromScope),toScope:input.toScope,toKey:key(input.toScope)}).map(({scope,scopeKey,brush,orig,dest,at})=>Object.freeze({scope,scopeKey,brush,orig,...(dest===undefined?{}:{dest}),at})));
   }
 
-  async create(input: CreateRunRequest, leaseInput: LeaseHolder | string): Promise<DrillRun> {
+  async create(input: CreateRunRequest, leaseInput: LeaseHolder | string, options: { readonly persist?: (run: DrillRun, title: string) => void } = {}): Promise<DrillRun> {
     const lease = this.#lease(leaseInput);
     if (lease.learnerId === "__legacy") this.#principal("legacy-create");
     const packRequest = input.session.kind === "pack" ? input.session : undefined;
@@ -691,7 +733,10 @@ export class RunService {
     if (input.intent?.scheduleId !== undefined && pending?.id !== input.intent.scheduleId) {
       throw new ServerError("RUN_NOT_FOUND", `Unknown pending schedule: ${input.intent.scheduleId}`);
     }
-    this.#storage.create(
+    // rfc/campaign-core.md §5.3: a campaign encounter persists the run inside its own campaign
+    // transaction (run rows + node_entered + pointer commit together); everyone else creates here.
+    if (options.persist !== undefined) options.persist(run, typeof title === "string" ? title : "Position session");
+    else this.#storage.create(
       run,
       lease,
       typeof title === "string" ? title : "Position session",
@@ -1449,13 +1494,24 @@ export class RunService {
     writerOrTarget: string | RewindTarget,
     targetOrAt?: RewindTarget | string,
     maybeAt?: string,
-  ): MutationResult {
+    campaign?: CampaignCommandInput,
+  ): MutationResult & { readonly campaign?: Readonly<Record<string, unknown>> } {
     const principal = this.#principal(principalOrWriter);
     const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrTarget as string;
     const target = typeof principalOrWriter === "string" ? writerOrTarget as RewindTarget : targetOrAt as RewindTarget;
     const at = typeof principalOrWriter === "string" ? targetOrAt as string | undefined : maybeAt;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
+    const charged = this.#campaignCharged(runId, lease, "rewind", { target, ...(at === undefined ? {} : { at }) }, campaign, (before) => {
+      let pruned: readonly string[] = [];
+      const hook = { onRewound: (ids: readonly string[]) => { pruned = ids; } };
+      if (target.nodeId !== undefined && target.branchId !== undefined && !branchPath(before, target.branchId).some((node) => node.id === target.nodeId)) {
+        throw new ServerError("INVALID_REQUEST", "Rewind node is not on the named branch");
+      }
+      const next = target.nodeId === undefined ? rewindToCheckpoint(before, target.checkpointId, at, hook) : rewind(before, target.nodeId, at, hook, target.branchId);
+      return { run: next.run, prunedNodeIds: pruned, operationResult: { activeCursor: next.run.activeCursor } };
+    });
+    if (charged !== undefined) return charged;
     // The runtime rewind only reports the pruned ids; cancellation is the storage commit's.
     let prunedNodeIds: readonly string[] = [];
     const pruned = { onRewound: (ids: readonly string[]) => { prunedNodeIds = ids; } };
@@ -1485,13 +1541,19 @@ export class RunService {
     writerOrNode: string,
     nodeOrOptions: string | ForkOptions = {},
     maybeOptions: ForkOptions = {},
-  ): MutationResult {
+    campaign?: CampaignCommandInput,
+  ): MutationResult & { readonly campaign?: Readonly<Record<string, unknown>> } {
     const principal = this.#principal(principalOrWriter);
     const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrNode;
     const nodeId = typeof principalOrWriter === "string" ? writerOrNode : nodeOrOptions as string;
     const options = typeof principalOrWriter === "string" ? nodeOrOptions as ForkOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
+    const charged = this.#campaignCharged(runId, lease, "fork", { nodeId, options }, campaign, (before) => {
+      const next = fork(before, nodeId, options);
+      return { run: next.run, operationResult: { activeCursor: next.run.activeCursor } };
+    });
+    if (charged !== undefined) return charged;
     const result = fork(stored.run, nodeId, options);
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
@@ -1524,7 +1586,43 @@ export class RunService {
       nodes: publicNodes(run),
       branches: run.branches,
       activeCursor: run.activeCursor,
+      // rfc/campaign-core.md §5.3: the durable campaign origin, read from the campaign join.
+      campaignOrigin: this.#campaignGate?.origin(runId) ?? null,
     });
+  }
+
+  /** Wires the campaign charge gate (CampaignService) after both services exist. */
+  setCampaignGate(gate: CampaignChargeGate | undefined): void {
+    this.#campaignGate = gate;
+  }
+
+  /** rfc/campaign-core.md §5.3: the play-run half of an encounter start. */
+  afterCampaignEncounterCreated(run: DrillRun, learnerId: string): void {
+    this.#project(run, learnerId, { [run.branches[0]!.id]: { origin: "fresh" } });
+  }
+
+  #campaignCharged(
+    runId: string,
+    lease: LeaseHolder,
+    operation: "rewind" | "fork" | "simulate_enter",
+    operands: unknown,
+    campaign: CampaignCommandInput | undefined,
+    mutate: (before: DrillRun) => { readonly run: DrillRun; readonly prunedNodeIds?: readonly string[]; readonly operationResult: unknown },
+  ): (MutationResult & { readonly campaign: Readonly<Record<string, unknown>> }) | undefined {
+    const gate = this.#campaignGate;
+    if (gate === undefined || !gate.isActiveEncounter(runId)) {
+      if (campaign !== undefined) throw new ServerError("CAMPAIGN_ACTIVE_ENCOUNTER_MISMATCH", "This run is not an active campaign encounter; campaignCommand is refused");
+      return undefined;
+    }
+    const outcome = gate.charge({ runId, lease, operation, operands, command: campaign, mutate });
+    if (outcome.kind === "committed") this.#project(outcome.run, lease.learnerId);
+    return Object.freeze({ run: outcome.run, emitted: outcome.emitted, campaign: outcome.campaign });
+  }
+
+  #groupReplay(outcome: CampaignChargedOutcome): CreateGroupResult & { readonly campaign: Readonly<Record<string, unknown>> } {
+    const group = groupsFromEvents(outcome.run).at(-1);
+    if (group === undefined) throw new ServerError("STORAGE_FAILURE", "A replayed group command names no group");
+    return Object.freeze({ group, run: outcome.run, emitted: [], campaign: outcome.campaign, comparison: compareBranches(outcome.run, group.members.map((member) => member.branchId), {}) });
   }
 
   /** rfc/intent-presets.md §5.1: the server re-derives context and access; it never trusts the client's. */
@@ -1533,8 +1631,13 @@ export class RunService {
     const run = stored.run;
     const session = this.#storage.liveSessionByRun?.(runId);
     const assistance = this.#assistanceContext(runId, principal, run, role);
+    // rfc/intent-presets.md Discharge D6: a campaign encounter's origin is the ISSUED receipt the
+    // campaign authority derives from durable rows at the encounter's `node_entered` cut.
+    const receipt = this.#campaignGate?.assistanceReceipt(runId, principal.learnerId);
     return Object.freeze({
-      origin: Object.freeze({ kind: "run" as const, sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, ...(session === undefined ? {} : { liveKind: session.kind }) }),
+      origin: receipt !== undefined
+        ? Object.freeze({ kind: "campaign_encounter" as const, receipt })
+        : Object.freeze({ kind: "run" as const, sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, ...(session === undefined ? {} : { liveKind: session.kind }) }),
       access: Object.freeze({ deliveryOpen: feedbackDeliveryOpen(run), role, seatedInContest: assistance.seatedInContest, reviewing: assistance.reviewing }),
     });
   }
@@ -1602,9 +1705,19 @@ export class RunService {
     principal: Principal,
     writerId: string,
     input: CreateGroupInput,
-  ): Promise<CreateGroupResult> {
+    campaign?: CampaignCommandInput,
+  ): Promise<CreateGroupResult & { readonly campaign?: Readonly<Record<string, unknown>> }> {
     const { stored, role, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
+    // rfc/campaign-core.md §2.2: a stored terminal result (success or provider failure) replays
+    // BEFORE any provider is contacted; no second call, no second charge.
+    const groupOperands = { input };
+    const campaignEncounter = this.#campaignGate?.isActiveEncounter(runId) === true;
+    if (!campaignEncounter && campaign !== undefined) throw new ServerError("CAMPAIGN_ACTIVE_ENCOUNTER_MISMATCH", "This run is not an active campaign encounter; campaignCommand is refused");
+    if (campaignEncounter) {
+      const replayed = this.#campaignGate!.replay({ runId, lease, operation: "group", operands: groupOperands, command: campaign });
+      if (replayed !== undefined) return this.#groupReplay(replayed);
+    }
     this.#requiredEvidenceQueue();
     this.#refuseBotProfileGroup(stored.run);
     const pack = this.#requiredRegisteredPack(stored.run);
@@ -1662,9 +1775,14 @@ export class RunService {
       const selector = this.#requiredOpponentSelector();
       const mode = input.source === "human_replies" ? "human_common" : "strong_engine";
       const request = this.#selectionRequest(stored.run, sourceNode.id, pack, Object.freeze({ ...stored.run.opponentPolicy, mode }), stored.run.branches[0]!.seed);
-      distribution = input.source === "human_replies"
-        ? await selector.select(request)
-        : await selector.enumerate(request, requestedSize);
+      try {
+        distribution = input.source === "human_replies"
+          ? await selector.select(request)
+          : await selector.enumerate(request, requestedSize);
+      } catch (error) {
+        if (campaignEncounter && error instanceof ServerError) this.#campaignGate!.settleProviderFailure({ runId, lease, operation: "group", operands: groupOperands, command: campaign, error });
+        throw error;
+      }
       candidates = Object.freeze((distribution.candidates ?? []).filter((candidate) => candidate.offWindow !== true).slice(0, requestedSize).map((candidate) => candidate.moveUci));
     }
     if (candidates.length < 2) {
@@ -1732,13 +1850,27 @@ export class RunService {
         ...(distribution === undefined ? {} : { distribution }),
       },
     }]);
-    this.#commitWithEnrichment(scratch, lease, evidenceNodeIds);
+    let campaignResult: Readonly<Record<string, unknown>> | undefined;
+    if (campaignEncounter) {
+      const computed = scratch;
+      const plans = [...new Set(evidenceNodeIds)].slice(0, 8).map((nodeId) => this.#enrichmentPlan(computed, nodeId));
+      const outcome = this.#campaignGate!.charge({ runId, lease, operation: "group", operands: groupOperands, command: campaign, mutate: (before) => {
+        // The group was computed from the pre-provider image; the play revision must be unchanged.
+        if (before.events.length !== stored.run.events.length) throw new ServerError("CAMPAIGN_REVISION_STALE", "The run changed while the group was being prepared; reload and try again");
+        return { run: computed, plans, operationResult: { groupId: groupsFromEvents(computed).at(-1)!.groupId } };
+      } });
+      if (outcome.kind === "replayed") return this.#groupReplay(outcome);
+      campaignResult = outcome.campaign;
+    } else {
+      this.#commitWithEnrichment(scratch, lease, evidenceNodeIds);
+    }
     this.#project(scratch, lease.learnerId);
     const group = groupsFromEvents(scratch).at(-1)!;
     return Object.freeze({
       group,
       run: scratch,
       emitted: scratch.events.slice(stored.run.events.length),
+      ...(campaignResult === undefined ? {} : { campaign: campaignResult }),
       comparison: compareBranches(scratch, members.map((member) => member.branchId), pack === undefined ? {} : {
         pack: expandPackAuthoredBoundary(
           pack.document,
@@ -2217,7 +2349,14 @@ export class RunService {
     simulationId: string,
     branchIndex: number,
     at?: string,
-  ): MutationResult {
+    campaign?: CampaignCommandInput,
+  ): MutationResult & { readonly campaign?: Readonly<Record<string, unknown>> } {
+    if (campaign !== undefined && this.#campaignGate?.isActiveEncounter(runId) === true) {
+      // A response-loss retry of a committed entry replays even after the simulation was consumed.
+      const { lease } = this.#forWrite(runId, principal, writerId);
+      const replayed = this.#campaignGate.replay({ runId, lease, operation: "simulate_enter", operands: { simulationId, branchIndex }, command: campaign });
+      if (replayed !== undefined) return replayed;
+    }
     const simulation = this.#simulations.get(simulationId);
     if (!simulation || simulation.runId !== runId || simulation.writerId !== writerId || Date.now() - simulation.createdAt > 10 * 60_000) {
       throw new ServerError("SIMULATION_EXPIRED", "Simulation is missing or expired");
@@ -2226,6 +2365,33 @@ export class RunService {
     if (!moves) throw new ServerError("INVALID_REQUEST", "Unknown simulation branch");
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
+    const enter = (base: DrillRun): MutationResult => {
+      let entered = fork(base, simulation.sourceNodeId, {
+        label: simulation.labels[branchIndex]!,
+        intent: `Entered authored variation ${simulation.labels[branchIndex]!}`,
+        origin: "simulated",
+        ...(at === undefined ? {} : { at }),
+      });
+      const collected = [...entered.emitted];
+      for (const uci of moves) {
+        entered = commitMove(entered.run, uci, { actor: "system", ...(at === undefined ? {} : { at }) });
+        collected.push(...entered.emitted);
+      }
+      if (entered.run.events.length > 800) {
+        throw new ServerError("SIMULATE_BUDGET_EXCEEDED", "Entering this line would leave too little room to continue", {
+          details: { plies: moves.length, events: entered.run.events.length, limit: 800 },
+        });
+      }
+      return { run: entered.run, emitted: Object.freeze(collected) };
+    };
+    const charged = this.#campaignCharged(runId, lease, "simulate_enter", { simulationId, branchIndex }, campaign, (before) => {
+      const next = enter(before);
+      return { run: next.run, operationResult: { activeCursor: next.run.activeCursor } };
+    });
+    if (charged !== undefined) {
+      this.#simulations.delete(simulationId);
+      return charged;
+    }
     let result = fork(stored.run, simulation.sourceNodeId, {
       label: simulation.labels[branchIndex]!,
       intent: `Entered authored variation ${simulation.labels[branchIndex]!}`,

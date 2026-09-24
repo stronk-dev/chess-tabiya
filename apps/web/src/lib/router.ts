@@ -8,7 +8,8 @@ export type StaticRouteName =
   | "live"
   | "create"
   | "library"
-  | "settings";
+  | "settings"
+  | "campaign";
 
 export type AppRoute =
   | { readonly name: StaticRouteName }
@@ -21,6 +22,8 @@ export type AppRoute =
   | { readonly name: "shape-entry"; readonly shapeId: string }
   | { readonly name: "principle-entry"; readonly principleId: string }
   | { readonly name: "opening-entry"; readonly positionKey: string }
+  /** rfc/campaign-core.md §7.1: one campaign run's map, encounter preparation and result. */
+  | { readonly name: "campaign-run"; readonly campaignRunId: string }
   | { readonly name: "not-found"; readonly pathname: string };
 
 type Subscriber = (route: AppRoute) => void;
@@ -36,6 +39,7 @@ const STATIC_ROUTES: Readonly<Record<string, StaticRouteName>> = Object.freeze({
   "/create": "create",
   "/library": "library",
   "/settings": "settings",
+  "/campaign": "campaign",
 });
 
 const ROUTE_TITLES: Readonly<Record<AppRoute["name"], string>> = Object.freeze({
@@ -57,6 +61,8 @@ const ROUTE_TITLES: Readonly<Record<AppRoute["name"], string>> = Object.freeze({
   create: "Create",
   library: "Library",
   settings: "Settings",
+  campaign: "Campaign",
+  "campaign-run": "Campaign map",
   "not-found": "Not found",
 });
 
@@ -95,6 +101,13 @@ export function parseRoute(location: Pick<Location, "pathname">): AppRoute {
       if(id.trim()!=="")return live[1]==="session"?Object.freeze({name:"live-session",sessionId:id}):Object.freeze({name:"live-overlay",runId:id});
     } catch { /* malformed live ids route to not-found */ }
   }
+  const campaign = /^\/campaign\/([^/]+)$/.exec(pathname);
+  if (campaign !== null) {
+    try {
+      const id = decodeURIComponent(campaign[1]!);
+      if (id.trim() !== "") return Object.freeze({ name: "campaign-run", campaignRunId: id });
+    } catch { /* malformed campaign ids route to not-found */ }
+  }
   // Parameterized theory/pack routes. Query strings are never read (§2.2): all state is a path segment.
   const entry = /^\/(?:play\/(pack)|library\/(shape|principle|opening))\/([^/]+)$/.exec(pathname);
   if (entry !== null) {
@@ -121,6 +134,7 @@ export function routePath(route: Exclude<AppRoute, { name: "not-found" }>): stri
   if(route.name==="shape-entry")return `/library/shape/${encodeURIComponent(route.shapeId)}`;
   if(route.name==="principle-entry")return `/library/principle/${encodeURIComponent(route.principleId)}`;
   if(route.name==="opening-entry")return `/library/opening/${encodeURIComponent(route.positionKey)}`;
+  if(route.name==="campaign-run")return `/campaign/${encodeURIComponent(route.campaignRunId)}`;
   return Object.entries(STATIC_ROUTES).find(([, name]) => name === route.name)![0];
 }
 

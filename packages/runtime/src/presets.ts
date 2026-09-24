@@ -15,7 +15,7 @@ export type WorkflowContextId = (typeof WORKFLOW_CONTEXTS)[number];
 export type OrdinaryWorkflowContextId = Exclude<WorkflowContextId, "campaign">;
 
 export const PRESET_IDS = Object.freeze([
-  "quiet", "guided", "theory_only", "support", "analysis",
+  "quiet", "guided", "theory_only", "support", "analysis", "campaign_kit",
 ] as const);
 export type PresetId = (typeof PRESET_IDS)[number];
 
@@ -209,6 +209,10 @@ export const PRESET_DECLARATIONS: readonly PresetDeclaration[] = Object.freeze([
   { id: "theory_only", label: "Theory only", promise: "Cited applicable theory; no evaluation, no candidates, no line.", modules: ["rules_floor", "theory_breadcrumb"], config: projection("off", "off", "off", "off", "legal", "off", "on"), validation: "candidate" },
   { id: "support", label: "Support", promise: "Staged-move risk warnings, on request, before you commit. Never the best move.", modules: ["rules_floor", "sight_on_request", "threat_radar", "blunder_prevention", "postcommit_nudge", "guided_hint", "theory_breadcrumb"], config: projection("live", "off", "off", "off", "sight", "sight", "on"), validation: "candidate" },
   { id: "analysis", label: "Analyze", promise: "Attributed raw evidence, evaluations and lines, in an explicit inspector.", modules: ["rules_floor", "review_map", "compare_coach", "theory_breadcrumb", "full_inspector"], config: projection("live", "off", "on_request", "on_request", "evidence", "evidence", "on"), validation: "candidate" },
+  // rfc/campaign-core.md §5 (2026-09-24 implementation): the opinionated Campaign preset. It requests
+  // the whole campaign ceiling; the server's campaign encounter receipt then narrows it to the kit the
+  // learner earned and equipped, minus the boss's suppression. It is offered only in Campaign.
+  { id: "campaign_kit", label: "Campaign kit", promise: "Exactly the tools you have earned and equipped in this campaign — nothing more, nothing sold.", modules: ["rules_floor", "sight_on_request", "threat_radar", "postcommit_nudge", "structure_nudge", "theory_breadcrumb", "guided_hint", "compare_coach", "review_map", "full_inspector"], config: projection("live", "live", "on_request", "on_request", "evidence", "evidence", "on"), validation: "candidate" },
 ]);
 
 // ---------------------------------------------------------------------------------------------
@@ -231,7 +235,7 @@ const clamp = (markers: AssistancePermission, guided: AssistancePermission, huma
 const FULL = clamp("free", "free", "free", "free", "free", "free", "evidence", "evidence", "free");
 
 export const WORKFLOW_CONTEXT_POLICIES: readonly WorkflowContextPolicy[] = Object.freeze([
-  { id: "position", defaultPreset: "quiet", allowedPresets: PRESET_IDS, moduleCeiling: MODULE_IDS, configClamp: FULL, validation: "candidate" },
+  { id: "position", defaultPreset: "quiet", allowedPresets: ["quiet", "guided", "theory_only", "support", "analysis"], moduleCeiling: MODULE_IDS, configClamp: FULL, validation: "candidate" },
   { id: "pack", defaultPreset: "quiet", allowedPresets: ["quiet", "guided", "theory_only", "analysis"], moduleCeiling: except("blunder_prevention"), configClamp: FULL, validation: "candidate" },
   { id: "imported", defaultPreset: "quiet", allowedPresets: ["quiet", "guided", "theory_only", "analysis"], moduleCeiling: except("blunder_prevention"), configClamp: FULL, validation: "candidate" },
   { id: "match", defaultPreset: "quiet", allowedPresets: ["quiet"], moduleCeiling: ["rules_floor"], configClamp: clamp("locked_off", "locked_off", "locked_off", "locked_off", "locked_off", "locked_off", "legal", "locked_off", "locked_off"), validation: "candidate" },
@@ -240,7 +244,7 @@ export const WORKFLOW_CONTEXT_POLICIES: readonly WorkflowContextPolicy[] = Objec
   // §5's adapter both bind the raw-corpus switch to `full_inspector` alone, which these contexts exclude.
   { id: "academy", defaultPreset: "guided", allowedPresets: ["quiet", "guided", "theory_only"], moduleCeiling: except("blunder_prevention", "full_inspector"), configClamp: clamp("free", "free", "locked_off", "locked_off", "free", "free", "sight", "sight", "free"), validation: "candidate" },
   { id: "onramp", defaultPreset: "guided", allowedPresets: ["quiet", "guided", "theory_only"], moduleCeiling: except("blunder_prevention", "full_inspector", "review_map"), configClamp: clamp("free", "free", "locked_off", "locked_off", "free", "free", "sight", "sight", "free"), validation: "candidate" },
-  { id: "campaign", defaultPreset: "guided", allowedPresets: ["quiet", "guided", "theory_only", "analysis"], moduleCeiling: except("blunder_prevention"), configClamp: FULL, validation: "candidate" },
+  { id: "campaign", defaultPreset: "campaign_kit", allowedPresets: ["campaign_kit", "quiet", "guided", "theory_only", "analysis"], moduleCeiling: except("blunder_prevention"), configClamp: FULL, validation: "candidate" },
 ]);
 
 // ---------------------------------------------------------------------------------------------
@@ -255,7 +259,7 @@ export const HINT_CEILING_TABLE = Object.freeze({
   validation: "proposed" as const,
   ruling: "D1639" as const,
   source: "rfc/hint-distance.md §5",
-  presets: Object.freeze({ quiet: "off", guided: "distance", theory_only: "off", support: "distance", analysis: "off" } satisfies Record<PresetId, HintRung>),
+  presets: Object.freeze({ quiet: "off", guided: "distance", theory_only: "off", support: "distance", analysis: "off", campaign_kit: "distance" } satisfies Record<PresetId, HintRung>),
   contexts: Object.freeze({ position: "move", pack: "distance", imported: "move", match: "off", stream: "distance", academy: "distance", onramp: "move", campaign: "distance" } satisfies Record<WorkflowContextId, HintRung>),
 });
 
@@ -333,8 +337,10 @@ export function assertPresetFoundation(
     }
   }
   const admitted = contexts.reduce((sum, context) => sum + context.allowedPresets.length, 0);
-  if (admitted !== 28 || PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted !== 12) {
-    throw new PresetContractError("CONTEXT_PRESET_INVALID", `expected 28 admitted and 12 refused pairs; received ${admitted} and ${PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted}`);
+  // 2026-09-24: the Campaign kit preset (campaign-core §5) is admitted in Campaign only: 28 → 29
+  // admitted pairs and 12 → 19 refused (the seven non-campaign contexts refuse it).
+  if (admitted !== 29 || PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted !== 19) {
+    throw new PresetContractError("CONTEXT_PRESET_INVALID", `expected 29 admitted and 19 refused pairs; received ${admitted} and ${PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted}`);
   }
 }
 

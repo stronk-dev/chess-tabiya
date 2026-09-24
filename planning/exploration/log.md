@@ -21457,3 +21457,21 @@ moves), and the compiler admits exactly that width. A regression test covers a
     receipts.
   - Fixing hyphenated raw-id leaks in two sentences.
   - The Guided Hint seat, which is merging next.
+
+### 2026-09-24 — Campaign exists (migration 30, campaign-schema lanes 2–3)
+
+Campaign was the one capability with no API, route or content. Now:
+- **Routes and API:** a `/campaign` route and API family, with persistence at
+  migration 30.
+- **Play:** a map over three acts, pack encounters, an earned-rewind balance
+  spent atomically with its play mutation (D2986), kit rewards,
+  declare-done, abandon, result and review.
+- **Boss:** an unrated Act-II boss game against a registered bot.
+- **Presets:** an identity-verified encounter receipt makes the Campaign preset
+  context executable.
+- **Content:** the pilot is a community draft that only wires existing packs
+  and bots; no chess prose was written.
+- **Ledger:** D2986–D2990 close.
+- **Roadmap:** the roadmap now marks Campaign live.
+- **Remaining:** the official reviewed campaign, the rated boss, and
+  catalogue progression (migration 31).

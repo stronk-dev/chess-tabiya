@@ -24293,48 +24293,48 @@
     },
     {
       "id": "D2986",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f27cbc36ff9574128a1888358d8eafc83360d79c16a09a088b3374bc8359ff05",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:731297afbf4dff30cf1d3bae95809bac30fc44e56f3b5c0aa8ab64e2fd7f31aa",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "apps/server/src/campaign-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2987",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:92d8401436fbcf637b4b378e75eadf97205983dc38d4f83a8e758c8c66f17e51",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:53b6f3711c45a97d451c8f2b1d51f6066b5ff68864a1fe0a44a7b6ad373207c5",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "apps/server/src/campaign-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2988",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:65ecc731a68a184ec1309f0f8b5297fad66e28e6feb9104d96364b24c7861e3f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:77989f40abf37da9888abeb969895b3a1d56845c068e09b6d3114a9495a78c06",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "apps/server/src/campaign-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2989",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c3bc943997127420f8644080479ba8eb94149b401c87342c57bfe528592bf0fa",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:338c3206b222651e0cc17111f1b0f38a67c3e5d0e7fc342cdf29ceeed1613601",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "apps/server/src/campaign-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2990",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:51b82106ad2f0f67c4b6e7b02e523fce1a558afc4274415404dbda8fd106736b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bd7413a8121b5a485aaebac001b3c5d1cfdb201fbdcac06dfb50e42405ca2fae",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "apps/server/src/campaign-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2991",

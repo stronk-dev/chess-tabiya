@@ -36,7 +36,9 @@ export default defineConfig({
       "DRAFT_PACK_FILES=schemas/drill_pack.example.json,schemas/fixtures/drill-pack/terminal-outcome.browser.json," +
       "content/drafts/immediate-guard.browser.json,content/drafts/line-boundary.browser.json," +
       "content/drafts/outcome-hold.browser.json,content/drafts/outcome-resist.browser.json," +
-      "content/drafts/stated-reasoning.browser.json,content/drafts/trajectory-legs.browser.json " +
+      "content/drafts/stated-reasoning.browser.json,content/drafts/trajectory-legs.browser.json," +
+      "schemas/fixtures/drill-pack/campaign-boss.browser.json " +
+      "DRAFT_CAMPAIGN_FILES=tests/browser/fixtures/campaign.browser.json " +
       `PORT=${port} ` +
       "node apps/server/dist/main.js",
     url: `http://127.0.0.1:${port}/healthz`,

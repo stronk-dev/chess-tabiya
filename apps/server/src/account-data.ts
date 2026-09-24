@@ -92,6 +92,13 @@ export const ACCOUNT_DATA_INVENTORY = Object.freeze([
   table("evidence_jobs", "owned_runs", "exclude", "classify_run"),
   table("evidence_result_sequences", "owned_runs", "exclude", "classify_run"),
   table("evidence_run_transitions", "owned_runs", "exclude", "classify_run"),
+  // rfc/campaign-core.md §6.2: campaign run, create-receipt, event, charged-command and award history
+  // export as progress and hard-delete with the learner. There is no account import/merge route.
+  table("campaign_runs", "progress", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("campaign_run_creations", "progress", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("campaign_events", "progress", "project", "hard_delete"),
+  table("campaign_mutation_commands", "progress", "project", "hard_delete"),
+  table("campaign_reward_awards", "progress", "project", "hard_delete"),
   Object.freeze({
     store: "browser_local",
     kind: "browser",
@@ -172,6 +179,11 @@ export const ACCOUNT_TAGGED_RECORD_FIELDS = {
   learner_observations: [["run_id", "projection_id", "projection_version", "semantic_sign", "source_sign", "phase", "decision_class", "session_kind", "pack_id", "opportunities", "occurred", "alternative_share_sum", "occurredRefs", "opportunityRefs", "observed_at", "derived_rev"]],
   learner_structure_stats: [["run_id", "root_key", "root_node_id", "session_kind", "pack_id", "branch_count", "rewound_count", "forked_count", "group_count", "outcome_count", "observed_at", "derived_rev"]],
   learner_observation_jobs: [["run_id", "requested_seq", "completed_seq", "derived_rev", "state", "retry_count", "failure_code", "next_attempt_at", "updated_at"]],
+  campaign_runs: [["id", "campaign_id", "campaign_version", "campaign_document_digest", "campaign_document", "status", "active_encounter_run_id", "created_at"]],
+  campaign_run_creations: [["campaign_id", "command_id", "campaign_version", "operands_digest", "campaign_run_id", "result_payload", "created_at"]],
+  campaign_events: [["campaign_run_id", "seq", "kind", "command_id", "expected_revision", "operands_digest", "result_payload", "payload", "at"]],
+  campaign_mutation_commands: [["campaign_run_id", "command_id", "play_run_id", "expected_campaign_revision", "expected_play_revision", "operation", "operands_digest", "result_payload", "settled_at"]],
+  campaign_reward_awards: [["campaign_run_id", "durable_reward_id", "reward_payload", "awarded_at"]],
 } as const satisfies Readonly<Record<string, readonly (readonly string[])[]>>;
 
 export type AccountRecordTable = keyof typeof ACCOUNT_TAGGED_RECORD_FIELDS;
@@ -284,7 +296,7 @@ export function buildAccountBundle(input: AccountBundleInput): AccountBundleV1 {
     account: projected(["learners"], Object.freeze({ ...input.account })),
     ownedRuns: projected(["drill_runs", "run_grants", "imported_games", "run_derivations"], Object.freeze([...input.ownedRuns].sort((a, b) => a.id.localeCompare(b.id)))),
     sharedAccess: projected(["run_grants", "run_marks"], Object.freeze([...input.sharedAccess].sort((a, b) => a.runId.localeCompare(b.runId)))),
-    progress: projected(["attempts", "attempt_concepts", "attempt_concept_legacy", "schedules", "learner_position_stats"], Object.freeze([...input.progress])),
+    progress: projected(["attempts", "attempt_concepts", "attempt_concept_legacy", "schedules", "learner_position_stats", "campaign_runs", "campaign_run_creations", "campaign_events", "campaign_mutation_commands", "campaign_reward_awards"], Object.freeze([...input.progress])),
     marks: projected(["run_marks"], Object.freeze([...input.marks])),
     repertoires: projected(["repertoires", "repertoire_moves", "repertoire_scans", "repertoire_gap_runs"], Object.freeze([...input.repertoires])),
     drafts: projected(["pack_drafts", "shape_drafts", "playtest_documents"], Object.freeze([...input.drafts])),

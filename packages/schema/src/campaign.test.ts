@@ -16,7 +16,7 @@ describe("campaign schema", () => {
     };
     walk(schema);
     expect(open).toEqual([]);
-    expect(schema.$id).toBe("urn:chess-tabiya:schema:campaign:1");
+    expect(schema.$id).toBe("urn:chess-tabiya:schema:campaign:3");
     expect(() => new Ajv2020({ allErrors: true, strict: true }).compile(schema)).not.toThrow();
   });
 });
