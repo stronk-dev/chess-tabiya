@@ -101,8 +101,11 @@ revocable. Every invalid-token state deliberately looks like the same 404.
 - Run events still identify chess actors only as user/opponent/system. A live session's
   possession journal derives the learner responsible for ordinary committed plies;
   Arena imports use their leg attribution instead.
-- Account export is not an account-import format. It is a portable, intelligible copy
-  of account data. Object-specific PGN and draft interchange remain separate.
+- Account export is a portable, intelligible copy of account data, and since 2026-09-24 it
+  is also an account-import format for the learner's *private* record
+  (`docs/account-data-lifecycle.md` §Import). Importing never grants access to, or
+  recreates, anything involving another learner. Object-specific PGN and draft
+  interchange remain separate.
 - Live rows are removed immediately. Existing operator backups may retain an older
   copy until the deployment's backup policy expires; account deletion cannot rewrite
   a backup already made.

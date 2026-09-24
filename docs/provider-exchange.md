@@ -112,4 +112,5 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
   consumer census reaches zero.
 - The Maia occurrence projections and the Explorer population summary (§§6, 8 derived
   projections).
-- A Maia container-identity probe for the networked sidecar.
+- (Shipped by `rfc/provider-health-degradation.md`: the Maia container-identity probe for the
+  networked sidecar; see `docs/provider-health.md`.)

@@ -7877,14 +7877,14 @@
     },
     {
       "id": "D959",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:555ea1424ca4c7171b7c42f158ca4bb0880fc37b3b4cfbfeb22a991f7ddcbd35",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6870c0104f2525d4377581963e307a32e0b7d5ec2c1b83035c39f3c62110e313",
       "uxItems": [
         "IMP-a10"
       ],
-      "owner": "content-and-theory",
-      "blocker": "rfc:famous-games.md"
+      "evidence": "apps/server/src/import-source-protocol.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D960",
@@ -14490,11 +14490,12 @@
     },
     {
       "id": "D1892",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7794354d80baabdfb66fcf66b8f49878d5ee6a6386f58601ce726ae3f25a88d9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9595e93ac52c50e026562348d691f46bdb73f919c307b77b44e1075cdfe84859",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "apps/server/src/principle-citation.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1893",
@@ -14506,19 +14507,21 @@
     },
     {
       "id": "D1894",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:570eb6c33a1ebc38ef5e643147d513b3985eaddbfccbc7bab6f50689131c6264",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2c0e5488eaa604ad86f0c9be723afce59dbcd8c5f3ac2d6cf5e1618a479119a7",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "apps/server/src/principle-citation.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1895",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2c7270c866450127e4c5127bbdfa03c4b19ec0dcd84fa462ce777e9bb5c707d3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d8781755c10c5f64759e5e5d90190770207bbecf8a90374ab9fc36c9289de198",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "apps/server/src/principle-citation.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1896",
@@ -14538,11 +14541,12 @@
     },
     {
       "id": "D1898",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ccba55546a26ab42ac6882497b7de2ca3dc81fcead7af916605d1f9a7804f4e6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c09ae0ea46d6f79236963516675d6cc13edd44370faedb0b2537b6f953d79ff3",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "apps/server/src/principle-citation.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1899",
@@ -17941,12 +17945,12 @@
     },
     {
       "id": "D2278",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a0b346f8d93c70e95316af3da1111b0c3113de3a03aa0fa8fbd10553f145dad2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:591ca5bb015038a006f0fb47bdb91544a2461d0ffeda85981b90fec87234a15c",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:live-sources.md"
+      "evidence": "packages/runtime/src/import-source-protocol.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2279",

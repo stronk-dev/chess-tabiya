@@ -565,23 +565,34 @@
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Famous-game sourcing is implemented as an authoring path: one cited master game at a time becomes a stripped, attribution-bearing candidate through the shared explorer fetch path, index enumeration and learner masters import stay refused, and capability rows state exactly what is and is not available. No official pack has graduated; the sourceGame schema lane waits on lane 0.30.",
+          "summary": "The theory/library workflow exists: a phase-first Library searches packs, principles, shapes, concepts and named openings with one row per item, official material first and drafts labelled; entry pages join each item to rehearse, understand and return doors over GET /theory; principles gain a pinned, rights-reviewed citation register; pasted games are stripped of third-party annotations. No official pack has graduated and no principle cites a source yet — authored content remains the gate.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/sourcing/masters.ts",
-            "planning/famous-games/implementation-2026-09-24.md",
-            "rfc/famous-games.md"
+            "apps/server/src/theory-library.test.ts",
+            "rfc/theory-knowledge-pipeline.md",
+            "rfc/theory-drill-current-joins.md",
+            "rfc/import-source-protocol-register.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "famous-games.md",
-              "digest": "sha256:8f19c11e9fcbcbb299cdf78535615e0d961c53abc417c1ec01224e97ddb71144"
+              "id": "theory-knowledge-pipeline.md",
+              "digest": "sha256:a9bace0ec4438edc6a9dbadc1a461ccdedd6c3fb3fef1b17a482a140bbdc8cae"
+            },
+            {
+              "kind": "rfc",
+              "id": "theory-drill-current-joins.md",
+              "digest": "sha256:4195698ca5705574716fe919f0a0061095b8ef9e469eb57ee1cf037a9865d6ff"
+            },
+            {
+              "kind": "rfc",
+              "id": "import-source-protocol-register.md",
+              "digest": "sha256:094f8370441b6d9d09fa7dc8e1f5a934f07bb2285605313934c152bdbae57172"
             },
             {
               "kind": "work_state",
-              "id": "D959",
-              "digest": "sha256:555ea1424ca4c7171b7c42f158ca4bb0880fc37b3b4cfbfeb22a991f7ddcbd35"
+              "id": "D1046",
+              "digest": "sha256:04caac94e14fa6e8bd24f444a6ef649fd70d027c07d01bb4eb02729f7d31fdff"
             }
           ]
         },
@@ -656,7 +667,11 @@
     ["learn", "learner_model", "live"],
     ["live", "social_play", "live"],
     ["create", "theory_content", "live"],
-    ["library", "theory_content", "live_but_inadequate"],
+    ["library", "theory_content", "live"],
+    ["pack", "theory_content", "live"],
+    ["shape-entry", "theory_content", "live"],
+    ["principle-entry", "theory_content", "live"],
+    ["opening-entry", "theory_content", "live"],
     ["settings", "support", "live_but_inadequate"],
     ["run", "rehearsal", "live"],
     ["story", "review", "live_but_inadequate"],
@@ -685,6 +700,7 @@
     ["/marks", "learner_model", "live"],
     ["/cohorts", "learner_model", "live"],
     ["/principles", "theory_content", "live"],
+    ["/theory", "theory_content", "live"],
     ["/campaign", "campaign", "missing"],
     ["/healthz", "operations", "live_direct"]
   ]

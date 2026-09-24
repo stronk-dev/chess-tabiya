@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 
+import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -1026,7 +1027,7 @@ describe("Layer 3 screens", () => {
     const run = { ...initial, nodes: [...initial.nodes, child], activeCursor: { nodeId: child.id, branchId: initial.activeCursor.branchId } } as DrillRun;
     const preferences = new Map([[assistanceKey("position"), JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })]]);
     const assistanceStorage = { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } };
-    const capabilities = { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities;
+    const capabilities = { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "external-voice": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture" }) } as Capabilities;
     const onVoice = vi.fn(async () => ({ text: "Recorded reading at this position: fixture fact.", source: "provider" as const, scope: "marker" as const }));
     const component = mountDrill({ target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, capabilities, onVoice, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion } });
     await vi.waitFor(() => expect(document.querySelector(".pivotal-marker")).not.toBeNull());
@@ -1081,7 +1082,7 @@ describe("Layer 3 screens", () => {
     }));
     const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
-      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
+      capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "external-voice": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture" }) } as Capabilities,
       assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onVoice,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -1129,7 +1130,7 @@ describe("Layer 3 screens", () => {
     });
     const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
-      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
+      capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "external-voice": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture" }) } as Capabilities,
       assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onVoice,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -1176,7 +1177,7 @@ describe("Layer 3 screens", () => {
     const onSpeech = vi.fn().mockRejectedValue(new Error("tts endpoint detail"));
     const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
-      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "none", tts: "external", tablebase: "none" } } as Capabilities,
+      capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "external-tts": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture" }) } as Capabilities,
       assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "provider", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onSpeech,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -1509,7 +1510,7 @@ describe("Layer 3 screens", () => {
     const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "on_request", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() },
-      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "none" } } as Capabilities,
+      capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "explorer-primary": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture", "explorer-primary": "local_fixture" }) } as Capabilities,
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
       onHumanSplit, onCorpus, registerKeyboardRegion,
@@ -1660,7 +1661,7 @@ describe("Layer 3 screens", () => {
     const run = branchedRun();
     const onAnalyzeMissing = vi.fn(async () => true);
     const capabilities = {
-      providers: { opponent: "mock", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "none" },
+      providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture" }),
     } as Capabilities;
     const component = mountDrill({ target: target(), props: {
       pack,
@@ -1697,7 +1698,7 @@ describe("Layer 3 screens", () => {
       .mockResolvedValueOnce(false);
     const component = mountDrill({ target: target(), props: {
       pack,
-      capabilities: { providers: { opponent: "mock", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
+      capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture" }) } as Capabilities,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),

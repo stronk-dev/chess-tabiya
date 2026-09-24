@@ -11,6 +11,7 @@ import type { BotRosterRow } from "./api.js";
 const BLOCKER_COPY: Readonly<Record<BotAvailabilityBlocker, string>> = Object.freeze({
   maia_unavailable: "Unavailable: the Maia move model is not reachable here.",
   stockfish_unavailable: "Unavailable: the Stockfish check this bot needs is not reachable here.",
+  guard_release_receipt_invalid: "Unavailable: the Stockfish check's release measurement no longer matches the running engines.",
 });
 
 const CONDITION_COPY: Readonly<Record<BotAvailabilityCondition, string>> = Object.freeze({

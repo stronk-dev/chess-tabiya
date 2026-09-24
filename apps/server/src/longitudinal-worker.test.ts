@@ -85,7 +85,7 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     const origin = await listen(application);
     const health = await fetch(`${origin}/healthz`);
     expect(health.status).toBe(200);
-    expect(await health.json()).toEqual({ status: "ok", engineMode: "mock", longitudinal: { status: "ready" } });
+    expect(await health.json()).toEqual({ status: "ok", engineMode: "mock", longitudinal: { status: "ready" }, providers: expect.any(Array) });
 
     const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "importer", password: "importer-password-long" }) });
     expect(registered.status).toBe(201);
@@ -140,7 +140,7 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     await until(() => application!.longitudinal.health().status === "degraded" ? true : undefined, 10_000);
     const health = await fetch(`${origin}/healthz`);
     expect(health.status).toBe(503);
-    expect(await health.json()).toEqual({ status: "degraded", engineMode: "mock", longitudinal: { status: "degraded", reason: "worker_exited" } });
+    expect(await health.json()).toEqual({ status: "degraded", engineMode: "mock", longitudinal: { status: "degraded", reason: "worker_exited" }, providers: expect.any(Array) });
   });
 
   it("fails before readiness on a missing artifact, a disagreeing database path or a :memory: identity", async () => {
@@ -163,7 +163,7 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     const origin = await listen(application);
     const health = await fetch(`${origin}/healthz`);
     expect(health.status).toBe(200);
-    expect(await health.json()).toEqual({ status: "ok", engineMode: "mock", longitudinal: { status: "disabled_test" } });
+    expect(await health.json()).toEqual({ status: "ok", engineMode: "mock", longitudinal: { status: "disabled_test" }, providers: expect.any(Array) });
     expect(application.longitudinal.progress()).toBeUndefined();
     const main = readFileSync(join(HERE, "main.ts"), "utf8");
     for (const forbidden of ["in-memory-test-application", "composeApplication", ":memory:", "longitudinal-test-support"]) expect(main).not.toContain(forbidden);
@@ -323,7 +323,8 @@ describe("criterion 14 — reachability boundaries", () => {
     }
     // No production module outside the store/storage/account inventory reads the tables directly.
     const readers = [...sources.entries()].filter(([name, text]) => /learner_observations|learner_observation_denominators|learner_structure_stats|learner_observation_jobs/u.test(text)).map(([name]) => name).sort();
-    expect(readers).toEqual(["account-data.ts", "longitudinal-store.ts", "storage.ts"]);
+    // account-import.ts names the four tables only to declare them re-derived (never copied) on import.
+    expect(readers).toEqual(["account-data.ts", "account-import.ts", "longitudinal-store.ts", "storage.ts"]);
   });
 });
 

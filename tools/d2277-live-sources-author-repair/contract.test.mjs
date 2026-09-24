@@ -19,9 +19,11 @@ test("D2277 uses current observed-finished authority on both sides of the PGN re
   assert.doesNotMatch(normative, /ongoing board imports as a\s+partial game/u);
 });
 
-test("D2278 has one absent registered protocol and one exact first-lane claim", () => {
-  assert.match(rfc, /import-source-protocol \| first lane 1 \| whole projection/u);
-  assert.match(registerRfc, /import-source-protocol \| sequential\/canonical_resource@1\/absent/u);
+test("D2278 has one registered protocol and one exact live-sources claim", () => {
+  // Corrected 2026-09-24: the implemented bootstrap has no lane grammar; the register landed a present
+  // members row and live-sources claims the broadcast pair (import-source-protocol-register.md).
+  assert.match(rfc, /^import-source-protocol \| members request_broadcast, source_lichess_broadcast \| /mu);
+  assert.match(registerRfc, /import-source-protocol \| members\/string_tuple@present/u);
   assert.equal([...registerRfc.matchAll(/^## Discharges$/gmu)].length, 1);
   assert.deepEqual(additions, {
     schemaVersion: 1,

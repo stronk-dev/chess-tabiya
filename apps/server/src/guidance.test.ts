@@ -22,6 +22,7 @@ import { FixtureCorpusSource } from "./corpus.js";
 import { ExternalHttpVoiceProvider, type ReasoningReviewProvider } from "./external-voice.js";
 import { ExternalHttpTtsProvider, type TtsProvider } from "./external-tts.js";
 import { IdentityService } from "./identity.js";
+import { testProviderHealth } from "./provider-health.test-support.js";
 import { PackRegistry } from "./pack-registry.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -41,7 +42,7 @@ const capabilities: CapabilitiesProvider = {
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
       policyProfiles: { strong_engine: { movetimeMs: 100, nodes: 50_000, threads: 1, hashMb: 16, multiPv: 1 }, human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } }, resistance: HUMAN_COMMON_RESISTANCE_PROFILE, profiles: projectBotRoster().profiles } },
-      providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "none" },
+      providerHealth: await testProviderHealth({ "maia-inference": "available", "explorer-primary": "available" }, { implementations: { "explorer-primary": "local_fixture" } }),
       surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
     };
   },
@@ -266,7 +267,7 @@ describe("adaptive guidance server seams", () => {
       "renderVoice",
       "renderedEvidenceItems",
       "appendRecordedReadings",
-      "renderVoice",
+      // Speech no longer re-renders voice: it speaks the displayed text ([[D2576]]).
     ]);
     for (const call of assemblyCalls) expect(call.arguments.join(" ")).not.toMatch(/\b(?:mark|marks|runMarks|learnerMarks)\b/u);
   });
@@ -451,6 +452,24 @@ describe("adaptive guidance server seams", () => {
     expect(providerCalls).toBe(0);
     expect((await handler(request("/runs/reasoning-disclosure/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, host.cookie))).status).toBe(200);
     expect(providerCalls).toBe(1);
+  });
+
+  it("never rewrites a reasoning-review provider failure into a valid external empty answer ([[D2575]])", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
+    const identity = new IdentityService(storage, { cookieSecure: false, derive: async (password, salt) => Buffer.alloc(32, password.length + salt.length) });
+    const host = await identity.register({ handle: "review-host", password: "correct horse battery staple" });
+    const registry = await PackRegistry.fromDocuments([{ source: "reasoning-failure", value: reasoningDocument }]);
+    const service = new RunService(storage, { packRegistry: registry, evidenceQueue: new EvidenceJobQueue(executor) });
+    const principal = { learnerId: host.learner.id, handle: host.learner.handle };
+    await service.create({ id: "reasoning-failure", session: { kind: "pack", packId: reasoningDocument.id }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at }, { writerId: "host-writer", learnerId: host.learner.id });
+    const moved = service.move("reasoning-failure", principal, "host-writer", "h2h3", { at });
+    const checkpoint = moved.run.events.find((event) => event.type === "checkpoint.reached")!;
+    service.recordReasoning("reasoning-failure", principal, "host-writer", { nodeId: moved.run.activeCursor.nodeId, checkpointEventSeq: checkpoint.seq, transcript: { candidates: ["Keep the queen"], plan: "protect the queen", fears: "rook on the d-file" }, at });
+    const failing: ReasoningReviewProvider = { async review() { throw new Error("Reasoning review provider returned 502"); } };
+    const handler = createRestHandler(service, undefined, undefined, identity, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, failing);
+    const response = await handler(request("/runs/reasoning-failure/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, host.cookie));
+    expect(response.status).toBe(503);
+    expect(await response.json()).toMatchObject({ error: { code: "VOICE_UNAVAILABLE" } });
   });
 
   it("posts only text bytes to the external TTS provider", async () => {

@@ -1,4 +1,5 @@
 import { createRun, type DrillRun, type OpponentSelection } from "@chess-tabiya/runtime";
+import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import { describe, expect, it } from "vitest";
 
 import { DrillApi, PLANNED_SURFACES } from "./api.js";
@@ -158,7 +159,7 @@ describe("DrillApi", () => {
               profiles: botRosterFixture(),
             },
           },
-          providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },
+          providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "explorer-primary": "available", "tablebase-primary": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture", "explorer-primary": "local_fixture", "tablebase-primary": "local_fixture" }),
           surfaces: {
             play: "available",
             review: "available",
@@ -266,7 +267,7 @@ describe("DrillApi", () => {
     };
 
     expect(await api.capabilities()).toMatchObject({
-      providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none" },
+      providerHealth: { generatedAt: "2026-09-24T12:00:00.000Z" },
       surfaces: { play: "available", learn: "available" },
     });
     expect((await api.corpus(run.id, run.nodes[0]!.id)).result.kind).toBe("abstention");

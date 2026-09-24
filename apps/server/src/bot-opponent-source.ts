@@ -14,10 +14,10 @@
  *   re-enter ONLY through the shared operation-specific parser `parsePersistedProviderDelivery`
  *   ([[D3030]]), never as caller or stored JSON trusted by shape.
  *
- * `BotProviderAvailability` derives profile availability from the exchange's own outcomes
- * (delivery → available; `provider_unavailable`/`identity_mismatch` → unavailable). It has no
- * configuration input. Provider health (`rfc/provider-health-degradation.md`) is a draft; when it
- * lands, its snapshot replaces this observer behind the same `BotProviderAvailabilitySnapshot`.
+ * `BotProviderAvailability` projects the provider-health authority
+ * (`rfc/provider-health-degradation.md`) — its snapshot, exchange-operation availability and
+ * release receipt — into the roster's `BotProviderAvailabilitySnapshot`; it has no configuration
+ * input and no private health state.
  */
 import {
   BOT_LAYER_DECLARATIONS,
@@ -27,6 +27,7 @@ import {
   type BotProfileReference,
   type BotProviderAvailabilitySnapshot,
   type BotProviderOperationState,
+  type ProviderOperationAvailability,
   type MaiaPolicyPage,
   type MaiaPolicyPageRequest,
   type ProviderDelivery,
@@ -36,6 +37,7 @@ import {
 } from "@chess-tabiya/runtime";
 
 import type { BotMaiaPolicyPage, BotProviderResult, BotStockfishRootTable } from "./bot-policy-compiler.js";
+import type { ProviderRegistry, ProviderReleaseReceipt } from "./provider-health.js";
 
 type MaiaDelivery = ProviderDelivery<MaiaPolicyPage, "maia.policy_page@1">;
 type StockfishDelivery = ProviderDelivery<StockfishLegalRootTable, "stockfish.legal_root_table@1">;
@@ -213,38 +215,47 @@ export function reloadBotSources(value: unknown): {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Availability derived from the exchange's own outcomes.
+// Availability: the provider-health authority's snapshot and release receipt (D3031 / D7).
 
 type ObservedOperation = "maia.policy_page@1" | "stockfish.legal_root_table@1";
 
-/**
- * Classifies one typed exchange outcome. Transient outcomes (deadline, queue full, cancellation,
- * one malformed response) say nothing about whether the provider is present and leave the state.
- */
-export function observedProviderState(result: TypedProviderResult<ObservedOperation>): BotProviderOperationState | undefined {
-  if (result.kind === "success") return "available";
-  if (result.kind === "source_failure" && (result.reason === "provider_unavailable" || result.reason === "identity_mismatch")) return "unavailable";
-  return undefined;
+/** Projects one provider-health operation availability to the roster's closed per-operation state. */
+export function botOperationState(availability: ProviderOperationAvailability): BotProviderOperationState {
+  if (availability.state === "available") return "available";
+  if (availability.state === "unavailable") return "unavailable";
+  // requestable_unverified, recovering, temporarily_blocked and conditional/cached-only: a roster
+  // card has no position or request digest with which to prove a hit, so it is at best conditional.
+  return "unverified";
 }
 
+/**
+ * The bot roster's view of provider health (rfc/bot-policy.md §4.3). It defines no bot-private
+ * health state: the snapshot, operation availability, release receipt and generation semantics all
+ * come from the one `ProviderRegistry`; every shared-exchange outcome the bot observes is settled
+ * into that registry (a sealed live delivery heals, a failure opens the serving instance).
+ */
 export class BotProviderAvailability {
-  #revision = 0;
-  #maia: BotProviderOperationState = "unverified";
-  #stockfish: BotProviderOperationState = "unverified";
+  readonly #health: ProviderRegistry;
+  readonly #releaseReceipt: () => ProviderReleaseReceipt | undefined;
 
-  /** Records the outcome of one real exchange; returns true when the snapshot changed. */
-  observe(operation: ObservedOperation, result: TypedProviderResult<ObservedOperation>): boolean {
-    const state = observedProviderState(result);
-    if (state === undefined) return false;
-    const current = operation === "maia.policy_page@1" ? this.#maia : this.#stockfish;
-    if (current === state) return false;
-    if (operation === "maia.policy_page@1") this.#maia = state;
-    else this.#stockfish = state;
-    this.#revision += 1;
-    return true;
+  constructor(health: ProviderRegistry, releaseReceipt: () => ProviderReleaseReceipt | undefined = () => undefined) {
+    this.#health = health;
+    this.#releaseReceipt = releaseReceipt;
+  }
+
+  /** Records one real exchange outcome into provider health. */
+  observe(_operation: ObservedOperation, result: TypedProviderResult<ObservedOperation>): void {
+    this.#health.settleExchange(result);
   }
 
   snapshot(): BotProviderAvailabilitySnapshot {
-    return Object.freeze({ revision: this.#revision, maia: this.#maia, stockfish: this.#stockfish });
+    const snapshot = this.#health.snapshot();
+    const receipt = this.#releaseReceipt();
+    return Object.freeze({
+      revision: snapshot.revision,
+      maia: botOperationState(this.#health.exchangeOperationAvailability("maia.policy_page@1", snapshot)),
+      stockfish: botOperationState(this.#health.exchangeOperationAvailability("stockfish.legal_root_table@1", snapshot)),
+      guardReleaseReceipt: receipt === undefined ? "absent" : this.#health.validateReleaseReceipt(receipt) === "valid" ? "valid" : "invalid",
+    });
   }
 }

@@ -58,6 +58,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       digest: ${{ steps.build.outputs.digest }}
+      imageid: ${{ steps.build.outputs.imageid }}
     steps:
       - uses: actions/checkout@v7
       - uses: docker/setup-buildx-action@v4
@@ -82,6 +83,8 @@ jobs:
     env:
       SERVER_IMAGE: ghcr.io/${{ github.repository_owner }}/chess-tabiya-server@${{ needs.server.outputs.digest }}
       MAIA_IMAGE: ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia@${{ needs.maia.outputs.digest }}
+      MAIA_MANIFEST_DIGEST: ${{ needs.maia.outputs.digest }}
+      MAIA_CONFIG_DIGEST: ${{ needs.maia.outputs.imageid }}
     steps:
       - uses: actions/checkout@v7
       - name: Render digest-pinned Compose release
@@ -89,6 +92,8 @@ jobs:
           mkdir -p release
           sed -e "s|__SERVER_IMAGE__|${SERVER_IMAGE}|g" \
               -e "s|__MAIA_IMAGE__|${MAIA_IMAGE}|g" \
+              -e "s|__MAIA_MANIFEST_DIGEST__|${MAIA_MANIFEST_DIGEST}|g" \
+              -e "s|__MAIA_CONFIG_DIGEST__|${MAIA_CONFIG_DIGEST}|g" \
               deploy/compose.release.template.yaml > release/compose.yaml
           docker compose -f release/compose.yaml config --quiet
       - name: Publish release Compose file

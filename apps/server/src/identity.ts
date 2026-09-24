@@ -7,8 +7,9 @@ import {
 } from "node:crypto";
 
 import { ServerError } from "./errors.js";
-import { serializeAccountBundle } from "./account-data.js";
+import { accountInventory, serializeAccountBundle, type AccountInventoryV1 } from "./account-data.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
+import { ACCOUNT_REDERIVED_TABLES, planAccountRestore, readPortableAccountBundle, restoredCounts, type AccountImportReceiptV1 } from "./account-import.js";
 import type { Learner, RunStorage, StoredLearner } from "./storage.js";
 import type { Principal } from "./authorization.js";
 
@@ -182,6 +183,41 @@ export class IdentityService {
     await this.#confirmPassword(principal, password);
     const serialized = serializeAccountBundle(this.#storage.accountBundle(principal.learnerId));
     return Object.freeze({ ...serialized, filename: `tabiya-account-${principal.handle}.json` });
+  }
+
+  /** The standing twelve-class inventory: counts only, from the export projection. */
+  accountInventory(principal: Principal): AccountInventoryV1 {
+    return accountInventory(this.#storage.accountBundle(principal.learnerId));
+  }
+
+  /**
+   * Read-only: what importing this file would restore, decline and collide with. No password —
+   * like the deletion preview it discloses nothing the learner does not already hold.
+   */
+  previewAccountImport(principal: Principal, value: unknown): AccountImportReceiptV1 {
+    return this.#accountImport(principal, value, false);
+  }
+
+  async importAccount(principal: Principal, password: string, value: unknown): Promise<AccountImportReceiptV1> {
+    await this.#confirmPassword(principal, password);
+    return this.#accountImport(principal, value, true);
+  }
+
+  #accountImport(principal: Principal, value: unknown, commit: boolean): AccountImportReceiptV1 {
+    const bundle = readPortableAccountBundle(value);
+    const plan = planAccountRestore(bundle);
+    const conflicts = this.#storage.restoreAccountBundle(principal.learnerId, plan, { commit, at: this.#now().toISOString() });
+    return Object.freeze({
+      version: 1 as const,
+      mode: commit ? "committed" as const : "preview" as const,
+      bundleDigest: serializeAccountBundle(bundle).digest,
+      bundleFormatVersion: bundle.formatVersion,
+      sourceStorageVersion: bundle.source.storageVersion,
+      restored: restoredCounts(plan),
+      rederived: Object.freeze([...ACCOUNT_REDERIVED_TABLES]),
+      notRestored: plan.notRestored,
+      conflicts,
+    });
   }
 
   async #confirmPassword(principal: Principal, password: string): Promise<void> {
