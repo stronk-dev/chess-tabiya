@@ -190,6 +190,23 @@ describe("content sourcing foundation", () => {
     expect((await checkSourcingDirectory(unhashed)).issues.map((value) => value.code)).toContain("CITATION_SOURCE_UNRETRIEVABLE");
   });
 
+  it("P7: a citable_text source must name an immutable revision (rfc/theory-knowledge-pipeline.md §9)", async () => {
+    const cite = (ledger: any) => {
+      ledger.records[0] = { ...ledger.records[0], kind: "citable_text", grounds: "citable_source", values: { title: "Fixture source", sectionRef: "§1", quotedText: "A bounded source excerpt." }, supports: ["/objective/summary"] };
+    };
+    const mutable = await candidate();
+    await mutate(resolve(mutable, "evidence.json"), cite);
+    await mutate(resolve(mutable, "sources.json"), (manifest) => { manifest.entries[0].origin.url = "https://en.wikibooks.org/wiki/Chess/The_Endgame"; });
+    expect((await checkSourcingDirectory(mutable)).issues.map((value) => value.code)).toContain("CITATION_REVISION_UNPINNED");
+
+    const pinned = await candidate();
+    await mutate(resolve(pinned, "evidence.json"), cite);
+    await mutate(resolve(pinned, "sources.json"), (manifest) => { manifest.entries[0].origin.url = "https://en.wikibooks.org/w/index.php?title=Chess/The_Endgame&oldid=4242584"; });
+    const codes = (await checkSourcingDirectory(pinned)).issues.map((value) => value.code);
+    expect(codes).not.toContain("CITATION_REVISION_UNPINNED");
+    expect(codes).not.toContain("CITATION_SOURCE_UNRETRIEVABLE");
+  });
+
   it("uses citable_text only to earn the provenance_note claim label", async () => {
     const directory = await candidate();
     const text = "This authored description follows the cited source.";

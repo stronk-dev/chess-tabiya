@@ -396,6 +396,18 @@ export type WorkflowPreferenceReceipt =
       readonly moduleOverrides: CustomModuleOverrides }
   | { readonly kind: "invalid_fallback"; readonly reason: "malformed" | "storage_unavailable" };
 
+/**
+ * The `workflow-preference` shared resource (rfc/assistance-config-register.md): one member per
+ * landed persisted workflow-preference version, read by the catalogue's `string_tuple` reader. v1
+ * (`{ version: 1, preset }`) is the adopted baseline the web loader still migrates; v2 is the
+ * current sealed value landed by rfc/intent-presets.md. `assistance-register.test.ts` binds the last
+ * member to `WorkflowPreferenceV2.version`.
+ */
+export const WORKFLOW_PREFERENCE_VERSIONS = [
+  "workflow_preference_v1",
+  "workflow_preference_v2",
+] as const;
+
 export interface WorkflowPreferenceV2 {
   readonly version: 2;
   readonly assistanceHead: 4;

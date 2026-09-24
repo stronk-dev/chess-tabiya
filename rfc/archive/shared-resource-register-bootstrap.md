@@ -1,6 +1,12 @@
 # RFC: Shared-resource register catalogue bootstrap
 
-- **Status:** awaiting D3 — implemented 2026-09-24 at the owner's direction to implement ready RFCs, without the D1 fresh review; the catalogue, parser and catalogue-driven checker ship with all fourteen §7 controls in `make shared-resource-catalogue`. Only the three consumer rebases remain
+- **Status:** implemented 2026-09-24 at the owner's direction to implement ready RFCs, without
+  the D1 fresh review. The catalogue, parser and catalogue-driven checker ship with all fourteen §7
+  controls in `make shared-resource-catalogue`. All three D3 consumer rebases landed the same day as
+  catalogue rows over the retained `string_tuple` reader, each over a present source:
+  `provider-protocol` ([[D2455]]), `semantic-conventions` ([[D2466]]) and `assistance-config` /
+  `workflow-preference` ([[D2454]]). Archived with the canonical description in
+  `docs/development.md`
 - **Author:** Codex
 - **Created:** 2026-08-31; cut to the owner-ruled scope 2026-09-06
 - **Design refs:** none; this is repository process and changes no learner or product behavior
@@ -214,6 +220,11 @@ records do not grow a forbidden date field ([[D3083]]). Missing rows, metadata, 
 discharge fail. The items may leave `item:D3034` only in the same landing that makes this RFC's
 foundation item terminal.
 
+**Discharged 2026-09-24.** All three rebases landed (see D3). Archiving removes this table from the
+active population the gate reads. The coordinator's closeout transitions `D3034`, `D2454`, `D2455`
+and `D2466` in `planning/work-state.json` and `design/BACKLOG.md` and appends the exploration log
+in the merging commit; this landing was instructed not to edit those files.
+
 ## 7. Able-to-fail contract
 
 After repairing [[D3116]], [[D3117]], [[D3118]] and [[D3119]], another fresh review and
@@ -278,7 +289,7 @@ No product, schema, migration, vocabulary or content bytes change in this implem
 |---|---|---|---|---|
 | D1 | Fresh independent review of the cut contract; due 2026-09-07 | claude | review receipt plus verdict | **2026-09-24 — not run**: the owner directed implementation of ready RFCs in the coordinator session; the fourteen executable §7 controls stand in its place |
 | D2 | Catalogue/checker implementation after acceptance; due 2026-09-07 | codex | implementing SHA plus `make verify-awake` | **2026-09-24** — `rfc/shared-resource-registers.json`, `parseResourceCatalogue`, catalogue-driven C1–C8 and `make shared-resource-catalogue` (13 tests, 14 controls) in `verify-governance` |
-| D3 | Rebase exactly [[D2454]], [[D2455]], [[D2466]]; due 2026-09-08 | codex | three RFC amendments and transitioned work-state items | |
+| D3 | Rebase exactly [[D2454]], [[D2455]], [[D2466]]; due 2026-09-08 | codex | three RFC amendments and transitioned work-state items | **2026-09-24** — [[D2455]] `67d208c6` (`provider-protocol-register.md`: one `members` row, empty tuple created first); [[D2466]] `2f2661bc` (`semantic-convention-register.md`: `semantic-conventions` row; the 48 members landed in `3ee872d6`); [[D2454]] `fc04c04d` (`assistance-config-register.md`: `assistance-config` and `workflow-preference` rows). No rebase needed a fourth reader, absent-source admission or a checker edit. The work-state transitions belong to the coordinator closeout (see §6) |
 
 ## Open questions
 
@@ -287,6 +298,14 @@ when a concrete resource proves one necessary.
 
 ## Changelog
 
+- 2026-09-24: archived as implemented (claude). D3 is discharged by the three consumer rebases,
+  and each confirms the §3 claim that a present resource which fits a retained reader is one data
+  row plus its register section. `provider-protocol`, `semantic-conventions`, `assistance-config`
+  and `workflow-preference` all fit the `string_tuple` reader once their source bytes existed, so
+  none needed a new reader. Adding catalogue rows exposed two §7 fixture assumptions that the first
+  row is `campaign-schema` (§7.2 claim-kind mismatch and §7.13). These are test brittleness, not
+  contract defects, and now address that row by id. The catalogue has twelve rows. Absent-source
+  admission remains [[D3082]].
 - 2026-09-24: implemented. `RESOURCE_NAMES`/`SCHEMA_SLUGS` deleted; the checker loads the seed-equal catalogue and every check reads it. Register and schema-digest markers and schema `$id` slugs now share the digit-bearing id grammar. A catalogue row whose source is absent is reported by C7 rather than dereferenced by C2/C4/C6. The pre-implementation author/review harnesses left `verify-rfc-evidence` because they assert the replaced inventories.
 - 2026-09-07: bounded repairs close [[D3116]]–[[D3119]] and [[D3131]]–[[D3133]] in the contract/author gate; fresh review remains.
 - 2026-09-07: fresh review returned source aliases, non-canonical lanes, mismatched id grammars and unchecked exports; the seven-resource cut survives.

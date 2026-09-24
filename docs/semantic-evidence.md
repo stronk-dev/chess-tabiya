@@ -150,10 +150,10 @@ engine principal variation.
   edge; defender duty is memoised per window-start FEN within one call; full `localSemanticEvents`
   fan-out is never used except by the eager byte-parity oracle.
 - **Identity.** Events order by end ply, start ply, projection and id. The digest covers the manifest
-  digest, the convention digest, the ordered exact edges and each event's input value digests, run,
-  branch, origin, path, event ids and receipts. The semantic-convention provenance predecessor has
-  not landed, so the result carries `conventionReceipt.status: "predecessor_unlanded"` and digests
-  the in-catalogue convention text rather than claiming a registry head.
+  digest, the compiled convention-registry digest, the ordered exact edges and each event's input
+  value digests and sealed convention-receipt digest, run, branch, origin, path, event ids and
+  receipts. The result's `conventionReceipt` (`status: "registered"`) names the registry digest, the
+  union of the emitted events' convention refs and each event's receipt digest in emission order.
 - **Server.** `apps/server/src/recorded-semantic-path.ts` exposes the injected, read-authorised
   `compileRecordedSemanticPath`; there is no public raw-evidence route. No Review, module or
   longitudinal application operation consumes it yet, so the RFC stays `awaiting` (criterion 13).

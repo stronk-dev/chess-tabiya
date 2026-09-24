@@ -15,6 +15,7 @@ import {
   validateClaimBindings,
 } from "./claim-binding.js";
 import { EXPLORER_TEMPLATE_ID, RATING_GROUPS, SPEEDS } from "./explorer.js";
+import { pinnedRevision } from "./revision-pin.js";
 import { sourceGameSidecarIssues } from "./source-game.js";
 import {
   type EvidenceLedger,
@@ -292,6 +293,11 @@ export function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[
       const entry = manifest?.entries.find((candidate) => candidate.sourceId === record.sourceId && candidate.retrievedAt === record.retrievedAt);
       if (entry?.origin.kind !== "http" || !nonEmpty(entry.origin.sha256)) {
         issues.push(issue("CITATION_SOURCE_UNRETRIEVABLE", `/records/${index}`, "citable_text requires a manifest-linked HTTP source with a content sha256"));
+      } else if (pinnedRevision(entry.origin.url) === undefined) {
+        // P7 (rfc/theory-knowledge-pipeline.md §9): sha256 pins bytes, but a mutable URL makes the
+        // next legitimate fetch indistinguishable from drift. Only an origin adapter that extracts an
+        // immutable revision from the URL itself admits a citation source.
+        issues.push(issue("CITATION_REVISION_UNPINNED", `/records/${index}`, "citable_text requires a manifest source URL naming an immutable revision (MediaWiki oldid or a commit-pinned GitHub path)"));
       }
     }
     if (record.kind === "puzzle_provenance") {
