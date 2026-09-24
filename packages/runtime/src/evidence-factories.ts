@@ -35,6 +35,8 @@ import {
   type ProjectionDeclaration,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
+import { directProjectionConventions } from "./evidence-convention-closure.js";
+import { conventionReceipt, type ConventionReceipt } from "./evidence-conventions.js";
 import { resolveEvidenceReference, type EvidenceReferenceResolution } from "./evidence-ref-resolution.js";
 import { kingZoneEvents, kingZoneReading } from "./king-state.js";
 import { exactLegalMoveMap, exactMoveIdentity } from "./legal-moves.js";
@@ -345,12 +347,65 @@ function authorityDigest(authority: unknown): string {
   return digest;
 }
 
-function mint<T>(route: string, symbol: string, payload: T, authority: unknown, sources: readonly (DeclaredEvidence<unknown> | string)[] = []): DeclaredEvidence<T> {
+// ---------------------------------------------------------------------------------------------
+// Convention closure (rfc/semantic-convention-provenance.md §4; [[D1921]])
+// ---------------------------------------------------------------------------------------------
+
+const SOURCE_CONVENTION_RECEIPTS = new Map<string, ConventionReceipt>();
+const INPUT_VALUE_DIGESTS = new WeakMap<object, string>();
+
+/** One sealed input's identity inside a derived receipt: producer, projection, payload and its own closure. */
+function conventionInputValueDigest(input: DeclaredEvidence<unknown>): string {
+  const cached = INPUT_VALUE_DIGESTS.get(input);
+  if (cached !== undefined) return cached;
+  const receipt = evidenceValueReceipt(input);
+  const digest = `sha256:${evidenceDigest({
+    producer: `${input.producer.id}@${input.producer.version}`,
+    projection: sealedRoute(input),
+    payloadDigest: receipt.payloadDigest,
+    convention: receipt.convention?.digest ?? null,
+  })}`;
+  INPUT_VALUE_DIGESTS.set(input, digest);
+  return digest;
+}
+
+/**
+ * The closure the mint seals with a value: the projection's direct refs plus, for a derived value,
+ * the closures of the exact sealed inputs actually used, under the canonical member identity. A
+ * source/computed value (no sealed inputs) has one per-route receipt.
+ */
+function mintConventionReceipt(route: string, sources: readonly (DeclaredEvidence<unknown> | string)[], instance: readonly VersionedEvidenceId[]): ConventionReceipt {
+  const inputs = sources.filter((source): source is DeclaredEvidence<unknown> => typeof source !== "string");
+  const direct = instance.length === 0 ? directProjectionConventions(route) : [...directProjectionConventions(route), ...instance];
+  if (inputs.length === 0 && instance.length > 0) return conventionReceipt(direct, { kind: "source" });
+  if (inputs.length === 0) {
+    let receipt = SOURCE_CONVENTION_RECEIPTS.get(route);
+    if (receipt === undefined) {
+      receipt = conventionReceipt(direct, { kind: "source" });
+      SOURCE_CONVENTION_RECEIPTS.set(route, receipt);
+    }
+    return receipt;
+  }
+  const refs = [...direct];
+  for (const input of inputs) refs.push(...(evidenceValueReceipt(input).convention?.refs ?? []));
+  return conventionReceipt(refs, {
+    kind: "derived",
+    member: [...new Set(inputs.map(sealedRoute))].sort().join("+"),
+    inputs: inputs.map((input) => ({ projection: sealedRoute(input), valueDigest: conventionInputValueDigest(input) })),
+  });
+}
+
+/**
+ * The local mint helper. Deliberately not exported. `instance` names the registered conventions a
+ * payload instance selected (a setup or method convention ref); unregistered refs fail the receipt.
+ */
+function mint<T>(route: string, symbol: string, payload: T, authority: unknown, sources: readonly (DeclaredEvidence<unknown> | string)[] = [], instance: readonly VersionedEvidenceId[] = []): DeclaredEvidence<T> {
   const projection = projectionFor(route);
   return declareEvidence(projection.producer, { id: projection.id, version: projection.version }, present(payload, route), {
     factory: symbol,
     inputDigest: authorityDigest(authority),
     sourceDigests: sources.map(sourceDigest),
+    convention: mintConventionReceipt(route, sources, instance),
   });
 }
 
@@ -381,8 +436,6 @@ function fenReading<T>(route: string, compute: (fen: string) => T, options: { re
   return factory({ route, symbol, shape: options.shape ?? "computed", arms: [{ fen: FEN }], result: "single", ...(options.dependency === undefined ? {} : { dependency: options.dependency }), ...(options.pending === undefined ? {} : { pending: options.pending }) }, ({ fen }: { readonly fen: string }) => mint(route, symbol, compute(validFen(fen)), { fen }));
 }
 
-const CONVENTION_CLOSURE_PENDING = "The direct convention identity is carried in-payload; the registered descriptor/closure receipt lands with semantic-convention-provenance.";
-
 export const createRulesCastlingReadingRightsV1Evidence = fenReading("rules.castling.reading.rights@1", castlingRights);
 export const createRulesTacticReadingLoosePieceV1Evidence = fenReading("rules.tactic.reading.loose_piece@1", loosePieceReading);
 export const createRulesTacticReadingRayClassificationV1Evidence = fenReading("rules.tactic.reading.ray_classification@1", rayClassificationReading);
@@ -395,14 +448,14 @@ export const createRulesTacticReadingDiscoveredLatencyV1Evidence = fenReading("r
 export const createRulesTacticReadingTrappedPieceV1Evidence = fenReading("rules.tactic.reading.trapped_piece@1", trappedPieceReading);
 export const createRulesTacticReadingBackRankV1Evidence = fenReading("rules.tactic.reading.back_rank@1", backRankReading);
 export const createRulesTacticConsequenceMateInOneV1Evidence = fenReading("rules.tactic.consequence.mate_in_one@1", mateInOne);
-export const createRulesSquareReadingControlV1Evidence = fenReading("rules.square.reading.control@1", squareControlReading, { dependency: "semantic-convention-provenance", pending: CONVENTION_CLOSURE_PENDING });
+export const createRulesSquareReadingControlV1Evidence = fenReading("rules.square.reading.control@1", squareControlReading, { dependency: "semantic-convention-provenance" });
 export const createRulesMobilityReadingPieceDestinationsV1Evidence = fenReading("rules.mobility.reading.piece_destinations@1", pieceDestinationsReading);
 export const createRulesMobilityReadingLegalMovesV1Evidence = fenReading("rules.mobility.reading.legal_moves@1", exactLegalMoveMap);
 export const createRulesPawnReadingContactsV1Evidence = fenReading("rules.pawn.reading.contacts@1", pawnContactsReading);
 export const createRulesPawnReadingCandidateMajorityV1Evidence = fenReading("rules.pawn.reading.candidate_majority@1", candidateMajorityReading);
 export const createRulesKingReadingZoneStateV1Evidence = fenReading("rules.king.reading.zone_state@1", kingZoneReading);
-export const createRulesTacticReadingDefenderDutySetV1Evidence = fenReading("rules.tactic.reading.defender_duty_set@1", defenderDutyReading, { dependency: "semantic-convention-provenance", pending: CONVENTION_CLOSURE_PENDING });
-export const createRulesPhaseReadingV2Evidence = fenReading("rules.phase.reading@2", phaseBandReading, { dependency: "semantic-convention-provenance", pending: "phase-bands@1 is carried as the payload conventionId; its registered descriptor lands with semantic-convention-provenance." });
+export const createRulesTacticReadingDefenderDutySetV1Evidence = fenReading("rules.tactic.reading.defender_duty_set@1", defenderDutyReading, { dependency: "semantic-convention-provenance" });
+export const createRulesPhaseReadingV2Evidence = fenReading("rules.phase.reading@2", phaseBandReading, { dependency: "semantic-convention-provenance" });
 /** Derived reading whose declared piece-count inputs are recomputed in the same pass from the FEN. */
 export const createDerivedMaterialReadingRoleSignatureV1Evidence = fenReading("derived.material.reading.role_signature@1", materialRoleSignatureReading, { shape: "derived" });
 /** Derived reading whose declared predicate inputs are recomputed in the same pass from the FEN. */
@@ -425,8 +478,8 @@ function cachedStructuralReading(fen: string): StructuralReading {
 }
 
 export const createRulesCastlingReadingLegalityV1Evidence = fenPopulation("rules.castling.reading.legality@1", castlingLegality);
-export const createRulesStructuralReadingNamedStructureV2Evidence = fenPopulation("rules.structural.reading.named_structure@2", (fen) => cachedStructuralReading(fen).structures.map((structure) => Object.freeze({ id: structure.id, name: structure.name, provenanceNote: structure.provenanceNote })), { dependency: "semantic-convention-provenance", pending: "The structure catalogue is the product-owned convention; its registered descriptor lands with semantic-convention-provenance." });
-export const createRulesEndgameClassificationV1Evidence = fenPopulation("rules.endgame.classification@1", (fen) => { const reading = endgameClassification(fen); return reading === null ? [] : [reading]; }, { dependency: "semantic-convention-provenance", pending: "endgame-material-census@1 is carried in-payload; its registered descriptor lands with semantic-convention-provenance." });
+export const createRulesStructuralReadingNamedStructureV2Evidence = fenPopulation("rules.structural.reading.named_structure@2", (fen) => cachedStructuralReading(fen).structures.map((structure) => Object.freeze({ id: structure.id, name: structure.name, provenanceNote: structure.provenanceNote })), { dependency: "semantic-convention-provenance" });
+export const createRulesEndgameClassificationV1Evidence = fenPopulation("rules.endgame.classification@1", (fen) => { const reading = endgameClassification(fen); return reading === null ? [] : [reading]; }, { dependency: "semantic-convention-provenance" });
 
 const STRUCTURAL_READING_KINDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count" && kind !== "named_structure"));
 export type StructuralReadingKind = (typeof STRUCTURAL_READING_KINDS)[number];
@@ -483,7 +536,7 @@ export const createRulesTacticConsequenceReplyBreadthV1Evidence = (() => {
 })();
 export const createRulesTacticEventCheckV1Evidence = edgePopulation("rules.tactic.event.check@1", (edge) => { const check = checkEvent(edge.beforeFen, edge.moveUci); return check === undefined ? [] : [check]; });
 export const createRulesTacticEventDoubleAttackV1Evidence = edgePopulation("rules.tactic.event.double_attack@1", (edge) => { const fork = doubleAttackEvent(edge.beforeFen, edge.moveUci); return fork === undefined ? [] : [fork]; });
-export const createRulesSquareEventControlV1Evidence = edgePopulation("rules.square.event.control@1", (edge) => squareControlEvents(edge.beforeFen, edge.moveUci, edge.afterFen).events, { dependency: "semantic-convention-provenance", pending: CONVENTION_CLOSURE_PENDING });
+export const createRulesSquareEventControlV1Evidence = edgePopulation("rules.square.event.control@1", (edge) => squareControlEvents(edge.beforeFen, edge.moveUci, edge.afterFen).events, { dependency: "semantic-convention-provenance" });
 export const createRulesMobilityEventPieceDestinationsV1Evidence = edgePopulation("rules.mobility.event.piece_destinations@1", (edge) => pieceDestinationEvents(edge.beforeFen, edge.moveUci, edge.afterFen).events);
 export const createRulesPawnEventDynamicsV1Evidence = edgePopulation("rules.pawn.event.dynamics@1", (edge) => pawnDynamicsEvents(edge.beforeFen, edge.moveUci, edge.afterFen));
 export const createRulesKingEventZoneStateV1Evidence = edgePopulation("rules.king.event.zone_state@1", (edge) => kingZoneEvents(edge.beforeFen, edge.moveUci, edge.afterFen));
@@ -491,8 +544,8 @@ function captureFactFor(edge: EvidenceEdge) {
   const fact = transitionSemanticFacts(edge.beforeFen, edge.moveUci, edge.afterFen).find((candidate) => candidate.family === "capture");
   return fact?.family === "capture" ? fact : undefined;
 }
-export const createRulesTacticEventDefenderRemovedV1Evidence = edgePopulation("rules.tactic.event.defender_removed@1", (edge) => defenderRemovedEvents(edge.beforeFen, edge.moveUci, edge.afterFen, captureFactFor(edge)), { dependency: "semantic-convention-provenance", pending: CONVENTION_CLOSURE_PENDING });
-export const createRulesTacticEventDefenderDutyRelocatedV1Evidence = edgePopulation("rules.tactic.event.defender_duty_relocated@1", (edge) => defenderDutyRelocatedEvents(edge.beforeFen, edge.moveUci, edge.afterFen), { dependency: "semantic-convention-provenance", pending: CONVENTION_CLOSURE_PENDING });
+export const createRulesTacticEventDefenderRemovedV1Evidence = edgePopulation("rules.tactic.event.defender_removed@1", (edge) => defenderRemovedEvents(edge.beforeFen, edge.moveUci, edge.afterFen, captureFactFor(edge)), { dependency: "semantic-convention-provenance" });
+export const createRulesTacticEventDefenderDutyRelocatedV1Evidence = edgePopulation("rules.tactic.event.defender_duty_relocated@1", (edge) => defenderDutyRelocatedEvents(edge.beforeFen, edge.moveUci, edge.afterFen), { dependency: "semantic-convention-provenance" });
 
 export const createRulesTacticEventLoosePieceV1Evidence = (() => {
   const route = "rules.tactic.event.loose_piece@1";
@@ -518,7 +571,7 @@ export const createRulesExchangePredicateLegalExchangeV1Evidence = (() => {
 export const createRulesTacticConsequenceForcedMateAfterMoveV1Evidence = (() => {
   const route = "rules.tactic.consequence.forced_mate_after_move@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, breadth: sealed("rules.tactic.consequence.reply_breadth@1"), maxAttackerMoves: value("an integer attacker-move horizon", Number.isSafeInteger) }], result: "availability", dependency: "semantic-convention-provenance", pending: "mate-proof@1 is carried in-payload; its registered descriptor lands with semantic-convention-provenance." }, ({ beforeFen, breadth, maxAttackerMoves }: { readonly beforeFen: string; readonly breadth: DeclaredEvidence<ReplyBreadth>; readonly maxAttackerMoves: number }): EvidenceAvailability<DeclaredEvidence<unknown>> => {
+  return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, breadth: sealed("rules.tactic.consequence.reply_breadth@1"), maxAttackerMoves: value("an integer attacker-move horizon", Number.isSafeInteger) }], result: "availability", dependency: "semantic-convention-provenance" }, ({ beforeFen, breadth, maxAttackerMoves }: { readonly beforeFen: string; readonly breadth: DeclaredEvidence<ReplyBreadth>; readonly maxAttackerMoves: number }): EvidenceAvailability<DeclaredEvidence<unknown>> => {
     const result = forcedMateAfterMove(validFen(beforeFen), breadth.payload.triggeringMove, maxAttackerMoves, breadth.payload);
     if (result.kind === "unavailable") return unavailable(result.reason);
     return available(mint(route, symbol, result.proof, { beforeFen, breadth, maxAttackerMoves }, [breadth]));
@@ -533,7 +586,7 @@ export const createRulesTacticConsequenceForcedMateAfterMoveV1Evidence = (() => 
 export const createRulesTacticConsequenceForcedMateAfterMoveV2Evidence = (() => {
   const route = "rules.tactic.consequence.forced_mate_after_move@2";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, breadth: sealed("rules.tactic.consequence.reply_breadth@1"), maxAttackerMoves: value("an integer attacker-move horizon", Number.isSafeInteger) }], result: "availability", dependency: "semantic-convention-provenance", pending: "mate-proof@1 is carried in-payload; its registered descriptor lands with semantic-convention-provenance." }, ({ beforeFen, breadth, maxAttackerMoves }: { readonly beforeFen: string; readonly breadth: DeclaredEvidence<ReplyBreadth>; readonly maxAttackerMoves: number }): EvidenceAvailability<DeclaredEvidence<ForcedMateAfterMoveProofV2>> => {
+  return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, breadth: sealed("rules.tactic.consequence.reply_breadth@1"), maxAttackerMoves: value("an integer attacker-move horizon", Number.isSafeInteger) }], result: "availability", dependency: "semantic-convention-provenance" }, ({ beforeFen, breadth, maxAttackerMoves }: { readonly beforeFen: string; readonly breadth: DeclaredEvidence<ReplyBreadth>; readonly maxAttackerMoves: number }): EvidenceAvailability<DeclaredEvidence<ForcedMateAfterMoveProofV2>> => {
     const result = forcedMateAfterMove(validFen(beforeFen), breadth.payload.triggeringMove, maxAttackerMoves, breadth.payload);
     if (result.kind === "unavailable") return unavailable(result.reason);
     const { proof } = result;
@@ -1455,16 +1508,14 @@ export type EndgameSetupMatchAvailability =
   | { readonly kind: "not_matched"; readonly convention: VersionedEvidenceId; readonly failedOperandIds: readonly string[] }
   | { readonly kind: "unavailable"; readonly reason: string; readonly dependency?: string };
 
-const SETUP_CONVENTION_PENDING = "The three cited, versioned setup conventions are registered in-code (endgame-setup.ts) because semantic-convention-register/provenance are still drafts; the shared register descriptor/closure receipt lands with semantic-convention-provenance.";
-
 export const createTheoryEndgameSetupMatchV1Evidence = (() => {
   const route = "theory.endgame.setup_match@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN, convention: value("a versioned setup convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance", pending: SETUP_CONVENTION_PENDING }, ({ fen, convention }: { readonly fen: string; readonly convention: VersionedEvidenceId }): EndgameSetupMatchAvailability => {
+  return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN, convention: value("a versioned setup convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance" }, ({ fen, convention }: { readonly fen: string; readonly convention: VersionedEvidenceId }): EndgameSetupMatchAvailability => {
     const result = endgameSetupMatch(validFen(fen), convention);
     if (result.kind === "unavailable") return Object.freeze({ kind: "unavailable", reason: result.reason, dependency: "semantic-convention-provenance" });
     if (result.kind === "not_matched") return result;
-    return Object.freeze({ kind: "available", value: mint(route, symbol, result.value, { fen, convention }, [evidenceDigest(endgameSetupConvention(convention))]) });
+    return Object.freeze({ kind: "available", value: mint(route, symbol, result.value, { fen, convention }, [evidenceDigest(endgameSetupConvention(convention))], [convention]) });
   });
 })();
 
@@ -1544,11 +1595,10 @@ export const createRunRecordEdgeV1Evidence = (() => {
 })();
 
 const EDGES = (min: number, max: number | null = min) => sealedList(min, max, "run.record.edge@1");
-const RECORDED_PENDING = "Exact run.record.edge@1 lineage is sealed; convention closure for the detector conventions lands with semantic-convention-provenance.";
 
 function recordedSequenceFactory<T>(route: string, arm: EvidenceInputArm, compute: (input: Record<string, unknown>, anchors: readonly RecordedMoveAnchor[]) => readonly T[], sources: (input: Record<string, unknown>) => readonly DeclaredEvidence<unknown>[]): EvidenceValueFactory<Record<string, unknown>, readonly DeclaredEvidence<T>[]> {
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [arm], result: "population", dependency: "semantic-convention-provenance", pending: RECORDED_PENDING }, (input: Record<string, unknown>) => {
+  return factory({ route, symbol, shape: "derived", arms: [arm], result: "population", dependency: "semantic-convention-provenance" }, (input: Record<string, unknown>) => {
     const anchors = recordedEdgeAnchors(input.edges as readonly DeclaredEvidence<unknown>[]);
     const inputs = sources(input);
     return Object.freeze(compute(input, anchors).map((payload) => mint(route, symbol, payload, input, inputs)));
@@ -1561,7 +1611,7 @@ const others = (input: Record<string, unknown>, ...keys: string[]) => keys.flatM
 export const createDerivedExchangeTradeCompletedV2Evidence = (() => {
   const route = "derived.exchange.trade_completed@2";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ first: sealed("rules.transition.event.capture@1"), second: sealed("rules.transition.event.capture@1"), firstEdge: sealed("run.record.edge@1"), secondEdge: sealed("run.record.edge@1") }], result: "population", dependency: "semantic-convention-provenance", pending: RECORDED_PENDING }, ({ first, second, firstEdge, secondEdge }: { readonly first: DeclaredEvidence<unknown>; readonly second: DeclaredEvidence<unknown>; readonly firstEdge: DeclaredEvidence<unknown>; readonly secondEdge: DeclaredEvidence<unknown> }) => {
+  return factory({ route, symbol, shape: "derived", arms: [{ first: sealed("rules.transition.event.capture@1"), second: sealed("rules.transition.event.capture@1"), firstEdge: sealed("run.record.edge@1"), secondEdge: sealed("run.record.edge@1") }], result: "population", dependency: "semantic-convention-provenance" }, ({ first, second, firstEdge, secondEdge }: { readonly first: DeclaredEvidence<unknown>; readonly second: DeclaredEvidence<unknown>; readonly firstEdge: DeclaredEvidence<unknown>; readonly secondEdge: DeclaredEvidence<unknown> }) => {
     const a = first.payload as CapturePayload, b = second.payload as CapturePayload;
     const [left, right] = [firstEdge.payload as RecordedEdge, secondEdge.payload as RecordedEdge];
     recordedEdgeAnchors([firstEdge, secondEdge]);
@@ -1631,7 +1681,7 @@ export type EndgameMethodStageAvailability =
 export const createTheoryEndgameMethodStageV1Evidence = (() => {
   const route = "theory.endgame.method_stage@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ setup: sealed("theory.endgame.setup_match@1"), edges: EDGES(1, null), convention: value("a versioned method convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance", pending: "The three cited, versioned method conventions are registered in-code (endgame-method.ts) pending semantic-convention-provenance. A stage is a retrospective observation only; reachability/forceability needs a quantified game-graph provider that does not exist (D2497), so no reachability projection is minted." }, ({ setup, edges, convention }: { readonly setup: DeclaredEvidence<unknown>; readonly edges: readonly DeclaredEvidence<unknown>[]; readonly convention: VersionedEvidenceId }): EndgameMethodStageAvailability => {
+  return factory({ route, symbol, shape: "derived", arms: [{ setup: sealed("theory.endgame.setup_match@1"), edges: EDGES(1, null), convention: value("a versioned method convention ref", (candidate) => hasExactKeys(candidate, ["id", "version"])) }], result: "availability", dependency: "semantic-convention-provenance" }, ({ setup, edges, convention }: { readonly setup: DeclaredEvidence<unknown>; readonly edges: readonly DeclaredEvidence<unknown>[]; readonly convention: VersionedEvidenceId }): EndgameMethodStageAvailability => {
     const anchors = recordedEdgeAnchors(edges);
     const method = endgameMethodConvention(convention);
     if (method === undefined) return Object.freeze({ kind: "unavailable", reason: `method_convention_unregistered:${convention.id}@${convention.version}`, dependency: "semantic-convention-provenance" });
@@ -1657,7 +1707,7 @@ export const createTheoryEndgameMethodStageV1Evidence = (() => {
         afterFen: trigger.afterFen,
         triggeringUci: trigger.moveUci,
       });
-      return mint(route, symbol, payload, { setup, edges: edges.slice(0, stage.stepIndex + 1), convention }, [setup, ...edges.slice(0, stage.stepIndex + 1), evidenceDigest(method)]);
+      return mint(route, symbol, payload, { setup, edges: edges.slice(0, stage.stepIndex + 1), convention }, [setup, ...edges.slice(0, stage.stepIndex + 1), evidenceDigest(method)], [convention]);
     })) });
   });
 })();

@@ -1,7 +1,13 @@
 # RFC: Bot roster
 
-- **Status:** implementing — **owner-directed partial implementation landed 2026-09-24 without the
-  fresh review: the 4×3 roster is registered, not playable.** `bot-profile-catalog@1` (owned by
+- **Status:** implementing — **second owner-directed landing 2026-09-24: the 4×3 roster is playable.**
+  Criterion 10 now passes through bot-policy's run lane 0.18 (migration 29), the mounted
+  `POST /runs/:runId/opponent-ply` over the shared provider exchange, and exchange-observed
+  availability (`available` | `conditional` | `unavailable`; guarded families stay conditional without
+  a provider-health release receipt). Play offers the roster as honest uncalibrated cards; raw rungs
+  moved under Advanced; nothing is preselected (D1611 unruled) and no names are invented (D1610).
+  Receipt addendum in `planning/bot-roster/implementation-receipt-2026-09-24.md`. *(First landing,
+  same day, without the fresh review: the 4×3 roster was registered, not playable.)* `bot-profile-catalog@1` (owned by
   `bot-policy` §1) derives the twelve `family.band@1` profiles as `FAMILIES × BANDS` with separate
   pinned `behaviorDigest`/profile digests; every profile has a grounded, source-bearing card from
   the committed depth-8 and D333 artifacts, registers `uncalibrated` and shows no strength number;
@@ -723,3 +729,10 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   The HumanPolicyModel is the profile's `model` + `band` fields rather than a
   `model.maia3.band-<b>@1` layer id (bot-policy §1 closes the layer union at three ids).
   Receipt: `planning/bot-roster/implementation-receipt-2026-09-24.md`.
+- 2026-09-24 (second owner-directed landing, no review round): criterion 10 lands — a learner picks
+  a registered profile in Play, the run stores its exact reference (run lane 0.18, migration 29),
+  every reply goes through `POST /runs/:runId/opponent-ply` over the shared provider exchange, and
+  resume/rematch keep the identity. The `/capabilities` `startable` field becomes the §4.3
+  availability union derived from exchange outcomes (the three dependency blockers are retired).
+  Criteria 5, 11, 12 and the owner inputs (D1610, D1611) remain open. Receipt addendum:
+  `planning/bot-roster/implementation-receipt-2026-09-24.md`.

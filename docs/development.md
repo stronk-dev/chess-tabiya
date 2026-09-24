@@ -74,8 +74,17 @@ do not prepend toolchain-specific environment assignments.
 `make verify-governance` runs the registers, roadmap and process invariants; and
 `make verify-content` runs tests that deliberately read committed corpus bytes. It also runs
 `make register-check`, which joins every active RFC's
-`tabiya-claims` declaration to the six shared-resource registers, derives their landed heads
-from the tree, refuses collisions, and prints the current next lanes. `make build` separately
+`tabiya-claims` declaration to the shared-resource registers, derives their landed heads
+from the tree, refuses collisions, and prints the current next lanes. The resource inventory is
+data: each register is one row of `rfc/shared-resource-registers.json` bound to one of three tree
+readers (a versioned JSON schema, the storage migration list, or a literal exported string tuple
+whose members are the landed identities). Adopting a new already-present resource is one catalogue
+row plus its README register section, never a checker edit; a resource whose source bytes do not
+exist yet is created first (for example an empty tuple) so the row can be admitted.
+`make semantic-convention-source-check` keeps the generated initial semantic-convention
+declarations byte-equal to their reviewed source, and `make semantic-convention-history-check`
+keeps `packages/runtime/src/evidence-convention-history.jsonl` append-only and equal to the
+declarations' semantic digests (a same-version meaning change fails; declare the next version). `make build` separately
 proves the Svelte production bundle. `make status-parity` binds the Active and Archive tables to
 their files, compares lifecycle tokens, and refuses malformed or ownerless surviving obligations.
 `make intent-parity` binds the owner/Claude amendments in living intent to their mirrored gate

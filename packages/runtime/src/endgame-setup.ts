@@ -1,16 +1,18 @@
 import type { Color, Role, Square } from "chessops/types";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
+import { isRegisteredConvention } from "./evidence-conventions.js";
 
 /**
  * Registered, cited and versioned KRPKR setup conventions (`theory.endgame.setup_match@1`).
  *
- * Home: this is the smallest honest registered home available on 2026-09-24. The
- * `semantic-convention-register` / `semantic-convention-provenance` RFCs that would own a shared
- * convention register are still drafts, so the three conventions are registered here as frozen,
- * versioned, code-owned records — the same way `phase-bands@1` and `endgame-material-census@1` are —
- * and every operand carries the published sentence it operationalizes. Retrieval receipts and the
- * operationalization choices are in `design/research/endgame-setup-conventions.md`.
+ * Registration: the three conventions are members of the shared semantic-convention register
+ * (`evidence-conventions.ts#CONVENTION_DECLARATIONS`, rfc/semantic-convention-provenance.md), whose
+ * declaration carries the definition, limitations and cited sources. This module keeps only the
+ * executable operand computers and the verbatim quotes they operationalize; a record here is usable
+ * only while its `id@version` is registered, and `evidence-conventions.test.ts` requires the
+ * registered declaration to equal the text rendered from this record byte-for-byte. Retrieval
+ * receipts and the operationalization choices are in `design/research/endgame-setup-conventions.md`.
  *
  * A match is geometry under the declared convention only. It carries no outcome, advice,
  * reachability or significance: those are separate evidence identities.
@@ -181,7 +183,9 @@ function deepFreeze<T>(value: T): T {
   return value;
 }
 
+/** The code record for a setup convention, only while that exact `id@version` is registered. */
 export function endgameSetupConvention(ref: EndgameConventionRef): EndgameSetupConvention | undefined {
+  if (!isRegisteredConvention(ref)) return undefined;
   return ENDGAME_SETUP_CONVENTIONS.find((convention) => convention.id === ref.id && convention.version === ref.version);
 }
 

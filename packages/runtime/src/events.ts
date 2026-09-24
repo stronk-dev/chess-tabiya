@@ -1,6 +1,7 @@
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { unknownNode } from "./errors.js";
+import { resolveBotProfileReference } from "./bot-profile-catalog.js";
 import { positionFromFen } from "./chess.js";
 import { terminalOutcome } from "./outcome.js";
 import { assertObjectiveTransition } from "./objective-state.js";
@@ -160,6 +161,15 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
   if (!isPack && (data.opponentPolicy.mode === "theory_strict" || data.opponentPolicy.mode === "perfect_tablebase")) {
     throw new TypeError("Non-pack sessions cannot use pack-only opponent modes");
   }
+  if (data.opponentPolicy.profile !== undefined) {
+    // Run schema 0.18: the profile is the WHOLE catalogue member, never a weaker id match.
+    const policy = data.opponentPolicy;
+    if (policy.mode !== "human_common" || policy.targetElo !== undefined || policy.temperature !== undefined || policy.topP !== undefined) {
+      throw new TypeError("A bot profile is valid only with human_common and no targetElo/temperature/topP");
+    }
+    if (isPack || data.sessionKind !== "position") throw new TypeError("A bot profile is valid only on a position session");
+    resolveBotProfileReference(policy.profile);
+  }
   if (data.start.fen !== data.rootNode.fen) {
     throw new TypeError("Run start FEN and root node FEN disagree");
   }
@@ -269,6 +279,9 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
           throw new TypeError(
             `opponent.move_selected ${event.seq} orderingBasis requires perfect_tablebase`,
           );
+        }
+        if (event.data.selection.policy !== undefined && (data.opponentPolicy.profile === undefined || event.data.selection.policyModeApplied !== "human_common")) {
+          throw new TypeError(`opponent.move_selected ${event.seq} carries a bot-policy envelope on a run without a bot profile`);
         }
         if (!nodes.some((node) => node.id === event.data.nodeId)) {
           throw unknownNode(event.data.nodeId);

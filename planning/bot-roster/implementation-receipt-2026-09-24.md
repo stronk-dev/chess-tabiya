@@ -36,3 +36,15 @@ playable**. Mechanism detail and the persistence/provider blockers are in
   strength.
 
 No strength number, Elo or human-like label is invented anywhere.
+
+## Addendum — playable landing (2026-09-24, second landing)
+
+Criterion 10 now passes: bot-policy's run lane 0.18 (migration 29) stores the chosen profile and one
+decision envelope per bot move, `POST /runs/:runId/opponent-ply` is mounted over the shared provider
+exchange, and `/capabilities` `startable` is the §4.3 availability union derived from exchange
+outcomes (the `run-schema-0.18` / `provider-exchange` / `provider-health` blockers are retired).
+Criterion 13 stays owner-open (D1611): Play no longer defaults to the raw 1400 rung — it preselects
+nothing, lists the roster first and moves raw rungs under Advanced. Criterion 14 is partially met by
+the bounded picker, card, status identity, retry and rematch (see `rfc/opponent-experience.md`
+changelog). Criteria 5, 11 and 12 are unchanged. Details and tests:
+`planning/bot-policy/implementation-receipt-2026-09-24-playable.md`.

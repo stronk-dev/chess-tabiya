@@ -74,8 +74,10 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
   local-domain envelope.
 - **Unavailability.** The closed failure reasons are `provider_unavailable`, `deadline_exceeded`,
   `queue_full`, `cancelled`, `invalid_response` and `identity_mismatch`. An unconfigured provider is
-  `provider_unavailable`. Examples: mock mode, the networked Maia sidecar with no container
-  identity, or the explorer without a token. It is never a fabricated result. More than seven
+  `provider_unavailable`. Examples: the networked Maia sidecar with no container identity, or the
+  explorer without a token. It is never a fabricated result. Mock-engine deployments serve the two
+  engine operations through the same exchange from labelled stand-ins (`Mock Stockfish`,
+  `Mock Maia`; `apps/server/src/mock-provider-engine.ts`), so Review and bot play run end to end. More than seven
   pieces is the local `outside_domain` fact, not a failure. A zero explorer population is
   successful source truth.
 - **Scheduling.** Each waiter gets its own scheduler-minted deadline. Queue time consumes the first

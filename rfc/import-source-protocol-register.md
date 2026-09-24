@@ -90,7 +90,7 @@ semantics, it must do so through a new measured claim, not a name collision.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | generic bootstrap accepted and implemented | `shared-resource-register-bootstrap.md` | archived bootstrap receipt | |
+| D1 | generic bootstrap accepted and implemented | `shared-resource-register-bootstrap.md` | archived bootstrap receipt | **2026-09-24** — implemented and archived at `rfc/archive/shared-resource-register-bootstrap.md` (owner-directed, without its D1 fresh review). It offers no absent-source admission ([[D3082]]); a present-first `string_tuple` row, as `provider-protocol` used, is the available path |
 | D2 | descriptor/additions/register marker implemented and checked | `import-source-protocol-register.md` | this RFC's implementation commit plus RFC/register/log closeout | |
 | D3 | product version 1 created under exact first-lane claim | `live-sources.md` | its accepted implementation | |
 

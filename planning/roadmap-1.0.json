@@ -446,28 +446,35 @@
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Three durable foundations landed in register order today: the longitudinal store (26), evidence-job durability (27) and the concept registry (28). The longitudinal worker now drains within 2 s by abandoning its claim for re-lease, and its projector is ~5.8x faster with byte-identical output. Bot-policy's run lane 0.18 holds the next position, then campaign.",
+          "summary": "Four durable migrations landed in register order today: longitudinal store (26), evidence jobs (27), concept registry (28) and bot-policy's run lane 0.18 (29), which stores the chosen bot profile and every bot decision with its provider deliveries so bots resume and rematch exactly. Campaign-core now holds the next position.",
           "impact": "advanced",
           "evidence": [
-            "planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md",
-            "rfc/longitudinal-store.md",
-            "rfc/concept-registry.md"
+            "apps/server/src/bot-opponent-ply.test.ts",
+            "planning/bot-policy/implementation-receipt-2026-09-24-playable.md",
+            "rfc/bot-policy.md",
+            "rfc/bot-roster.md",
+            "rfc/opponent-experience.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "longitudinal-store.md",
-              "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+              "id": "bot-policy.md",
+              "digest": "sha256:a65db5a0f082a3c56e55c4ab1f752fa46e194fb4b9d4e37af799c922dc222508"
             },
             {
               "kind": "rfc",
-              "id": "concept-registry.md",
-              "digest": "sha256:e371f8263638667cbbaf86b1e60858c21ef40fbd7f68bb85056b51395a1ed8b0"
+              "id": "bot-roster.md",
+              "digest": "sha256:f3b6cc6e7fe35ebe6db3019278c630a3d98226933f5b78fb1530f3cfb4d95b83"
+            },
+            {
+              "kind": "rfc",
+              "id": "opponent-experience.md",
+              "digest": "sha256:84f2bc773bfa7fd5af4f1417ea670f876d8b1c630dd5625f404967f83e7c6876"
             },
             {
               "kind": "work_state",
-              "id": "D3300",
-              "digest": "sha256:05039110c08731062f3da449d882bcf214a73b64f340ccb19257b3acfd2e406a"
+              "id": "D1610",
+              "digest": "sha256:40b950bf031f0aac48bd5604711a003dd660236a7df268d43a6bc6f008829cae"
             }
           ]
         },
