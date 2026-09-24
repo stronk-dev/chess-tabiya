@@ -141,8 +141,10 @@ describe("semantic evidence runtime", () => {
       const missingEvidence = declareEvidence(projection.producer, declaration.projection, missing);
       expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: missingEvidence, derivationInputs, anchor, sign: declaration.allowedSigns[0]!, operands: missing })).toThrowError(expect.objectContaining({ code: "EVIDENCE_EVENT_OPERAND_MISSING" }));
 
-      expectedFixtureIds.add(`semantic-event:${declaration.projection.id}:positive`);
-      expectedFixtureIds.add(`semantic-event:${declaration.projection.id}:hard-negative`);
+      // v1 fixture labels are byte-unchanged; recorded-path v2 successors carry their exact version.
+      const label = declaration.projection.version === 1 ? declaration.projection.id : `${declaration.projection.id}@${declaration.projection.version}`;
+      expectedFixtureIds.add(`semantic-event:${label}:positive`);
+      expectedFixtureIds.add(`semantic-event:${label}:hard-negative`);
     }
 
     expect(new Set(SEMANTIC_EVENT_DECLARATIONS.flatMap((declaration) => [...declaration.validation.positives, ...declaration.validation.hardNegatives]))).toEqual(expectedFixtureIds);

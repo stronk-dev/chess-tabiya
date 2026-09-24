@@ -20987,3 +20987,25 @@ The RFC's lead double-bug had already been fixed at `4f8ba581`.
 
 Both RFCs were implemented at the owner's direction, without a further review
 round. Their register rows are now `implementing`.
+
+### 2026-09-24 — recorded-semantic-path implemented (awaiting D1)
+
+- **Branch paths:** one strict `resolveBranchPath` refuses corrupt run graphs
+  with typed reasons.
+- **Exact edges:** `run.record.edge@1` is minted only by replaying the recorded
+  move. The eleven multi-edge tactic events gain exact-edge `@2` successors.
+- **Versioned inventory:** `SEMANTIC_EVENT_PROJECTION_REFS` replaces the
+  version-erasing id list.
+- **Compiler:** `recordedSemanticPath(run, branchId)` compiles a branch into
+  events with per-edge receipts, with a read-authorized server operation.
+- **Census:** over 108 imported games (6,991 plies) there were 0 refusals and
+  1,288 events, with exact/eager byte parity.
+- **Merge fix:** the candidate packet's projection generator now excludes
+  recorded-edge successors, because a candidate child is never a recorded edge.
+- **Ledger:** D1068, D1927, D1928, D1930 and D1933 close.
+- **Still open:** the RFC holds on D1 for its first production consumer, the
+  Review compiler. Convention receipts report `predecessor_unlanded` until
+  [[D1921]]/[[D1929]].
+- **Harness fallout:** several draft-RFC evidence harnesses with stale pins now
+  fail (`evidence-value-authority-author-contract`, D1710, D1711). None is in
+  `make verify`.

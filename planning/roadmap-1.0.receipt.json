@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8477a2617b8b23cdfed18b1c8957a54675facec91c6c77832f32eb395281ed6b",
+    "roadmap": "sha256:34424abed403b75b72b547e7ee72a277b70dd900160e1d48e873cb17c1c8b03f",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:4ede81b283687eb59d8ef1b56e88ca3302ee8b83bb6ed30e972d27cd5bf5539d",
-    "rfcRegister": "sha256:5842c1faace8a70541b966c8f5f218eddb119324b7b423358b948f60c7fd988b",
+    "workState": "sha256:3c9913ea33774443f9269e199b35edbd0cc6d8f5ab646a5e01f0f7a16f2dafaa",
+    "rfcRegister": "sha256:d43a9fc02445c8d4743b8131ee2870ff0540c0ef88e5d5d9e7093ce87e00baf9",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -20,10 +20,10 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 56,
+      "draft": 55,
       "accepted": 0,
       "implementing": 8,
-      "awaiting": 8,
+      "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
       "withdrawn": 0
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1219,
-      "done": 1091,
+      "blocked": 1214,
+      "done": 1096,
       "refused": 111
     },
     "workItems": {
@@ -163,14 +163,20 @@
       "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "The shared candidate evidence packet is implemented: one sealed, score-free, complete legal-candidate receipt compiled from the root position through the exact legal-move authority, admitted only by compiled-object identity, narrowable without recomputation, and consumed by semantic selection with a measured evaluated-alternatives count. Criterion 12's cold/warm record and the service/collector-registry successors remain open; no production consumer was added.",
+        "summary": "The recorded semantic path compiler is implemented: a strict branch resolver, an exact replay-validated recorded-edge source, versioned v2 multi-edge successors and an exact id@version event inventory compile any recorded branch into events with per-edge receipts. Its first production consumer (the Review compiler) and the convention predecessor remain open; the shared candidate packet landed alongside it.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/candidate-population.ts",
-          "planning/evidence-foundation-ux/shared-candidate-evidence-packet-implementation-2026-09-24.md",
+          "packages/runtime/src/recorded-semantic-path.ts",
+          "planning/recorded-semantic-path/implementation-2026-09-24.md",
+          "rfc/recorded-semantic-path.md",
           "rfc/shared-candidate-evidence-packet.md"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "recorded-semantic-path.md",
+            "digest": "sha256:37cb3035db519a343c4e4958fef74e0a356e485aba478db3135b5897c07a0214"
+          },
           {
             "kind": "rfc",
             "id": "shared-candidate-evidence-packet.md",
@@ -178,8 +184,8 @@
           },
           {
             "kind": "work_state",
-            "id": "D1071",
-            "digest": "sha256:c040ef7f72be185276a865742219ae67c09754f49f76f88049ba4bbf6d8c09c7"
+            "id": "D1067",
+            "digest": "sha256:718bc3ed0920635fb01c51614ae3f23940eff604866887d3750bbd631659b589"
           }
         ]
       },

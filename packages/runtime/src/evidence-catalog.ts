@@ -25,6 +25,9 @@ import type {
 } from "./evidence-contract.js";
 
 const ref = (id: string): VersionedEvidenceId => Object.freeze({ id, version: 1 });
+/** Explicit v2 ref; the v1 `ref`/`projection` helpers never mint a v2 identity by omission. */
+const ref2 = (id: string): VersionedEvidenceId => Object.freeze({ id, version: 2 });
+const refKey = (value: VersionedEvidenceId): string => `${value.id}@${value.version}`;
 const retired = (reason: string): EvidenceDispositionDeclaration => Object.freeze({ kind: "retired", reason });
 const producer = (id: string, plane: EvidencePlane, implementation: string, availability: ProducerDeclaration["availability"], outputs: readonly ProjectionDeclaration[]): ProducerDeclaration => Object.freeze({ id, version: 1, plane, implementation, availability, latency: availability === "provider" ? "interactive" : availability === "build_time" ? "offline" : "sync", outputs: Object.freeze(outputs) });
 
@@ -75,6 +78,36 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
     limitations: Object.freeze(options.limitations ?? []),
     ...(options.disposition === undefined ? {} : { disposition: options.disposition }),
   });
+}
+
+/**
+ * Separately named versioned helper for the recorded-path v2 successors (rfc/recorded-semantic-path §3).
+ * The successor keeps the v1 operands, signs, convention text and limitations byte-for-byte and only
+ * replaces the narrative run.record.move@1 source with the exact run.record.edge@1 source.
+ */
+function recordedPathSuccessor(v1: ProjectionDeclaration): ProjectionDeclaration {
+  if (v1.version !== 1) throw new TypeError(`${refKey(v1)} is not a v1 recorded-path predecessor`);
+  const move = refKey(ref("run.record.move"));
+  const swap = (values: readonly VersionedEvidenceId[]): readonly VersionedEvidenceId[] => Object.freeze(values.map((value) => refKey(value) === move ? ref("run.record.edge") : value));
+  if (![...v1.dependsOn, ...(v1.derivation?.inputs ?? v1.derivation?.anyOf?.flat() ?? [])].some((value) => refKey(value) === move)) {
+    throw new TypeError(`${refKey(v1)} does not derive from run.record.move@1`);
+  }
+  return Object.freeze({
+    ...v1,
+    version: 2,
+    semantics: `${v1.semantics} Derived from the exact run.record.edge@1 recorded-path source.`,
+    dependsOn: swap(v1.dependsOn),
+    ...(v1.derivation === undefined ? {} : {
+      derivation: v1.derivation.inputs !== undefined
+        ? Object.freeze({ inputs: swap(v1.derivation.inputs) })
+        : Object.freeze({ anyOf: Object.freeze(v1.derivation.anyOf.map(swap)) }),
+    }),
+  });
+}
+
+function withRecordedPathSuccessors(outputs: readonly ProjectionDeclaration[]): readonly ProjectionDeclaration[] {
+  const v2 = new Set(SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2).map((value) => value.id));
+  return Object.freeze([...outputs, ...outputs.filter((output) => v2.has(output.id)).map(recordedPathSuccessor)]);
 }
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([
@@ -146,7 +179,34 @@ export const SEMANTIC_WAVE_EVENT_PROJECTION_IDS = Object.freeze([
   "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
   "derived.tactic.overload_exploitation_observed",
 ] as const);
-export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS, ...BREADTH_EVENT_PROJECTION_IDS, ...SEMANTIC_WAVE_EVENT_PROJECTION_IDS]);
+const SEMANTIC_EVENT_V1_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS, ...BREADTH_EVENT_PROJECTION_IDS, ...SEMANTIC_WAVE_EVENT_PROJECTION_IDS]);
+
+/**
+ * rfc/recorded-semantic-path §3 ([[D1933]]): the one exact semantic-event authority. It replaces the
+ * version-erasing base-id semantic string inventory, because v1 and the recorded-path v2
+ * successors coexist under equal base ids. Manifest checks, censuses and complete-ingest consumers
+ * compare exact `id@version` keys from this list.
+ */
+export const SEMANTIC_EVENT_PROJECTION_REFS: readonly VersionedEvidenceId[] = Object.freeze([
+  ...SEMANTIC_EVENT_V1_PROJECTION_IDS.map(ref),
+  ref2("derived.exchange.trade_completed"),
+  ref2("derived.pawn.sequence.contact_timing"),
+  ref2("derived.pawn.sequence.harassment_pressure"),
+  ref2("derived.tactic.sequence.defender_consequence"),
+  ref2("derived.tactic.deflection_observed"),
+  ref2("derived.tactic.attraction_observed"),
+  ref2("derived.tactic.line_blocker_clearance_observed"),
+  ref2("derived.tactic.square_clearance_observed"),
+  ref2("derived.tactic.interference_observed"),
+  ref2("derived.tactic.check_zwischenzug_observed"),
+  ref2("derived.tactic.overload_exploitation_observed"),
+]);
+
+/**
+ * Explicitly lossy logical-family view (unique base ids). Analysis/display only: coexisting versions
+ * collapse into one family, so it can never police manifest closure or consumer completeness.
+ */
+export const SEMANTIC_EVENT_FAMILY_IDS: readonly string[] = Object.freeze([...new Set(SEMANTIC_EVENT_PROJECTION_REFS.map((value) => value.id))]);
 
 /** Closed Appendix-A inventory from tactical-collectors; checked set-equal to the compiled catalogue. */
 export const TACTICAL_COLLECTOR_PROJECTION_IDS = Object.freeze([
@@ -796,7 +856,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("theory.opening.runtime", "theory.opening.current_endpoint", "theory", { payloadType: "CurrentOpeningEndpoint", grounding: "cited_theory", exactness: "exact", confidence: "exact", operands: ["positionKey", "observedPly", "eco", "name", "sourcePly", "catalogue"], answerContent: ["fact", "theory"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["artifact_missing", "artifact_invalid", "digest_mismatch"] }, limitations: ["Exact endpoint only; never sticky, fuzzy, or a move prior."], disposition: { kind: "inspector_only", reason: "Runtime opening identity lands before learner-module selection and theory/Review bindings." } }),
     projection("theory.opening.runtime", "theory.opening.catalogue_membership", "theory", { payloadType: "OpeningCatalogueMembership", grounding: "cited_theory", exactness: "exact", confidence: "exact", operands: ["positionKey", "observedPly", "descendantEndpointCount", "catalogue"], answerContent: ["fact"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["artifact_missing", "artifact_invalid", "digest_mismatch"] }, limitations: ["Path membership never selects or exposes a descendant opening identity."], disposition: { kind: "inspector_only", reason: "Catalogue membership lands before a measured learner use; inspector count only." } }),
   ]),
-  producer("run.record", "record", "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts", "recorded", [
+  producer("run.record", "record", "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; packages/runtime/src/recorded-semantic-path.ts; apps/web/src/lib/evidence-sentences.ts", "recorded", [
     projection("run.record", "run.record.fork", "record", { payloadType: "RecordedForkNarrative", grounding: "recorded_run", operands: ["context", "forkNodeId", "sharedPly"], forms: ["sentence", "list", "panel"] }),
     projection("run.record", "run.record.move", "record", { payloadType: "RecordedMoveNarrative", grounding: "recorded_run", operands: ["context", "offset", "moveSan"], answerContent: ["fact", "move"], forms: ["sentence", "list", "panel"], limitations: ["This is an already-played recorded move, never a recommendation."] }),
     projection("run.record", "run.record.checkpoint_hit", "record", { payloadType: "RecordedCheckpointNarrative", grounding: "recorded_run", operands: ["context", "checkpointId", "plyOffset"], forms: ["sentence", "timeline_marker", "panel"] }),
@@ -804,6 +864,14 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("run.record", "run.record.consequence", "record", { payloadType: "RecordedConsequenceNarrative", grounding: "recorded_run", operands: ["context", "terminal"], forms: ["sentence", "timeline_marker", "panel"] }),
     projection("run.record", "run.record.imported_result", "record", { payloadType: "ImportedResultNarrative", grounding: "recorded_run", operands: ["context", "result"], forms: ["sentence", "panel"], limitations: ["A claim of the imported document, not a rules-derived outcome."] }),
     projection("run.record", "run.record.evidence_ref_resolution", "record", { payloadType: "EvidenceReferenceResolution", grounding: "declared_convention", exactness: "convention", operands: ["reference", "text", "sourceLabel"], answerContent: ["fact"], forms: ["sentence", "machine_condition"], limitations: ["A family-only reference token does not retain predicate operands or independently establish the referenced semantic fact; attached provider bytes travel as a separate declared source item."] }),
+    projection("run.record", "run.record.edge", "record", {
+      role: "source_record", payloadType: "RecordedEdge", grounding: "recorded_run", exactness: "exact", confidence: "exact",
+      semantics: "One exact recorded parent/child edge of a validated run path: run id, the child's actual recorded branch, both node ids and canonical FENs, canonical UCI and SAN, and child ply, reproduced by legal replay. Path-independent: a shared ancestral edge has one identity for every descendant path.",
+      operands: ["runId", "edgeBranchId", "beforeNodeId", "afterNodeId", "beforeFen", "afterFen", "moveUci", "moveSan", "ply"],
+      answerContent: ["fact", "move"], forms: ["list", "panel", "machine_condition"],
+      limitations: ["An already-played recorded edge, never a recommendation; engine principal variations and caller-built move arrays cannot mint it."],
+      disposition: { kind: "inspector_only", reason: "Exact recorded-path source for the v2 semantic successors; it has no ordinary sentence renderer." },
+    }),
     projection("run.record", "run.record.position", "record", { payloadType: "RecordedPosition", grounding: "recorded_run", exactness: "exact", confidence: "exact", operands: ["nodeId", "ply", "fen"], answerContent: ["fact"], forms: ["list", "panel", "machine_condition"], limitations: ["Exact recorded node position; not itself a learner sentence."], disposition: { kind: "inspector_only", reason: "Recorded position is an internal exact input to retrospective opening derivation at landing." } }),
   ]),
   producer("derived.compare_narrative", "derived", "packages/runtime/src/compare-strips.ts:comparisonNarrative", "local", [
@@ -834,9 +902,9 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       disposition: { kind: "experimental", reason: "Awaits learner-module consumer compilation for postcommit_nudge and review_map." },
     }),
   ]),
-  producer("derived.exchange", "derived", "packages/runtime/src/exchange.ts", "local", derivedExchangeOutputs),
-  producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts", "local", derivedTacticOutputs),
-  producer("derived.pawn", "derived", "packages/runtime/src/pawn-dynamics.ts", "local", derivedPawnOutputs),
+  producer("derived.exchange", "derived", "packages/runtime/src/exchange.ts", "local", withRecordedPathSuccessors(derivedExchangeOutputs)),
+  producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts", "local", withRecordedPathSuccessors(derivedTacticOutputs)),
+  producer("derived.pawn", "derived", "packages/runtime/src/pawn-dynamics.ts", "local", withRecordedPathSuccessors(derivedPawnOutputs)),
   producer("derived.material", "derived", "packages/runtime/src/material-state.ts", "local", derivedMaterialOutputs),
   producer("derived.king", "derived", "packages/runtime/src/semantic-evidence.ts", "local", derivedKingOutputs),
   producer("derived.activity", "derived", "packages/runtime/src/semantic-evidence.ts", "local", derivedActivityOutputs),
@@ -853,7 +921,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
 interface ConsumerSpec {
   readonly id: string;
   readonly implementation: string;
-  readonly projections?: readonly string[];
+  readonly projections?: readonly (string | VersionedEvidenceId)[];
   readonly timing?: ConsumerDeclaration["timing"];
   readonly roles?: ConsumerDeclaration["roles"];
   readonly sessions?: readonly string[];
@@ -865,6 +933,7 @@ interface ConsumerSpec {
   readonly disposition?: EvidenceDispositionDeclaration;
 }
 
+const exactRef = (value: string | VersionedEvidenceId): VersionedEvidenceId => typeof value === "string" ? ref(value) : value;
 const DEFAULT_TIMING: readonly EvidenceTiming[] = Object.freeze(["postcommit", "checkpoint", "attempt_end", "terminal", "review", "analysis"]);
 const DEFAULT_ROLES: readonly EvidenceRole[] = Object.freeze(["learner", "host", "participant", "spectator", "author", "operator"]);
 const DEFAULT_SESSIONS: readonly string[] = Object.freeze(["pack", "position", "imported"]);
@@ -903,14 +972,14 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "guidance.voice_compare", implementation: "comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", "rules.pivotal.marker", "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
   { id: "guidance.voice_story", implementation: "storyDeclaredEvidence", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim", "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "derived.story.eval_shift", "derived.story.last_level", "derived.story.title"], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
   { id: "assistance.arrows", implementation: "experimentalProducerlessArrows", disposition: { kind: "experimental", reason: "D546: migrated preference has no producer and no renderer; F5 or an owner ruling decides activation or retirement." } },
-  { id: "research.semantic_selection", implementation: "selectLocalSemanticEvidence", projections: SEMANTIC_EVENT_PROJECTION_IDS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
+  { id: "research.semantic_selection", implementation: "selectLocalSemanticEvidence", projections: SEMANTIC_EVENT_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
 ];
 
 export const EVIDENCE_CONSUMERS: readonly ConsumerDeclaration[] = Object.freeze(CONSUMER_SPECS.map((spec) => Object.freeze({
   id: spec.id,
   version: 1,
   implementation: spec.implementation,
-  accepts: Object.freeze((spec.projections ?? []).map(ref)),
+  accepts: Object.freeze((spec.projections ?? []).map(exactRef)),
   timing: Object.freeze(spec.timing ?? DEFAULT_TIMING),
   roles: Object.freeze(spec.roles ?? DEFAULT_ROLES),
   sessions: Object.freeze(spec.sessions ?? DEFAULT_SESSIONS),
@@ -922,12 +991,13 @@ export const EVIDENCE_CONSUMERS: readonly ConsumerDeclaration[] = Object.freeze(
   ...(spec.disposition === undefined ? {} : { disposition: Object.freeze(spec.disposition) }),
 })));
 
-const producerByProjection = new Map(EVIDENCE_PRODUCERS.flatMap((item) => item.outputs.map((output) => [output.id, item] as const)));
+const producerByProjection = new Map(EVIDENCE_PRODUCERS.flatMap((item) => item.outputs.map((output) => [refKey(output), item] as const)));
 
-export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CONSUMER_SPECS.flatMap((spec) => (spec.projections ?? []).map((projectionId, index) => {
-  const source = producerByProjection.get(projectionId);
-  if (source === undefined) throw new TypeError(`Catalogue consumer ${spec.id} names missing projection ${projectionId}`);
-  const projectionValue = source.outputs.find((value) => value.id === projectionId)!;
+export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CONSUMER_SPECS.flatMap((spec) => (spec.projections ?? []).map((projectionValueRef, index) => {
+  const projectionRef = exactRef(projectionValueRef);
+  const source = producerByProjection.get(refKey(projectionRef));
+  if (source === undefined) throw new TypeError(`Catalogue consumer ${spec.id} names missing projection ${refKey(projectionRef)}`);
+  const projectionValue = source.outputs.find((value) => refKey(value) === refKey(projectionRef))!;
   const forms = (spec.forms ?? DEFAULT_FORMS).filter((form) => projectionValue.forms.includes(form));
   const answers = (spec.answerContent ?? DEFAULT_ANSWERS).filter((answer) => projectionValue.answerContent.includes(answer));
   return Object.freeze({
@@ -935,7 +1005,7 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
     version: 1,
     implementation: spec.implementation,
     producer: ref(source.id),
-    projection: ref(projectionId),
+    projection: projectionRef,
     consumer: ref(spec.id),
     timing: Object.freeze(spec.timing ?? DEFAULT_TIMING),
     roles: Object.freeze(spec.roles ?? DEFAULT_ROLES),
@@ -949,12 +1019,14 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
 })));
 
 const R2_EXTERNAL_POPULATION = "r2-imported-sample@a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec";
-export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = Object.freeze(SEMANTIC_EVENT_PROJECTION_IDS.map((projectionId) => {
-  const source = producerByProjection.get(projectionId);
-  const output = source?.outputs.find((candidate) => candidate.id === projectionId);
-  if (output === undefined) throw new TypeError(`Semantic event catalogue names missing projection ${projectionId}`);
+export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = Object.freeze(SEMANTIC_EVENT_PROJECTION_REFS.map((projectionRef) => {
+  // v1 fixture labels stay byte-unchanged; v2 labels carry the exact version.
+  const projectionId = projectionRef.version === 1 ? projectionRef.id : refKey(projectionRef);
+  const source = producerByProjection.get(refKey(projectionRef));
+  const output = source?.outputs.find((candidate) => refKey(candidate) === refKey(projectionRef));
+  if (output === undefined) throw new TypeError(`Semantic event catalogue names missing projection ${refKey(projectionRef)}`);
   return Object.freeze({
-    projection: ref(projectionId),
+    projection: projectionRef,
     ...(output.derivation === undefined ? {}
       : output.derivation.inputs !== undefined
         ? { derivationInputs: Object.freeze(output.derivation.inputs) }

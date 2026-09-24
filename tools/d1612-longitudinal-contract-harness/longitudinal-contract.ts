@@ -4,7 +4,8 @@ import { createHash } from "node:crypto";
 import {
   AVOIDANCE_EVENT_PROJECTION_IDS,
   SEMANTIC_EVENT_DECLARATIONS,
-  SEMANTIC_EVENT_PROJECTION_IDS,
+  // v1-era base-id family view (rfc/recorded-semantic-path D1933); exact refs are SEMANTIC_EVENT_PROJECTION_REFS.
+  SEMANTIC_EVENT_FAMILY_IDS as SEMANTIC_EVENT_PROJECTION_IDS,
   TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
 } from "../../packages/runtime/src/evidence-catalog.js";
 import {

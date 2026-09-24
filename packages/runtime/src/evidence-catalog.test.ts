@@ -13,7 +13,8 @@ import {
   EVIDENCE_CONTRACT_DECLARATIONS,
   EVIDENCE_PRODUCER_IDS,
   EVIDENCE_PRODUCERS,
-  SEMANTIC_EVENT_PROJECTION_IDS,
+  SEMANTIC_EVENT_FAMILY_IDS,
+  SEMANTIC_EVENT_PROJECTION_REFS,
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
   STRUCTURAL_PREDICATE_PROJECTION_IDS,
   STRUCTURAL_READING_PROJECTION_IDS,
@@ -49,11 +50,13 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([37, 194, 25, 211]);
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([67, 67, 15, 1]);
-    expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([37, 206, 25, 222]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
+    const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
+    expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
-    expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
+    const semanticKeys = new Set(SEMANTIC_EVENT_PROJECTION_REFS.map(exact));
+    expect(manifest.bindings.filter((binding) => semanticKeys.has(exact(binding.projection))).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
   });
 
@@ -190,7 +193,7 @@ describe("primary evidence catalogue", () => {
 
   it("keeps all seven non-round-trip structural readings refused as semantic events", () => {
     const refused = ["outpost", "bishop_on_shade", "piece_distance", "piece_reach_count", "named_structure", "pawn_safe_square", "pawn_count"];
-    expect(refused.every((family) => !SEMANTIC_EVENT_PROJECTION_IDS.includes(`rules.structural.reading.${family}`))).toBe(true);
+    expect(refused.every((family) => !SEMANTIC_EVENT_FAMILY_IDS.includes(`rules.structural.reading.${family}`))).toBe(true);
     for (const family of refused) {
       const projection = EVIDENCE_PRODUCERS.find((item) => item.id === "rules.structural")!.outputs.find((item) => item.id === `rules.structural.reading.${family}`)!;
       expect(() => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, semanticEvents: [...EVIDENCE_CONTRACT_DECLARATIONS.semanticEvents!, { projection: { id: projection.id, version: 1 }, allowedSigns: projection.signs, requiredOperands: projection.operands, valence: "none", validation: { positives: ["positive"], hardNegatives: ["negative"] } }] })).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_EVENT_PROJECTION_REFUSED" }));

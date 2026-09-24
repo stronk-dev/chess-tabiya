@@ -24,6 +24,8 @@ type FactoryShape = "computed" | "derived" | "source_receipt" | "authored_author
 interface CurrentRoute {
   readonly oldOperation: string;
   readonly projection: string;
+  /** Exact projection version (rfc/recorded-semantic-path D1933): v1 and v2 share base ids. */
+  readonly version: number;
 }
 
 interface ProductionUse {
@@ -55,6 +57,7 @@ const SPECIALIZED = Object.freeze([
   { operation: "declareStructuralSemanticSourceEvidence", projections: STRUCTURAL_EVENT_PROJECTION_IDS },
   { operation: "declareTransitionSemanticSourceEvidence", projections: TRANSITION_EVENT_PROJECTION_IDS },
   { operation: "declareAvoidanceEvidence", projections: [...AVOIDANCE_EVENT_PROJECTION_IDS, "derived.semantic_avoidance.loose_piece", "derived.semantic_avoidance.pawn_islands"] },
+  { operation: "declareRecordedEdgeEvidence", projections: ["run.record.edge"] },
 ] as const);
 
 const CORRECTED_TARGETS: Readonly<Record<string, readonly TargetProfile[]>> = Object.freeze({
@@ -175,10 +178,10 @@ function productionUseIndex(operations: ReadonlySet<string>): ReadonlyMap<string
 
 function currentRoutes(): readonly CurrentRoute[] {
   const adapters = readFileSync(join(ROOT, ADAPTER), "utf8");
-  const generic = [...adapters.matchAll(/export const (declare[A-Za-z]+) = <T extends object>\(payload: T\) => exactObject\("[^"]+", "([^"]+)"/gu)]
-    .map((match) => ({ oldOperation: match[1]!, projection: match[2]! }));
-  const specialized = SPECIALIZED.flatMap((route) => route.projections.map((projection) => ({ oldOperation: route.operation, projection })));
-  return [...generic, ...specialized].sort((left, right) => left.projection.localeCompare(right.projection) || left.oldOperation.localeCompare(right.oldOperation));
+  const generic = [...adapters.matchAll(/export const (declare[A-Za-z]+) = <T extends object>\(payload: T\) => exactObject(V2)?\("[^"]+", "([^"]+)"/gu)]
+    .map((match) => ({ oldOperation: match[1]!, projection: match[3]!, version: match[2] === "V2" ? 2 : 1 }));
+  const specialized = SPECIALIZED.flatMap((route) => route.projections.map((projection) => ({ oldOperation: route.operation, projection, version: 1 })));
+  return [...generic, ...specialized].sort((left, right) => left.projection.localeCompare(right.projection) || left.version - right.version || left.oldOperation.localeCompare(right.oldOperation));
 }
 
 function defaultShape(plane: string): FactoryShape {
@@ -234,13 +237,13 @@ function factorySymbol(projection: string): string {
 }
 
 function buildReceipt() {
-  const declarations = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [projection.id, projection]));
+  const declarations = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [`${projection.id}@${projection.version}`, projection]));
   const producers = new Map(PRIMARY_EVIDENCE_MANIFEST.producers.map((producer) => [`${producer.id}@${producer.version}`, producer]));
   const current = currentRoutes();
   const uses = productionUseIndex(new Set(current.map((route) => route.oldOperation)));
   const routes = current.map((route) => {
-    const declaration = declarations.get(route.projection);
-    if (declaration === undefined) throw new TypeError(`undeclared mint projection ${route.projection}`);
+    const declaration = declarations.get(`${route.projection}@${route.version}`);
+    if (declaration === undefined) throw new TypeError(`undeclared mint projection ${route.projection}@${route.version}`);
     const producer = producers.get(`${declaration.producer.id}@${declaration.producer.version}`);
     if (producer === undefined) throw new TypeError(`missing producer for ${route.projection}`);
     const productionUses = uses.get(route.oldOperation) ?? [];
@@ -271,8 +274,8 @@ function buildReceipt() {
     .filter(([, rows]) => rows.every((row) => row.currentProductionUseCount === 0) && rows.some((row) => row.currentBindings.length > 0))
     .map(([projection]) => projection)
     .sort();
-  const minted = new Set(routes.map((route) => route.currentProjection.split("@")[0]!));
-  const noRoute = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => !minted.has(projection.id)).map((projection) => ({
+  const minted = new Set(routes.map((route) => route.currentProjection));
+  const noRoute = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => !minted.has(`${projection.id}@${projection.version}`)).map((projection) => ({
     projection: `${projection.id}@${projection.version}`,
     disposition: projection.disposition?.kind ?? "ordinary",
     requiredAction: projection.disposition?.kind === "retired" ? "remain_factoryless" : "add_factory_and_profile_before_binding",
@@ -311,7 +314,8 @@ if (process.argv.includes("--write")) {
   if (!existsSync(target) || readFileSync(target, "utf8") !== serialized) {
     throw new TypeError(`evidence value-authority route receipt is stale; run make evidence-value-authority-route-map-update`);
   }
-  if (receipt.summary.routeCount !== 192 || receipt.summary.distinctCurrentProjections !== 188 || receipt.summary.noRouteCount !== 6) {
+  // rfc/recorded-semantic-path: +1 run.record.edge@1 route and +11 exact v2 successor routes (192/188 before).
+  if (receipt.summary.routeCount !== 204 || receipt.summary.distinctCurrentProjections !== 200 || receipt.summary.noRouteCount !== 6) {
     throw new TypeError(`evidence value-authority route population drifted: ${JSON.stringify(receipt.summary)}`);
   }
   if (receipt.summary.boundProjectionsWithoutProductionUses.length > 0) {

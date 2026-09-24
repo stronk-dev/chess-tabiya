@@ -106,10 +106,53 @@ structured projection. The exact 14-file migration census is executable in
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 37 producers, 193 projections, 25 consumers and 210 bindings, plus
-67 semantic events, 67 eligibility rows, 15 reasons and one selection policy. All collections
+The primary manifest contains 37 producers, 206 projections, 25 consumers and 222 bindings, plus
+78 semantic events, 78 eligibility rows, 15 reasons and one selection policy. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
 startup and by `make semantic-evidence-check`.
+
+The exact semantic-event authority is `SEMANTIC_EVENT_PROJECTION_REFS` (`id@version`). The former
+base-id string inventory was removed because v1 and the recorded-path v2 successors coexist under
+equal ids; `SEMANTIC_EVENT_FAMILY_IDS` is the explicitly lossy family view for analysis and display
+only and never polices manifest or consumer closure.
+
+## Recorded semantic paths
+
+`recordedSemanticPath(run, branchId)` (`packages/runtime/src/recorded-semantic-path.ts`,
+`rfc/recorded-semantic-path.md`) is the only producer of the eleven multi-edge sequence projections
+over a real run. It accepts a `DrillRun` and a branch id only — never nodes, anchors, PGN arrays or an
+engine principal variation.
+
+- **Path authority.** `branchPath`/`branchPaths` delegate to `resolveBranchPath`, a total graph
+  resolver: unique branch and node ids, exactly one parentless root declared by exactly one
+  `run.started`, a present fork, every same-branch node reaching that fork through present parents
+  without a cycle, and exactly one graph tip. Node-array order is never trusted and a broken chain is
+  refused, not truncated (`BranchQueryError` `INVALID_BRANCH_GRAPH` with its `reason`).
+- **Exact edge source.** `declareRecordedEdgeEvidence(run, parent, child)` is the only constructor of
+  `run.record.edge@1` (inspector-only, no sentence renderer). It replays the move and refuses any
+  parent, ply, canonical UCI, canonical SAN or FEN disagreement. Its payload carries the child's
+  actual recorded branch, so a shared ancestral edge has one identity for every descendant path.
+- **v2 successors.** The eleven sequence projections have `@2` successors that keep the v1 operands,
+  signs, conventions and limitations and replace `run.record.move@1` with `run.record.edge@1`. Their
+  constructors bind every edge value-for-value to the operand anchors and refuse edges not minted
+  from an actual run. v1 declarations and constructors are unchanged and have no production caller.
+- **Receipts.** Every edge start receives exactly one receipt per evaluator row (eleven projections,
+  thirteen rows): `emitted`, `no_witness` (an evaluated negative) or `insufficient_continuation`
+  (not a negative). Any path or edge corruption refuses the whole path before any detector runs.
+- **Execution shape.** One `transitionSemanticEvents` compile and one `checkSemanticEvent` probe per
+  edge; defender duty is memoised per window-start FEN within one call; full `localSemanticEvents`
+  fan-out is never used except by the eager byte-parity oracle.
+- **Identity.** Events order by end ply, start ply, projection and id. The digest covers the manifest
+  digest, the convention digest, the ordered exact edges and each event's input value digests, run,
+  branch, origin, path, event ids and receipts. The semantic-convention provenance predecessor has
+  not landed, so the result carries `conventionReceipt.status: "predecessor_unlanded"` and digests
+  the in-catalogue convention text rather than claiming a registry head.
+- **Server.** `apps/server/src/recorded-semantic-path.ts` exposes the injected, read-authorised
+  `compileRecordedSemanticPath`; there is no public raw-evidence route. No Review, module or
+  longitudinal application operation consumes it yet, so the RFC stays `awaiting` (criterion 13).
+
+`make recorded-semantic-path-check` runs the fixtures, the imported-sample census, eager parity and
+the 20/40/80-ply timing arms; the pinned performance tier enforces total p95 ≤ 500 ms.
 
 Provider absence remains explicit through the F1 binding contract. F2's initial events are local
 rules/convention facts, so the complete-population selector never treats missing provider output as

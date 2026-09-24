@@ -220,6 +220,15 @@ candidate-packet-projections-check:
 candidate-closure-census:
 	node tools/candidate-closure-census.mjs $(POSITIONS)
 
+# rfc/recorded-semantic-path §8: fixtures, exact/eager parity, imported-sample census and the
+# pinned 20/40/80-ply timing arms (RECORDED_PATH_TIMING=report downgrades the budget to a warning
+# on unpinned hosts; the pinned performance tier enforces it).
+.PHONY: recorded-semantic-path-check
+recorded-semantic-path-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
+	./node_modules/.bin/esbuild apps/server/src/recorded-semantic-path-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/recorded-semantic-path-check.js
+	node apps/server/dist/recorded-semantic-path-check.js
+
 .PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check semantic-search-stockfish-child-capture semantic-search-stockfish-child-check semantic-search-stockfish-child-beam semantic-search-maia-capture semantic-search-maia-check semantic-search-maia-child-capture semantic-search-maia-child-check semantic-search-maia-child-prefix semantic-search-maia-configured-window semantic-search-maia-direct-check semantic-search-maia-direct-frontier semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-touch semantic-search-semantic-reserve semantic-search-relation-event semantic-search-relation-event-reserve semantic-search-local-contrast semantic-search-local-rank-concordance semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 semantic-search-input-readiness:
 	$(CI_NODE) tools/d3262-search-calibration/input-readiness.mjs

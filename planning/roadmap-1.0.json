@@ -354,14 +354,20 @@
         "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "The shared candidate evidence packet is implemented: one sealed, score-free, complete legal-candidate receipt compiled from the root position through the exact legal-move authority, admitted only by compiled-object identity, narrowable without recomputation, and consumed by semantic selection with a measured evaluated-alternatives count. Criterion 12's cold/warm record and the service/collector-registry successors remain open; no production consumer was added.",
+          "summary": "The recorded semantic path compiler is implemented: a strict branch resolver, an exact replay-validated recorded-edge source, versioned v2 multi-edge successors and an exact id@version event inventory compile any recorded branch into events with per-edge receipts. Its first production consumer (the Review compiler) and the convention predecessor remain open; the shared candidate packet landed alongside it.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/candidate-population.ts",
-            "planning/evidence-foundation-ux/shared-candidate-evidence-packet-implementation-2026-09-24.md",
+            "packages/runtime/src/recorded-semantic-path.ts",
+            "planning/recorded-semantic-path/implementation-2026-09-24.md",
+            "rfc/recorded-semantic-path.md",
             "rfc/shared-candidate-evidence-packet.md"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "recorded-semantic-path.md",
+              "digest": "sha256:37cb3035db519a343c4e4958fef74e0a356e485aba478db3135b5897c07a0214"
+            },
             {
               "kind": "rfc",
               "id": "shared-candidate-evidence-packet.md",
@@ -369,8 +375,8 @@
             },
             {
               "kind": "work_state",
-              "id": "D1071",
-              "digest": "sha256:c040ef7f72be185276a865742219ae67c09754f49f76f88049ba4bbf6d8c09c7"
+              "id": "D1067",
+              "digest": "sha256:718bc3ed0920635fb01c51614ae3f23940eff604866887d3750bbd631659b589"
             }
           ]
         },

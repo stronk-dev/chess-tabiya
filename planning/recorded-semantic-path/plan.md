@@ -2,6 +2,11 @@
 
 ## State
 
+**2026-09-24: accepted by owner direction and implemented; status `awaiting D1`.** A production
+Review/module/longitudinal consumer (criterion 13) is still needed. The [[D1921]]/[[D1929]]
+convention predecessor abstains explicitly in the result. Receipt: `implementation-2026-09-24.md`.
+The history below is retained.
+
 Draft product RFC amended after independent buildability review and follow-up measurement.
 [[D1927]]/[[D1928]]/[[D1930]]–[[D1932]] now have executable contract repairs; the
 [[D1921]]/[[D1929]] value/convention predecessor and repeat review still block acceptance. No

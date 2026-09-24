@@ -1,4 +1,4 @@
-import { CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_ADAPTERS, EVIDENCE_CONSUMERS, EVIDENCE_ELIGIBILITY_DECLARATIONS, EVIDENCE_PRODUCER_IDS, EVIDENCE_PRODUCERS, EVIDENCE_REASON_DECLARATIONS, EVIDENCE_SELECTION_POLICIES, RUNTIME_EVIDENCE_CONSUMER_OPERATIONS, SEMANTIC_EVENT_PROJECTION_IDS, assertEvidenceConsumerOperations } from "@chess-tabiya/runtime";
+import { CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_ADAPTERS, EVIDENCE_CONSUMERS, EVIDENCE_ELIGIBILITY_DECLARATIONS, EVIDENCE_PRODUCER_IDS, EVIDENCE_PRODUCERS, EVIDENCE_REASON_DECLARATIONS, EVIDENCE_SELECTION_POLICIES, RUNTIME_EVIDENCE_CONSUMER_OPERATIONS, SEMANTIC_EVENT_PROJECTION_REFS, assertEvidenceConsumerOperations } from "@chess-tabiya/runtime";
 
 import { WEB_EVIDENCE_CONSUMER_OPERATIONS } from "../../web/src/lib/evidence-consumer-operations.js";
 import { SERVER_EVIDENCE_CONSUMER_OPERATIONS } from "./evidence-consumer-operations.js";
@@ -20,10 +20,10 @@ const arrows = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "a
 if (arrows?.disposition?.kind !== "experimental" || arrows.accepts.length !== 0) throw new TypeError("assistance.arrows lost its explicit producerless experimental disposition");
 const semanticResearch = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "research.semantic_selection");
 const semanticIds = semanticResearch?.accepts.map((value) => `${value.id}@${value.version}`).sort() ?? [];
-const declaredSemanticIds = SEMANTIC_EVENT_PROJECTION_IDS.map((id) => `${id}@1`).sort();
+const declaredSemanticIds = SEMANTIC_EVENT_PROJECTION_REFS.map((value) => `${value.id}@${value.version}`).sort();
 if (semanticResearch === undefined || semanticIds.join("|") !== declaredSemanticIds.join("|") || EVIDENCE_MANIFEST.selectionPolicies[0]?.consumer.id !== semanticResearch.id) throw new TypeError(`The research semantic-selection consumer is not set-equal to its ${declaredSemanticIds.length} declared events`);
 const counts = [EVIDENCE_MANIFEST.producers.length, EVIDENCE_MANIFEST.projections.length, EVIDENCE_MANIFEST.consumers.length, EVIDENCE_MANIFEST.bindings.length, EVIDENCE_MANIFEST.semanticEvents.length, EVIDENCE_MANIFEST.eligibility.length, EVIDENCE_MANIFEST.reasons.length, EVIDENCE_MANIFEST.selectionPolicies.length];
-const declaredCounts = [EVIDENCE_PRODUCERS.length, EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs).length, EVIDENCE_CONSUMERS.length, EVIDENCE_ADAPTERS.length, SEMANTIC_EVENT_PROJECTION_IDS.length, EVIDENCE_ELIGIBILITY_DECLARATIONS.length, EVIDENCE_REASON_DECLARATIONS.length, EVIDENCE_SELECTION_POLICIES.length];
+const declaredCounts = [EVIDENCE_PRODUCERS.length, EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs).length, EVIDENCE_CONSUMERS.length, EVIDENCE_ADAPTERS.length, SEMANTIC_EVENT_PROJECTION_REFS.length, EVIDENCE_ELIGIBILITY_DECLARATIONS.length, EVIDENCE_REASON_DECLARATIONS.length, EVIDENCE_SELECTION_POLICIES.length];
 if (counts.join("/") !== declaredCounts.join("/")) throw new TypeError(`Semantic evidence compiler dropped a declaration: compiled ${counts.join("/")}, declared ${declaredCounts.join("/")}`);
 
 console.log(`evidence-manifest-check: ${EVIDENCE_MANIFEST.digest} · ${counts.slice(0, 4).join("/")} core · ${counts.slice(4).join("/")} semantic`);

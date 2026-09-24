@@ -8760,19 +8760,19 @@
       "id": "D1067",
       "state": "blocked",
       "sourceGlyph": "📜",
-      "sourceDigest": "sha256:4cf7d678851a732ff17ec2c88c73461868b171dba26d1bf48fe53bcae63f0c8d",
+      "sourceDigest": "sha256:718bc3ed0920635fb01c51614ae3f23940eff604866887d3750bbd631659b589",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:recorded-semantic-path.md"
     },
     {
       "id": "D1068",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:efcb8b278097afa6786c0bf770fe9e47fae3a2faffd2a9a603509239cf3c34ea",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e6ba09bea28b0b0be9e0d123e39b011dc998b42db03676d93d22ef1d6cf7e819",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:recorded-semantic-path.md"
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1069",
@@ -14792,21 +14792,21 @@
     },
     {
       "id": "D1927",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:df09bf6566e14f7b0f5916f0f42509b5a618d71e4b8d1c6badc29f8971805df8",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:82123631b4eae33603f6a28d4e68fce84b652b9e48b7ea317fe52ddb0b06100d",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:recorded-semantic-path.md"
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1928",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:43d209eb9cc12a233cae538e25d728b7355ff10a1dbbc322582f8ddb88ada78d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e101e32e701d1f9ab16cafc54ae262032562ab3f4167bbabf8b0b051ddb5d8fb",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:recorded-semantic-path.md"
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1929",
@@ -14819,12 +14819,12 @@
     },
     {
       "id": "D1930",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:715e2ac0705e1c4dc1e0c5f7e2fce70138526a8239ce2f569844b3889f23973b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3a7cb82a6fea2489962fc81ad2ca85178f155766cb40af8a47a5fc351b5086da",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:recorded-semantic-path.md"
+      "evidence": "apps/server/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1931",
@@ -14846,12 +14846,12 @@
     },
     {
       "id": "D1933",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:678fd428acef95ec8fe7815a6be1a5d1b6ac6ff823a89a5272724f56cc911c25",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:88aee4e189e314d86d132c40d83095ff74d55e0e2e4b9d2c482b0af48069e0bd",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:recorded-semantic-path.md"
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1934",

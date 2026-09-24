@@ -34,8 +34,11 @@ const isProviderProjection = (manifest: CompiledEvidenceManifest, id: string): b
  * compiled manifest to its literal `id@version` key.
  */
 export function deriveCandidatePacketProjectionGroups(manifest: CompiledEvidenceManifest = PRIMARY_EVIDENCE_MANIFEST): { readonly groups: ProjectionGroups; readonly abstentions: ProjectionGroups } {
+  // `@2` multi-edge successors read the exact recorded edge (`run.record.edge`), which exists only on
+  // a recorded path (rfc/recorded-semantic-path.md); a candidate child is never a recorded edge.
   const resolve = (id: string): string => {
-    const matches = manifest.projections.filter((candidate) => candidate.id === id);
+    const matches = manifest.projections.filter((candidate) => candidate.id === id
+      && !candidate.dependsOn.some((dependency) => dependency.id === "run.record.edge"));
     if (matches.length !== 1) throw new TypeError(`candidate projection ${id} does not resolve to exactly one compiled manifest projection`);
     return `${matches[0]!.id}@${matches[0]!.version}`;
   };

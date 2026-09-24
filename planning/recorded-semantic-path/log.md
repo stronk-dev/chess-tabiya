@@ -64,3 +64,15 @@ server checks manufacture `@1` from those strings. An exact v1/v2 population can
 the old base-id set equality while one version is absent. The amendment must replace it with a
 literal `VersionedEvidenceId` authority; any logical-family collapse is separately named and cannot
 police manifest or consumer closure.
+
+## 2026-09-24 — implemented on owner acceptance; awaiting D1
+
+The owner directed implementation in session. What landed: the total `branchPath` resolver, the exact
+`run.record.edge@1` source, eleven v2 successors, the exact `SEMANTIC_EVENT_PROJECTION_REFS` authority,
+the pure compiler with complete window receipts, the read-authorised server operation, and
+`make recorded-semantic-path-check`. On the imported sample (108 games, 6,991 plies) there were zero
+refusals, exact/eager parity held, and total p95 was 69.7/140.1/235.4 ms at 20/40/80 plies. The
+D1933 prediction reproduced in a live tool: the D2146 route map keyed projections by base id and
+relabelled the v1 trade adapter as `@2`; it now keys by exact ref. Status is `awaiting D1` because no
+Review, module or longitudinal operation consumes the compiler yet. The convention predecessor
+abstains explicitly in the result. Receipt: `implementation-2026-09-24.md`.
