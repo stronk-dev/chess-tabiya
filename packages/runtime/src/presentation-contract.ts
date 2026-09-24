@@ -138,7 +138,7 @@ export const CLAIM_EVIDENCE_TYPE_LABELS: LabelVocabulary<ClaimEvidenceType> = Ob
   tablebase_exact: { label: "exact tablebase" },
   corpus_observed: { label: "game-corpus observation" },
   human_model_predicted: { label: "human-move model" },
-  derived_feature: { label: "board-feature detector" },
+  derived_feature: { label: "board-feature reading" },
   hypothesis: { label: "hypothesis" },
   provenance_note: { label: "provenance note" },
 });

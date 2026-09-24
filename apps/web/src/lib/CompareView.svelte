@@ -19,6 +19,7 @@
   import { comparisonStepAnnouncement, comparisonStepLabel, rehearsalStepLabel, rehearsalTurnCount } from "./chronology-copy.js";
   import { resistanceModeLabel, resistanceSentences } from "./outcome-presentation.js";
   import { runOutcomeLabel } from "./run-copy.js";
+  import { UNRECORDED_LABEL, labelFor, labelOrFallback, learnerProse } from "./labels/index.js";
   import { comparisonNode, evidencePayloads } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
 
@@ -191,7 +192,7 @@
   }
   function theorySentence(entry: LineMembershipEntry): string {
     if (entry.verdict === "on_line") return `${rehearsalStepLabel(entry.ply)}: stayed on the authored line${entry.insideBoundary ? "" : " beyond its feedback boundary"}.`;
-    if (entry.verdict === "classified_deviation") return `${rehearsalStepLabel(entry.ply)}: the authored pack classifies this as ${entry.deviationClass?.replaceAll("_", " ") ?? "a deviation"}.`;
+    if (entry.verdict === "classified_deviation") return `${rehearsalStepLabel(entry.ply)}: the authored pack classifies this as ${labelOrFallback("deviation_class", entry.deviationClass, "a deviation")}.`;
     return `${rehearsalStepLabel(entry.ply)}: the authored line does not classify this move.`;
   }
   function openInspector(event: MouseEvent): void {
@@ -396,7 +397,7 @@
           {#each comparison.columns as column}
             <article><strong>{column.label}</strong>
               <details><summary>Structure and timing facts</summary>{#each strips[column.branchId]?.structure ?? [] as entry}<p>+{entry.plyOffset}: {entry.observation ? renderStructuralObservation(entry.observation) : entry.sentence} {entry.attribution}.</p>{/each}{#each strips[column.branchId]?.timing ?? [] as entry}<p>+{entry.plyOffset}: {entry.sentence} {entry.attribution}.</p>{/each}</details>
-              <details><summary>Piece routes</summary>{#each strips[column.branchId]?.routes ?? [] as route}<p>{route.pieceId}: {route.squares.join(" → ")}</p>{:else}<p>No piece route past the fork.</p>{/each}</details>
+              <details><summary>Piece routes</summary>{#each strips[column.branchId]?.routes ?? [] as route}<p>{learnerProse(route.pieceId)}: {route.squares.join(" → ")}</p>{:else}<p>No piece route past the fork.</p>{/each}</details>
             </article>
           {/each}
         </section>
@@ -405,7 +406,7 @@
             {@const consequence = comparison.consequences[column.branchId]}
             {@const entries = timeline(comparison.objectiveTimelines[column.branchId] ?? [])}
             <article><h4>{column.label}</h4>
-              <p>Recorded objective state: {consequence?.objectiveState ?? "unknown"}.</p>
+              <p>Recorded objective state: {consequence === undefined ? UNRECORDED_LABEL : labelFor("objective_state", consequence.objectiveState)}.</p>
               {#if consequence}<p>Opponent: {resistanceModeLabel(consequence.resistance.requested.mode)}{consequence.resistance.requested.targetElo === undefined ? "" : ` · target ${consequence.resistance.requested.targetElo}`}.</p>{/if}
               {#each entries as entry}<div><strong>{entry.from} → {entry.to}</strong>{#each entry.grounds as ground}<p>{ground.sourceLabel}: {ground.text}</p>{/each}</div>{/each}
               {#if consequence}<details><summary>Opponent and authored-line context</summary>{#each resistanceSentences(run, column.leafNodeId, pack) as sentence}<p>{sentence}</p>{/each}{#each consequence.theory ?? [] as entry}<p>{theorySentence(entry)}</p>{:else}<p>No authored line is attached to this comparison.</p>{/each}</details>

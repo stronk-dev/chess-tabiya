@@ -24,7 +24,7 @@
   let unsaved = $state(false);
   let password = $state("");
   let exportPassword = $state("");
-  let exportStatus = $state<string | undefined>();
+  let exportMessage = $state<string | undefined>();
   let exportError = $state<string | undefined>();
   let exportBusy = $state(false);
   let deleteError = $state<string | undefined>();
@@ -153,16 +153,16 @@
   }
   async function downloadAccount(): Promise<void> {
     if (exportBusy) return;
-    exportStatus = undefined;
+    exportMessage = undefined;
     exportError = undefined;
-    if (exportPassword.length === 0) { exportStatus = "Re-enter your password to download your data."; return; }
+    if (exportPassword.length === 0) { exportMessage = "Re-enter your password to download your data."; return; }
     const request = ++exportRequest;
     const submittedPassword = exportPassword;
     exportPassword = "";
     exportBusy = true;
     try {
       await onExport(submittedPassword);
-      if (mounted && request === exportRequest) exportStatus = "Your account data download has started.";
+      if (mounted && request === exportRequest) exportMessage = "Your account data download has started.";
     } catch {
       if (mounted && request === exportRequest) exportError = "Your account download could not be prepared. Re-enter your password and try again.";
     } finally {
@@ -269,7 +269,7 @@
     <label>Current password <input type="password" autocomplete="current-password" bind:value={exportPassword} /></label>
     <button type="submit" disabled={exportBusy} aria-describedby={exportBusy ? "account-export-busy" : undefined}>{exportBusy ? "Preparing download…" : "Download my data"}</button>
     {#if exportBusy}<p id="account-export-busy" role="status">Preparing one private account archive.</p>{/if}
-    {#if exportStatus}<p role="status">{exportStatus}</p>{/if}
+    {#if exportMessage}<p role="status">{exportMessage}</p>{/if}
     {#if exportError}<p role="alert">{exportError}</p>{/if}
   </form>
   <form onsubmit={(event) => { event.preventDefault(); void removeAccount(); }}>
