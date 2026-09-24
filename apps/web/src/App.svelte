@@ -2565,7 +2565,7 @@
           {#each threadSuggestions as suggestion (suggestion.kind + ("runId" in suggestion ? suggestion.runId : suggestion.packId))}
             <article data-suggestion-kind={suggestion.kind}>
               <h3>{suggestion.title}</h3>
-              <p>{suggestion.reason}</p>
+              <p>{suggestion.because}</p>
               {#if "runId" in suggestion}
                 <button type="button" onclick={() => navigate(routePath({ name: "run", runId: suggestion.runId }))}>Open the run</button>
               {:else}

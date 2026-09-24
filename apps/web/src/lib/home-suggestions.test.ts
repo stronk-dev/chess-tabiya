@@ -21,11 +21,11 @@ describe("Home suggestion rail (ARR-a8)", () => {
     const suggestions = homeSuggestions({ runs, packs, excludeRunId: "latest" });
     expect(suggestions.map((item) => item.kind)).toEqual(["short_of_objective", "in_progress", "untouched_phase"]);
     expect(suggestions[0]).toMatchObject({ runId: "missed", title: "Return to iqp title" });
-    expect(suggestions[0]!.reason).toContain("objective missed");
+    expect(suggestions[0]!.because).toContain("objective missed");
     expect(suggestions[1]).toMatchObject({ runId: "open", title: "Finish iqp title" });
-    expect(suggestions[1]!.reason).toContain("6 recorded moves across 2 branches");
+    expect(suggestions[1]!.because).toContain("6 recorded moves across 2 branches");
     expect(suggestions[2]).toMatchObject({ packId: "lucena", title: "Start lucena title" });
-    expect(suggestions[2]!.reason).toBe("You have not started an endgame rehearsal here yet.");
+    expect(suggestions[2]!.because).toBe("You have not started an endgame rehearsal here yet.");
   });
 
   it("never counts runs someone else hosts, and stays empty on a first visit so Home keeps its phase entries", () => {
@@ -36,13 +36,13 @@ describe("Home suggestion rail (ARR-a8)", () => {
     const suggestions = homeSuggestions({ runs: [shared, own], packs });
     expect(suggestions.map((item) => item.kind)).toEqual(["untouched_phase", "untouched_phase", "untouched_phase"]);
     expect(suggestions.map((item) => "packId" in item ? item.packId : "")).toEqual(["italian", "iqp", "lucena"]);
-    expect(suggestions[0]!.reason).toBe("You have not started an opening rehearsal here yet.");
-    expect(suggestions[1]!.reason).toBe("You have not started a middlegame rehearsal here yet.");
+    expect(suggestions[0]!.because).toBe("You have not started an opening rehearsal here yet.");
+    expect(suggestions[1]!.because).toBe("You have not started a middlegame rehearsal here yet.");
   });
 
   it("states facts only: no reason names a move, grades play, or claims a weakness", () => {
     const runs = [run("missed", "iqp", "failed", "2026-09-23T10:00:00Z"), run("open", null, "active", "2026-09-22T10:00:00Z")];
-    const text = [HOME_SUGGESTION_RULE, ...homeSuggestions({ runs, packs }).flatMap((item) => [item.title, item.reason])].join(" ").toLowerCase();
+    const text = [HOME_SUGGESTION_RULE, ...homeSuggestions({ runs, packs }).flatMap((item) => [item.title, item.because])].join(" ").toLowerCase();
     for (const claim of ["weak", "mistake", "blunder", "you struggle", "you tend", "accuracy", "best move", "should play"]) expect(text).not.toContain(claim);
     expect(HOME_SUGGESTION_RULE).toContain("does not judge your play");
   });
@@ -50,7 +50,7 @@ describe("Home suggestion rail (ARR-a8)", () => {
   it("scopes a phase fact to the loaded runs when the learner has more than Home loaded", () => {
     const runs = [run("a", "italian", "achieved", "2026-09-23T10:00:00Z")];
     const suggestions = homeSuggestions({ runs, packs, totalRuns: 40 });
-    expect(suggestions.map((item) => item.reason)).toEqual([
+    expect(suggestions.map((item) => item.because)).toEqual([
       "None of your 1 most recent runs is a middlegame rehearsal.",
       "None of your 1 most recent runs is an endgame rehearsal.",
     ]);

@@ -12,8 +12,8 @@ export const HOME_SUGGESTION_RULE = "Suggestions come only from your own runs he
 export const HOME_RUN_WINDOW = 20;
 
 export type HomeSuggestion =
-  | { readonly kind: "short_of_objective" | "in_progress"; readonly title: string; readonly reason: string; readonly runId: string }
-  | { readonly kind: "untouched_phase"; readonly title: string; readonly reason: string; readonly packId: string };
+  | { readonly kind: "short_of_objective" | "in_progress"; readonly title: string; readonly because: string; readonly runId: string }
+  | { readonly kind: "untouched_phase"; readonly title: string; readonly because: string; readonly packId: string };
 
 const SHORT_OF_OBJECTIVE = new Set<RunSummary["objectiveState"]>(["failed", "degraded"]);
 const ENDED_LABEL: Readonly<Partial<Record<RunSummary["objectiveState"], string>>> = Object.freeze({ failed: "Objective missed", degraded: "Objective weakened" });
@@ -44,9 +44,9 @@ export function homeSuggestions(input: {
     .slice().sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt));
   const suggestions: HomeSuggestion[] = [];
   const short = own.find((run) => SHORT_OF_OBJECTIVE.has(run.objectiveState));
-  if (short !== undefined) suggestions.push(Object.freeze({ kind: "short_of_objective", runId: short.id, title: `Return to ${titleFor(short, input.packs)}`, reason: `Your run ended with ${ENDED_LABEL[short.objectiveState]!.toLocaleLowerCase()}. Rewind to the decision and try another way.` }));
+  if (short !== undefined) suggestions.push(Object.freeze({ kind: "short_of_objective", runId: short.id, title: `Return to ${titleFor(short, input.packs)}`, because: `Your run ended with ${ENDED_LABEL[short.objectiveState]!.toLocaleLowerCase()}. Rewind to the decision and try another way.` }));
   const open = own.find((run) => run.objectiveState === "active" && run.recordedMoveCount > 0 && run.id !== short?.id);
-  if (open !== undefined) suggestions.push(Object.freeze({ kind: "in_progress", runId: open.id, title: `Finish ${titleFor(open, input.packs)}`, reason: `Still in progress after ${open.recordedMoveCount} recorded ${open.recordedMoveCount === 1 ? "move" : "moves"} across ${open.branchCount} ${open.branchCount === 1 ? "branch" : "branches"}.` }));
+  if (open !== undefined) suggestions.push(Object.freeze({ kind: "in_progress", runId: open.id, title: `Finish ${titleFor(open, input.packs)}`, because: `Still in progress after ${open.recordedMoveCount} recorded ${open.recordedMoveCount === 1 ? "move" : "moves"} across ${open.branchCount} ${open.branchCount === 1 ? "branch" : "branches"}.` }));
   const playedPhases = new Set(input.runs.filter((run) => run.viewerRole === "host" && run.packId !== null)
     .map((run) => input.packs.find((pack) => pack.id === run.packId)?.phase).filter((phase) => phase !== undefined && phase !== null));
   for (const phase of PHASES) {
@@ -56,7 +56,7 @@ export function homeSuggestions(input: {
     const label = PACK_PHASE_COPY[phase]!;
     const article = /^[aeiou]/iu.test(label) ? "an" : "a";
     const partial = input.totalRuns !== undefined && input.totalRuns > input.runs.length;
-    suggestions.push(Object.freeze({ kind: "untouched_phase", packId: pack.id, title: `Start ${pack.title}`, reason: partial
+    suggestions.push(Object.freeze({ kind: "untouched_phase", packId: pack.id, title: `Start ${pack.title}`, because: partial
       ? `None of your ${input.runs.length} most recent runs is ${article} ${label.toLocaleLowerCase()} rehearsal.`
       : `You have not started ${article} ${label.toLocaleLowerCase()} rehearsal here yet.` }));
   }
