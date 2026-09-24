@@ -351,6 +351,20 @@ Library, and Settings through the production bundle. Each main surface must own
 its width and every control must remain inside the viewport unless a named
 horizontal rail owns that control explicitly.
 
+## Streamer mode
+
+Streamer mode is a posture on the learner's own screen for when they are on camera
+(`design/research/ux-live-and-social.md` §6). Settings offers three browser-local states — Off,
+On everywhere, Only while playing a run — stored under `tabiya.streamer-mode.v1`, and the shell
+binds **Z** (outside form fields and the board) to flip what the current screen shows. While
+active it hides the primary navigation, the shell identity and account handle, the Rating card,
+the run's support style control, Inspector, ambient button and Support region (the companion shows
+Branches instead), and authored timeline markers. It only hides: `streamer-mode.css` contains no
+rule other than `display: none` and the Branches fallback, and a fence test keeps the module
+unreachable from the assistance compiler in both directions. Settings states the limit beside the
+control — it does not change what viewers see and withholds nothing from the run — and that it is
+not the Live **Stream a rehearsal** session.
+
 ## Honest disabled controls
 
 Every disabled control, including an element using `aria-disabled="true"`,

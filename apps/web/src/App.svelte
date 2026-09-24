@@ -27,6 +27,9 @@
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
   import StatusAnnouncement from "./lib/StatusAnnouncement.svelte";
+  import StreamerModeSettings from "./lib/StreamerModeSettings.svelte";
+  import { loadStreamerMode, saveStreamerMode, streamerModeActive, toggledStreamerMode, type StreamerMode } from "./lib/streamer-mode.js";
+  import "./lib/streamer-mode.css";
   import AppearanceSettings from "./lib/AppearanceSettings.svelte";
   import AccessibilitySettings from "./lib/AccessibilitySettings.svelte";
   import DistillDraftForm from "./lib/DistillDraftForm.svelte";
@@ -166,6 +169,27 @@
     },
   });
   let route: AppRoute = $state(router.route);
+  // LIV-a14: streamer mode is chrome on this screen only; it never reaches the assistance compiler.
+  const initialStreamerMode = loadStreamerMode(applicationStorage());
+  let streamerMode: StreamerMode = $state(initialStreamerMode);
+  let streamerLastOn: Exclude<StreamerMode, "off"> = $state(initialStreamerMode === "off" ? "always" : initialStreamerMode);
+  let streamerAnnouncement = $state("");
+  let streamerActive = $derived(streamerModeActive(streamerMode, route.name));
+  function setStreamerMode(next: StreamerMode): void {
+    streamerMode = next;
+    if (next !== "off") streamerLastOn = next;
+    saveStreamerMode(next, applicationStorage());
+  }
+  function toggleStreamerMode(): void {
+    setStreamerMode(toggledStreamerMode(streamerMode, streamerMode === "off" ? streamerLastOn : streamerMode, route.name));
+    streamerAnnouncement = streamerModeActive(streamerMode, route.name) ? "Streamer mode on. Your handle, navigation and support panels are hidden on this screen." : "Streamer mode off.";
+  }
+  $effect(() => {
+    const root = document.documentElement;
+    if (streamerActive) root.dataset.streamerMode = "active";
+    else delete root.dataset.streamerMode;
+    return () => { delete root.dataset.streamerMode; };
+  });
   let session: DrillSessionState = $state(controller.state);
   let packs: readonly PackSummary[] = $state([]);
   let relatedPack: DrillPackDefinition | undefined = $state();
@@ -383,6 +407,7 @@
     openHelp: openShellHelp,
     closeHelp: closeShellHelp,
     helpIsOpen: () => shellHelpOpen,
+    toggleStreamerMode,
   });
 
   let recentRun = $derived(runs[0]);
@@ -2410,6 +2435,7 @@
 </script>
 
 <svelte:window onkeydown={(event) => keyboardDispatcher.handle(event)} />
+<StatusAnnouncement message={streamerAnnouncement} />
 
 {#if authLoading}
   <main class="auth-gate" aria-busy="true"><p>Loading Tabiya…</p></main>
@@ -3194,9 +3220,10 @@
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
       <p class="eyebrow">Preferences and account</p><h1 id="settings-title">Settings</h1>
-      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#accessibility-settings">Accessibility</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
+      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#accessibility-settings">Accessibility</a><a href="#streamer-mode-settings">Streamer mode</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
       <AppearanceSettings />
       <AccessibilitySettings />
+      <StreamerModeSettings mode={streamerMode} onChange={setStreamerMode} />
       <AssistanceSettings {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} />
     </main>
   {:else if route.name === "not-found"}

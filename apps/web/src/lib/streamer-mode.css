@@ -1,0 +1,24 @@
+/*
+ * LIV-a14 (ux-live-and-social.md §6 E3): streamer mode hides private chrome on this screen only.
+ * Every rule hides; none reveals or re-enables anything. The selectors are pinned by
+ * streamer-mode.test.ts so a renamed region cannot silently fall out of the mode.
+ */
+:root[data-streamer-mode="active"] .shell-topbar #primary-navigation,
+:root[data-streamer-mode="active"] .shell-topbar .identity-control,
+:root[data-streamer-mode="active"] #account-settings .account-handle,
+:root[data-streamer-mode="active"] .shell-topbar .run-context,
+:root[data-streamer-mode="active"] .rating-view .rating-card,
+:root[data-streamer-mode="active"] .drill .topbar .assistance-control,
+:root[data-streamer-mode="active"] .drill .topbar .inspector-entry,
+:root[data-streamer-mode="active"] .drill .topbar .ambient,
+:root[data-streamer-mode="active"] .drill .compact-tabs > button:nth-of-type(1),
+:root[data-streamer-mode="active"] .drill #run-support-region,
+:root[data-streamer-mode="active"] .drill .shape-marker,
+:root[data-streamer-mode="active"] .drill .pivotal-marker {
+  display: none !important;
+}
+
+/* With the Support region hidden, the companion shows Branches rather than an empty seat. */
+:root[data-streamer-mode="active"] .drill .companion-scroll:has(> #run-support-region.compact-active) > .branch-seat {
+  display: grid;
+}

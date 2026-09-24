@@ -250,7 +250,7 @@
 
 {#if learner}
 <section id="account-settings" aria-labelledby="account-settings-title">
-  <h2 id="account-settings-title">Account</h2><p>Signed in as <strong>@{learner.handle}</strong>.</p>
+  <h2 id="account-settings-title">Account</h2><p class="account-handle">Signed in as <strong>@{learner.handle}</strong>.</p>
   <button type="button" disabled={signOutBusy} aria-describedby={signOutBusy ? "account-signout-busy" : undefined} onclick={() => void signOut()}>{signOutBusy ? "Signing out…" : "Sign out"}</button>
   {#if signOutBusy}<p id="account-signout-busy" role="status">Ending this account session…</p>{/if}
   {#if signOutError}<p role="alert">{signOutError}</p>{/if}
