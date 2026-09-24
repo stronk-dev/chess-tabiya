@@ -1,10 +1,13 @@
+import { providerSignal } from "./external-voice.js";
+import { ProviderHttpError } from "./provider-health.js";
+
 export interface TtsResult {
   readonly bytes: Uint8Array;
   readonly contentType: string;
 }
 
 export interface TtsProvider {
-  synthesize(text: string): Promise<TtsResult>;
+  synthesize(text: string, signal?: AbortSignal): Promise<TtsResult>;
 }
 
 export interface ExternalHttpTtsOptions {
@@ -27,9 +30,8 @@ export class ExternalHttpTtsProvider implements TtsProvider {
     this.#fetch = options.fetch ?? fetch;
   }
 
-  async synthesize(text: string): Promise<TtsResult> {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.#timeoutMs);
+  async synthesize(text: string, signal?: AbortSignal): Promise<TtsResult> {
+    const controller = providerSignal(this.#timeoutMs, signal);
     try {
       const response = await this.#fetch(this.#url, {
         method: "POST",
@@ -40,13 +42,13 @@ export class ExternalHttpTtsProvider implements TtsProvider {
         body: text,
         signal: controller.signal,
       });
-      if (!response.ok) throw new Error(`TTS provider returned ${response.status}`);
+      if (!response.ok) throw new ProviderHttpError(response.status, response.headers.get("retry-after"), `TTS provider returned ${response.status}`);
       return Object.freeze({
         bytes: new Uint8Array(await response.arrayBuffer()),
         contentType: response.headers.get("content-type") ?? "audio/mpeg",
       });
     } finally {
-      clearTimeout(timeout);
+      controller.dispose();
     }
   }
 }

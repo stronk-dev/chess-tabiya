@@ -18,6 +18,7 @@ import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { projectBotRoster } from "./bot-roster.js";
+import { testRegistry } from "./provider-health.test-support.js";
 
 function ready(identity: EngineIdentity): EngineHealth {
   return {
@@ -130,7 +131,7 @@ describe("engine capabilities", () => {
         observed,
       ),
       ["stockfish-analysis", "maia-5m"],
-      { engineMode: "maia", tablebase: "lichess" },
+      { health: await testRegistry({ "stockfish-play": "available", "stockfish-analysis": "available", "maia-inference": "available", "tablebase-primary": "unverified" }) },
     );
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     try {
@@ -200,7 +201,22 @@ describe("engine capabilities", () => {
             profiles: projectBotRoster().profiles,
           },
         },
-        providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },
+        providerHealth: {
+          generatedAt: "2026-09-24T12:00:00.000Z",
+          providers: expect.arrayContaining([
+            expect.objectContaining({ instanceId: "maia-inference", state: "available", implementation: "uci_sidecar" }),
+            expect.objectContaining({ instanceId: "tablebase-primary", state: "unverified", retryAfterMs: null }),
+            { instanceId: "explorer-primary", familyId: "explorer", state: "not_configured" },
+          ]),
+          operations: expect.arrayContaining([
+            { operation: "opponent.maia_inference", availability: { state: "available", instanceIds: ["maia-inference"] } },
+            { operation: "evidence.tablebase_probe", availability: { state: "requestable_unverified", instanceIds: ["tablebase-primary"] } },
+            { operation: "evidence.explorer_query", availability: { state: "unavailable", instanceIds: ["explorer-primary"], reason: "not_configured" } },
+          ]),
+          policyModes: expect.arrayContaining([
+            { mode: "practical_resistance", availability: { state: "requestable_unverified", instanceIds: ["maia-inference", "tablebase-primary"] } },
+          ]),
+        },
         surfaces: {
           play: "available",
           review: "available",
@@ -242,17 +258,16 @@ describe("engine capabilities", () => {
     const descriptor = await new EngineCapabilities(
       healthClient({ [identity.id]: ready(identity) }),
       [identity.id],
-      { engineMode: "mock", tablebase: "mock" },
+      { health: await testRegistry({ "stockfish-play": "available", "stockfish-analysis": "available", "maia-inference": "available", "tablebase-primary": "available" }, { implementations: { "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture", "maia-inference": "local_fixture", "tablebase-primary": "local_fixture" } }) },
     ).get();
 
-    expect(descriptor.providers).toEqual({
-      opponent: "mock",
-      judge: "mock",
-      llm: "none",
-      corpus: "none",
-      tts: "none",
-      tablebase: "mock",
-    });
+    // Mock deployments publish `local_fixture` literally; they never impersonate Maia or Stockfish.
+    expect(descriptor.providerHealth.providers.filter((row) => row.state !== "not_configured").map((row) => [row.instanceId, "implementation" in row ? row.implementation : null])).toEqual([
+      ["stockfish-play", "local_fixture"],
+      ["stockfish-analysis", "local_fixture"],
+      ["maia-inference", "local_fixture"],
+      ["tablebase-primary", "local_fixture"],
+    ]);
     expect(descriptor.engines).toEqual([identity]);
     expect(descriptor.guardBasis).toEqual(["rules", "engine"]);
     expect(descriptor.feedbackPolicies).toContain("immediate_guard");
@@ -260,25 +275,20 @@ describe("engine capabilities", () => {
     expect(descriptor.surfaces.justPlay).toBe("available");
   });
 
-  it("reports an injected voice seam without inventing a provider by default", async () => {
-    const capabilities = new EngineCapabilities(healthClient({}), [], { engineMode: "mock", llmAvailable: true });
-    expect((await capabilities.get()).providers.llm).toBe("external");
-    const absent = new EngineCapabilities(healthClient({}), [], { engineMode: "mock" });
-    expect((await absent.get()).providers.llm).toBe("none");
+  it("reports a configured external voice as unverified until its first real request, and absence as not configured", async () => {
+    const configured = new EngineCapabilities(healthClient({}), [], { health: await testRegistry({ "external-voice": "unverified" }) });
+    const voice = (await configured.get()).providerHealth.operations.find((row) => row.operation === "render.voice")!;
+    expect(voice.availability).toEqual({ state: "requestable_unverified", instanceIds: ["external-voice"] });
+    const absent = new EngineCapabilities(healthClient({}), [], { health: await testRegistry({}) });
+    expect((await absent.get()).providerHealth.operations.find((row) => row.operation === "render.voice")!.availability).toEqual({ state: "unavailable", instanceIds: ["external-voice"], reason: "not_configured" });
   });
 
-  it("reports corpus availability from explicit application wiring", async () => {
-    const live = new EngineCapabilities(healthClient({}), [], { engineMode: "maia", corpus: "lichess-explorer" });
-    const mock = new EngineCapabilities(healthClient({}), [], { engineMode: "mock", corpus: "mock" });
-    expect((await live.get()).providers.corpus).toBe("lichess-explorer");
-    expect((await mock.get()).providers.corpus).toBe("mock");
-  });
-
-  it("reports TTS only from explicit application wiring", async () => {
-    const present = new EngineCapabilities(healthClient({}), [], { engineMode: "mock", tts: "external" });
-    const absent = new EngineCapabilities(healthClient({}), [], { engineMode: "mock" });
-    expect((await present.get()).providers.tts).toBe("external");
-    expect((await absent.get()).providers.tts).toBe("none");
+  it("reports corpus and TTS state from the live registry, not from wiring flags", async () => {
+    const failed = new EngineCapabilities(healthClient({}), [], { health: await testRegistry({ "explorer-primary": { failed: "network" }, "external-tts": "available" }) });
+    const health = (await failed.get()).providerHealth;
+    expect(health.operations.find((row) => row.operation === "evidence.explorer_query")!.availability.state).toBe("temporarily_blocked");
+    expect(health.providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "unavailable", reason: "network", cacheScope: "none" });
+    expect(health.operations.find((row) => row.operation === "render.speech")!.availability).toEqual({ state: "available", instanceIds: ["external-tts"] });
   });
 
   it("downgrades unhealthy real providers instead of reporting stale identities", async () => {
@@ -302,32 +312,31 @@ describe("engine capabilities", () => {
         },
       }),
       ["maia-5m", "stockfish-analysis"],
-      { engineMode: "maia" },
+      { health: await testRegistry({ "maia-inference": { failed: "process_exit" }, "stockfish-analysis": { failed: "process_exit" }, "stockfish-play": { failed: "startup" } }) },
     ).get();
 
     expect(descriptor.engines).toEqual([]);
-    expect(descriptor.guardBasis).toEqual(["rules"]);
-    expect(descriptor.providers).toEqual({
-      opponent: "none",
-      judge: "none",
-      llm: "none",
-      corpus: "none",
-      tts: "none",
-      tablebase: "none",
-    });
-    expect(descriptor.surfaces.play).toBe("unavailable-here");
-    expect(descriptor.surfaces.justPlay).toBe("unavailable-here");
-    expect(descriptor.policyModes).toEqual([]);
+    // A runtime failure is temporary: the modes, surfaces and guard basis stay offered, and the live
+    // state reports the failure instead of deleting the capability (the O13 ruling).
+    expect(descriptor.guardBasis).toEqual(["rules", "engine"]);
+    expect(descriptor.policyModes).toEqual(["human_common", "strong_engine", "theory_strict"]);
+    expect(descriptor.surfaces.play).toBe("available");
+    expect(descriptor.providerHealth.policyModes.find((row) => row.mode === "human_common")!.availability).toEqual({ state: "unavailable", instanceIds: ["maia-inference"], reason: "process_exit" });
+    const notConfigured = await new EngineCapabilities(healthClient({}), [], { health: await testRegistry({}) }).get();
+    expect(notConfigured.policyModes).toEqual([]);
+    expect(notConfigured.guardBasis).toEqual(["rules"]);
+    expect(notConfigured.surfaces.play).toBe("unavailable-here");
+    expect(notConfigured.surfaces.justPlay).toBe("unavailable-here");
   });
 
   it("advertises opponent modes only when their providers are executable", async () => {
     const judge: EngineIdentity = { id: "stockfish-analysis", kind: "judge", name: "Stockfish", version: "18", seedHonored: false };
     const opponent: EngineIdentity = { id: "maia-5m", kind: "opponent", name: "Maia", version: "3", seedHonored: false, eloHonored: true };
-    const judgeOnly = await new EngineCapabilities(healthClient({ [judge.id]: ready(judge) }), [judge.id], { engineMode: "maia" }).get();
+    const judgeOnly = await new EngineCapabilities(healthClient({ [judge.id]: ready(judge) }), [judge.id], { health: await testRegistry({ "stockfish-play": "available", "stockfish-analysis": "available" }) }).get();
     expect(judgeOnly.policyModes).toEqual(["strong_engine"]);
-    const opponentOnly = await new EngineCapabilities(healthClient({ [opponent.id]: ready(opponent) }), [opponent.id], { engineMode: "maia" }).get();
+    const opponentOnly = await new EngineCapabilities(healthClient({ [opponent.id]: ready(opponent) }), [opponent.id], { health: await testRegistry({ "maia-inference": "available" }) }).get();
     expect(opponentOnly.policyModes).toEqual(["human_common", "theory_strict"]);
-    const opponentWithTablebase = await new EngineCapabilities(healthClient({ [opponent.id]: ready(opponent) }), [opponent.id], { engineMode: "maia", tablebase: "lichess" }).get();
+    const opponentWithTablebase = await new EngineCapabilities(healthClient({ [opponent.id]: ready(opponent) }), [opponent.id], { health: await testRegistry({ "maia-inference": "available", "tablebase-primary": "unverified" }) }).get();
     expect(opponentWithTablebase.policyModes).toEqual(["human_common", "theory_strict", "perfect_tablebase", "practical_resistance"]);
   });
 
@@ -357,7 +366,7 @@ describe("engine capabilities", () => {
       healthClient({ [identity.id]: ready(identity) }),
       [identity.id],
       {
-        engineMode: "maia",
+        health: await testRegistry({ "stockfish-analysis": "available" }),
         strongEngineProfile: { movetimeMs: 175, nodes: null, threads: 2, hashMb: 32 },
       },
     ).get();
@@ -415,7 +424,7 @@ describe("engine capabilities", () => {
     const descriptor = await new EngineCapabilities(
       healthClient({ [identity.id]: ready(identity) }),
       [identity.id],
-      { engineMode: "maia" },
+      { health: await testRegistry({ "maia-inference": "available" }) },
     ).get();
     const locusIdentity = { id: identity.id, version: identity.version };
 

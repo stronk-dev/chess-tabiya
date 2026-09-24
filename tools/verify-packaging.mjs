@@ -41,9 +41,12 @@ const digest = `sha256:${"a".repeat(64)}`;
 const template = readFileSync("deploy/compose.release.template.yaml", "utf8");
 const rendered = template
   .replaceAll("__SERVER_IMAGE__", `ghcr.io/stronk-dev/chess-tabiya-server@${digest}`)
-  .replaceAll("__MAIA_IMAGE__", `ghcr.io/stronk-dev/chess-tabiya-maia@${digest}`);
+  .replaceAll("__MAIA_IMAGE__", `ghcr.io/stronk-dev/chess-tabiya-maia@${digest}`)
+  .replaceAll("__MAIA_MANIFEST_DIGEST__", digest)
+  .replaceAll("__MAIA_CONFIG_DIGEST__", `sha256:${"b".repeat(64)}`);
 required(!rendered.includes("__SERVER_IMAGE__"), "Server image placeholder survived");
 required(!rendered.includes("__MAIA_IMAGE__"), "Maia image placeholder survived");
+required(!rendered.includes("__MAIA_MANIFEST_DIGEST__") && !rendered.includes("__MAIA_CONFIG_DIGEST__"), "Maia container identity placeholder survived");
 const releasePath = join(tmpdir(), `chess-tabiya-compose-${process.pid}.yaml`);
 writeFileSync(releasePath, rendered);
 compose(["-f", releasePath]);

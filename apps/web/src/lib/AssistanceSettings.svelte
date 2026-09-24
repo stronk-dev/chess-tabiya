@@ -2,9 +2,13 @@
   import { ASSISTANCE_PREFERENCE_FIELDS, CONFIGURABLE_MODULE_IDS, MODULE_LABELS, permittedAssistance, preferenceDisplayMode, presetDeclaration, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type ConfigurableModuleId, type PresetId, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
   import { onDestroy, onMount } from "svelte";
 
-  import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
+  import type { AccountExportProgress, AccountImportReceipt, AccountInventory, Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
+  import AccountImportPanel from "./AccountImportPanel.svelte";
+  import AccountInventoryPanel from "./AccountInventoryPanel.svelte";
+  import { formatBytes } from "./account-inventory-copy.js";
   import { ASSISTANCE_PROFILES, loadWorkflowPreference, requestedAssistanceConfig, saveWorkflowPreference, type AssistanceProfile } from "./assistance-preference.js";
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
+  import { operationConfigured, operationNotice, providerInspectorRows, providerRows } from "./provider-availability.js";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import { assertAccountDeletionPreview } from "./account-deletion-preview.js";
 
@@ -12,13 +16,18 @@
     capabilities?: Capabilities | undefined;
     learner?: Learner | undefined;
     onSignOut: () => void | Promise<void>;
-    onExport: (password: string) => void | Promise<void>;
+    onExport: (password: string, onProgress?: (progress: AccountExportProgress) => void) => void | Promise<void>;
     onDelete: (password: string, previewDigest: string) => void | Promise<void>;
     loadDeletionPreview?: () => Promise<DeletionPreview>;
+    loadAccountInventory?: (() => Promise<AccountInventory>) | undefined;
+    previewAccountImport?: ((bundle: unknown) => Promise<AccountImportReceipt>) | undefined;
+    commitAccountImport?: ((password: string, bundle: unknown) => Promise<AccountImportReceipt>) | undefined;
     plannedSurfaceIds?: readonly string[];
   }
 
-  let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview, plannedSurfaceIds = [] }: Props = $props();
+  let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview, loadAccountInventory, previewAccountImport, commitAccountImport, plannedSurfaceIds = [] }: Props = $props();
+  let exportProgress = $state<AccountExportProgress | undefined>();
+  let inventoryVersion = $state(0);
   const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp", campaign: "Campaign" };
   let receipts: Record<AssistanceProfile, WorkflowPreferenceReceipt> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadWorkflowPreference(profile, storage())])) as Record<AssistanceProfile, WorkflowPreferenceReceipt>);
   let unsaved = $state(false);
@@ -39,14 +48,6 @@
   let deleteRequest = 0;
   let signOutRequest = 0;
   let mounted = true;
-  const providerLabels: Readonly<Record<keyof Capabilities["providers"], string>> = Object.freeze({
-    opponent: "Human-like opponents",
-    judge: "Position calculation",
-    llm: "Optional narrated guidance",
-    corpus: "Human-game statistics",
-    tts: "Spoken guidance",
-    tablebase: "Exact endgame results",
-  });
   const surfaceLabels: Readonly<Record<keyof Capabilities["surfaces"], string>> = Object.freeze({
     play: "Rehearsals",
     review: "Review and import",
@@ -142,11 +143,6 @@
   }
   function effectCount(groups: readonly DeletionEffect[]): number { return groups.reduce((total, effect) => total + effect.count, 0); }
   function records(count: number): string { return `${count} ${count === 1 ? "record" : "records"}`; }
-  function providerState(value: Capabilities["providers"][keyof Capabilities["providers"]]): string {
-    if (value === "none") return "Not available";
-    if (value === "mock") return "Test service";
-    return "Available";
-  }
   function surfaceState(id: keyof Capabilities["surfaces"], value: Capabilities["surfaces"][keyof Capabilities["surfaces"]]): string {
     if (plannedSurfaceIds.includes(id)) return "Coming later";
     return value === "available" ? "Available" : "Not available on this server";
@@ -160,14 +156,26 @@
     const submittedPassword = exportPassword;
     exportPassword = "";
     exportBusy = true;
+    exportProgress = undefined;
     try {
-      await onExport(submittedPassword);
+      await onExport(submittedPassword, (progress) => { if (mounted && request === exportRequest) exportProgress = progress; });
       if (mounted && request === exportRequest) exportMessage = "Your account data download has started.";
     } catch {
       if (mounted && request === exportRequest) exportError = "Your account download could not be prepared. Re-enter your password and try again.";
     } finally {
-      if (mounted && request === exportRequest) exportBusy = false;
+      if (mounted && request === exportRequest) { exportBusy = false; exportProgress = undefined; }
     }
+  }
+
+  function progressText(progress: AccountExportProgress): string {
+    return progress.totalBytes === null
+      ? `Downloaded ${formatBytes(progress.receivedBytes)}`
+      : `Downloaded ${formatBytes(progress.receivedBytes)} of ${formatBytes(progress.totalBytes)}`;
+  }
+
+  function accountImported(): void {
+    inventoryVersion += 1;
+    if (loadDeletionPreview !== undefined) void previewDeletion();
   }
 
   async function signOut(): Promise<void> {
@@ -261,17 +269,27 @@
         <button type="button" disabled={previewLoading || deleteBusy} aria-describedby={previewLoading ? "account-preview-busy" : deleteBusy ? "account-delete-busy" : undefined} onclick={() => void previewDeletion()}>Refresh data summary</button>
       </div>
     {:else}<p>This deployment cannot provide an account data summary.</p>{/if}
+    {#if loadAccountInventory}
+      {#key inventoryVersion}<AccountInventoryPanel loadInventory={loadAccountInventory} />{/key}
+    {/if}
   </section>
   <form onsubmit={(event) => { event.preventDefault(); void downloadAccount(); }}>
     <h3>Download my data</h3>
     <p class="honest">A portable copy of your runs, progress, authored drafts, publications, and account-scoped activity. Passwords, sessions, provider credentials, and preferences stored only on this device are excluded.</p>
-    <p class="honest">This Tabiya account archive is for safekeeping and inspection. Tabiya cannot import it, and other chess products do not read it. To move games between chess tools, <a href="/library">download them as PGN</a>.</p>
+    <p class="honest">This Tabiya account archive is for safekeeping, inspection and moving your private records into another Tabiya account; other chess products do not read it. To move games between chess tools, <a href="/library">download them as PGN</a>.</p>
     <label>Current password <input type="password" autocomplete="current-password" bind:value={exportPassword} /></label>
     <button type="submit" disabled={exportBusy} aria-describedby={exportBusy ? "account-export-busy" : undefined}>{exportBusy ? "Preparing download…" : "Download my data"}</button>
     {#if exportBusy}<p id="account-export-busy" role="status">Preparing one private account archive.</p>{/if}
+    {#if exportBusy && exportProgress}
+      <progress class="export-progress" max={exportProgress.totalBytes ?? undefined} value={exportProgress.receivedBytes} aria-label="Account download progress">{progressText(exportProgress)}</progress>
+      <p class="honest">{progressText(exportProgress)}</p>
+    {/if}
     {#if exportMessage}<p role="status">{exportMessage}</p>{/if}
     {#if exportError}<p role="alert">{exportError}</p>{/if}
   </form>
+  {#if previewAccountImport && commitAccountImport}
+    <AccountImportPanel previewImport={previewAccountImport} commitImport={commitAccountImport} onImported={accountImported} />
+  {/if}
   <form onsubmit={(event) => { event.preventDefault(); void removeAccount(); }}>
     <h3>Delete account</h3>
     {#if deletionPreview === undefined}
@@ -293,11 +311,11 @@
 <section id="about-deployment" aria-labelledby="about-deployment-title">
   <h2 id="about-deployment-title">About this deployment</h2>
   {#if capabilities}
-    <h3>Available services</h3><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{providerLabels[name as keyof Capabilities["providers"]]}</dt><dd>{providerState(value as Capabilities["providers"][keyof Capabilities["providers"]])}</dd></div>{/each}</dl>
+    <h3>Available services</h3><dl id="deployment-services">{#each providerRows(capabilities) as row (row.id)}<div data-provider={row.id}><dt>{row.label}</dt><dd>{row.state}</dd></div>{/each}</dl>
     <h3>App areas</h3><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li><strong>{surfaceLabels[id as keyof Capabilities["surfaces"]]}</strong>: {surfaceState(id as keyof Capabilities["surfaces"], availability as Capabilities["surfaces"][keyof Capabilities["surfaces"]])}</li>{/each}</ul>
-    <details class="technical-details"><summary>Technical details</summary><p>Run format {capabilities.runSchemaVersion}</p><p>Opponent policies: {capabilities.policyModes.join(", ")}</p><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{name}</dt><dd>{value}</dd></div>{/each}</dl></details>
+    <details class="technical-details"><summary>Technical details</summary><p>Run format {capabilities.runSchemaVersion}</p><p>Opponent policies: {capabilities.policyModes.join(", ")}</p><p>Provider snapshot {capabilities.providerHealth.generatedAt}</p><dl>{#each providerInspectorRows(capabilities) as row (row.id)}<div><dt>{row.id}</dt><dd>{row.detail}</dd></div>{/each}</dl></details>
   {:else}<p>Deployment status is unavailable.</p>{/if}
-  {#if capabilities?.providers.llm !== "external"}<p class="honest" id="external-voice-unavailable">External voice is unavailable because this deployment has no configured provider.</p>{/if}
+  {#if !operationConfigured(capabilities, "render.voice")}<p class="honest" id="external-voice-unavailable">External voice is unavailable because this deployment has no configured provider.</p>{:else if !operationNotice(capabilities, "render.voice").requestable}<p class="honest" id="external-voice-unavailable">{operationNotice(capabilities, "render.voice").reason} Written guidance stays grounded and unchanged.</p>{/if}
   <p class="honest">These are status facts, not account controls. Whoever runs this Tabiya server chooses which optional services are available.</p>
 </section>
 

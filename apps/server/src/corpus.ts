@@ -14,6 +14,7 @@ import {
   type RatingGroup,
   type Speed,
 } from "./sourcing/explorer.js";
+import { ProviderHttpError, ProviderUnavailableError, classifyProviderError, type ProviderRegistry } from "./provider-health.js";
 
 /** The runtime owns the Explorer result shape and its abstention-reason tuple (D3103). */
 export type CorpusPopulation = RuntimeCorpusPopulation<RatingGroup, Speed>;
@@ -86,7 +87,16 @@ export class LichessCorpusSource implements CorpusSource {
   readonly #inFlight = new Map<string, Promise<CorpusResult>>();
   readonly #queue: QueueItem[] = [];
   #active = false;
-  constructor(private readonly options: { readonly token: string; readonly fetcher?: ExplorerFetch; readonly now?: () => Date; readonly timeoutMs?: number } ) {}
+  #revision = 0;
+  constructor(private readonly options: { readonly token: string; readonly fetcher?: ExplorerFetch; readonly now?: () => Date; readonly timeoutMs?: number; readonly health?: ProviderRegistry } ) {
+    // rfc/provider-health-degradation.md §7: the retained successful answers are the registry's
+    // exact-request inventory for the Explorer instance.
+    options.health?.registerCacheInventory("explorer-primary", {
+      validExactEntries: () => { const now = (this.options.now?.() ?? new Date()).getTime(); return [...this.#cache.values()].filter((entry) => entry.expiresAt > now).length; },
+      revision: () => this.#revision,
+      invalidateExcept: () => { this.#cache.clear(); this.#revision += 1; },
+    });
+  }
 
   stats(raw: CorpusQuery): Promise<CorpusResult> {
     const query = normalizedCorpusQuery(raw), key = corpusUrl(query), now = (this.options.now?.() ?? new Date()).getTime();
@@ -111,6 +121,8 @@ export class LichessCorpusSource implements CorpusSource {
   }
 
   async #fetch(key: string, query: CorpusQuery): Promise<CorpusResult> {
+    const health = this.options.health;
+    if (health !== undefined) return this.#fetchAdmitted(health, key, query);
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.options.timeoutMs ?? 4000);
     let result: CorpusResult, ttl = 0;
@@ -122,6 +134,37 @@ export class LichessCorpusSource implements CorpusSource {
     finally { clearTimeout(timeout); }
     if (ttl > 0) this.#cache.set(key, { expiresAt: (this.options.now?.() ?? new Date()).getTime() + ttl, result });
     while (this.#cache.size > 512) this.#cache.delete(this.#cache.keys().next().value!);
+    return result;
+  }
+
+  /**
+   * The health-admitted path: a NEW request passes the registry's circuit and `lichess-api` group
+   * (shared with the tablebase) under the Explorer consumer deadline, and its real outcome settles
+   * health. `no_data_at_band` is a successful domain answer; an HTTP/network/protocol failure is a
+   * provider failure, is never cached, and is never rewritten as "no games".
+   */
+  async #fetchAdmitted(health: ProviderRegistry, key: string, query: CorpusQuery): Promise<CorpusResult> {
+    let result: CorpusResult;
+    try {
+      result = await health.run("evidence.explorer_query", async ({ signal }) => {
+        const response = await (this.options.fetcher ?? fetch)(key, { signal, headers: { authorization: `Bearer ${this.options.token}`, "user-agent": "chess-tabiya-sourcing/0.0.0 (+https://github.com/stronk-dev/chess-tabiya; repository-owner)" } });
+        if (response.status >= 400) throw new ProviderHttpError(response.status, response.headers.get("retry-after"), `HTTP ${response.status}`);
+        let body: unknown;
+        try { body = await response.json(); } catch { throw new SyntaxError("invalid explorer response"); }
+        try { return parseCorpusResponse(body, query); } catch { throw new SyntaxError("invalid explorer response"); }
+      }, classifyProviderError);
+    } catch (error) {
+      if (error instanceof ProviderUnavailableError) {
+        const availability = error.availability;
+        return unavailable(query, availability.state === "unavailable" ? `provider ${availability.reason}` : availability.state === "temporarily_blocked" ? `provider temporarily blocked (${availability.reason})` : `provider ${availability.state}`);
+      }
+      throw error;
+    }
+    if (result.kind === "stats" || result.reason === "no_data_at_band") {
+      this.#cache.set(key, { expiresAt: (this.options.now?.() ?? new Date()).getTime() + DAY, result });
+      while (this.#cache.size > 512) this.#cache.delete(this.#cache.keys().next().value!);
+      this.#revision += 1;
+    }
     return result;
   }
 }
