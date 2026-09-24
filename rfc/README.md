@@ -223,20 +223,20 @@ predecessor renegotiates here rather than renumbering unilaterally.
 
 ## Principle-entry-schema-version register
 
-<!-- register: principle-entry-schema head=0.1 -->
-<!-- schema-digest: principle-entry-schema fcfbeb776857 -->
+<!-- register: principle-entry-schema head=0.2 -->
+<!-- schema-digest: principle-entry-schema 61e38078e5c3 -->
 
 ### Landed
 
 | version | owner RFC | what it changed | landed at |
 |---|---|---|---|
 | 0.1 | `archive/claim-backing.md` | official principle-entry registry contract | `5a63225` |
+| 0.2 | `theory-knowledge-pipeline.md` | `provenance.sources` items are a closed union of the string form and `$defs/structuredCitation` (sourceId, revisionUrl, sha256, sectionRef, quotedText); `standsOn` gains `cited_source`, admitted biconditionally in `validatePrincipleEntry`; every citation joins an accepted `content/theory-sources.json` row with equal revision and digest and derives its attribution from that row ([[D1898]] repair). Additive: all 13 entries validate unchanged and no principle digest moves | `5194954` |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| lane 0.2 | `theory-knowledge-pipeline.md` | provenance.sources items become a closed union of the existing string form and a structured citation object (sourceId, revisionUrl, sha256, sectionRef, quotedText); standsOn gains a fourth member cited_source admissible only when a structured citation is present | `tabiya-claims` |
 
 ## Campaign-schema-version register
 

@@ -789,6 +789,31 @@ Proposed — ids assigned at landing; head was **D1354** at drafting.
 
 ## Changelog
 
+- 2026-09-24: **read-time half implemented on the owner's direct-implementation mandate; the
+  migration half is not taken** (its position behind `social-play` stands). Landed without a
+  migration: the Library-context applicability result (`apps/server/src/theory-library.ts` —
+  shape `present` targets, bare-principle vs claim-anchored identities, exact opening endpoints,
+  the four abstentions, `targetId` as §1.1 specifies); the four routes of §2.1; the Library
+  catalogue of §4.3 (packs, shapes, principles, plus concepts and named openings) behind a new
+  read-only `/theory` REST family. Not landed: `theory_launch`, the `run_derivations` rebuild, the
+  source-bound launch endpoint, the §3.2 single-kind repairs, Learn/ShapePanel source-bound doors,
+  anchors on recommendations, and the §4.4 `review.story` projection edits. **Defects fixed
+  inline:** (1) §2.1 said `/play/pack/{packId}` *opens* the pack; a GET-navigable URL that creates
+  a run turns Back/reload into duplicate runs, so the route renders the pack's entry (understand +
+  return) with an explicit Rehearse action that uses the ordinary direct start (§4.3's no-derivation
+  rule is unchanged). (2) §1.1/D3 say the opening declarations move to `packages/runtime` "without
+  changing producer bytes"; `apps/server/src/opening-catalogue.ts` is itself one of
+  `OPENING_CATALOGUE_COMPILER_FILES`, so any edit to it changes the compiled artifact's
+  `compilerDigest` and requires a catalogue rebuild. The move is therefore deferred with the
+  migration half, and applicability imports the literal `CurrentOpeningEndpoint` from the server
+  module rather than restating it. (3) §4.1's "50 most recent runs" bound no longer exists at HEAD:
+  `shapeRecommendations()` pages through every preserved run, and both the offer and suppression
+  sets already require `relation === "present"` — criterion 2's offer arm is re-asserted over the
+  Library result instead. (4) The runtime catalogue names several exact positions identically
+  (e.g. five "Sicilian Defense: Najdorf Variation" endpoints), so the Library lists one row per
+  name and the opening entry names its sibling positions; listing each endpoint was a duplicate
+  listing.
+
 - 2026-08-30: author repair for [[D1879]]–[[D1887]]. The draft now reuses the literal implemented
   opening payload, splits bare principles from claim occurrences, replaces raw routes with closed
   actions, separates Library starts from source-bound launches, accepts only a recomputed target id

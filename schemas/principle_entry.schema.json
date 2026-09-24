@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:principle-entry:0.1",
+  "$id": "urn:chess-tabiya:schema:principle-entry:0.2",
   "title": "Tabiya Principle Entry",
   "type": "object",
   "required": ["id", "version", "name", "statement", "phases", "standsOn", "counterCase", "provenance"],
@@ -10,7 +10,7 @@
     "name": { "$ref": "#/$defs/nonEmptyString" },
     "statement": { "$ref": "#/$defs/nonEmptyString" },
     "phases": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["opening", "middlegame", "endgame"] } },
-    "standsOn": { "enum": ["chess_tradition", "authors_practice", "instrument_pattern"] },
+    "standsOn": { "enum": ["chess_tradition", "authors_practice", "instrument_pattern", "cited_source"] },
     "counterCase": { "$ref": "#/$defs/nonEmptyString" },
     "provenance": { "$ref": "#/$defs/provenance" }
   },
@@ -18,13 +18,27 @@
   "$defs": {
     "nonEmptyString": { "type": "string", "minLength": 1 },
     "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
+    "structuredCitation": {
+      "description": "A revision-pinned citation of an accepted theory-source register row (rfc/theory-knowledge-pipeline.md §10). sourceId joins content/theory-sources.json; revisionUrl and sha256 must equal that row, and the complete attribution is derived from the row rather than copied here. quotedText is the exact quoted span, never a paraphrase.",
+      "type": "object",
+      "required": ["sourceId", "revisionUrl", "sha256", "sectionRef", "quotedText"],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/id" },
+        "revisionUrl": { "type": "string", "format": "uri" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sectionRef": { "$ref": "#/$defs/nonEmptyString" },
+        "quotedText": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
     "provenance": {
       "type": "object",
       "required": ["licence", "sources", "attribution"],
       "properties": {
         "licence": { "$ref": "#/$defs/nonEmptyString" },
-        "sources": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "sources": { "type": "array", "items": { "oneOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "$ref": "#/$defs/structuredCitation" }] } },
         "attribution": {
           "type": "array",
           "items": {

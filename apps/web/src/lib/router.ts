@@ -16,6 +16,11 @@ export type AppRoute =
   | { readonly name: "story"; readonly runId: string }
   | { readonly name: "live-session"; readonly sessionId: string }
   | { readonly name: "live-overlay"; readonly runId: string }
+  /** rfc/theory-drill-current-joins.md §2.1: an exact pack target and the three theory entries. */
+  | { readonly name: "pack"; readonly packId: string }
+  | { readonly name: "shape-entry"; readonly shapeId: string }
+  | { readonly name: "principle-entry"; readonly principleId: string }
+  | { readonly name: "opening-entry"; readonly positionKey: string }
   | { readonly name: "not-found"; readonly pathname: string };
 
 type Subscriber = (route: AppRoute) => void;
@@ -45,6 +50,10 @@ const ROUTE_TITLES: Readonly<Record<AppRoute["name"], string>> = Object.freeze({
   live: "Live",
   "live-session": "Live session",
   "live-overlay": "Live overlay",
+  pack: "Rehearsal pack",
+  "shape-entry": "Shape",
+  "principle-entry": "Principle",
+  "opening-entry": "Opening",
   create: "Create",
   library: "Library",
   settings: "Settings",
@@ -86,6 +95,20 @@ export function parseRoute(location: Pick<Location, "pathname">): AppRoute {
       if(id.trim()!=="")return live[1]==="session"?Object.freeze({name:"live-session",sessionId:id}):Object.freeze({name:"live-overlay",runId:id});
     } catch { /* malformed live ids route to not-found */ }
   }
+  // Parameterized theory/pack routes. Query strings are never read (§2.2): all state is a path segment.
+  const entry = /^\/(?:play\/(pack)|library\/(shape|principle|opening))\/([^/]+)$/.exec(pathname);
+  if (entry !== null) {
+    try {
+      const id = decodeURIComponent(entry[3]!);
+      if (id.trim() !== "") {
+        const kind = entry[1] ?? entry[2];
+        if (kind === "pack") return Object.freeze({ name: "pack", packId: id });
+        if (kind === "shape") return Object.freeze({ name: "shape-entry", shapeId: id });
+        if (kind === "principle") return Object.freeze({ name: "principle-entry", principleId: id });
+        return Object.freeze({ name: "opening-entry", positionKey: id });
+      }
+    } catch { /* malformed ids route to not-found */ }
+  }
   return Object.freeze({ name: "not-found", pathname });
 }
 
@@ -94,6 +117,10 @@ export function routePath(route: Exclude<AppRoute, { name: "not-found" }>): stri
   if(route.name==="story")return `/review/game/${encodeURIComponent(route.runId)}`;
   if(route.name==="live-session")return `/live/session/${encodeURIComponent(route.sessionId)}`;
   if(route.name==="live-overlay")return `/live/overlay/${encodeURIComponent(route.runId)}`;
+  if(route.name==="pack")return `/play/pack/${encodeURIComponent(route.packId)}`;
+  if(route.name==="shape-entry")return `/library/shape/${encodeURIComponent(route.shapeId)}`;
+  if(route.name==="principle-entry")return `/library/principle/${encodeURIComponent(route.principleId)}`;
+  if(route.name==="opening-entry")return `/library/opening/${encodeURIComponent(route.positionKey)}`;
   return Object.entries(STATIC_ROUTES).find(([, name]) => name === route.name)![0];
 }
 
