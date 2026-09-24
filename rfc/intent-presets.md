@@ -1,13 +1,16 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** implementing — **Checkpoint A landed 2026-09-24 by owner direction (implement
+- **Status:** draft (register token unchanged pending the rfc/README.md owner flip to implementing) — **Checkpoint A landed 2026-09-24 by owner direction (implement
   directly, no review rounds).** The literal §4a/§3.2 tables are re-derived at import time; the ∩ algebra
   runs through the four typed, digest-bound stages; the lossless v2 receipt is the only writer;
   `POST /runs/:id/assistance` is the server seat; and the Play pill, footer, Settings and Advanced
-  surfaces render the compiled result. Checkpoint B (a real `compiled.modules` delivery, D5), the sealed
-  module source graph (module-registration still draft, so finalization records
-  `MODULE_AUTHORITY_NOT_ACCEPTED`), executable Campaign (D6) and the owner's D1639 ruling (proposed
-  hint table used) remain open. Receipt: `planning/intent-presets/checkpoint-a-implementation-2026-09-24.md`.
+  surfaces render the compiled result. After module-registration's production registry landed the
+  same day, the presentation facts mirror `MODULE_POLICIES`, and the Post-commit Nudge seat renders
+  only through the compiled `postcommit_nudge` effect: the first real consumer. D5 stays open
+  because the server's `/nudge` operation does not yet bind delivery to the final digest or record a
+  new receipt. Also still open: the sealed effect/source graph (the module contract artifacts are
+  still `requirements_only`, so finalization records `MODULE_AUTHORITY_NOT_ACCEPTED`), executable
+  Campaign (D6), and the owner's D1639 ruling (the proposed hint table is used). Receipt: `planning/intent-presets/checkpoint-a-implementation-2026-09-24.md`.
   *Prior status for history:* draft — **third author repair complete 2026-08-30 on [[D2171]]–[[D2178]];
   dependency-blocked before another fresh review.** One four-stage typed pipeline replaces the
   monolith; v2 persists its intent arm losslessly; named preset selection clears Custom module
@@ -1387,8 +1390,10 @@ named in its own text, never this list.
   **(7)** A v1 workflow key naming a preset the context refuses migrates to `invalid_fallback`, not a
   silent default.
   **Findings kept as tests, not changed:** the match clamp has no terminal arm (§3 says
-  "pre-terminal"); D1639's proposed hint table is used and marked proposed; the module presentation
-  facts are a transcribed stand-in pending module-registration's sealed registry.
+  "pre-terminal"); D1639's proposed hint table is used and marked proposed. After main's module-registration
+  landing, the module presentation facts mirror `MODULE_POLICIES` (re-derived at import). The Nudge seat
+  consumes the compiled `postcommit_nudge` effect and never nudges retroactively on a preset raise
+  (criterion 9 arm a).
 - 2026-08-30 (**third author repair [[D2171]]–[[D2178]]**): replaced the conflicting compiler
   APIs with one four-stage discriminated/digest-correlated pipeline; made v2 intent lossless;
   made named preset selection literal; removed browser readiness from the server request; excluded

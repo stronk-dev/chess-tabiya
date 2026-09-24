@@ -36,3 +36,17 @@ and the new shared wires/vocabulary claim no register.
 preset author collapses to one typed pipeline, makes persistence lossless, settles selection and
 recovery semantics, registers the wires, inverts all eight arms and requests another fresh review.
 Exact review: `planning/intent-presets/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-09-24 — Checkpoint A implemented (owner direction: implement directly)
+
+**What landed:** the literal preset/context tables with import-time re-derivation from the module
+registry; the four digest-bound stages and `POST /runs/:id/assistance`; the lossless v2 receipt as the
+only writer; the Play pill/footer/Advanced and the Settings help-style selects. The Post-commit Nudge
+seat is now gated on the compiled effect. Seven RFC defects were fixed inline (changelog).
+
+**What changed:** choosing a preset now changes the default modules and config. Every primitive stays
+reachable under Advanced, and anything above the preset reads as Custom.
+
+**Blocked/next:** D5 server-side delivery binding; sealed effect/source graph; Campaign (D6); owner
+ruling D1639; the five module-dependent composition states. Receipt:
+`planning/intent-presets/checkpoint-a-implementation-2026-09-24.md`.
