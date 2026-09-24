@@ -21334,3 +21334,26 @@ sixth `provider-protocol` member.
 - **Still open:** bots are unavailable in production Maia mode until the
   sidecar reports its container identity, which is in the provider-health lane.
   The migration queue now opens for campaign-core.
+
+### 2026-09-24 — shared-resource-register-bootstrap archived; convention provenance lands
+
+The register catalogue's three staged rebases landed on the catalogue, each by
+creating its source first:
+- provider-protocol;
+- semantic-conventions, with 48 registered members;
+- assistance-config and workflow-preference.
+The bootstrap is archived as implemented.
+
+**Convention provenance:**
+- 48 declarations with an append-only history. The endgame setup/method
+  conventions now live in the register.
+- Every minted value seals a `ConventionReceipt`.
+- The recorded semantic path returns a registered convention receipt.
+- This discharges evidence-value-authority D1. That RFC now awaits D2.
+
+**Ledger:**
+- Sixteen rows close (D3034, D2454, D2455, D2466, D3085–D3087, D3116–D3119,
+  D1921, D1929, D1852, D1918, D1920).
+- 49 findings against the withdrawn register engine are superseded (⛔).
+- D2401 moves to evidence-presentation.
+- Absent-source admission (D2363, D3082) stays open in the routing queue.
