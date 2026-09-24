@@ -275,8 +275,12 @@ describe("expression census", () => {
     const declarations = fullDeclarationReport.declarations;
     expect(JSON.stringify(declarations)).not.toMatch(/"(?:dead|unreachable|unsatisfiable|unused)"/u);
     const retry = declarations.find((row: any) => row.namespace === "schema" && row.subject === "/retryVariants");
+    // rfc/return-scheduling.md §7 names the variation on varied returns; the census reports it.
     expect(retry).toMatchObject({
-      consumers: [],
+      consumers: [
+        { module: "apps/server/src/service.ts", symbol: "retryVariants" },
+        { module: "apps/server/src/training-census.ts", symbol: "trainingCensus" },
+      ],
       refusalSites: [{ module: "apps/server/src/pack-validation.ts", symbol: "runtimeIssues", code: "RETRY_VARIANTS_NOT_EXECUTABLE" }],
       dispositionRow: "/retryVariants",
     });
