@@ -1,6 +1,6 @@
 # RFC: Import-source protocol shared-resource registration
 
-- **Status:** implemented 2026-09-24 at the owner's direction to build ready RFCs without further
+- **Status:** implementing 2026-09-24 (landing complete; archival deferred to consolidation) at the owner's direction to build ready RFCs without further
   review rounds (the fresh review was not run). The descriptor/claim vocabulary was corrected to the
   implemented bootstrap (see Changelog): `import-source-protocol` is one `members` row read by the
   existing `string_tuple` reader over a present `IMPORT_SOURCE_PROTOCOL_MEMBERS` tuple seeded with

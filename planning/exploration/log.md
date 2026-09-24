@@ -21373,3 +21373,21 @@ The bootstrap is archived as implemented.
   routes and the `/theory` family are added.
 - **Still open:** no principle cites a source yet, which is authored judgement.
   The persistent theory-drill joins keep their migration position.
+
+### 2026-09-24 — import-source protocol registered; account import lands
+
+- **Import protocol:** `import-source-protocol` is a catalogue members resource,
+  and every import union derives from it (D2278).
+- **Pasted PGN:** it is capped and stripped of third-party annotations at the
+  record boundary (D959).
+- **Account import:** a learner can now preview and restore their own exported
+  bundle into a fresh installation.
+  - Formats are versioned with upgrade steps.
+  - Derived stats are recomputed, not copied.
+  - Any clash refuses the whole import.
+  - Ratings, marks and anything involving other people are never restored.
+- **Account screens:** a twelve-kind inventory panel and download progress.
+- **Export fix:** a repertoire's original PGN was exported as a list of byte
+  values; it is now text.
+- **Owner decisions:** guest accounts and claiming (O-A2/D1485), and the
+  wording of the twelve kind names.
