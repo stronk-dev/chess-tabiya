@@ -248,7 +248,11 @@ result. Native matches retain their separate open-seat participant link.
 
 A streamer cannot be forced to play blind while their audience sees more evidence: the
 streamer can grant and use a second spectator account. Tabiya therefore gives player and
-spectator the same viewer-blind run projection. Assistance is a separate rail: it caps a
+spectator the same viewer-blind run projection — the same moves, branches and disclosure
+barrier — but **not the same assistance**: a non-reviewing spectator or seated participant gets
+strictly less than a solo player or host, with no human-model split, no corpus counts, and board
+lighting and arrows capped at `sight` (`accessPermission`, `packages/runtime/src/assistance.ts`).
+Assistance is a separate rail: it caps a
 seated participant or non-reviewing spectator during live play, never raises the run's
 disclosure ceiling, and never exceeds what the run itself has disclosed. A
 submission-granted teacher may receive the host ceiling only after an outcome and after

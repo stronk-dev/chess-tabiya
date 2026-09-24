@@ -380,6 +380,10 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   await expect(page.getByLabel("Current password")).toHaveValue("");
 
   await expect(page.getByRole("heading", { name: "Your data and privacy" })).toBeVisible();
+  // IMP-a12: the standing inventory reads the same summary without approaching deletion.
+  await expect(page.getByRole("heading", { name: "What Tabiya has recorded" })).toBeVisible();
+  await expect(page.locator('[data-recorded-kind="account"]')).toContainText("1 record");
+  await expect(page.locator('[data-recorded-kind="behavioral_profile"]')).toContainText("abandoned and voided games");
   await expect(page.locator(".deletion-preview")).toBeVisible();
   await expect(page.getByRole("button", { name: "Refresh data summary" })).toBeVisible();
   await expect(page.getByText("Live data is removed immediately", { exact: false })).toBeVisible();
@@ -829,7 +833,8 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
     await voteEditor.getByLabel("Move").nth(index).selectOption(moves[index]!);
     await voteEditor.getByLabel("Audience label").nth(index).fill(labels[index]!);
   }
-  await voteEditor.getByLabel("Duration (seconds)").fill("90");
+  await voteEditor.getByLabel("Voting time (seconds)").fill("90");
+  await expect(voteEditor.getByLabel("Voting time (seconds)")).toHaveAccessibleDescription(/It is not a board delay/u);
   await voteEditor.getByRole("button", { name: "Open vote" }).click();
   await expect(page.getByText("Which plan? · Voting open")).toBeVisible();
   await expect(page.getByRole("button", { name: /Vote for Bishop f4/ })).toBeVisible();
@@ -2800,16 +2805,22 @@ test("@matrix normal Tab traversal reaches every drill region in both directions
 test("@matrix mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/settings");
+  // SET-a14: ordinary Settings states the in-flow choice; per-activity help sits behind one Advanced door.
+  await expect(page.locator("#playing-settings")).not.toContainText(/\bcontexts?\b/iu);
+  await expect(page.getByRole("group", { name: "Just Play" })).toBeHidden();
+  await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+  await expect(page.getByLabel("Activity")).toHaveValue("position");
   const position = page.getByRole("group", { name: "Just Play" });
   const ambientLabel = position.locator("label").filter({ hasText: "Ambient presence" });
   expect(await ambientLabel.evaluate((element) => getComputedStyle(element).display)).toBe("flex");
   expect(await ambientLabel.evaluate((element) => getComputedStyle(element).alignItems)).toBe("center");
   await expect(page).toHaveTitle("Settings · Tabiya");
   await expect(position.getByLabel("Help style")).toHaveValue("quiet");
-  await position.locator("summary").filter({ hasText: "Advanced" }).click();
+  await position.locator("summary").filter({ hasText: "Individual help channels" }).click();
   await position.getByLabel("Board lighting").selectOption("sight");
   await page.reload();
-  await position.locator("summary").filter({ hasText: "Advanced" }).click();
+  await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+  await position.locator("summary").filter({ hasText: "Individual help channels" }).click();
   await expect(position.getByLabel("Board lighting")).toHaveValue("sight");
   await expect(position.getByLabel("Help style")).toHaveValue("custom");
   await page.goto("/play");
