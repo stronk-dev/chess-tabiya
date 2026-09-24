@@ -83,7 +83,7 @@ subpath, an AST-resolved two-way import-graph guard, and a multi-rating rendered
 | `shared-candidate-evidence-packet.md` | **implementing — foundation contract landed 2026-09-24 at the owner's direction.** `packages/runtime/src/candidate-population.ts` compiles one sealed, score-free, complete legal-candidate receipt from the root position; selection consumes it; criteria 1–11, 14–25, 27 and 36 are tested. Criterion 12 (cold/warm record) waits on `candidate-population-service.md`; D11/D12 successors unchanged. Receipt: `planning/evidence-foundation-ux/shared-candidate-evidence-packet-implementation-2026-09-24.md` | `planning/evidence-foundation-ux/candidate-packet-cut-plan.md`; owner acceptance; draft `evidence-value-authority` | **`none`, failable:** internal process receipt only; no F1 aggregate, schema, migration, pack, run or content-kind lane; implementation unauthorized |
 | `candidate-population-service.md` | **draft — stub created by the 2026-09-06 cut of `shared-candidate-evidence-packet.md`; unwritten by design.** Holds the runtime service and cache material and its rows: construction seam, result/failure algebra, cancellation and yield, single-flight, queue and LRU bounds, retained-graph accounting, stats. Specifies nothing; deferred until a consumer needs it ([[D3034]]). | `planning/evidence-foundation-ux/candidate-packet-cut-plan.md` | **`none`** — a process-local cache keyed on a content digest touches no versioned resource; implementation unauthorized |
 | `candidate-collector-registry.md` | **draft — stub created by the 2026-09-06 cut of `shared-candidate-evidence-packet.md`; unwritten by design.** Holds the executable collector topology and its rows: the thirteen adapters, dependency-closed scope plans, the per-collector memo, the generated projection dialect, abstention and failure identity. Specifies nothing; deferred until a consumer needs it ([[D3034]]). | `planning/evidence-foundation-ux/candidate-packet-cut-plan.md` | **`none`** — every collector output keeps its existing F1 identity; no catalogue projection is added; implementation unauthorized |
-| `assistance-config-register.md` | **draft — generic descriptor/selector repair complete 2026-09-01 under [[D2498]]/[[D2499]].** Config v4 and workflow v1 now have complete canonical descriptor candidates whose real AST version selectors resolve exactly once; the live permission union is adopted separately and permission operations/exchange remain atomic absent contracts. | `planning/assistance-config-register/catalogue-additions.v1.json`; generic engine acceptance/implementation, then fresh independent review | **claims none** — no descriptor/register/product implementation authorized |
+| `assistance-config-register.md` | **implementing — process landing complete 2026-09-24 at the owner's direction; D4/D5 are later product claims.** Rebased for [[D2454]] onto the implemented catalogue: `assistance-config` (adopted at v4) and `workflow-preference` (adopted v1 plus the v2 intent presets landed) are `members` rows read by the existing `string_tuple` reader from literal version tuples in `assistance.ts`/`presets.ts`, bound to the live versions by `assistance-register.test.ts`; a next version is a member claim, so two claimants collide. The draft's TypeScript-graph/adopted/absent engine does not exist and is corrected inline; permission vocabulary, permission contract and exchange are deferred to their product landings | `planning/assistance-config-register/`; implemented `shared-resource-register-bootstrap.md` | **claims none** — process rows only; hint distance claims `assistance_config_v5` when it lands |
 | `bounded-policy-targets.md` | **draft — sixth author repair complete for [[D3042]]–[[D3046]]; fresh independent review required.** Complete declaration ASTs, owned request snapshots, authority-exact dedup, the public result assertion and pre-identity malformed-input rejection pass the retained chain plus 5/5 new controls. | `planning/bounded-policy-targets/sixth-author-repair-2026-09-06.md`; another genuinely fresh review; `evidence-value-authority` and `semantic-validation-authority` dependencies | **claims none** — additive unpersisted F1 ids only; implementation forbidden pending fresh acceptance |
 | `bounded-target-policy-composition.md` | **draft 2026-08-27 — third layer of [[D1861]], blocked on the local-target and shared-provider RFCs.** Publishes two literal reported derivations: a depth-stable Stockfish category over complete legal-root tables and one-band Maia execution/availability bounds over retained pages. Exact target facts and reusable provider receipts remain separate authorities; same-exchange identity, path-effective latency/confidence, three-arm absence bounds, mass-less refusal, denominator retention and one composed application operation are failable. Both outputs remain inspector-only pending consumer RFCs. | `design/research/bounded-policy-target-contract-closure.md`; `provider-exchange-and-execution`; `bounded-policy-targets` | **claims none** — additive unpersisted F1 ids only; no schema, migration, pack, run or content lane |
 | `evidence-presentation.md` | **implementing — Checkpoint A (Review-compiler slice) landed 2026-09-24 at the owner's direction.** 14 component declarations, pair-keyed adapters for every `review.story@1` binding and the executable `module.review_map@1` pairs, `PresentedEvidenceItem`/`PresentationReceipt` with strict parser, raw-id guard, six runtime component renderers and the authored-claim seat; [[D3102]]–[[D3107]] fixed in production code. Remaining: five Checkpoint-P operations, eight declared-only components, the label registry and sweeps, Checkpoint B and every other module pair. Receipt: `planning/platform-alignment/evidence-presentation/checkpoint-a-implementation-2026-09-24.md` | `planning/platform-alignment/evidence-presentation/seventh-fresh-independent-buildability-review-2026-09-07.md`; bounded seventh author repair; another genuinely fresh review; [[D1672]] and [[D2401]] remain independent blockers | **temporarily claims none while the root is absent** — [[D2401]] requires the process bootstrap to register `source-attribution-registry`, then this RFC must carry its unique `first lane 1` claim before acceptance; no schema, migration or evidence-kind lane |
@@ -440,6 +440,54 @@ Human-owned and checked by `make register-check`, never generated.
 | trapped_v1 | `semantic-convention-provenance.md` | implementing checkpoint 2026-09-24 |
 | vancura_method_v1 | `semantic-convention-provenance.md` | implementing checkpoint 2026-09-24 (meaning: `evidence-value-authority.md`) |
 | vancura_setup_v1 | `semantic-convention-provenance.md` | implementing checkpoint 2026-09-24 (meaning: `evidence-value-authority.md`) |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
+## Assistance-config register
+
+<!-- register: assistance-config members=1 -->
+
+The persisted `AssistanceConfig` versions (rfc/assistance-config-register.md). The tree source is the
+literal tuple `ASSISTANCE_CONFIG_VERSIONS` in `packages/runtime/src/assistance.ts`, read by the
+catalogue's existing `string_tuple` reader (`rfc/shared-resource-registers.json`); each member is one
+landed version spelled `assistance_config_v<n>`. Coverage begins at the adopted v4: v1–v3 predate the
+register, are only migration inputs and are not manufactured as landed rows. A config change that
+needs a new version claims the next member (`assistance_config_v5`), so two claimants collide.
+`packages/runtime/src/assistance-register.test.ts` binds the last member to `AssistanceConfig.version`.
+Human-owned and checked by `make register-check`, never generated.
+
+### Landed
+
+| member | added by | added at |
+|---|---|---|
+| assistance_config_v4 | `assistance-config-register.md` | adopted 2026-09-24 (coverage begins here) |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
+## Workflow-preference register
+
+<!-- register: workflow-preference members=2 -->
+
+The persisted workflow-preference versions (rfc/assistance-config-register.md). The tree source is the
+literal tuple `WORKFLOW_PREFERENCE_VERSIONS` in `packages/runtime/src/presets.ts`, read by the
+catalogue's existing `string_tuple` reader; each member is one landed version spelled
+`workflow_preference_v<n>`. v1 (`{ version: 1, preset }`) is the adopted baseline the web loader still
+migrates; v2 is the sealed value `intent-presets.md` landed. The next version claims
+`workflow_preference_v3`. `packages/runtime/src/assistance-register.test.ts` binds the last member to
+`WorkflowPreferenceV2.version`. Human-owned and checked by `make register-check`, never generated.
+
+### Landed
+
+| member | added by | added at |
+|---|---|---|
+| workflow_preference_v1 | `assistance-config-register.md` | adopted 2026-09-24 (coverage begins here) |
+| workflow_preference_v2 | `intent-presets.md` | Checkpoint A 2026-09-24 (recorded at adoption) |
 
 ### Live claims
 

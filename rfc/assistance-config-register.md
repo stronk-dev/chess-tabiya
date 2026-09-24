@@ -1,9 +1,12 @@
 # RFC: Assistance shared-resource catalogue population
 
-- **Status:** draft — generic descriptor/selector repair complete 2026-09-01 under
-  [[D2498]]/[[D2499]], after [[D2450]]–[[D2454]] and [[D2465]]–[[D2467]]. The document now depends on the generic register engine, adopts three truthful current
-  authorities, introduces two atomic future contracts and adds no bespoke checker. Fresh
-  independent review is required; implementation is unauthorized.
+- **Status:** implementing 2026-09-24 (process landing complete; D4/D5 are later product claims)
+  at the owner's direction to implement ready RFCs without further review rounds (D2 not run).
+  Rebased for [[D2454]] onto the implemented collision-core bootstrap: `assistance-config` (adopted
+  at v4) and `workflow-preference` (adopted at v1, with the v2 that `intent-presets.md` already
+  landed) are two `members` rows read by the existing `string_tuple` reader over present literal
+  version tuples, with checked README registers. Previously: generic descriptor/selector repair
+  complete 2026-09-01 under [[D2498]]/[[D2499]]
 - **Author:** Codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over already-ruled assistance behavior; it
@@ -11,9 +14,9 @@
 - **Exploration gate:** passed by `design/research/assistance-config-shared-resource.md`,
   `design/research/assistance-shared-resource-boundaries.md`, [[D1581]], [[D2328]] and the sixth
   fresh review
-- **Depends on:** accepted and implemented `rfc/shared-resource-register-bootstrap.md`
-- **Parent / amends:** adds resource descriptors/registers through the generic engine; does not
-  amend its parser, transition reader or canonical-byte authority
+- **Depends on:** implemented `rfc/shared-resource-register-bootstrap.md` (catalogue + checker)
+- **Parent / amends:** adds two data rows to the generic catalogue; does not amend its parser or
+  readers
 - **Supersedes / superseded by:** supersedes every C9/`RESOURCE_NAMES` proposal in earlier revisions
 - **Planning:** `planning/assistance-config-register/`
 
@@ -21,237 +24,81 @@
 none
 ```
 
-```tabiya-resource-roots
-assistance-config | sequential/typescript_contract@1/adopted | packages/runtime/src/assistance.ts#interface:AssistanceConfig | packages/runtime/src/assistance.ts#interface:AssistanceConfig/member:version/literal
-workflow-preference | sequential/typescript_contract@1/adopted | apps/web/src/lib/assistance-preference.ts#function:loadWorkflowPreset | apps/web/src/lib/assistance-preference.ts#function:saveWorkflowPreset/object:version/literal
-assistance-permission | member_set/literal_string_union@1/adopted | packages/runtime/src/assistance.ts#type:AssistancePermission | none
-assistance-permission-contract | sequential/canonical_resource@1/absent | packages/runtime/src/assistance.ts#export:ASSISTANCE_PERMISSION_CONTRACT_RESOURCE | packages/runtime/src/assistance.ts#export:ASSISTANCE_PERMISSION_CONTRACT_RESOURCE.version
-assistance-exchange | sequential/canonical_resource@1/absent | packages/runtime/src/assistance-exchange.ts#export:ASSISTANCE_EXCHANGE_RESOURCE | packages/runtime/src/assistance-exchange.ts#export:ASSISTANCE_EXCHANGE_RESOURCE.version
+```tabiya-resource-descriptor-source
+rfc/shared-resource-registers.json#assistance-config
+rfc/shared-resource-registers.json#workflow-preference
 ```
 
-```tabiya-resource-descriptor-source
-planning/assistance-config-register/catalogue-additions.v1.json
+```tabiya-resource-roots
+assistance-config | members/string_tuple@present | packages/runtime/src/assistance.ts#export:ASSISTANCE_CONFIG_VERSIONS | none
+workflow-preference | members/string_tuple@present | packages/runtime/src/presets.ts#export:WORKFLOW_PREFERENCE_VERSIONS | none
 ```
 
 ## Summary
 
-This process RFC adds five assistance resources to the generic shared-resource catalogue. It
-changes no assistance product bytes:
+Two assistance authorities are shared resources: the persisted `AssistanceConfig` version, and the
+persisted workflow-preference version. Both can be changed by more than one product RFC (hint
+distance claims config v5; intent presets changed the workflow value), so both need collision
+prevention. The implemented bootstrap offers three readers; the smallest honest shape is one literal
+version tuple per resource, read by the existing `string_tuple` reader. A product RFC that needs the
+next version claims the next member, so two claimants of `assistance_config_v5` collide through the
+generic C3 check.
 
-- `assistance-config` adopts the complete live version-4 config/persistence graph;
-- `workflow-preference` adopts the complete live version-1 preference/policy graph;
-- `assistance-permission` adopts the current four-member type-union vocabulary;
-- `assistance-permission-contract` is a genuinely absent sequential contract for the operations
-  that compose effective permission; and
-- `assistance-exchange` is a genuinely absent atomic wire/compiler contract.
+This RFC adds only catalogue data, two literal tuples beside the authorities they name, README
+registers and a binding test. It adds no reader, parser branch, Git reader, canonicalizer or
+resource-name literal to `tools/register-check.mjs`, and it changes no assistance behavior.
 
-Vocabulary membership and operation semantics have different lifecycles. A member-only register
-cannot represent a same-membership change to `permittedAssistance`, context clamping or pointwise
-composition ([[D2453]]).
+## Active contract and acceptance criteria
 
-All projection, claim, collision, digest, staged and first-parent behavior comes from
-`shared-resource-register-bootstrap`. This RFC adds descriptor data and README rows only. It does
-not add C9, a resource-name branch, a Git reader or a second canonicalization implementation.
+1. `rfc/shared-resource-registers.json` gains exactly two `members` rows:
+   `assistance-config` → `packages/runtime/src/assistance.ts#ASSISTANCE_CONFIG_VERSIONS` and
+   `workflow-preference` → `packages/runtime/src/presets.ts#WORKFLOW_PREFERENCE_VERSIONS`, both
+   `string_tuple`. The historical `planning/assistance-config-register/catalogue-additions.v1.json`
+   descriptor is retained as evidence only. Its `typescript_contract@1`, `literal_string_union@1`,
+   `canonical_resource@1`, `adopted`/`absent` and `whole projection` vocabulary does not exist in the
+   implemented bootstrap (its §5 removes it).
+2. **Honest adoption.** `assistance-config` records exactly `assistance_config_v4`. Coverage begins
+   at the live head, and v1–v3 are migration inputs, not invented landed rows. `workflow-preference`
+   records `workflow_preference_v1`, the adopted baseline the web loader still migrates from
+   `tabiya.workflow.v1.*`. It also records `workflow_preference_v2`, the sealed value
+   `intent-presets.md` landed before this adoption. Each README register says where its coverage
+   begins.
+3. **Binding.** `packages/runtime/src/assistance-register.test.ts` proves that each tuple is a
+   contiguous `<prefix>_v<n>` lineage. It checks that the last config member equals
+   `AssistanceConfig.version` and that the last workflow member equals the sealed
+   `WorkflowPreferenceV2.version`, whose `assistanceHead` equals the config head. v1 stays landed only
+   while the loader still reads it. A version bump without its member, or a member without the bump,
+   fails.
+4. **Collision.** A next-version claim is a `members` claim (`assistance-config | members
+   assistance_config_v5 | …`). Two claimants of one next version collide. A lane or
+   whole-projection claim is refused by the generic grammar (`tools/register-check.test.mjs`).
+5. Generic C4/C6 prove every tree member has a Landed row and the head count equals the tuple length.
+6. No assistance, preset, preference, web, schema, storage or content behavior changes. The only
+   product bytes are the two literal tuples and their doc comments.
+7. `make register-check`, `make shared-resource-catalogue` and the runtime software suite prove the
+   rows, registers, binding and collision.
 
-## 1. Exact catalogue descriptors
+### Deferred from the earlier five-resource cut (not registered here)
 
-The implementation appends five descriptors to `rfc/shared-resource-catalogue.json`. The generic
-schema is authoritative; these sections publish their complete semantic configuration.
-
-### 1.1 Assistance config — adopted sequential TypeScript contract
-
-The profile is `sequential/typescript_contract@1/adopted`, `claimMode: whole_projection`, with
-current head derived as literal 4 from `AssistanceConfig.version`. Root selectors are exactly:
-
-```text
-packages/runtime/src/assistance.ts#interface:AssistanceConfig
-packages/runtime/src/assistance.ts#export:SILENT_ASSISTANCE
-apps/web/src/lib/assistance-preference.ts#export:PROFILE_DEFAULTS
-apps/web/src/lib/assistance-preference.ts#function:assistanceKey
-apps/web/src/lib/assistance-preference.ts#function:validV4
-apps/web/src/lib/assistance-preference.ts#function:migrate
-apps/web/src/lib/assistance-preference.ts#function:loadAssistance
-apps/web/src/lib/assistance-preference.ts#function:saveAssistance
-```
-
-The generic TypeScript projection closes transitive types, constants, calls and property edges.
-All nine fields/domains, defaults, storage key, JSON parse/stringify, unknown/invalid fallback,
-v1–v3 migrations and current load/save behavior enter the adopted semantic digest. The transition
-writes one `adopted@4` baseline and changes none of those product selectors. It does not invent
-v1–v3 semantic history.
-
-### 1.2 Workflow preference — adopted sequential TypeScript contract
-
-The profile is `sequential/typescript_contract@1/adopted`, `claimMode: whole_projection`, with
-current head 1 derived from the unique `version` property in the object literal passed by
-`saveWorkflowPreset` to persistence. Roots are:
-
-```text
-packages/runtime/src/presets.ts#export:PRESET_IDS
-packages/runtime/src/presets.ts#type:PresetId
-packages/runtime/src/presets.ts#export:WORKFLOW_CONTEXTS
-packages/runtime/src/presets.ts#type:WorkflowContextId
-packages/runtime/src/presets.ts#interface:WorkflowContextPolicy
-packages/runtime/src/presets.ts#export:WORKFLOW_CONTEXT_POLICIES
-packages/runtime/src/presets.ts#function:workflowContextPolicy
-apps/web/src/lib/assistance-preference.ts#function:workflowKey
-apps/web/src/lib/assistance-preference.ts#function:loadWorkflowPreset
-apps/web/src/lib/assistance-preference.ts#function:saveWorkflowPreset
-```
-
-This includes context-dependent allowed/default presets, open unknown-key handling, invalid-input
-fallback, storage key and exact `{ version: 1, preset }` grammar. A future strict v2 is one
-`lane 2 | whole projection`. Its before/after graph derives every moved authority—including policy,
-lookup, receipt/override types, field/module registries and persistence functions. The former
-hand-picked eight-symbol list is not authority ([[D2450]]).
-
-### 1.3 Assistance permission vocabulary — adopted member set
-
-The profile is `member_set/literal_string_union@1/adopted` over
-`packages/runtime/src/assistance.ts#type:AssistancePermission`. It records exactly `evidence`,
-`free`, `locked_off` and `sight`. Adoption reads the live union directly and adds no tuple or second
-vocabulary ([[D2467]]). Future literal additions use member claims; removal is forbidden.
-
-This resource says only which values exist. It makes no operation-semantics claim.
-
-### 1.4 Assistance permission contract — absent sequential atomic resource
-
-The future root is
-`packages/runtime/src/assistance.ts#export:ASSISTANCE_PERMISSION_CONTRACT_RESOURCE` and uses
-`canonical_resource@1`. Its eventual payload declares the vocabulary ref/digest, complete
-`AssistanceContext`, config-clamp fields/order, pointwise-min identity and ordered operands,
-`permittedAssistance`/access/context operations, effective field set and authoritative compiler
-projections.
-
-This process creates no root bytes. After archive, a product RFC may claim:
-
-```text
-assistance-permission-contract | first lane 1 | whole projection
-```
-
-Changing `ConfigClamp`, minimum operand order, one permission arm or compiler projection changes
-the payload/digest and requires a lane even when vocabulary membership is unchanged
-([[D2451]], [[D2453]]).
-
-### 1.5 Assistance exchange — absent sequential atomic resource
-
-The future root is
-`packages/runtime/src/assistance-exchange.ts#export:ASSISTANCE_EXCHANGE_RESOURCE` and uses
-`canonical_resource@1`. Its eventual payload contains complete request/response variants, config
-and permission refs, preset/context refs, module/seat mapping, absence/error states, codec ids and
-client/server compiler projections.
-
-Version, payload and digest are one export. A version-only, declarations-only or codec-only
-artifact is partial, not absent. Once landed, a missing/renamed root is a regression. The first
-lane is the complete payload derived at landing, not the former ten-symbol substitute ([[D2452]]).
-
-## 2. Register images and transition delegation
-
-The process implementation adds generated register sections with exactly:
-
-```text
-assistance-config: adopted@4, zero claims
-workflow-preference: adopted@1, zero claims
-assistance-permission: adopted evidence/free/locked_off/sight, zero claims
-assistance-permission-contract: head=absent, zero claims
-assistance-exchange: head=absent, zero claims
-```
-
-Adoption rows say `coverage begins here` and do not manufacture earlier lanes. Absent sections are
-header-only. No product claim appears until this process RFC is archived and a product document is
-separately amended/reviewed.
-
-`assertSharedResourceTransition` is the sole time authority. It proves complete/unchanged adoption,
-exact selector absence, catalogue/register/ledger/log atomicity, future prior-claim consumption,
-fixed-head drift refusal and one-way history. This RFC owns no `HEAD^` code, CI checkout setting or
-merge policy.
-
-## 3. Able-to-fail population fixtures
-
-Using the generic engine, the implementation crosses:
-
-1. exact three-resource adoption plus two absent introductions;
-2. config adoption changing a default, migration, key, parser or save operation;
-3. config adoption with invented v1–v3 rows;
-4. workflow adoption omitting policy lookup or context admission;
-5. workflow v2 changing transitive authorities while a hand-picked root list stays unchanged;
-6. permission union omission/extra/duplicate/computed/broad member;
-7. attempted tuple rewrite during union adoption;
-8. unchanged permission vocabulary plus changed operation-contract payload;
-9. pointwise-min operand swap and omitted ConfigClamp;
-10. exact absent permission-contract/exchange roots;
-11. version-only, payload-only, digest-only and codec-only partial artifacts;
-12. first-lane complete atomic landing and fixed-head nested wire drift;
-13. product claim added in the same commit as process introduction;
-14. adoption replay or landed-to-absent regression; and
-15. a second adopted TypeScript contract plus second atomic absent resource, proving no
-    assistance-id branch.
-
-## 4. Implementation boundary and order
-
-The accepted implementation changes only the shared catalogue, generated README registers,
-descriptor/population fixtures, development docs and this RFC's ledger/log/roadmap closeout. It
-calls the generic engine unchanged.
-
-It does not change `packages/runtime/src/assistance.ts`, `packages/runtime/src/presets.ts`,
-`apps/web/src/lib/assistance-preference.ts`, any product claim, runtime behavior, API, schema,
-storage, web UX, content, archive or protected design.
-
-Order:
-
-1. generic register engine is accepted, implemented and archived;
-2. fresh independent review executes these fifteen population fixtures;
-3. implement the five catalogue/register entries without product bytes;
-4. run normal `make register-check`, governance and full `make verify`;
-5. archive with ledger and append-only exploration-log closeout; and
-6. only then may product RFCs claim config v5, workflow v2, permission-contract v1 or exchange v1.
-
-## Historical finding routing
-
-Earlier return rows remain live inputs to this population rather than disappearing with C9:
-
-- [[D1918]] and [[D1920]] retain exact resource coverage and single-authority parsing;
-- [[D2037]]/[[D2038]] retain fail-closed committed history and generated source-authority closure;
-- [[D2113]], [[D2114]], [[D2115]], [[D2116]] and [[D2117]] retain truthful v4/v5 phase identity, sole reader/writer/key/serializer
-  authority, fixed-head drift refusal, complete transition reach and defined TS/Svelte graph
-  semantics;
-- [[D2190]], [[D2191]], [[D2192]] and [[D2193]] retain consumer reach, transition ownership, able-to-fail product use and
-  honest absence;
-- [[D2328]] retains first-lane absence without fictional head zero; and
-- [[D2355]], [[D2356]], [[D2357]], [[D2358]], [[D2359]] and [[D2360]] retain truthful workflow-v1 semantics, exact adjacent roots, one-way absence,
-  permission scope and executable transition behavior.
-
-Those obligations are now discharged through complete generic projections, adoption and atomic
-resources. None is closed merely because the bespoke checker was removed.
-
-## Acceptance criteria
-
-1. Five exact descriptors/registers land through the generic engine; no C9, `RESOURCE_NAMES`,
-   checker branch, canonicalizer or Git reader is added.
-2. Config v4 and workflow v1 are adopted from complete live projections with identical product
-   bytes and one honest baseline each.
-3. Permission vocabulary adoption reads the live type union and records exactly four members.
-4. Permission operations are a distinct sequential atomic contract, giving same-membership changes
-   a lawful lane.
-5. Exchange has one atomic image whose complete payload detects nested wire/compiler drift.
-6. Workflow changes derive from the complete graph; omitted policy/receipt/registry authorities
-   cannot stay outside the delta.
-7. Exact absence refuses every partial selector population and landed-to-absent transition.
-8. All fifteen population fixtures can fail for their named reason.
-9. Existing assistance/preset/preference product tests remain byte-identical and green.
-10. Normal `make verify` covers snapshot and staged/committed transition checks without bespoke
-    user environment commands.
-11. [[D2450]]–[[D2454]] and [[D2465]]–[[D2467]] close only after executable criteria pass.
+- **`assistance-permission` vocabulary.** The draft adopted a four-member union. The live
+  `AssistancePermission` union has five members (`free`, `locked_off`, `legal`, `sight`,
+  `evidence`) and there is no literal tuple to read, so the draft's claim is stale. The first
+  product RFC that adds a permission member creates the literal tuple and its catalogue row in that
+  landing, as `provider-protocol` did. This RFC adds no second vocabulary copy now ([[D2467]]).
+- **`assistance-permission-contract` and `assistance-exchange`.** Both were absent atomic
+  `canonical_resource@1` contracts. That reader does not exist, and absent-source admission remains
+  [[D3082]]. Their product RFCs (D4) create the present source first, as `provider-protocol` did,
+  and add one row through a retained reader or justify a new one on a measured collision.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Generic register engine is accepted/implemented first | shared-resource-register-bootstrap | archived implementing SHA | |
-| D2 | Fresh independent review executes all fifteen fixtures | claude | review receipt plus acceptance/corrections | |
-| D3 | Five descriptors/registers land without product bytes and full verification passes | codex | implementing SHA plus green `make verify` | |
+| D1 | Generic register engine is accepted/implemented first | shared-resource-register-bootstrap | archived implementing SHA | **2026-09-24** — the catalogue and catalogue-driven checker are implemented; the bootstrap archives in the same series once its three D3 rebases land |
+| D2 | Fresh independent review of the population | claude | review receipt plus acceptance/corrections | **2026-09-24 — not run**: the owner directed implementation of ready RFCs without review rounds; criteria 2–5 execute in `assistance-register.test.ts` and `tools/register-check.test.mjs` |
+| D3 | Descriptors/registers land without assistance behavior change and verification passes | claude | implementing SHA plus green verification | **2026-09-24** — landing commit on branch `worktree-agent-ad09667cb734eccf8` |
 | D4 | Intent presets later claims and lands workflow, permission-contract and exchange lanes | intent-presets.md | register transitions and product receipts | |
-| D5 | Hint distance later claims and lands the config-v5 lane | hint-distance.md | register transition and product receipt | |
+| D5 | Hint distance later claims and lands the config-v5 member | hint-distance.md | register transition and product receipt | |
 
 ## Open questions
 
@@ -260,6 +107,17 @@ intent/RFC concerns. This document governs shared authority identity and change 
 
 ## Changelog
 
+- 2026-09-24: implemented the process landing (claude) and rebased for [[D2454]], with two
+  genuine-defect corrections inline. (1) The draft assumed a generic TypeScript-graph projection
+  engine, `literal_string_union@1` and `canonical_resource@1` adapters, `adopted`/`absent`
+  lifecycles and staged/first-parent transition readers. None of them exists in the implemented
+  `shared-resource-register-bootstrap`, whose §5 removes them. The registration therefore became
+  two member tuples over the existing `string_tuple` reader, and the semantic-delta guarantees of
+  the draft's TypeScript projections ([[D2450]]–[[D2453]]) are deferred with the removed engine
+  rather than faked. (2) The draft adopted workflow v1 as the head, but `intent-presets.md` has
+  since landed v2. Both are recorded, and v2 is the head. The draft's four-member permission
+  vocabulary is also stale (five live members). Permission vocabulary, permission-contract and
+  exchange are deferred to their product landings.
 - 2026-09-01: added the complete canonical descriptor candidate; corrected config/workflow version
   selectors to the generic slash grammar and the real persisted workflow object. Generic-engine
   acceptance/implementation and fresh review still gate this process population.

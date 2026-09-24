@@ -40,6 +40,8 @@ const tree = {
   "evidence-kinds": { members: ["alpha", "beta"] },
   "provider-protocol": { members: ["gamma"] },
   "semantic-conventions": { members: ["space_v1"] },
+  "assistance-config": { members: ["assistance_config_v4"] },
+  "workflow-preference": { members: ["workflow_preference_v1", "workflow_preference_v2"] },
 };
 
 const declaration = (body = "none") => `# RFC: fixture
@@ -283,11 +285,12 @@ test("§7.1 the exact seven-row seed parses, sorted and unique", () => {
   // The reviewed seed's seven rows survive unchanged; every row added since is one data row from a
   // later RFC (§1 extension property): provider-protocol-register.md adds `provider-protocol`, and
   // concept-registry.md adds `concept-registry-schema` through the existing json_schema reader, and
-  // semantic-convention-register.md adds `semantic-conventions` through the string_tuple reader.
+  // semantic-convention-register.md adds `semantic-conventions` and assistance-config-register.md adds
+  // `assistance-config` and `workflow-preference`, all through the string_tuple reader.
   const reviewedSeed = JSON.parse(fs.readFileSync(path.join(repoRoot, "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json"), "utf8"));
   assert.deepEqual(reviewedSeed.resources.map(({ id }) => id), seven);
   assert.deepEqual(seed().resources.filter(({ id }) => seven.includes(id)), reviewedSeed.resources);
-  assert.deepEqual(ids, [...seven, "provider-protocol", "concept-registry-schema", "semantic-conventions"].sort());
+  assert.deepEqual(ids, [...seven, "provider-protocol", "concept-registry-schema", "semantic-conventions", "assistance-config", "workflow-preference"].sort());
   assert.deepEqual(seed().resources.find(({ id }) => id === "semantic-conventions"), {
     id: "semantic-conventions",
     claimKind: "members",
@@ -319,7 +322,7 @@ test("§7.2 deleting, duplicating, renaming, extra keys and aliases fail", () =>
   assert.throws(parse((value) => { value.resources[0].source.extra = true; }), /source keys/);
   assert.throws(parse((value) => { value.extra = true; }), /envelope/);
   assert.throws(parse((value) => { value.schemaVersion = 2; }), /schemaVersion/);
-  assert.throws(parse((value) => { value.resources[0].claimKind = "members"; }), /requires source/);
+  assert.throws(parse((value) => { value.resources.find(({ id }) => id === "campaign-schema").claimKind = "members"; }), /requires source/);
   // Alias: a second id naming pack-schema's slug.
   assert.throws(parse((value) => {
     value.resources.push({ id: "zz-alias", claimKind: "schema_lane", source: { kind: "json_schema", schemaSlug: "drill-pack", versionExport: null } });
@@ -412,13 +415,14 @@ test("§7.12 missing or mismatched exports and invalid tuples fail", () => {
 test("§7.13 caller mutation after admission leaves the admitted image unchanged", () => {
   const value = seed();
   const admitted = parseResourceCatalogue(value, { root: repoRoot });
-  value.resources[0].id = "mutated";
-  value.resources[0].source.schemaSlug = "mutated";
+  const index = value.resources.findIndex(({ id }) => id === "campaign-schema");
+  value.resources[index].id = "mutated";
+  value.resources[index].source.schemaSlug = "mutated";
   value.resources.pop();
   assert.equal(admitted.resources.length, seed().resources.length);
-  assert.equal(admitted.resources[0].id, "campaign-schema");
-  assert.equal(admitted.resources[0].source.schemaSlug, "campaign");
-  assert.ok(Object.isFrozen(admitted.resources[0].source));
+  assert.equal(admitted.resources[index].id, "campaign-schema");
+  assert.equal(admitted.resources[index].source.schemaSlug, "campaign");
+  assert.ok(Object.isFrozen(admitted.resources[index].source));
 });
 
 test("§7.14 the implementation carries no removed scope or speculative root", () => {
@@ -457,4 +461,17 @@ test("semantic-conventions members: the real source derives, one next version cl
   assert.deepEqual(collisions, ["C3 collision: one.md and two.md both claim semantic-conventions|space_v2"]);
   assert.match(checkC1({ "one.md": declaration("semantic-conventions | members space@2 | raw ref") }, catalogue).errors[0], /invalid member claim/);
   assert.match(checkC1({ "one.md": declaration("semantic-conventions | members defence-duty_v1 | hyphen") }, catalogue).errors[0], /invalid member claim/);
+});
+
+// assistance-config-register.md ([[D2454]]): config and workflow versions enter as member tuples, so a
+// second claimant of one next version collides and a lane grammar is refused.
+test("assistance-config and workflow-preference members: the real sources derive and one next version collides", () => {
+  const real = deriveTree(repoRoot);
+  assert.deepEqual(real["assistance-config"].members, ["assistance_config_v4"]);
+  assert.deepEqual(real["workflow-preference"].members, ["workflow_preference_v1", "workflow_preference_v2"]);
+  const first = checkC1({ "hint-distance.md": declaration("assistance-config | members assistance_config_v5 | config v5") }, catalogue);
+  const second = checkC1({ "other.md": declaration("assistance-config | members assistance_config_v5 | competing v5") }, catalogue);
+  assert.deepEqual([...first.errors, ...second.errors], []);
+  assert.match(checkC3([...first.claims, ...second.claims], [], catalogue).join("\n"), /collision: hint-distance\.md and other\.md both claim assistance-config\|assistance_config_v5/);
+  assert.match(checkC1({ "one.md": declaration("workflow-preference | lane 2 | whole projection") }, catalogue).errors[0], /invalid member claim/);
 });
