@@ -33,9 +33,11 @@ describe("adoption wave server contracts", () => {
   it("offers native terminal stories and stores only hashed revocable share tokens", async () => {
     const { storage, service } = await terminalRun();
     const run = storage.read("native")!.run;
-    const story = service.story("native", principal);
-    expect(story).toMatchObject({ runId: "native", source: { kind: "native" }, outcome: { kind: "board_terminal", result: "loss" }, branchId: run.activeCursor.branchId });
-    expect(story.moments.some((moment) => moment.kinds.includes("human_divergence"))).toBe(true);
+    // rfc/review-evidence-compiler.md: the story route returns the closed review-story@1 receipt.
+    const receipt = service.story("native", principal);
+    expect(receipt).toMatchObject({ protocol: "review-story@1", subject: { runId: "native", branchId: run.activeCursor.branchId, outcome: { kind: "board_terminal", result: "loss" } } });
+    expect(receipt.moments.some((moment) => moment.kinds.includes("human_divergence"))).toBe(true);
+    const story = { ...service.storyEvidence("native", principal), branchId: receipt.subject.branchId };
     const share = service.share("native", principal, story.branchId);
     expect(share).toMatchObject({
       scope: "story_read",
@@ -57,7 +59,10 @@ describe("adoption wave server contracts", () => {
     const card = service.publicStory(share.token);
     expect(card).toMatchObject({ title: expect.any(String), outcome: { kind: "board_terminal" } });
     expect(card.productLink).toBe("/play");
-    expect(Object.keys(card).sort()).toEqual(["considered", "footer", "moments", "momentsSentence", "outcome", "productLink", "title"]);
+    expect(Object.keys(card).sort()).toEqual(["considered", "footer", "moments", "momentsSentence", "outcome", "productLink", "receipt", "title"]);
+    // The public receipt is a strict projection of the same selected presentation receipts.
+    expect(card.receipt.moments.map((moment) => moment.evidenceNodeId)).toEqual(card.moments.map((moment) => moment.nodeId));
+    for (const moment of card.receipt.moments) expect(moment.presentation).toEqual(receipt.moments.find((candidate) => candidate.evidenceNodeId === moment.evidenceNodeId)!.presentation);
     const storySelection = selectReviewMoments(story);
     expect(card.considered).toBe(storySelection.considered);
     expect(card.moments.map((moment) => moment.nodeId)).toEqual(storySelection.moments.map((moment) => moment.nodeId));

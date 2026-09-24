@@ -807,6 +807,7 @@ Unnumbered per [[D1503]]; renumber at landing.
 
 ## Changelog
 
+- 2026-09-24: **`story_completion` owner superseded by `rfc/review-evidence-compiler.md` §4.1.** Import completion and `RunService.story()` now reach only the one `ReviewEvidenceCoordinator.ensureBranch` over `ProviderExchangeScheduler.get` (typed `stockfish.position_evaluation@1` deliveries attached to the run event log), so `RunService.#ensureStoryEvidence` is removed; `story_completion` / `review.story_evidence` stay in the closed store vocabulary and row parser but no production path admits them. The owner census in `capability-operations.test.ts` asserts the supersession. The §table row naming `#ensureStoryEvidence` is historical.
 - 2026-09-06: cut out of `rfc/pack-capability-contract.md` at `c37c6eb8`. Specification bytes are
   unchanged; the preamble, scope and section numbering are new. No defect was repaired by the cut.
 - 2026-09-07: registered under [[D3122]] and received the storage migration claim its DDL owns.

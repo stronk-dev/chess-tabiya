@@ -8,17 +8,20 @@ import { GRADE_CONVENTION, assertMoveQualityGradeSentence, moveQualityGrade, win
 import { recordedSemanticPath } from "./recorded-semantic-path.js";
 import { REVIEW_MOMENT_BUDGET, reviewMapProjection, selectReviewMoments, type ReviewMapProjection } from "./review-map.js";
 import { REVIEW_MAP_TEMPLATES, reviewText } from "./review-map-templates.js";
-import { storyMoments, type StoryMoment } from "./story.js";
+import { storyMomentsForRun, type StoryMoment } from "./story.js";
 import { fixtureCentipawns, reviewFixtureRun } from "./testing/review-map-fixture.js";
 import { BANNED_JUDGEMENTS, judgementWordsOutsideGrounding, ungroundedResidue } from "./voice.js";
 import type { DrillRun } from "./types.js";
+import { RECORDED_RELATION_LABELS, parsePresentationReceipt, presentedSentence } from "./presentation-contract.js";
+import { reviewDurableEngineStates, reviewPacketForRun } from "./review-evidence.js";
+import { attachDelivery, evaluationDelivery, importRecord, importedRun, play } from "./testing/review-evidence-fixture.js";
 
 const ROOT = new URL("../../../", import.meta.url);
 const VIEWER = Object.freeze({ role: "learner" as const, session: "imported" });
 
 function projectionOf(run: DrillRun, context: "review" | "imported_analysis" = "imported_analysis", withSemantic = false): ReviewMapProjection {
   const branchId = run.activeCursor.branchId;
-  const story = storyMoments(run, branchId, context === "imported_analysis" ? { recordedResult: "1-0" } : {});
+  const story = storyMomentsForRun(run, branchId, context === "imported_analysis" ? { recordedResult: "1-0" } : {});
   return reviewMapProjection({ run, branchId, story, context, viewer: VIEWER, ...(withSemantic ? { semanticPath: recordedSemanticPath(run, branchId) } : {}) });
 }
 
@@ -154,7 +157,7 @@ describe("review map projection (rfc/review-map.md)", () => {
     for (const row of empty.rows) {
       expect(row.facts).toContain(reviewText("evidence.eval.missing"));
       expect(row.facts).toContain(reviewText("evidence.grade.abstained", { reason: reviewText("grade.abstention.missing_eval") }));
-      expect(row.facts).toContain(reviewText("evidence.packet.abstained"));
+      expect(row.facts).toContain(reviewText("evidence.packet.absent"));
       expect(row.facts).toContain(reviewText("evidence.relation.absent"));
     }
     expect(empty.accuracy.white.sentence).toContain("no accuracy figure");
@@ -174,7 +177,7 @@ describe("review map projection (rfc/review-map.md)", () => {
   it("[D1409] a judgement word on the surface appears only inside the exact sentence that grounds it", () => {
     const grounding = [
       ...projection.rows.flatMap((row) => row.grade === undefined ? [] : [row.grade.sentence]),
-      ...storyMoments(run, run.activeCursor.branchId, { recordedResult: "1-0" }).moments.flatMap((moment) => moment.sentences),
+      ...storyMomentsForRun(run, run.activeCursor.branchId, { recordedResult: "1-0" }).moments.flatMap((moment) => moment.sentences),
     ];
     const surface = surfaceText(projection).join("\n");
     expect(judgementWordsOutsideGrounding(grounding, surface)).toEqual([]);
@@ -200,15 +203,47 @@ describe("review map projection (rfc/review-map.md)", () => {
     expect(semantic.events.length).toBeGreaterThan(0);
     const first = semantic.events[0]!;
     const row = projection.rows.find((candidate) => candidate.nodeId === first.anchor.nodeId)!;
-    expect(row.facts.some((fact) => fact.includes(`${first.projection.id}@${first.projection.version}`))).toBe(true);
-    expect(projection.rows.every((candidate) => candidate.facts.includes(reviewText("evidence.packet.abstained")))).toBe(true);
+    // module-registration A5 / evidence-presentation §6: the relation renders through its registered
+    // pair-keyed adapter as a labelled sentence — never the raw projection id or a de-underscored one.
+    const label = RECORDED_RELATION_LABELS[first.projection.id as keyof typeof RECORDED_RELATION_LABELS].label;
+    expect(row.facts.some((fact) => fact.startsWith("Recorded-path detector fired from this move:") && fact.includes(label))).toBe(true);
+    expect(projection.rows.flatMap((candidate) => candidate.facts).filter((fact) => fact.startsWith("Recorded-path detector")).join(" ")).not.toMatch(/@\d|[a-z]+_[a-z]+|derived\./u);
+    expect(projection.rows.every((candidate) => candidate.facts.includes(reviewText("evidence.packet.absent")))).toBe(true);
     expect(projection.footer.labels).toEqual(expect.arrayContaining(["Recorded game", "Recorded engine analysis"]));
+  });
+
+  it("renders the typed Review packet through module.review_map@1 instead of an abstention (review-evidence-compiler)", () => {
+    let evaluated = play(importedRun("panel"), ["e2e4", "e7e5", "g1f3"]);
+    const path = [...evaluated.nodes].sort((left, right) => left.ply - right.ply);
+    evaluated = attachDelivery(evaluated, path[0]!.id, evaluationDelivery(path[0]!.fen, "cp 20"));
+    evaluated = attachDelivery(evaluated, path[1]!.id, evaluationDelivery(path[1]!.fen, "cp -300"));
+    const branchId = evaluated.activeCursor.branchId;
+    const engine = new Map(reviewDurableEngineStates(evaluated, path));
+    engine.set(path[2]!.id, { kind: "pending", jobCount: 1, retrying: 0 });
+    const packet = reviewPacketForRun(evaluated, branchId, { importRecord: importRecord(evaluated, "1-0"), engine });
+    const map = reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0", engine }), context: "imported_analysis", viewer: VIEWER, packet });
+    const [first, second] = map.rows;
+    expect(first!.facts).toContain("Recorded engine evaluation after this move: +3.00 from White's side (Stockfish 19, depth 12 search).");
+    expect(first!.facts).toContain("Recorded engine evaluation changed by +2.80 pawns from White's side across this move (Stockfish 19, depth 12 search).");
+    expect(first!.facts.some((fact) => fact.startsWith("Recorded engine win/draw/loss expectation from White's side:"))).toBe(true);
+    expect(map.rows.flatMap((row) => row.facts)).not.toContain(reviewText("evidence.packet.absent"));
+    // The pending node states its absence as a packet-issued abstention, distinct from a value.
+    expect(second!.facts).toContain("Engine evaluation: requested, waiting for the provider.");
+    const parsed = parsePresentationReceipt(JSON.parse(JSON.stringify(second!.packet)));
+    expect(parsed.some((item) => item.component.id === "abstention")).toBe(true);
+    expect(parsePresentationReceipt(JSON.parse(JSON.stringify(first!.packet))).map(presentedSentence)).toEqual(first!.facts.slice(-3));
+    // A viewer outside the module's roles is withheld, never shown the packet.
+    const withheld = reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0", engine }), context: "imported_analysis", viewer: { role: "author", session: "imported" }, packet });
+    expect(withheld.rows[0]!.packet.items).toEqual([]);
+    // A packet for another branch or run is refused.
+    const other = play(importedRun("panel-other"), ["e2e4"]);
+    expect(() => reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0" }), context: "imported_analysis", viewer: VIEWER, packet: reviewPacketForRun(other, other.activeCursor.branchId, { importRecord: importRecord(other, "*") }) })).toThrow(/another run or branch/u);
   });
 });
 
 describe("the whole-game moment selector (§5)", () => {
   const moment = (nodeId: string, ply: number, phase: StoryMoment["phase"], sentences: readonly string[] = ["A recorded fact."]): StoryMoment => ({
-    nodeId, entryNodeId: nodeId, ply, san: null, fen: "8/8/8/8/8/8/8/K6k w - - 0 1", kinds: ["eval_pivot"], sentences, evidence: [], phase,
+    nodeId, decisionNodeId: nodeId, evidenceNodeId: nodeId, stopNodeId: nodeId, entryNodeId: nodeId, ply, san: null, fen: "8/8/8/8/8/8/8/K6k w - - 0 1", kinds: ["eval_pivot"], sentences, components: [], evidence: [], evaluation: null, phase,
   });
 
   it("keeps at most one moment per phase, in rank order, then restores chronology, with a declared budget", () => {

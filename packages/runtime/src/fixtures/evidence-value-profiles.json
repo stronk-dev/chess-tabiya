@@ -248,6 +248,41 @@
       "9247cde839b8cf922b5c27ba55dc4357d9fb0b9516a59806a4eea1f6322f4f5d"
     ]
   },
+  "derived.review.eval_delta@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "7c726b8719c35484616ab59c3379d2d3485ae56cba9320d445639233fa970ae9"
+    ]
+  },
+  "derived.review.eval_point@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "02fc42e9c14e60f739a560f84d34d765ad4fdece5a587527cdb2e7527cc22129"
+    ]
+  },
+  "derived.review.mate_transition@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "af3617f46dda4d8ece68e02de0dd8467520e14164f1c97297acb16149c27c244"
+    ]
+  },
+  "derived.review.wdl_point@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "48932ac0fe7c75387052973d5100460873ff347427fe3fd9cbff16b017889bda"
+    ]
+  },
+  "derived.review.wdl_white@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "3bccbc9e19d74ac64a658119e05fe302c9b68b92c83c7a43eb2104d678f56365"
+    ]
+  },
   "derived.semantic_avoidance.backward_pawn@1": {
     "availability": "available",
     "cardinality": 1,
@@ -339,18 +374,11 @@
       "b6701526274de0a276dbe19ef2d258d13db0b0ed77a08f3211d4faa0a7586af8"
     ]
   },
-  "derived.story.eval_shift@1": {
-    "availability": "available",
-    "cardinality": 1,
-    "payloadDigests": [
-      "d9dde4723118d1dc3a2abb0362e29107b4ca4d2efbf23b00e633b4e53476e932"
-    ]
-  },
   "derived.story.last_level@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "2292d1d866ffcdc5fbd364f268994f1f4dfd178cd46701a2e36e871c87090eae"
+      "8a95117f5b332e54364605163eae57f950d47145f788967dba1050da96ecccb0"
     ]
   },
   "derived.story.rank@1": {
@@ -1342,6 +1370,13 @@
     "cardinality": 1,
     "payloadDigests": [
       "4ed23a02c8c63f641e396c7c5987e4b2f99edc65dd47efcb2985fa150ac3f069"
+    ]
+  },
+  "rules.tactic.consequence.forced_mate_after_move@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "3fb7ce1badd6616f3838821dd33f26dd4aff7dbfff78c21b8342fe029ad3d545"
     ]
   },
   "rules.tactic.consequence.mate_in_one@1": {

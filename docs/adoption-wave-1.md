@@ -13,9 +13,9 @@ native branch becomes storyable only when it carries a validated
 without enqueueing a story evidence pass. The default native branch is the one
 with the most recent terminal event.
 
-Story evidence completion is path-scoped and idempotent. It enqueues only
-missing recorded evaluations on the selected root-to-leaf path and never reads
-another branch into the story. Native stories identify their source only as
+Story evidence completion is path-scoped and idempotent. The Review coordinator requests only
+positions on the selected root-to-leaf path that have no durable typed delivery and never reads
+another branch into the story ([review evidence](review-evidence.md)). Native stories identify their source only as
 `{kind: "native"}` and derive the terminal result from the recorded outcome.
 The client offers, rather than opens, a story at attempt completion. Story
 moments remain doors back into the same preserved run.

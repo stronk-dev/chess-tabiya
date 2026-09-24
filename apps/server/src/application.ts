@@ -36,6 +36,8 @@ import {
 import { PackRegistry } from "./pack-registry.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
+import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
+import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { PackStudio } from "./pack-studio.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
 import {
@@ -63,6 +65,17 @@ import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } 
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
 import { binaryArtifactProbe } from "./engine-supervisor.js";
 import { composeProviderTraversalApplication, type ProviderTraversalApplication } from "./provider-traversal.js";
+
+/** rfc/review-evidence-compiler.md §4.1: the 1.0 Review enrichment profile (explicit bounds). */
+export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
+  windowNodes: 4,
+  maxOutstandingPerRun: 2,
+  maxTrackedRuns: 64,
+  maxAttemptsPerRequest: 3,
+  maxTerminalAttemptOutcomes: 4_096,
+  movetimeMs: 100,
+  timeoutMs: 10_000,
+});
 
 export type EngineMode = "mock" | "maia";
 
@@ -457,8 +470,10 @@ export async function composeApplication(
   }
 
   const providerFetch = (url: string, init: { readonly signal: AbortSignal; readonly headers: Readonly<Record<string, string>> }): Promise<Response> => fetch(url, { signal: init.signal, headers: { ...init.headers } });
+  // Mock-engine deployments run the one real provider exchange over a labelled mock analysis engine.
+  const providerEngines = supervisor ?? new MockProviderEngineClient();
   const providers = composeProviderTraversalApplication({
-    engines: supervisor ?? null,
+    engines: providerEngines,
     tablebaseFetch: tablebaseSource instanceof LichessTablebaseSource ? providerFetch : null,
     explorerFetch: engineMode === "maia" && options.corpusToken !== undefined ? providerFetch : null,
     explorerToken: options.corpusToken ?? null,
@@ -468,8 +483,22 @@ export async function composeApplication(
     retry: APPLICATION_EVIDENCE_RETRY_POLICY,
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
   });
+  // rfc/review-evidence-compiler.md §4.1: the one application-lifetime Review coordinator. It shares
+  // the application's single provider scheduler and never enqueues on the evidence queue. Explicit
+  // 1.0 profile bounds; no implicit unbounded default exists.
+  const reviewEvidence = new ReviewEvidenceCoordinator({
+    scheduler: providers.scheduler,
+    requestedEngine: async () => {
+      const identity = await providerEngines.start("stockfish-analysis");
+      return Object.freeze({ id: identity.id, version: identity.version });
+    },
+    storage,
+    attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: REVIEW_EVIDENCE_PROFILE.maxTerminalAttemptOutcomes, maxAttemptsPerRequest: REVIEW_EVIDENCE_PROFILE.maxAttemptsPerRequest }),
+    ...REVIEW_EVIDENCE_PROFILE,
+  });
   const service = new RunService(storage, {
     evidenceQueue,
+    reviewEvidence,
     packRegistry: registry,
     progressStorage: storage,
     opponentSelector: selector,

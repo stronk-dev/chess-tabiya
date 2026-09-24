@@ -1,5 +1,6 @@
 import type { CorpusPage, CorpusPopulation, CorpusResult, HumanSplitPage } from "./api.js";
 import { parseSelectionCandidates, parseSelectionEngine } from "./opponent-selection-response.js";
+import { CORPUS_RESULT_ABSTENTION_REASONS } from "@chess-tabiya/runtime";
 
 type RecordValue = Readonly<Record<string, unknown>>;
 
@@ -76,7 +77,7 @@ function corpusResult(value: unknown): CorpusResult {
   const item = record(value, "corpus/result"), kind = oneOf(item.kind, ["stats", "abstention"] as const, "corpus/result/kind");
   if (kind === "abstention") {
     exact(item, ["kind", "reason", "detail", "population"], "corpus/result");
-    oneOf(item.reason, ["no_data_at_band", "source_unavailable"] as const, "corpus/result/reason"); nonempty(item.detail, "corpus/result/detail"); population(item.population, "corpus/result/population");
+    oneOf(item.reason, CORPUS_RESULT_ABSTENTION_REASONS, "corpus/result/reason"); nonempty(item.detail, "corpus/result/detail"); population(item.population, "corpus/result/population");
     return item as unknown as CorpusResult;
   }
   exact(item, ["kind", "total", "white", "draws", "black", "moves", "recency", "population"], "corpus/result");

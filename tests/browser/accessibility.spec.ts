@@ -156,6 +156,8 @@ test("the Review Map passes the automated WCAG scan with its move list and abste
   await expect(page).toHaveURL(/\/review\/game\/import-/u);
   await expect(page.getByRole("heading", { name: "Ann – Ben" })).toBeVisible();
   await expect(page.getByRole("list", { name: "Move list" }).getByRole("listitem")).toHaveCount(4);
-  await expect(page.getByText(/^Evaluation coverage: 5 of 5 positions/u)).toBeVisible({ timeout: 15_000 });
+  // rfc/review-evidence-compiler.md: the checkmate position has no legal move to search, so the typed
+  // Review pass states it outside the engine's domain instead of inventing a reading.
+  await expect(page.getByText(/^Evaluation coverage: 4 of 5 positions/u)).toBeVisible({ timeout: 15_000 });
   await expectNoWcagViolations(page, "review map");
 });

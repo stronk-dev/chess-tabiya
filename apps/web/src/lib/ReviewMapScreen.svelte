@@ -1,13 +1,14 @@
 <script lang="ts">
   // rfc/review-map.md: the learner-facing whole-game Review Map. Every authored string on this
   // surface is a registered template (`reviewText`); everything else is payload data rendered as is.
-  import { reviewText } from "@chess-tabiya/runtime";
+  import { parsePresentationReceipt, reviewText } from "@chess-tabiya/runtime";
   import { onDestroy } from "svelte";
 
   import type { ReviewAnalysisPage, ReviewMap, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
   import ReviewEvalGraph from "./ReviewEvalGraph.svelte";
   import { storyCardDocument } from "./story-card.js";
+  import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
 
   interface Props {
     review: ReviewMap;
@@ -56,6 +57,10 @@
   const selectedIndex = $derived(review.rows.findIndex((row) => row.nodeId === (selectedId ?? initial)));
   const selected = $derived(selectedIndex < 0 ? undefined : review.rows[selectedIndex]);
   const doors = $derived(new Map(review.compareDoors.map((door) => [door.entryNodeId, door])));
+  /** rfc/review-evidence-compiler.md: the typed packet components, re-sealed client-side by the exact parser. */
+  const packetItems = $derived(selected === undefined ? [] : parsePresentationReceipt(selected.packet));
+  /** The facts that are not packet components (the packet's equivalent sentences are their tail). */
+  const plainFacts = $derived(selected === undefined ? [] : selected.facts.slice(0, selected.facts.length - packetItems.length));
   /** O7.3: the reveal belongs to one selected move and is gone the moment selection or a retry moves on. */
   const shownAnalysis = $derived(analysis !== undefined && analysis.nodeId === selected?.nodeId && retrying === undefined ? analysis : undefined);
   const sideLabel = (side: "white" | "black"): string => side === "white" ? reviewText("side.white") : reviewText("side.black");
@@ -303,7 +308,8 @@
       {#if selected}
         <article class="evidence" aria-labelledby="review-evidence-title">
           <h2 id="review-evidence-title">{reviewText("evidence.title")}</h2>
-          {#each selected.facts as fact}<p>{fact}</p>{/each}
+          {#each plainFacts as fact}<p>{fact}</p>{/each}
+          <PresentedEvidence items={packetItems} />
         </article>
         {#if onAnalyze && retrying === undefined}
           <section class="analysis" aria-labelledby="review-analysis-title" data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.kind ?? "closed"}>

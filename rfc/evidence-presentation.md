@@ -1,21 +1,20 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **RETURNED BY SEVENTH FRESH INDEPENDENT REVIEW 2026-09-07 on
-  [[D3102]]–[[D3107]].** The sixth author repair retained its narrower controls, but citation text
-  is not bound to the evidence value; Explorer abstention consumes an incomplete local copy;
-  workflow authority blesses caller-picked decisions; named-structure authority points at absent
-  production exports; Checkpoint P still checks strings rather than behavior; and the registry
-  digest accepts partial semantic images. `make evidence-presentation-seventh-fresh-review` retains
-  the chain and reproduces 6/6. No implementation is authorised; a bounded seventh author repair
-  and another genuinely fresh review are required. [[D1672]] and [[D2401]] remain independent
-  blockers.
-  Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
-  module/hint seats.
-  Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
-  arrow activation is a 1.0 obligation. The transition-event hand-off is measured: five geometry
-  event families already retain their relations; the live work is forms, adapters, module admission,
-  routing capture overlays through the existing capture-class endpoint, and the per-family
-  hint-horizon contract.
+- **Status:** **implementing — Checkpoint A (the Review-compiler slice) landed 2026-09-24 at the
+  owner's direction (implement directly, no review round); receipt
+  `planning/platform-alignment/evidence-presentation/checkpoint-a-implementation-2026-09-24.md`.**
+  `packages/runtime/src/presentation-contract.ts` ships the fourteen `COMPONENT_DECLARATIONS`, the
+  exact pair-keyed `PRESENTATION_ADAPTERS` (review.story@1, the module.review_map@1 executable pairs
+  and the [[D1673]] claim slice), the process/client seals, `PresentationReceipt`
+  (`presentation.receipt@1`), `serializePresentedEvidence` / `parsePresentationReceipt`, the raw-id
+  guard and runtime parsers/renderers for `magnitude`, `fact_statement`, `abstention`, `claim`,
+  `citation` and `enum_state`. The seventh-return defects [[D3102]]–[[D3107]] are closed in the
+  production implementation (not in the disposable author model). Checkpoint P landed two of its
+  eight operations (the consequence operand repair and the Explorer result-reason authority) plus the
+  source-attribution registry; the other P operations, the remaining eight components, the full
+  label registry and sweeps (§8.1/§8.2/§8.4) and Checkpoint B remain open. *Prior status, retained
+  for history:* draft — returned by the seventh fresh independent review 2026-09-07 on
+  [[D3102]]–[[D3107]]; [[D1672]] and [[D2401]] were independent blockers.
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
@@ -986,7 +985,9 @@ budget, and draws it. A component that queries anything is the defect the dossie
     };
   }
   ```
-  `EvidenceFieldBinding` names the admitted projection, retained text field and evidence digest.
+  `EvidenceFieldBinding` names the admitted projection, retained text field, evidence digest and the
+  digest of the exact retained text value (`valueDigest`, [[D3102]]): the constructor reads the text
+  from that field of one sealed evidence value and the parser refuses text whose digest differs.
   `authored_summary` means a summary already present in cited/authored evidence; a renderer or LLM
   cannot create it.
 - **Convention:** not applicable; **attribution is mandatory and is part of the component**, not
@@ -1050,7 +1051,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
 
 - **Renders:** a sentence somebody is responsible for, with the responsibility rendered.
 - **Operand:** the admitted `pack.authored.claim_delivery@1` projection — `{ text; binding:
-  "ledger_bound" | "author_attributed" | "author_declared"; principles?; earnedEvidenceTypes }`
+  "ledger_bound" | "author_attributed" | "self_declared"; principles?; earnedEvidenceTypes }`
   — as received by the `guidance.authored_claim@1` consumer (`claim-presentation.ts:12-29`).
   Consumer and projection identities are not interchangeable.
 - **Convention:** required in its authored form — the **binding** is the convention. A
@@ -1118,6 +1119,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   type AbstentionOperand =
     | {
         readonly kind: "pending";
+        readonly stage: "requested" | "not_yet_scheduled";
         readonly question: PresentationQuestionId;
         readonly projection: VersionedEvidenceId;
         readonly producer: VersionedEvidenceId;
@@ -1826,6 +1828,32 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-09-24 — **Checkpoint A (Review-compiler slice) implemented directly at the owner's direction;
+  status `implementing`.** Receipt:
+  `planning/platform-alignment/evidence-presentation/checkpoint-a-implementation-2026-09-24.md`.
+  Production closes the seventh return: [[D3102]] citations read their text from the exact retained
+  evidence field and bind it by `valueDigest` (`citationFromEvidence`, parser refusal); [[D3103]] one
+  exported `CORPUS_RESULT_ABSTENTION_REASONS` tuple derives `CorpusResult`, the complete-arm
+  `parseCorpusResultAbstention` refuses fragments and the `position_stats` factory admits only the
+  complete arm; [[D3104]] abstentions are issued only by the sealed Review packet that asked
+  (`presentReviewFamilyAbstentions`) with its own invocation id and decision stamp — no caller
+  fixture mints authority; [[D3105]] production `STRUCTURE_PREDICATES` and
+  `evaluateNamedStructureWithWitness` decide match and positive witnesses in one traversal and
+  `structuralReading` emits them; [[D3106]] `presentation-checkpoint-p.test.ts` resolves and executes
+  every P operation (landed rows by postimage behavior, open rows by preimage behavior) instead of
+  string needles; [[D3107]] `sourceAttributionRegistryDigest` issues identity only for the branded
+  complete parsed image. **Inline corrections:** §3.10's binding vocabulary is the shipped
+  `self_declared`, not `author_declared` (pin encoding); §3.8's `EvidenceFieldBinding` gains
+  `valueDigest` ([[D3102]]); §3.11's pending receipt gains `stage: requested | not_yet_scheduled`
+  so a queued-but-unscheduled request is not a terminal absence. **Implementation note:** the Story
+  pivotal-marker, shape and endgame adapters use `fact_statement` renderers over the retained payload
+  (their shipped sentences carry operands beyond one vocabulary member), not the plan table's
+  `enum_state`. The consequence operand repair (P, [[D2140]]) landed with the Story slice because the
+  outcome component reads `outcome`. The claim evidence-type ids render through a total
+  `CLAIM_EVIDENCE_TYPE_LABELS` registry (the raw-id guard refused `tablebase_exact`). Open: the other
+  six P operations, eight declared-only components, the full §6b label registry, `make label-sweep`,
+  `make component-coverage`, `make component-theme-sweep`, criteria 3/4/6/8–15/17 and Checkpoint B.
 
 - 2026-09-07 — sixth author repair for [[D3035]]–[[D3041]]. Reused the shared canonical byte
   authority; closed citation operands; moved Explorer absence to its operation-result union;

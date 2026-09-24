@@ -170,7 +170,29 @@ export { ENDGAME_CLASSIFICATION_CONVENTION, endgameClassification, renderEndgame
 export { ENDGAME_CONVENTION_SOURCES, ENDGAME_SETUP_CONVENTIONS, endgameSetupConvention, endgameSetupMatch, endgameSetupMatches, renderEndgameSetupMatch, type EndgameConventionRef, type EndgameConventionSource, type EndgameSetupConvention, type EndgameSetupMatch, type EndgameSetupMatchResult, type EndgameTechnique } from "./endgame-setup.js";
 export { ENDGAME_METHOD_CONVENTIONS, endgameMethodConvention, type EndgameMethodConvention, type MethodStage } from "./endgame-method.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { STORY_MATE_CP, STORY_PIVOT_CP, evidenceGroundingLabel, rankStoryMoments, storyEvaluation, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationChange, renderStoryEvaluationTrajectory, reviewStoryTitle, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
+export { STORY_MOMENT_KINDS, STORY_PIVOT_CP, evidenceGroundingLabel, parseReviewStoryReceipt, projectPublicReviewStory, rankStoryMoments, renderReviewStoryComponents, renderReviewStoryReceipt, reviewStoryMoments, storyDeclaredEvidence, storyMomentsForRun, storyEvidenceSourceLabels, suggestTitle, type ParsedReviewStory, type PublicReviewStoryReceipt, type ReviewStoryMomentReceipt, type ReviewStoryReceipt, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
+export {
+  COMPONENT_DECLARATIONS, COMPONENT_IDS, GROUNDING_LABELS, LABEL_VOCABULARIES, OBJECTIVE_STATE_LABELS, PRESENTATION_ADAPTERS, PRESENTATION_CONVENTIONS,
+  PRESENTATION_QUESTIONS, PRESENTATION_SELECTION_ONLY, PRESENTATION_SOURCE_REASONS, PresentationError, RECORDED_RELATION_LABELS, RUN_OUTCOME_LABELS,
+  assertPresentationText, assertPresentedEvidenceItem, citationFromEvidence, isPresentedAbstention, parsePresentationReceipt, presentEvidenceItems,
+  presentScore, presentSearchBound, presentationAdapter, presentationDigest, presentedSentence, serializePresentedEvidence,
+  type AbstentionOperand, type CitationOperand, type ClaimOperand, type ComponentDeclaration, type ComponentId, type ComponentValue, type ConventionReceipt,
+  type EnumStateOperand, type FactStatementOperand, type LabelEntry, type LabelVocabulary, type MagnitudeOperand, type PresentationReceipt,
+  type PresentedEvidenceItem, type ProjectionPresentationAdapter,
+} from "./presentation-contract.js";
+export {
+  REVIEW_PACKET_SOURCE_ADAPTERS, REVIEW_PACKET_SOURCE_PROJECTION_IDS, REVIEW_SOURCE_FAMILIES, REVIEW_UNAVAILABLE_REASONS, ReviewEvidenceError,
+  REVIEW_PROVIDER_DELIVERY_KEY, assertReviewEvidencePacket, assertReviewRecordedPrefixReceipt, reviewDeliveryEvidencePayload, reviewDurableEngineStates, reviewPacketForRun, compileReviewEvidence, compileReviewPacketForSubject, createReviewPrefixAuthority,
+  foldReviewCompletion, foldReviewFamilyState, presentReviewFamilyAbstentions, reviewPacketSourcePlan, reviewSubjectPath, runReviewPacketSources,
+  type ReviewAdapterState, type ReviewDegradation, type ReviewEvidenceInput, type ReviewEvidencePacket, type ReviewImportRecordImage, type ReviewNodePacket,
+  type ReviewOutcomeReceipt, type ReviewProgress, type ReviewProviderNodeState, type ReviewRecordedPrefixReceipt, type ReviewRunFamilyState,
+  type ReviewSourceContext, type ReviewSourceFamily, type ReviewStorageAuthority, type ReviewUnavailableReason,
+} from "./review-evidence.js";
+export {
+  MATE_TRANSITION_KINDS, learnerCentipawns, mateTransitionChanges, reviewPointComparability, reviewScoreReceipt, searchCommandImage, whiteWdl,
+  type ForcedMateAfterMoveProofV2, type RecordedPosition, type ReviewEnginePoint, type ReviewEvalDelta, type ReviewMateTransition, type ReviewScoreReceipt,
+  type ReviewWdlPoint, type StockfishPositionEvaluation, type WhiteWdlPoint,
+} from "./review-points.js";
 export {
   voiceCheck,
   renderRecordedReading,
@@ -209,8 +231,52 @@ export {
   type TriggerResolver,
 } from "./tempo.js";
 export {
+  CORPUS_POPULATION_SOURCE,
+  CORPUS_RESULT_ABSTENTION_REASONS,
+  isCorpusResultAbstentionReason,
+  parseCorpusResultAbstention,
+  type CorpusAbstentionResult,
+  type CorpusMoveRow,
+  type CorpusPopulation,
+  type CorpusResult,
+  type CorpusResultAbstentionReason,
+  type CorpusStatsResult,
+} from "./corpus-result.js";
+export {
+  SOURCE_ATTRIBUTION_ABSENT_REASON,
+  SOURCE_ATTRIBUTION_MISSING_METADATA_POLICY,
+  SOURCE_ATTRIBUTION_REGISTRY_ID,
+  SOURCE_ATTRIBUTION_REGISTRY_IMAGE,
+  SOURCE_ATTRIBUTION_REGISTRY_RESOURCE,
+  SOURCE_ATTRIBUTION_REGISTRY_VERSION,
+  SOURCE_ATTRIBUTION_RESOLVER,
+  SOURCE_DEPLOYMENT_ARTIFACT_IDS,
+  SOURCE_DEPLOYMENT_RECEIPT_FIELDS,
+  SOURCE_REMOTE_ENDPOINT_IDS,
+  isParsedSourceAttributionRegistryImage,
+  parseSourceAttributionRegistryImage,
+  resolveSourceAttribution,
+  sourceAttributionRegistryDigest,
+  type AbsentSourceAttribution,
+  type ParsedSourceAttributionRegistryImage,
+  type ResolvedSourceAttribution,
+  type SourceAttributionFieldResolver,
+  type SourceAttributionReceipt,
+  type SourceAttributionRegistryImage,
+  type SourceAttributionRegistryRow,
+  type SourceAttributionResolution,
+  type SourceAttributionValue,
+  type SourceDeploymentArtifactId,
+  type SourceDeploymentReceiptField,
+  type SourceMetadataAuthority,
+  type SourceRemoteEndpointId,
+} from "./source-attribution.js";
+export {
   STRUCTURAL_FEATURE_KINDS,
+  STRUCTURE_PREDICATES,
   emptyBoardDistance,
+  evaluateNamedStructureWithWitness,
+  evaluateStructuralExpressionWithWitness,
   matchesStructuralExpression,
   matchesStructuralFeature,
   mirrorExpression,
@@ -243,6 +309,7 @@ export {
   type SpaceZone,
   type StructuralDelta,
   type StructuralExpression,
+  type StructuralExpressionWitness,
   type StructuralFeature,
   type StructuralFeatureKind,
   type StructuralObservation,

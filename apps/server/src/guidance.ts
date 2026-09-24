@@ -10,7 +10,8 @@ import {
   renderPivotalMarker,
   renderRecordedReading,
   renderShapeFiring,
-  renderStoryEvaluationChange,
+  presentEvidenceItems,
+  presentedSentence,
   renderStructuralObservationChange,
   renderEvidenceItems,
   structuralReading,
@@ -22,7 +23,6 @@ import {
   type Node,
   type PositionEvidenceIndex,
   type RenderedEvidenceView,
-  type StoryEvaluation,
   type ConsumerEvidenceView,
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition, PackPhase } from "@chess-tabiya/schema/drill-pack";
@@ -122,11 +122,12 @@ function renderCompareDerived(evidence: DeclaredEvidence<unknown>): readonly str
   const pawns = `${delta >= 0 ? "+" : "−"}${(Math.abs(delta) / 100).toFixed(2)}`;
   return one(`Recorded evaluation change at ${consequenceStep(payload.plyOffset)}: ${pawns} pawns on the stored scale.`);
 }
+/**
+ * Story-derived and typed Review facts render through the registered review.story@1 presentation
+ * adapter, so the voice story speaks exactly the sealed component sentence (never a cp scalar).
+ */
 function renderStoryDerived(evidence: DeclaredEvidence<unknown>): readonly string[] {
-  const payload = evidence.payload as Readonly<Record<string, unknown>>;
-  if (evidence.projection.id === "derived.story.last_level") return one("The last recorded moment within a pawn of level — Tabiya's recorded-evaluation convention.");
-  if (evidence.projection.id === "derived.story.title") return one(String(payload.title));
-  return one(renderStoryEvaluationChange(payload.after as StoryEvaluation, payload.delta as number));
+  return Object.freeze(presentEvidenceItems(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "review.story", version: 1 }, [evidence])).map(presentedSentence));
 }
 const renderMarker = (evidence: DeclaredEvidence<unknown>) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]);
 const PIVOTAL_ROUTES = Object.freeze(["derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@1", "derived.pivotal.human_divergence@1", "derived.pivotal.option_collapse@1"] as const);
@@ -146,7 +147,8 @@ const RENDERERS = Object.freeze({
   "run.record.imported_result@1": renderRunRecord,
   "derived.compare.structure_delta@1": renderCompareDerived,
   "derived.compare.eval_delta@1": renderCompareDerived,
-  "derived.story.eval_shift@1": renderStoryDerived,
+  "derived.review.eval_delta@1": renderStoryDerived,
+  "derived.review.mate_transition@1": renderStoryDerived,
   "derived.story.last_level@1": renderStoryDerived,
   "derived.story.title@1": renderStoryDerived,
 });

@@ -11,7 +11,7 @@ import { ArrayReductionQualityRecorder } from "./module-reducers.js";
 import { POSTCOMMIT_NUDGE_TEMPLATES, postcommitNudgePacket } from "./postcommit-nudge.js";
 import { reviewMapProjection } from "./review-map.js";
 import { reviewText } from "./review-map-templates.js";
-import { storyMoments } from "./story.js";
+import { storyMomentsForRun } from "./story.js";
 import { reviewFixtureRun } from "./testing/review-map-fixture.js";
 import type { DrillRun, EvidencePayload } from "./types.js";
 
@@ -118,7 +118,7 @@ describe("Post-commit Nudge — the post_commit production operation", () => {
 describe("Review Map — module.review_map@1 admits everything it shows", () => {
   const run = reviewFixtureRun({ id: "review-admission", plies: 20 });
   const branchId = run.activeCursor.branchId;
-  const story = storyMoments(run, branchId, { recordedResult: "1-0" });
+  const story = storyMomentsForRun(run, branchId, { recordedResult: "1-0" });
 
   it("renders grades for every Review Map role and withholds them where the context ceiling refuses the module", () => {
     for (const role of ["learner", "host", "participant", "spectator"] as const) {

@@ -98,6 +98,10 @@ Current completion state is deliberately not copied here. Use the
 
 - [Game import and story](game-import-and-story.md) — PGN/Lichess import, grounded moments,
   re-entry and export.
+- [Review evidence](review-evidence.md) — the typed Review packet, its coordinator, the story
+  receipt and the Review Map evidence panel.
+- [Evidence presentation](evidence-presentation.md) — the sealed component vocabulary, adapters and
+  the closed presentation receipt.
 - [Adoption wave 1](adoption-wave-1.md) — terminal stories, public cards, milestones and
   opposite-side replay.
 

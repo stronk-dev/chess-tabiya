@@ -226,14 +226,20 @@ describe("§5 capability register", () => {
 });
 
 describe("§9 application composition and degradation", () => {
-  it("composes one scheduler; with providers off every operation is honestly unavailable", async () => {
+  it("composes one scheduler; with remote providers off those operations are honestly unavailable", async () => {
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
     try {
       const result = await application.providers.scheduler.get({ operation: "syzygy.position@1", request: REQUESTS["syzygy-position"] as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
       expect(result).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
-      const engine = await application.providers.scheduler.get({ operation: "stockfish.position_evaluation@1", request: REQUESTS["stockfish-position-evaluation"] as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
-      expect(engine).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
+      const maia = await application.providers.scheduler.get({ operation: "maia.policy_page@1", request: REQUESTS["maia-policy-page"] as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
+      expect(maia).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
+      // rfc/review-evidence-compiler.md: a mock-engine deployment runs the ONE real exchange over a
+      // labelled mock analysis engine, so the Review packet path is exercised end to end.
+      const request = { ...(REQUESTS["stockfish-position-evaluation"] as Record<string, unknown>), requestedEngine: { id: "stockfish-analysis", version: "mock-1" } };
+      const engine = await application.providers.scheduler.get({ operation: "stockfish.position_evaluation@1", request: request as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
+      expect(engine, JSON.stringify(engine)).toMatchObject({ kind: "success" });
+      expect(engine.kind === "success" && (engine.delivery.payload as { readonly engine: { readonly name: string } }).engine.name).toBe("Mock Stockfish");
     } finally {
       await application.close();
     }

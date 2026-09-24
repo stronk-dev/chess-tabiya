@@ -1,4 +1,9 @@
-import { transposeKey } from "@chess-tabiya/runtime";
+import {
+  transposeKey,
+  type CorpusPopulation as RuntimeCorpusPopulation,
+  type CorpusResult as RuntimeCorpusResult,
+  type CorpusResultAbstentionReason,
+} from "@chess-tabiya/runtime";
 
 import {
   RATING_GROUPS,
@@ -10,18 +15,12 @@ import {
   type Speed,
 } from "./sourcing/explorer.js";
 
-export interface CorpusPopulation {
-  readonly source: "lichess-explorer";
-  readonly ratings: readonly RatingGroup[];
-  readonly speeds: readonly Speed[];
-  readonly since: string;
-  readonly until: string;
-}
+/** The runtime owns the Explorer result shape and its abstention-reason tuple (D3103). */
+export type CorpusPopulation = RuntimeCorpusPopulation<RatingGroup, Speed>;
+export type CorpusAbstentionReason = CorpusResultAbstentionReason;
 
 export interface CorpusQuery extends CorpusPopulation { readonly fen: string; }
-export type CorpusResult =
-  | { readonly kind: "stats"; readonly total: number; readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly { readonly san: string; readonly uci: string; readonly playedCount: number; readonly sharePct: number; readonly white: number; readonly draws: number; readonly black: number }[]; readonly recency: { readonly kind: "month"; readonly lastPlayedMonth: string } | { readonly kind: "absent" }; readonly population: CorpusPopulation }
-  | { readonly kind: "abstention"; readonly reason: "no_data_at_band" | "source_unavailable"; readonly detail: string; readonly population: CorpusPopulation };
+export type CorpusResult = RuntimeCorpusResult<CorpusPopulation>;
 export interface CorpusSource { stats(query: CorpusQuery): Promise<CorpusResult>; }
 
 const DAY = 86_400_000;

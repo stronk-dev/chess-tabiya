@@ -5,6 +5,8 @@ import type {
 import type { ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
 import type {
   BranchComparison,
+  CorpusPopulation,
+  CorpusResult,
   BranchGroup,
   DrillRun,
   DrillRunEvent,
@@ -22,7 +24,7 @@ import type {
   ReasoningDetection,
   ReasoningTranscript,
   RunMark,
-  StoryMoment,
+  ReviewStoryReceipt,
   ReviewAnalysis,
   ReviewMapProjection,
   BotCardSourceId,
@@ -35,7 +37,7 @@ import type {
   FinalizedAssistanceV1,
   RequestedAssistanceV1,
 } from "@chess-tabiya/runtime";
-import { parseFinalizedAssistanceV1 } from "@chess-tabiya/runtime";
+import { parseFinalizedAssistanceV1, parseReviewStoryReceipt } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
@@ -582,8 +584,7 @@ export interface HumanSplitPage {
   readonly candidates: readonly NonNullable<OpponentSelection["candidates"]>[number][];
 }
 
-export interface CorpusPopulation { readonly source: "lichess-explorer"; readonly ratings: readonly number[]; readonly speeds: readonly string[]; readonly since: string; readonly until: string; }
-export type CorpusResult = { readonly kind: "stats"; readonly total: number; readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly { readonly san: string; readonly uci: string; readonly playedCount: number; readonly sharePct: number; readonly white: number; readonly draws: number; readonly black: number }[]; readonly recency: { readonly kind: "month"; readonly lastPlayedMonth: string } | { readonly kind: "absent" }; readonly population: CorpusPopulation } | { readonly kind: "abstention"; readonly reason: "no_data_at_band" | "source_unavailable"; readonly detail: string; readonly population: CorpusPopulation };
+export type { CorpusPopulation, CorpusResult } from "@chess-tabiya/runtime";
 export interface CorpusPage { readonly nodeId: string; readonly result: CorpusResult; readonly committedMoveSan: string | null; }
 export interface RepertoireSummary {readonly id:string;readonly name:string;readonly side:"white"|"black";readonly targetElo:number;readonly coverageDenominator:number;readonly digest:string;readonly updatedAt:string;readonly scan:null|{readonly scannedAt:string;readonly stale:boolean;readonly truncated:boolean;readonly gapCount:number}}
 export interface RepertoireView extends RepertoireSummary {readonly rootFen:string;readonly sourceKind:"pgn_paste"|"lichess_study";readonly sourceUrl:string|null;readonly licenceNote:string;readonly moves:readonly {readonly positionKey:string;readonly moveUci:string;readonly moveSan:string;readonly representativeFen:string;readonly rank:number;readonly origin:"imported"|"chosen_from_attempt"}[]}
@@ -614,21 +615,14 @@ export interface ImportGameRequest {
   readonly seed: number;
   readonly source: { readonly kind: "pgn"; readonly pgn: string } | { readonly kind: "lichess"; readonly url: string };
 }
-export interface GameStory {
-  readonly runId: string;
-  readonly ready: boolean;
-  readonly pendingEvidence: number;
-  readonly branchId: string;
-  readonly side: "white" | "black";
-  readonly source: { readonly kind: "native" } | { readonly kind: ImportedGameRecord["sourceKind"]; readonly url?: string; readonly headers: Readonly<Record<string, string>>; readonly result: ImportedGameRecord["result"]; readonly importedAt: string };
-  readonly outcome:
-    | { readonly kind: "board_terminal"; readonly result: "win" | "loss" | "draw" }
-    | { readonly kind: "recorded_result"; readonly result: Exclude<ImportedGameRecord["result"], "*"> }
-    | { readonly kind: "unfinished" };
-  readonly moments: readonly StoryMoment[];
-  readonly rank: readonly string[];
-  readonly evidence?: StoryMoment["evidence"];
-}
+/** The imported or native source summary carried by the Review Map header. */
+export type ReviewSourceSummary = { readonly kind: "native" } | { readonly kind: ImportedGameRecord["sourceKind"]; readonly url?: string; readonly headers: Readonly<Record<string, string>>; readonly result: ImportedGameRecord["result"]; readonly importedAt: string };
+export type ReviewOutcomeSummary =
+  | { readonly kind: "board_terminal"; readonly result: "win" | "loss" | "draw" }
+  | { readonly kind: "recorded_result"; readonly result: Exclude<ImportedGameRecord["result"], "*"> }
+  | { readonly kind: "unfinished" };
+/** rfc/review-evidence-compiler.md §4: `GET /runs/:id/story` is exactly the closed review-story@1 receipt. */
+export type GameStory = ReviewStoryReceipt;
 /** rfc/review-map.md: the whole-game Review Map payload from `GET /runs/:id/review`. */
 export type ReviewMap = ReviewMapProjection & {
   readonly runId: string;
@@ -636,8 +630,8 @@ export type ReviewMap = ReviewMapProjection & {
   readonly side: "white" | "black";
   readonly ready: boolean;
   readonly pendingEvidence: number;
-  readonly source: GameStory["source"];
-  readonly outcome: GameStory["outcome"];
+  readonly source: ReviewSourceSummary;
+  readonly outcome: ReviewOutcomeSummary;
   readonly storyTitle: string;
   readonly viewer: { readonly mayWrite: boolean };
   readonly semanticPath: { readonly kind: "available"; readonly events: number } | { readonly kind: "refused"; readonly reason: string };
@@ -1223,9 +1217,10 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/review-analysis?node=${encoded(nodeId)}${branch}`);
   }
 
-  story(runId: string, branchId?: string): Promise<GameStory> {
+  async story(runId: string, branchId?: string): Promise<GameStory> {
     const query = branchId === undefined ? "" : `?branch=${encoded(branchId)}`;
-    return this.#json(`/runs/${encoded(runId)}/story${query}`);
+    // The exact recursive parser: nested presentation receipts are re-sealed client-side.
+    return parseReviewStoryReceipt(await this.#json<unknown>(`/runs/${encoded(runId)}/story${query}`), { runId, ...(branchId === undefined ? {} : { branchId }) }).receipt;
   }
 
   shareStory(runId: string, branchId: string): Promise<CreatedStoryShare> { return this.#json(`/runs/${encoded(runId)}/share`, { method: "POST", body: { branchId } }); }

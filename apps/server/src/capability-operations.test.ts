@@ -165,9 +165,14 @@ describe("criterion 21 — queued providers are a closed operation population ([
   });
 
   it("admits each origin only in its production owner; there is no post-save enqueue loop ([[D2526]])", () => {
+    // rfc/review-evidence-compiler.md §4.1 supersedes the `story_completion` owner: import completion
+    // and story() reach only the Review coordinator's `ensureBranch` over the provider exchange, so
+    // the origin stays in the closed store vocabulary but no production path admits it.
+    expect(serviceSource).not.toContain('origin: "story_completion"');
+    expect(serviceSource).not.toContain("#ensureStoryEvidence");
+    expect(serviceSource).toContain("this.#reviewEvidence.ensureBranch(runId, branchId)");
     const owners: Readonly<Record<string, string>> = {
       explicit_analysis: "  enqueueEvidence(",
-      story_completion: "  #ensureStoryEvidence(",
       run_enrichment: "  #enrichmentPlan(",
     };
     for (const [origin, owner] of Object.entries(owners)) {

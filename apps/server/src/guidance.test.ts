@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, phaseBandReading, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, phaseBandReading, storyMomentsForRun, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 // Test-only compiler fixture for renderer tests (rfc/evidence-value-authority.md §1).
 import { fixtureEvidence, fixtureEvidenceList } from "../../../packages/runtime/src/testing/evidence-fixture.test-support.js";
+import { attachDelivery, evaluationDelivery, importedRun, mainPath, play } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import type { SquareName } from "chessops/types";
 import * as ts from "typescript";
@@ -106,15 +107,18 @@ describe("adaptive guidance server seams", () => {
     expect(text).toContain("Recorded evaluation change at consequence step 2: −1.65 pawns on the stored scale.");
     expect(text).not.toMatch(/\bcp\b|\bplies\b|\boffset\b|reply-seen|\b(active|preserved)\b/u);
   });
-  it("voices Story evaluation changes in learner-oriented pawn units", () => {
-    const evidence = fixtureEvidence("derived.story.eval_shift@1", {
-      before: { centipawns: -25, engineId: "sf", requestedMovetimeMs: 100 },
-      after: { centipawns: 240, engineId: "sf", requestedMovetimeMs: 100 },
-      delta: 265,
-    });
-    const rendered = voiceEvidenceView(fixturePacket(), "story", [evidence], false).rendered;
-    const sentence = rendered.items.find((item) => item.evidence.projection.id === "derived.story.eval_shift")?.sentences[0];
-    expect(sentence).toBe("Recorded evaluation change from the learner's side: +2.65 pawns across this move (sf, 100 ms).");
+  it("voices typed Story evaluation changes through the review.story@1 component sentence", () => {
+    // rfc/review-evidence-compiler.md: the voice story speaks the sealed component of the typed
+    // derived.review.eval_delta@1 item — never a clamped cp scalar.
+    let run = play(importedRun("voice-story"), ["e2e4", "e7e5"]);
+    const path = mainPath(run);
+    run = attachDelivery(run, path[0]!.id, evaluationDelivery(path[0]!.fen, "cp 0"));
+    run = attachDelivery(run, path[1]!.id, evaluationDelivery(path[1]!.fen, "cp -240"));
+    const story = storyMomentsForRun(run, run.activeCursor.branchId, { recordedResult: "*" });
+    const shift = story.moments.flatMap((moment) => moment.evidence).find((item) => item.projection.id === "derived.review.eval_delta")!;
+    const rendered = voiceEvidenceView(fixturePacket(), "story", [shift], false).rendered;
+    const sentence = rendered.items.find((item) => item.evidence.projection.id === "derived.review.eval_delta")?.sentences[0];
+    expect(sentence).toBe("Recorded engine evaluation changed by +2.40 pawns from White's side across this move (Stockfish 19, depth 12 search).");
     expect(sentence).not.toMatch(/\bcp\b/u);
   });
   it("voices shape firings without exposing catalogue keys or trigger plumbing", () => {

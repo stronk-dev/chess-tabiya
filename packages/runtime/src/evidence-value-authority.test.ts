@@ -28,6 +28,7 @@ import { commitMove, createRun, fork, rewind } from "./runtime.js";
 import { compileSemanticEvidenceEvent, legalAlternativeEdges, loosePieceSemanticEvents, pawnIslandSemanticEvents, structuralSemanticEvents, transitionSemanticEvents } from "./semantic-evidence.js";
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
 import type { DrillRun } from "./types.js";
+import { evaluationDelivery as reviewEvaluationDelivery } from "./testing/review-evidence-fixture.js";
 import { PROVIDER_EXCHANGE_AUTHORITY } from "./provider-exchange.js";
 import { normalizeProviderRequest } from "./provider-requests.js";
 import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
@@ -174,12 +175,17 @@ describe("value authority: static closure", () => {
 
 const ACTIVE = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => projection.disposition?.kind !== "retired").map(exact).sort();
 const RETIRED = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => projection.disposition?.kind === "retired").map(exact).sort();
+/** Receipt targets retired after migration, each with its typed successor route. */
+const RETIRED_AFTER_MIGRATION: ReadonlyMap<string, string> = new Map([["derived.story.eval_shift@1", "derived.review.eval_delta@1"]]);
 
 describe("value authority: registry equality", () => {
   it("is set-equal to every non-retired catalogue projection, with bindings a subset (§8.3, criterion 13)", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
-    expect(ACTIVE).toHaveLength(216);
+    // 216 + the five typed Review projections and forced-mate v2, less the retired Story eval shift
+    // (rfc/review-evidence-compiler.md).
+    expect(ACTIVE).toHaveLength(221);
     expect(RETIRED).toEqual([
+      "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
       "rules.structural.predicate.result@1", "rules.structural.reading.named_structure@1", "rules.structural.reading.pawn_count@1",
     ]);
@@ -218,6 +224,13 @@ describe("value authority: registry equality", () => {
       expect(row.targetProfiles.length, row.oldOperation).toBeGreaterThan(0);
       for (const target of row.targetProfiles) {
         expect(target.projection, row.oldOperation).not.toMatch(/\*|generic/u);
+        // rfc/review-evidence-compiler.md §5 retires this receipt target after migration: its route
+        // is removed with the projection, and the typed Review successor carries the evidence.
+        if (RETIRED_AFTER_MIGRATION.has(target.projection)) {
+          expect(ROUTES.has(target.projection), target.projection).toBe(false);
+          expect(ROUTES.has(RETIRED_AFTER_MIGRATION.get(target.projection)!), target.projection).toBe(true);
+          continue;
+        }
         const meta = ROUTES.get(target.projection);
         expect(meta, `${row.oldOperation} -> ${target.projection}`).toBeDefined();
         expect(meta!.symbol).toBe(target.factorySymbol);
@@ -240,7 +253,8 @@ describe("value authority: registry equality", () => {
     const extra = [...ROUTES.keys()].filter((route) => !targets.has(route)).sort();
     // Plus the six provider-exchange routes (rfc/provider-exchange-and-execution.md §9), which have no
     // pre-exchange route in the frozen receipt.
-    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.syzygy.position_result@1", "rules.endgame.tablebase_domain@1", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
+    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.syzygy.position_result@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -666,6 +680,7 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const mateFen = "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1";
   const breadth = sealedOne("rules.tactic.consequence.reply_breadth@1", edge(mateFen, "f7g7"));
   profiles.set("rules.tactic.consequence.forced_mate_after_move@1", { valid: { beforeFen: mateFen, breadth, maxAttackerMoves: 1 }, falsify: refused("rules.tactic.consequence.forced_mate_after_move@1", { beforeFen: mateFen, breadth: breadth.payload, maxAttackerMoves: 1 }) });
+  profiles.set("rules.tactic.consequence.forced_mate_after_move@2", { valid: { beforeFen: mateFen, breadth, maxAttackerMoves: 1 }, falsify: refused("rules.tactic.consequence.forced_mate_after_move@2", { beforeFen: mateFen, breadth: breadth.payload, maxAttackerMoves: 1 }) });
   const doubleAttack = sealedOne("rules.tactic.event.double_attack@1", edge("4k3/8/8/8/1n6/8/8/R3K3 b - - 0 1", "b4c2"));
   const forkBreadth = sealedOne("rules.tactic.consequence.reply_breadth@1", edge("4k3/8/8/8/1n6/8/8/R3K3 b - - 0 1", "b4c2"));
   profiles.set("derived.tactic.fork_survives_reply@1", { valid: { doubleAttack, breadth: forkBreadth }, falsify: refused("derived.tactic.fork_survives_reply@1", { doubleAttack: forkBreadth, breadth: forkBreadth }) });
@@ -791,8 +806,17 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   profiles.set("run.record.fork@1", { valid: { run, comparison }, falsify: refused("run.record.fork@1", { run, comparison: { ...comparison, forkNodeId: "missing" } }) });
   profiles.set("run.record.position@1", { valid: { run, nodeId: mainPath[2]!.id }, falsify: refused("run.record.position@1", { run, nodeId: "missing" }) });
   profiles.set("run.record.imported_result@1", { valid: { run, branchId: main, recordedResult: "0-1" }, falsify: refused("run.record.imported_result@1", { run, branchId: main, recordedResult: "*" }) });
-  profiles.set("derived.story.eval_shift@1", { valid: { run, branchId: main }, falsify: refused("derived.story.eval_shift@1", { run, branchId: main, delta: 500 }) });
-  profiles.set("derived.story.last_level@1", { valid: { run, branchId: main, recordedResult: "0-1" }, falsify: refused("derived.story.last_level@1", { run, branchId: main, recordedResult: "white" }) });
+  // rfc/review-evidence-compiler.md: the typed Review projections over one sealed position delivery.
+  const reviewDelivery = (fen: string, raw: string) => sealedOne("live.stockfish.position_eval@1", { delivery: reviewEvaluationDelivery(fen, raw) });
+  const reviewPoint = (index: number, raw: string) => invoke("derived.review.eval_point@1", { evaluation: reviewDelivery(mainPath[index]!.fen, raw), position: sealedOne("run.record.position@1", { run, nodeId: mainPath[index]!.id }) }) as { readonly kind: string; readonly value: DeclaredEvidence<unknown> };
+  profiles.set("derived.review.eval_point@1", { valid: { evaluation: reviewDelivery(mainPath[1]!.fen, "cp 30"), position: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }) }, falsify: refused("derived.review.eval_point@1", { evaluation: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }), position: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }) }) });
+  const reviewBefore = reviewPoint(1, "cp 30").value, reviewAfter = reviewPoint(2, "cp -250").value, reviewMated = reviewPoint(2, "mate 2").value;
+  profiles.set("derived.review.eval_delta@1", { valid: { before: reviewBefore, after: reviewAfter }, falsify: refused("derived.review.eval_delta@1", { before: reviewBefore, after: reviewAfter, deltaCp: 5 }) });
+  profiles.set("derived.review.mate_transition@1", { valid: { before: reviewBefore, after: reviewMated }, falsify: refused("derived.review.mate_transition@1", { before: reviewBefore, after: reviewDelivery(mainPath[2]!.fen, "mate 2") }) });
+  const normalized = sealedOne("derived.review.wdl_white@1", { evaluation: reviewDelivery(mainPath[1]!.fen, "cp 30") });
+  profiles.set("derived.review.wdl_white@1", { valid: { evaluation: reviewDelivery(mainPath[1]!.fen, "cp 30") }, falsify: refused("derived.review.wdl_white@1", { evaluation: normalized }) });
+  profiles.set("derived.review.wdl_point@1", { valid: { normalized, position: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }) }, falsify: refused("derived.review.wdl_point@1", { normalized, position: normalized }) });
+  profiles.set("derived.story.last_level@1", { valid: { path: mainPath.map((node) => node.id), side: "white", recordedResult: "0-1", points: [reviewBefore, reviewAfter] }, falsify: refused("derived.story.last_level@1", { path: mainPath.map((node) => node.id), side: "white", recordedResult: "white", points: [reviewBefore] }) });
   const pivotalRuns = pivotalFixtures();
   for (const kind of ["irreversibility", "phase_change", "human_divergence", "option_collapse"] as const) {
     const route = `derived.pivotal.${kind}@1`;
@@ -800,8 +824,8 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     profiles.set(route, { valid: fixture, falsify: refused(route, { ...fixture, detail: {} }) });
   }
   profiles.set("derived.opening.deepest_reached@1", { valid: { run, branchId: main }, falsify: refused("derived.opening.deepest_reached@1", { run, branchId: main, deepest: {} }) });
-  const shift = sealedOne("derived.story.eval_shift@1", { run, branchId: main });
-  const moment = { nodeId: mainPath[2]!.id, entryNodeId: mainPath[2]!.id, ply: 2, san: null, fen: mainPath[2]!.fen, kinds: ["eval_pivot"], sentences: [], evidence: shift === undefined ? [] : [(shift as unknown as { evidence: DeclaredEvidence<unknown> }).evidence], phase: "middlegame", ...(shift === undefined ? {} : { evalBefore: ((shift as unknown as { evidence: DeclaredEvidence<{ before: unknown }> }).evidence.payload.before), evalAfter: ((shift as unknown as { evidence: DeclaredEvidence<{ after: unknown }> }).evidence.payload.after) }) };
+  const shift = (invoke("derived.review.eval_delta@1", { before: reviewBefore, after: reviewAfter }) as { readonly value: DeclaredEvidence<{ readonly before: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }>; readonly after: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }> }> }).value;
+  const moment = { nodeId: mainPath[2]!.id, decisionNodeId: mainPath[1]!.id, evidenceNodeId: mainPath[2]!.id, stopNodeId: mainPath[2]!.id, entryNodeId: mainPath[1]!.id, ply: 2, san: null, fen: mainPath[2]!.fen, kinds: ["eval_pivot"], sentences: [], components: [], evidence: [shift], phase: "middlegame", evaluation: { before: shift.payload.before.payload.evaluation.payload.payload.score, after: shift.payload.after.payload.evaluation.payload.payload.score } };
   profiles.set("derived.story.rank@1", { valid: { moments: [moment] }, falsify: refused("derived.story.rank@1", { moments: [{ ...moment, kinds: ["phase_change"] }] }) });
   const rank = invoke("derived.story.rank@1", { moments: [moment] }) as DeclaredEvidence<{ rank: readonly string[] }>;
   const story = { side: "white", outcome: { kind: "unfinished" }, moments: [moment], rank: rank.payload.rank };

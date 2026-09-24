@@ -1600,8 +1600,8 @@ export function createRestHandler(
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
-        const story = scope === "story" ? service.story(route.runId, principal) : undefined;
-        const extra = story === undefined ? [] : storyDeclaredEvidence({ ...story, evidence: story.moments.find((moment) => moment.nodeId === access.node.id)?.evidence ?? [] });
+        const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
+        const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
         return json(200, { ...(await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra)), scope });
       }
       if (route.action === "speech") {
@@ -1613,8 +1613,8 @@ export function createRestHandler(
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
-        const story = scope === "story" ? service.story(route.runId, principal) : undefined;
-        const extra = story === undefined ? [] : storyDeclaredEvidence({ ...story, evidence: story.moments.find((moment) => moment.nodeId === access.node.id)?.evidence ?? [] });
+        const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
+        const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
         const rendered = renderedEvidenceItems(EVIDENCE_MANIFEST, scope === "story" ? "guidance.voice_story" : "guidance.voice", [...basePacket.declared, ...extra]);
         const deterministic = rendered.items.flatMap((item) => item.sentences).join("\n");
         const checkedText = voiceProvider === undefined ? appendRecordedReadings(deterministic, basePacket) : (await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra)).text;

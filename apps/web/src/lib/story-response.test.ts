@@ -2,83 +2,41 @@ import { describe, expect, it } from "vitest";
 
 import {
   assertCreatedStoryShare,
-  assertGameStoryResponse,
   assertRevokedStoryShare,
   assertStoryShares,
 } from "./story-response.js";
 
-const FEN = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
+import { parseReviewStoryReceipt, renderReviewStoryReceipt, reviewPacketForRun } from "@chess-tabiya/runtime";
 
-function validStory(): unknown {
-  return {
-    runId: "run-one",
-    ready: true,
-    pendingEvidence: 0,
-    branchId: "main",
-    side: "white",
-    source: { kind: "native" },
-    outcome: { kind: "unfinished" },
-    moments: [{
-      nodeId: "node-one",
-      entryNodeId: "entry-one",
-      ply: 1,
-      san: "e4",
-      fen: FEN,
-      kinds: ["phase_change"],
-      sentences: [],
-      evidence: [],
-      phase: "opening",
-    }],
-    rank: ["node-one"],
-    evidence: [],
-  };
+import { attachDelivery, evaluationDelivery, importRecord, importedRun, mainPath, play } from "../../../../packages/runtime/src/testing/review-evidence-fixture.js";
+
+function validStory(): Record<string, unknown> {
+  let run = play(importedRun("run-one"), ["e2e4", "e7e5", "g1f3"]);
+  const path = mainPath(run);
+  run = attachDelivery(run, path[0]!.id, evaluationDelivery(path[0]!.fen, "cp 20"));
+  run = attachDelivery(run, path[1]!.id, evaluationDelivery(path[1]!.fen, "cp -300"));
+  return JSON.parse(JSON.stringify(renderReviewStoryReceipt(reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, "1-0") })))) as Record<string, unknown>;
 }
 
-function expectInvalidStory(value: unknown, branchId?: string): void {
-  expect(() => assertGameStoryResponse(value, { runId: "run-one", ...(branchId === undefined ? {} : { branchId }) }))
-    .toThrow("Invalid game story response");
-}
-
-describe("Story network response contracts", () => {
-  it("admits a closed Story document bound to the requested run and branch", () => {
+describe("Story network response contracts (rfc/review-evidence-compiler.md §4)", () => {
+  it("admits the closed review-story@1 receipt bound to the requested run and branch", () => {
     const story = validStory();
-    expect(() => assertGameStoryResponse(story, { runId: "run-one", branchId: "main" })).not.toThrow();
+    const branchId = (story.subject as { readonly branchId: string }).branchId;
+    const parsed = parseReviewStoryReceipt(story, { runId: "run-one", branchId });
+    expect(parsed.receipt.protocol).toBe("review-story@1");
+    expect(parsed.moments.length).toBeGreaterThan(0);
   });
 
-  it("refuses crossed subjects and contradictory readiness", () => {
-    expectInvalidStory({ ...validStory() as object, runId: "run-two" });
-    expectInvalidStory({ ...validStory() as object, branchId: "other" }, "main");
-    expectInvalidStory({ ...validStory() as object, ready: true, pendingEvidence: 1 });
-  });
-
-  it("refuses malformed board state and rankings that are not an exact moment set", () => {
-    const story = validStory() as { moments: Record<string, unknown>[]; rank: string[] };
-    expectInvalidStory({ ...story, moments: [{ ...story.moments[0], fen: "not a fen" }] });
-    expectInvalidStory({ ...story, rank: [] });
-    expectInvalidStory({ ...story, rank: ["node-one", "node-one"] });
-  });
-
-  it("refuses undeclared evidence identities and unpaired evaluations", () => {
-    const story = validStory() as { moments: Record<string, unknown>[] };
-    expectInvalidStory({
-      ...story,
-      moments: [{
-        ...story.moments[0],
-        evidence: [{
-          producer: { id: "forged.producer", version: 1 },
-          projection: { id: "forged.projection", version: 1 },
-          payload: {},
-        }],
-      }],
-    });
-    expectInvalidStory({
-      ...story,
-      moments: [{ ...story.moments[0], evalBefore: { centipawns: 0, engineId: "sf" } }],
-    });
-    expectInvalidStory({
-      ...story,
-      moments: [{ ...story.moments[0], sentences: ["A network-authored judgement."] }],
-    });
+  it("refuses crossed subjects, open shapes, legacy scalar fields and forged presentation receipts", () => {
+    const story = validStory();
+    expect(() => parseReviewStoryReceipt(story, { runId: "run-two" })).toThrow(/does not answer the request/u);
+    expect(() => parseReviewStoryReceipt({ ...story, ready: true, pendingEvidence: 0 })).toThrow(/keys/u);
+    const moments = story.moments as Record<string, unknown>[];
+    expect(() => parseReviewStoryReceipt({ ...story, moments: [{ ...moments[0]!, evalBefore: { centipawns: 0, engineId: "sf" } }, ...moments.slice(1)] })).toThrow(/keys/u);
+    expect(() => parseReviewStoryReceipt({ ...story, moments: [{ ...moments[0]!, sentences: ["prose"] }, ...moments.slice(1)] })).toThrow(/keys/u);
+    const forged = structuredClone(moments[0]!) as { presentation: { items: { component: { operand: Record<string, unknown> } }[] } };
+    forged.presentation.items[0]!.component.operand.value = 12345;
+    expect(() => parseReviewStoryReceipt({ ...story, moments: [forged, ...moments.slice(1)] })).toThrow(/presentation/u);
   });
 
   it("binds share lists and creation receipts to the requested Story", () => {

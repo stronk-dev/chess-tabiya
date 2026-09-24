@@ -1,3 +1,5 @@
+import { parsePresentationReceipt, presentedSentence } from "@chess-tabiya/runtime";
+
 import type { ReviewAnalysisPage, ReviewMap } from "./api.js";
 
 const GRAPH_KINDS = new Set(["complete", "partial", "abstained"]);
@@ -42,6 +44,13 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
     if (row.ply !== index + 1 || !natural(row.moveNumber) || !SIDES.has(row.side as string) || typeof row.moment !== "boolean") fail(`row ${index} position`);
     if (/[?!]|\$\d/u.test(row.san as string)) fail(`row ${index} carries an annotation glyph`);
     if (!texts(row.facts) || (row.facts as readonly string[]).length === 0) fail(`row ${index} facts`);
+    // rfc/review-evidence-compiler.md: the typed packet components travel as one closed presentation
+    // receipt whose equivalent sentences are exactly the tail of the row's facts.
+    let packet: ReturnType<typeof parsePresentationReceipt>;
+    try { packet = parsePresentationReceipt(row.packet); } catch (error) { return fail(`row ${index} packet: ${error instanceof Error ? error.message : String(error)}`); }
+    const facts = row.facts as readonly string[];
+    const tail = facts.slice(facts.length - packet.length);
+    if (packet.length > facts.length || packet.some((item, position) => presentedSentence(item) !== tail[position])) fail(`row ${index} packet sentences are not its facts`);
     if (row.grade !== undefined) {
       const grade = record(row.grade) ?? fail(`row ${index} grade`);
       if (!CLASSES.has(grade.klass as string) || !text(grade.sentence) || !isGroundedGradeSentence(grade.klass as string, grade.sentence as string)) fail(`row ${index} grade is not a grounded sentence`);

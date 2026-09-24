@@ -74,41 +74,48 @@ The learner-facing surface for both forms is the Review Map (below). On desktop 
 move list, the selected-position board with its evidence panel, and the moment cards as three
 columns; on narrow screens the same regions stack into the route's normal vertical reading order.
 
-After persistence, the server enqueues one evaluation job per mainline node,
-including the root. An 80-ply game therefore requests 81 jobs; the 300-ply import
-cap bounds the pass at 301. The pass is idempotent-completing: story reads inspect
-durable evaluations plus current queue state and enqueue only missing nodes.
-Process loss or rewind cancellation can delay work but cannot permanently wedge the
-story.
+After persistence, import completion calls the one Review evidence coordinator
+(`ReviewEvidenceCoordinator.ensureBranch`, [review evidence](review-evidence.md)). It requests one
+typed `stockfish.position_evaluation@1` delivery per mainline node through the shared provider
+scheduler in bounded windows, attaches each admitted delivery durably to the run's own event log,
+and advances the next window from completion callbacks. It never uses the evidence job queue. Story
+reads call the same operation; Review Map reads only observe it. Repeated reads coalesce and never
+duplicate an attached delivery; exhausted attempts are retained in a bounded application-lifetime
+store and are not retried until restart.
 
-Evidence remains single-writer. Story reads never apply staged results or acquire a
-lease; the active writer uses the normal evidence endpoint while delivery is open.
-Until every mainline node has durable evaluation or a current recorded failure, the
-review says how many positions remain; grades and accuracy stay coverage-gated meanwhile.
+Until every requested node is settled the review says how many positions remain; grades and
+accuracy stay coverage-gated meanwhile. `ready`/`pendingEvidence` on the Review Map are generated
+summaries of the packet's orthogonal `progress` field.
 
 ## Grounded moments
 
 `GET /runs/:id/story` is an authorized, disclosure-gated derived projection. Imported
 mainlines qualify under this contract; native pack and position branches qualify after a
-validated terminal outcome. It
-combines persisted run/evidence data with shipped deterministic detectors:
+validated terminal outcome. It returns only the closed `review-story@1` receipt rendered from the
+typed Review packet by `renderReviewStoryReceipt(packet)`; the web parses it with
+`parseReviewStoryReceipt`. Moments are compiled from exact packet items:
 
 - irreversible moves, phase changes, sustained option collapse;
-- recorded evaluation pivots and the last near-level moment in a recorded loss;
+- cp pivots from `derived.review.eval_delta@1` (|Δ| ≥ 150 cp, White perspective) and typed mate
+  transitions from `derived.review.mate_transition@1`;
+- the last near-level moment in a recorded loss, from cp review points converted to the learner's
+  perspective at that consumer (a mate point can neither satisfy nor fail it);
 - first endgame entry and attributed technique census;
 - reusable-shape spans; and
 - board-terminal outcome or the PGN's attributed recorded result.
 
-Evaluation moments use a documented product convention: mate maps to a ±1000 cp
-rail, scores are learner-relative, and a consecutive swing of at least 150 cp is a
-pivot. These are arithmetic over recorded engine evidence, not move grades. An
-imported mainline has no human-model divergence because no selection distribution
-was recorded there.
+There is no mate→cp rail and no clamp: a mate score stays typed, and cp→mate is a mate
+transition, never a cp swing. These are arithmetic over recorded engine evidence, not move grades.
+An imported mainline has no human-model divergence because no selection distribution was recorded
+there.
 
-Every moment contains deterministic attributed sentences, FEN, ply/SAN, phase,
-and separate `nodeId` and `entryNodeId`. A terminal fact stays grounded at its
-terminal node but enters its playable parent. The payload returns all moments plus
-a deterministic rank. The Review Map's single selector (`selectReviewMoments`) walks that rank and
+Every moment carries sealed presentation components (a closed `presentation.receipt@1` on the
+wire), FEN, ply/SAN, phase and three identities: `decisionNodeId` (the parent of the exact recorded
+edge — retry always forks here), `evidenceNodeId` (where the observation is anchored) and
+`stopNodeId` (the bounded consequence endpoint). A root occurrence has no decision edge and
+constructs no moment. The receipt returns all moments plus a deterministic compatibility rank:
+outcome, mate transition, cp pivot, last level, phase change, endgame entry, shape, other facts,
+irreversibility; the |Δcp| tiebreak applies only to cp-typed moments. The Review Map's single selector (`selectReviewMoments`) walks that rank and
 keeps at most three moments, one per represented phase, then restores game chronology. The private
 review, the public share and the downloadable card all read that one selection, so their moment ids
 and order are byte-identical; each states the denominator of admitted story moments.
@@ -236,7 +243,8 @@ moves, chess nouns and prescriptive verbs remain packet-relative pending [[D1419
 - No account linking, automatic history import, background fetch, weakness model,
   variants, or third-party engine annotations.
 - No chess.com URL fetch; PGN paste is the supported path.
-- Story evidence is admitted as durable batches (≤16 jobs, keyed by branch, terminal node and
-  chunk); an interrupted pass resumes after restart instead of repeating work.
+- Story evidence is the typed Review pass ([review evidence](review-evidence.md)): admitted
+  deliveries are durable on the run's event log, so a pass interrupted by a restart resumes from the
+  first position without one instead of repeating work.
 - Native terminal story offers, story-card image rendering, and revocable public
   share-card hosting are documented in `adoption-wave-1.md`.

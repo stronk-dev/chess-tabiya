@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-import { REVIEW_MAP_TEMPLATES, judgementWordsOutsideGrounding, reviewMapProjection, reviewText, storyMoments, type ReviewMapProjection } from "@chess-tabiya/runtime";
+import { REVIEW_MAP_TEMPLATES, judgementWordsOutsideGrounding, reviewMapProjection, reviewPacketForRun, reviewText, storyMomentsForRun, type ReviewMapProjection } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -17,11 +17,12 @@ import { storyCardDocument } from "./story-card.js";
 const ROOT = `${process.cwd()}/`;
 afterEach(() => document.body.replaceChildren());
 
-function payload(options: { readonly mayWrite?: boolean; readonly evaluated?: (index: number) => boolean; readonly noMoments?: boolean; readonly plies?: number } = {}): ReviewMap {
+function payload(options: { readonly mayWrite?: boolean; readonly evaluated?: (index: number) => boolean; readonly noMoments?: boolean; readonly plies?: number; readonly packet?: boolean } = {}): ReviewMap {
   const run = reviewFixtureRun({ id: "web-review", ...(options.evaluated === undefined ? {} : { evaluated: options.evaluated }), ...(options.plies === undefined ? {} : { plies: options.plies }) });
   const branchId = run.activeCursor.branchId;
-  const story = options.noMoments === true ? { moments: [], rank: [] } : storyMoments(run, branchId, { recordedResult: "1-0" });
-  const projection: ReviewMapProjection = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "learner", session: "imported" } });
+  const story = options.noMoments === true ? { moments: [], rank: [] } : storyMomentsForRun(run, branchId, { recordedResult: "1-0" });
+  const packet = options.packet === true ? reviewPacketForRun(run, branchId, { importRecord: { runId: run.id, result: "1-0", movetextDigest: run.sessionDigest }, engine: new Map(run.nodes.map((node, index) => [node.id, index % 2 === 0 ? { kind: "pending" as const, jobCount: 1, retrying: 0 } : { kind: "unavailable" as const, reason: "provider_off" as const }])) }) : undefined;
+  const projection: ReviewMapProjection = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, ...(packet === undefined ? {} : { packet }) });
   // A JSON round trip: the component renders exactly what crosses the wire.
   return JSON.parse(JSON.stringify({
     runId: run.id, branchId, side: "white", ready: true, pendingEvidence: 0,
@@ -229,7 +230,7 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     ]);
     const evidence = [...document.querySelectorAll(".evidence p")].map((element) => element.textContent);
     expect(evidence).toContain(reviewText("evidence.eval.missing"));
-    expect(evidence).toContain(reviewText("evidence.packet.abstained"));
+    expect(evidence).toContain(reviewText("evidence.packet.absent"));
     for (const region of document.querySelectorAll("section")) expect(region.textContent!.trim()).not.toBe("");
     await unmount(component);
   });
@@ -251,6 +252,23 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     expect(createHash("sha256").update(rows.join("\n")).digest("hex")).toBe("c70b19666af161e3dcfb461fd4bafe3362f95c1c4db086336dfdaf6df0c9dca5");
     const importers = files(resolve(ROOT, "apps/web/src/")).filter((file) => !file.endsWith(".test.ts") && readFileSync(file, "utf8").includes("ReviewMapScreen.svelte"));
     expect(importers.map((file) => file.slice(ROOT.length))).toEqual(["apps/web/src/App.svelte"]);
+  });
+
+  it("[review-evidence-compiler] renders the typed packet as sealed components; abstention is structurally distinct", async () => {
+    const review = payload({ packet: true });
+    const component = render(review);
+    const evidence = document.querySelector(".evidence")!;
+    const abstentions = [...evidence.querySelectorAll("[data-abstention]")];
+    expect(abstentions.length).toBeGreaterThan(0);
+    for (const element of abstentions) {
+      expect(element.getAttribute("data-component")).toBe("abstention");
+      expect(element.textContent!.trim()).not.toBe("");
+    }
+    // Value components never carry the abstention attribute, and the packet never renders a raw id.
+    expect([...evidence.querySelectorAll("[data-component]:not([data-component='abstention'])")].every((element) => !element.hasAttribute("data-abstention"))).toBe(true);
+    expect([...evidence.querySelectorAll("[data-component]")].map((element) => element.textContent).join(" ")).not.toMatch(/review\.source\.|derived\.review|@\d|provider_off/u);
+    expect([...evidence.querySelectorAll("p")].map((element) => element.textContent)).toEqual(review.rows.find((row) => row.nodeId === document.querySelector(".move-row.selected")!.getAttribute("data-node-id"))!.facts);
+    await unmount(component);
   });
 
   it("navigates every ply from the list and the step controls without leaving the surface", async () => {

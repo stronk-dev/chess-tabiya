@@ -24,7 +24,7 @@ receipt is re-joined to its job. A row that fails is `EVIDENCE_JOB_CORRUPT`, nev
 | Origin | Owner | Key | Provider-off terminal |
 |---|---|---|---|
 | `explicit_analysis` | `POST /runs/:id/analysis` → `RunService.enqueueEvidence` | the caller's canonical-UUID `Idempotency-Key` | `settled_unavailable` |
-| `story_completion` | Story reads → `#ensureStoryEvidence` | SHA-256 of `{story_evidence@1, branchId, terminalNodeId, chunk}` | `settled_empty` |
+| `story_completion` | superseded — no production owner since `rfc/review-evidence-compiler.md` §4.1 (import and story reads use the Review coordinator over the provider exchange); the vocabulary member and row parser remain | SHA-256 of `{story_evidence@1, branchId, terminalNodeId, chunk}` | `settled_empty` |
 | `run_enrichment` | learner move, opponent ply, group seeds | `run_enrichment@1:<nodeId>` | `settled_empty` |
 
 An equal key with equal bytes replays the stored batch and ids; the same key with different bytes

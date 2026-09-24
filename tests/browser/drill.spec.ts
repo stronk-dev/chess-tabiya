@@ -220,7 +220,10 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   await page.getByRole("button", { name: "Next move" }).click();
   await expect(page.getByText("Position after 1… e5")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Recorded facts at this move" })).toBeVisible();
-  await expect(page.getByText("No per-position review packet is admitted here", { exact: false })).toBeVisible();
+  // rfc/review-evidence-compiler.md: the panel renders the typed Review packet through
+  // module.review_map@1 as sealed components, the number travelling with its engine and bound.
+  await expect(page.locator(".evidence [data-component='magnitude']", { hasText: "after this move" })).toContainText(/^Recorded engine evaluation after this move: [+−]\d+\.\d{2} from White's side \(Mock Stockfish mock-1, 100 ms search\)\.$/u);
+  await expect(page.getByText("No per-position review packet", { exact: false })).toHaveCount(0);
   // [criterion 12] no recommendation, PV or praise in the ordinary map.
   await expect(page.locator("main")).not.toContainText(/\bbest\b|principal variation|brilliant|excellent/iu);
   // [criteria 4, 5] Retry is on every row and every moment card; it works from another device (no stored writer id).
@@ -300,8 +303,9 @@ test("review map remainder: eval graph by keyboard, explicit Analyze withheld du
   await expect(main).not.toContainText(/principal variation|first move of its search|\bbest\b/iu);
   await page.getByRole("list", { name: "Move list" }).getByRole("button", { name: /^2\. Nf3/u }).click();
   await page.getByRole("button", { name: "Analyze the position before move 2 (Nf3): show the recorded engine line" }).click();
-  await expect(page.locator(".analysis-sentence")).toHaveText(/^mock-evidence \(\d+ ms search\) reported 2\. \S+ as the first move of its search from the position before 2\. Nf3; no longer line is recorded\.$/u);
-  await expect(page.getByText("It is not advice", { exact: false })).toBeVisible();
+  // rfc/review-evidence-compiler.md refusal 7: the typed Review delivery records no best move or PV,
+  // so the explicit reveal states honestly that no engine line is recorded.
+  await expect(page.locator(".analysis-sentence")).toHaveText("No engine line is recorded for the position before 2. Nf3.");
   await page.getByRole("button", { name: "Hide engine line" }).click();
   await expect(page.locator(".analysis-sentence")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /^Compare lines from here/u })).toHaveCount(0);

@@ -5,7 +5,8 @@
 // principal variation and no praise class (§7).
 
 import { branchPath } from "./branch-path.js";
-import type { DeclaredEvidence, EvidenceRole } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { evidenceForConsumer, type DeclaredEvidence, type EvidenceRole } from "./evidence-contract.js";
 import { compileModulePacket } from "./module-packets.js";
 import { GRADE_CONVENTION, assertMoveQualityGradeSentence, renderMoveQualityGrade, type GradeContext, type GradeEvaluation, type GradeSide, type MoveQualityClass, type MoveQualityGrade } from "./grade.js";
 import { gradeReadingFromPayload, moverWinPercent } from "./grade-reading.js";
@@ -13,6 +14,8 @@ import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import type { DetectedPhase } from "./phase.js";
 import type { RecordedSemanticPathResult } from "./recorded-semantic-path.js";
 import { reviewText, type ReviewTemplateId } from "./review-map-templates.js";
+import { presentEvidenceItems, presentedSentence, serializePresentedEvidence, type PresentationReceipt, type PresentedEvidenceItem } from "./presentation-contract.js";
+import { assertReviewEvidencePacket, presentReviewFamilyAbstentions, type ReviewEvidencePacket } from "./review-evidence.js";
 import { evidenceGroundingLabel, storyEvidenceSourceLabels, type StoryMoment, type StoryMomentKind, type StoryProjection } from "./story.js";
 import type { DrillRun, EvidencePayload, Node } from "./types.js";
 
@@ -43,6 +46,12 @@ export interface ReviewMapRow {
   readonly grade?: ReviewMapGrade;
   /** Evidence-panel sentences for this move, each from a registered template or an admitted renderer. */
   readonly facts: readonly string[];
+  /**
+   * The typed Review packet components for this move admitted by `module.review_map@1`, plus the
+   * packet-issued abstentions of its engine families (rfc/review-evidence-compiler.md). The closed
+   * presentation receipt; its equivalent sentences are the matching tail of `facts`.
+   */
+  readonly packet: PresentationReceipt;
 }
 
 export interface ReviewMapMoment {
@@ -145,6 +154,8 @@ export interface ReviewMapInput {
   readonly viewer: { readonly role: EvidenceRole; readonly session: string };
   /** The side this review follows (default: the run's start side); the eval graph is drawn for it. */
   readonly side?: GradeSide;
+  /** The typed Review evidence packet for the same subject (rfc/review-evidence-compiler.md). */
+  readonly packet?: ReviewEvidencePacket;
 }
 
 /** The shipped N-way compare's column limit (`MAX_COMPARISON_BRANCHES`). */
@@ -179,6 +190,7 @@ const MOMENT_KIND_TEMPLATES: Readonly<Record<StoryMomentKind, ReviewTemplateId>>
   human_divergence: "kind.human_divergence",
   option_collapse: "kind.option_collapse",
   eval_pivot: "kind.eval_pivot",
+  mate_transition: "kind.mate_transition",
   last_level: "kind.last_level",
   endgame_entry: "kind.endgame_entry",
   shape_span: "kind.shape_span",
@@ -383,12 +395,31 @@ function accuracyFor(side: GradeSide, decisions: readonly Decision[]): ReviewAcc
   });
 }
 
-function relationFamily(projectionId: string): string {
-  return (projectionId.split(".").at(-1) ?? projectionId).replaceAll("_", " ");
+/** The packet projections the Review Map panel admits through `module.review_map@1`. */
+const REVIEW_PANEL_PROJECTIONS: ReadonlySet<string> = new Set(["derived.review.eval_point@1", "derived.review.eval_delta@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1"]);
+
+/**
+ * The typed packet at one move, through the module registry: admission by `module.review_map@1`
+ * (exact consumer, role, session), then the registered pair-keyed presentation adapters. Engine
+ * families with no admitted item state their absence with a packet-issued abstention component.
+ */
+function packetComponents(viewer: ReviewMapInput["viewer"], packet: ReviewEvidencePacket, nodeId: string): readonly PresentedEvidenceItem[] | { readonly refused: ReviewModuleRefusal } {
+  const node = packet.nodes.find((candidate) => candidate.nodeId === nodeId);
+  if (node === undefined) return Object.freeze([]);
+  const offered = node.items.filter((item) => REVIEW_PANEL_PROJECTIONS.has(`${item.projection.id}@${item.projection.version}`));
+  const admission = admitForReview(viewer, offered);
+  if ("refused" in admission) return admission;
+  const admitted = offered.filter((item) => admission.admitted.has(item));
+  const presented = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 1 }, admitted));
+  return Object.freeze([...presented, ...presentReviewFamilyAbstentions(packet, nodeId, ["engine_eval", "engine_wdl"])]);
 }
 
 /** Builds the whole Review Map projection for one recorded branch. Pure and recomputed on every read. */
 export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection {
+  if (input.packet !== undefined) {
+    assertReviewEvidencePacket(input.packet);
+    if (input.packet.subject.runId !== input.run.id || input.packet.subject.branchId !== input.branchId) throw new TypeError("Review Map packet belongs to another run or branch");
+  }
   const path = branchPath(input.run, input.branchId);
   const packets = new Map(path.map((node) => [node.id, evaluationPacket(input.run, node)]));
   const selection = selectReviewMoments(input.story);
@@ -401,15 +432,14 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
   // Recorded-path events are exact v2 refs; module.review_map@1 admits each before it renders.
   const relationAdmission = semantic?.kind === "available" ? admitForReview(input.viewer, semantic.events.map((event) => event.evidence)) : undefined;
   if (semantic?.kind === "available" && relationAdmission !== undefined && "admitted" in relationAdmission) {
-    for (const event of semantic.events) {
-      if (!relationAdmission.admitted.has(event.evidence)) continue;
-      const nodeId = event.anchor.nodeId;
-      if (nodeId === undefined) continue;
-      const source = evidenceGroundingLabel(event.basis.grounding);
-      relationLabels.add(source);
-      const sentence = reviewText("evidence.relation", { family: relationFamily(event.projection.id), projection: `${event.projection.id}@${event.projection.version}`, source });
-      relationsByNode.set(nodeId, [...(relationsByNode.get(nodeId) ?? []), sentence]);
-    }
+    const admitted = semantic.events.filter((event) => relationAdmission.admitted.has(event.evidence) && event.anchor.nodeId !== undefined);
+    // module-registration A5: each admitted recorded-path event renders through its registered
+    // module.review_map@1 adapter — a labelled relation, never a raw projection id.
+    const presented = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 1 }, admitted.map((event) => event.evidence)));
+    admitted.forEach((event, index) => {
+      relationLabels.add(evidenceGroundingLabel(event.basis.grounding));
+      relationsByNode.set(event.anchor.nodeId!, [...(relationsByNode.get(event.anchor.nodeId!) ?? []), presentedSentence(presented[index]!)]);
+    });
   }
   const decisions: Record<GradeSide, Decision[]> = { white: [], black: [] };
   let graded = false;
@@ -441,12 +471,17 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
         : relationAdmission !== undefined && "refused" in relationAdmission
           ? [withheld(relationAdmission.refused)]
           : relationsByNode.get(node.id) ?? [reviewText("evidence.relation.none")];
+    const packetItems = input.packet === undefined ? undefined : packetComponents(input.viewer, input.packet, node.id);
+    const packetPresented = packetItems === undefined || "refused" in packetItems ? Object.freeze([]) : packetItems;
+    const packetFacts = packetItems === undefined
+      ? [reviewText("evidence.packet.absent")]
+      : "refused" in packetItems ? [withheld(packetItems.refused)] : packetItems.map(presentedSentence);
     const facts = Object.freeze([
       gradeFact,
       evaluationSentence(input.viewer, packets.get(node.id), side === "white" ? "black" : "white"),
       ...(notesByNode.get(node.id) ?? []),
       ...relationFacts,
-      reviewText("evidence.packet.abstained"),
+      ...packetFacts,
     ]);
     return Object.freeze({
       nodeId: node.id, entryNodeId: parent.id, ply: node.ply, moveNumber, side, san,
@@ -454,6 +489,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
       fen: node.fen, moveUci: node.moveUci, moment: selected.has(node.id),
       ...(grade === undefined ? {} : { grade }),
       facts,
+      packet: serializePresentedEvidence(packetPresented),
     });
   });
   const moments = selection.moments.map((moment) => {

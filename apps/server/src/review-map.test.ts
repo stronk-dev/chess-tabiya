@@ -13,6 +13,9 @@ import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js"
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
+import { MockProviderEngineClient } from "./mock-provider-engine.js";
+import { composeProviderTraversalApplication } from "./provider-traversal.js";
+import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
 
 // A pasted broadcast-style PGN: third-party SAN glyphs outside comments, a NAG, and a third-party
 // eval comment. None of it may reach the review surface (§8).
@@ -89,13 +92,16 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(imported.status, await imported.clone().text()).toBe(201);
     const runId = "review-import";
     expect((await post(`/runs/${runId}/reveal`, {})).status).toBe(200);
-    let results: { seq: number }[] = [];
-    for (let attempt = 0; attempt < 100 && results.length < PLIES + 1; attempt += 1) {
-      results = ((await (await fetch(`${origin}/runs/${runId}/evidence?sinceSeq=0`, { headers: { cookie } })).json()) as { results: { seq: number }[] }).results;
-      if (results.length < PLIES + 1) await new Promise((resolve) => setTimeout(resolve, 20));
+    // rfc/review-evidence-compiler.md §4.1: the import-completion pass runs through the Review
+    // coordinator over the one provider exchange (the labelled mock engine in this deployment) and
+    // attaches every delivery durably; the story read keeps the bounded window moving.
+    let ready = false;
+    for (let attempt = 0; attempt < 200 && !ready; attempt += 1) {
+      const story = await (await fetch(`${origin}/runs/${runId}/story`, { headers: { cookie } })).json() as { progress: { kind: string } };
+      ready = story.progress.kind === "settled";
+      if (!ready) await new Promise((resolve) => setTimeout(resolve, 20));
     }
-    expect(results.length).toBeGreaterThanOrEqual(PLIES + 1);
-    for (const result of results) expect((await post(`/runs/${runId}/evidence`, { resultSeq: result.seq })).status).toBe(200);
+    expect(ready).toBe(true);
     return runId;
   }
 
@@ -212,11 +218,11 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const target = review.rows[10]!;
     const revealed = await analyze(target.nodeId);
     expect(revealed.status, await revealed.clone().text()).toBe(200);
-    const line = await revealed.json() as { kind: string; source: string; engineId: string; bound: Record<string, number>; moves: string[]; sentence: string; entryNodeId: string };
-    expect(line).toMatchObject({ kind: "line", source: "search_first_move", engineId: "mock-evidence", entryNodeId: target.entryNodeId });
-    expect(line.bound.requestedMovetimeMs).toBeGreaterThan(0);
-    expect(line.moves).toHaveLength(1);
-    expect(line.sentence).toBe(`mock-evidence (${line.bound.requestedMovetimeMs} ms search) reported ${line.moves[0]} as the first move of its search from the position before ${target.label}; no longer line is recorded.`);
+    // rfc/review-evidence-compiler.md refusal 7: the typed position-evaluation delivery admits no best
+    // move or PV, so the Review pass records no engine line; the explicit reveal says so honestly.
+    const line = await revealed.json() as { kind: string; sentence: string; entryNodeId: string };
+    expect(line).toMatchObject({ kind: "none", entryNodeId: target.entryNodeId });
+    expect(line.sentence).toBe(`No engine line is recorded for the position before ${target.label}.`);
     expect(tableSnapshot(databasePath)).toEqual(tables);
     expect(eventKinds(databasePath, runId)).toEqual(events);
     expect((await analyze(review.rows[0]!.entryNodeId)).status).toBe(400);
@@ -234,7 +240,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const withheld = await (await analyze(target.nodeId)).json() as { kind: string; sentence: string };
     expect(withheld).toMatchObject({ kind: "withheld" });
     expect(JSON.stringify(withheld)).not.toMatch(/"moves"|mock-evidence/u);
-    expect((await (await analyze(review.rows[12]!.nodeId)).json() as { kind: string }).kind).toBe("line");
+    expect((await (await analyze(review.rows[12]!.nodeId)).json() as { kind: string }).kind).toBe("none");
 
     // Play one move on the retry: the compare door appears, and the shipped compare accepts it verbatim.
     const moved = await post(`/runs/${runId}/moves`, { uci: "a2a3" });
@@ -281,18 +287,16 @@ describe("review map service boundary", () => {
 
   it("[§6] draws the eval graph for the imported side: White-perspective +1.50 reads above level for White, below for Black", async () => {
     const at = "2026-09-24T12:00:00.000Z";
-    const executor: EvidenceExecutor = { async execute(job) { return { kind: "eval", source: "engine_validated", values: { centipawns: 150, perspective: "white", engineId: "mock", requestedMovetimeMs: job.movetime } }; } };
-    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    // White +1.50 at every position: the raw side-to-move score is +150 for White to move, −150 for Black.
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {}, now: () => at });
     stores.push(storage);
-    const service = new RunService(storage, { evidenceQueue: queue });
+    const { service, coordinator } = reviewService(storage, (fen) => ({ score: fen.split(" ")[1] === "w" ? "cp 150" : "cp -150", wdl: [600, 300, 100] as const }));
     const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
     const graphs: Record<string, { side: string; points: readonly { kind: string; percent?: number }[] }> = {};
     for (const side of ["white", "black"] as const) {
       const imported = await service.importGame({ id: `graph-${side}`, side, opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: GLYPHED_PGN } }, "writer");
-      await queue.whenIdle();
       service.reveal(imported.run.id, "writer");
-      for (const result of queue.page(imported.run.id).results) service.applyEvidence(imported.run.id, "writer", result.seq);
+      for (let pass = 0; pass < 40 && service.story(imported.run.id, principal).progress.kind !== "settled"; pass += 1) await coordinator.whenIdle();
       graphs[side] = (await service.review(imported.run.id, principal)).evalGraph;
     }
     expect(graphs.white!.side).toBe("white");
@@ -302,29 +306,35 @@ describe("review map service boundary", () => {
     graphs.white!.points.forEach((point, index) => expect(point.percent! + graphs.black!.points[index]!.percent!).toBeCloseTo(100, 0));
   });
 
-  it("[criterion 6] a line whose evaluation pass has not completed abstains and states the fraction; the read enqueues nothing", async () => {
+  it("[criterion 6] a line whose evaluation pass could not complete abstains and states the fraction; the read enqueues nothing", async () => {
     const at = "2026-09-24T12:00:00.000Z";
-    let executed = 0;
-    const executor: EvidenceExecutor = { async execute(job) { executed += 1; return { kind: "eval", source: "engine_validated", values: { centipawns: 0, engineId: "mock", requestedMovetimeMs: job.movetime } }; } };
-    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {}, now: () => at });
     stores.push(storage);
-    const service = new RunService(storage, { evidenceQueue: queue });
-    const imported = await service.importGame({ id: "pending-review", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: GLYPHED_PGN } }, "writer");
-    await queue.whenIdle();
-    service.reveal(imported.run.id, "writer");
-    // Apply only the first eight results: the rest of the line has no durable evaluation.
-    for (const result of queue.page(imported.run.id).results.slice(0, 8)) service.applyEvidence(imported.run.id, "writer", result.seq);
+    // The provider answers only the first eight positions (fullmove 1–4); later positions fail and exhaust.
+    const { service, coordinator, calls } = reviewService(storage, () => ({ score: "cp 0", wdl: [300, 400, 300] as const }), (fen) => Number(fen.split(" ")[5]) > 4);
     const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
-    const runs = executed;
-    const outstanding = queue.outstanding(imported.run.id).length;
+    const imported = await service.importGame({ id: "pending-review", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: GLYPHED_PGN } }, "writer");
+    await coordinator.whenIdle();
+    service.reveal(imported.run.id, "writer");
+    const before = calls();
     const review = await service.review(imported.run.id, principal);
-    await queue.whenIdle();
-    expect(executed).toBe(runs);
-    expect(queue.outstanding(imported.run.id)).toHaveLength(outstanding);
-    expect(review.ready).toBe(false);
+    await coordinator.whenIdle();
+    // The Review Map read observes the coordinator; it requests nothing.
+    expect(calls()).toBe(before);
+    // The pass settled (every requested position reached a terminal state) but degraded: the later
+    // positions exhausted their attempts, so accuracy abstains and coverage states the fraction.
+    expect(review.ready).toBe(true);
     expect(review.accuracy.white.kind).toBe("abstained");
     expect(review.accuracy.white.sentence).toMatch(/^White: no accuracy figure\. \d+ of 20 of White's decisions have paired recorded evaluations/u);
     expect(review.coverage.sentence).toBe(`Evaluation coverage: 8 of ${PLIES + 1} positions on this line carry a recorded engine evaluation.`);
   });
 });
+
+/** A RunService with the Review coordinator over the one real provider exchange (labelled mock engine). */
+function reviewService(storage: SQLiteRunStorage, score: (fen: string) => { readonly score: string; readonly wdl: readonly [number, number, number] }, fail: (fen: string) => boolean = () => false) {
+  const { scheduler } = composeProviderTraversalApplication({ engines: new MockProviderEngineClient({ score, fail }), tablebaseFetch: null, explorerFetch: null, explorerToken: null });
+  let gets = 0;
+  const counting = { get: ((...args: Parameters<typeof scheduler.get>) => { gets += 1; return scheduler.get(...args); }) as typeof scheduler.get, normalizedRequestDigest: scheduler.normalizedRequestDigest.bind(scheduler) };
+  const coordinator = new ReviewEvidenceCoordinator({ scheduler: counting as never, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 256, maxAttemptsPerRequest: 1 }), windowNodes: 8, maxOutstandingPerRun: 4, maxTrackedRuns: 4, maxAttemptsPerRequest: 1, movetimeMs: 50, timeoutMs: 2_000 });
+  return { coordinator, calls: () => gets, service: new RunService(storage, { reviewEvidence: coordinator }) };
+}

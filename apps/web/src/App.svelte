@@ -1051,13 +1051,11 @@
       await api.reveal(runId, writer.writerId);
       nextReview = await readReview();
     }
-    if (writer !== undefined && !nextReview.ready) {
-      // Completing the evaluation pass is the evidence pipeline's write, not the review's: the story
-      // read enqueues any missing jobs and this device, as writer, applies the finished results.
-      await api.story?.(runId);
-      const page = await api.evidence(runId, 0);
-      for (const result of page.results) await api.applyEvidence(runId, result.seq, writer.writerId);
-      nextReview = await readReview();
+    if (!nextReview.ready && api.story !== undefined) {
+      // rfc/review-evidence-compiler.md §4.1: the story read reaches the Review coordinator's
+      // bounded window (the Review Map read itself requests nothing); deliveries attach server-side
+      // and the existing poll re-reads the map.
+      await api.story(runId).catch(() => undefined);
     }
     return nextReview;
   }

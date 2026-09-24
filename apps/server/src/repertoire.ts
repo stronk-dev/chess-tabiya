@@ -8,7 +8,7 @@ import { parseUci } from "chessops/util";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { assertConsumerEvidenceView, canonicalFen, CORPUS_GUARD, corpusPositionEvidence, evidenceForConsumer, transposeKey, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
-import { corpusPopulation, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
+import { corpusPopulation, type CorpusAbstentionReason, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { ServerError } from "./errors.js";
 import { resolveStudySource } from "./import-source.js";
@@ -32,7 +32,7 @@ export interface GapRow {
   readonly gamesUntilSeen:number;
 }
 export interface AlternateGapRow extends Omit<GapRow,"mass"|"gamesUntilSeen">{readonly behindAlternate:true}
-export interface UnknownGapRow {readonly key:string;readonly representativeFen:string;readonly line:readonly string[];readonly reason:"no_data_at_band"|"source_unavailable";readonly detail:string;readonly pathMass:number;readonly gamesUntilPosition:number}
+export interface UnknownGapRow {readonly key:string;readonly representativeFen:string;readonly line:readonly string[];readonly reason:CorpusAbstentionReason;readonly detail:string;readonly pathMass:number;readonly gamesUntilPosition:number}
 
 interface Frontier {readonly fen:string;readonly key:string;readonly mass:number;readonly line:readonly string[];readonly ply:number;readonly alternate:boolean}
 
