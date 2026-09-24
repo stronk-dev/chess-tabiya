@@ -11,7 +11,7 @@ function pack(input: Partial<PackSummary> & Pick<PackSummary, "id" | "title">): 
     phase: "middlegame",
     difficulty: { minOnlineRapid: 1400, maxOnlineRapid: 2000, label: "Club player" },
     objectiveSummary: "Create a backward pawn on the c-file.",
-    concepts: ["carlsbad-structure"],
+    concepts: [{ id: "carlsbad-structure", label: "Carlsbad structure", status: "active" as const }],
     reviewStatus: "draft",
     channel: "community",
     ...input,
@@ -21,8 +21,8 @@ function pack(input: Partial<PackSummary> & Pick<PackSummary, "id" | "title">): 
 describe("pack catalogue", () => {
   const packs = [
     pack({ id: "carlsbad", title: "Carlsbad minority attack" }),
-    pack({ id: "lucena", title: "Lucena bridge", phase: "endgame", mode: "outcome", difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 1600 }, objectiveSummary: "Build the bridge and promote.", concepts: ["rook-ending"] }),
-    pack({ id: "najdorf", title: "Najdorf English Attack", phase: "opening", mode: "line", difficulty: { minOnlineRapid: 1800, maxOnlineRapid: 2200 }, objectiveSummary: "Continue beyond the opening fork.", concepts: ["sicilian-defense"] }),
+    pack({ id: "lucena", title: "Lucena bridge", phase: "endgame", mode: "outcome", difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 1600 }, objectiveSummary: "Build the bridge and promote.", concepts: [{ id: "rook-ending", label: "Rook ending", status: "active" as const }] }),
+    pack({ id: "najdorf", title: "Najdorf English Attack", phase: "opening", mode: "line", difficulty: { minOnlineRapid: 1800, maxOnlineRapid: 2200 }, objectiveSummary: "Continue beyond the opening fork.", concepts: [{ id: "sicilian-defense", label: "Sicilian defense", status: "active" as const }] }),
   ];
 
   it("searches authored objectives and concepts, then composes phase and band filters", () => {

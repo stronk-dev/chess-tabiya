@@ -22,7 +22,7 @@
       { "kind": "reach_checkpoint", "checkpointId": "timing-window" }
     ]
   },
-  "concepts": ["move order", "theory-to-plan transition"],
+  "concepts": ["move-order-discipline", "plan-continuity-across-phases"],
   "planClasses": [
     {
       "id": "sharp-kingside",

@@ -81,6 +81,17 @@ function horizon(value: unknown, label: string): NonNullable<PackSummary["conseq
   return Object.freeze({ kind: oneOf(item.kind, ["declared", "authored"] as const, `${label}/kind`), plies: integer(item.plies, `${label}/plies`, 1) });
 }
 
+function conceptLabels(value: unknown, label: string): PackSummary["concepts"] {
+  if (!Array.isArray(value)) throw new TypeError(`${label} must be an array`);
+  const seen = new Set<string>();
+  return Object.freeze(value.map((raw, index) => {
+    const item = record(raw, `${label}/${index}`); exact(item, ["id", "label", "status"], `${label}/${index}`);
+    const id = nonempty(item.id, `${label}/${index}/id`);
+    if (seen.has(id)) throw new TypeError(`${label} repeats ${id}`); seen.add(id);
+    return Object.freeze({ id, label: nonempty(item.label, `${label}/${index}/label`), status: oneOf(item.status, ["active", "retired", "unregistered"] as const, `${label}/${index}/status`) });
+  }));
+}
+
 function pack(value: unknown, index: number): PackSummary {
   const label = `packs/${index}`, item = record(value, label); exact(item, PACK_KEYS, label, ["publisherHandle"]);
   const channel = oneOf(item.channel, ["official", "community"] as const, `${label}/channel`);
@@ -91,7 +102,7 @@ function pack(value: unknown, index: number): PackSummary {
     title: nonempty(item.title, `${label}/title`), mode: oneOf(item.mode, ["line", "plan", "outcome", "trajectory"] as const, `${label}/mode`),
     phase: item.phase === null ? null : oneOf(item.phase, PACK_PHASES, `${label}/phase`), difficulty: difficulty(item.difficulty, `${label}/difficulty`),
     objectiveSummary: nonempty(item.objectiveSummary, `${label}/objectiveSummary`), consequenceHorizon: horizon(item.consequenceHorizon, `${label}/consequenceHorizon`),
-    concepts: strings(item.concepts, `${label}/concepts`), reviewStatus: oneOf(item.reviewStatus, ["schema_example", "draft", "published"] as const, `${label}/reviewStatus`),
+    concepts: conceptLabels(item.concepts, `${label}/concepts`), reviewStatus: oneOf(item.reviewStatus, ["schema_example", "draft", "published"] as const, `${label}/reviewStatus`),
     channel, ...(publisherHandle === undefined ? {} : { publisherHandle }),
   });
 }

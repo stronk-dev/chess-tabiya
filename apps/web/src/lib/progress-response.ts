@@ -1,4 +1,4 @@
-import { CORPUS_GUARD } from "@chess-tabiya/runtime";
+import { CORPUS_GUARD, parseConceptLabelView } from "@chess-tabiya/runtime";
 
 import { parseCorpusPopulation } from "./human-evidence-response.js";
 import { RETURN_STANDINGS } from "./api.js";
@@ -25,6 +25,8 @@ const SCHEDULE_KEYS = Object.freeze(["id", "sessionKind", "packId", "kind", "var
 const DUE_SCHEDULE_KEYS = Object.freeze([...SCHEDULE_KEYS, "frequency", "standing"] as const);
 const MILESTONE_KEYS = Object.freeze(["kind", "occurredAt", "link"] as const);
 const RELATED_KEYS = Object.freeze(["relation", "runId", "branchId", "attemptCount"] as const);
+/** rfc/concept-registry.md §4: the pack-scoped token is retired and rejected, never re-meant. */
+const RELATIONS = Object.freeze(["same_position", "same_pack", "same_concept"] as const);
 const REPERTOIRE_RECOMMENDATION_KEYS = Object.freeze(["kind", "repertoireId", "repertoireName", "gapKey", "replySan", "line", "gamesUntilSeen"] as const);
 const SHAPE_RECOMMENDATION_KEYS = Object.freeze(["kind", "shapeId", "shapeName", "runCount", "runIds", "packIds"] as const);
 
@@ -223,14 +225,16 @@ export function parseRelatedProgress(value: unknown, sourceRunId: string): reado
   if (!Array.isArray(envelope.related) || envelope.related.length > 3) throw new TypeError("related attempts must contain at most three rows");
   const identities = new Set<string>(); let priorOrder = -1;
   return Object.freeze(envelope.related.map((raw, index) => {
-    const item = record(raw, `related/${index}`); exact(item, RELATED_KEYS, `related/${index}`);
-    const relation = oneOf(item.relation, ["same_position", "same_pack", "same_concept_in_pack"] as const, `related/${index}/relation`);
-    const order = ["same_position", "same_pack", "same_concept_in_pack"].indexOf(relation);
+    const item = record(raw, `related/${index}`);
+    const relation = oneOf(item.relation, RELATIONS, `related/${index}/relation`);
+    exact(item, relation === "same_concept" ? [...RELATED_KEYS, "concept"] : RELATED_KEYS, `related/${index}`);
+    const order = RELATIONS.indexOf(relation);
     if (order < priorOrder) throw new TypeError("related attempts are not in relation priority order"); priorOrder = order;
     const runId = string(item.runId, `related/${index}/runId`), branchId = string(item.branchId, `related/${index}/branchId`);
     if (runId === sourceRunId) throw new TypeError("related attempts contain the source run");
     const identity = `${runId}\0${branchId}`; if (identities.has(identity)) throw new TypeError("related attempts contain a duplicate run/branch"); identities.add(identity);
-    return Object.freeze({ relation, runId, branchId, attemptCount: integer(item.attemptCount, `related/${index}/attemptCount`, 1) });
+    const concept = relation === "same_concept" ? parseConceptLabelView(item.concept, `related/${index}/concept`) : undefined;
+    return Object.freeze({ relation, runId, branchId, attemptCount: integer(item.attemptCount, `related/${index}/attemptCount`, 1), ...(concept === undefined ? {} : { concept }) });
   }));
 }
 

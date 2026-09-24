@@ -363,12 +363,14 @@ export {
   guardConditionEvidence,
   humanSplitPageEvidence,
   opponentProviderEvidence,
+  packConceptReferenceEvidence,
   positionGuidanceEvidence,
   providerSourceEvidence,
   recordedEdgeEvidence,
   recordedReadingEvidence,
   sourcingRecordEvidence,
   syzygyTablebaseDomainEvidence,
+  type PackConceptReferencePayload,
   type PositionGuidanceEvidenceInput,
 } from "./evidence-operations.js";
 // rfc/provider-exchange-and-execution.md: shared provider exchange types, request identity,
@@ -1032,3 +1034,4 @@ export {
 export * from "./style-contract.js";
 export * from "./style-atoms.js";
 export * from "./skills-contract.js";
+export * from "./concept-registry.js";

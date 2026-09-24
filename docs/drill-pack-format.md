@@ -242,6 +242,16 @@ The required negative fixtures live in `schemas/fixtures/drill-pack/`. The illeg
 spine fixture is structurally schema-valid and fails semantic lint; the other
 fixtures fail their targeted schema constraint.
 
+## Concepts
+
+`concepts[]` names registered ids from the [concept registry](concept-registry.md), never free text.
+The schema still accepts any non-empty string; the stronger boundary is validation: lint reports a
+non-slug id as `CONCEPT_KEY_NOT_SLUG` (error), and the server validator — shared by `make pack-check`,
+catalogue loading and Pack Studio publication — reports `CONCEPT_UNREGISTERED` for an id the
+installed registry lacks and `CONCEPT_RETIRED` for a retired id. Pack Studio offers a searchable
+picker over active entries only. To introduce a new idea, reference it and run
+`make concept-registry-revise`, then review its seeded label in the same change.
+
 ## Digest and URLs
 
 `digestDrillPack` canonicalizes the complete JSON document—including `version`—

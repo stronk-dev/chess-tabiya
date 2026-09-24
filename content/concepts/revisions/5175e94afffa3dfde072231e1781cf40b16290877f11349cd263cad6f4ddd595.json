@@ -1,0 +1,846 @@
+{
+  "entries": [
+    {
+      "id": "advance-chain-base",
+      "label": "Advance chain base",
+      "status": "active"
+    },
+    {
+      "id": "answer-the-centre",
+      "label": "Answer the centre",
+      "status": "active"
+    },
+    {
+      "id": "arrangement-before-action",
+      "label": "Arrangement before action",
+      "status": "active"
+    },
+    {
+      "id": "arrangement-before-reinforcement",
+      "label": "Arrangement before reinforcement",
+      "status": "active"
+    },
+    {
+      "id": "attack-the-base",
+      "label": "Attack the base",
+      "status": "active"
+    },
+    {
+      "id": "attacker-count-on-the-blockade-square",
+      "label": "Attacker count on the blockade square",
+      "status": "active"
+    },
+    {
+      "id": "attacker-counting",
+      "label": "Attacker counting",
+      "status": "active"
+    },
+    {
+      "id": "back-rank-luft",
+      "label": "Back rank luft",
+      "status": "active"
+    },
+    {
+      "id": "back-rank-mate",
+      "label": "Back rank mate",
+      "status": "active"
+    },
+    {
+      "id": "back-rank-skewer",
+      "label": "Back rank skewer",
+      "status": "active"
+    },
+    {
+      "id": "backward-pawn-target",
+      "label": "Backward pawn target",
+      "status": "active"
+    },
+    {
+      "id": "bishop-coloured-corner",
+      "label": "Bishop coloured corner",
+      "status": "active"
+    },
+    {
+      "id": "bishop-locked-behind-its-own-pawn",
+      "label": "Bishop locked behind its own pawn",
+      "status": "active"
+    },
+    {
+      "id": "bishop-outside-the-chain",
+      "label": "Bishop outside the chain",
+      "status": "active"
+    },
+    {
+      "id": "bishop-pair",
+      "label": "Bishop pair",
+      "status": "active"
+    },
+    {
+      "id": "blockade-as-payment",
+      "label": "Blockade as payment",
+      "status": "active"
+    },
+    {
+      "id": "blockade-on-bishop-colour",
+      "label": "Blockade on bishop colour",
+      "status": "active"
+    },
+    {
+      "id": "blockade-square",
+      "label": "Blockade square",
+      "status": "active"
+    },
+    {
+      "id": "blockader-removal",
+      "label": "Blockader removal",
+      "status": "active"
+    },
+    {
+      "id": "break-restraint",
+      "label": "Break restraint",
+      "status": "active"
+    },
+    {
+      "id": "break-timing",
+      "label": "Break timing",
+      "status": "active"
+    },
+    {
+      "id": "breakthrough",
+      "label": "Breakthrough",
+      "status": "active"
+    },
+    {
+      "id": "bridge-building",
+      "label": "Bridge building",
+      "status": "active"
+    },
+    {
+      "id": "carlsbad-structure",
+      "label": "Carlsbad structure",
+      "status": "active"
+    },
+    {
+      "id": "castle-before-attacking",
+      "label": "Castle before attacking",
+      "status": "active"
+    },
+    {
+      "id": "central-outpost",
+      "label": "Central outpost",
+      "status": "active"
+    },
+    {
+      "id": "central-pawn-duo",
+      "label": "Central pawn duo",
+      "status": "active"
+    },
+    {
+      "id": "central-program-over-drift",
+      "label": "Central program over drift",
+      "status": "active"
+    },
+    {
+      "id": "centre-concession-for-attack",
+      "label": "Centre concession for attack",
+      "status": "active"
+    },
+    {
+      "id": "centre-duo",
+      "label": "Centre duo",
+      "status": "active"
+    },
+    {
+      "id": "centre-pawn-first",
+      "label": "Centre pawn first",
+      "status": "active"
+    },
+    {
+      "id": "chain-base",
+      "label": "Chain base",
+      "status": "active"
+    },
+    {
+      "id": "challenge-the-system-piece",
+      "label": "Challenge the system piece",
+      "status": "active"
+    },
+    {
+      "id": "checking-distance",
+      "label": "Checking distance",
+      "status": "active"
+    },
+    {
+      "id": "closed-centre-chain",
+      "label": "Closed centre chain",
+      "status": "active"
+    },
+    {
+      "id": "closing-the-centre-on-your-terms",
+      "label": "Closing the centre on your terms",
+      "status": "active"
+    },
+    {
+      "id": "colour-complex-endgame",
+      "label": "Colour complex endgame",
+      "status": "active"
+    },
+    {
+      "id": "corner-net",
+      "label": "Corner net",
+      "status": "active"
+    },
+    {
+      "id": "counter-at-the-right-beat",
+      "label": "Counter at the right beat",
+      "status": "active"
+    },
+    {
+      "id": "counterplay-before-safety",
+      "label": "Counterplay before safety",
+      "status": "active"
+    },
+    {
+      "id": "defend-by-developing",
+      "label": "Defend by developing",
+      "status": "active"
+    },
+    {
+      "id": "defender-count",
+      "label": "Defender count",
+      "status": "active"
+    },
+    {
+      "id": "defender-counting",
+      "label": "Defender counting",
+      "status": "active"
+    },
+    {
+      "id": "defender-trades",
+      "label": "Defender trades",
+      "status": "active"
+    },
+    {
+      "id": "deny-the-only-break",
+      "label": "Deny the only break",
+      "status": "active"
+    },
+    {
+      "id": "develop-with-a-job",
+      "label": "Develop with a job",
+      "status": "active"
+    },
+    {
+      "id": "development-before-material",
+      "label": "Development before material",
+      "status": "active"
+    },
+    {
+      "id": "development-before-space",
+      "label": "Development before space",
+      "status": "active"
+    },
+    {
+      "id": "diagonal-fence",
+      "label": "Diagonal fence",
+      "status": "active"
+    },
+    {
+      "id": "direct-opposition",
+      "label": "Direct opposition",
+      "status": "active"
+    },
+    {
+      "id": "distant-opposition",
+      "label": "Distant opposition",
+      "status": "active"
+    },
+    {
+      "id": "division-of-labour",
+      "label": "Division of labour",
+      "status": "active"
+    },
+    {
+      "id": "doubled-c-pawns",
+      "label": "Doubled c pawns",
+      "status": "active"
+    },
+    {
+      "id": "doubled-pawns",
+      "label": "Doubled pawns",
+      "status": "active"
+    },
+    {
+      "id": "drawn-files-recognition",
+      "label": "Drawn files recognition",
+      "status": "active"
+    },
+    {
+      "id": "early-queen-tax",
+      "label": "Early queen tax",
+      "status": "active"
+    },
+    {
+      "id": "exploit-the-abandoned-squares",
+      "label": "Exploit the abandoned squares",
+      "status": "active"
+    },
+    {
+      "id": "extra-piece-wins-pawns",
+      "label": "Extra piece wins pawns",
+      "status": "active"
+    },
+    {
+      "id": "f7-is-the-address",
+      "label": "F7 is the address",
+      "status": "active"
+    },
+    {
+      "id": "fianchetto",
+      "label": "Fianchetto",
+      "status": "active"
+    },
+    {
+      "id": "fifty-move-pressure",
+      "label": "Fifty move pressure",
+      "status": "active"
+    },
+    {
+      "id": "file-ownership",
+      "label": "File ownership",
+      "status": "active"
+    },
+    {
+      "id": "forcing-sequence-literacy",
+      "label": "Forcing sequence literacy",
+      "status": "active"
+    },
+    {
+      "id": "fortress",
+      "label": "Fortress",
+      "status": "active"
+    },
+    {
+      "id": "grab-and-decide",
+      "label": "Grab and decide",
+      "status": "active"
+    },
+    {
+      "id": "half-open-b-file",
+      "label": "Half open b file",
+      "status": "active"
+    },
+    {
+      "id": "half-open-file",
+      "label": "Half open file",
+      "status": "active"
+    },
+    {
+      "id": "isolated-queens-pawn",
+      "label": "Isolated queens pawn",
+      "status": "active"
+    },
+    {
+      "id": "key-squares",
+      "label": "Key squares",
+      "status": "active"
+    },
+    {
+      "id": "kid-chain-arrangement",
+      "label": "Kid chain arrangement",
+      "status": "active"
+    },
+    {
+      "id": "king-activity",
+      "label": "King activity",
+      "status": "active"
+    },
+    {
+      "id": "king-before-pawn",
+      "label": "King before pawn",
+      "status": "active"
+    },
+    {
+      "id": "king-centralization",
+      "label": "King centralization",
+      "status": "active"
+    },
+    {
+      "id": "king-is-a-piece",
+      "label": "King is a piece",
+      "status": "active"
+    },
+    {
+      "id": "king-leads",
+      "label": "King leads",
+      "status": "active"
+    },
+    {
+      "id": "king-on-promotion-path",
+      "label": "King on promotion path",
+      "status": "active"
+    },
+    {
+      "id": "king-shelter",
+      "label": "King shelter",
+      "status": "active"
+    },
+    {
+      "id": "king-support",
+      "label": "King support",
+      "status": "active"
+    },
+    {
+      "id": "kingside-space-with-a-hook",
+      "label": "Kingside space with a hook",
+      "status": "active"
+    },
+    {
+      "id": "knight-crossing",
+      "label": "Knight crossing",
+      "status": "active"
+    },
+    {
+      "id": "knight-on-the-rim",
+      "label": "Knight on the rim",
+      "status": "active"
+    },
+    {
+      "id": "knights-move-tracking",
+      "label": "Knights move tracking",
+      "status": "active"
+    },
+    {
+      "id": "know-the-opponent-plan",
+      "label": "Know the opponent plan",
+      "status": "active"
+    },
+    {
+      "id": "lever-absence",
+      "label": "Lever absence",
+      "status": "active"
+    },
+    {
+      "id": "lever-arrival",
+      "label": "Lever arrival",
+      "status": "active"
+    },
+    {
+      "id": "liquidation-into-a-won-structure",
+      "label": "Liquidation into a won structure",
+      "status": "active"
+    },
+    {
+      "id": "london-wedge",
+      "label": "London wedge",
+      "status": "active"
+    },
+    {
+      "id": "long-diagonal",
+      "label": "Long diagonal",
+      "status": "active"
+    },
+    {
+      "id": "maroczy-bind",
+      "label": "Maroczy bind",
+      "status": "active"
+    },
+    {
+      "id": "minority-attack",
+      "label": "Minority attack",
+      "status": "active"
+    },
+    {
+      "id": "move-order-discipline",
+      "label": "Move order discipline",
+      "status": "active"
+    },
+    {
+      "id": "new-piece-every-move",
+      "label": "New piece every move",
+      "status": "active"
+    },
+    {
+      "id": "one-break-openings",
+      "label": "One break openings",
+      "status": "active"
+    },
+    {
+      "id": "one-move-window",
+      "label": "One move window",
+      "status": "active"
+    },
+    {
+      "id": "open-c-file",
+      "label": "Open c file",
+      "status": "active"
+    },
+    {
+      "id": "open-central-file",
+      "label": "Open central file",
+      "status": "active"
+    },
+    {
+      "id": "open-centre",
+      "label": "Open centre",
+      "status": "active"
+    },
+    {
+      "id": "open-d-file",
+      "label": "Open d file",
+      "status": "active"
+    },
+    {
+      "id": "opposite-castling-commitment",
+      "label": "Opposite castling commitment",
+      "status": "active"
+    },
+    {
+      "id": "opposite-side-castling",
+      "label": "Opposite side castling",
+      "status": "active"
+    },
+    {
+      "id": "opposite-side-race",
+      "label": "Opposite side race",
+      "status": "active"
+    },
+    {
+      "id": "opposite-wing-race",
+      "label": "Opposite wing race",
+      "status": "active"
+    },
+    {
+      "id": "outpost-with-a-pawn-fork-behind-it",
+      "label": "Outpost with a pawn fork behind it",
+      "status": "active"
+    },
+    {
+      "id": "outside-passer",
+      "label": "Outside passer",
+      "status": "active"
+    },
+    {
+      "id": "pawn-chain",
+      "label": "Pawn chain",
+      "status": "active"
+    },
+    {
+      "id": "pawn-chain-commitment",
+      "label": "Pawn chain commitment",
+      "status": "active"
+    },
+    {
+      "id": "pawn-lever-support",
+      "label": "Pawn lever support",
+      "status": "active"
+    },
+    {
+      "id": "pawn-sacrifice",
+      "label": "Pawn sacrifice",
+      "status": "active"
+    },
+    {
+      "id": "pawn-trade-counting",
+      "label": "Pawn trade counting",
+      "status": "active"
+    },
+    {
+      "id": "phase-decomposition",
+      "label": "Phase decomposition",
+      "status": "active"
+    },
+    {
+      "id": "pin-before-committing",
+      "label": "Pin before committing",
+      "status": "active"
+    },
+    {
+      "id": "plan-continuity-across-phases",
+      "label": "Plan continuity across phases",
+      "status": "active"
+    },
+    {
+      "id": "plan-exclusivity",
+      "label": "Plan exclusivity",
+      "status": "active"
+    },
+    {
+      "id": "plan-menu",
+      "label": "Plan menu",
+      "status": "active"
+    },
+    {
+      "id": "plan-now-or-plan-later",
+      "label": "Plan now or plan later",
+      "status": "active"
+    },
+    {
+      "id": "poisoned-guarded-pawn",
+      "label": "Poisoned guarded pawn",
+      "status": "active"
+    },
+    {
+      "id": "problem-bishop-first",
+      "label": "Problem bishop first",
+      "status": "active"
+    },
+    {
+      "id": "promotion-is-the-plan",
+      "label": "Promotion is the plan",
+      "status": "active"
+    },
+    {
+      "id": "promotion-square-tempo",
+      "label": "Promotion square tempo",
+      "status": "active"
+    },
+    {
+      "id": "prophylaxis-before-storm",
+      "label": "Prophylaxis before storm",
+      "status": "active"
+    },
+    {
+      "id": "queen-trade",
+      "label": "Queen trade",
+      "status": "active"
+    },
+    {
+      "id": "queening-race-counting",
+      "label": "Queening race counting",
+      "status": "active"
+    },
+    {
+      "id": "queenless-middlegame",
+      "label": "Queenless middlegame",
+      "status": "active"
+    },
+    {
+      "id": "queenside-file-play",
+      "label": "Queenside file play",
+      "status": "active"
+    },
+    {
+      "id": "question-the-pinning-bishop",
+      "label": "Question the pinning bishop",
+      "status": "active"
+    },
+    {
+      "id": "quiet-bishop-move",
+      "label": "Quiet bishop move",
+      "status": "active"
+    },
+    {
+      "id": "race-not-reaction",
+      "label": "Race not reaction",
+      "status": "active"
+    },
+    {
+      "id": "rear-checks",
+      "label": "Rear checks",
+      "status": "active"
+    },
+    {
+      "id": "refuse-the-race",
+      "label": "Refuse the race",
+      "status": "active"
+    },
+    {
+      "id": "reroute-before-the-break",
+      "label": "Reroute before the break",
+      "status": "active"
+    },
+    {
+      "id": "restraint-before-action",
+      "label": "Restraint before action",
+      "status": "active"
+    },
+    {
+      "id": "rook-activity",
+      "label": "Rook activity",
+      "status": "active"
+    },
+    {
+      "id": "rook-fence",
+      "label": "Rook fence",
+      "status": "active"
+    },
+    {
+      "id": "rook-fence-reprise",
+      "label": "Rook fence reprise",
+      "status": "active"
+    },
+    {
+      "id": "rook-on-the-fourth",
+      "label": "Rook on the fourth",
+      "status": "active"
+    },
+    {
+      "id": "rook-trade-avoidance",
+      "label": "Rook trade avoidance",
+      "status": "active"
+    },
+    {
+      "id": "second-player-patience",
+      "label": "Second player patience",
+      "status": "active"
+    },
+    {
+      "id": "shouldering",
+      "label": "Shouldering",
+      "status": "active"
+    },
+    {
+      "id": "shrinking-the-box",
+      "label": "Shrinking the box",
+      "status": "active"
+    },
+    {
+      "id": "space-as-compensation",
+      "label": "Space as compensation",
+      "status": "active"
+    },
+    {
+      "id": "spare-pawn-tempo",
+      "label": "Spare pawn tempo",
+      "status": "active"
+    },
+    {
+      "id": "stalemate-avoidance",
+      "label": "Stalemate avoidance",
+      "status": "active"
+    },
+    {
+      "id": "stalemate-field",
+      "label": "Stalemate field",
+      "status": "active"
+    },
+    {
+      "id": "storm-arrival",
+      "label": "Storm arrival",
+      "status": "active"
+    },
+    {
+      "id": "structure-as-a-purchase",
+      "label": "Structure as a purchase",
+      "status": "active"
+    },
+    {
+      "id": "structure-dissolution",
+      "label": "Structure dissolution",
+      "status": "active"
+    },
+    {
+      "id": "structure-ends-on-a-recapture",
+      "label": "Structure ends on a recapture",
+      "status": "active"
+    },
+    {
+      "id": "symmetry-and-the-extra-tempo",
+      "label": "Symmetry and the extra tempo",
+      "status": "active"
+    },
+    {
+      "id": "system-before-break",
+      "label": "System before break",
+      "status": "active"
+    },
+    {
+      "id": "system-with-move-orders",
+      "label": "System with move orders",
+      "status": "active"
+    },
+    {
+      "id": "tempo-count",
+      "label": "Tempo count",
+      "status": "active"
+    },
+    {
+      "id": "tempo-for-placement",
+      "label": "Tempo for placement",
+      "status": "active"
+    },
+    {
+      "id": "tempo-from-the-queen-hunt",
+      "label": "Tempo from the queen hunt",
+      "status": "active"
+    },
+    {
+      "id": "tempo-move",
+      "label": "Tempo move",
+      "status": "active"
+    },
+    {
+      "id": "tension-as-asset",
+      "label": "Tension as asset",
+      "status": "active"
+    },
+    {
+      "id": "tension-belongs-to-whoever-resolves-it",
+      "label": "Tension belongs to whoever resolves it",
+      "status": "active"
+    },
+    {
+      "id": "their-prep-is-longer",
+      "label": "Their prep is longer",
+      "status": "active"
+    },
+    {
+      "id": "third-rank-fence",
+      "label": "Third rank fence",
+      "status": "active"
+    },
+    {
+      "id": "threats-outrank-attacks",
+      "label": "Threats outrank attacks",
+      "status": "active"
+    },
+    {
+      "id": "trade-pieces-not-pawns",
+      "label": "Trade pieces not pawns",
+      "status": "active"
+    },
+    {
+      "id": "trade-the-right-pieces",
+      "label": "Trade the right pieces",
+      "status": "active"
+    },
+    {
+      "id": "two-diagonal-wall",
+      "label": "Two diagonal wall",
+      "status": "active"
+    },
+    {
+      "id": "waiting-moves",
+      "label": "Waiting moves",
+      "status": "active"
+    },
+    {
+      "id": "what-did-it-stop-doing",
+      "label": "What did it stop doing",
+      "status": "active"
+    },
+    {
+      "id": "what-does-it-want",
+      "label": "What does it want",
+      "status": "active"
+    },
+    {
+      "id": "wrong-colour-eviction",
+      "label": "Wrong colour eviction",
+      "status": "active"
+    },
+    {
+      "id": "wrong-corner-defence",
+      "label": "Wrong corner defence",
+      "status": "active"
+    },
+    {
+      "id": "zigzag-checks",
+      "label": "Zigzag checks",
+      "status": "active"
+    }
+  ],
+  "previousDigest": null,
+  "schemaVersion": 1
+}

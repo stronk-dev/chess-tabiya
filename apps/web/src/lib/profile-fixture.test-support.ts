@@ -69,7 +69,7 @@ export function profileFixture() {
         ],
         candidateLeaves: [{ leafId: "shape:carlsbad", label: "Carlsbad structure", source: "registered_shape", category: null, blockers: ["valence_unruled"], blockerText: ["No valence declaration is admitted: whether any may be declared is the owner's open ruling (rfc/skills.md Open question 1)."] }],
         valence: { declarations: 0, issues: 0, statement: "No valence declaration has been admitted, so no skill can be credited yet. Whether any may be declared is an open owner ruling (rfc/skills.md Open question 1)." },
-        conceptIdentity: "Concept ids are still pack-local; cross-pack identity lands with rfc/concept-registry.md.",
+        conceptIdentity: "Concepts come from the concept registry, one identity across every pack. An idea is listed here only when at least 2 packs name it.",
         marksStatement: "A mark records the first time you played a creditable idea when you had a real alternative. It is earned once, never taken away, and links to the move.",
       },
       history: {

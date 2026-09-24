@@ -967,6 +967,19 @@ opening-catalogue-check: build
 account-data-lifecycle-check:
 	./node_modules/.bin/vitest run apps/server/src/r18-account-data.test.ts
 
+# rfc/concept-registry.md: `census` prints the pack-reference census and fails on any reference the
+# installed registry does not carry (criterion 3; the content tier asserts the same set-equality).
+# `revise` writes the next immutable revision adding every unregistered reference with its seed label;
+# the new labels are reviewed in the same content change (Discharge D2).
+.PHONY: concept-registry-census concept-registry-revise
+concept-registry-census:
+	./node_modules/.bin/esbuild apps/server/src/concept-registry-tool.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/concept-registry-tool.js
+	node apps/server/dist/concept-registry-tool.js census
+
+concept-registry-revise:
+	./node_modules/.bin/esbuild apps/server/src/concept-registry-tool.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/concept-registry-tool.js
+	node apps/server/dist/concept-registry-tool.js revise
+
 # rfc/player-style.md criteria 1–3: STYLE_METRICS is set-equal (metric id, feature id, floor) to the
 # R21 instrument rows whose R12 persistent floor is non-null; every drift arm must be red.
 style-registry-check:

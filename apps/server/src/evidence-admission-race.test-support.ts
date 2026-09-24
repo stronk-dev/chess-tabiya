@@ -3,16 +3,19 @@
 // then calls the one admission operation. Production never imports this module.
 import { parentPort, workerData } from "node:worker_threads";
 
+import { loadConceptRegistry } from "./concept-registry-loader.js";
 import { SQLiteRunStorage } from "./storage.js";
 
 interface RaceData {
   readonly path: string;
   readonly barrier: SharedArrayBuffer;
   readonly input: { readonly idempotencyKey: string; readonly request: unknown };
+  /** The bundle lives outside the tree, so the test names the installed registry's directory. */
+  readonly conceptRegistryDirectory: string;
 }
 
 const data = workerData as RaceData;
-const storage = new SQLiteRunStorage(data.path, { onMigration: () => {} });
+const storage = new SQLiteRunStorage(data.path, { onMigration: () => {}, concepts: { registry: loadConceptRegistry(data.conceptRegistryDirectory) } });
 const flag = new Int32Array(data.barrier);
 Atomics.add(flag, 1, 1);
 Atomics.wait(flag, 0, 0);

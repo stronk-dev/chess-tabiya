@@ -35,6 +35,7 @@ const tree = {
   "shape-entry-schema": { head: "0.3" },
   "principle-entry-schema": { head: "0.1" },
   "campaign-schema": { head: "1" },
+  "concept-registry-schema": { head: "1" },
   migration: { head: 4 },
   "evidence-kinds": { members: ["alpha", "beta"] },
   "provider-protocol": { members: ["gamma"] },
@@ -177,6 +178,7 @@ const schemaFiles = () => [
   { filename: "shape_entry.schema.json", id: "urn:chess-tabiya:schema:shape-entry:0.3", slug: "shape-entry", version: "0.3" },
   { filename: "principle_entry.schema.json", id: "urn:chess-tabiya:schema:principle-entry:0.1", slug: "principle-entry", version: "0.1" },
   { filename: "campaign.schema.json", id: "urn:chess-tabiya:schema:campaign:1", slug: "campaign", version: "1", digest: "bbbbbbbbbbbb" },
+  { filename: "concept_registry.schema.json", id: "urn:chess-tabiya:schema:concept-registry:1", slug: "concept-registry", version: "1" },
 ];
 
 test("C7 accepts the schemas on disk today", () => {
@@ -278,11 +280,17 @@ test("§7.1 the exact seven-row seed parses, sorted and unique", () => {
     "principle-entry-schema", "run-schema", "shape-entry-schema",
   ];
   // The reviewed seed's seven rows survive unchanged; every row added since is one data row from a
-  // later RFC (§1 extension property): provider-protocol-register.md adds `provider-protocol`.
+  // later RFC (§1 extension property): provider-protocol-register.md adds `provider-protocol`, and
+  // concept-registry.md adds `concept-registry-schema` through the existing json_schema reader.
   const reviewedSeed = JSON.parse(fs.readFileSync(path.join(repoRoot, "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json"), "utf8"));
   assert.deepEqual(reviewedSeed.resources.map(({ id }) => id), seven);
   assert.deepEqual(seed().resources.filter(({ id }) => seven.includes(id)), reviewedSeed.resources);
-  assert.deepEqual(ids, [...seven, "provider-protocol"].sort());
+  assert.deepEqual(ids, [...seven, "provider-protocol", "concept-registry-schema"].sort());
+  assert.deepEqual(seed().resources.find(({ id }) => id === "concept-registry-schema"), {
+    id: "concept-registry-schema",
+    claimKind: "schema_lane",
+    source: { kind: "json_schema", schemaSlug: "concept-registry", versionExport: "CONCEPT_REGISTRY_SCHEMA_LANE" },
+  });
   assert.deepEqual(seed().resources.find(({ id }) => id === "provider-protocol"), {
     id: "provider-protocol",
     claimKind: "members",
@@ -400,7 +408,7 @@ test("§7.13 caller mutation after admission leaves the admitted image unchanged
   value.resources[0].id = "mutated";
   value.resources[0].source.schemaSlug = "mutated";
   value.resources.pop();
-  assert.equal(admitted.resources.length, 8);
+  assert.equal(admitted.resources.length, 9);
   assert.equal(admitted.resources[0].id, "campaign-schema");
   assert.equal(admitted.resources[0].source.schemaSlug, "campaign");
   assert.ok(Object.isFrozen(admitted.resources[0].source));

@@ -1075,6 +1075,10 @@ export function createRestHandler(
         if(resource==="answers"&&request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["positionKey","moveUci","ifMatch"]);return json(200,{repertoire:repertoires.chooseAnswer(id,principal,{positionKey:requiredString(body.positionKey,"positionKey"),moveUci:requiredString(body.moveUci,"moveUci"),ifMatch:requiredString(body.ifMatch??request.headers.get("if-match"),"ifMatch")})});}
         return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
       }
+      if (request.method === "GET" && url.pathname === "/packs/concepts") {
+        if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
+        return json(200, { concepts: studio.conceptCatalogue() });
+      }
       if (url.pathname === "/packs/drafts") {
         if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
         const principal = authenticate();

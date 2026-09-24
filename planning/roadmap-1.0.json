@@ -447,15 +447,21 @@
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Two durable foundations landed in register order: the longitudinal store at migration 26 and evidence-job durability at migration 27, so observations and queued engine/tablebase evidence now survive restart with fenced leases, idempotent admission and replay. Concept-registry holds the next position, followed by bot-policy's run lane 0.18 and campaign.",
+          "summary": "Three durable foundations landed in register order today: the longitudinal store (26), evidence-job durability (27) and the concept registry (28), which rewrote attempt concepts to registered global identities with a fail-closed quarantine and gave /profile skills cross-pack concept candidates. Bot-policy's run lane 0.18 now holds the next position, then campaign.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/evidence-job-store.ts",
-            "planning/evidence-job-durability/implementation-2026-09-24.md",
+            "apps/server/src/concept-migration.test.ts",
+            "planning/concept-registry/implementation-2026-09-24.md",
+            "rfc/concept-registry.md",
             "rfc/evidence-job-durability.md",
-            "rfc/longitudinal-store.md"
+            "rfc/skills.md"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "concept-registry.md",
+              "digest": "sha256:e371f8263638667cbbaf86b1e60858c21ef40fbd7f68bb85056b51395a1ed8b0"
+            },
             {
               "kind": "rfc",
               "id": "evidence-job-durability.md",
@@ -463,13 +469,13 @@
             },
             {
               "kind": "rfc",
-              "id": "longitudinal-store.md",
-              "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+              "id": "skills.md",
+              "digest": "sha256:9d58a2decab24038dcda1daf29b090b9634aaa61eed220994251dfaf29407359"
             },
             {
               "kind": "work_state",
-              "id": "D3300",
-              "digest": "sha256:73fefdc741ca314c6a3832598368eed98269963dea2a8e2c3c4bf774017c462e"
+              "id": "D3027",
+              "digest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e"
             }
           ]
         },

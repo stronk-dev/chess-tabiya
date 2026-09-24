@@ -1,3 +1,4 @@
+import { parseConceptCatalogueView, type ConceptCatalogueView, type ConceptLabelView } from "@chess-tabiya/runtime";
 import type {
   DrillPackDefinition,
   PackPhase,
@@ -77,11 +78,21 @@ export interface PackSummary {
   readonly difficulty: unknown;
   readonly objectiveSummary: string;
   readonly consequenceHorizon?: { readonly kind: "declared" | "authored"; readonly plies: number } | null;
-  readonly concepts: readonly string[];
+  /** Registry-labelled concept references (rfc/concept-registry.md §6). */
+  readonly concepts: readonly PackConceptLabel[];
   readonly reviewStatus: string;
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
 }
+
+/** One pack concept reference as the server's compiled registry labels it. */
+export interface PackConceptLabel {
+  readonly id: string;
+  readonly label: string;
+  readonly status: "active" | "retired" | "unregistered";
+}
+
+export type { ConceptCatalogueView, ConceptLabelView } from "@chess-tabiya/runtime";
 
 export interface PackDocument {
   readonly document: DrillPackDefinition;
@@ -745,10 +756,12 @@ export interface ScheduledReturnResult {
 }
 
 export interface RelatedProgressAttempt {
-  readonly relation: "same_position" | "same_pack" | "same_concept_in_pack";
+  readonly relation: "same_position" | "same_pack" | "same_concept";
   readonly runId: string;
   readonly branchId: string;
   readonly attemptCount: number;
+  /** The shared registered concept, rendered from its exact revision (`same_concept` only). */
+  readonly concept?: ConceptLabelView;
 }
 
 export interface PackDraft {
@@ -959,6 +972,7 @@ export interface DrillClientApi extends RunApi {
   pack(packId: string): Promise<PackDocument>;
   shapes(): Promise<readonly ShapeSummary[]>;
   principles?(): Promise<readonly PrincipleSummary[]>;
+  conceptCatalogue?(): Promise<ConceptCatalogueView>;
   shape(shapeId: string): Promise<ShapeDocument>;
   runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
   runPage?(limit?: number, offset?: number): Promise<RunPage>;
@@ -1173,6 +1187,17 @@ export class DrillApi implements DrillClientApi {
 
   async principles(): Promise<readonly PrincipleSummary[]> {
     return parsePrincipleCatalog(await this.#json<unknown>("/principles"));
+  }
+
+  /** Consumer 6 of rfc/concept-registry.md §2: the registry's typed projection, strictly parsed. */
+  async conceptCatalogue(): Promise<ConceptCatalogueView> {
+    const envelope = await this.#json<unknown>("/packs/concepts");
+    if (typeof envelope !== "object" || envelope === null || Array.isArray(envelope) || Object.keys(envelope).join(",") !== "concepts") throw new ApiError(502, "INVALID_RESPONSE", "Concept catalogue response has an invalid shape");
+    try {
+      return parseConceptCatalogueView((envelope as { readonly concepts: unknown }).concepts);
+    } catch (error) {
+      throw new ApiError(502, "INVALID_RESPONSE", error instanceof Error ? error.message : "Concept catalogue response is invalid");
+    }
   }
 
   async shape(shapeId: string): Promise<ShapeDocument> {

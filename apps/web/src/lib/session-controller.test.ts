@@ -186,7 +186,7 @@ class FakeApi implements DrillClientApi {
         phase: "opening",
         difficulty: this.document.difficulty,
         objectiveSummary: this.document.objective.summary ?? this.document.objective.type.replaceAll("_", " "),
-        concepts: this.document.concepts ?? [],
+        concepts: (this.document.concepts ?? []).map((id) => ({ id, label: id, status: "active" as const })),
         reviewStatus: "schema_example",
         channel: "official",
       },

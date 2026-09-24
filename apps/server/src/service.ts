@@ -115,6 +115,7 @@ import {
   DUE_INTAKE_LIMIT,
   orderDueByFrequency,
   projectAttempts,
+  RegisteredConceptResolver,
   rootKey as progressRootKey,
   type AttemptOriginInput,
   type ReturnStanding,
@@ -2423,6 +2424,7 @@ export class RunService {
       const projection = projectAttempts({
         run,
         learnerId,
+        ...(this.#packRegistry === undefined ? {} : { concepts: new RegisteredConceptResolver(this.#packRegistry.concepts) }),
         ...(pack === undefined ? {} : { pack }),
         ...(pack === undefined ? {} : { resolvePlanSignature: planSignatureResolver(pack, this.#shapes) }),
         ...(origins === undefined ? {} : { origins }),

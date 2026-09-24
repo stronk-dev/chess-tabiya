@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chess-tabiya:schema:concept-registry:1",
+  "title": "Tabiya Concept Registry Revision",
+  "description": "One immutable revision of the cross-pack concept vocabulary (rfc/concept-registry.md). Stored at content/concepts/revisions/<sha256-hex>.json, whose name is the SHA-256 of the file's canonical bytes; content/concepts/current.json is the closed head in $defs/head. Entries sort by id, ids and v1 label-collision keys are unique, and compileConceptRegistry in packages/runtime is the only parser. The registry states only that an authored vocabulary entry exists: no valence, category, definition or evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "previousDigest", "entries"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "previousDigest": {
+      "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/digest" }]
+    },
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "conceptId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/conceptId" },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^\\S(?:.*\\S)?$"
+        },
+        "status": { "enum": ["active", "retired"] }
+      }
+    },
+    "head": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "digest"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

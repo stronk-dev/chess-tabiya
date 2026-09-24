@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2f0b1abe713130d0a6dfeb637e74812c443a161db5147c9882e165af4489212e",
+    "roadmap": "sha256:cc63523e726ffff90a79f9eb19c5f948f8c8795e14f4b23affd4901fb19b2d25",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:d90a64c9bf3daaf6cc03c8b7247c5517b4551381f16a0b831239fa9f4efe107f",
-    "rfcRegister": "sha256:c0d2bf154265ef7d88cc171239edb886258b5064a453f3c0a6fed28f1261317f",
+    "workState": "sha256:38fb2d7a66b42e97072e6663ada463e89fd094d9158eba9c15477909da2780eb",
+    "rfcRegister": "sha256:857093e90628eeba3ea05bd1d245cc2387f8a570291799294a68b6dc00022c3d",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:afc6dfb524c9c901e5368ae1191db359acb151121d677244495b6eefb9832540",
-    "application": "sha256:6748e856d54b9677f4aa8c067242e740880fa34345fe79610e5108bda87acb87",
-    "rest": "sha256:48d424e15ce2f91c03b138cddd6e0c2a3ac99c725cadce4d6a8c70af5874d976"
+    "application": "sha256:996e60adb5b78eced69c47414e02dacd5d475098f422ac0ceb23d0f8a4099c72",
+    "rest": "sha256:533976b41e30b44eaa5c19352abfff2a3713f47ff8e5c87127089d44b821e468"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 40,
+      "draft": 39,
       "accepted": 0,
-      "implementing": 21,
+      "implementing": 22,
       "awaiting": 11,
       "implemented": 0,
       "superseded": 0,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 622,
       "doing": 0,
-      "blocked": 1138,
-      "done": 1178,
+      "blocked": 1132,
+      "done": 1184,
       "refused": 111
     },
     "workItems": {
@@ -259,15 +259,21 @@
       "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Two durable foundations landed in register order: the longitudinal store at migration 26 and evidence-job durability at migration 27, so observations and queued engine/tablebase evidence now survive restart with fenced leases, idempotent admission and replay. Concept-registry holds the next position, followed by bot-policy's run lane 0.18 and campaign.",
+        "summary": "Three durable foundations landed in register order today: the longitudinal store (26), evidence-job durability (27) and the concept registry (28), which rewrote attempt concepts to registered global identities with a fail-closed quarantine and gave /profile skills cross-pack concept candidates. Bot-policy's run lane 0.18 now holds the next position, then campaign.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/src/evidence-job-store.ts",
-          "planning/evidence-job-durability/implementation-2026-09-24.md",
+          "apps/server/src/concept-migration.test.ts",
+          "planning/concept-registry/implementation-2026-09-24.md",
+          "rfc/concept-registry.md",
           "rfc/evidence-job-durability.md",
-          "rfc/longitudinal-store.md"
+          "rfc/skills.md"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "concept-registry.md",
+            "digest": "sha256:e371f8263638667cbbaf86b1e60858c21ef40fbd7f68bb85056b51395a1ed8b0"
+          },
           {
             "kind": "rfc",
             "id": "evidence-job-durability.md",
@@ -275,13 +281,13 @@
           },
           {
             "kind": "rfc",
-            "id": "longitudinal-store.md",
-            "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+            "id": "skills.md",
+            "digest": "sha256:9d58a2decab24038dcda1daf29b090b9634aaa61eed220994251dfaf29407359"
           },
           {
             "kind": "work_state",
-            "id": "D3300",
-            "digest": "sha256:73fefdc741ca314c6a3832598368eed98269963dea2a8e2c3c4bf774017c462e"
+            "id": "D3027",
+            "digest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e"
           }
         ]
       },

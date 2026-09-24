@@ -20,7 +20,7 @@ subpath, an AST-resolved two-way import-graph guard, and a multi-rating rendered
 | `0000-rfc-process.md` | accepted | — | process |
 | `shared-resource-register-bootstrap.md` | **awaiting D3 — implemented 2026-09-24 at the owner's direction, without the D1 fresh review.** The seven-row `rfc/shared-resource-registers.json` catalogue is the sole resource inventory: `RESOURCE_NAMES`/`SCHEMA_SLUGS` are deleted, `parseResourceCatalogue(value, { root })` fails closed and returns a frozen image, and C1–C8 read the catalogue. `make shared-resource-catalogue` runs the fourteen §7 controls in `verify-governance`. Only the D3 rebases of [[D2454]]/[[D2455]]/[[D2466]] remain; absent-source admission stays [[D3082]] | `planning/shared-resource-register-bootstrap/collision-core-second-author-repair-2026-09-07.md`; another genuinely fresh review | **claims none** — implementation and three staged consumer rebases remain unauthorized |
 | `import-source-protocol-register.md` | **draft — first author pass 2026-09-06; fresh independent review and accepted/implemented generic bootstrap required.** Registers the absent atomic request/result/source-kind/receipt/limit resource required by [[D2278]]; changes no product bytes. | `planning/import-source-protocol-register/catalogue-additions.v1.json`; `live-sources.md` | **claims none** — introduces absent `import-source-protocol`; product version 1 belongs to `live-sources.md` |
-| `concept-registry.md` | **draft — sixth fresh independent review returned the fifth repair on [[D2960]]–[[D2965]].** Named boundary calls are neither symbol-authenticated nor live; server/web configs are crossed; artifact receipts depend on loader order; registry authority is structural; failed post-commit composition leaks readiness; and failures leave SQLite open. `make concept-registry-sixth-fresh-review` passes 6/6 executable counterexamples plus strict TypeScript. | `planning/concept-registry/sixth-fresh-independent-buildability-review-2026-09-06.md`; bounded sixth author repair; another genuinely fresh review; independently-passed shared-resource bootstrap | retains **migration behind `evidence-job-durability`**; proposed `concept-registry-schema` first-lane-1 claim remains non-live pending bootstrap |
+| `concept-registry.md` | **implementing — landed 2026-09-24 at migration 28, at the owner's direction.** A compiled global concept registry (168 seeded ids, Unicode-17.0 label-collision rule, self-output-only compiler) under the new `concept-registry-schema` catalogue resource; `attempt_concepts` rewritten to `concept:<id>@1` with registry version/digest and occurrence provenance, fail-closed into a seven-reason `attempt_concept_legacy` quarantine with one migration receipt; unknown/retired ids refused at lint, pack-check and publication; `GET /packs/concepts`; `pack.authored.concept_reference@1`; Pack Studio concept picker; cross-pack `same_concept`; return scheduling and the /profile skills section consume global keys. Remaining: owner review of the 168 labels (D2), Campaign consumption (D4), the skills leaf taxonomy. Receipt: `planning/concept-registry/implementation-2026-09-24.md` | `planning/concept-registry/sixth-fresh-independent-buildability-review-2026-09-06.md`; bounded sixth author repair; another genuinely fresh review; independently-passed shared-resource bootstrap | retains **migration behind `evidence-job-durability`**; proposed `concept-registry-schema` first-lane-1 claim remains non-live pending bootstrap |
 | `verifiable-runtime-distribution.md` | **draft — partial author repair 2026-08-31 after return on [[D2206]]–[[D2209]].** [[D2207]]–[[D2209]] now have an acyclic pre/post-image graph, closed SPDX policy and exact production bot journey. [[D2206]] has a v1 protocol but its first register claim is honestly blocked by bootstrap defect [[D2363]]. `make runtime-distribution-author-repair` passes 7/7 + TypeScript. | `planning/verifiable-runtime-distribution/partial-author-repair-2026-08-31.md`; prior fresh review; O13 Choice C | **claims none while returned** — `release-manifest-schema` lane 1 must enter through a lawful register bootstrap after [[D2363]], then fresh review; implementation unauthorized |
 | `provider-health-degradation.md` | **draft — cut to its blocking obligation 2026-09-06.** All 75 blocked rows were defects against this RFC's own twelve-round author model, not downstream work; the round history, routing table and twenty-two harness-pinned criteria moved to `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`, and durable opponent recovery moved to `opponent-recovery-journey.md`. 1,666 -> 832 lines, 22 criteria each mapped to the rows it discharges. | `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; owner acceptance; provider exchange/protocol | **claims none** — the run-schema lane moved to `opponent-recovery-journey.md`; live provider health lands in one checkpoint |
 | `opponent-recovery-journey.md` | **draft — stub opened 2026-09-06 by the `provider-health-degradation` cut.** Scope and eight inherited ledger rows are recorded; the specification is unwritten. | `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; specification required before criteria | retains **run-schema lane 0.26** released by `provider-health-degradation.md`; unauthorized until specified |
@@ -271,6 +271,30 @@ the live-claims table below: campaign-core lane 2, boss games lane 3, training m
 | lane 3 | `campaign-boss-games.md` | adds the boss_game encounter arm with exact start FEN, learner side, immutable calibrated bot-profile reference, rating policy and briefing reference; no authored objective, checkpoint, success condition or horizon is admitted | `tabiya-claims` |
 | lane 4 | `training-mode-variants.md` | adds prediction and survival encounter arms after campaign-boss-games; pack and boss_game arms remain byte-identical | `tabiya-claims` |
 
+## Concept-registry-schema-version register
+
+<!-- register: concept-registry-schema head=1 -->
+<!-- schema-digest: concept-registry-schema b9d6798506a2 -->
+
+The closed grammar of one immutable concept-registry revision
+(`schemas/concept_registry.schema.json`) and its `current.json` head (`$defs/head`). A bare major
+integer like the campaign lane; the version export is `CONCEPT_REGISTRY_SCHEMA_LANE` in
+`packages/schema/src/index.ts`, and revision documents carry it as the numeric literal
+`schemaVersion: 1`. Registry *content* (new ids, labels, retirements) is a new immutable revision
+under `content/concepts/revisions/`, not a lane; only a change to the document grammar, the
+`labelCollisionKeyV1` rule or its pinned Unicode-data version claims the next lane.
+
+### Landed
+
+| version | owner RFC | what it changed | landed at |
+|---|---|---|---|
+| 1 | `concept-registry.md` | registry revision + head grammar; active/retired lifecycle; exact v1 label-collision key under Unicode 17.0 | implementing checkpoint 2026-09-24 |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
 ## Evidence-kinds register
 
 <!-- register: evidence-kinds members=8 -->
@@ -350,7 +374,7 @@ checked by `make register-check`, never generated.
 
 ## Migration register
 
-<!-- register: migration head=27 -->
+<!-- register: migration head=28 -->
 
 Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
 migration 2 and `STORAGE_VERSION` 1→2, so neither could land independently. A
@@ -403,12 +427,12 @@ was sound for the same reason — the draft that could not land is the one that 
 | 25 | 24→25 | `learner-rating.md` | **implementation checkpoint 2026-08-22** — creates learner ratings, rated games, rating periods, cohort standings, standing members and learner marks; additive schema only and deliberately no historical backfill. Writers, projections and service routes are implemented; the RFC remains active for client surfaces and validation |
 | 26 | 25→26 | `longitudinal-store.md` | **implemented 2026-09-24** — adds `drill_runs.longitudinal_profile_disposition` (`profileable` default) and `drill_runs.longitudinal_structure_attribution` (`unattributable_legacy` default; new runs insert `single_player`), the `drill_runs_longitudinal_owner` parent key, and creates `learner_observation_denominators`, `learner_observations`, `learner_structure_stats` and `learner_observation_jobs` with five named indexes. Additive schema only: no backfill and no snapshot rewrite; startup reconciliation queues pre-migration runs. The body is idempotent (column-presence guarded, `IF NOT EXISTS`) so rewound-version fixtures replay it safely |
 | 27 | 26→27 | `evidence-job-durability.md` | **implemented 2026-09-24** — creates `evidence_job_batches`, `evidence_result_sequences`, `evidence_jobs` and `evidence_run_transitions` with the RFC's exact §2 DDL, the two `evidence_run_transitions` append-only triggers and two named indexes (`evidence_jobs_claimable`, `evidence_jobs_run_state`). Additive schema only: no backfill (the in-process queue it replaces never survived a restart) and no run-schema change. The body is table-presence guarded so rewound-version fixtures replay it safely |
+| 28 | 27→28 | `concept-registry.md` | **implemented 2026-09-24** — rebuilds `attempt_concepts` as registered global identities (`concept_key` = `concept:<id>@1` CHECKed against `concept_id`, `registry_schema_version`, `registry_digest`, revision-time `label`, occurrence `pack_id`/`pack_digest`) and creates `attempt_concept_legacy` (closed-reason quarantine) and `concept_registry_migration` (one canonical receipt). A data migration: every legacy `pack:<pack>#<id>` row is resolved through its replayed run, its exact complete-document pack artifact and the compiled registry inside one coordinator-owned transaction, or quarantined; unknown or colliding rows fail closed and roll back to 27. The body is presence-guarded so rewound-version fixtures replay it safely |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| position behind evidence-job-durability | `concept-registry.md` | rewrite attempt_concepts pack-scoped keys to registered global concept identities and canonical labels; fail closed on unknown or colliding legacy rows | `tabiya-claims` |
 | position behind concept-registry | `bot-policy.md` | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite | `tabiya-claims` |
 | position behind bot-policy | `campaign-core.md` | campaign_runs; campaign_run_creations; campaign_events; campaign_mutation_commands; campaign_reward_awards | `tabiya-claims` |
 | position behind campaign-core | `campaign-catalogue-progression.md` | learner_catalogue_sightings; learner_catalogue_projection_state | `tabiya-claims` |

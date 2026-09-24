@@ -5,7 +5,7 @@ import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 
-import { canonicalFen, exactLegalMoves, PRIMARY_EVIDENCE_MANIFEST, validateValenceRegister, VALENCE_REGISTER_FORMAT, type EvidencePayload, type ValenceRegister } from "@chess-tabiya/runtime";
+import { canonicalFen, exactLegalMoves, packConceptReferenceEvidence, PRIMARY_EVIDENCE_MANIFEST, validateValenceRegister, VALENCE_REGISTER_FORMAT, type EvidencePayload, type ValenceRegister } from "@chess-tabiya/runtime";
 
 import { LearnerProfileService } from "./learner-profile.js";
 
@@ -34,6 +34,8 @@ import {
   type SelectorEngineClient,
 } from "./opponent-selector.js";
 import { PackRegistry } from "./pack-registry.js";
+import { validatePackDocument } from "./pack-validation.js";
+import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
@@ -392,13 +394,18 @@ export async function composeApplication(
     }
     databasePath = ":memory:";
   }
-  const storage = new SQLiteRunStorage(databasePath);
+  // rfc/concept-registry.md §4 startup order: every authority the concept phase needs compiles
+  // first (concept registry, shapes, principles, built-in packs); only then does the storage
+  // coordinator open SQLite, finish the structural migrations and run the concept phase in its own
+  // transaction. A refused startup closes the database and rejects before any server exists.
+  const concepts = installedConceptRegistry();
   const shapes = await ShapeRegistry.loadDefault();
   const principles = await PrincipleRegistry.loadDefault();
   const registry = await PackRegistry.loadDefault({
     development: options.development === true,
     shapes,
     principles,
+    concepts,
     ...(options.draftPackFile === undefined
       ? {}
       : { draftFile: options.draftPackFile }),
@@ -406,6 +413,34 @@ export async function composeApplication(
       ? {}
       : { draftFiles: options.draftPackFiles }),
   });
+  const storage = new SQLiteRunStorage(databasePath, {
+    concepts: Object.freeze({
+      registry: concepts,
+      builtInArtifacts: registry.artifactInventory(),
+      validateStoredPack: (document: unknown) => validatePackDocument(document, { shapes, principles, concepts, packs: Object.freeze({ get: (id: string) => registry.get(id)?.document }) }),
+    }),
+  });
+  try {
+    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig });
+  } catch (error) {
+    // Nothing composed after the coordinator may leave the database open ([[D2965]]).
+    try { storage.close(); } catch { /* preserve the primary failure */ }
+    throw error;
+  }
+}
+
+async function composeServices(
+  options: ApplicationOptions,
+  composition: LongitudinalComposition,
+  authorities: {
+    readonly storage: SQLiteRunStorage;
+    readonly shapes: ShapeRegistry;
+    readonly principles: PrincipleRegistry;
+    readonly registry: PackRegistry;
+    readonly workerConfig: ReturnType<typeof validateLongitudinalWorkerConfig>;
+  },
+): Promise<ChessTabiyaApplication> {
+  const { storage, shapes, principles, registry, workerConfig } = authorities;
   const shapeStudio = new ShapeStudio(storage, shapes, () => registry.list().map((summary) => ({
     document: registry.required(summary.id).document,
     title: summary.title,
@@ -512,12 +547,34 @@ export async function composeApplication(
   const repertoires = new RepertoireService(storage, service, corpusSource);
   const classrooms = new ClassroomService(storage, registry);
   let longitudinalStatus: () => string = () => "degraded";
+  const conceptReferenceCache = new Map<string, ReturnType<typeof packConceptReferenceEvidence>>();
   const learnerProfile = new LearnerProfileService({
     storage,
     longitudinalStatus: () => longitudinalStatus(),
     openingCatalogue,
     packs: () => registry.list().map((summary) => Object.freeze({ id: summary.id, title: summary.title, startFen: registry.required(summary.id).document.start.fen })),
     shapes: () => shapes.list().map((summary) => Object.freeze({ id: summary.id, name: summary.name })),
+    conceptReferences: () => {
+      // rfc/concept-registry.md §6: a pack whose references cannot be minted (an unregistered id in a
+      // stored pre-registry pack, or a digest that does not match its document) abstains by name.
+      const abstained: string[] = [];
+      const references = registry.list().flatMap((summary) => {
+        const record = registry.required(summary.id);
+        // Complete documents are immutable per digest, so their reference population is too.
+        let minted = conceptReferenceCache.get(record.digest);
+        if (minted === undefined) {
+          try {
+            minted = packConceptReferenceEvidence({ pack: record.document, packDigest: record.digest, registry: registry.concepts });
+          } catch {
+            abstained.push(summary.id);
+            return [];
+          }
+          conceptReferenceCache.set(record.digest, minted);
+        }
+        return minted;
+      });
+      return Object.freeze({ registry: registry.concepts, references: Object.freeze(references), abstainedPacks: Object.freeze(abstained.sort()) });
+    },
     ratedResults: (learnerId) => new Map(storage.ratedGames(learnerId).flatMap((game) => game.result === null ? [] : [[game.runId, game.result] as const])),
     valenceRegister: await loadValenceRegister(options.valenceRegisterPath ?? join(process.cwd(), "content", "valence", "register.json")),
   });

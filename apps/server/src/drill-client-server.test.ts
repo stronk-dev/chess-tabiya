@@ -123,7 +123,11 @@ describe("drill-client pack registry", () => {
         difficulty: fixture.difficulty,
         objectiveSummary: fixture.objective.summary ?? fixture.objective.type.replaceAll("_", " "),
         consequenceHorizon: { kind: "declared", plies: 4 },
-        concepts: fixture.concepts ?? [],
+        // rfc/concept-registry.md §6: the catalogue carries registry labels, never raw strings.
+        concepts: [
+          { id: "move-order-discipline", label: "Move order discipline", status: "active" },
+          { id: "plan-continuity-across-phases", label: "Plan continuity across phases", status: "active" },
+        ],
         reviewStatus: "schema_example",
         channel: "official",
       },

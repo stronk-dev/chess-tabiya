@@ -83,7 +83,7 @@ export function filterPacks(packs: readonly PackSummary[], query: PackCatalogQue
     if (query.phase !== "all" && pack.phase !== query.phase) return false;
     if (!matchesBand(pack, query.band)) return false;
     if (needle === "") return true;
-    return [pack.title, pack.objectiveSummary, ...pack.concepts]
+    return [pack.title, pack.objectiveSummary, ...pack.concepts.flatMap((concept) => [concept.label, concept.id])]
       .join(" ")
       .toLocaleLowerCase()
       .includes(needle);

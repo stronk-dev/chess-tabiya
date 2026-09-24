@@ -7,7 +7,11 @@ import { parseUci } from "chessops/util";
 import ts from "typescript";
 import { describe, expect, it } from "vitest";
 
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+
+import { sha256Hex } from "./assistance-exchange.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
+import { compileConceptRegistry, conceptRegistryDigest, conceptRegistryHeadBytes, conceptRegistryRevisionBytes } from "./concept-registry.js";
 import { compareBranches } from "./compare.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import {
@@ -181,9 +185,9 @@ const RETIRED_AFTER_MIGRATION: ReadonlyMap<string, string> = new Map([["derived.
 describe("value authority: registry equality", () => {
   it("is set-equal to every non-retired catalogue projection, with bindings a subset (§8.3, criterion 13)", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
-    // 216 + the five typed Review projections and forced-mate v2, less the retired Story eval shift
+    // 216 + the five typed Review projections and forced-mate v2 and the concept reference, less the retired Story eval shift
     // (rfc/review-evidence-compiler.md).
-    expect(ACTIVE).toHaveLength(221);
+    expect(ACTIVE).toHaveLength(222);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -254,7 +258,8 @@ describe("value authority: registry equality", () => {
     // Plus the six provider-exchange routes (rfc/provider-exchange-and-execution.md §9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
-    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.syzygy.position_result@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    // Plus rfc/concept-registry.md §3's identity-only authored reference, which has no pre-registry route.
+    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -866,6 +871,13 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const deliveryItem = { kind: "claim", id: "claim#one", revealedBy: { kind: "outcome", eventSeq: 4 }, anchor: { claimId: "one" }, text: "Authored sentence.", evidenceTypes: ["tablebase_exact"], earnedEvidenceTypes: ["tablebase_exact"], binding: "ledger_bound", authorSpans: [], principles: [] };
   profiles.set("pack.authored.claim_delivery@1", { valid: { item: deliveryItem }, falsify: refused("pack.authored.claim_delivery@1", { item: { ...deliveryItem, note: "prose" } }) });
   profiles.set("pack.authored.claim@1", { valid: { item: { kind: "annotation", id: "a1", text: "Watch the d-file.", revealedBy: { kind: "checkpoint", eventSeq: 7 } } }, falsify: refused("pack.authored.claim@1", { item: { kind: "annotation", id: "a1", text: "x" } }) });
+  // rfc/concept-registry.md §3: a validated pack, its complete-document digest and the private
+  // compiled registry; the falsifier is the same pack under a wrong digest.
+  const conceptRevision = conceptRegistryRevisionBytes(null, [{ id: "break-timing", label: "Break timing", status: "active" }]);
+  const conceptRegistry = compileConceptRegistry(conceptRegistryHeadBytes(conceptRegistryDigest(conceptRevision)), { [`${conceptRegistryDigest(conceptRevision).slice("sha256:".length)}.json`]: conceptRevision });
+  const conceptPack = { id: "fixture-pack", concepts: ["break-timing"] };
+  const conceptPackDigest = `sha256:${sha256Hex(canonicalizeJson(conceptPack))}`;
+  profiles.set("pack.authored.concept_reference@1", { valid: { pack: conceptPack, packDigest: conceptPackDigest, registry: conceptRegistry }, falsify: refused("pack.authored.concept_reference@1", { pack: conceptPack, packDigest: `sha256:${"0".repeat(64)}`, registry: conceptRegistry }) });
   profiles.set("pack.authored.phase@1", { valid: { pack: { id: "fixture-pack", phase: "endgame" } }, falsify: refused("pack.authored.phase@1", { pack: { id: "fixture-pack", phase: "late" } }) });
   const expression = { kind: "feature", feature: { kind: "open_file", file: "a" } };
   profiles.set("authored.structural_condition.input@1", { valid: { source: "shape", documentId: "shape-a", pointer: "/trigger", expression }, falsify: refused("authored.structural_condition.input@1", { source: "caller", documentId: "shape-a", pointer: "/trigger", expression }) });

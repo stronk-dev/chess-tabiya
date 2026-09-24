@@ -10,12 +10,14 @@
  * `invokeEvidenceValueRoute` is the single dispatcher; `make evidence-value-authority` enforces
  * both edges. Nothing here is re-exported from the package barrel.
  */
-import { STRUCTURAL_FEATURE_KINDS, type DrillPackDefinition, type StructuralFeature } from "@chess-tabiya/schema/drill-pack";
+import { canonicalizeJson, STRUCTURAL_FEATURE_KINDS, type DrillPackDefinition, type StructuralFeature } from "@chess-tabiya/schema/drill-pack";
 import { normalizeMove } from "chessops/chess";
 import { parseUci } from "chessops/util";
 
+import { sha256Hex } from "./assistance-exchange.js";
 import { castlingLegality, castlingRights, castlingRightsLost } from "./castling.js";
 import { parseCorpusResultAbstention } from "./corpus-result.js";
+import { isCompiledConceptRegistry, type CompiledConceptRegistry, type ConceptRef } from "./concept-registry.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { recordedBranchFacts, type BranchComparison, type ComparisonEvidenceEntry, type ComparisonScore, type RecordedBranchFacts } from "./compare.js";
 import { endgameClassification } from "./endgame.js";
@@ -1339,6 +1341,41 @@ export const createPackAuthoredPhaseV1Evidence = (() => {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "authored_authority", arms: [{ pack: value("a drill-pack definition with a pack phase", (candidate) => isRecord(candidate) && PACK_PHASES.has(String(candidate.phase))) }], result: "single", dependency: "registered-authored-provenance", pending: AUTHORED_PENDING }, ({ pack }: { readonly pack: DrillPackDefinition }) =>
     mint(route, symbol, pack.phase, { pack: { id: pack.id, phase: pack.phase } }, [evidenceDigest({ pack: pack.id, phase: pack.phase })]));
+})();
+
+/**
+ * rfc/concept-registry.md §3: "this pack references this registered concept" — identity only.
+ * Authority inputs are the complete pack document, its complete-document digest (recomputed and
+ * compared, so a wrong digest is refused) and the private compiled registry (a digest-bearing
+ * lookalike is refused). One value per `concepts[]` reference; an unregistered id refuses the whole
+ * population rather than minting a partial one. It never claims occurrence, demonstration or value.
+ */
+export interface PackConceptReferencePayload {
+  readonly packId: string;
+  readonly packDigest: string;
+  readonly concept: ConceptRef;
+}
+
+export const createPackAuthoredConceptReferenceV1Evidence = (() => {
+  const route = "pack.authored.concept_reference@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({
+    route, symbol, shape: "authored_authority",
+    arms: [{
+      pack: value("a complete drill-pack document (concepts optional)", (candidate) => isRecord(candidate) && isText(candidate.id) && (candidate.concepts === undefined || Array.isArray(candidate.concepts))),
+      packDigest: value("the pack's complete-document digest", (candidate) => typeof candidate === "string" && /^sha256:[0-9a-f]{64}$/u.test(candidate)),
+      registry: value("the private compiled concept registry", isCompiledConceptRegistry),
+    }],
+    result: "population",
+  }, ({ pack, packDigest, registry }: { readonly pack: DrillPackDefinition; readonly packDigest: string; readonly registry: CompiledConceptRegistry }) => {
+    const recomputed = `sha256:${sha256Hex(canonicalizeJson(pack))}`;
+    if (recomputed !== packDigest) throw new TypeError(`Pack concept reference digest ${packDigest} is not the pack's complete-document digest ${recomputed}`);
+    return Object.freeze((pack.concepts ?? []).map((id) => {
+      const ref = registry.ref(id);
+      const payload: PackConceptReferencePayload = Object.freeze({ packId: pack.id, packDigest, concept: ref });
+      return mint(route, symbol, payload, { pack: { id: pack.id, digest: packDigest }, registry: registry.digest, concept: id }, [evidenceDigest({ packDigest, concept: ref })]);
+    }));
+  });
 })();
 
 /** Structural shape of one server authored-feedback page item. */

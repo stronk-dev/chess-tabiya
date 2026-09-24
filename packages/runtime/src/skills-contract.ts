@@ -129,15 +129,20 @@ export type SkillLeafSource = "registered_shape" | "pack_concept";
 export type SkillLeafBlocker =
   | "category_unassigned"
   | "valence_unruled"
-  | "opportunity_definition_missing"
-  | "concept_identity_pack_local";
+  | "opportunity_definition_missing";
 
 export const SKILL_LEAF_BLOCKER_TEXT: Readonly<Record<SkillLeafBlocker, string>> = Object.freeze({
   category_unassigned: "Its category has not been assigned by the owner yet (rfc/skills.md §3.3, Open question 3).",
   valence_unruled: "No valence declaration is admitted: whether any may be declared is the owner's open ruling (rfc/skills.md Open question 1).",
-  opportunity_definition_missing: "A shape needs its own opportunity definition before a first can be credited (rfc/skills.md Discharge D3).",
-  concept_identity_pack_local: "Concept ids are still pack-local; cross-pack identity lands with rfc/concept-registry.md.",
+  opportunity_definition_missing: "It needs its own opportunity definition before a first can be credited (rfc/skills.md Discharge D3).",
 });
+
+/**
+ * rfc/skills.md §3.2 over rfc/concept-registry.md: a registered concept is a candidate leaf only when
+ * at least this many distinct installed packs reference it. The rule is arithmetic over authored
+ * references (a pack referencing an id), never a chess judgement about which ideas matter.
+ */
+export const SKILL_CONCEPT_LEAF_MIN_PACKS = 2 as const;
 
 export interface SkillLeaf {
   readonly leafId: string;

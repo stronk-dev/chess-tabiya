@@ -55,6 +55,7 @@
     type ShapeDraft,
     type ShapeSummary,
     type PrincipleSummary,
+    type ConceptCatalogueView,
     type LiveSession,
     type LiveSessionSummary,
     type LiveSessionDetail,
@@ -200,6 +201,7 @@
   let shapeDrafts: readonly ShapeDraft[] = $state([]);
   let authoringShapes: readonly ShapeSummary[] = $state([]);
   let authoringPrinciples: readonly PrincipleSummary[] = $state([]);
+  let authoringConcepts: ConceptCatalogueView | undefined = $state(undefined);
   let shapeStudioJson = $state("");
   let selectedShapeDraftId: string | undefined = $state();
   let shapeProbeFen = $state("");
@@ -631,10 +633,11 @@
     return `${attempt.runId}\0${attempt.branchId}`;
   }
 
-  function relatedAttemptLabel(relation: RelatedProgressAttempt["relation"]): string {
-    if (relation === "same_position") return "Same position";
-    if (relation === "same_pack") return "Same pack, different position";
-    return "Same idea in this pack";
+  function relatedAttemptLabel(item: RelatedProgressAttempt): string {
+    if (item.relation === "same_position") return "Same position";
+    if (item.relation === "same_pack") return "Same pack, different position";
+    // rfc/concept-registry.md §6: an unavailable revision renders its stored label, marked unverified.
+    return item.concept === undefined ? "Same idea" : `Same idea: ${item.concept.label}${item.concept.revision === "resolved" ? "" : " (registry revision unavailable)"}`;
   }
 
   function relatedAttemptRequestIsCurrent(key:string,generation:number,action:number):boolean {
@@ -645,7 +648,7 @@
     return Array.isArray(value)&&value.length<=3&&value.every((item)=>{
       if(typeof item!=="object"||item===null)return false;
       const candidate=item as Partial<RelatedProgressAttempt>;
-      return (candidate.relation==="same_position"||candidate.relation==="same_pack"||candidate.relation==="same_concept_in_pack")
+      return (candidate.relation==="same_position"||candidate.relation==="same_pack"||candidate.relation==="same_concept")
         &&typeof candidate.runId==="string"&&candidate.runId.length>0
         &&typeof candidate.branchId==="string"&&candidate.branchId.length>0
         &&Number.isInteger(candidate.attemptCount)&&candidate.attemptCount!==undefined&&candidate.attemptCount>=0;
@@ -868,9 +871,11 @@
           api.capabilities(),
           api.packs(),
           initialRunPage(),
+          api.conceptCatalogue?.() ?? Promise.resolve(undefined),
         ]);
         if (generation !== loadGeneration) return;
         [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities, packs] = loaded;
+        authoringConcepts = loaded[7];
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
       } else if (next.name === "live") {
@@ -2819,7 +2824,7 @@
               {:else if related?.status === "loaded"}
                 <ul class="related-attempts" aria-label={`Related attempts for ${attempt.packId === null ? "this position" : packTitle(attempt.packId)}`}>
                   {#each related.items as item}
-                    <li><span><strong>{relatedAttemptLabel(item.relation)}</strong> · {item.attemptCount} {item.attemptCount === 1 ? "attempt" : "attempts"} on that material</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: item.runId }))}>Open</button></li>
+                    <li><span><strong>{relatedAttemptLabel(item)}</strong> · {item.attemptCount} {item.attemptCount === 1 ? "attempt" : "attempts"} on that material</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: item.runId }))}>Open</button></li>
                   {:else}<li>No other recorded attempts match this position or pack yet.</li>{/each}
                 </ul>
               {/if}
@@ -2908,7 +2913,7 @@
           <p class="honest">Registration publishes immutable bytes. Resolve each blocking condition in the document before registering.</p>
         </aside>
       </div>
-      <PackVocabularyEditor documentJson={studioJson} shapes={authoringShapes} principles={authoringPrinciples} onDocumentJson={(documentJson) => studioJson = documentJson} />
+      <PackVocabularyEditor documentJson={studioJson} shapes={authoringShapes} principles={authoringPrinciples} concepts={authoringConcepts} onDocumentJson={(documentJson) => studioJson = documentJson} />
       <PackProvenanceEditor documentJson={studioJson} onDocumentJson={(documentJson) => studioJson = documentJson} />
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
       </section>

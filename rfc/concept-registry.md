@@ -1,13 +1,17 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **sixth fresh independent review returned the fifth repair on
-  [[D2960]]–[[D2965]].** The claimed value-flow proof accepts counterfeit and dormant boundaries;
-  project configuration is shallow-merged across server and web; artifact population identity is
-  order-dependent; digest-shaped registry objects mint readiness; a failed post-commit composition
-  can leak a valid ready token; and unsuccessful startup leaves the database open. `make
-  concept-registry-sixth-fresh-review` retains the predecessor chain and passes 6/6 executable
-  counterexamples plus strict TypeScript. Another bounded author repair, another genuinely fresh
-  review and the independently-passed shared-resource bootstrap precede acceptance or implementation.
+- **Status:** implementing — **implementation landed 2026-09-24 at migration 28** under the owner's
+  direct-implementation direction for this session; no review round preceded landing, and
+  consolidation, review and the Active-row status transition belong to the register owner. The
+  sixth return's [[D2960]]–[[D2965]] and every predecessor finding are addressed in production code,
+  each by an executable control (receipt:
+  `planning/concept-registry/implementation-2026-09-24.md`); genuine RFC defects found while
+  implementing are corrected inline and listed in the Changelog. The registry, schema lane 1, the
+  compiler, the six live consumers, the identity-only evidence projection, migration 28 with its
+  quarantine and receipt, account export/deletion coverage, the Pack Studio picker and the /profile
+  skills concept leaves ship. Discharge D2 (owner review of the 168 seeded labels) and D4's Campaign
+  half stay open. *(Prior state: sixth fresh independent review returned the fifth repair on
+  [[D2960]]–[[D2965]]; `make concept-registry-sixth-fresh-review` retains that evidence.)*
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -25,14 +29,13 @@
 - **Planning:** `planning/concept-registry/rfc-derivation-2026-08-31.md`.
 
 ```tabiya-claims
-migration | position behind evidence-job-durability | rewrite attempt_concepts pack-scoped keys to registered global concept identities and canonical labels; fail closed on unknown or colliding legacy rows
+none
 ```
 
-**Proposed after the process prerequisite lands; not a live claim yet:**
-
-```text
-concept-registry-schema | first lane 1 | $id and exported version; closed registry document and entry grammar; active/retired identity lifecycle
-```
+Both shared resources landed on 2026-09-24 and their claims are discharged: storage migration 28
+(migration register, landed row) and `concept-registry-schema` lane 1 (its own register section and
+catalogue row in `rfc/shared-resource-registers.json`; the schema, its register and the RFC landed in
+one change, so no pre-landing lane claim was needed — see Changelog correction 1).
 
 ## Summary
 
@@ -535,6 +538,77 @@ boundary calls under each exact project configuration, sort the artifact populat
 consume private compiler authority, and make readiness publication plus failure closure one atomic
 application-composition boundary.
 
+## Implementation landing — 2026-09-24
+
+Landed at migration 28 under the owner's direct-implementation direction. Criteria map to tests in
+`planning/concept-registry/implementation-2026-09-24.md`. The sixth return is closed as follows:
+[[D2960]] — the consumer census resolves each operation call by TypeScript symbol through aliases to
+its one declaration, requires the result to be used and the enclosing declaration to be referenced
+from a file reached from the real entry, and fails a same-named counterfeit, an uncalled wrapper, a
+discarded result and a type error; [[D2961]] — server and web are compiled as two programs, each
+from its own committed `tsconfig.json`, never merged; [[D2962]] — the artifact population digest is
+computed over the digest-sorted inventory; [[D2963]] — the compiler records its output in a
+module-private `WeakSet` and every consumer and the migration refuse anything else; [[D2964]] — no
+readiness token or post-commit callback exists: the storage constructor is the coordinator, a
+constructor that throws yields no object, and `composeApplication` closes storage if anything after
+it fails; [[D2965]] — the coordinator closes SQLite on every unsuccessful exit.
+
+## Changelog
+
+- 2026-09-24: **implementation landed** at migration 28. Production: `packages/runtime/src/
+  concept-registry.ts` (compiler, private authority, collision key, refs, consumer operations, wire
+  parsers), `content/concepts/` (head + one revision of 168 seeded entries),
+  `schemas/concept_registry.schema.json`, `apps/server/src/concept-registry-loader.ts` (sole reader),
+  `concept-migration.ts` (migration 28's data operation, quarantine, receipt, restart verification),
+  `storage.ts` (coordinator, rebuilt tables, `same_concept`, metrics, export/deletion rows),
+  `progress.ts` (`RegisteredConceptResolver`), `pack-validation.ts`/`pack-registry.ts`/
+  `pack-studio.ts`/`rest.ts` (errors, labelled summaries, `GET /packs/concepts`), `account-data.ts`,
+  the `pack.authored.concept_reference@1` factory, `learner-profile.ts` (skills concept leaves) and
+  the web picker/parsers. Inline corrections of genuine defects, each pinned by a test:
+  (1) **The schema lane needs no pre-landing claim and a quoted export.** The bootstrap withdrew
+  absent-root admission ([[D3082]]), and the checker's `versionExport` reader accepts only a quoted
+  version string. The schema, its catalogue row and its register section land in one change; the
+  lane export is `CONCEPT_REGISTRY_SCHEMA_LANE = "1"` in `packages/schema`, the revision literal stays
+  the numeric `CONCEPT_REGISTRY_SCHEMA_VERSION = 1`, and a test keeps them and the `$id` in step.
+  (2) **No duplicate-key-refusing parser exists in the repository.** Canonical-byte equality is the
+  refusal: `JSON.parse` keeps the last duplicate, so the re-serialised value differs from the source.
+  (3) **Restart cannot demand perpetual equality with the migration's populations.** §4 step 7 and
+  criterion 16 would fail every restart after the registry gains a revision, a learner plays, a run
+  is re-projected, an account is deleted, or a built-in pack's content (and so its digest) changes.
+  The receipt is a one-shot migration receipt. Restart requires a canonical receipt whose stored
+  digest matches, requires the migrated revision and every revision a stored row names to be in the
+  installed registry's immutable history, and checks each registered key against its id; a missing
+  receipt at version 28 is a mixed-version database and refuses startup.
+  (4) **A stored historical pack that fails today's validator cannot brick startup.** Criterion 27's
+  "fails" would refuse the whole application because an old community pack fails a newer lint rule.
+  Such an artifact vouches for nothing: its rows are quarantined as `artifact_invalid`. A stored or
+  built-in artifact whose complete document does not hash to its recorded digest is corruption and
+  still refuses startup.
+  (5) **Live projection had no path for a stored pre-registry pack's unregistered id.** §4's
+  `registry.required(raw)` would throw while saving any run of such a pack. The resolver returns no
+  identity and the occurrence is written to the quarantine as `unregistered_at_projection`, never
+  keyed.
+  (6) **Lint cannot see the registry.** `packages/schema`'s lint is registry-free; it upgrades the
+  malformed arm to an error (`CONCEPT_KEY_NOT_SLUG`), and the server validator shared by
+  `make pack-check`, catalogue loading and publication reports `CONCEPT_UNREGISTERED` and
+  `CONCEPT_RETIRED` as errors.
+  (7) **Two §4/criterion-7 arms are unreachable by construction.** A digest cycle needs a SHA-256
+  fixed point, so the cycle guard stays and the test exercises the missing-predecessor arm; a key
+  collision needs two legacy rows with one `(run_id, branch_id)` and one raw id under different
+  keys, which the shipped primary key and exact grammar exclude, so the collision guard stays and is
+  exercised by a test-only fault point.
+  (8) **The two-phase startup is realised without a separate ready type.** The storage constructor
+  is the coordinator; it is the only way to obtain storage and yields nothing unless migration 28
+  and receipt verification succeed. The data operation receives a frozen repository with no SQL,
+  transaction or pragma surface.
+  (9) **§3's adapter must accept a pack that declares no concepts, and §6's abstention reaches the
+  consumer.** A pack without `concepts` is an empty reference population, not a refused input (the
+  browser smoke caught the profile failing over such a pack); a pack whose population cannot be
+  minted is named in the profile's statement and contributes no leaf.
+  Additive wire changes: `GET /packs/concepts`; pack summaries carry `concepts` as registry label
+  views; a `same_concept` related row carries its `concept` label view; the voluntary concept-return
+  metric carries `conceptId` and `label`.
+
 ## Acceptance criteria
 
 1. The process prerequisite's absent root exists before this RFC declares `first lane 1`; first
@@ -629,9 +703,9 @@ application-composition boundary.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Land the absent `concept-registry-schema` root and generic checker support | shared-resource-register-bootstrap | process archive receipt | |
+| D1 | Land the absent `concept-registry-schema` root and generic checker support | shared-resource-register-bootstrap | process archive receipt | 2026-09-24 — the bootstrap's catalogue admits the present source; this landing adds the row and register section with the schema |
 | D2 | Author-review every initial canonical label without adding definitions or chess claims | OWNER | reviewed registry content commit | |
-| D3 | Move `skills.md` §4 from owner to consumer and preserve its valence/taxonomy questions | codex | skills author-amendment commit | |
+| D3 | Move `skills.md` §4 from owner to consumer and preserve its valence/taxonomy questions | codex | skills author-amendment commit | 2026-09-24 — `skills.md` §4 already reads as the consumer; its criteria 4–7 now run against this registry (skills Changelog) |
 | D4 | Bind Campaign catalogue and Skills to the one compiled `ConceptRef` | codex | successor author/implementation contracts | |
 
 ## Open questions

@@ -1,5 +1,6 @@
 export const CONTENT_CONTRACT_TESTS = Object.freeze([
   "apps/server/src/authored-consequence-lifecycle.test.ts",
+  "apps/server/src/concept-registry-content.test.ts",
   "apps/server/src/evidence-at-runtime.test.ts",
   "apps/server/src/expression-census.test.ts",
   "apps/server/src/feedback-delivery.test.ts",

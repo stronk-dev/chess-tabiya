@@ -609,6 +609,18 @@ Written **unnumbered** per [[D1130]] — ids assigned at landing; head was **D12
 
 ## Changelog
 
+- 2026-09-24: **criteria 4–7 run against `concept-registry.md`** (landed at migration 28). Registered
+  concepts now join registered shapes as candidate leaves on `/profile`, read only through the
+  identity-only `pack.authored.concept_reference@1` population and labelled from the compiled
+  registry; the `concept_identity_pack_local` blocker is retired. Correction to criterion 4's text:
+  the registry lives at `content/concepts/` (immutable revisions plus a `current.json` head), not
+  `content/concepts/registry.json`, and with no owner-authored leaf table yet the leaf set is
+  mechanical — registered shapes plus registered active concepts that at least two installed packs
+  reference (`SKILL_CONCEPT_LEAF_MIN_PACKS`), an arithmetic rule over authored references rather than
+  a chess judgement; the owner's leaf→category table (§3.3) still replaces it. Criterion 5:
+  `concept-registry-consumers.test.ts` › one global key across packs; 6: › `same_concept` is
+  cross-pack (and the retired token is rejected by the web parser); 7: › publication and Pack Studio;
+  4: › the leaf set and the composed-application leaf census.
 - 2026-09-24: **migration-free subset implemented at the owner's direction**; text defects fixed
   inline, every other finding became a test. Corrections:
   1. **§6.2's "extend the derived `milestones()` path" names the wrong home.** `milestones()` lives in

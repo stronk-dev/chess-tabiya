@@ -21277,3 +21277,17 @@ receipt contract the packet needs, with D3102–D3107 fixed in production.
 **Behaviour change:** Analyze now reports "no recorded engine line", because
 typed engine deliveries carry no PV. Restoring the line needs a PV-bearing
 provider operation.
+
+### 2026-09-24 — concept-registry landed at migration 28 (implementing)
+
+- **Registry:** pack concept tags now resolve to one compiled, versioned global
+  registry of 168 seeded ids.
+- **Migration:** `attempt_concepts` is rewritten to registered identities.
+  Unverifiable legacy rows go to a quarantine with closed reasons, under one
+  migration receipt. Unknown or retired ids are refused at lint, pack-check and
+  publication.
+- **Consumers:** return scheduling and /profile skills now group across packs.
+  A concept named by at least two packs becomes a candidate skill.
+- **Ledger:** D2960–D2965 close.
+- **Migration queue:** bot-policy's run lane 0.18 is next, then campaign.
+- **Owner:** reviewing the 168 seeded labels (D2).

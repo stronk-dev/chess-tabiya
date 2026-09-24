@@ -20,6 +20,7 @@ import {
   shannonEntropyBits,
   SKILL_CATEGORIES,
   SKILL_CATEGORY_LABELS,
+  SKILL_CONCEPT_LEAF_MIN_PACKS,
   SKILL_LEAF_BLOCKER_TEXT,
   STANDARD_START_FEN,
   STYLE_METRICS,
@@ -35,6 +36,9 @@ import {
   EARLY_QUEEN_PLY_BOUND,
   PRIMARY_EVIDENCE_MANIFEST,
   type AdmittedSkillLeaf,
+  type CompiledConceptRegistry,
+  type DeclaredEvidence,
+  type PackConceptReferencePayload,
   type ConceptMark,
   type DrillRun,
   type EvidenceGrounding,
@@ -85,6 +89,17 @@ export interface LearnerProfileDependencies {
   readonly openingCatalogue: OpeningCatalogueAvailability;
   readonly packs?: () => readonly LearnerProfilePack[];
   readonly shapes?: () => readonly LearnerProfileShape[];
+  /**
+   * rfc/concept-registry.md §3: the installed packs' identity-only
+   * `pack.authored.concept_reference@1` population and the compiled registry that labels it. Skills
+   * never parses pack JSON for concepts.
+   */
+  readonly conceptReferences?: () => {
+    readonly registry: CompiledConceptRegistry;
+    readonly references: readonly DeclaredEvidence<PackConceptReferencePayload>[];
+    /** Packs whose reference population could not be minted; they contribute no leaf. */
+    readonly abstainedPacks?: readonly string[];
+  };
   readonly valenceRegister?: ValenceRegister;
   /** Learner-relative results of rated games (rated_games), which also cover resignation and abandonment. */
   readonly ratedResults?: (learnerId: string) => ReadonlyMap<string, "win" | "loss" | "draw">;
@@ -741,13 +756,24 @@ export class LearnerProfileService {
   #skills(snapshot: Snapshot): SkillsView {
     const register = this.#deps.valenceRegister ?? { formatVersion: "tabiya.valence-register.v1", declarations: [] };
     const issues = validateValenceRegister(register, evidenceGroundingOf);
-    const leaves = (this.#deps.shapes?.() ?? []).map((shape) => {
-      const blockers = ["category_unassigned", "valence_unruled", "opportunity_definition_missing"] as const;
-      return Object.freeze({
-        leafId: `shape:${shape.id}`, label: shape.name, source: "registered_shape" as const, category: null, blockers: Object.freeze([...blockers]),
-        blockerText: Object.freeze(blockers.map((blocker) => SKILL_LEAF_BLOCKER_TEXT[blocker])),
-      });
-    }).sort((left, right) => left.label.localeCompare(right.label));
+    const blockers = ["category_unassigned", "valence_unruled", "opportunity_definition_missing"] as const;
+    const blocked = { category: null, blockers: Object.freeze([...blockers]), blockerText: Object.freeze(blockers.map((blocker) => SKILL_LEAF_BLOCKER_TEXT[blocker])) };
+    const shapeLeaves = (this.#deps.shapes?.() ?? []).map((shape) => Object.freeze({
+      leafId: `shape:${shape.id}`, label: shape.name, source: "registered_shape" as const, ...blocked,
+    }));
+    // rfc/skills.md criteria 4–5: concept leaves come only from the registry's global identity, via
+    // the identity-only reference projection. One id across many packs is one leaf.
+    const concepts = this.#deps.conceptReferences?.();
+    const packsByConcept = new Map<string, Set<string>>();
+    for (const reference of concepts?.references ?? []) {
+      const id = reference.payload.concept.id as string;
+      packsByConcept.set(id, (packsByConcept.get(id) ?? new Set()).add(reference.payload.packId));
+    }
+    const conceptLeaves = [...packsByConcept].filter(([, packs]) => packs.size >= SKILL_CONCEPT_LEAF_MIN_PACKS).flatMap(([id]) => {
+      const entry = concepts?.registry.get(id);
+      return entry === undefined || entry.status !== "active" ? [] : [Object.freeze({ leafId: `concept:${id}`, label: entry.label, source: "pack_concept" as const, ...blocked })];
+    });
+    const leaves = [...shapeLeaves, ...conceptLeaves].sort((left, right) => left.label.localeCompare(right.label) || left.leafId.localeCompare(right.leafId));
     // No leaf is admitted: none has an owner-assigned category, an admitted valence declaration and a
     // written opportunity rule. The derivation still runs, over the learner's own decisions, so the
     // mechanism is exercised on every read rather than dormant.
@@ -771,7 +797,9 @@ export class LearnerProfileService {
           ? "No valence declaration has been admitted, so no skill can be credited yet. Whether any may be declared is an open owner ruling (rfc/skills.md Open question 1)."
           : "Valence declarations are recorded in content/valence/register.json.",
       }),
-      conceptIdentity: SKILL_LEAF_BLOCKER_TEXT.concept_identity_pack_local,
+      conceptIdentity: concepts === undefined
+        ? "The concept registry is unavailable, so no pack concept is listed."
+        : `Concepts come from the concept registry, one identity across every pack. An idea is listed here only when at least ${SKILL_CONCEPT_LEAF_MIN_PACKS} packs name it.${(concepts.abstainedPacks?.length ?? 0) === 0 ? "" : ` Some packs are left out because their concept references could not be verified: ${concepts.abstainedPacks!.join(", ")}.`}`,
       marksStatement: "A mark records the first time you played a creditable idea when you had a real alternative. It is earned once, never taken away, and links to the move.",
     });
   }

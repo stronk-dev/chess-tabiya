@@ -106,7 +106,7 @@ const packSummary: PackSummary = {
   phase: "opening",
   difficulty: pack.difficulty,
   objectiveSummary: pack.objective.summary ?? pack.objective.type.replaceAll("_", " "),
-  concepts: pack.concepts ?? [],
+  concepts: (pack.concepts ?? []).map((id) => ({ id, label: id, status: "active" as const })),
   reviewStatus: "schema_example",
   channel: "official",
 };

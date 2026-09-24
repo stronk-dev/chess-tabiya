@@ -1889,7 +1889,7 @@ describe("Layer 3 screens", () => {
       phase: "opening",
       difficulty: pack.difficulty,
       objectiveSummary: pack.objective.summary ?? pack.objective.type.replaceAll("_", " "),
-      concepts: pack.concepts ?? [],
+      concepts: (pack.concepts ?? []).map((id) => ({ id, label: id, status: "active" as const })),
       reviewStatus: "draft",
       channel: "community",
     };
@@ -1914,14 +1914,14 @@ describe("Layer 3 screens", () => {
       id: "najdorf", version: "0.27", digest: `sha256:${"b".repeat(64)}`,
       title: "Najdorf English Attack", mode: "line", phase: "opening",
       difficulty: { minOnlineRapid: 1800, maxOnlineRapid: 2200 },
-      objectiveSummary: "Continue beyond the opening fork.", concepts: ["sicilian-defense"],
+      objectiveSummary: "Continue beyond the opening fork.", concepts: [{ id: "sicilian-defense", label: "Sicilian defense", status: "active" as const }],
       reviewStatus: "draft", channel: "community",
     };
     const ending: PackSummary = {
       id: "lucena", version: "0.27", digest: `sha256:${"c".repeat(64)}`,
       title: "Lucena bridge", mode: "outcome", phase: "endgame",
       difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 1600 },
-      objectiveSummary: "Build the bridge and promote.", concepts: ["rook-ending"],
+      objectiveSummary: "Build the bridge and promote.", concepts: [{ id: "rook-ending", label: "Rook ending", status: "active" as const }],
       reviewStatus: "draft", channel: "community",
     };
     const component = mount(PackList, { target: target(), props: { packs: [opening, ending], onSelect: vi.fn() } });
