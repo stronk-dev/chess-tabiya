@@ -24659,21 +24659,21 @@
     },
     {
       "id": "D3027",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fb2121164374bcb403e4249a6f43e03d88e48f330910a060a0c6dce164c665ad",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "apps/server/src/bot-opponent-ply.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3028",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:47de49752a50d5df5cce29f31cc6ce8f7cbe43da0e40b533940bca9f68de7ab8",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e72d6b7a7b6b85afa711773c880d68d5e3fd64c5dbc1ed17ec6a7f3b4e5379e6",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "apps/server/src/bot-opponent-ply.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3029",

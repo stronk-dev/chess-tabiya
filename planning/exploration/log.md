@@ -21320,3 +21320,17 @@ sixth `provider-protocol` member.
 - **Cost:** Review now runs two engine searches per position.
 - **Older evaluations:** evaluations recorded before this change have no line,
   and Analyze reports "none" for them.
+
+### 2026-09-24 — registered bots are playable (run lane 0.18, migration 29)
+
+- **Choosing a bot:** learners pick from twelve honest, uncalibrated bot cards
+  on Play. Raw rungs sit under Advanced.
+- **Playing:** every bot reply is computed and committed server-side through
+  `POST /runs/:id/opponent-ply` over the shared provider exchange. Each move
+  stores its decision and provider deliveries.
+- **Resume and rematch:** both keep the exact profile. Retries replay only after
+  recomputation.
+- **Ledger:** D3027 and D3028 close.
+- **Still open:** bots are unavailable in production Maia mode until the
+  sidecar reports its container identity, which is in the provider-health lane.
+  The migration queue now opens for campaign-core.
