@@ -97,9 +97,20 @@ if (prepared.result !== "succeeded") {
   process.exit(prepared.result === "refused" ? 2 : 3);
 }
 
+const deploymentTier = process.env.TABIYA_DEPLOYMENT_TIER;
+if (deploymentTier !== undefined && deploymentTier !== "core" && deploymentTier !== "cpu") {
+  throw new TypeError(`Unsupported TABIYA_DEPLOYMENT_TIER: ${deploymentTier}`);
+}
 const application = await createApplication({
   development,
   engineMode,
+  // rfc/verifiable-runtime-distribution.md §4/§9: embedded build facts + the mounted release index.
+  releaseAbout: {
+    ...(process.env.TABIYA_LEGAL_DIRECTORY === undefined ? {} : { legalDirectory: process.env.TABIYA_LEGAL_DIRECTORY }),
+    ...(process.env.TABIYA_RELEASE_MANIFEST === undefined ? {} : { releaseManifestPath: process.env.TABIYA_RELEASE_MANIFEST }),
+    ...(process.env.TABIYA_SERVER_IMAGE === undefined ? {} : { serverImage: process.env.TABIYA_SERVER_IMAGE }),
+    ...(deploymentTier === undefined ? {} : { deploymentTier }),
+  },
   // rfc/provider-health-degradation.md §11: one structured line per provider-health transition
   // (no FEN, PGN, learner text, prompt, token, query string or account id).
   providerHealthLog: (event) => console.info(JSON.stringify(event)),

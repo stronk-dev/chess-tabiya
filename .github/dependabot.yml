@@ -1,0 +1,9 @@
+# rfc/verifiable-runtime-distribution.md §3: action updates arrive as reviewable full-SHA changes
+# (Dependabot keeps the same-line `# vX.Y.Z` comment in step with the pinned commit).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

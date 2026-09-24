@@ -104,7 +104,7 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
 
   // The Act-II boss: a full game against registered bot human-baseline.1400@1.
   const boss = page.locator('[data-node="f6-boss"]');
-  await expect(boss).toContainText("Opponent: registered bot human-baseline.1400@1");
+  await expect(boss).toContainText("Opponent: Human baseline · model band 1400");
   const bossRunId = await startNode(page, "f6-boss");
   await move(page, "h1", "g1");
   await expect.poll(() => moveCount(page, bossRunId), { timeout: 30_000 }).toBeGreaterThanOrEqual(2);
@@ -116,12 +116,12 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
   await expect(sheet.getByText("a rewind spends an earned rewind", { exact: false })).toBeVisible();
   await sheet.getByRole("button", { name: "Declare done and return to the campaign map" }).click();
   await expect(page).toHaveURL(/\/campaign\//u);
-  await expect(page.locator('[data-node="f6-boss"]')).toContainText("Game won (checkmate)");
+  await expect(page.locator('[data-node="f6-boss"]')).toContainText("Game won by checkmate");
 
   // Resume after reload lands on the same campaign map with the boss sealed.
   await page.goto(mapUrl);
   await page.reload();
-  await expect(page.locator('[data-node="f6-boss"]')).toContainText("Game won (checkmate)");
+  await expect(page.locator('[data-node="f6-boss"]')).toContainText("Game won by checkmate");
   await expect(page.locator('[data-node="f7-a"]').getByRole("button", { name: "Prepare" })).toBeVisible();
 
   // Abandon is a separately confirmed action with the exact non-punitive consequence.

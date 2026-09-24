@@ -21475,3 +21475,18 @@ Campaign was the one capability with no API, route or content. Now:
 - **Roadmap:** the roadmap now marks Campaign live.
 - **Remaining:** the official reviewed campaign, the rated boss, and
   catalogue progression (migration 31).
+
+### 2026-09-24 — verifiable runtime distribution: the release pipeline exists (unpublished)
+
+- **What landed:** a pinned, least-privilege release workflow; an allow-listed
+  runtime content set proven by a logged-reads boot; SBOM and licence gates;
+  generated notices; a release manifest with checksums over every rendered
+  deployment file; and an About page that reports the verified release.
+- **Status:** `make release-verify-local` passes in Docker. Nothing was pushed,
+  tagged or published.
+- **Blockers found by the pipeline itself:**
+  - steady memory is 178 MiB against a 128 MiB ceiling;
+  - 68 Debian and 9 Python packages carry non-standard licence declarations
+    that need owner-approved records;
+  - the Maia weights have no licence;
+  - the content bundle and core journey are not yet final.

@@ -2,13 +2,13 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1ac8debba91ab12b42f7d2ef17ab83976f1c2e56cf90408060eed12bacf4f99c",
+    "roadmap": "sha256:97d714df92357fe8dad378476abe518efb270df7ec0860c8929e0c579f7dc7ec",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
     "workState": "sha256:27329d9edacc91061632775f56df8fded2fdaf5d92895c21c67454ec92a2afc3",
-    "rfcRegister": "sha256:4b7ab765eea3333f58a5c870cd08eaafc8b8577373befe9c42f8d23b6b3584c2",
+    "rfcRegister": "sha256:896e20cde6a5f520c3a1083f3faf56e38f837eefe5f610bca52cb855f241247f",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
-    "application": "sha256:643c564b422b3329ca2045969f6ce507a8db577db8b578c6da37df6d2bfa51b0",
+    "application": "sha256:7f18928dcb7b231fd35d2eda6e005089285a3fe2c7cbf377b223779653660f81",
     "rest": "sha256:614dc50af846d3c72d4f26f3f4af82ca3b31aa352ac4075e5c4d0434ab7f4fc4"
   },
   "summary": {
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 71,
     "activeRfcLifecycle": {
-      "draft": 27,
+      "draft": 26,
       "accepted": 0,
-      "implementing": 34,
+      "implementing": 35,
       "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
@@ -496,15 +496,20 @@
       "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Self-hosting now has real operator paths: an exclusive storage lock, verified backup/restore/rollback with crash-safe replacement, upgrade through a verified pre-upgrade bundle, three validated deployment profiles (local, appliance with TLS, hosted ACME) with secure cookies and cross-origin refusal, a CPU-only engine tier, and live provider health with Maia container identity. A real backup-restore-boot round trip and an upgrade-rollback pass; clean-host digest-pinned release proof remains.",
+        "summary": "A verifiable release pipeline exists and passes locally: pinned least-privilege workflow, allow-listed runtime content proven by a logged-reads boot, SBOM and licence gates, a release manifest with checksums over every rendered deployment profile, backup/restore/rollback, provider health and an About page reporting the verified release. Publication is gated on steady memory above the ceiling, owner licence records for base-image packages and Maia weights, the official content bundle and a first real workflow run.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/src/storage-appliance.test.ts",
+          "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
+          "rfc/verifiable-runtime-distribution.md",
           "rfc/storage-backup-recovery.md",
-          "rfc/safe-deployment-profiles.md",
-          "rfc/provider-health-degradation.md"
+          "rfc/safe-deployment-profiles.md"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "verifiable-runtime-distribution.md",
+            "digest": "sha256:92325d90a2d8d0535b6659d1b97a0684e079a8f07c2100dd71910ebbfbf5f298"
+          },
           {
             "kind": "rfc",
             "id": "storage-backup-recovery.md",
@@ -514,11 +519,6 @@
             "kind": "rfc",
             "id": "safe-deployment-profiles.md",
             "digest": "sha256:b26a1d4a65c50862156d63c5b722bded914ae8fbc48a01f59a590d3b00bff1cb"
-          },
-          {
-            "kind": "rfc",
-            "id": "provider-health-degradation.md",
-            "digest": "sha256:3de1c228e6e548f861e4e89020e982d30328eea3c92d302c9e5050884bb12dd3"
           },
           {
             "kind": "work_state",

@@ -7,6 +7,7 @@
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
     SHELF_REASON_TEXT,
+    campaignBotLabel,
     newCampaignCommandId,
     rewardText,
     verdictText,
@@ -246,7 +247,7 @@
                 <article class="node-card" class:boss={card.boss} class:sealed={card.seal !== null} data-node={card.nodeId}>
                   <h3>{card.boss ? "Boss · " : ""}{card.title}</h3>
                   <p class="meta">{card.kind === "boss_game" ? "Full game" : "Rehearsal pack"}{card.phase ? ` · ${card.phase}` : ""}</p>
-                  {#if card.opponent}<p class="meta">Opponent: registered bot {card.opponent.profileId} · {card.rating === "unrated" ? "unrated" : "rated when clean"}</p>{/if}
+                  {#if card.opponent}<p class="meta">Opponent: {campaignBotLabel(card.opponent.profileId)} · {card.rating === "unrated" ? "unrated" : "rated when clean"}</p>{/if}
                   <p>{rewardText(card.reward)}</p>
                   {#if card.suppress.length > 0}<p class="suppress">Sets aside: {card.suppress.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}</p>{/if}
                   {#if card.seal !== null}<p class="seal">{verdictText(card.seal)}</p>{/if}
@@ -282,7 +283,7 @@
       <section class="prep" aria-labelledby="prep-title">
         <h2 id="prep-title">{preparing.boss ? "Boss · " : ""}{preparing.title}</h2>
         {#if preparing.objectiveSummary}<p>{preparing.objectiveSummary}</p>{/if}
-        {#if preparing.opponent}<p>You play a full game from the authored start against registered bot {preparing.opponent.profileId}. Only the rules end it.</p>{/if}
+        {#if preparing.opponent}<p>You play a full game from the authored start against {campaignBotLabel(preparing.opponent.profileId)}. Only the rules end it.</p>{/if}
         <p>{rewardText(preparing.reward)} — earned when you declare the encounter done, whatever the outcome.</p>
         {#if preparing.suppress.length > 0}<p class="suppress">This boss sets aside: {preparing.suppress.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}.</p>{/if}
         <h3>Tools for this encounter</h3>

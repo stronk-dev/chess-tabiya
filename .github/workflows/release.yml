@@ -1,24 +1,65 @@
 name: release
 
+# rfc/verifiable-runtime-distribution.md §3/§8. Tag pushes only. The workflow grants nothing by
+# default; every job declares least-privilege permissions, and package/OIDC/attestation/release
+# write authority exists only in jobs that run after `verify` and the native proofs. The release
+# graph is: committed/pre-image bytes → platform images → SBOM/native proof → Compose → release
+# manifest → SHA256SUMS → signatures/attestations → fresh verification → GitHub release.
 on:
   push:
     tags: ["v*"]
 
-permissions:
-  contents: write
-  packages: write
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SERVER_REPOSITORY: ghcr.io/${{ github.repository_owner }}/chess-tabiya-server
+  MAIA_REPOSITORY: ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia-cpu
 
 jobs:
-  verify:
+  eligibility:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      version: ${{ steps.gate.outputs.version }}
+      prerelease: ${{ steps.gate.outputs.prerelease }}
+      maia: ${{ steps.gate.outputs.maia }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Tag is an exact green main commit; D1 weight-rights gate
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          node tools/release/eligibility.mjs --tag "$GITHUB_REF_NAME" --sha "$GITHUB_SHA"
+          --repository "$GITHUB_REPOSITORY" --github-output "$GITHUB_OUTPUT"
+
+  verify:
+    needs: eligibility
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     env:
       ENGINES_REQUIRED: "1"
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           version: 11.18.0
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
           cache: pnpm
@@ -28,82 +69,366 @@ jobs:
           echo "SF_CMD=$RUNNER_TEMP/stockfish/bin/stockfish" >> "$GITHUB_ENV"
       - run: pnpm install --frozen-lockfile
       - run: make verify
+      - run: make release-policy-check
+      - name: Base-image platform fixture
+        run: node tools/release/base-images.mjs
 
-  server:
-    needs: verify
+  pre-image:
+    needs: [eligibility, verify]
     runs-on: ubuntu-24.04
-    outputs:
-      digest: ${{ steps.build.outputs.digest }}
-    steps:
-      - uses: actions/checkout@v7
-      - uses: docker/setup-buildx-action@v4
-      - uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - id: build
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: apps/server/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          build-args: |
-            TABIYA_APPLICATION_REVISION=${{ github.sha }}
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/chess-tabiya-server:${{ github.ref_name }}
-            ghcr.io/${{ github.repository_owner }}/chess-tabiya-server:${{ github.sha }}
-
-  maia:
-    needs: verify
-    runs-on: ubuntu-24.04
-    outputs:
-      digest: ${{ steps.build.outputs.digest }}
-      imageid: ${{ steps.build.outputs.imageid }}
-    steps:
-      - uses: actions/checkout@v7
-      - uses: docker/setup-buildx-action@v4
-      - uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - id: build
-        uses: docker/build-push-action@v7
-        with:
-          context: workers/maia
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia:${{ github.ref_name }}
-            ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia:${{ github.sha }}
-
-  compose:
-    needs: [server, maia]
-    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     env:
-      SERVER_IMAGE: ghcr.io/${{ github.repository_owner }}/chess-tabiya-server@${{ needs.server.outputs.digest }}
-      MAIA_IMAGE: ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia@${{ needs.maia.outputs.digest }}
-      MAIA_MANIFEST_DIGEST: ${{ needs.maia.outputs.digest }}
-      MAIA_CONFIG_DIGEST: ${{ needs.maia.outputs.imageid }}
+      VERSION: ${{ needs.eligibility.outputs.version }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 11.18.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
-      - name: Render digest-pinned deployment profiles
-        run: |
-          node tools/render-deployment.mjs --out release --server-image "${SERVER_IMAGE}" --maia-image "${MAIA_IMAGE}" --maia-manifest-digest "${MAIA_MANIFEST_DIGEST}" --maia-config-digest "${MAIA_CONFIG_DIGEST}"
-          docker compose -f release/compose.yaml config --quiet
-          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org docker compose -f release/compose.appliance.yaml config --quiet
-          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org TABIYA_ACME_EMAIL=operator@example.org docker compose -f release/compose.hosted.yaml config --quiet
-          TABIYA_BACKUP_DIRECTORY=/srv/tabiya-backups docker compose -f release/compose.yaml -f release/compose.maintenance.yaml config --quiet
-      - name: Publish release deployment files
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Generate pre-image NOTICE, licences, build metadata and runtime content
+        run: >-
+          node tools/release/pre-image.mjs --out "$RUNNER_TEMP/pre-image" --version "$VERSION"
+          --revision "$GITHUB_SHA" --repository "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+      - name: Refuse a generated mutation not committed at the tagged SHA
+        run: git diff --exit-code && test -z "$(git status --porcelain)"
+      - name: Corresponding source archive
+        run: >-
+          node tools/release/release-set.mjs source-archive --version "$VERSION" --revision "$GITHUB_SHA"
+          --out "$RUNNER_TEMP/pre-image/chess-tabiya-$VERSION-source.tar.gz"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: pre-image
+          path: ${{ runner.temp }}/pre-image
+          if-no-files-found: error
+
+  build:
+    needs: [eligibility, pre-image]
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - platform: linux/amd64
+            arch: amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    env:
+      VERSION: ${{ needs.eligibility.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Build the server image natively (no registry authority)
+        run: >-
+          docker buildx build --platform "${{ matrix.platform }}" --file apps/server/Dockerfile
+          --build-arg TABIYA_VERSION="$VERSION" --build-arg SOURCE_REVISION="$GITHUB_SHA"
+          --build-arg TABIYA_APPLICATION_REVISION="$GITHUB_SHA"
+          --build-arg TABIYA_REPOSITORY="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          --build-arg SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          --provenance=false --sbom=false
+          --output "type=docker,dest=$RUNNER_TEMP/server-${{ matrix.arch }}.tar,name=chess-tabiya-server:candidate,rewrite-timestamp=true" .
+      - name: Build the Maia CPU image natively
+        if: needs.eligibility.outputs.maia == 'true'
+        run: >-
+          docker buildx build --platform "${{ matrix.platform }}" --file workers/maia/Dockerfile
+          --build-arg TABIYA_VERSION="$VERSION" --build-arg SOURCE_REVISION="$GITHUB_SHA"
+          --build-arg TABIYA_REPOSITORY="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          --build-arg SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          --provenance=false --sbom=false
+          --output "type=docker,dest=$RUNNER_TEMP/maia-cpu-${{ matrix.arch }}.tar,name=chess-tabiya-maia-cpu:candidate,rewrite-timestamp=true" workers/maia
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: images-${{ matrix.arch }}
+          path: ${{ runner.temp }}/*-${{ matrix.arch }}.tar
+          if-no-files-found: error
+          retention-days: 3
+
+  publish:
+    needs: [eligibility, verify, build]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      images: ${{ steps.push.outputs.images }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: images-*
+          path: ${{ runner.temp }}/images
+          merge-multiple: true
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push immutable platform manifests by digest and assemble candidate indexes
+        id: push
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAIA: ${{ needs.eligibility.outputs.maia }}
+        run: node tools/release/publish-images.mjs --images "$RUNNER_TEMP/images" --sha "$GITHUB_SHA" --maia "$MAIA" --github-output "$GITHUB_OUTPUT"
+
+  native-proof:
+    needs: [eligibility, pre-image, publish]
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - platform: linux/amd64
+            arch: amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: read
+    env:
+      IMAGES: ${{ needs.publish.outputs.images }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 11.18.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: pre-image
+          path: ${{ runner.temp }}/pre-image
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Native proof from the pushed platform digests (census, SBOM, licence gate, boot, envelope)
+        run: >-
+          node tools/release/native-proof.mjs --images "$IMAGES" --platform "${{ matrix.platform }}"
+          --pre-image "$RUNNER_TEMP/pre-image" --out "$RUNNER_TEMP/proof" --idle-seconds 300 --licence-gate enforce
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: proof-${{ matrix.arch }}
+          path: ${{ runner.temp }}/proof
+          if-no-files-found: error
+
+  release-set:
+    needs: [eligibility, pre-image, publish, native-proof]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      VERSION: ${{ needs.eligibility.outputs.version }}
+      IMAGES: ${{ needs.publish.outputs.images }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 11.18.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: pre-image
+          path: ${{ runner.temp }}/pre-image
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: proof-*
+          path: ${{ runner.temp }}/proof
+          merge-multiple: true
+      - name: Assemble, generate the manifest once, checksum
+        run: >-
+          node tools/release/assemble-release.mjs --images "$IMAGES" --version "$VERSION" --revision "$GITHUB_SHA"
+          --repository "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" --pre-image "$RUNNER_TEMP/pre-image"
+          --proof "$RUNNER_TEMP/proof" --out "$RUNNER_TEMP/release"
+      - name: Every rendered deployment file is valid Compose (rfc/safe-deployment-profiles.md)
+        working-directory: ${{ runner.temp }}/release
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            release/compose.yaml release/compose.appliance.yaml release/compose.hosted.yaml \
-            release/compose.maintenance.yaml release/Caddyfile.appliance release/Caddyfile.hosted \
-            --generate-notes
+          docker compose -f compose.yaml config --quiet
+          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org docker compose -f compose.appliance.yaml config --quiet
+          TABIYA_PUBLIC_HOSTNAME=tabiya.example.org TABIYA_ACME_EMAIL=operator@example.org docker compose -f compose.hosted.yaml config --quiet
+          TABIYA_BACKUP_DIRECTORY=/srv/tabiya-backups docker compose -f compose.yaml -f compose.maintenance.yaml config --quiet
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release-set
+          path: ${{ runner.temp }}/release
+          if-no-files-found: error
+
+  sign-attest:
+    needs: [eligibility, verify, publish, native-proof, release-set]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    env:
+      VERSION: ${{ needs.eligibility.outputs.version }}
+      IMAGES: ${{ needs.publish.outputs.images }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-set
+          path: ${{ runner.temp }}/release
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Resolve subjects
+        id: subjects
+        run: node tools/release/publish-images.mjs --subjects "$IMAGES" --github-output "$GITHUB_OUTPUT"
+      - name: Keyless-sign every image index (identity bound to this workflow and tag)
+        run: node tools/release/publish-images.mjs --sign "$IMAGES"
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ env.SERVER_REPOSITORY }}
+          subject-digest: ${{ steps.subjects.outputs.server_index }}
+          push-to-registry: true
+      - uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        with:
+          subject-name: ${{ env.SERVER_REPOSITORY }}
+          subject-digest: ${{ steps.subjects.outputs.server_amd64 }}
+          sbom-path: ${{ runner.temp }}/release/sbom/server-linux-amd64.spdx.json
+          push-to-registry: true
+      - uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        with:
+          subject-name: ${{ env.SERVER_REPOSITORY }}
+          subject-digest: ${{ steps.subjects.outputs.server_arm64 }}
+          sbom-path: ${{ runner.temp }}/release/sbom/server-linux-arm64.spdx.json
+          push-to-registry: true
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        if: needs.eligibility.outputs.maia == 'true'
+        with:
+          subject-name: ${{ env.MAIA_REPOSITORY }}
+          subject-digest: ${{ steps.subjects.outputs.maia_index }}
+          push-to-registry: true
+      - uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        if: needs.eligibility.outputs.maia == 'true'
+        with:
+          subject-name: ${{ env.MAIA_REPOSITORY }}
+          subject-digest: ${{ steps.subjects.outputs.maia_amd64 }}
+          sbom-path: ${{ runner.temp }}/release/sbom/maia-cpu-linux-amd64.spdx.json
+          push-to-registry: true
+      - uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        if: needs.eligibility.outputs.maia == 'true'
+        with:
+          subject-name: ${{ env.MAIA_REPOSITORY }}
+          subject-digest: ${{ steps.subjects.outputs.maia_arm64 }}
+          sbom-path: ${{ runner.temp }}/release/sbom/maia-cpu-linux-arm64.spdx.json
+          push-to-registry: true
+      - name: Release-artifact attestations cover every checksummed file (source, Compose, manifest, notices, SBOMs)
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-checksums: ${{ runner.temp }}/release/SHA256SUMS
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ${{ runner.temp }}/release/SHA256SUMS
+      - name: Apply the human version tags to the signed, proven indexes
+        run: node tools/release/publish-images.mjs --tag "$IMAGES" --version "$VERSION"
+
+  verify-release:
+    needs: [eligibility, publish, sign-attest]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+      attestations: read
+    env:
+      VERSION: ${{ needs.eligibility.outputs.version }}
+      IMAGES: ${{ needs.publish.outputs.images }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            tools/release
+            tools/render-deployment.mjs
+            deploy
+            packages/schema/src/release-manifest
+            release
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-set
+          path: ${{ runner.temp }}/release
+      - name: Verify checksums, manifest joins, signatures and attestations from a clean job
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          node tools/release/verify-release.mjs --dir "$RUNNER_TEMP/release" --repository "$GITHUB_REPOSITORY"
+          --tag "$GITHUB_REF_NAME" --bundles "$RUNNER_TEMP/verification"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: verification
+          path: ${{ runner.temp }}/verification
+          if-no-files-found: error
+
+  github-release:
+    needs: [eligibility, verify-release]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      PRERELEASE: ${{ needs.eligibility.outputs.prerelease }}
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-set
+          path: ${{ runner.temp }}/release
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: verification
+          path: ${{ runner.temp }}/verification
+      - name: Publish the verified release set
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd "$RUNNER_TEMP/release"
+          flags="--verify-tag --repo $GITHUB_REPOSITORY --title $GITHUB_REF_NAME --notes-file RELEASE-NOTES.md"
+          if [ "$PRERELEASE" = "true" ]; then flags="$flags --prerelease"; fi
+          # GitHub release assets are flat; sbom/<name> is published as sbom-<name> and restored by the consumer drill.
+          for file in sbom/*.spdx.json; do cp "$file" "sbom-$(basename "$file")"; done
+          # shellcheck disable=SC2086
+          gh release create "$GITHUB_REF_NAME" $flags $(find . -maxdepth 1 -type f ! -name RELEASE-NOTES.md | sort) "$RUNNER_TEMP"/verification/*

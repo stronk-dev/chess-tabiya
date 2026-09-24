@@ -15,10 +15,18 @@ services:
       MAIA_PORT: "7000"
       PORT: "3000"
       STOCKFISH_PATH: /usr/games/stockfish
+      # rfc/verifiable-runtime-distribution.md §4/§9: the verified release index and this image's subject.
+      TABIYA_RELEASE_MANIFEST: /run/chess-tabiya/release-manifest.json
+      TABIYA_SERVER_IMAGE: __SERVER_IMAGE__
     ports:
       - "127.0.0.1:${TABIYA_PORT:-3000}:3000"
     volumes:
       - tabiya-data:/data
+      # Download release-manifest.json next to this file; startup verifies it (docs/release.md).
+      - ./release-manifest.json:/run/chess-tabiya/release-manifest.json:ro
+    # rfc/verifiable-runtime-distribution.md §5: the core hard limit, no swap.
+    mem_limit: 512m
+    memswap_limit: 512m
     depends_on:
       maia:
         condition: service_healthy
@@ -33,17 +41,20 @@ services:
     environment:
       MAIA_LISTEN_HOST: 0.0.0.0
       MAIA_LISTEN_PORT: "7000"
-      MAIA_READY_FILE: /ready
+      MAIA_READY_FILE: /tmp/ready
       # The running container's OCI identity (the Maia provider-exchange artifact capture).
       MAIA_IMAGE_ID: __MAIA_IMAGE__
       MAIA_MANIFEST_DIGEST: __MAIA_MANIFEST_DIGEST__
       MAIA_CONFIG_DIGEST: __MAIA_CONFIG_DIGEST__
     healthcheck:
-      test: ["CMD", "test", "-f", "/ready"]
+      test: ["CMD", "test", "-f", "/tmp/ready"]
       interval: 5s
       timeout: 2s
       start_period: 90s
       retries: 12
+    # rfc/verifiable-runtime-distribution.md §5: the cpu tier's Maia share (2,048 MiB total), no swap.
+    mem_limit: 1536m
+    memswap_limit: 1536m
     restart: unless-stopped
 
 volumes:

@@ -1,3 +1,5 @@
+import { BOT_FAMILY_LABELS } from "@chess-tabiya/runtime";
+
 import { ApiError } from "./api.js";
 
 // rfc/campaign-core.md §7.1 — the browser half of the closed /campaign family. The client never
@@ -168,9 +170,30 @@ export function rewardText(reward: CampaignRunReward | null): string {
   return "Unlocks a theory passage";
 }
 
+/** Learner copy for the rules result that ended a boss game; an unlisted reason is not shown raw. */
+const GAME_END_TEXT: Readonly<Record<string, string>> = Object.freeze({
+  checkmate: "checkmate",
+  stalemate: "stalemate",
+  insufficient_material: "insufficient material",
+  fifty_move: "the fifty-move rule",
+  threefold: "threefold repetition",
+  resignation: "resignation",
+});
+
+function gameEndText(reason: string): string {
+  return GAME_END_TEXT[reason] ?? "the rules";
+}
+
+/** A registered bot's honest name: its family and model band, never the raw profile id. */
+export function campaignBotLabel(profileId: string): string {
+  const match = /^([a-z-]+)\.(\d+)@\d+$/u.exec(profileId);
+  const family = match === null ? undefined : BOT_FAMILY_LABELS[match[1] as keyof typeof BOT_FAMILY_LABELS];
+  return family === undefined ? "a registered bot" : `${family} · model band ${match![2]}`;
+}
+
 export function verdictText(seal: CampaignNodeCard["seal"]): string {
   if (seal === null) return "Not played";
-  if (seal.kind === "boss_game") return seal.outcome === "win" ? `Game won (${seal.reason.replaceAll("_", " ")})` : seal.outcome === "loss" ? `Game lost (${seal.reason.replaceAll("_", " ")})` : `Game drawn (${seal.reason.replaceAll("_", " ")})`;
+  if (seal.kind === "boss_game") return seal.outcome === "win" ? `Game won by ${gameEndText(seal.reason)}` : seal.outcome === "loss" ? `Game lost by ${gameEndText(seal.reason)}` : `Game drawn by ${gameEndText(seal.reason)}`;
   return seal.verdict === "achieved" ? "Objective reached" : seal.verdict === "failed" ? "Objective not reached" : seal.verdict === "transitioned" ? "Objective transitioned" : "Played to the authored boundary";
 }
 

@@ -1,5 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import {
@@ -66,6 +65,7 @@ import {
 } from "./tablebase.js";
 import { EMITTER_GRADUATION_CLEARANCE_PLANS, type EmitterGraduationClearancePlan } from "./graduation-blocker-templates.mjs";
 import { GRADUATION_RULING_ANCHOR_ROOTS } from "./graduation-ruling-roots.mjs";
+import { repositoryAnchorLine, repositoryPathExists } from "./runtime-content-facts.js";
 
 export { GRADUATION_RULING_ANCHOR_ROOTS };
 
@@ -134,7 +134,7 @@ function graduationClearanceIssues(document: Record<string, unknown>, entry: Rec
   if (kind !== "content_declared" && kind !== "assessment_grounded" && subject !== undefined && !pointer.found) issue("GRADUATION_CLEARANCE_SUBJECT_UNRESOLVED", "/subject", `${subject} does not resolve in this pack`);
   if (kind === "unbuilt" && typeof value.blockedBy === "string") {
     const target = value.blockedBy.split("#", 1)[0]!;
-    if (!existsSync(resolve(target))) issue("GRADUATION_CLEAREDBY_UNRESOLVED", "/blockedBy", `graduation dependency does not resolve: ${value.blockedBy}`);
+    if (!repositoryPathExists(target)) issue("GRADUATION_CLEAREDBY_UNRESOLVED", "/blockedBy", `graduation dependency does not resolve: ${value.blockedBy}`);
   }
 
   const plan = (EMITTER_GRADUATION_CLEARANCE_PLANS as Readonly<Record<string, EmitterGraduationClearancePlan>>)[String(entry.id ?? "")];
@@ -1142,11 +1142,9 @@ function runtimeIssues(
       } else {
         const file = match.groups.file;
         const line = Number(match.groups.line);
-        const absolute = resolve(file);
-        let cited = existsSync(absolute);
-        const contents = cited ? readFileSync(absolute, "utf8") : "";
-        const citedLine = contents.split(/\r?\n/u)[line - 1];
-        cited = cited && citedLine !== undefined;
+        // rfc/verifiable-runtime-distribution.md §7: a release image answers from compiled facts.
+        const citedLine = repositoryAnchorLine(file, line);
+        let cited = citedLine !== undefined;
         const date = /20\d\d-\d\d-\d\d/u.exec(ruling)?.[0];
         if (accepted.kind === "owner_ruling" && (date === undefined || !citedLine?.includes(date))) cited = false;
         if (!cited) issues.push(runtimeIssue("GRADUATION_RULING_UNCITED", `${path}/accepted/rulingRef`, `accepted condition citation does not resolve: ${rulingRef}`));

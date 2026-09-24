@@ -1,0 +1,4 @@
+# Verbatim third-party licence and notice texts: their bytes are pinned by digest, so
+# whitespace checks must not ask for edits.
+licenses/** -whitespace
+notices/** -whitespace

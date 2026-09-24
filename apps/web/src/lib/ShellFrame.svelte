@@ -74,6 +74,8 @@
           onclick={(event) => follow(event, path)}>{label}</a
         >
       {/each}
+      <!-- rfc/verifiable-runtime-distribution.md §9: the persistent licence/source entry (a server page). -->
+      <a class="legal-link" href="/about" rel="license">Licence &amp; source</a>
     </nav>
     <StatusAnnouncement message={runStatus} />
     <div class="run-context visually-hidden-below-rail" aria-hidden="true">

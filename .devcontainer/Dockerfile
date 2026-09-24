@@ -1,4 +1,4 @@
-FROM node:24.10.0-bookworm AS stockfish
+FROM node:24.21.0-bookworm AS stockfish
 
 ARG TARGETARCH
 RUN apt-get update \
@@ -8,7 +8,7 @@ RUN apt-get update \
 COPY tools/install-stockfish-linux.sh /usr/local/bin/install-stockfish-linux
 RUN install-stockfish-linux /opt/stockfish
 
-FROM node:24.10.0-bookworm
+FROM node:24.21.0-bookworm
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git netcat-openbsd \

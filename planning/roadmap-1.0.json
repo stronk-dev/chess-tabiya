@@ -618,15 +618,20 @@
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Self-hosting now has real operator paths: an exclusive storage lock, verified backup/restore/rollback with crash-safe replacement, upgrade through a verified pre-upgrade bundle, three validated deployment profiles (local, appliance with TLS, hosted ACME) with secure cookies and cross-origin refusal, a CPU-only engine tier, and live provider health with Maia container identity. A real backup-restore-boot round trip and an upgrade-rollback pass; clean-host digest-pinned release proof remains.",
+          "summary": "A verifiable release pipeline exists and passes locally: pinned least-privilege workflow, allow-listed runtime content proven by a logged-reads boot, SBOM and licence gates, a release manifest with checksums over every rendered deployment profile, backup/restore/rollback, provider health and an About page reporting the verified release. Publication is gated on steady memory above the ceiling, owner licence records for base-image packages and Maia weights, the official content bundle and a first real workflow run.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/storage-appliance.test.ts",
+            "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
+            "rfc/verifiable-runtime-distribution.md",
             "rfc/storage-backup-recovery.md",
-            "rfc/safe-deployment-profiles.md",
-            "rfc/provider-health-degradation.md"
+            "rfc/safe-deployment-profiles.md"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "verifiable-runtime-distribution.md",
+              "digest": "sha256:92325d90a2d8d0535b6659d1b97a0684e079a8f07c2100dd71910ebbfbf5f298"
+            },
             {
               "kind": "rfc",
               "id": "storage-backup-recovery.md",
@@ -636,11 +641,6 @@
               "kind": "rfc",
               "id": "safe-deployment-profiles.md",
               "digest": "sha256:b26a1d4a65c50862156d63c5b722bded914ae8fbc48a01f59a590d3b00bff1cb"
-            },
-            {
-              "kind": "rfc",
-              "id": "provider-health-degradation.md",
-              "digest": "sha256:3de1c228e6e548f861e4e89020e982d30328eea3c92d302c9e5050884bb12dd3"
             },
             {
               "kind": "work_state",

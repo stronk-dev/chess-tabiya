@@ -125,23 +125,37 @@ for (const [label, base, overlay] of [["development", "compose.yaml", "compose.m
   required(admin.volumes.some((volume) => volume.target === "/data" && volume.source === config.services.server.volumes[0].source), `${label} maintenance: shares the server data volume`);
   required(admin.volumes.some((volume) => volume.target === "/backup" && volume.source === "/srv/tabiya-backups"), `${label} maintenance: explicit backup mount`);
 }
+// rfc/verifiable-runtime-distribution.md §4/§5: every rendered server mounts the verified release
+// index read-only, declares its own subject and runs under the core hard limit without swap; a
+// release that withholds maia-cpu (D1) renders valid Compose with no Maia reference.
+const { withoutMaia } = await import("./release/lib/release-set.mjs");
+for (const [file, env] of [["compose.yaml", process.env], ["compose.appliance.yaml", proxyEnv], ["compose.hosted.yaml", proxyEnv]]) {
+  const config = composeConfigWith(env, ["-f", join(renderedDirectory, file), "--profile", "engines"]);
+  const { server, maia } = config.services;
+  required(server.volumes.some((volume) => volume.target === "/run/chess-tabiya/release-manifest.json" && volume.read_only === true), `${file}: the release index must be mounted read-only`);
+  required(server.environment.TABIYA_SERVER_IMAGE === serverImage, `${file}: the server must declare its digest-pinned subject`);
+  required(Number(server.mem_limit) === 512 * 1024 * 1024 && Number(server.memswap_limit) === 512 * 1024 * 1024, `${file}: 512 MiB core limit without swap`);
+  required(Number(maia.mem_limit) === 1536 * 1024 * 1024 && Number(maia.memswap_limit) === 1536 * 1024 * 1024, `${file}: 1,536 MiB Maia limit without swap`);
+  const stripped = join(renderedDirectory, `core-${file}`);
+  writeFileSync(stripped, withoutMaia(renderedArtifacts[file]));
+  const core = composeConfigWith(env, ["-f", stripped, "--profile", "engines"]);
+  required(!("maia" in core.services) && !readFileSync(stripped, "utf8").includes(maiaImage), `${file}: withholding maia-cpu removes every Maia reference`);
+}
 rmSync(renderedDirectory, { recursive: true, force: true });
 
 const release = readFileSync(".github/workflows/release.yml", "utf8");
 const verifyWorkflow = readFileSync(".github/workflows/verify.yml", "utf8");
 const browserWorkflow = readFileSync(".github/workflows/browser.yml", "utf8");
 for (const expected of [
-  "verify:",
+  "  verify:",
   "ENGINES_REQUIRED: \"1\"",
   "- run: make verify",
-  "needs: verify",
-  "linux/amd64,linux/arm64",
-  "chess-tabiya-server:${{ github.ref_name }}",
-  "chess-tabiya-server:${{ github.sha }}",
-  "chess-tabiya-maia:${{ github.ref_name }}",
-  "chess-tabiya-maia:${{ github.sha }}",
-  "@${{ needs.server.outputs.digest }}",
-  "@${{ needs.maia.outputs.digest }}",
+  "- run: make release-policy-check",
+  "needs: [eligibility, verify, build]",
+  "runner: ubuntu-24.04-arm",
+  "node tools/release/native-proof.mjs",
+  "node tools/release/assemble-release.mjs",
+  "node tools/release/verify-release.mjs",
 ]) {
   required(release.includes(expected), `Release workflow is missing ${expected}`);
 }
@@ -176,8 +190,11 @@ for (const relative of readdirSync("content", { recursive: true })) {
 }
 for (const dependency of [...contentDependencies].sort()) {
   required(existsSync(dependency), `Content graduation dependency does not exist: ${dependency}`);
-  required(serverDockerfile.includes(`COPY ${dependency} ${dependency}`), `Production image must contain referenced content dependency ${dependency}`);
 }
+const { planRuntimeContent } = await import("./release/lib/runtime-content.mjs");
+const runtimeFacts = planRuntimeContent().facts;
+for (const dependency of runtimeFacts.resolvedPaths) required(existsSync(dependency), `Compiled runtime dependency does not exist: ${dependency}`);
+required(runtimeFacts.resolvedPaths.length > 0 && Object.keys(runtimeFacts.rulingLines).length > 0, "Served packs' blockedBy targets and ruling anchors must compile into runtime-content facts");
 const serverBuild = JSON.parse(readFileSync("apps/server/package.json", "utf8")).scripts.build;
 required(serverBuild.includes("src/main.ts") && serverBuild.includes("--bundle"), "Server build must bundle its runtime entry");
 // rfc/storage-backup-recovery.md §8: the shipped image carries the storage-admin entry point.
@@ -190,8 +207,12 @@ for (const ignored of ["data", "backups"]) {
 }
 // D655 / rfc/verifiable-runtime-distribution.md §4: the default Maia image is the CPU tier.
 const maiaDockerfile = readFileSync("workers/maia/Dockerfile", "utf8");
-required(maiaDockerfile.includes("https://download.pytorch.org/whl/cpu") && maiaDockerfile.includes("torch==2.8.0+cpu"), "Maia image must install the pinned CPU-only torch");
-required(/grep -Eiq[^\n]*nvidia[^\n]*&& exit 1/u.test(maiaDockerfile), "Maia image must refuse any NVIDIA/CUDA distribution");
+// rfc/verifiable-runtime-distribution.md §2: the closure is an exact hashed CPU-only lock (the GPU
+// distribution/library census lives in tools/release, see make release-policy-check).
+required(maiaDockerfile.includes("https://download.pytorch.org/whl/cpu") && maiaDockerfile.includes("--require-hashes --no-deps"), "Maia image must install the hashed CPU-only lock");
+for (const arch of ["amd64", "arm64"]) {
+  required(/^torch==[0-9.]+\+cpu \\$/mu.test(readFileSync(`workers/maia/requirements-cpu-linux-${arch}.txt`, "utf8")), `Maia ${arch} lock must pin the CPU-only torch build`);
+}
 
 const runtimeBundle = buildSync({
   entryPoints: ["apps/server/src/main.ts"],
@@ -220,9 +241,15 @@ const mainText = buildSync({
 }).outputFiles[0].text;
 required(mainText.includes('new URL("./longitudinal-worker-thread.js", import.meta.url)'), "Bundled main must resolve the sibling longitudinal worker thread");
 required(!mainText.includes("longitudinalSemanticPopulation") && !/function projectObservations\b/u.test(mainText), "Bundled main must not contain the longitudinal projector");
-required(serverDockerfile.includes("COPY --from=build /app/apps/server/dist apps/server/dist"), "Production image must copy the whole server dist, including the worker thread");
-for (const root of missingGraduationRulingCopies(GRADUATION_RULING_ANCHOR_ROOTS, serverDockerfile)) {
-  required(false, `Production image must include the graduation-ruling source ${root}`);
+// rfc/verifiable-runtime-distribution.md §4: the image carries the runtime entries only (main + the
+// longitudinal worker thread and its two operator CLIs), never the authoring/sourcing tool bundles.
+required(/COPY --from=build \/app\/apps\/server\/dist\/main\.js \/app\/apps\/server\/dist\/longitudinal-worker-thread\.js /u.test(serverDockerfile), "Production image must copy the server main entry and its sibling longitudinal worker thread");
+required(!serverDockerfile.includes("COPY --from=build /app/apps/server/dist apps/server/dist"), "Production image must not copy authoring tool bundles from the server dist");
+// rfc/verifiable-runtime-distribution.md §7: ruling anchors and blockedBy targets reach the image
+// only as compiled facts (TABIYA_RUNTIME_CONTENT_FACTS); the prose roots stay out of the final stage.
+required(serverDockerfile.includes("ENV TABIYA_RUNTIME_CONTENT_FACTS=/app/runtime-content/facts.json"), "Production image must answer ruling anchors from compiled runtime-content facts");
+for (const root of GRADUATION_RULING_ANCHOR_ROOTS) {
+  required(missingGraduationRulingCopies([root], serverDockerfile.slice(serverDockerfile.lastIndexOf("\nFROM "))).length === 1, `Production image final stage must not copy the prose root ${root}`);
 }
 required(
   readFileSync("apps/server/Dockerfile", "utf8").includes("install-stockfish-linux /opt/stockfish"),
@@ -232,7 +259,7 @@ const openingCommit = "4b8622759e7ae6f93f011cc6c83a3823401ab45e";
 for (const name of ["COPYING.txt", "a.tsv", "b.tsv", "c.tsv", "d.tsv", "e.tsv"]) {
   required(existsSync(`vendor/chess-openings/${openingCommit}/${name}`), `Pinned opening source is missing ${name}`);
 }
-required(serverDockerfile.includes("COPY --from=build /app/apps/server/artifacts apps/server/artifacts"), "Production image must contain the compiled runtime opening catalogue");
+required(JSON.parse(readFileSync("release/runtime-content-rights.v1.json", "utf8")).openingCatalogue.path === "apps/server/artifacts/runtime-opening-catalogue.json" && serverDockerfile.includes("COPY --from=release-inputs /release/app/ /app/"), "Production image must contain the compiled runtime opening catalogue through the runtime-content bundle");
 required(!serverDockerfile.includes("COPY vendor"), "Production image must not copy raw opening TSV inputs");
 const stockfishInstaller = readFileSync("tools/install-stockfish-linux.sh", "utf8");
 for (const expected of [

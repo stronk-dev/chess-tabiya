@@ -11,6 +11,8 @@ Start with:
 - [Feature and capability map](features.md) — what each work area owns and unlocks.
 - [Extending Tabiya](extending.md) — where code/content changes belong and their integration checks.
 - [Development foundation](development.md) — toolchain, workspace and commands.
+- [Release distribution](release.md) — pinned release images, SBOM/licence gate, runtime-content
+  allow-list, release manifest, signing/attestation workflow and local verification.
 - [Testing](testing.md) — verification tiers and what each tier proves.
 - [1.0 progress tracking](progress-tracking.md) — strict gates, incremental checkpoints, the sealed
   receipt and staged implementation flow-back.

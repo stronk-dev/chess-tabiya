@@ -1186,7 +1186,9 @@ describe("application shell", () => {
     });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("Your games and rehearsals"));
-    expect(document.querySelectorAll("nav a")).toHaveLength(10);
+    // Ten product destinations (Campaign included) plus the persistent licence/source entry (rfc/verifiable-runtime-distribution.md §9).
+    expect(document.querySelectorAll("nav a:not(.legal-link)")).toHaveLength(10);
+    expect(document.querySelectorAll("nav a.legal-link[href=\"/about\"]")).toHaveLength(1);
     expect(document.querySelector<HTMLAnchorElement>('nav a[href="/review"]')?.textContent).toBe("Review & import");
     document.querySelector<HTMLButtonElement>(".item-list button")!.click();
 
