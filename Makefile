@@ -1965,7 +1965,12 @@ bounded-target-contract:
 	./node_modules/.bin/tsc -p tools/d1652-bounded-target-repair-harness/tsconfig.contract.json --noEmit
 
 bounded-target-census:
-	./node_modules/.bin/vitest run --config tools/d1023-bounded-policy-harness/vitest.config.ts tools/d1023-bounded-policy-harness/exact-target.test.ts
+	./node_modules/.bin/vitest run --config tools/d1023-bounded-policy-harness/vitest.config.ts tools/d1023-bounded-policy-harness/production-census.test.ts
+
+# rfc/bounded-policy-targets.md §7: the production service, factories and protocol tests.
+.PHONY: bounded-target-contract-production
+bounded-target-contract-production:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts
 
 bounded-target-repeat-review:
 	./node_modules/.bin/vitest run --config tools/d1962-bounded-target-repeat-review/vitest.config.ts

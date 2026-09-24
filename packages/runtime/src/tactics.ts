@@ -1006,11 +1006,47 @@ export interface Threat {
   readonly mate: boolean;
 }
 
-export function threats(fen: string): ThreatResult {
-  const position = positionFromFen(fen);
-  if (position.isCheck()) return Object.freeze({ kind: "abstained", reason: "pass_while_in_check", conventionId: THREAT_CONVENTION, threats: Object.freeze([] as const) });
+/**
+ * The one threat@1 pass transform (rfc/bounded-policy-targets.md §1.2, [[D2203]]): the canonical
+ * six-field source position and the canonical passed position (side to move flipped, en passant
+ * cleared). A checked source has no passed position. Every available anchor is frozen and admitted
+ * to a module-private set, so a spread, JSON round trip or rebuilt equal object is not an anchor.
+ */
+export interface ThreatPassAnchor {
+  readonly conventionId: typeof THREAT_CONVENTION;
+  readonly sourceFen: string;
+  readonly passedFen: string;
+}
+
+export type ThreatPassAnchorResult =
+  | { readonly kind: "available"; readonly anchor: ThreatPassAnchor }
+  | { readonly kind: "unavailable"; readonly reason: "pass_while_in_check"; readonly sourceFen: string };
+
+const THREAT_PASS_ANCHORS = new WeakSet<ThreatPassAnchor>();
+
+export function threatPassAnchor(sourceFen: string): ThreatPassAnchorResult {
+  const position = positionFromFen(sourceFen);
+  const canonicalSource = canonicalFen(position);
+  if (position.isCheck()) return Object.freeze({ kind: "unavailable", reason: "pass_while_in_check", sourceFen: canonicalSource });
   position.turn = opposite(position.turn);
   position.epSquare = undefined;
+  const anchor: ThreatPassAnchor = Object.freeze({ conventionId: THREAT_CONVENTION, sourceFen: canonicalSource, passedFen: canonicalFen(position) });
+  THREAT_PASS_ANCHORS.add(anchor);
+  return Object.freeze({ kind: "available", anchor });
+}
+
+export function assertThreatPassAnchor(value: unknown): asserts value is ThreatPassAnchor {
+  if (typeof value !== "object" || value === null || !THREAT_PASS_ANCHORS.has(value as ThreatPassAnchor)) throw new TypeError("Threat pass anchor was not produced by threatPassAnchor()");
+  const anchor = value as ThreatPassAnchor;
+  if (anchor.conventionId !== THREAT_CONVENTION) throw new TypeError("Threat pass anchor names another convention");
+  const rebuilt = threatPassAnchor(anchor.sourceFen);
+  if (rebuilt.kind !== "available" || rebuilt.anchor.sourceFen !== anchor.sourceFen || rebuilt.anchor.passedFen !== anchor.passedFen) throw new TypeError("Threat pass anchor does not re-derive under threat@1");
+}
+
+export function threats(fen: string): ThreatResult {
+  const pass = threatPassAnchor(fen);
+  if (pass.kind === "unavailable") return Object.freeze({ kind: "abstained", reason: "pass_while_in_check", conventionId: THREAT_CONVENTION, threats: Object.freeze([] as const) });
+  const position = positionFromFen(pass.anchor.passedFen);
   const values: Threat[] = [];
   for (const move of legalMoves(position)) {
     const mover = position.board.get(move.from)!;

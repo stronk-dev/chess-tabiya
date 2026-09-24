@@ -37,7 +37,7 @@ import {
 } from "./evidence-contract.js";
 import { resolveEvidenceReference, type EvidenceReferenceResolution } from "./evidence-ref-resolution.js";
 import { kingZoneEvents, kingZoneReading } from "./king-state.js";
-import { exactLegalMoveMap, exactMoveIdentity } from "./legal-moves.js";
+import { exactLegalMoveMap, exactMoveIdentity, type ExactLegalMove } from "./legal-moves.js";
 import { materialRoleAsymmetryEvent, materialRoleSignatureReading } from "./material-state.js";
 import { forcedMateAfterMove } from "./mate-proof.js";
 import { moveQualityGrade, type GradeContext, type GradeSide, type MoveQualityGrade } from "./grade.js";
@@ -109,12 +109,29 @@ import {
   rayClassificationReading,
   replyBreadth,
   rookOnSeventhReading,
+  threatPassAnchor,
   threats,
   trappedPieceReading,
   type DoubleAttackEvent,
   type GainedSliderRay,
   type ReplyBreadth,
 } from "./tactics.js";
+import { bindThreatEvidencePassAnchor } from "./threat-pass-authority.js";
+import {
+  computeBoundedReturn,
+  computeImmediate,
+  computeNamedMaterialTarget,
+  isBoundedTargetTraversalAuthority,
+  type BoundedTargetImmediate,
+  type BoundedTargetImmediateEvidence,
+  type BoundedTargetReturn,
+  type BoundedTargetReturnEvidence,
+  type BoundedTargetTraversalAuthority,
+  type LegalExchangeEvidence,
+  type NamedMaterialTargetEvidence,
+  type SourceLegalMovesEvidence,
+  type ThreatEvidence,
+} from "./bounded-target-chess.js";
 import { transitionReading, transitionSemanticFacts } from "./transition.js";
 import { branchPath } from "./branch-path.js";
 import { recordedPieceRoutes, structureDeltaEntries } from "./compare-strip-values.js";
@@ -386,7 +403,22 @@ const CONVENTION_CLOSURE_PENDING = "The direct convention identity is carried in
 export const createRulesCastlingReadingRightsV1Evidence = fenReading("rules.castling.reading.rights@1", castlingRights);
 export const createRulesTacticReadingLoosePieceV1Evidence = fenReading("rules.tactic.reading.loose_piece@1", loosePieceReading);
 export const createRulesTacticReadingRayClassificationV1Evidence = fenReading("rules.tactic.reading.ray_classification@1", rayClassificationReading);
-export const createRulesTacticConsequenceThreatV1Evidence = fenReading("rules.tactic.consequence.threat@1", threats);
+/**
+ * The sole threat factory (rfc/bounded-policy-targets.md §1.1, [[D2630]]): it owns the source FEN,
+ * computes `threats()` itself and binds the exact `threatPassAnchor()` result to the wrapper it
+ * minted, so target admission can join the passed exchange to the original source position.
+ */
+export const createRulesTacticConsequenceThreatV1Evidence = (() => {
+  const route = "rules.tactic.consequence.threat@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN }], result: "single" }, ({ fen }: { readonly fen: string }) => {
+    const valid = validFen(fen);
+    const pass = threatPassAnchor(valid);
+    const evidence = mint(route, symbol, threats(valid), { fen });
+    bindThreatEvidencePassAnchor(evidence, pass);
+    return evidence;
+  });
+})();
 export const createRulesStructuralReadingPawnConnectivityV1Evidence = fenReading("rules.structural.reading.pawn_connectivity@1", pawnConnectivityReading);
 export const createRulesPhaseDevelopmentV1Evidence = fenReading("rules.phase.development@1", developmentReading);
 export const createRulesTacticReadingRookOnSeventhV1Evidence = fenReading("rules.tactic.reading.rook_on_seventh@1", rookOnSeventhReading);
@@ -1659,6 +1691,68 @@ export const createTheoryEndgameMethodStageV1Evidence = (() => {
       });
       return mint(route, symbol, payload, { setup, edges: edges.slice(0, stage.stepIndex + 1), convention }, [setup, ...edges.slice(0, stage.stepIndex + 1), evidenceDigest(method)]);
     })) });
+  });
+})();
+
+// ---------------------------------------------------------------------------------------------
+// rfc/bounded-policy-targets.md §4: the three bounded-target value routes
+// ---------------------------------------------------------------------------------------------
+
+type NamedTargetInputs = { readonly threat: ThreatEvidence; readonly exchange: LegalExchangeEvidence; readonly sourcePosition: SourceLegalMovesEvidence };
+
+export type NamedMaterialTargetFactoryResult =
+  | { readonly kind: "evidence"; readonly item: NamedMaterialTargetEvidence }
+  | { readonly kind: "abstained"; readonly projection: { readonly id: "derived.bounded_target.named_material_target"; readonly version: 1 }; readonly reason: "input_abstained" | "position_mismatch" | "target_mismatch" };
+
+export type BoundedTargetImmediateFactoryResult =
+  | { readonly kind: "evidence"; readonly item: BoundedTargetImmediateEvidence }
+  | { readonly kind: "abstained"; readonly projection: { readonly id: "derived.bounded_target.immediate"; readonly version: 1 }; readonly reason: "position_mismatch" | "target_mismatch" | "identity_lost"; readonly candidateUci: string };
+
+export type BoundedTargetReturnDerivation =
+  | { readonly kind: "evidence"; readonly item: BoundedTargetReturnEvidence }
+  | { readonly kind: "abstained"; readonly projection: { readonly id: "derived.bounded_target.bounded_return"; readonly version: 1 }; readonly reason: "budget_exhausted"; readonly candidateUci: string; readonly visitedPositions: number };
+
+const isExactLegalMove = (candidate: unknown): boolean => isRecord(candidate)
+  && typeof candidate.uci === "string" && typeof candidate.from === "string" && typeof candidate.to === "string" && typeof candidate.role === "string"
+  && Object.keys(candidate).every((key) => ["uci", "from", "to", "role", "promotion"].includes(key));
+
+/** Named target: one positive material capture joined to its exact threat, exchange and source map. */
+export const createDerivedBoundedTargetNamedMaterialTargetV1Evidence = (() => {
+  const route = "derived.bounded_target.named_material_target@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ threat: sealed("rules.tactic.consequence.threat@1"), exchange: sealed("rules.exchange.predicate.legal_exchange@1"), sourcePosition: sealed("rules.mobility.reading.legal_moves@1") }], result: "availability" }, (input: NamedTargetInputs): NamedMaterialTargetFactoryResult => {
+    const computed = computeNamedMaterialTarget(input.threat, input.exchange, input.sourcePosition);
+    if (computed.kind === "abstained") return Object.freeze({ kind: "abstained", projection: Object.freeze({ id: "derived.bounded_target.named_material_target" as const, version: 1 as const }), reason: computed.reason });
+    const item = mint(route, symbol, computed.payload, { threat: input.threat, exchange: input.exchange, sourcePosition: input.sourcePosition }, [input.threat, input.exchange, input.sourcePosition]) as NamedMaterialTargetEvidence;
+    return Object.freeze({ kind: "evidence", item });
+  });
+})();
+
+/** Immediate: the exact outcome of one legal candidate from the retained source map. */
+export const createDerivedBoundedTargetImmediateV1Evidence = (() => {
+  const route = "derived.bounded_target.immediate@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ target: sealed("derived.bounded_target.named_material_target@1"), candidate: value("an exact legal move from the retained source map", isExactLegalMove) }], result: "availability" }, (input: { readonly target: NamedMaterialTargetEvidence; readonly candidate: ExactLegalMove }): BoundedTargetImmediateFactoryResult => {
+    const computed = computeImmediate(input.target.payload, input.candidate);
+    if (computed.kind === "abstained") return Object.freeze({ kind: "abstained", projection: Object.freeze({ id: "derived.bounded_target.immediate" as const, version: 1 as const }), reason: computed.reason, candidateUci: computed.candidateUci });
+    const payload: BoundedTargetImmediate = Object.freeze({ target: input.target, candidateUci: computed.candidateUci, afterFen: computed.afterFen, outcome: computed.outcome });
+    const item = mint(route, symbol, payload, { target: input.target, candidate: input.candidate }, [input.target]) as BoundedTargetImmediateEvidence;
+    return Object.freeze({ kind: "evidence", item });
+  });
+})();
+
+/** Bounded return: the async three-ply enumeration under a service-created traversal authority. */
+export const createDerivedBoundedTargetBoundedReturnV1Evidence = (() => {
+  const route = "derived.bounded_target.bounded_return@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ immediate: sealed("derived.bounded_target.immediate@1"), traversal: value("a service-created bounded-target traversal authority", isBoundedTargetTraversalAuthority) }], result: "availability" }, async (input: { readonly immediate: BoundedTargetImmediateEvidence; readonly traversal: BoundedTargetTraversalAuthority }): Promise<BoundedTargetReturnDerivation> => {
+    const immediate = input.immediate.payload;
+    if (immediate.outcome.result !== "removed") throw new TypeError("A preserved immediate target has no bounded return");
+    const computed = await computeBoundedReturn(immediate as BoundedTargetImmediate & { readonly outcome: { readonly result: "removed" } }, input.traversal);
+    if (computed.kind === "budget_exhausted") return Object.freeze({ kind: "abstained", projection: Object.freeze({ id: "derived.bounded_target.bounded_return" as const, version: 1 as const }), reason: "budget_exhausted", candidateUci: immediate.candidateUci, visitedPositions: computed.visitedPositions });
+    const payload: BoundedTargetReturn = Object.freeze({ immediate: input.immediate as BoundedTargetReturn["immediate"], horizonPlies: 3, visitedPositions: computed.visitedPositions, outcome: computed.outcome });
+    const item = mint(route, symbol, payload, { immediate: input.immediate, traversal: input.traversal.requestDigest }, [input.immediate]) as BoundedTargetReturnEvidence;
+    return Object.freeze({ kind: "evidence", item });
   });
 })();
 

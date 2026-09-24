@@ -15,6 +15,8 @@ import type { CompiledConceptRegistry } from "./concept-registry.js";
 export type { PackConceptReferencePayload } from "./evidence-factories.js";
 import type { CandidateFeatureInput, CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { positiveMaterialThreatExchanges, type LegalExchangeEvidence, type SourceLegalMovesEvidence, type ThreatEvidence } from "./bounded-target-chess.js";
+import { threatEvidencePassAnchor } from "./threat-pass-authority.js";
 import { pivotalMarkerEvidenceItems } from "./pivotal.js";
 import type { SourcingLedgerRecord } from "./recorded-reading.js";
 import type { ShapeTriggerSource } from "./shape-firing.js";
@@ -23,6 +25,20 @@ import type { DrillRun, EvidencePayload, Node, SelectionEngineIdentity } from ".
 import type { RecordedReading } from "./voice.js";
 import type { RecordedEdge } from "./recorded-edge.js";
 import type { ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
+
+/**
+ * rfc/bounded-policy-targets.md §1: the complete sealed authority set a bounded-target batch owns,
+ * minted from one source FEN through the sole value routes — the FEN-owning threat reading (with
+ * its bound pass anchor), one legal-exchange item per positive material threat capture on the
+ * passed position, and the exact source legal-move map. The caller never supplies a payload.
+ */
+export function boundedTargetSourceEvidence(fen: string): { readonly threat: ThreatEvidence; readonly exchanges: readonly LegalExchangeEvidence[]; readonly sourcePosition: SourceLegalMovesEvidence } {
+  const threat = invokeEvidenceValueRoute("rules.tactic.consequence.threat@1", { fen }) as ThreatEvidence;
+  const passed = threatEvidencePassAnchor(threat);
+  const exchanges = passed.kind !== "available" ? [] : positiveMaterialThreatExchanges(threat.payload).flatMap((exchange) => invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: passed.anchor.passedFen, captureUci: exchange.captureUci }) as readonly LegalExchangeEvidence[]);
+  const sourcePosition = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen }) as SourceLegalMovesEvidence;
+  return Object.freeze({ threat, exchanges: Object.freeze(exchanges), sourcePosition });
+}
 
 const READING_KINDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count" && kind !== "named_structure"));
 

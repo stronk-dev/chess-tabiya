@@ -155,6 +155,9 @@ import {
   createDerivedTacticCheckZwischenzugObservedV2Evidence,
   createDerivedTacticOverloadExploitationObservedV2Evidence,
   createTheoryEndgameMethodStageV1Evidence,
+  createDerivedBoundedTargetNamedMaterialTargetV1Evidence,
+  createDerivedBoundedTargetImmediateV1Evidence,
+  createDerivedBoundedTargetBoundedReturnV1Evidence,
   type EvidenceInputArm,
   type EvidenceValueFactory,
   type EvidenceValueFactoryMeta,
@@ -310,6 +313,10 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "live.syzygy.position_result@1": createLiveSyzygyPositionResultV1Evidence,
   "human.explorer.position_page@1": createHumanExplorerPositionPageV1Evidence,
   "rules.endgame.tablebase_domain@1": createRulesEndgameTablebaseDomainV1Evidence,
+  // rfc/bounded-policy-targets.md §4: the three bounded-target value routes.
+  "derived.bounded_target.named_material_target@1": createDerivedBoundedTargetNamedMaterialTargetV1Evidence,
+  "derived.bounded_target.immediate@1": createDerivedBoundedTargetImmediateV1Evidence,
+  "derived.bounded_target.bounded_return@1": createDerivedBoundedTargetBoundedReturnV1Evidence,
 });
 
 type Routes = typeof EVIDENCE_VALUE_ROUTES;
