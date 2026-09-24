@@ -232,7 +232,7 @@ predecessor renegotiates here rather than renumbering unilaterally.
 | version | owner RFC | what it changed | landed at |
 |---|---|---|---|
 | 0.1 | `archive/claim-backing.md` | official principle-entry registry contract | `5a63225` |
-| 0.2 | `theory-knowledge-pipeline.md` | `provenance.sources` items are a closed union of the string form and `$defs/structuredCitation` (sourceId, revisionUrl, sha256, sectionRef, quotedText); `standsOn` gains `cited_source`, admitted biconditionally in `validatePrincipleEntry`; every citation joins an accepted `content/theory-sources.json` row with equal revision and digest and derives its attribution from that row ([[D1898]] repair). Additive: all 13 entries validate unchanged and no principle digest moves | landing commit (see `theory-knowledge-pipeline.md` changelog 2026-09-24) |
+| 0.2 | `theory-knowledge-pipeline.md` | `provenance.sources` items are a closed union of the string form and `$defs/structuredCitation` (sourceId, revisionUrl, sha256, sectionRef, quotedText); `standsOn` gains `cited_source`, admitted biconditionally in `validatePrincipleEntry`; every citation joins an accepted `content/theory-sources.json` row with equal revision and digest and derives its attribution from that row ([[D1898]] repair). Additive: all 13 entries validate unchanged and no principle digest moves | `5194954` |
 
 ### Live claims
 
