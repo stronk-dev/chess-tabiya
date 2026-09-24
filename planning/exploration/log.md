@@ -21306,3 +21306,17 @@ provider operation.
   seals about 200 evidence values.
 - **Still open:** reducing that cost needs an evidence-contract change, so D3300
   stays open for the remainder.
+
+### 2026-09-24 — Analyze reveals the engine line again
+
+A new sealed provider operation, `stockfish.principal_variation@1`, is the
+sixth `provider-protocol` member.
+
+- **Recording:** the Review evidence coordinator requests the line after each
+  node's evaluation and records it on the same `evidence.attached` event.
+- **Reading:** Analyze reads the recorded line through `module.full_inspector@1`,
+  attributed to engine, search bound and reached depth. It remains read-only
+  and withheld during an open retry.
+- **Cost:** Review now runs two engine searches per position.
+- **Older evaluations:** evaluations recorded before this change have no line,
+  and Analyze reports "none" for them.

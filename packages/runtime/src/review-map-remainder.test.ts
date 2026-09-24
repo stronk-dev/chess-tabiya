@@ -7,10 +7,12 @@ import { branchPath } from "./branch-path.js";
 import { attachEvidence } from "./evidence.js";
 import { winPercentFromCp } from "./grade.js";
 import { reviewAnalysis } from "./review-analysis.js";
+import { REVIEW_PROVIDER_LINE_KEY, reviewDeliveryEvidencePayload } from "./review-evidence.js";
 import { REVIEW_COMPARE_LIMIT, openRetryEntry, reviewMapProjection, type ReviewMapProjection } from "./review-map.js";
 import { reviewText } from "./review-map-templates.js";
 import { commitMove, fork, rewind } from "./runtime.js";
 import { storyMomentsForRun } from "./story.js";
+import { attachDelivery, evaluationDelivery, lineDelivery } from "./testing/review-evidence-fixture.js";
 import { REVIEW_FIXTURE_AT, fixtureCentipawns, reviewFixtureRun } from "./testing/review-map-fixture.js";
 import type { DrillRun } from "./types.js";
 import { judgementWordsOutsideGrounding } from "./voice.js";
@@ -222,5 +224,58 @@ describe("Analyze (§7, O7.3)", () => {
   it("[criterion 12] the ordinary map never carries the line the Analyze action can reveal", () => {
     const serialized = JSON.stringify(projectionOf(run));
     expect(serialized).not.toMatch(/movesUci|bestMove|principal|c7c5|1\. e4 e5 2\. Nf3|1… c5/u);
+  });
+});
+
+describe("Analyze over the Review pass's typed line (§7, provider exchange §5.2)", () => {
+  // The Review coordinator records `stockfish.principal_variation@1` beside each evaluation on the same
+  // durable event; Analyze re-derives it and admits it through module.full_inspector@1.
+  const typed = (): DrillRun => {
+    let run = reviewFixtureRun({ id: "analyze-typed", plies: 6, evaluated: () => false });
+    const path = branchPath(run, run.branches[0]!.id);
+    const start = path[0]!;
+    run = attachDelivery(run, start.id, evaluationDelivery(start.fen, "cp 20", { bound: { kind: "movetime", requestedMs: 100 } }), lineDelivery(start.fen, ["e2e4", "e7e5", "g1f3", "b8c6"], { maxPlies: 3 }));
+    // A second node carries an evaluation without a line: Analyze states that none is recorded.
+    run = attachDelivery(run, path[1]!.id, evaluationDelivery(path[1]!.fen, "cp 20", { bound: { kind: "movetime", requestedMs: 100 } }));
+    return run;
+  };
+  const run = typed();
+  const main = run.branches[0]!.id;
+  const rows = projectionOf(run).rows;
+
+  it("reveals the recorded bounded line, attributed to the actual engine and requested bound", () => {
+    const analysis = reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
+    expect(analysis).toMatchObject({ kind: "line", source: "bestline", engineId: "stockfish-analysis", bound: { requestedMovetimeMs: 100 }, moves: ["1. e4", "e5", "2. Nf3"] });
+    if (analysis.kind !== "line") throw new Error("unreachable");
+    expect(analysis.sentence.endsWith(` 19 (100 ms search) reported this principal variation from the position before ${rows[0]!.label}: 1. e4 e5 2. Nf3.`)).toBe(true);
+    expect(judgementWordsOutsideGrounding([], analysis.sentence)).toEqual([]);
+    expect(reviewAnalysis(run, main, rows[1]!.nodeId, { role: "learner", session: "imported" })).toMatchObject({ kind: "none" });
+  });
+
+  it("keeps module, retry and read-only gates: no inspector ceiling, an open retry, and no write", () => {
+    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "academy" }).kind).toBe("withheld");
+    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "spectator", session: "imported" }).kind).toBe("withheld");
+    expect(reviewAnalysis(retry(run, rows[0]!.entryNodeId), main, rows[0]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("withheld");
+    const before = JSON.stringify(run);
+    reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
+    expect(JSON.stringify(run)).toBe(before);
+    // The ordinary map carries neither the line nor its record.
+    expect(JSON.stringify(projectionOf(run))).not.toMatch(/movesUci|providerLineDelivery|principal|1\. e4 e5 2\. Nf3/u);
+  });
+
+  it("does not reveal a line whose recorded bytes no longer re-derive", () => {
+    const tampered = structuredClone(run) as DrillRun;
+    for (const event of tampered.events) {
+      if (event.type !== "evidence.attached") continue;
+      const values = event.data.payload.values as Record<string, { response?: { bodyBase64: string } }>;
+      const line = values[REVIEW_PROVIDER_LINE_KEY];
+      if (line?.response !== undefined) line.response.bodyBase64 = Buffer.from(Buffer.from(line.response.bodyBase64, "base64").toString("utf8").replace("pv e2e4 e7e5", "pv d2d4 d7d5")).toString("base64");
+    }
+    expect(reviewAnalysis(tampered, main, rows[0]!.nodeId, { role: "learner", session: "imported" })).toMatchObject({ kind: "none" });
+  });
+
+  it("refuses to record a line searched from another position", () => {
+    const path = branchPath(run, main);
+    expect(() => reviewDeliveryEvidencePayload(evaluationDelivery(path[0]!.fen, "cp 0"), lineDelivery(path[1]!.fen, ["e7e5"]))).toThrow(/exact FEN/u);
   });
 });

@@ -38,14 +38,15 @@ function harness(options: { readonly engine?: MockProviderEngineClient; readonly
   const engine = options.engine ?? new MockProviderEngineClient({ score: swinging });
   const { scheduler } = composeProviderTraversalApplication({ engines: engine, tablebaseFetch: null, explorerFetch: null, explorerToken: null });
   let gets = 0;
-  const counting = { get: ((...args: Parameters<typeof scheduler.get>) => { gets += 1; return scheduler.get(...args); }) as typeof scheduler.get, normalizedRequestDigest: scheduler.normalizedRequestDigest.bind(scheduler) };
+  let lineGets = 0;
+  const counting = { get: ((...args: Parameters<typeof scheduler.get>) => { if (args[0].operation === "stockfish.principal_variation@1") lineGets += 1; else gets += 1; return scheduler.get(...args); }) as typeof scheduler.get, normalizedRequestDigest: scheduler.normalizedRequestDigest.bind(scheduler) };
   const attempts = options.attempts ?? new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 64, maxAttemptsPerRequest: 2 });
   const coordinator = new ReviewEvidenceCoordinator({
     scheduler: counting as never, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts,
-    windowNodes: options.windowNodes ?? 3, maxOutstandingPerRun: options.maxOutstandingPerRun ?? 2, maxTrackedRuns: options.maxTrackedRuns ?? 4, maxAttemptsPerRequest: 2, movetimeMs: 50, timeoutMs: 2_000,
+    windowNodes: options.windowNodes ?? 3, maxOutstandingPerRun: options.maxOutstandingPerRun ?? 2, maxTrackedRuns: options.maxTrackedRuns ?? 4, maxAttemptsPerRequest: 2, movetimeMs: 50, linePlies: 8, timeoutMs: 2_000,
   });
   const service = new RunService(storage, { reviewEvidence: coordinator, ...(options.queue === undefined ? {} : { evidenceQueue: options.queue }) });
-  return { storage, service, coordinator, attempts, gets: () => gets };
+  return { storage, service, coordinator, attempts, gets: () => gets, lineGets: () => lineGets };
 }
 
 describe("ReviewAttemptOutcomeStore (criterion 13)", () => {
@@ -137,7 +138,7 @@ describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)
     // Criterion 17: the wire parses into client-local seals with no DeclaredEvidence.
     const parsed = parseReviewStoryReceipt(JSON.parse(JSON.stringify(receipt)), { runId: imported.run.id });
     expect(parsed.moments.flatMap((moment) => moment.components.map(presentedSentence)).join(" ")).toMatch(/Mock Stockfish mock-1, 50 ms search/u);
-    expect(JSON.stringify(receipt)).not.toMatch(/"payload"|"acquisition"|providerDelivery|bestMoveUci/u);
+    expect(JSON.stringify(receipt)).not.toMatch(/"payload"|"acquisition"|providerDelivery|providerLineDelivery|bestMoveUci|movesUci/u);
   });
 
   it("states provider failure as unavailable and exhaustion as retry_exhausted without looping (criteria 13, 14)", async () => {
@@ -162,16 +163,73 @@ describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)
   });
 
   it("never requests a position with no legal move: it is outside the search domain, not a failure", async () => {
-    const { service, coordinator, gets } = harness({ windowNodes: 8, maxOutstandingPerRun: 8 });
+    const { service, coordinator, gets, lineGets } = harness({ windowNodes: 8, maxOutstandingPerRun: 8 });
     const mate = `[Event "Mate"]\n[Result "0-1"]\n\n1. f3 e5 2. g4 Qh4# 0-1`;
     const imported = await service.importGame({ id: "review-mate", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: mate } }, "writer");
     await coordinator.whenIdle();
     expect(gets()).toBe(imported.run.nodes.length - 1);
+    // The Analyze line follows each delivered evaluation; the mated position is searched for neither.
+    expect(lineGets()).toBe(imported.run.nodes.length - 1);
     service.reveal(imported.run.id, "writer");
     const receipt = service.story(imported.run.id, principal);
     expect(receipt.progress).toEqual({ kind: "settled" });
     expect(receipt.families.engine_eval.unavailable).toEqual([]);
     expect(receipt.families.engine_eval.sourceCounts.honestEmpty).toBeGreaterThan(0);
+  });
+
+  it("records the bounded engine line with each delivery, and Analyze reveals it read-only (rfc/review-map.md §7)", async () => {
+    const { service, coordinator, storage, gets, lineGets } = harness({ windowNodes: 2, maxOutstandingPerRun: 2 });
+    const imported = await service.importGame({ id: "review-line", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    const run = storage.read("review-line")!.run;
+    const attached = run.events.filter((event) => event.type === "evidence.attached");
+    // One durable event per node carries both sealed deliveries; no separate bestline row exists.
+    expect(attached).toHaveLength(run.nodes.length);
+    for (const event of attached) {
+      if (event.type !== "evidence.attached") throw new Error("unreachable");
+      expect(event.data.payload.kind).toBe("eval");
+      expect(Object.keys(event.data.payload.values)).toEqual(expect.arrayContaining(["providerDelivery", "providerLineDelivery"]));
+    }
+    expect(lineGets()).toBe(gets());
+    service.reveal(imported.run.id, "writer");
+    const branchId = imported.run.branches[0]!.id;
+    const secondMove = run.nodes.find((node) => node.branchId === branchId && node.ply === 3)!;
+    const eventsBefore = storage.read("review-line")!.run.events.length;
+    const callsBefore = gets() + lineGets();
+    const analysis = service.reviewAnalysis(imported.run.id, principal, secondMove.id);
+    expect(analysis).toMatchObject({ kind: "line", source: "bestline", engineId: "stockfish-analysis", bound: { requestedMovetimeMs: 50 } });
+    if (analysis.kind !== "line") throw new Error("line expected");
+    expect(analysis.sentence).toMatch(/^Mock Stockfish mock-1 \(50 ms search\) reported this principal variation from the position before 2\. Nf3: 2\. \S+ \S+\.$/u);
+    expect(analysis.caveat).toMatch(/not advice/u);
+    // Criterion 14: the explicit read writes nothing and requests nothing.
+    await coordinator.whenIdle();
+    expect(storage.read("review-line")!.run.events.length).toBe(eventsBefore);
+    expect(gets() + lineGets()).toBe(callsBefore);
+    // The ordinary review payload never carries the line.
+    const review = await service.review(imported.run.id, principal);
+    expect(JSON.stringify(review)).not.toMatch(/principal variation|providerLineDelivery|movesUci/u);
+  });
+
+  it("a line that cannot be obtained never withholds the evaluation; Analyze then states none is recorded", async () => {
+    class LineFailing extends MockProviderEngineClient {
+      override async exchange(engineId: string, request: Parameters<MockProviderEngineClient["exchange"]>[1]) {
+        if (request.commands.includes("setoption name UCI_ShowWDL value false")) throw new Error("line unavailable");
+        return super.exchange(engineId, request);
+      }
+    }
+    const { service, coordinator, storage } = harness({ engine: new LineFailing({ score: swinging }), windowNodes: 2, maxOutstandingPerRun: 2 });
+    const imported = await service.importGame({ id: "review-no-line", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    const run = storage.read("review-no-line")!.run;
+    const attached = run.events.filter((event) => event.type === "evidence.attached");
+    expect(attached).toHaveLength(run.nodes.length);
+    for (const event of attached) if (event.type === "evidence.attached") expect(Object.keys(event.data.payload.values)).not.toContain("providerLineDelivery");
+    service.reveal(imported.run.id, "writer");
+    const receipt = service.story(imported.run.id, principal);
+    expect(receipt.progress).toEqual({ kind: "settled" });
+    expect(receipt.families.engine_eval.unavailable).toEqual([]);
+    const secondMove = run.nodes.find((node) => node.branchId === imported.run.branches[0]!.id && node.ply === 3)!;
+    expect(service.reviewAnalysis(imported.run.id, principal, secondMove.id)).toMatchObject({ kind: "none", sentence: "No engine line is recorded for the position before 2. Nf3." });
   });
 
   it("keeps outstanding work within the per-run bound and evicts idle trackers above maxTrackedRuns", async () => {

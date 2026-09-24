@@ -10,5 +10,5 @@ export const PROVIDER_PARSER_IMPLEMENTATION = Object.freeze({
     "packages/runtime/src/provider-requests.ts",
     "packages/runtime/src/provider-types.ts"
   ] as readonly string[]),
-  closureDigest: "sha256:b15ae1b5157714943c705aa4581a8fc9363c4973212d5a26ea58177627f28b2e",
+  closureDigest: "sha256:8f3ffcd90fdd32232538996de90370f18e5dc82ce071b764936479a62cf41e34",
 } as const);

@@ -13,6 +13,7 @@ import type {
   ProviderRequestedIdentityMap,
   StockfishLegalRootTableRequest,
   StockfishPositionEvaluationRequest,
+  StockfishPrincipalVariationRequest,
   SyzygyPositionRequest,
 } from "./provider-types.js";
 
@@ -85,6 +86,14 @@ export function evaluationRequest(fen: string, bound: StockfishPositionEvaluatio
 }
 
 export function evaluationCapture(identity: ProviderRequestedIdentityMap["stockfish.position_evaluation@1"], received: readonly string[], generation = 1): ProviderExecutionCapture<"stockfish.position_evaluation@1"> {
+  return { endpoint: STOCKFISH_ENDPOINT, actualIdentity: stockfishActual(identity.request.requestedEngine.version), generation, contentEncoding: "uci-utf8", transport: null, responseBytes: transcript(identity.command.commands, received) };
+}
+
+export function principalVariationRequest(fen: string, bound: StockfishPrincipalVariationRequest["bound"] = { kind: "depth", requestedDepth: 12 }, maxPlies = 8): StockfishPrincipalVariationRequest {
+  return { fen, requestedEngine: { id: "stockfish-analysis", version: STOCKFISH_VERSION }, bound, maxPlies, timeoutMs: 5_000 };
+}
+
+export function principalVariationCapture(identity: ProviderRequestedIdentityMap["stockfish.principal_variation@1"], received: readonly string[], generation = 1): ProviderExecutionCapture<"stockfish.principal_variation@1"> {
   return { endpoint: STOCKFISH_ENDPOINT, actualIdentity: stockfishActual(identity.request.requestedEngine.version), generation, contentEncoding: "uci-utf8", transport: null, responseBytes: transcript(identity.command.commands, received) };
 }
 

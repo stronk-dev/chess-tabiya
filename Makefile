@@ -937,7 +937,7 @@ provider-exchange-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/provider-exchange.test.ts packages/runtime/src/provider-protocol.test.ts apps/server/src/provider-exchange.test.ts apps/server/src/provider-traversal.test.ts apps/server/src/engine-supervisor-exchange.test.ts
 
 # The process-local operator/research door: `make provider-traversal OP=<operation>` reads one JSON
-# request from stdin (operations: stockfish-legal-roots, stockfish-position-evaluation,
+# request from stdin (operations: stockfish-legal-roots, stockfish-position-evaluation, stockfish-principal-variation,
 # maia-policy-page, syzygy-position, explorer-position-page).
 provider-traversal: build
 	node apps/server/dist/provider-traversal.js $(OP)

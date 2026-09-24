@@ -111,9 +111,10 @@ export function assertReviewAnalysisResponse(value: unknown, subject: { readonly
   if (body.runId !== subject.runId || body.nodeId !== subject.nodeId || !text(body.entryNodeId) || !text(body.branchId) || !text(body.sentence)) fail("analysis identity");
   if (body.kind === "line") {
     const bound = record(body.bound) ?? fail("analysis bound");
-    const attributed = (Number.isSafeInteger(bound.requestedMovetimeMs) && (bound.requestedMovetimeMs as number) > 0) || (Number.isSafeInteger(bound.requestedDepth) && (bound.requestedDepth as number) > 0);
+    const positive = (value: unknown): boolean => Number.isSafeInteger(value) && (value as number) > 0;
+    const attributed = positive(bound.requestedMovetimeMs) || positive(bound.requestedDepth) || positive(bound.requestedNodes);
     // Law 8: an engine line renders only attributed to its engine and search bound, never as advice.
-    if (!attributed || !text(body.engineId) || !(body.sentence as string).startsWith(`${body.engineId as string} (`)) fail("analysis line is not attributed to engine and search bound");
+    if (!attributed || !text(body.engineId) || !text(body.engine) || !(body.sentence as string).startsWith(`${body.engine as string} (`)) fail("analysis line is not attributed to engine and search bound");
     if (!texts(body.moves) || (body.moves as readonly string[]).length === 0 || !text(body.caveat)) fail("analysis line shape");
     if (/\b(?:best|should|must|strongest|winning)\b/iu.test(`${body.sentence as string} ${body.caveat as string}`)) fail("analysis line is phrased as advice");
     return;

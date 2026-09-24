@@ -182,7 +182,7 @@ export {
 } from "./presentation-contract.js";
 export {
   REVIEW_PACKET_SOURCE_ADAPTERS, REVIEW_PACKET_SOURCE_PROJECTION_IDS, REVIEW_SOURCE_FAMILIES, REVIEW_UNAVAILABLE_REASONS, ReviewEvidenceError,
-  REVIEW_PROVIDER_DELIVERY_KEY, assertReviewEvidencePacket, assertReviewRecordedPrefixReceipt, reviewDeliveryEvidencePayload, reviewDurableEngineStates, reviewPacketForRun, compileReviewEvidence, compileReviewPacketForSubject, createReviewPrefixAuthority,
+  REVIEW_PROVIDER_DELIVERY_KEY, REVIEW_PROVIDER_LINE_KEY, reviewDurableEngineLine, assertReviewEvidencePacket, assertReviewRecordedPrefixReceipt, reviewDeliveryEvidencePayload, reviewDurableEngineStates, reviewPacketForRun, compileReviewEvidence, compileReviewPacketForSubject, createReviewPrefixAuthority,
   foldReviewCompletion, foldReviewFamilyState, presentReviewFamilyAbstentions, reviewPacketSourcePlan, reviewSubjectPath, runReviewPacketSources,
   type ReviewAdapterState, type ReviewDegradation, type ReviewEvidenceInput, type ReviewEvidencePacket, type ReviewImportRecordImage, type ReviewNodePacket,
   type ReviewOutcomeReceipt, type ReviewProgress, type ReviewProviderNodeState, type ReviewRecordedPrefixReceipt, type ReviewRunFamilyState,
@@ -191,7 +191,7 @@ export {
 export {
   MATE_TRANSITION_KINDS, learnerCentipawns, mateTransitionChanges, reviewPointComparability, reviewScoreReceipt, searchCommandImage, whiteWdl,
   type ForcedMateAfterMoveProofV2, type RecordedPosition, type ReviewEnginePoint, type ReviewEvalDelta, type ReviewMateTransition, type ReviewScoreReceipt,
-  type ReviewWdlPoint, type StockfishPositionEvaluation, type WhiteWdlPoint,
+  type ReviewWdlPoint, type StockfishPositionEvaluation, type StockfishPrincipalVariation, type WhiteWdlPoint,
 } from "./review-points.js";
 export {
   voiceCheck,
@@ -404,6 +404,7 @@ export {
   type ProviderRetainedDigest,
 } from "./provider-digest.js";
 export {
+  MAX_PRINCIPAL_VARIATION_PLIES,
   PROVIDER_REQUEST_NORMALIZERS,
   ProviderRequestInvalid,
   STOCKFISH_RESET_COMMANDS,

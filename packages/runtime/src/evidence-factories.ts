@@ -1221,6 +1221,7 @@ function providerSourceFactory<K extends ProviderOperationId>(operation: K): Evi
 
 export const createLiveStockfishLegalRootTableV1Evidence = providerSourceFactory("stockfish.legal_root_table@1");
 export const createLiveStockfishPositionEvalV1Evidence = providerSourceFactory("stockfish.position_evaluation@1");
+export const createLiveStockfishPrincipalVariationV1Evidence = providerSourceFactory("stockfish.principal_variation@1");
 export const createHumanMaiaPolicyPageV1Evidence = providerSourceFactory("maia.policy_page@1");
 export const createLiveSyzygyPositionResultV1Evidence = providerSourceFactory("syzygy.position@1");
 export const createHumanExplorerPositionPageV1Evidence = providerSourceFactory("lichess_explorer.position_page@1");

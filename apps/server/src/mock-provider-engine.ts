@@ -4,6 +4,10 @@
 // packet, durable attachment and presentation run end to end. It identifies itself as a mock
 // ("Mock Stockfish"), reports a level score for every position and never serves Maia.
 
+import { Chess, normalizeMove } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
+
 import {
   digestEngineBinary,
   digestEngineOptionImage,
@@ -17,6 +21,19 @@ import type { ProviderEngineClient } from "./provider-operations.js";
 const ANALYSIS = "stockfish-analysis";
 const IDENTITY: EngineIdentity = Object.freeze({ id: ANALYSIS, kind: "judge", name: "Mock Stockfish", version: "mock-1", seedHonored: true });
 const OPTION_IMAGE = Object.freeze({ advertisedUciOptionLines: Object.freeze(["option name MultiPV type spin default 1 min 1 max 500", "option name UCI_ShowWDL type check default false"]), appliedSetoptionCommands: Object.freeze([]) });
+
+/** A deterministic, legal, labelled-mock line: up to two plies of each position's first legal move. */
+function mockLine(fen: string): readonly string[] {
+  const line: string[] = [];
+  const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+  for (let ply = 0; ply < 2; ply += 1) {
+    const move = exactLegalMoves(makeFen(position.toSetup()))[0];
+    if (move === undefined) break;
+    line.push(move.uci);
+    position.play(normalizeMove(position, parseUci(move.uci)!));
+  }
+  return line;
+}
 
 export class MockProviderEngineClient implements ProviderEngineClient {
   readonly #score: (fen: string) => { readonly score: string; readonly wdl: readonly [number, number, number] };
@@ -51,9 +68,11 @@ export class MockProviderEngineClient implements ProviderEngineClient {
     const { score, wdl } = this.#score(fen!);
     // A depth-bounded request completes exactly its requested depth; other bounds report depth 1.
     const depth = Number(/^go depth (\d+)$/u.exec(request.commands.find((command) => command.startsWith("go ")) ?? "")?.[1] ?? 1);
+    // WDL only when the request enabled it (the evaluation does; the principal variation does not).
+    const showWdl = request.commands.includes("setoption name UCI_ShowWDL value true");
     const transcript = [
       ...request.commands.map((command) => `> ${command}`),
-      `< info depth ${depth} seldepth ${depth} multipv 1 score ${score} wdl ${wdl[0]} ${wdl[1]} ${wdl[2]} nodes 1 pv ${first}`,
+      `< info depth ${depth} seldepth ${depth} multipv 1 score ${score}${showWdl ? ` wdl ${wdl[0]} ${wdl[1]} ${wdl[2]}` : ""} nodes 1 pv ${mockLine(fen!).join(" ")}`,
       `< bestmove ${first}`,
     ];
     return Object.freeze({

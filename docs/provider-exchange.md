@@ -9,12 +9,13 @@ deadlines, cancellation, deduplication and bounded retention. A consumer receive
 source evidence, a typed local-domain fact or a typed source failure. It never receives a
 provider-private shortcut.
 
-## The five operations
+## The six operations
 
 | operation | provider | endpoint | source projection | CLI name |
 |---|---|---|---|---|
 | `stockfish.legal_root_table@1` | stockfish | `stockfish-analysis` supervisor | `live.stockfish.legal_root_table@1` | `stockfish-legal-roots` |
 | `stockfish.position_evaluation@1` | stockfish | `stockfish-analysis` supervisor | `live.stockfish.position_eval@1` | `stockfish-position-evaluation` |
+| `stockfish.principal_variation@1` | stockfish | `stockfish-analysis` supervisor | `live.stockfish.principal_variation@1` | `stockfish-principal-variation` |
 | `maia.policy_page@1` | maia | `maia-5m` supervisor | `human.maia.policy_page@1` | `maia-policy-page` |
 | `syzygy.position@1` | syzygy | `https://tablebase.lichess.org/standard` | `live.syzygy.position_result@1` | `syzygy-position` |
 | `lichess_explorer.position_page@1` | lichess_explorer | `https://explorer.lichess.org/lichess` | `human.explorer.position_page@1` | `explorer-position-page` |
@@ -25,6 +26,16 @@ The register member tuple `PROVIDER_PROTOCOL_MEMBERS` is the shared-resource cat
 and `provider-protocol.test.ts` prove several things are one set: the tuple, the rows, the
 operation-keyed type maps, parsers, normalizers, projections, factories, CLI arms and the ten digest
 domains.
+
+`stockfish.principal_variation@1` (§5.2) is the bounded engine line. It is a separate operation so
+that the evaluation delivery stays score/WDL only. Its request is the evaluation's single-line bound
+grammar plus a refuse-only `maxPlies` (`1..MAX_PRINCIPAL_VARIATION_PLIES` = 32). Its command image
+sends `UCI_ShowWDL false`, so it never coalesces with an evaluation. The parser uses the same
+task-local selection rule as the evaluation over lines that carry a completed score and a PV. It
+keeps only the selected line's exact legal moves (king-takes-rook castling identity), truncated to
+`maxPlies`, with `truncated`, the actual engine and the requested bound with its reached depth. It
+keeps no score, rank or verdict. The only consumer is Review's explicit Analyze reveal
+([review evidence](review-evidence.md#the-analyze-line)).
 
 ## Modules
 

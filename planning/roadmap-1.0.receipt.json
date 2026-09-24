@@ -2,13 +2,13 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:95a719fac8118b13eaaf6ac8ea1044759a1efbc168fd8b5507b15181cb3a5707",
+    "roadmap": "sha256:18cd3858c3a566785c2de6ddeebe33e4c38702ca791dd23f3dc5bd03bc9bc7c2",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
     "workState": "sha256:833cab9bf4f06a9d7a33dddc30ea6118cabd6f970bfc5dca5ca75e8e535d865b",
-    "rfcRegister": "sha256:857093e90628eeba3ea05bd1d245cc2387f8a570291799294a68b6dc00022c3d",
+    "rfcRegister": "sha256:195658e500edc2aa656f89424c84e9d5890a3fd826fb4fc8052bdf2c35ab4b2a",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:afc6dfb524c9c901e5368ae1191db359acb151121d677244495b6eefb9832540",
-    "application": "sha256:996e60adb5b78eced69c47414e02dacd5d475098f422ac0ceb23d0f8a4099c72",
+    "application": "sha256:c8a14dd0b777590f8d2acf948b4ce13ac55cb8d4e8e9ac0a4a175b704a96c412",
     "rest": "sha256:533976b41e30b44eaa5c19352abfff2a3713f47ff8e5c87127089d44b821e468"
   },
   "summary": {
@@ -164,30 +164,29 @@
       "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Collector to fact to module to learner surface is closed at runtime for Review: the typed Review packet, compiled through the provider scheduler and sealed, renders in the Review Map evidence panel via module.review_map@1 and evidence-presentation's component receipts, and Story no longer flattens mate or loses learner perspective. Post-commit Nudge, the recorded semantic path and the candidate packet also run in production. Remaining: other module seats, preset disclosure receipts and legacy provider callers.",
+        "summary": "Collector to fact to module to learner surface is closed at runtime for Review: the typed Review packet, compiled through the provider scheduler and sealed, renders via module.review_map@1, and each node also records a sealed principal-variation delivery that Analyze reveals through Full Inspector with engine attribution. Post-commit Nudge, the recorded semantic path and the candidate packet also run in production.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/review-evidence.ts",
-          "packages/runtime/src/presentation-contract.ts",
+          "apps/server/src/review-evidence.ts",
           "rfc/review-evidence-compiler.md",
-          "rfc/evidence-presentation.md",
-          "rfc/evidence-job-durability.md"
+          "rfc/provider-exchange-and-execution.md",
+          "rfc/review-map.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
             "id": "review-evidence-compiler.md",
-            "digest": "sha256:5ef0b526c33a75c0440499daa68b31142a61391300baa8720ca52f052eb8eaa9"
+            "digest": "sha256:8c3934086f64e5b1c019e021cde3b1eafac507721e953b64f74ce8e1e6b1c0d5"
           },
           {
             "kind": "rfc",
-            "id": "evidence-presentation.md",
-            "digest": "sha256:58ac4d32ecbb86674e347e6de1ab47715b5a8cf7f32f0a2bcf94e2e08fda178c"
+            "id": "provider-exchange-and-execution.md",
+            "digest": "sha256:ebddcc793fb0fb8227bddd1ba41f60fde8bb72681e9d71675dc12272f41f6fbf"
           },
           {
             "kind": "rfc",
-            "id": "evidence-job-durability.md",
-            "digest": "sha256:0f3c9f4d5fc49bd594a01f03c69d8cc15433a96d78d47dcafe775453eff78742"
+            "id": "review-map.md",
+            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
           },
           {
             "kind": "work_state",

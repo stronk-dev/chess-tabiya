@@ -252,35 +252,35 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "7c726b8719c35484616ab59c3379d2d3485ae56cba9320d445639233fa970ae9"
+      "9d117aad3b17e09f37fc96af8918a99dfca5c70e01f38518bb6f1581fa3c11dd"
     ]
   },
   "derived.review.eval_point@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "02fc42e9c14e60f739a560f84d34d765ad4fdece5a587527cdb2e7527cc22129"
+      "8dab8ecedb7461e0cf4716a9942443f4848bfda86a18ae4db611cd6720e7d284"
     ]
   },
   "derived.review.mate_transition@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "af3617f46dda4d8ece68e02de0dd8467520e14164f1c97297acb16149c27c244"
+      "323da3a26b2cf945a3ac34b979766b9819e6d5c21745cfc26efddd2a98ac0238"
     ]
   },
   "derived.review.wdl_point@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "48932ac0fe7c75387052973d5100460873ff347427fe3fd9cbff16b017889bda"
+      "5311bce1c7306bc86c8941b89499d7f5a484dfb9296588a5ef52233e314e5e71"
     ]
   },
   "derived.review.wdl_white@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "3bccbc9e19d74ac64a658119e05fe302c9b68b92c83c7a43eb2104d678f56365"
+      "1bb372134d53738f20e9bba73a51a0ca6e6bba228505af3041c735219b0c0c39"
     ]
   },
   "derived.semantic_avoidance.backward_pawn@1": {
@@ -560,7 +560,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "04d4336cc5925eb4c2c2775205be167ff1c2ee21b87052e1dc7dcfbd44ff58e5"
+      "e84ddebe5fd81954ddb057082fe14abe17dd37e369bc5772f5c202458d6bf874"
     ]
   },
   "human.explorer.position_stats@1": {
@@ -588,7 +588,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "6376abd462f3244d30f8ce2da54fc11b2db91be4208301fe33d2b345d1ed6e6f"
+      "e451320e7edd994b5d0ef4ea9251cad5c7387b2d8422b0ffa3547e61b52ce655"
     ]
   },
   "human.maia.policy@1": {
@@ -616,14 +616,21 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "e664e8251527ff916e79da8164d4c5b3367f2eaf9b77e8ddfa930d140220f139"
+      "e4452545984946fa96b12c79d5d60a63fc52f4b7ea88319e21eda0a9c2fbe45d"
     ]
   },
   "live.stockfish.position_eval@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "f7968af198a910d5475857fbc6ce8f6803496e862e90706714b066b77c5143ee"
+      "c43692a8938229c2994532f2b0e9512a38e12d42aa5393ff22c7bd64259fd27f"
+    ]
+  },
+  "live.stockfish.principal_variation@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "3ae7e6865841c4cbfeeabdd9b60d0aa967a1720c094bd852250dd6ec0087c1ae"
     ]
   },
   "live.stockfish.pv@1": {
@@ -665,7 +672,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "9ed275c47379670bc27aa3497d5c93b03599293354b766c2a83bea098b5f5776"
+      "b44f766f3389f7cc1592090c24eec2f749331457bb419e9b05a79049fe764ddc"
     ]
   },
   "live.syzygy.probe_result@1": {

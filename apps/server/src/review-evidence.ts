@@ -7,6 +7,12 @@
 // remain the provider contract. Admitted deliveries attach durably to the run's own event log (the
 // reconstruction authority); terminal attempt outcomes live in one bounded application-lifetime
 // store that never evicts an individual identity.
+//
+// After a node's evaluation is delivered, the same attempt requests that position's bounded engine
+// line (`stockfish.principal_variation@1`, rfc/provider-exchange-and-execution.md §5.2) through the
+// same scheduler, sequentially so one node never holds two exchange slots, and records it on the
+// same durable event. Only the explicit Analyze reveal reads it (rfc/review-map.md §7); a line that
+// cannot be obtained never withholds the evaluation, and Analyze then states that none is recorded.
 
 import {
   attachEvidence,
@@ -18,6 +24,8 @@ import {
   type DrillRun,
   type ReviewProviderNodeState,
   type StockfishPositionEvaluation,
+  type StockfishPrincipalVariation,
+  type TypedProviderRequest,
   type TypedProviderResult,
 } from "@chess-tabiya/runtime";
 
@@ -178,9 +186,12 @@ export class ReviewAttemptOutcomeStore {
 // The coordinator
 // ---------------------------------------------------------------------------------------------
 
+/** The two Review engine operations: the evaluation every node needs and the line Analyze reveals. */
+export type ReviewProviderOperation = "stockfish.position_evaluation@1" | "stockfish.principal_variation@1";
+
 export interface ReviewProviderGateway {
-  get(request: { readonly operation: "stockfish.position_evaluation@1"; readonly request: import("@chess-tabiya/runtime").StockfishPositionEvaluationRequest }, scope: { readonly id: string; readonly budgetMs: number }, signal: AbortSignal): Promise<TypedProviderResult<"stockfish.position_evaluation@1">>;
-  normalizedRequestDigest(request: { readonly operation: "stockfish.position_evaluation@1"; readonly request: import("@chess-tabiya/runtime").StockfishPositionEvaluationRequest }): string;
+  get<K extends ReviewProviderOperation>(request: TypedProviderRequest<K>, scope: { readonly id: string; readonly budgetMs: number }, signal: AbortSignal): Promise<TypedProviderResult<K>>;
+  normalizedRequestDigest<K extends ReviewProviderOperation>(request: TypedProviderRequest<K>): string;
 }
 
 export interface ReviewEvidenceCoordinatorOptions {
@@ -196,6 +207,8 @@ export interface ReviewEvidenceCoordinatorOptions {
   readonly maxAttemptsPerRequest: number;
   readonly movetimeMs: number;
   readonly timeoutMs: number;
+  /** The recorded engine line's ply bound (`maxPlies` of the principal-variation request). */
+  readonly linePlies: number;
   readonly now?: () => string;
   readonly onAttached?: (run: DrillRun, learnerId: string) => void;
 }
@@ -212,7 +225,8 @@ const OPERATION = "stockfish.position_evaluation@1" as const;
 const OUTSIDE_DOMAIN: ReviewProviderNodeState = Object.freeze({ kind: "honest_empty" as const, reason: "outside_domain" as const });
 /** A position with no legal move cannot be searched; it is never requested. */
 const searchable = (fen: string): boolean => exactLegalMoves(fen).length > 0;
-type ReviewPositionRequest = Parameters<ReviewProviderGateway["get"]>[0];
+type ReviewPositionRequest = TypedProviderRequest<"stockfish.position_evaluation@1">;
+type ReviewLineRequest = TypedProviderRequest<"stockfish.principal_variation@1">;
 const RETRYABLE = new Set(["deadline_exceeded", "queue_full", "cancelled"]);
 
 /**
@@ -228,7 +242,7 @@ export class ReviewEvidenceCoordinator {
   #engine: Promise<{ readonly id: string; readonly version: string } | null> | undefined;
 
   constructor(options: ReviewEvidenceCoordinatorOptions) {
-    for (const [label, value] of [["windowNodes", options.windowNodes], ["maxOutstandingPerRun", options.maxOutstandingPerRun], ["maxTrackedRuns", options.maxTrackedRuns], ["maxAttemptsPerRequest", options.maxAttemptsPerRequest], ["movetimeMs", options.movetimeMs], ["timeoutMs", options.timeoutMs]] as const) positive(value, label);
+    for (const [label, value] of [["windowNodes", options.windowNodes], ["maxOutstandingPerRun", options.maxOutstandingPerRun], ["maxTrackedRuns", options.maxTrackedRuns], ["maxAttemptsPerRequest", options.maxAttemptsPerRequest], ["movetimeMs", options.movetimeMs], ["timeoutMs", options.timeoutMs], ["linePlies", options.linePlies]] as const) positive(value, label);
     this.#options = options;
   }
 
@@ -269,6 +283,21 @@ export class ReviewEvidenceCoordinator {
 
   #request(fen: string, engine: { readonly id: string; readonly version: string }): ReviewPositionRequest {
     return Object.freeze({ operation: OPERATION, request: Object.freeze({ fen, requestedEngine: Object.freeze({ id: engine.id, version: engine.version }), bound: Object.freeze({ kind: "movetime" as const, requestedMs: this.#options.movetimeMs }), timeoutMs: this.#options.timeoutMs }) });
+  }
+
+  /** The same position, engine and bound as `#request`, asking for the bounded principal variation. */
+  #lineRequest(request: ReviewPositionRequest): ReviewLineRequest {
+    return Object.freeze({ operation: "stockfish.principal_variation@1" as const, request: Object.freeze({ ...request.request, maxPlies: this.#options.linePlies }) });
+  }
+
+  /** The bounded engine line for a delivered position, or undefined when it cannot be obtained. */
+  async #line(runId: string, request: ReviewPositionRequest, signal: AbortSignal): Promise<StockfishPrincipalVariation | undefined> {
+    try {
+      const result = await this.#options.scheduler!.get(this.#lineRequest(request), { id: `review:${runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, signal);
+      return result.kind === "success" ? result.delivery as StockfishPrincipalVariation : undefined;
+    } catch {
+      return undefined;
+    }
   }
 
   /**
@@ -372,7 +401,9 @@ export class ReviewEvidenceCoordinator {
       const result = await scheduler.get(request, { id: `review:${runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, controller.signal);
       if (controller.signal.aborted) { outcome = owner.cancel(); return; }
       if (result.kind === "success") {
-        const digest = this.#attach(runId, node.id, result.delivery as StockfishPositionEvaluation);
+        const line = await this.#line(runId, request, controller.signal);
+        if (controller.signal.aborted) { outcome = owner.cancel(); return; }
+        const digest = this.#attach(runId, node.id, result.delivery as StockfishPositionEvaluation, line);
         outcome = digest === null
           ? owner.settle({ kind: "non_retryable_failure", reason: "node_pruned", generation: result.delivery.acquisition.generation })
           : owner.settle({ kind: "success", deliveryDigest: digest, generation: result.delivery.acquisition.generation });
@@ -398,14 +429,15 @@ export class ReviewEvidenceCoordinator {
   }
 
   /** Durable attachment in one synchronous read-modify-write turn; returns the delivery digest. */
-  #attach(runId: string, nodeId: string, delivery: StockfishPositionEvaluation): string | null {
+  #attach(runId: string, nodeId: string, delivery: StockfishPositionEvaluation, line: StockfishPrincipalVariation | undefined): string | null {
     const stored = this.#options.storage.read(runId);
     if (stored === undefined || !stored.run.nodes.some((node) => node.id === nodeId)) return null;
     const node = stored.run.nodes.find((candidate) => candidate.id === nodeId)!;
     if (node.fen !== delivery.payload.fen) return null;
     const digest = delivery.payloadReceipt.payloadDigest;
     const reference = engineEvidenceRef(`review-${digest.slice("sha256:".length, "sha256:".length + 24)}`);
-    const attached = attachEvidence(stored.run, nodeId, [reference], reviewDeliveryEvidencePayload(delivery), (this.#options.now ?? (() => new Date().toISOString()))());
+    const recordedLine = line !== undefined && line.payload.fen === delivery.payload.fen ? line : undefined;
+    const attached = attachEvidence(stored.run, nodeId, [reference], reviewDeliveryEvidencePayload(delivery, recordedLine), (this.#options.now ?? (() => new Date().toISOString()))());
     this.#options.storage.save(attached.run, { writerId: stored.activeWriterId, learnerId: stored.activeWriterLearnerId });
     this.#options.onAttached?.(attached.run, stored.activeWriterLearnerId);
     return digest;

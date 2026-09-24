@@ -223,9 +223,12 @@ evaluation job, writes no event and persists no grade.
   compare on exactly those branch ids; no comparison machinery is added.
 - **Analyze.** An explicit, secondary action under the evidence panel. `GET
   /runs/:id/review-analysis?node=<nodeId>` (read-only, like the review) returns the recorded engine
-  line from the position before that move — a `bestline` packet's principal variation, else the
-  eval packet's recorded search first move — as one template sentence naming the engine and the
-  requested search bound, plus a caveat that it is not advice. A line without its search bound is not
+  line from the position before that move. That is the bounded `stockfish.principal_variation@1` line
+  the Review pass recorded with the position's evaluation
+  ([review evidence](review-evidence.md#the-analyze-line)). If there is none, it falls back to an
+  attached `bestline` packet's principal variation, then to the eval packet's recorded search first
+  move. It comes back as one template sentence naming the engine and the requested search bound,
+  plus a caveat that it is not advice. It is admitted only through `module.full_inspector@1`. A line without its search bound is not
   shown. The reveal closes when the selection moves or a retry starts, and it is **withheld** (server
   and client) for the position a retry is open from: the run's active line leaves the reviewed line
   there and has reached no outcome (`openRetryEntryNodeId`).

@@ -215,8 +215,8 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(review.evalGraph.points.every((point) => point.kind === "evaluated" && point.percent === 50)).toBe(true);
     expect(review.compareDoors).toEqual([]);
     expect(review.openRetryEntryNodeId).toBeNull();
-    // Criterion 12: the mock evaluation records its search's first move; the ordinary map never carries it.
-    expect(JSON.stringify(review)).not.toMatch(/bestMove|movesUci|principal/u);
+    // Criterion 12: the Review pass records each position's engine line; the ordinary map never carries it.
+    expect(JSON.stringify(review)).not.toMatch(/bestMove|movesUci|principal|providerLineDelivery/u);
 
     // §7 / O7.3: the explicit reveal, attributed to engine and search bound, and it writes nothing.
     const tables = tableSnapshot(databasePath);
@@ -224,11 +224,14 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const target = review.rows[10]!;
     const revealed = await analyze(target.nodeId);
     expect(revealed.status, await revealed.clone().text()).toBe(200);
-    // rfc/review-evidence-compiler.md refusal 7: the typed position-evaluation delivery admits no best
-    // move or PV, so the Review pass records no engine line; the explicit reveal says so honestly.
-    const line = await revealed.json() as { kind: string; sentence: string; entryNodeId: string };
-    expect(line).toMatchObject({ kind: "none", entryNodeId: target.entryNodeId });
-    expect(line.sentence).toBe(`No engine line is recorded for the position before ${target.label}.`);
+    // The Review pass recorded this position's bounded line (stockfish.principal_variation@1) beside its
+    // evaluation; the reveal re-derives it, attributed to the actual engine and the requested bound.
+    // The evaluation delivery itself still carries no best move or PV (refusal 7).
+    const line = await revealed.json() as { kind: string; sentence: string; caveat: string; entryNodeId: string; engineId: string; bound: unknown; moves: readonly string[] };
+    expect(line).toMatchObject({ kind: "line", source: "bestline", entryNodeId: target.entryNodeId, engineId: "stockfish-analysis", bound: { requestedMovetimeMs: 100 } });
+    expect(line.moves).toHaveLength(2);
+    expect(line.sentence).toBe(`Mock Stockfish mock-1 (100 ms search) reported this principal variation from the position before ${target.label}: ${line.moves.join(" ")}.`);
+    expect(line.caveat).toMatch(/It is not advice/u);
     expect(tableSnapshot(databasePath)).toEqual(tables);
     expect(eventKinds(databasePath, runId)).toEqual(events);
     expect((await analyze(review.rows[0]!.entryNodeId)).status).toBe(400);
@@ -245,8 +248,8 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(opened.compareDoors).toEqual([]);
     const withheld = await (await analyze(target.nodeId)).json() as { kind: string; sentence: string };
     expect(withheld).toMatchObject({ kind: "withheld" });
-    expect(JSON.stringify(withheld)).not.toMatch(/"moves"|mock-evidence/u);
-    expect((await (await analyze(review.rows[12]!.nodeId)).json() as { kind: string }).kind).toBe("none");
+    expect(JSON.stringify(withheld)).not.toMatch(/"moves"|mock-evidence|Mock Stockfish/u);
+    expect((await (await analyze(review.rows[12]!.nodeId)).json() as { kind: string }).kind).toBe("line");
 
     // Play one move on the retry: the compare door appears, and the shipped compare accepts it verbatim.
     const moved = await post(`/runs/${runId}/moves`, { uci: "a2a3" });
@@ -310,7 +313,9 @@ describe("review map service boundary", () => {
     expect(graphs.white!.points.every((point) => point.kind === "evaluated" && point.percent! > 60)).toBe(true);
     expect(graphs.black!.points.every((point) => point.kind === "evaluated" && point.percent! < 40)).toBe(true);
     graphs.white!.points.forEach((point, index) => expect(point.percent! + graphs.black!.points[index]!.percent!).toBeCloseTo(100, 0));
-  });
+    // Two full imported games through the real exchange, each position now also recording its
+    // Analyze line (provider exchange §5.2): ~4 s alone, so the 5 s default flakes under suite load.
+  }, 20_000);
 
   it("[criterion 6] a line whose evaluation pass could not complete abstains and states the fraction; the read enqueues nothing", async () => {
     const at = "2026-09-24T12:00:00.000Z";
@@ -341,6 +346,6 @@ function reviewService(storage: SQLiteRunStorage, score: (fen: string) => { read
   const { scheduler } = composeProviderTraversalApplication({ engines: new MockProviderEngineClient({ score, fail }), tablebaseFetch: null, explorerFetch: null, explorerToken: null });
   let gets = 0;
   const counting = { get: ((...args: Parameters<typeof scheduler.get>) => { gets += 1; return scheduler.get(...args); }) as typeof scheduler.get, normalizedRequestDigest: scheduler.normalizedRequestDigest.bind(scheduler) };
-  const coordinator = new ReviewEvidenceCoordinator({ scheduler: counting as never, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 256, maxAttemptsPerRequest: 1 }), windowNodes: 8, maxOutstandingPerRun: 4, maxTrackedRuns: 4, maxAttemptsPerRequest: 1, movetimeMs: 50, timeoutMs: 2_000 });
+  const coordinator = new ReviewEvidenceCoordinator({ scheduler: counting as never, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 256, maxAttemptsPerRequest: 1 }), windowNodes: 8, maxOutstandingPerRun: 4, maxTrackedRuns: 4, maxAttemptsPerRequest: 1, movetimeMs: 50, linePlies: 8, timeoutMs: 2_000 });
   return { coordinator, calls: () => gets, service: new RunService(storage, { reviewEvidence: coordinator }) };
 }

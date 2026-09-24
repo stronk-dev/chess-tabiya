@@ -112,6 +112,7 @@ export const REVIEW_MAP_TEMPLATES = Object.freeze({
   "analysis.withheld": "The engine line for the position before {move} stays hidden while a retry from that position is open. Finish that retry or switch to another line to see it.",
   "analysis.bound.movetime": "{ms} ms search",
   "analysis.bound.depth": "depth {depth} search",
+  "analysis.bound.nodes": "{nodes}-node search",
   "analysis.module.withheld": "The engine line for the position before {move} is withheld for this view: {reason}.",
   "module.refusal.inspector.role_outside_ceiling": "this viewer's role is outside the Full Inspector module's declared roles",
   "module.refusal.inspector.session_outside_ceiling": "this workflow context does not admit the Full Inspector module",

@@ -32,6 +32,7 @@ import {
   type ProviderSourceFailure,
   type StockfishLegalRootTableRequest,
   type StockfishPositionEvaluationRequest,
+  type StockfishPrincipalVariationRequest,
   type SyzygyPositionRequest,
   type VersionedEvidenceId,
 } from "@chess-tabiya/runtime";
@@ -67,6 +68,7 @@ function sourceFactory<K extends ProviderOperationId>(operation: K): ProviderSou
 export const PROVIDER_SOURCE_FACTORIES: ProviderSourceFactories = Object.freeze({
   "stockfish.legal_root_table@1": sourceFactory("stockfish.legal_root_table@1"),
   "stockfish.position_evaluation@1": sourceFactory("stockfish.position_evaluation@1"),
+  "stockfish.principal_variation@1": sourceFactory("stockfish.principal_variation@1"),
   "maia.policy_page@1": sourceFactory("maia.policy_page@1"),
   "syzygy.position@1": sourceFactory("syzygy.position@1"),
   "lichess_explorer.position_page@1": sourceFactory("lichess_explorer.position_page@1"),
@@ -115,7 +117,7 @@ export interface ProviderTraversalSources {
   readonly wallNow?: () => string;
 }
 
-/** One scheduler over the five operations; the application root and the CLI both use this. */
+/** One scheduler over the six operations; the application root and the CLI both use this. */
 export function composeProviderTraversalApplication(sources: ProviderTraversalSources): ProviderTraversalApplication {
   const bounds = sources.bounds ?? OPERATOR_PROVIDER_BOUNDS;
   const scheduler = new ProviderExchangeScheduler({
@@ -173,6 +175,10 @@ export function providerTraversalStockfishPositionEvaluation(application: Provid
   return traverse(application, capability, "stockfish.position_evaluation@1", request);
 }
 
+export function providerTraversalStockfishPrincipalVariation(application: ProviderTraversalApplication, capability: ProviderOperatorCapability, request: StockfishPrincipalVariationRequest): Promise<ProviderEvidenceTraversalResult<"stockfish.principal_variation@1">> {
+  return traverse(application, capability, "stockfish.principal_variation@1", request);
+}
+
 export function providerTraversalMaiaPolicyPage(application: ProviderTraversalApplication, capability: ProviderOperatorCapability, request: MaiaPolicyPageRequest): Promise<ProviderEvidenceTraversalResult<"maia.policy_page@1">> {
   return traverse(application, capability, "maia.policy_page@1", request);
 }
@@ -191,6 +197,7 @@ type Traversal = (application: ProviderTraversalApplication, capability: Provide
 export const PROVIDER_TRAVERSALS: { readonly [Name in ProviderCliName]: { readonly operation: ProviderOperationId; readonly traverse: Traversal } } = Object.freeze({
   "stockfish-legal-roots": Object.freeze({ operation: "stockfish.legal_root_table@1", traverse: providerTraversalStockfishLegalRoots as unknown as Traversal }),
   "stockfish-position-evaluation": Object.freeze({ operation: "stockfish.position_evaluation@1", traverse: providerTraversalStockfishPositionEvaluation as unknown as Traversal }),
+  "stockfish-principal-variation": Object.freeze({ operation: "stockfish.principal_variation@1", traverse: providerTraversalStockfishPrincipalVariation as unknown as Traversal }),
   "maia-policy-page": Object.freeze({ operation: "maia.policy_page@1", traverse: providerTraversalMaiaPolicyPage as unknown as Traversal }),
   "syzygy-position": Object.freeze({ operation: "syzygy.position@1", traverse: providerTraversalSyzygyPosition as unknown as Traversal }),
   "explorer-position-page": Object.freeze({ operation: "lichess_explorer.position_page@1", traverse: providerTraversalExplorerPositionPage as unknown as Traversal }),

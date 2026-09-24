@@ -43,7 +43,9 @@ spelled `<provider>_<operation>_v<version>` — and was declared at `67d208c6`:
 `provider-protocol | members lichess_explorer_position_page_v1, maia_policy_page_v1,
 stockfish_legal_root_table_v1, stockfish_position_evaluation_v1, syzygy_position_v1`. The
 implementing checkpoint lands those five members in `PROVIDER_PROTOCOL_MEMBERS` and moves them to
-the register's Landed table, so the live claim closes (as `pack-population-provenance.md` did).
+the register's Landed table, so the live claim closes (as `pack-population-provenance.md` did). The
+sixth member, `stockfish_principal_variation_v1` (§5.2), was added and landed in one change on
+2026-09-24 to restore Review's Analyze line; it was never a live claim.
 
 ## Summary
 
@@ -1250,6 +1252,52 @@ both frames. `live.stockfish.position_eval@1` is
 best move, PV, rank, loss, grade or recommendation. Bot and Review derive their own frames from this
 one source; neither opens a second engine request path.
 
+#### 5.2 Fixed-bound principal variation
+
+Added 2026-09-24 (implementing) to restore the Review Map's explicit Analyze line
+(`rfc/review-map.md` §7). §5.1 deliberately keeps the evaluation delivery score/WDL only
+(`rfc/review-evidence-compiler.md` refusal 7). So the bounded line is its own operation, member
+`stockfish_principal_variation_v1`, and is not a widened evaluation payload:
+
+```ts
+interface StockfishPrincipalVariationRequest {
+  readonly fen: string;
+  readonly requestedEngine: { readonly id: string; readonly version: string };
+  readonly bound:
+    | { readonly kind: "movetime"; readonly requestedMs: number }
+    | { readonly kind: "depth"; readonly requestedDepth: number }
+    | { readonly kind: "nodes"; readonly requestedNodes: number };
+  readonly maxPlies: number; // 1..32, refuse-only
+  readonly timeoutMs: number;
+}
+
+interface FixedBoundPrincipalVariation {
+  readonly fen: string;
+  readonly positionKey: string;
+  readonly engine: { readonly id: string; readonly name: string; readonly version: string };
+  readonly bound: /* the §5.1 bound union, each with reachedDepth */;
+  readonly maxPlies: number;
+  readonly movesUci: readonly string[];
+  readonly truncated: boolean;
+}
+```
+
+The descriptor's command image is `setoption name MultiPV value 1`, `setoption name UCI_ShowWDL
+value false`, `position fen <canonical FEN>` and the bound's `go` line. The reset is the shared
+§5 `finally`. The image differs from §5.1's, so a line request never coalesces with an evaluation.
+The reducer and selection rule are §5.1's: last admissible line at exactly the requested depth,
+otherwise greatest depth, ties to the latest arrival. An admissible line is one unbounded
+`multipv 1` (or omitted) line with a completed score and a PV on the same line. The score only marks
+a completed iteration and is not retained. The PV is normalized move by move from the requested FEN
+to exact legal identities (king-takes-rook castling). An illegal move or an empty PV is
+`invalid_response`. The line is truncated to `maxPlies`, and `truncated` records whether it was.
+`live.stockfish.principal_variation@1` is `search/source_record` and operator-only. Its payload is
+`ProviderEvidenceDelivery<FixedBoundPrincipalVariation, "stockfish.principal_variation@1">`. It is
+`bounded_search/measured/reported`, answers move/principal variation, and carries no node, score,
+rank, loss, grade or recommendation. Its one consumer is Review's Analyze reveal. That reveal
+re-derives the recorded delivery and seals it as the attributed `live.stockfish.pv@1` packet that
+`module.full_inspector@1` admits.
+
 ### 6. Maia policy-page source and run occurrence
 
 ```ts
@@ -2017,6 +2065,13 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-09-24: §5.2 adds `stockfish.principal_variation@1` (sixth `provider-protocol` member, landed in
+  the same change) to restore Review's Analyze line. The Review evidence compiler moved Review onto
+  §5.1's typed delivery, which records no PV. Analyze then always reported that no line was
+  recorded. The evaluation payload stays unchanged (refusal 7 of `review-evidence-compiler.md`). The
+  line is a separate, bounded, operator-only source. The Review coordinator requests it after each
+  delivered evaluation and records it on the same durable event.
 
 - 2026-09-24: implementing (claude). §§3–9 core shipped; §§1–2 and the derived/migration work
   remain (Status). Genuine defects corrected inline while implementing, none widening authority:

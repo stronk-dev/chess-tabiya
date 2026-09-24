@@ -19,6 +19,7 @@ export const PROVIDER_PROTOCOL_MEMBERS = [
   "maia_policy_page_v1",
   "stockfish_legal_root_table_v1",
   "stockfish_position_evaluation_v1",
+  "stockfish_principal_variation_v1",
   "syzygy_position_v1",
 ] as const;
 
@@ -31,6 +32,7 @@ export const PROVIDER_PROTOCOL_RESOURCE = Object.freeze({
       Object.freeze({ member: "maia_policy_page_v1", operation: "maia.policy_page@1", provider: "maia", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "maia-5m" }), parserId: "parse.maia_policy_page@1", sourceProjection: "human.maia.policy_page@1", sourceFactoryId: "createHumanMaiaPolicyPageV1Evidence", cliName: "maia-policy-page" }),
       Object.freeze({ member: "stockfish_legal_root_table_v1", operation: "stockfish.legal_root_table@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_legal_root_table@1", sourceProjection: "live.stockfish.legal_root_table@1", sourceFactoryId: "createLiveStockfishLegalRootTableV1Evidence", cliName: "stockfish-legal-roots" }),
       Object.freeze({ member: "stockfish_position_evaluation_v1", operation: "stockfish.position_evaluation@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_position_evaluation@1", sourceProjection: "live.stockfish.position_eval@1", sourceFactoryId: "createLiveStockfishPositionEvalV1Evidence", cliName: "stockfish-position-evaluation" }),
+      Object.freeze({ member: "stockfish_principal_variation_v1", operation: "stockfish.principal_variation@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_principal_variation@1", sourceProjection: "live.stockfish.principal_variation@1", sourceFactoryId: "createLiveStockfishPrincipalVariationV1Evidence", cliName: "stockfish-principal-variation" }),
       Object.freeze({ member: "syzygy_position_v1", operation: "syzygy.position@1", provider: "syzygy", endpoint: Object.freeze({ kind: "https", origin: "https://tablebase.lichess.org", path: "/standard" }), parserId: "parse.syzygy_position@1", sourceProjection: "live.syzygy.position_result@1", sourceFactoryId: "createLiveSyzygyPositionResultV1Evidence", cliName: "syzygy-position" }),
     ] as const),
     digestDomains: PROVIDER_DIGEST_DOMAINS,
@@ -81,6 +83,7 @@ export type ProviderProtocolTypeRelations = {
 const RELATIONS_HOLD = {
   "stockfish.legal_root_table@1": { member: true, provider: true, endpoint: true, parser: true },
   "stockfish.position_evaluation@1": { member: true, provider: true, endpoint: true, parser: true },
+  "stockfish.principal_variation@1": { member: true, provider: true, endpoint: true, parser: true },
   "maia.policy_page@1": { member: true, provider: true, endpoint: true, parser: true },
   "syzygy.position@1": { member: true, provider: true, endpoint: true, parser: true },
   "lichess_explorer.position_page@1": { member: true, provider: true, endpoint: true, parser: true },

@@ -1,5 +1,5 @@
 /**
- * The five operation-keyed response parsers (rfc/provider-exchange-and-execution.md §§3, 5–8).
+ * The six operation-keyed response parsers (rfc/provider-exchange-and-execution.md §§3, 5–8).
  *
  * A descriptor returns only raw capture bytes; the scheduler — and, on reload, the durable parser —
  * runs exactly one of these over those bytes plus the sealed requested identity. A parser either
@@ -25,6 +25,7 @@ import {
   type ExplorerReportedHistory,
   type ExplorerReportedOpening,
   type FixedBoundPositionEvaluation,
+  type FixedBoundPrincipalVariation,
   type LegalRootScore,
   type LiveSyzygyPosition,
   type MaiaPolicyPage,
@@ -250,6 +251,50 @@ function parsePositionEvaluation(capture: ProviderExecutionCapture<"stockfish.po
 }
 
 // ---------------------------------------------------------------------------------------------
+// §5.2 Fixed-bound principal variation
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * The same task-local reducer and selection rule as §5.1 (last admissible line at exactly the
+ * requested depth; otherwise greatest depth, ties to the latest arrival), over lines that carry a
+ * completed score AND a PV on the same line. The PV is legal-normalized from the requested FEN and
+ * truncated to `maxPlies`; the score only marks a completed iteration and is not retained.
+ */
+function parsePrincipalVariation(capture: ProviderExecutionCapture<"stockfish.principal_variation@1">, requested: ProviderRequestedIdentityMap["stockfish.principal_variation@1"]): FixedBoundPrincipalVariation {
+  const task = readUciTask(capture, requested.command.commands);
+  const { fen, bound, maxPlies } = requested.request;
+  let selected: ScoreLine | undefined;
+  for (const line of task.output) {
+    const parsed = scoreLine(line);
+    if (parsed === null || parsed.score === null) continue;
+    if (parsed.multipv !== null && parsed.multipv !== 1) bad(`MultiPV ${parsed.multipv} in a single-line principal variation`);
+    if (parsed.bounded || parsed.pv === null) continue; // inadmissible: never selected, never combined
+    if (bound.kind === "depth") {
+      if (parsed.depth === bound.requestedDepth) selected = parsed;
+    } else if (selected === undefined || parsed.depth >= selected.depth) {
+      selected = parsed;
+    }
+  }
+  if (selected === undefined) return bad(bound.kind === "depth" ? `no exact completed line with a PV at depth ${bound.requestedDepth}` : "no exact completed line with a PV");
+  const pv = normalizePv(fen, selected.pv!);
+  if (pv.length === 0) bad("an empty principal variation");
+  const actual = capture.actualIdentity;
+  return Object.freeze({
+    fen,
+    positionKey: transposeKey(fen),
+    engine: Object.freeze({ id: actual.id, name: actual.name, version: actual.version }),
+    bound: bound.kind === "movetime"
+      ? Object.freeze({ kind: "movetime", requestedMs: bound.requestedMs, reachedDepth: selected.depth })
+      : bound.kind === "depth"
+        ? Object.freeze({ kind: "depth", requestedDepth: bound.requestedDepth, reachedDepth: selected.depth })
+        : Object.freeze({ kind: "nodes", requestedNodes: bound.requestedNodes, reachedDepth: selected.depth }),
+    maxPlies,
+    movesUci: Object.freeze(pv.slice(0, maxPlies)),
+    truncated: pv.length > maxPlies,
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
 // §6 Maia policy page
 // ---------------------------------------------------------------------------------------------
 
@@ -444,6 +489,7 @@ function parseExplorerPositionPage(capture: ProviderExecutionCapture<"lichess_ex
 export const PROVIDER_RESPONSE_PARSERS: ProviderResponseParsers = Object.freeze({
   "stockfish.legal_root_table@1": Object.freeze({ operation: "stockfish.legal_root_table@1", id: "parse.stockfish_legal_root_table@1", parse: parseLegalRootTable }),
   "stockfish.position_evaluation@1": Object.freeze({ operation: "stockfish.position_evaluation@1", id: "parse.stockfish_position_evaluation@1", parse: parsePositionEvaluation }),
+  "stockfish.principal_variation@1": Object.freeze({ operation: "stockfish.principal_variation@1", id: "parse.stockfish_principal_variation@1", parse: parsePrincipalVariation }),
   "maia.policy_page@1": Object.freeze({ operation: "maia.policy_page@1", id: "parse.maia_policy_page@1", parse: parseMaiaPolicyPage }),
   "syzygy.position@1": Object.freeze({ operation: "syzygy.position@1", id: "parse.syzygy_position@1", parse: parseSyzygyPosition }),
   "lichess_explorer.position_page@1": Object.freeze({ operation: "lichess_explorer.position_page@1", id: "parse.lichess_explorer_position_page@1", parse: parseExplorerPositionPage }),

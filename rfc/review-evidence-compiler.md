@@ -629,9 +629,15 @@ bound, FEN or command digest is distinct work. Completion callbacks, not future 
 the bounded window, so a long game eventually reaches full requested-family coverage without an
 all-at-once enqueue.
 
-Tablebase is requested only inside its declared material domain. Maia, Explorer and PV remain
+Tablebase is requested only inside its declared material domain. Maia and Explorer remain
 `not_requested` in the baseline pass; explicit Review/Analyze modules may request them later and
-recompile the packet. No source request blocks already complete facts.
+recompile the packet. No source request blocks already complete facts. *(Amended 2026-09-24.)* The
+Analyze line is obtained during the pass itself, because the Analyze read must not write
+(`rfc/review-map.md` criterion 14). After a node's evaluation is delivered, the coordinator requests
+`stockfish.principal_variation@1` (`provider-exchange-and-execution.md` §5.2) for the same FEN,
+engine and bound, and records it on the same durable event under `values.providerLineDelivery`. It
+is not a packet source and no family counts it. A line that cannot be obtained never withholds the
+evaluation. Refusal 7 is unchanged.
 
 The closed receipt replaces Story's ambiguous `ready/pendingEvidence`. Its orthogonal `progress`
 and `degradation` fields distinguish pending, retrying and not-yet-scheduled counts from terminal
@@ -1047,6 +1053,14 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-09-24 **Analyze line restored.** This RFC's landing left Analyze always reporting "no engine
+  line is recorded", because the typed evaluation delivery has no PV (refusal 7). The coordinator
+  now records the bounded `stockfish.principal_variation@1` line (provider exchange §5.2) beside each
+  delivered evaluation on the same event (`providerLineDelivery`). Analyze re-derives it, seals it
+  as `live.stockfish.pv@1` and admits it through `module.full_inspector@1`. The packet, its
+  projections, Story and the ordinary map never carry it. §4's "PV remains `not_requested`" sentence
+  is amended in place.
 
 - 2026-09-24 **implemented directly at the owner's direction; status `implementing`.** Receipt:
   `planning/evidence-foundation-ux/review-evidence-compiler-implementation-2026-09-24.md`. Criteria

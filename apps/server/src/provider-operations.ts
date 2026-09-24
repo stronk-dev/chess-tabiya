@@ -1,5 +1,5 @@
 /**
- * The five registered provider-operation descriptors (rfc/provider-exchange-and-execution.md §§5–8).
+ * The six registered provider-operation descriptors (rfc/provider-exchange-and-execution.md §§5–8).
  *
  * Each export implements exactly its `ProviderOperationDescriptor<operation-id>`: normalize with the
  * shared runtime normalizer, run the closed preflight, and execute one same-exchange capture. A
@@ -68,7 +68,7 @@ function uciBytes(capture: EngineExchangeCapture): Uint8Array {
 // §5 Stockfish
 // ---------------------------------------------------------------------------------------------
 
-function stockfishCapture<K extends "stockfish.legal_root_table@1" | "stockfish.position_evaluation@1">(operation: K, capture: EngineExchangeCapture): ProviderExecutionCapture<K> {
+function stockfishCapture<K extends "stockfish.legal_root_table@1" | "stockfish.position_evaluation@1" | "stockfish.principal_variation@1">(operation: K, capture: EngineExchangeCapture): ProviderExecutionCapture<K> {
   if (capture.artifact?.kind !== "binary") throw new ProviderSourceUnavailable("provider_unavailable", "the launched Stockfish executable was not captured for this generation");
   return Object.freeze({
     endpoint: endpoint(operation),
@@ -80,7 +80,7 @@ function stockfishCapture<K extends "stockfish.legal_root_table@1" | "stockfish.
   }) as unknown as ProviderExecutionCapture<K>;
 }
 
-function stockfishDescriptor<K extends "stockfish.legal_root_table@1" | "stockfish.position_evaluation@1">(operation: K, engines: ProviderEngineClient | null, weight: (payload: never) => number): ProviderOperationDescriptor<K> {
+function stockfishDescriptor<K extends "stockfish.legal_root_table@1" | "stockfish.position_evaluation@1" | "stockfish.principal_variation@1">(operation: K, engines: ProviderEngineClient | null, weight: (payload: never) => number): ProviderOperationDescriptor<K> {
   return describe<K>({
     operation,
     provider: "stockfish",
@@ -102,6 +102,11 @@ export function StockfishLegalRootTableOperation(engines: ProviderEngineClient |
 
 export function StockfishPositionEvaluationOperation(engines: ProviderEngineClient | null): ProviderOperationDescriptor<"stockfish.position_evaluation@1"> {
   return stockfishDescriptor("stockfish.position_evaluation@1", engines, () => 1);
+}
+
+/** §5.2: the bounded principal variation of one fixed-bound single-line search. */
+export function StockfishPrincipalVariationOperation(engines: ProviderEngineClient | null): ProviderOperationDescriptor<"stockfish.principal_variation@1"> {
+  return stockfishDescriptor("stockfish.principal_variation@1", engines, (payload: { readonly movesUci: readonly unknown[] }) => Math.max(1, payload.movesUci.length));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -254,6 +259,7 @@ export function providerOperationDescriptors(sources: ProviderOperationSources):
   return Object.freeze({
     "stockfish.legal_root_table@1": StockfishLegalRootTableOperation(sources.engines),
     "stockfish.position_evaluation@1": StockfishPositionEvaluationOperation(sources.engines),
+    "stockfish.principal_variation@1": StockfishPrincipalVariationOperation(sources.engines),
     "maia.policy_page@1": MaiaPolicyPageOperation(sources.engines),
     "syzygy.position@1": SyzygyPositionOperation(sources.tablebaseFetch),
     "lichess_explorer.position_page@1": ExplorerPositionPageOperation(sources.explorerFetch, sources.explorerToken),
