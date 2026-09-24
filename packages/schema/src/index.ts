@@ -18,7 +18,7 @@ export type DrillRunSchemaVersion = typeof DRILL_RUN_SCHEMA_VERSION;
 export type DrillPackSchemaVersion = typeof DRILL_PACK_SCHEMA_VERSION;
 export type DrillPackRequiredField = typeof DRILL_PACK_REQUIRED_FIELDS[number];
 export type ShapeEntrySchemaVersion = typeof SHAPE_ENTRY_SCHEMA_VERSION;
-export const PRINCIPLE_ENTRY_SCHEMA_VERSION = "0.1" as const;
+export const PRINCIPLE_ENTRY_SCHEMA_VERSION = "0.2" as const;
 export type PrincipleEntrySchemaVersion = typeof PRINCIPLE_ENTRY_SCHEMA_VERSION;
 /**
  * The concept-registry schema lane (`schemas/concept_registry.schema.json`, rfc/concept-registry.md).

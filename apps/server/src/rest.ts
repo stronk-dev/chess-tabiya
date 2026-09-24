@@ -68,6 +68,7 @@ import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
 import { distillRun } from "./distill.js";
 import type { ClassroomService } from "./classroom.js";
 import type { PrincipleRegistry } from "./principle-registry.js";
+import { LIBRARY_KINDS, LIBRARY_PHASES, openingEntryView, packEntryView, principleEntryView, shapeEntryView, type LibraryKind, type LibraryPhase, type TheoryLibrary } from "./theory-library.js";
 import { vocabularyUsage } from "./authoring-vocabulary.js";
 import type { LearnerProfileService } from "./learner-profile.js";
 
@@ -639,6 +640,7 @@ export function errorResponse(error: unknown): Response {
             : error.code === "RUN_NOT_FOUND" ||
                 error.code === "PACK_NOT_FOUND" ||
                 error.code === "SHAPE_NOT_FOUND" ||
+                error.code === "THEORY_ENTRY_NOT_FOUND" ||
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
                 || error.code === "UNKNOWN_GROUP" ||
                 error.code === "IMPORT_SOURCE_NOT_FOUND"
@@ -800,6 +802,7 @@ export function createRestHandler(
   openingCatalogue?: OpeningCatalogueAvailability,
   principles?: PrincipleRegistry,
   learnerProfile?: LearnerProfileService,
+  theoryLibrary?: TheoryLibrary,
 ): RestHandler {
   return async (request) => {
     try {
@@ -1040,6 +1043,37 @@ export function createRestHandler(
         if (principles === undefined) throw new ServerError("STORAGE_FAILURE", "Principle registry is not configured");
         const usage = vocabularyUsage(service.packs().map((pack) => service.pack(pack.id).document));
         return json(200, { principles: principles.list().map((principle) => ({ ...principle, usedByPacks: usage.principles.get(principle.id) ?? 0 })) });
+      }
+      if (url.pathname.startsWith("/theory/")) {
+        // The Library's theory family (rfc/theory-drill-current-joins.md §4.3; theory-knowledge-pipeline
+        // principle-entry 0.2). Read-only public content like /packs, /shapes and /principles.
+        if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        if (theoryLibrary === undefined) throw new ServerError("STORAGE_FAILURE", "Theory library is not configured");
+        if (url.pathname === "/theory/search") {
+          const phase = url.searchParams.get("phase");
+          if (phase !== null && phase !== "" && !(LIBRARY_PHASES as readonly string[]).includes(phase)) throw invalid(`phase must be one of ${LIBRARY_PHASES.join(", ")}`);
+          const kinds = url.searchParams.getAll("kind").flatMap((value) => value.split(",")).filter((value) => value !== "");
+          for (const kind of kinds) if (!(LIBRARY_KINDS as readonly string[]).includes(kind)) throw invalid(`kind must be one of ${LIBRARY_KINDS.join(", ")}`);
+          const rawLimit = url.searchParams.get("limit");
+          if (rawLimit !== null && !/^[0-9]{1,4}$/.test(rawLimit)) throw invalid("limit must be a positive integer");
+          return json(200, theoryLibrary.search({
+            text: url.searchParams.get("q") ?? "",
+            ...(phase === null || phase === "" ? {} : { phase: phase as LibraryPhase }),
+            ...(kinds.length === 0 ? {} : { kinds: kinds as LibraryKind[] }),
+            ...(rawLimit === null ? {} : { limit: Number(rawLimit) }),
+          }));
+        }
+        const entry = /^\/theory\/(principles|shapes|openings|packs)\/([^/]+)$/.exec(url.pathname);
+        if (entry !== null) {
+          let id: string;
+          try { id = decodeURIComponent(entry[2]!); } catch { throw invalid("entry id is not valid URL encoding"); }
+          if (id.trim() === "") throw invalid("entry id must be non-empty");
+          if (entry[1] === "principles") return json(200, principleEntryView(theoryLibrary.sources, id));
+          if (entry[1] === "shapes") return json(200, shapeEntryView(theoryLibrary.sources, id));
+          if (entry[1] === "openings") return json(200, openingEntryView(theoryLibrary.sources, id));
+          return json(200, packEntryView(theoryLibrary.sources, id));
+        }
+        return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
       }
       if (request.method === "GET" && /^\/shapes\/[^/]+$/.test(url.pathname)) {
         if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");

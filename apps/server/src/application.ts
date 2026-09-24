@@ -65,6 +65,7 @@ import { ClassroomService } from "./classroom.js";
 import type { TtsProvider } from "./external-tts.js";
 import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } from "./tablebase.js";
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
+import { TheoryLibrary } from "./theory-library.js";
 import { binaryArtifactProbe } from "./engine-supervisor.js";
 import { composeProviderTraversalApplication, type ProviderTraversalApplication } from "./provider-traversal.js";
 
@@ -299,6 +300,7 @@ function isApiPath(pathname: string): boolean {
     pathname === "/shapes" ||
     pathname.startsWith("/shapes/") ||
     pathname === "/principles" ||
+    pathname.startsWith("/theory/") ||
     pathname === "/runs" ||
     pathname.startsWith("/runs/") ||
     pathname === "/progress" ||
@@ -580,7 +582,7 @@ async function composeServices(
     ratedResults: (learnerId) => new Map(storage.ratedGames(learnerId).flatMap((game) => game.result === null ? [] : [[game.runId, game.result] as const])),
     valenceRegister: await loadValenceRegister(options.valenceRegisterPath ?? join(process.cwd(), "content", "valence", "register.json")),
   });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }));
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
