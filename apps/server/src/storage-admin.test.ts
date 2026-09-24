@@ -27,6 +27,7 @@ import {
   parseStorageOperationId,
   prepareStartOperation,
   ReceiptClock,
+  receipt,
   receiptExitCode,
   releaseRecoveryEligible,
   resolveStoragePaths,
@@ -166,6 +167,9 @@ describe("closed identities (§2, §9)", () => {
     expect(receiptExitCode(errorReceipt(base, "backup", new StorageAdminError("refused", "NO_DATABASE", "x")))).toBe(2);
     expect(receiptExitCode(errorReceipt(base, "verify", new StorageAdminError("failed", "DIGEST_MISMATCH", "x", "invalid")))).toBe(3);
     expect(receiptExitCode(errorReceipt(base, "verify", new Error("boom")))).toBe(4);
+    // A caught signal before the replacement boundary is the only `cancelled` arm.
+    expect(receiptExitCode(receipt(base, [], { operation: "backup", result: "cancelled", code: "OPERATION_CANCELLED", signal: "SIGINT" }))).toBe(130);
+    expect(receiptExitCode(receipt(base, [], { operation: "restore", result: "cancelled", code: "OPERATION_CANCELLED", signal: "SIGTERM" }))).toBe(143);
   });
 });
 
