@@ -1,12 +1,15 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — fifth author repair complete for [[D2445]]–[[D2448]]; **dependency-blocked on
-  the owner-authorised empty-store bootstrap in [[D2449]]**, then another fresh independent
-  review. The repair defines every proposition reference and resolved record, replaces wildcard
-  cherry-picking with whole-value collection equality, derives owner chronology from repository
-  transitions, and rejects duplicate root/declaration/profile/verdict subjects before equality.
-  `make semantic-validation-fifth-author-repair` is the positive author contract. No runtime
-  validation or learner eligibility implementation is authorized.
+- **Status:** draft (README row and this token flip together; left to the coordinator) — **Slice A
+  implemented 2026-09-24 at the owner's direction, no review round.** The authority mechanism,
+  78-root profile register, 38 migrated D1713 emitter cases (29 positive / 9 negative, all passing
+  through production operations), 53 executed imported-population receipts, 8 migrated D872
+  external-disagreement receipts, the generated receipt with `make semantic-validation-check` in
+  `verify-software`, explicit `research_only`/`required` eligibility and the learner admission
+  conjunction ship. **Zero subjects pass** (no emitter-level orientation authority exists). The
+  avoidance family (D1716) and king opposition (D1717) abstain on every arm, named. **D0 is not
+  discharged:** the protected owner store is absent (implementers may not write `design/`), so the
+  owner arm fails closed. Receipt: `planning/semantic-validation-authority/implementation-2026-09-24.md`
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -1468,6 +1471,21 @@ This remains the durable return record. R1–R4 above are the author's response 
 review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
+
+- 2026-09-24: **Slice A implemented at the owner's direction.** Genuine defects fixed inline:
+  (a) the §2 root predicate admitted four provider-reported `live.*` event projections that have no
+  semantic-event declaration, so four-way equality could never hold — roots now exclude
+  provider-availability producers; (b) the §4.2 result algebra could only express whole-invocation
+  unavailability, so the local closure's typed loose-piece abstention either erased the edge or
+  became an empty target — `completed` now also names per-projection abstentions and the runner
+  maps a subject's own abstention to that subject's `unavailable` arm; (c) `emits` could not carry
+  the sign a moved D1713 assertion checked, so moving it would weaken it — `emits.sign` is added;
+  (d) the operation implementation digest is the derived static import closure of declared entry
+  files rather than a hand list, so a new local import cannot be omitted; (e) the generated receipt
+  is split into the full JSON artifact and a compact verdict module, so browser bundles carry no
+  case receipts; (f) `SemanticEventDeclaration.validation` is `{ profile: { kind: "event",
+  projection } }`. The ninth operation (`runtime.semantic.bounded_target_batch`) lands with
+  `bounded-policy-targets`, per R1. D0 remains the owner's.
 
 - 2026-08-31: fifth fresh independent review returned the fourth repair on [[D2445]]–[[D2449]].
   Proposition types, wildcard constraint semantics, derived owner chronology, one-row-per-subject

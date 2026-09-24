@@ -688,6 +688,23 @@ foundation-source-author-audit:
 
 foundation-source-author-repair: foundation-source-author-contract foundation-source-author-audit
 
+# rfc/semantic-validation-authority.md §6: the generated receipt's only writer and its drift check.
+.PHONY: semantic-validation-update semantic-validation-check semantic-validation-build
+semantic-validation-build:
+	./node_modules/.bin/esbuild tools/semantic-validation-build.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/semantic-validation/dist/semantic-validation-build.mjs --log-level=warning
+
+semantic-validation-update: semantic-validation-build
+	node tools/semantic-validation/dist/semantic-validation-build.mjs --write
+
+semantic-validation-check: semantic-validation-build
+	node tools/semantic-validation/dist/semantic-validation-build.mjs --check
+
+# §R4: the owner-authority store is append-only and owner rows predate the case admitting them.
+.PHONY: semantic-validation-owner-transition-check
+semantic-validation-owner-transition-check:
+	./node_modules/.bin/esbuild tools/semantic-validation-owner-transition.ts --bundle --platform=node --format=esm --outfile=tools/semantic-validation/dist/semantic-validation-owner-transition.mjs --log-level=warning
+	node tools/semantic-validation/dist/semantic-validation-owner-transition.mjs $(if $(CI),--ci,)
+
 semantic-validation-closure:
 	./node_modules/.bin/vitest run --config tools/d1711-semantic-validation-closure/vitest.config.ts --reporter=verbose
 
@@ -2031,7 +2048,7 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check evidence-manifest-check evidence-value-authority semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
+verify-software: typecheck test-software test-performance schema-check evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
 
 verify-governance: register-check shared-resource-catalogue status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 

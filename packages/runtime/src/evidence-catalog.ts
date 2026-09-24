@@ -1,3 +1,4 @@
+import { SEMANTIC_VALIDATION_RECEIPT } from "./semantic-validation-receipt.generated.js";
 import { STRUCTURAL_FEATURE_KINDS, TRANSITION_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 
 import { CORPUS_RESULT_ABSTENTION_REASONS } from "./corpus-result.js";
@@ -1277,10 +1278,7 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
   });
 })));
 
-const R2_EXTERNAL_POPULATION = "r2-imported-sample@a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec";
 export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = Object.freeze(SEMANTIC_EVENT_PROJECTION_REFS.map((projectionRef) => {
-  // v1 fixture labels stay byte-unchanged; v2 labels carry the exact version.
-  const projectionId = projectionRef.version === 1 ? projectionRef.id : refKey(projectionRef);
   const source = producerByProjection.get(refKey(projectionRef));
   const output = source?.outputs.find((candidate) => refKey(candidate) === refKey(projectionRef));
   if (output === undefined) throw new TypeError(`Semantic event catalogue names missing projection ${refKey(projectionRef)}`);
@@ -1293,17 +1291,15 @@ export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = 
     allowedSigns: Object.freeze(output.signs),
     requiredOperands: Object.freeze(output.operands),
     valence: "none" as const,
-    validation: Object.freeze({
-      positives: Object.freeze([`semantic-event:${projectionId}:positive`]),
-      hardNegatives: Object.freeze([`semantic-event:${projectionId}:hard-negative`]),
-      externalPopulation: R2_EXTERNAL_POPULATION,
-    }),
+    // rfc/semantic-validation-authority.md §2: a profile reference, never a generated label.
+    validation: Object.freeze({ profile: Object.freeze({ kind: "event" as const, projection: projectionRef }) }),
   });
 }));
 
 const ELIGIBILITY_REASON_IDS = Object.freeze([
   "eligible_validated_literal", "source_abstained", "source_projection_unbound", "payload_invalid",
   "required_operand_missing", "event_unvalidated", "consumer_refused", "sign_refused", "valence_unbacked",
+  "event_value_unverified",
 ] as const);
 const SELECTION_REASON_IDS = Object.freeze([
   "no_eligible_events", "insufficient_alternatives", "nothing_distinctive", "budget_zero",
@@ -1322,6 +1318,8 @@ export const EVIDENCE_ELIGIBILITY_DECLARATIONS: readonly EvidenceEligibilityDecl
   allowedSigns: event.allowedSigns,
   requiredOperands: event.requiredOperands,
   valenceAuthority: Object.freeze([]),
+  // §7.1 / Slice A item 6: the operator research selector names its validation posture explicitly.
+  semanticValidation: "research_only" as const,
 })));
 
 export const EVIDENCE_SELECTION_POLICIES: readonly EvidenceSelectionPolicyDeclaration[] = Object.freeze([
@@ -1340,6 +1338,7 @@ export const EVIDENCE_CONTRACT_DECLARATIONS: EvidenceContractDeclarations = Obje
   eligibility: EVIDENCE_ELIGIBILITY_DECLARATIONS,
   reasons: EVIDENCE_REASON_DECLARATIONS,
   selectionPolicies: EVIDENCE_SELECTION_POLICIES,
+  semanticValidationVerdicts: SEMANTIC_VALIDATION_RECEIPT.verdicts.map((row) => Object.freeze({ subject: row.subject, verdict: row.verdict })),
 });
 
 export const PRIMARY_EVIDENCE_MANIFEST = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);

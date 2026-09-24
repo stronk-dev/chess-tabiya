@@ -130,7 +130,7 @@ function alternativeOnlyShares(receipt: CandidatePopulationReceipt, moveUci: str
 }
 
 describe("semantic evidence runtime", () => {
-  it("executes one named positive and hard-negative operand fixture for every declared event", () => {
+  it("compiles a synthetic operand fixture for every declared event — compile mechanics, never validation", () => {
     const fen = INITIAL_FEN;
     const moveUci = "e2e4";
     const afterFen = after(fen, moveUci);
@@ -161,13 +161,13 @@ describe("semantic evidence runtime", () => {
       const missingEvidence = declareEvidence(projection.producer, declaration.projection, missing, derivationInputs);
       expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: missingEvidence, derivationInputs, anchor, sign: declaration.allowedSigns[0]! })).toThrowError(expect.objectContaining({ code: "EVIDENCE_EVENT_OPERAND_MISSING" }));
 
-      // v1 fixture labels are byte-unchanged; recorded-path v2 successors carry their exact version.
-      const label = declaration.projection.version === 1 ? declaration.projection.id : `${declaration.projection.id}@${declaration.projection.version}`;
-      expectedFixtureIds.add(`semantic-event:${label}:positive`);
-      expectedFixtureIds.add(`semantic-event:${label}:hard-negative`);
+      // rfc/semantic-validation-authority.md §2: validation is a profile reference, never a label.
+      expect(declaration.validation).toEqual({ profile: { kind: "event", projection: declaration.projection } });
+      expectedFixtureIds.add(`${declaration.projection.id}@${declaration.projection.version}`);
     }
 
-    expect(new Set(SEMANTIC_EVENT_DECLARATIONS.flatMap((declaration) => [...declaration.validation.positives, ...declaration.validation.hardNegatives]))).toEqual(expectedFixtureIds);
+    expect(expectedFixtureIds.size).toBe(SEMANTIC_EVENT_DECLARATIONS.length);
+    expect(JSON.stringify(SEMANTIC_EVENT_DECLARATIONS)).not.toMatch(/semantic-event:|positives|hardNegatives|externalPopulation/u);
   });
 
   it("seals event bytes and rejects structural forgeries", () => {

@@ -57,7 +57,7 @@ describe("primary evidence catalogue", () => {
     // five review-evidence-compiler projections (four Review Map, one Full Inspector forced-mate v2).
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(263);
     expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([41, 230, 34, 508]); // +7 provider-exchange sources (+1 principal variation, §5.2); +1 producer, +6 projections, +7 bindings (rfc/review-evidence-compiler.md); +1 pack.authored.concept_reference (rfc/concept-registry.md §3)
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 16, 1]); // +1 event_value_unverified (rfc/semantic-validation-authority.md §7.1)
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());
     // Semantic eligibility stays the single research authority, byte-identical (§2.2, [[D1854]]).
@@ -215,7 +215,7 @@ describe("primary evidence catalogue", () => {
     expect(refused.every((family) => !SEMANTIC_EVENT_FAMILY_IDS.includes(`rules.structural.reading.${family}`))).toBe(true);
     for (const family of refused) {
       const projection = EVIDENCE_PRODUCERS.find((item) => item.id === "rules.structural")!.outputs.find((item) => item.id === `rules.structural.reading.${family}`)!;
-      expect(() => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, semanticEvents: [...EVIDENCE_CONTRACT_DECLARATIONS.semanticEvents!, { projection: { id: projection.id, version: 1 }, allowedSigns: projection.signs, requiredOperands: projection.operands, valence: "none", validation: { positives: ["positive"], hardNegatives: ["negative"] } }] })).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_EVENT_PROJECTION_REFUSED" }));
+      expect(() => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, semanticEvents: [...EVIDENCE_CONTRACT_DECLARATIONS.semanticEvents!, { projection: { id: projection.id, version: 1 }, allowedSigns: projection.signs, requiredOperands: projection.operands, valence: "none", validation: { profile: { kind: "event", projection: { id: projection.id, version: 1 } } } }] })).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_EVENT_PROJECTION_REFUSED" }));
     }
   });
 

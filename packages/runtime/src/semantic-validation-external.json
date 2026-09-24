@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "path": "tools/d872-semantic-tactics-harness/agreement-output.md",
+    "sha256": "1c8182d4197b4e1cd2e3aa27b4f121fd8e91b77f2aa5d631c09884f8e3487bb1",
+    "harness": "tools/d872-semantic-tactics-harness/agreement.test.ts",
+    "harnessSha256": "3e39a18ebbe626fb18c79099267b2a44f5bc201b0b78661bb8c1c48f5e3d3b39",
+    "note": "external_disagreement, never external_truth: Lichess puzzle themes are calibration evidence and cannot satisfy a positive, negative, orientation or counterfactual arm"
+  },
+  "dataset": {
+    "id": "lichess-puzzle-export-prefix-2026-08-22",
+    "version": 1,
+    "sha256": "910d6920fbd2117182a165c39fe6cf34869afd9b80cae09cde5550ffc982e005"
+  },
+  "receipts": [
+    { "id": "d872.capturing-defender", "subject": { "kind": "event", "projection": { "id": "rules.tactic.event.defender_removed", "version": 1 } }, "theme": "capturingDefender", "localPredicateSource": "defenderRemovedSequence", "tagged": 1642, "taggedDetected": 1638, "controls": 12442, "controlsDetected": 283 },
+    { "id": "d872.deflection-split", "subject": { "kind": "event", "projection": { "id": "derived.tactic.deflection_observed", "version": 1 } }, "theme": "deflection", "localPredicateSource": "defenderDutyDisplacedSequence", "tagged": 10915, "taggedDetected": 10153, "controls": 11989, "controlsDetected": 371 },
+    { "id": "d872.attraction-split", "subject": { "kind": "event", "projection": { "id": "derived.tactic.attraction_observed", "version": 1 } }, "theme": "attraction", "localPredicateSource": "attractedPieceSequence", "tagged": 9088, "taggedDetected": 9079, "controls": 12094, "controlsDetected": 6 },
+    { "id": "d872.clearance-ray", "subject": { "kind": "event", "projection": { "id": "derived.tactic.line_blocker_clearance_observed", "version": 1 } }, "theme": "clearance", "localPredicateSource": "clearanceSequence", "tagged": 3352, "taggedDetected": 36, "controls": 12365, "controlsDetected": 478 },
+    { "id": "d872.clearance-square-split", "subject": { "kind": "event", "projection": { "id": "derived.tactic.square_clearance_observed", "version": 1 } }, "theme": "clearance", "localPredicateSource": "squareVacatedForSliderSequence", "tagged": 3352, "taggedDetected": 3294, "controls": 12365, "controlsDetected": 331 },
+    { "id": "d872.interference", "subject": { "kind": "event", "projection": { "id": "derived.tactic.interference_observed", "version": 1 } }, "theme": "interference", "localPredicateSource": "interferenceSequence", "tagged": 928, "taggedDetected": 345, "controls": 12484, "controlsDetected": 8 },
+    { "id": "d872.intermezzo", "subject": { "kind": "event", "projection": { "id": "derived.tactic.check_zwischenzug_observed", "version": 1 } }, "theme": "intermezzo", "localPredicateSource": "checkZwischenzugSequence", "tagged": 2891, "taggedDetected": 1980, "controls": 12387, "controlsDetected": 70 },
+    { "id": "d872.overloading", "subject": { "kind": "event", "projection": { "id": "derived.tactic.overload_exploitation_observed", "version": 1 } }, "theme": "overloading", "localPredicateSource": "overloadExploitationSequence", "tagged": 0, "taggedDetected": 0, "controls": 12530, "controlsDetected": 211 }
+  ]
+}

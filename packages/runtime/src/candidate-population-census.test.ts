@@ -41,6 +41,9 @@ describe("candidate packet repository census", () => {
       "packages/runtime/src/candidate-population.ts",
       "packages/runtime/src/index.ts",
       "packages/runtime/src/semantic-evidence.ts",
+      // rfc/semantic-validation-authority.md §4.3: the (required-reach) complete-alternatives
+      // validation operation over the research selection; a validation harness, not a product consumer.
+      "packages/runtime/src/semantic-validation-operations.ts",
     ]);
     for (const rel of ["apps/server/src/application.ts", "apps/server/src/rest.ts", "apps/server/src/main.ts", "apps/server/src/opponent-selector.ts", "packages/runtime/src/voice.ts", "packages/runtime/src/evidence-contract.ts"]) {
       expect(PACKET_SYMBOLS.test(read(rel))).toBe(false);

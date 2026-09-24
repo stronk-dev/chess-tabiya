@@ -1,0 +1,1259 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "structural.initial-e4.piece-count",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.piece_count",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moveUci": "e2e4",
+        "afterFen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.structural.event.piece_count",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits identity-preserving structural relations while leaving raw readings independent",
+        "sourceSha256": "a96133c14d979fe358409b0d1f72db67fb122f792faad4a33d5b095ce0f2bf1d",
+        "frozenExpectationSha256": "0406f29d1aaf0f4497219bd517ed8af87c65eaf1a9c6301a46533cdf40b947be"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "structural.b-pawn-double.islands",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.pawn_islands",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/PP1P4/4K3 w - - 0 1",
+        "moveUci": "b2b4",
+        "afterFen": "4k3/8/8/8/1P6/8/P2P4/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.structural.event.pawn_islands",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits pawn-island and mover-relative loose-piece events through the compiled path",
+        "sourceSha256": "434f688d433a5e5ee0e1c366b8082d36f6f6b899239a4617d1b28f580260948a",
+        "frozenExpectationSha256": "c03be587c0bf39bc9c96f241e5d846715a06dace13db8fd3bd63cb7664d73898"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "preserved"
+      }
+    },
+    {
+      "id": "local.french-exchange.blockers-lost",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.line_blockers",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+        "moveUci": "d4c5",
+        "afterFen": "rnbqkbnr/pp2pppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR b KQkq - 0 4"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.structural.event.line_blockers",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#pins five legal positives through the local emitter boundary",
+        "sourceSha256": "eb0ce2c1a248a5abcc00f998aa848c61f2f123772a8a044bdda55e8c3ff3fc49",
+        "frozenExpectationSha256": "aa34f2e5b754594f10dd39385671d8a9ba12d70f5b9dc96034ebe8ac685cb534"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "lost"
+      }
+    },
+    {
+      "id": "local.french-exchange.escape-gained",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.piece_escape",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+        "moveUci": "d4c5",
+        "afterFen": "rnbqkbnr/pp2pppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR b KQkq - 0 4"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.piece_escape",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#pins five legal positives through the local emitter boundary",
+        "sourceSha256": "eb0ce2c1a248a5abcc00f998aa848c61f2f123772a8a044bdda55e8c3ff3fc49",
+        "frozenExpectationSha256": "124fa635d380a448cf21205ea44bcb81ea3831cba0d676d64b42c492ceccbf1d"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "gained"
+      }
+    },
+    {
+      "id": "local.french-exchange.pawn-transition",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.pawn.event.transitions",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+        "moveUci": "d4c5",
+        "afterFen": "rnbqkbnr/pp2pppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR b KQkq - 0 4"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.pawn.event.transitions",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#pins five legal positives through the local emitter boundary",
+        "sourceSha256": "eb0ce2c1a248a5abcc00f998aa848c61f2f123772a8a044bdda55e8c3ff3fc49",
+        "frozenExpectationSha256": "947e88a070deccef939e8f7708758d6c992bca66b0ccbb26b015687612d94203"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "state"
+      }
+    },
+    {
+      "id": "local.french-knight.developed",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.developed",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pp2pppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR b KQkq - 0 4",
+        "moveUci": "b8c6",
+        "afterFen": "r1bqkbnr/pp2pppp/2n5/2PpP3/8/8/PPP2PPP/RNBQKBNR w KQkq - 1 5"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.developed",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#pins five legal positives through the local emitter boundary",
+        "sourceSha256": "eb0ce2c1a248a5abcc00f998aa848c61f2f123772a8a044bdda55e8c3ff3fc49",
+        "frozenExpectationSha256": "3707f9235028aa82d15741bb1118736e7751d6f64fa95f810458b5d6032f10b4"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "gained"
+      }
+    },
+    {
+      "id": "local.bishop-takes-e7.zone-defender",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.king.captured_zone_defender",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r1bqrnk1/pp2bppp/2p5/3p2B1/3Pn3/2NBP3/PPQ1NPPP/1R3RK1 w - - 10 12",
+        "moveUci": "g5e7",
+        "afterFen": "r1bqrnk1/pp2Bppp/2p5/3p4/3Pn3/2NBP3/PPQ1NPPP/1R3RK1 b - - 0 12"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.king.captured_zone_defender",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#pins five legal positives through the local emitter boundary",
+        "sourceSha256": "eb0ce2c1a248a5abcc00f998aa848c61f2f123772a8a044bdda55e8c3ff3fc49",
+        "frozenExpectationSha256": "ffa542689ecf3c88daa304d20a5727e73840498cff53f5b17e7016dc27c156eb"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "state"
+      }
+    },
+    {
+      "id": "transition.short-castle.castled",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.castled",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+        "moveUci": "e1h1",
+        "afterFen": "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.castled",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits castling, promotion and checkmate exact positives",
+        "sourceSha256": "5dff97f7f426e1d13c090159c66d9a1d0bf547bcaa24b19c86df73866c1fc670",
+        "frozenExpectationSha256": "f597e70a58b9bf8f57a9a85d6742726cc8ee9ca2e2b28fc6cd5c431c890992c1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "transition.a-pawn-queens.promotion",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.promotion",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/P7/8/8/8/8/8/4K3 w - - 0 1",
+        "moveUci": "a7a8q",
+        "afterFen": "Q3k3/8/8/8/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.promotion",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits castling, promotion and checkmate exact positives",
+        "sourceSha256": "5dff97f7f426e1d13c090159c66d9a1d0bf547bcaa24b19c86df73866c1fc670",
+        "frozenExpectationSha256": "4cd55b6327fcb3b759495ec62320e71cffe1b2e63b6a4ddfa50a41783490e7dd"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "transition.queen-g7.checkmate",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.checkmate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/5KQ1/8/8/8/8/8 w - - 0 1",
+        "moveUci": "g6g7",
+        "afterFen": "7k/6Q1/5K2/8/8/8/8/8 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.checkmate",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits castling, promotion and checkmate exact positives",
+        "sourceSha256": "5dff97f7f426e1d13c090159c66d9a1d0bf547bcaa24b19c86df73866c1fc670",
+        "frozenExpectationSha256": "7d8fd63fac5d13b4959bed9731cd369156481eafaa6342e1ed758a0c1038eba1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "transition.pawn-takes-queen.clock",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.clock_reset",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/5p2/4q3/3P4/8/8/4K3 w - - 0 1",
+        "moveUci": "d4e5",
+        "afterFen": "4k3/8/5p2/4P3/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.clock_reset",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits independent transition properties without priority suppression",
+        "sourceSha256": "a53cb83913894e81352991f7c3aff2c5f16672a3f3f77d28d1be3ac83fe25530",
+        "frozenExpectationSha256": "7b92c0bb604be930acd4d89b2136a922582d46d816886a5ce414f80ecd05eaac"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "transition.pawn-takes-queen.last-role",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.last_of_role",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/5p2/4q3/3P4/8/8/4K3 w - - 0 1",
+        "moveUci": "d4e5",
+        "afterFen": "4k3/8/5p2/4P3/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.last_of_role",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits independent transition properties without priority suppression",
+        "sourceSha256": "a53cb83913894e81352991f7c3aff2c5f16672a3f3f77d28d1be3ac83fe25530",
+        "frozenExpectationSha256": "598719cd958b5bccd4ba85209d6db2f48a8d64cb65062ca86590959d2aafd19f"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "transition.pawn-takes-queen.contact",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.pawn_contact",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/5p2/4q3/3P4/8/8/4K3 w - - 0 1",
+        "moveUci": "d4e5",
+        "afterFen": "4k3/8/5p2/4P3/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.pawn_contact",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits independent transition properties without priority suppression",
+        "sourceSha256": "a53cb83913894e81352991f7c3aff2c5f16672a3f3f77d28d1be3ac83fe25530",
+        "frozenExpectationSha256": "f5d0fa5a49a7b30d2a1e09c90baa6bf66b8c716048edd77617b2b00144bda55c"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "transition.exd5.capture",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.capture",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1",
+        "moveUci": "e4d5",
+        "afterFen": "4k3/8/4p3/3P4/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.transition.event.capture",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#seals an immediate capture-recapture trade over both capture and recorded-move anchors",
+        "sourceSha256": "5af427d4c89c51355a571b23ee63c558fa58627d6114f5d8d77180c670373dcd",
+        "frozenExpectationSha256": "24e84041d17e739540649516d43aa4aa430d440e6d5c4f4a4de9ba59f7955a47"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "local.knight-fork.double-attack",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.double_attack",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "8/2k5/3r4/8/3N4/8/8/4K3 w - - 0 1",
+        "moveUci": "d4b5",
+        "afterFen": "8/2k5/3r4/1N6/8/8/8/4K3 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.tactic.event.double_attack",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits exact reply/check and exchange-filtered double-attack events from their real producers",
+        "sourceSha256": "7629534431cab33bf5fbaa79a51a367c719a0dde75a1aecdcf1b2ebc8e19b2df",
+        "frozenExpectationSha256": "09e331de20be987279450c68de949bc02ba094df8c3c120d05c4b20e27950767"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "local.knight-fork.reply-breadth",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.consequence.reply_breadth",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "8/2k5/3r4/8/3N4/8/8/4K3 w - - 0 1",
+        "moveUci": "d4b5",
+        "afterFen": "8/2k5/3r4/1N6/8/8/8/4K3 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.tactic.consequence.reply_breadth",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits exact reply/check and exchange-filtered double-attack events from their real producers",
+        "sourceSha256": "7629534431cab33bf5fbaa79a51a367c719a0dde75a1aecdcf1b2ebc8e19b2df",
+        "frozenExpectationSha256": "fbb7feffc14b616143b71d0afa87e3ddbca64de4355f16edd6525302f44340d4"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "local.knight-fork.check",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.check",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "8/2k5/3r4/8/3N4/8/8/4K3 w - - 0 1",
+        "moveUci": "d4b5",
+        "afterFen": "8/2k5/3r4/1N6/8/8/8/4K3 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.tactic.event.check",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits exact reply/check and exchange-filtered double-attack events from their real producers",
+        "sourceSha256": "7629534431cab33bf5fbaa79a51a367c719a0dde75a1aecdcf1b2ebc8e19b2df",
+        "frozenExpectationSha256": "c93311bc403ca084eeb572b567ee6ba764aa71c7e1d00faa94496285296895e2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "local.queen-steps-e2.loose",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.loose_piece",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4r1k1/8/8/8/8/8/3Q4/6K1 w - - 0 1",
+        "moveUci": "d2e2",
+        "afterFen": "4r1k1/8/8/8/8/8/4Q3/6K1 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.tactic.event.loose_piece",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits pawn-island and mover-relative loose-piece events through the compiled path",
+        "sourceSha256": "434f688d433a5e5ee0e1c366b8082d36f6f6b899239a4617d1b28f580260948a",
+        "frozenExpectationSha256": "c5108562df35773b910df2306c16b09cec1c434a5fc385ba83b87f935d9712cc"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "gained"
+      }
+    },
+    {
+      "id": "local.rook-leaves-h1.rights",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.castling.event.rights_lost",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+        "moveUci": "h1h2",
+        "afterFen": "r3k2r/8/8/8/8/8/7R/R3K3 b Qkq - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.castling.event.rights_lost",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits permanent castling-right loss separately from transient legality",
+        "sourceSha256": "1a238777626aceb95425251a7cf310083cb4db1f81f337f32880d2b38afdd191",
+        "frozenExpectationSha256": "6f41af0651bb0d409e4b34e946ebe37e40e9db1c12a13dd4122d76e2dc50e3c4"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "lost"
+      }
+    },
+    {
+      "id": "local.rook-takes-a7.capture-class",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.exchange.capture_class",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/p7/8/8/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "a1a7",
+        "afterFen": "r3k3/R7/8/8/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.exchange.capture_class",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#seals capture class as a derivation of the exact capture and exchange evidence",
+        "sourceSha256": "5e04593df24e16e73ff1c12e61bfc0f3d1e3e5c2b8b677c65623c07be5109614",
+        "frozenExpectationSha256": "af8e1eb6ee00e1511fe23acbab44ddc05efe84772236c978ab7bfcaf695169b5"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "local.knight-unmasks-g2.discovered",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.discovered_executed",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/4r3/5N2/6B1/7K w - - 0 1",
+        "moveUci": "f3h4",
+        "afterFen": "7k/8/8/8/4r2N/8/6B1/7K b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.discovered_executed",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits discovered execution only when the exact before-state relation and gained ray agree",
+        "sourceSha256": "6ff8346a114634c6fefacc8db6c3bffc8b2ee29e91e76a38d4cd81dde4e4c2c7",
+        "frozenExpectationSha256": "a47115fc99fa3d780211b3d6617eabc357c0b0aafdbe592ef670b842e942c653"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "gained"
+      }
+    },
+    {
+      "id": "breadth.bishop-takes-b6.control",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.square.event.control",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.square.event.control",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#routes one-edge breadth facts through the compiled semantic-event authority",
+        "sourceSha256": "d54e3652a937513208773f87180e0b70446e117ce05aeb649b4f347e87470c15",
+        "frozenExpectationSha256": "2d9509474cc516775f8d778554cc4b48ad05e503a9f8f0459418967c750a31db"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "breadth.bishop-takes-b6.destinations",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.mobility.event.piece_destinations",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.mobility.event.piece_destinations",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#routes one-edge breadth facts through the compiled semantic-event authority",
+        "sourceSha256": "d54e3652a937513208773f87180e0b70446e117ce05aeb649b4f347e87470c15",
+        "frozenExpectationSha256": "c6a7143496cf9dc7f39a5cd51c712b23c699c963e488a312c258c32bf7011894"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "breadth.bishop-takes-b6.exposure",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.defender_exposure",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.defender_exposure",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#routes one-edge breadth facts through the compiled semantic-event authority",
+        "sourceSha256": "d54e3652a937513208773f87180e0b70446e117ce05aeb649b4f347e87470c15",
+        "frozenExpectationSha256": "8265da9381684552c801659254be324781b43af8a72da83f14dd9f156314776d"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "breadth.bishop-takes-b6.zone",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.king.event.zone_state",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.king.event.zone_state",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#routes one-edge breadth facts through the compiled semantic-event authority",
+        "sourceSha256": "d54e3652a937513208773f87180e0b70446e117ce05aeb649b4f347e87470c15",
+        "frozenExpectationSha256": "021944f127d10116a4b4ec04569701b1a67bc4d6a8d5fce6ad252045246d4cfa"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "breadth.rook-to-d1.open-file",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.activity.event.open_file_occupancy",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/P7/R3K3 w - - 0 1",
+        "moveUci": "a1d1",
+        "afterFen": "4k3/8/8/8/8/8/P7/3RK3 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.activity.event.open_file_occupancy",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#routes one-edge breadth facts through the compiled semantic-event authority",
+        "sourceSha256": "d54e3652a937513208773f87180e0b70446e117ce05aeb649b4f347e87470c15",
+        "frozenExpectationSha256": "101e59d111e033cfc26c513cd232ff05cc964224ec93d011745a1c1919981313"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "breadth.a-pawn-queens.role-asymmetry",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/P7/8/8/8/8/8/4K3 w - - 0 1",
+        "moveUci": "a7a8q",
+        "afterFen": "Q3k3/8/8/8/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.material.event.role_asymmetry",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#retains promotion-only and capture-promotion authorities for material-role events",
+        "sourceSha256": "8862ef8374e6734a037ff91348091bb0f0fe54b87d170813020c9e080a56e6b9",
+        "frozenExpectationSha256": "a007409d13e5d29307d12fa5773274037f83aace9d5313cf42e102ef4839d3a1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "duty.bishop-takes-b6.removed",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.defender_removed",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.duty_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.tactic.event.defender_removed",
+        "testSite": "packages/runtime/src/semantic-tactics.test.ts#joins defender removal to the exact capture and retained target",
+        "sourceSha256": "042d5da88fd3e11d9e5466ddc0bd273bf4c4384532c3b95ab310c8c28893a5c2",
+        "frozenExpectationSha256": "0cef7203fcd0448d111210f5178898a5fbdbdfbbde6aa1e3d9cc674d1875427b"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "duty.knight-leaves-b6.relocated",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.defender_duty_relocated",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.duty_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/8/1n6/2P5/8/8/8/R3K3 b - - 0 1",
+        "moveUci": "b6d7",
+        "afterFen": "r3k3/3n4/8/2P5/8/8/8/R3K3 w - - 1 2"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.tactic.event.defender_duty_relocated",
+        "testSite": "packages/runtime/src/semantic-tactics.test.ts#distinguishes a same-piece relocation that loses its duty",
+        "sourceSha256": "20ea7f60c40d03b4970426b2c7ffe4c9ba9cb89f448ae7507fcae77aafc7348f",
+        "frozenExpectationSha256": "8acfddaae3b9d4bcadcbd0d83b828d3e70813492a9c65b0471732c505279970c"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "transition.king-steps-e2.no-castle",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.castled",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+        "moveUci": "e1e2",
+        "afterFen": "r3k2r/8/8/8/8/8/4K3/R6R b kq - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.transition.event.castled",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits castling, promotion and checkmate exact positives",
+        "sourceSha256": "5dff97f7f426e1d13c090159c66d9a1d0bf547bcaa24b19c86df73866c1fc670",
+        "frozenExpectationSha256": "dc6be9864f332a656a75e1d248871c8c9ebc48b12ea9b3710d66ab726cd4a35b"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "transition.a-pawn-to-a7.no-promotion",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.promotion",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/P7/8/8/8/8/4K3 w - - 0 1",
+        "moveUci": "a6a7",
+        "afterFen": "4k3/P7/8/8/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.transition.event.promotion",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits castling, promotion and checkmate exact positives",
+        "sourceSha256": "5dff97f7f426e1d13c090159c66d9a1d0bf547bcaa24b19c86df73866c1fc670",
+        "frozenExpectationSha256": "f6cf6fd66cb6817e41ae23d4d837adbe747a0548f61026d9d4b68d25304f3548"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "transition.king-g5.no-mate",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.checkmate",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/5KQ1/8/8/8/8/8 w - - 0 1",
+        "moveUci": "g6g5",
+        "afterFen": "7k/8/5K2/6Q1/8/8/8/8 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.transition.event.checkmate",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits castling, promotion and checkmate exact positives",
+        "sourceSha256": "5dff97f7f426e1d13c090159c66d9a1d0bf547bcaa24b19c86df73866c1fc670",
+        "frozenExpectationSha256": "27388ea8e7f743075972bce1923abe66d55fbc923c839760c5d8f66aeb983254"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "local.knight-f5.no-double-attack",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.double_attack",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/2p3p1/3b3b/8/3N4/8/8/4K3 w - - 0 1",
+        "moveUci": "d4f5",
+        "afterFen": "4k3/2p3p1/3b3b/5N2/8/8/8/4K3 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.tactic.event.double_attack",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits exact reply/check and exchange-filtered double-attack events from their real producers",
+        "sourceSha256": "7629534431cab33bf5fbaa79a51a367c719a0dde75a1aecdcf1b2ebc8e19b2df",
+        "frozenExpectationSha256": "e9ebaaa7d11581fe25bc4993bd8b4fec88b40a23e8dd1ee5594278d11abdae59"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "local.bare-kings.no-blockers",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.line_blockers",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+        "moveUci": "e1d1",
+        "afterFen": "4k3/8/8/8/8/8/8/3K4 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.structural.event.line_blockers",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#reaches nearby legal local-emitter negatives without corrupting an operand",
+        "sourceSha256": "03684eaeee587d7e6e7b60df65152593ad0218a8deb34daac44c71a7416353d4",
+        "frozenExpectationSha256": "016eac04cc6c9a0c3c5957ebf2c6767d84eca1891f9aa4c82f6896dc9eacbf3b"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "local.remote-pawn.no-escape",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.piece_escape",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "k7/8/8/8/8/8/4P3/K7 w - - 0 1",
+        "moveUci": "e2e3",
+        "afterFen": "k7/8/8/8/8/4P3/8/K7 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.transition.event.piece_escape",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#reaches nearby legal local-emitter negatives without corrupting an operand",
+        "sourceSha256": "03684eaeee587d7e6e7b60df65152593ad0218a8deb34daac44c71a7416353d4",
+        "frozenExpectationSha256": "33a65dca1832f1be23b0247becfa59d5d4e63b09f53bb3494ad567c207ad8436"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "local.opening-pawn.no-development",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.developed",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moveUci": "e2e4",
+        "afterFen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.transition.event.developed",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#reaches nearby legal local-emitter negatives without corrupting an operand",
+        "sourceSha256": "03684eaeee587d7e6e7b60df65152593ad0218a8deb34daac44c71a7416353d4",
+        "frozenExpectationSha256": "5f92e6d7b0955d2d8810c76454b123efffa227f82445af82e71a3d123636b5f3"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "local.bare-kings.no-zone-defender",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.king.captured_zone_defender",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+        "moveUci": "e1d1",
+        "afterFen": "4k3/8/8/8/8/8/8/3K4 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.king.captured_zone_defender",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#reaches nearby legal local-emitter negatives without corrupting an operand",
+        "sourceSha256": "03684eaeee587d7e6e7b60df65152593ad0218a8deb34daac44c71a7416353d4",
+        "frozenExpectationSha256": "13f3a08ffa9ff467957e520500e0d7f877a231be9bfee8dc330b42b80dd18e14"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "breadth.king-step.no-pawn-transition",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.pawn.event.transitions",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/4P3/8/8/4K3 w - - 0 1",
+        "moveUci": "e1d1",
+        "afterFen": "4k3/8/8/8/4P3/8/8/3K4 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.pawn.event.transitions",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#checks an explicit pawn-transition positive and a quiet negative through breadth emission",
+        "sourceSha256": "f7b875194b7e823e4096546828eadd610f3ef122a6a4c2723b81291e5e34c46f",
+        "frozenExpectationSha256": "54cc46d0b11f3fbf3906e15d0e0cf73488c06228175a28cc1215d068aaf018a7"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    }
+  ]
+}

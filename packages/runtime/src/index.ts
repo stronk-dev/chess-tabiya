@@ -686,6 +686,25 @@ export {
   type RecordedSemanticPathExecution,
   type RecordedSemanticPathResult,
 } from "./recorded-semantic-path.js";
+// rfc/semantic-validation-authority.md: verdict lookup and learner admission only. The case
+// registry, runner, operations, oracles and authority stores are deliberately not exported.
+export {
+  SEMANTIC_VALIDATION_PROFILES,
+  SEMANTIC_VALIDATION_ROOTS,
+  admitValidatedSemanticInstance,
+  semanticValidationSummary,
+  semanticValidationVerdict,
+  type SemanticValidationAdmission,
+} from "./semantic-validation-registry.js";
+export {
+  SEMANTIC_READING_VALIDATION_ROOTS,
+  SemanticValidationError,
+  semanticValidationSubjectKey,
+  type SemanticValidationArm,
+  type SemanticValidationProfile,
+  type SemanticValidationSubject,
+  type SemanticValidationVerdictSummary,
+} from "./semantic-validation.js";
 export {
   RULES_EVIDENCE_FACTS,
   THEORY_EVIDENCE_FACTS,
