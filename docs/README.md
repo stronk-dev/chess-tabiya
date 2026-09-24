@@ -110,6 +110,8 @@ Current completion state is deliberately not copied here. Use the
 - [Learner rating](learner-rating.md) — isolated rating arithmetic, storage and learner surface.
 - [Longitudinal store](longitudinal-store.md) — the personal observation ledger, its background
   projection worker, typed read and operator rebuild.
+- [Evidence jobs](evidence-jobs.md) — durable admission, lease, settlement and consumption of
+  queued engine/tablebase evidence.
 
 ## Identity and client platform
 

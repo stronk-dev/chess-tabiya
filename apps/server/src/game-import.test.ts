@@ -6,6 +6,7 @@ import { SQLiteRunStorage } from "./storage.js";
 import { normalizeLichessGameUrl, normalizeLichessStudyUrl, resolveImportSource, resolveStudySource, stripPgnAnnotations } from "./import-source.js";
 import { createRestHandler } from "./rest.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
+import { ServerError } from "./errors.js";
 
 const PGN = `[Event "Friendly"]
 [Site "https://lichess.org/abcd1234"]
@@ -200,22 +201,12 @@ describe("own-game import", () => {
 
   it("does not let a tablebase failure suppress story eval evidence for the same node", async () => {
     const executor: EvidenceExecutor = { async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 12 } }; } };
-    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
-    queue.enqueue({
-      runId: "story-kind-isolation",
-      nodeId: "story-kind-isolation:node:0",
-      fen: "8/8/8/8/8/8/4K3/6k1 w - - 0 1",
-      kind: "tablebase",
-    });
-    await queue.whenIdle();
-    expect(queue.failures("story-kind-isolation")).toEqual([
-      expect.objectContaining({ nodeId: "story-kind-isolation:node:0", kind: "tablebase" }),
-    ]);
-
+    const failingTablebase = { kind: "mock" as const, async probe(): Promise<never> { throw new ServerError("TABLEBASE_UNAVAILABLE", "tablebase down"); } };
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     stores.push(storage);
-    const service = new RunService(storage, { evidenceQueue: queue });
-    const imported = await service.importGame({
+    // Import without a queue so no Story batch exists yet, then durably fail a tablebase job.
+    const importer = new RunService(storage);
+    const imported = await importer.importGame({
       id: "story-kind-isolation",
       side: "white",
       opponentPolicy: { mode: "human_common" },
@@ -223,10 +214,25 @@ describe("own-game import", () => {
       seed: 4,
       source: { kind: "pgn", pgn: PGN },
     }, "story-writer");
+    expect(imported.evidencePass.jobs).toBe(0);
+    const root = imported.run.nodes[0]!;
+    storage.admitInternalEvidence(imported.run.id, [{
+      origin: "run_enrichment",
+      idempotencyKey: `run_enrichment@1:${root.id}`,
+      request: { schema: "evidence_batch_request@1", runId: imported.run.id, origin: "run_enrichment", jobs: [{ schema: "evidence_job_request@1", runId: imported.run.id, nodeId: root.id, fen: root.fen, kind: "tablebase", depth: null, movetime: null, multiPv: null, timeoutMs: null, objectiveRequest: null }] },
+    }]);
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1, tablebaseSource: failingTablebase, retry: { maxAttempts: 1, retryDelayMs: 0 } });
+    const service = new RunService(storage, { evidenceQueue: queue });
+    await queue.whenIdle();
+    expect(queue.failures(imported.run.id)).toEqual([
+      expect.objectContaining({ nodeId: root.id, kind: "tablebase" }),
+    ]);
 
-    expect(imported.evidencePass.jobs).toBe(imported.run.nodes.length);
+    service.reveal(imported.run.id, "story-writer");
+    const story = service.story(imported.run.id, { learnerId: "__legacy", handle: "__legacy" });
+    expect(story.pendingEvidence).toBe(imported.run.nodes.length);
     expect(queue.outstanding(imported.run.id)).toEqual(expect.arrayContaining([
-      expect.objectContaining({ nodeId: imported.run.nodes[0]!.id, kind: "eval" }),
+      expect.objectContaining({ nodeId: root.id, kind: "eval" }),
     ]));
   });
 });

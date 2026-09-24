@@ -26,6 +26,15 @@ import {
 import type { LongitudinalJob, LongitudinalReadResult, ParsedLongitudinalReadQuery } from "./longitudinal-contract.js";
 import type { LongitudinalSourceImageV4 } from "./longitudinal-source.js";
 import {
+  EVIDENCE_JOB_MIGRATION_SQL,
+  EVIDENCE_JOB_TABLES,
+  EvidenceJobStore,
+  type AdmittedEvidenceBatch,
+  type EvidenceApplication,
+  type RecordedGuardAuthority,
+} from "./evidence-job-store.js";
+import { EvidenceJobCorrupt, evidenceJobCorrupt } from "./evidence-jobs.js";
+import {
   buildAccountBundle,
   planDeletion,
   storedRunExport,
@@ -379,6 +388,14 @@ export interface RunStorage {
   list(learnerId: string, limit: number, offset: number): readonly RunSummary[];
   runCount(learnerId: string): number;
   save(run: DrillRun, lease: LeaseHolder): void;
+  /** rfc/evidence-job-durability.md: the durable evidence authority and its run-coupled commits. */
+  readonly evidenceJobs?: EvidenceJobStore;
+  setEvidenceJobListener?(listener: EvidenceJobListener | undefined): void;
+  admitEvidenceBatch?(input: { readonly idempotencyKey: string; readonly request: unknown }): AdmittedEvidenceBatch;
+  admitInternalEvidence?(runId: string, plans: readonly InternalEvidencePlan[]): readonly AdmittedEvidenceBatch[];
+  commitRunMutationWithEvidence?(run: DrillRun, lease: LeaseHolder, plans: readonly InternalEvidencePlan[]): void;
+  commitRewindWithEvidenceCancellation?(run: DrillRun, lease: LeaseHolder, prunedNodeIds: readonly string[]): void;
+  applyEvidenceAndConsumeJob?(runId: string, lease: LeaseHolder, input: { readonly resultSeq: number; readonly at: string; readonly guard: RecordedGuardAuthority }): EvidenceApplication;
   createImportedRun?(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void;
   importedGame?(runId: string): ImportedGameRecord | undefined;
   createPublicToken?(record: PublicTokenRecord): void;
@@ -690,6 +707,32 @@ export interface SQLiteRunStorageOptions {
   readonly failDeletionAfterEffectGroup?: (group: DeletionEffectGroup) => void;
   /** Wall-clock milliseconds for longitudinal job leases/backoff (tests cross exact boundaries). */
   readonly longitudinalNow?: () => number;
+  /** Canonical-instant clock for durable evidence jobs (tests cross exact lease boundaries). */
+  readonly evidenceNow?: () => string;
+}
+
+/** Post-commit hints from the durable evidence store to its in-process worker. */
+export interface EvidenceJobListener {
+  wake(): void;
+  cancelled(jobIds: readonly string[]): void;
+}
+
+/** One internal (Story/enrichment) batch derived before the run mutation commits. */
+export interface InternalEvidencePlan {
+  readonly origin: "story_completion" | "run_enrichment";
+  readonly idempotencyKey: string;
+  readonly request: unknown;
+}
+
+/** A run write whose next image is derived inside the save transaction from the CAS-owned run. */
+export interface RunSaveTransition {
+  readonly kind: "run_save_transition";
+  readonly runId: string;
+  compute(before: DrillRun): { readonly write: false } | { readonly write: true; readonly run: DrillRun; readonly effect?: () => void };
+}
+
+function isRunSaveTransition(value: DrillRun | RunSaveTransition): value is RunSaveTransition {
+  return (value as Partial<RunSaveTransition>).kind === "run_save_transition";
 }
 
 export type DeletionEffectGroup =
@@ -703,7 +746,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 26;
+export const STORAGE_VERSION = 27;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -958,9 +1001,13 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   readonly #onMigration: (entry: StorageMigrationLog) => void;
   readonly #failDeletionAfterEffectGroup: ((group: DeletionEffectGroup) => void) | undefined;
   readonly #longitudinal: LongitudinalStore;
+  readonly #evidence: EvidenceJobStore;
   readonly #databasePath: string;
   #longitudinalWakePending = false;
   #longitudinalWake: (() => void) | undefined;
+  #evidenceListener: EvidenceJobListener | undefined;
+  #evidenceWakePending = false;
+  #evidenceCancelled: string[] = [];
 
   constructor(filename = ":memory:", options: SQLiteRunStorageOptions = {}) {
     this.#databasePath = filename;
@@ -983,6 +1030,100 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     `);
     this.#migrate();
     this.#longitudinal = new LongitudinalStore(this.#database, options.longitudinalNow === undefined ? {} : { now: options.longitudinalNow });
+    this.#evidence = new EvidenceJobStore(this.#database, options.evidenceNow === undefined ? {} : { now: options.evidenceNow });
+  }
+
+  /** The durable evidence store sharing this application database (rfc/evidence-job-durability.md). */
+  get evidenceJobs(): EvidenceJobStore {
+    return this.#evidence;
+  }
+
+  /** Post-commit wake/cancel hints for the evidence worker; the durable rows remain the authority. */
+  setEvidenceJobListener(listener: EvidenceJobListener | undefined): void {
+    this.#evidenceListener = listener;
+  }
+
+  #flushEvidence(): void {
+    const cancelled = this.#evidenceCancelled;
+    const wake = this.#evidenceWakePending;
+    this.#evidenceCancelled = [];
+    this.#evidenceWakePending = false;
+    try {
+      if (cancelled.length > 0) this.#evidenceListener?.cancelled(Object.freeze(cancelled));
+      if (wake) this.#evidenceListener?.wake();
+    } catch {
+      // Hints only: the worker's own claim loop recovers a missed signal.
+    }
+  }
+
+  #admitInternal(plans: readonly InternalEvidencePlan[], runId: string): readonly AdmittedEvidenceBatch[] {
+    const admitted: AdmittedEvidenceBatch[] = [];
+    for (const plan of plans) {
+      const batch = this.#evidence.admitInternalIfAbsentInTransaction({ runId, origin: plan.origin, idempotencyKey: plan.idempotencyKey, plan: () => plan.request });
+      if (batch !== undefined) {
+        admitted.push(batch);
+        if (!batch.replayed) this.#evidenceWakePending = true;
+      }
+    }
+    return admitted;
+  }
+
+  /** Standalone explicit admission (`admitEvidenceBatch`): one whole batch or nothing. */
+  admitEvidenceBatch(input: { readonly idempotencyKey: string; readonly request: unknown }): AdmittedEvidenceBatch {
+    const batch = this.#evidence.admitEvidenceBatch(input);
+    if (!batch.replayed) {
+      this.#evidenceWakePending = true;
+      this.#flushEvidence();
+    }
+    return batch;
+  }
+
+  /** Standalone internal (Story) admission; each plan is derived only when its key is absent. */
+  admitInternalEvidence(runId: string, plans: readonly InternalEvidencePlan[]): readonly AdmittedEvidenceBatch[] {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const admitted = this.#admitInternal(plans, runId);
+      this.#database.exec("COMMIT");
+      this.#flushEvidence();
+      return admitted;
+    } catch (error) {
+      this.#rollback();
+      this.#evidenceWakePending = false;
+      if (error instanceof EvidenceJobCorrupt) throw evidenceJobCorrupt(error);
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not admit evidence", error);
+    }
+  }
+
+  /** `commitRunMutationWithEvidence`: the run write and every enrichment batch in one commit. */
+  commitRunMutationWithEvidence(run: DrillRun, lease: LeaseHolder, plans: readonly InternalEvidencePlan[]): void {
+    this.save({ kind: "run_save_transition", runId: run.id, compute: () => ({ write: true, run, effect: () => { this.#admitInternal(plans, run.id); } }) }, lease);
+  }
+
+  /** `commitRewindWithEvidenceCancellation`: the rewind write and the pruned-node cancellations. */
+  commitRewindWithEvidenceCancellation(run: DrillRun, lease: LeaseHolder, prunedNodeIds: readonly string[]): void {
+    this.save({ kind: "run_save_transition", runId: run.id, compute: () => ({ write: true, run, effect: () => {
+      this.#evidenceCancelled.push(...this.#evidence.cancelPrunedInTransaction(run.id, prunedNodeIds));
+    } }) }, lease);
+  }
+
+  /**
+   * `applyEvidenceAndConsumeJob`: the CAS-owned before-run, the stored success row and the
+   * registered guard derive the complete appended suffix; the run write, retained transition and
+   * success→consumed CAS commit together. A consumed row replays its validated receipt.
+   */
+  applyEvidenceAndConsumeJob(runId: string, lease: LeaseHolder, input: { readonly resultSeq: number; readonly at: string; readonly guard: RecordedGuardAuthority }): EvidenceApplication {
+    let outcome: EvidenceApplication | undefined;
+    this.save({ kind: "run_save_transition", runId, compute: (before) => {
+      const resolved = this.#evidence.applicationInTransaction({ before, resultSeq: input.resultSeq, at: input.at, guard: input.guard });
+      if (resolved.kind === "replay") {
+        outcome = resolved.result;
+        return { write: false };
+      }
+      return { write: true, run: resolved.run, effect: () => { outcome = resolved.commit(); } };
+    } }, lease);
+    if (outcome === undefined) throw new ServerError("STORAGE_FAILURE", "Evidence application did not complete");
+    return outcome;
   }
 
   /** The database identity this connection opened; the longitudinal worker must open the same one. */
@@ -2038,10 +2179,26 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   save(run: DrillRun, lease: LeaseHolder): void;
   /** @deprecated Test-harness compatibility; production always supplies a learner-bound lease. */
   save(run: DrillRun, writerId: string): void;
-  save(run: DrillRun, leaseInput: LeaseHolder | string): void {
+  save(input: DrillRun | RunSaveTransition, leaseInput: LeaseHolder | string): void;
+  save(input: DrillRun | RunSaveTransition, leaseInput: LeaseHolder | string): void {
     const lease = this.#lease(leaseInput);
+    const runId = isRunSaveTransition(input) ? input.runId : input.id;
     try {
       this.#database.exec("BEGIN IMMEDIATE");
+      let run: DrillRun;
+      let effect: (() => void) | undefined;
+      if (isRunSaveTransition(input)) {
+        const computed = input.compute(this.#runInTransaction(runId, lease));
+        if (!computed.write) {
+          this.#database.exec("ROLLBACK");
+          return;
+        }
+        if (computed.run.id !== runId) throw new TypeError("A run save transition cannot change the run id");
+        run = computed.run;
+        effect = computed.effect;
+      } else {
+        run = input;
+      }
       const row = this.#database
         .prepare("SELECT summary_json FROM drill_runs WHERE id = ?")
         .get(run.id) as { readonly summary_json?: unknown } | undefined;
@@ -2069,6 +2226,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           lease.learnerId,
         );
       if (result.changes === 1) {
+        effect?.();
         this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#save", effect: "conditional" }, [run.id]);
         this.#database.exec("COMMIT");
         this.#snapshots.set(
@@ -2080,18 +2238,37 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           }),
         );
         this.#flushLongitudinalWake();
+        this.#flushEvidence();
         return;
       }
       this.#database.exec("ROLLBACK");
     } catch (error) {
       this.#rollback();
-      if (error instanceof ServerError) throw error;
+      this.#evidenceWakePending = false;
+      this.#evidenceCancelled = [];
+      if (error instanceof EvidenceJobCorrupt) throw evidenceJobCorrupt(error);
+      if (error instanceof ServerError || error instanceof RuntimeError) throw error;
       throw storageFailure("Could not save run", error);
     }
 
-    const existing = this.read(run.id);
-    if (!existing) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${run.id}`);
+    const existing = this.read(runId);
+    if (!existing) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
     throw notActiveWriter(lease.writerId);
+  }
+
+  /** The CAS-owned run image read inside an open transaction; the lease must hold it. */
+  #runInTransaction(runId: string, lease: LeaseHolder): DrillRun {
+    const value = this.#database.prepare(
+      "SELECT id, snapshot_json, active_writer_id, active_writer_learner_id FROM drill_runs WHERE id = ? AND schema_version = ?",
+    ).get(runId, DRILL_RUN_SCHEMA_VERSION);
+    if (value === undefined) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
+    if (!isRunRow(value)) throw new ServerError("STORAGE_FAILURE", "Stored run row has an invalid shape");
+    if (value.active_writer_id !== lease.writerId || value.active_writer_learner_id !== lease.learnerId) throw notActiveWriter(lease.writerId);
+    const snapshot = JSON.parse(value.snapshot_json) as { events?: unknown };
+    if (!Array.isArray(snapshot.events)) throw new TypeError("Snapshot has no events");
+    const run = readBackReplay(snapshot.events as readonly DrillRunEvent[]).run;
+    if (run.id !== value.id) throw new TypeError("Snapshot id does not match row id");
+    return run;
   }
 
   createPublicToken(record: PublicTokenRecord): void {
@@ -4052,6 +4229,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "longitudinal observation ledger, structure stats, and projection jobs",
         apply: () => this.#addLongitudinalTables(),
       },
+      {
+        version: 27,
+        name: "durable evidence job batches, jobs, result sequences and application transitions",
+        apply: () => this.#addEvidenceJobTables(),
+      },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {
@@ -4903,6 +5085,17 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     const columns = new Set((this.#database.prepare("PRAGMA table_info(drill_runs)").all() as unknown as readonly { readonly name: string }[]).map((column) => column.name));
     for (const [column, sql] of Object.entries(LONGITUDINAL_RUN_COLUMNS_SQL)) if (!columns.has(column)) this.#database.exec(sql);
     this.#database.exec(LONGITUDINAL_MIGRATION_SQL);
+  }
+
+  /**
+   * Migration 27 (rfc/evidence-job-durability.md): additive only, no backfill. The in-process
+   * queue's state never survived a restart, so there is nothing to carry forward. Guarded so
+   * rewound-version fixtures replay it safely.
+   */
+  #addEvidenceJobTables(): void {
+    const present = new Set((this.#database.prepare("SELECT name FROM sqlite_schema WHERE type='table'").all() as unknown as readonly { readonly name: string }[]).map((row) => row.name));
+    if (EVIDENCE_JOB_TABLES.every((table) => present.has(table))) return;
+    this.#database.exec(EVIDENCE_JOB_MIGRATION_SQL);
   }
 
   #insertLegacy(at: string): void {

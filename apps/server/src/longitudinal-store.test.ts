@@ -97,8 +97,8 @@ describe("criterion 1 — additive migration with a prior-release upgrade", () =
 
     const log: { version: number; name: string }[] = [];
     const upgraded = new SQLiteRunStorage(path, { onMigration: (entry) => log.push(entry) });
-    expect(STORAGE_VERSION).toBe(26);
-    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }]);
+    expect(STORAGE_VERSION).toBe(27);
+    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }]);
     upgraded.close();
 
     const after = raw(path);
@@ -150,7 +150,7 @@ describe("criteria 6, 31 — the eleven source mutations commit watermark and so
       ["wrong effect", mutate(call, call.replace('"conditional"', '"always"')), /MISMATCH/u],
       ["renamed", mutate(call, call.replace("SQLiteRunStorage#save", "SQLiteRunStorage#persist")), /WRONG_METHOD/u],
       ["duplicate", mutate(call, `${call}${call}`), /DUPLICATE/u],
-      ["outside transaction", mutate(call, "").replace("  save(run: DrillRun, leaseInput: LeaseHolder | string): void {\n    const lease = this.#lease(leaseInput);", `  save(run: DrillRun, leaseInput: LeaseHolder | string): void {\n    const lease = this.#lease(leaseInput);\n    ${call}`), /OUTSIDE_TRANSACTION/u],
+      ["outside transaction", mutate(call, "").replace("  save(input: DrillRun | RunSaveTransition, leaseInput: LeaseHolder | string): void {\n    const lease = this.#lease(leaseInput);", `  save(input: DrillRun | RunSaveTransition, leaseInput: LeaseHolder | string): void {\n    const lease = this.#lease(leaseInput);\n    ${call}`), /OUTSIDE_TRANSACTION/u],
     ];
     for (const [, source, error] of cases) {
       expect(() => assertLongitudinalMutationCensus(compileLongitudinalMutationCensus(source))).toThrow(error);

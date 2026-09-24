@@ -60,12 +60,14 @@ function eventKinds(path: string, runId: string): readonly string[] {
 describe("review map through createApplication", { timeout: 30_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
   let directory: string | undefined;
+  // `close()` drains the longitudinal worker, which finishes an in-flight projection first (a
+  // 40-ply import projects for ~10 s); the hook budget matches the describe's 30 s test budget.
   afterEach(async () => {
     await application?.close();
     application = undefined;
     if (directory !== undefined) rmSync(directory, { recursive: true, force: true });
     directory = undefined;
-  });
+  }, 30_000);
 
   async function start(): Promise<{ origin: string; databasePath: string }> {
     directory = mkdtempSync(join(tmpdir(), "tabiya-review-map-"));

@@ -79,9 +79,10 @@ import { parseUci } from "chessops/util";
 
 import {
   EvidenceJobQueue,
-  type EvidenceJob,
   type EvidencePage,
 } from "./evidence-queue.js";
+import type { AdmittedEvidenceBatch, EvidenceApplication } from "./evidence-job-store.js";
+import type { EvidenceJobRequestV1 } from "./evidence-jobs.js";
 import { isRunOpponentMode } from "./capabilities.js";
 import {
   projectAuthoredFeedback,
@@ -99,7 +100,7 @@ import {
   type PackRecord,
   type PackSummary,
 } from "./pack-registry.js";
-import type { ImportedGameRecord, PublicTokenRecord, RepertoireGapRunRecord, RunDerivation, RunStorage, RunSummary, StoredRun } from "./storage.js";
+import type { ImportedGameRecord, InternalEvidencePlan, PublicTokenRecord, RepertoireGapRunRecord, RunDerivation, RunStorage, RunSummary, StoredRun } from "./storage.js";
 import type { DifficultRootPage, ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
 import type { RatingStorage, RatedGameTerminalReason } from "./storage.js";
 import type { ClassroomStorage } from "./storage.js";
@@ -380,6 +381,45 @@ export interface CreateRatedGameRequest {
   readonly createdAt?: string;
 }
 
+type ExplicitEvidenceInput = ({ readonly nodeId: string } | { readonly nodeIds: readonly string[] }) & {
+  readonly kind: EvidenceKind;
+  readonly depth?: number;
+  readonly movetime?: number;
+  readonly multiPv?: number;
+};
+
+/** One exact `evidence_job_request@1` image for a node of an immutable run snapshot. */
+function evidenceJobRequest(
+  run: DrillRun,
+  node: DrillRun["nodes"][number],
+  kind: EvidenceKind,
+  bounds: { readonly depth?: number; readonly movetime?: number; readonly multiPv?: number; readonly timeoutMs?: number },
+  objective: boolean,
+): EvidenceJobRequestV1 {
+  const engine = kind !== "tablebase";
+  return {
+    schema: "evidence_job_request@1",
+    runId: run.id,
+    nodeId: node.id,
+    fen: node.fen,
+    kind,
+    depth: engine ? bounds.depth ?? null : null,
+    movetime: engine && bounds.depth === undefined ? bounds.movetime ?? null : null,
+    multiPv: engine ? bounds.multiPv ?? null : null,
+    timeoutMs: bounds.timeoutMs ?? null,
+    objectiveRequest: objective && run.packId !== null && run.packDigest !== null ? {
+      runId: run.id,
+      packId: run.packId,
+      packDigest: run.packDigest,
+      nodeId: node.id,
+      fen: node.fen,
+      objectiveState: node.objectiveState,
+      evidenceRefs: [...node.evidenceRefs],
+      policyConfig: run.policyConfig,
+    } : null,
+  };
+}
+
 export class RunService {
   readonly #storage: RunStorage;
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
@@ -418,6 +458,9 @@ export class RunService {
   ) {
     this.#storage = storage;
     this.#evidenceQueue = options.evidenceQueue;
+    if (options.evidenceQueue !== undefined && storage.evidenceJobs !== undefined && storage.setEvidenceJobListener !== undefined) {
+      options.evidenceQueue.attach({ evidenceJobs: storage.evidenceJobs, setEvidenceJobListener: (listener) => storage.setEvidenceJobListener!(listener) });
+    }
     this.#packRegistry = options.packRegistry;
     this.#progress = options.progressStorage;
     this.#rating = options.ratingStorage ?? (
@@ -1015,6 +1058,11 @@ export class RunService {
   }
   shares(runId:string,principal:Principal){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may list shares");return this.#storage.publicTokens?.(runId,principal.learnerId).map(({tokenHash:_tokenHash,createdBy:_createdBy,...record})=>record)??[];}
   revokeShare(runId:string,principal:Principal,tokenId:string,at=new Date().toISOString()){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may revoke shares");if(this.#storage.revokePublicToken?.(runId,tokenId,principal.learnerId,at)!==true)throw new ServerError("RUN_NOT_FOUND","Story share not found");return Object.freeze({revoked:true as const,runId,tokenId,revokedAt:at});}
+  /** The one hash lookup that fixes a public token's scope before any capability dispatch. */
+  publicTokenScope(token: string): PublicTokenRecord["scope"] | undefined {
+    return this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"))?.scope;
+  }
+
   publicStory(token:string){
     const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));
     if(record?.scope!=="story_read")throw new ServerError("RUN_NOT_FOUND","Shared story not found");
@@ -1082,9 +1130,8 @@ export class RunService {
       pack === undefined
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed, planSignatureResolver(pack.document, this.#shapes));
-    this.#storage.save(result.run, lease);
+    this.#commitWithEnrichment(result.run, lease, [result.run.activeCursor.nodeId]);
     this.#project(result.run, lease.learnerId);
-    this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
@@ -1121,9 +1168,8 @@ export class RunService {
         });
       }
     }
-    this.#storage.save(result.run, lease);
+    this.#commitWithEnrichment(result.run, lease, [result.run.activeCursor.nodeId]);
     this.#project(result.run, lease.learnerId);
-    this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
@@ -1140,21 +1186,25 @@ export class RunService {
     const at = typeof principalOrWriter === "string" ? targetOrAt as string | undefined : maybeAt;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
+    // The runtime rewind only reports the pruned ids; cancellation is the storage commit's.
+    let prunedNodeIds: readonly string[] = [];
+    const pruned = { onRewound: (ids: readonly string[]) => { prunedNodeIds = ids; } };
     const result =
       target.nodeId === undefined
         ? rewindToCheckpoint(
             stored.run,
             target.checkpointId,
             at,
-            this.#evidenceQueue,
+            pruned,
           )
         : (() => {
             if (target.branchId !== undefined && !branchPath(stored.run, target.branchId).some((node) => node.id === target.nodeId)) {
               throw new ServerError("INVALID_REQUEST", "Rewind node is not on the named branch");
             }
-            return rewind(stored.run, target.nodeId, at, this.#evidenceQueue, target.branchId);
+            return rewind(stored.run, target.nodeId, at, pruned, target.branchId);
           })();
-    this.#storage.save(result.run, lease);
+    if (this.#storage.commitRewindWithEvidenceCancellation !== undefined) this.#storage.commitRewindWithEvidenceCancellation(result.run, lease, prunedNodeIds);
+    else this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
     return result;
   }
@@ -1411,9 +1461,8 @@ export class RunService {
         ...(distribution === undefined ? {} : { distribution }),
       },
     }]);
-    this.#storage.save(scratch, lease);
+    this.#commitWithEnrichment(scratch, lease, evidenceNodeIds);
     this.#project(scratch, lease.learnerId);
-    for (const nodeId of evidenceNodeIds) this.#enqueueMoveEvidence(scratch, nodeId);
     const group = groupsFromEvents(scratch).at(-1)!;
     return Object.freeze({
       group,
@@ -1565,51 +1614,33 @@ export class RunService {
     return this.#requiredPackRegistry().required(packId);
   }
 
+  /**
+   * The `explicit_analysis` enqueue owner (rfc/evidence-job-durability.md §2): validates every
+   * node and job, then admits one whole batch under the caller's idempotency key. 202 means only
+   * that the durable `admitted` rows committed.
+   */
   enqueueEvidence(
     runId: string,
-    principalOrInput: Principal | {
-      readonly nodeId: string;
-      readonly kind: EvidenceKind;
-      readonly depth?: number;
-      readonly movetime?: number;
-      readonly multiPv?: number;
-    },
-    maybeInput?: {
-      readonly nodeId: string;
-      readonly kind: EvidenceKind;
-      readonly depth?: number;
-      readonly movetime?: number;
-      readonly multiPv?: number;
-    },
-  ): EvidenceJob {
+    principalOrInput: Principal | ExplicitEvidenceInput,
+    maybeInput?: ExplicitEvidenceInput,
+    idempotencyKey: string = randomUUID(),
+  ): AdmittedEvidenceBatch {
     const principal = "learnerId" in principalOrInput ? principalOrInput : this.#principal("legacy-reader");
     const input = "learnerId" in principalOrInput ? maybeInput! : principalOrInput;
-    const queue = this.#requiredEvidenceQueue();
+    this.#requiredEvidenceQueue();
+    if (this.#storage.admitEvidenceBatch === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Durable evidence storage is not configured");
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    const node = run.nodes.find((candidate) => candidate.id === input.nodeId);
-    if (node === undefined) {
-      throw new ServerError("INVALID_REQUEST", `Unknown evidence node: ${input.nodeId}`);
-    }
-    return queue.enqueue({
-      runId,
-      nodeId: node.id,
-      fen: node.fen,
-      kind: input.kind,
-      ...(input.depth === undefined ? {} : { depth: input.depth }),
-      ...(input.movetime === undefined ? {} : { movetime: input.movetime }),
-      ...(input.multiPv === undefined ? {} : { multiPv: input.multiPv }),
-      ...(isPackSession(run) ? {
-        objectiveRequest: Object.freeze({
-          runId: run.id,
-          packId: run.packId,
-          packDigest: run.packDigest,
-          nodeId: node.id,
-          fen: node.fen,
-          objectiveState: node.objectiveState,
-          evidenceRefs: node.evidenceRefs,
-          policyConfig: run.policyConfig,
-        }),
-      } : {}),
+    const nodeIds = "nodeIds" in input ? input.nodeIds : [input.nodeId];
+    const jobs = nodeIds.map((nodeId) => {
+      const node = run.nodes.find((candidate) => candidate.id === nodeId);
+      if (node === undefined) throw new ServerError("INVALID_REQUEST", `Unknown evidence node: ${nodeId}`);
+      if (input.kind === "tablebase") throw new ServerError("INVALID_REQUEST", "Explicit analysis requests engine evidence only");
+      return evidenceJobRequest(run, node, input.kind, input, isPackSession(run));
+    });
+    if (jobs.length < 1 || jobs.length > 16) throw new ServerError("INVALID_REQUEST", "analysis requires 1-16 node ids");
+    return this.#storage.admitEvidenceBatch({
+      idempotencyKey,
+      request: { schema: "evidence_batch_request@1", runId, origin: "explicit_analysis", jobs },
     });
   }
 
@@ -1624,7 +1655,8 @@ export class RunService {
       readonly depth?: number;
       readonly movetime?: number;
     },
-  ): readonly EvidenceJob[] {
+    idempotencyKey: string = randomUUID(),
+  ): AdmittedEvidenceBatch {
     this.#refuseRatedAssistance(runId);
     this.#forWrite(runId, principal, writerId);
     if (input.nodeIds.length < 1 || input.nodeIds.length > 16 || new Set(input.nodeIds).size !== input.nodeIds.length) {
@@ -1633,13 +1665,16 @@ export class RunService {
     if (input.multiPv !== undefined && (!Number.isSafeInteger(input.multiPv) || input.multiPv < 1 || input.multiPv > 8)) {
       throw new ServerError("INVALID_REQUEST", "multiPv must be an integer from 1 to 8");
     }
-    return Object.freeze(input.nodeIds.map((nodeId) => this.enqueueEvidence(runId, principal, {
-      nodeId,
+    if (input.depth === undefined && input.movetime === undefined) {
+      throw new ServerError("INVALID_REQUEST", "analysis requires exactly one of depth or movetime");
+    }
+    return this.enqueueEvidence(runId, principal, {
+      nodeIds: input.nodeIds,
       kind: input.kind ?? "bestline",
       ...(input.multiPv === undefined ? {} : { multiPv: input.multiPv }),
       ...(input.depth === undefined ? {} : { depth: input.depth }),
       ...(input.movetime === undefined ? {} : { movetime: input.movetime }),
-    })));
+    }, idempotencyKey);
   }
 
   recordPrediction(
@@ -1995,55 +2030,15 @@ export class RunService {
         "Evidence is withheld by the run feedback policy",
       );
     }
-    const queue = this.#requiredEvidenceQueue();
-    const staged = queue.result(runId, resultSeq);
-    if (staged === undefined) {
-      throw new ServerError(
-        "EVIDENCE_RESULT_NOT_FOUND",
-        `Unknown staged evidence result: ${resultSeq}`,
-      );
-    }
-
-    const attached = attachEvidence(
-      stored.run,
-      staged.nodeId,
-      staged.evidenceRefs,
-      staged.payload,
-      at,
-    );
-    const upgraded =
-      staged.objectiveProposal === undefined
-        ? attached
-        : applyObjectiveEvidenceProposal(
-            attached.run,
-            staged.objectiveProposal,
-            at,
-          );
-    let result: MutationResult = Object.freeze({
-      run: upgraded.run,
-      emitted: Object.freeze([
-        ...attached.emitted,
-        ...(upgraded === attached ? [] : upgraded.emitted),
-      ]),
-    });
-    const pack = this.#requiredRegisteredPack(result.run);
-    if (pack !== undefined && result.run.feedbackPolicy === "immediate_guard") {
-      const guarded = applyRecordedEngineGuard(
-        pack.document,
-        result.run,
-        staged.nodeId,
-        staged.evidenceRefs,
-        at,
-      );
-      result = Object.freeze({
-        run: guarded.run,
-        emitted: Object.freeze([...result.emitted, ...guarded.emitted]),
-      });
-    }
-    this.#storage.save(result.run, lease);
-    this.#project(result.run, lease.learnerId);
-    queue.consume(runId, resultSeq);
-    return result;
+    this.#requiredEvidenceQueue();
+    if (this.#storage.applyEvidenceAndConsumeJob === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Durable evidence storage is not configured");
+    const pack = this.#requiredRegisteredPack(stored.run);
+    // The registered recorded-guard authority: storage invokes it; the caller supplies no events.
+    const guard = (run: DrillRun, nodeId: string, evidenceRefs: readonly string[], guardAt: string): MutationResult =>
+      pack === undefined ? Object.freeze({ run, emitted: Object.freeze([]) }) : applyRecordedEngineGuard(pack.document, run, nodeId, evidenceRefs, guardAt);
+    const applied: EvidenceApplication = this.#storage.applyEvidenceAndConsumeJob(runId, lease, { resultSeq, at, guard });
+    if (!applied.replayed) this.#project(applied.run, lease.learnerId);
+    return Object.freeze({ run: applied.run, emitted: applied.emitted });
   }
 
   async pgn(runId: string, principalOrBranches?: Principal | readonly string[], maybeBranches?: readonly string[]): Promise<string> {
@@ -2266,6 +2261,11 @@ export class RunService {
     return Object.freeze({ schedule, result });
   }
 
+  /**
+   * The `story_completion` enqueue owner. The plan (path nodes with no durable, live or terminally
+   * absent eval) is derived only on first admission and chunked into ≤16-job batches keyed by
+   * `story_evidence@1` + branch + terminal node + chunk; replays never re-derive.
+   */
   #ensureStoryEvidence(run: DrillRun, branchId: string, enqueue = true): { readonly ready: boolean; readonly pending: number; readonly enqueued: number } {
     const path = branchPath(run, branchId);
     const durable = new Set(run.events.flatMap((event) =>
@@ -2275,18 +2275,35 @@ export class RunService {
         : [],
     ));
     const queue = this.#evidenceQueue;
-    if (queue === undefined) {
+    if (queue === undefined || this.#storage.admitInternalEvidence === undefined) {
       return Object.freeze({ ready: false, pending: path.filter((node) => !durable.has(node.id)).length, enqueued: 0 });
     }
-    const failed = new Set(queue.failures(run.id).filter((failure) => failure.kind === "eval").map((failure) => failure.nodeId));
-    const outstanding = new Set(queue.outstanding(run.id).filter((job) => job.kind === "eval").map((job) => job.nodeId));
+    const evalRows = () => queue.store.jobsForRun(run.id).filter((row) => row.request.kind === "eval");
+    const failedNodes = () => new Set(evalRows().filter((row) => row.state === "settled_unavailable" || (row.state === "settled_empty" && row.settlement.reason === "provider_unavailable")).map((row) => row.nodeId));
     let enqueued = 0;
-    for (const node of path) {
-      if (!enqueue || durable.has(node.id) || failed.has(node.id) || outstanding.has(node.id)) continue;
-      queue.enqueue({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "eval", movetime: this.#evidenceMovetimeMs });
-      outstanding.add(node.id);
-      enqueued += 1;
+    if (enqueue) {
+      const failed = failedNodes();
+      const live = new Set(evalRows().filter((row) => ["admitted", "running", "retry_wait", "settled_success", "consumed"].includes(row.state)).map((row) => row.nodeId));
+      const needed = path.filter((node) => !durable.has(node.id) && !failed.has(node.id) && !live.has(node.id));
+      const terminalNodeId = path.at(-1)!.id;
+      const plans: InternalEvidencePlan[] = [];
+      for (let chunk = 0; chunk * 16 < needed.length; chunk += 1) {
+        plans.push({
+          origin: "story_completion",
+          idempotencyKey: createHash("sha256").update(canonicalizeJson({ schema: "story_evidence@1", branchId, terminalNodeId, chunk })).digest("hex"),
+          request: {
+            schema: "evidence_batch_request@1",
+            runId: run.id,
+            origin: "story_completion",
+            jobs: needed.slice(chunk * 16, chunk * 16 + 16).map((node) => evidenceJobRequest(run, node, "eval", { movetime: this.#evidenceMovetimeMs }, false)),
+          },
+        });
+      }
+      if (plans.length > 0) {
+        enqueued = this.#storage.admitInternalEvidence(run.id, plans).filter((batch) => !batch.replayed).reduce((total, batch) => total + batch.jobs.length, 0);
+      }
     }
+    const failed = failedNodes();
     const ready = path.every((node) => durable.has(node.id) || failed.has(node.id));
     return Object.freeze({ ready, pending: path.filter((node) => !durable.has(node.id) && !failed.has(node.id)).length, enqueued });
   }
@@ -2550,33 +2567,31 @@ export class RunService {
     return pack;
   }
 
-  #enqueueMoveEvidence(run: DrillRun, nodeId = run.activeCursor.nodeId): void {
+  /**
+   * The `run_enrichment` enqueue owner: derive the complete batch for each new eligible node from
+   * the post-mutation immutable run, then commit the run write and every batch together through
+   * `commitRunMutationWithEvidence`. There is no post-save enqueue loop.
+   */
+  #commitWithEnrichment(run: DrillRun, lease: LeaseHolder, nodeIds: readonly string[]): void {
+    this.#requiredEvidenceQueue();
+    if (this.#storage.commitRunMutationWithEvidence === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Durable evidence storage is not configured");
+    const plans = [...new Set(nodeIds)].slice(0, 8).map((nodeId) => this.#enrichmentPlan(run, nodeId));
+    this.#storage.commitRunMutationWithEvidence(run, lease, plans);
+  }
+
+  #enrichmentPlan(run: DrillRun, nodeId: string): InternalEvidencePlan {
     const node = run.nodes.find((candidate) => candidate.id === nodeId);
-    if (node === undefined) throw new TypeError("Run active cursor has no node");
-    const queue = this.#requiredEvidenceQueue();
+    if (node === undefined) throw new TypeError("Enrichment node is absent from the run");
+    const jobs: EvidenceJobRequestV1[] = [];
     if (this.#tablebase !== undefined && countFenPieces(node.fen) <= 7 &&
-      !queue.outstanding(run.id).some((job) => job.nodeId === node.id && job.kind === "tablebase") &&
       !run.events.some((event) => event.type === "evidence.attached" && event.data.nodeId === node.id && event.data.payload.kind === "tablebase")) {
-      queue.enqueueProducer({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "tablebase" });
+      jobs.push(evidenceJobRequest(run, node, "tablebase", {}, false));
     }
-    queue.enqueue({
-      runId: run.id,
-      nodeId,
-      fen: node.fen,
-      kind: "eval",
-      movetime: this.#evidenceMovetimeMs,
-      ...(isPackSession(run) ? {
-        objectiveRequest: Object.freeze({
-          runId: run.id,
-          packId: run.packId,
-          packDigest: run.packDigest,
-          nodeId: node.id,
-          fen: node.fen,
-          objectiveState: node.objectiveState,
-          evidenceRefs: node.evidenceRefs,
-          policyConfig: run.policyConfig,
-        }),
-      } : {}),
+    jobs.push(evidenceJobRequest(run, node, "eval", { movetime: this.#evidenceMovetimeMs }, isPackSession(run)));
+    return Object.freeze({
+      origin: "run_enrichment",
+      idempotencyKey: `run_enrichment@1:${node.id}`,
+      request: { schema: "evidence_batch_request@1", runId: run.id, origin: "run_enrichment", jobs },
     });
   }
 

@@ -88,6 +88,7 @@ describe("adoption wave server contracts", () => {
       sourceLabels: Object.freeze(["Board rules"]),
     }));
     const service = {
+      publicTokenScope: () => "story_read",
       publicStory: () => Object.freeze({
         title: "A bounded story",
         outcome: Object.freeze({ kind: "recorded_result", result: "1-0" }),

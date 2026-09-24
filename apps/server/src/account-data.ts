@@ -32,7 +32,7 @@ function table(
 }
 
 /**
- * The exhaustive privacy boundary for storage schema v26. A migration adding a table must add one
+ * The exhaustive privacy boundary for storage schema v27. A migration adding a table must add one
  * entry here in the same change; assertAccountDataInventory enforces set equality at startup/tests.
  */
 export const ACCOUNT_DATA_INVENTORY = Object.freeze([
@@ -80,6 +80,12 @@ export const ACCOUNT_DATA_INVENTORY = Object.freeze([
   table("learner_observations", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_structure_stats", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_observation_jobs", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  // rfc/evidence-job-durability.md: run-owned operational evidence state. It carries no learner
+  // identity, follows its run's classification (cascade on run deletion) and is not exported.
+  table("evidence_job_batches", "owned_runs", "exclude", "classify_run"),
+  table("evidence_jobs", "owned_runs", "exclude", "classify_run"),
+  table("evidence_result_sequences", "owned_runs", "exclude", "classify_run"),
+  table("evidence_run_transitions", "owned_runs", "exclude", "classify_run"),
   Object.freeze({
     store: "browser_local",
     kind: "browser",
