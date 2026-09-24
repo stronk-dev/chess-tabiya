@@ -21,6 +21,7 @@ an explicit not-found view rather than crashing the application.
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Review and import; stored game/rehearsal history plus the finished-game importer |
 | `/rating` | Server-shaped band-equivalent publication, permanent rated-win marks, disclosures, and whole-game result history |
+| `/profile` | The private learner profile ([learner-profile.md](learner-profile.md)): habit cards with per-metric floors, opening results, recorded observations, skills and history, each with its drill-down; linked from Rating and Learn, and Rating stays highlighted in the primary navigation |
 | `/learn` | Assigned classroom packs above the return queue and phase-based catalogue |
 | `/live` | Classroom roster/assignment management, consented classroom standings, scheduled pack nights, live-session index, native-match simul wall, and creation from hosted runs |
 | `/live/session/:sessionId` | Members, match pause state, friend links, board control, proposals, votes, invitations, Arena legs, and journal |

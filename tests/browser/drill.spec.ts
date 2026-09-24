@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 
@@ -447,6 +448,48 @@ test("Just Play states its selected human-model rung and low-material limit", as
   await expect(support).toContainText("They are not FIDE, Lichess, or Chess.com ratings.");
   await expect(support).toContainText("With ten pieces or fewer, changing the Maia rung has very little effect");
   await expect(page.locator("[data-status-announcement]")).toContainText("Human-like opponent · rung 1800");
+});
+
+test("the private profile opens from Rating and Learn, abstains below each floor and drills into the counted game (rfc/player-style.md)", async ({ page }) => {
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await move(page, "g2", "g3");
+  await expect(page.locator("[data-status-announcement]")).not.toContainText("Thinking", { timeout: 15_000 });
+  const runId = page.url().split("/").at(-1)!;
+
+  await page.goto("/learn");
+  const primary = page.getByRole("navigation", { name: "Primary navigation" });
+  await primary.getByRole("link", { name: "Rating" }).click();
+  await page.getByRole("link", { name: /Your profile/ }).click();
+  await expect(page).toHaveURL(/\/profile$/u);
+  await expect(page.getByRole("heading", { name: "What your recorded games show" })).toBeVisible();
+  await expect(primary.getByRole("link", { name: "Rating" })).toHaveAttribute("aria-current", "page");
+
+  // The worker counts the run off the request path; the profile says so until it has.
+  await expect(async () => {
+    if (await page.getByRole("button", { name: "Check again" }).isVisible()) await page.getByRole("button", { name: "Check again" }).click();
+    await expect(page.getByRole("region", { name: "What is counted" })).toContainText("Your 1 saved run is counted.", { timeout: 1_000 });
+  }).toPass({ timeout: 30_000 });
+
+  const fianchetto = page.getByRole("article", { name: "Fianchetto setup reached" });
+  await expect(fianchetto).toContainText("This card's floor is 25 games; 1 measured.");
+  await expect(fianchetto).not.toContainText(/\d+ of \d+ measured games/u);
+  await expect(page.getByRole("article", { name: "Time used per opening move" })).toContainText("rfc/recorded-clocks.md Discharge D4");
+  await expect(page.getByRole("article", { name: "How common your first eight plies are" })).toContainText("This card cannot be measured yet.");
+  const skills = page.getByRole("region", { name: "Skills" });
+  for (const category of ["Fundamentals", "Openings", "Tactics", "Strategy", "Endgame"]) await expect(skills.getByRole("heading", { name: category, exact: true })).toBeVisible();
+  await expect(skills).not.toContainText(/%|\d+\s*\/\s*\d+/u);
+  await expect(page.getByRole("region", { name: "Privacy" })).toContainText("This profile is private.");
+  const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+  expect(scan.violations, JSON.stringify(scan.violations, null, 2)).toEqual([]);
+
+  await fianchetto.getByRole("button", { name: "Show the games counted so far" }).click();
+  await expect(fianchetto.getByRole("list", { name: "Fianchetto setup reached: contributing moves" })).toContainText("g3");  await fianchetto.getByRole("button", { name: "Open game review" }).first().click();
+  await expect(page).toHaveURL(new RegExp(`/review/game/${runId}$`, "u"));
+
+  await primary.getByRole("link", { name: "Learn" }).click();
+  await page.getByRole("link", { name: /Your profile/ }).click();
+  await expect(page.getByRole("heading", { name: "What your recorded games show" })).toBeVisible();
 });
 
 test("choosing a help style activates its modules through the server compiler and persists (rfc/intent-presets.md)", async ({ page }) => {

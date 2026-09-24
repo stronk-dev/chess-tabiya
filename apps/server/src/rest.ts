@@ -69,6 +69,7 @@ import { distillRun } from "./distill.js";
 import type { ClassroomService } from "./classroom.js";
 import type { PrincipleRegistry } from "./principle-registry.js";
 import { vocabularyUsage } from "./authoring-vocabulary.js";
+import type { LearnerProfileService } from "./learner-profile.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -797,6 +798,7 @@ export function createRestHandler(
   classrooms?: ClassroomService,
   openingCatalogue?: OpeningCatalogueAvailability,
   principles?: PrincipleRegistry,
+  learnerProfile?: LearnerProfileService,
 ): RestHandler {
   return async (request) => {
     try {
@@ -1168,6 +1170,44 @@ export function createRestHandler(
       }
       if (request.method === "GET" && url.pathname === "/rating") {
         return json(200, service.rating(authenticate()));
+      }
+      if (url.pathname === "/learner-profile" || url.pathname.startsWith("/learner-profile/")) {
+        // rfc/player-style.md + rfc/skills.md: the private learner profile. Every read is the
+        // authenticated learner's own; no route names another learner.
+        if (learnerProfile === undefined) throw new ServerError("STORAGE_FAILURE", "The learner profile is not configured");
+        const principal = authenticate();
+        const styleRoute = /^\/learner-profile\/style\/([^/]+)$/.exec(url.pathname);
+        const openingRoute = /^\/learner-profile\/openings\/([^/]+)$/.exec(url.pathname);
+        const observationRoute = /^\/learner-profile\/observations\/([^/]+)$/.exec(url.pathname);
+        const readable = url.pathname === "/learner-profile" || url.pathname === "/learner-profile/history" || styleRoute !== null || openingRoute !== null || observationRoute !== null;
+        if (readable && request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        if (url.pathname === "/learner-profile") return json(200, { profile: learnerProfile.profile(principal) });
+        if (url.pathname === "/learner-profile/history") {
+          const { limit, offset } = parsePagination(url);
+          return json(200, { history: learnerProfile.historyPage(principal, offset, limit) });
+        }
+        const decoded = (raw: string): string => {
+          try { return decodeURIComponent(raw); } catch { throw invalid("Profile path contains invalid URL encoding"); }
+        };
+        if (styleRoute !== null) {
+          const { limit, offset } = parsePagination(url);
+          return json(200, learnerProfile.styleCard(principal, decoded(styleRoute[1]!), offset, limit));
+        }
+        if (openingRoute !== null) {
+          const { limit, offset } = parsePagination(url);
+          return json(200, learnerProfile.opening(principal, decoded(openingRoute[1]!), offset, limit));
+        }
+        if (observationRoute !== null) {
+          const { limit, offset } = parsePagination(url);
+          return json(200, learnerProfile.observation(principal, decoded(observationRoute[1]!), offset, limit));
+        }
+        if (url.pathname === "/learner-profile/share-card") {
+          if (request.method !== "POST") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          requireJson(request);
+          const body = closedRecord(await parseBody(request), "/", ["metricId", "consent"]);
+          return json(200, learnerProfile.shareCard(principal, requiredString(body.metricId, "metricId"), body.consent));
+        }
+        return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
       }
       if (request.method === "GET" && url.pathname === "/marks") {
         return json(200, { marks: service.learnerMarks(authenticate()) });

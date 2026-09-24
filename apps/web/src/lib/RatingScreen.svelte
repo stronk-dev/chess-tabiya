@@ -20,8 +20,9 @@
   interface Props {
     api: DrillClientApi;
     onStart?: (band: 1000 | 1400 | 1800 | 2200, side: "white" | "black") => Promise<void>;
+    onOpenProfile?: () => void;
   }
-  let { api, onStart }: Props = $props();
+  let { api, onStart, onOpenProfile }: Props = $props();
 
   let ratingView: RatingView | undefined = $state();
   let history: RatingHistoryPage | undefined = $state();
@@ -91,6 +92,7 @@
     <p class="eyebrow">Rated games</p>
     <h1 id="rating-title">Your measured record</h1>
     <p>Results against the calibrated human-choice opponent ladder. This record never grades a move or changes what a coach says about it.</p>
+    {#if onOpenProfile}<p><a href="/profile" onclick={(event) => { event.preventDefault(); onOpenProfile(); }}>Your profile: the openings, habit cards and observations behind your saved games</a></p>{/if}
   </header>
 
   {#if loading}
