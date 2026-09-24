@@ -8925,12 +8925,12 @@
     },
     {
       "id": "D1086",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:c857cab2fcb1fe03d1f6f242277ea1e5a00b912890952152fad32389c8ae06dc",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:078d91255f45616611a0768ebe4cdd1799394a483f52e9f7d7cce51bae6316d1",
       "uxItems": [],
-      "owner": "content-and-theory",
-      "blocker": "rfc:famous-games.md"
+      "evidence": "apps/server/src/sourcing/masters.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1087",

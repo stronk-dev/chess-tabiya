@@ -500,11 +500,26 @@
         "dependsOn": ["evidence-to-consumer-spine", "complete-learner-journeys"],
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
         "latestCheckpoint": {
-          "at": "2026-09-08",
-          "summary": "The 436-entry graduation migration is complete with zero author-required or contract-blocked decisions, pack schema 0.28 is live, and every draft/candidate carries typed clearance. The release corpus is still held because no official pack has graduated; the next content pass must satisfy the remaining 354 explicit blockers through grounded evidence and authored content rather than bypassing them.",
-          "impact": "held",
-          "evidence": ["planning/content-era/plan.md", "planning/archive/graduation-clearance/author-decisions.json", "apps/server/src/graduation-clearance-corpus.ts", "rfc/archive/graduation-clearance.md"],
-          "anchors": [{"kind": "work_state", "id": "D409", "digest": "sha256:7c2a85bcf19ef39daa00bb868838572ee428f52431e1bca2a021ce854ebe3765"}]
+          "at": "2026-09-24",
+          "summary": "Famous-game sourcing is implemented as an authoring path: one cited master game at a time becomes a stripped, attribution-bearing candidate through the shared explorer fetch path, index enumeration and learner masters import stay refused, and capability rows state exactly what is and is not available. No official pack has graduated; the sourceGame schema lane waits on lane 0.30.",
+          "impact": "advanced",
+          "evidence": [
+            "apps/server/src/sourcing/masters.ts",
+            "planning/famous-games/implementation-2026-09-24.md",
+            "rfc/famous-games.md"
+          ],
+          "anchors": [
+            {
+              "kind": "rfc",
+              "id": "famous-games.md",
+              "digest": "sha256:8f19c11e9fcbcbb299cdf78535615e0d961c53abc417c1ec01224e97ddb71144"
+            },
+            {
+              "kind": "work_state",
+              "id": "D959",
+              "digest": "sha256:555ea1424ca4c7171b7c42f158ca4bb0880fc37b3b4cfbfeb22a991f7ddcbd35"
+            }
+          ]
         },
         "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
       },

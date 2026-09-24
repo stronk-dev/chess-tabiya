@@ -21058,3 +21058,19 @@ established. The word is mapped in `returnStanding()` from the rung that the
 exactly as they move the interval. The rung itself never leaves the server,
 and the existing guard still refuses mastery, ratio or rung fields. The page
 shows a fixed explanation beside the due date. D864 closes.
+
+### 2026-09-24 — famous-games implementing
+
+- **Refusal replaced:** the bundled explorer refusal is now four honest
+  capability rows.
+- **Shared fetch path:** stats, masters stats and single master games share one
+  explorer fetch path with the shipped retry schedule.
+- **Authoring pipeline:** `candidate-emit PIPELINE=masters` turns one master
+  game into a stripped, attribution-bearing candidate. The attribution is a
+  validated `source-game.json` sidecar. The pipeline refuses to enumerate the
+  masters index.
+- **Import still refused:** learner import of masters URLs is refused through
+  `createApplication`.
+- **No learner surface:** the RFC specifies none, and none was built.
+- **Waiting:** the `sourceGame` pack-schema half waits on lane 0.30.
+- **Ledger:** D1086 closes.

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:374e8cb48de6dfa2a85198af3b9936b6f2d4402b49482237be79e0c5a645acee",
+    "roadmap": "sha256:c2cfc97bb29874a13ea0eb97795688be7f2f540f4bd00b365247404c5a3e358c",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:96dd61969be667c5cf669cbfba5a25357421c4e3c9b1f2e713579c734c075e5f",
-    "rfcRegister": "sha256:8a632f653c1c551ceddabe55bb7429fdaf316102dbf2973f48381638d75c2fa5",
+    "workState": "sha256:b20d4668a8aa8e5958d3cf1c27c7a645d0b93bdda311f3ee83803cf90f203d96",
+    "rfcRegister": "sha256:1221bf11222bf02098914f7a8099e288c525894363ed810f5cf8d33419a2456e",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 54,
+      "draft": 53,
       "accepted": 0,
-      "implementing": 8,
+      "implementing": 9,
       "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1209,
-      "done": 1101,
+      "blocked": 1208,
+      "done": 1102,
       "refused": 111
     },
     "workItems": {
@@ -430,20 +430,24 @@
       ],
       "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
       "latestCheckpoint": {
-        "at": "2026-09-08",
-        "summary": "The 436-entry graduation migration is complete with zero author-required or contract-blocked decisions, pack schema 0.28 is live, and every draft/candidate carries typed clearance. The release corpus is still held because no official pack has graduated; the next content pass must satisfy the remaining 354 explicit blockers through grounded evidence and authored content rather than bypassing them.",
-        "impact": "held",
+        "at": "2026-09-24",
+        "summary": "Famous-game sourcing is implemented as an authoring path: one cited master game at a time becomes a stripped, attribution-bearing candidate through the shared explorer fetch path, index enumeration and learner masters import stay refused, and capability rows state exactly what is and is not available. No official pack has graduated; the sourceGame schema lane waits on lane 0.30.",
+        "impact": "advanced",
         "evidence": [
-          "planning/content-era/plan.md",
-          "planning/archive/graduation-clearance/author-decisions.json",
-          "apps/server/src/graduation-clearance-corpus.ts",
-          "rfc/archive/graduation-clearance.md"
+          "apps/server/src/sourcing/masters.ts",
+          "planning/famous-games/implementation-2026-09-24.md",
+          "rfc/famous-games.md"
         ],
         "anchors": [
           {
+            "kind": "rfc",
+            "id": "famous-games.md",
+            "digest": "sha256:8f19c11e9fcbcbb299cdf78535615e0d961c53abc417c1ec01224e97ddb71144"
+          },
+          {
             "kind": "work_state",
-            "id": "D409",
-            "digest": "sha256:7c2a85bcf19ef39daa00bb868838572ee428f52431e1bca2a021ce854ebe3765"
+            "id": "D959",
+            "digest": "sha256:555ea1424ca4c7171b7c42f158ca4bb0880fc37b3b4cfbfeb22a991f7ddcbd35"
           }
         ]
       },
