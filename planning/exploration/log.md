@@ -21357,3 +21357,19 @@ The bootstrap is archived as implemented.
 - 49 findings against the withdrawn register engine are superseded (⛔).
 - D2401 moves to evidence-presentation.
 - Absent-source admission (D2363, D3082) stays open in the routing queue.
+
+### 2026-09-24 — theory Library and principles API
+
+- **Library:** `/library` is rebuilt as a phase-first search over packs,
+  principles, shapes, concepts and named openings. It shows one row per item,
+  lists official material first, and labels community drafts.
+- **Entry pages:** each item has an entry page (principle, shape, opening,
+  pack) with Rehearse, Understand and Return doors.
+- **API:** `GET /theory/*` crosses `createApplication`.
+- **Citations:** theory-knowledge-pipeline lands principle-entry lane 0.2 and a
+  pinned 13-row theory-source register with citation validation. D1892, D1894,
+  D1895 and D1898 close.
+- **Roadmap:** the Library route is now marked live, and the four new entry
+  routes and the `/theory` family are added.
+- **Still open:** no principle cites a source yet, which is authored judgement.
+  The persistent theory-drill joins keep their migration position.
