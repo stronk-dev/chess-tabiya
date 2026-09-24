@@ -17,6 +17,7 @@
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 
 import { renderEndgameClassification, type EndgameClassification } from "./endgame.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import {
   assertConsumerEvidenceView,
   assertDeclaredEvidence,
@@ -816,6 +817,13 @@ const fact = <R extends FactStatementRendererId>(rendererId: R, binding: "record
 
 const PIVOTAL_PROJECTIONS = Object.freeze(["derived.pivotal.irreversibility", "derived.pivotal.phase_change", "derived.pivotal.human_divergence", "derived.pivotal.option_collapse"]);
 
+/** The grounding the compiled manifest declares for one projection (never caller-chosen). */
+function declaredGrounding(projection: VersionedEvidenceId): EvidenceGrounding {
+  const declared = PRIMARY_EVIDENCE_MANIFEST.projections.find((candidate) => candidate.id === projection.id && candidate.version === projection.version);
+  if (declared === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", `${refKey(projection)} is not a compiled projection`);
+  return declared.grounding;
+}
+
 type AdapterSpec = Omit<ProjectionPresentationAdapter, "key">;
 const adapter = (spec: AdapterSpec): ProjectionPresentationAdapter => Object.freeze({ ...spec, key: adapterKey(spec.consumer, spec.projection), forms: Object.freeze([...spec.forms]), sourceOperands: Object.freeze([...spec.sourceOperands]), assertions: Object.freeze([...spec.assertions]) });
 
@@ -841,7 +849,7 @@ export const PRESENTATION_ADAPTERS: readonly ProjectionPresentationAdapter[] = O
   adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
   adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.wdl_point"), component: "fact_statement", forms: ["list", "panel"], sourceOperands: ["position", "normalized"], assertions: ["copied_byte_equal", "mechanical_transform", "retained_convention"], construct: wdlPointComponent }),
   adapter({ consumer: REVIEW_MAP, projection: V1("derived.grade.move_quality"), component: "fact_statement", forms: ["panel"], sourceOperands: ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "depthOrMovetime"], assertions: ["copied_byte_equal"], construct: fact("module.move_quality_grade@1", "declared_convention", "grade-convention@1", (payload) => payload as MoveQualityGrade) }),
-  ...(Object.keys(RECORDED_RELATION_LABELS) as RecordedRelationLabelId[]).map((id) => adapter({ consumer: REVIEW_MAP, projection: Object.freeze({ id, version: 2 }), component: "fact_statement", forms: ["list", "panel"], sourceOperands: [], assertions: ["mechanical_transform"], construct: fact("module.recorded_relation@1", "declared_convention", "recorded-semantic-path@1", () => ({ relation: id, grounding: "declared_convention" })) })),
+  ...(Object.keys(RECORDED_RELATION_LABELS) as RecordedRelationLabelId[]).map((id) => adapter({ consumer: REVIEW_MAP, projection: Object.freeze({ id, version: 2 }), component: "fact_statement", forms: ["list", "panel"], sourceOperands: [], assertions: ["mechanical_transform"], construct: fact("module.recorded_relation@1", "declared_convention", "recorded-semantic-path@1", () => ({ relation: id, grounding: declaredGrounding({ id, version: 2 }) })) })),
   // guidance.authored_claim@1 — the [[D1673]] vertical slice
   adapter({ consumer: V1("guidance.authored_claim"), projection: V1("pack.authored.claim_delivery"), component: "claim", forms: ["sentence", "panel"], sourceOperands: ["text", "binding", "evidenceTypes", "earnedEvidenceTypes", "principles"], assertions: ["authored_text_copied"], construct: (evidence) => {
     const item = evidence.payload as { readonly text: string; readonly binding: ClaimBinding; readonly evidenceTypes: readonly ClaimEvidenceType[]; readonly earnedEvidenceTypes: readonly ClaimEvidenceType[]; readonly principles: readonly { readonly name: string; readonly statement: string; readonly counterCase: string }[] };

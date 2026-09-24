@@ -120,10 +120,11 @@ records `engineId` and exactly one of `requestedDepth` or
 `requestedMovetimeMs`, in addition to the returned score/WDL/line and achieved
 depth. The effective judgment budget therefore survives in run provenance.
 
-Automatic tablebase evidence is a best-effort producer: it attempts a node once
-and only while the evidence queue is idle. A busy queue or failed producer probe
-is dropped without becoming an opponent-mode failure; explicit interactive
-tablebase requests retain their normal refusals.
+Automatic tablebase evidence joins a node's durable run-enrichment batch whenever a
+tablebase source is configured (≤7 pieces, no tablebase evidence already attached). A
+failed probe retries and then settles as honest absence (`settled_empty`) without becoming
+an opponent-mode failure; explicit interactive tablebase requests retain their normal
+refusals.
 
 ## Maia-3 sidecar
 
@@ -236,33 +237,35 @@ never averaged into one number.
 
 ## Evidence jobs
 
-`EvidenceJobQueue` accepts Stockfish analysis jobs for a node with kind
-`eval|wdl|bestline` and exactly one positive depth or movetime limit. It starts
-jobs FIFO with a configurable global concurrency bound (default two). Results
-are immutable and staged outside the run with a per-run sequence cursor.
-Failures retain their evidence kind as well as run and node identity. Story
-completion treats only failed `eval` jobs as failed evals; a tablebase failure
+Evidence jobs are durable rows in the application database (migration 27,
+[`evidence-jobs.md`](evidence-jobs.md)). `EvidenceJobQueue` is the in-process worker bound to
+that store: it claims rows under a compare-and-swap lease with a configurable global
+concurrency bound (default two), calls exactly one of the two queued gateways
+(`EvidenceExecutor.execute` for `eval|wdl|bestline`, `TablebaseSource.probe` for
+`tablebase`), and settles through the store. Jobs carry exactly one positive depth or
+movetime limit. Results are immutable and staged with a never-reused per-run sequence.
+Story completion treats only terminal `eval` absence as failed evals; a tablebase failure
 cannot suppress or falsely complete the Stockfish pass for the same node.
 
 The read/apply flow is:
 
-1. Server code submits through `RunService.enqueueEvidence`.
+1. `POST /runs/:id/analysis` (with a canonical-UUID `Idempotency-Key`) admits one whole
+   batch and returns 202 with `{batchId, jobs}`; Story reads and learner moves admit their
+   own batches internally.
 2. A reader polls `GET /runs/:id/evidence?sinceSeq=<n>`.
 3. The lease holder applies a selected staged result with
    `POST /runs/:id/evidence` and `{resultSeq}`.
-4. The service atomically appends `evidence.attached`, then applies any
-   evidence-bearing `ObjectiveEvidenceProposal` as
-   `objective.state_changed`, saves the run, and consumes the staged result.
+4. One storage transaction appends `evidence.attached`, any stored
+   `objective.state_changed`, and the recorded guard's `feedback.generated` suffix, saves the
+   run, retains the before/after transition and marks the job consumed. Replaying the same
+   `resultSeq` returns the stored application without appending.
 
-Non-writers may read staged results but cannot apply them. Failed jobs remain
-inspectable through the queue failure surface rather than becoming a fallback.
-There is currently no public job-submission endpoint or event-stream push; job
-submission is a server-service call and result delivery is polling.
-
-The queue implements the runtime `JobObserver`. On rewind it removes queued and
-already-staged work for pruned nodes, aborts running work, and checks cancellation
-again before staging. A fake executor that deliberately ignores cancellation
-proves late results are discarded; a real Stockfish test proves `stop` is sent.
+Non-writers may read staged results but cannot apply them. Provider unavailability retries
+and then settles as the origin's honest terminal (explicit analysis `settled_unavailable`,
+Story/enrichment `settled_empty`), never as a fallback payload. Rewind cancels the pruned
+nodes' non-terminal and staged jobs in the rewind's own commit and aborts running work; a
+fake executor that deliberately ignores cancellation proves late results are discarded; a
+real Stockfish test proves `stop` is sent.
 
 ## Capabilities
 

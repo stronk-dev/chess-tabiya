@@ -1063,8 +1063,11 @@ unauthorized until another genuinely fresh review and all declared dependencies 
   readers); a root occurrence constructs no Story moment; the bounded consequence window is zero
   plies (`stopNodeId = evidenceNodeId`); the Review Map read only observes the coordinator;
   mock-engine deployments run the one exchange over a labelled mock analysis engine. The
-  evidence-job-durability store has not reached main; the coordinator uses the provider scheduler
-  plus the run event log, and never the evidence queue. The Analyze reveal now honestly reports no
+  evidence-job-durability store landed (migration 27) during this work; its `story_completion`
+  owner (`#ensureStoryEvidence`, which admitted legacy eval jobs) is superseded by this RFC's
+  coordinator, recorded in that RFC's changelog. The durable job store remains the substrate for
+  explicit analysis and run enrichment; Review durability is the run event log plus the bounded
+  attempt store, as §4.1 specifies. The Analyze reveal now honestly reports no
   recorded line for typed deliveries (refusal 7 keeps best move/PV out of the eval payload).
 
 - 2026-09-13 fifth author repair ([[D3184]]–[[D3189]]): multi-adapter family accounting,

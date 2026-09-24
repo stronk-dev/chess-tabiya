@@ -1,9 +1,16 @@
 # RFC: Evidence job durability — admission, lease, settlement, and the HTTP capability-operation census
 
-- **Status:** draft — **carried out of `rfc/pack-capability-contract.md` on 2026-09-06, returned and
-  unrepaired.** It inherits [[D2429]], [[D2509]]–[[D2513]], [[D2587]]–[[D2592]],
+- **Status:** implementing — **implementation landed 2026-09-24 at migration 27** under the owner's
+  direct-implementation direction for this session; no review round preceded landing, and
+  consolidation, review and the Active-row status transition belong to the register owner. The
+  inherited acceptance population [[D2429]], [[D2509]]–[[D2513]], [[D2587]]–[[D2592]],
   [[D2673]]–[[D2677]], [[D2742]]–[[D2747]], [[D2771]]–[[D2778]], [[D2802]]–[[D2808]] and
-  [[D3002]]–[[D3008]] **unresolved**. No implementation is authorised.
+  [[D3002]]–[[D3008]] is addressed in production code, each by an executable control (receipt:
+  `planning/evidence-job-durability/implementation-2026-09-24.md`); the genuine RFC defects found
+  while implementing are corrected inline and listed in the Changelog. The durable store, the worker,
+  the three enqueue owners, run-coupled enrichment/rewind/application commits, the `/analysis`
+  idempotency key and the public-card single dispatch ship. *(Prior state: carried out of
+  `rfc/pack-capability-contract.md` on 2026-09-06, returned and unrepaired.)*
 - **Author:** claude (cut, not drafted — every specification byte below is the parent RFC's, moved
   verbatim; only this preamble is new)
 - **Created:** 2026-09-06
@@ -12,7 +19,7 @@
 - **Parent:** `rfc/pack-capability-contract.md` — see its §4.1a, §5.1 and Changelog for the cut.
 
 ```tabiya-claims
-migration | position behind longitudinal-store | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows + evidence_result_sequences never-reused per-run allocator
+none
 ```
 
 ## Summary
@@ -800,7 +807,55 @@ Unnumbered per [[D1503]]; renumber at landing.
 
 ## Changelog
 
+- 2026-09-24: **`story_completion` owner superseded by `rfc/review-evidence-compiler.md` §4.1.** Import completion and `RunService.story()` now reach only the one `ReviewEvidenceCoordinator.ensureBranch` over `ProviderExchangeScheduler.get` (typed `stockfish.position_evaluation@1` deliveries attached to the run event log), so `RunService.#ensureStoryEvidence` is removed; `story_completion` / `review.story_evidence` stay in the closed store vocabulary and row parser but no production path admits them. The owner census in `capability-operations.test.ts` asserts the supersession. The §table row naming `#ensureStoryEvidence` is historical.
 - 2026-09-06: cut out of `rfc/pack-capability-contract.md` at `c37c6eb8`. Specification bytes are
   unchanged; the preamble, scope and section numbering are new. No defect was repaired by the cut.
 - 2026-09-07: registered under [[D3122]] and received the storage migration claim its DDL owns.
   No inherited operation/durability defect was repaired by registration.
+- 2026-09-24: **implementation landed** — migration 27 (`STORAGE_VERSION` 26→27) creates the four §2
+  tables with their exact DDL and triggers; the claim is discharged and the register row is landed.
+  Production: `apps/server/src/evidence-jobs.ts` (request images, digest authorities, receipts,
+  settlement/retry unions, the exhaustive row parser), `evidence-job-store.ts` (admission, lease,
+  provider interval, settlement, cancellation, sequence allocator, application/consumption,
+  replay), `evidence-queue.ts` (the durable worker), `storage.ts` (the run-coupled commits inside the
+  one watermarked `save` transaction), `service.ts` (the three enqueue owners), `rest.ts`
+  (`Idempotency-Key`, single public-token dispatch) and `capability-operations.ts` (the §1
+  census). Inline corrections of genuine defects, each pinned by a test:
+  (1) **Story key chunking.** `job_count ≤ 16` cannot hold the Story plan of any game longer than
+  sixteen plies under one `{schema,branchId,terminalNodeId}` key; the key image gains `chunk`
+  (the 0-based 16-job slice ordinal), all chunks being admitted in one transaction.
+  (2) **Internal plans are derived only on first admission.** The enrichment/Story plan carries a
+  snapshot of mutable node state (`objectiveRequest.evidenceRefs`/`objectiveState`), so
+  re-deriving it on an honest revisit would turn a learner's move into `IDEMPOTENCY_CONFLICT`. The
+  internal producers therefore replay an existing key's validated batch without re-deriving;
+  `admitEvidenceBatch` keeps the equal/unequal-digest rule for every origin, and the key-version
+  prefix stays the mechanism for a plan revision.
+  (3) **The receipt vocabulary is the queue gateway's.** The two queued gateways
+  (`EvidenceExecutor.execute`, `TablebaseSource.probe`) are not provider-exchange operations — the
+  exchange has no best-line or queued tablebase-probe operation — and `provider-health-degradation`
+  is unimplemented. The success arm's single `acquisition` field ([[D3002]]) is the store-sealed
+  `evidence_acquisition@1` receipt (operation, instance, job, lease generation, request digest,
+  requested/retrieved instants, RFC-8785 response digest); `ProviderOperationAvailability` and
+  `ProviderFailureReceipt` are its `EvidenceProviderAvailability`/`EvidenceProviderFailure`, the
+  failure `reason` drawn from the shared exchange `ProviderSourceFailureReason` vocabulary. Adopting
+  the health registry's receipts later is a mechanical join, not a new state.
+  (4) **"Run revision" is the transition chain.** `DrillRun` has no revision; `fromRevision` is the
+  run's highest retained `to_revision` (0 when none) and `toRevision = fromRevision + 1`, which the
+  primary key `(run_id,to_revision)` makes a gap-free, append-only chain.
+  (5) **Engine provenance is the gateway's.** An absent `engineId`/search bound is stamped by the
+  gateway from the compiled instance and the stored request; a present one must already equal them
+  ([[D2802]]). Production executors declare their instance; a test double that declares none is
+  identified by its own claim.
+  (6) **The idle-only, once-per-process tablebase producer budget is retired.** Durable enrichment
+  admits the tablebase job in the node's batch whenever a tablebase source is configured; the bounded
+  worker concurrency governs load, and an unconfigured gateway settles
+  `empty/capability_not_configured` without a provider call.
+  (7) **Non-availability provider errors share the retry path.** A refused payload (wrong kind,
+  crossed operand) is a sealed `invalid_response` failure and takes the same retry → origin-terminal
+  path; it never becomes evidence.
+  (8) **The "database-observed" clock** is one store clock: SQLite `strftime('%Y-%m-%dT%H:%M:%fZ')`
+  by default, injectable (`evidenceNow`) so fixtures cross exact lease boundaries.
+  (9) **The §1 census follows the live surface.** `parseRunRoute` now carries 40 actions; the four
+  added since the author image (`assistance`, `review`, `review-analysis`, `nudge`) call no provider
+  and bind `none`. Runtime enforcement of `pack.requires` against the deployment projection stays
+  with `rfc/pack-capability-contract.md`, which owns capability identity.

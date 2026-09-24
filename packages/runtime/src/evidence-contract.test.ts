@@ -270,3 +270,18 @@ function semanticErrorCases(): Record<string, EvidenceContractDeclarations> {
     EVIDENCE_POLICY_CRITICAL_REFUSED: { ...valid, selectionPolicies: [{ ...policy, criticalEvents: [{ id: "missing.event", version: 1 }] }] },
   };
 }
+
+describe("rfc/skills.md criterion 2 — the shipped valence biconditional passes a populated authority", () => {
+  it("validates source_required with a declared, consumer-bound authority and refuses the same event with an empty authority", () => {
+    const valid = semanticDeclarations();
+    const event = valid.semanticEvents![0]!;
+    const row = valid.eligibility![0]!;
+    const authority = { id: "p.output", version: 1 };
+    const populated = { ...valid, semanticEvents: [{ ...event, valence: "source_required" as const }], eligibility: [{ ...row, valenceAuthority: [authority] }] };
+    expect(code(populated)).toBeUndefined();
+    const empty = { ...populated, eligibility: [{ ...row, valenceAuthority: [] }] };
+    expect(code(empty)).toBe("EVIDENCE_EVENT_VALENCE_UNBACKED");
+    const undeclared = { ...populated, eligibility: [{ ...row, valenceAuthority: [{ id: "missing.authority", version: 1 }] }] };
+    expect(code(undeclared)).toBe("EVIDENCE_EVENT_VALENCE_UNBACKED");
+  });
+});

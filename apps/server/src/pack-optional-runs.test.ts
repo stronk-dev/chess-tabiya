@@ -102,7 +102,7 @@ describe("pack-optional position runs", () => {
     expect(evidence.results).toHaveLength(1);
     expect((await call(handler, "POST", "/runs/position-loop/evidence", { resultSeq: evidence.results[0]!.seq, at })).status).toBe(200);
     const appliedGraph = await (await call(handler, "GET", "/runs/position-loop/graph")).text();
-    expect(appliedGraph).toContain("engine:evidence-job-1");
+    expect(appliedGraph).toMatch(/engine:[0-9a-f]{8}-[0-9a-f-]{27}/u);
     const duplicateReveal = await call(handler, "POST", "/runs/position-loop/reveal", { at });
     expect((await duplicateReveal.json() as { emitted: unknown[] }).emitted).toEqual([]);
 
@@ -111,7 +111,7 @@ describe("pack-optional position runs", () => {
     expect(await (await call(handler, "GET", "/runs/position-loop/evidence?sinceSeq=0")).json()).toEqual({ results: [], nextSeq: 0 });
     const closedApply = await call(handler, "POST", "/runs/position-loop/evidence", { resultSeq: 2, at });
     expect(closedApply.status).toBe(409);
-    expect(await (await call(handler, "GET", "/runs/position-loop/graph")).text()).toContain("engine:evidence-job-1");
+    expect(await (await call(handler, "GET", "/runs/position-loop/graph")).text()).toMatch(/engine:[0-9a-f]{8}-[0-9a-f-]{27}/u);
 
     expect((await call(handler, "POST", "/runs/position-loop/rewind", { nodeId: rootId, at })).status).toBe(200);
     expect((await call(handler, "POST", "/runs/position-loop/moves", { uci: "d2d4", at })).status).toBe(200);

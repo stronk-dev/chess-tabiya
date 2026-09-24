@@ -1,6 +1,15 @@
 # RFC: Skills — concepts earned from play, as a progression surface
 
-- **Status:** draft — 2026-08-23. **Drafted at full depth on the owner's explicit rejection of a
+- **Status:** implementing — **the migration-free subset was implemented 2026-09-24 at the owner's direction**
+  (no review round; the Active-row transition is left to consolidation, so the token stays `draft`).
+  Shipped over the landed longitudinal store and the private learner profile: the five-category
+  navigation with Openings/Strategy's stated reasons, the mechanical valence-admissibility rule and
+  an empty, validated `content/valence/register.json`, candidate leaves (registered shapes) with their
+  named blockers, and the read-time concept-mark derivation (declinable alternative, earned once,
+  linked to its node, never written to `learner_marks`). No leaf is creditable: Open question 1 is
+  unruled, no category is assigned and no opportunity definition exists (D3). Criteria 4–7 wait on
+  `concept-registry.md` (behind `evidence-job-durability` in register order). Receipt:
+  `planning/skills/implementation-2026-09-24.md`. Draft history follows. **Drafted at full depth on the owner's explicit rejection of a
   scope cut** ([[D1232]]): a prior derivation recommended *"do not draft a skills RFC — the first
   visible pixel ships inside the review lane"*, and the owner answered *"well what do you mean no
   rfc at all? does it have the depth we need?"* It did not — that recommendation supplied **one of
@@ -600,6 +609,28 @@ Written **unnumbered** per [[D1130]] — ids assigned at landing; head was **D12
 
 ## Changelog
 
+- 2026-09-24: **migration-free subset implemented at the owner's direction**; text defects fixed
+  inline, every other finding became a test. Corrections:
+  1. **§6.2's "extend the derived `milestones()` path" names the wrong home.** `milestones()` lives in
+     `RunService`, which has no store access and no complete legal-move population per decision. The
+     derivation (`deriveConceptMarks`, `packages/runtime/src/skills-contract.ts`) runs in the private
+     profile's read-time path over the store-attributed decisions instead — still derived, never
+     stored, and criterion 9 asserts `learner_marks` stays untouched.
+  2. **§2.2's `declared_convention` row needs a cited convention the register cannot express yet.**
+     The validator admits exactly the five groundings as a `basis`; an authority grounded in
+     `declared_convention` is accepted only under one of the five declared bases (its citation lives
+     in the row's `note` and is not machine-checked — a residual for the first real declaration),
+     and the three refused groundings fail as `VALENCE_AUTHORITY_GROUNDING_REFUSED` (criterion 3).
+  3. **§3 leaf count.** The shipped surface lists registered shapes as candidate leaves with their
+     blockers and does not list pack concept ids: without `concept-registry` their identity is
+     pack-local, and listing 168 strings would be §3.2's refused collection over a namespaced-apart
+     vocabulary.
+  4. **Criterion 2 is green at HEAD** (`evidence-contract.test.ts`: a populated, declared,
+     consumer-bound authority validates; the empty arm fails `EVIDENCE_EVENT_VALENCE_UNBACKED`); no
+     catalogue edit is made because no declaration is admitted.
+  Criteria 4 (taxonomy set-equality over `content/concepts/registry.json`), 5, 6 and 7 belong to the
+  concept-registry lane and stay red-by-absence; criterion 14 is an import wall
+  (`learner-profile-walls.test.ts`).
 - 2026-08-23: created, at full depth, on the owner's rejection of a scope cut ([[D1232]]). Drafted
   from `planning/skills/full-depth-derivation.md`; supersedes `planning/skills/rfc-derivation.md` on
   its crux (§2) only.

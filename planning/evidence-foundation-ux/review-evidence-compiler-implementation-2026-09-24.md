@@ -55,5 +55,14 @@ other, irreversibility), the vacuous mixed tie rule, and `ReviewEvidencePacket.c
 ## Open
 
 In-domain tablebase request; runtime opening items (D2); C4 figure reproduction; the measured
-criterion-19 bound; D1 (Review Map policy) and D3 (owner use). The evidence-job-durability store has
-not reached main: durability is the run event log plus the bounded attempt store.
+criterion-19 bound; D1 (Review Map policy) and D3 (owner use).
+
+## Evidence-job durability
+
+The evidence-job-durability store reached main (migration 27) before this landing's final merge. Its
+`story_completion` enqueue owner admitted legacy eval jobs for Story; this RFC supersedes it (§4.1:
+import and story reach only `ensureBranch` over `ProviderExchangeScheduler.get`), so
+`#ensureStoryEvidence` is removed, the owner census asserts the supersession, and
+`rfc/evidence-job-durability.md` records it. The job store keeps explicit analysis and run
+enrichment. Review durability is the run event log (re-derivable typed deliveries) plus the bounded
+application-lifetime attempt store.

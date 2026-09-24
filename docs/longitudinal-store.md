@@ -5,7 +5,8 @@ surface (style, skills, opening performance, recommendations, campaign credit). 
 **opportunity/outcome pairs over declared evidence**, split by phase and decision class, plus
 per-root attempt-structure counts. It is a projection of each run's immutable event log: rows are
 re-derivable byte-for-byte and never a second source of truth. Contract: `rfc/longitudinal-store.md`.
-Nothing renders it yet — there is no route, client code, habit card, skill credit or tip.
+Its first consumer is the private [learner profile](learner-profile.md) (`/learner-profile`, client
+route `/profile`); the store itself still has no route of its own.
 
 ## Storage (migration 26)
 
@@ -33,7 +34,9 @@ Imported source-game moves are `game`, the learner's own moves `played`, first p
 checkpoint `predicted`. Move authorship comes from durable records: no collaboration journal means
 the owner (single-player and pre-migration runs); a live session's `board.granted` timeline
 attributes each commit to its holder; grant-only shared runs and imported arena legs abstain.
-Predictions are admitted only on `single_player` runs.
+Predictions are admitted only on `single_player` runs. That decision algebra (`normativeDecisions`)
+lives in `longitudinal-decisions.ts` so the HTTP-side profile can share it without importing the
+projector's population enumeration, which stays off the HTTP module graph.
 
 ## Writes, jobs and the worker
 
@@ -66,7 +69,9 @@ The test-only `createInMemoryTestApplication` has no worker and reports `disable
 every requested or eligible run is complete at the requested revision and exact current cut;
 otherwise it returns one outcome per run (`pending` with `retryAt`, `failed` with code and attempts,
 or `unavailable`: `not_requested`, `revision_mismatch`, `profile_suppressed`, `cut_superseded`) and
-no data. Consumer RFCs build on this handle; none is wired at landing.
+no data. Consumer RFCs build on this handle. The learner profile reads `played` rows only and, when
+some cuts are still pending, re-reads exactly the complete cuts so it can count them while naming
+the rest.
 
 ## Operations
 

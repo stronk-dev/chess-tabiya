@@ -9,6 +9,7 @@ import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
+import { ServerError } from "./errors.js";
 
 const PGN = `[Event "Friendly"]
 [Site "https://lichess.org/abcd1234"]
@@ -206,19 +207,42 @@ describe("own-game import", () => {
 
   it("does not let an evidence-queue tablebase failure affect the Review engine family", async () => {
     const executor: EvidenceExecutor = { async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 12 } }; } };
-    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
-    queue.enqueue({ runId: "story-kind-isolation", nodeId: "story-kind-isolation:node:0", fen: "8/8/8/8/8/8/4K3/6k1 w - - 0 1", kind: "tablebase" });
-    await queue.whenIdle();
-    expect(queue.failures("story-kind-isolation")).toEqual([expect.objectContaining({ nodeId: "story-kind-isolation:node:0", kind: "tablebase" })]);
+    const failingTablebase = { kind: "mock" as const, async probe(): Promise<never> { throw new ServerError("TABLEBASE_UNAVAILABLE", "tablebase down"); } };
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     stores.push(storage);
+    // Import without a coordinator so no Review pass exists yet, then durably fail a tablebase job.
+    const importer = new RunService(storage);
+    const imported = await importer.importGame({
+      id: "story-kind-isolation",
+      side: "white",
+      opponentPolicy: { mode: "human_common" },
+      policyConfig,
+      seed: 4,
+      source: { kind: "pgn", pgn: PGN },
+    }, "story-writer");
+    expect(imported.evidencePass.jobs).toBe(0);
+    const root = imported.run.nodes[0]!;
+    storage.admitInternalEvidence(imported.run.id, [{
+      origin: "run_enrichment",
+      idempotencyKey: `run_enrichment@1:${root.id}`,
+      request: { schema: "evidence_batch_request@1", runId: imported.run.id, origin: "run_enrichment", jobs: [{ schema: "evidence_job_request@1", runId: imported.run.id, nodeId: root.id, fen: root.fen, kind: "tablebase", depth: null, movetime: null, multiPv: null, timeoutMs: null, objectiveRequest: null }] },
+    }]);
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1, tablebaseSource: failingTablebase, retry: { maxAttempts: 1, retryDelayMs: 0 } });
     const { service, coordinator } = reviewService(storage, queue);
-    const imported = await service.importGame({ id: "story-kind-isolation", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 4, source: { kind: "pgn", pgn: PGN } }, "story-writer");
-    await coordinator.whenIdle();
+    await queue.whenIdle();
+    expect(queue.failures(imported.run.id)).toEqual([
+      expect.objectContaining({ nodeId: root.id, kind: "tablebase" }),
+    ]);
+
     service.reveal(imported.run.id, "story-writer");
+    // rfc/review-evidence-compiler.md §4.1: the story read reaches the Review coordinator only; the
+    // durable tablebase failure neither suppresses nor enqueues the typed engine family.
+    service.story(imported.run.id, { learnerId: "__legacy", handle: "__legacy" });
+    await coordinator.whenIdle();
     const story = service.story(imported.run.id, { learnerId: "__legacy", handle: "__legacy" });
     expect(story.families.engine_eval.unavailable).toEqual([]);
     expect(story.families.engine_eval.itemCount).toBeGreaterThan(0);
+    expect(queue.outstanding(imported.run.id).filter((job) => job.kind === "eval")).toEqual([]);
   });
 });
 

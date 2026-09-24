@@ -69,6 +69,7 @@ import { distillRun } from "./distill.js";
 import type { ClassroomService } from "./classroom.js";
 import type { PrincipleRegistry } from "./principle-registry.js";
 import { vocabularyUsage } from "./authoring-vocabulary.js";
+import type { LearnerProfileService } from "./learner-profile.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -644,6 +645,7 @@ export function errorResponse(error: unknown): Response {
                 || error.code === "REPERTOIRE_NOT_FOUND"
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
+                error.code === "IDEMPOTENCY_CONFLICT" ||
                 error.code === "FEEDBACK_WITHHELD" ||
                 error.code === "ASSISTANCE_WITHHELD" ||
                 error.code === "STORY_UNAVAILABLE" ||
@@ -797,6 +799,7 @@ export function createRestHandler(
   classrooms?: ClassroomService,
   openingCatalogue?: OpeningCatalogueAvailability,
   principles?: PrincipleRegistry,
+  learnerProfile?: LearnerProfileService,
 ): RestHandler {
   return async (request) => {
     try {
@@ -993,12 +996,19 @@ export function createRestHandler(
       if (request.method === "GET" && publicCardRoute !== null) {
         const token=decodeURIComponent(publicCardRoute[1]!);
         const escape = escapeHtml;
+        // rfc/evidence-job-durability.md criterion 20: resolve the token scope once, then dispatch.
+        // A Story failure never falls through to the join page; a join token never enters Story.
+        const scope = service.publicTokenScope(token);
+        if (scope === "session_join") {
+          try{if(live===undefined)throw new Error();return sessionJoinPage(token,live.publicJoin(token));}catch{return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});}
+        }
+        if (scope !== "story_read") return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});
         try{
           const card=service.publicStory(token),moments=card.moments.map((moment) => `<li><h2>${escape(moment.heading)}</h2><p>${escape(moment.moveLabel)}</p>${moment.sentences.map((sentence)=>`<p>${escape(sentence)}</p>`).join("")}<p>${escape(reviewText("moment.sources",{labels:moment.sourceLabels.join(" · ")}))}</p></li>`).join("");
           const selection=card.moments.length===0?card.momentsSentence:reviewText("public.selection",{shown:card.moments.length,considered:card.considered});
           return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}<p>${escape(selection)}</p><ol>${moments}</ol><p>${escape(card.footer.sentence)}</p><a href="${escape(card.productLink)}">${escape(reviewText("public.link"))}</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
         }catch{
-          try{if(live===undefined)throw new Error();return sessionJoinPage(token,live.publicJoin(token));}catch{return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});}
+          return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});
         }
       }
       if (url.pathname === "/shapes/drafts") {
@@ -1168,6 +1178,44 @@ export function createRestHandler(
       }
       if (request.method === "GET" && url.pathname === "/rating") {
         return json(200, service.rating(authenticate()));
+      }
+      if (url.pathname === "/learner-profile" || url.pathname.startsWith("/learner-profile/")) {
+        // rfc/player-style.md + rfc/skills.md: the private learner profile. Every read is the
+        // authenticated learner's own; no route names another learner.
+        if (learnerProfile === undefined) throw new ServerError("STORAGE_FAILURE", "The learner profile is not configured");
+        const principal = authenticate();
+        const styleRoute = /^\/learner-profile\/style\/([^/]+)$/.exec(url.pathname);
+        const openingRoute = /^\/learner-profile\/openings\/([^/]+)$/.exec(url.pathname);
+        const observationRoute = /^\/learner-profile\/observations\/([^/]+)$/.exec(url.pathname);
+        const readable = url.pathname === "/learner-profile" || url.pathname === "/learner-profile/history" || styleRoute !== null || openingRoute !== null || observationRoute !== null;
+        if (readable && request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        if (url.pathname === "/learner-profile") return json(200, { profile: learnerProfile.profile(principal) });
+        if (url.pathname === "/learner-profile/history") {
+          const { limit, offset } = parsePagination(url);
+          return json(200, { history: learnerProfile.historyPage(principal, offset, limit) });
+        }
+        const decoded = (raw: string): string => {
+          try { return decodeURIComponent(raw); } catch { throw invalid("Profile path contains invalid URL encoding"); }
+        };
+        if (styleRoute !== null) {
+          const { limit, offset } = parsePagination(url);
+          return json(200, learnerProfile.styleCard(principal, decoded(styleRoute[1]!), offset, limit));
+        }
+        if (openingRoute !== null) {
+          const { limit, offset } = parsePagination(url);
+          return json(200, learnerProfile.opening(principal, decoded(openingRoute[1]!), offset, limit));
+        }
+        if (observationRoute !== null) {
+          const { limit, offset } = parsePagination(url);
+          return json(200, learnerProfile.observation(principal, decoded(observationRoute[1]!), offset, limit));
+        }
+        if (url.pathname === "/learner-profile/share-card") {
+          if (request.method !== "POST") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+          requireJson(request);
+          const body = closedRecord(await parseBody(request), "/", ["metricId", "consent"]);
+          return json(200, learnerProfile.shareCard(principal, requiredString(body.metricId, "metricId"), body.consent));
+        }
+        return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
       }
       if (request.method === "GET" && url.pathname === "/marks") {
         return json(200, { marks: service.learnerMarks(authenticate()) });
@@ -1781,13 +1829,20 @@ export function createRestHandler(
         if (!Array.isArray(body.nodeIds) || body.nodeIds.some((id) => typeof id !== "string")) {
           throw invalid("nodeIds must be an array of strings");
         }
-        return json(202, { jobs: service.analysis(route.runId, principal, writerId(request), {
+        // rfc/evidence-job-durability.md §2: 202 means only that the durable batch committed; the
+        // caller's canonical UUID key makes response-loss retry replay the stored batch.
+        const idempotencyKey = request.headers.get("idempotency-key");
+        if (idempotencyKey === null || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(idempotencyKey)) {
+          throw invalid("Idempotency-Key must be a canonical lowercase UUID");
+        }
+        const batch = service.analysis(route.runId, principal, writerId(request), {
           nodeIds: body.nodeIds,
           kind: body.kind,
           ...(body.multiPv === undefined ? {} : { multiPv: requiredSafeInteger(body.multiPv, "multiPv") }),
           ...(body.depth === undefined ? {} : { depth: requiredSafeInteger(body.depth, "depth") }),
           ...(body.movetime === undefined ? {} : { movetime: requiredSafeInteger(body.movetime, "movetime") }),
-        }) });
+        }, idempotencyKey);
+        return json(202, { batchId: batch.batchId, jobs: batch.jobs.map((job) => ({ id: job.id, nodeId: job.nodeId, kind: job.kind })) });
       }
       if (route.action === "simulate") {
         const body = closedRecord(value, "/", ["maxBranches", "maxPlies", "at"]);

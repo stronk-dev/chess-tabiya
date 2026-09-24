@@ -465,29 +465,29 @@
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "The longitudinal store landed at migration 26: additive observation tables, one watermarked mutation boundary, claim-fenced jobs, a supervised worker thread gating readiness and health, rebuild and full export/deletion coverage. The migration queue now opens for evidence-job durability, then concept-registry, then bot-policy's run lane 0.18; bot policy and roster already landed their non-persistent half.",
+          "summary": "Two durable foundations landed in register order: the longitudinal store at migration 26 and evidence-job durability at migration 27, so observations and queued engine/tablebase evidence now survive restart with fenced leases, idempotent admission and replay. Concept-registry holds the next position, followed by bot-policy's run lane 0.18 and campaign.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/longitudinal-store.ts",
-            "planning/longitudinal-store/implementation-2026-09-24.md",
-            "rfc/longitudinal-store.md",
-            "rfc/bot-policy.md"
+            "apps/server/src/evidence-job-store.ts",
+            "planning/evidence-job-durability/implementation-2026-09-24.md",
+            "rfc/evidence-job-durability.md",
+            "rfc/longitudinal-store.md"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "evidence-job-durability.md",
+              "digest": "sha256:0f3c9f4d5fc49bd594a01f03c69d8cc15433a96d78d47dcafe775453eff78742"
+            },
             {
               "kind": "rfc",
               "id": "longitudinal-store.md",
               "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
             },
             {
-              "kind": "rfc",
-              "id": "bot-policy.md",
-              "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
-            },
-            {
               "kind": "work_state",
-              "id": "D3027",
-              "digest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e"
+              "id": "D3300",
+              "digest": "sha256:73fefdc741ca314c6a3832598368eed98269963dea2a8e2c3c4bf774017c462e"
             }
           ]
         },
@@ -518,28 +518,35 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Whole-game Review is a working learner journey: every ply with grounded grades, Retry from here through a preserving fork and a Compare handoff afterwards, 0..3 shared moments, coverage-gated accuracy and learner-side eval graph, recorded semantic events per ply, and an explicit attributed Analyze action withheld during retries. Return scheduling reaches Learn with the owner-ruled standing words. The Review compiler packet and module presets remain.",
+          "summary": "Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph and Analyze; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and skill categories drilled down to their source games, all computed on read from the durable longitudinal store.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/review-map-remainder.test.ts",
-            "planning/review/implementation-2026-09-24.md",
-            "rfc/review-map.md"
+            "apps/server/src/learner-profile-application.test.ts",
+            "planning/style/implementation-2026-09-24.md",
+            "rfc/player-style.md",
+            "rfc/skills.md",
+            "rfc/longitudinal-store.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "review-map.md",
-              "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+              "id": "player-style.md",
+              "digest": "sha256:9939e4a13fd7b1b6a1c6ebc52d43f58f82ae3399c9f1af4fcd37a500e231a347"
             },
             {
               "kind": "rfc",
-              "id": "return-scheduling.md",
-              "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
+              "id": "skills.md",
+              "digest": "sha256:9d58a2decab24038dcda1daf29b090b9634aaa61eed220994251dfaf29407359"
+            },
+            {
+              "kind": "rfc",
+              "id": "longitudinal-store.md",
+              "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
             },
             {
               "kind": "work_state",
-              "id": "D1467",
-              "digest": "sha256:da350aa968f6d7aa9bd3506c1fe5e83af8f163bf532bf89be787ed5b6f14d6dc"
+              "id": "D3300",
+              "digest": "sha256:73fefdc741ca314c6a3832598368eed98269963dea2a8e2c3c4bf774017c462e"
             }
           ]
         },
@@ -641,6 +648,7 @@
     ["play", "rehearsal", "live"],
     ["review", "review", "live"],
     ["rating", "learner_model", "live"],
+    ["profile", "learner_model", "live"],
     ["learn", "learner_model", "live"],
     ["live", "social_play", "live"],
     ["create", "theory_content", "live"],
@@ -669,6 +677,7 @@
     ["/sessions", "social_play", "live"],
     ["/rated-games", "learner_model", "live"],
     ["/rating", "learner_model", "live"],
+    ["/learner-profile", "learner_model", "live"],
     ["/marks", "learner_model", "live"],
     ["/cohorts", "learner_model", "live"],
     ["/principles", "theory_content", "live"],

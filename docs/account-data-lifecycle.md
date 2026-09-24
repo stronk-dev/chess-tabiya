@@ -23,7 +23,10 @@ has no temporary-disk allocation or cleanup bound; cancellation stops further ch
 
 The export deliberately excludes password hashes, failed-login and lock state,
 sessions, bearer tokens and token hashes, provider credentials, deployment
-configuration, and installation-wide official content. Browser-local writer ids,
+configuration, and installation-wide official content. Durable evidence-job rows (batches, jobs,
+result sequences and application transitions; `evidence-jobs.md`) are run-owned operational
+state: they carry no learner identity, are not exported, and follow their run's deletion
+classification by cascade. Browser-local writer ids,
 board-view preferences, assistance preferences, and workflow presets are named as an
 exclusion because another device's copy is neither account data nor recoverable by the
 server. There is no account-import endpoint.

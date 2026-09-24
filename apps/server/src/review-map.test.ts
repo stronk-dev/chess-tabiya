@@ -63,12 +63,14 @@ function eventKinds(path: string, runId: string): readonly string[] {
 describe("review map through createApplication", { timeout: 30_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
   let directory: string | undefined;
+  // close() drains the longitudinal worker, which finishes its in-flight imported-game projection
+  // (~10 s for the fixture game); the hook gets the same budget as the tests. See D3300.
   afterEach(async () => {
     await application?.close();
     application = undefined;
     if (directory !== undefined) rmSync(directory, { recursive: true, force: true });
     directory = undefined;
-  });
+  }, 30_000);
 
   async function start(): Promise<{ origin: string; databasePath: string }> {
     directory = mkdtempSync(join(tmpdir(), "tabiya-review-map-"));

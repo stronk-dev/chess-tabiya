@@ -3,6 +3,7 @@ export type StaticRouteName =
   | "play"
   | "review"
   | "rating"
+  | "profile"
   | "learn"
   | "live"
   | "create"
@@ -24,6 +25,7 @@ const STATIC_ROUTES: Readonly<Record<string, StaticRouteName>> = Object.freeze({
   "/play": "play",
   "/review": "review",
   "/rating": "rating",
+  "/profile": "profile",
   "/learn": "learn",
   "/live": "live",
   "/create": "create",
@@ -38,6 +40,7 @@ const ROUTE_TITLES: Readonly<Record<AppRoute["name"], string>> = Object.freeze({
   review: "Review",
   story: "Game review",
   rating: "Rating",
+  profile: "Your profile",
   learn: "Learn",
   live: "Live",
   "live-session": "Live session",
