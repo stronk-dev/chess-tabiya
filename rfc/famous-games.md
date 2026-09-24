@@ -1,11 +1,11 @@
 # RFC: Famous games — lifting the masters refusal and making a cited game machine-readable
 
-- **Status:** draft — 2026-08-23
+- **Status:** implementing — 2026-09-24. §1, §4 and §5 ship (criteria 1, 2, 4–8 green); the `sourceGame` shape ships as a validated candidate sidecar. The pack-schema half of criterion 3 and criterion 9's lane-0.31 landing are **queued behind lane 0.30** (`pack-capability-contract.md`, unlanded), because landing order follows the numbers. Receipt: `planning/famous-games/implementation-2026-09-24.md`. Prior status: draft — 2026-08-23
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` §Library (packs, games, positions, historical sources); `design/01-training-model.md` (authored framing over a played consequence)
 - **Exploration gate:** [[D1093]] (drafting mandate) plus [[D1060]] (the owner's FULL LIFT ruling); the research this draws on is `design/research/famous-game-sources-licensing.md`, landed 2026-08-23
-- **Depends on:** the shipped explorer sourcing lane (`apps/server/src/sourcing/explorer.ts`); `rfc/live-sources.md` (accepted — the record-boundary annotation strip this reuses)
+- **Depends on:** the shipped explorer sourcing lane (`apps/server/src/sourcing/explorer.ts`); the shipped [[D410]] record-boundary strip (`stripPgnAnnotations`, `apps/server/src/import-source.ts`) — *corrected 2026-09-24: this line named `rfc/live-sources.md` as accepted; it is a draft with implementation unauthorized, and the strip this reuses shipped under D410, not under live-sources*
 - **Parent / amends:** amends the capability record at `apps/server/src/capabilities.ts:159`; answers [[D329]]'s provenance axis
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/famous-games/` (once implementing)
@@ -138,8 +138,11 @@ New, on `$defs/provenance`, optional, closed:
 }
 ```
 
-Every required field is a field the masters PGN already returns, so nothing must be authored by
-hand to satisfy the shape. `date` is PGN date format (`YYYY.MM.DD`, with `??` for unknown parts),
+Nothing must be authored by hand to satisfy the shape. Four required fields (`white`, `black`,
+`date`, `result`) are Seven-Tag-Roster fields the masters PGN already returns; `sourceId` is the
+requested game identity and `licenceBasis` is the fetched source entry's licence basis — neither is
+a PGN tag, and both are mechanical. *(Corrected 2026-09-24: this sentence said every required field
+is returned by the PGN.)* `date` is PGN date format (`YYYY.MM.DD`, with `??` for unknown parts),
 not ISO — the source's own convention, kept so a round-trip is lossless.
 
 **Why a typed object rather than the existing `attribution` array.** `attribution` is typed
@@ -184,7 +187,7 @@ half; the authored half is content work, not code.
 | Obligation | Source | Where it lives |
 |---|---|---|
 | Serialise requests; back off on 429/5xx | Lichess rate-limiting etiquette | **Already shipped** — `explorer.ts:128` retries on 429 and ≥500 with waits, then abstains `source_unavailable`. Extend the same client to `/masters`; do not build a second fetch path. |
-| Contact-bearing User-Agent + OAuth token | Both endpoints returned **401** unauthenticated on probe | Already shipped. The token becomes a hard dependency, so the ToS revocation clause is recorded as an availability risk, not assumed away. |
+| Contact-bearing User-Agent + OAuth token | The **aggregate** endpoint returned **401** unauthenticated on probe; the **per-game PGN** endpoint returned **200** unauthenticated (dossier §1b, re-probed 2026-09-24) | Already shipped. The token is a hard dependency for aggregates only, so the ToS revocation clause is recorded as an availability risk, not assumed away. *(Corrected 2026-09-24: this row said both endpoints 401.)* |
 | **No systematic index walk** | Directive 96/9/EC Art. 7(5) | **New.** Masters fetches are capped to author-named game ids; bulk enumeration of the index is refused in the sourcing lane (criterion 5). |
 | Record the source even though no attribution is required | §2 | `provenance.sources` / `licenceNote`, as `explorer.ts:247` already demands. |
 | **Attribution IS required for broadcast-sourced games** | Lichess broadcasts are CC BY-SA 4.0 | `provenance.attribution`, with `licenceBasis: "cc-by-sa-4.0"`. **Share-alike must be assessed before a broadcast-sourced pack ships** — not resolved here. |
@@ -239,16 +242,19 @@ Each names what a wrong implementation would do to pass it.
    with all six required fields passes. *Wrong implementation: an unconstrained object, which is
    the `attribution` slot this row exists to avoid.*
 4. **A masters PGN populates `sourceGame` with no hand-authoring.** A fixture drives the fetch path
-   with a recorded masters response and asserts all six required fields are derived from the
-   Seven-Tag-Roster; the assertion names the field values, not just their presence. *Wrong
+   with a recorded masters response and asserts all six required fields are derived mechanically —
+   the four roster fields from the Seven-Tag-Roster, `sourceId` from the requested id, `licenceBasis`
+   from the source entry; the assertion names the field values, not just their presence. *Wrong
    implementation: defaulting a missing field to an empty string.*
 5. **Bulk enumeration is refused.** A sourcing call requesting more than one masters game id per
    invocation, or any call to a masters *index* endpoint, throws a typed refusal. The negative
    fixture asserts the throw. *Wrong implementation: documenting the cap in prose — hence a fixture
    that must be red before the cap exists.*
 6. **The masters client is the explorer client.** A test asserts the masters fetch path shares the
-   429/5xx retry-and-abstain behaviour at `explorer.ts:128` — specifically that a stubbed 429
-   produces one retry then a `source_unavailable` abstention. *Wrong implementation: a second fetch
+   429/5xx retry-and-abstain behaviour at `explorer.ts:128` — specifically that a persistently
+   stubbed 429 produces the shipped schedule (three waits of 60/120/240 s, four requests) then a
+   `source_unavailable` abstention. *(Corrected 2026-09-24: "one retry" contradicted the shipped
+   schedule this criterion requires sharing.)* *Wrong implementation: a second fetch
    helper that happens to be polite today.*
 7. **A pack carrying `sourceGame` also carries its licence basis in `provenance.sources`.** The
    existing `ATTACH_SOURCE_LINE_MISSING` guard (`explorer.ts:247`) extends to masters-sourced packs;
@@ -292,6 +298,16 @@ Proposed; ids assigned at landing. Head was **D1142** at drafting.
 
 ## Changelog
 
+- 2026-09-24 — implementing (owner request in session; no further review cycle). Shipped: the four
+  §1 rows (`capabilities.ts`, now at line ~207 — the bundled row had already been re-marked
+  `unmeasured` pending this RFC); `ExplorerClient.masterGame`/`mastersStats` on the one explorer
+  fetch path; `assertMastersRequest` and the one-id cap; `make candidate-emit PIPELINE=masters`
+  over the shipped D410 strip and `parsePgnMainline`; the closed `sourceGame` derivation written as a
+  `source-game.json` sidecar that `sourcing-check` validates; the masters source-line guard in
+  `candidate-attach`. **Deferred by the register, not by choice:** `$defs/provenance.sourceGame`
+  (lane 0.31) waits behind lane 0.30. **Corrected inline:** the Depends-on line (live-sources is not
+  accepted; the strip is D410's), §3's "every required field" sentence, §5's "both endpoints 401"
+  row, and criterion 6's "one retry". Masters aggregates have a client path and no attach consumer.
 - 2026-08-23 — drafted from `design/research/famous-game-sources-licensing.md` under [[D1093]],
   spending owner ruling [[D1060]]. Scoped to the authoring path; learner-facing import deferred
   once the shipped `source_kind` CHECK was found closed and its migration position already claimed

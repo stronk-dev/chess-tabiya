@@ -15,6 +15,7 @@ import {
   validateClaimBindings,
 } from "./claim-binding.js";
 import { EXPLORER_TEMPLATE_ID, RATING_GROUPS, SPEEDS } from "./explorer.js";
+import { sourceGameSidecarIssues } from "./source-game.js";
 import {
   type EvidenceLedger,
   type EvidenceRecord,
@@ -412,6 +413,12 @@ export async function checkSourcingDirectory(directory: string, options: { reado
   if (manifest && ledger) linkage(manifest, ledger, issues);
   corpusEvidenceStateIssues(pack, ledger, issues);
   offlineJobProvenance(job, manifest, issues);
+  if (await exists(resolve(absolute, "source-game.json"))) {
+    try {
+      const sidecar = await readJson(resolve(absolute, "source-game.json"));
+      for (const message of sourceGameSidecarIssues(sidecar, object(pack) ? pack.id : undefined)) issues.push(issue("SOURCE_GAME_INVALID", "/source-game.json", message));
+    } catch (error) { issues.push(issue("SOURCE_GAME_INVALID", "/source-game.json", error instanceof Error ? error.message : String(error))); }
+  }
   if (manifest && !ledger && await exists(resolve(absolute, "priority.json"))) {
     try {
       priorityLinkage(manifest, await readJson(resolve(absolute, "priority.json")), issues);

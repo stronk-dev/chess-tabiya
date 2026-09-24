@@ -1,5 +1,6 @@
 import { emitOpeningCandidate } from "./openings.js";
-import { emitExplorerPriority, ExplorerClient, fixtureUnavailableExplorer, type RatingGroup, type Speed } from "./explorer.js";
+import { emitExplorerPriority, ExplorerClient, fixtureRecordedMasterGame, fixtureUnavailableExplorer, type RatingGroup, type Speed } from "./explorer.js";
+import { emitMastersCandidate } from "./masters.js";
 import { emitSyzygyCandidates, fixtureTablebaseQuery, liveTablebaseQuery } from "./syzygy.js";
 import { createPositionSeedEngineEvaluator, emitPositionSeeds } from "./position-seeds.js";
 import { SourcingError } from "./types.js";
@@ -20,8 +21,8 @@ function argumentsMap(values: readonly string[]): Map<string, string> {
 
 async function main(): Promise<number> {
   const pipeline = process.argv[2];
-  if (pipeline !== "openings" && pipeline !== "syzygy" && pipeline !== "explorer" && pipeline !== "position-seeds") {
-    console.error(`Unknown pipeline ${JSON.stringify(pipeline)}; registered pipelines: openings, syzygy, explorer, position-seeds`);
+  if (pipeline !== "openings" && pipeline !== "syzygy" && pipeline !== "explorer" && pipeline !== "position-seeds" && pipeline !== "masters") {
+    console.error(`Unknown pipeline ${JSON.stringify(pipeline)}; registered pipelines: openings, syzygy, explorer, position-seeds, masters`);
     return 2;
   }
   try {
@@ -66,6 +67,27 @@ async function main(): Promise<number> {
       const live = new ExplorerClient(process.env.LICHESS_TOKEN === undefined ? {} : { token: process.env.LICHESS_TOKEN });
       const output = await emitExplorerPriority({ lines, query: { ratings, speeds, since, until }, client: { stats: process.env.OFFLINE === "1" ? fixtureUnavailableExplorer : (query) => live.stats(query) }, ...(args.has("output-root") ? { outputRoot: args.get("output-root")! } : {}) });
       console.log(`Emitted explorer priority artifact: ${output}`);
+      return 0;
+    }
+    if (pipeline === "masters") {
+      // rfc/famous-games.md §4: one hand-selected game per invocation; a comma list is refused, not looped.
+      const game = args.get("game");
+      if (!game) throw new SourcingError("ARGUMENT_MISSING", "--game <masters game id> is required");
+      const learnerSide = args.get("learner-side");
+      if (learnerSide !== "white" && learnerSide !== "black") throw new SourcingError("LEARNER_SIDE_REQUIRED", "--learner-side white|black is required");
+      const phase = args.get("phase");
+      if (phase !== "opening" && phase !== "middlegame" && phase !== "endgame" && phase !== "cross_phase") throw new SourcingError("ARGUMENT_INVALID", "--phase opening|middlegame|endgame|cross_phase is required");
+      const live = new ExplorerClient(process.env.LICHESS_TOKEN === undefined ? {} : { token: process.env.LICHESS_TOKEN });
+      const output = await emitMastersCandidate({
+        gameIds: game.split(","),
+        splitPly: Number(args.get("split-ply")),
+        ...(args.has("to-ply") ? { toPly: Number(args.get("to-ply")) } : {}),
+        learnerSide,
+        phase,
+        client: { masterGame: process.env.OFFLINE === "1" ? fixtureRecordedMasterGame : (id) => live.masterGame(id) },
+        ...(args.has("output-root") ? { outputRoot: args.get("output-root")! } : {}),
+      });
+      console.log(`Emitted masters candidate: ${output}`);
       return 0;
     }
     const side = args.get("learner-side");

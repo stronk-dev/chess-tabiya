@@ -38,7 +38,7 @@ describe("D634 evidence contract topology", () => {
     expect(intersection(RUNTIME_EVENT_KINDS, EVIDENCE_KINDS)).toEqual([]);
     expect(RULES_EVIDENCE_FACTS).toHaveLength(34);
     expect(RECORDED_READING_DISPOSITIONS.filter((row) => row.disposition === "admitted").map((row) => row.kind)).toEqual(["tablebase_result", "engine_eval"]);
-    expect(CAPABILITY_DISPOSITIONS).toHaveLength(39);
+    expect(CAPABILITY_DISPOSITIONS).toHaveLength(42);
     expect(intersection(
       [...new Set(CAPABILITY_DISPOSITIONS.flatMap((row) => row.surface === undefined ? [] : [row.surface]))],
       SURFACE_IDS,

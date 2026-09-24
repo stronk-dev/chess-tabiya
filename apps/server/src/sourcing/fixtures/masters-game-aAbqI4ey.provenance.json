@@ -1,0 +1,19 @@
+{
+  "schema": "tabiya.test-fixture.http-capture.v1",
+  "fixture": "masters-game-aAbqI4ey.pgn",
+  "sourceId": "lichess-masters",
+  "capture": {
+    "method": "GET",
+    "url": "https://explorer.lichess.org/masters/pgn/aAbqI4ey",
+    "retrievedAt": "2026-09-24T12:43:54.000Z",
+    "status": 200,
+    "etag": null,
+    "sha256": "sha256:6603f3d5a3966c3136de3333e64020253bec1bffbf78abf821efce55274cb8b1",
+    "bytes": 687
+  },
+  "storage": {
+    "transform": "append_lf",
+    "sha256": "sha256:d60f05d319ac43fafb6e23a78e913154d96c38f65329aacd3832034d267202e2",
+    "bytes": 688
+  }
+}

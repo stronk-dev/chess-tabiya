@@ -23,6 +23,13 @@ export const SPEEDS = ["ultraBullet", "bullet", "blitz", "rapid", "classical", "
 export type Speed = (typeof SPEEDS)[number];
 export const EXPLORER_RATIONALE = "aggregate statistics are facts; the underlying Lichess game data is CC0; requests are serialized to follow the Lichess opening-explorer etiquette";
 export const EXPLORER_TEMPLATE_ID = "explorer-move-share/v1";
+// rfc/famous-games.md §1/§2/§5. The masters database shares the explorer's client, its etiquette and
+// its abstention vocabulary. The rationale is the line a masters-sourced pack must carry in
+// `provenance.sources` (criterion 7), exactly as EXPLORER_RATIONALE is for population evidence.
+export const MASTERS_SOURCE_ID = "lichess-masters";
+export const MASTERS_RATIONALE = "a master game score is a record of fact; Lichess asserts no rights over the masters database and requires no attribution; games are hand-selected by id and never enumerated from the masters index; third-party annotations are stripped at the record boundary";
+const MASTERS_ORIGIN = "https://explorer.lichess.org";
+const MASTERS_GAME_ID = /^[A-Za-z0-9]{8}$/;
 
 export interface ExplorerQuery {
   readonly fen: string;
@@ -72,17 +79,91 @@ export function explorerUrl(raw: ExplorerQuery): string {
   url.searchParams.set("since", query.since);
   url.searchParams.set("until", query.until);
   url.searchParams.set("moves", String(query.moves));
+  // Product scope, not a licence conclusion (rfc/famous-games.md §1, D5): the corpus panel renders
+  // population results and has no per-game consumer, so game references are never requested.
   url.searchParams.set("topGames", "0");
   url.searchParams.set("recentGames", "0");
   url.searchParams.set("history", "false");
   return url.toString();
 }
 
-function source(url: string, response: Response, body: Uint8Array, retrievedAt: string): SourceEntry {
-  return { sourceId: "lichess-explorer", retrievedAt, origin: { kind: "http", url, status: response.status, sha256: sha256(body), bytes: body.byteLength, etag: response.headers.get("etag") }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: EXPLORER_RATIONALE } };
+export interface MastersQuery {
+  readonly fen: string;
+  readonly since?: number;
+  readonly until?: number;
+  readonly moves?: number;
 }
 
-function parseStats(body: Uint8Array, query: ExplorerQuery, sourceEntry: SourceEntry): ExplorerStats {
+export type NormalizedMastersQuery = { readonly fen: string; readonly since: number; readonly until: number; readonly moves: number };
+
+export type MastersStats =
+  | { readonly kind: "stats"; readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly ExplorerMove[]; readonly window: { readonly since: number; readonly until: number }; readonly source: SourceEntry }
+  | { readonly kind: "abstention"; readonly reason: "source_unavailable" | "no_data_at_band"; readonly detail: string; readonly source: SourceEntry };
+
+export type MastersGame =
+  | { readonly kind: "game"; readonly gameId: string; readonly body: Uint8Array; readonly source: SourceEntry }
+  | { readonly kind: "abstention"; readonly reason: "source_unavailable"; readonly detail: string; readonly source: SourceEntry };
+
+export function normalizeMastersQuery(query: MastersQuery, now: Date = new Date()): NormalizedMastersQuery {
+  const since = query.since ?? 1952;
+  const until = query.until ?? now.getUTCFullYear();
+  if (!Number.isSafeInteger(since) || !Number.isSafeInteger(until) || since < 1952 || until > now.getUTCFullYear() || since > until) throw new SourcingError("WINDOW_INVALID", "masters since/until must be whole years from 1952 to the current year with since <= until");
+  const moves = query.moves ?? 12;
+  if (!Number.isSafeInteger(moves) || moves < 1) throw new SourcingError("ARGUMENT_INVALID", "moves must be a positive safe integer");
+  return Object.freeze({ fen: query.fen, since, until, moves });
+}
+
+export function mastersUrl(raw: MastersQuery, now?: Date): string {
+  const query = normalizeMastersQuery(raw, now);
+  const url = new URL(`${MASTERS_ORIGIN}/masters`);
+  url.searchParams.set("fen", query.fen);
+  url.searchParams.set("since", String(query.since));
+  url.searchParams.set("until", String(query.until));
+  url.searchParams.set("moves", String(query.moves));
+  // Aggregates only: a masters response that names games is the index, and walking it is the
+  // repeated, systematic extraction rfc/famous-games.md §2/§5 refuses.
+  url.searchParams.set("topGames", "0");
+  return url.toString();
+}
+
+export function mastersGameUrl(gameId: string): string {
+  if (!MASTERS_GAME_ID.test(gameId)) throw new SourcingError("MASTERS_GAME_ID_INVALID", `masters game ids are eight ASCII letters or digits; refused ${JSON.stringify(gameId)}`);
+  return `${MASTERS_ORIGIN}/masters/pgn/${gameId}`;
+}
+
+/** Every request the explorer client makes passes this guard (criterion 5). Outside `/masters` it is inert. */
+export function assertMastersRequest(raw: string): void {
+  const url = new URL(raw);
+  if (url.origin !== MASTERS_ORIGIN || !(url.pathname === "/masters" || url.pathname.startsWith("/masters/"))) return;
+  if (url.pathname === "/masters") {
+    if (url.searchParams.get("topGames") !== "0" || url.searchParams.has("recentGames")) throw new SourcingError("MASTERS_INDEX_REFUSED", "a masters query must request aggregates only (topGames=0); listing games from the masters index is refused");
+    return;
+  }
+  const parts = url.pathname.split("/").filter(Boolean);
+  if (parts.length === 3 && parts[1] === "pgn" && MASTERS_GAME_ID.test(parts[2]!) && url.search === "") return;
+  throw new SourcingError("MASTERS_INDEX_REFUSED", `only hand-selected /masters/pgn/{id} games and topGames=0 aggregates may be fetched; refused ${url.pathname}`);
+}
+
+/** A sourcing invocation names exactly one masters game (criterion 5). */
+export function requireSingleMastersGame(gameIds: readonly string[]): string {
+  if (gameIds.length !== 1) throw new SourcingError("MASTERS_ENUMERATION_REFUSED", `one masters game id per invocation; ${gameIds.length} requested`);
+  mastersGameUrl(gameIds[0]!);
+  return gameIds[0]!;
+}
+
+interface SourceIdentity { readonly sourceId: string; readonly rationale: string }
+const EXPLORER_SOURCE: SourceIdentity = { sourceId: "lichess-explorer", rationale: EXPLORER_RATIONALE };
+const MASTERS_SOURCE: SourceIdentity = { sourceId: MASTERS_SOURCE_ID, rationale: MASTERS_RATIONALE };
+
+function source(url: string, response: Response, body: Uint8Array, retrievedAt: string, identity: SourceIdentity = EXPLORER_SOURCE): SourceEntry {
+  return { sourceId: identity.sourceId, retrievedAt, origin: { kind: "http", url, status: response.status, sha256: sha256(body), bytes: body.byteLength, etag: response.headers.get("etag") }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: identity.rationale } };
+}
+
+type Retrieved =
+  | { readonly kind: "body"; readonly body: Uint8Array; readonly source: SourceEntry }
+  | { readonly kind: "abstention"; readonly reason: "source_unavailable"; readonly detail: string; readonly source: SourceEntry };
+
+function parseCounts(body: Uint8Array): { readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly ExplorerMove[] } {
   const raw = JSON.parse(new TextDecoder().decode(body)) as Record<string, unknown>;
   const white = Number(raw.white);
   const draws = Number(raw.draws);
@@ -92,9 +173,21 @@ function parseStats(body: Uint8Array, query: ExplorerQuery, sourceEntry: SourceE
     return { uci: String(value.uci), san: String(value.san), averageRating: Number(value.averageRating), white: Number(value.white), draws: Number(value.draws), black: Number(value.black) };
   }) : [];
   if (![white, draws, black].every((value) => Number.isSafeInteger(value) && value >= 0) || moves.some((move) => ![move.white, move.draws, move.black].every((value) => Number.isSafeInteger(value) && value >= 0))) throw new SourcingError("EXPLORER_RESPONSE_INVALID", "explorer response has invalid result counts");
+  return { white, draws, black, moves: Object.freeze(moves) };
+}
+
+function parseStats(body: Uint8Array, query: ExplorerQuery, sourceEntry: SourceEntry): ExplorerStats {
+  const { white, draws, black, moves } = parseCounts(body);
   const total = white + draws + black;
   if (total < 100) return { kind: "abstention", reason: "no_data_at_band", detail: `total ${total} < 100`, source: sourceEntry };
-  return { kind: "stats", white, draws, black, moves: Object.freeze(moves), window: { since: query.since, until: query.until }, ratings: query.ratings, speeds: query.speeds, source: sourceEntry };
+  return { kind: "stats", white, draws, black, moves, window: { since: query.since, until: query.until }, ratings: query.ratings, speeds: query.speeds, source: sourceEntry };
+}
+
+function parseMastersStats(body: Uint8Array, query: NormalizedMastersQuery, sourceEntry: SourceEntry): MastersStats {
+  const { white, draws, black, moves } = parseCounts(body);
+  const total = white + draws + black;
+  if (total === 0) return { kind: "abstention", reason: "no_data_at_band", detail: "no master games reach this position in the requested years", source: sourceEntry };
+  return { kind: "stats", white, draws, black, moves, window: { since: query.since, until: query.until }, source: sourceEntry };
 }
 
 export class ExplorerClient {
@@ -102,10 +195,29 @@ export class ExplorerClient {
 
   async stats(raw: ExplorerQuery): Promise<ExplorerStats> {
     const query = normalizeExplorerQuery(raw);
-    const url = explorerUrl(query);
+    const retrieved = await this.#retrieve(explorerUrl(query), EXPLORER_SOURCE, "lichess-explorer");
+    return retrieved.kind === "abstention" ? retrieved : parseStats(retrieved.body, query, retrieved.source);
+  }
+
+  /** Masters position and per-move aggregates (rfc/famous-games.md §1): the same client, the same etiquette. */
+  async mastersStats(raw: MastersQuery): Promise<MastersStats> {
+    const now = this.options.now?.() ?? new Date();
+    const query = normalizeMastersQuery(raw, now);
+    const retrieved = await this.#retrieve(mastersUrl(query, now), MASTERS_SOURCE, "lichess-masters");
+    return retrieved.kind === "abstention" ? retrieved : parseMastersStats(retrieved.body, query, retrieved.source);
+  }
+
+  /** One hand-selected masters game score (rfc/famous-games.md §1 row 3). The body is returned raw; the record-boundary strip happens in the parser. */
+  async masterGame(gameId: string): Promise<MastersGame> {
+    const retrieved = await this.#retrieve(mastersGameUrl(gameId), MASTERS_SOURCE, "lichess-masters");
+    return retrieved.kind === "abstention" ? retrieved : { kind: "game", gameId, body: retrieved.body, source: retrieved.source };
+  }
+
+  async #retrieve(url: string, identity: SourceIdentity, cacheDirectory: string): Promise<Retrieved> {
+    assertMastersRequest(url);
     const sourceRoot = resolve(this.options.sourceRoot ?? "content/sources");
     const key = sha256(url).slice(7);
-    const cachePath = resolve(sourceRoot, "lichess-explorer", `${key}.json`);
+    const cachePath = resolve(sourceRoot, cacheDirectory, `${key}.json`);
     try {
       const cached = await readJson(cachePath) as Record<string, unknown>;
       const retrievedAt = String(cached.retrievedAt);
@@ -113,7 +225,7 @@ export class ExplorerClient {
       if (age <= 30 * 24 * 60 * 60 * 1000 && typeof cached.body === "string") {
         const body = Uint8Array.from(Buffer.from(cached.body, "base64"));
         const response = new Response(body, { status: Number(cached.status), headers: typeof cached.etag === "string" ? { etag: cached.etag } : {} });
-        return parseStats(body, query, source(url, response, body, retrievedAt));
+        return { kind: "body", body, source: source(url, response, body, retrievedAt, identity) };
       }
     } catch { /* cache miss */ }
     return withSourceLock(sourceRoot, async (lock) => {
@@ -124,14 +236,14 @@ export class ExplorerClient {
         const response = await fetcher(url, { headers: { "user-agent": "chess-tabiya-sourcing/0.0.0 (+https://github.com/stronk-dev/chess-tabiya; repository-owner)", ...(this.options.token ? { authorization: `Bearer ${this.options.token}` } : {}) } });
         const body = new Uint8Array(await response.arrayBuffer());
         const retrievedAt = (this.options.now?.() ?? new Date()).toISOString();
-        const entry = source(url, response, body, retrievedAt);
+        const entry = source(url, response, body, retrievedAt, identity);
         if (response.status === 401 || response.status === 403) return { kind: "abstention", reason: "source_unavailable", detail: `HTTP ${response.status} Authorization Required`, source: entry };
         if ((response.status === 429 || response.status >= 500) && attempt < waits.length) { await (this.options.wait ?? ((ms) => new Promise((done) => setTimeout(done, ms))))(waits[attempt]!); continue; }
         if (response.status === 429 || response.status >= 500) return { kind: "abstention", reason: "source_unavailable", detail: `HTTP ${response.status} after ${attempt} retries`, source: entry };
         if (response.status >= 400) return { kind: "abstention", reason: "source_unavailable", detail: `HTTP ${response.status}`, source: entry };
         await mkdir(resolve(cachePath, ".."), { recursive: true });
         await writeCanonicalJson(cachePath, { kind: "body", url, status: response.status, etag: response.headers.get("etag"), retrievedAt, body: Buffer.from(body).toString("base64") });
-        return parseStats(body, query, entry);
+        return { kind: "body", body, source: entry };
       }
     });
   }
@@ -157,6 +269,24 @@ export async function fixtureAvailableExplorer(query: ExplorerQuery): Promise<Ex
     licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: EXPLORER_RATIONALE },
   });
   return parseStats(captured.body, normalized, captured.source);
+}
+
+export async function fixtureUnavailableMasterGame(gameId: string): Promise<MastersGame> {
+  const url = mastersGameUrl(gameId);
+  const body = new TextEncoder().encode("source unavailable offline");
+  const response = new Response(body, { status: 503, headers: { "content-type": "text/plain" } });
+  return { kind: "abstention", reason: "source_unavailable", detail: "HTTP 503 after 3 retries", source: source(url, response, body, "2026-09-24T00:00:00.000Z", MASTERS_SOURCE) };
+}
+
+/** The recorded 2026-09-24 capture of the dossier's probed game; any other id is refused, never relabelled. */
+export async function fixtureRecordedMasterGame(gameId: string): Promise<MastersGame> {
+  const captured = await readCapturedHttpFixture({
+    fixturePath: resolve("apps/server/src/sourcing/fixtures/masters-game-aAbqI4ey.pgn"),
+    provenancePath: resolve("apps/server/src/sourcing/fixtures/masters-game-aAbqI4ey.provenance.json"),
+    expectedUrl: mastersGameUrl(gameId),
+    licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: MASTERS_RATIONALE },
+  });
+  return { kind: "game", gameId, body: captured.body, source: captured.source };
 }
 
 interface ExplorerLine { readonly eco: string; readonly name: string; readonly movesSan: readonly string[]; readonly fen: string }
@@ -249,6 +379,8 @@ export async function attachExplorerEvidence(options: { readonly directory?: str
   if (!Array.isArray(pack.feedbackClaims) || typeof pack.feedbackClaims[claimIndex]?.text !== "string") throw new SourcingError("ATTACH_TARGET_FORBIDDEN", "target feedback claim does not exist");
   if (options.span === undefined || options.span.length === 0 || options.field === undefined) throw new SourcingError("ATTACH_SPAN_REQUIRED", "--span and --field are required; pack prose is never generated or overwritten");
   if (!(pack.provenance?.sources ?? []).some((source: unknown) => typeof source === "string" && source.includes(EXPLORER_RATIONALE))) throw new SourcingError("ATTACH_SOURCE_LINE_MISSING", `pack provenance.sources must already contain the explorer rationale: ${EXPLORER_RATIONALE}`);
+  const mastersSourced = (manifest.entries as readonly SourceEntry[]).some((entry) => entry.sourceId === MASTERS_SOURCE_ID);
+  if (mastersSourced && !(pack.provenance?.sources ?? []).some((source: unknown) => typeof source === "string" && source.includes(MASTERS_RATIONALE))) throw new SourcingError("ATTACH_SOURCE_LINE_MISSING", `a masters-sourced pack's provenance.sources must already contain the masters rationale: ${MASTERS_RATIONALE}`);
   const anchor = nodePosition(pack, options.spineNodeId);
   const result = await options.client.stats({ ...options.query, fen: anchor.fen });
   const nextManifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: [...manifest.entries.filter((entry: SourceEntry) => !(entry.sourceId === result.source.sourceId && entry.retrievedAt === result.source.retrievedAt)), result.source].sort((a, b) => a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt)) };

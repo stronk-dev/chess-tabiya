@@ -1,0 +1,2 @@
+# The captured masters body already ends in LF; the fixture convention appends one more (README.md).
+masters-game-*.pgn whitespace=-blank-at-eof
