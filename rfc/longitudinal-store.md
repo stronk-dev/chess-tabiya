@@ -1,19 +1,14 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **RETURNED by the tenth fresh independent review on 2026-09-06 on
-  [[D2994]]–[[D3001]].** The ninth repair's file-backed model retains durable source bytes,
-  store-scoped claim capabilities and a five-state row shape, but its eleven named source
-  mutations are receipt-only no-ops; identical requests cancel healthy claims; caller-selected
-  cuts can regress the high-water mark; SQL and parsing admit mutually inconsistent states; due
-  retries and expired claims cannot run; legacy provenance is inverted; and the repair silently
-  forks the normative V4 source identity to V5. `make longitudinal-store-tenth-fresh-review`
-  retains the complete chain and passes 8/8 counterexamples plus strict TypeScript. Another
-  bounded author repair and genuinely fresh independent review are required. No production
-  migration, `SQLiteRunStorage` method, worker, reader, consumer, API or client implementation is
-  authorized. The
-  2026-08-22 acceptance remains history, not implementation authority.
-  *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
-  returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
+- **Status:** implementing — **implementation landed 2026-09-24
+  at migration 26** under the owner's direct-implementation direction for this session; no further
+  review round preceded landing, and consolidation, review and the Active-row status transition
+  belong to the register owner. The tenth fresh return's [[D2994]]–[[D3001]] are fixed in the production code, each by an
+  executable test (receipt: `planning/longitudinal-store/implementation-2026-09-24.md`). The store,
+  file-backed worker, reconciliation, typed read, rebuild/once operator doors and account
+  export/deletion coverage ship; no consumer, route or client surface is wired, by §Scope.
+  *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
+  and returned 2026-08-23 before that.)*
 - **Author:** claude
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` §Learn and return;
@@ -43,10 +38,10 @@
   inventory — Discharge D1)
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/longitudinal-store/` (once implementing)
+- **Planning:** `planning/longitudinal-store/` (implementation receipt `implementation-2026-09-24.md`)
 
 ```tabiya-claims
-migration | position behind learner-rating | drill_runs.longitudinal_profile_disposition; drill_runs.longitudinal_structure_attribution; learner_observation_denominators; learner_observations; learner_structure_stats; learner_observation_jobs
+none
 ```
 
 ## Summary
@@ -1989,7 +1984,7 @@ negative fixture where it could otherwise pass vacuously.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| `D1` | the four durable classes (`learner_observation_denominators`, `learner_observations`, `learner_structure_stats`, `learner_observation_jobs`) enter the account-export and account/per-run deletion inventories required by `archive/portable-account-data.md` and the landed export/deletion docs | `longitudinal-store` (self, at landing) | the landing commit | |
+| `D1` | the four durable classes (`learner_observation_denominators`, `learner_observations`, `learner_structure_stats`, `learner_observation_jobs`) enter the account-export and account/per-run deletion inventories required by `archive/portable-account-data.md` and the landed export/deletion docs | `longitudinal-store` (self, at landing) | the landing commit | 2026-09-24 — `ACCOUNT_DATA_INVENTORY` + `behavioralProfiles` export, account and per-run deletion previews, `docs/account-data-lifecycle.md`; `longitudinal-store.test.ts` privacy arms |
 | `D2` | durable import subject provenance (`learner_asserted | observed_other | unknown`, selected side, non-empty asserted handle, legacy unknown) lands before any personal-play consumer admits imported source-mainline rows | future import-subject RFC; consumers enforce the revision-1 refusal meanwhile | accepted subject RFC + migration/rebuild receipt | |
 
 ## Resolved questions (2026-08-24 amendment)
@@ -2026,6 +2021,38 @@ head after that renumbering and **not yet written**:
 
 ## Changelog
 
+- 2026-09-24: **implementation landed** — migration 26 landed with the storage, projector, worker, read, rebuild
+  and export/deletion coverage (`docs/longitudinal-store.md`). Inline corrections of genuine
+  defects, each pinned by a test:
+  (1) §A registry closure is set-equal to the exact **version-1** semantic-event refs; the eleven
+  recorded-path v2 successors ([[D1933]]) landed after the literal registry and stay outside
+  revision 1 until an accepted RFC owns the bump;
+  (2) §C job DDL gains the CHECKs that make SQL mirror the one parser ([[D2997]]/[[D2998]]):
+  `completed_seq=0` outside `complete`, zero retries in `pending`/`complete`, per-code retry
+  budgets for `retry_wait`/`quarantined`, the running claim tuple equal to the requested cut,
+  non-empty token/worker, canonical millisecond instants and ref-array lengths equal to counts; the
+  retry counter is shared across failure codes and a job quarantines once it reaches the failing
+  code's budget;
+  (3) §B.1/§C authorship is one closed journal × disposition matrix ([[D3000]]): journal-less
+  `single_player` and pre-migration `unattributable_legacy` commits resolve to the owner;
+  grant-only `unattributable_shared` commits abstain; a live journal attributes each commit to the
+  `board.granted` holder, with pre-grant and imported arena-leg commits abstaining; a
+  `single_player` run with a journal is `snapshot_invalid`. Predictions are admitted only on
+  `single_player` runs — a legacy run cannot prove it never shared write access;
+  (4) `deleteOwnedRun` of a retained shared run uses the same `account_deleted` suppression as
+  account deletion, before owner reassignment;
+  (5) the migration body is idempotent (column-presence guarded, `IF NOT EXISTS`) so existing
+  rewound-version storage fixtures replay it; a run whose bytes cannot be replayed is recorded as a
+  quarantined `snapshot_invalid` job at watermark time rather than failing the write;
+  (6) the rebuild instrument takes the projector as an operand and worker configuration lives apart
+  from the executor, so the HTTP process module graph never reaches the semantic adapters;
+  (7) [[D2996]]'s "monotone head" is realised as *no caller operand selects the cut*: the requested
+  head is always the locked stored head inside the writer's transaction, so it is exactly as
+  monotone as the append-only event log. A stale full-snapshot overwrite that genuinely shortens the
+  stored log is a changed source like any other — the job re-requests that exact head and the
+  generation bump fences every claim over the longer log (refusing the write instead would have
+  changed `save` semantics for existing callers, including the server latency benchmark).
+  The V4 source identity and `tabiya.longitudinal-source.v4\0` domain are preserved ([[D3001]]).
 - 2026-09-05: ninth author repair completed [[D2779]]–[[D2788]]. A file-backed SQLite contract now
   owns replayed source/owner/journal/authorship truth, all five job states, clock, exact claim and
   invalidation CAS; committed mutation receipts replace caller source text; restart/idempotence and

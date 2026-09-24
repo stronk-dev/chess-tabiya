@@ -123,6 +123,10 @@ describe("complete-profile identity (bot-policy A1, [[D3025]])", () => {
     expect(() => resolveBotProfileReference(missing)).toThrow(BotProfileError);
     expect(() => resolveBotProfileReference({ ...entry.reference, digest: entry.reference.digest.toUpperCase() })).toThrow(BotProfileError);
     expect(() => resolveBotProfileReference(null)).toThrow(BotProfileError);
+    // Direct refusal-code disposition (refusal-coverage.test.ts): every refusal is BOT_PROFILE_INVALID.
+    let refusal: unknown;
+    try { resolveBotProfileReference(null); } catch (error) { refusal = error; }
+    expect(refusal).toMatchObject({ name: "BotProfileError", code: "BOT_PROFILE_INVALID" });
   });
 });
 

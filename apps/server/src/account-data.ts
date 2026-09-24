@@ -32,7 +32,7 @@ function table(
 }
 
 /**
- * The exhaustive privacy boundary for storage schema v25. A migration adding a table must add one
+ * The exhaustive privacy boundary for storage schema v26. A migration adding a table must add one
  * entry here in the same change; assertAccountDataInventory enforces set equality at startup/tests.
  */
 export const ACCOUNT_DATA_INVENTORY = Object.freeze([
@@ -76,6 +76,10 @@ export const ACCOUNT_DATA_INVENTORY = Object.freeze([
   table("cohort_standings", "behavioral_profiles", "project", "tombstone", { opened_by_learner_id: "deletion_scoped_key" }),
   table("standing_members", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_marks", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_observation_denominators", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_observations", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_structure_stats", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_observation_jobs", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   Object.freeze({
     store: "browser_local",
     kind: "browser",
@@ -151,6 +155,10 @@ export const ACCOUNT_TAGGED_RECORD_FIELDS = {
   standing_members: [["classroom_id", "show_record", "show_rating", "published_at"]],
   learner_marks: [["mark", "calibration_id", "run_id", "earned_at"]],
   cohort_standings: [["classroom_id", "window_from", "window_to", "opened_at", "closed_at"]],
+  learner_observation_denominators: [["run_id", "phase", "decision_class", "decisions", "observed_at", "derived_rev"]],
+  learner_observations: [["run_id", "projection_id", "projection_version", "semantic_sign", "source_sign", "phase", "decision_class", "session_kind", "pack_id", "opportunities", "occurred", "alternative_share_sum", "occurredRefs", "opportunityRefs", "observed_at", "derived_rev"]],
+  learner_structure_stats: [["run_id", "root_key", "root_node_id", "session_kind", "pack_id", "branch_count", "rewound_count", "forked_count", "group_count", "outcome_count", "observed_at", "derived_rev"]],
+  learner_observation_jobs: [["run_id", "requested_seq", "completed_seq", "derived_rev", "state", "retry_count", "failure_code", "next_attempt_at", "updated_at"]],
 } as const satisfies Readonly<Record<string, readonly (readonly string[])[]>>;
 
 export type AccountRecordTable = keyof typeof ACCOUNT_TAGGED_RECORD_FIELDS;
@@ -269,7 +277,7 @@ export function buildAccountBundle(input: AccountBundleInput): AccountBundleV1 {
     drafts: projected(["pack_drafts", "shape_drafts", "playtest_documents"], Object.freeze([...input.drafts])),
     publications: projected(["registered_packs", "registered_shapes"], Object.freeze([...input.publications])),
     liveAndSocial: projected(["live_sessions", "session_journal", "session_proposals", "session_vote_windows", "session_votes", "session_invitations", "arena_legs", "match_states", "public_tokens", "classrooms", "classroom_members", "assignments", "assignment_submissions"], Object.freeze([...input.liveAndSocial])),
-    behavioralProfiles: projected(["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks"], Object.freeze([...input.behavioralProfiles])),
+    behavioralProfiles: projected(["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks", "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_observation_jobs"], Object.freeze([...input.behavioralProfiles])),
     exclusions: projected(["learners", "learner_sessions", "public_tokens", "browser_local"], Object.freeze([
       Object.freeze({ kind: "password_hash", reason: "Password hashes, login failures, and lock state are authentication material and are never exported." }),
       Object.freeze({ kind: "sessions", reason: "Authenticated sessions, bearer tokens, and token hashes are credentials and are never exported." }),

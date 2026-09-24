@@ -49,7 +49,7 @@ const externalVoice = voiceMode !== "external_http" ? undefined : new ExternalHt
 const application = await createApplication({
   development,
   engineMode,
-  databasePath: process.env.DATABASE_PATH ?? ":memory:",
+  ...(process.env.DATABASE_PATH === undefined ? {} : { databasePath: process.env.DATABASE_PATH }),
   cookieSecure,
   ...(process.env.DRAFT_PACK_FILE === undefined
     ? {}
@@ -75,6 +75,9 @@ const application = await createApplication({
     }),
   }),
 });
+
+// The self-hosted appliance startup/upgrade receipt, including longitudinal reconciliation.
+console.info(JSON.stringify({ event: "startup_receipt", ...application.startupReceipt }));
 
 await new Promise<void>((resolve, reject) => {
   application.server.once("error", reject);

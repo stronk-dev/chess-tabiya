@@ -2,13 +2,13 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2084d31dec01996e4c99cf7c1a07da7d13d24d4f17c397550d2725fa9fdbf4df",
+    "roadmap": "sha256:2fb622b9909845131366825f2a21bd73d7386128654e93148fd0d742da76ffe3",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:a404906b70e7e37d76d6eb9f976179ebe27566fba17b3e57d87ac0460e4eeebe",
-    "rfcRegister": "sha256:3a6607aa4a34d1f7114f42e314aada79c718efccc2c1053b0e9664075ee7aab5",
+    "workState": "sha256:d9e01c26b832ba19778f03e9c8c8c8d474f84ff8d863dec403f237fd08b43964",
+    "rfcRegister": "sha256:9d80e478085e52d02ba4834584b0b0332cd657db0fa73a3507483b45ac21ddaa",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
-    "application": "sha256:dcb641a078d62660d013d17b636c9be49026fc3f7eef556070306d408358e946",
+    "application": "sha256:ad34bfc07f99a75baea84e3cf1519278bb999f9da605e99610c421081a3e5d2e",
     "rest": "sha256:6b9241b40c3d60caf1927e01be2a0e54412499cf9ddf0ece06b4172e4635ac4f"
   },
   "summary": {
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 46,
+      "draft": 45,
       "accepted": 0,
-      "implementing": 15,
+      "implementing": 16,
       "awaiting": 11,
       "implemented": 0,
       "superseded": 0,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 623,
       "doing": 0,
-      "blocked": 1197,
-      "done": 1117,
+      "blocked": 1189,
+      "done": 1125,
       "refused": 111
     },
     "workItems": {
@@ -277,24 +277,24 @@
       "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Bot policy and roster landed their non-persistent half: a twelve-profile catalogue with exact identity binding, a sealed deterministic compiler with a strict guard and replay from independent inputs, and honest uncalibrated cards exposed as not-startable. Persisting the chosen profile needs run lane 0.18 and a migration queued behind concept-registry, evidence-job-durability and longitudinal-store, which is now the binding constraint for bots, history and campaign.",
+        "summary": "The longitudinal store landed at migration 26: additive observation tables, one watermarked mutation boundary, claim-fenced jobs, a supervised worker thread gating readiness and health, rebuild and full export/deletion coverage. The migration queue now opens for evidence-job durability, then concept-registry, then bot-policy's run lane 0.18; bot policy and roster already landed their non-persistent half.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/src/bot-policy-compiler.ts",
-          "planning/bot-policy/implementation-receipt-2026-09-24.md",
-          "rfc/bot-policy.md",
-          "rfc/bot-roster.md"
+          "apps/server/src/longitudinal-store.ts",
+          "planning/longitudinal-store/implementation-2026-09-24.md",
+          "rfc/longitudinal-store.md",
+          "rfc/bot-policy.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "bot-policy.md",
-            "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
+            "id": "longitudinal-store.md",
+            "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
           },
           {
             "kind": "rfc",
-            "id": "bot-roster.md",
-            "digest": "sha256:51f22932e44a8c95ecac0c96c6ccf50861146e946213b04e46b3d205f6cdd27c"
+            "id": "bot-policy.md",
+            "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
           },
           {
             "kind": "work_state",

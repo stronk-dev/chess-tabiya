@@ -1037,6 +1037,18 @@ longitudinal-store-tenth-fresh-review: longitudinal-store-ninth-author-repair
 	./node_modules/.bin/vitest run --config tools/d2994-longitudinal-tenth-fresh-review/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2994-longitudinal-tenth-fresh-review/tsconfig.json
 
+# rfc/longitudinal-store.md §C operator doors. `once` drains one bounded batch of live queued work;
+# `rebuild` compares every complete projection with a fresh derivation (WRITE=1 repairs). Both open
+# DATABASE_PATH (default data/chess-tabiya.sqlite) and never migrate it.
+.PHONY: longitudinal-worker-once longitudinal-rebuild
+longitudinal-worker-once:
+	pnpm --filter @chess-tabiya/server exec esbuild src/longitudinal-worker-once.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/longitudinal-worker-once.js
+	node apps/server/dist/longitudinal-worker-once.js
+
+longitudinal-rebuild:
+	pnpm --filter @chess-tabiya/server exec esbuild src/longitudinal-rebuild.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/longitudinal-rebuild.js
+	node apps/server/dist/longitudinal-rebuild.js $(if $(WRITE),--write,)
+
 .PHONY: bot-roster-fresh-review
 bot-roster-fresh-review:
 	node --test tools/d2233-bot-roster-fresh-review/contract.test.mjs

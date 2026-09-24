@@ -6,16 +6,18 @@
 // perfect_tablebase reaches the real Syzygy endpoint rather than the empty
 // FixtureTablebaseSource that ENGINE_MODE=mock installs by default.
 import { createApplication, type EngineMode } from "../../apps/server/src/application.js";
+import { createInMemoryTestApplication } from "../../apps/server/src/in-memory-test-application.js";
 import { LichessTablebaseSource } from "../../apps/server/src/tablebase.js";
 
 const port = Number(process.env.PORT ?? 4180);
 const engineMode = (process.env.ENGINE_MODE ?? "mock") as EngineMode;
 const development = process.env.NODE_ENV === "development";
 
-const application = await createApplication({
+const compose = process.env.DATABASE_PATH === undefined ? createInMemoryTestApplication : createApplication;
+const application = await compose({
   development,
   engineMode,
-  databasePath: process.env.DATABASE_PATH ?? ":memory:",
+  ...(process.env.DATABASE_PATH === undefined ? {} : { databasePath: process.env.DATABASE_PATH }),
   cookieSecure: false,
   staticDirectory: process.env.STATIC_DIRECTORY ?? "apps/web/dist",
   ...(process.env.K9_REAL_TABLEBASE === "1"

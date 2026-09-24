@@ -8,7 +8,7 @@ import { afterAll, describe, expect, it } from "vitest";
 
 import { PROVIDER_PROTOCOL_RESOURCE, ProviderRequestInvalid, assertProviderDelivery, exactLegalMoves, normalizeProviderRequest, parsePersistedProviderDelivery, serializeProviderDelivery } from "@chess-tabiya/runtime";
 
-import { createApplication } from "./application.js";
+import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { CAPABILITY_DISPOSITIONS } from "./capabilities.js";
 import { EngineSupervisor, binaryArtifactProbe } from "./engine-supervisor.js";
 import { ControlledFetch, FakeEngines, ManualClock, flush, syzygyBody } from "./provider-exchange.test-support.js";
@@ -227,7 +227,7 @@ describe("§5 capability register", () => {
 
 describe("§9 application composition and degradation", () => {
   it("composes one scheduler; with providers off every operation is honestly unavailable", async () => {
-    const application = await createApplication({ engineMode: "mock", cookieSecure: false });
+    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
     await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
     try {
       const result = await application.providers.scheduler.get({ operation: "syzygy.position@1", request: REQUESTS["syzygy-position"] as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);

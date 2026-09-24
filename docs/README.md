@@ -108,6 +108,8 @@ Current completion state is deliberately not copied here. Use the
 - [Classrooms](classrooms.md) — rosters, assignments, submissions and consent.
 - [Campaign](campaign.md) — campaign schema/registry/fold and the present product boundary.
 - [Learner rating](learner-rating.md) — isolated rating arithmetic, storage and learner surface.
+- [Longitudinal store](longitudinal-store.md) — the personal observation ledger, its background
+  projection worker, typed read and operator rebuild.
 
 ## Identity and client platform
 

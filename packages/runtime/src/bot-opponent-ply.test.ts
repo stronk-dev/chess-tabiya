@@ -1,26 +1,35 @@
+// Direct dispositions for the bot-policy §4.1 opponent-ply result codes. Added with the
+// longitudinal-store landing (2026-09-24) because `refusal-coverage.test.ts` found the five codes
+// introduced by ae13a523 with no test disposition, which kept `make verify-content` red at main.
 import { describe, expect, it } from "vitest";
 
 import { BOT_OPPONENT_PLY_RESULTS, BOT_OPPONENT_PLY_RESULT_KINDS, parseBotOpponentPlyResultRow } from "./bot-opponent-ply.js";
-import { BOT_PROFILE_CATALOG, BotProfileError, resolveBotProfileReference } from "./bot-profile-catalog.js";
 
-describe("bot opponent-ply result table (rfc/bot-policy.md §4.1)", () => {
-  it("pins each refusal row's status, code, retryability and action", () => {
-    expect(BOT_OPPONENT_PLY_RESULTS.request_reused_with_different_operands).toEqual({ kind: "request_reused_with_different_operands", status: 409, code: "OPPONENT_REQUEST_REUSED", retryable: false, action: "issue_new_request" });
-    expect(BOT_OPPONENT_PLY_RESULTS.concurrent_commit_conflict).toEqual({ kind: "concurrent_commit_conflict", status: 409, code: "OPPONENT_CONCURRENT_CONFLICT", retryable: true, action: "refresh_and_retry" });
-    expect(BOT_OPPONENT_PLY_RESULTS.base_provider_unavailable).toEqual({ kind: "base_provider_unavailable", status: 503, code: "OPPONENT_PROVIDER_UNAVAILABLE", retryable: true, action: "retry_or_change_opponent" });
-    expect(BOT_OPPONENT_PLY_RESULTS.provider_failed).toEqual({ kind: "provider_failed", status: 502, code: "OPPONENT_PROVIDER_FAILED", retryable: true, action: "retry_or_change_opponent" });
-    for (const kind of BOT_OPPONENT_PLY_RESULT_KINDS) expect(parseBotOpponentPlyResultRow({ ...BOT_OPPONENT_PLY_RESULTS[kind] })).toEqual(BOT_OPPONENT_PLY_RESULTS[kind]);
+describe("bot opponent-ply result table", () => {
+  it("pins every refusal code to its status, retryability and client action", () => {
+    expect(BOT_OPPONENT_PLY_RESULT_KINDS.map((kind) => {
+      const row = BOT_OPPONENT_PLY_RESULTS[kind];
+      return [row.code, row.status, row.retryable, row.action];
+    })).toEqual([
+      [null, 200, false, "continue"],
+      [null, 200, false, "continue"],
+      [null, 200, false, "continue"],
+      ["OPPONENT_STALE_ROOT", 409, false, "refresh_position"],
+      ["OPPONENT_REQUEST_REUSED", 409, false, "issue_new_request"],
+      ["OPPONENT_CONCURRENT_CONFLICT", 409, true, "refresh_and_retry"],
+      ["OPPONENT_PROVIDER_UNAVAILABLE", 503, true, "retry_or_change_opponent"],
+      ["OPPONENT_PROVIDER_FAILED", 502, true, "retry_or_change_opponent"],
+    ]);
   });
 
-  it("refuses a row whose code was swapped for another refusal", () => {
+  it("refuses a wire row whose status, code, retryability or action disagrees with its kind", () => {
+    for (const kind of BOT_OPPONENT_PLY_RESULT_KINDS) {
+      const row = BOT_OPPONENT_PLY_RESULTS[kind];
+      expect(parseBotOpponentPlyResultRow({ ...row })).toEqual(row);
+      expect(() => parseBotOpponentPlyResultRow({ ...row, retryable: !row.retryable })).toThrow(TypeError);
+    }
     expect(() => parseBotOpponentPlyResultRow({ ...BOT_OPPONENT_PLY_RESULTS.provider_failed, code: "OPPONENT_PROVIDER_UNAVAILABLE" })).toThrow(TypeError);
-  });
-
-  it("types an unregistered profile reference as BOT_PROFILE_INVALID", () => {
-    const [entry] = BOT_PROFILE_CATALOG;
-    let caught: unknown;
-    try { resolveBotProfileReference({ ...entry!.reference, id: "guarded-human.1400@2" } as unknown); } catch (error) { caught = error; }
-    expect(caught).toBeInstanceOf(BotProfileError);
-    expect((caught as BotProfileError).code).toBe("BOT_PROFILE_INVALID");
+    expect(() => parseBotOpponentPlyResultRow({ ...BOT_OPPONENT_PLY_RESULTS.stale_root, kind: "invented" })).toThrow(/closed vocabulary/u);
+    expect(() => parseBotOpponentPlyResultRow({ ...BOT_OPPONENT_PLY_RESULTS.committed, extra: true })).toThrow(/invalid shape/u);
   });
 });

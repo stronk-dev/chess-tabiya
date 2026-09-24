@@ -465,24 +465,24 @@
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Bot policy and roster landed their non-persistent half: a twelve-profile catalogue with exact identity binding, a sealed deterministic compiler with a strict guard and replay from independent inputs, and honest uncalibrated cards exposed as not-startable. Persisting the chosen profile needs run lane 0.18 and a migration queued behind concept-registry, evidence-job-durability and longitudinal-store, which is now the binding constraint for bots, history and campaign.",
+          "summary": "The longitudinal store landed at migration 26: additive observation tables, one watermarked mutation boundary, claim-fenced jobs, a supervised worker thread gating readiness and health, rebuild and full export/deletion coverage. The migration queue now opens for evidence-job durability, then concept-registry, then bot-policy's run lane 0.18; bot policy and roster already landed their non-persistent half.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/bot-policy-compiler.ts",
-            "planning/bot-policy/implementation-receipt-2026-09-24.md",
-            "rfc/bot-policy.md",
-            "rfc/bot-roster.md"
+            "apps/server/src/longitudinal-store.ts",
+            "planning/longitudinal-store/implementation-2026-09-24.md",
+            "rfc/longitudinal-store.md",
+            "rfc/bot-policy.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "bot-policy.md",
-              "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
+              "id": "longitudinal-store.md",
+              "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
             },
             {
               "kind": "rfc",
-              "id": "bot-roster.md",
-              "digest": "sha256:51f22932e44a8c95ecac0c96c6ccf50861146e946213b04e46b3d205f6cdd27c"
+              "id": "bot-policy.md",
+              "digest": "sha256:ee4171ed9cde8dcbd286a6101bb42c7812438d6dd2e3f0d4393a72a028890b04"
             },
             {
               "kind": "work_state",

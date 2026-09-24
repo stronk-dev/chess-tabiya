@@ -21208,3 +21208,22 @@ narrow it, and each removal is a typed suppression rendered in words.
 - **Ledger:** D484 closes.
 - **Still open:** Checkpoint B (digest-bound nudge delivery) and the five
   emitter-dependent composition states.
+
+### 2026-09-24 — longitudinal-store landed at migration 26 (implementing)
+
+- **Schema:** the observation tables and the run disposition/attribution
+  columns land additively.
+- **Integrity:** every storage mutation calls one watermark inside its own
+  transaction.
+- **Worker:** jobs are claim-fenced. Projection runs in a supervised worker
+  thread that must report ready before the application starts, and `/healthz`
+  reports it. Rebuild and export/deletion cover the new tables.
+- **Tests:** D2994–D3001 close. An 80-ply projection kept the HTTP loop at a
+  p95 delay of 11.3 ms.
+- **Behaviour change:** `createApplication` always runs on a database file, and
+  in-memory tests use `createInMemoryTestApplication`.
+- **Merge fix:** the provider-exchange composition test moved to the in-memory
+  helper.
+- **Migration queue:** evidence-job-durability is now next, followed by
+  concept-registry, then bot-policy's run lane 0.18.
+- **Still open:** D2 (imported-game player identity).
