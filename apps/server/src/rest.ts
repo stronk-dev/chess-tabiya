@@ -17,6 +17,8 @@ import {
   compileAuthoritativeAssistance,
   finalizeAssistanceEffects,
   parseRequestedAssistanceV1,
+  parseModuleQueryRequest,
+  ModuleQueryError,
   serverAvailabilityFromProviderHealth,
   capabilityOperationAvailability,
   availabilityAdmitsNewRequest,
@@ -783,7 +785,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|modules\/query|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -1735,6 +1737,31 @@ export function createRestHandler(
           return json(200, { hint: { state: "stale", requestId: hints.requestIdFor(decisionDigest, rung), rung } });
         }
         return json(200, { hint: hints.request({ run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: access.session, voiceRequested: authoritative.config.voice === "persona" }, rung) });
+      }
+      if (route.action === "modules/query") {
+        // rfc/module-registration.md §2.5.2 + intent-presets Checkpoint B: the requested-assistance
+        // receipt is untrusted intent; the server re-derives authority, compiles and finalizes it,
+        // and delivers only what that finalized digest makes effective.
+        requireJson(request);
+        const body = closedRecord(value, "/", ["assistance", "query"]);
+        const authority = service.assistanceAuthority(route.runId, principal);
+        // Exactly the /assistance derivation, so the final digest the client holds can match.
+        const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
+        let finalized;
+        try {
+          finalized = finalizeAssistanceEffects(compileAuthoritativeAssistance(parseRequestedAssistanceV1(body.assistance), { origin: authority.origin, access: authority.access, availability }), { authority: MODULE_SOURCE_AUTHORITY, availability });
+        } catch (error) {
+          if (error instanceof AssistanceExchangeError) throw invalid(error.message);
+          throw error;
+        }
+        let query;
+        try {
+          query = parseModuleQueryRequest(body.query);
+        } catch (error) {
+          if (error instanceof ModuleQueryError) throw invalid(error.message);
+          throw error;
+        }
+        return json(200, { page: service.queryModules(route.runId, principal, finalized, query) });
       }
       if (route.action === "deletion-preview") {
         requireJson(request);

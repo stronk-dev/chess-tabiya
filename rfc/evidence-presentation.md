@@ -1,19 +1,18 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** **implementing — Checkpoint A (the Review-compiler slice) landed 2026-09-24 at the
-  owner's direction (implement directly, no review round); receipt
-  `planning/platform-alignment/evidence-presentation/checkpoint-a-implementation-2026-09-24.md`.**
-  `packages/runtime/src/presentation-contract.ts` ships the fourteen `COMPONENT_DECLARATIONS`, the
-  exact pair-keyed `PRESENTATION_ADAPTERS` (review.story@1, the module.review_map@1 executable pairs
-  and the [[D1673]] claim slice), the process/client seals, `PresentationReceipt`
-  (`presentation.receipt@1`), `serializePresentedEvidence` / `parsePresentationReceipt`, the raw-id
-  guard and runtime parsers/renderers for `magnitude`, `fact_statement`, `abstention`, `claim`,
-  `citation` and `enum_state`. The seventh-return defects [[D3102]]–[[D3107]] are closed in the
-  production implementation (not in the disposable author model). Checkpoint P landed two of its
-  eight operations (the consequence operand repair and the Explorer result-reason authority) plus the
-  source-attribution registry; the other P operations, the remaining eight components, the full
-  label registry and sweeps (§8.1/§8.2/§8.4) and Checkpoint B remain open. *Prior status, retained
-  for history:* draft — returned by the seventh fresh independent review 2026-09-07 on
+- **Status:** **implementing — Checkpoints P, A and B landed 2026-09-24 at the owner's direction
+  (implement directly, no review round); receipts
+  `planning/platform-alignment/evidence-presentation/checkpoint-a-implementation-2026-09-24.md` and
+  `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`.** All eight Checkpoint-P operations, all fourteen components (runtime parser, sentence
+  renderer and client component), exact pair-keyed adapters for every presented consumer × projection
+  pair (ordinary 91, Inspector 115, author/operator 5, learner-module seats 188 — `make
+  component-coverage` 0 misses), the §6b label registry and the three §8 instruments (`make
+  label-sweep`, `make component-coverage`, `make component-theme-sweep`, all in `verify-software`)
+  have landed; module seats render through the module query. Open before archival: D1 (owner's
+  design/05 amendment), D9 owner use, [[D2401]]'s `first lane 1` registry claim, the Guided Hint
+  disclosures (hint-distance lane) and the current-consumer UI migrations named in the receipt.
+  *Prior status, retained for history:* Checkpoint A (the Review-compiler slice) landed earlier the
+  same day; before that, draft — returned by the seventh fresh independent review 2026-09-07 on
   [[D3102]]–[[D3107]]; [[D1672]] and [[D2401]] were independent blockers.
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
@@ -1828,6 +1827,25 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-09-24 — **Checkpoints P (remainder) and B implemented directly at the owner's direction; status
+  stays `implementing`.** Receipt: `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`. Checkpoint P: opponent selection and the repertoire scan
+  are machine-only; `review.story × derived.story.rank@1` is selection-only (`SELECTION_ONLY_BINDINGS`);
+  `pack.authored.phase@1` is `{phase}`; `named_structure@2` retains its witness `squares`;
+  `derived.citation.attribution@1` joins one resolution to exactly its source item and the versioned
+  attribution registry. Checkpoint B: the eight declared-only components, the adapter groups (play,
+  inspector/nudge/review map, consumer), the label registry and the three instruments, and the module
+  seats through `queryModules`. **Inline corrections:** §3.5 `square_set` carries its caption as a
+  sealed `fact_statement` operand (the RFC named a registered renderer but retained nothing that
+  identifies it); §5a `ConventionBasis` gains `recorded_search` and, pin-encoded, the shipped pages'
+  model/population identity for `human_model`/`human_population` (no provider receipt exists on those
+  pages); §3.12 `STRUCTURED_DOCUMENT_SCHEMAS` are the five exact authoring-record schemas and
+  `runtime.evidence_ref` source records use a learner-safe fact statement because that consumer is
+  learner-reachable (criterion 14); §2.3 adapters may be a named composition whose member forms union
+  exactly to the binding forms, validated at registry import; the PV/Maia rows name squares where the
+  payload keeps no FEN. **Implementation notes:** criteria 1–17, 21, 21a are executable (see the
+  receipt's criterion table); the source-reason vocabulary gains `floor_not_met` and
+  `provider_unavailable` (§4b's two named states).
 
 - 2026-09-24 — **Checkpoint A (Review-compiler slice) implemented directly at the owner's direction;
   status `implementing`.** Receipt:

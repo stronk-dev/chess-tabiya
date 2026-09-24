@@ -1,18 +1,19 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
 - **Status:** **implementing — the production registry landed 2026-09-24 at the owner's direction
-  (implement directly, no review round); receipt
-  `planning/learner-modules/implementation-2026-09-24.md`.** `MODULE_REGISTRY` compiles all eleven
-  declarations at import against the evidence manifest (`packages/runtime/src/module-registry.ts`);
-  nine `module.*` consumers bind 258 exact pairs; the capability repair (§2.3(a)/(b)), the derived
-  disposition transfer (31, §2.4), the §1.3.1 successor rebase and the D3065 cover-or-refuse closure
-  are enforced at import. **Executable today:** Review Map (grade, recorded evaluation, the eleven
-  recorded-path v2 events) and Post-commit Nudge (grade + one-edge closure), both through
-  `compileModulePacket`. **Blocked, by name, per pair (`MODULE_PAIR_EXECUTION`):** Guided Hint
-  (hint-distance D1639 / D7), pre-/at-commit modules (intent-presets disclosure receipt, A16),
-  every seat's pair-keyed presentation (evidence-presentation, A5), the general module query route
-  and exact-operation resolution (D8), and two declared-awaiting refs. Open: A5, A7–A11, A13, A16–A20,
-  A23–A25 and Discharges D1–D8. *Prior status, retained for history:* **draft — bounded discharge-coverage repair complete; not acceptable.** The artifacts are
+  (implement directly, no review round); receipts `planning/learner-modules/implementation-2026-09-24.md`
+  and `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`.** `MODULE_REGISTRY` compiles all eleven declarations at import; A5 is closed by exact
+  pair-keyed adapters for all 188 module-seat pairs (`make component-coverage`). The general module query
+  route landed as `POST /runs/:id/modules/query` → `RunService.queryModules` → runtime `queryModules`
+  (§2.5.2's closed timing union, decision stamp, post-adapter budget fit §5.1 and `ModuleDisclosureReceipt`);
+  the seats render in the companion region (`ModuleSeats.svelte`, §2.6) with the §2.7 staged-move
+  protocol. `MODULE_PAIR_EXECUTION` flips a pair exactly when an operation acquires its source and its
+  adapter exists: every evidence-bearing module except Guided Hint now has executable pairs. **Still
+  blocked, by name:** Guided Hint (hint-distance D1639 / D7), pairs whose source is a provider page or a
+  multi-edge window the query does not acquire (D8), the two declared-awaiting refs, and
+  `compileModuleExactOperationResolution`'s artifact receipt (the operation's source image is the literal
+  `module-query-sources.ts` table). Open: A7–A11, A13, A17–A20, A23–A25 and Discharges D1–D8.
+  *Prior status, retained for history:* **draft — bounded discharge-coverage repair complete; not acceptable.** The artifacts are
   `completionClaim: requirements_only` and all 229 binding rows are `blocked_dependencies`, so no
   module becomes executable and no implementation is authorised. Standing blockers: the
   `evidence-value-authority` successor rebase (§1.3.1), the `hint-distance` measured family×rung
@@ -1960,6 +1961,17 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-09-24 — **Checkpoint B: the seats render.** Receipt: `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`. `queryModules` is the one
+  module operation (sources → `compileModulePacket` → `presentEvidenceItems` → `fitModulePresentation` →
+  `presentation.receipt@1` + `ModuleDisclosureReceipt`), served at `POST /runs/:id/modules/query`; A5 is
+  closed (188/188 module pairs adapted). **Inline correction (§2.5.2):** the request union carries a
+  `requested` module list for `pre_commit | post_commit | checkpoint | review` — without it an on-request
+  module could only render unsolicited. Post-commit delivery waits for `feedbackDeliveryOpen` (A16);
+  pre-/at-commit Support requests are ephemeral request receipts ([[D1866]]). The Post-commit Nudge seat
+  moved from `GET /nudge`'s raw-id template to the sealed adapters; `witnessedEvidence` is the one rule
+  that keeps empty readings (and unchanged king-zone events) out of every packet, so no all-clear fact
+  is ever presented.
 
 - 2026-09-24 — **Guided Hint executes (rfc/hint-distance.md Checkpoint A).** `guided_hint` is no longer `blocked_dependencies`: it declares the capability union `observation | pattern | threat | candidates | move` plus the closed `disclosure` declaration (`GUIDED_HINT_DISCLOSURE`), and `module.guided_hint@1` accepts exactly the 35 `derived.hint.disclosure.<family>.<rung>@1` projections, each row with its exact registry answer image. `compileModuleRegistry` refuses a non-registry row, an omitted or widened answer image, a rung above the declared ceiling and a `move` rung at a pre-/at-commit timing. The singular `guided_hint@1` answer-contract arm and `GUIDED_HINT_BLOCKERS` are removed; `MODULE_OPERATIONS` names `compileGuidedHintPacket` (checkpoint). This discharges hint-distance D6 and this RFC's D7 hint blocker.
 - 2026-09-24 — **A5 slice (presentation) and the Review packet pairs.** `evidence-presentation` Checkpoint A registers exact pair-keyed adapters for the executable `module.review_map@1` pairs (grade, the eleven recorded-path v2 events and the four typed Review packet projections); `MODULE_PAIR_EXECUTION` no longer blocks those pairs on presentation, the Review Map operation routes `derived.review.eval_point|eval_delta|mate_transition|wdl_point@1`, and the former `review-map D4` packet blocker is replaced by the named Review Map operation blocker. `module.full_inspector@1` accepts `rules.tactic.consequence.forced_mate_after_move@2`. A5 stays open for every other module pair and form.

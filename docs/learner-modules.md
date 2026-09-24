@@ -15,7 +15,9 @@ answer capabilities and budgets. It selects no chess fact by itself and authors 
 | `packages/runtime/src/module-registry.ts` | `MODULE_DECLARATIONS`, `MODULE_REGISTRY` (compiled at import), `assertModuleRegistry`, the per-pair execution table |
 | `packages/runtime/src/module-packets.ts` | `compileModulePacket` — the single operation every `module.*` consumer names |
 | `packages/runtime/src/module-reducers.ts` | admission, ordering, identity, subsumption, bounded novelty and the fact backstop |
-| `packages/runtime/src/postcommit-nudge.ts` | Post-commit Nudge, the post-commit production caller |
+| `packages/runtime/src/postcommit-nudge.ts` | Post-commit Nudge, its one-edge source closure (also served by the legacy `GET /runs/:id/nudge`) |
+| `packages/runtime/src/module-query.ts` | `queryModules` — the one module query operation (sources, admission, presentation, budget fit, disclosure receipt) |
+| `packages/runtime/src/module-query-sources.ts` | the literal per-module source image `MODULE_PAIR_EXECUTION` is derived from |
 
 Sessions are never written: a module's `ceilings.sessions` is the set of workflow contexts whose
 `WORKFLOW_CONTEXT_POLICIES.moduleCeiling` contains it, and the registry fails at import if the two
@@ -32,23 +34,32 @@ no accepted witness. Admission enforces the same image per fact. `derived.grade.
 
 ## What executes today
 
-Every compiled pair is either `executable` through a named production operation or
-`blocked_dependencies` with its blockers (`MODULE_PAIR_EXECUTION`).
+Every compiled pair is either `executable` or `blocked_dependencies` with its blockers
+(`MODULE_PAIR_EXECUTION`). A pair is executable exactly when a production operation acquires its
+sealed source **and** an exact pair-keyed presentation adapter presents it.
 
-- **Review Map** (`reviewMapProjection`, served at `GET /runs/:id/review`): the move grade, the
-  recorded evaluation and the eleven exact recorded-path v2 events are admitted through
-  `module.review_map@1` before they render. A viewer outside the module's roles, or a workflow
-  context whose ceiling excludes it (Match, onramp), sees the stated withholding sentence instead.
-- **Post-commit Nudge** (`postcommitNudgePacket`, served at `GET /runs/:id/nudge?nodeId=`): one
-  committed learner move's one-edge semantic closure plus, when both recorded evaluations exist,
-  its grade — admitted, ordered and backstopped at two facts, with one `reduction_quality@1`
-  observation on overflow. It is withheld until `feedbackDeliveryOpen`. Empty is silent.
-- **Guided Hint** (`compileGuidedHintPacket`, served at `POST|GET|DELETE /runs/:id/hints`): one
-  learner-requested family×rung disclosure per request, admitted through `module.guided_hint@1` at
-  the checkpoint (open disclosure boundary) timing. See [Guided Hint](guided-hint.md).
-- **Blocked:** Pre-/at-commit modules wait on the ephemeral disclosure receipt
-  (`intent-presets`); every seat waits on pair-keyed presentation adapters
-  (`evidence-presentation`); the general module query route waits on
-  `compileModuleExactOperationResolution` (module-registration D8). Two declared-awaiting refs —
-  `derived.explorer.population_summary@1` and `pack.authored.classifier@1` — are named, not
-  fabricated.
+- **The module query** (`queryModules`, `packages/runtime/src/module-query.ts`, served at
+  `POST /runs/:id/modules/query`): the browser sends its requested-assistance receipt and one closed
+  timing request (`pre_commit` with an optional selected square, `at_commit` with a staged UCI and
+  generation, `post_commit`, `checkpoint` or `review`, plus the on-request doors it opened). The server
+  recompiles and finalizes the assistance itself and delivers only modules whose compiled effect
+  exists at that timing. Per module it acquires the sources (`module-query-sources.ts`), runs
+  `compileModulePacket`, presents the survivors through the exact adapters, fits the post-adapter
+  budget over whole fact bundles (`fitModulePresentation`) and returns a `presentation.receipt@1`
+  plus a `ModuleDisclosureReceipt` bound to the decision stamp and to the finalized digest.
+  Post-commit output waits for `feedbackDeliveryOpen`. Empty is the module's declared state.
+- **Seats** (`apps/web/src/lib/ModuleSeats.svelte`, `module-seats.ts`): Sight on request (the square
+  gesture), Threat radar, Theory pointer and Attempt comparison on request; Post-commit Nudge and
+  the Named-structure nudge after a move; Staged-move risk check in the head slot while a staged move
+  is held (Revise / play anyway). One seat is expanded at a time; board paint is the expanded seat's
+  own facts. The client refuses any page compiled under a different final digest.
+- **Review Map** (`reviewMapProjection`, `GET /runs/:id/review`) is unchanged.
+- **Guided Hint** (`compileGuidedHintPacket`, served at `POST|GET|DELETE /runs/:id/hints`): its own
+  learner-requested seat beside the module seats — one family×rung disclosure per press, admitted
+  through `module.guided_hint@1` at the checkpoint (open disclosure boundary) timing. It is not a
+  `modules/query` module: the progressive ladder needs the per-decision request protocol. Its 35
+  pairs still carry exact `play.guided_hint@1` seat adapters (sentence, lit squares/halo, one
+  move arrow on the move rung), so presentation coverage stays complete. See
+  [Guided Hint](guided-hint.md).
+- **Blocked:** Pairs whose source is a provider page or a
+  multi-edge window the query does not acquire are blocked by name; two declared-awaiting refs remain.

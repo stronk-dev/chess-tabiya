@@ -14,6 +14,7 @@
     type ThemeMode,
   } from "./theme/axes.js";
   import { APP_THEMES, INHERITED_CONTRAST_NOTICES } from "./theme/catalog.js";
+  import { THEME_MODE_LABELS } from "./labels/index.js";
   import type { ResolvedTheme } from "./theme/controller.js";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import Chessboard from "./Chessboard.svelte";
@@ -109,7 +110,7 @@
       <p>Select a piece to preview legal destinations. The position includes every piece role in both colours, a checked king, last move, and all four mark brushes.</p>
     </div>
   </section>
-  <p class="current">Using {APP_THEMES[resolved.appTheme].label} in {resolved.mode} mode.</p>
+  <p class="current">Using {APP_THEMES[resolved.appTheme].label} in {THEME_MODE_LABELS[resolved.mode].label} mode.</p>
   {#if APP_THEMES[resolved.preference.appTheme].after}<p class="credit">{APP_THEMES[resolved.preference.appTheme].after}</p>{/if}
 </section>
 

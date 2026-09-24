@@ -23,7 +23,7 @@ import {
   type RenderedEvidenceView,
 } from "./evidence-contract.js";
 import { hintReceiptDigest, parseHintDeliveryReceipt, type HintDecisionStamp, type HintDeliveryMarks, type HintDeliveryReceipt, type HintEmptyReason, type HintVoiceState } from "./hint-exchange.js";
-import { HintHorizonMismatch, searchedEdges, type HintDisclosurePayload, type HintHorizonOccurrence, type HintPieceIdentity } from "./hint-horizon.js";
+import { HintHorizonMismatch, hintSentence, searchedEdges, type HintDisclosurePayload, type HintHorizonOccurrence, type HintPieceIdentity } from "./hint-horizon.js";
 import {
   HINT_DISCLOSURE_PROJECTION_IDS,
   HINT_FAMILIES,
@@ -219,29 +219,6 @@ export function assertHintDisclosurePacket(value: unknown): asserts value is Dec
 // ---------------------------------------------------------------------------------------------
 // §4 — deterministic rendering. One canonical sentence per rung; no judgement or prescription word.
 
-const FAMILY_LABEL: Readonly<Record<HintFamily, string>> = Object.freeze({
-  mate_in_one: "a mate in one",
-  forced_mate: "a proved forced mate",
-  double_attack: "a double attack",
-  fork_survives_reply: "a double attack that still stands after every reply",
-  discovered_executed: "a discovered attack",
-  loose_piece: "a way to take one of your capturable pieces out of capture",
-  promotion_pressure: "a promotion path that every reply leaves open",
-});
-
-const squareList = (squares: readonly string[]): string => squares.length === 1 ? squares[0]! : `${squares.slice(0, -1).join(", ")} and ${squares[squares.length - 1]!}`;
-const pieceText = (piece: HintPieceIdentity): string => `your ${piece.role} on ${piece.square}`;
-
-/** The canonical sentence of one redacted packet. Unit of the table is the rung; total five. */
-export function hintSentence(payload: HintDisclosurePayload): string {
-  const parts = [`A ${payload.attribution.engine} search from here (${payload.attribution.bound}) finds ${FAMILY_LABEL[payload.family]} for you.`];
-  if (payload.rung !== "pattern") parts.push(`It involves ${squareList(payload.targetSquares)}.`);
-  if (payload.rung === "piece" || payload.rung === "distance" || payload.rung === "move") parts.push(`The piece involved is ${pieceText(payload.actor)}.`);
-  if (payload.rung === "distance" || payload.rung === "move") parts.push(payload.relation === "root_direct" ? "It appears after this move." : "It appears on your next turn in this searched line.");
-  if (payload.rung === "move") parts.push(`The searched line starts with ${payload.firstMove.san}.`);
-  return parts.join(" ");
-}
-
 /** One registered renderer per disclosure projection (35), set-equal to the registry. */
 export const HINT_DISCLOSURE_RENDERERS: EvidenceRendererRegistry = Object.freeze(Object.fromEntries(HINT_DISCLOSURE_PROJECTION_IDS.map((projection) => [
   `${projection.id}@${projection.version}`,
@@ -340,3 +317,5 @@ export function compileHintDeliveryReceipt(input: {
 export function hintSearchLineEvidence(delivery: unknown): DeclaredEvidence<unknown> {
   return invoke(`${HINT_SEARCH_SOURCE.id}@${HINT_SEARCH_SOURCE.version}`, { delivery }) as DeclaredEvidence<unknown>;
 }
+
+export { hintSentence };

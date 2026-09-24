@@ -21431,3 +21431,11 @@ The bootstrap is archived as implemented.
   health introduced; the merge reconciled the two release-rendering changes.
 - The server image base moves to Node 24.21 for Unicode 17. The CPU Maia image
   was not built.
+
+### 2026-09-24 — D3301: profile bots failed in narrow positions
+
+The intermittent playable-bot browser failure was deterministic per seed. A
+profile asked Maia for 20 candidates, and any position with fewer legal moves
+was refused as a provider failure. Bots now request min(declared width, legal
+moves), and the compiler admits exactly that width. A regression test covers a
+19-move position, and the browser journey passes 6/6.

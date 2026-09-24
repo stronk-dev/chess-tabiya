@@ -764,3 +764,12 @@ validation.
   **Findings kept as tests, not changed:** D1639's table is used exactly as written and is still
   marked proposed (criterion 20 RED). Advanced cannot store a ceiling yet, because v5/D12 is not
   implemented. There is no §10 latency receipt yet (D7).
+- 2026-09-25 (merge with evidence-presentation Checkpoint B): `module.guided_hint@1`'s 35 pairs
+  gain exact pair-keyed adapters (`play.guided_hint@1` renderer under the `guided-hint@1`
+  convention: sentence for `pattern`; square set plus sentence for `square`/`piece`/`distance`;
+  relation overlay with one `moves_to` arrow plus sentence for `move`). Component coverage is
+  223/223. The canonical sentence template moved to `hint-horizon.ts`, so the F1 renderer and the
+  adapter share one template. The Guided Hint seat sits beside `ModuleSeats`; `queryModules` keeps
+  refusing `guided_hint` (`guided_hint_owned_elsewhere`) because the ladder needs its own
+  per-decision request protocol. Hint search availability reads provider health
+  (`exchangeOperationAvailability("stockfish.principal_variation@1")`).

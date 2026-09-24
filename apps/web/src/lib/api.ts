@@ -42,6 +42,7 @@ import type {
   BotDegradationReason,
   FinalizedAssistanceV1,
   RequestedAssistanceV1,
+  ModuleQueryRequest,
   ImportSourceKind,
   ImportSourceRequestKind,
 } from "@chess-tabiya/runtime";
@@ -66,6 +67,7 @@ import {
   type StyleCardPage,
 } from "./profile-response.js";
 import { parseEvidencePage } from "./evidence-page-response.js";
+import { EVIDENCE_KIND_LABELS } from "./labels/evidence-kind.js";
 import { parsePostcommitNudge, type PostcommitNudge } from "./nudge-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
 import { parseGroupReplyResult, parsePredictionResult } from "./opponent-path-response.js";
@@ -1125,6 +1127,12 @@ export interface DrillClientApi extends RunApi {
   review?(runId: string, branchId?: string): Promise<ReviewMap>;
   /** rfc/module-registration.md §4.5: Post-commit Nudge for one committed learner move. */
   nudge?(runId: string, nodeId: string): Promise<PostcommitNudge>;
+  /**
+   * rfc/module-registration.md §2.5.2 / intent-presets Checkpoint B: the one module query. The
+   * body is the requested-assistance receipt (untrusted intent) plus the closed timing request; the
+   * raw page is returned for the screen to strict-parse against its own finalized digest.
+   */
+  modules?(runId: string, body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }): Promise<unknown>;
   reviewAnalysis?(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage>;
   shareStory?(runId: string, branchId: string): Promise<CreatedStoryShare>;
   storyShares?(runId: string): Promise<readonly StoryShare[]>;
@@ -1648,6 +1656,10 @@ export class DrillApi implements DrillClientApi {
     });
   }
 
+  modules(runId: string, body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }): Promise<unknown> {
+    return this.#json<unknown>(`/runs/${encoded(runId)}/modules/query`, { method: "POST", body });
+  }
+
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
     return this.#json<unknown>(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } }).then((value) => parseVoicePage(value, scope));
   }
@@ -1957,6 +1969,7 @@ export class DrillApi implements DrillClientApi {
   }
 }
 
+/** rfc/evidence-presentation.md rule 6c: total over `EvidenceKind` through the label registry. */
 export function evidenceKindLabel(kind: EvidenceKind): string {
-  return kind === "bestline" ? "best line" : kind;
+  return EVIDENCE_KIND_LABELS[kind].label;
 }

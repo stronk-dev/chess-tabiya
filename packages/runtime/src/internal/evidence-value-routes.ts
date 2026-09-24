@@ -25,6 +25,7 @@ import {
   createDerivedCompareEvalDeltaV1Evidence,
   createDerivedComparePieceRouteV1Evidence,
   createDerivedCompareStructureDeltaV1Evidence,
+  createDerivedCitationAttributionV1Evidence,
   createDerivedExchangeCaptureClassV1Evidence,
   createDerivedExchangeTradeCompletedV1Evidence,
   createDerivedGradeMoveQualityV1Evidence,
@@ -166,6 +167,7 @@ import {
 const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "authored.structural_condition.input@1": createAuthoredStructuralConditionInputV1Evidence,
   "derived.activity.event.open_file_occupancy@1": createDerivedActivityEventOpenFileOccupancyV1Evidence,
+  "derived.citation.attribution@1": createDerivedCitationAttributionV1Evidence,
   "derived.compare.engine_trajectory@1": createDerivedCompareEngineTrajectoryV1Evidence,
   "derived.compare.eval_delta@1": createDerivedCompareEvalDeltaV1Evidence,
   "derived.compare.piece_route@1": createDerivedComparePieceRouteV1Evidence,

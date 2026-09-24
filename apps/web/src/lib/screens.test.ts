@@ -19,6 +19,8 @@ import {
   MODULE_SOURCE_AUTHORITY,
   compileAuthoritativeAssistance,
   finalizeAssistanceEffects,
+  parseModuleQueryRequest,
+  queryModules,
   serverAvailabilityFromProviders,
   type DrillRun,
   type FinalizedAssistanceV1,
@@ -57,6 +59,7 @@ import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
 import WhyBanner from "./WhyBanner.svelte";
 import type { Capabilities, PackSummary, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
+import { OBJECTIVE_TYPE_LABELS } from "./labels/index.js";
 import type {
   RegionKeyboardHandler,
   RegisterKeyboardRegion,
@@ -81,6 +84,14 @@ async function testAssistanceAuthority(request: RequestedAssistanceV1): Promise<
   const availability = serverAvailabilityFromProviders({ opponent: "mock", judge: "mock", llm: "external", corpus: "mock", tts: "external", tablebase: "none" });
   const authoritative = compileAuthoritativeAssistance(request, { origin: TEST_ORIGINS[request.contextHint]!, access: { deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }, availability });
   return finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability });
+}
+/** The module query operation run in-process, exactly as the server route runs it (JSON round-trip). */
+function testModuleQuery(run: DrillRun) {
+  return vi.fn(async (body: { readonly assistance: RequestedAssistanceV1; readonly query: unknown }) => {
+    const assistance = await testAssistanceAuthority(body.assistance);
+    const { page } = queryModules({ run, assistance, role: "host", session: assistance.context, request: parseModuleQueryRequest(body.query) });
+    return JSON.parse(JSON.stringify({ page })) as unknown;
+  });
 }
 function explicitPreference(preset: string, overrides: Record<string, string> = {}): string {
   return JSON.stringify({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset, overrides, moduleOverrides: { include: [], exclude: [] } } });
@@ -1277,37 +1288,42 @@ describe("Layer 3 screens", () => {
   });
 
   it("delivers the Post-commit Nudge only through the compiled effect, never retroactively on a preset raise (Checkpoint B, criterion 9)", async () => {
-    const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const START = "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2";
     const initial = createRun({ id: "nudge-seat", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
-    const run = revealFeedback(commitMove(initial, "e2e4", { at }).run, at).run;
-    const moveNodeId = run.nodes.find((node) => node.moveUci === "e2e4")!.id;
-    const onNudge = vi.fn(async (nodeId: string) => ({ runId: run.id, kind: "packet" as const, nodeId, facts: [{ projection: "rules.fixture.fact@1", sentence: "Fixture consequence.", source: "fixture" }], headline: "After e4", closing: "Try the other idea.", receipt: { offered: 1, admitted: 1, afterReducers: 1, noveltyAbstained: false } }));
+    const run = revealFeedback(commitMove(initial, "e4d5", { at }).run, at).run;
+    const moveNodeId = run.nodes.find((node) => node.moveUci === "e4d5")!.id;
+    const onModuleQuery = testModuleQuery(run);
     const mountWith = (entries: readonly (readonly [string, string])[]) => {
       const preferences = new Map<string, string>(entries);
       return mountDrill({ target: target(), props: {
-        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onNudge,
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onModuleQuery,
         assistanceStorage: { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } },
         onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
         onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
       } });
     };
     const seat = () => document.querySelector('[data-module="postcommit_nudge"]');
+    const postCommitCalls = () => onModuleQuery.mock.calls.filter(([body]) => (body.query as { readonly timing: string }).timing === "post_commit");
 
-    // Guided composes postcommit_nudge: the server-compiled effect admits the seat after disclosure opened.
+    // Guided composes postcommit_nudge: the server-compiled effect admits the seat after disclosure opened,
+    // and the seat renders only sealed presentation components bound to the compiled digest.
     let component = mountWith([[workflowPreferenceKey("position"), explicitPreference("guided")]]);
-    await vi.waitFor(() => expect(seat()?.textContent).toContain("Fixture consequence."));
-    expect(onNudge).toHaveBeenCalledWith(moveNodeId);
+    await vi.waitFor(() => expect(seat()?.querySelector("[data-presented]") ?? null).not.toBeNull(), { timeout: 4000 });
+    expect(postCommitCalls().some(([body]) => (body.query as { readonly subjectNodeId: string }).subjectNodeId === moveNodeId)).toBe(true);
+    expect(seat()?.textContent).not.toMatch(/@\d|rules\.|derived\./u);
     await unmount(component);
     document.body.replaceChildren();
-    onNudge.mockClear();
+    onModuleQuery.mockClear();
 
     // Guided with an explicit markers:"off" removes exactly the governed automatic effect.
     component = mountWith([[workflowPreferenceKey("position"), explicitPreference("guided", { markers: "off" })]]);
     await assistanceSettled();
+    await tick();
     expect(seat()).toBeNull();
-    expect(onNudge).not.toHaveBeenCalled();
+    expect(postCommitCalls()).toHaveLength(0);
     await unmount(component);
     document.body.replaceChildren();
+    onModuleQuery.mockClear();
 
     // Quiet → Guided mid-run with no new learner move renders nothing new (criterion 9 arm a).
     component = mountWith([]);
@@ -1315,7 +1331,7 @@ describe("Layer 3 screens", () => {
     [...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')].find((input) => input.value === "guided")!.click();
     await vi.waitFor(() => expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain("After you commit"));
     await tick();
-    expect(onNudge).not.toHaveBeenCalled();
+    expect(postCommitCalls()).toHaveLength(0);
     expect(seat()).toBeNull();
     await unmount(component);
   });
@@ -1891,7 +1907,7 @@ describe("Layer 3 screens", () => {
       mode: pack.mode as string,
       phase: "opening",
       difficulty: pack.difficulty,
-      objectiveSummary: pack.objective.summary ?? pack.objective.type.replaceAll("_", " "),
+      objectiveSummary: pack.objective.summary ?? OBJECTIVE_TYPE_LABELS[pack.objective.type].label,
       concepts: (pack.concepts ?? []).map((id) => ({ id, label: id, status: "active" as const })),
       reviewStatus: "draft",
       channel: "community",

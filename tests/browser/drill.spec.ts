@@ -30,6 +30,23 @@ async function register(page: Page): Promise<string> {
   return handle;
 }
 
+/** Chooses a named help style from the Play pill and waits for the server-compiled result. */
+async function choosePreset(page: Page, name: RegExp): Promise<void> {
+  const summary = page.locator("details.assistance-control summary");
+  await summary.click();
+  await page.getByRole("radio", { name }).check();
+  await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
+  if (await page.locator("details.assistance-control").getAttribute("open") !== null) await summary.click();
+}
+
+/** Opens the companion's Support region when it is collapsed behind the compact tab. */
+async function showSupport(page: Page): Promise<void> {
+  if (!await page.getByRole("region", { name: "Support", exact: true }).isVisible()) {
+    await page.getByRole("button", { name: "Support", exact: true }).click();
+  }
+  await expect(page.getByRole("region", { name: "Support", exact: true })).toBeVisible();
+}
+
 async function openAdvancedSupport(page: Page): Promise<void> {
   await page.locator("details.assistance-control summary").click();
   await page.getByRole("button", { name: "Advanced support controls" }).click();
@@ -1259,7 +1276,9 @@ test("terminal flip preserves the source and milestones link back into played ru
   await page.getByRole("button", { name: "Replay this as Black" }).click();
   await expect(page).toHaveURL(/\/play\/run\/flip-/);
   await expect(page.getByRole("heading", { name: /Nothing is authored about this position/ })).toBeVisible();
-  await expect(page.getByLabel("Opposite-side replay source")).toContainText(sourceId);
+  // rfc/evidence-presentation.md §6a: the source is named, never shown as its raw run id.
+  await expect(page.getByLabel("Opposite-side replay source")).toContainText("Mirror of the source run");
+  await expect(page.getByLabel("Opposite-side replay source")).not.toContainText(sourceId);
   await page.goto("/learn");
   await expect(page.getByRole("heading", { name: "Milestones" })).toBeVisible();
   await expect(page.getByText("First preserved attempt.")).toBeVisible();
@@ -2109,13 +2128,13 @@ test("@matrix play composition keeps one exact board rectangle through reachable
       await page.getByRole("button", { name: "Collapse companion" }).click();
     }
 
+    // State 2 is requested sight: the sight module's seat under a style that composes it.
+    await choosePreset(page, /Guide me/u);
     const selectedPoint = squarePoint(calm!, "d4");
     await page.mouse.click(selectedPoint.x, selectedPoint.y);
-    const selectedSight = page.locator('[data-evidence-consumer="board.selected_square_sight"]');
-    if (!await selectedSight.isVisible()) {
-      await page.getByRole("button", { name: "Support", exact: true }).click();
-    }
-    await expect(selectedSight).toBeVisible();
+    await showSupport(page);
+    const selectedSight = page.locator('[data-module="sight_on_request"] .seat-card');
+    await expect(selectedSight.locator("[data-presented], .stated-empty").first()).toBeVisible();
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     await attachCompositionCell(page, testInfo, viewport, "02-square-selected");
   }
@@ -2131,10 +2150,11 @@ test("selected-square support clears with the visible selection and displayed po
   const box = await board.boundingBox();
   if (box === null) throw new Error("Chessground board has no bounding box");
   const d4 = squarePoint(box, "d4");
-  const selectedSight = page.locator('[data-evidence-consumer="board.selected_square_sight"]');
+  await choosePreset(page, /Guide me/u);
+  const selectedSight = page.locator('[data-module="sight_on_request"] .seat-card').locator("[data-presented], .stated-empty");
 
   await page.mouse.click(d4.x, d4.y);
-  await expect(selectedSight).toBeVisible();
+  await expect(selectedSight.first()).toBeVisible();
   const selectedBox = await board.boundingBox();
   if (selectedBox === null) throw new Error("Chessground board has no selected-state bounding box");
   const selectedD4 = squarePoint(selectedBox, "d4");
@@ -2149,10 +2169,105 @@ test("selected-square support clears with the visible selection and displayed po
   if (movedBox === null) throw new Error("Chessground board has no moved bounding box");
   const b5 = squarePoint(movedBox, "b5");
   await page.mouse.click(b5.x, b5.y);
-  await expect(selectedSight).toBeVisible();
+  await expect(selectedSight.first()).toBeVisible();
   await page.getByRole("button", { name: /^Rehearsal step 1:/u }).click();
   await expect(page.getByText("Preview", { exact: true })).toBeVisible();
   await expect(selectedSight).toHaveCount(0);
+});
+
+// rfc/play-composition.md §6 states 3, 5, 9 and 13 — the module-emitter-dependent columns — over
+// real module seats fed by the module query route (module-registration §2.5.2). State 6 (guided
+// hint at its final stage) belongs to the hint-distance lane that owns the Guided Hint seat.
+// The Scholar's-mate trap is a Just Play position the learner (Black) plays under Support.
+const SCHOLAR_TRAP = "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3";
+
+async function startSupportFromFen(page: Page, fen: string, side: "white" | "black"): Promise<void> {
+  await page.goto("/play");
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill(fen);
+  await page.getByLabel("Your side").selectOption(side);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await choosePreset(page, /Support/u);
+}
+
+test("@matrix module seats render sealed evidence without moving the board (states 3, 5, 9, 13)", async ({ page }, testInfo) => {
+  test.setTimeout(300_000);
+  const projections = [
+    { width: 1440, height: 900 },
+    { width: 1366, height: 768 },
+    { width: 1280, height: 720 },
+    { width: 768, height: 1024 },
+    { width: 430, height: 932 },
+    { width: 390, height: 844 },
+    { width: 360, height: 680 },
+  ] as const;
+  const seat = (module: string) => page.locator(`[data-module="${module}"]`);
+  const forbidden = /Tabiya's|detector|phase bands|[a-z]+_[a-z]+|@\d|\b[a-h][1-8][a-h][1-8][qrbn]?\b/u;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await startSupportFromFen(page, SCHOLAR_TRAP, "black");
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    expect(calm).not.toBeNull();
+
+    // State 5 — a rail module expanded: Threat radar is opened on request and names the mate threat.
+    await showSupport(page);
+    await seat("threat_radar").locator(".seat-row").click();
+    await seat("threat_radar").getByRole("button", { name: "Show" }).click();
+    const radar = seat("threat_radar").locator(".seat-card");
+    await expect(radar.locator("[data-presented]").first()).toBeVisible();
+    await expect(radar).toContainText("mate");
+    await expect(radar).not.toContainText(forbidden);
+    await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "05-rail-module-expanded");
+    if (viewport.width <= 719) await page.getByRole("button", { name: "Collapse companion" }).click();
+
+    // State 3 — a staged move with the one board-adjacent cue in the head slot; Revise keeps the board.
+    await move(page, "g8", "f6", "black");
+    await showSupport(page);
+    const cue = seat("blunder_prevention");
+    await expect(cue).toHaveAttribute("data-seat-state", "warning");
+    await expect(cue).toContainText("mate on f7");
+    await expect(cue).not.toContainText(forbidden);
+    await expect(page.locator('[data-seat-class="board_adjacent"]')).toHaveCount(1);
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "03-move-staged-cue");
+    await cue.getByRole("button", { name: "Revise" }).click();
+    await expect(cue).toHaveCount(0);
+    if (viewport.width <= 719) await page.getByRole("button", { name: "Collapse companion" }).click();
+    // Post-gesture: a real move submission after the cue, with its exact outgoing UCI.
+    const committed = page.waitForRequest((request) => request.url().endsWith("/moves") && request.method() === "POST");
+    await move(page, "d8", "e7", "black");
+    expect(JSON.parse((await committed).postData() ?? "{}")).toMatchObject({ uci: "d8e7" });
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+
+    // State 9 — honest empty: opened doors state their declared absence inside their own card.
+    await showSupport(page);
+    const reveal = page.getByRole("button", { name: "Show support for this position" });
+    if (await reveal.isEnabled()) await reveal.click();
+    await seat("theory_breadcrumb").locator(".seat-row").click();
+    await seat("theory_breadcrumb").getByRole("button", { name: "Show" }).click();
+    const theory = seat("theory_breadcrumb").locator(".seat-card");
+    await expect(theory.locator(".stated-empty")).toHaveText("Nothing is written about this position.");
+    await expect(theory).toContainText("Not consulted: the cited catalogue is not installed in this deployment.");
+    await expect(theory.locator("[data-presented]")).toHaveCount(0);
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "09-evidence-unavailable-honest-empty");
+
+    // State 13 — max load: every composed rail seat is present with its row; exactly one expanded;
+    // expanding another collapses the first (post-gesture).
+    await seat("threat_radar").locator(".seat-row").click();
+    await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+    await expect(seat("theory_breadcrumb")).not.toHaveAttribute("data-seat-state", "expanded");
+    for (const module of ["sight_on_request", "threat_radar", "theory_breadcrumb"]) await expect(seat(module)).toHaveCount(1);
+    await expect(page.locator(".module-seat .seat-badge").first()).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "13-max-load");
+  }
 });
 
 test("@matrix post-commit guard preserves the board rectangle at every composition viewport", async ({ page }, testInfo) => {

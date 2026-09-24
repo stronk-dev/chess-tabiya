@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
+import { presentationAdapter } from "./presentation-contract.js";
+
 import {
   EVIDENCE_CONTRACT_DECLARATIONS,
   MODULE_CONSUMER_ACCEPTS,
@@ -241,15 +243,24 @@ describe("module registration — the compiled production registry", () => {
   it("marks what is executable versus blocked, per pair, and executes Guided Hint through its disclosure registry", () => {
     expect(MODULE_PAIR_EXECUTION).toHaveLength(pairs.length);
     const executable = MODULE_PAIR_EXECUTION.filter((pair) => pair.status === "executable");
-    expect(new Set(executable.map((pair) => pair.module))).toEqual(new Set(["review_map", "postcommit_nudge", "guided_hint"]));
+    // evidence-presentation Checkpoint B: every evidence-bearing module has executable pairs — an
+    // operation acquires the source AND an exact adapter presents it (Guided Hint: rfc/hint-distance.md
+    // §4's per-disclosure `play.guided_hint@1` adapters).
+    expect(new Set(executable.map((pair) => pair.module))).toEqual(new Set(["sight_on_request", "blunder_prevention", "threat_radar", "postcommit_nudge", "structure_nudge", "theory_breadcrumb", "guided_hint", "compare_coach", "review_map", "full_inspector"]));
     for (const id of ["review_map", "postcommit_nudge"] as const) {
       expect(executable.some((pair) => pair.module === id && key(pair.projection) === "derived.grade.move_quality@1")).toBe(true);
     }
     for (const pair of MODULE_PAIR_EXECUTION) {
       if (pair.status === "blocked_dependencies") expect(pair.blockers.length).toBeGreaterThan(0);
+      // Flip rule: executable exactly when the operation acquires the pair and its adapter exists.
+      const adapter = presentationAdapter({ id: `module.${pair.module}`, version: 1 }, pair.projection) !== undefined;
+      const acquired = MODULE_OPERATIONS.some((operation) => operation.module === pair.module && operation.projections.some((projection) => key(projection) === key(pair.projection)));
+      expect(pair.status === "executable", `${pair.module} ${key(pair.projection)}`).toBe(adapter && acquired);
+      if (pair.status === "blocked_dependencies" && !adapter) expect(pair.blockers.some((blocker) => blocker.owner === "evidence-presentation")).toBe(true);
     }
-    // Pre-/at-commit pairs are blocked on the ephemeral disclosure receipt.
-    expect(MODULE_PAIR_EXECUTION.filter((pair) => pair.module === "blunder_prevention").every((pair) => pair.status === "blocked_dependencies" && pair.blockers.some((blocker) => blocker.owner === "intent-presets"))).toBe(true);
+    // The pre-/at-commit disclosure receipt and the query operation have landed: no pair is blocked on them.
+    expect(MODULE_PAIR_EXECUTION.some((pair) => pair.status === "blocked_dependencies" && pair.blockers.some((blocker) => blocker.owner === "intent-presets"))).toBe(false);
+    expect(MODULE_PAIR_EXECUTION.filter((pair) => pair.module === "blunder_prevention").every((pair) => pair.status === "executable")).toBe(true);
     // rfc/hint-distance.md §3/§9 (criteria 6, 8, 14): the module accepts exactly the 35 disclosure
     // projections, each row with its exact registry answer image; no horizon, raw PV, Syzygy, authored
     // claim or endgame reading is a learner binding.

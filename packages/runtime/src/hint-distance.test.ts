@@ -6,6 +6,8 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { evidenceForConsumer } from "./evidence-contract.js";
+import { presentEvidenceItems } from "./presentation-contract.js";
 import { compileEvidenceManifest, identitySealedEvidenceWithoutValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS } from "./evidence-catalog.js";
 import {
@@ -316,6 +318,21 @@ describe("criteria 10–11 — ceiling versus availability, and per-decision pro
     const seat = readFileSync(new URL("apps/web/src/lib/GuidedHintSeat.svelte", ROOT), "utf8");
     expect(seat).toContain("A little more");
     expect(seat).not.toMatch(/<select|stage 2|\bPV\b|semantic event|Stockfish/u);
+  });
+});
+
+describe("evidence-presentation Checkpoint B — the module.guided_hint seat adapters", () => {
+  it("every family x rung disclosure presents through its exact adapter with the canonical sentence and only its rung's marks", () => {
+    for (const family of HINT_FAMILIES) {
+      const horizon = selected(HINT_FAMILY_POSITIVES[family]);
+      for (const rung of HINT_RUNGS) {
+        const disclosure = compileHintDisclosure(horizon, rung);
+        const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 1 }, [disclosure]));
+        const bytes = JSON.stringify(items);
+        expect(bytes, `${family}/${rung}`).toContain(JSON.stringify(hintSentence(disclosure.payload)).slice(1, -1));
+        expect(bytes.includes("\"moves_to\""), `${family}/${rung}`).toBe(rung === "move");
+      }
+    }
   });
 });
 

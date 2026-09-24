@@ -20,6 +20,7 @@ import {
   BOT_LAYER_DECLARATIONS,
   classifyPawnMoves,
   exactLegalMoves,
+  botEffectiveRequestedWidth,
   resolveBotProfileReference,
   type BotClassifierId,
   type BotDegradationReason,
@@ -306,7 +307,7 @@ function admitMaia(page: BotMaiaPolicyPage, root: BotOperationRootAuthority, leg
     || page.request.model.id !== profile.model.id || page.request.model.version !== profile.model.version
     || page.actual.modelId !== profile.model.id || page.actual.version !== profile.model.version
     || page.request.temperature !== profile.sampler.temperature || page.request.topP !== profile.sampler.topP
-    || page.request.requestedWidth !== profile.sampler.requestedWidth) {
+    || page.request.requestedWidth !== botEffectiveRequestedWidth(profile.sampler.requestedWidth, legal.moves.length)) {
     return "maia_profile_mismatch";
   }
   if (page.rows.length === 0) return "maia_empty_page";

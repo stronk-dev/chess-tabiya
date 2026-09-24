@@ -237,3 +237,27 @@ export function hintDisclosurePayload(horizon: HintHorizonOccurrence, rung: Hint
     case "move": return Object.freeze({ rung, family, attribution, targetSquares, actor, relation: horizon.relation, occurrencePly: horizon.occurrencePly, firstMove: Object.freeze({ uci: horizon.firstMove.uci, san: horizon.firstMove.san }) });
   }
 }
+
+// §4: the one canonical sentence template (shared by the F1 renderer and the presentation adapter).
+const FAMILY_LABEL: Readonly<Record<HintFamily, string>> = Object.freeze({
+  mate_in_one: "a mate in one",
+  forced_mate: "a proved forced mate",
+  double_attack: "a double attack",
+  fork_survives_reply: "a double attack that still stands after every reply",
+  discovered_executed: "a discovered attack",
+  loose_piece: "a way to take one of your capturable pieces out of capture",
+  promotion_pressure: "a promotion path that every reply leaves open",
+});
+
+const squareList = (squares: readonly string[]): string => squares.length === 1 ? squares[0]! : `${squares.slice(0, -1).join(", ")} and ${squares[squares.length - 1]!}`;
+const pieceText = (piece: HintPieceIdentity): string => `your ${piece.role} on ${piece.square}`;
+
+/** The canonical sentence of one redacted packet. Unit of the table is the rung; total five. */
+export function hintSentence(payload: HintDisclosurePayload): string {
+  const parts = [`A ${payload.attribution.engine} search from here (${payload.attribution.bound}) finds ${FAMILY_LABEL[payload.family]} for you.`];
+  if (payload.rung !== "pattern") parts.push(`It involves ${squareList(payload.targetSquares)}.`);
+  if (payload.rung === "piece" || payload.rung === "distance" || payload.rung === "move") parts.push(`The piece involved is ${pieceText(payload.actor)}.`);
+  if (payload.rung === "distance" || payload.rung === "move") parts.push(payload.relation === "root_direct" ? "It appears after this move." : "It appears on your next turn in this searched line.");
+  if (payload.rung === "move") parts.push(`The searched line starts with ${payload.firstMove.san}.`);
+  return parts.join(" ");
+}

@@ -13,6 +13,13 @@
       "459828f5e5e68c9510db25a11cf1b2236c07eb0ac4e3a908c19461f889e5bb38"
     ]
   },
+  "derived.citation.attribution@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "aed5bc573f631d57b5b1287645690964c8259abd4f470e0449a8d4c1230b0146"
+    ]
+  },
   "derived.compare.engine_trajectory@1": {
     "availability": "available",
     "cardinality": 2,
@@ -1008,7 +1015,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "b0bd12b5480cd29a659cd9b1702265a4b0a77c25fdf2800386bdfa53c1ceea5b"
+      "aaa18cfcf6a740c87e9dc27086e05be17610e1e7b63c4a06af00d9f3d343b3ac"
     ]
   },
   "recorded.engine.eval@1": {
@@ -1564,7 +1571,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "9c7b95c69499dd7caec1f31187354c3860cd3e7310acdae5999ad157bb64bcf6"
+      "299bc2dad599bf63114dc75b2508ef77ca35e7fced8489b51c3679dbc46cf48d"
     ]
   },
   "rules.structural.reading.open_file@1": {

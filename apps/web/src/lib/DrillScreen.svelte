@@ -28,7 +28,11 @@
   import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
   import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
-  import type { PostcommitNudge } from "./nudge-response.js";
+  import ModuleSeats from "./ModuleSeats.svelte";
+  import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
+  import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
+  import { composedSeats, effectActive, toggleExpanded, type PlaySeatModule, type StagedCue } from "./module-seats.js";
+  import { boardPaint } from "./evidence/presented-view.js";
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
   import type { HintDeliveryMarks } from "@chess-tabiya/runtime";
@@ -59,11 +63,12 @@
   } from "./outcome-presentation.js";
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
   import { assistanceProfile, loadWorkflowPreference, requestedAssistanceConfig, requestedPresetLabel, saveWorkflowPreference, workflowPreferenceKey, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
-  import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
+  import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2, type ModuleQueryRequest } from "@chess-tabiya/runtime";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, runOpponentStatus } from "./opponent-copy.js";
   import { storyMomentLabel } from "./learner-copy.js";
+  import { labelOrFallback, learnerProse } from "./labels/index.js";
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
   import { rehearsalGuideStep } from "./rehearsal-guide.js";
@@ -148,7 +153,12 @@
     onStop: () => void;
     onAssistanceQuery?: ((request: RequestedAssistanceV1) => Promise<FinalizedAssistanceV1>) | undefined;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
-    onNudge?: ((nodeId: string) => Promise<PostcommitNudge>) | undefined;
+    /**
+     * rfc/module-registration.md §2.5.2: the one module query. Receives the requested-assistance
+     * receipt and the closed timing request; returns the raw page, strict-parsed here against the
+     * finalized digest this screen renders (intent-presets Checkpoint B).
+     */
+    onModuleQuery?: ((body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }) => Promise<unknown>) | undefined;
     /** rfc/hint-distance.md §7: the Guided Hint seat's request/poll/cancel operations. */
     hints?: GuidedHintClient | undefined;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
@@ -224,7 +234,7 @@
     onStop,
     onAssistanceQuery,
     onHumanSplit,
-    onNudge,
+    onModuleQuery,
     hints,
     onCorpus,
     onVoice,
@@ -847,37 +857,179 @@
   let endgameSentences = $derived(endgame === null ? [] : [...renderEndgameClassification(endgame), ...endgameSetupMatches(displayedNode.fen).map(renderEndgameSetupMatch)]);
   let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
   let assistanceContext = $derived({ workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
-  // rfc/module-registration.md §4.5 + rfc/intent-presets.md Checkpoint B: Post-commit Nudge renders only
-  // when the server-compiled result carries its automatic post-commit effect (preset ∩ ceiling ∩ access,
-  // with `markers` governing it) and the run's durable feedback-delivery boundary is open.
-  let nudgeEffectActive = $derived(compiledAssistance?.effects.some((effect) => effect.effectId === "postcommit_nudge:post_commit:proactive") === true);
   let latestLearnerMoveId = $derived.by(() => {
     const target = currentNode.actor === "user" ? currentNode : run.nodes.find((node) => node.id === currentNode.parentId);
     return target?.actor === "user" && target.moveUci !== null ? target.id : undefined;
   });
+  // rfc/module-registration.md §2.5.2/§2.6 + rfc/intent-presets.md Checkpoint B: the module seats. A
+  // seat exists only for a module the FINALIZED assistance composed with a play-timing effect; every
+  // delivery comes from the one module query, is strict-parsed against this screen's final digest and
+  // renders only its sealed presentation components. Guided Hint's seat is the hint-distance lane's.
+  let requestedAssistance: RequestedAssistanceV1 | undefined = $state();
+  let seats = $derived(onModuleQuery === undefined ? [] : composedSeats(compiledAssistance));
+  let seatPackets: ReadonlyMap<PlaySeatModule, ParsedModulePacket> = $state.raw(new Map());
+  let seatSubjects: ReadonlyMap<PlaySeatModule, string> = $state.raw(new Map());
+  let seatPending: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
+  let seatFailed: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
+  let seatDoorReasons: Readonly<Partial<Record<PlaySeatModule, string>>> = $state.raw({});
+  let seatExpanded: PlaySeatModule | undefined = $state();
+  let stagedCue: StagedCue | undefined = $state();
+  let stagedUci: string | undefined;
+  let stagedGeneration = 0;
+  let seatFocusSquares: readonly string[] | undefined = $state();
+  const seatRequests = new Map<PlaySeatModule, number>();
+  let seatRequestCounter = 0;
+  let postCommitEffectActive = $derived(effectActive(compiledAssistance, "postcommit_nudge", "post_commit") || effectActive(compiledAssistance, "structure_nudge", "post_commit"));
   // Criterion 9: raising the preset mid-run is not a learner request. The move already on the board when
-  // the nudge effect switches on is held back; the next committed move is the first one nudged.
-  let nudgeHeldNodeId: string | undefined = $state();
-  let nudgeWasActive: boolean | undefined;
+  // a proactive post-commit effect switches on is held back; the next committed move is the first one served.
+  let proactiveHeldNodeId: string | undefined = $state();
+  let proactiveWasActive: boolean | undefined;
   $effect(() => {
-    const active = nudgeEffectActive;
+    const active = postCommitEffectActive;
     if (compiledAssistance === undefined) return;
-    if (nudgeWasActive === false && active) nudgeHeldNodeId = untrack(() => latestLearnerMoveId);
-    nudgeWasActive = active;
+    if (proactiveWasActive === false && active) proactiveHeldNodeId = untrack(() => latestLearnerMoveId);
+    proactiveWasActive = active;
   });
-  let nudgeNodeId = $derived.by(() => {
-    if (onNudge === undefined || !nudgeEffectActive || !feedbackDeliveryOpen(run)) return undefined;
-    return latestLearnerMoveId === nudgeHeldNodeId ? undefined : latestLearnerMoveId;
+
+  function withSeat<T>(collection: ReadonlySet<T>, module: T, present: boolean): ReadonlySet<T> {
+    const next = new Set(collection);
+    if (present) next.add(module); else next.delete(module);
+    return next;
+  }
+
+  /** One module query for `modules`; the result lands only if still current (decision/digest/request). */
+  async function queryModuleSeats(query: ModuleQueryRequest, subjectNodeId: string, modules: readonly PlaySeatModule[]): Promise<ParsedModulePacket[] | undefined> {
+    if (onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined || modules.length === 0) return undefined;
+    const finalDigest = compiledAssistance.finalDigest;
+    const assistanceRequest = requestedAssistance;
+    const tokens = modules.map((module) => { const token = ++seatRequestCounter; seatRequests.set(module, token); return [module, token] as const; });
+    for (const module of modules) { seatPending = withSeat(seatPending, module, true); seatFailed = withSeat(seatFailed, module, false); }
+    try {
+      const page = parseModuleQueryPage(await onModuleQuery({ assistance: assistanceRequest, query }), { runId: run.id, subjectNodeId, finalDigest });
+      if (compiledAssistance?.finalDigest !== finalDigest) return undefined;
+      const packets: ParsedModulePacket[] = [];
+      let nextPackets = new Map(seatPackets), nextSubjects = new Map(seatSubjects), nextDoors = { ...seatDoorReasons };
+      for (const [module, token] of tokens) {
+        if (seatRequests.get(module) !== token) continue;
+        seatPending = withSeat(seatPending, module, false);
+        const packet = page.packets.find((candidate) => candidate.module === module);
+        const suppression = page.suppressions.find((candidate) => candidate.module === module);
+        if (packet !== undefined) { nextPackets.set(module, packet); nextSubjects.set(module, subjectNodeId); packets.push(packet); delete nextDoors[module]; }
+        else {
+          nextPackets.delete(module);
+          if (suppression?.reason === "no_second_attempt") nextDoors = { ...nextDoors, [module]: "Needs a second attempt: rewind to an earlier move and try another idea." };
+        }
+      }
+      seatPackets = nextPackets; seatSubjects = nextSubjects; seatDoorReasons = nextDoors;
+      return packets;
+    } catch {
+      for (const [module, token] of tokens) {
+        if (seatRequests.get(module) !== token) continue;
+        seatPending = withSeat(seatPending, module, false);
+        seatFailed = withSeat(seatFailed, module, true);
+      }
+      return undefined;
+    }
+  }
+
+  function clearSeat(modules: readonly PlaySeatModule[]): void {
+    let next = new Map(seatPackets), subjects = new Map(seatSubjects);
+    for (const module of modules) { next.delete(module); subjects.delete(module); seatRequests.delete(module); seatPending = withSeat(seatPending, module, false); seatFailed = withSeat(seatFailed, module, false); }
+    seatPackets = next; seatSubjects = subjects;
+  }
+
+  // Post-commit proactive seats: one query per new learner move, before any automatic reply is read.
+  let postCommitSubject = $derived.by(() => {
+    if (!postCommitEffectActive || !feedbackDeliveryOpen(run)) return undefined;
+    return latestLearnerMoveId === proactiveHeldNodeId ? undefined : latestLearnerMoveId;
   });
-  let nudge: PostcommitNudge | undefined = $state();
-  let nudgeRequest = 0;
   $effect(() => {
-    const nodeId = nudgeNodeId;
-    const load = onNudge;
-    if (nodeId === undefined || load === undefined) { nudge = undefined; return; }
-    if (nudge?.nodeId === nodeId) return;
-    const request = ++nudgeRequest;
-    void load(nodeId).then((page) => { if (request === nudgeRequest) nudge = page; }).catch(() => { if (request === nudgeRequest) nudge = undefined; });
+    const subject = postCommitSubject;
+    const proactive = untrack(() => seats.filter((seat) => seat.proactive && (seat.module === "postcommit_nudge" || seat.module === "structure_nudge")).map((seat) => seat.module));
+    if (subject === undefined) { untrack(() => clearSeat(["postcommit_nudge", "structure_nudge"])); return; }
+    if (proactive.every((module) => untrack(() => seatSubjects.get(module)) === subject)) return;
+    void untrack(() => queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [] }, subject, proactive)).then((packets) => {
+      // play-composition §4.1: a critical post-commit fact may auto-expand the nudge seat.
+      if (packets?.some((packet) => packet.module === "postcommit_nudge" && packet.items.length > 0) && stagedCue === undefined) seatExpanded = "postcommit_nudge";
+    });
+  });
+  // On-request answers describe one subject: moving on, rewinding or switching branch retires them.
+  $effect(() => {
+    const node = currentNode.id;
+    void node;
+    untrack(() => {
+      const stale = [...seatSubjects].filter(([module, subject]) => module !== "postcommit_nudge" && module !== "structure_nudge" && module !== "sight_on_request" && subject !== latestLearnerMoveId && subject !== currentNode.id).map(([module]) => module);
+      if (stale.length > 0) clearSeat(stale);
+      seatDoorReasons = {};
+    });
+  });
+  // sight_on_request: the square gesture IS the request (module-registration §4.2).
+  let sightActive = $derived(onModuleQuery !== undefined && effectActive(compiledAssistance, "sight_on_request", "pre_commit"));
+  $effect(() => {
+    const square = selectedSquare;
+    const active = sightActive;
+    const node = displayedNode.id;
+    untrack(() => {
+      if (!active || square === undefined || previewNodeId !== undefined) { clearSeat(["sight_on_request"]); return; }
+      seatExpanded = "sight_on_request";
+      void queryModuleSeats({ timing: "pre_commit", nodeId: node, selectedSquare: square, requested: ["sight_on_request"] }, node, ["sight_on_request"]);
+    });
+  });
+
+  function requestSeat(module: PlaySeatModule): void {
+    const learnerToMove = currentNode.actor !== "user";
+    if (module === "sight_on_request") { seatDoorReasons = { ...seatDoorReasons, sight_on_request: "Select a square on the board to ask about it." }; return; }
+    if (module === "compare_coach") { void queryModuleSeats({ timing: "checkpoint", nodeId: currentNode.id, requested: ["compare_coach"] }, currentNode.id, ["compare_coach"]); return; }
+    if (module === "threat_radar" && learnerToMove) { void queryModuleSeats({ timing: "pre_commit", nodeId: currentNode.id, requested: ["threat_radar"] }, currentNode.id, ["threat_radar"]); return; }
+    const subject = latestLearnerMoveId;
+    if (subject === undefined) { seatDoorReasons = { ...seatDoorReasons, [module]: "Available after your first move." }; return; }
+    if (!feedbackDeliveryOpen(run)) { seatDoorReasons = { ...seatDoorReasons, [module]: "Available once this run opens help for the position." }; return; }
+    void queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [module] }, subject, [module]);
+  }
+
+  function toggleSeat(module: PlaySeatModule): void {
+    seatExpanded = toggleExpanded(seatExpanded, module);
+    seatFocusSquares = undefined;
+  }
+
+  // module-registration §4.11 + §5.2: Full Inspector is an explicit surface. Opening the Inspector
+  // under a style that composed it is the explicit request; its families state their own states.
+  let fullInspectorActive = $derived(onModuleQuery !== undefined && effectActive(compiledAssistance, "full_inspector", "review"));
+  let fullInspector: ParsedModulePacket | undefined = $state.raw();
+  let fullInspectorState: "idle" | "pending" | "failed" = $state("idle");
+  let fullInspectorRequest = 0;
+  $effect(() => {
+    const open = inspectorOpen;
+    const active = fullInspectorActive;
+    const node = displayedNode.id;
+    untrack(() => {
+      if (!open || !active || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) { fullInspector = undefined; fullInspectorState = "idle"; return; }
+      const request = ++fullInspectorRequest;
+      const finalDigest = compiledAssistance.finalDigest;
+      fullInspectorState = "pending";
+      void onModuleQuery({ assistance: requestedAssistance, query: { timing: "review", nodeId: node, requested: ["full_inspector"] } })
+        .then((value) => {
+          if (request !== fullInspectorRequest) return;
+          const page = parseModuleQueryPage(value, { runId: run.id, subjectNodeId: node, finalDigest });
+          fullInspector = page.packets.find((packet) => packet.module === "full_inspector");
+          fullInspectorState = "idle";
+        })
+        .catch(() => { if (request === fullInspectorRequest) { fullInspector = undefined; fullInspectorState = "failed"; } });
+    });
+  });
+  const INSPECTOR_FAMILY_LABELS: Readonly<Record<string, string>> = Object.freeze({ local_rules: "Local rules", authored_theory: "Authored theory", recorded_run: "Recorded game", stockfish: "Stockfish", syzygy: "Tablebase", maia: "Human-move model", explorer: "Game corpus", derived: "Derived readings" });
+  function familyLine(state: { readonly family: string; readonly kind: string; readonly factCount?: number }): string {
+    const label = INSPECTOR_FAMILY_LABELS[state.family] ?? "Other";
+    if (state.kind === "available") return `${label}: ${state.factCount} ${state.factCount === 1 ? "fact" : "facts"}`;
+    if (state.kind === "no_witness") return `${label}: nothing recorded here`;
+    if (state.kind === "unavailable") return `${label}: unavailable`;
+    return `${label}: not requested here`;
+  }
+
+  // §4.5: board paint is the expanded seat's own facts (or the held cue's); collapsing removes it.
+  let seatPaint = $derived.by(() => {
+    const items = stagedCue?.state === "warning" ? stagedCue.packet.items : seatExpanded === undefined ? [] : seatPackets.get(seatExpanded)?.items ?? [];
+    return boardPaint(items);
   });
   // rfc/hint-distance.md §5/§7: the Guided Hint seat is shown exactly when the server-compiled preset
   // carries `guided_hint` under a non-off ceiling. The ceiling is the D1639 table, marked proposed.
@@ -904,8 +1056,18 @@
   let presetSentences = $derived(presetDisclosure?.sentences ?? []);
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
-  let boardOverlays = $derived([...((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []), ...hintOverlays]);
-  let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
+  let boardOverlays: readonly DrawShape[] = $derived.by(() => {
+    // rfc/hint-distance.md: the learner-requested hint's receipt marks sit beside the seat paint.
+    if (effectiveLighting !== "sight" && effectiveLighting !== "evidence") return hintOverlays;
+    const squares = seatFocusSquares ?? seatPaint.squares;
+    return [
+      ...hintOverlays,
+      ...squares.map((square) => ({ orig: square as DrawShape["orig"], brush: "blue" })),
+      ...(assistance.arrows === "off" ? [] : seatPaint.arrows.map((arrow) => ({ orig: arrow.orig as DrawShape["orig"], dest: arrow.dest as DrawShape["orig"], brush: "blue" }))),
+    ];
+  });
+  // Without the module query (a harness with no server) the shipped sight caption stays the renderer.
+  let overlayCaption = $derived(onModuleQuery === undefined ? selectedObservations.map(renderStructuralObservation) : []);
   let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(run, run.activeCursor.branchId, assistanceContext) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
@@ -945,6 +1107,7 @@
       if (request !== assistanceQuery) return;
       if (finalized.requestedDigest !== requested.requestDigest || finalized.context !== context) throw new TypeError("Assistance response answers a different request");
       compiledAssistance = narrowBrowserChannels(finalized, browserChannelReceipt(request, speechAvailable ? { state: "available" } : { state: "unavailable", reason: "no_browser_voice" }));
+      requestedAssistance = requested;
       assistanceQueryState = "ready";
     } catch {
       if (request !== assistanceQuery) return;
@@ -1142,12 +1305,63 @@
     if (groupCandidates.length < 8) groupCandidates = [...groupCandidates, uci];
   }
 
+  /**
+   * rfc/module-registration.md §2.7: the one staged-move protocol. Click, drag, touch, keyboard grid
+   * and text entry all converge here with one exact UCI (after promotion choice). An ineffective
+   * module bypasses the check; an honest empty result commits once with no all-clear; a concrete
+   * risk holds the move for Revise or exactly-once Play anyway; a failed check is shown as unavailable
+   * and also needs explicit confirmation. A new gesture or Revise bumps the generation so late
+   * responses are ignored.
+   */
+  async function stageMove(uci: string): Promise<"commit" | "held"> {
+    if (onModuleQuery === undefined || !effectActive(compiledAssistance, "blunder_prevention", "at_commit")) return "commit";
+    const generation = ++stagedGeneration;
+    const move = moveSanFromUci(currentNode.fen, uci) ?? "this move";
+    stagedUci = uci;
+    stagedCue = { state: "checking", move };
+    try {
+      const packets = await queryModuleSeats({ timing: "at_commit", nodeId: currentNode.id, candidateUci: uci, generation }, currentNode.id, ["blunder_prevention"]);
+      if (generation !== stagedGeneration) return "held";
+      if (packets === undefined) { stagedCue = { state: "unavailable", move }; return "held"; }
+      const cue = packets.find((packet) => packet.module === "blunder_prevention");
+      if (cue !== undefined && cue.items.length > 0) { stagedCue = { state: "warning", move, packet: cue }; return "held"; }
+      stagedCue = undefined;
+      stagedUci = undefined;
+      return "commit";
+    } catch {
+      if (generation === stagedGeneration) stagedCue = { state: "unavailable", move };
+      return "held";
+    }
+  }
+
+  function reviseStagedMove(): void {
+    stagedGeneration += 1;
+    stagedCue = undefined;
+    stagedUci = undefined;
+    clearSeat(["blunder_prevention"]);
+    boardFocusRequested = true;
+  }
+
+  async function confirmStagedMove(): Promise<void> {
+    const uci = stagedUci;
+    stagedGeneration += 1;
+    stagedCue = undefined;
+    stagedUci = undefined;
+    clearSeat(["blunder_prevention"]);
+    if (uci !== undefined) await commitBoardMove(uci);
+  }
+
   async function boardMove(uci: string): Promise<boolean> {
     selectedSquare = undefined;
     if (groupOpen && groupSource === "hand_picked") {
       captureGroupMove(uci);
       return false;
     }
+    if (await stageMove(uci) === "held") return false;
+    return commitBoardMove(uci);
+  }
+
+  async function commitBoardMove(uci: string): Promise<boolean> {
     const before = activeGroup;
     const beforeIndex = before?.members.findIndex((member) => member.branchId === run.activeCursor.branchId) ?? -1;
     const committed = await onMove(uci);
@@ -1794,7 +2008,7 @@
   <section class="viewport-refusal" role="alert" aria-labelledby="viewport-refusal-title">
     <p>More room needed</p>
     <h1 id="viewport-refusal-title">This screen is too small for a playable board.</h1>
-    <p>{viewportSupport.reason}</p>
+    <p>{learnerProse(viewportSupport.reason ?? "")}</p>
     <button type="button" onclick={onStop}>Return to Play</button>
   </section>
 {:else if comparison}
@@ -1853,7 +2067,7 @@
 
     {#if opponentPause !== undefined}
       <section class="opponent-pause" role="alert" aria-label="Opponent paused" data-testid="opponent-pause">
-        <p><strong>The opponent is paused.</strong> {opponentPause.reason} Your move is kept; no opponent move was played for you.</p>
+        <p><strong>The opponent is paused.</strong> {learnerProse(opponentPause.reason)} Your move is kept; no opponent move was played for you.</p>
         <div class="opponent-pause-actions">
           {#if onRetryOpponent !== undefined}<button type="button" disabled={busy} onclick={() => void onRetryOpponent()}>Retry</button>{/if}
           {#if onChangeOpponent !== undefined}{#each opponentPause.alternatives as alternative (alternative.mode)}<button type="button" disabled={busy || !alternative.requestable} aria-describedby={alternative.requestable ? undefined : `opponent-alt-${alternative.mode}`} onclick={() => void onChangeOpponent(alternative.mode)}>Change opponent: {alternative.label}</button>{#if !alternative.requestable}<span id={`opponent-alt-${alternative.mode}`} class="honest">{alternative.note}</span>{/if}{/each}{/if}
@@ -2049,12 +2263,21 @@
             {#if hints !== undefined && hintCeiling !== "off"}
               <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} />
             {/if}
-            {#if nudge?.kind === "packet" && nudge.nodeId === nudgeNodeId && nudge.facts.length > 0}
-              <section class="module-seat" aria-label="Post-commit nudge" data-module="postcommit_nudge">
-                <strong>{nudge.headline}</strong>
-                {#each nudge.facts as fact (fact.projection)}<p data-projection={fact.projection}>{fact.sentence}</p>{/each}
-                <p>{nudge.closing}</p>
-              </section>
+            {#if seats.length > 0}
+              <ModuleSeats
+                {seats}
+                packets={seatPackets}
+                pending={seatPending}
+                failed={seatFailed}
+                expanded={seatExpanded}
+                doorBlocked={seatDoorReasons}
+                staged={stagedCue}
+                onToggle={toggleSeat}
+                onRequest={requestSeat}
+                onConfirmStaged={() => void confirmStagedMove()}
+                onReviseStaged={reviseStagedMove}
+                onFocusSquares={(squares) => seatFocusSquares = squares}
+              />
             {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No extra highlights are available here; basic board guidance remains available.</p>{/if}
@@ -2310,9 +2533,9 @@
             />
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" disabled={humanSplitBusyNodeId === displayedNode.id} onclick={() => void requestHumanSplit()}>{humanSplitBusyNodeId === displayedNode.id ? "Loading human move choices…" : "Load human move-model evidence"}</button>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
-            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<span class="honest provider-notice" data-provider-state="not_configured">{corpusNotice.reason}</span>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading human game counts…" : corpusNotice.requestable ? "Load human-game corpus evidence" : "Retry human-game corpus evidence"}</button>{#if !corpusNotice.requestable}<span class="honest provider-notice" data-provider-state={corpusNotice.tone}>{corpusNotice.reason}</span>{/if}{/if}{/if}
+            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<span class="honest provider-notice" data-provider-state="not_configured">{learnerProse(corpusNotice.reason)}</span>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading human game counts…" : corpusNotice.requestable ? "Load human-game corpus evidence" : "Retry human-game corpus evidence"}</button>{#if !corpusNotice.requestable}<span class="honest provider-notice" data-provider-state={corpusNotice.tone}>{learnerProse(corpusNotice.reason)}</span>{/if}{/if}{/if}
             {#if assistancePermission.humanSplit === "locked_off" || assistancePermission.corpus === "locked_off"}<span id="advanced-support-locked" class="honest">Requested evidence is available only after this run opens feedback, and never to participants or spectators.</span>{/if}
-            {#if voiceNotice.notConfigured}<span id="advanced-support-external-voice-unavailable" class="honest">External voice is unavailable from this deployment.</span>{:else if !voiceNotice.requestable}<span id="advanced-support-external-voice-unavailable" class="honest provider-notice" data-provider-state={voiceNotice.tone}>{voiceNotice.reason} Written guidance stays grounded and unchanged.</span>{/if}
+            {#if voiceNotice.notConfigured}<span id="advanced-support-external-voice-unavailable" class="honest">External voice is unavailable from this deployment.</span>{:else if !voiceNotice.requestable}<span id="advanced-support-external-voice-unavailable" class="honest provider-notice" data-provider-state={voiceNotice.tone}>{learnerProse(voiceNotice.reason)} Written guidance stays grounded and unchanged.</span>{/if}
             {#if !speechAvailable && !operationConfigured(capabilities, "render.speech")}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
           <fieldset class="module-toggles" aria-describedby="advanced-module-note">
@@ -2325,6 +2548,17 @@
             {/each}
           </fieldset>
         </section>
+        {#if fullInspectorActive}
+          <section class="full-inspector" aria-label="Evidence inspector: full inspector" data-module="full_inspector">
+            <h3>Everything recorded here, attributed</h3>
+            {#if fullInspectorState === "pending"}<p role="status">Collecting the recorded evidence…</p>
+            {:else if fullInspectorState === "failed"}<p role="alert">The full inspector could not be loaded.</p>
+            {:else if fullInspector !== undefined}
+              {#if fullInspector.empty?.kind === "family_partitioned"}<ul class="inspector-families">{#each fullInspector.empty.families as state (state.family)}<li data-family-state={state.kind}>{familyLine(state)}</li>{/each}</ul>{/if}
+              <PresentedEvidence items={fullInspector.items} />
+            {/if}
+          </section>
+        {/if}
         <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
           <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Position structure</button>
           {#if structuralOpen}<div class="structural-facts">{#if assistance.guided === "live" && firings.length === 0}<p>No named structure entry matches this line.</p>{/if}{#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}{#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}</div>{/if}
@@ -2346,7 +2580,7 @@
         </section>
         <section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">
           <h3>Human corpus</h3>
-          {#if assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<p class="honest provider-notice" data-provider-state="not_configured">{corpusNotice.reason}</p>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading game counts…" : corpusNotice.requestable ? "Load corpus counts" : "Retry corpus counts"}</button>{#if !corpusNotice.requestable}<p class="honest provider-notice" data-provider-state={corpusNotice.tone} data-testid="corpus-provider-notice">{corpusNotice.reason}</p>{/if}{/if}{/if}
+          {#if assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<p class="honest provider-notice" data-provider-state="not_configured">{learnerProse(corpusNotice.reason)}</p>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading game counts…" : corpusNotice.requestable ? "Load corpus counts" : "Retry corpus counts"}</button>{#if !corpusNotice.requestable}<p class="honest provider-notice" data-provider-state={corpusNotice.tone} data-testid="corpus-provider-notice">{learnerProse(corpusNotice.reason)}</p>{/if}{/if}{/if}
           {#if corpusBusyNodeId === corpusQueryNodeId}<p role="status">Loading human game counts for this position…</p>{/if}
           {#if corpusError?.nodeId === corpusQueryNodeId}<p role="alert">{corpusError.text}</p>{/if}
           {#if corpusPage?.nodeId === corpusQueryNodeId}{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{:else if corpusBusyNodeId !== corpusQueryNodeId && corpusError?.nodeId !== corpusQueryNodeId}<p class="honest">No corpus page loaded for this position.</p>{/if}
@@ -2401,7 +2635,7 @@
           {:else}
             <h4>{inspectedShape.name}</h4>
             <p class="guidance-sentence">{renderStructuralExpressionSpec(inspectedShape.trigger)}</p>
-            <p class="honest">{inspectedShape.id}@{inspectedShape.version} · {inspectedShape.channel} · {inspectedShape.provenance.licence}</p>
+            <p class="honest">Version {inspectedShape.version} · {inspectedShape.channel} · {inspectedShape.provenance.licence}</p>
             {#each inspectedShape.provenance.attribution as source}<p>{source.title} — {source.author} ({source.licence}){#if source.url} · <a href={source.url} rel="noreferrer">source</a>{/if}</p>{/each}
             {#each inspectedShape.provenance.sources as source}<p>{source}</p>{/each}
             {#each inspectedShape.plans.filter((plan) => plan.success.signature !== null) as plan}<p class="guidance-sentence">{plan.label}: {renderStructuralExpressionSpec(plan.success.signature!)}.</p>{/each}
@@ -2411,7 +2645,7 @@
           <h3>Run trajectory</h3>
           {#if trajectory}
             <div class="trajectory-status">
-              {#each trajectory.legs as leg}<div class:active-leg={leg.legId === trajectory.activeLegId}><strong>{leg.legId}</strong><span>{leg.status === "not_entered" ? "not entered" : leg.state}</span></div>{/each}
+              {#each trajectory.legs as leg, legIndex}<div class:active-leg={leg.legId === trajectory.activeLegId}><strong>Leg {legIndex + 1}</strong><span>{leg.status === "not_entered" ? "not entered" : labelOrFallback("objective_state", leg.state)}</span></div>{/each}
             </div>
           {:else}<p class="honest">This run has no trajectory legs.</p>{/if}
         </section>
