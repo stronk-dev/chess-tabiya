@@ -18,6 +18,9 @@ import {
   type DrillRun,
   type MutationResult,
   type OpponentSelection,
+  BOT_OPPONENT_PLY_RESULTS,
+  BOT_PROFILE_CATALOG,
+  type BotOpponentPlyRequest,
 } from "@chess-tabiya/runtime";
 import { describe, expect, it, vi } from "vitest";
 
@@ -35,7 +38,7 @@ import type {
   RunSummary,
   SelectMoveRequest,
 } from "./api.js";
-import { ApiError } from "./api.js";
+import { ApiError, BotOpponentPlyError, type BotOpponentPlyResponse } from "./api.js";
 import type { PollScheduler } from "./run-state.js";
 import { DrillSessionController, sessionErrorMessage } from "./session-controller.js";
 import {
@@ -1468,5 +1471,87 @@ describe("DrillSessionController", () => {
       id: "plan-commitment",
     });
     expect(api.selected).toBeUndefined();
+  });
+});
+
+// rfc/bot-policy.md §4.1 and rfc/opponent-experience.md §§2, 5: a bot-profile run's reply goes
+// through the four-field server operation only; the browser sends no FEN/history/seed/profile.
+class BotFakeApi extends FakeApi {
+  readonly plyRequests: { readonly runId: string; readonly request: BotOpponentPlyRequest; readonly writerId: string }[] = [];
+  readonly failures: BotOpponentPlyError[] = [];
+  selectCalls = 0;
+
+  override async selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
+    this.selectCalls += 1;
+    return super.selectMove(input);
+  }
+
+  async opponentPly(runId: string, request: BotOpponentPlyRequest, writerId: string): Promise<BotOpponentPlyResponse> {
+    this.plyRequests.push({ runId, request, writerId });
+    const failure = this.failures.shift();
+    if (failure !== undefined) throw failure;
+    const result = appendOpponentPly(this.requiredRun(), { moveUci: this.opponentMove, policyModeApplied: "human_common", engine: { id: "maia-5m", name: "Mock Maia", version: "1", seedHonored: true, eloHonored: true, eloApplied: 1400 } }, { at });
+    this.run = result.run;
+    return {
+      result: BOT_OPPONENT_PLY_RESULTS.committed,
+      run: result.run,
+      emitted: result.emitted,
+      operation: { requestId: request.requestId, profileDigest: digest as `sha256:${string}`, derivationDigest: digest as `sha256:${string}`, operationDigest: digest as `sha256:${string}`, committedEventSequence: result.emitted[0]!.seq, chosenMoveUci: this.opponentMove, layers: [{ id: "sampler.maia_reconstruction@1", action: "applied" }, { id: "guard.severe_error@1", action: "abstained", reason: "guard_deadline" }] },
+    };
+  }
+}
+
+describe("bot-profile play through the server operation", () => {
+  const reference = BOT_PROFILE_CATALOG.find((entry) => entry.reference.id === "guarded-human.1400@1")!.reference;
+  const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+  it("creates the run with the exact profile and asks the server for the reply with four fields", async () => {
+    const api = new BotFakeApi(pack, "e2e4", false);
+    const environment = controller(api);
+    await environment.controller.startPosition({ fen: START, side: "black", mode: "human_common", profile: reference });
+    expect(api.created?.session).toMatchObject({ kind: "position", opponentPolicy: { mode: "human_common", profile: reference } });
+    expect((api.created?.session as { opponentPolicy: Record<string, unknown> }).opponentPolicy).not.toHaveProperty("targetElo");
+    expect(api.selectCalls).toBe(0);
+    expect(api.plyRequests).toHaveLength(1);
+    const { request } = api.plyRequests[0]!;
+    expect(Object.keys(request).sort()).toEqual(["expectedBranchId", "expectedEventHeadDigest", "expectedNodeId", "requestId"]);
+    expect(request.requestId).toMatch(/^botreq_[A-Za-z0-9_-]{16,128}$/u);
+    expect(request.expectedEventHeadDigest).toMatch(/^sha256:[0-9a-f]{64}$/u);
+    expect(environment.controller.state.runState?.run.nodes.at(-1)).toMatchObject({ moveUci: "e2e4", actor: "opponent" });
+    expect(environment.controller.state.botReply?.layers[1]).toEqual({ id: "guard.severe_error@1", action: "abstained", reason: "guard_deadline" });
+  });
+
+  it("reuses the idempotency key after a retryable failure and issues a new one after a stale root", async () => {
+    const api = new BotFakeApi(pack, "e2e4", false);
+    api.failures.push(new BotOpponentPlyError(BOT_OPPONENT_PLY_RESULTS.base_provider_unavailable, "down"));
+    const environment = controller(api);
+    await environment.controller.startPosition({ fen: START, side: "black", mode: "human_common", profile: reference });
+    expect(environment.controller.state.error).toBe("The bot's move model is unavailable right now. Try again, or choose another opponent.");
+    expect(await environment.controller.retryOpponent()).toBe(true);
+    expect(api.plyRequests).toHaveLength(2);
+    expect(api.plyRequests[1]!.request).toEqual(api.plyRequests[0]!.request);
+    expect(environment.controller.state.runState?.run.nodes.at(-1)).toMatchObject({ actor: "opponent" });
+
+    const stale = new BotFakeApi(pack, "e2e4", false);
+    stale.failures.push(new BotOpponentPlyError(BOT_OPPONENT_PLY_RESULTS.stale_root, "stale"));
+    const second = controller(stale);
+    await second.controller.startPosition({ fen: START, side: "black", mode: "human_common", profile: reference });
+    expect(second.controller.state.error).toBe("The board changed before the bot could reply. Reopen the run to continue from the current position.");
+    expect(await second.controller.retryOpponent()).toBe(true);
+    expect(stale.plyRequests[1]!.request.requestId).not.toBe(stale.plyRequests[0]!.request.requestId);
+  });
+
+  it("refuses a created run that does not echo the chosen bot", async () => {
+    class Dropping extends BotFakeApi {
+      override async createRun(input: CreateRunRequest, writerId: string): Promise<DrillRun> {
+        const session = input.session.kind === "position" ? { ...input.session, opponentPolicy: { mode: "human_common" as const, targetElo: 1400 } } : input.session;
+        return super.createRun({ ...input, session }, writerId);
+      }
+    }
+    const api = new Dropping(pack, "e2e4", false);
+    const environment = controller(api);
+    await environment.controller.startPosition({ fen: START, side: "black", mode: "human_common", profile: reference });
+    expect(api.plyRequests).toHaveLength(0);
+    expect(environment.controller.state.error).toBeDefined();
   });
 });

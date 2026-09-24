@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import { branchPath, branchPaths, resolveBranchPath } from "./branch-path.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_FAMILY_IDS, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
-import { EvidenceManifestError, compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceDigest, identitySealedEvidenceWithoutValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { EvidenceManifestError, compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceConventionReceipt, evidenceDigest, identitySealedEvidenceWithoutValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { CONVENTION_REGISTRY } from "./evidence-conventions.js";
 import type { LegalExchangeResult } from "./exchange.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import type { RecordedEdge } from "./recorded-edge.js";
@@ -20,6 +21,7 @@ function declareLegalExchangeEvidence(result: LegalExchangeResult): DeclaredEvid
 }
 import {
   assertRecordedPathTableClosure,
+  recordedPathConventionReceipt,
   recordedPathEvaluatorRows,
   recordedSemanticPath,
   recordedSemanticPathExecution,
@@ -392,8 +394,16 @@ describe("recorded semantic path compiler", () => {
   it("[criterion 15] moves result identity with every exact edge, value and convention receipt", () => {
     const run = recordedRun("identity", POSITIVES[4].fen, POSITIVES[4].moves);
     const result = compileMain(run);
-    expect(result.conventionReceipt).toMatchObject({ status: "predecessor_unlanded", predecessor: "rfc/semantic-convention-provenance.md" });
-    expect(result.conventionReceipt.registryDigest).toMatch(/^[0-9a-f]{64}$/u);
+    // [[D1921]]/[[D1929]]: a real registry receipt over the exact emitted closure, not an abstention.
+    expect(result.conventionReceipt).toMatchObject({ status: "registered", registryDigest: CONVENTION_REGISTRY.digest });
+    expect(result.conventionReceipt.digest).toMatch(/^sha256:[0-9a-f]{64}$/u);
+    expect(result.conventionReceipt.eventReceiptDigests).toEqual(result.events.map((event) => evidenceConventionReceipt(event.evidence)!.digest));
+    const closure = new Set(result.events.flatMap((event) => evidenceConventionReceipt(event.evidence)!.refs.map(exact)));
+    expect(result.conventionReceipt.refs.map(exact)).toEqual([...closure].sort());
+    expect(result.conventionReceipt.refs.length).toBeGreaterThan(0);
+    // The closure is exactly the emitted events': an event-free path carries an empty closure.
+    expect(recordedPathConventionReceipt([])).toMatchObject({ refs: [], eventReceiptDigests: [], registryDigest: CONVENTION_REGISTRY.digest });
+    expect(recordedPathConventionReceipt(result.events.slice(1)).digest).not.toBe(result.conventionReceipt.digest);
     const material: RecordedPathIdentityMaterial = {
       operation: "recorded-semantic-path@1", manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest, semanticConventionRegistryDigest: result.conventionReceipt.registryDigest,
       sourceClosureDigest: "0".repeat(64), runId: run.id, branchId: result.branchId, branchOrigin: result.branchOrigin, pathNodeIds: result.pathNodeIds,

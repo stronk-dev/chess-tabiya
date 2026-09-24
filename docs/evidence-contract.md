@@ -79,18 +79,44 @@ therefore no generic mint API and no caller-payload adapter:
   factories nor the invoker is a package export.
 - Where the authority a projection needs is not yet registered, the factory returns an explicit
   `EvidenceAvailability` `unavailable` arm with a reason and the dependency it waits on, or carries a
-  `pending` dependency note; it never mints a best guess. Today that covers the endgame setup and
-  method-stage successors, the grade, and the opening endpoint/membership/deepest-reached
-  projections.
+  `pending` dependency note; it never mints a best guess. Today that covers the grade and the
+  opening endpoint/membership/deepest-reached projections; a setup or method convention ref that is
+  not registered returns `unavailable` rather than a match.
+
+### Convention closure
+
+A convention is the definition a fact was computed under — a threshold, ordering, window or cited
+technique — and it is separate from grounding (`rfc/semantic-convention-provenance.md`). The
+registry is `packages/runtime/src/evidence-conventions.ts#CONVENTION_DECLARATIONS`: one literal
+declaration per `id@version` with its definition, mandatory limitations, authority (`landed_contract`
+witnesses at a reviewed snapshot, a `published_source` citation and licence, a `product_rule`
+ledger ruling, …) and disclosure. The first 39 are generated from the reviewed
+`planning/semantic-convention-provenance/initial-declarations.json`; later ones (phase bands, the
+endgame material census, the named-structure catalogue and the six cited Lucena/Philidor/Vančura
+setup and method conventions) are authored beneath them and bound byte-for-byte by tests to the code
+that computes them. `compileConventionRegistry` refuses duplicate or aliased refs, blank fields,
+unresolvable authority and skipped lineage. Every declaration has one append-only row in
+`evidence-convention-history.jsonl`, so changing a meaning means declaring the next version.
+
+The mint seals a value-level `ConventionReceipt` with every value:
+`{ refs, registryDigest, derivation, digest }`. A projection's direct refs come from
+`evidence-convention-closure.ts`, derived mechanically from declaration witnesses, retaining
+successors (`X@2` keeps `X@1`'s witnessed refs), registered `id@version` tokens in the catalogue
+text, and the one declared inheritance row. A derived value's closure is its direct refs plus the
+closures of the exact sealed inputs it used; the receipt records the canonical used-input member and
+the multiset of input value digests, so input order never matters and multiplicity does. A setup or
+method value carries only the one convention it was computed under, never the alternatives.
+`evidenceConventionReceipt(value)` reads it (package-internal). The receipt does not change
+grounding, exactness or confidence, and it is not a learner-facing setting.
 
 Corrected projection identities replaced the false or mixed v1 rows: `rules.phase.reading@2`
 (five-arm `PhaseBandReadingV2` decision computed with the phase from one FEN),
 `rules.structural.reading.named_structure@2` (`{id, name, provenanceNote}`),
 `rules.endgame.classification@1` (material census; technique naming is gone),
-`theory.endgame.setup_match@1` (`matched | not_matched | unavailable` under the cited, versioned
-conventions in `endgame-setup.ts`) and `theory.endgame.method_stage@1` (retrospective stages
-replayed by the cited method conventions in `endgame-method.ts` over exact `run.record.edge@1`
-windows; no consumer binding), the four `derived.pivotal.*@1` markers, and
+`theory.endgame.setup_match@1` (`matched | not_matched | unavailable` under the registered, cited
+setup conventions whose operands `endgame-setup.ts` computes) and `theory.endgame.method_stage@1`
+(retrospective stages replayed by the registered method conventions in `endgame-method.ts` over
+exact `run.record.edge@1` windows; no consumer binding), the four `derived.pivotal.*@1` markers, and
 `derived.structural.predicate_result@1` (derived from the sealed authored condition). The v1
 projections are retired with zero consumer bindings.
 

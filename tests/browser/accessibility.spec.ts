@@ -3,6 +3,8 @@ import { randomUUID } from "node:crypto";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { chooseRawRung } from "./play-helpers.js";
+
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"] as const;
 
 async function register(page: Page): Promise<void> {
@@ -55,6 +57,7 @@ test("@matrix automated WCAG scan covers catalogue, settings, and a live rehears
   await expectSafeLiveRegions(page, "settings");
 
   await page.goto("/play");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expectNoWcagViolations(page, "live rehearsal");
@@ -77,6 +80,7 @@ test("@matrix @mobile the mobile project uses real touch and coarse-pointer sema
   expect(signOutBox!.width).toBeGreaterThanOrEqual(24);
   expect(signOutBox!.height).toBeGreaterThanOrEqual(24);
 
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.locator(".compact-tabs button[aria-pressed='true']")).toHaveCount(1);

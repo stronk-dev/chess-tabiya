@@ -387,14 +387,57 @@ export const BOT_CARD_SOURCE_IDS = Object.freeze([
 export type BotCardSourceId = (typeof BOT_CARD_SOURCE_IDS)[number];
 
 /**
- * Why no registered profile can start a game yet. Each id names an unlanded dependency, not a
- * provider outage: `run-schema-0.18` (the profile reference and decision envelope persist under
- * run lane 0.18, whose stamp migration is registered behind `concept-registry`),
- * `provider-exchange` (the shared Maia page / Stockfish root-table deliveries) and
- * `provider-health` (the snapshot/release receipt availability is joined to).
+ * Profile availability (rfc/bot-policy.md §4.3, §8). A roster row is derived from the shared
+ * provider exchange's own observed outcomes for the operations the profile needs — never from a
+ * configuration flag. Baseline needs only `maia.policy_page@1`; guarded and pawn-forward profiles
+ * additionally need `stockfish.legal_root_table@1` and a provider-health release receipt, which does
+ * not exist yet, so they are at best conditional.
+ *
+ * - `available`: every required operation's last observed exchange outcome was a delivery.
+ * - `conditional`: startable, but a named condition is not yet proven (never observed, or the
+ *   release receipt is absent).
+ * - `unavailable`: a required operation's last observed outcome was `provider_unavailable` or an
+ *   identity mismatch. Not startable.
  */
-export const BOT_ROSTER_BLOCKERS = Object.freeze(["run-schema-0.18", "provider-exchange", "provider-health"] as const);
-export type BotRosterBlocker = (typeof BOT_ROSTER_BLOCKERS)[number];
+export const BOT_AVAILABILITY_CONDITIONS = Object.freeze(["maia_unverified", "stockfish_unverified", "guard_release_receipt_absent"] as const);
+export type BotAvailabilityCondition = (typeof BOT_AVAILABILITY_CONDITIONS)[number];
+export const BOT_AVAILABILITY_BLOCKERS = Object.freeze(["maia_unavailable", "stockfish_unavailable"] as const);
+export type BotAvailabilityBlocker = (typeof BOT_AVAILABILITY_BLOCKERS)[number];
+
+export type BotProfileStartability =
+  | Readonly<{ kind: "available" }>
+  | Readonly<{ kind: "conditional"; conditions: readonly BotAvailabilityCondition[] }>
+  | Readonly<{ kind: "unavailable"; blockedBy: readonly BotAvailabilityBlocker[] }>;
+
+/** The per-operation provider observation a profile joins (one closed state per operation). */
+export type BotProviderOperationState = "unverified" | "available" | "unavailable";
+
+export interface BotProviderAvailabilitySnapshot {
+  readonly revision: number;
+  readonly maia: BotProviderOperationState;
+  readonly stockfish: BotProviderOperationState;
+}
+
+/**
+ * The §4.3 profile join. Baseline ignores Stockfish entirely; a guarded family is unavailable when
+ * either operation is unavailable and otherwise conditional until a release receipt exists.
+ */
+export function botProfileStartability(entry: BotProfileCatalogEntry, snapshot: BotProviderAvailabilitySnapshot): BotProfileStartability {
+  const guarded = entry.reference.orderedLayers.includes("guard.severe_error@1");
+  const blockedBy: BotAvailabilityBlocker[] = [];
+  if (snapshot.maia === "unavailable") blockedBy.push("maia_unavailable");
+  if (guarded && snapshot.stockfish === "unavailable") blockedBy.push("stockfish_unavailable");
+  if (blockedBy.length > 0) return Object.freeze({ kind: "unavailable", blockedBy: Object.freeze(blockedBy) });
+  const conditions: BotAvailabilityCondition[] = [];
+  if (snapshot.maia === "unverified") conditions.push("maia_unverified");
+  if (guarded && snapshot.stockfish === "unverified") conditions.push("stockfish_unverified");
+  if (guarded) conditions.push("guard_release_receipt_absent");
+  return conditions.length === 0 ? Object.freeze({ kind: "available" }) : Object.freeze({ kind: "conditional", conditions: Object.freeze(conditions) });
+}
+
+export function botProfileIsStartable(startability: BotProfileStartability): boolean {
+  return startability.kind !== "unavailable";
+}
 
 // ---------------------------------------------------------------------------------------------
 // Layer-composition compiler (rfc/bot-policy.md §3 compile-time failures; A5).

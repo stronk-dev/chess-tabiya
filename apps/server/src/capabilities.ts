@@ -27,6 +27,7 @@ import {
 } from "./evidence-manifest.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { projectBotRoster, type BotRosterRow } from "./bot-roster.js";
+import type { BotProviderAvailabilitySnapshot } from "@chess-tabiya/runtime";
 
 export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
 
@@ -345,6 +346,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #tts: CapabilityProviders["tts"];
   readonly #tablebase: CapabilityProviders["tablebase"];
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
+  readonly #botAvailability: (() => BotProviderAvailabilitySnapshot) | undefined;
 
   constructor(
     client: CapabilityEngineClient,
@@ -357,6 +359,8 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly tts?: CapabilityProviders["tts"];
       readonly tablebase?: CapabilityProviders["tablebase"];
       readonly openingCatalogue?: OpeningCatalogueAvailability;
+      /** rfc/bot-policy.md §4.3: exchange-observed provider availability for the roster join. */
+      readonly botAvailability?: () => BotProviderAvailabilitySnapshot;
     },
   ) {
     this.#client = client;
@@ -367,6 +371,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
     this.#tts = options.tts ?? "none";
     this.#tablebase = options.tablebase ?? "none";
     this.#openingCatalogue = options.openingCatalogue;
+    this.#botAvailability = options.botAvailability;
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -428,7 +433,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
         human_common: Object.freeze({
           elo,
           resistance: HUMAN_COMMON_RESISTANCE_PROFILE,
-          profiles: projectBotRoster().profiles,
+          profiles: projectBotRoster(this.#botAvailability?.()).profiles,
         }),
       }),
       providers: providerState,

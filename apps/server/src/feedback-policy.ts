@@ -80,6 +80,8 @@ function projectPublicEvent(event: DrillRunEvent): DrillRunEvent {
           ...(event.data.opponentPolicy.targetElo === undefined ? {} : { targetElo: event.data.opponentPolicy.targetElo }),
           ...(event.data.opponentPolicy.temperature === undefined ? {} : { temperature: event.data.opponentPolicy.temperature }),
           ...(event.data.opponentPolicy.topP === undefined ? {} : { topP: event.data.opponentPolicy.topP }),
+          // Run schema 0.18: the exact catalogue reference is public identity, not feedback.
+          ...(event.data.opponentPolicy.profile === undefined ? {} : { profile: event.data.opponentPolicy.profile }),
         }),
         policyConfig: Object.freeze({
           seedMode: event.data.policyConfig.seedMode,

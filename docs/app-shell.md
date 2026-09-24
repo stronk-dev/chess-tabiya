@@ -27,7 +27,7 @@ an explicit not-found view rather than crashing the application.
 | `/live/session/:sessionId` | Members, match pause state, friend links, board control, proposals, votes, invitations, Arena legs, and journal |
 | `/live/overlay/:runId` | Chrome-free spectator/stream projection of a live run |
 | `/create` | Pack and shape authoring with persistent drafts, continuous validation, playtest, graduation readiness, and community registration |
-| `/library` | Read-only pack and run-artifact inventory; its knowledge-browser replacement remains an owner decision |
+| `/library` | Phase-first searchable Library over packs, principles, shapes, concepts and named openings (official first, community drafts disclosed), plus the learner's saved games; entries open at `/library/principle/{id}`, `/library/shape/{id}`, `/library/opening/{positionKey}` and `/play/pack/{packId}` |
 | `/settings` | Appearance, provider, deployment-surface, and shortcut information |
 
 Public `/shared/:token` pages sit outside the authenticated shell. Story tokens render a
@@ -125,8 +125,20 @@ vertical list of complete learner cards rather than a 48-rem table requiring a s
 
 The application boundary also exposes the official principle registry at `GET /principles` as an
 id-sorted summary catalogue. The browser client preserves each entry's id, version, digest, name,
-phases, and licence. This is the data path required by authoring pickers and a future knowledge
-surface; it does not itself settle whether `/library` becomes that surface.
+phases, and licence. This is the data path required by authoring pickers.
+
+The Library is the knowledge surface (`rfc/theory-drill-current-joins.md` §4.3, read-time half).
+The read-only `/theory` family serves it: `GET /theory/search?q=&phase=&kind=&limit=` is a
+deterministic catalogue search (literal word-prefix matching, no query syntax, no ranking by any
+chess quantity; official material, then the CC0 opening catalogue, then community drafts; one row
+per id and one row per opening name; shown/total per kind); `GET /theory/principles/{id}`,
+`/theory/shapes/{id}`, `/theory/openings/{positionKey}` and `/theory/packs/{packId}` return entry
+views carrying the Library-context applicability result — shape `present` pack targets, principle
+claim anchors, exact opening endpoints (with an honest empty pack set) and the four abstentions.
+Every Library item offers Rehearse (the ordinary pack start; no derivation is recorded),
+Understand (the entry page) and Return (a due return starts directly; otherwise the pack entry
+explains that a return is scheduled from a finished rehearsal). The source-bound launch that
+records a `run_derivations` row remains the RFC's migration half.
 
 ## Run index and SQLite migration
 
