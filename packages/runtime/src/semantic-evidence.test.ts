@@ -8,6 +8,17 @@ import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVE
 import { compileEvidenceManifest, declareEvidence, type EvidenceSelectionPolicyDeclaration } from "./evidence-contract.js";
 import { declareRunRecordEvidence } from "./evidence-source-adapters.js";
 import {
+  CANDIDATE_EVENTS_SCOPE,
+  CANDIDATE_READINGS_SCOPE,
+  CANDIDATE_WIDE_SCOPE,
+  assertCandidatePacketEvent,
+  candidateAlternatives,
+  candidatePlayedRow,
+  compileCandidatePopulation,
+  projectCandidatePopulationReceipt,
+  type CandidatePopulationReceipt,
+} from "./candidate-population.js";
+import {
   assertEvidenceSelectionResult,
   assertSemanticEvidenceEvent,
   canonicalMoveUci,
@@ -22,6 +33,7 @@ import {
   tacticalSemanticEvents,
   tradeCompletedSemanticEvent,
   transitionSemanticEvents,
+  type CounterfactualAbsenceOperands,
   type SemanticEvidenceEvent,
 } from "./semantic-evidence.js";
 
@@ -43,13 +55,6 @@ function event(fen: string, uci: string, projection = "rules.structural.event.op
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign, operands: payload });
 }
 
-function looseEvent(fen: string, uci: string, sign: "gained" | "lost" | "preserved" = "gained"): SemanticEvidenceEvent {
-  const afterFen = after(fen, uci);
-  const payload = Object.freeze({ beforeFen: canonicalFen(positionFromFen(fen)), moveUci: canonicalMoveUci(fen, uci), afterFen, mover: Object.freeze({ fixture: true }), before: Object.freeze({ enPrise: sign !== "gained" }), after: Object.freeze({ enPrise: sign !== "lost" }) });
-  const declared = declareEvidence(ref("rules.tactic"), ref("rules.tactic.event.loose_piece"), payload);
-  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign, operands: payload });
-}
-
 function ruleEvent(fen: string, uci: string, family: "castled" | "promotion" | "checkmate" | "last_of_role"): SemanticEvidenceEvent {
   const afterFen = after(fen, uci);
   const canonical = canonicalMoveUci(fen, uci);
@@ -61,6 +66,47 @@ function ruleEvent(fen: string, uci: string, family: "castled" | "promotion" | "
 function policy(overrides: Partial<EvidenceSelectionPolicyDeclaration> = {}) {
   const declaration: EvidenceSelectionPolicyDeclaration = { id: "test.selection", version: 1, consumer: ref("research.semantic_selection"), disposition: "experimental", minimumAlternatives: 8, maximumSameFamilyShare: 0.2, minimumAlternativeOnlyShare: 0.3, maxFacts: 2, criticalEvents: [], ...overrides };
   return { declaration, manifest: compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, selectionPolicies: [...EVIDENCE_CONTRACT_DECLARATIONS.selectionPolicies!, declaration] }) };
+}
+
+const CHECK_FEN = "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1";
+const RECEIPTS = new Map<string, CandidatePopulationReceipt>();
+
+function eventsReceipt(fen: string): CandidatePopulationReceipt {
+  const cached = RECEIPTS.get(fen);
+  if (cached !== undefined) return cached;
+  const compiled = compileCandidatePopulation({ beforeFen: fen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+  if (compiled.kind !== "ready") throw new Error(`candidate packet did not compile: ${compiled.error.code}`);
+  RECEIPTS.set(fen, compiled.receipt);
+  return compiled.receipt;
+}
+
+function familyOf(event: SemanticEvidenceEvent): string {
+  return `${event.projection.id}:${event.sign}`;
+}
+
+function eligibleFor(event: SemanticEvidenceEvent, consumer: { readonly id: string; readonly version: number }): boolean {
+  return PRIMARY_EVIDENCE_MANIFEST.eligibility.some((row) => row.event.id === event.projection.id && row.consumer.id === consumer.id && row.consumer.version === consumer.version && row.disposition === "eligible" && row.allowedSigns.includes(event.sign));
+}
+
+/** Independent oracle over the packet rows: share of alternatives carrying each played family. */
+function playedFamilyShares(receipt: CandidatePopulationReceipt, moveUci: string, consumer: { readonly id: string; readonly version: number }): Map<string, number> {
+  const alternatives = candidateAlternatives(receipt, moveUci);
+  const families = new Set(candidatePlayedRow(receipt, moveUci).events.filter((event) => eligibleFor(event, consumer)).map(familyOf));
+  return new Map([...families].map((family) => [family, alternatives.filter((row) => row.events.some((event) => eligibleFor(event, consumer) && familyOf(event) === family)).length / alternatives.length]));
+}
+
+/** Independent oracle: structural/loose families present only among alternatives, with their share. */
+function alternativeOnlyShares(receipt: CandidatePopulationReceipt, moveUci: string, consumer: { readonly id: string; readonly version: number }): Map<string, number> {
+  const alternatives = candidateAlternatives(receipt, moveUci);
+  const played = new Set(candidatePlayedRow(receipt, moveUci).events.filter((event) => eligibleFor(event, consumer)).map(familyOf));
+  const families = new Set(alternatives.flatMap((row) => row.events.filter((event) => eligibleFor(event, consumer) && (event.projection.id.startsWith("rules.structural.event.") || event.projection.id === "rules.tactic.event.loose_piece")).map(familyOf)));
+  const shares = new Map<string, number>();
+  for (const family of families) if (!played.has(family)) {
+    const share = alternatives.filter((row) => row.events.some((event) => eligibleFor(event, consumer) && familyOf(event) === family)).length / alternatives.length;
+    const avoidance = `derived.semantic_avoidance.${family.split(":")[0]!.replace("rules.structural.event.", "").replace("rules.tactic.event.", "")}`;
+    if (PRIMARY_EVIDENCE_MANIFEST.eligibility.some((row) => row.event.id === avoidance && row.consumer.id === consumer.id && row.disposition === "eligible")) shares.set(family, share);
+  }
+  return shares;
 }
 
 describe("semantic evidence runtime", () => {
@@ -141,13 +187,15 @@ describe("semantic evidence runtime", () => {
     expect(legalAlternativeEdges(fixtures[3]!.fen, "e1e2").filter((edge) => edge.moveUci.startsWith("a7a8")).map((edge) => edge.moveUci)).toEqual(["a7a8b", "a7a8n", "a7a8q", "a7a8r"]);
   });
 
-  it("selects a critical exact event without granting valence and seals the result", () => {
+  it("selects a critical exact event from a compiled packet without granting valence and seals the result", () => {
     const fen = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
-    const played = ruleEvent(fen, "e1g1", "castled");
-    const result = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { beforeFen: fen, moveUci: "e1g1", afterFen: after(fen, "e1g1"), playedEvents: [played], evaluateAlternative: () => [] });
-    expect(result.selected).toHaveLength(1);
-    expect(result.selected[0]?.kind).toBe("played_event");
-    expect(result.selected[0]?.event.valence).toBeUndefined();
+    const receipt = eventsReceipt(fen);
+    const result = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt, moveUci: "e1h1" });
+    const castled = result.selected.find((item) => item.event.projection.id === "rules.transition.event.castled");
+    expect(castled?.kind).toBe("played_event");
+    expect(castled?.event.valence).toBeUndefined();
+    expect(result.population).toEqual({ legalAlternatives: receipt.packet.candidates.length - 1, evaluatedAlternatives: receipt.packet.candidates.length - 1 });
+    for (const item of result.selected) if (item.kind === "played_event") expect(assertCandidatePacketEvent(receipt, item.event).moveUci).toBe("e1h1");
     expect(() => assertEvidenceSelectionResult(PRIMARY_EVIDENCE_MANIFEST, result)).not.toThrow();
     expect(() => assertEvidenceSelectionResult(PRIMARY_EVIDENCE_MANIFEST, { ...result })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
     expect(() => assertEvidenceSelectionResult(PRIMARY_EVIDENCE_MANIFEST, { ...result, consumer: ref("inspector.position_structure") })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
@@ -290,88 +338,117 @@ describe("semantic evidence runtime", () => {
     expect(() => assertEvidenceSelectionResult(PRIMARY_EVIDENCE_MANIFEST, result)).not.toThrow();
   });
 
-  it("applies played-family thresholds and deterministic order without operand-coordinate denominator tricks", () => {
-    const configured = policy();
-    const afterFen = after(INITIAL_FEN, "e2e4");
-    const played = [event(INITIAL_FEN, "e2e4", "rules.structural.event.open_file"), event(INITIAL_FEN, "e2e4", "rules.structural.event.piece_count")];
-    const supportingMoves = new Set(legalAlternativeEdges(INITIAL_FEN, "e2e4").slice(0, 3).map((edge) => edge.moveUci));
-    const eventsFor = (edge: { readonly beforeFen: string; readonly moveUci: string }) => supportingMoves.has(edge.moveUci) ? [event(edge.beforeFen, edge.moveUci, "rules.structural.event.open_file"), event(edge.beforeFen, edge.moveUci, "rules.structural.event.piece_count")] : [];
-    const first = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: played, evaluateAlternative: eventsFor });
-    const second = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: [...played].reverse(), evaluateAlternative: (edge) => [...eventsFor(edge)].reverse() });
-    expect(first.selected.map((item) => item.event.id)).toEqual(second.selected.map((item) => item.event.id));
-    expect(first.rejected).toEqual(second.rejected);
-    expect(first.selected.find((item) => item.event.projection.id.endsWith("open_file"))?.kind).toBe("played_event");
-    expect((first.selected.find((item) => item.event.projection.id.endsWith("open_file")) as { sameFamilyShare: number }).sameFamilyShare).toBeCloseTo(3 / 19);
+  it("applies played-family thresholds at the packet's measured share and orders deterministically", () => {
+    const receipt = eventsReceipt(INITIAL_FEN);
+    const research = ref("research.semantic_selection");
+    const shares = playedFamilyShares(receipt, "e2e4", research);
+    const [family, share] = [...shares].find(([, value]) => value > 0 && value < 1)!;
+    const at = policy({ maximumSameFamilyShare: share, maxFacts: 50, minimumAlternativeOnlyShare: null });
+    const below = policy({ maximumSameFamilyShare: share - 1e-9, maxFacts: 50, minimumAlternativeOnlyShare: null });
+    const selectedAt = selectSemanticEvidence(at.manifest, ref(at.declaration.id), { receipt, moveUci: "e2e4" });
+    const selectedBelow = selectSemanticEvidence(below.manifest, ref(below.declaration.id), { receipt, moveUci: "e2e4" });
+    const fact = selectedAt.selected.find((item) => familyOf(item.event) === family);
+    expect(fact?.kind).toBe("played_event");
+    expect((fact as { sameFamilyShare: number }).sameFamilyShare).toBeCloseTo(share);
+    expect(selectedBelow.selected.some((item) => familyOf(item.event) === family)).toBe(false);
+    expect(selectedBelow.rejected.some((item) => item.candidate.id === fact!.event.id && item.reason.id === "nothing_distinctive")).toBe(true);
+    const wide = compileCandidatePopulation({ beforeFen: INITIAL_FEN, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+    if (wide.kind !== "ready") throw new Error("wide packet did not compile");
+    const projected = projectCandidatePopulationReceipt(wide.receipt, CANDIDATE_EVENTS_SCOPE);
+    if (projected.kind !== "ready") throw new Error("wide packet did not project");
+    const again = selectSemanticEvidence(at.manifest, ref(at.declaration.id), { receipt: projected.receipt, moveUci: "e2e4" });
+    expect(again.selected.map((item) => item.event.id)).toEqual(selectedAt.selected.map((item) => item.event.id));
+    expect(again.rejected).toEqual(selectedAt.rejected);
   });
 
   it("keeps eligibility consumer-specific and refuses to turn a signed event into valence", () => {
     const configured = policy({ consumer: ref("inspector.position_structure"), criticalEvents: [] });
-    const played = event(INITIAL_FEN, "e2e4");
-    const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen: after(INITIAL_FEN, "e2e4"), playedEvents: [played], evaluateAlternative: () => [] });
+    const receipt = eventsReceipt(INITIAL_FEN);
+    const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { receipt, moveUci: "e2e4" });
     expect(result.selected).toEqual([]);
     expect(result.emptyReason?.id).toBe("no_eligible_events");
-    expect(played.valence).toBeUndefined();
+    expect(candidatePlayedRow(receipt, "e2e4").events.every((event) => event.valence === undefined)).toBe(true);
   });
 
-  it("covers every threshold and cap in the declared selector sensitivity grid", () => {
-    const afterFen = after(INITIAL_FEN, "e2e4");
-    const families = ["rules.structural.event.open_file", "rules.structural.event.piece_count", "rules.structural.event.half_open_file"] as const;
+  it("covers every threshold and cap in the declared selector sensitivity grid against the packet's own counts", () => {
+    const receipt = eventsReceipt(INITIAL_FEN);
+    const research = ref("research.semantic_selection");
+    const played = playedFamilyShares(receipt, "e2e4", research);
+    const alternativeOnly = alternativeOnlyShares(receipt, "e2e4", research);
     for (const maximumSameFamilyShare of [0.1, 0.2, 0.3]) {
-      const configured = policy({ maximumSameFamilyShare, maxFacts: 3 });
-      const support = Math.floor(maximumSameFamilyShare * 19);
-      let index = 0;
-      const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: [event(INITIAL_FEN, "e2e4")], evaluateAlternative: (edge) => index++ < support ? [event(edge.beforeFen, edge.moveUci)] : [] });
-      expect(result.selected.some((item) => item.kind === "played_event")).toBe(true);
+      const configured = policy({ maximumSameFamilyShare, maxFacts: 50, minimumAlternativeOnlyShare: null });
+      const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { receipt, moveUci: "e2e4" });
+      const expected = [...played].filter(([, share]) => share <= maximumSameFamilyShare).map(([family]) => family).sort();
+      expect([...new Set(result.selected.filter((item) => item.kind === "played_event").map((item) => familyOf(item.event)))].sort()).toEqual(expected);
     }
     for (const minimumAlternativeOnlyShare of [null, 0.2, 0.3, 0.4] as const) {
-      const configured = policy({ minimumAlternativeOnlyShare, maxFacts: 3 });
-      let index = 0;
-      const support = minimumAlternativeOnlyShare === null ? 19 : Math.ceil(minimumAlternativeOnlyShare * 19);
-      const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: [], evaluateAlternative: (edge) => index++ < support ? [event(edge.beforeFen, edge.moveUci)] : [] });
-      expect(result.selected.some((item) => item.kind === "counterfactual_absence")).toBe(minimumAlternativeOnlyShare !== null);
+      const configured = policy({ minimumAlternativeOnlyShare, maximumSameFamilyShare: 0, maxFacts: 50 });
+      const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { receipt, moveUci: "e2e4" });
+      const expected = minimumAlternativeOnlyShare === null ? [] : [...alternativeOnly].filter(([, share]) => share >= minimumAlternativeOnlyShare).map(([family]) => family).sort();
+      const absences = result.selected.flatMap((item) => item.kind === "counterfactual_absence" ? [`${item.event.operands.family.projection.id}:${item.event.operands.family.sign}`] : []);
+      expect(absences.sort()).toEqual(expected);
     }
+    expect(alternativeOnly.size).toBeGreaterThan(0);
     for (const maxFacts of [1, 2, 3]) {
-      const configured = policy({ maxFacts });
-      const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: families.map((family) => event(INITIAL_FEN, "e2e4", family)), evaluateAlternative: () => [] });
+      const configured = policy({ maxFacts, maximumSameFamilyShare: 1, minimumAlternativeOnlyShare: null });
+      const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { receipt, moveUci: "e2e4" });
       expect(result.selected).toHaveLength(maxFacts);
     }
   });
 
-  it("constructs avoided only from a complete retained numerator and denominator", () => {
-    const configured = policy();
-    const afterFen = after(INITIAL_FEN, "e2e4");
-    let index = 0;
-    const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: [], evaluateAlternative: (edge) => index++ < 6 ? [event(edge.beforeFen, edge.moveUci, "rules.structural.event.open_file")] : [] });
+  it("constructs avoided only from the packet's complete retained numerator and denominator", () => {
+    const receipt = eventsReceipt(INITIAL_FEN);
+    const result = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt, moveUci: "e2e4" });
     const avoided = result.selected.find((item) => item.kind === "counterfactual_absence");
     expect(avoided?.kind).toBe("counterfactual_absence");
     if (avoided?.kind !== "counterfactual_absence") return;
-    expect(avoided.event.operands).toMatchObject({ relation: "avoided", legalAlternatives: 19, alternativesWithFamily: 6 });
-    expect(avoided.event.operands.alternativeEvents).toHaveLength(6);
-    expect(avoided.event.derivationInputs).toHaveLength(6);
+    const operands = avoided.event.operands;
+    const withFamily = candidateAlternatives(receipt, "e2e4").filter((row) => row.events.some((event) => familyOf(event) === `${operands.family.projection.id}:${operands.family.sign}`));
+    expect(operands).toMatchObject({ relation: "avoided", legalAlternatives: 19, alternativesWithFamily: withFamily.length });
+    expect(operands.alternativeEvents).toHaveLength(withFamily.length);
+    for (const event of operands.alternativeEvents) expect(assertCandidatePacketEvent(receipt, event).moveUci).toBe(event.anchor.moveUci);
+    expect(avoided.event.derivationInputs).toHaveLength(withFamily.length);
     expect(avoided.event.valence).toBeUndefined();
   });
 
   it("constructs loose-piece avoidance through the same complete-population path", () => {
-    const configured = policy();
-    const afterFen = after(INITIAL_FEN, "e2e4");
-    let index = 0;
-    const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: [], evaluateAlternative: (edge) => index++ < 6 ? [looseEvent(edge.beforeFen, edge.moveUci)] : [] });
-    const avoided = result.selected.find((item) => item.kind === "counterfactual_absence" && item.event.projection.id === "derived.semantic_avoidance.loose_piece");
+    const fen = "r2q1rk1/pp2bppp/2n1bn2/2pp4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 10";
+    const receipt = eventsReceipt(fen);
+    const loose = candidateAlternatives(receipt, "a2a3").filter((row) => row.events.some((event) => event.projection.id === "rules.tactic.event.loose_piece" && event.sign === "gained"));
+    expect(candidatePlayedRow(receipt, "a2a3").events.some((event) => event.projection.id === "rules.tactic.event.loose_piece" && event.sign === "gained")).toBe(false);
+    expect(loose.length).toBeGreaterThan(0);
+    const configured = policy({ minimumAlternativeOnlyShare: loose.length / 33, maxFacts: 50 });
+    const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { receipt, moveUci: "a2a3" });
+    const avoided = result.selected.find((item) => item.kind === "counterfactual_absence" && item.event.projection.id === "derived.semantic_avoidance.loose_piece" && (item.event.operands as CounterfactualAbsenceOperands).family.sign === "gained");
     expect(avoided?.kind).toBe("counterfactual_absence");
-    if (avoided?.kind === "counterfactual_absence") expect(avoided.event.operands).toMatchObject({ legalAlternatives: 19, alternativesWithFamily: 6, relation: "avoided" });
+    if (avoided?.kind === "counterfactual_absence") expect(avoided.event.operands).toMatchObject({ legalAlternatives: 33, alternativesWithFamily: loose.length, relation: "avoided" });
   });
 
   it("makes every selection reason reachable, including a non-empty critical budget exhaustion", () => {
-    const afterFen = after(INITIAL_FEN, "e2e4");
-    const run = (configured: ReturnType<typeof policy>, playedEvents: readonly SemanticEvidenceEvent[], evaluateAlternative: Parameters<typeof selectSemanticEvidence>[2]["evaluateAlternative"]) => selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents, evaluateAlternative });
-    expect(run(policy(), [], () => []).emptyReason?.id).toBe("no_eligible_events");
-    expect(run(policy({ minimumAlternatives: 100 }), [event(INITIAL_FEN, "e2e4")], () => []).emptyReason?.id).toBe("insufficient_alternatives");
-    expect(run(policy(), [event(INITIAL_FEN, "e2e4")], (edge) => [event(edge.beforeFen, edge.moveUci)]).emptyReason?.id).toBe("nothing_distinctive");
-    expect(run(policy({ maxFacts: 0 }), [event(INITIAL_FEN, "e2e4")], () => []).emptyReason?.id).toBe("budget_zero");
-    expect(run(policy(), [event(INITIAL_FEN, "e2e4")], () => undefined).emptyReason?.id).toBe("counterfactual_population_incomplete");
-    const critical = policy({ maxFacts: 2, criticalEvents: [ref("rules.structural.event.open_file"), ref("rules.structural.event.piece_count"), ref("rules.structural.event.half_open_file")] });
-    const exhausted = run(critical, [event(INITIAL_FEN, "e2e4", "rules.structural.event.open_file"), event(INITIAL_FEN, "e2e4", "rules.structural.event.piece_count"), event(INITIAL_FEN, "e2e4", "rules.structural.event.half_open_file")], () => []);
-    expect(exhausted.selected).toHaveLength(2);
+    const receipt = eventsReceipt(INITIAL_FEN);
+    const run = (configured: ReturnType<typeof policy>, target = receipt, moveUci = "e2e4") => selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { receipt: target, moveUci });
+    expect(run(policy({ consumer: ref("inspector.position_structure"), criticalEvents: [] })).emptyReason?.id).toBe("no_eligible_events");
+    expect(run(policy({ minimumAlternatives: 100 })).emptyReason?.id).toBe("insufficient_alternatives");
+    expect(run(policy({ maximumSameFamilyShare: 0, minimumAlternativeOnlyShare: null })).emptyReason?.id).toBe("nothing_distinctive");
+    expect(run(policy({ maxFacts: 0 })).emptyReason?.id).toBe("budget_zero");
+    const check = eventsReceipt(CHECK_FEN);
+    const incomplete = run(policy(), check, check.packet.candidates[0]!.moveUci);
+    expect(incomplete.emptyReason?.id).toBe("counterfactual_population_incomplete");
+    expect(incomplete.population).toEqual({ legalAlternatives: check.packet.candidates.length - 1, evaluatedAlternatives: 0 });
+    const played = candidatePlayedRow(receipt, "e2e4").events.filter((event) => eligibleFor(event, ref("research.semantic_selection")));
+    const critical = policy({ maxFacts: 1, criticalEvents: [...new Map(played.map((event) => [event.projection.id, ref(event.projection.id)])).values()] });
+    const exhausted = run(critical);
+    expect(exhausted.selected).toHaveLength(1);
     expect(exhausted.rejected.some((item) => item.reason.id === "critical_budget_exhausted")).toBe(true);
+  });
+
+  it("refuses a raw packet, a readings-only packet and a foreign-dialect played move at the selection boundary", () => {
+    const receipt = eventsReceipt(INITIAL_FEN);
+    expect(() => selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt: { ...receipt }, moveUci: "e2e4" })).toThrow(/not minted/u);
+    const readings = compileCandidatePopulation({ beforeFen: INITIAL_FEN, ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
+    if (readings.kind !== "ready") throw new Error("readings packet did not compile");
+    expect(() => selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt: readings.receipt, moveUci: "e2e4" })).toThrow(/retains events/u);
+    const castle = eventsReceipt("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1");
+    expect(() => selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt: castle, moveUci: "e1g1" })).toThrowError(expect.objectContaining({ code: "move_not_in_packet", convention: "chessops-king-takes-rook@1" }));
   });
 });

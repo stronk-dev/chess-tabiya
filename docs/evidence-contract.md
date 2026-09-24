@@ -41,6 +41,14 @@ remains SAN. Moves also retain role and all four promotion identities. It is not
 one-exchange local safety. Registration creates no learner binding; the requested-sight module owns
 that later delivery decision.
 
+`createRulesMobilityReadingLegalMovesV1Evidence(fen)` is the FEN-to-evidence route for this projection.
+It accepts a FEN string and never a caller payload. It calls `exactLegalMoveMap` once and seals that
+exact returned object. The candidate evidence packet (`docs/semantic-evidence.md`) reaches the legal
+authority only through this route. The older `declareExactLegalMovesEvidence(payload)` validator
+remains for its existing callers until `rfc/evidence-value-authority.md` retires it. The packet is an
+internal execution receipt, not an F1 projection. It adds no catalogue projection, binding or consumer
+view, and every retained event and reading keeps its own exact F1 identity.
+
 ## Honest homes and raw evidence
 
 Every projection is either bound to a consumer or has one explicit disposition:

@@ -2,10 +2,14 @@ import { describe, expect, it } from "vitest";
 
 import {
   BREADTH_COLLECTOR_PROJECTION_IDS,
+  CANDIDATE_READINGS_SCOPE,
   TACTICAL_COLLECTOR_PROJECTION_IDS,
+  candidatePlayedRow,
+  compileCandidatePopulation,
 } from "@chess-tabiya/runtime";
 
-import { candidateFeatureVector } from "./candidate-evidence.js";
+import { BOT_POLICY_PROFILES } from "./bot-policy-catalog.js";
+import { CANDIDATE_COLLECTOR_IDS, candidateFeatureVector } from "./candidate-evidence.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -80,5 +84,21 @@ describe("candidate evidence adapter", () => {
     expect(() => candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [{ moveUci: "e2e4", scoreCp: 0 }, { moveUci: "e2e4", scoreCp: 1 }] })).toThrow(/duplicated/u);
     expect(() => candidateFeatureVector({ beforeFen: START, engine: unboundedEngine, candidates: [{ moveUci: "e2e4", scoreCp: 0 }] })).toThrow(/fixed engine search bound/u);
     expect(() => candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [{ moveUci: "e2e4", scoreCp: Number.NaN }] })).toThrow(/not finite/u);
+  });
+
+  it("closes the Maia leak and reads child readings from the one runtime authority (shared-candidate-evidence-packet §8.2, criterion 9/20)", () => {
+    expect(CANDIDATE_COLLECTOR_IDS.has("human.maia.candidate_wdl")).toBe(false);
+    expect(TACTICAL_COLLECTOR_PROJECTION_IDS).toContain("human.maia.candidate_wdl");
+    const vector = candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [{ moveUci: "g1f3", scoreCp: 31 }] });
+    const packet = compileCandidatePopulation({ beforeFen: START, ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
+    if (packet.kind !== "ready") throw new Error("expected packet");
+    const row = candidatePlayedRow(packet.receipt, "g1f3");
+    const readingIds = new Set(row.readings.map((value) => value.projection.id));
+    const vectorReadings = vector.candidates[0]!.results.filter((result) => readingIds.has(result.source.id)).map((result) => `${result.source.id}:${JSON.stringify(result.payload)}`).sort();
+    expect(vectorReadings).toEqual(row.readings.map((value) => `${value.projection.id}:${JSON.stringify(value.payload)}`).sort());
+  });
+
+  it("the packet foundation claims no bot consumer: the production bot profile roster stays empty (criterion 23)", () => {
+    expect(BOT_POLICY_PROFILES).toEqual([]);
   });
 });

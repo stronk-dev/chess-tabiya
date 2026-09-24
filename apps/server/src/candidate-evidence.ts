@@ -5,56 +5,19 @@ import { makeUci, parseUci } from "chessops/util";
 
 import {
   BREADTH_COLLECTOR_PROJECTION_IDS,
+  LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS,
+  LOCAL_CANDIDATE_READING_PROJECTION_KEYS,
   TACTICAL_COLLECTOR_PROJECTION_IDS,
   assertConsumerEvidenceView,
-  backRankReading,
-  candidateMajorityReading,
-  castlingLegality,
-  castlingRights,
-  declareBackRankEvidence,
+  candidateChildReadings,
   declareCandidateFeatureVectorEvidence,
-  declareCandidateMajorityEvidence,
-  declareCastlingLegalityEvidence,
-  declareCastlingRightsEvidence,
-  declareDevelopmentReadingEvidence,
-  declareDiscoveredLatencyEvidence,
   declareForkSurvivalEvidence,
-  declareKingZoneReadingEvidence,
   declareLegalExchangeEvidence,
-  declareLoosePieceEvidence,
-  declareMateInOneEvidence,
-  declareMaterialRoleReadingEvidence,
-  declareMobilityReadingEvidence,
-  declarePawnConnectivityEvidence,
-  declarePawnContactsEvidence,
-  declarePromotionPressureEvidence,
-  declareRayClassificationEvidence,
-  declareRookOnSeventhEvidence,
-  declareSpaceEvidence,
-  declareSquareControlReadingEvidence,
-  declareThreatEvidence,
-  developmentReading,
-  discoveredLatencyReading,
   evidenceForConsumer,
   forkSurvivesReply,
-  kingZoneReading,
   legalExchange,
   localSemanticEvents,
-  loosePieceReading,
-  mateInOne,
-  materialRoleSignatureReading,
-  pawnConnectivityReading,
-  pawnContactsReading,
-  pieceDestinationsReading,
-  promotionPressureReading,
-  rayClassificationReading,
   replyBreadth,
-  rookOnSeventhReading,
-  spaceReading,
-  squareControlReading,
-  threats,
-  trappedPieceReading,
-  declareTrappedPieceEvidence,
   type ConsumerEvidenceView,
   type DeclaredEvidence,
   type DoubleAttackEvent,
@@ -64,10 +27,14 @@ import {
 
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 
-const CANDIDATE_COLLECTOR_IDS = new Set<string>([
+// The declared tactical/breadth inventory intersected with the packet's code-derived local closure
+// (rfc/shared-candidate-evidence-packet.md §8.2): the provider-only `human.maia.candidate_wdl` is
+// not a local collector result and can no longer pass this guard.
+const LOCAL_CLOSURE_IDS = new Set<string>([...LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS, ...LOCAL_CANDIDATE_READING_PROJECTION_KEYS].map((key) => key.slice(0, key.lastIndexOf("@"))));
+export const CANDIDATE_COLLECTOR_IDS: ReadonlySet<string> = new Set<string>([
   ...TACTICAL_COLLECTOR_PROJECTION_IDS,
   ...BREADTH_COLLECTOR_PROJECTION_IDS,
-]);
+].filter((id) => LOCAL_CLOSURE_IDS.has(id)));
 
 export interface CandidateFeatureInput {
   readonly moveUci: string;
@@ -122,35 +89,10 @@ function fixedBoundEngine(engine: SelectionEngineIdentity): SelectionEngineIdent
   return Object.freeze({ ...engine, searchBound: Object.freeze({ ...engine.searchBound }) });
 }
 
-function childReadings(afterFen: string): readonly DeclaredEvidence<unknown>[] {
-  return Object.freeze([
-    declareCastlingRightsEvidence(castlingRights(afterFen)),
-    ...castlingLegality(afterFen).map(declareCastlingLegalityEvidence),
-    declareLoosePieceEvidence(loosePieceReading(afterFen)),
-    declareRayClassificationEvidence(rayClassificationReading(afterFen)),
-    declareThreatEvidence(threats(afterFen)),
-    declarePawnConnectivityEvidence(pawnConnectivityReading(afterFen)),
-    declareDevelopmentReadingEvidence(developmentReading(afterFen)),
-    declareRookOnSeventhEvidence(rookOnSeventhReading(afterFen)),
-    declareSpaceEvidence(spaceReading(afterFen)),
-    declareDiscoveredLatencyEvidence(discoveredLatencyReading(afterFen)),
-    declareTrappedPieceEvidence(trappedPieceReading(afterFen)),
-    declareBackRankEvidence(backRankReading(afterFen)),
-    declareMateInOneEvidence(mateInOne(afterFen)),
-    declarePromotionPressureEvidence(promotionPressureReading(afterFen)),
-    declareSquareControlReadingEvidence(squareControlReading(afterFen)),
-    declareMobilityReadingEvidence(pieceDestinationsReading(afterFen)),
-    declarePawnContactsEvidence(pawnContactsReading(afterFen)),
-    declareCandidateMajorityEvidence(candidateMajorityReading(afterFen)),
-    declareMaterialRoleReadingEvidence(materialRoleSignatureReading(afterFen)),
-    declareKingZoneReadingEvidence(kingZoneReading(afterFen)),
-  ]);
-}
-
 function collectorResults(beforeFen: string, moveUci: string, afterFen: string): readonly CandidateCollectorResult[] {
   const events = localSemanticEvents(beforeFen, moveUci, afterFen);
   const declared: DeclaredEvidence<unknown>[] = [
-    ...childReadings(afterFen),
+    ...candidateChildReadings(afterFen),
     ...events.filter((event) => CANDIDATE_COLLECTOR_IDS.has(event.projection.id)).map((event) => event.evidence),
   ];
   const exchange = legalExchange(beforeFen, moveUci);

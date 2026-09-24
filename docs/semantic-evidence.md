@@ -42,6 +42,46 @@ The denominator includes alternatives that emit no event. The versioned research
 most two locally distinctive facts and treats an empty result as normal output. It is a regression
 profile, not a learner default.
 
+## Candidate evidence packet
+
+Since `rfc/shared-candidate-evidence-packet.md` (2026-09-24), selection no longer takes its
+population from a caller callback. `selectSemanticEvidence(manifest, policy, { receipt, moveUci })`
+accepts only a `CandidatePopulationReceipt` minted by `compileCandidatePopulation` in
+`packages/runtime/src/candidate-population.ts`, and `selectLocalSemanticEvidence` compiles one.
+
+- **The population is an output.** A request is exactly `{ beforeFen, ruleset: "standard", scope }`.
+  The compiler calls `createRulesMobilityReadingLegalMovesV1Evidence` once, flattens that sealed
+  exact map without copying move objects, and derives every child FEN, event and reading itself.
+  Candidates are set-equal to the legal authority, promotions included. Checkmate and stalemate are
+  the only empty packets. A non-terminal empty population is a typed `non_terminal_empty` failure.
+- **One closure.** `localSemanticEventClosure` is the one-edge event composition that
+  `localSemanticEvents`, the packet and local selection all read. The narrower eight-family inline
+  closure is gone. The loose-piece collector's `invalid_turn_clone` becomes a typed row abstention
+  instead of being dropped. The permitted projections are the generated literal `id@version` map in
+  `candidate-population-projections.generated.ts`: 44 one-edge events plus the twenty
+  `candidateChildReadings`, legal exchange and fork survival. The map is regenerated or checked with
+  `node tools/generate-candidate-packet-projections.mjs [--check]`. `human.maia.candidate_wdl` is
+  outside it.
+- **Retention is by reference.** Rows hold the original sealed events and readings. A private
+  `WeakMap` receipt authority recognises only receipts the compiler minted, and
+  `assertCandidatePacketEvent` admits an event only if it `===` a retained value. A byte-identical
+  rebuild passes the event seal but is refused here.
+- **Scope narrows evidence, never candidates.** The three closed scopes are events-only, readings-only
+  and both. Scope is part of the facts-only `packetId`, together with the full FEN, the legal and
+  move-identity conventions, the manifest digest, `CANDIDATE_PACKET_COMPILER_VERSION` and the ruleset.
+  `projectCandidatePopulationReceipt` narrows a wide receipt without chess work. It never widens or
+  crosses scopes.
+- **Counts are measured.** `evaluatedAlternatives` counts alternatives whose event closure did not
+  abstain. For an in-check root it is 0, and the result is `counterfactual_population_incomplete`.
+- **Readers never normalise.** `candidatePlayedRow` and `candidateAlternatives` accept only
+  `MOVE_IDENTITY_CONVENTION` identities. `e1g1` fails with `CandidatePacketMoveError`, so conversion
+  happens at the engine or pack boundary.
+
+The packet is process-local and operator-only. It is never persisted and has no product consumer:
+`make semantic-evidence-check` is a contract instrument. It carries no score, rank, salience or
+valence. The bounded service and cache are `rfc/candidate-population-service.md`'s work, and the
+collector registry and full outcome algebra are `rfc/candidate-collector-registry.md`'s.
+
 ## Sign is not valence
 
 `gained`, `lost`, `preserved` and selector-derived `avoided` describe relations. None means good,

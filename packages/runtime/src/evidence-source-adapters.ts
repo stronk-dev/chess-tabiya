@@ -134,7 +134,18 @@ export function declareExactLegalMovesEvidence(payload: ExactLegalMoveMap): Decl
   }
   return exactObject("rules.mobility", projection, payload, required);
 }
-export const declareMobilityEventEvidence = <T extends object>(payload: T) => exactObject("rules.mobility", "rules.mobility.event.piece_destinations", payload, ["beforeFen", "moveUci", "afterFen", "color", "piece", "legalBefore", "legalAfter", "legalGained", "legalLost", "safeBefore", "safeAfter", "safeGained", "safeLost", "moved", "zeroSafe"]);
+/**
+ * The exact FEN→legal-evidence route pinned by `rfc/evidence-value-authority.md`. It accepts a FEN,
+ * never a caller payload, invokes the exact-mobility authority once and seals that exact returned
+ * object. Landed here as the predecessor slice `rfc/shared-candidate-evidence-packet.md` requires
+ * (2026-09-24 implementation receipt); ownership of the route stays with evidence-value-authority.
+ */
+export function createRulesMobilityReadingLegalMovesV1Evidence(fen: string): DeclaredEvidence<ExactLegalMoveMap> {
+  if (typeof fen !== "string") throw new TypeError("rules.mobility.reading.legal_moves evidence requires a FEN string, not a caller payload");
+  const payload = exactLegalMoveMap(fen);
+  return exactObject("rules.mobility", "rules.mobility.reading.legal_moves", payload, ["fen", "turn", "pieces"]);
+}
+export const declareMobilityEventEvidence =<T extends object>(payload: T) => exactObject("rules.mobility", "rules.mobility.event.piece_destinations", payload, ["beforeFen", "moveUci", "afterFen", "color", "piece", "legalBefore", "legalAfter", "legalGained", "legalLost", "safeBefore", "safeAfter", "safeGained", "safeLost", "moved", "zeroSafe"]);
 export function declarePawnContactsEvidence(payload: PawnContactsReading): DeclaredEvidence<PawnContactsReading> {
   const projection = "rules.pawn.reading.contacts";
   if (typeof payload !== "object" || payload === null || Array.isArray(payload)) throw new TypeError(`${projection} evidence payload must be an object`);

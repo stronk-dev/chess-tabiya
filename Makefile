@@ -203,6 +203,18 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	node apps/server/dist/semantic-evidence-check.js
 
+.PHONY: candidate-packet-projections candidate-packet-projections-check candidate-closure-census
+# rfc/shared-candidate-evidence-packet.md §5.3/§12: the generated literal closure and its drift check.
+candidate-packet-projections:
+	node tools/generate-candidate-packet-projections.mjs
+
+candidate-packet-projections-check:
+	node tools/generate-candidate-packet-projections.mjs --check
+
+# Prevalence/cost census over a fixed sample (POSITIONS=<file of FENs> to override); never the schema.
+candidate-closure-census:
+	node tools/candidate-closure-census.mjs $(POSITIONS)
+
 .PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check semantic-search-stockfish-child-capture semantic-search-stockfish-child-check semantic-search-stockfish-child-beam semantic-search-maia-capture semantic-search-maia-check semantic-search-maia-child-capture semantic-search-maia-child-check semantic-search-maia-child-prefix semantic-search-maia-configured-window semantic-search-maia-direct-check semantic-search-maia-direct-frontier semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-touch semantic-search-semantic-reserve semantic-search-relation-event semantic-search-relation-event-reserve semantic-search-local-contrast semantic-search-local-rank-concordance semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 semantic-search-input-readiness:
 	$(CI_NODE) tools/d3262-search-calibration/input-readiness.mjs
@@ -1941,7 +1953,7 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
+verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
 verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 
