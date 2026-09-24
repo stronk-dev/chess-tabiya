@@ -21391,3 +21391,24 @@ The bootstrap is archived as implemented.
   values; it is now text.
 - **Owner decisions:** guest accounts and claiming (O-A2/D1485), and the
   wording of the twelve kind names.
+
+### 2026-09-24 — provider health and the live opponent-recovery journey
+
+- **Health authority:** provider availability is now a live, typed authority
+  (circuits, Lichess 429 blocking, cached-only states, logged transitions and
+  release receipts) instead of constructor flags.
+- **Capabilities and client:** `/capabilities` carries `providerHealth`.
+  Controls stay visible with a reason and Retry.
+- **Opponent selector:** it runs under one 4 s deadline with an exact cache.
+- **Maia identity:** the sidecar answers a container-identity probe, and bot
+  availability reads the health snapshot.
+- **Opponent recovery:** when the opponent fails, the run pauses and offers
+  Retry or Change opponent.
+- **Intent amendment:** proposed for `design/02` and `design/03`'s "capabilities
+  stay green on Maia loss".
+- **Still open:**
+  - The opponent-recovery schema half (lane 0.26).
+  - Registering the voice/TTS operations.
+  - Release receipts. Until they exist, guarded bot families stay conditional.
+- **Triage deferred:** the 75 author-model rows blocked on these RFCs are left
+  for the consolidation pass.
