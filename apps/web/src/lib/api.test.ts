@@ -2,6 +2,7 @@ import { createRun, type DrillRun, type OpponentSelection } from "@chess-tabiya/
 import { describe, expect, it } from "vitest";
 
 import { DrillApi, PLANNED_SURFACES } from "./api.js";
+import { botRosterFixture } from "./bot-roster.test-support.js";
 
 const run = createRun({
   id: "run / one",
@@ -154,6 +155,7 @@ describe("DrillApi", () => {
                 slowestLosingRate: { min: 0.5, max: 0.5, uniformBaseline: 0.5 },
                 fastestLosingRate: { value: 0.5, uniformBaseline: 0.5 },
               },
+              profiles: botRosterFixture(),
             },
           },
           providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },

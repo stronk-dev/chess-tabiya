@@ -24,6 +24,13 @@ import type {
   RunMark,
   StoryMoment,
   ReviewMapProjection,
+  BotCardSourceId,
+  BotCardStatementId,
+  BotClassifierId,
+  BotProfileFamily,
+  BotProfileId,
+  BotProfileReference,
+  BotRosterBlocker,
 } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
@@ -442,6 +449,26 @@ export interface CohortStandingView {
   readonly entries: readonly CohortStandingEntry[];
 }
 
+export interface BotCardWire {
+  readonly profileId: BotProfileId;
+  readonly profileDigest: `sha256:${string}`;
+  readonly behaviorDigest: `sha256:${string}`;
+  readonly family: BotProfileFamily;
+  readonly band: number;
+  readonly title: string;
+  readonly controlledTraits: readonly BotClassifierId[];
+  readonly statements: readonly { readonly id: BotCardStatementId; readonly text: string; readonly sources: readonly BotCardSourceId[] }[];
+  readonly strength: { readonly kind: "uncalibrated" } | { readonly kind: "calibrated"; readonly humanLikeLabelAllowed: boolean; readonly [key: string]: unknown };
+  readonly decorative: null;
+}
+
+export interface BotRosterRow {
+  readonly reference: BotProfileReference;
+  readonly behaviorDigest: `sha256:${string}`;
+  readonly card: BotCardWire;
+  readonly startable: { readonly kind: "not_startable"; readonly blockedBy: readonly BotRosterBlocker[] };
+}
+
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
   readonly policyModes: readonly (
@@ -495,6 +522,8 @@ export interface Capabilities {
         readonly slowestLosingRate: { readonly min: number; readonly max: number; readonly uniformBaseline: number };
         readonly fastestLosingRate: { readonly value: number; readonly uniformBaseline: number };
       };
+      /** The registered `bot-profile-catalog@1` roster with grounded cards (rfc/bot-policy.md §8). */
+      readonly profiles: readonly BotRosterRow[];
     };
   };
   readonly providers: {

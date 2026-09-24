@@ -26,6 +26,7 @@ import {
   type EvidenceManifestCapabilities,
 } from "./evidence-manifest.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
+import { projectBotRoster, type BotRosterRow } from "./bot-roster.js";
 
 export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
 
@@ -97,6 +98,8 @@ export interface Capabilities {
     readonly human_common: {
       readonly elo: EngineBandProfile;
       readonly resistance: typeof HUMAN_COMMON_RESISTANCE_PROFILE;
+      /** Every `bot-profile-catalog@1` member with its grounded card; rfc/bot-policy.md §8. */
+      readonly profiles: readonly BotRosterRow[];
     };
   };
   readonly providers: CapabilityProviders;
@@ -190,6 +193,8 @@ export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.
   { instrument: "Maia", capability: "band-conditioned resistance", disposition: "refused", reason: "Measured flat across 1100/1500/1900 (fastest-losing 3.3% at every band, design/research/maia-endgame-fidelity.md §6); the band's game-level transfer ratio falls from 0.40 at full material to ~0.07 below ten pieces (design/research/maia-band-outcome-transfer.md §7, 16,660 games), so the flat endgame reading has a measured cause and a per-band resistance figure would assert a difference no instrument finds" },
   { instrument: "Maia", capability: "resistance above seven pieces", disposition: "unmeasured", reason: "No exact DTZ ground truth exists outside the Syzygy range; conversion-up-a-piece (17 pieces) and rook-4v3-same-side-hold (11) are outside it at every authored position", experiment: "D370-b realized-ply-count-to-conversion against a fixed converting opponent on the two out-of-range packs" },
   { instrument: "Maia", capability: "Temperature 0", disposition: "refused", reason: "A modal opponent is a different product", advertisedOptions: ["Temperature"] },
+  { instrument: "Maia", capability: "multi-band runtime queries", disposition: "refused", reason: "D817 measured refusal: multi-band disagreement tracks real human band movement at Pearson 0.021-0.044 with 47.2-52.0% sign agreement (rfc/bot-policy.md §8)" },
+  { instrument: "Bot policy", capability: "artificial move delay", disposition: "refused", reason: "D820: no fake timing; a timing layer requires clock-accepting model/corpus work, and the bot-profile compiler refuses any delay effect" },
   { instrument: "Maia", capability: "asymmetric SelfElo / OppoElo", disposition: "unmeasured", reason: "Advertised but unmeasured", experiment: "RFC ledger row 5 asymmetric Elo experiment", advertisedOptions: ["SelfElo", "OppoElo"] },
   { instrument: "Glicko-2", capability: "learner rating from rules-terminal results", disposition: "reached", reason: "Arithmetic over game results against a measured opponent; no move is graded", surface: "rating" },
   { instrument: "Glicko-2", capability: "cohort standing over rated results", disposition: "reached", reason: "Results, marks and grouped ratings for learners who published themselves into one classroom; games are unwitnessed and the surface must say so", surface: "standing" },
@@ -422,6 +427,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
         human_common: Object.freeze({
           elo,
           resistance: HUMAN_COMMON_RESISTANCE_PROFILE,
+          profiles: projectBotRoster().profiles,
         }),
       }),
       providers: providerState,
