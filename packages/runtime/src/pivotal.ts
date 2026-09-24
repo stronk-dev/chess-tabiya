@@ -8,8 +8,8 @@ import { classifyPhase, type DetectedPhase } from "./phase.js";
 import type { DrillRun, Node, OpponentSelection } from "./types.js";
 import { irreversibility, type IrreversibilityDetail } from "./transition.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView } from "./evidence-contract.js";
-import { declarePivotalMarkerEvidence } from "./evidence-source-adapters.js";
+import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 export type PivotalKind = "irreversibility" | "phase_change" | "human_divergence" | "option_collapse";
 export type { IrreversibilityDetail } from "./transition.js";
@@ -38,7 +38,8 @@ function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly Pivot
   });
 }
 
-export function pivotalMarkers(run: DrillRun, branchId: string): readonly PivotalMarker[] {
+/** Pure pivotal-marker population: the producer operation behind the four derived.pivotal routes. */
+export function pivotalMarkerPayloads(run: DrillRun, branchId: string): readonly PivotalMarker[] {
   const path = branchPath(run, branchId), markers: PivotalMarker[] = [];
   let lastDefinite: Exclude<DetectedPhase, "unclear"> | undefined;
   for (let index = 0; index < path.length; index += 1) {
@@ -63,6 +64,29 @@ export function pivotalMarkers(run: DrillRun, branchId: string): readonly Pivota
   markers.push(...divergence(run, new Set(path.map((node) => node.id))));
   const order = new Map(path.map((node, index) => [node.id, index]));
   return Object.freeze(markers.sort((a, b) => (order.get(a.nodeId)! - order.get(b.nodeId)!) || a.kind.localeCompare(b.kind)));
+}
+
+/** Rendering-model population (not evidence). Evidence consumers use `pivotalMarkerEvidenceItems`. */
+export function pivotalMarkers(run: DrillRun, branchId: string): readonly PivotalMarker[] {
+  return pivotalMarkerPayloads(run, branchId);
+}
+
+export const PIVOTAL_MARKER_ROUTES = Object.freeze({
+  irreversibility: "derived.pivotal.irreversibility@1",
+  phase_change: "derived.pivotal.phase_change@1",
+  human_divergence: "derived.pivotal.human_divergence@1",
+  option_collapse: "derived.pivotal.option_collapse@1",
+} as const satisfies Readonly<Record<PivotalKind, string>>);
+
+/**
+ * The four exact derived pivotal projections for one recorded branch, in path order. Each item is
+ * minted by its own factory from its own authority: a rule marker cannot be relabelled human-model
+ * evidence and a Maia split cannot be relabelled a position-rule marker.
+ */
+export function pivotalMarkerEvidenceItems(run: DrillRun, branchId: string): readonly DeclaredEvidence<PivotalMarker>[] {
+  const order = new Map(branchPath(run, branchId).map((node, index) => [node.id, index]));
+  const items = (Object.keys(PIVOTAL_MARKER_ROUTES) as PivotalKind[]).flatMap((kind) => invokeEvidenceValueRoute(PIVOTAL_MARKER_ROUTES[kind], { run, branchId }).map((item) => item.evidence as DeclaredEvidence<PivotalMarker>));
+  return Object.freeze(items.sort((a, b) => (order.get(a.payload.nodeId)! - order.get(b.payload.nodeId)!) || a.payload.kind.localeCompare(b.payload.kind)));
 }
 
 export function liveAdmitted(
@@ -105,8 +129,10 @@ export function consumePivotalMarkers(
   return Object.freeze(view.items.map((item) => item.payload));
 }
 
-export function pivotalMarkerEvidence(markers: readonly PivotalMarker[]): readonly PivotalMarker[] {
-  const declared = markers.map(declarePivotalMarkerEvidence);
+/** Live board markers: factory-minted, filtered by the live admission rule, then admitted. */
+export function pivotalMarkerEvidence(run: DrillRun, branchId: string, context: AssistanceContext): readonly PivotalMarker[] {
+  const permission = permittedAssistance(context);
+  const declared = pivotalMarkerEvidenceItems(run, branchId).filter((item) => liveAdmitted(item.payload, permission));
   return consumePivotalMarkers(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "board.pivotal_marker", version: 1 },

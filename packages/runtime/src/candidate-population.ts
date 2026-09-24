@@ -20,31 +20,7 @@ import {
 } from "./candidate-population-projections.generated.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertDeclaredEvidence, evidenceDigest, type DeclaredEvidence } from "./evidence-contract.js";
-import {
-  createRulesMobilityReadingLegalMovesV1Evidence,
-  declareBackRankEvidence,
-  declareCandidateMajorityEvidence,
-  declareCastlingLegalityEvidence,
-  declareCastlingRightsEvidence,
-  declareDevelopmentReadingEvidence,
-  declareDiscoveredLatencyEvidence,
-  declareForkSurvivalEvidence,
-  declareKingZoneReadingEvidence,
-  declareLegalExchangeEvidence,
-  declareLoosePieceEvidence,
-  declareMateInOneEvidence,
-  declareMaterialRoleReadingEvidence,
-  declareMobilityReadingEvidence,
-  declarePawnConnectivityEvidence,
-  declarePawnContactsEvidence,
-  declarePromotionPressureEvidence,
-  declareRayClassificationEvidence,
-  declareRookOnSeventhEvidence,
-  declareSpaceEvidence,
-  declareSquareControlReadingEvidence,
-  declareThreatEvidence,
-  declareTrappedPieceEvidence,
-} from "./evidence-source-adapters.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { legalExchange } from "./exchange.js";
 import { kingZoneReading } from "./king-state.js";
 import { MOVE_IDENTITY_CONVENTION, type ExactLegalMove, type ExactLegalMoveMap } from "./legal-moves.js";
@@ -265,27 +241,28 @@ function packetIdentity(beforeFen: string, member: CandidatePacketScopeMember): 
  * authority owns them (§12 row 1, criterion 20). No detector, grade or prose is added.
  */
 export function candidateChildReadings(afterFen: string): readonly DeclaredEvidence<unknown>[] {
+  const fen = afterFen;
   return Object.freeze([
-    declareCastlingRightsEvidence(castlingRights(afterFen)),
-    ...castlingLegality(afterFen).map(declareCastlingLegalityEvidence),
-    declareLoosePieceEvidence(loosePieceReading(afterFen)),
-    declareRayClassificationEvidence(rayClassificationReading(afterFen)),
-    declareThreatEvidence(threats(afterFen)),
-    declarePawnConnectivityEvidence(pawnConnectivityReading(afterFen)),
-    declareDevelopmentReadingEvidence(developmentReading(afterFen)),
-    declareRookOnSeventhEvidence(rookOnSeventhReading(afterFen)),
-    declareSpaceEvidence(spaceReading(afterFen)),
-    declareDiscoveredLatencyEvidence(discoveredLatencyReading(afterFen)),
-    declareTrappedPieceEvidence(trappedPieceReading(afterFen)),
-    declareBackRankEvidence(backRankReading(afterFen)),
-    declareMateInOneEvidence(mateInOne(afterFen)),
-    declarePromotionPressureEvidence(promotionPressureReading(afterFen)),
-    declareSquareControlReadingEvidence(squareControlReading(afterFen)),
-    declareMobilityReadingEvidence(pieceDestinationsReading(afterFen)),
-    declarePawnContactsEvidence(pawnContactsReading(afterFen)),
-    declareCandidateMajorityEvidence(candidateMajorityReading(afterFen)),
-    declareMaterialRoleReadingEvidence(materialRoleSignatureReading(afterFen)),
-    declareKingZoneReadingEvidence(kingZoneReading(afterFen)),
+    invokeEvidenceValueRoute("rules.castling.reading.rights@1", { fen }),
+    ...invokeEvidenceValueRoute("rules.castling.reading.legality@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.reading.loose_piece@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.reading.ray_classification@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.consequence.threat@1", { fen }),
+    invokeEvidenceValueRoute("rules.structural.reading.pawn_connectivity@1", { fen }),
+    invokeEvidenceValueRoute("rules.phase.development@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.reading.rook_on_seventh@1", { fen }),
+    invokeEvidenceValueRoute("rules.structural.reading.space@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.reading.discovered_latency@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.reading.trapped_piece@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.reading.back_rank@1", { fen }),
+    invokeEvidenceValueRoute("rules.tactic.consequence.mate_in_one@1", { fen }),
+    invokeEvidenceValueRoute("derived.tactic.promotion_pressure@1", { fen }),
+    invokeEvidenceValueRoute("rules.square.reading.control@1", { fen }),
+    invokeEvidenceValueRoute("rules.mobility.reading.piece_destinations@1", { fen }),
+    invokeEvidenceValueRoute("rules.pawn.reading.contacts@1", { fen }),
+    invokeEvidenceValueRoute("rules.pawn.reading.candidate_majority@1", { fen }),
+    invokeEvidenceValueRoute("derived.material.reading.role_signature@1", { fen }),
+    invokeEvidenceValueRoute("rules.king.reading.zone_state@1", { fen }),
   ]);
 }
 
@@ -352,7 +329,7 @@ function parseRequest(value: unknown): ParsedRequest {
 
 /** The module-private legal compiler: exactly one source call, no second enumerator (§3.1, §4.1). */
 function compileLegalPopulation(beforeFen: string): Readonly<{ legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>; legalMoves: readonly ExactLegalMove[] }> {
-  const legalMovesInput = createRulesMobilityReadingLegalMovesV1Evidence(beforeFen);
+  const legalMovesInput = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: beforeFen }) as DeclaredEvidence<ExactLegalMoveMap>;
   assertDeclaredEvidence(legalMovesInput);
   // flatMap allocates only the flat container; every member is the authority's own object.
   return Object.freeze({ legalMovesInput, legalMoves: Object.freeze(legalMovesInput.payload.pieces.flatMap((piece) => piece.moves)) });
@@ -373,7 +350,7 @@ function forkSurvival(tactical: readonly SemanticEvidenceEvent[]): readonly Decl
   if (doubleAttack === undefined) return EMPTY;
   const breadth = tactical.find((event) => event.projection.id === "rules.tactic.consequence.reply_breadth");
   if (breadth === undefined) throw new TypeError("Fork survival requires the reply-breadth event of the same edge");
-  return [declareForkSurvivalEvidence(forkSurvivesReply(doubleAttack.operands as DoubleAttackEvent, breadth.operands as ReplyBreadth))];
+  return [invokeEvidenceValueRoute("derived.tactic.fork_survives_reply@1", { doubleAttack: doubleAttack.evidence as DeclaredEvidence<DoubleAttackEvent>, breadth: breadth.evidence as DeclaredEvidence<ReplyBreadth> })];
 }
 
 function compileRow(beforeFen: string, move: ExactLegalMove, member: CandidatePacketScopeMember, structuralCache: Map<string, StructuralReading>): CompiledRowValues {
@@ -386,11 +363,11 @@ function compileRow(beforeFen: string, move: ExactLegalMove, member: CandidatePa
   const events = closure?.events ?? EMPTY;
   let readings: readonly DeclaredEvidence<unknown>[] = EMPTY;
   if (wantsReadings) {
-    const exchange = legalExchange(beforeFen, move.uci);
+    const exchange = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: beforeFen, captureUci: move.uci });
     const tactical = closure === undefined ? tacticalSemanticEvents(beforeFen, move.uci, afterFen) : closure.events;
     readings = Object.freeze([
       ...candidateChildReadings(afterFen),
-      ...(exchange === undefined ? [] : [declareLegalExchangeEvidence(exchange)]),
+      ...exchange,
       ...forkSurvival(tactical),
     ]);
   }

@@ -86,7 +86,7 @@ export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type Assistance
 export { PRESET_CONTRACT_ERROR_CODES, PRESET_DECLARATIONS, PRESET_IDS, WORKFLOW_CONTEXT_POLICIES, WORKFLOW_CONTEXTS, PresetContractError, assertPresetFoundation, deriveWorkflowContext, presetDeclaration, workflowContextPolicy, type PresetContractErrorCode, type PresetDeclaration, type PresetId, type WorkflowContextId, type WorkflowContextPolicy } from "./presets.js";
 export { CAMPAIGN_ACT_IDS, CampaignModuleError, assertCampaignUnlockAllowed, campaignModuleInventory, effectiveCampaignModules, isUnlockableModuleId, type CampaignAct, type CampaignActId, type CampaignDocument, type CampaignEconomy, type CampaignLayer, type CampaignNode, type CampaignNodeReward, type UnlockableModuleId } from "./campaign-contract.js";
 export { CampaignStateError, campaignRunState, prestigeEligible, type CampaignChargeEarnedEvent, type CampaignChargeSpentEvent, type CampaignCursor, type CampaignEvent, type CampaignModuleUnlockedEvent, type CampaignNodeEnteredEvent, type CampaignNodeSeal, type CampaignNodeSealedEvent, type CampaignNodeVerdict, type CampaignRunState, type CampaignStateErrorCode } from "./campaign-state.js";
-export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
+export { PIVOTAL_MARKER_ROUTES, consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkerEvidenceItems, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
   TRANSITION_FEATURE_KINDS,
   capturedRole,
@@ -100,9 +100,9 @@ export {
   type TransitionReading,
   type TransitionSemanticFact,
 } from "./transition.js";
-export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
+export { ENDGAME_CLASSIFICATION_CONVENTION, endgameClassification, renderEndgameClassification, type EndgameClassification, type EndgameTypeId } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { STORY_MATE_CP, STORY_PIVOT_CP, rankStoryMoments, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationChange, renderStoryEvaluationTrajectory, reviewStoryTitle, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryMomentSelection, type StoryProjection, type StoryTitleInput } from "./story.js";
+export { STORY_MATE_CP, STORY_PIVOT_CP, rankStoryMoments, storyEvaluation, renderReviewStoryEvidence, renderSerializedReviewStoryEvidence, renderStoryEvaluationChange, renderStoryEvaluationTrajectory, reviewStoryTitle, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryMomentSelection, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {
   voiceCheck,
   renderRecordedReading,
@@ -218,7 +218,26 @@ export {
   type SessionSource,
 } from "./session.js";
 export { attachEvidence } from "./evidence.js";
-export { createRulesMobilityReadingLegalMovesV1Evidence, declareExactLegalMovesEvidence } from "./evidence-source-adapters.js";
+export {
+  attachedPacketEvidence,
+  candidateFeatureVectorEvidence,
+  claimDeliveryEvidence,
+  corpusPageEvidence,
+  corpusPositionEvidence,
+  evidenceReferenceEvidence,
+  guardConditionEvidence,
+  humanSplitPageEvidence,
+  opponentProviderEvidence,
+  positionGuidanceEvidence,
+  recordedEdgeEvidence,
+  recordedReadingEvidence,
+  sourcingRecordEvidence,
+  type PositionGuidanceEvidenceInput,
+} from "./evidence-operations.js";
+export type { AuthoredFeedbackItemRecord, EvidenceAvailability } from "./evidence-factories.js";
+export { RECORDED_ASSESSMENT_CATEGORIES, recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
+export { evidenceSentenceTable, resolveEvidenceReference, type EvidenceReferenceResolution, type EvidenceSentence } from "./evidence-ref-resolution.js";
+export { type CandidateCollectorResult, type CandidateFeatureInput, type CandidateFeatureRow, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 export {
   CANDIDATE_EVENTS_SCOPE,
   CANDIDATE_PACKET_COMPILER_VERSION,
@@ -426,105 +445,11 @@ export {
   type TradeCompletedEventOperands,
 } from "./semantic-evidence.js";
 export {
-  declareAuthoredClaimDeliveryEvidence,
-  declareAuthoredClaimEvidence,
-  declareAuthoredStructuralConditionEvidence,
-  declareAvoidanceEvidence,
-  declareCompareDerivedEvidence,
-  declareEndgameReadingEvidence,
-  declareEvidenceReferenceResolution,
-  declareLegalExchangeEvidence,
-  declareCaptureClassEvidence,
-  declareThreatEvidence,
-  declareDoubleAttackEvidence,
-  declareForkSurvivalEvidence,
-  declareReplyBreadthEvidence,
-  declareCheckEventEvidence,
-  declareLoosePieceEvidence,
-  declareRayClassificationEvidence,
-  declareMateInOneEvidence,
-  declareDiscoveredLatencyEvidence,
-  declareTrappedPieceEvidence,
-  declareBackRankEvidence,
-  declareRookOnSeventhEvidence,
-  declarePawnConnectivityEvidence,
-  declareSpaceEvidence,
-  declareLoosePieceEventEvidence,
-  declarePawnIslandEventEvidence,
-  declareDiscoveredExecutedEvidence,
-  declarePromotionPressureEvidence,
-  declareTradeCompletedEvidence,
-  declareCastlingRightsEvidence,
-  declareCastlingRightsLostEvidence,
-  declareCastlingLegalityEvidence,
-  declareCandidateMajorityEvidence,
-  declareCandidateFeatureVectorEvidence,
-  declareCapturedZoneDefenderEvidence,
-  declareDefenderConsequenceEvidence,
-  declareDefenderExposureEvidence,
-  declareDefenderDutyEvidence,
-  declareDefenderDutyRelocatedEvidence,
-  declareDefenderRemovedEvidence,
-  declareForcedMateAfterMoveEvidence,
-  declareOverloadedDefenderConflictEvidence,
-  declareDeflectionObservedEvidence,
-  declareAttractionObservedEvidence,
-  declareLineBlockerClearanceEvidence,
-  declareSquareClearanceEvidence,
-  declareInterferenceEvidence,
-  declareCheckZwischenzugEvidence,
-  declareOverloadExploitationEvidence,
-  declareExplorerPopulationEvidence,
-  declareExplorerPositionEvidence,
-  declareHarassmentPressureEvidence,
-  declareKingZoneEventEvidence,
-  declareKingZoneReadingEvidence,
-  declareLivePacketEvidence,
-  declareMaterialRoleEventEvidence,
-  declareMaterialRoleReadingEvidence,
-  declareMaiaEventEvidence,
-  declareMaiaCandidateWdlEvidence,
-  declareMaiaPolicyEvidence,
-  declareMobilityEventEvidence,
-  declareMobilityReadingEvidence,
-  declareNamedStructureEvidence,
-  declareOpponentProviderEvidence,
-  declarePackPhaseEvidence,
-  declareOpenFileOccupancyEvidence,
-  declarePawnContactTimingEvidence,
-  declarePawnContactsEvidence,
-  declarePawnDynamicsEvidence,
-  declarePawnTransitionEvidence,
-  declarePhaseReadingEvidence,
-  declareDevelopmentReadingEvidence,
-  declarePivotalMarkerEvidence,
-  declareRecordedEngineEvidence,
-  declareRecordedTablebaseEvidence,
-  declareRunRecordEvidence,
-  declareShapeFiringSourceEvidence,
-  declareSquareControlEventEvidence,
-  declareSquareControlReadingEvidence,
-  declareSourcingRecordEvidence,
-  declareStockfishEvalEvidence,
-  declareStoryDerivedEvidence,
-  declareStructuralPredicateFeatureEvidence,
-  declareStructuralPredicateResultEvidence,
-  declareStructuralReadingSourceEvidence,
-  declareStructuralSemanticSourceEvidence,
-  declareSyzygyResultEvidence,
-  declareSyzygyCategoryEvidence,
-  declareSyzygyDistanceEvidence,
-  declareTransitionReadingSourceEvidence,
-  declareTransitionSemanticSourceEvidence,
-} from "./evidence-source-adapters.js";
-export type { MaiaCandidateWdlProjection } from "./evidence-source-adapters.js";
-export {
   RecordedEdgeError,
   assertRecordedEdgeEvidence,
-  declareRecordedEdgeEvidence,
   type RecordedEdge,
   type RecordedEdgeRefusalReason,
-} from "./evidence-source-adapters.js";
+} from "./recorded-edge.js";
 export {
   recordedAttractionObservedSemanticEvent,
   recordedCheckZwischenzugSemanticEvent,

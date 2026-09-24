@@ -5,7 +5,16 @@
 import { resolveBranchPath } from "./branch-path.js";
 import { BREADTH_CONVENTION_TEXT, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_CONVENTION_TEXT, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
 import { evidenceDigest, type CompiledEvidenceManifest, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
-import { RecordedEdgeError, declareDefenderDutyEvidence, declareLegalExchangeEvidence, declareRecordedEdgeEvidence, type RecordedEdge } from "./evidence-source-adapters.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { RecordedEdgeError, type RecordedEdge } from "./recorded-edge.js";
+import type { LegalExchangeResult } from "./exchange.js";
+
+/** The exact legal-exchange evidence of one capture, recomputed by its factory from FEN + UCI. */
+function exchangeEvidence(result: LegalExchangeResult): DeclaredEvidence<unknown> {
+  const computed = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: result.beforeFen, captureUci: result.captureUci })[0];
+  if (computed === undefined || evidenceDigest(computed.payload) !== evidenceDigest(result)) throw new TypeError("Recorded path exchange operand is not reproduced by the exchange authority");
+  return computed;
+}
 import { harassmentPressureSequence, pawnContactTimingSequence, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import {
   attractionObservedOperands,
@@ -272,7 +281,7 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       const operands = deflectionObservedOperands(anchors);
       if (operands.length === 0) break;
       const check = deflectionObservedInduction(anchors) === "check_induced" ? window[0]!.check : undefined;
-      for (const value of operands) emitted.push(recordedDeflectionObservedSemanticEvent(value, edges, duty(), captureEvidence, declareLegalExchangeEvidence(value.targetCapture), check));
+      for (const value of operands) emitted.push(recordedDeflectionObservedSemanticEvent(value, edges, duty(), captureEvidence, exchangeEvidence(value.targetCapture), check));
       break;
     }
     case "attraction":
@@ -282,23 +291,23 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       }
       break;
     case "line_clearance":
-      for (const value of lineBlockerClearanceObservedOperands(anchors)) emitted.push(recordedLineBlockerClearanceSemanticEvent(value, edges, declareLegalExchangeEvidence(value.targetCapture)));
+      for (const value of lineBlockerClearanceObservedOperands(anchors)) emitted.push(recordedLineBlockerClearanceSemanticEvent(value, edges, exchangeEvidence(value.targetCapture)));
       break;
     case "square_clearance":
       for (const value of squareClearanceObservedOperands(anchors)) emitted.push(recordedSquareClearanceSemanticEvent(value, edges));
       break;
     case "interference":
-      for (const value of interferenceObservedOperands(anchors)) emitted.push(recordedInterferenceSemanticEvent(value, edges, duty(), declareLegalExchangeEvidence(value.targetCapture)));
+      for (const value of interferenceObservedOperands(anchors)) emitted.push(recordedInterferenceSemanticEvent(value, edges, duty(), exchangeEvidence(value.targetCapture)));
       break;
     case "check_zwischenzug":
       for (const value of checkZwischenzugObservedOperands(anchors)) {
         const capture = window[0]!.capture, check = window[1]!.check;
         if (capture === undefined || check === undefined) throw new TypeError("Checking zwischenzug lost its exact capture/check source");
-        emitted.push(recordedCheckZwischenzugSemanticEvent(value, edges, capture.evidence, check.evidence, declareLegalExchangeEvidence(value.retainedRecapture)));
+        emitted.push(recordedCheckZwischenzugSemanticEvent(value, edges, capture.evidence, check.evidence, exchangeEvidence(value.retainedRecapture)));
       }
       break;
     case "overload_exploitation":
-      for (const value of overloadExploitationObservedOperands(anchors)) emitted.push(recordedOverloadExploitationSemanticEvent(value, edges, duty(), captureEvidence, declareLegalExchangeEvidence(value.secondTargetCapture)));
+      for (const value of overloadExploitationObservedOperands(anchors)) emitted.push(recordedOverloadExploitationSemanticEvent(value, edges, duty(), captureEvidence, exchangeEvidence(value.secondTargetCapture)));
       break;
   }
   for (const event of emitted) if (refKey(event.projection) !== refKey(row.projection)) throw new TypeError(`Evaluator row ${refKey(row.projection)} emitted ${refKey(event.projection)}`);
@@ -326,7 +335,7 @@ export function recordedSemanticPathExecution(run: DrillRun, branchId: string, o
   const edges: DeclaredEvidence<RecordedEdge>[] = [];
   for (let index = 1; index < path.length; index += 1) {
     try {
-      edges.push(declareRecordedEdgeEvidence(run, path[index - 1]!, path[index]!));
+      edges.push(invokeEvidenceValueRoute("run.record.edge@1", { run, parent: path[index - 1]!, child: path[index]! }));
     } catch (error) {
       if (!(error instanceof RecordedEdgeError)) throw error;
       return finish(Object.freeze({ kind: "refused", branchId, reason: error.reason, atNodeId: error.atNodeId, detail: error.message }), now() - started, 0, 0, 0, 0, 0);
@@ -356,7 +365,7 @@ export function recordedSemanticPathExecution(run: DrillRun, branchId: string, o
         const cached = dutyByFen.get(first.anchor.beforeFen);
         if (cached !== undefined) return cached;
         work.defenderDutyReads += 1;
-        const value = declareDefenderDutyEvidence(defenderDutyReading(first.anchor.beforeFen));
+        const value = invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: first.anchor.beforeFen });
         dutyByFen.set(first.anchor.beforeFen, value);
         return value;
       };
