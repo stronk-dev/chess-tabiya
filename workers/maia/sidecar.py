@@ -14,8 +14,8 @@ from pathlib import Path
 
 HOST = os.environ.get("MAIA_LISTEN_HOST", "0.0.0.0")
 PORT = int(os.environ.get("MAIA_LISTEN_PORT", "7000"))
-READY = Path(os.environ.get("MAIA_READY_FILE", "/ready"))
-COMMAND = ["maia3-uci", "--model", "5m", "--use-uci-history"]
+READY = Path(os.environ.get("MAIA_READY_FILE", "/tmp/ready"))
+COMMAND = ["maia3-uci", "--model", "5m", "--checkpoint-path", "/opt/maia3-models/maia3-5m.pt", "--use-uci-history"]
 
 
 def send(engine: subprocess.Popen[bytes], line: str) -> None:

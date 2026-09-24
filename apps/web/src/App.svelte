@@ -2447,6 +2447,7 @@
       onRetry={retryVisibleRoute}
       onSelect={choosePublicPack}
     />
+    <footer class="legal-footer"><a href="/about" rel="license">Licence &amp; source</a></footer>
   </div>
 {:else}
 <ShellFrame
@@ -3217,6 +3218,8 @@
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
   .play-surface{height:100%;overflow:auto;padding:1rem 0}.surface-skip{position:fixed;z-index:50;top:.35rem;left:.35rem;padding:.6rem .8rem;border-radius:.5rem;background:var(--ink);color:var(--paper);transform:translateY(-150%)}.surface-skip:focus{transform:translateY(0)}
   .public-landing { height: 100%; overflow: auto; }
+  .legal-footer { padding: 1rem clamp(1rem, 4vw, 3rem) 1.5rem; color: var(--muted); font-size: 0.8rem; }
+  .legal-footer a { color: var(--ink); }
   .public-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(15rem, .6fr); gap: 1.5rem 3rem; width: min(76rem, calc(100% - 2rem)); margin: 0 auto; padding: clamp(3rem, 8vw, 7rem) 0 2rem; }
   .public-hero > div { max-width: 52rem; }
   .public-hero h1 { max-width: 15ch; margin: .5rem 0 1rem; font: 500 clamp(2.7rem, 7vw, 6.5rem)/.92 var(--display-font); letter-spacing: -.055em; }

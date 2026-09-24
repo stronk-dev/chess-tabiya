@@ -16,12 +16,22 @@ export interface MaiaDockerSpecOptions {
   readonly transcriptCapacity?: number;
 }
 
+/**
+ * A dependency-free stdio↔TCP bridge run by the server's own Node runtime. It replaces the
+ * `netcat-openbsd` OS package (rfc/verifiable-runtime-distribution.md §2 form 1): the release image
+ * carries no network utility, and the bridge is covered by the Node runtime's own notice.
+ */
+export const MAIA_TCP_BRIDGE_SCRIPT =
+  'const s=require("node:net").connect(Number(process.argv[2]),process.argv[1]);' +
+  's.on("error",(e)=>{process.stderr.write(String(e.message)+String.fromCharCode(10));process.exit(1)});' +
+  's.on("close",()=>process.stdout.write("",()=>process.exit(0)));process.stdin.pipe(s);s.pipe(process.stdout);';
+
 export function maiaNetworkSpec(host: string, port: number): EngineSpec {
   return Object.freeze({
     id: "maia-5m",
     kind: "opponent",
-    command: "nc",
-    args: Object.freeze([host, String(port)]),
+    command: process.execPath,
+    args: Object.freeze(["-e", MAIA_TCP_BRIDGE_SCRIPT, host, String(port)]),
     name: "Maia3",
     version: MAIA3_SOURCE_COMMIT,
     modelId: MAIA3_MODEL_ID,

@@ -2,6 +2,7 @@
   "name": "@chess-tabiya/schema",
   "version": "0.0.0",
   "private": true,
+  "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
@@ -9,7 +10,8 @@
     "./shape-entry": "./src/shape-entry/index.ts",
     "./principle-entry": "./src/principle-entry/index.ts",
     "./campaign": "./src/campaign/index.ts",
-    "./pack-path": "./src/pack-path/index.ts"
+    "./pack-path": "./src/pack-path/index.ts",
+    "./release-manifest": "./src/release-manifest/index.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"

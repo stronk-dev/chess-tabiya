@@ -67,6 +67,7 @@ import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } 
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
 import { binaryArtifactProbe } from "./engine-supervisor.js";
 import { composeProviderTraversalApplication, type ProviderTraversalApplication } from "./provider-traversal.js";
+import { loadReleaseAbout, type ReleaseAboutOptions } from "./release-about.js";
 
 /** rfc/review-evidence-compiler.md §4.1: the 1.0 Review enrichment profile (explicit bounds). */
 export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
@@ -108,6 +109,8 @@ export interface ApplicationOptions {
   readonly longitudinalWorkerEntry?: URL;
   /** rfc/skills.md §2.5 valence register; defaults to `content/valence/register.json`. */
   readonly valenceRegisterPath?: string;
+  /** rfc/verifiable-runtime-distribution.md §4/§9: embedded build facts and the mounted release index. */
+  readonly releaseAbout?: ReleaseAboutOptions;
 }
 
 /**
@@ -385,6 +388,9 @@ export async function composeApplication(
   composition: LongitudinalComposition,
 ): Promise<ChessTabiyaApplication> {
   assertEvidenceManifest();
+  // A mounted release index that fails the shared v1 parser or the build/image join refuses startup
+  // before any storage opens.
+  const about = loadReleaseAbout({ ...(options.releaseAbout ?? {}), engineMode: options.engineMode ?? "mock" });
   const workerConfig = validateLongitudinalWorkerConfig(options.longitudinalWorker ?? LONGITUDINAL_WORKER_DEFAULTS);
   let databasePath: string;
   if (composition.kind === "worker") {
@@ -423,7 +429,7 @@ export async function composeApplication(
     }),
   });
   try {
-    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig });
+    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig, about });
   } catch (error) {
     // Nothing composed after the coordinator may leave the database open ([[D2965]]).
     try { storage.close(); } catch { /* preserve the primary failure */ }
@@ -440,9 +446,10 @@ async function composeServices(
     readonly principles: PrincipleRegistry;
     readonly registry: PackRegistry;
     readonly workerConfig: ReturnType<typeof validateLongitudinalWorkerConfig>;
+    readonly about: ReturnType<typeof loadReleaseAbout>;
   },
 ): Promise<ChessTabiyaApplication> {
-  const { storage, shapes, principles, registry, workerConfig } = authorities;
+  const { storage, shapes, principles, registry, workerConfig, about } = authorities;
   const shapeStudio = new ShapeStudio(storage, shapes, () => registry.list().map((summary) => ({
     document: registry.required(summary.id).document,
     title: summary.title,
@@ -589,6 +596,8 @@ async function composeServices(
     if (url.pathname === "/healthz") {
       return healthProbe();
     }
+    const aboutResponse = about.handle(request);
+    if (aboutResponse !== undefined) return aboutResponse;
     return isApiPath(url.pathname)
       ? api(request)
       : staticResponse(request, staticDirectory);

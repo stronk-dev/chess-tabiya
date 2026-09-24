@@ -1,0 +1,16 @@
+{
+  "format": "tabiya-maia-weight-rights",
+  "formatVersion": 1,
+  "discharge": "rfc/verifiable-runtime-distribution.md D1",
+  "weight": {
+    "repository": "UofTCSSLab/Maia3-5M",
+    "revision": "b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+    "file": "maia3-5m.pt",
+    "sha256": "sha256:ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f562524f"
+  },
+  "status": "unresolved",
+  "expression": "LicenseRef-MAIA3-WEIGHTS-UNRESOLVED",
+  "evidence": null,
+  "observed": "The model card at this revision declares no licence (cardData has no licence field); the AGPL-3.0 text in the Maia source repository covers the code, not independently hosted weight bytes. Checked 2026-09-24.",
+  "resolution": "OWNER: record an explicit upstream statement that applies to these exact weight bytes (url, retrieved-at, statement text digest, SPDX expression that passes a reviewed policy input), or replace/remove the model from the required cpu tier."
+}

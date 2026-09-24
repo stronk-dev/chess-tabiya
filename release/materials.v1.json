@@ -1,0 +1,126 @@
+{
+  "format": "tabiya-release-materials",
+  "formatVersion": 1,
+  "baseImages": [
+    {
+      "id": "dockerfile-frontend",
+      "repository": "docker.io/docker/dockerfile",
+      "tag": "1.19",
+      "index": "sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6",
+      "platforms": {
+        "linux/amd64": "sha256:62b0eac4b38b65f257ba2525a1bc87978b5e339d6133b5daef1bde40fe7aa10f",
+        "linux/arm64": "sha256:53813717d076769a5dba593f7e0a49f0daa0ea4027726abc593f56d4940cca1f"
+      }
+    },
+    {
+      "id": "node-runtime",
+      "repository": "docker.io/library/node",
+      "tag": "24.21.0-bookworm-slim",
+      "index": "sha256:0e0ff40c39bc087845bfb27465a0df4ea419520094bc35842ff83dd8cbe6f9b6",
+      "platforms": {
+        "linux/amd64": "sha256:5cbc7caba8c2c0f0bca675d1b61b9f2857e1cf1853c6164ee9dd409501a936e7",
+        "linux/arm64": "sha256:24b8bc17702002d2ed0c1da9ad66c3ee507cc279d0856726662ff2b6fc35c149"
+      }
+    },
+    {
+      "id": "python-runtime",
+      "repository": "docker.io/library/python",
+      "tag": "3.12.13-slim-bookworm",
+      "index": "sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2",
+      "platforms": {
+        "linux/amd64": "sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4902ef07565721f46bf44917af",
+        "linux/arm64": "sha256:3f9c7f75b916e8279e24136d7a57769aba9e193715be52570417698c52d6eed0"
+      }
+    },
+    {
+      "id": "sbom-scanner",
+      "repository": "docker.io/anchore/syft",
+      "tag": "v1.33.0",
+      "index": "sha256:f94e5d9fce1f2278491a8e3a63bd5f6ddb81fdfdbb8bf7a1637565c1d5344357",
+      "platforms": {
+        "linux/amd64": "sha256:cefadcf11bd9cce9e3ec5248bb1538a84e33d519486c1b4523ac155c9b5f5033",
+        "linux/arm64": "sha256:25a18bc9c2bc07853d671e6995f1ee06b7a49937766863543c01e0eb6635c6f9"
+      }
+    }
+  ],
+  "debianSnapshots": [
+    {
+      "baseImage": "node-runtime",
+      "timestamp": "20260918T000000Z",
+      "archive": "http://snapshot.debian.org/archive/debian/20260918T000000Z",
+      "security": "http://snapshot.debian.org/archive/debian-security/20260918T000000Z",
+      "packages": ["g++=4:12.2.0-3", "make=4.3-4.1"],
+      "use": "stockfish arm64 source build stage only"
+    },
+    {
+      "baseImage": "python-runtime",
+      "timestamp": "20260803T000000Z",
+      "archive": "http://snapshot.debian.org/archive/debian/20260803T000000Z",
+      "security": "http://snapshot.debian.org/archive/debian-security/20260803T000000Z",
+      "packages": ["patch=2.7.6-7"],
+      "use": "maia source patch stage only"
+    }
+  ],
+  "debianSnapshotNote": "Each timestamp is the snapshot the pinned bookworm base image itself records. apt verifies every .deb against the signed, frozen snapshot index and exact top-level versions close the resolution. No runtime stage runs apt.",
+  "buildTools": {
+    "pnpm": {
+      "version": "11.18.0",
+      "url": "https://registry.npmjs.org/pnpm/-/pnpm-11.18.0.tgz",
+      "sha256": "sha256:29c35ca8d2a287988fdee3e0f36e07d9b93783f567b579b7fd5b798a4563dd81",
+      "integrity": "sha512-M9g8d9qC9J+6g2klxvG4QRgewxMrZwY5vQEvcHX1x89jTF+HAUfBmq50ePrAHfCdiJLogEVIlu3SPumzN1dWPA=="
+    }
+  },
+  "nodeRuntime": {
+    "version": "24.21.0",
+    "declaredExpression": "MIT",
+    "notice": { "path": "release/notices/node-v24.21.0-LICENSE", "sha256": "sha256:5888dbb9a1d2b18f2c3e6c5f6af1b39de658372b402a0577b002777f14c62ace" },
+    "source": "https://github.com/nodejs/node/tree/v24.21.0",
+    "note": "The verbatim upstream LICENSE enumerates the third-party terms of every library bundled into the node binary."
+  },
+  "pythonRuntime": {
+    "version": "3.12.13",
+    "declaredExpression": "Python-2.0",
+    "source": "https://www.python.org/downloads/release/python-31213/",
+    "note": "CPython from the pinned python-runtime base image; the SPDX Python-2.0 identifier covers the PSF/BeOpen/CNRI/CWI licence stack in the upstream LICENSE."
+  },
+  "stockfish": {
+    "version": "18",
+    "commit": "cb3d4ee9b47d0c5aae855b12379378ea1439675c",
+    "declaredExpression": "GPL-3.0-or-later",
+    "x86Archive": { "url": "https://github.com/official-stockfish/Stockfish/releases/download/sf_18/stockfish-ubuntu-x86-64.tar", "sha256": "sha256:5c6f38b02a4da5f3ffe763f27da6c3e743eebefd92b50cb3661623b96696adff" },
+    "sourceArchive": { "url": "https://github.com/official-stockfish/Stockfish/archive/cb3d4ee9b47d0c5aae855b12379378ea1439675c.tar.gz", "sha256": "sha256:b5d3b85e08cdf9189a4753142eb21a4333983d97501531b19e1cd1ac9fc43f35" },
+    "networks": [
+      { "file": "nn-c288c895ea92.nnue", "url": "https://tests.stockfishchess.org/api/nn/nn-c288c895ea92.nnue", "sha256": "sha256:c288c895ea924429ea9092e3f36b2b3c1f00f2a3a4c759ff7e57e79e3b43e4a7" },
+      { "file": "nn-37f18f62d772.nnue", "url": "https://tests.stockfishchess.org/api/nn/nn-37f18f62d772.nnue", "sha256": "sha256:37f18f62d772f3107e1d6aaca3898c130c3c86f2ab63e6555fbbca20635a899d" }
+    ],
+    "installer": "tools/install-stockfish-linux.sh",
+    "imageSource": "/usr/share/doc/stockfish/source"
+  },
+  "openingSource": {
+    "repository": "https://github.com/lichess-org/chess-openings",
+    "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+    "declaredExpression": "CC0-1.0",
+    "licenseFile": { "path": "vendor/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/COPYING.txt", "sha256": "sha256:a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499" }
+  },
+  "maia": {
+    "sourceCommit": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+    "sourceArchive": { "url": "https://github.com/CSSLab/maia3/archive/1e13597c42d4858b7cfd7cfdae01e297263364b2.tar.gz", "sha256": "sha256:774c363dd2f2d10d6996ef5ef0bdba473ae769a79e442132bd82d0e999b7b488" },
+    "declaredExpression": "AGPL-3.0-only",
+    "licenseFile": { "path": "LICENSE", "sha256": "sha256:8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef" },
+    "patch": { "path": "workers/maia/patches/maia3-uci-policy-mass.patch", "sha256": "sha256:3aedf724d937bc3634406ad2ce1f7b62bc77e42b667bbee04cba021d56018ff6" },
+    "weight": {
+      "repository": "UofTCSSLab/Maia3-5M",
+      "revision": "b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "file": "maia3-5m.pt",
+      "url": "https://huggingface.co/UofTCSSLab/Maia3-5M/resolve/b6559de2398d7140b985f28fd2c19fb5e47ddabe/maia3-5m.pt",
+      "bytes": 20968049,
+      "sha256": "sha256:ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f562524f",
+      "rights": "release/maia-weight-rights.v1.json"
+    },
+    "pythonLocks": {
+      "linux/amd64": { "path": "workers/maia/requirements-cpu-linux-amd64.txt", "sha256": "sha256:e12cd7a0477a3fa4d4d5e3a85ee1a8db8305f2fa9867ba05bf9dcbdb9540d825" },
+      "linux/arm64": { "path": "workers/maia/requirements-cpu-linux-arm64.txt", "sha256": "sha256:61774f50ab6cc022aa42f1a38a66290c8b4ed1f13fad7d63f248ccedcced6ebe" }
+    },
+    "pythonIndexes": ["https://download.pytorch.org/whl/cpu", "https://pypi.org/simple"]
+  }
+}

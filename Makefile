@@ -2031,7 +2031,7 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check evidence-manifest-check evidence-value-authority semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
+verify-software: typecheck test-software test-performance schema-check release-policy-check evidence-manifest-check evidence-value-authority semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
 
 verify-governance: register-check shared-resource-catalogue status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 
@@ -2063,6 +2063,23 @@ verify-awake: staged-process-contracts
 	else \
 		exec $(MAKE) verify; \
 	fi
+
+# rfc/verifiable-runtime-distribution.md — offline release policy (no Docker, no network): workflow
+# SHA pins/permissions, Dockerfile pins, material digests, SPDX policy, manifest v1, allow-list.
+.PHONY: release-policy-check release-verify-local release-verify-local-maia
+release-policy-check:
+	node --test tools/release/*.test.mjs
+	node tools/release/release-policy.mjs
+
+# Builds the release server image natively, proves the allow-list/census, SBOM + licence gate,
+# embedded NOTICE/licences, a loader-traced boot to /healthz under 512 MiB without swap, and a local
+# prerelease release set (manifest + SHA256SUMS + mounted-index About join). Pushes nothing.
+release-verify-local:
+	node tools/release/verify-local.mjs $(if $(IDLE),--idle-seconds $(IDLE),)
+
+# The same plus the Maia CPU image (GPU census, weight digest, SBOM, D1 report). Downloads ~200 MB.
+release-verify-local-maia:
+	node tools/release/verify-local.mjs --maia $(if $(IDLE),--idle-seconds $(IDLE),)
 
 .PHONY: runtime-distribution-fresh-review
 runtime-distribution-fresh-review:

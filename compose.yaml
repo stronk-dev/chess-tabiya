@@ -33,9 +33,9 @@ services:
     environment:
       MAIA_LISTEN_HOST: 0.0.0.0
       MAIA_LISTEN_PORT: "7000"
-      MAIA_READY_FILE: /ready
+      MAIA_READY_FILE: /tmp/ready
     healthcheck:
-      test: ["CMD", "test", "-f", "/ready"]
+      test: ["CMD", "test", "-f", "/tmp/ready"]
       interval: 5s
       timeout: 2s
       start_period: 90s

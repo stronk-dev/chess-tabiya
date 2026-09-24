@@ -15,8 +15,15 @@ fi
 temporary=$(mktemp -d)
 trap 'rm -rf "$temporary"' EXIT HUP INT TERM
 
+# STOCKFISH_ARCHIVE_DIRECTORY names pre-fetched archives (the release Dockerfile fetches them with
+# `ADD --checksum`, so the image build needs no curl or live package index). Either way every
+# archive is verified against the pinned SHA-256 below before use.
 download() {
-  curl --fail --location --retry 3 --show-error --silent "$1" --output "$2"
+  if [ -n "${STOCKFISH_ARCHIVE_DIRECTORY:-}" ]; then
+    cp "$STOCKFISH_ARCHIVE_DIRECTORY/$(basename "$2")" "$2"
+  else
+    curl --fail --location --retry 3 --show-error --silent "$1" --output "$2"
+  fi
 }
 
 verify() {
@@ -44,6 +51,13 @@ case "$machine" in
     source_directory="$temporary/source"
     mkdir -p "$source_directory"
     tar -xzf "$archive" -C "$source_directory" --strip-components=1
+    # The default NNUE nets are build inputs; when pre-fetched (checksum-locked by the caller) the
+    # Makefile's `net` target validates and reuses them instead of downloading.
+    if [ -n "${STOCKFISH_ARCHIVE_DIRECTORY:-}" ]; then
+      for net in "$STOCKFISH_ARCHIVE_DIRECTORY"/nn-*.nnue; do
+        [ -f "$net" ] && cp "$net" "$source_directory/src/"
+      done
+    fi
     jobs=$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)
     make -C "$source_directory/src" -j "$jobs" build ARCH=armv8
     binary="$source_directory/src/stockfish"

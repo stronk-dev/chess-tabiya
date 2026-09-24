@@ -46,9 +46,20 @@ const externalVoice = voiceMode !== "external_http" ? undefined : new ExternalHt
   ...(process.env.TABIYA_VOICE_PROVIDER_KEY === undefined ? {} : { key: process.env.TABIYA_VOICE_PROVIDER_KEY }),
   timeoutMs: voiceTimeout,
 });
+const deploymentTier = process.env.TABIYA_DEPLOYMENT_TIER;
+if (deploymentTier !== undefined && deploymentTier !== "core" && deploymentTier !== "cpu") {
+  throw new TypeError(`Unsupported TABIYA_DEPLOYMENT_TIER: ${deploymentTier}`);
+}
 const application = await createApplication({
   development,
   engineMode,
+  // rfc/verifiable-runtime-distribution.md §4/§9: embedded build facts + the mounted release index.
+  releaseAbout: {
+    ...(process.env.TABIYA_LEGAL_DIRECTORY === undefined ? {} : { legalDirectory: process.env.TABIYA_LEGAL_DIRECTORY }),
+    ...(process.env.TABIYA_RELEASE_MANIFEST === undefined ? {} : { releaseManifestPath: process.env.TABIYA_RELEASE_MANIFEST }),
+    ...(process.env.TABIYA_SERVER_IMAGE === undefined ? {} : { serverImage: process.env.TABIYA_SERVER_IMAGE }),
+    ...(deploymentTier === undefined ? {} : { deploymentTier }),
+  },
   ...(process.env.DATABASE_PATH === undefined ? {} : { databasePath: process.env.DATABASE_PATH }),
   cookieSecure,
   ...(process.env.DRAFT_PACK_FILE === undefined

@@ -1,11 +1,13 @@
 # RFC: Verifiable runtime distribution and resource tiers
 
-- **Status:** **draft — author repair in progress after the fresh independent return on
-  [[D2206]]–[[D2209]].** [[D2207]]–[[D2209]] are repaired below. [[D2206]] now has a closed v1
-  protocol and single generated reader surface, but its required first shared-resource claim exposes
-  the register-bootstrap defect [[D2363]]: the current checker rejects a new resource before the RFC
-  that introduces it can be accepted. No checker/schema bypass is taken. Implementation remains
-  unauthorized and also awaits another fresh review, F12-A/C/D, the bot production path and D1.
+- **Status:** **draft — implementation landed on the owner's 2026-09-24 direction (no review round); release
+  publication remains gated.** The pipeline, images, policy, manifest v1, allow-list, About surface
+  and local verification are in the tree
+  (`planning/verifiable-runtime-distribution/implementation-2026-09-24.md`, `docs/release.md`).
+  Publication stays refused by the implementation itself until D1 (weight rights), owner-approved
+  curated records for the Debian base packages, D2 (final content bundle), the F12-H core journey,
+  the bot production route and the measured core steady-state excess are resolved. The
+  `release-manifest-schema` register claim is still blocked by [[D2363]]; claims stay `none`.
 - **Author:** Codex on the owner's O13 Choice-C resource-tier ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` self-hostable appliance floor; `design/03-product-breadth.md` B8
@@ -720,6 +722,20 @@ implementation amendment with exact platform and resource numbers, but omitting 
 the owner-ruled `core` and `cpu` 1.0 floor.
 
 ## Changelog
+
+- 2026-09-24 — implemented on the owner's direction. Genuine defects fixed inline, each with a test:
+  (1) §2 called `netcat-openbsd` unused, but `maiaNetworkSpec` spawned `nc`; the server now bridges
+  Maia with its own Node runtime and the package is gone. (2) §7 excluded `*.sources.json` /
+  `*.evidence.json`, but the production pack registry opens both to ground assessments; the
+  allow-list admits them only as sidecars of served packs, never for candidates, still under the
+  local-path refusal. (3) §6's accepted-id set omitted `CC-BY-SA-4.0`, the licence the repository
+  itself declares for authored content; it is added with its pinned text. (4) the arm64 Stockfish
+  source build fetched its NNUE nets at build time, validated only by a 12-hex name prefix; both nets
+  are now `ADD --checksum` inputs. (5) the pinned `node:24.10.0` base reports Unicode 16 and the
+  concept registry (migration 28) refused startup; the base is `node:24.21.0` (Unicode 17). The §5
+  steady-state instrument is pinned to the cgroup working set (the R18/`docker stats` instrument the
+  ceilings were anchored on). Measured locally on arm64: 161 MiB steady against the 128 MiB ceiling
+  — reported, not loosened.
 
 - 2026-08-31 — author-repaired [[D2207]]–[[D2209]] and specified the protocol half of [[D2206]].
   The release graph now splits embedded pre-image metadata/notices from the externally mounted
