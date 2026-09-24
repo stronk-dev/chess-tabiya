@@ -7,7 +7,7 @@ import { HistoryRouter, parseRoute, routePath, routeTitle } from "./router.js";
 describe("application router", () => {
   it("parses every shell route and encoded run deep link", () => {
     expect(
-      ["/", "/play", "/review", "/rating", "/learn", "/live", "/create", "/library", "/settings"].map(
+      ["/", "/play", "/review", "/rating", "/profile", "/learn", "/live", "/create", "/library", "/settings"].map(
         (pathname) => parseRoute({ pathname }).name,
       ),
     ).toEqual([
@@ -15,6 +15,7 @@ describe("application router", () => {
       "play",
       "review",
       "rating",
+      "profile",
       "learn",
       "live",
       "create",

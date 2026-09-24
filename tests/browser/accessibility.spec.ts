@@ -108,7 +108,7 @@ test("@matrix @mobile the mobile project uses real touch and coarse-pointer sema
 
 test("@matrix @mobile primary non-run journeys own their width without clipped controls", async ({ page }) => {
   await register(page);
-  for (const route of ["/", "/play", "/review", "/learn", "/live", "/create", "/library", "/settings"]) {
+  for (const route of ["/", "/play", "/review", "/learn", "/profile", "/live", "/create", "/library", "/settings"]) {
     await page.goto(route);
     await expect(page.getByText("Loading Tabiya…")).toHaveCount(0);
     const geometry = await page.locator("main, #position-catalogue").first().evaluate((main) => {

@@ -20,6 +20,7 @@
   import { validRegisteredShapeIdentity, validShapeDraftIdentity, validShapeValidation } from "./lib/shape-draft-response.js";
   import { progressRecommendationSentence } from "./lib/progress-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
+  import ProfileScreen from "./lib/ProfileScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
@@ -2666,6 +2667,7 @@
     <main class="shell-view" aria-labelledby="learn-title">
       <p class="eyebrow">Learn / return loop</p>
       <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      <p class="profile-link"><a href="/profile" onclick={(event) => { event.preventDefault(); navigate(routePath({ name: "profile" })); }}>Your profile: openings, habit cards, observations and skills from your saved games</a></p>
       {#if session.busy}<p id="return-action-busy" role="status">Starting your rehearsal…</p>{/if}
       {#if returnActionError ?? session.error}<p role="alert">{returnActionError ?? session.error}</p>{/if}
       <section aria-labelledby="assigned-title">
@@ -3145,7 +3147,9 @@
       {:else}<p role="alert">Overlay run unavailable.</p>{/if}
     </main>
   {:else if route.name === "rating"}
-    <RatingScreen {api} onStart={startRatedGame} />
+    <RatingScreen {api} onStart={startRatedGame} onOpenProfile={() => navigate(routePath({ name: "profile" }))} />
+  {:else if route.name === "profile"}
+    <ProfileScreen {api} onNavigate={navigate} onStartPack={(packId) => controller.startPack(packId)} />
   {:else if route.name === "library"}
     <main class="shell-view" aria-labelledby="library-title">
       <p class="eyebrow">Library</p><h1 id="library-title">Packs and run artifacts</h1>

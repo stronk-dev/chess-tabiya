@@ -5,7 +5,9 @@ import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 
-import { canonicalFen, exactLegalMoves, type EvidencePayload } from "@chess-tabiya/runtime";
+import { canonicalFen, exactLegalMoves, PRIMARY_EVIDENCE_MANIFEST, validateValenceRegister, VALENCE_REGISTER_FORMAT, type EvidencePayload, type ValenceRegister } from "@chess-tabiya/runtime";
+
+import { LearnerProfileService } from "./learner-profile.js";
 
 import {
   assertAdvertisedCapabilityDispositions,
@@ -86,6 +88,25 @@ export interface ApplicationOptions {
   readonly longitudinalWorker?: LongitudinalWorkerConfig;
   /** Built worker-thread entry override (tests bundle it; production uses the sibling dist file). */
   readonly longitudinalWorkerEntry?: URL;
+  /** rfc/skills.md §2.5 valence register; defaults to `content/valence/register.json`. */
+  readonly valenceRegisterPath?: string;
+}
+
+/**
+ * Loads and validates the valence register (rfc/skills.md §2.5). An absent file is the empty
+ * register; an invalid one fails startup rather than crediting from an unvalidated declaration.
+ */
+export async function loadValenceRegister(path: string): Promise<ValenceRegister> {
+  let text: string;
+  try { text = await readFile(path, "utf8"); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return Object.freeze({ formatVersion: VALENCE_REGISTER_FORMAT, declarations: Object.freeze([]) });
+    throw error;
+  }
+  const value = JSON.parse(text) as unknown;
+  const issues = validateValenceRegister(value, (id, version) => PRIMARY_EVIDENCE_MANIFEST.projections.find((projection) => projection.id === id && projection.version === version)?.grounding);
+  if (issues.length > 0) throw new TypeError(`VALENCE_REGISTER_INVALID: ${issues.map((issue) => `${issue.code} ${issue.message}`).join("; ")}`);
+  return value as ValenceRegister;
 }
 
 export type LongitudinalHealth =
@@ -277,6 +298,8 @@ function isApiPath(pathname: string): boolean {
     pathname === "/rating" ||
     pathname.startsWith("/rating/") ||
     pathname === "/marks" ||
+    pathname === "/learner-profile" ||
+    pathname.startsWith("/learner-profile/") ||
     pathname === "/cohorts" ||
     pathname.startsWith("/cohorts/") ||
     pathname.startsWith("/api/shared/") ||
@@ -460,7 +483,17 @@ export async function composeApplication(
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
   const classrooms = new ClassroomService(storage, registry);
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles);
+  let longitudinalStatus: () => string = () => "degraded";
+  const learnerProfile = new LearnerProfileService({
+    storage,
+    longitudinalStatus: () => longitudinalStatus(),
+    openingCatalogue,
+    packs: () => registry.list().map((summary) => Object.freeze({ id: summary.id, title: summary.title, startFen: registry.required(summary.id).document.start.fen })),
+    shapes: () => shapes.list().map((summary) => Object.freeze({ id: summary.id, name: summary.name })),
+    ratedResults: (learnerId) => new Map(storage.ratedGames(learnerId).flatMap((game) => game.result === null ? [] : [[game.runId, game.result] as const])),
+    valenceRegister: await loadValenceRegister(options.valenceRegisterPath ?? join(process.cwd(), "content", "valence", "register.json")),
+  });
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
@@ -501,6 +534,7 @@ export async function composeApplication(
     const status: LongitudinalWorkerStatus = worker.status();
     return status;
   };
+  longitudinalStatus = () => longitudinalHealth().status;
   healthProbe = () => {
     const longitudinal = longitudinalHealth();
     const ok = longitudinal.status === "ready" || longitudinal.status === "disabled_test";

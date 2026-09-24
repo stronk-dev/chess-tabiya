@@ -40,6 +40,21 @@ import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parseCapabilities } from "./capability-response.js";
+import {
+  parseLearnerProfile,
+  parseObservationDetail,
+  parseOpeningDetail,
+  parseProfileHistory,
+  parseSharedCard,
+  parseStyleCardPage,
+  type LearnerProfileView,
+  type ObservationDetail,
+  type OpeningDetail,
+  type ProfileHistoryRow,
+  type ProfilePage,
+  type SharedHabitCard,
+  type StyleCardPage,
+} from "./profile-response.js";
 import { parseEvidencePage } from "./evidence-page-response.js";
 import { parsePostcommitNudge, type PostcommitNudge } from "./nudge-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
@@ -1026,6 +1041,12 @@ export interface DrillClientApi extends RunApi {
   ratingHistory?(): Promise<RatingHistoryPage>;
   createRatedGame?(input: CreateRatedGameRequest, writerId: string): Promise<DrillRun>;
   learnerMarks?(): Promise<readonly LearnerMark[]>;
+  learnerProfile?(): Promise<LearnerProfileView>;
+  learnerProfileStyle?(metricId: string, offset?: number, limit?: number): Promise<StyleCardPage>;
+  learnerProfileOpening?(key: string, offset?: number, limit?: number): Promise<OpeningDetail>;
+  learnerProfileObservation?(key: string, offset?: number, limit?: number): Promise<ObservationDetail>;
+  learnerProfileHistory?(offset?: number, limit?: number): Promise<ProfilePage<ProfileHistoryRow>>;
+  shareProfileCard?(metricId: string, consent: true): Promise<SharedHabitCard>;
   cohortStanding?(classroomId: string): Promise<CohortStandingView>;
   updateCohortStanding?(classroomId: string, input:
     | { readonly op: "open"; readonly windowFrom: string; readonly windowTo?: string }
@@ -1360,6 +1381,12 @@ export class DrillApi implements DrillClientApi {
   ratingHistory():Promise<RatingHistoryPage>{return this.#json("/rating/history");}
   async createRatedGame(input:CreateRatedGameRequest,writerId:string):Promise<DrillRun>{const body=await this.#json<{readonly run:DrillRun}>("/rated-games",{method:"POST",writerId,body:input});return body.run;}
   async learnerMarks():Promise<readonly LearnerMark[]>{const body=await this.#json<{readonly marks:readonly LearnerMark[]}>("/marks");return body.marks;}
+  async learnerProfile():Promise<LearnerProfileView>{return parseLearnerProfile(await this.#json<unknown>("/learner-profile"));}
+  async learnerProfileStyle(metricId:string,offset=0,limit=50):Promise<StyleCardPage>{return parseStyleCardPage(await this.#json<unknown>(`/learner-profile/style/${encoded(metricId)}?offset=${offset}&limit=${limit}`));}
+  async learnerProfileOpening(key:string,offset=0,limit=50):Promise<OpeningDetail>{return parseOpeningDetail(await this.#json<unknown>(`/learner-profile/openings/${encoded(key)}?offset=${offset}&limit=${limit}`));}
+  async learnerProfileObservation(key:string,offset=0,limit=50):Promise<ObservationDetail>{return parseObservationDetail(await this.#json<unknown>(`/learner-profile/observations/${encoded(key)}?offset=${offset}&limit=${limit}`));}
+  async learnerProfileHistory(offset=0,limit=50):Promise<ProfilePage<ProfileHistoryRow>>{return parseProfileHistory(await this.#json<unknown>(`/learner-profile/history?offset=${offset}&limit=${limit}`));}
+  async shareProfileCard(metricId:string,consent:true):Promise<SharedHabitCard>{return parseSharedCard(await this.#json<unknown>("/learner-profile/share-card",{method:"POST",body:{metricId,consent}}));}
   cohortStanding(classroomId:string):Promise<CohortStandingView>{return this.#json(`/cohorts/${encoded(classroomId)}/standing`);}
   async updateCohortStanding(classroomId:string,input:
     | {readonly op:"open";readonly windowFrom:string;readonly windowTo?:string}

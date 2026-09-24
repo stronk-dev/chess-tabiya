@@ -36,7 +36,7 @@
   ] as const;
 
   function active(name: string): boolean {
-    return route.name === name || (name === "play" && route.name === "run") || (name === "review" && route.name === "story") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
+    return route.name === name || (name === "play" && route.name === "run") || (name === "rating" && route.name === "profile") || (name === "review" && route.name === "story") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
   }
 
   let runStatus = $derived(

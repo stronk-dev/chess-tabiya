@@ -103,7 +103,13 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
       return result.kind === "complete" ? result : undefined;
     });
     expect(preexisting.cuts).toEqual([{ kind: "complete", runId: "preexisting", requestedSeq: 2, completedSeq: 2, derivedRev: 1 }]);
-    expect(application.longitudinal.progress()?.completed).toBeGreaterThanOrEqual(2);
+    // Worker totals cross the thread boundary in their own message, which may trail the published
+    // rows the reads above already observe; wait for it rather than racing it.
+    const totals = await until(() => {
+      const progress = application!.longitudinal.progress();
+      return progress !== undefined && progress.completed >= 2 ? progress : undefined;
+    });
+    expect(totals.completed).toBeGreaterThanOrEqual(2);
 
     const closing = application;
     application = undefined;
