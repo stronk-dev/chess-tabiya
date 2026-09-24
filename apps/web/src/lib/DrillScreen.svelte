@@ -53,7 +53,8 @@
     resistanceSummary,
   } from "./outcome-presentation.js";
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
-  import { assistanceKey, assistanceProfile, loadAssistance, loadWorkflowPreset, saveAssistance, workflowKey, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
+  import { assistanceProfile, loadWorkflowPreference, requestedAssistanceConfig, requestedPresetLabel, saveWorkflowPreference, workflowPreferenceKey, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
+  import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
@@ -128,6 +129,7 @@
     onSaveMarks?: ((input: MarkSaveInput) => Promise<readonly RunMark[]>) | undefined;
     onRescopeMarks?: ((input: MarkRescopeInput) => Promise<readonly RunMark[]>) | undefined;
     onStop: () => void;
+    onAssistanceQuery?: ((request: RequestedAssistanceV1) => Promise<FinalizedAssistanceV1>) | undefined;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
@@ -193,6 +195,7 @@
     onSaveMarks,
     onRescopeMarks,
     onStop,
+    onAssistanceQuery,
     onHumanSplit,
     onCorpus,
     onVoice,
@@ -240,8 +243,15 @@
   let sheetOpen = $state(false);
   let openShapeId: string | undefined = $state();
   let inspectedShapeId: string | undefined = $state();
-  let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
-  let workflowPreset: PresetId = $state("quiet");
+  // rfc/intent-presets.md §5.2 — the one seat. The browser holds only the learner's typed receipt;
+  // the effective config arrives from the server's authoritative/finalized stages and is narrowed
+  // here only for browser speech. Pending/unavailable renders the silent floor, never a wider promise.
+  let preference: WorkflowPreferenceReceipt = $state({ kind: "unset" });
+  let compiledAssistance: BrowserNarrowedAssistanceV1 | undefined = $state();
+  let assistanceQueryState: "pending" | "ready" | "unavailable" = $state("pending");
+  let preferenceUnsaved = $state(false);
+  let assistanceQuery = 0;
+  let assistance: AssistanceConfig = $derived(compiledAssistance?.config ?? SILENT_ASSISTANCE);
   let assistanceMenuOpen = $state(false);
   let openPivotalNodeId: string | undefined = $state();
   let pivotalDialogOpen = $state(false);
@@ -795,9 +805,17 @@
   // at the material class (rfc/evidence-value-authority.md §3.4).
   let endgameSentences = $derived(endgame === null ? [] : [...renderEndgameClassification(endgame), ...endgameSetupMatches(displayedNode.fen).map(renderEndgameSetupMatch)]);
   let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
-  let activePreset = $derived(presetDeclaration(workflowPreset));
-  let assistanceContext = $derived({ sessionKind: run.sessionKind, workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
+  let assistanceContext = $derived({ workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
+  let contextPolicy = $derived(workflowContextPolicy(activeAssistanceProfile));
+  let requestedPresetId = $derived(requestedPreset(preference, activeAssistanceProfile) ?? contextPolicy.defaultPreset);
+  let requestedConfig = $derived(requestedAssistanceConfig(activeAssistanceProfile, preference));
+  let requestedModuleSet = $derived(requestedModules(preference, requestedPresetId));
+  let offeredPresets = $derived(contextPolicy.allowedPresets.map(presetDeclaration));
+  let presetDisclosure = $derived(compiledAssistance === undefined ? undefined : compiledPresetDisclosure(compiledAssistance));
+  let presetPillLabel = $derived(presetDisclosure?.pillLabel ?? requestedPresetLabel(activeAssistanceProfile, preference));
+  let presetHeadline = $derived(presetDisclosure?.headline ?? (assistanceQueryState === "pending" ? "Confirming help for this run. Legal moves stay visible meanwhile." : "Help settings could not be confirmed, so only legal moves are shown."));
+  let presetSentences = $derived(presetDisclosure?.sentences ?? []);
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
   let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
@@ -812,24 +830,75 @@
     try { return globalThis.localStorage ?? undefined; } catch { return undefined; }
   }
 
+  /** Only the v2 key recompiles; a stale tab's legacy write cannot change the in-memory receipt. */
   function refreshAssistancePreference(event: StorageEvent): void {
-    if (event.key === null || event.key === assistanceKey(activeAssistanceProfile)) {
-      assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
-    }
-    if (event.key === null || event.key === workflowKey(activeAssistanceProfile)) {
-      workflowPreset = loadWorkflowPreset(activeAssistanceProfile, preferenceStorage());
+    if (event.key === null || event.key === workflowPreferenceKey(activeAssistanceProfile)) {
+      preference = loadWorkflowPreference(activeAssistanceProfile, preferenceStorage());
     }
   }
 
+  async function recompileAssistance(): Promise<void> {
+    const request = ++assistanceQuery;
+    const context = activeAssistanceProfile;
+    let requested: RequestedAssistanceV1;
+    try {
+      requested = compileAssistanceRequest({ contextHint: context, preference });
+    } catch {
+      compiledAssistance = undefined;
+      assistanceQueryState = "unavailable";
+      return;
+    }
+    if (onAssistanceQuery === undefined) {
+      compiledAssistance = undefined;
+      assistanceQueryState = "unavailable";
+      return;
+    }
+    assistanceQueryState = "pending";
+    try {
+      const finalized = await onAssistanceQuery(requested);
+      if (request !== assistanceQuery) return;
+      if (finalized.requestedDigest !== requested.requestDigest || finalized.context !== context) throw new TypeError("Assistance response answers a different request");
+      compiledAssistance = narrowBrowserChannels(finalized, browserChannelReceipt(request, speechAvailable ? { state: "available" } : { state: "unavailable", reason: "no_browser_voice" }));
+      assistanceQueryState = "ready";
+    } catch {
+      if (request !== assistanceQuery) return;
+      compiledAssistance = undefined;
+      assistanceQueryState = "unavailable";
+    }
+  }
+
+  function commitPreference(next: WorkflowPreferenceV2): void {
+    preference = next.intent;
+    preferenceUnsaved = !saveWorkflowPreference(activeAssistanceProfile, next, preferenceStorage());
+  }
+
+  function choosePreset(preset: PresetId): void {
+    commitPreference(selectNamedPreset(activeAssistanceProfile, preference, preset));
+    assistanceMenuOpen = false;
+  }
+
+  /** Advanced: every changed raw field becomes a sparse explicit override (criterion 18). */
   function setAssistanceConfig(value: AssistanceConfig): void {
-    const markersClosed = assistance.markers === "live" && value.markers === "off";
-    assistance = value;
-    saveAssistance(activeAssistanceProfile, value, preferenceStorage());
-    if (markersClosed) {
+    let receipt: WorkflowPreferenceReceipt = preference;
+    let next: WorkflowPreferenceV2 | undefined;
+    for (const field of ASSISTANCE_PREFERENCE_FIELDS) {
+      if (value[field] === requestedConfig[field]) continue;
+      next = setPreferenceField(activeAssistanceProfile, receipt, field, value[field]);
+      receipt = next.intent;
+    }
+    if (next !== undefined) commitPreference(next);
+  }
+
+  function setAssistanceModule(moduleId: ConfigurableModuleId, enabled: boolean): void {
+    commitPreference(setPreferenceModule(activeAssistanceProfile, preference, moduleId, enabled));
+  }
+
+  $effect(() => {
+    if (assistance.markers === "off") {
       openPivotalNodeId = undefined;
       pivotalDialogOpen = false;
     }
-  }
+  });
 
   async function requestHumanSplit(): Promise<void> {
     if (onHumanSplit === undefined) return;
@@ -1509,8 +1578,6 @@
     globalThis.addEventListener("resize", measureViewport);
     globalThis.addEventListener("storage", refreshAssistancePreference);
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
-    assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
-    workflowPreset = loadWorkflowPreset(activeAssistanceProfile, preferenceStorage());
     try { const saved=globalThis.localStorage?.getItem(`tabiya:mark-scope:${run.id}`);if(saved==="branch")markScope="branch"; } catch { /* local preference only */ }
     try {
       const stored = JSON.parse(globalThis.localStorage?.getItem(`tabiya:branch-fold:v1:${run.id}`) ?? "[]");
@@ -1550,8 +1617,17 @@
   $effect(() => {
     if (loadedAssistanceProfile === activeAssistanceProfile) return;
     loadedAssistanceProfile = activeAssistanceProfile;
-    assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
-    workflowPreset = loadWorkflowPreset(activeAssistanceProfile, preferenceStorage());
+    preference = loadWorkflowPreference(activeAssistanceProfile, preferenceStorage());
+  });
+
+  // The server re-derives access; re-query whenever an access input or the receipt changes.
+  let assistanceAccessKey = $derived(`${run.id}|${activeAssistanceProfile}|${feedbackDeliveryOpen(run)}|${viewerRole}|${seatedInContest}|${reviewing}|${JSON.stringify(preference)}`);
+  let queriedAccessKey: string | undefined;
+  $effect(() => {
+    const key = assistanceAccessKey;
+    if (key === queriedAccessKey) return;
+    queriedAccessKey = key;
+    void recompileAssistance();
   });
 
   $effect(() => {
@@ -1666,9 +1742,17 @@
       <div class="topbar-actions">
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
         <details class="assistance-control" bind:open={assistanceMenuOpen}>
-          <summary aria-label={`Support style: ${activePreset.label}`}><span class="preset-pill">{activePreset.label}</span></summary>
+          <summary aria-label={`Support style: ${presetPillLabel}`}><span class="preset-pill" data-preset-mode={compiledAssistance?.displayMode ?? "pending"}>{presetPillLabel}</span></summary>
           <div class="support-menu">
-            <p class="preset-menu-promise">{activePreset.promise}</p>
+            <p class="preset-menu-promise">{presetHeadline}</p>
+            <fieldset class="preset-options">
+              <legend>Help style</legend>
+              {#each offeredPresets as option (option.id)}
+                <label class="preset-option"><input type="radio" name={`help-style-${run.id}`} value={option.id} checked={compiledAssistance?.displayMode !== "custom" && preference.kind !== "migrated_snapshot" && requestedPresetId === option.id} onchange={() => choosePreset(option.id)} /><span><strong>{option.label}</strong><small>{option.promise}</small></span></label>
+              {/each}
+            </fieldset>
+            {#if compiledAssistance?.displayMode === "custom"}<p class="honest">Custom help is active. Choosing a style above replaces it; Advanced support controls keep it.</p>{/if}
+            {#if preferenceUnsaved}<p class="honest">This browser is not saving help settings, so this choice lasts only until you leave.</p>{/if}
             <p>Open the help available in this workflow. This does not reveal a move. Temporary position help must be opened explicitly and closes after your next move.</p>
             <button type="button" onclick={(event) => { assistanceMenuOpen = false; openAssistance(event); }}>Open support</button>
             <button type="button" onclick={openAdvancedSupport}>Advanced support controls</button>
@@ -1794,9 +1878,10 @@
 
         <div class="companion-scroll">
           <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
-            <footer class="preset-disclosure" aria-label="Active support promise">
-              <strong>{activePreset.label}</strong>
-              <span>{activePreset.promise}</span>
+            <footer class="preset-disclosure" aria-label="Active support promise" data-preset-state={assistanceQueryState}>
+              <strong>{presetPillLabel}</strong>
+              <span>{presetHeadline}</span>
+              {#if presetSentences.length > 0}<ul class="preset-suppressions">{#each presetSentences as sentence}<li>{sentence}</li>{/each}</ul>{/if}
             </footer>
             {#if guide}
               <section class="rehearsal-guide" aria-labelledby="rehearsal-guide-title">
@@ -2106,7 +2191,7 @@
           <p class="honest">These controls change individual evidence channels. Ordinary play uses the workflow's support defaults.</p>
           <div class="assistance-grid">
             <AssistanceControlFields
-              config={assistance}
+              config={requestedConfig}
               permissions={assistancePermission}
               {capabilities}
               lockedReasonId="advanced-support-locked"
@@ -2121,6 +2206,15 @@
             {#if capabilities?.providers.llm !== "external"}<span id="advanced-support-external-voice-unavailable" class="honest">External voice is unavailable from this deployment.</span>{/if}
             {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
+          <fieldset class="module-toggles" aria-describedby="advanced-module-note">
+            <legend>Help modules</legend>
+            <p id="advanced-module-note" class="honest">Starting from {presetDeclaration(requestedPresetId).label}. Adding or removing a module makes this workflow's help Custom; legal moves always stay.</p>
+            <p id="advanced-module-ceiling" class="honest">Modules this workflow never shows are unavailable here.</p>
+            {#each CONFIGURABLE_MODULE_IDS as moduleId (moduleId)}
+              {@const admitted = contextPolicy.moduleCeiling.includes(moduleId)}
+              <label><input type="checkbox" checked={requestedModuleSet.includes(moduleId)} disabled={!admitted} aria-describedby={admitted ? undefined : "advanced-module-ceiling"} onchange={(event) => setAssistanceModule(moduleId, event.currentTarget.checked)} /> {MODULE_LABELS[moduleId]}</label>
+            {/each}
+          </fieldset>
         </section>
         <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
           <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Position structure</button>
@@ -2524,6 +2618,15 @@
   .preset-disclosure strong { color:var(--accent); font-size:.72rem; }
   .preset-disclosure span { min-width:0; color:var(--muted); font-size:.72rem; line-height:1.35; }
   .assistance-grid { display:grid; gap:.55rem; }
+  .module-toggles { display:grid; gap:.35rem; margin:.75rem 0 0; padding:.6rem; border:1px solid var(--line); border-radius:.6rem; }
+  .module-toggles legend { font-weight:700; font-size:.78rem; }
+  .module-toggles .honest { color:var(--muted); font-size:.68rem; }
+  .preset-options { display:grid; gap:.35rem; margin:0; padding:0 0 .45rem; border:0; border-bottom:1px solid var(--line); }
+  .preset-options legend { padding:0; font-weight:700; font-size:.72rem; }
+  .preset-option { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.45rem; align-items:start; min-height:24px; }
+  .preset-option span { display:grid; gap:.1rem; }
+  .preset-option small { color:var(--muted); font-size:.68rem; line-height:1.3; }
+  .preset-suppressions { grid-column:1 / -1; margin:.2rem 0 0; padding-left:1rem; color:var(--muted); font-size:.72rem; line-height:1.35; }
   .assistance-grid .honest { color:var(--muted); font-size:.68rem; }
   .guidance-panel { max-height:min(38rem,calc(100dvh - 2rem)); overflow:auto; }
   .guidance-sentence { color:var(--ink)!important; font:400 .85rem/1.45 var(--display-font)!important; text-transform:none!important; }

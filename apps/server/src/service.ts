@@ -1205,6 +1205,18 @@ export class RunService {
     });
   }
 
+  /** rfc/intent-presets.md §5.1: the server re-derives context and access; it never trusts the client's. */
+  assistanceAuthority(runId: string, principal: Principal) {
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    const run = stored.run;
+    const session = this.#storage.liveSessionByRun?.(runId);
+    const assistance = this.#assistanceContext(runId, principal, run, role);
+    return Object.freeze({
+      origin: Object.freeze({ kind: "run" as const, sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, ...(session === undefined ? {} : { liveKind: session.kind }) }),
+      access: Object.freeze({ deliveryOpen: feedbackDeliveryOpen(run), role, seatedInContest: assistance.seatedInContest, reviewing: assistance.reviewing }),
+    });
+  }
+
   guidanceAccess(runId: string, principal: Principal, nodeId: string): GuidanceAccess {
     this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
@@ -1314,7 +1326,6 @@ export class RunService {
       ));
     } else {
       const permission = permittedAssistance({
-        sessionKind: stored.run.sessionKind,
         deliveryOpen: feedbackDeliveryOpen(stored.run),
         role,
         ...this.#assistanceContext(runId, principal, stored.run, role),
@@ -1941,7 +1952,6 @@ export class RunService {
       return Object.freeze({ results: Object.freeze([]), nextSeq: sinceSeq });
     }
     const permission = permittedAssistance({
-      sessionKind: run.sessionKind,
       deliveryOpen: true,
       role,
       ...this.#assistanceContext(runId, principal, run, role),

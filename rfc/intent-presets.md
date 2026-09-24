@@ -1,6 +1,14 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** draft — **third author repair complete 2026-08-30 on [[D2171]]–[[D2178]];
+- **Status:** implementing — **Checkpoint A landed 2026-09-24 by owner direction (implement
+  directly, no review rounds).** The literal §4a/§3.2 tables are re-derived at import time; the ∩ algebra
+  runs through the four typed, digest-bound stages; the lossless v2 receipt is the only writer;
+  `POST /runs/:id/assistance` is the server seat; and the Play pill, footer, Settings and Advanced
+  surfaces render the compiled result. Checkpoint B (a real `compiled.modules` delivery, D5), the sealed
+  module source graph (module-registration still draft, so finalization records
+  `MODULE_AUTHORITY_NOT_ACCEPTED`), executable Campaign (D6) and the owner's D1639 ruling (proposed
+  hint table used) remain open. Receipt: `planning/intent-presets/checkpoint-a-implementation-2026-09-24.md`.
+  *Prior status for history:* draft — **third author repair complete 2026-08-30 on [[D2171]]–[[D2178]];
   dependency-blocked before another fresh review.** One four-stage typed pipeline replaces the
   monolith; v2 persists its intent arm losslessly; named preset selection clears Custom module
   deltas; browser readiness has one post-server receipt; `rules_floor` is unconfigurable; and
@@ -395,8 +403,8 @@ mismatch is a diff, not a search:
 | `imported` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
 | `match` | `locked_off` | `locked_off` | `locked_off` | `locked_off` | `locked_off` | `locked_off` | **`legal`** | `locked_off` | `locked_off` |
 | `stream` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
-| `academy` | `free` | `free` | **`locked_off`** | `free` | `free` | `free` | **`sight`** | **`sight`** | `free` |
-| `onramp` | `free` | `free` | **`locked_off`** | `free` | `free` | `free` | **`sight`** | **`sight`** | `free` |
+| `academy` | `free` | `free` | **`locked_off`** | **`locked_off`** | `free` | `free` | **`sight`** | **`sight`** | `free` |
+| `onramp` | `free` | `free` | **`locked_off`** | **`locked_off`** | `free` | `free` | **`sight`** | **`sight`** | `free` |
 | `campaign` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
 
 **Every cell is derived, and here is the derivation** — one rule, applied to the shipped
@@ -413,7 +421,7 @@ The field-to-module bindings the rule reads, each grounded in a shipped consumer
 | `markers` | any module that renders without a learner request at post-commit or review — `postcommit_nudge`, `structure_nudge`, `review_map` | `DrillScreen.svelte:384` (`projectedPivotal` ← `liveMarkers`) |
 | `guided` | `structure_nudge` (the named-shape module, `answerCeiling: pattern`) | `DrillScreen.svelte:282,1140` (shape firings) |
 | `humanSplit` | `full_inspector` — the raw human-model split is inspector content, [[D619]]'s *"explicit analysis inspector for raw evidence/providers"* | `DrillScreen.svelte:851-854,1148` |
-| `corpus` | `theory_breadcrumb` (accepts `human.explorer.population@1`, `learner-modules.md` §4.7) or `full_inspector` | `DrillScreen.svelte:855-857` |
+| `corpus` | `full_inspector` only (**corrected 2026-09-24**: `theory_breadcrumb` renders one cited pointer and is not the raw-counts switch — §4a and the §5 adapter already said so) | `DrillScreen.svelte:855-857` |
 | `voice` | **provider-channel field, not module-driven** (see the split below) — clamped `free` wherever the ceiling admits any content-bearing module, and to its floor where it admits none | `DrillScreen.svelte:1167` |
 | `spoken` | **provider-channel field, not module-driven** — same rule; clamping it where content exists would be an accessibility clamp with no honesty gain | `DrillScreen.svelte:432-442` |
 | `boardLighting` | `legal` from `rules_floor` always; `sight` from any module with `maxMarks > 0`; `evidence` from `full_inspector` | `DrillScreen.svelte:380,978` |
@@ -428,7 +436,7 @@ Working the rule against the eight shipped ceilings gives exactly the table abov
   `board_adjacent` sentence with `maxMarks: 1`, `maxArrows: 0`, already covered by `sight`. Which
   is the honest reading of the Support ceiling: it is a *module* restriction, and the nine legacy
   fields cannot express it. The `allowedPresets` refusal is what enforces it, not the clamp.)
-- `academy` and `onramp` exclude `full_inspector`, so `humanSplit` locks off and both lit-board
+- `academy` and `onramp` exclude `full_inspector`, so `humanSplit` and `corpus` lock off (corpus corrected 2026-09-24) and both lit-board
   fields stop at `sight`. `onramp` additionally excludes `review_map`, which changes no field
   (`markers` still has `postcommit_nudge`/`structure_nudge`; `arrows` still has
   `threat_radar`/`compare_coach`).
@@ -471,7 +479,7 @@ table of this section, with `boardLighting`'s `["legal", T]` range semantics app
 minimum so the floor cannot be minimised away. Criterion 5's non-vacuity is now *computable*
 rather than hoped for: against the HEAD body under a permissive access (`solo`,
 `deliveryOpen: true`, not seated), the composed function differs for `match` (nine fields),
-`academy` (three fields) and `onramp` (three fields), and agrees for the other five — which is
+`academy` (four fields, corrected 2026-09-24 from three) and `onramp` (four fields), and agrees for the other five — which is
 correct, because those five carry the full ceiling.
 
 **`AssistanceContext.sessionKind` is removed at this landing.** With `workflowContext` read,
@@ -627,7 +635,7 @@ export type SuppressionRecord =
   | { readonly kind: "field"; readonly field: AssistancePreferenceField;
       readonly requested: AssistancePreferenceFields[AssistancePreferenceField];
       readonly effective: AssistancePreferenceFields[AssistancePreferenceField];
-      readonly by: "context_ceiling" | "access" | "stored_choice" | "browser_channel";
+      readonly by: "context_ceiling" | "access" | "stored_choice" | "source_availability" | "browser_channel";
       readonly reason: SuppressionReason }
   | { readonly kind: "effect"; readonly effectId: CompiledAssistanceEffectId;
       readonly moduleId: ModuleId; readonly requested: "enabled"; readonly effective: "disabled";
@@ -704,7 +712,7 @@ effects, not a second authority. The closed adapter is:
 | field | exact governed effect |
 |---|---|
 | `markers` | automatic `post_commit`/`review` delivery of `postcommit_nudge`, `structure_nudge`, `review_map` |
-| `guided` | named-pattern delivery of `structure_nudge` and staged `guided_hint` |
+| `guided` | named-pattern delivery of `structure_nudge` (**corrected 2026-09-24**: not staged `guided_hint` — Support carries `guided_hint` and projects `guided: "off"`, so the drafted row deleted Support's own hint; the staged hint is governed by module membership and the D1639 hint ceiling) |
 | `humanSplit` | `full_inspector`'s `human_split` sub-surface, on request |
 | `corpus` | `full_inspector`'s raw-corpus sub-surface, on request; it never suppresses the separately rendered cited `theory_breadcrumb` |
 | `voice` | renderer selection (`authored` or `persona`) over an already-admitted rendered item; it admits no module |
@@ -1352,6 +1360,35 @@ named in its own text, never this list.
 
 ## Changelog
 
+- 2026-09-24 (**Checkpoint A implementation**, owner-directed, no review round): runtime `presets.ts`
+  carries the literal projection/clamp tables plus their import-time re-derivation, the v2 parser,
+  serializer and selection helpers. `assistance.ts` adds `"legal"`, `accessPermission` and the composed
+  `permittedAssistance`, and drops `AssistanceContext.sessionKind`. New `assistance-exchange.ts` holds
+  the four stages, suppressions, renderers, effect adapter and D1639 hint ceiling. The server exposes
+  `POST /runs/:id/assistance`. The web client drops every v1 writer and `PROFILE_DEFAULTS`; its pill,
+  footer, Settings and Advanced surfaces read the compiled result. **Inline corrections of genuine
+  defects:**
+  **(1)** the §3.2 binding table let `theory_breadcrumb` drive `corpus`, contradicting §4a and the §5
+  adapter. `academy`/`onramp` corpus is now `locked_off`, and criterion 5's before/after count is four
+  fields there, not three.
+  **(2)** The §5 adapter let `guided` govern staged `guided_hint`, but Support carries `guided_hint`
+  and projects `guided: "off"`. That would have deleted Support's own hint; `guided` now governs
+  `structure_nudge` only.
+  **(3)** §5.3's voice/spoken availability fallbacks had no `by` in the field arm;
+  `"source_availability"` is added.
+  **(4)** Criterion 4 fixture A requires an explicit off that equals the current projection to be
+  recorded. Advanced therefore records explicit values even when equal. Named selection keeps explicit
+  overrides no higher than the new projection, and only strictly lower values from a migrated snapshot.
+  **(5)** An `unset` with no legacy input is exact and is not written, so a read-only visit writes no
+  local bytes.
+  **(6)** The four stage functions live in `packages/runtime/src/assistance-exchange.ts`, not
+  `presets.ts` (§5.1): `assistance.ts` reads `contextClamp` from `presets.ts`, so the stages there
+  would form a value-import cycle. The barrel export is unchanged.
+  **(7)** A v1 workflow key naming a preset the context refuses migrates to `invalid_fallback`, not a
+  silent default.
+  **Findings kept as tests, not changed:** the match clamp has no terminal arm (§3 says
+  "pre-terminal"); D1639's proposed hint table is used and marked proposed; the module presentation
+  facts are a transcribed stand-in pending module-registration's sealed registry.
 - 2026-08-30 (**third author repair [[D2171]]–[[D2178]]**): replaced the conflicting compiler
   APIs with one four-stage discriminated/digest-correlated pipeline; made v2 intent lossless;
   made named preset selection literal; removed browser readiness from the server request; excluded

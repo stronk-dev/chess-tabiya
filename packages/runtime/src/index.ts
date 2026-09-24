@@ -82,8 +82,27 @@ export {
   type ModuleTiming,
   type ModuleTimingDeclaration,
 } from "./module-contract.js";
-export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
-export { PRESET_CONTRACT_ERROR_CODES, PRESET_DECLARATIONS, PRESET_IDS, WORKFLOW_CONTEXT_POLICIES, WORKFLOW_CONTEXTS, PresetContractError, assertPresetFoundation, deriveWorkflowContext, presetDeclaration, workflowContextPolicy, type PresetContractErrorCode, type PresetDeclaration, type PresetId, type WorkflowContextId, type WorkflowContextPolicy } from "./presets.js";
+export { SILENT_ASSISTANCE, accessPermission, permittedAssistance, reviewingGrant, type AssistanceAccess, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
+export {
+  ASSISTANCE_FIELD_DOMAINS, ASSISTANCE_PREFERENCE_FIELDS, CLAMP_TOKENS, CONFIGURABLE_MODULE_IDS, EMPTY_MODULE_OVERRIDES, HINT_CEILING_TABLE, HINT_RUNGS,
+  MODULE_PRESENTATION_FACTS, MODULE_PRESENTATION_SOURCE, PRESET_CONTRACT_ERROR_CODES, PRESET_DECLARATIONS, PRESET_IDS, WORKFLOW_CONTEXT_POLICIES, WORKFLOW_CONTEXTS,
+  PreferenceParseError, PresetContractError, PresetRefusalError, assertPresetFoundation, clampFieldValue, contextClamp, deriveContextClamp, deriveModuleFieldCeiling,
+  derivePresetProjection, deriveWorkflowContext, fieldRank, hintCeiling, parseWorkflowPreferenceV2, permissionCeiling, permissionToken, pointwiseMin, preferenceDisplayMode,
+  preferenceReceipt, presetDeclaration, requestedAssistanceFields, requestedModules, requestedPreset, selectNamedPreset, serializeWorkflowPreferenceV2, setPreferenceField,
+  setPreferenceModule, workflowContextPolicy,
+  type AssistancePreferenceField, type AssistancePreferenceFields, type ConfigClamp, type ConfigurableModuleId, type ContextContract, type CustomModuleOverrides, type FieldValue,
+  type HintRung, type ModulePresentationFacts, type OrdinaryWorkflowContextId, type OrdinaryWorkflowContextOrigin, type PresetContractErrorCode, type PresetDeclaration, type PresetId,
+  type WorkflowContextId, type WorkflowContextPolicy, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2,
+} from "./presets.js";
+export {
+  ASSISTANCE_EXCHANGE_ERROR_CODES, ASSISTANCE_FIELD_EFFECT_ADAPTER, ASSISTANCE_FIELD_LABELS, CONTEXT_PHRASES, MODULE_EFFECT_CATALOG, MODULE_LABELS, MODULE_SOURCE_AUTHORITY,
+  SERVER_EVIDENCE_SOURCES, SUPPRESSION_REASONS, SUPPRESSION_RENDERERS, AssistanceExchangeError, assistanceDigest, browserChannelReceipt, compileAssistanceRequest,
+  compileAuthoritativeAssistance, compiledPresetDisclosure, effectSourceDependencies, finalizeAssistanceEffects, narrowBrowserChannels, parseFinalizedAssistanceV1,
+  parseRequestedAssistanceV1, renderSuppression, serverAvailabilityFromProviders, sha256Hex,
+  type AssistanceDigest, type AssistanceExchangeErrorCode, type AuthoritativeAssistanceV1, type AvailabilityState, type BrowserChannelReceiptV1, type BrowserNarrowedAssistanceV1,
+  type CompiledAssistanceEffect, type FieldAdapterEntry, type FinalizedAssistanceV1, type HintCeilingReceipt, type LocalPreferenceInput, type ModuleSourceAuthority,
+  type RequestedAssistanceV1, type SealedModuleSourceReceipts, type ServerAssistanceAuthority, type ServerEvidenceAvailabilityReceipt, type SuppressionReason, type SuppressionRecord,
+} from "./assistance-exchange.js";
 export { CAMPAIGN_ACT_IDS, CampaignModuleError, assertCampaignUnlockAllowed, campaignModuleInventory, effectiveCampaignModules, isUnlockableModuleId, type CampaignAct, type CampaignActId, type CampaignDocument, type CampaignEconomy, type CampaignLayer, type CampaignNode, type CampaignNodeReward, type UnlockableModuleId } from "./campaign-contract.js";
 export { CampaignStateError, campaignRunState, prestigeEligible, type CampaignChargeEarnedEvent, type CampaignChargeSpentEvent, type CampaignCursor, type CampaignEvent, type CampaignModuleUnlockedEvent, type CampaignNodeEnteredEvent, type CampaignNodeSeal, type CampaignNodeSealedEvent, type CampaignNodeVerdict, type CampaignRunState, type CampaignStateErrorCode } from "./campaign-state.js";
 export { PIVOTAL_MARKER_ROUTES, consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkerEvidenceItems, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";

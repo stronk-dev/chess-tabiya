@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. Same-day checkpoints move the individual evidence switches behind Advanced and make related-rehearsal chrome resolve a human title plus legal SAN instead of pack-id/UCI internals. The 2026-09-08 preset-identity checkpoint makes the selected help style and its exact declared promise visible without claiming that the still-draft preset compiler is active. The 2026-09-12 vocabulary checkpoint removes evidence-pipeline language from ordinary Support, consequence, terminal and classroom-sharing actions while retaining exact attribution in Advanced Inspector. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, preset-driven activation/defaults, remaining compiled-family vocabulary and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
+- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. Same-day checkpoints move the individual evidence switches behind Advanced and make related-rehearsal chrome resolve a human title plus legal SAN instead of pack-id/UCI internals. The 2026-09-08 preset-identity checkpoint makes the selected help style and its exact declared promise visible without claiming that the still-draft preset compiler is active. The 2026-09-12 vocabulary checkpoint removes evidence-pipeline language from ordinary Support, consequence, terminal and classroom-sharing actions while retaining exact attribution in Advanced Inspector. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. The 2026-09-24 preset-activation checkpoint (intent-presets Checkpoint A) makes the pill offer exactly the context's allowed presets and applies the server-compiled defaults, with the primitives and a module include/exclude list under Advanced. Module seats/badges, remaining compiled-family vocabulary and the five module-dependent columns of the 7×16 matrix (states 3, 5, 6, 9 and 13, which need real module emitters from module-registration) remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
@@ -738,6 +738,17 @@ document's to rewrite). Rows proposed by the cross-review, from head+1, NOT writ
 
 ## Changelog
 
+- 2026-09-24: preset-activation checkpoint, landed with `rfc/intent-presets.md` Checkpoint A. The
+  topbar pill's menu offers exactly `allowedPresets` for the run's workflow context as a radio group.
+  Choosing one writes the v2 preference and re-queries `POST /runs/:id/assistance`, so the default
+  config really changes: Guide me turns on the ambient opener, markers, named-pattern guidance and lit
+  sight, where Quiet shows none. The pill reads **Custom** when Advanced raises a field or changes a
+  module, and the footer states typed suppressions instead of a promise the config would not keep.
+  Advanced keeps the nine switches and adds a ten-module include/exclude list. Settings becomes one
+  help-style select per context with the 72 primitives under a collapsed Advanced disclosure. The
+  7×16 geometry matrix is unchanged; state 7 now opens the preset radio menu. **Not claimed:** states
+  3, 5, 6, 9 and 13 still need real module emitters and seats (module-registration draft; Checkpoint
+  B of intent-presets).
 - 2026-09-08: preset-identity checkpoint. The run topbar shows the per-workflow selected help
   style as a learner-facing pill, and Support begins with the exact
   `presetDeclaration(preset).promise` sentence. It follows both initial persisted state and storage

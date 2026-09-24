@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { permittedAssistance, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type RunSessionKind } from "@chess-tabiya/runtime";
+  import { ASSISTANCE_PREFERENCE_FIELDS, CONFIGURABLE_MODULE_IDS, MODULE_LABELS, permittedAssistance, preferenceDisplayMode, presetDeclaration, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type ConfigurableModuleId, type PresetId, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
   import { onDestroy, onMount } from "svelte";
 
   import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
-  import { ASSISTANCE_PROFILES, loadAssistance, saveAssistance, type AssistanceProfile } from "./assistance-preference.js";
+  import { ASSISTANCE_PROFILES, loadWorkflowPreference, requestedAssistanceConfig, saveWorkflowPreference, type AssistanceProfile } from "./assistance-preference.js";
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import { assertAccountDeletionPreview } from "./account-deletion-preview.js";
@@ -20,7 +20,8 @@
 
   let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview, plannedSurfaceIds = [] }: Props = $props();
   const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp", campaign: "Campaign" };
-  let configs: Record<AssistanceProfile, AssistanceConfig> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadAssistance(profile, storage())])) as Record<AssistanceProfile, AssistanceConfig>);
+  let receipts: Record<AssistanceProfile, WorkflowPreferenceReceipt> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadWorkflowPreference(profile, storage())])) as Record<AssistanceProfile, WorkflowPreferenceReceipt>);
+  let unsaved = $state(false);
   let password = $state("");
   let exportPassword = $state("");
   let exportStatus = $state<string | undefined>();
@@ -61,14 +62,8 @@
   });
 
   function storage(): Storage | undefined { try { return globalThis.localStorage; } catch { return undefined; } }
-  function profileSessionKind(kind: AssistanceProfile): RunSessionKind {
-    if (kind === "position") return "position";
-    if (kind === "imported" || kind === "match" || kind === "stream") return "imported";
-    return "pack";
-  }
   function profilePermissions(kind: AssistanceProfile): Readonly<Record<keyof Omit<AssistanceConfig, "version">, AssistancePermission>> {
     return permittedAssistance({
-      sessionKind: profileSessionKind(kind),
       workflowContext: kind,
       deliveryOpen: true,
       role: kind === "match" ? "participant" : "solo",
@@ -81,9 +76,34 @@
       ? "Match play permits legal board interaction only. These saved support preferences do not apply during a match."
       : undefined;
   }
+  // rfc/intent-presets.md §7: the ordinary view is the per-context help style; the nine raw
+  // switches and the module include/exclude list stay reachable under Advanced.
+  function commit(kind: AssistanceProfile, next: WorkflowPreferenceV2): void {
+    receipts = { ...receipts, [kind]: next.intent };
+    unsaved = !saveWorkflowPreference(kind, next, storage());
+  }
+  function choosePreset(kind: AssistanceProfile, preset: PresetId): void {
+    commit(kind, selectNamedPreset(kind, receipts[kind], preset));
+  }
   function set(kind: AssistanceProfile, value: AssistanceConfig): void {
-    configs = { ...configs, [kind]: value };
-    saveAssistance(kind, value, storage());
+    const current = requestedAssistanceConfig(kind, receipts[kind]);
+    let receipt = receipts[kind];
+    let next: WorkflowPreferenceV2 | undefined;
+    for (const field of ASSISTANCE_PREFERENCE_FIELDS) {
+      if (value[field] === current[field]) continue;
+      next = setPreferenceField(kind, receipt, field, value[field]);
+      receipt = next.intent;
+    }
+    if (next !== undefined) commit(kind, next);
+  }
+  function setModule(kind: AssistanceProfile, moduleId: ConfigurableModuleId, enabled: boolean): void {
+    commit(kind, setPreferenceModule(kind, receipts[kind], moduleId, enabled));
+  }
+  function activePreset(kind: AssistanceProfile): PresetId {
+    return requestedPreset(receipts[kind], kind) ?? workflowContextPolicy(kind).defaultPreset;
+  }
+  function custom(kind: AssistanceProfile): boolean {
+    return preferenceDisplayMode(receipts[kind], activePreset(kind)) === "custom";
   }
   async function removeAccount(): Promise<void> {
     if (deleteBusy) return;
@@ -172,22 +192,46 @@
 <section id="playing-settings" aria-labelledby="assistance-settings-title">
   <h2 id="assistance-settings-title">Playing</h2>
   <p class="honest">Saved in this browser only. Deployment providers are controlled by the server environment.</p>
+  {#if unsaved}<p class="honest" role="status">This browser is not saving help settings, so these choices last only until you leave.</p>{/if}
   <div class="context-grid">
     {#each ASSISTANCE_PROFILES as kind}
       {@const refusal = profileRefusal(kind)}
       {@const permissions = profilePermissions(kind)}
-      <fieldset>
+      {@const policy = workflowContextPolicy(kind)}
+      {@const selected = activePreset(kind)}
+      {@const isCustom = custom(kind)}
+      {@const modules = requestedModules(receipts[kind], selected)}
+      <fieldset data-assistance-context={kind}>
         <legend>{labels[kind]}</legend>
         {#if refusal}<p id={`assistance-profile-refusal-${kind}`} class="honest">{refusal}</p>{/if}
-        <AssistanceControlFields
-          config={configs[kind]}
-          {permissions}
-          {capabilities}
-          disabled={refusal !== undefined}
-          describedBy={refusal ? `assistance-profile-refusal-${kind}` : undefined}
-          externalVoiceReasonId="external-voice-unavailable"
-          onChange={(value) => set(kind, value)}
-        />
+        {#if kind === "campaign"}<p class="honest">Campaign encounters are not separate yet; this choice is kept for when they are.</p>{/if}
+        <label>Help style
+          <select value={isCustom ? "custom" : selected} disabled={refusal !== undefined} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => choosePreset(kind, event.currentTarget.value as PresetId)}>
+            {#if isCustom}<option value="custom" disabled aria-describedby={`custom-help-${kind}`}>Custom (from {presetDeclaration(selected).label})</option>{/if}
+            {#each policy.allowedPresets as preset}<option value={preset}>{presetDeclaration(preset).label}</option>{/each}
+          </select>
+        </label>
+        <p id={`custom-help-${kind}`} class="honest">{isCustom ? "Custom help. Choosing a style replaces it." : presetDeclaration(selected).promise}</p>
+        <details class="advanced-assistance">
+          <summary>Advanced</summary>
+          <AssistanceControlFields
+            config={requestedAssistanceConfig(kind, receipts[kind])}
+            {permissions}
+            {capabilities}
+            disabled={refusal !== undefined}
+            describedBy={refusal ? `assistance-profile-refusal-${kind}` : undefined}
+            externalVoiceReasonId="external-voice-unavailable"
+            onChange={(value) => set(kind, value)}
+          />
+          <fieldset class="module-toggles">
+            <legend>Help modules</legend>
+            <p id={`module-ceiling-${kind}`} class="honest">Modules this workflow never shows stay unavailable; legal moves always stay.</p>
+            {#each CONFIGURABLE_MODULE_IDS as moduleId (moduleId)}
+              {@const admitted = policy.moduleCeiling.includes(moduleId)}
+              <label><span><input type="checkbox" checked={modules.includes(moduleId)} disabled={!admitted || refusal !== undefined} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : admitted ? undefined : `module-ceiling-${kind}`} onchange={(event) => setModule(kind, moduleId, event.currentTarget.checked)} /> {MODULE_LABELS[moduleId]}</span></label>
+            {/each}
+          </fieldset>
+        </details>
       </fieldset>
     {/each}
   </div>
@@ -258,5 +302,5 @@
 </section>
 
 <style>
-  section{margin:2rem 0}.data-summary{max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.data-summary h4{margin-bottom:.35rem}.data-summary ul{margin-top:0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.technical-details{margin-top:1rem}.technical-details summary{cursor:pointer;font-weight:700}.honest{color:var(--muted);font-size:.8rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}
+  section{margin:2rem 0}.data-summary{max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.data-summary h4{margin-bottom:.35rem}.data-summary ul{margin-top:0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.technical-details{margin-top:1rem}.technical-details summary{cursor:pointer;font-weight:700}.honest{color:var(--muted);font-size:.8rem}.advanced-assistance{display:grid;gap:.5rem}.advanced-assistance summary{cursor:pointer;font-weight:700}.module-toggles{padding:.6rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}
 </style>

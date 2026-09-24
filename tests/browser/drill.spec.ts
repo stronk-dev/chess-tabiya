@@ -449,6 +449,42 @@ test("Just Play states its selected human-model rung and low-material limit", as
   await expect(page.locator("[data-status-announcement]")).toContainText("Human-like opponent · rung 1800");
 });
 
+test("choosing a help style activates its modules through the server compiler and persists (rfc/intent-presets.md)", async ({ page }) => {
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const footer = page.getByLabel("Active support promise");
+  await expect(footer).toContainText("no chess guidance appears unless you ask");
+  await expect(page.getByRole("button", { name: "Open assistance" })).toHaveCount(0);
+  const calm = await page.getByLabel("Chessboard").boundingBox();
+
+  const compiled = page.waitForResponse((response) => response.url().endsWith("/assistance") && response.request().method() === "POST");
+  await page.locator("details.assistance-control summary").click();
+  await expect(page.locator(".preset-options input[type=radio]")).toHaveCount(5);
+  await page.getByRole("radio", { name: /Guide me/u }).check();
+  const body = await (await compiled).json() as { assistance: { stage: string; preset: string; modules: string[] } };
+  expect(body.assistance).toMatchObject({ stage: "finalized", preset: "guided" });
+  expect(body.assistance.modules).toEqual(expect.arrayContaining(["postcommit_nudge", "structure_nudge", "guided_hint"]));
+  await expect(page.locator("details.assistance-control summary")).toHaveAttribute("aria-label", "Support style: Guide me");
+  await expect(footer).toContainText("After you commit, a small consequence nudge");
+  await expect(page.getByRole("button", { name: "Open assistance" })).toBeVisible();
+  expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("tabiya.workflow.v2.position") ?? "null"))).toEqual({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+
+  // The primitives stay reachable: Advanced still edits every raw switch, and going above the preset is Custom.
+  await openAdvancedSupport(page);
+  await expect(page.getByLabel("Board lighting")).toHaveValue("sight");
+  await page.getByLabel("Board lighting").selectOption("evidence");
+  await page.getByRole("button", { name: "Return to play" }).click();
+  await expect(page.locator(".preset-pill")).toHaveText("Custom");
+
+  await page.reload();
+  await expect(page.locator(".preset-pill")).toHaveText("Custom");
+  await page.locator("details.assistance-control summary").click();
+  await page.getByRole("radio", { name: /Quiet/u }).check();
+  await expect(footer).toContainText("no chess guidance appears unless you ask");
+  await expect(page.getByRole("button", { name: "Open assistance" })).toHaveCount(0);
+});
+
 test("Just Play explicitly reveals evidence and the next move closes the window", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -2718,18 +2754,22 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   expect(await ambientLabel.evaluate((element) => getComputedStyle(element).display)).toBe("flex");
   expect(await ambientLabel.evaluate((element) => getComputedStyle(element).alignItems)).toBe("center");
   await expect(page).toHaveTitle("Settings · Tabiya");
+  await expect(position.getByLabel("Help style")).toHaveValue("quiet");
+  await position.locator("summary").filter({ hasText: "Advanced" }).click();
   await position.getByLabel("Board lighting").selectOption("sight");
   await page.reload();
+  await position.locator("summary").filter({ hasText: "Advanced" }).click();
   await expect(position.getByLabel("Board lighting")).toHaveValue("sight");
+  await expect(position.getByLabel("Help style")).toHaveValue("custom");
   await page.goto("/play");
   await expect(page).toHaveTitle("Play · Tabiya");
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page).toHaveTitle("Rehearsal · Tabiya");
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.evaluate(() => {
-    const key = "tabiya.assistance.v1.position";
-    const current = JSON.parse(localStorage.getItem(key) ?? "{}") as Record<string, unknown>;
-    localStorage.setItem(key, JSON.stringify({ ...current, ambient: "on" }));
+    const key = "tabiya.workflow.v2.position";
+    const current = JSON.parse(localStorage.getItem(key) ?? "{}") as { intent: { overrides: Record<string, unknown> } };
+    localStorage.setItem(key, JSON.stringify({ ...current, intent: { ...current.intent, overrides: { ...current.intent.overrides, ambient: "on" } } }));
     dispatchEvent(new StorageEvent("storage", { key }));
   });
   await expect(page.getByRole("button", { name: "Open assistance" })).toBeVisible();

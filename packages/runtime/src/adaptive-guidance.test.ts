@@ -86,7 +86,7 @@ describe("adaptive guidance runtime", () => {
     const quiet = commitMove(created("quiet", start), "g1f3", { at }).run;
     expect(pivotalMarkers(quiet, quiet.activeCursor.branchId).filter((item) => item.kind === "irreversibility")).toEqual([]);
 
-    const free = { sessionKind: "position" as const, workflowContext: "position" as const, deliveryOpen: true, role: "solo" as const, seatedInContest: false, reviewing: false };
+    const free = { workflowContext: "position" as const, deliveryOpen: true, role: "solo" as const, seatedInContest: false, reviewing: false };
     expect(liveMarkers(castle, castle.activeCursor.branchId, free).filter((item) => item.kind === "irreversibility")).toEqual([]);
     expect(liveMarkers(pawn, pawn.activeCursor.branchId, free).filter((item) => item.kind === "irreversibility")).toEqual([]);
     expect(liveMarkers(queen, queen.activeCursor.branchId, free).filter((item) => item.kind === "irreversibility")).toHaveLength(1);
@@ -108,10 +108,10 @@ describe("adaptive guidance runtime", () => {
     const markers = pivotalMarkers(run([start], [event]), "main").filter((item) => item.kind === "human_divergence");
     expect(markers).toHaveLength(1);
     expect(renderPivotalMarker(markers[0]!)[0]).toMatch(/Maia-1500.*31%.*24%.*19%.*recorded mass/);
-    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
-    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
-    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "participant", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
-    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "spectator", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
+    expect(liveMarkers(run([start], [event]), "main", { workflowContext: "position", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
+    expect(liveMarkers(run([start], [event]), "main", { workflowContext: "position", deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
+    expect(liveMarkers(run([start], [event]), "main", { workflowContext: "position", deliveryOpen: true, role: "participant", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
+    expect(liveMarkers(run([start], [event]), "main", { workflowContext: "position", deliveryOpen: true, role: "spectator", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
     expect(pivotalMarkers(run([start], [{ ...event, data: { ...event.data, selection: { ...selection, policyModeApplied: "strong_engine" as const } } }]), "main").filter((item) => item.kind === "human_divergence")).toEqual([]);
   });
 
@@ -132,8 +132,8 @@ describe("adaptive guidance runtime", () => {
     for (const [item] of fixtures) for (const banned of BANNED_JUDGEMENTS) {
       expect(renderPivotalMarker(item).join(" ").toLowerCase()).not.toMatch(new RegExp(`\\b${banned}\\b`, "u"));
     }
-    const free = permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "solo", seatedInContest: false, reviewing: false });
-    const locked = permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false });
+    const free = permittedAssistance({ workflowContext: "position", deliveryOpen: true, role: "solo", seatedInContest: false, reviewing: false });
+    const locked = permittedAssistance({ workflowContext: "position", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false });
     expect(fixtures.filter(([item]) => liveAdmitted(item, free)).map(([item]) => item.kind)).toEqual([
       "phase_change", "irreversibility", "irreversibility",
     ]);
@@ -144,12 +144,12 @@ describe("adaptive guidance runtime", () => {
 
   it("implements the assistance table with silence as the universal default", () => {
     expect(SILENT_ASSISTANCE).toEqual({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" });
-    expect(permittedAssistance({ sessionKind: "pack", workflowContext: "pack", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false }).humanSplit).toBe("locked_off");
-    expect(permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }).humanSplit).toBe("free");
-    expect(permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "participant", seatedInContest: false, reviewing: false }).humanSplit).toBe("locked_off");
-    expect(permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "spectator", seatedInContest: false, reviewing: false }).markers).toBe("free");
+    expect(permittedAssistance({ workflowContext: "pack", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false }).humanSplit).toBe("locked_off");
+    expect(permittedAssistance({ workflowContext: "position", deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }).humanSplit).toBe("free");
+    expect(permittedAssistance({ workflowContext: "position", deliveryOpen: true, role: "participant", seatedInContest: false, reviewing: false }).humanSplit).toBe("locked_off");
+    expect(permittedAssistance({ workflowContext: "position", deliveryOpen: true, role: "spectator", seatedInContest: false, reviewing: false }).markers).toBe("free");
     for (const role of ["solo", "host", "participant", "spectator"] as const) for (const deliveryOpen of [false, true]) {
-      expect(permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen, role, seatedInContest: false, reviewing: false }).corpus).toBe(deliveryOpen && (role === "solo" || role === "host") ? "free" : "locked_off");
+      expect(permittedAssistance({ workflowContext: "position", deliveryOpen, role, seatedInContest: false, reviewing: false }).corpus).toBe(deliveryOpen && (role === "solo" || role === "host") ? "free" : "locked_off");
     }
   });
 
@@ -160,8 +160,8 @@ describe("adaptive guidance runtime", () => {
     expect(reviewingGrant({ run: terminal, grantMintedBySubmission: true, liveSessionOpen: true })).toBe(false);
     expect(reviewingGrant({ run: run([start]), grantMintedBySubmission: true, liveSessionOpen: false })).toBe(false);
 
-    expect(permittedAssistance({ sessionKind: "pack", workflowContext: "pack", deliveryOpen: true, role: "spectator", seatedInContest: false, reviewing: true }).humanSplit).toBe("free");
-    expect(permittedAssistance({ sessionKind: "pack", workflowContext: "pack", deliveryOpen: true, role: "host", seatedInContest: true, reviewing: true }).humanSplit).toBe("locked_off");
+    expect(permittedAssistance({ workflowContext: "pack", deliveryOpen: true, role: "spectator", seatedInContest: false, reviewing: true }).humanSplit).toBe("free");
+    expect(permittedAssistance({ workflowContext: "pack", deliveryOpen: true, role: "host", seatedInContest: true, reviewing: true }).humanSplit).toBe("locked_off");
   });
 
   it("classifies endgame census families without any technique applicability claim", () => {

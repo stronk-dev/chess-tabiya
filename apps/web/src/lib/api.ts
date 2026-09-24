@@ -32,7 +32,10 @@ import type {
   BotProfileId,
   BotProfileReference,
   BotRosterBlocker,
+  FinalizedAssistanceV1,
+  RequestedAssistanceV1,
 } from "@chess-tabiya/runtime";
+import { parseFinalizedAssistanceV1 } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
@@ -966,6 +969,7 @@ export interface DrillClientApi extends RunApi {
   reasoningReview?(runId: string, checkpointEventSeq: number): Promise<ReasoningReviewPage>;
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
   corpus(runId: string, nodeId: string): Promise<CorpusPage>;
+  assistance?(runId: string, request: RequestedAssistanceV1): Promise<FinalizedAssistanceV1>;
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
   compareVoice(runId: string, branchIds: readonly string[]): Promise<VoicePage>;
   speech(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<Blob>;
@@ -1381,6 +1385,13 @@ export class DrillApi implements DrillClientApi {
   }
 
   corpus(runId: string, nodeId: string): Promise<CorpusPage> { return this.#json<unknown>(`/runs/${encoded(runId)}/corpus?nodeId=${encoded(nodeId)}`).then((value) => parseCorpusPage(value, nodeId)); }
+
+  assistance(runId: string, request: RequestedAssistanceV1): Promise<FinalizedAssistanceV1> {
+    return this.#json<unknown>(`/runs/${encoded(runId)}/assistance`, { method: "POST", body: request }).then((value) => {
+      if (value === null || typeof value !== "object" || !("assistance" in value)) throw new TypeError("Assistance response is malformed");
+      return parseFinalizedAssistanceV1((value as { readonly assistance: unknown }).assistance);
+    });
+  }
 
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
     return this.#json<unknown>(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } }).then((value) => parseVoicePage(value, scope));

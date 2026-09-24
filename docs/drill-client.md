@@ -172,7 +172,13 @@ Inspector and update the same profile immediately. They do not render as the ord
 The topbar names the workflow's selected help style rather than a provider or evidence channel.
 Its play status is likewise learner-facing: **Your move**, **Updating**, or **Watching** replace
 writer/follower protocol roles, and withheld authored material states when commentary opens.
-The first row of Support always repeats that style's exact declared promise—for example,
+The topbar menu offers exactly the context's allowed help styles as radios. Choosing one writes the
+v2 preference and re-queries the server compiler, so the default modules really change: for example,
+Guide me turns on the ambient opener, passive markers, named-pattern guidance and lit sight. The
+pill says **Custom** whenever Advanced raises a field above the style or adds or removes a module. The
+Advanced inspector keeps all nine raw switches plus a ten-module include/exclude list.
+The first row of Support repeats the compiled style's exact declared promise, or states each
+suppression when a context, access or source ceiling removes something—for example,
 **Theory only** states that it provides cited theory with no evaluation, candidates, or line.
 This makes intentional silence distinguishable from missing or broken analysis. The label and
 promise follow per-workflow preference changes; they do not move individual evidence controls out
