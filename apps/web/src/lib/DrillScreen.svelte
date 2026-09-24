@@ -1807,7 +1807,7 @@
       </p>
     {/if}
 
-    <div class="workspace" class:evidence-active={compactTab === "evidence"}>
+    <div class="workspace" class:evidence-active={compactTab === "evidence"} class:region-open={sheetOpen}>
       <section class="position-column" class:outcome={grading !== undefined || pack?.objective.type === "follow_theory"}>
         <div class="board-slot">
           <div class="board-frame" class:previewing={previewNodeId !== undefined} class:checkpoint-paused={checkpoint !== undefined}>
@@ -2938,7 +2938,14 @@
   .drill.compact .objective-line span, .drill.compact .objective-line small { color: var(--muted); font: 600 .58rem ui-monospace,monospace; text-transform: uppercase; }
   .drill.compact .objective-line strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .76rem; }
   .drill.compact .rail-stack { grid-row: 2; grid-template-rows: var(--rim-h) minmax(0,1fr); border: 0; border-top: 1px solid var(--line); }
-  .drill.compact .rail-stack.sheet-open { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; height: min(68dvh, 38rem); grid-template-rows: var(--rim-h) minmax(0,1fr); border-radius: 1rem 1rem 0 0; box-shadow: var(--shadow); }
+  /*
+   * D1566 / ux-accessibility-and-mobile.md §5 Q1: the phone shows the board plus one region, and the
+   * open region never covers the board. The board is pinned to the top of its column at rest, so
+   * opening a region only claims the space below the objective line and the board never moves.
+   */
+  .drill.compact .position-column { align-content: start; }
+  .drill.compact .workspace.region-open { grid-template-rows: auto minmax(0, 1fr); }
+  .drill.compact .rail-stack.sheet-open { position: relative; z-index: 20; min-height: 0; grid-template-rows: var(--rim-h) minmax(0,1fr); border-radius: 1rem 1rem 0 0; box-shadow: var(--shadow); background: var(--panel); }
   .drill.compact .companion-identity { display: none; }
   .drill.compact .compact-tabs { height: var(--rim-h); align-items: center; justify-content: center; padding: .3rem .5rem; border: 0; }
   .drill.compact .sheet-handle { position: absolute; top: .25rem; left: 50%; width: 2.5rem; height: .2rem; transform: translateX(-50%); border-radius: 999px; background: var(--line); }
@@ -2955,6 +2962,8 @@
     grid-template-rows: auto var(--rim-h);
     overflow: visible;
   }
+  .drill.reflow .workspace.region-open { grid-template-rows: auto auto; }
+  .drill.reflow .rail-stack.sheet-open { min-height: 22rem; }
   .drill.reflow .position-column {
     min-height: calc(var(--board-edge) + var(--strip-h) + var(--objective-h));
     overflow: visible;

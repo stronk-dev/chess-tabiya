@@ -254,7 +254,9 @@ evidence strips, and results rather than requiring a sideways hunt.
 Opening a compact run region turns the companion into a labelled modal drawer
 only at phone width. It takes focus when opened from outside, makes the board and
 shell inert, contains Tab in both directions, closes on Escape, and restores the
-exact region tab that opened it. At tablet and desktop widths the same element
+exact region tab that opened it. The drawer occupies only the space below the board, timeline
+strip and objective line: the board is pinned to the top of its column at rest, so opening a region
+neither moves nor covers it, and the phone shows the board plus exactly one region. At tablet and desktop widths the same element
 remains an ordinary companion landmark, so modal semantics never leak into the
 side-by-side composition.
 

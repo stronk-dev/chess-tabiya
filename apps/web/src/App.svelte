@@ -28,6 +28,7 @@
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
   import StatusAnnouncement from "./lib/StatusAnnouncement.svelte";
   import AppearanceSettings from "./lib/AppearanceSettings.svelte";
+  import AccessibilitySettings from "./lib/AccessibilitySettings.svelte";
   import DistillDraftForm from "./lib/DistillDraftForm.svelte";
   import PackProvenanceEditor from "./lib/PackProvenanceEditor.svelte";
   import ShapePlanSignatureEditor from "./lib/ShapePlanSignatureEditor.svelte";
@@ -3188,8 +3189,9 @@
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
       <p class="eyebrow">Preferences and account</p><h1 id="settings-title">Settings</h1>
-      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
+      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#accessibility-settings">Accessibility</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
       <AppearanceSettings />
+      <AccessibilitySettings />
       <AssistanceSettings {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} />
     </main>
   {:else if route.name === "not-found"}

@@ -1977,6 +1977,11 @@ test("@matrix play composition keeps one exact board rectangle through reachable
       await expect(page.locator(".companion-section:visible")).toHaveCount(1);
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
       if (viewport.width <= 719) {
+        // A11-b1 (D1566): the phone's one open region sits below the board and never covers it.
+        const sheet = await page.getByRole("dialog", { name: "Run companion" }).boundingBox();
+        expect(sheet).not.toBeNull();
+        expect(sheet!.y).toBeGreaterThanOrEqual(calm!.y + calm!.height - 0.5);
+        expect(sheet!.height).toBeGreaterThanOrEqual(160);
         await page.getByRole("button", { name: "Collapse companion" }).click();
       }
     }

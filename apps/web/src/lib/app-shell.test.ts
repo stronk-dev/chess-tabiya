@@ -1314,7 +1314,7 @@ describe("application shell", () => {
       expect(document.title).not.toBe("Tabiya");
       expectDisabledControlsExplained();
       if (path === "/settings") {
-        expect([...document.querySelectorAll(".settings-toc a")].map((link) => link.textContent)).toEqual(["Appearance", "Playing", "Account", "About"]);
+        expect([...document.querySelectorAll(".settings-toc a")].map((link) => link.textContent)).toEqual(["Appearance", "Accessibility", "Playing", "Account", "About"]);
         expect(document.querySelector("#about-deployment-title")?.textContent).toBe("About this deployment");
         expect(document.body.textContent).toContain("Human-like opponents");
         expect(document.body.textContent).toContain("Exact endgame results");

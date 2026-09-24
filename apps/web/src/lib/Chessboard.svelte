@@ -3,6 +3,7 @@
   import "@lichess-org/chessground/assets/chessground.cburnett.css";
   import "./theme/board-skins/brown.css";
   import "./theme/board-skins/olive.css";
+  import "./theme/board-skins/contrast.css";
   import "./theme/interaction-paint.css";
   import "./theme/piece-skins/mono.css";
 

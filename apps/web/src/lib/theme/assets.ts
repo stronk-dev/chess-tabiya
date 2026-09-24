@@ -25,6 +25,14 @@ export const THEME_ARTWORK_ASSETS: readonly ThemeArtworkAsset[] = Object.freeze(
     source: "LICENSE",
   }),
   Object.freeze({
+    id: "board.contrast",
+    file: "board-skins/contrast.css",
+    author: "Tabiya contributors",
+    license: "AGPL-3.0-or-later",
+    redistributionBasis: "Original high-contrast CSS board skin distributed with Tabiya.",
+    source: "LICENSE",
+  }),
+  Object.freeze({
     id: "pieces.cburnett",
     file: "@lichess-org/chessground/assets/chessground.cburnett.css",
     author: "Colin M.L. Burnett",
