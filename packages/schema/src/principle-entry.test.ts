@@ -13,7 +13,7 @@ const entries = readdirSync(new URL("../../../content/principles/", import.meta.
   .sort()
   .map((name) => json(`../../../content/principles/${name}`));
 
-describe("principle entry schema 0.1", () => {
+describe("principle entry schema 0.2", () => {
   it("binds the exported version to the schema identity and stays closed", () => {
     const open: string[] = [];
     const walk = (value: unknown, pointer = ""): void => {
@@ -27,7 +27,7 @@ describe("principle entry schema 0.1", () => {
     walk(schema);
     expect(open).toEqual([]);
     expect(schema.$id).toBe(`urn:chess-tabiya:schema:principle-entry:${PRINCIPLE_ENTRY_SCHEMA_VERSION}`);
-    expect(PRINCIPLE_ENTRY_SCHEMA_VERSION).toBe("0.1");
+    expect(PRINCIPLE_ENTRY_SCHEMA_VERSION).toBe("0.2");
   });
 
   it("validates every registered principle", () => {
