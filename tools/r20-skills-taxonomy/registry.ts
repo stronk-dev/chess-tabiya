@@ -1,5 +1,6 @@
 // DISPOSABLE research registry — platform-alignment R20. Not a product taxonomy.
-import { SEMANTIC_EVENT_PROJECTION_IDS } from "../../packages/runtime/src/evidence-catalog.js";
+// v1-era base-id family view (rfc/recorded-semantic-path D1933); exact refs are SEMANTIC_EVENT_PROJECTION_REFS.
+import { SEMANTIC_EVENT_FAMILY_IDS as SEMANTIC_EVENT_PROJECTION_IDS } from "../../packages/runtime/src/evidence-catalog.js";
 
 export const SKILL_CATEGORIES = Object.freeze([
   "fundamentals", "openings", "tactics", "strategy", "endgames",

@@ -1,7 +1,10 @@
 # RFC: Recorded semantic path compiler
 
-- **Status:** draft — amended 2026-08-27 for [[D1927]]/[[D1928]]/[[D1930]]–[[D1933]];
-  awaits the [[D1921]]/[[D1929]] convention/value predecessor and repeat independent review
+- **Status:** awaiting D1 — accepted by owner direction 2026-09-24 and implemented the same day
+  (compiler, exact edge source, v2 successors, exact ref inventory, server operation, checker);
+  criterion 13's production consumer (D1 via [[D1870]]/[[D1710]]) and the [[D1921]]/[[D1929]]
+  convention predecessor (explicit abstention in the result) remain open. Receipt:
+  `planning/recorded-semantic-path/implementation-2026-09-24.md`
 - **Author:** codex
 - **Created:** 2026-08-27
 - **Design refs:** `design/05-in-run-experience.md` §5 (detection is cheap; significance is not),
@@ -131,6 +134,8 @@ type RecordedSemanticPathResult =
       pathNodeIds: readonly string[];
       events: readonly SemanticEvidenceEvent[];
       windows: readonly RecordedPathWindowReceipt[];
+      // 2026-09-24: explicit abstention until the D1921/D1929 predecessor lands.
+      conventionReceipt: Readonly<{ status: "predecessor_unlanded"; predecessor: string; registryDigest: string }>;
       digest: string;
     }>
   | Readonly<{
@@ -486,6 +491,24 @@ assumed.
 
 ## Changelog
 
+- 2026-09-24: implemented on the owner's acceptance ("just do the work implement a bunch of RFC's");
+  status `awaiting D1` because no Review/module/longitudinal application operation consumes the
+  compiler yet (criterion 13 census guards against `implemented`). Implementation clarifications,
+  none of which widens a detector, presentation or assistance claim:
+  (1) §2.5's legal replay (parent, ply, canonical UCI/SAN, child FEN) runs in the compiler's exact
+  edge adapter, still before any detector, rather than inside `branchPath`, which the UI calls on
+  every render; `branchPath` owns the graph checks and checks fork reachability (missing parent,
+  cycle) before tips. Corrupt graphs throw `BranchQueryError` `INVALID_BRANCH_GRAPH` with the
+  typed reason instead of truncating. (2) The [[D1921]]/[[D1929]] convention predecessor has not
+  landed, so the available result carries `conventionReceipt: { status: "predecessor_unlanded" }`
+  and `semanticConventionRegistryDigest` digests the in-catalogue convention text; each event's
+  value receipt digests every derivation-input payload. (3) The non-persisted execution receipt is
+  `recordedSemanticPathExecution` (work counts and split timings); its `preparation: "eager"` mode
+  is the byte-parity oracle only. (4) v2 validation fixture labels carry the exact version
+  (`semantic-event:<id>@2:positive`). (5) The D2146 value-authority route map collapsed versions by
+  base id exactly as [[D1933]] predicted; it now keys routes by `id@version` (204 routes / 200
+  projections). The `evidence-value-authority` author-contract pins (192/188/185/46 and its RFC
+  text) drift by construction and belong to that RFC's owner.
 - 2026-08-27: authority amendment after D1927/D1928/D1932 candidate. `branchPath` becomes a total
   graph resolver; `run.record.edge@1` is path-independent; the eleven outputs move to v2 rather
   than rewriting their v1 provenance. D1933 replaces the base-id inventory with exact versioned

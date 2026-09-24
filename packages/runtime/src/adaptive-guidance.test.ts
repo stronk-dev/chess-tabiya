@@ -43,7 +43,11 @@ function node(id: string, fen: string, ply: number): Node {
 
 function run(fens: readonly string[], events: DrillRun["events"] = []): DrillRun {
   const nodes = fens.map((fen, index) => node(`n${index}`, fen, index));
-  return Object.freeze({ schemaVersion: "0.17", id: "adaptive", sessionKind: "position", packId: null, packDigest: null, sessionDigest: "sha256:test", start: { fen: fens[0]!, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, nodes, branches: [{ id: "main", forkNodeId: "n0", label: "Main", seed: 1, origin: "played" }], events, activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } } satisfies DrillRun);
+  const branch = { id: "main", forkNodeId: "n0", label: "Main", seed: 1, origin: "played" } as const;
+  const header = { id: "adaptive", sessionKind: "position", packId: null, packDigest: null, sessionDigest: "sha256:test", start: { fen: fens[0]!, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } } as const;
+  // The total branch-path authority requires the run.started root declaration every real run carries.
+  const started = { seq: 0, type: "run.started", at, data: { ...header, rootNode: nodes[0]!, branch, activeCursor: { nodeId: nodes[0]!.id, branchId: "main" } } } as const;
+  return Object.freeze({ schemaVersion: "0.17", ...header, nodes, branches: [branch], events: [started, ...events], activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } } satisfies DrillRun);
 }
 
 describe("adaptive guidance runtime", () => {

@@ -9,7 +9,8 @@ import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
-import { SEMANTIC_EVENT_PROJECTION_IDS } from "../../packages/runtime/src/evidence-catalog.js";
+// v1-era base-id family view (rfc/recorded-semantic-path D1933); exact refs are SEMANTIC_EVENT_PROJECTION_REFS.
+import { SEMANTIC_EVENT_FAMILY_IDS as SEMANTIC_EVENT_PROJECTION_IDS } from "../../packages/runtime/src/evidence-catalog.js";
 import { exactLegalMoves } from "../../packages/runtime/src/legal-moves.js";
 import { localSemanticEvents } from "../../packages/runtime/src/semantic-evidence.js";
 

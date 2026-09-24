@@ -4,7 +4,8 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { SEMANTIC_EVENT_PROJECTION_IDS } from "@chess-tabiya/runtime";
+// v1-era base-id family view (rfc/recorded-semantic-path D1933); exact refs are SEMANTIC_EVENT_PROJECTION_REFS.
+import { SEMANTIC_EVENT_FAMILY_IDS as SEMANTIC_EVENT_PROJECTION_IDS } from "@chess-tabiya/runtime";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 

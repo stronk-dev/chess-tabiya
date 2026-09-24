@@ -26,7 +26,7 @@ export {
   type LineMembershipEntry,
   type LineVerdict,
 } from "./line.js";
-export { BranchQueryError, branchPath, branchPaths } from "./branch-path.js";
+export { BranchQueryError, branchPath, branchPaths, resolveBranchPath, type BranchPathRefusalReason, type BranchPathResolution } from "./branch-path.js";
 export {
   MAX_COMPARISON_BRANCHES,
   compareBranches,
@@ -301,7 +301,8 @@ export {
   BREADTH_EVENT_PROJECTION_IDS,
   CASTLING_EVENT_PROJECTION_IDS,
   SEMANTIC_EVENT_DECLARATIONS,
-  SEMANTIC_EVENT_PROJECTION_IDS,
+  SEMANTIC_EVENT_FAMILY_IDS,
+  SEMANTIC_EVENT_PROJECTION_REFS,
   SEMANTIC_CONVENTION_TEXT,
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
   STRUCTURAL_EVENT_FAMILIES,
@@ -478,6 +479,35 @@ export {
   declareTransitionSemanticSourceEvidence,
 } from "./evidence-source-adapters.js";
 export type { MaiaCandidateWdlProjection } from "./evidence-source-adapters.js";
+export {
+  RecordedEdgeError,
+  assertRecordedEdgeEvidence,
+  declareRecordedEdgeEvidence,
+  type RecordedEdge,
+  type RecordedEdgeRefusalReason,
+} from "./evidence-source-adapters.js";
+export {
+  recordedAttractionObservedSemanticEvent,
+  recordedCheckZwischenzugSemanticEvent,
+  recordedDefenderConsequenceSemanticEvent,
+  recordedDeflectionObservedSemanticEvent,
+  recordedHarassmentPressureSemanticEvent,
+  recordedInterferenceSemanticEvent,
+  recordedLineBlockerClearanceSemanticEvent,
+  recordedOverloadExploitationSemanticEvent,
+  recordedPawnContactTimingSemanticEvent,
+  recordedSquareClearanceSemanticEvent,
+  recordedTradeCompletedSemanticEvent,
+} from "./semantic-evidence.js";
+export {
+  recordedSemanticPath,
+  recordedSemanticPathExecution,
+  type RecordedPathConventionReceipt,
+  type RecordedPathRefusalReason,
+  type RecordedPathWindowReceipt,
+  type RecordedSemanticPathExecution,
+  type RecordedSemanticPathResult,
+} from "./recorded-semantic-path.js";
 export {
   RULES_EVIDENCE_FACTS,
   THEORY_EVIDENCE_FACTS,
