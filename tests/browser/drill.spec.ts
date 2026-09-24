@@ -572,6 +572,7 @@ test("Guide me: a learner-requested hint climbs one rung per press to the propos
   // The labelled mock engine searches the alphabetically first legal move: Na4-b2 double-attacks both rooks.
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   const seat = page.getByRole("region", { name: "Ask for the least that helps" });

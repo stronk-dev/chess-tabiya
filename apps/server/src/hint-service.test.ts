@@ -120,6 +120,7 @@ describe("Guided Hint through createApplication", { timeout: 60_000 }, () => {
     // [criterion 12] an unknown id (a restart looks the same) is an explicit 404 so the client re-POSTs.
     const unknown = await poll("0".repeat(32));
     expect(unknown.status).toBe(404);
+    expect(await unknown.json()).toMatchObject({ error: { code: "HINT_REQUEST_NOT_FOUND" } });
   });
 
   it("[D1643] commit, rewind and a late poll make the decision stale; an old digest is refused before any work", async () => {
