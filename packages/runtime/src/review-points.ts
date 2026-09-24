@@ -4,7 +4,7 @@
 
 import type { DeclaredEvidence } from "./evidence-contract.js";
 import type { ForcedMateAfterMoveProof } from "./mate-proof.js";
-import type { FixedBoundPositionEvaluation, ProviderEvidenceDelivery } from "./provider-types.js";
+import type { FixedBoundPositionEvaluation, FixedBoundPrincipalVariation, ProviderEvidenceDelivery } from "./provider-types.js";
 
 /** `run.record.position@1`. */
 export interface RecordedPosition {
@@ -15,6 +15,8 @@ export interface RecordedPosition {
 
 /** The one shared node-free engine source (`live.stockfish.position_eval@1`). */
 export type StockfishPositionEvaluation = ProviderEvidenceDelivery<FixedBoundPositionEvaluation, "stockfish.position_evaluation@1">;
+/** The node-free bounded engine line (`live.stockfish.principal_variation@1`), read only by Analyze. */
+export type StockfishPrincipalVariation = ProviderEvidenceDelivery<FixedBoundPrincipalVariation, "stockfish.principal_variation@1">;
 export type ReviewEngineScore = FixedBoundPositionEvaluation["score"];
 export type ReviewSearchBound = FixedBoundPositionEvaluation["bound"];
 export interface ReviewEngineIdentity { readonly id: string; readonly name: string; readonly version: string }

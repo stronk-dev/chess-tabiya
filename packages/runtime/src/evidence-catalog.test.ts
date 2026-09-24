@@ -56,7 +56,7 @@ describe("primary evidence catalogue", () => {
     // 263 module pairs = the post-successor-rebase 237, the 21 recorded-path v2 successors, and the
     // five review-evidence-compiler projections (four Review Map, one Full Inspector forced-mate v2).
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(263);
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([41, 228, 34, 508]); // +6 provider-exchange sources; +1 producer, +6 projections, +7 bindings (rfc/review-evidence-compiler.md)
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([41, 229, 34, 508]); // +7 provider-exchange sources (+1 principal variation, §5.2); +1 producer, +6 projections, +7 bindings (rfc/review-evidence-compiler.md)
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());

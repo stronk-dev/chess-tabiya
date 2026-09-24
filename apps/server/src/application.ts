@@ -74,6 +74,8 @@ export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
   maxAttemptsPerRequest: 3,
   maxTerminalAttemptOutcomes: 4_096,
   movetimeMs: 100,
+  // rfc/review-map.md §7: the Analyze line records at most this many plies of the searched PV.
+  linePlies: 12,
   timeoutMs: 10_000,
 });
 

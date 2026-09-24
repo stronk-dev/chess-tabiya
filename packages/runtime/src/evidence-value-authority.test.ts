@@ -31,7 +31,7 @@ import type { DrillRun } from "./types.js";
 import { evaluationDelivery as reviewEvaluationDelivery } from "./testing/review-evidence-fixture.js";
 import { PROVIDER_EXCHANGE_AUTHORITY } from "./provider-exchange.js";
 import { normalizeProviderRequest } from "./provider-requests.js";
-import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
+import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, principalVariationCapture, principalVariationRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
 import type { ProviderExecutionCapture, ProviderOperationId, ProviderRequestedIdentityMap } from "./provider-types.js";
 
 /** One scheduler-sealed live delivery per provider operation, keyed by its source route. */
@@ -46,12 +46,14 @@ function providerDeliveries(): readonly (readonly [string, ProviderOperationId, 
   const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const root = normalizeProviderRequest("stockfish.legal_root_table@1", legalRootRequest(promotion));
   const evaluation = normalizeProviderRequest("stockfish.position_evaluation@1", evaluationRequest(initial));
+  const line = normalizeProviderRequest("stockfish.principal_variation@1", principalVariationRequest(initial));
   const maia = normalizeProviderRequest("maia.policy_page@1", maiaRequest({ kind: "exact_fen", fen: initial }, { requestedWidth: 2 }));
   const syzygy = normalizeProviderRequest("syzygy.position@1", syzygyRequest(kqk));
   const explorer = normalizeProviderRequest("lichess_explorer.position_page@1", explorerRequest());
   return [
     ["live.stockfish.legal_root_table@1", "stockfish.legal_root_table@1", seal("stockfish.legal_root_table@1", root, legalRootCapture(root, legalRootLines(promotion, allLegalRows(promotion), 8)))],
     ["live.stockfish.position_eval@1", "stockfish.position_evaluation@1", seal("stockfish.position_evaluation@1", evaluation, evaluationCapture(evaluation, ["info depth 12 score cp 20 wdl 300 600 100 pv e2e4", "bestmove e2e4"]))],
+    ["live.stockfish.principal_variation@1", "stockfish.principal_variation@1", seal("stockfish.principal_variation@1", line, principalVariationCapture(line, ["info depth 12 score cp 20 pv e2e4 e7e5", "bestmove e2e4"]))],
     ["human.maia.policy_page@1", "maia.policy_page@1", seal("maia.policy_page@1", maia, maiaCapture(maia, ["info depth 1 multipv 1 policy 0.4 pv e2e4", "info depth 1 multipv 2 policy 0.3 pv d2d4", "bestmove e2e4"]))],
     ["live.syzygy.position_result@1", "syzygy.position@1", seal("syzygy.position@1", syzygy, httpCapture("syzygy.position@1", syzygyBody(kqk)))],
     ["human.explorer.position_page@1", "lichess_explorer.position_page@1", seal("lichess_explorer.position_page@1", explorer, httpCapture("lichess_explorer.position_page@1", explorerBody()))],
@@ -182,8 +184,8 @@ describe("value authority: registry equality", () => {
   it("is set-equal to every non-retired catalogue projection, with bindings a subset (§8.3, criterion 13)", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
     // 216 + the five typed Review projections and forced-mate v2, less the retired Story eval shift
-    // (rfc/review-evidence-compiler.md).
-    expect(ACTIVE).toHaveLength(221);
+    // (rfc/review-evidence-compiler.md), plus the principal-variation source (provider exchange §5.2).
+    expect(ACTIVE).toHaveLength(222);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -251,10 +253,10 @@ describe("value authority: registry equality", () => {
     }
     // The registry is exactly the receipt's targets plus the five no-route factories and method_stage.
     const extra = [...ROUTES.keys()].filter((route) => !targets.has(route)).sort();
-    // Plus the six provider-exchange routes (rfc/provider-exchange-and-execution.md §9), which have no
+    // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
-    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.syzygy.position_result@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(extra).toEqual(["derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {

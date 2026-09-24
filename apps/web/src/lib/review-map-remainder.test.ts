@@ -236,6 +236,9 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId, { role: "learner", session: "imported" }) };
     expect(() => assertReviewAnalysisResponse(page, { runId: run.id, nodeId })).not.toThrow();
     expect(() => assertReviewAnalysisResponse({ ...page, bound: {} }, { runId: run.id, nodeId })).toThrow(/attributed/u);
+    // The sentence must open with the named engine attribution (a typed line names engine and version).
+    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1" }, { runId: run.id, nodeId })).toThrow(/attributed/u);
+    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1", sentence: page.sentence.replace(/^stockfish-test/u, "Mock Stockfish mock-1") }, { runId: run.id, nodeId })).not.toThrow();
     expect(() => assertReviewAnalysisResponse({ ...page, sentence: `stockfish-test (depth 18 search): the best line is ${"3. Nf3"}.` }, { runId: run.id, nodeId })).toThrow(/advice/u);
     const review = payloadOf(run);
     expect(() => assertReviewMapResponse({ ...review, rows: review.rows.map((row, index) => index === 0 ? { ...row, bestMoveUci: "e2e4" } : row) }, { runId: review.runId })).toThrow(/engine line/u);

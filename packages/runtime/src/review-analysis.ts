@@ -5,6 +5,11 @@
 // Law 8: the line is rendered only as recorded engine output, attributed to the engine and the
 // search bound it was requested under, through frozen templates that are not phrased as advice. A
 // recorded line without its search bound is not shown. Nothing here grades, ranks or explains.
+//
+// The line is the one the Review compilation pass recorded: the coordinator requests
+// `stockfish.principal_variation@1` beside each node's evaluation and records the sealed delivery on
+// the same durable event (`REVIEW_PROVIDER_LINE_KEY`). This read re-derives it, seals it as the
+// `live.stockfish.pv@1` packet the Full Inspector admits, and writes nothing (criterion 14).
 
 import { Chess, normalizeMove } from "chessops/chess";
 import { parseFen } from "chessops/fen";
@@ -15,6 +20,7 @@ import { branchPath } from "./branch-path.js";
 import type { EvidenceRole } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { compileModulePacket } from "./module-packets.js";
+import { reviewDurableEngineLine } from "./review-evidence.js";
 import { openRetryEntry } from "./review-map.js";
 import { reviewText, type ReviewTemplateId } from "./review-map-templates.js";
 import type { DrillRun, EvidencePayload, Node } from "./types.js";
@@ -27,7 +33,9 @@ export type ReviewAnalysis =
     /** `bestline` = a recorded principal variation; `search_first_move` = only the search's first move was recorded. */
     readonly source: "bestline" | "search_first_move";
     readonly engineId: string;
-    readonly bound: { readonly requestedMovetimeMs: number } | { readonly requestedDepth: number };
+    /** The attribution the sentence opens with: engine name and version for a typed line, else the id. */
+    readonly engine: string;
+    readonly bound: { readonly requestedMovetimeMs: number } | { readonly requestedDepth: number } | { readonly requestedNodes: number };
     readonly moves: readonly string[];
     readonly sentence: string;
     readonly caveat: string;
@@ -42,6 +50,8 @@ export type ReviewAnalysis =
 interface RecordedLine {
   readonly source: "bestline" | "search_first_move";
   readonly engineId: string | undefined;
+  /** The attribution rendered in the sentence: engine name and version for a typed line, else the id. */
+  readonly engineLabel: string | undefined;
   readonly values: Readonly<Record<string, unknown>>;
   readonly movesUci: readonly string[];
   /** The exact recorded packet, sealed through its evidence route before any module admission. */
@@ -50,8 +60,36 @@ interface RecordedLine {
 
 const isRecord = (candidate: unknown): candidate is Readonly<Record<string, unknown>> => typeof candidate === "object" && candidate !== null && !Array.isArray(candidate);
 
-/** The latest recorded engine line at one node: a `bestline` packet first, else an eval packet's search first move. */
-function recordedLine(run: DrillRun, nodeId: string): RecordedLine | undefined {
+/**
+ * The Review compilation pass's typed line at one node, as the attributed `bestline` packet the
+ * `live.stockfish.pv@1` route seals: the actual engine identity, the requested bound, the reached
+ * depth and the provider payload digest that ties it to its sealed delivery.
+ */
+function typedLine(run: DrillRun, node: Node): RecordedLine | undefined {
+  const line = reviewDurableEngineLine(run, node);
+  if (line === undefined) return undefined;
+  const { payload, payloadReceipt } = line.payload;
+  const bound = payload.bound;
+  const values = Object.freeze({
+    engineId: payload.engine.id,
+    engineName: payload.engine.name,
+    engineVersion: payload.engine.version,
+    movesUci: payload.movesUci,
+    ...(bound.kind === "movetime" ? { requestedMovetimeMs: bound.requestedMs } : bound.kind === "depth" ? { requestedDepth: bound.requestedDepth } : { requestedNodes: bound.requestedNodes }),
+    ...(bound.reachedDepth === null ? {} : { depth: bound.reachedDepth }),
+    providerPayloadDigest: payloadReceipt.payloadDigest,
+  });
+  return { source: "bestline", engineId: payload.engine.id, engineLabel: `${payload.engine.name} ${payload.engine.version}`, values, movesUci: payload.movesUci, packet: Object.freeze({ kind: "bestline" as const, source: "engine_validated" as const, values }) };
+}
+
+/**
+ * The recorded engine line at one node: the Review pass's typed line first, else the latest
+ * explicitly attached `bestline` packet, else an attached eval packet's search first move.
+ */
+function recordedLine(run: DrillRun, node: Node): RecordedLine | undefined {
+  const typed = typedLine(run, node);
+  if (typed !== undefined) return typed;
+  const nodeId = node.id;
   let bestline: RecordedLine | undefined;
   let firstMove: RecordedLine | undefined;
   for (const event of run.events) {
@@ -61,10 +99,10 @@ function recordedLine(run: DrillRun, nodeId: string): RecordedLine | undefined {
     const values = payload.values;
     const engineId = typeof values.engineId === "string" && values.engineId.trim() !== "" ? values.engineId : undefined;
     if (payload.kind === "bestline" && Array.isArray(values.movesUci) && values.movesUci.length > 0 && values.movesUci.every((move) => typeof move === "string")) {
-      bestline = { source: "bestline", engineId, values, movesUci: values.movesUci as readonly string[], packet: { kind: payload.kind, source: payload.source, values } };
+      bestline = { source: "bestline", engineId, engineLabel: engineId, values, movesUci: values.movesUci as readonly string[], packet: { kind: payload.kind, source: payload.source, values } };
     }
     if (payload.kind === "eval" && typeof values.bestMoveUci === "string") {
-      firstMove = { source: "search_first_move", engineId, values, movesUci: [values.bestMoveUci], packet: { kind: payload.kind, source: payload.source, values } };
+      firstMove = { source: "search_first_move", engineId, engineLabel: engineId, values, movesUci: [values.bestMoveUci], packet: { kind: payload.kind, source: payload.source, values } };
     }
   }
   return bestline ?? firstMove;
@@ -133,21 +171,25 @@ export function reviewAnalysis(run: DrillRun, branchId: string, nodeId: string, 
   const move = moveLabel(entry, node);
   const base = { nodeId: node.id, entryNodeId: entry.id };
   if (openRetryEntry(run, branchId) === entry.id) return Object.freeze({ ...base, kind: "withheld" as const, sentence: reviewText("analysis.withheld", { move }) });
-  const recorded = recordedLine(run, entry.id);
+  const recorded = recordedLine(run, entry);
   const moves = recorded === undefined ? undefined : sanLine(entry.fen, recorded.movesUci);
   if (recorded === undefined || moves === undefined) return Object.freeze({ ...base, kind: "none" as const, sentence: reviewText("analysis.none", { move }) });
   const movetime = recorded.values.requestedMovetimeMs;
   const depth = recorded.values.requestedDepth;
-  const bound = Number.isSafeInteger(movetime) && (movetime as number) > 0
-    ? { requestedMovetimeMs: movetime as number }
-    : Number.isSafeInteger(depth) && (depth as number) > 0 ? { requestedDepth: depth as number } : undefined;
-  if (bound === undefined || recorded.engineId === undefined) return Object.freeze({ ...base, kind: "unattributed" as const, sentence: reviewText("analysis.unattributed", { move }) });
+  const nodes = recorded.values.requestedNodes;
+  const positive = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) > 0;
+  const bound = positive(movetime)
+    ? { requestedMovetimeMs: movetime }
+    : positive(depth) ? { requestedDepth: depth } : positive(nodes) ? { requestedNodes: nodes } : undefined;
+  if (bound === undefined || recorded.engineId === undefined || recorded.engineLabel === undefined) return Object.freeze({ ...base, kind: "unattributed" as const, sentence: reviewText("analysis.unattributed", { move }) });
   const refused = inspectorRefusal(recorded, viewer);
   if (refused !== undefined) return Object.freeze({ ...base, kind: "withheld" as const, sentence: reviewText("analysis.module.withheld", { move, reason: reviewText(INSPECTOR_REFUSALS[refused]) }) });
-  const boundText = "requestedMovetimeMs" in bound ? reviewText("analysis.bound.movetime", { ms: bound.requestedMovetimeMs }) : reviewText("analysis.bound.depth", { depth: bound.requestedDepth });
-  const operands = { engine: recorded.engineId, bound: boundText, move, line: moves.join(" ") };
+  const boundText = "requestedMovetimeMs" in bound
+    ? reviewText("analysis.bound.movetime", { ms: bound.requestedMovetimeMs })
+    : "requestedDepth" in bound ? reviewText("analysis.bound.depth", { depth: bound.requestedDepth }) : reviewText("analysis.bound.nodes", { nodes: bound.requestedNodes });
+  const operands = { engine: recorded.engineLabel, bound: boundText, move, line: moves.join(" ") };
   return Object.freeze({
-    ...base, kind: "line" as const, source: recorded.source, engineId: recorded.engineId, bound: Object.freeze(bound), moves,
+    ...base, kind: "line" as const, source: recorded.source, engineId: recorded.engineId, engine: recorded.engineLabel, bound: Object.freeze(bound), moves,
     sentence: recorded.source === "bestline" ? reviewText("analysis.line", operands) : reviewText("analysis.first", operands),
     caveat: reviewText("analysis.caveat"),
   });

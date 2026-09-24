@@ -17,6 +17,7 @@ import type {
 export type ProviderOperationId =
   | "stockfish.legal_root_table@1"
   | "stockfish.position_evaluation@1"
+  | "stockfish.principal_variation@1"
   | "maia.policy_page@1"
   | "syzygy.position@1"
   | "lichess_explorer.position_page@1";
@@ -24,6 +25,7 @@ export type ProviderOperationId =
 export type ProviderOperationProviderMap = {
   readonly "stockfish.legal_root_table@1": "stockfish";
   readonly "stockfish.position_evaluation@1": "stockfish";
+  readonly "stockfish.principal_variation@1": "stockfish";
   readonly "maia.policy_page@1": "maia";
   readonly "syzygy.position@1": "syzygy";
   readonly "lichess_explorer.position_page@1": "lichess_explorer";
@@ -32,6 +34,7 @@ export type ProviderOperationProviderMap = {
 export type ProviderEndpointMap = {
   readonly "stockfish.legal_root_table@1": Readonly<{ kind: "uci_supervisor"; engineId: "stockfish-analysis" }>;
   readonly "stockfish.position_evaluation@1": Readonly<{ kind: "uci_supervisor"; engineId: "stockfish-analysis" }>;
+  readonly "stockfish.principal_variation@1": Readonly<{ kind: "uci_supervisor"; engineId: "stockfish-analysis" }>;
   readonly "maia.policy_page@1": Readonly<{ kind: "uci_supervisor"; engineId: "maia-5m" }>;
   readonly "syzygy.position@1": Readonly<{ kind: "https"; origin: "https://tablebase.lichess.org"; path: "/standard" }>;
   readonly "lichess_explorer.position_page@1": Readonly<{ kind: "https"; origin: "https://explorer.lichess.org"; path: "/lichess" }>;
@@ -40,6 +43,7 @@ export type ProviderEndpointMap = {
 export type ProviderResponseParserIdMap = {
   readonly "stockfish.legal_root_table@1": "parse.stockfish_legal_root_table@1";
   readonly "stockfish.position_evaluation@1": "parse.stockfish_position_evaluation@1";
+  readonly "stockfish.principal_variation@1": "parse.stockfish_principal_variation@1";
   readonly "maia.policy_page@1": "parse.maia_policy_page@1";
   readonly "syzygy.position@1": "parse.syzygy_position@1";
   readonly "lichess_explorer.position_page@1": "parse.lichess_explorer_position_page@1";
@@ -103,6 +107,38 @@ export interface FixedBoundPositionEvaluation {
     | { readonly kind: "movetime"; readonly requestedMs: number; readonly reachedDepth: number | null }
     | { readonly kind: "depth"; readonly requestedDepth: number; readonly reachedDepth: number | null }
     | { readonly kind: "nodes"; readonly requestedNodes: number; readonly reachedDepth: number | null };
+}
+
+/**
+ * §5.2 The bounded principal variation of one fixed-bound single-line search. A separate operation
+ * from the evaluation above so the evaluation delivery stays score/WDL only (review-evidence-compiler
+ * refusal 7); `maxPlies` bounds the recorded line and is part of the request identity.
+ */
+export interface StockfishPrincipalVariationRequest {
+  readonly fen: string;
+  readonly requestedEngine: { readonly id: string; readonly version: string };
+  readonly bound:
+    | { readonly kind: "movetime"; readonly requestedMs: number }
+    | { readonly kind: "depth"; readonly requestedDepth: number }
+    | { readonly kind: "nodes"; readonly requestedNodes: number };
+  readonly maxPlies: number;
+  readonly timeoutMs: number;
+}
+
+/** The selected line's exact legal PV from `fen`, truncated to `maxPlies`; no score, rank or verdict. */
+export interface FixedBoundPrincipalVariation {
+  readonly fen: string;
+  readonly positionKey: string;
+  readonly engine: { readonly id: string; readonly name: string; readonly version: string };
+  readonly bound:
+    | { readonly kind: "movetime"; readonly requestedMs: number; readonly reachedDepth: number | null }
+    | { readonly kind: "depth"; readonly requestedDepth: number; readonly reachedDepth: number | null }
+    | { readonly kind: "nodes"; readonly requestedNodes: number; readonly reachedDepth: number | null };
+  readonly maxPlies: number;
+  /** The selected line's exact legal moves from `fen`, at most `maxPlies`. */
+  readonly movesUci: readonly string[];
+  /** True when the engine reported more plies than `maxPlies`. */
+  readonly truncated: boolean;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -263,6 +299,7 @@ export interface ExplorerPositionPage {
 export interface ProviderOperationRequestMap {
   readonly "stockfish.legal_root_table@1": StockfishLegalRootTableRequest;
   readonly "stockfish.position_evaluation@1": StockfishPositionEvaluationRequest;
+  readonly "stockfish.principal_variation@1": StockfishPrincipalVariationRequest;
   readonly "maia.policy_page@1": MaiaPolicyPageRequest;
   readonly "syzygy.position@1": SyzygyPositionRequest;
   readonly "lichess_explorer.position_page@1": ExplorerPositionPageRequest;
@@ -271,6 +308,7 @@ export interface ProviderOperationRequestMap {
 export interface ProviderOperationResultMap {
   readonly "stockfish.legal_root_table@1": StockfishLegalRootTable;
   readonly "stockfish.position_evaluation@1": FixedBoundPositionEvaluation;
+  readonly "stockfish.principal_variation@1": FixedBoundPrincipalVariation;
   readonly "maia.policy_page@1": MaiaPolicyPage;
   readonly "syzygy.position@1": LiveSyzygyPosition;
   readonly "lichess_explorer.position_page@1": ExplorerPositionPage;
@@ -279,6 +317,7 @@ export interface ProviderOperationResultMap {
 export interface ProviderOperationLocalResultMap {
   readonly "stockfish.legal_root_table@1": never;
   readonly "stockfish.position_evaluation@1": never;
+  readonly "stockfish.principal_variation@1": never;
   readonly "maia.policy_page@1": never;
   readonly "syzygy.position@1": SyzygyOutsideDomain;
   readonly "lichess_explorer.position_page@1": never;
@@ -287,6 +326,7 @@ export interface ProviderOperationLocalResultMap {
 export type ProviderRequestedIdentityMap = {
   readonly "stockfish.legal_root_table@1": Readonly<{ request: StockfishLegalRootTableRequest; command: StockfishCommandIdentity }>;
   readonly "stockfish.position_evaluation@1": Readonly<{ request: StockfishPositionEvaluationRequest; command: StockfishCommandIdentity }>;
+  readonly "stockfish.principal_variation@1": Readonly<{ request: StockfishPrincipalVariationRequest; command: StockfishCommandIdentity }>;
   readonly "maia.policy_page@1": Readonly<{ request: MaiaPolicyPageRequest }>;
   readonly "syzygy.position@1": Readonly<{ request: SyzygyPositionRequest }>;
   readonly "lichess_explorer.position_page@1": Readonly<{ request: ExplorerPositionPageRequest }>;
@@ -315,6 +355,7 @@ export type MaiaActualIdentity = Readonly<{
 export type ProviderActualIdentityMap = {
   readonly "stockfish.legal_root_table@1": StockfishActualIdentity;
   readonly "stockfish.position_evaluation@1": StockfishActualIdentity;
+  readonly "stockfish.principal_variation@1": StockfishActualIdentity;
   readonly "maia.policy_page@1": MaiaActualIdentity;
   readonly "syzygy.position@1": Readonly<{ source: "lichess_syzygy"; endpoint: ProviderEndpointMap["syzygy.position@1"]; apiVersion: "standard-v1" }>;
   readonly "lichess_explorer.position_page@1": Readonly<{ source: "lichess_explorer"; endpoint: ProviderEndpointMap["lichess_explorer.position_page@1"]; apiVersion: "lichess-v1" }>;
@@ -328,6 +369,7 @@ export interface ProviderHttpResponseMetadata {
 export type ProviderTransportMetadataMap = {
   readonly "stockfish.legal_root_table@1": null;
   readonly "stockfish.position_evaluation@1": null;
+  readonly "stockfish.principal_variation@1": null;
   readonly "maia.policy_page@1": null;
   readonly "syzygy.position@1": ProviderHttpResponseMetadata;
   readonly "lichess_explorer.position_page@1": ProviderHttpResponseMetadata;

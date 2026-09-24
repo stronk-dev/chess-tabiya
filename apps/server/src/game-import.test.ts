@@ -250,6 +250,6 @@ describe("own-game import", () => {
 function reviewService(storage: SQLiteRunStorage, queue: EvidenceJobQueue) {
   const swinging = (fen: string) => { const white = Number(fen.split(" ")[5]) >= 3 ? -400 : 20; return { score: `cp ${fen.split(" ")[1] === "w" ? white : -white}`, wdl: [300, 400, 300] as const }; };
   const { scheduler } = composeProviderTraversalApplication({ engines: new MockProviderEngineClient({ score: swinging }), tablebaseFetch: null, explorerFetch: null, explorerToken: null });
-  const coordinator = new ReviewEvidenceCoordinator({ scheduler, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 64, maxAttemptsPerRequest: 2 }), windowNodes: 3, maxOutstandingPerRun: 2, maxTrackedRuns: 4, maxAttemptsPerRequest: 2, movetimeMs: 50, timeoutMs: 2_000 });
+  const coordinator = new ReviewEvidenceCoordinator({ scheduler, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 64, maxAttemptsPerRequest: 2 }), windowNodes: 3, maxOutstandingPerRun: 2, maxTrackedRuns: 4, maxAttemptsPerRequest: 2, movetimeMs: 50, linePlies: 8, timeoutMs: 2_000 });
   return { coordinator, service: new RunService(storage, { evidenceQueue: queue, reviewEvidence: coordinator }) };
 }

@@ -23,6 +23,8 @@ import {
   legalRootRequest,
   maiaCapture,
   maiaRequest,
+  principalVariationCapture,
+  principalVariationRequest,
   syzygyBody,
   syzygyRequest,
   transcript,
@@ -139,6 +141,42 @@ describe("§5.1 fixed-bound position evaluation parser", () => {
     const identity = normalizeProviderRequest("stockfish.position_evaluation@1", evaluationRequest(WHITE));
     const bytes = providerUtf8(["< info depth 12 score cp 77 wdl 300 600 100 pv e2e4", ...identity.command.commands.map((command) => `> ${command}`), "< bestmove e2e4"].join("\n"));
     expect(() => PROVIDER_RESPONSE_PARSERS["stockfish.position_evaluation@1"].parse({ ...evaluationCapture(identity, []), responseBytes: bytes }, identity)).toThrow(/no exact completed line/u);
+  });
+});
+
+describe("§5.2 fixed-bound principal variation parser", () => {
+  const parse = (fen: string, received: readonly string[], bound?: Parameters<typeof principalVariationRequest>[1], maxPlies?: number) => {
+    const identity = normalizeProviderRequest("stockfish.principal_variation@1", principalVariationRequest(fen, bound, maxPlies));
+    return () => PROVIDER_RESPONSE_PARSERS["stockfish.principal_variation@1"].parse(principalVariationCapture(identity, received), identity);
+  };
+  const WHITE = START_FEN;
+
+  it("has its own command image (WDL off) and refuses an unbounded or missing ply bound", () => {
+    const identity = normalizeProviderRequest("stockfish.principal_variation@1", principalVariationRequest(WHITE));
+    expect(identity.command.commands).toEqual(["setoption name MultiPV value 1", "setoption name UCI_ShowWDL value false", `position fen ${WHITE}`, "go depth 12"]);
+    const evaluation = normalizeProviderRequest("stockfish.position_evaluation@1", evaluationRequest(WHITE));
+    expect(identity.command.commandsDigest).not.toBe(evaluation.command.commandsDigest);
+    for (const maxPlies of [0, 33, 1.5]) expect(() => normalizeProviderRequest("stockfish.principal_variation@1", principalVariationRequest(WHITE, undefined, maxPlies))).toThrow(/maxPlies/u);
+    const { maxPlies: _omitted, ...missing } = principalVariationRequest(WHITE);
+    expect(() => normalizeProviderRequest("stockfish.principal_variation@1", missing as never)).toThrow(/exactly/u);
+  });
+
+  it("records the selected line's exact legal moves, bounded by maxPlies, with no score", () => {
+    const line = parse(WHITE, ["info depth 11 score cp 90 pv d2d4 d7d5", "info depth 12 score cp 20 upperbound pv c2c4", "info depth 12 score cp 30 pv e2e4 e7e5 g1f3 b8c6 f1b5", "info depth 13 score cp 50 pv g1f3", "bestmove e2e4"], undefined, 3)();
+    expect(line).toEqual({ fen: WHITE, positionKey: line.positionKey, engine: { id: "stockfish-analysis", name: line.engine.name, version: "19" }, bound: { kind: "depth", requestedDepth: 12, reachedDepth: 12 }, maxPlies: 3, movesUci: ["e2e4", "e7e5", "g1f3"], truncated: true });
+    expect(Object.keys(line)).not.toContain("score");
+    const whole = parse(WHITE, ["info depth 9 score cp 10 pv e2e4", "info depth 11 score cp 14 pv d2d4 g8f6", "bestmove d2d4"], { kind: "movetime", requestedMs: 100 })();
+    expect(whole).toMatchObject({ bound: { kind: "movetime", requestedMs: 100, reachedDepth: 11 }, movesUci: ["d2d4", "g8f6"], truncated: false });
+    // A castling PV move is recorded under the exact king-takes-rook identity.
+    const castling = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
+    expect(parse(castling, ["info depth 12 score cp 0 pv e1g1 e8c8", "bestmove e1g1"])().movesUci).toEqual(["e1h1", "e8a8"]);
+  });
+
+  it("refuses short depth, an illegal PV, other MultiPV and a line with a score but no PV", () => {
+    expect(parse(WHITE, ["info depth 11 score cp 10 pv e2e4", "bestmove e2e4"])).toThrow(/no exact completed line with a PV at depth 12/u);
+    expect(parse(WHITE, ["info depth 12 score cp 10", "bestmove e2e4"])).toThrow(/no exact completed line with a PV/u);
+    expect(parse(WHITE, ["info depth 12 score cp 10 pv e2e4 e2e4", "bestmove e2e4"])).toThrow(/illegal PV move/u);
+    expect(parse(WHITE, ["info depth 12 multipv 2 score cp 10 pv e2e4", "bestmove e2e4"])).toThrow(/MultiPV 2/u);
   });
 });
 

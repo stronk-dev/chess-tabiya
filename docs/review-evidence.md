@@ -50,11 +50,37 @@ provider. `ensureBranch` admits at most `windowNodes` missing positions and `max
 active subscribers, requests through `ProviderExchangeScheduler.get`, attaches each delivery to the
 run's own `evidence.attached` eval event under `values.providerDelivery` (legacy scalar fields stay
 for inspector/grade readers), and pumps the next window from completion callbacks. `observe` is the
-read-only view used by the Review Map. `ReviewAttemptOutcomeStore` retains fixed-size terminal
+read-only view used by the Review Map. After a delivery, the same attempt requests that position's
+bounded line (see below) before attaching. `ReviewAttemptOutcomeStore` retains fixed-size terminal
 receipts in exactly `maxTerminalAttemptOutcomes` slots: attempts count only at `start()`, a
 never-started cancel restores history, a started cancel consumes an attempt, exhaustion is retained,
 and a full store refuses unseen work with `attempt_history_capacity`. Mock-engine deployments run
 the same exchange over the labelled `Mock Stockfish` client (`mock-provider-engine.ts`).
+
+## The Analyze line
+
+The Review Map's explicit Analyze action (`GET /runs/:id/review-analysis`, rfc/review-map.md §7)
+reveals a line that the compilation pass already recorded. After each evaluation is delivered, the
+coordinator requests `stockfish.principal_variation@1` for the same FEN, engine and movetime, bounded
+to `REVIEW_EVIDENCE_PROFILE.linePlies` (12) plies. The request goes through the same scheduler and
+runs after the evaluation, so a node never holds two exchange slots. The sealed line is stored on
+the same durable event under `values.providerLineDelivery` (`REVIEW_PROVIDER_LINE_KEY`). No separate
+`bestline` row is attached, so Compare's line overlay does not change.
+
+The line never holds back the evaluation. If the line can't be obtained, the evaluation is still
+attached and Analyze says that no engine line is recorded. The packet, Story and the Review Map never
+read the line, so the evaluation delivery and its projections still carry no best move or PV
+(refusal 7).
+
+`reviewDurableEngineLine(run, node)` re-derives the recorded bytes through
+`parsePersistedProviderDelivery` and seals them as `live.stockfish.principal_variation@1`. A line
+whose bytes no longer re-derive is not a line. `reviewAnalysis` turns it into the attributed
+`bestline` packet sealed by `live.stockfish.pv@1`. That packet carries the actual engine id, name
+and version, the requested bound, the reached depth and the provider payload digest. It is admitted
+only through `module.full_inspector@1`. The sentence names the engine and the search bound and adds
+the not-advice caveat. The reveal is withheld while a retry from that position is open. It is read
+only: it enqueues nothing and writes nothing (criterion 14). Explicitly attached `bestline` packets
+and legacy eval first moves remain fallbacks for runs that have no typed line.
 
 ## Story and the Review Map
 

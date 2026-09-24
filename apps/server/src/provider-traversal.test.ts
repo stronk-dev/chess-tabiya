@@ -31,6 +31,7 @@ const MAIA_REQUEST = { position: EXACT, requestedModel: { id: "maia3-5m@b6559de2
 const REQUESTS = {
   "stockfish-legal-roots": { fen: KQK, bound: { kind: "depth", value: 6 }, requestedWidth: "all_legal", moveIdentity: "chessops-king-takes-rook@1", requestedEngine: { id: "stockfish-analysis", version: "19" }, timeoutMs: 5_000 },
   "stockfish-position-evaluation": { fen: START, requestedEngine: { id: "stockfish-analysis", version: "19" }, bound: { kind: "depth", requestedDepth: 9 }, timeoutMs: 5_000 },
+  "stockfish-principal-variation": { fen: START, requestedEngine: { id: "stockfish-analysis", version: "19" }, bound: { kind: "depth", requestedDepth: 9 }, maxPlies: 4, timeoutMs: 5_000 },
   "maia-policy-page": MAIA_REQUEST,
   "syzygy-position": { rules: "chess", variant: "standard", fen: KQK, timeoutMs: 5_000 },
   "explorer-position-page": { rules: "chess", setupFamily: "standard_start", variant: "standard", positionFen4: START.split(" ").slice(0, 4).join(" "), requestFen6: START, ratingBuckets: [1600], speeds: ["blitz"], since: null, until: null, moveWidth: 3, history: { kind: "requested" }, topWidth: 0, recentWidth: 0, timeoutMs: 5_000 },
@@ -79,7 +80,7 @@ class Output {
 }
 
 describe("§9 operator traversal", () => {
-  it("names exactly the resource's five CLI arms, each bound to one operation and one source factory", () => {
+  it("names exactly the resource's six CLI arms, each bound to one operation and one source factory", () => {
     const rows = PROVIDER_PROTOCOL_RESOURCE.payload.operations;
     expect(Object.keys(PROVIDER_TRAVERSALS).sort()).toEqual(rows.map((row) => row.cliName).sort());
     for (const row of rows) {
@@ -89,7 +90,7 @@ describe("§9 operator traversal", () => {
     }
   });
 
-  it("traverses all five arms descriptor → scheduler → parser → sole source factory → declared projection", async () => {
+  it("traverses all six arms descriptor → scheduler → parser → sole source factory → declared projection", async () => {
     for (const row of PROVIDER_PROTOCOL_RESOURCE.payload.operations) {
       const { application } = fixtureApplication();
       const out = new Output();

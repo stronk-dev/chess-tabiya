@@ -6,10 +6,10 @@ import { attachEvidence } from "../evidence.js";
 import { exactLegalMoves } from "../legal-moves.js";
 import { PROVIDER_EXCHANGE_AUTHORITY } from "../provider-exchange.js";
 import { normalizeProviderRequest } from "../provider-requests.js";
-import { FIXTURE_AT, evaluationCapture, evaluationRequest } from "../provider-test-fixtures.js";
+import { FIXTURE_AT, evaluationCapture, evaluationRequest, principalVariationCapture, principalVariationRequest } from "../provider-test-fixtures.js";
 import type { StockfishPositionEvaluationRequest } from "../provider-types.js";
 import { reviewDeliveryEvidencePayload, type ReviewImportRecordImage } from "../review-evidence.js";
-import type { StockfishPositionEvaluation } from "../review-points.js";
+import type { StockfishPositionEvaluation, StockfishPrincipalVariation } from "../review-points.js";
 import { commitMove, createRun } from "../runtime.js";
 import type { DrillRun } from "../types.js";
 
@@ -42,9 +42,18 @@ export function evaluationDelivery(fen: string, score: string, options: Delivery
   return PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, payload, payloadReceipt, servedAt: FIXTURE_AT }) as StockfishPositionEvaluation;
 }
 
-/** Attaches a delivery exactly as the Review coordinator does (the production payload builder). */
-export function attachDelivery(run: DrillRun, nodeId: string, delivery: StockfishPositionEvaluation): DrillRun {
-  return attachEvidence(run, nodeId, [`engine:review-${nodeId}`], reviewDeliveryEvidencePayload(delivery), REVIEW_AT).run;
+/** One sealed `stockfish.principal_variation@1` delivery whose engine reported `pv` (UCI) at the bound. */
+export function lineDelivery(fen: string, pv: readonly string[], options: { readonly bound?: StockfishPositionEvaluationRequest["bound"]; readonly maxPlies?: number } = {}): StockfishPrincipalVariation {
+  const requested = normalizeProviderRequest("stockfish.principal_variation@1", principalVariationRequest(fen, options.bound ?? { kind: "movetime", requestedMs: 100 }, options.maxPlies ?? 8));
+  const capture = principalVariationCapture(requested, [`info depth 14 seldepth 16 score cp 20 nodes 100 pv ${pv.join(" ")}`, `bestmove ${pv[0]}`]);
+  const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt({ operation: "stockfish.principal_variation@1", requestedIdentity: requested, capture, requestedAt: FIXTURE_AT, retrievedAt: FIXTURE_AT });
+  const { payload, payloadReceipt } = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+  return PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, payload, payloadReceipt, servedAt: FIXTURE_AT }) as StockfishPrincipalVariation;
+}
+
+/** Attaches a delivery (and optionally its line) exactly as the Review coordinator does. */
+export function attachDelivery(run: DrillRun, nodeId: string, delivery: StockfishPositionEvaluation, line?: StockfishPrincipalVariation): DrillRun {
+  return attachEvidence(run, nodeId, [`engine:review-${nodeId}`], reviewDeliveryEvidencePayload(delivery, line), REVIEW_AT).run;
 }
 
 export function importedRun(id: string, side: "white" | "black" = "white", fen = START_FEN): DrillRun {

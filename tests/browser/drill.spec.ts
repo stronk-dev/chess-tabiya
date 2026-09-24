@@ -303,9 +303,10 @@ test("review map remainder: eval graph by keyboard, explicit Analyze withheld du
   await expect(main).not.toContainText(/principal variation|first move of its search|\bbest\b/iu);
   await page.getByRole("list", { name: "Move list" }).getByRole("button", { name: /^2\. Nf3/u }).click();
   await page.getByRole("button", { name: "Analyze the position before move 2 (Nf3): show the recorded engine line" }).click();
-  // rfc/review-evidence-compiler.md refusal 7: the typed Review delivery records no best move or PV,
-  // so the explicit reveal states honestly that no engine line is recorded.
-  await expect(page.locator(".analysis-sentence")).toHaveText("No engine line is recorded for the position before 2. Nf3.");
+  // The Review pass recorded each position's bounded line (stockfish.principal_variation@1) beside its
+  // evaluation; the explicit reveal shows it attributed to the engine and its search bound, never as advice.
+  await expect(page.locator(".analysis-sentence")).toHaveText(/^Mock Stockfish mock-1 \(\d+ ms search\) reported this principal variation from the position before 2\. Nf3: 2\. \S+ \S+\.$/u);
+  await expect(page.getByText("It is not advice", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Hide engine line" }).click();
   await expect(page.locator(".analysis-sentence")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /^Compare lines from here/u })).toHaveCount(0);

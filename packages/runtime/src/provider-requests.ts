@@ -23,6 +23,7 @@ import {
   type ProviderRequestedIdentityMap,
   type StockfishLegalRootTableRequest,
   type StockfishPositionEvaluationRequest,
+  type StockfishPrincipalVariationRequest,
   type SyzygyOutsideDomain,
   type SyzygyPositionRequest,
 } from "./provider-types.js";
@@ -115,8 +116,59 @@ export function normalizeStockfishLegalRootTableRequest(raw: StockfishLegalRootT
 export function normalizeStockfishPositionEvaluationRequest(raw: StockfishPositionEvaluationRequest): ProviderRequestedIdentityMap["stockfish.position_evaluation@1"] {
   const record = exactKeys(raw, ["fen", "requestedEngine", "bound", "timeoutMs"], "stockfish.position_evaluation request");
   const fen = canonicalSixFieldFen(record.fen, "fen");
-  if (!isRecord(record.bound)) invalid("bound must be an object");
-  const rawBound = record.bound as Readonly<Record<string, unknown>>;
+  const { bound, go } = singleLineBound(record.bound);
+  if (exactLegalMoves(fen).length === 0) invalid("the position has no legal move to search");
+  const request: StockfishPositionEvaluationRequest = Object.freeze({
+    fen,
+    requestedEngine: engineIdentity(record.requestedEngine, "requestedEngine"),
+    bound,
+    timeoutMs: positiveInteger(record.timeoutMs, "timeoutMs", MAX_PROVIDER_TIMEOUT_MS),
+  });
+  return Object.freeze({
+    request,
+    command: commandIdentity([
+      "setoption name MultiPV value 1",
+      "setoption name UCI_ShowWDL value true",
+      `position fen ${fen}`,
+      go,
+    ]),
+  });
+}
+
+/** §5.2: the longest principal variation a request may ask to record. */
+export const MAX_PRINCIPAL_VARIATION_PLIES = 32;
+
+/**
+ * §5.2 fixed-bound principal variation: the same single-line bound grammar as the evaluation, a
+ * refuse-only `maxPlies` in `1..MAX_PRINCIPAL_VARIATION_PLIES`, and WDL off (the line carries no
+ * outcome estimate). The command image differs from the evaluation's, so the two never coalesce.
+ */
+export function normalizeStockfishPrincipalVariationRequest(raw: StockfishPrincipalVariationRequest): ProviderRequestedIdentityMap["stockfish.principal_variation@1"] {
+  const record = exactKeys(raw, ["fen", "requestedEngine", "bound", "maxPlies", "timeoutMs"], "stockfish.principal_variation request");
+  const fen = canonicalSixFieldFen(record.fen, "fen");
+  const { bound, go } = singleLineBound(record.bound);
+  if (exactLegalMoves(fen).length === 0) invalid("the position has no legal move to search");
+  const request: StockfishPrincipalVariationRequest = Object.freeze({
+    fen,
+    requestedEngine: engineIdentity(record.requestedEngine, "requestedEngine"),
+    bound,
+    maxPlies: positiveInteger(record.maxPlies, "maxPlies", MAX_PRINCIPAL_VARIATION_PLIES),
+    timeoutMs: positiveInteger(record.timeoutMs, "timeoutMs", MAX_PROVIDER_TIMEOUT_MS),
+  });
+  return Object.freeze({
+    request,
+    command: commandIdentity([
+      "setoption name MultiPV value 1",
+      "setoption name UCI_ShowWDL value false",
+      `position fen ${fen}`,
+      go,
+    ]),
+  });
+}
+
+function singleLineBound(value: unknown): { readonly bound: StockfishPositionEvaluationRequest["bound"]; readonly go: string } {
+  if (!isRecord(value)) invalid("bound must be an object");
+  const rawBound = value as Readonly<Record<string, unknown>>;
   let bound: StockfishPositionEvaluationRequest["bound"];
   let go: string;
   if (rawBound.kind === "movetime") {
@@ -137,22 +189,7 @@ export function normalizeStockfishPositionEvaluationRequest(raw: StockfishPositi
   } else {
     return invalid("bound.kind must be movetime, depth or nodes");
   }
-  if (exactLegalMoves(fen).length === 0) invalid("the position has no legal move to search");
-  const request: StockfishPositionEvaluationRequest = Object.freeze({
-    fen,
-    requestedEngine: engineIdentity(record.requestedEngine, "requestedEngine"),
-    bound,
-    timeoutMs: positiveInteger(record.timeoutMs, "timeoutMs", MAX_PROVIDER_TIMEOUT_MS),
-  });
-  return Object.freeze({
-    request,
-    command: commandIdentity([
-      "setoption name MultiPV value 1",
-      "setoption name UCI_ShowWDL value true",
-      `position fen ${fen}`,
-      go,
-    ]),
-  });
+  return { bound, go };
 }
 
 /** The literal reset every Stockfish operation sends in `finally` before the generation is reused. */
@@ -365,6 +402,7 @@ type Normalizers = { readonly [K in ProviderOperationId]: (request: ProviderOper
 export const PROVIDER_REQUEST_NORMALIZERS: Normalizers = Object.freeze({
   "stockfish.legal_root_table@1": normalizeStockfishLegalRootTableRequest,
   "stockfish.position_evaluation@1": normalizeStockfishPositionEvaluationRequest,
+  "stockfish.principal_variation@1": normalizeStockfishPrincipalVariationRequest,
   "maia.policy_page@1": normalizeMaiaPolicyPageRequest,
   "syzygy.position@1": normalizeSyzygyPositionRequest,
   "lichess_explorer.position_page@1": normalizeExplorerPositionPageRequest,

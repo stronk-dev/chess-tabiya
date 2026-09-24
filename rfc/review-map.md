@@ -419,6 +419,14 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
 
 ## Changelog
 
+- **2026-09-24 (Analyze line restored)** — after the Review evidence compiler landed, Analyze always
+  said no engine line was recorded, because the typed evaluation delivery carries no PV. The Review
+  pass now records each position's bounded line (`stockfish.principal_variation@1`,
+  `provider-exchange-and-execution.md` §5.2). Analyze reveals it as specified: explicit and
+  secondary, through `module.full_inspector@1`, attributed to the engine and its search bound,
+  withheld while a retry is open, and never in the ordinary payload. It is still read-only
+  (criterion 14).
+
 - **2026-09-24** — D5 discharged by `63902370` (module-registration implementation). The Review Map now requires its viewer (`{ role, session }`): outside `review_map`'s derived role/session ceilings (Match, onramp, an operator) grades, evaluations and relations render as a stated withholding sentence.
 
 - **2026-09-24 (merge of module registration with the remainder)** — the eval graph draws only evaluations `module.review_map@1` admits (a refused viewer gets the stated `graph.module.withheld` caption and no points), and the Analyze reveal carries principal-variation content, so its line is admitted through `module.full_inspector@1`: spectators, participants and contexts whose ceiling excludes the inspector (academy, onramp, Match) receive `analysis.module.withheld` instead of the line.

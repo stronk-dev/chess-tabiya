@@ -35,6 +35,8 @@ import {
   maiaActual,
   maiaCapture,
   maiaRequest,
+  principalVariationCapture,
+  principalVariationRequest,
   stockfishActual,
   syzygyBody,
   syzygyRequest,
@@ -56,12 +58,14 @@ function deliver<K extends ProviderOperationId>(operation: K, requested: Provide
 const fixtures = () => {
   const root = normalizeProviderRequest("stockfish.legal_root_table@1", legalRootRequest(PROMOTION));
   const evaluation = normalizeProviderRequest("stockfish.position_evaluation@1", evaluationRequest(START_FEN));
+  const line = normalizeProviderRequest("stockfish.principal_variation@1", principalVariationRequest(START_FEN));
   const maia = normalizeProviderRequest("maia.policy_page@1", maiaRequest(EXACT, { requestedWidth: 2 }));
   const syzygy = normalizeProviderRequest("syzygy.position@1", syzygyRequest(KQK));
   const explorer = normalizeProviderRequest("lichess_explorer.position_page@1", explorerRequest());
   return {
     "stockfish.legal_root_table@1": deliver("stockfish.legal_root_table@1", root, legalRootCapture(root, legalRootLines(PROMOTION, allLegalRows(PROMOTION), 8))),
     "stockfish.position_evaluation@1": deliver("stockfish.position_evaluation@1", evaluation, evaluationCapture(evaluation, ["info depth 12 score cp 20 wdl 300 600 100 pv e2e4", "bestmove e2e4"])),
+    "stockfish.principal_variation@1": deliver("stockfish.principal_variation@1", line, principalVariationCapture(line, ["info depth 12 score cp 20 pv e2e4 e7e5 g1f3", "bestmove e2e4"])),
     "maia.policy_page@1": deliver("maia.policy_page@1", maia, maiaCapture(maia, MAIA_LINES)),
     "syzygy.position@1": deliver("syzygy.position@1", syzygy, httpCapture("syzygy.position@1", syzygyBody(KQK))),
     "lichess_explorer.position_page@1": deliver("lichess_explorer.position_page@1", explorer, httpCapture("lichess_explorer.position_page@1", explorerBody())),
@@ -69,7 +73,7 @@ const fixtures = () => {
 };
 
 describe("§3 same-exchange receipts and seals", () => {
-  it("seals acquisition, payload receipt and delivery for all five operations and refuses forgeries at runtime", () => {
+  it("seals acquisition, payload receipt and delivery for all six operations and refuses forgeries at runtime", () => {
     for (const [operation, delivery] of Object.entries(fixtures()) as [ProviderOperationId, ReturnType<typeof fixtures>[ProviderOperationId]][]) {
       expect(() => assertProviderDelivery(operation, delivery)).not.toThrow();
       expect(delivery.payloadReceipt.responseDigest).toBe(delivery.acquisition.responseDigest);
@@ -142,6 +146,7 @@ describe("value-authority source factories (evidence-value-authority D2)", () =>
     const expected = {
       "stockfish.legal_root_table@1": "live.stockfish.legal_root_table@1",
       "stockfish.position_evaluation@1": "live.stockfish.position_eval@1",
+      "stockfish.principal_variation@1": "live.stockfish.principal_variation@1",
       "maia.policy_page@1": "human.maia.policy_page@1",
       "syzygy.position@1": "live.syzygy.position_result@1",
       "lichess_explorer.position_page@1": "human.explorer.position_page@1",

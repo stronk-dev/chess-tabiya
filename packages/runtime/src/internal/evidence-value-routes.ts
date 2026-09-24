@@ -65,6 +65,7 @@ import {
   createHumanMaiaPolicyPageV1Evidence,
   createLiveStockfishLegalRootTableV1Evidence,
   createLiveStockfishPositionEvalV1Evidence,
+  createLiveStockfishPrincipalVariationV1Evidence,
   createLiveSyzygyPositionResultV1Evidence,
   createRulesEndgameTablebaseDomainV1Evidence,
   createHumanExplorerPositionStatsV1Evidence,
@@ -302,6 +303,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   // and the Syzygy local-domain adapter.
   "live.stockfish.legal_root_table@1": createLiveStockfishLegalRootTableV1Evidence,
   "live.stockfish.position_eval@1": createLiveStockfishPositionEvalV1Evidence,
+  "live.stockfish.principal_variation@1": createLiveStockfishPrincipalVariationV1Evidence,
   "human.maia.policy_page@1": createHumanMaiaPolicyPageV1Evidence,
   "live.syzygy.position_result@1": createLiveSyzygyPositionResultV1Evidence,
   "human.explorer.position_page@1": createHumanExplorerPositionPageV1Evidence,

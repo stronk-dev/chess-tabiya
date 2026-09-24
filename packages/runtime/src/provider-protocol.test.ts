@@ -61,7 +61,7 @@ function registerLanded(): readonly string[] {
 describe("provider-protocol resource (criterion 36)", () => {
   it("the tuple, resource rows, type maps, parsers, normalizers, projections, factories and digest domains are one set", () => {
     expect(validateProtocol(PROVIDER_PROTOCOL_RESOURCE, PROVIDER_PROTOCOL_MEMBERS)).toEqual([]);
-    expect(PROVIDER_OPERATION_IDS).toHaveLength(5);
+    expect(PROVIDER_OPERATION_IDS).toHaveLength(6);
     expect(PROVIDER_PROTOCOL_MEMBERS).toEqual([...PROVIDER_PROTOCOL_MEMBERS].sort());
   });
 

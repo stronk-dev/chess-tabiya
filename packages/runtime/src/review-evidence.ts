@@ -22,7 +22,7 @@ import {
 import { parsePersistedProviderDelivery, serializeProviderDelivery } from "./provider-exchange.js";
 import { recordedSemanticPath, type RecordedSemanticPathResult } from "./recorded-semantic-path.js";
 import type { RecordedEdge } from "./recorded-edge.js";
-import type { ForcedMateAfterMoveProofV2, RecordedPosition, ReviewEnginePoint, ReviewMateTransition, StockfishPositionEvaluation } from "./review-points.js";
+import type { ForcedMateAfterMoveProofV2, RecordedPosition, ReviewEnginePoint, ReviewMateTransition, StockfishPositionEvaluation, StockfishPrincipalVariation } from "./review-points.js";
 import type { ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, EvidencePayload, Node, RunOutcome } from "./types.js";
 
@@ -835,6 +835,35 @@ export function reviewDurableEngineStates(run: DrillRun, path: readonly Pick<Nod
 }
 
 /**
+ * The additive payload key under which the coordinator records the same node's bounded engine line
+ * (`stockfish.principal_variation@1`) beside its evaluation delivery. Review's packet never reads it:
+ * only the explicit Analyze reveal does (rfc/review-map.md §7), so refusal 7 holds — the evaluation
+ * delivery, its projections and the packet carry no best move or PV.
+ */
+export const REVIEW_PROVIDER_LINE_KEY = "providerLineDelivery" as const;
+
+/**
+ * The durable, re-derived engine line recorded for one node, sealed as
+ * `live.stockfish.principal_variation@1`, or undefined when none re-derives for that exact FEN. The
+ * latest recorded line wins; bytes that no longer re-derive are not a line. Read-only.
+ */
+export function reviewDurableEngineLine(run: DrillRun, node: Pick<Node, "id" | "fen">): DeclaredEvidence<StockfishPrincipalVariation> | undefined {
+  let line: DeclaredEvidence<StockfishPrincipalVariation> | undefined;
+  for (const event of run.events) {
+    if (event.type !== "evidence.attached" || event.data.nodeId !== node.id || event.data.payload.kind !== "eval" || event.data.payload.source !== "engine_validated") continue;
+    const persisted = (event.data.payload.values as Readonly<Record<string, unknown>>)[REVIEW_PROVIDER_LINE_KEY];
+    if (persisted === undefined) continue;
+    try {
+      const delivery = parsePersistedProviderDelivery("stockfish.principal_variation@1", persisted);
+      if (delivery.payload.fen === node.fen) line = invokeEvidenceValueRoute("live.stockfish.principal_variation@1", { delivery }) as DeclaredEvidence<StockfishPrincipalVariation>;
+    } catch {
+      // Bytes that no longer re-derive are not a recorded line.
+    }
+  }
+  return line;
+}
+
+/**
  * Local (in-memory) compilation for one run whose storage is the run itself: tests, offline tools
  * and any caller that already holds the parsed stored run and its import record image. Provider
  * states default to the run's durable deliveries; nodes without one are `not_requested`.
@@ -850,10 +879,13 @@ export function reviewPacketForRun(run: DrillRun, branchId: string, options: { r
 /**
  * The additive durable image of one admitted delivery on the run's own `evidence.attached` eval
  * event. The legacy scalar fields keep existing inspector/grade readers working; Review reads only
- * `providerDelivery`, which re-derives through the provider exchange's reload boundary.
+ * `providerDelivery`, which re-derives through the provider exchange's reload boundary. The same
+ * node's bounded engine line, when the coordinator obtained one, is recorded under
+ * `providerLineDelivery` for the explicit Analyze reveal alone.
  */
-export function reviewDeliveryEvidencePayload(delivery: StockfishPositionEvaluation): EvidencePayload {
+export function reviewDeliveryEvidencePayload(delivery: StockfishPositionEvaluation, line?: StockfishPrincipalVariation): EvidencePayload {
   const persisted = serializeProviderDelivery("stockfish.position_evaluation@1", delivery);
+  if (line !== undefined && line.payload.fen !== delivery.payload.fen) throw new TypeError("a recorded engine line must search the evaluation's exact FEN");
   const score = delivery.payload.score;
   const bound = delivery.payload.bound;
   return Object.freeze({
@@ -865,6 +897,7 @@ export function reviewDeliveryEvidencePayload(delivery: StockfishPositionEvaluat
       engineId: delivery.acquisition.actualIdentity.id,
       ...(bound.kind === "movetime" ? { requestedMovetimeMs: bound.requestedMs } : bound.kind === "depth" ? { requestedDepth: bound.requestedDepth } : {}),
       [REVIEW_PROVIDER_DELIVERY_KEY]: persisted,
+      ...(line === undefined ? {} : { [REVIEW_PROVIDER_LINE_KEY]: serializeProviderDelivery("stockfish.principal_variation@1", line) }),
     }),
   });
 }
