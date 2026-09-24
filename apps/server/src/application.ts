@@ -46,6 +46,7 @@ import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-e
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { PackStudio } from "./pack-studio.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
+import { deploymentRefusal, type DeploymentBoundary } from "./config.js";
 import {
   LONGITUDINAL_WORKER_DEFAULTS,
   fileBackedDatabaseIdentity,
@@ -130,6 +131,48 @@ export interface ApplicationOptions {
   readonly valenceRegisterPath?: string;
   /** Structured provider-health transition log (rfc/provider-health-degradation.md §11). */
   readonly providerHealthLog?: (event: ProviderHealthLogEvent) => void;
+  /**
+   * rfc/storage-backup-recovery.md §6: production opens only an absent/empty or exactly current
+   * database; `prepare-start` has already performed any upgrade under the storage lock.
+   */
+  readonly requirePreparedStorage?: boolean;
+  /**
+   * rfc/safe-deployment-profiles.md: the compiled transport boundary. When present it owns the
+   * session cookie security/name and refuses wrong Host, proxy headers and cross-origin writes
+   * before any routing.
+   */
+  readonly deployment?: DeploymentBoundary;
+}
+
+/**
+ * The production migration authority for `storage-admin` (rfc/storage-backup-recovery.md §6): the
+ * same compiled concept registry, shapes, principles and built-in pack artifacts the HTTP startup
+ * would use, so a staged upgrade runs the exact chain — including the concept phase — the server
+ * would. Returns a migrator that migrates one staged file to the current version and closes it.
+ */
+export async function createStorageMigrator(options: Pick<ApplicationOptions, "development" | "draftPackFile" | "draftPackFiles"> = {}): Promise<(path: string) => void> {
+  const concepts = installedConceptRegistry();
+  const shapes = await ShapeRegistry.loadDefault();
+  const principles = await PrincipleRegistry.loadDefault();
+  const registry = await PackRegistry.loadDefault({
+    development: options.development === true,
+    shapes,
+    principles,
+    concepts,
+    ...(options.draftPackFile === undefined ? {} : { draftFile: options.draftPackFile }),
+    ...(options.draftPackFiles === undefined ? {} : { draftFiles: options.draftPackFiles }),
+  });
+  const authority = Object.freeze({
+    registry: concepts,
+    builtInArtifacts: registry.artifactInventory(),
+    validateStoredPack: (document: unknown) => validatePackDocument(document, { shapes, principles, concepts, packs: Object.freeze({ get: (id: string) => registry.get(id)?.document }) }),
+  });
+  return (path: string) => {
+    new SQLiteRunStorage(path, {
+      concepts: authority,
+      onMigration: (entry) => console.error(`storage migration ${entry.version}: ${entry.name}`),
+    }).close();
+  };
 }
 
 /**
@@ -402,6 +445,10 @@ export const DEFAULT_DATABASE_PATH = (): string => resolve(process.cwd(), "data"
  * startup reconciles longitudinal jobs and awaits the worker's ready message before returning, so
  * `main.ts` listens only after the semantic executor is live.
  */
+function unready(): Response {
+  return new Response(`{"status":"unready"}`, { status: 503, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
+}
+
 export async function createApplication(
   options: ApplicationOptions = {},
 ): Promise<ChessTabiyaApplication> {
@@ -444,7 +491,11 @@ export async function composeApplication(
       ? {}
       : { draftFiles: options.draftPackFiles }),
   });
+  if (options.deployment !== undefined && options.cookieSecure !== undefined && options.cookieSecure !== options.deployment.secureCookie) {
+    throw new TypeError("PROFILE_HYBRID_REFUSED: cookieSecure contradicts the deployment profile");
+  }
   const storage = new SQLiteRunStorage(databasePath, {
+    ...(options.requirePreparedStorage === true ? { requirePreparedStorage: true } : {}),
     concepts: Object.freeze({
       registry: concepts,
       builtInArtifacts: registry.artifactInventory(),
@@ -657,7 +708,7 @@ async function composeServices(
     botAvailability: () => botAvailability.snapshot(),
   });
   const identity = new IdentityService(storage, {
-    cookieSecure: options.cookieSecure ?? true,
+    cookieSecure: options.deployment?.secureCookie ?? options.cookieSecure ?? true,
   });
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
@@ -698,10 +749,19 @@ async function composeServices(
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
+  let readyProbe: () => Response = () => unready();
+  const deployment = options.deployment;
   const handler: RestHandler = async (request) => {
     const url = new URL(request.url);
+    if (deployment !== undefined) {
+      const refused = deploymentRefusal(deployment, request);
+      if (refused !== undefined) return refused;
+    }
     if (url.pathname === "/healthz") {
       return healthProbe();
+    }
+    if (url.pathname === "/readyz") {
+      return readyProbe();
     }
     return isApiPath(url.pathname)
       ? api(request)
@@ -749,6 +809,20 @@ async function composeServices(
       ...(row.state === "unavailable" || row.state === "degraded_cached_only" ? { reason: row.reason } : {}),
     }));
     return Response.json({ status: ok ? "ok" : "degraded", engineMode, longitudinal, providers }, { status: ok ? 200 : 503, headers: { "cache-control": "no-store" } });
+  };
+  // rfc/storage-backup-recovery.md §6 / [[D2728]]: readiness is the live route observing the live
+  // storage connection — its exact current version plus one representative read — and a live
+  // semantic executor. The canonical body is the only one a rehearsal or proxy accepts.
+  readyProbe = () => {
+    const longitudinal = longitudinalHealth();
+    if (draining || (longitudinal.status !== "ready" && longitudinal.status !== "disabled_test")) return unready();
+    let probe: ReturnType<SQLiteRunStorage["readinessProbe"]>;
+    try { probe = storage.readinessProbe(); } catch { return unready(); }
+    if (probe.storageVersion !== STORAGE_VERSION) return unready();
+    return new Response(`{"representativeData":"${probe.representativeData}","status":"ready","storageVersion":${probe.storageVersion}}`, {
+      status: 200,
+      headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
+    });
   };
   const startupReceipt: ApplicationStartupReceipt = Object.freeze({
     storageVersion: STORAGE_VERSION,

@@ -1,0 +1,89 @@
+name: chess-tabiya
+
+# rfc/safe-deployment-profiles.md §4 — `appliance`: HTTPS on one exact LAN hostname through the
+# pinned Caddy edge with its internal CA. The application port is never published; only Caddy owns
+# 80/443. Required: TABIYA_PUBLIC_HOSTNAME (an operator-managed LAN DNS name). docs/deployment.md.
+services:
+  server:
+    image: __SERVER_IMAGE__
+    environment:
+      DATABASE_PATH: /data/chess-tabiya.sqlite
+      ENGINE_MODE: ${ENGINE_MODE:-mock}
+      TABIYA_DEPLOYMENT_PROFILE: appliance
+      TABIYA_PUBLIC_HOSTNAME: ${TABIYA_PUBLIC_HOSTNAME:?set TABIYA_PUBLIC_HOSTNAME to the exact LAN DNS name}
+      TABIYA_LISTEN_HOST: 0.0.0.0
+      MAIA_HOST: maia
+      MAIA_PORT: "7000"
+      PORT: "3000"
+      STOCKFISH_PATH: /usr/games/stockfish
+    expose:
+      - "3000"
+    networks:
+      proxy_edge:
+        aliases: [tabiya-proxy-origin]
+      provider_edge: {}
+      egress: {}
+    volumes:
+      - tabiya-data:/data
+    depends_on:
+      maia:
+        condition: service_healthy
+        required: false
+    restart: unless-stopped
+
+  caddy:
+    image: docker.io/library/caddy:2.11.4-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648
+    environment:
+      TABIYA_PUBLIC_HOSTNAME: ${TABIYA_PUBLIC_HOSTNAME:?set TABIYA_PUBLIC_HOSTNAME to the exact LAN DNS name}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile.appliance:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - public_edge
+      - proxy_edge
+    depends_on:
+      server:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # The default FOSS `cpu` tier: CPU-only Maia on the internal provider edge (no Caddy, no egress).
+  maia:
+    profiles: [engines]
+    image: __MAIA_IMAGE__
+    entrypoint: ["python", "/opt/chess-tabiya/maia-sidecar.py"]
+    environment:
+      MAIA_LISTEN_HOST: 0.0.0.0
+      MAIA_LISTEN_PORT: "7000"
+      MAIA_READY_FILE: /ready
+    networks:
+      - provider_edge
+    healthcheck:
+      test: ["CMD", "test", "-f", "/ready"]
+      interval: 5s
+      timeout: 2s
+      start_period: 90s
+      retries: 12
+    restart: unless-stopped
+
+networks:
+  # Exactly server + caddy; no route off the host.
+  proxy_edge:
+    internal: true
+  # Server + engine sidecars; no Caddy, no route off the host.
+  provider_edge:
+    internal: true
+  # Caddy only: published 80/443.
+  public_edge: {}
+  # Server only: outbound public data sources (Lichess explorer/tablebase). Nothing is published.
+  egress: {}
+
+volumes:
+  tabiya-data:
+    name: ${TABIYA_DATA_VOLUME:-chess-tabiya_tabiya-data}
+  # Caddy's internal CA and certificates: operational secret state, not part of a database backup.
+  caddy-data: {}
+  caddy-config: {}

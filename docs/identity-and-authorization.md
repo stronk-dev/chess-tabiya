@@ -93,9 +93,13 @@ revocable. Every invalid-token state deliberately looks like the same 404.
   administration UI. A forgotten password has no in-application recovery path.
 - Rate limiting is per handle only; a hosted reverse proxy should add broader
   abuse controls.
-- The application server speaks plain HTTP. Production must terminate TLS in
-  front of it; secure cookies are the default. Local HTTP development must set
-  `TABIYA_COOKIE_SECURE=false`.
+- The application server speaks plain HTTP. The deployment profile decides the session
+  cookie ([deployment profiles](deployment.md)): `local` (loopback HTTP) issues
+  `tabiya_session` without `Secure`; `appliance` and `hosted` terminate TLS in the bundled
+  Caddy edge and issue a host-only `__Host-tabiya_session` with `Secure`. Outside
+  development a profile is required, so no packaged default silently issues an insecure
+  cookie. `TABIYA_COOKIE_SECURE` is no longer a setting; a value contradicting the profile
+  refuses startup.
 - Cross-origin client/API deployment is unsupported; the shipped client and API
   are same-origin.
 - Run events still identify chess actors only as user/opponent/system. A live session's
