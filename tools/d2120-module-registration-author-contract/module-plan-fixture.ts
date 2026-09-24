@@ -8,6 +8,8 @@ import {
   TRANSITION_EVENT_PROJECTION_IDS,
   TRANSITION_GEOMETRY_EVENT_FAMILIES,
 } from "../../packages/runtime/src/evidence-catalog.js";
+import { moduleEvidenceTimings } from "../../packages/runtime/src/module-contract.js";
+import { MODULE_POLICIES } from "../../packages/runtime/src/module-policy.js";
 
 const structuralEvents = STRUCTURAL_EVENT_PROJECTION_IDS.filter((id) => ![
   "rules.structural.event.piece_count", "rules.structural.event.direct_attack_count",
@@ -124,23 +126,27 @@ export const GUIDED_HINT_AUTHORITY = Object.freeze({
 } as const);
 
 /**
- * Literal author input for the future MODULE_DECLARATIONS registry. The
- * generator may consume this authority; it may not recreate any of these
- * policy bytes in a neighbouring table. Session ceilings are intentionally
- * absent because they are derived from WORKFLOW_CONTEXT_POLICIES.
+ * The author policy image, DERIVED from the production policy authority
+ * (`packages/runtime/src/module-policy.ts` MODULE_POLICIES, [[D3066]]) since the
+ * registry landed. This fixture restates no capability, timing, role, form or
+ * budget. Session ceilings stay derived from WORKFLOW_CONTEXT_POLICIES.
  */
-export const AUTHOR_MODULE_POLICIES = Object.freeze({
-  sight_on_request: Object.freeze({ answerCapabilities: ["pattern", "candidates"], timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 1 }),
-  blunder_prevention: Object.freeze({ answerCapabilities: ["threat"], timings: ["at_commit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 1 }),
-  threat_radar: Object.freeze({ answerCapabilities: ["pattern", "threat"], timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 3 }),
-  postcommit_nudge: Object.freeze({ answerCapabilities: ["threat", "evaluation"], timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 2 }),
-  structure_nudge: Object.freeze({ answerCapabilities: ["theory"], timings: ["postcommit"], roles: ["learner", "host"], forms: ["card", "timeline_mark"], maxFacts: 1 }),
-  theory_breadcrumb: Object.freeze({ answerCapabilities: ["theory"], timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "card"], maxFacts: 1 }),
-  guided_hint: Object.freeze({ answerCapabilities: ["guided_hint@1"], timings: ["checkpoint"], roles: ["learner", "host"], forms: ["sentence", "square", "arrow"], maxFacts: 1 }),
-  compare_coach: Object.freeze({ answerCapabilities: ["move", "evaluation"], timings: ["checkpoint", "attempt_end", "review", "analysis"], roles: ["learner", "host"], forms: ["sentence", "card", "arrow"], maxFacts: 2 }),
-  review_map: Object.freeze({ answerCapabilities: ["threat", "theory", "evaluation"], timings: ["review", "analysis"], roles: ["learner", "host", "participant", "spectator"], forms: ["timeline_mark", "card", "sentence", "square", "arrow"], maxFacts: 3 }),
-  full_inspector: Object.freeze({ answerCapabilities: ["threat", "theory", "evaluation", "principal_variation"], timings: ["review", "analysis"], roles: ["learner", "host"], forms: ["panel", "sentence", "square", "arrow"], maxFacts: 20 }),
-} as const);
+const authorPolicy = (id: Exclude<(typeof MODULE_POLICIES)[number]["id"], "rules_floor">) => {
+  const policy = MODULE_POLICIES.find((value) => value.id === id)!;
+  return Object.freeze({
+    answerCapabilities: policy.answer.kind === "capabilities" ? [...policy.answer.capabilities] : [policy.answer.kind],
+    timings: [...moduleEvidenceTimings(policy)],
+    roles: [...policy.roles],
+    forms: [...policy.forms],
+    maxFacts: policy.budgets.maxFacts,
+  });
+};
+export const AUTHOR_MODULE_POLICIES = Object.freeze(Object.fromEntries(MODULE_POLICIES
+  .filter((policy) => policy.id !== "rules_floor")
+  .map((policy) => [policy.id, authorPolicy(policy.id as Exclude<typeof policy.id, "rules_floor">)]))) as Readonly<Record<
+    "sight_on_request" | "blunder_prevention" | "threat_radar" | "postcommit_nudge" | "structure_nudge" | "theory_breadcrumb" | "guided_hint" | "compare_coach" | "review_map" | "full_inspector",
+    ReturnType<typeof authorPolicy>
+  >>;
 
 /**
  * Exact semantic exceptions to the sealed-pool stage profiles. A projection

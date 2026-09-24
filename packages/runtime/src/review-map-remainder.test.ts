@@ -16,7 +16,7 @@ import type { DrillRun } from "./types.js";
 import { judgementWordsOutsideGrounding } from "./voice.js";
 
 function projectionOf(run: DrillRun, branchId = run.branches[0]!.id): ReviewMapProjection {
-  return reviewMapProjection({ run, branchId, story: storyMoments(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis" });
+  return reviewMapProjection({ run, branchId, story: storyMoments(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", viewer: { role: "learner", session: "imported" } });
 }
 
 /** A retry exactly as the Review Map performs it: rewind to the entry, fork `story-reentry`, optionally play. */
@@ -163,7 +163,7 @@ describe("Analyze (§7, O7.3)", () => {
   const rows = projectionOf(run).rows;
 
   it("reveals the recorded principal variation, attributed to engine and search bound, and not phrased as advice", () => {
-    const analysis = reviewAnalysis(run, main, rows[0]!.nodeId);
+    const analysis = reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
     expect(analysis).toMatchObject({ kind: "line", source: "bestline", engineId: "stockfish-test", bound: { requestedDepth: 18 }, moves: ["1. e4", "e5", "2. Nf3"], entryNodeId: rows[0]!.entryNodeId });
     if (analysis.kind !== "line") throw new Error("unreachable");
     expect(analysis.sentence).toBe(`stockfish-test (depth 18 search) reported this principal variation from the position before ${rows[0]!.label}: 1. e4 e5 2. Nf3.`);
@@ -174,36 +174,49 @@ describe("Analyze (§7, O7.3)", () => {
     }
   });
 
+  it("[module-registration] admits the recorded line only through module.full_inspector@1", () => {
+    // A principal variation is Full Inspector's capability: spectators, participants and contexts
+    // whose ceiling excludes the inspector (academy, onramp, match) get a stated withholding.
+    for (const viewer of [{ role: "spectator" as const, session: "imported" }, { role: "participant" as const, session: "imported" }, { role: "learner" as const, session: "academy" }]) {
+      const analysis = reviewAnalysis(run, main, rows[0]!.nodeId, viewer);
+      expect(analysis.kind).toBe("withheld");
+      expect(JSON.stringify(analysis)).not.toMatch(/"moves"|stockfish-test|2\. Nf3/u);
+    }
+    const reason = reviewText("module.refusal.inspector.role_outside_ceiling");
+    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "spectator", session: "imported" })).toMatchObject({ sentence: reviewText("analysis.module.withheld", { move: rows[0]!.label, reason }) });
+    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "host", session: "imported" }).kind).toBe("line");
+  });
+
   it("renders a recorded search's first move as exactly that, with Black-to-move numbering", () => {
-    const analysis = reviewAnalysis(run, main, rows[1]!.nodeId);
+    const analysis = reviewAnalysis(run, main, rows[1]!.nodeId, { role: "learner", session: "imported" });
     expect(analysis).toMatchObject({ kind: "line", source: "search_first_move", bound: { requestedMovetimeMs: 100 }, moves: ["1… c5"] });
     if (analysis.kind !== "line") throw new Error("unreachable");
     expect(analysis.sentence).toBe(`stockfish-test (100 ms search) reported 1… c5 as the first move of its search from the position before ${rows[1]!.label}; no longer line is recorded.`);
   });
 
   it("abstains when the line lacks its search bound, is not legal, or is not recorded", () => {
-    expect(reviewAnalysis(run, main, rows[2]!.nodeId)).toEqual({ kind: "unattributed", nodeId: rows[2]!.nodeId, entryNodeId: rows[2]!.entryNodeId, sentence: reviewText("analysis.unattributed", { move: rows[2]!.label }) });
-    expect(reviewAnalysis(run, main, rows[3]!.nodeId)).toMatchObject({ kind: "none" });
-    expect(reviewAnalysis(run, main, rows[6]!.nodeId)).toEqual({ kind: "none", nodeId: rows[6]!.nodeId, entryNodeId: rows[6]!.entryNodeId, sentence: reviewText("analysis.none", { move: rows[6]!.label }) });
-    expect(() => reviewAnalysis(run, main, branchPath(run, main)[0]!.id)).toThrow(/not a move/u);
-    expect(() => reviewAnalysis(run, main, "nope")).toThrow(/not a move/u);
+    expect(reviewAnalysis(run, main, rows[2]!.nodeId, { role: "learner", session: "imported" })).toEqual({ kind: "unattributed", nodeId: rows[2]!.nodeId, entryNodeId: rows[2]!.entryNodeId, sentence: reviewText("analysis.unattributed", { move: rows[2]!.label }) });
+    expect(reviewAnalysis(run, main, rows[3]!.nodeId, { role: "learner", session: "imported" })).toMatchObject({ kind: "none" });
+    expect(reviewAnalysis(run, main, rows[6]!.nodeId, { role: "learner", session: "imported" })).toEqual({ kind: "none", nodeId: rows[6]!.nodeId, entryNodeId: rows[6]!.entryNodeId, sentence: reviewText("analysis.none", { move: rows[6]!.label }) });
+    expect(() => reviewAnalysis(run, main, branchPath(run, main)[0]!.id, { role: "learner", session: "imported" })).toThrow(/not a move/u);
+    expect(() => reviewAnalysis(run, main, "nope", { role: "learner", session: "imported" })).toThrow(/not a move/u);
   });
 
   it("is withheld while a retry from that position is open, and returns once the learner leaves it", () => {
     const opened = retry(run, rows[0]!.entryNodeId);
     expect(openRetryEntry(opened, main)).toBe(rows[0]!.entryNodeId);
     expect(projectionOf(opened).openRetryEntryNodeId).toBe(rows[0]!.entryNodeId);
-    const withheld = reviewAnalysis(opened, main, rows[0]!.nodeId);
+    const withheld = reviewAnalysis(opened, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
     // Wrong implementation caught: a client-only hide, with the server still serving the line.
     expect(withheld).toEqual({ kind: "withheld", nodeId: rows[0]!.nodeId, entryNodeId: rows[0]!.entryNodeId, sentence: reviewText("analysis.withheld", { move: rows[0]!.label }) });
     expect(JSON.stringify(withheld)).not.toMatch(/"moves"|"engineId"|2\. Nf3/u);
     // Other positions stay analysable during that retry.
-    expect(reviewAnalysis(opened, main, rows[1]!.nodeId).kind).toBe("line");
+    expect(reviewAnalysis(opened, main, rows[1]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("line");
     const playing = commitMove(opened, "d2d4", { actor: "user", at: REVIEW_FIXTURE_AT }).run;
-    expect(reviewAnalysis(playing, main, rows[0]!.nodeId).kind).toBe("withheld");
+    expect(reviewAnalysis(playing, main, rows[0]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("withheld");
     const left = backToReviewed(playing);
     expect(openRetryEntry(left, main)).toBeNull();
-    expect(reviewAnalysis(left, main, rows[0]!.nodeId).kind).toBe("line");
+    expect(reviewAnalysis(left, main, rows[0]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("line");
   });
 
   it("[criterion 12] the ordinary map never carries the line the Analyze action can reveal", () => {

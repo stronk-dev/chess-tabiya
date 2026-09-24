@@ -1,4 +1,4 @@
-import { CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_ADAPTERS, EVIDENCE_CONSUMERS, EVIDENCE_ELIGIBILITY_DECLARATIONS, EVIDENCE_PRODUCER_IDS, EVIDENCE_PRODUCERS, EVIDENCE_REASON_DECLARATIONS, EVIDENCE_SELECTION_POLICIES, RUNTIME_EVIDENCE_CONSUMER_OPERATIONS, SEMANTIC_EVENT_PROJECTION_REFS, assertEvidenceConsumerOperations } from "@chess-tabiya/runtime";
+import { CURRENT_CONSUMER_OPERATION_IDS, MODULE_CONSUMER_IDS, MODULE_CONSUMER_IMPLEMENTATION, MODULE_REGISTRY, compileModulePacket, EVIDENCE_ADAPTERS, EVIDENCE_CONSUMERS, EVIDENCE_ELIGIBILITY_DECLARATIONS, EVIDENCE_PRODUCER_IDS, EVIDENCE_PRODUCERS, EVIDENCE_REASON_DECLARATIONS, EVIDENCE_SELECTION_POLICIES, RUNTIME_EVIDENCE_CONSUMER_OPERATIONS, SEMANTIC_EVENT_PROJECTION_REFS, assertEvidenceConsumerOperations } from "@chess-tabiya/runtime";
 
 import { WEB_EVIDENCE_CONSUMER_OPERATIONS } from "../../web/src/lib/evidence-consumer-operations.js";
 import { SERVER_EVIDENCE_CONSUMER_OPERATIONS } from "./evidence-consumer-operations.js";
@@ -12,6 +12,11 @@ const consumerOperations = Object.freeze([
   ...WEB_EVIDENCE_CONSUMER_OPERATIONS,
 ]);
 assertEvidenceConsumerOperations(CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_MANIFEST.consumers, consumerOperations);
+// rfc/module-registration.md §2.2: every module consumer names the one shared module operation.
+const moduleConsumers = EVIDENCE_MANIFEST.consumers.filter((consumer) => consumer.id.startsWith("module."));
+if (moduleConsumers.map((consumer) => consumer.id).sort().join("|") !== [...MODULE_CONSUMER_IDS].sort().join("|")) throw new TypeError("The module consumers are not set-equal to MODULE_CONSUMER_IDS");
+if (compileModulePacket.name !== MODULE_CONSUMER_IMPLEMENTATION || moduleConsumers.some((consumer) => consumer.implementation !== compileModulePacket.name)) throw new TypeError(`Every module consumer must declare ${compileModulePacket.name}`);
+if (MODULE_REGISTRY.modules.length !== 11) throw new TypeError("The production module registry did not compile all eleven declarations");
 if (declaredConsumers.includes("guidance.packet") || declaredConsumers.includes("analysis.engine")) throw new TypeError("Evidence production or acquisition was incorrectly reintroduced as a consumer");
 
 if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") !== [...EVIDENCE_PRODUCER_IDS].sort().join("|")) throw new TypeError("The producer paths are not set-equal to the primary catalogue");

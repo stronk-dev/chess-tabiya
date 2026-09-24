@@ -1273,6 +1273,50 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("delivers the Post-commit Nudge only through the compiled effect, never retroactively on a preset raise (Checkpoint B, criterion 9)", async () => {
+    const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const initial = createRun({ id: "nudge-seat", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    const run = revealFeedback(commitMove(initial, "e2e4", { at }).run, at).run;
+    const moveNodeId = run.nodes.find((node) => node.moveUci === "e2e4")!.id;
+    const onNudge = vi.fn(async (nodeId: string) => ({ runId: run.id, kind: "packet" as const, nodeId, facts: [{ projection: "rules.fixture.fact@1", sentence: "Fixture consequence.", source: "fixture" }], headline: "After e4", closing: "Try the other idea.", receipt: { offered: 1, admitted: 1, afterReducers: 1, noveltyAbstained: false } }));
+    const mountWith = (entries: readonly (readonly [string, string])[]) => {
+      const preferences = new Map<string, string>(entries);
+      return mountDrill({ target: target(), props: {
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onNudge,
+        assistanceStorage: { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } },
+        onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+        onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+    };
+    const seat = () => document.querySelector('[data-module="postcommit_nudge"]');
+
+    // Guided composes postcommit_nudge: the server-compiled effect admits the seat after disclosure opened.
+    let component = mountWith([[workflowPreferenceKey("position"), explicitPreference("guided")]]);
+    await vi.waitFor(() => expect(seat()?.textContent).toContain("Fixture consequence."));
+    expect(onNudge).toHaveBeenCalledWith(moveNodeId);
+    await unmount(component);
+    document.body.replaceChildren();
+    onNudge.mockClear();
+
+    // Guided with an explicit markers:"off" removes exactly the governed automatic effect.
+    component = mountWith([[workflowPreferenceKey("position"), explicitPreference("guided", { markers: "off" })]]);
+    await assistanceSettled();
+    expect(seat()).toBeNull();
+    expect(onNudge).not.toHaveBeenCalled();
+    await unmount(component);
+    document.body.replaceChildren();
+
+    // Quiet → Guided mid-run with no new learner move renders nothing new (criterion 9 arm a).
+    component = mountWith([]);
+    await assistanceSettled();
+    [...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')].find((input) => input.value === "guided")!.click();
+    await vi.waitFor(() => expect(document.querySelector('[aria-label="Active support promise"]')?.textContent).toContain("After you commit"));
+    await tick();
+    expect(onNudge).not.toHaveBeenCalled();
+    expect(seat()).toBeNull();
+    await unmount(component);
+  });
+
   it("activates each preset's modules from the pill, offers only allowed presets, and states suppressions (criteria 2, 7, 16)", async () => {
     const make = (id: string, liveKind?: "match" | "academy") => ({ run: createRun({
       id,

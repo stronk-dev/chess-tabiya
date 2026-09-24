@@ -36,6 +36,8 @@ import {
   rewindToCheckpoint,
   reviewAnalysis,
   reviewMapProjection,
+  moduleEvidenceRole,
+  postcommitNudgePacket,
   storyMoments,
   reviewStoryTitle,
   trajectoryPolicyAt,
@@ -938,7 +940,7 @@ export class RunService {
   async review(runId: string, principal: Principal, requestedBranchId?: string) {
     const context = this.#storyContext(runId, principal, requestedBranchId, false);
     const semanticPath = await recordedSemanticPathOperation(this.#storage)({ principal, runId, branchId: context.branchId });
-    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side });
+    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role) });
     return Object.freeze({
       runId,
       branchId: context.branchId,
@@ -964,7 +966,7 @@ export class RunService {
     const context = this.#storyContext(runId, principal, requestedBranchId, false);
     let analysis: ReturnType<typeof reviewAnalysis>;
     try {
-      analysis = reviewAnalysis(context.run, context.branchId, nodeId);
+      analysis = reviewAnalysis(context.run, context.branchId, nodeId, this.#moduleViewer(runId, principal, context.run, context.role));
     } catch (error) {
       throw new ServerError("INVALID_REQUEST", "node is not a reviewed move on this branch", { cause: error });
     }
@@ -1020,7 +1022,7 @@ export class RunService {
     if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");
     const context=this.#storyContext(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId,false);
     // rfc/review-map.md §5 ([[D688]]): the public card reads the same moment selection as the private review.
-    const review=reviewMapProjection({run:context.run,branchId:context.branchId,story:context.projection,context:context.record===undefined?"review":"imported_analysis"});
+    const review=reviewMapProjection({run:context.run,branchId:context.branchId,story:context.projection,context:context.record===undefined?"review":"imported_analysis",viewer:this.#moduleViewer(record.runId,{learnerId:learner.id,handle:learner.handle},context.run,context.role)});
     return Object.freeze({
       title:reviewStoryTitle({side:context.run.start.side,outcome:context.outcome,...context.projection}),
       outcome:context.outcome,
@@ -2308,6 +2310,29 @@ export class RunService {
     const state=this.#storage.matchState?.(session.id);
     if(state===undefined)throw new ServerError("STORAGE_FAILURE","Native match state is missing");
     return Object.freeze({session,state});
+  }
+
+  /** rfc/module-registration.md §1.2: the viewer a learner module admits against (role, workflow context). */
+  #moduleViewer(runId: string, principal: Principal, run: DrillRun, role: RunRole) {
+    return Object.freeze({ role: moduleEvidenceRole(role), session: this.#assistanceContext(runId, principal, run, role).workflowContext });
+  }
+
+  /**
+   * rfc/module-registration.md §4.5: Post-commit Nudge for one committed learner move. Read-only
+   * (recomputed, never persisted). Post-commit output is bound to the durable feedback-delivery
+   * boundary (A16): it is withheld until `feedbackDeliveryOpen` holds for the run.
+   */
+  postcommitNudge(runId: string, principal: Principal, nodeId: string) {
+    this.#refuseRatedAssistance(runId);
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    const run = stored.run;
+    if (!run.nodes.some((node) => node.id === nodeId)) throw new ServerError("INVALID_REQUEST", `Unknown nudge node: ${nodeId}`);
+    if (!feedbackDeliveryOpen(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Post-commit guidance is withheld until this run opens feedback");
+    const packet = postcommitNudgePacket({ run, nodeId, ...this.#moduleViewer(runId, principal, run, role) });
+    if (packet.kind === "refused" && packet.reason !== "not_a_learner_move") {
+      throw new ServerError("ASSISTANCE_WITHHELD", `Post-commit Nudge is withheld here (${packet.reason})`);
+    }
+    return Object.freeze({ runId, ...packet });
   }
 
   #assistanceContext(runId: string, principal: Principal, run: DrillRun, role: RunRole) {

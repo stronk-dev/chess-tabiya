@@ -1,5 +1,6 @@
 import { accessPermission, type AssistanceAccess, type AssistanceConfig } from "./assistance.js";
-import { MODULE_IDS, type ModuleId, type ModuleTiming } from "./module-contract.js";
+import { MODULE_IDS, type ModuleId, type ModuleInitiative, type ModuleTiming } from "./module-contract.js";
+import { MODULE_POLICIES } from "./module-policy.js";
 import {
   ASSISTANCE_FIELD_DOMAINS,
   ASSISTANCE_PREFERENCE_FIELDS,
@@ -19,11 +20,13 @@ import {
   requestedPreset,
   workflowContextPolicy,
   HINT_RUNGS,
+  MODULE_PRESENTATION_FACTS,
   PRESET_IDS,
   type AssistancePreferenceField,
   type AssistancePreferenceFields,
   type ConfigClamp,
   type HintRung,
+  type ModulePresentationFacts,
   type OrdinaryWorkflowContextId,
   type OrdinaryWorkflowContextOrigin,
   type PresetId,
@@ -161,7 +164,7 @@ export const SUPPRESSION_REASONS: readonly SuppressionReason[] = Object.freeze([
 ]);
 
 export type EffectSubSurface = "human_split" | "raw_corpus";
-export type EffectArm = "ambient" | "proactive" | "automatic" | "on_request" | "explicit_mode";
+export type EffectArm = ModuleInitiative;
 export interface CompiledAssistanceEffect {
   readonly effectId: string;
   readonly moduleId: ModuleId;
@@ -195,25 +198,31 @@ export type SuppressionRecord =
 const effect = (moduleId: ModuleId, timing: ModuleTiming, arm: EffectArm, subSurface?: EffectSubSurface): CompiledAssistanceEffect =>
   Object.freeze({ effectId: `${moduleId}:${timing}:${arm}${subSurface === undefined ? "" : `:${subSurface}`}`, moduleId, timing, arm, ...(subSurface === undefined ? {} : { subSurface }) });
 
-/** Transcribed from rfc/learner-modules.md §4's timing (initiative) column — see MODULE_PRESENTATION_SOURCE. */
+/** Derived from the production registry: one effect per declared (timing, initiative), plus the two raw-inspector sub-surfaces. */
 export const MODULE_EFFECT_CATALOG: readonly CompiledAssistanceEffect[] = Object.freeze([
-  effect("rules_floor", "pre_commit", "ambient"),
-  effect("sight_on_request", "pre_commit", "on_request"),
-  effect("blunder_prevention", "at_commit", "proactive"),
-  effect("threat_radar", "pre_commit", "on_request"),
-  effect("threat_radar", "post_commit", "on_request"),
-  effect("postcommit_nudge", "post_commit", "automatic"),
-  effect("structure_nudge", "post_commit", "automatic"),
-  effect("structure_nudge", "post_commit", "on_request"),
-  effect("theory_breadcrumb", "post_commit", "on_request"),
-  effect("guided_hint", "checkpoint", "on_request"),
-  effect("compare_coach", "checkpoint", "on_request"),
-  effect("compare_coach", "review", "on_request"),
-  effect("review_map", "review", "automatic"),
-  effect("full_inspector", "review", "explicit_mode"),
+  ...MODULE_POLICIES.flatMap((policy) => policy.timings.map((timing) => effect(policy.id, timing.timing, timing.initiative))),
   effect("full_inspector", "review", "explicit_mode", "human_split"),
   effect("full_inspector", "review", "explicit_mode", "raw_corpus"),
 ]);
+
+/** The presentation facts presets.ts derives its tables from, re-derived here from the registry. */
+export function registryPresentationFacts(): Readonly<Record<ModuleId, ModulePresentationFacts>> {
+  return Object.freeze(Object.fromEntries(MODULE_POLICIES.map((policy) => [policy.id, Object.freeze({
+    maxMarks: policy.budgets.maxMarks ?? 0,
+    maxArrows: policy.budgets.maxArrows,
+    automaticAfterCommit: policy.timings.some((timing) => (timing.timing === "post_commit" || timing.timing === "review") && timing.initiative === "proactive"),
+    onRequest: policy.timings.some((timing) => timing.initiative === "on_request"),
+    namedPattern: policy.id === "structure_nudge",
+    rawInspector: policy.id === "full_inspector",
+    contentBearing: policy.budgets.maxFacts > 0,
+  })])) as Record<ModuleId, ModulePresentationFacts>);
+}
+{
+  const derived = registryPresentationFacts();
+  for (const id of MODULE_IDS) {
+    if (JSON.stringify(derived[id]) !== JSON.stringify(MODULE_PRESENTATION_FACTS[id])) throw new AssistanceExchangeError("EXCHANGE_SHAPE_INVALID", `MODULE_PRESENTATION_FACTS.${id} drifted from the module registry`);
+  }
+}
 
 export type FieldAdapterEntry =
   | { readonly kind: "governs_effects"; readonly effectIds: readonly string[] }
@@ -228,8 +237,8 @@ export type FieldAdapterEntry =
  * governed by module membership and the (D1639-proposed) hint ceiling.
  */
 export const ASSISTANCE_FIELD_EFFECT_ADAPTER: Readonly<Record<AssistancePreferenceField, FieldAdapterEntry>> = Object.freeze({
-  markers: { kind: "governs_effects", effectIds: ["postcommit_nudge:post_commit:automatic", "structure_nudge:post_commit:automatic", "review_map:review:automatic"] },
-  guided: { kind: "governs_effects", effectIds: ["structure_nudge:post_commit:automatic", "structure_nudge:post_commit:on_request"] },
+  markers: { kind: "governs_effects", effectIds: ["postcommit_nudge:post_commit:proactive", "structure_nudge:post_commit:proactive", "review_map:review:proactive"] },
+  guided: { kind: "governs_effects", effectIds: ["structure_nudge:post_commit:proactive"] },
   humanSplit: { kind: "governs_effects", effectIds: ["full_inspector:review:explicit_mode:human_split"] },
   corpus: { kind: "governs_effects", effectIds: ["full_inspector:review:explicit_mode:raw_corpus"] },
   voice: { kind: "channel", channel: "renderer" },

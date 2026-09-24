@@ -19,6 +19,7 @@ import {
   narrowBrowserChannels,
   parseFinalizedAssistanceV1,
   parseRequestedAssistanceV1,
+  registryPresentationFacts,
   renderSuppression,
   serverAvailabilityFromProviders,
   sha256Hex,
@@ -32,6 +33,8 @@ import {
   ASSISTANCE_PREFERENCE_FIELDS,
   CONFIGURABLE_MODULE_IDS,
   HINT_CEILING_TABLE,
+  MODULE_PRESENTATION_FACTS,
+  MODULE_PRESENTATION_SOURCE,
   PRESET_DECLARATIONS,
   PRESET_IDS,
   WORKFLOW_CONTEXT_POLICIES,
@@ -200,7 +203,7 @@ describe("rfc/intent-presets.md — the ∩ algebra, compiled", () => {
   it("criterion 6: presets.ts and the exchange import no eligibility, event or evidence-packet symbol", () => {
     for (const file of ["presets.ts", "assistance-exchange.ts"]) {
       const imports = [...readFileSync(join(__dirname, file), "utf8").matchAll(/from "(\.\/[^"]+)"/gu)].map((match) => match[1]);
-      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./types.js", "./presets.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
+      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
     }
   });
 
@@ -248,7 +251,7 @@ describe("rfc/intent-presets.md — the ∩ algebra, compiled", () => {
     const compiled = compile("position", plus);
     expect(compiled.displayMode).toBe("custom");
     expect(compiled.modules).toEqual(expect.arrayContaining(["structure_nudge", "guided_hint"]));
-    expect(compiled.effects.map((item) => item.effectId)).toContain("structure_nudge:post_commit:on_request");
+    expect(compiled.effects.map((item) => item.effectId)).toContain("structure_nudge:post_commit:proactive");
     const inAcademy = compileAuthoritativeAssistance(compileAssistanceRequest({ contextHint: "academy", preference: { ...plus, preset: "guided" } as WorkflowPreferenceReceipt }), authority("academy"));
     expect(inAcademy.modules).not.toContain("full_inspector");
   });
@@ -311,6 +314,11 @@ describe("rfc/intent-presets.md — the four staged authorities", () => {
     expect(code(() => parseFinalizedAssistanceV1({ ...(wire as object), stage: "authoritative" }))).toBe("EXCHANGE_STAGE_MISMATCH");
     const tampered = { ...authoritative, modules: [...authoritative.modules, "full_inspector"] } as AuthoritativeAssistanceV1;
     expect(code(() => finalizeAssistanceEffects(tampered, { authority: MODULE_SOURCE_AUTHORITY, availability: ALL_AVAILABLE }))).toBe("EXCHANGE_DIGEST_MISMATCH");
+  });
+
+  it("the presentation facts presets.ts derives from are the production registry's (module-registration landed)", () => {
+    expect(registryPresentationFacts()).toEqual(MODULE_PRESENTATION_FACTS);
+    expect(MODULE_PRESENTATION_SOURCE.kind).toBe("registry_mirror");
   });
 
   it("the requirements-only module artifacts are refused, not executed (D2171)", () => {

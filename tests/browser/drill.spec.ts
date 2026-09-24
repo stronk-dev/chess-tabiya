@@ -1140,10 +1140,13 @@ test("Learn shows each due return's standing word beside its due date with its f
   }
   const standing = String(served.schedules[0]!.standing);
   const dueRoute = /\/progress\/due$/u;
+  // The due date the page renders is the one in the payload it was served, not an earlier probe's.
+  let rendered: { schedules: Record<string, unknown>[] } = { schedules: [] };
   const serve = (rewrite: (item: Record<string, unknown>) => Record<string, unknown>) => page.route(dueRoute, async (route) => {
     const response = await route.fetch({ url: `${route.request().url()}?at=${future}` });
     const body = await response.json() as { schedules: Record<string, unknown>[] };
-    await route.fulfill({ response, json: { ...body, schedules: body.schedules.map(rewrite) } });
+    rendered = { ...body, schedules: body.schedules.map(rewrite) };
+    await route.fulfill({ response, json: rendered });
   });
 
   await serve((item) => item);
@@ -1154,7 +1157,7 @@ test("Learn shows each due return's standing word beside its due date with its f
   await expect(label).toHaveAttribute("data-return-standing", standing);
   await expect(label).toHaveText(`${standing} (based on how many spaced returns you've held)`);
   // Beside the due date: the word follows the date on the same line.
-  const dueLabel = await page.evaluate((iso) => new Date(iso).toLocaleString(), String(served.schedules[0]!.dueAt));
+  const dueLabel = await page.evaluate((iso) => new Date(iso).toLocaleString(), String(rendered.schedules[0]!.dueAt));
   expect(await label.locator("xpath=..").textContent()).toContain(`${dueLabel} · ${standing} (based on`);
 
   // The page renders whichever closed word the server sends, and refuses a word outside the vocabulary.

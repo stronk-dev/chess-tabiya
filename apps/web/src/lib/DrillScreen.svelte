@@ -3,7 +3,7 @@
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
   import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameClassification, endgameSetupMatches, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
-  import { onDestroy, onMount, tick } from "svelte";
+  import { onDestroy, onMount, tick, untrack } from "svelte";
 
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
   import BranchRail from "./BranchRail.svelte";
@@ -27,6 +27,7 @@
   import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
   import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
+  import type { PostcommitNudge } from "./nudge-response.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -131,6 +132,7 @@
     onStop: () => void;
     onAssistanceQuery?: ((request: RequestedAssistanceV1) => Promise<FinalizedAssistanceV1>) | undefined;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
+    onNudge?: ((nodeId: string) => Promise<PostcommitNudge>) | undefined;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     onCompareVoice?: (() => Promise<VoicePage>) | undefined;
@@ -197,6 +199,7 @@
     onStop,
     onAssistanceQuery,
     onHumanSplit,
+    onNudge,
     onCorpus,
     onVoice,
     onCompareVoice,
@@ -806,6 +809,38 @@
   let endgameSentences = $derived(endgame === null ? [] : [...renderEndgameClassification(endgame), ...endgameSetupMatches(displayedNode.fen).map(renderEndgameSetupMatch)]);
   let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
   let assistanceContext = $derived({ workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
+  // rfc/module-registration.md §4.5 + rfc/intent-presets.md Checkpoint B: Post-commit Nudge renders only
+  // when the server-compiled result carries its automatic post-commit effect (preset ∩ ceiling ∩ access,
+  // with `markers` governing it) and the run's durable feedback-delivery boundary is open.
+  let nudgeEffectActive = $derived(compiledAssistance?.effects.some((effect) => effect.effectId === "postcommit_nudge:post_commit:proactive") === true);
+  let latestLearnerMoveId = $derived.by(() => {
+    const target = currentNode.actor === "user" ? currentNode : run.nodes.find((node) => node.id === currentNode.parentId);
+    return target?.actor === "user" && target.moveUci !== null ? target.id : undefined;
+  });
+  // Criterion 9: raising the preset mid-run is not a learner request. The move already on the board when
+  // the nudge effect switches on is held back; the next committed move is the first one nudged.
+  let nudgeHeldNodeId: string | undefined = $state();
+  let nudgeWasActive: boolean | undefined;
+  $effect(() => {
+    const active = nudgeEffectActive;
+    if (compiledAssistance === undefined) return;
+    if (nudgeWasActive === false && active) nudgeHeldNodeId = untrack(() => latestLearnerMoveId);
+    nudgeWasActive = active;
+  });
+  let nudgeNodeId = $derived.by(() => {
+    if (onNudge === undefined || !nudgeEffectActive || !feedbackDeliveryOpen(run)) return undefined;
+    return latestLearnerMoveId === nudgeHeldNodeId ? undefined : latestLearnerMoveId;
+  });
+  let nudge: PostcommitNudge | undefined = $state();
+  let nudgeRequest = 0;
+  $effect(() => {
+    const nodeId = nudgeNodeId;
+    const load = onNudge;
+    if (nodeId === undefined || load === undefined) { nudge = undefined; return; }
+    if (nudge?.nodeId === nodeId) return;
+    const request = ++nudgeRequest;
+    void load(nodeId).then((page) => { if (request === nudgeRequest) nudge = page; }).catch(() => { if (request === nudgeRequest) nudge = undefined; });
+  });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let contextPolicy = $derived(workflowContextPolicy(activeAssistanceProfile));
   let requestedPresetId = $derived(requestedPreset(preference, activeAssistanceProfile) ?? contextPolicy.defaultPreset);
@@ -1947,6 +1982,13 @@
                 {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
               </section>
             {/if}
+            {#if nudge?.kind === "packet" && nudge.nodeId === nudgeNodeId && nudge.facts.length > 0}
+              <section class="module-seat" aria-label="Post-commit nudge" data-module="postcommit_nudge">
+                <strong>{nudge.headline}</strong>
+                {#each nudge.facts as fact (fact.projection)}<p data-projection={fact.projection}>{fact.sentence}</p>{/each}
+                <p>{nudge.closing}</p>
+              </section>
+            {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No extra highlights are available here; basic board guidance remains available.</p>{/if}
             {#if rawStructure.structures.length === 0 && !firings.some((firing) => firing.openEnded && firing.lastNodeId === currentNode.id)}
@@ -2581,6 +2623,8 @@
   .assistance-control { position:relative; z-index:6; padding:.35rem .55rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); font-size:.75rem; }
   .guard-prompt { display:grid; gap:.65rem; margin:0; padding:.65rem; border:1px solid var(--accent); border-radius:.7rem; background:color-mix(in srgb,var(--accent) 9%,var(--panel)); }
   .guard-prompt p { margin:.2rem 0 0; font-size:.78rem; color:var(--muted); }
+  .module-seat { display:grid; gap:.35rem; margin:0; padding:.65rem; border:1px solid var(--line); border-radius:.7rem; background:var(--panel); }
+  .module-seat p { margin:0; font-size:.78rem; }
   .guard-actions { display:flex; flex:none; gap:.45rem; }
   .rehearsal-guide { display:grid; gap:.45rem; padding:.8rem; border:1px solid var(--accent); border-radius:.8rem; background:color-mix(in srgb,var(--accent) 7%,var(--panel)); }
   .rehearsal-guide > p, .rehearsal-guide h2 { margin:0; }

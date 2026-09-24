@@ -1,6 +1,6 @@
 # RFC: Move-quality grades — the grade-family projection and its convention document
 
-- **Status:** implementing — 2026-09-01 same-lane derivation repair landed: the manifest now declares recorded-pair OR live-pair, matching the already-enforced runtime instrument guard. The cited convention, pure grade/mate arithmetic, renderer, and experimental projection remain implemented and verified. D1 remains open until learner-modules compiles the two production consumers; this RFC must not archive before that edge exists. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
+- **Status:** implementing — 2026-09-01 same-lane derivation repair landed: the manifest now declares recorded-pair OR live-pair, matching the already-enforced runtime instrument guard. The cited convention, pure grade/mate arithmetic, renderer, and experimental projection remain implemented and verified. D1 discharged at `63902370` (2026-09-24): the production module registry compiles and both consumers — Review Map and Post-commit Nudge — admit the grade through `compileModulePacket`; archival is the coordinator's closeout. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
 - **Author:** claude, on the [[D879]] BUILD-IT verdict and the [[D899]] routing (learner-modules `## Discharges` D3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3 (grounding ladder, §3-forms honesty split), `design/research/assistance-surface-taxonomy.md` §2b (pinned Lichess constants), §2d-1 (two-ladder precedent), §4a (the explicit verdict); `design/research/classifier-coverage-and-noise.md` §4a layer 2 (as quoted by both)
@@ -557,7 +557,7 @@ scored as evidence.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Consumer-edge compilation: the two ◇ declared-awaiting rows (`module.postcommit_nudge`, `module.review_map`) bind `derived.grade.move_quality@1` and this projection's `experimental` disposition lifts — learner-modules' registry landing is the edge; until it lands the projection is manifest-registered with no production consumer and this RFC cannot archive around that | `learner-modules` | the learner-modules implementation commit that compiles the registry (the same commit flips learner-modules' own D3) | |
+| D1 | Consumer-edge compilation: the two ◇ declared-awaiting rows (`module.postcommit_nudge`, `module.review_map`) bind `derived.grade.move_quality@1` and this projection's `experimental` disposition lifts — learner-modules' registry landing is the edge; until it lands the projection is manifest-registered with no production consumer and this RFC cannot archive around that | `learner-modules` | the learner-modules implementation commit that compiles the registry (the same commit flips learner-modules' own D3) | ✅ `63902370` (2026-09-24): `MODULE_REGISTRY` compiles at import; the grade is bound to exactly `module.postcommit_nudge@1` and `module.review_map@1`, its disposition deleted; `reviewMapProjection` and `postcommitNudgePacket` admit it through `compileModulePacket` |
 
 ## Open questions
 
@@ -601,6 +601,8 @@ to the ledger by this review:**
   `move-quality-grades`' implementation (§6), guarding every consumer.
 
 ## Changelog
+
+- 2026-09-24: D1 discharged by `63902370` (module-registration implementation): the `experimental` disposition is deleted and the grade binds to exactly its two module consumers.
 
 - 2026-08-22: created. All cited symbols verified at drafting HEAD (`906498a`):
   `evidence-catalog.ts` projection declarations (`recorded.engine.eval` ~:361,

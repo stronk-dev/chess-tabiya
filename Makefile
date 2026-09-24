@@ -928,6 +928,20 @@ semantic-collectors-promotion-second-author-repair:
 evidence-seal-audit:
 	./node_modules/.bin/vitest run --config tools/d2144-evidence-seal-audit/vitest.config.ts
 
+# rfc/provider-exchange-and-execution.md: the shared provider exchange's focused contract (digest
+# registry, parsers and parser-implementation digest, seals and the durable boundary, the protocol
+# resource/census, the scheduler, descriptors, operator traversals and the supervisor exchange).
+# Regenerate the parser digest with UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1 after a parser change.
+.PHONY: provider-exchange-check provider-traversal
+provider-exchange-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/provider-exchange.test.ts packages/runtime/src/provider-protocol.test.ts apps/server/src/provider-exchange.test.ts apps/server/src/provider-traversal.test.ts apps/server/src/engine-supervisor-exchange.test.ts
+
+# The process-local operator/research door: `make provider-traversal OP=<operation>` reads one JSON
+# request from stdin (operations: stockfish-legal-roots, stockfish-position-evaluation,
+# maia-policy-page, syzygy-position, explorer-position-page).
+provider-traversal: build
+	node apps/server/dist/provider-traversal.js $(OP)
+
 # Permanent value-authority gate (rfc/evidence-value-authority.md §8): single mint, central invoker,
 # registry = non-retired catalogue, receipts, positives and falsifiers for every factory.
 evidence-value-authority:

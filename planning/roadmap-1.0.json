@@ -367,28 +367,53 @@
         "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "The recorded semantic path now reaches a real consumer: the Review Map compiles each run's recorded branch into exact versioned tactic events and shows them per ply, discharging the compiler's first-caller obligation. The shared candidate packet feeds semantic selection. The Review compiler packet, module registry and convention provenance remain open.",
+          "summary": "The evidence-to-consumer chain now runs in production for Review and Post-commit Nudge: the module registry compiles all eleven modules at startup (including the accepted D921 Wave-C pairs) and gates every Review Map fact, so move-quality grades reach both consumers; the recorded semantic path feeds Review, the candidate packet feeds selection, and provider exchange seals Stockfish/Maia/Syzygy/Explorer deliveries into value-authority factories under the new provider-protocol register. Remaining: the Review compiler packet, evidence-presentation seats, preset disclosure, and migrating legacy provider callers.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/review-map.test.ts",
-            "rfc/recorded-semantic-path.md",
-            "rfc/shared-candidate-evidence-packet.md"
+            "packages/runtime/src/module-registry.ts",
+            "packages/runtime/src/provider-exchange.ts",
+            "rfc/module-registration.md",
+            "rfc/provider-exchange-and-execution.md",
+            "rfc/learner-modules.md",
+            "rfc/move-quality-grades.md",
+            "rfc/provider-protocol-register.md",
+            "rfc/review-map.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "recorded-semantic-path.md",
-              "digest": "sha256:4ef59cd6ddd764286753545e129c4dc4f8256a98bd827a943fe28b104caa3fb2"
+              "id": "module-registration.md",
+              "digest": "sha256:49cd572afe9d387a7d072b60be852325f019368c07393123e51e1b602d610f64"
             },
             {
               "kind": "rfc",
-              "id": "shared-candidate-evidence-packet.md",
-              "digest": "sha256:fbe3488b8a3ba3dcadc73eb262aa9ad63b25da8113b7c1c939f26a84d726c23e"
+              "id": "provider-exchange-and-execution.md",
+              "digest": "sha256:ebddcc793fb0fb8227bddd1ba41f60fde8bb72681e9d71675dc12272f41f6fbf"
+            },
+            {
+              "kind": "rfc",
+              "id": "learner-modules.md",
+              "digest": "sha256:68132f47c846c0faa0df246e05d7504a3ca67eb7d620ef8ccfe5248a573c5afe"
+            },
+            {
+              "kind": "rfc",
+              "id": "move-quality-grades.md",
+              "digest": "sha256:0821dc89c12d645511647f289479ed8301d694eb7e86141d810634e76b6bbab9"
+            },
+            {
+              "kind": "rfc",
+              "id": "provider-protocol-register.md",
+              "digest": "sha256:722d617cb8f212b44f2d594d8a5f1b2d10658da33fc410fd0a56ec7208129eec"
+            },
+            {
+              "kind": "rfc",
+              "id": "review-map.md",
+              "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
             },
             {
               "kind": "work_state",
-              "id": "D1710",
-              "digest": "sha256:07490821e6fc8582bd758865e92da093edadfa8556235a7edf9cccf978d463e3"
+              "id": "D1655",
+              "digest": "sha256:43db4ec531aafc5bfabbdd7dbfacabeb69e6a2a6a3edf007b08e8187edd610f7"
             }
           ]
         },

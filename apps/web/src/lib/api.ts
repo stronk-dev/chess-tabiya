@@ -41,6 +41,7 @@ import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parseCapabilities } from "./capability-response.js";
 import { parseEvidencePage } from "./evidence-page-response.js";
+import { parsePostcommitNudge, type PostcommitNudge } from "./nudge-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
 import { parseGroupReplyResult, parsePredictionResult } from "./opponent-path-response.js";
 import { parseOpponentSelection } from "./opponent-selection-response.js";
@@ -978,6 +979,8 @@ export interface DrillClientApi extends RunApi {
   importRecord?(runId: string): Promise<ImportedGameRecord>;
   story?(runId: string, branchId?: string): Promise<GameStory>;
   review?(runId: string, branchId?: string): Promise<ReviewMap>;
+  /** rfc/module-registration.md §4.5: Post-commit Nudge for one committed learner move. */
+  nudge?(runId: string, nodeId: string): Promise<PostcommitNudge>;
   reviewAnalysis?(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage>;
   shareStory?(runId: string, branchId: string): Promise<CreatedStoryShare>;
   storyShares?(runId: string): Promise<readonly StoryShare[]>;
@@ -1188,6 +1191,10 @@ export class DrillApi implements DrillClientApi {
   review(runId: string, branchId?: string): Promise<ReviewMap> {
     const query = branchId === undefined ? "" : `?branch=${encoded(branchId)}`;
     return this.#json(`/runs/${encoded(runId)}/review${query}`);
+  }
+
+  nudge(runId: string, nodeId: string): Promise<PostcommitNudge> {
+    return this.#json<unknown>(`/runs/${encoded(runId)}/nudge?nodeId=${encoded(nodeId)}`).then((value) => parsePostcommitNudge(value, { runId, nodeId }));
   }
 
   reviewAnalysis(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage> {

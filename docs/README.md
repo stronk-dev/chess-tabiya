@@ -52,6 +52,8 @@ Current completion state is deliberately not copied here. Use the
   availability and registration.
 - [Semantic evidence](semantic-evidence.md) — operand-preserving events, research selection and
   counterfactual population rules.
+- [Learner modules](learner-modules.md) — the compiled eleven-module registry, its capability
+  image, what executes today and what is blocked by name.
 - [Recorded evidence](recorded-evidence.md) — durable evidence shapes and their source identity.
 - [Claim backing](claim-backing.md) — authored-claim evidence bindings and validation.
 - [Explanation grounds](explanation-grounds.md) — disclosure, grounded sentences, score
@@ -73,6 +75,8 @@ Current completion state is deliberately not copied here. Use the
 
 - [Engine workers](engine-workers.md) — UCI supervision, Maia, Stockfish evidence, capabilities,
   caching and failure handling.
+- [Provider exchange](provider-exchange.md) — one scheduler, sealed request identity and receipts,
+  typed unavailability and the durable save/reload parser for Stockfish, Maia, Syzygy and Explorer.
 - [Engine grounding](engine-grounding.md) — fixed-depth opening assessments and the read-only engine
   authoring walk.
 - [Tablebase grounding](tablebase-grounding.md) — Syzygy sidecars, perfect resistance and refusal

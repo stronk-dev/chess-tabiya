@@ -14,11 +14,12 @@ import { BANNED_JUDGEMENTS, judgementWordsOutsideGrounding, ungroundedResidue } 
 import type { DrillRun } from "./types.js";
 
 const ROOT = new URL("../../../", import.meta.url);
+const VIEWER = Object.freeze({ role: "learner" as const, session: "imported" });
 
 function projectionOf(run: DrillRun, context: "review" | "imported_analysis" = "imported_analysis", withSemantic = false): ReviewMapProjection {
   const branchId = run.activeCursor.branchId;
   const story = storyMoments(run, branchId, context === "imported_analysis" ? { recordedResult: "1-0" } : {});
-  return reviewMapProjection({ run, branchId, story, context, ...(withSemantic ? { semanticPath: recordedSemanticPath(run, branchId) } : {}) });
+  return reviewMapProjection({ run, branchId, story, context, viewer: VIEWER, ...(withSemantic ? { semanticPath: recordedSemanticPath(run, branchId) } : {}) });
 }
 
 /** Every string the projection would put on screen. */
@@ -146,7 +147,7 @@ describe("review map projection (rfc/review-map.md)", () => {
 
   it("[criterion 11] renders abstention as sentences: zero moments, missing evaluations, no decisions", () => {
     const bare = reviewFixtureRun({ id: "bare", kind: "position", plies: 6, evaluated: () => false });
-    const empty = reviewMapProjection({ run: bare, branchId: bare.activeCursor.branchId, story: { moments: [], rank: [] }, context: "review" });
+    const empty = reviewMapProjection({ run: bare, branchId: bare.activeCursor.branchId, story: { moments: [], rank: [] }, context: "review", viewer: VIEWER });
     expect(empty.moments).toEqual([]);
     expect(empty.momentsSentence).toBe(reviewText("moments.none"));
     expect(empty.coverage.evaluated).toBe(0);

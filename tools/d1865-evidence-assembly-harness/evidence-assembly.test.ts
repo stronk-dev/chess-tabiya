@@ -190,43 +190,21 @@ describe("D1865 complete non-hint module assembly closure", () => {
     expect(accepts).toContain("owner-ruled `outpost`");
   });
 
-  it("derives the exact accepted projections whose landing disposition must be removed", () => {
+  it("records that the landing transferred every accepted disposition except the four retired pre-rebase refs", () => {
+    // The production registry (packages/runtime/src/module-registry.ts) bound the thirty-one accepted
+    // projections and deleted their dispositions in the binding commit (§2.4). What remains accepted-with-
+    // disposition in this historical base-id author image is exactly the four v1 refs evidence-value-authority
+    // retired; the production image binds their §1.3.1 successors instead.
     const acceptedProjectionIds = new Set(pairs.map(({ projection }) => projection));
     const acceptedWithDisposition = PRIMARY_EVIDENCE_MANIFEST.projections
       .filter((projection) => acceptedProjectionIds.has(projection.id) && projection.disposition !== undefined)
-      .map((projection) => projection.id)
+      .map((projection) => `${projection.id}@${projection.version}:${projection.disposition!.kind}`)
       .sort();
     expect(acceptedWithDisposition).toEqual([
-      "derived.grade.move_quality",
-      "derived.material.reading.role_signature",
-      "derived.opening.deepest_reached",
-      "derived.tactic.fork_survives_reply",
-      "derived.tactic.overloaded_defender_response_conflict",
-      "derived.tactic.promotion_pressure",
-      "human.maia.candidate_wdl",
-      "rules.castling.reading.legality",
-      "rules.castling.reading.rights",
-      "rules.king.reading.zone_state",
-      "rules.mobility.reading.legal_moves",
-      "rules.mobility.reading.piece_destinations",
-      "rules.pawn.reading.candidate_majority",
-      "rules.pawn.reading.contacts",
-      "rules.phase.development",
-      "rules.square.reading.control",
-      "rules.structural.reading.pawn_connectivity",
-      "rules.structural.reading.space",
-      "rules.tactic.consequence.forced_mate_after_move",
-      "rules.tactic.consequence.mate_in_one",
-      "rules.tactic.consequence.threat",
-      "rules.tactic.reading.back_rank",
-      "rules.tactic.reading.defender_duty_set",
-      "rules.tactic.reading.discovered_latency",
-      "rules.tactic.reading.loose_piece",
-      "rules.tactic.reading.ray_classification",
-      "rules.tactic.reading.rook_on_seventh",
-      "rules.tactic.reading.trapped_piece",
-      "theory.opening.catalogue_membership",
-      "theory.opening.current_endpoint",
+      "rules.endgame.reading@1:retired",
+      "rules.phase.reading@1:retired",
+      "rules.pivotal.marker@1:retired",
+      "rules.structural.reading.named_structure@1:retired",
     ]);
   });
 

@@ -108,10 +108,10 @@ export function pointwiseMin(left: ConfigClamp, right: ConfigClamp): ConfigClamp
 }
 
 // ---------------------------------------------------------------------------------------------
-// §3.2/§4a derivation inputs. MISSING REGISTRY, EXPLICIT: module-registration (draft) has not landed
-// the production module declarations, so the per-module presentation facts the derivation rule reads
-// are transcribed here from rfc/learner-modules.md §4's accepted eleven-row table. When the sealed
-// registry lands, the census in presets.test.ts must be re-pointed at it and this table deleted.
+// §3.2/§4a derivation inputs: the per-module presentation facts the derivation rule reads. They mirror
+// the production registry (`module-policy.ts` MODULE_POLICIES, landed by module-registration
+// 2026-09-24). presets.ts cannot import that file (module-policy imports this one), so
+// `assistance-exchange.ts` re-derives these facts from MODULE_POLICIES at import and throws on any drift.
 
 export interface ModulePresentationFacts {
   /** `maxMarks` > 0 (a null "—" budget reads as zero). */
@@ -130,9 +130,9 @@ export interface ModulePresentationFacts {
 }
 
 export const MODULE_PRESENTATION_SOURCE = Object.freeze({
-  kind: "transcribed_stand_in" as const,
-  from: "rfc/learner-modules.md §4",
-  awaiting: "rfc/module-registration.md sealed registry",
+  kind: "registry_mirror" as const,
+  from: "packages/runtime/src/module-policy.ts MODULE_POLICIES",
+  assertedBy: "packages/runtime/src/assistance-exchange.ts (import time)",
 });
 
 const facts = (maxMarks: number, maxArrows: number, flags: Partial<Omit<ModulePresentationFacts, "maxMarks" | "maxArrows">> = {}): ModulePresentationFacts => Object.freeze({
@@ -142,12 +142,12 @@ const facts = (maxMarks: number, maxArrows: number, flags: Partial<Omit<ModulePr
 export const MODULE_PRESENTATION_FACTS: Readonly<Record<ModuleId, ModulePresentationFacts>> = Object.freeze({
   rules_floor: facts(0, 0, { contentBearing: false }),
   sight_on_request: facts(6, 1, { onRequest: true }),
-  blunder_prevention: facts(1, 0),
+  blunder_prevention: facts(1, 1),
   threat_radar: facts(4, 2, { onRequest: true }),
   postcommit_nudge: facts(2, 1, { automaticAfterCommit: true }),
-  structure_nudge: facts(4, 0, { automaticAfterCommit: true, onRequest: true, namedPattern: true }),
+  structure_nudge: facts(4, 0, { automaticAfterCommit: true, namedPattern: true }),
   theory_breadcrumb: facts(0, 0, { onRequest: true }),
-  guided_hint: facts(1, 1, { onRequest: true }),
+  guided_hint: facts(2, 1, { onRequest: true }),
   compare_coach: facts(2, 2, { onRequest: true }),
   review_map: facts(3, 2, { automaticAfterCommit: true }),
   full_inspector: facts(20, 8, { rawInspector: true }),

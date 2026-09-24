@@ -12,9 +12,12 @@ import { makeSan } from "chessops/san";
 import { parseUci } from "chessops/util";
 
 import { branchPath } from "./branch-path.js";
+import type { EvidenceRole } from "./evidence-contract.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { compileModulePacket } from "./module-packets.js";
 import { openRetryEntry } from "./review-map.js";
-import { reviewText } from "./review-map-templates.js";
-import type { DrillRun, Node } from "./types.js";
+import { reviewText, type ReviewTemplateId } from "./review-map-templates.js";
+import type { DrillRun, EvidencePayload, Node } from "./types.js";
 
 export type ReviewAnalysis =
   | {
@@ -41,6 +44,8 @@ interface RecordedLine {
   readonly engineId: string | undefined;
   readonly values: Readonly<Record<string, unknown>>;
   readonly movesUci: readonly string[];
+  /** The exact recorded packet, sealed through its evidence route before any module admission. */
+  readonly packet: EvidencePayload;
 }
 
 const isRecord = (candidate: unknown): candidate is Readonly<Record<string, unknown>> => typeof candidate === "object" && candidate !== null && !Array.isArray(candidate);
@@ -56,10 +61,10 @@ function recordedLine(run: DrillRun, nodeId: string): RecordedLine | undefined {
     const values = payload.values;
     const engineId = typeof values.engineId === "string" && values.engineId.trim() !== "" ? values.engineId : undefined;
     if (payload.kind === "bestline" && Array.isArray(values.movesUci) && values.movesUci.length > 0 && values.movesUci.every((move) => typeof move === "string")) {
-      bestline = { source: "bestline", engineId, values, movesUci: values.movesUci as readonly string[] };
+      bestline = { source: "bestline", engineId, values, movesUci: values.movesUci as readonly string[], packet: { kind: payload.kind, source: payload.source, values } };
     }
     if (payload.kind === "eval" && typeof values.bestMoveUci === "string") {
-      firstMove = { source: "search_first_move", engineId, values, movesUci: [values.bestMoveUci] };
+      firstMove = { source: "search_first_move", engineId, values, movesUci: [values.bestMoveUci], packet: { kind: payload.kind, source: payload.source, values } };
     }
   }
   return bestline ?? firstMove;
@@ -95,7 +100,31 @@ function moveLabel(entry: Node, node: Node): string {
  * The Analyze reveal for one reviewed move: the recorded engine line from the position before it.
  * Read-only and recomputed; throws a TypeError when `nodeId` is not a move on the reviewed branch.
  */
-export function reviewAnalysis(run: DrillRun, branchId: string, nodeId: string): ReviewAnalysis {
+const INSPECTOR_REFUSALS: Readonly<Record<"role_outside_ceiling" | "session_outside_ceiling" | "not_admitted", ReviewTemplateId>> = Object.freeze({
+  role_outside_ceiling: "module.refusal.inspector.role_outside_ceiling",
+  session_outside_ceiling: "module.refusal.inspector.session_outside_ceiling",
+  not_admitted: "module.refusal.inspector.not_admitted",
+});
+
+/**
+ * rfc/module-registration.md: a recorded principal variation is `principal_variation` answer
+ * content, which only Full Inspector (the explicit surface) may carry. Analyze is that explicit
+ * reveal, so its line is admitted through `module.full_inspector@1` — roles learner/host, and only
+ * in the workflow contexts whose ceiling includes the inspector.
+ */
+function inspectorRefusal(recorded: RecordedLine, viewer: { readonly role: EvidenceRole; readonly session: string }): keyof typeof INSPECTOR_REFUSALS | undefined {
+  const evidence = recorded.source === "bestline"
+    ? invokeEvidenceValueRoute("live.stockfish.pv@1", { packet: recorded.packet })
+    : invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: recorded.packet });
+  const packet = compileModulePacket({ module: "full_inspector", timing: "review", role: viewer.role, session: viewer.session, evidence: [evidence], mode: "admit" });
+  if (packet.kind === "refused") {
+    if (packet.reason === "role_outside_ceiling" || packet.reason === "session_outside_ceiling") return packet.reason;
+    throw new TypeError(`module.full_inspector@1 refused its own review timing: ${packet.reason}`);
+  }
+  return packet.facts.some((fact) => fact.evidence === evidence) ? undefined : "not_admitted";
+}
+
+export function reviewAnalysis(run: DrillRun, branchId: string, nodeId: string, viewer: { readonly role: EvidenceRole; readonly session: string }): ReviewAnalysis {
   const path = branchPath(run, branchId);
   const index = path.findIndex((node) => node.id === nodeId);
   if (index < 1) throw new TypeError(`Node ${nodeId} is not a move on branch ${branchId}`);
@@ -113,6 +142,8 @@ export function reviewAnalysis(run: DrillRun, branchId: string, nodeId: string):
     ? { requestedMovetimeMs: movetime as number }
     : Number.isSafeInteger(depth) && (depth as number) > 0 ? { requestedDepth: depth as number } : undefined;
   if (bound === undefined || recorded.engineId === undefined) return Object.freeze({ ...base, kind: "unattributed" as const, sentence: reviewText("analysis.unattributed", { move }) });
+  const refused = inspectorRefusal(recorded, viewer);
+  if (refused !== undefined) return Object.freeze({ ...base, kind: "withheld" as const, sentence: reviewText("analysis.module.withheld", { move, reason: reviewText(INSPECTOR_REFUSALS[refused]) }) });
   const boundText = "requestedMovetimeMs" in bound ? reviewText("analysis.bound.movetime", { ms: bound.requestedMovetimeMs }) : reviewText("analysis.bound.depth", { depth: bound.requestedDepth });
   const operands = { engine: recorded.engineId, bound: boundText, move, line: moves.join(" ") };
   return Object.freeze({
