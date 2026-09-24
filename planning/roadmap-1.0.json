@@ -470,7 +470,7 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Return scheduling now reaches learners end to end without a migration: the ladder replays from attempts with a lapse step-down floor and an overstudy cap, difficult roots link their preserved runs, the due queue serves a bounded intake with frequency tie-breaks and a waiting count, varied returns rotate authored retry variants, and imported games record guess-the-move predictions. The maturity vocabulary and five cross-RFC discharges remain with their owners.",
+          "summary": "Return scheduling reaches learners end to end: the ladder replays from attempts with lapse step-down and an overstudy cap, difficult roots link preserved runs, the due queue serves a bounded intake with frequency tie-breaks and a waiting count, each due return carries the owner-ruled three-word standing with a fixed explanation, varied returns rotate authored retry variants, and imported games record guess-the-move predictions. Four cross-RFC discharges remain with their owners.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/return-scheduling-application.test.ts",
@@ -481,12 +481,12 @@
             {
               "kind": "rfc",
               "id": "return-scheduling.md",
-              "digest": "sha256:e0d2ffeb4b6d79f3197c9e15d0bc46148a19166df4a592565a67e724636b31c4"
+              "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
             },
             {
               "kind": "work_state",
-              "id": "D864",
-              "digest": "sha256:547c18b74efc2682cfb497a86a23894e7695ff628405dab6c4fedd2b114e33d4"
+              "id": "D868",
+              "digest": "sha256:5f88afcd1473f649026dda7cf14325249a39e1043fbebf2fb8a02785b44fa3d4"
             }
           ]
         },

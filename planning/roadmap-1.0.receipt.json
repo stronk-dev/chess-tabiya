@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2e68277b2ef11c58b209c714f84e6c9e1b7736c1a6a99d77616033d2ebc69afe",
+    "roadmap": "sha256:374e8cb48de6dfa2a85198af3b9936b6f2d4402b49482237be79e0c5a645acee",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:be7c8e6591304d049da9aa7094f51e1b0632aae452a997319172fcc8984f5818",
-    "rfcRegister": "sha256:80cc5b0c7e8c2da14ba96cb4d59de5f6ab62c22b9f17ea2b29295635c55b71dd",
+    "workState": "sha256:96dd61969be667c5cf669cbfba5a25357421c4e3c9b1f2e713579c734c075e5f",
+    "rfcRegister": "sha256:8a632f653c1c551ceddabe55bb7429fdaf316102dbf2973f48381638d75c2fa5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
-    "rest": "sha256:3990ec8319b18e53276cb78fb387307161b52791b6bca8f147da4388de5e0b78"
+    "rest": "sha256:2e764de837051606360d4869cb065f6ca7b8d624e0e3ea4097fa0d497b733ad7"
   },
   "summary": {
     "capabilities": 14,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1210,
-      "done": 1100,
+      "blocked": 1209,
+      "done": 1101,
       "refused": 111
     },
     "workItems": {
@@ -387,7 +387,7 @@
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Return scheduling now reaches learners end to end without a migration: the ladder replays from attempts with a lapse step-down floor and an overstudy cap, difficult roots link their preserved runs, the due queue serves a bounded intake with frequency tie-breaks and a waiting count, varied returns rotate authored retry variants, and imported games record guess-the-move predictions. The maturity vocabulary and five cross-RFC discharges remain with their owners.",
+        "summary": "Return scheduling reaches learners end to end: the ladder replays from attempts with lapse step-down and an overstudy cap, difficult roots link preserved runs, the due queue serves a bounded intake with frequency tie-breaks and a waiting count, each due return carries the owner-ruled three-word standing with a fixed explanation, varied returns rotate authored retry variants, and imported games record guess-the-move predictions. Four cross-RFC discharges remain with their owners.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/return-scheduling-application.test.ts",
@@ -398,12 +398,12 @@
           {
             "kind": "rfc",
             "id": "return-scheduling.md",
-            "digest": "sha256:e0d2ffeb4b6d79f3197c9e15d0bc46148a19166df4a592565a67e724636b31c4"
+            "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
           },
           {
             "kind": "work_state",
-            "id": "D864",
-            "digest": "sha256:547c18b74efc2682cfb497a86a23894e7695ff628405dab6c4fedd2b114e33d4"
+            "id": "D868",
+            "digest": "sha256:5f88afcd1473f649026dda7cf14325249a39e1043fbebf2fb8a02785b44fa3d4"
           }
         ]
       },

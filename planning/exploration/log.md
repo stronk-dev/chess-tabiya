@@ -21049,3 +21049,12 @@ The owner answered four questions in session:
 - **Next work:** build `review-map` and `famous-games` in parallel.
 - **Process:** for this session, implement directly without review rounds.
   Consolidation and review come later.
+
+### 2026-09-24 — return-scheduling D2 discharged: coarse return standing
+
+Each due return on Learn now carries one closed word: new, learning or
+established. The word is mapped in `returnStanding()` from the rung that the
+`attempts` replay already computes, so a lapse and an overstudy move the word
+exactly as they move the interval. The rung itself never leaves the server,
+and the existing guard still refuses mastery, ratio or rung fields. The page
+shows a fixed explanation beside the due date. D864 closes.

@@ -7099,12 +7099,12 @@
     },
     {
       "id": "D864",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:547c18b74efc2682cfb497a86a23894e7695ff628405dab6c4fedd2b114e33d4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:68387c7a2dcd258ba9421a545c3bfa1a2982098b973fc2956de60c08255f15dc",
       "uxItems": [],
-      "owner": "review-and-return",
-      "blocker": "rfc:return-scheduling.md"
+      "evidence": "apps/server/src/return-scheduling.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D865",
