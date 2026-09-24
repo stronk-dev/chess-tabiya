@@ -1,7 +1,14 @@
 # RFC: Bot policy
 
-- **Status:** **implementing — owner-directed partial implementation landed 2026-09-24 without the fresh
-  review; the persisted route stays dependency-blocked.** Shipped: the `bot-profile-catalog@1`
+- **Status:** **implementing — second owner-directed landing 2026-09-24: a learner can choose and play
+  a registered bot.** Run lane 0.18 + migration 29 persist the exact profile reference and one
+  decision/operation/delivery envelope per bot move; `POST /runs/:runId/opponent-ply` is mounted
+  through `createApplication` over the ONE shared provider exchange with pre-provider request-id
+  lookup, post-provider CAS, concurrent-winner/conflict split and durable replay by reconstruction
+  ([[D3027]]); roster availability is derived from the exchange's own outcomes (provider health
+  remains a draft, so guarded families stay `conditional`). Receipt:
+  `planning/bot-policy/implementation-receipt-2026-09-24-playable.md`. *(First landing the same day,
+  without the fresh review; the persisted route was then dependency-blocked.)* Shipped by the first landing: the `bot-profile-catalog@1`
   runtime catalogue (twelve profiles derived as families × bands, pinned behaviour/profile digests,
   complete-reference resolution, closed layer/classifier/reason/card/blocker grammar, composition
   refusals, the legal-board `pawn_move@1` view); the sealed compiler with normalized top-p, whole-guard
@@ -74,9 +81,12 @@
 - **Planning:** `planning/bot-policy/` (once implementing)
 
 ```tabiya-claims
-run-schema | lane 0.18 | OpponentSelection.policy event envelope + RunOpponentPolicy exact profile reference (packages/runtime/src/types.ts:69,102; run.started and opponent.move_selected payloads widen together)
-migration | position behind concept-registry | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite
+none
 ```
+
+**Both claims discharged 2026-09-24.** Run-schema lane 0.18 and its stamp-only migration landed
+together as migration 29 (run-schema and migration registers, landed rows). The paragraph below is
+the drafting-time rationale, kept for the record.
 
 **Why these two claims and nothing else, verified at HEAD.** The register heads at drafting
 HEAD are pack 0.27 (0.28/0.29 live-claimed), run **0.17** (`DRILL_RUN_SCHEMA_VERSION`,
@@ -89,7 +99,7 @@ learner-rating`), evidence-kinds 7 members. This RFC widens the **persisted**
 (migration 20, `SelectionCandidate.offWindow`) and 0.16→0.17 (migration 23,
 `orderingBasis`), both stamp-only. The same 0.18 lane also covers §4.1's run seam: the
 persisted `run.started` `opponentPolicy` payload (`RunOpponentPolicy`,
-`packages/runtime/src/types.ts:69`) widens by the same optional exact six-field profile reference — one
+`packages/runtime/src/types.ts:69`) widens by the same optional exact eight-field profile reference — one
 version bump, two payloads; the register row names both and remains byte-joined to the claims block.
 So: one run-schema lane,
 one stamp-only migration position, frozen literals per the migration-4/9 freeze lesson.
@@ -618,10 +628,18 @@ replayed_concurrent_winner | concurrent_commit_conflict | stale_root |
 request_reused_with_different_operands | base_provider_unavailable | provider_failed`. A successful
 compiler execution adds `commitOperandDigest`, covering the pre-provider operand digest,
 derivation digest and every exact provider source identity. It writes one
-`BotPolicyEventEnvelope { decision, operation }` **inside the same `opponent.move_selected` event**.
+`BotPolicyEventEnvelope { decision, operation }` **inside the same `opponent.move_selected` event**,
+persisted as `OpponentSelection.policy = { decision, operation, deliveries }`: `deliveries` holds the
+shared `tabiya.provider-delivery.v1` images of the Maia page and (guarded families) the Stockfish
+root table — or the guard's closed failure — so the durable parser can re-admit them through
+`parsePersistedProviderDelivery` instead of trusting stored payload bytes.
 The operation record names the pre-commit head and resulting event sequence, but deliberately does
 not contain the resulting committed head digest: the normal event-log hash protects the envelope,
-so the digest image is non-circular. The operation digest covers request, root, writer lease,
+so the digest image is non-circular. The **event-head digest** is `runEventHeadDigest` (runtime):
+SHA-256 over the run id and the head event's `(seq, type, at)`. The log is append-only with
+gap-free sequences, so the head identifies the whole prefix; payloads are excluded because the
+public projection redacts them before feedback disclosure, and the browser must compute the same
+token from its own view. The operation digest covers request, root, writer lease,
 profile, seed, derivation, exact provider identities, chosen move and event sequence; it excludes
 timings and its own digest field. Save → reload → retry locates that event by request id and returns
 the stored envelope byte-for-byte without provider calls. That later retry compares only the exact
@@ -1432,7 +1450,7 @@ joins before acceptance; no production/schema/migration/content byte is authoriz
 | D5 | Owner-use roster validation via the retained 42-branch blind packet (O8.5) — validates or rejects profiles by use; cannot clear H5/C5 population claims | OWNER | `planning/platform-alignment/bot-policy/` + ledger | |
 | D6 | Exact atomic production route benchmark at release concurrency clears the 400/500-ms operating contract or returns the guarded families for revision | `bot-policy` | release receipt with image/profile digests and total/Maia/guard/composition distributions | |
 | D7 | Provider health is accepted and its claim-free [[D2364]] runtime snapshot/result/release authority lands; bot policy imports those exact symbols and no health copy | `provider-health-degradation.md` | provider-health checkpoint receipt + symbol-level bot join | |
-| D8 | Shared-resource bootstrap is accepted/implemented, registers `bot-profile-catalog` as absent, and this RFC atomically adds the unique first-lane-1 claim before acceptance | `shared-resource-register-bootstrap.md` + `bot-policy` | register/check receipt and byte-joined claims block | |
+| D8 | Shared-resource bootstrap is accepted/implemented, registers `bot-profile-catalog` as absent, and this RFC atomically adds the unique first-lane-1 claim before acceptance (re-owned 2026-09-24: the bootstrap half is implemented and archived at `rfc/archive/shared-resource-register-bootstrap.md`; it has no absent registration ([[D3082]]), so the remaining registration is this RFC's — create the source first and add one catalogue row, as `provider-protocol` did) | `bot-policy` | register/check receipt and byte-joined claims block | |
 
 ## Open questions
 
@@ -1561,3 +1579,17 @@ as a named future measured layer (Open question 4).
   unlanded), provider delivery/health joins (D7, [[D3030]]). Every roster row is therefore
   `not_startable` and Play still offers raw Maia rungs. Receipt:
   `planning/bot-policy/implementation-receipt-2026-09-24.md`.
+- 2026-09-24 (second owner-directed landing, no review round): **a learner can choose and play a
+  registered bot.** Run lane 0.18 + migration 29 (stamp-only, frozen literals, prior-release upgrade
+  test); `POST /runs/:runId/opponent-ply` mounted through `createApplication` over the shared
+  scheduler (`bot-opponent-operation.ts`, `bot-opponent-source.ts`, `RunService.botOpponentPly`);
+  availability observed from the exchange's own outcomes behind the same snapshot provider health
+  will later supply; the Play picker and in-run identity. **Corrections made inline:** (1) §0's
+  claims rationale called the profile reference "six-field"; the §4.1 interface has eight fields;
+  (2) §4.1 never defined the event-head digest, and a payload-covering digest cannot serve as the
+  browser's CAS token because the public projection redacts payloads before disclosure — defined as
+  the head event's `(seq, type, at)` under the run id over the append-only log; (3) §4.1's
+  `{ decision, operation }` envelope could not satisfy A3's "retains each admitted delivery and
+  validates it after save/reload" — the persisted envelope now also carries the shared delivery
+  images. Every other finding became a test (`apps/server/src/bot-opponent-ply.test.ts`). Receipt:
+  `planning/bot-policy/implementation-receipt-2026-09-24-playable.md`.

@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 
 import { expect, test, type Browser, type BrowserContext, type Page } from "@playwright/test";
 
+import { chooseRawRung } from "./play-helpers.js";
+
 const PASSWORD = "browser-test-password";
 
 async function learner(browser: Browser, prefix: string): Promise<{
@@ -53,6 +55,7 @@ async function play(page: Page, from: string, to: string, orientation: "white" |
 
 async function startPosition(page: Page): Promise<string> {
   await page.goto("/play");
+  await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   return decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!);

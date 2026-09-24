@@ -233,8 +233,12 @@ describe("§9 application composition and degradation", () => {
     try {
       const result = await application.providers.scheduler.get({ operation: "syzygy.position@1", request: REQUESTS["syzygy-position"] as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
       expect(result).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
+      // rfc/bot-policy.md §4.1: mock-engine deployments also run the exchange over a labelled mock
+      // Maia (so a bot game is playable end to end in development/CI). It names itself a mock and
+      // its container digest is the digest of a labelled stand-in image, never a real one.
       const maia = await application.providers.scheduler.get({ operation: "maia.policy_page@1", request: REQUESTS["maia-policy-page"] as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
-      expect(maia).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
+      expect(maia, JSON.stringify(maia)).toMatchObject({ kind: "success" });
+      expect(maia.kind === "success" && maia.delivery.acquisition.actualIdentity.name).toBe("Mock Maia");
       // rfc/review-evidence-compiler.md: a mock-engine deployment runs the ONE real exchange over a
       // labelled mock analysis engine, so the Review packet path is exercised end to end.
       const request = { ...(REQUESTS["stockfish-position-evaluation"] as Record<string, unknown>), requestedEngine: { id: "stockfish-analysis", version: "mock-1" } };

@@ -3,8 +3,9 @@
 // relations only: it never selects, ranks, grades, explains or renders the events it returns.
 
 import { resolveBranchPath } from "./branch-path.js";
-import { BREADTH_CONVENTION_TEXT, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_CONVENTION_TEXT, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
-import { evidenceDigest, type CompiledEvidenceManifest, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
+import { evidenceConventionReceipt, evidenceDigest, type CompiledEvidenceManifest, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { CONVENTION_REGISTRY, compareConventionRefs, conventionRefKey, type ConventionReceipt, type ConventionRef } from "./evidence-conventions.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { RecordedEdgeError, type RecordedEdge } from "./recorded-edge.js";
 import type { LegalExchangeResult } from "./exchange.js";
@@ -74,14 +75,18 @@ export type RecordedPathWindowReceipt = Readonly<{
 }>;
 
 /**
- * The [[D1921]]/[[D1929]] semantic-convention value/provenance predecessor has not landed. Until it
- * does, the result explicitly abstains from a registry authority and digests the in-catalogue
- * convention text instead; it never claims a registry head it cannot name.
+ * The exact convention closure of the emitted events ([[D1921]]/[[D1929]];
+ * rfc/semantic-convention-provenance.md §4). `refs` is the union of every emitted event's sealed
+ * value-level convention receipt, `registryDigest` names the compiled registry those refs resolve
+ * in, and `digest` covers each event's exact receipt digest in emission order. An empty path emits
+ * no event and carries an empty closure under the same registry.
  */
 export type RecordedPathConventionReceipt = Readonly<{
-  status: "predecessor_unlanded";
-  predecessor: "rfc/semantic-convention-provenance.md";
+  status: "registered";
   registryDigest: string;
+  refs: readonly ConventionRef[];
+  eventReceiptDigests: readonly string[];
+  digest: string;
 }>;
 
 export type RecordedSemanticPathResult =
@@ -173,16 +178,22 @@ export function recordedPathEvaluatorRows(): readonly RecordedPathEvaluatorRow[]
   return Object.freeze(EVALUATOR_ROWS.map((row) => Object.freeze({ ...row })));
 }
 
-const CONVENTION_REGISTRY_MATERIAL = Object.freeze({
-  status: "predecessor_unlanded",
-  predecessor: "rfc/semantic-convention-provenance.md",
-  inCatalogueConventionText: { semantic: SEMANTIC_CONVENTION_TEXT, breadth: BREADTH_CONVENTION_TEXT },
-});
-const CONVENTION_RECEIPT: RecordedPathConventionReceipt = Object.freeze({
-  status: "predecessor_unlanded",
-  predecessor: "rfc/semantic-convention-provenance.md",
-  registryDigest: evidenceDigest(CONVENTION_REGISTRY_MATERIAL),
-});
+/** One event's sealed convention receipt; every v2 event is minted by the sole factory mint. */
+function eventConventionReceipt(event: SemanticEvidenceEvent): ConventionReceipt {
+  const receipt = evidenceConventionReceipt(event.evidence);
+  if (receipt === undefined) throw new TypeError(`Recorded-path event ${event.id} carries no sealed convention receipt`);
+  return receipt;
+}
+
+/** The result's closure over the exact emitted events, in emission order. */
+export function recordedPathConventionReceipt(events: readonly SemanticEvidenceEvent[]): RecordedPathConventionReceipt {
+  const receipts = events.map(eventConventionReceipt);
+  const refs = new Map<string, ConventionRef>();
+  for (const receipt of receipts) for (const ref of receipt.refs) refs.set(conventionRefKey(ref), ref);
+  const eventReceiptDigests = Object.freeze(receipts.map((receipt) => receipt.digest));
+  const body = { status: "registered" as const, registryDigest: CONVENTION_REGISTRY.digest, refs: [...refs.values()].sort(compareConventionRefs), eventReceiptDigests };
+  return Object.freeze({ ...body, refs: Object.freeze(body.refs), digest: `sha256:${evidenceDigest(body)}` });
+}
 
 export interface RecordedPathIdentityMaterial {
   readonly operation: "recorded-semantic-path@1";
@@ -391,14 +402,16 @@ export function recordedSemanticPathExecution(run: DrillRun, branchId: string, o
     projection: refKey(event.projection),
     conventionId: typeof (event.operands as { readonly conventionId?: unknown }).conventionId === "string" ? (event.operands as { readonly conventionId: string }).conventionId : null,
     inputs: event.derivationInputs.map((input) => ({ projection: refKey(input.projection), payload: evidenceDigest(input.payload) })),
+    convention: eventConventionReceipt(event).digest,
   }));
+  const conventionReceipt = recordedPathConventionReceipt(events);
   const sourceClosureDigest = evidenceDigest({ edges: prepared.map((edge) => edge.edge.payload), events: eventReceipts });
   const frozenWindows = Object.freeze(windows);
   const pathNodeIds = Object.freeze(path.map((node) => node.id));
   const digest = recordedSemanticPathIdentity({
     operation: "recorded-semantic-path@1",
     manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest,
-    semanticConventionRegistryDigest: CONVENTION_RECEIPT.registryDigest,
+    semanticConventionRegistryDigest: conventionReceipt.registryDigest,
     sourceClosureDigest,
     runId: run.id,
     branchId,
@@ -415,7 +428,7 @@ export function recordedSemanticPathExecution(run: DrillRun, branchId: string, o
     pathNodeIds,
     events,
     windows: frozenWindows,
-    conventionReceipt: CONVENTION_RECEIPT,
+    conventionReceipt,
     digest,
   }), validationMs, preparationMs, windowsMs, prepared.length, startFens.size, frozenWindows.length);
 }

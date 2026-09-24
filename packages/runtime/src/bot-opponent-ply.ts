@@ -3,10 +3,41 @@
  * (rfc/bot-policy.md §4.1). Server route and web client import these; neither declares a
  * parallel status/code/retry/action table.
  *
- * The route itself is not mounted yet: it persists its decision/operation envelope inside
- * `opponent.move_selected` under run-schema lane 0.18, whose stamp migration is registered behind
- * `concept-registry` (see `planning/bot-policy/implementation-receipt-2026-09-24.md`).
+ * The route persists its decision/operation envelope inside `opponent.move_selected`
+ * (`OpponentSelection.policy`, run schema 0.18, migration 29).
  */
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+
+import { sha256Hex } from "./assistance-exchange.js";
+import type { DrillRunEvent } from "./types.js";
+
+export const BOT_REQUEST_ID_PATTERN = /^botreq_[A-Za-z0-9_-]{16,128}$/u;
+
+/**
+ * The run's event-head identity: the compare-and-swap token the browser echoes as
+ * `expectedEventHeadDigest`. The event log is append-only with gap-free sequence numbers, so the
+ * head event's `(seq, type, at)` under the run id identifies the whole prefix: any append — on any
+ * branch, including a rewind or an evidence attachment — moves it. It deliberately excludes event
+ * payloads, which the public projection redacts before feedback disclosure, so server and browser
+ * compute the same token from their own views. Both share this one definition (the SHA-256 here is
+ * dependency-free and synchronous).
+ */
+export function runEventHeadDigest(run: { readonly id: string; readonly events: readonly Pick<DrillRunEvent, "seq" | "type" | "at">[] }): `sha256:${string}` {
+  const head = run.events.at(-1);
+  const image = canonicalizeJson({
+    protocol: "tabiya.run-event-head@1",
+    runId: run.id,
+    head: head === undefined ? null : { seq: head.seq, type: head.type, at: head.at },
+  });
+  return `sha256:${sha256Hex(image)}`;
+}
+
+/** A fresh idempotency key; `random` must return uniformly distributed bytes. */
+export function botOpponentPlyRequestId(random: (bytes: Uint8Array) => Uint8Array): `botreq_${string}` {
+  const bytes = random(new Uint8Array(18));
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+  return `botreq_${[...bytes].map((byte) => alphabet[byte & 63]).join("")}`;
+}
 
 export interface BotOpponentPlyRequest {
   readonly requestId: `botreq_${string}`;
@@ -24,7 +55,7 @@ export class BotOpponentPlyRequestError extends TypeError {
 }
 
 const REQUEST_KEYS = Object.freeze(["requestId", "expectedNodeId", "expectedBranchId", "expectedEventHeadDigest"] as const);
-const REQUEST_ID = /^botreq_[A-Za-z0-9_-]{16,128}$/u;
+const REQUEST_ID = BOT_REQUEST_ID_PATTERN;
 const CANONICAL_DIGEST = /^sha256:[0-9a-f]{64}$/u;
 const ROOT_IDENTITY = /^[A-Za-z0-9_.:-]{1,128}$/u;
 

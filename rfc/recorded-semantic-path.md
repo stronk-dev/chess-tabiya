@@ -2,8 +2,8 @@
 
 - **Status:** awaiting D2 — implemented 2026-09-24 at the owner's direction to implement ready RFCs; D1 discharged the same day when the Review Map became the first production caller
   (compiler, exact edge source, v2 successors, exact ref inventory, server operation, checker);
-  criterion 13's production consumer (D1 via [[D1870]]/[[D1710]]) and the [[D1921]]/[[D1929]]
-  convention predecessor (explicit abstention in the result) remain open. Receipt:
+  criterion 13's production consumer (D1 via [[D1870]]/[[D1710]]) remains open; the [[D1921]]/[[D1929]]
+  convention predecessor landed the same day and the result now carries a registered receipt. Receipt:
   `planning/recorded-semantic-path/implementation-2026-09-24.md`
 - **Author:** codex
 - **Created:** 2026-08-27
@@ -18,8 +18,8 @@
 - **Depends on:** implemented branch runtime; implemented evidence
   manifest, semantic event seal and eleven existing multi-edge projections; accepted
   `rfc/semantic-collectors.md` (the projection semantics, already implemented for this subset).
-  Acceptance now also waits on the exact value/convention authority returned in
-  `rfc/semantic-convention-provenance.md` ([[D1921]]/[[D1929]])
+  The exact value/convention authority of `rfc/semantic-convention-provenance.md`
+  ([[D1921]]/[[D1929]]) landed 2026-09-24
 - **Parent / amends:** implements the recorded-run adapter left outside
   `rfc/semantic-collectors.md` §1.1 and consumed later by `rfc/module-registration.md`,
   `rfc/review-evidence-compiler.md` and `rfc/longitudinal-store.md`
@@ -134,8 +134,8 @@ type RecordedSemanticPathResult =
       pathNodeIds: readonly string[];
       events: readonly SemanticEvidenceEvent[];
       windows: readonly RecordedPathWindowReceipt[];
-      // 2026-09-24: explicit abstention until the D1921/D1929 predecessor lands.
-      conventionReceipt: Readonly<{ status: "predecessor_unlanded"; predecessor: string; registryDigest: string }>;
+      // 2026-09-24: the exact emitted closure under the compiled convention registry ([[D1921]]/[[D1929]]).
+      conventionReceipt: Readonly<{ status: "registered"; registryDigest: string; refs: readonly ConventionRef[]; eventReceiptDigests: readonly string[]; digest: string }>;
       digest: string;
     }>
   | Readonly<{
@@ -482,14 +482,23 @@ assumed.
 |---|---|---|
 | [[D1927]] | `branchPath` truncates missing ancestry, trusts node-array order and has no cycle guard | **candidate green and amended:** total graph authority; repeat review required |
 | [[D1928]] | `run.record.move@1` is a loose narrative payload, not the claimed exact edge receipt | **candidate green and amended:** new `run.record.edge@1` plus eleven v2 successors; repeat review required |
-| [[D1921]] | event seals accept unrelated move-evidence values and retain the same id | semantic-convention/value-level derivation predecessor |
-| [[D1929]] | result identity claims convention heads but digests no convention receipt | semantic-convention predecessor + author amendment |
+| [[D1921]] | event seals accept unrelated move-evidence values and retain the same id | **closed 2026-09-24:** every v2 event value carries a mint-sealed `ConventionReceipt` over its exact sealed inputs (semantic-convention-provenance §4) |
+| [[D1929]] | result identity claims convention heads but digests no convention receipt | **closed 2026-09-24:** `semanticConventionRegistryDigest` is the compiled registry digest and `sourceClosureDigest` covers each event's receipt digest |
 | [[D1930]] | relative co-editable benchmark has no absolute consumer budget or deterministic CI split | **measured and amended:** absolute 500 ms pinned-performance gate; deterministic generic-CI parity/counts |
 | [[D1931]] | eager full `localSemanticEvents` preparation dominates and fails the 40/80-ply synchronous envelope | **measured and amended:** exact source closure is byte-identical and passes all three arms |
 | [[D1932]] | requested-branch identity duplicates a shared ancestral edge | **measured and amended:** actual edge branch stays in `run.record.edge@1`; requested branch stays in path/window receipt |
 | [[D1933]] | unversioned semantic inventory cannot police coexisting v1/v2 projections | **measured and amended:** exact ref authority; separately named derived family view |
 
 ## Changelog
+
+- 2026-09-24 ([[D1921]]/[[D1929]]): the convention predecessor landed
+  (`semantic-convention-provenance.md` §1/§4). `conventionReceipt` is now
+  `{ status: "registered", registryDigest, refs, eventReceiptDigests, digest }`: the compiled
+  registry digest, the union of the emitted events' sealed convention refs and each event's receipt
+  digest in emission order. `semanticConventionRegistryDigest` is the compiled registry digest and
+  each event's `sourceClosureDigest` entry includes its convention-receipt digest, so criterion 15's
+  identity now moves with every exact convention receipt rather than with in-catalogue text.
+  Changelog item (2) of the implementation entry below is superseded.
 
 - 2026-09-24: implemented on the owner's acceptance ("just do the work implement a bunch of RFC's");
   status `awaiting D1` because no Review/module/longitudinal application operation consumes the

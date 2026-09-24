@@ -73,7 +73,35 @@ import {
   type ReasoningTranscript,
   type RunMark,
   RuntimeError,
+  botProfileIsStartable,
+  botProfileStartability,
+  ProviderRequestInvalid,
+  resolveBotProfileReference,
+  runEventHeadDigest,
+  type BotOpponentPlyRequest,
+  type BotProfileCatalogEntry,
+  type BotProviderAvailabilitySnapshot,
+  type OpponentMoveSelectedEvent,
 } from "@chess-tabiya/runtime";
+import {
+  botPreProviderOperandDigest,
+  compileBotClassifierView,
+  compileBotLegalMoveMap,
+  compileBotPolicyEventEnvelope,
+  compileBotPolicyExecution,
+  projectBotPolicyDecisionRecord,
+  type BotPolicyEventEnvelope,
+} from "./bot-policy-compiler.js";
+import {
+  botSelection,
+  botSelectionPolicy,
+  botWriterLeaseDigest,
+  findBotSelectionEvent,
+  parseStoredBotEnvelope,
+  sealBotRootAt,
+  type BotOpponentAcquirer,
+} from "./bot-opponent-operation.js";
+import { botMaiaSource, botSourceFailure, botStockfishSource } from "./bot-opponent-source.js";
 import {
   RATED_OPPONENT_CALIBRATION,
   RATING_DISCLOSURES,
@@ -349,6 +377,31 @@ export type RewindTarget =
   | { readonly nodeId: string; readonly branchId?: string; readonly checkpointId?: never }
   | { readonly checkpointId: string; readonly nodeId?: never; readonly branchId?: never };
 
+export interface PositionOpponentPolicyInput {
+  readonly mode: "human_common" | "strong_engine";
+  readonly targetElo?: number;
+  readonly temperature?: number;
+  readonly topP?: number;
+  /** Unknown bytes; `RunService.create` resolves them to one whole catalogue member. */
+  readonly profile?: unknown;
+}
+
+/** The closed outcome of the opponent-ply operation (rfc/bot-policy.md §4.1's eight rows). */
+export type BotOpponentPlyOutcome =
+  | Readonly<{ kind: "committed"; result: MutationResult; envelope: BotPolicyEventEnvelope }>
+  | Readonly<{ kind: "replayed_idempotent" | "replayed_concurrent_winner"; run: DrillRun; envelope: BotPolicyEventEnvelope }>
+  | Readonly<{ kind: "stale_root" | "request_reused_with_different_operands" | "concurrent_commit_conflict" | "base_provider_unavailable" | "provider_failed" }>;
+
+/** Structurally valid placeholder used only to learn the selection event's sequence number. */
+const PROVISIONAL_POLICY = Object.freeze({ decision: Object.freeze({}), operation: Object.freeze({}), deliveries: Object.freeze({ maia: Object.freeze({}) }) });
+
+/** The request's root is the run's active cursor and its event head is unchanged. */
+function botRootIsCurrent(run: DrillRun, request: BotOpponentPlyRequest): boolean {
+  return run.activeCursor.nodeId === request.expectedNodeId
+    && run.activeCursor.branchId === request.expectedBranchId
+    && runEventHeadDigest(run) === request.expectedEventHeadDigest;
+}
+
 export interface CreateRunRequest {
   readonly id: string;
   readonly session:
@@ -357,12 +410,7 @@ export interface CreateRunRequest {
         readonly kind: "position";
         readonly start: { readonly fen: string; readonly side: "white" | "black" };
         readonly feedbackPolicy: "attempt_end";
-        readonly opponentPolicy: {
-          readonly mode: "human_common" | "strong_engine";
-          readonly targetElo?: number;
-          readonly temperature?: number;
-          readonly topP?: number;
-        };
+        readonly opponentPolicy: PositionOpponentPolicyInput;
       };
   readonly policyConfig: CreateRunInput["policyConfig"];
   readonly seed: number;
@@ -446,6 +494,8 @@ export class RunService {
   readonly #shapes: ShapeRegistry | undefined;
   readonly #tablebase: TablebaseSource | undefined;
   readonly #reviewEvidence: ReviewEvidenceCoordinator | undefined;
+  readonly #botOpponent: BotOpponentAcquirer | undefined;
+  readonly #botAvailability: (() => BotProviderAvailabilitySnapshot) | undefined;
   readonly #simulations = new Map<string, {
     readonly runId: string;
     readonly writerId: string;
@@ -470,10 +520,16 @@ export class RunService {
       readonly tablebaseSource?: TablebaseSource;
       /** rfc/review-evidence-compiler.md §4.1: the one application-lifetime Review coordinator. */
       readonly reviewEvidence?: ReviewEvidenceCoordinator;
+      /** rfc/bot-policy.md §4.1: the shared-exchange provider half of the opponent-ply operation. */
+      readonly botOpponent?: BotOpponentAcquirer;
+      /** rfc/bot-policy.md §4.3: the exchange-derived provider availability profiles join. */
+      readonly botAvailability?: () => BotProviderAvailabilitySnapshot;
     } = {},
   ) {
     this.#storage = storage;
     this.#reviewEvidence = options.reviewEvidence;
+    this.#botOpponent = options.botOpponent;
+    this.#botAvailability = options.botAvailability;
     this.#evidenceQueue = options.evidenceQueue;
     if (options.evidenceQueue !== undefined && storage.evidenceJobs !== undefined && storage.setEvidenceJobListener !== undefined) {
       options.evidenceQueue.attach({ evidenceJobs: storage.evidenceJobs, setEvidenceJobListener: (listener) => storage.setEvidenceJobListener!(listener) });
@@ -575,7 +631,7 @@ export class RunService {
             kind: "position" as const,
             start: canonicalRunStart(input.session.kind === "position" ? input.session.start : (() => { throw new TypeError("Invalid session"); })()),
             feedbackPolicy: "attempt_end" as const,
-            opponentPolicy: input.session.kind === "position" ? input.session.opponentPolicy : (() => { throw new TypeError("Invalid session"); })(),
+            opponentPolicy: input.session.kind === "position" ? this.#positionOpponentPolicy(input.session.opponentPolicy) : (() => { throw new TypeError("Invalid session"); })(),
           }
         : (() => {
             const side = pack.document.start.side;
@@ -611,7 +667,7 @@ export class RunService {
               opponentPolicy,
             };
           })();
-      this.validateOpponentPolicy(session.opponentPolicy);
+      if (session.opponentPolicy.profile === undefined) this.validateOpponentPolicy(session.opponentPolicy);
       const sessionDigest = await digestSessionSource(session);
       run = createRun({
         id: input.id,
@@ -1118,8 +1174,8 @@ export class RunService {
     const source=access.stored.run;this.#refuseWhileMatchLive(runId,source);const node=source.nodes.find((item)=>item.id===nodeId);if(node===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown run: ${runId}`);
     if(this.#storage.createDerivedRun===undefined)throw new ServerError("STORAGE_FAILURE","Run derivation storage is unavailable");
     const id=`flip-${randomUUID()}`,writerId=`writer-${randomUUID()}`,mode=resistance??(source.opponentPolicy.mode==="strong_engine"?"strong_engine":"human_common"),createdAt=new Date().toISOString();
-    const session={kind:"position" as const,start:canonicalRunStart({fen:node.fen,side:source.start.side==="white"?"black":"white"}),feedbackPolicy:"attempt_end" as const,opponentPolicy:{mode,...(mode==="human_common"&&source.opponentPolicy.targetElo!==undefined?{targetElo:source.opponentPolicy.targetElo}:{})}};
-    this.validateOpponentPolicy(session.opponentPolicy);const run=createRun({id,session,sessionDigest:await digestSessionSource(session),policyConfig:source.policyConfig,seed:Math.floor(Math.random()*2_147_483_647),createdAt});
+    const session={kind:"position" as const,start:canonicalRunStart({fen:node.fen,side:source.start.side==="white"?"black":"white"}),feedbackPolicy:"attempt_end" as const,opponentPolicy:mode==="human_common"&&source.opponentPolicy.profile!==undefined?this.#positionOpponentPolicy({mode,profile:source.opponentPolicy.profile}):{mode,...(mode==="human_common"&&source.opponentPolicy.targetElo!==undefined?{targetElo:source.opponentPolicy.targetElo}:{})}};
+    if(session.opponentPolicy.profile===undefined)this.validateOpponentPolicy(session.opponentPolicy);const run=createRun({id,session,sessionDigest:await digestSessionSource(session),policyConfig:source.policyConfig,seed:Math.floor(Math.random()*2_147_483_647),createdAt});
     const derivation:RunDerivation={derivedRunId:id,sourceRunId:runId,sourceBranchId:node.branchId,sourceNodeId:nodeId,kind:"flip_sides",createdAt};
     this.#storage.createDerivedRun(run,{writerId,learnerId:principal.learnerId},"Opposite-side replay",derivation);this.#project(run,principal.learnerId,{[run.branches[0]!.id]:{origin:"fresh",derivedFromRunId:runId}});return Object.freeze({run,writerId,derivation});
   }
@@ -1180,6 +1236,15 @@ export class RunService {
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseImportedMainlineExtension(stored.run);
     if(this.#matchContext(runId)!==undefined)throw new ServerError("INVALID_REQUEST","Native matches do not accept opponent selections");
+    if (stored.run.opponentPolicy.profile !== undefined) {
+      // rfc/bot-policy.md §4.1: a profile run's opponent plays only through the server-owned
+      // atomic operation; caller-supplied selection bytes are refused for this path.
+      throw new ServerError("INVALID_REQUEST", "Bot-profile runs play the opponent through POST /runs/:runId/opponent-ply");
+    }
+    return this.#commitOpponentSelection(stored, lease, selection, options);
+  }
+
+  #commitOpponentSelection(stored: StoredRun, lease: LeaseHolder, selection: OpponentSelection, options: AppendOpponentPlyOptions): MutationResult {
     const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
     const committed = appendOpponentPly(stored.run, selection, options);
@@ -1202,6 +1267,180 @@ export class RunService {
     this.#commitWithEnrichment(result.run, lease, [result.run.activeCursor.nodeId]);
     this.#project(result.run, lease.learnerId);
     return result;
+  }
+
+  /**
+   * Run schema 0.18 create validation (rfc/bot-policy.md §4.1, A1): a profile is the WHOLE catalogue
+   * member, valid only with `human_common` and none of `targetElo`/`temperature`/`topP`, and it must
+   * be startable under the exchange-derived availability at creation.
+   */
+  #positionOpponentPolicy(policy: PositionOpponentPolicyInput): PositionOpponentPolicy {
+    if (policy.profile === undefined) {
+      const { profile: _profile, ...rest } = policy;
+      return rest;
+    }
+    if (policy.mode !== "human_common" || policy.targetElo !== undefined || policy.temperature !== undefined || policy.topP !== undefined) {
+      throw new ServerError("INVALID_REQUEST", "A bot profile is valid only with human_common and without targetElo, temperature or topP");
+    }
+    let entry: BotProfileCatalogEntry;
+    try {
+      entry = resolveBotProfileReference(policy.profile);
+    } catch (error) {
+      throw new ServerError("INVALID_REQUEST", error instanceof Error ? error.message : "Bot profile reference is invalid");
+    }
+    if (this.#botOpponent === undefined || this.#botAvailability === undefined) {
+      throw new ServerError("ENGINE_UNAVAILABLE", "Bot opponents are not configured here", { details: { engineId: "bot-opponent", retryAfterMs: 0 } });
+    }
+    const startability = botProfileStartability(entry, this.#botAvailability());
+    if (!botProfileIsStartable(startability)) {
+      throw new ServerError("ENGINE_UNAVAILABLE", `${entry.reference.id} is unavailable: ${startability.kind === "unavailable" ? startability.blockedBy.join(", ") : ""}`, { details: { engineId: "bot-opponent", retryAfterMs: 0, startability } });
+    }
+    return Object.freeze({ mode: "human_common", profile: entry.reference });
+  }
+
+  /**
+   * `POST /runs/:runId/opponent-ply` (rfc/bot-policy.md §4.1): the ONE production operation for a
+   * profile run's opponent. The browser names only the root it saw and an idempotency key; the
+   * server derives and seals root, history, seed and profile, looks the request id up in the event
+   * log BEFORE any provider call, awaits the shared Maia/Stockfish deliveries with no transaction
+   * open, re-reads the run, separates a concurrent request winner from a stale root, and appends
+   * move + decision + operation + deliveries atomically in one `opponent.move_selected`.
+   */
+  async botOpponentPly(runId: string, principal: Principal, writerId: string, request: BotOpponentPlyRequest, at?: string): Promise<BotOpponentPlyOutcome> {
+    const started = performance.now();
+    const acquirer = this.#botOpponent;
+    if (acquirer === undefined) throw new ServerError("ENGINE_UNAVAILABLE", "Bot opponents are not configured here", { details: { engineId: "bot-opponent", retryAfterMs: 0 } });
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    const run = stored.run;
+    if (this.#matchContext(runId) !== undefined) throw new ServerError("INVALID_REQUEST", "Native matches do not accept opponent selections");
+    const entry = this.#runBotProfile(run);
+    const writerLeaseDigest = botWriterLeaseDigest(run.id, lease);
+
+    // 1. The event log is checked for the request id before any provider call.
+    const prior = findBotSelectionEvent(run, request.requestId);
+    if (prior !== undefined) return this.#replayBotSelection(run, prior, entry, request, writerLeaseDigest, "replayed_idempotent");
+
+    // 2. The server derives the root from its own run record; a moved root is refused now.
+    if (!botRootIsCurrent(run, request)) return Object.freeze({ kind: "stale_root" });
+    const node = run.nodes.find((candidate) => candidate.id === request.expectedNodeId)!;
+    const position = Chess.fromSetup(parseFen(node.fen).unwrap()).unwrap();
+    if (position.isEnd() || run.events.some((event) => event.type === "outcome.reached" && event.data.nodeId === node.id)) {
+      throw new ServerError("INVALID_REQUEST", "The game is over at this position");
+    }
+    if (position.turn === run.start.side) throw new ServerError("INVALID_REQUEST", "It is not the opponent's turn");
+    const root = sealBotRootAt(run, { nodeId: request.expectedNodeId, branchId: request.expectedBranchId, preCommitEventHeadDigest: request.expectedEventHeadDigest });
+    if (root === undefined) return Object.freeze({ kind: "stale_root" });
+    const legal = compileBotLegalMoveMap(root);
+    const classifiers = compileBotClassifierView(root, legal);
+    const preProviderOperandDigest = botPreProviderOperandDigest({ requestId: request.requestId, root: root.identity, writerLeaseDigest, profileDigest: entry.reference.digest, seed: root.seed });
+
+    // 3. Shared provider work, with no transaction open.
+    let acquisition: Awaited<ReturnType<BotOpponentAcquirer["acquire"]>>;
+    try {
+      acquisition = await acquirer.acquire({ root, profile: entry.reference });
+    } catch (error) {
+      // A request only the live provider can refuse (e.g. Maia no longer advertising the band) is a
+      // typed provider failure, never an internal error and never a fallback move.
+      if (error instanceof ProviderRequestInvalid) return Object.freeze({ kind: "provider_failed" });
+      throw error;
+    }
+    const composing = performance.now();
+    const stockfishSource = acquisition.stockfish === undefined || acquisition.stockfish === "not_delivered" ? undefined : botStockfishSource(acquisition.stockfish);
+    const compiled = compileBotPolicyExecution({
+      root,
+      legal,
+      classifiers,
+      profile: entry.reference,
+      maia: botMaiaSource(acquisition.maia),
+      ...(stockfishSource === undefined ? {} : { stockfish: stockfishSource }),
+    });
+    if (compiled.kind !== "executed") return Object.freeze({ kind: compiled.kind });
+    if (acquisition.maia.kind !== "success") throw new ServerError("STORAGE_FAILURE", "An executed decision requires a delivered Maia page");
+    const decision = projectBotPolicyDecisionRecord(compiled.execution);
+    const compositionMs = performance.now() - composing;
+
+    // 4. Re-read after the awaits: a request winner first, then the root compare-and-swap.
+    const current = this.#forWrite(runId, principal, writerId);
+    const currentLeaseDigest = botWriterLeaseDigest(current.stored.run.id, current.lease);
+    if (currentLeaseDigest !== writerLeaseDigest) return Object.freeze({ kind: "stale_root" });
+    const winner = findBotSelectionEvent(current.stored.run, request.requestId);
+    if (winner !== undefined) {
+      const stored = winner.data.selection.policy!.operation;
+      if (stored.preProviderOperandDigest !== preProviderOperandDigest) return Object.freeze({ kind: "request_reused_with_different_operands" });
+      const ours = compileBotPolicyEventEnvelope({ decision, requestId: request.requestId, writerLeaseDigest, committedEventSequence: winner.seq, timingMs: { total: 0, maia: 0, guard: 0, composition: 0 } });
+      if (stored.commitOperandDigest !== ours.operation.commitOperandDigest) return Object.freeze({ kind: "concurrent_commit_conflict" });
+      return this.#replayBotSelection(current.stored.run, winner, entry, request, writerLeaseDigest, "replayed_concurrent_winner");
+    }
+    if (!botRootIsCurrent(current.stored.run, request)) return Object.freeze({ kind: "stale_root" });
+
+    // 5. One atomic append: move, decision, operation record and the persisted deliveries.
+    const committedAt = at ?? new Date().toISOString();
+    const base = botSelection(decision, acquisition.maia.delivery);
+    const stockfishRecord = acquisition.stockfish === undefined
+      ? undefined
+      : acquisition.stockfish === "not_delivered"
+        ? Object.freeze({ failure: "not_delivered" as const })
+        : acquisition.stockfish.kind === "success"
+          ? acquisition.stockfish.delivery
+          : Object.freeze({ failure: acquisition.stockfish.kind === "source_failure" ? botSourceFailure(acquisition.stockfish.reason) : "invalid_response" as const });
+    const provisional = appendOpponentPly(current.stored.run, { ...base, policy: PROVISIONAL_POLICY }, { at: committedAt });
+    const selected = provisional.emitted.find((event) => event.type === "opponent.move_selected");
+    if (selected === undefined) throw new ServerError("STORAGE_FAILURE", "The opponent ply emitted no selection event");
+    const envelope = compileBotPolicyEventEnvelope({
+      decision,
+      requestId: request.requestId,
+      writerLeaseDigest,
+      committedEventSequence: selected.seq,
+      timingMs: {
+        total: Math.max(0, performance.now() - started),
+        maia: acquisition.timingMs.maia,
+        guard: acquisition.timingMs.guard,
+        composition: Math.max(0, compositionMs),
+      },
+    });
+    const policy = botSelectionPolicy({ envelope, maia: acquisition.maia.delivery, ...(stockfishRecord === undefined ? {} : { stockfish: stockfishRecord }) });
+    const result = this.#commitOpponentSelection(current.stored, current.lease, { ...base, policy }, { at: committedAt });
+    return Object.freeze({ kind: "committed", result, envelope });
+  }
+
+  /**
+   * Branch groups select opponent replies through their own selector wrapper, which is not yet the
+   * profile operation (rfc/bot-policy.md §4.1 "grouped branches call the same core through their
+   * group-specific wrapper" is unbuilt). A profile run refuses rather than playing a non-profile
+   * reply under the profile's identity.
+   */
+  #refuseBotProfileGroup(run: DrillRun): void {
+    if (run.opponentPolicy.profile !== undefined) throw new ServerError("INVALID_REQUEST", "Branch groups are not available on bot-profile runs yet");
+  }
+
+  #runBotProfile(run: DrillRun): BotProfileCatalogEntry {
+    const profile = run.opponentPolicy.profile;
+    if (profile === undefined) throw new ServerError("INVALID_REQUEST", "This run has no bot profile");
+    try {
+      return resolveBotProfileReference(profile);
+    } catch (error) {
+      throw new ServerError("STORAGE_FAILURE", "The run's stored bot profile is not a catalogue member", { cause: error });
+    }
+  }
+
+  /**
+   * A request id already committed on this run. The retry must name the SAME root, writer lease,
+   * profile and seed (recomputed from the run, never read from the stored operation); the stored
+   * envelope is then returned only after the durable parser recompiles it.
+   */
+  #replayBotSelection(run: DrillRun, event: OpponentMoveSelectedEvent, entry: BotProfileCatalogEntry, request: BotOpponentPlyRequest, writerLeaseDigest: string, kind: "replayed_idempotent" | "replayed_concurrent_winner"): BotOpponentPlyOutcome {
+    const stored = event.data.selection.policy!.operation;
+    const root = sealBotRootAt(run, { nodeId: request.expectedNodeId, branchId: request.expectedBranchId, preCommitEventHeadDigest: request.expectedEventHeadDigest });
+    if (root === undefined) return Object.freeze({ kind: "request_reused_with_different_operands" });
+    const pre = botPreProviderOperandDigest({ requestId: request.requestId, root: root.identity, writerLeaseDigest, profileDigest: entry.reference.digest, seed: root.seed });
+    if (stored.preProviderOperandDigest !== pre) return Object.freeze({ kind: "request_reused_with_different_operands" });
+    let envelope: BotPolicyEventEnvelope;
+    try {
+      envelope = parseStoredBotEnvelope(run, event);
+    } catch (error) {
+      throw new ServerError("STORAGE_FAILURE", "A stored bot-policy envelope failed its durable parse", { cause: error });
+    }
+    return Object.freeze({ kind, run, envelope });
   }
 
   rewind(
@@ -1367,6 +1606,7 @@ export class RunService {
     const { stored, role, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
     this.#requiredEvidenceQueue();
+    this.#refuseBotProfileGroup(stored.run);
     const pack = this.#requiredRegisteredPack(stored.run);
     const sourceNode = stored.run.nodes.find((node) => node.id === stored.run.activeCursor.nodeId)!;
     if (terminalPosition(sourceNode.fen) || ["achieved", "failed", "transitioned"].includes(sourceNode.objectiveState)) {
@@ -1516,6 +1756,7 @@ export class RunService {
   ): Promise<GroupReplyResult> {
     const { stored } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
+    this.#refuseBotProfileGroup(stored.run);
     const group = groupsFromEvents(stored.run).find((candidate) => candidate.groupId === groupId);
     if (group === undefined) throw new ServerError("UNKNOWN_GROUP", `Unknown group: ${groupId}`);
     const memberIndex = group.members.findIndex((member) => member.branchId === stored.run.activeCursor.branchId);

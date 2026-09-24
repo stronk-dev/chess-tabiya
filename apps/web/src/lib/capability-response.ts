@@ -3,7 +3,8 @@ import {
   BOT_CARD_STATEMENT_IDS,
   BOT_CLASSIFIER_IDS,
   BOT_PROFILE_CATALOG,
-  BOT_ROSTER_BLOCKERS,
+  BOT_AVAILABILITY_BLOCKERS,
+  BOT_AVAILABILITY_CONDITIONS,
   resolveBotProfileReference,
 } from "@chess-tabiya/runtime";
 
@@ -95,6 +96,18 @@ function validateProfiles(value: unknown): void {
 }
 
 /**
+ * The closed §4.3 availability union: `available`, `conditional` (startable; named unproven
+ * conditions) or `unavailable` (named blockers). Empty reason lists and unknown reasons refuse.
+ */
+function validateStartability(value: unknown, label: string): void {
+  const startable = record(value, label);
+  const kind = oneOf(startable.kind, ["available", "conditional", "unavailable"] as const, `${label}/kind`);
+  if (kind === "available") exact(startable, ["kind"], label);
+  else if (kind === "conditional") { exact(startable, ["kind", "conditions"], label); uniqueVocabulary(startable.conditions, BOT_AVAILABILITY_CONDITIONS, `${label}/conditions`, 1); }
+  else { exact(startable, ["kind", "blockedBy"], label); uniqueVocabulary(startable.blockedBy, BOT_AVAILABILITY_BLOCKERS, `${label}/blockedBy`, 1); }
+}
+
+/**
  * The roster wire is the runtime `bot-profile-catalog@1` projection: every row's reference must
  * equal its complete catalog member, the id set must be set-equal to the catalog, and card/source/
  * blocker ids come from the runtime's closed vocabularies — the client declares none of its own.
@@ -117,7 +130,7 @@ export function validateRoster(value: unknown): void {
     if (new Set(statementIds).size !== statementIds.length) throw new TypeError(`${rowLabel}/card/statements contain duplicates`);
     const strength = record(card.strength, `${rowLabel}/card/strength`); const kind = oneOf(strength.kind, ["uncalibrated", "calibrated"] as const, `${rowLabel}/card/strength/kind`);
     if (kind === "uncalibrated") exact(strength, ["kind"], `${rowLabel}/card/strength`); else boolean(strength.humanLikeLabelAllowed, `${rowLabel}/card/strength/humanLikeLabelAllowed`);
-    const startable = record(row.startable, `${rowLabel}/startable`); exact(startable, ["kind", "blockedBy"], `${rowLabel}/startable`); oneOf(startable.kind, ["not_startable"] as const, `${rowLabel}/startable/kind`); uniqueVocabulary(startable.blockedBy, BOT_ROSTER_BLOCKERS, `${rowLabel}/startable/blockedBy`, 1);
+    validateStartability(row.startable, `${rowLabel}/startable`);
   });
   if (ids.size !== BOT_PROFILE_CATALOG.length || BOT_PROFILE_CATALOG.some((entry) => !ids.has(entry.reference.id))) throw new TypeError(`${label} is not set-equal to bot-profile-catalog@1`);
 }
