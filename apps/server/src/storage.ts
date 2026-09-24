@@ -3,7 +3,9 @@ import { DatabaseSync } from "node:sqlite";
 
 import {
   RuntimeError,
+  conceptLabelView,
   readBackReplay,
+  type ConceptLabelView,
   type DrillRun,
   type DrillRunEvent,
   type ObjectiveState,
@@ -16,6 +18,15 @@ import {
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
+import { installedConceptRegistry } from "./concept-registry-loader.js";
+import {
+  CONCEPT_MIGRATION_SQL,
+  migrateAttemptConcepts,
+  verifyConceptStore,
+  type ConceptMigrationAuthority,
+  type ConceptMigrationReceipt,
+  type ConceptMigrationRepository,
+} from "./concept-migration.js";
 import {
   LONGITUDINAL_MIGRATION_SQL,
   LONGITUDINAL_RUN_COLUMNS_SQL,
@@ -602,13 +613,14 @@ export interface ProgressStorage {
   dismissSchedule(scheduleId: string, learnerId: string): void;
   ownerLearnerId(runId: string): string | undefined;
   related(learnerId: string, runId: string, transposeKey: string): readonly {
-    readonly relation: "same_position" | "same_pack" | "same_concept_in_pack";
+    readonly relation: "same_position" | "same_pack" | "same_concept";
+    readonly concept?: ConceptLabelView;
     readonly runId: string;
     readonly branchId: string;
     readonly attemptCount: number;
   }[];
   metrics(learnerId: string): {
-    readonly voluntaryConceptReturns: readonly { readonly conceptKey: string; readonly count: number }[];
+    readonly voluntaryConceptReturns: readonly { readonly conceptKey: string; readonly conceptId: string; readonly label: string; readonly count: number }[];
     readonly secondAttempts: readonly { readonly rootKey: string; readonly firstVerdict: string; readonly secondVerdict: string; readonly secondResult: string | null }[];
   };
 }
@@ -709,6 +721,13 @@ export interface SQLiteRunStorageOptions {
   readonly longitudinalNow?: () => number;
   /** Canonical-instant clock for durable evidence jobs (tests cross exact lease boundaries). */
   readonly evidenceNow?: () => string;
+  /**
+   * The concept phase's authority (rfc/concept-registry.md §4): the private compiled registry, the
+   * build's built-in pack artifacts and the stored-pack validator. Defaults to the installed
+   * registry with no artifact inventory, which suffices for fresh and already-migrated databases
+   * and refuses a legacy concept population rather than guessing.
+   */
+  readonly concepts?: ConceptMigrationAuthority;
 }
 
 /** Post-commit hints from the durable evidence store to its in-process worker. */
@@ -746,7 +765,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 27;
+export const STORAGE_VERSION = 28;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -1003,34 +1022,121 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   readonly #longitudinal: LongitudinalStore;
   readonly #evidence: EvidenceJobStore;
   readonly #databasePath: string;
+  readonly #concepts: ConceptMigrationAuthority;
+  readonly #conceptReceipt: ConceptMigrationReceipt;
   #longitudinalWakePending = false;
   #longitudinalWake: (() => void) | undefined;
   #evidenceListener: EvidenceJobListener | undefined;
   #evidenceWakePending = false;
   #evidenceCancelled: string[] = [];
 
+  /**
+   * The storage coordinator (rfc/concept-registry.md §4). It completes the structural migrations,
+   * then the concept phase in its own coordinator-owned transaction, then verifies the concept
+   * receipt on every open. A constructor that throws never yields a storage object, and it closes
+   * the database on every unsuccessful exit ([[D2964]], [[D2965]]).
+   */
   constructor(filename = ":memory:", options: SQLiteRunStorageOptions = {}) {
     this.#databasePath = filename;
     this.#database = new DatabaseSync(filename);
-    this.#now = options.now ?? (() => new Date().toISOString());
-    this.#failDeletionAfterEffectGroup = options.failDeletionAfterEffectGroup;
-    this.#onMigration =
-      options.onMigration ??
-      ((entry) => console.info(`storage migration ${entry.version}: ${entry.name}`));
-    this.#database.exec("PRAGMA foreign_keys = ON");
-    this.#database.exec("PRAGMA busy_timeout = 5000");
-    if (filename !== ":memory:") this.#database.exec("PRAGMA journal_mode = WAL");
-    this.#database.exec(`
-      CREATE TABLE IF NOT EXISTS drill_runs (
-        id TEXT PRIMARY KEY,
-        snapshot_json TEXT NOT NULL,
-        active_writer_id TEXT NOT NULL CHECK (length(active_writer_id) > 0),
-        updated_at TEXT NOT NULL
-      ) STRICT
-    `);
-    this.#migrate();
-    this.#longitudinal = new LongitudinalStore(this.#database, options.longitudinalNow === undefined ? {} : { now: options.longitudinalNow });
-    this.#evidence = new EvidenceJobStore(this.#database, options.evidenceNow === undefined ? {} : { now: options.evidenceNow });
+    try {
+      this.#now = options.now ?? (() => new Date().toISOString());
+      this.#failDeletionAfterEffectGroup = options.failDeletionAfterEffectGroup;
+      this.#onMigration =
+        options.onMigration ??
+        ((entry) => console.info(`storage migration ${entry.version}: ${entry.name}`));
+      this.#concepts = options.concepts ?? { registry: installedConceptRegistry() };
+      this.#database.exec("PRAGMA foreign_keys = ON");
+      this.#database.exec("PRAGMA busy_timeout = 5000");
+      if (filename !== ":memory:") this.#database.exec("PRAGMA journal_mode = WAL");
+      this.#database.exec(`
+        CREATE TABLE IF NOT EXISTS drill_runs (
+          id TEXT PRIMARY KEY,
+          snapshot_json TEXT NOT NULL,
+          active_writer_id TEXT NOT NULL CHECK (length(active_writer_id) > 0),
+          updated_at TEXT NOT NULL
+        ) STRICT
+      `);
+      this.#migrate();
+      this.#conceptReceipt = this.#verifyConceptStore();
+      this.#longitudinal = new LongitudinalStore(this.#database, options.longitudinalNow === undefined ? {} : { now: options.longitudinalNow });
+      this.#evidence = new EvidenceJobStore(this.#database, options.evidenceNow === undefined ? {} : { now: options.evidenceNow });
+    } catch (error) {
+      try { this.#database.close(); } catch { /* preserve the primary failure */ }
+      throw error;
+    }
+  }
+
+  /** The verified migration-28 receipt this database carries (rfc/concept-registry.md §4 step 7). */
+  get conceptMigrationReceipt(): ConceptMigrationReceipt {
+    return this.#conceptReceipt;
+  }
+
+  #verifyConceptStore(): ConceptMigrationReceipt {
+    const receipt = this.#database.prepare("SELECT receipt_json, receipt_digest FROM concept_registry_migration WHERE id = 1").get() as Record<string, unknown> | undefined;
+    const refs = this.#database.prepare("SELECT DISTINCT registry_digest, concept_id FROM attempt_concepts ORDER BY registry_digest, concept_id").all() as readonly Record<string, unknown>[];
+    const malformed = this.#database.prepare("SELECT count(*) AS n FROM attempt_concepts WHERE concept_key <> 'concept:' || concept_id || '@1' OR concept_id NOT GLOB '[a-z0-9]*'").get() as { readonly n: number };
+    try {
+      return verifyConceptStore({
+        receipt: receipt === undefined ? undefined : { receiptJson: String(receipt.receipt_json), receiptDigest: String(receipt.receipt_digest) },
+        refs: refs.map((row) => ({ registryDigest: String(row.registry_digest), conceptId: String(row.concept_id) })),
+        malformedKeys: Number(malformed.n),
+      }, this.#concepts.registry);
+    } catch (error) {
+      throw storageFailure("Could not verify the concept registry migration", error);
+    }
+  }
+
+  /**
+   * Migration 28's data operation, run inside the coordinator's transaction with a frozen
+   * operation-specific repository: no raw database, SQL, transaction or pragma surface.
+   */
+  #applyConceptMigration(): void {
+    const database = this.#database;
+    // Prepared after the rebuilt tables exist; reused for every row of the population.
+    let registeredInsert: ReturnType<DatabaseSync["prepare"]> | undefined;
+    let quarantineInsert: ReturnType<DatabaseSync["prepare"]> | undefined;
+    const repository: ConceptMigrationRepository = Object.freeze<ConceptMigrationRepository>({
+      transactionActive: () => database.isTransaction,
+      alreadyApplied: () => database.prepare("SELECT 1 FROM sqlite_schema WHERE type = 'table' AND name = 'concept_registry_migration'").get() !== undefined,
+      legacyRows: () => (database.prepare(`
+        SELECT c.run_id, c.branch_id, c.pack_id, c.concept_key, c.label,
+          a.pack_id AS attempt_pack_id, a.pack_digest AS attempt_pack_digest, r.snapshot_json
+        FROM attempt_concepts c
+        JOIN attempts a ON a.run_id = c.run_id AND a.branch_id = c.branch_id
+        LEFT JOIN drill_runs r ON r.id = c.run_id
+        ORDER BY c.run_id, c.branch_id, c.concept_key
+      `).all() as readonly Record<string, unknown>[]).map((row) => Object.freeze({
+        runId: String(row.run_id), branchId: String(row.branch_id), packId: String(row.pack_id),
+        conceptKey: String(row.concept_key), label: String(row.label),
+        attemptPackId: row.attempt_pack_id === null ? null : String(row.attempt_pack_id),
+        attemptPackDigest: row.attempt_pack_digest === null ? null : String(row.attempt_pack_digest),
+        snapshotJson: row.snapshot_json === null ? null : String(row.snapshot_json),
+      })),
+      storedPackArtifacts: () => [
+        ...(database.prepare("SELECT digest, document_json FROM registered_packs ORDER BY digest").all() as readonly Record<string, unknown>[])
+          .map((row) => Object.freeze({ source: "registered" as const, digest: String(row.digest), documentJson: String(row.document_json) })),
+        ...(database.prepare("SELECT digest, document_json FROM playtest_documents ORDER BY digest").all() as readonly Record<string, unknown>[])
+          .map((row) => Object.freeze({ source: "playtest" as const, digest: String(row.digest), documentJson: String(row.document_json) })),
+      ],
+      replaceConceptTables: () => {
+        database.exec("DROP TABLE attempt_concepts");
+        database.exec(CONCEPT_MIGRATION_SQL);
+      },
+      insertRegistered: (row) => {
+        registeredInsert ??= database.prepare(`INSERT INTO attempt_concepts (run_id, branch_id, pack_id, pack_digest, concept_key, concept_id, registry_schema_version, registry_digest, label)
+          VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)`);
+        registeredInsert.run(row.runId, row.branchId, row.packId, row.packDigest, row.conceptKey, row.conceptId, row.registryDigest, row.label);
+      },
+      insertQuarantined: (row) => {
+        quarantineInsert ??= database.prepare("INSERT INTO attempt_concept_legacy (run_id, branch_id, pack_id, raw_key, label, reason) VALUES (?, ?, ?, ?, ?, ?)");
+        quarantineInsert.run(row.runId, row.branchId, row.packId, row.rawKey, row.label, row.reason);
+      },
+      writeReceipt: (receiptJson, receiptDigest) => {
+        database.prepare("INSERT INTO concept_registry_migration (id, receipt_json, receipt_digest) VALUES (1, ?, ?)").run(receiptJson, receiptDigest);
+      },
+    });
+    migrateAttemptConcepts(repository, this.#concepts);
   }
 
   /** The durable evidence store sharing this application database (rfc/evidence-job-durability.md). */
@@ -1347,7 +1453,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       });
       const progress = [
         ...tagged("attempts", rows("SELECT * FROM attempts WHERE learner_id=? ORDER BY run_id,branch_id", learnerId)),
-        ...tagged("attempt_concepts", rows("SELECT c.* FROM attempt_concepts c JOIN attempts a ON a.run_id=c.run_id AND a.branch_id=c.branch_id WHERE a.learner_id=? ORDER BY c.run_id,c.branch_id,c.concept_key", learnerId)),
+        ...tagged("attempt_concepts", rows("SELECT c.run_id,c.branch_id,c.pack_id,c.pack_digest,c.concept_key,c.concept_id,c.registry_schema_version,c.registry_digest,c.label FROM attempt_concepts c JOIN attempts a ON a.run_id=c.run_id AND a.branch_id=c.branch_id WHERE a.learner_id=? ORDER BY c.run_id,c.branch_id,c.concept_key", learnerId).map((row) => Object.freeze({
+          run_id: row.run_id, branch_id: row.branch_id, pack_id: row.pack_id, pack_digest: row.pack_digest, concept_key: row.concept_key,
+          concept: Object.freeze({ id: row.concept_id, registrySchemaVersion: row.registry_schema_version, registryDigest: row.registry_digest }),
+          label: row.label,
+        }))),
+        ...tagged("attempt_concept_legacy", rows("SELECT q.run_id,q.branch_id,q.pack_id,q.raw_key,q.label,q.reason FROM attempt_concept_legacy q JOIN attempts a ON a.run_id=q.run_id AND a.branch_id=q.branch_id WHERE a.learner_id=? ORDER BY q.run_id,q.branch_id,q.raw_key", learnerId)),
         ...tagged("schedules", rows("SELECT * FROM schedules WHERE learner_id=? ORDER BY id", learnerId)),
         ...tagged("learner_position_stats", rows("SELECT * FROM learner_position_stats WHERE learner_id=? ORDER BY transpose_key", learnerId)),
       ];
@@ -1565,6 +1676,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ...ids("SELECT 'attempt:'||run_id||':'||branch_id AS id FROM attempts WHERE learner_id=? ORDER BY run_id,branch_id", learnerId),
       ...ids(`SELECT 'concept:'||c.run_id||':'||c.branch_id||':'||c.concept_key AS id FROM attempt_concepts c
         JOIN attempts a ON a.run_id=c.run_id AND a.branch_id=c.branch_id WHERE a.learner_id=? ORDER BY c.run_id,c.branch_id,c.concept_key`, learnerId),
+      ...ids(`SELECT 'concept-legacy:'||q.run_id||':'||q.branch_id||':'||q.raw_key AS id FROM attempt_concept_legacy q
+        JOIN attempts a ON a.run_id=q.run_id AND a.branch_id=q.branch_id WHERE a.learner_id=? ORDER BY q.run_id,q.branch_id,q.raw_key`, learnerId),
       ...ids("SELECT 'schedule:'||id AS id FROM schedules WHERE learner_id=? ORDER BY id", learnerId),
       ...ids("SELECT 'position:'||transpose_key AS id FROM learner_position_stats WHERE learner_id=? ORDER BY transpose_key", learnerId),
     ];
@@ -2992,12 +3105,21 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       }
       const runIds = new Set(attempts.map((attempt) => attempt.runId));
       const deleteConcepts = this.#database.prepare("DELETE FROM attempt_concepts WHERE run_id = ?");
-      for (const runId of runIds) deleteConcepts.run(runId);
+      const deleteUnverified = this.#database.prepare("DELETE FROM attempt_concept_legacy WHERE run_id = ? AND reason = 'unregistered_at_projection'");
+      for (const runId of runIds) { deleteConcepts.run(runId); deleteUnverified.run(runId); }
       const insertConcept = this.#database.prepare(
-        "INSERT INTO attempt_concepts (run_id, branch_id, pack_id, concept_key, label) VALUES (?, ?, ?, ?, ?)",
+        `INSERT INTO attempt_concepts (run_id, branch_id, pack_id, pack_digest, concept_key, concept_id, registry_schema_version, registry_digest, label)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      );
+      const insertUnverified = this.#database.prepare(
+        "INSERT OR IGNORE INTO attempt_concept_legacy (run_id, branch_id, pack_id, raw_key, label, reason) VALUES (?, ?, ?, ?, ?, ?)",
       );
       for (const concept of concepts) {
-        insertConcept.run(concept.runId, concept.branchId, concept.packId, concept.conceptKey, concept.label);
+        if (concept.kind === "registered") {
+          insertConcept.run(concept.runId, concept.branchId, concept.packId, concept.packDigest, concept.conceptKey, concept.ref.id, concept.ref.registrySchemaVersion, concept.ref.registryDigest, concept.label);
+        } else {
+          insertUnverified.run(concept.runId, concept.branchId, concept.packId, concept.rawKey, concept.label, concept.reason);
+        }
       }
       for (const key of affected) {
         const split = key.indexOf("\0");
@@ -3118,13 +3240,17 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     ).get(learnerId, runId) as { readonly pack_id?: unknown } | undefined;
     const packId = typeof source?.pack_id === "string" ? source.pack_id : null;
     const seen = new Set<string>();
-    const result: Array<{ relation: "same_position" | "same_pack" | "same_concept_in_pack"; runId: string; branchId: string; attemptCount: number }> = [];
-    const append = (relation: "same_position" | "same_pack" | "same_concept_in_pack", rows: readonly Record<string, unknown>[]) => {
+    const result: Array<{ relation: "same_position" | "same_pack" | "same_concept"; runId: string; branchId: string; attemptCount: number; concept?: ConceptLabelView }> = [];
+    const append = (relation: "same_position" | "same_pack" | "same_concept", rows: readonly Record<string, unknown>[]) => {
       for (const row of rows) {
         const key = `${String(row.run_id)}\0${String(row.branch_id)}`;
         if (seen.has(key) || String(row.run_id) === runId) continue;
         seen.add(key);
-        result.push({ relation, runId: String(row.run_id), branchId: String(row.branch_id), attemptCount: Number(row.attempt_count) });
+        // Consumer 4 (rfc/concept-registry.md §2): the shared concept renders from its exact revision.
+        const concept = relation === "same_concept"
+          ? conceptLabelView(this.#concepts.registry, { id: String(row.concept_id), registrySchemaVersion: 1, registryDigest: String(row.registry_digest) }, String(row.label))
+          : undefined;
+        result.push({ relation, runId: String(row.run_id), branchId: String(row.branch_id), attemptCount: Number(row.attempt_count), ...(concept === undefined ? {} : { concept }) });
         if (result.length === 3) return;
       }
     };
@@ -3138,19 +3264,22 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       FROM attempts WHERE learner_id = ? AND pack_id = ? AND countable = 1
       ORDER BY attempt_count, ended_at
     `).all(learnerId, packId) as readonly Record<string, unknown>[]);
-    if (result.length < 3 && packId !== null) append("same_concept_in_pack", this.#database.prepare(`
-      SELECT a.run_id, a.branch_id, count(*) OVER (PARTITION BY a.root_key) AS attempt_count
+    // rfc/concept-registry.md §4: `same_concept` is cross-pack. It filters by learner, countable
+    // attempts and the exact registered key; the quarantine table is never joined.
+    if (result.length < 3) append("same_concept", this.#database.prepare(`
+      SELECT a.run_id, a.branch_id, c.concept_id, c.registry_digest, c.label,
+        count(*) OVER (PARTITION BY a.root_key) AS attempt_count
       FROM attempts a JOIN attempt_concepts c ON c.run_id = a.run_id AND c.branch_id = a.branch_id
-      WHERE a.learner_id = ? AND a.pack_id = ? AND c.concept_key IN (
+      WHERE a.learner_id = ? AND c.concept_key IN (
         SELECT concept_key FROM attempt_concepts WHERE run_id = ?
-      ) AND a.countable = 1 ORDER BY attempt_count, a.ended_at
-    `).all(learnerId, packId, runId) as readonly Record<string, unknown>[]);
+      ) AND a.countable = 1 ORDER BY attempt_count, a.ended_at, a.run_id, a.branch_id, c.concept_key
+    `).all(learnerId, runId) as readonly Record<string, unknown>[]);
     return Object.freeze(result.map((item) => Object.freeze(item)));
   }
 
   metrics(learnerId: string) {
     const voluntary = this.#database.prepare(`
-      SELECT c.concept_key, count(*) AS total
+      SELECT c.concept_key, min(c.concept_id) AS concept_id, count(*) AS total
       FROM attempts a JOIN attempt_concepts c ON c.run_id = a.run_id AND c.branch_id = a.branch_id
       WHERE a.learner_id = ? AND a.countable = 1 AND a.schedule_id IS NULL
         AND a.root_due_at_start IS NULL AND EXISTS (
@@ -3174,7 +3303,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         AND first.graded = 1 AND second.graded = 1 ORDER BY first.root_key
     `).all(learnerId) as readonly Record<string, unknown>[];
     return Object.freeze({
-      voluntaryConceptReturns: Object.freeze(voluntary.map((row) => Object.freeze({ conceptKey: String(row.concept_key), count: Number(row.total) }))),
+      voluntaryConceptReturns: Object.freeze(voluntary.map((row) => Object.freeze({
+        conceptKey: String(row.concept_key),
+        conceptId: String(row.concept_id),
+        label: this.#concepts.registry.get(String(row.concept_id))?.label ?? String(row.concept_id),
+        count: Number(row.total),
+      }))),
       secondAttempts: Object.freeze(second.map((row) => Object.freeze({
         rootKey: String(row.root_key), firstVerdict: String(row.first_verdict),
         secondVerdict: String(row.second_verdict), secondResult: row.second_result === null ? null : String(row.second_result),
@@ -4233,6 +4367,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         version: 27,
         name: "durable evidence job batches, jobs, result sequences and application transitions",
         apply: () => this.#addEvidenceJobTables(),
+      },
+      {
+        version: 28,
+        name: "registered global concept identities and the legacy concept quarantine",
+        apply: () => this.#applyConceptMigration(),
       },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));

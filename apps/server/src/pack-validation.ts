@@ -22,6 +22,8 @@ import {
   matchesStructuralExpression,
   matchesTransitionExpression,
   transposeKey,
+  validateConceptReferences,
+  type CompiledConceptRegistry,
   type DrillRun,
   type ObjectiveTransitionRule,
 } from "@chess-tabiya/runtime";
@@ -33,6 +35,7 @@ import { parseUci } from "chessops/util";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
+import { installedConceptRegistry } from "./concept-registry-loader.js";
 import {
   DECLARED_UNIMPLEMENTED_POLICY_MODES,
   SUPPORTED_POLICY_MODES,
@@ -1562,11 +1565,24 @@ function runtimeIssues(
   return Object.freeze(issues);
 }
 
+/**
+ * Consumer 1 of rfc/concept-registry.md §2: every `concepts[]` item resolves against the exact
+ * compiled registry. Unknown and retired-new references are errors; the malformed arm is the
+ * schema lint's `CONCEPT_KEY_NOT_SLUG` error and is not repeated here.
+ */
+export function packConceptIssues(document: DrillPackDefinition, registry: CompiledConceptRegistry): readonly PackValidationIssue[] {
+  return validateConceptReferences(registry, document.concepts ?? [])
+    .filter((issue) => issue.code !== "CONCEPT_ID_MALFORMED")
+    .map((issue) => runtimeIssue(issue.code, `/concepts/${issue.index}`, issue.message));
+}
+
 export function validatePackDocument(value: unknown, options: {
   readonly shapes?: PackShapeLookup;
   readonly packs?: PackSiblingLookup;
   readonly principles?: PackPrincipleLookup;
   readonly compileObjectiveRules?: ObjectiveCompiler;
+  /** The compiled concept registry; defaults to the installed one (rfc/concept-registry.md §3). */
+  readonly concepts?: CompiledConceptRegistry;
 } = {}): PackValidationResult {
   const validate = validator();
   if (!validate(value)) {
@@ -1588,6 +1604,7 @@ export function validatePackDocument(value: unknown, options: {
       }),
     ),
     ...runtimeIssues(document, options.shapes, options.packs, options.principles, options.compileObjectiveRules),
+    ...packConceptIssues(document, options.concepts ?? installedConceptRegistry()),
   ];
   return Object.freeze({
     valid: !issues.some((issue) => issue.severity === "error"),

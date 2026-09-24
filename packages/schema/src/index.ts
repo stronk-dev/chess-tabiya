@@ -20,6 +20,12 @@ export type DrillPackRequiredField = typeof DRILL_PACK_REQUIRED_FIELDS[number];
 export type ShapeEntrySchemaVersion = typeof SHAPE_ENTRY_SCHEMA_VERSION;
 export const PRINCIPLE_ENTRY_SCHEMA_VERSION = "0.1" as const;
 export type PrincipleEntrySchemaVersion = typeof PRINCIPLE_ENTRY_SCHEMA_VERSION;
+/**
+ * The concept-registry schema lane (`schemas/concept_registry.schema.json`, rfc/concept-registry.md).
+ * Revision documents carry it as the numeric literal `schemaVersion: 1`
+ * (`CONCEPT_REGISTRY_SCHEMA_VERSION` in `@chess-tabiya/runtime`).
+ */
+export const CONCEPT_REGISTRY_SCHEMA_LANE = "1" as const;
 
 export const schemaBuildInfo = Object.freeze({
   drillPackVersion: DRILL_PACK_SCHEMA_VERSION,

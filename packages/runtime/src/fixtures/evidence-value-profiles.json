@@ -668,6 +668,13 @@
       "12468ab88fab75998c98661b29bfa35355b9b9002313e34a50e375eab92a0768"
     ]
   },
+  "pack.authored.concept_reference@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "6fececbf7abd06d9efa9926c09afb0c1513a53fa43ed0e5a59a2e5736f0e9a02"
+    ]
+  },
   "pack.authored.phase@1": {
     "availability": "available",
     "cardinality": 1,

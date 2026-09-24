@@ -55,7 +55,7 @@ describe("primary evidence catalogue", () => {
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
     // 258 module pairs = the post-successor-rebase 237 plus the 21 recorded-path v2 successors.
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(258);
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([40, 222, 34, 501]); // +6 provider-exchange sources (rfc/provider-exchange-and-execution.md §§5–9)
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([40, 223, 34, 501]); // +6 provider-exchange sources (rfc/provider-exchange-and-execution.md §§5–9); +1 pack.authored.concept_reference (rfc/concept-registry.md §3)
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());

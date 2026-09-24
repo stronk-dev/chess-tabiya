@@ -14,8 +14,9 @@ import {
   isPackSidecarName,
   PACK_SIDECAR_BASENAMES,
 } from "@chess-tabiya/schema/pack-path";
-import type { PositionEvidenceIndex } from "@chess-tabiya/runtime";
+import { assertCompiledConceptRegistry, type CompiledConceptRegistry, type PositionEvidenceIndex } from "@chess-tabiya/runtime";
 
+import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { ServerError } from "./errors.js";
 import { validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } from "./pack-validation.js";
 import { buildPositionEvidenceIndex } from "./position-evidence.js";
@@ -40,10 +41,29 @@ export interface PackSummary {
   readonly difficulty: unknown;
   readonly objectiveSummary: string;
   readonly consequenceHorizon: { readonly kind: "declared" | "authored"; readonly plies: number } | null;
-  readonly concepts: readonly string[];
+  /** Current-catalogue label projection of `concepts[]` (rfc/concept-registry.md §6). */
+  readonly concepts: readonly PackConceptLabel[];
   readonly reviewStatus: string;
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
+}
+
+/**
+ * One pack concept reference labelled from the compiled registry. `unregistered` marks a stored
+ * pre-registry community pack's id that the registry does not carry; it renders its raw id and is
+ * never promoted to registered identity.
+ */
+export interface PackConceptLabel {
+  readonly id: string;
+  readonly label: string;
+  readonly status: "active" | "retired" | "unregistered";
+}
+
+function conceptLabels(document: DrillPackDefinition, registry: CompiledConceptRegistry): readonly PackConceptLabel[] {
+  return freeze((document.concepts ?? []).map((id) => {
+    const entry = registry.get(id);
+    return freeze(entry === undefined ? { id, label: id, status: "unregistered" as const } : { id, label: entry.label, status: entry.status });
+  }));
 }
 
 export interface PackRecord {
@@ -154,8 +174,8 @@ export function projectPackDocument(
   });
 }
 
-function validatedDocument(value: unknown, source: string, shapes?: PackShapeLookup, principles?: PackPrincipleLookup): DrillPackDefinition {
-  const result = validatePackDocument(value, { ...(shapes === undefined ? {} : { shapes }), ...(principles === undefined ? {} : { principles }) });
+function validatedDocument(value: unknown, source: string, shapes: PackShapeLookup | undefined, principles: PackPrincipleLookup | undefined, concepts: CompiledConceptRegistry): DrillPackDefinition {
+  const result = validatePackDocument(value, { ...(shapes === undefined ? {} : { shapes }), ...(principles === undefined ? {} : { principles }), concepts });
   if (!result.valid || result.document === undefined) {
     const errors = result.issues.filter((issue) => issue.severity === "error");
     throw new ServerError(
@@ -235,10 +255,26 @@ function sidecarPaths(source: string): {
 export class PackRegistry {
   readonly #records: Map<string, PackRecord>;
   readonly #digests: Map<string, PackRecord>;
+  readonly #concepts: CompiledConceptRegistry;
 
-  private constructor(records: ReadonlyMap<string, PackRecord>) {
+  private constructor(records: ReadonlyMap<string, PackRecord>, concepts: CompiledConceptRegistry) {
     this.#records = new Map(records);
     this.#digests = new Map([...records.values()].map((record) => [record.digest, record]));
+    this.#concepts = concepts;
+  }
+
+  /** The compiled concept registry every pack in this catalogue was validated against. */
+  get concepts(): CompiledConceptRegistry {
+    return this.#concepts;
+  }
+
+  /**
+   * The complete-document artifacts this catalogue loaded from disk, as the concept migration's
+   * built-in inventory (rfc/concept-registry.md §4). Hydrated stored packs are read by the
+   * migration from their own rows, never from this mutable catalogue.
+   */
+  artifactInventory(): readonly { readonly digest: string; readonly document: DrillPackDefinition }[] {
+    return freeze([...this.#digests.values()].map((record) => freeze({ digest: record.digest, document: record.document })));
   }
 
   static async fromDocuments(
@@ -249,22 +285,24 @@ export class PackRegistry {
       readonly manifest?: unknown;
       readonly channel?: "official" | "community";
     }[],
-    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup } = {},
+    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup; readonly concepts?: CompiledConceptRegistry } = {},
   ): Promise<PackRegistry> {
+    const concepts = options.concepts ?? installedConceptRegistry();
+    assertCompiledConceptRegistry(concepts);
     const records = new Map<string, PackRecord>();
     const validated = documents.map(({ source, value, ledger, manifest, channel = "official" }) => ({
       source,
       ledger,
       manifest,
       channel,
-      document: validatedDocument(value, source, options.shapes, options.principles),
+      document: validatedDocument(value, source, options.shapes, options.principles, concepts),
     }));
     const siblings = new Map(validated.map(({ document }) => [document.id, {
       start: document.start,
       objective: { type: document.objective.type },
     }]));
     for (const entry of validated) {
-      const checked = validatePackDocument(entry.document, { ...(options.shapes === undefined ? {} : { shapes: options.shapes }), ...(options.principles === undefined ? {} : { principles: options.principles }), packs: siblings });
+      const checked = validatePackDocument(entry.document, { ...(options.shapes === undefined ? {} : { shapes: options.shapes }), ...(options.principles === undefined ? {} : { principles: options.principles }), packs: siblings, concepts });
       if (!checked.valid || checked.document === undefined) {
         const errors = checked.issues.filter((issue) => issue.severity === "error");
         throw new ServerError("PACK_INVALID", `Pack ${entry.source} is invalid: ${errors.map((issue) => issue.message).join("; ")}`, { details: { source: entry.source, issues: errors } });
@@ -308,7 +346,7 @@ export class PackRegistry {
         difficulty: raw.difficulty ?? null,
         objectiveSummary: objectiveSummary(document),
         consequenceHorizon: consequenceHorizon(document),
-        concepts: Object.freeze([...(document.concepts ?? [])]),
+        concepts: conceptLabels(document, concepts),
         reviewStatus: provenance.reviewStatus as string,
         channel,
       });
@@ -327,7 +365,7 @@ export class PackRegistry {
         }),
       );
     }
-    return new PackRegistry(records);
+    return new PackRegistry(records, concepts);
   }
 
   static async loadDefault(
@@ -338,6 +376,7 @@ export class PackRegistry {
       readonly draftsDirectory?: string;
       readonly shapes?: PackShapeLookup;
       readonly principles?: PackPrincipleLookup;
+      readonly concepts?: CompiledConceptRegistry;
     } = {},
   ): Promise<PackRegistry> {
     const contentDirectory = fileURLToPath(
@@ -377,6 +416,7 @@ export class PackRegistry {
       replaceDuplicates: options.development === true,
       ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
       ...(options.principles === undefined ? {} : { principles: options.principles }),
+      ...(options.concepts === undefined ? {} : { concepts: options.concepts }),
     });
   }
 
@@ -420,7 +460,7 @@ export class PackRegistry {
         difficulty: raw.difficulty ?? null,
         objectiveSummary: objectiveSummary(document),
         consequenceHorizon: consequenceHorizon(document),
-        concepts: Object.freeze([...(document.concepts ?? [])]),
+        concepts: conceptLabels(document, this.#concepts),
         reviewStatus: String(provenance.reviewStatus),
         channel: "community",
         publisherHandle,
@@ -451,7 +491,7 @@ export class PackRegistry {
         difficulty: raw.difficulty ?? null,
         objectiveSummary: objectiveSummary(document),
         consequenceHorizon: consequenceHorizon(document),
-        concepts: Object.freeze([...(document.concepts ?? [])]),
+        concepts: conceptLabels(document, this.#concepts),
         reviewStatus: String(provenance.reviewStatus),
         channel: "community",
       }),

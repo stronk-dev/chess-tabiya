@@ -388,12 +388,14 @@ export function lintDrillPack(
   lintPredictionDensity(pack.checkpoints, options, issues);
   lintUnreachableAuthoredProse(pack, issues);
   for (const [index, concept] of (pack.concepts ?? []).entries()) {
-    if (!/^[a-z0-9][a-z0-9-]*$/u.test(concept)) {
+    // rfc/concept-registry.md §3: a concept is a registered global id; a malformed one is an error.
+    // Registry membership itself is checked by the server validator against the compiled registry.
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(concept) || new TextEncoder().encode(concept).length > 80) {
       issues.push({
-        severity: "warning",
+        severity: "error",
         code: "CONCEPT_KEY_NOT_SLUG",
         path: `/concepts/${index}`,
-        message: `Concept ${JSON.stringify(concept)} is pack-local and not slug-shaped`,
+        message: `Concept ${JSON.stringify(concept)} is not a registered-id slug`,
       });
     }
   }

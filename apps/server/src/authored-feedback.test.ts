@@ -349,7 +349,7 @@ describe("authored feedback projection", () => {
   it("keeps unanchored claims withheld until the authored spine is exhausted", async () => {
     const pack = await registered(
       smallPack({
-        concepts: ["not-prose"],
+        concepts: ["break-timing"],
         planClasses: [{ id: "choice", label: "Choose me" }],
         checkpoints: [
           {

@@ -7,7 +7,7 @@ const digest = `sha256:${"a".repeat(64)}`;
 const pack = Object.freeze({
   id: "pack-a", version: "0.2.0", digest, title: "Pack A", mode: "plan", phase: "middlegame",
   difficulty: { minOnlineRapid: 1200, maxOnlineRapid: 1800, label: "Club player", branchLengthTarget: 8 },
-  objectiveSummary: "Preserve the structure.", consequenceHorizon: { kind: "declared", plies: 8 }, concepts: ["minority-attack"],
+  objectiveSummary: "Preserve the structure.", consequenceHorizon: { kind: "declared", plies: 8 }, concepts: [{ id: "minority-attack", label: "Minority attack", status: "active" as const }],
   reviewStatus: "draft", channel: "community", publisherHandle: "author-a",
 });
 const shape = Object.freeze({ id: "shape-a", version: "0.3", digest, name: "Shape A", phases: ["middlegame"], licence: "CC-BY-SA-4.0", channel: "official", usedByPacks: 3 });

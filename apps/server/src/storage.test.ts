@@ -63,8 +63,8 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(STORAGE_VERSION).toBe(27);
-    expect(log).toEqual([{ version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }]);
+    expect(STORAGE_VERSION).toBe(28);
+    expect(log).toEqual([{ version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }]);
     upgraded.close();
 
     const inspected = new DatabaseSync(filename);
@@ -137,7 +137,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
       { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
-      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" },
+      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -155,7 +155,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(27);
+    ).toBe(28);
     inspection.close();
   });
 
@@ -184,7 +184,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       PRAGMA user_version=13;
     `);fixture.close();
 
-    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"},{version:24,name:"classrooms, assignments, submissions, and expiring run grants"},{version:25,name:"learner ratings, rated games, periods, standings, and marks"},{version:26,name:"longitudinal observation ledger, structure stats, and projection jobs"},{version:27,name:"durable evidence job batches, jobs, result sequences and application transitions"}]);
+    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"},{version:24,name:"classrooms, assignments, submissions, and expiring run grants"},{version:25,name:"learner ratings, rated games, periods, standings, and marks"},{version:26,name:"longitudinal observation ledger, structure stats, and projection jobs"},{version:27,name:"durable evidence job batches, jobs, result sequences and application transitions"},{version:28,name:"registered global concept identities and the legacy concept quarantine"}]);
     expect(upgraded.liveSession(session.id)?.title).toBe("Old class");expect(upgraded.publicTokenByHash("hash-old")).toMatchObject({scope:"story_read",runId:value.id});upgraded.close();
     const inspection=new DatabaseSync(filename);expect((inspection.prepare("PRAGMA foreign_key_check").all())).toEqual([]);for(const table of ["session_proposals","session_vote_windows","session_invitations","arena_legs"]){const targets=(inspection.prepare(`PRAGMA foreign_key_list(${table})`).all() as readonly Record<string,unknown>[]).map((row)=>row.table);expect(targets).toContain("live_sessions");expect(targets).not.toContain("live_sessions_v14");}expect(String((inspection.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='live_sessions'").get() as {sql:string}).sql)).toContain("'match'");inspection.close();
     const freshFile=join(directory,"fresh.sqlite"),freshStorage=new SQLiteRunStorage(freshFile,{onMigration:()=>{}});freshStorage.close();const upgradedSchema=new DatabaseSync(filename),freshSchema=new DatabaseSync(freshFile);
@@ -254,7 +254,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
       { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
-      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" },
+      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.17");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
@@ -351,7 +351,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
       { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
-      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" },
+      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.17");
     expect(upgraded.read(quarantined.id)).toBeUndefined();
@@ -424,7 +424,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }]);
+    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }]);
     expect(upgraded.read("guard-migration")?.run.schemaVersion).toBe("0.17");
     upgraded.close();
 
@@ -466,7 +466,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }]);
+    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -497,7 +497,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }]);
+    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -529,7 +529,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }]);
+    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -562,7 +562,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }]);
+    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);

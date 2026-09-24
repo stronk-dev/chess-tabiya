@@ -14,7 +14,9 @@ projection idempotent.
 An empty fork is recorded but not counted. A countable attempt receives a stable ordinal
 within its root position. Objective states project to `stable`, `unstable`, or `open`; a
 position session with no authored grader remains explicitly ungraded. Concepts are
-pack-scoped tags and never scheduling keys.
+registered global identities (migration 28, [concept registry](concept-registry.md)): a pack's
+concept on an attempt is stored as `concept:<id>@1` with its exact registry revision and the pack
+digest as occurrence. They are never scheduling keys.
 
 Attempt provenance distinguishes fresh, duplicate, scheduled, and in-run retry origins.
 The server derives `root_due_at_start` from its own schedule table, so omitting client
@@ -144,15 +146,17 @@ rendered only as an honest absence, never exposed as an internal identifier.
 
 ## Pack format 0.6
 
-Packs may declare typed `retryVariants` and pack-scoped `concepts`. Concept keys must be
-slug-like; non-slug keys produce a lint warning rather than silently becoming a global
-taxonomy.
+Packs may declare typed `retryVariants` and `concepts`. Since migration 28 every concept
+must be a registered id in `content/concepts/`: a malformed, unregistered or retired-new id is a
+validation **error** at lint, `make pack-check` and publication.
 
 ## Current limits
 
 The first implementation does not import bulk personal PGN history or rank
 recommendations by inferred skill. Related-position expansion is available from each recorded
-attempt and labels only same-position, same-pack, or same-concept-in-pack relations. Longitudinal
+attempt and labels only same-position, same-pack, or same-concept relations; `same_concept` is
+cross-pack and names the shared registered concept (the retired `same_concept_in_pack` token is
+rejected). The voluntary concept-return metric groups on the same global key. Longitudinal
 product-success SQL remains operator/reporting work rather than a claim made by the learner UI. The scheduler is
 intentionally small and explainable; it is not an FSRS/SM-2 mastery model.
 

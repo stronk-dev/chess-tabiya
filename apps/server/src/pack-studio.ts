@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 
 import { canonicalizeJson, type DrillPackDefinition, type JsonValue } from "@chess-tabiya/schema/drill-pack";
+import { conceptCatalogueView, type ConceptCatalogueView } from "@chess-tabiya/runtime";
 
 import type { Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
@@ -43,6 +44,8 @@ function greater(a: string, b: string): boolean {
 
 export interface StudioDraftView extends StoredPackDraft {
   readonly validation: PackValidationResult;
+  /** The exact concept registry the validation resolved `concepts[]` against (rfc/concept-registry.md §3). */
+  readonly conceptRegistryDigest: string;
 }
 
 export class PackStudio {
@@ -99,8 +102,16 @@ export class PackStudio {
     return this.#view(row);
   }
 
-  lint(document: unknown): PackValidationResult {
-    return validatePackDocument(document, this.#validationOptions());
+  lint(document: unknown): PackValidationResult & { readonly conceptRegistryDigest: string } {
+    return Object.freeze({ ...validatePackDocument(document, this.#validationOptions()), conceptRegistryDigest: this.#registry.concepts.digest });
+  }
+
+  /**
+   * Consumer 2 of rfc/concept-registry.md §2: the picker's catalogue, projected from the one
+   * compiled registry. Active entries are offered; retired ones are shown only as retired.
+   */
+  conceptCatalogue(): ConceptCatalogueView {
+    return conceptCatalogueView(this.#registry.concepts);
   }
 
   update(id: string, principal: Principal, expectedDigest: string, document: unknown, at = new Date().toISOString()): StudioDraftView {
@@ -174,10 +185,11 @@ export class PackStudio {
       ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }),
       principles: this.#principles,
       packs: this.#packs,
+      concepts: this.#registry.concepts,
     };
   }
 
   #view(row: StoredPackDraft): StudioDraftView {
-    return Object.freeze({ ...row, validation: validatePackDocument(row.document, this.#validationOptions()) });
+    return Object.freeze({ ...row, validation: validatePackDocument(row.document, this.#validationOptions()), conceptRegistryDigest: this.#registry.concepts.digest });
   }
 }

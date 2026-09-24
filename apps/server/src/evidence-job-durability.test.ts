@@ -20,6 +20,8 @@ import {
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { buildSync } from "esbuild";
+
+import { CONCEPT_REGISTRY_DIRECTORY } from "./concept-registry-loader.js";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EvidenceJobStore, type EvidenceJobLease } from "./evidence-job-store.js";
@@ -292,7 +294,7 @@ function race(url: URL, path: string, input: { readonly idempotencyKey: string; 
   const barrier = new SharedArrayBuffer(8);
   const flag = new Int32Array(barrier);
   const results = [0, 1].map(() => new Promise<Record<string, unknown>>((done, fail) => {
-    const worker = new Worker(url, { workerData: { path, barrier, input } });
+    const worker = new Worker(url, { workerData: { path, barrier, input, conceptRegistryDirectory: CONCEPT_REGISTRY_DIRECTORY } });
     worker.once("message", (message: Record<string, unknown>) => { done(message); void worker.terminate(); });
     worker.once("error", fail);
   }));

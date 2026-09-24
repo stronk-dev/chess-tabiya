@@ -271,6 +271,30 @@ the live-claims table below: campaign-core lane 2, boss games lane 3, training m
 | lane 3 | `campaign-boss-games.md` | adds the boss_game encounter arm with exact start FEN, learner side, immutable calibrated bot-profile reference, rating policy and briefing reference; no authored objective, checkpoint, success condition or horizon is admitted | `tabiya-claims` |
 | lane 4 | `training-mode-variants.md` | adds prediction and survival encounter arms after campaign-boss-games; pack and boss_game arms remain byte-identical | `tabiya-claims` |
 
+## Concept-registry-schema-version register
+
+<!-- register: concept-registry-schema head=1 -->
+<!-- schema-digest: concept-registry-schema b9d6798506a2 -->
+
+The closed grammar of one immutable concept-registry revision
+(`schemas/concept_registry.schema.json`) and its `current.json` head (`$defs/head`). A bare major
+integer like the campaign lane; the version export is `CONCEPT_REGISTRY_SCHEMA_LANE` in
+`packages/schema/src/index.ts`, and revision documents carry it as the numeric literal
+`schemaVersion: 1`. Registry *content* (new ids, labels, retirements) is a new immutable revision
+under `content/concepts/revisions/`, not a lane; only a change to the document grammar, the
+`labelCollisionKeyV1` rule or its pinned Unicode-data version claims the next lane.
+
+### Landed
+
+| version | owner RFC | what it changed | landed at |
+|---|---|---|---|
+| 1 | `concept-registry.md` | registry revision + head grammar; active/retired lifecycle; exact v1 label-collision key under Unicode 17.0 | implementing checkpoint 2026-09-24 |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
 ## Evidence-kinds register
 
 <!-- register: evidence-kinds members=8 -->
@@ -350,7 +374,7 @@ checked by `make register-check`, never generated.
 
 ## Migration register
 
-<!-- register: migration head=27 -->
+<!-- register: migration head=28 -->
 
 Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
 migration 2 and `STORAGE_VERSION` 1→2, so neither could land independently. A
@@ -403,12 +427,12 @@ was sound for the same reason — the draft that could not land is the one that 
 | 25 | 24→25 | `learner-rating.md` | **implementation checkpoint 2026-08-22** — creates learner ratings, rated games, rating periods, cohort standings, standing members and learner marks; additive schema only and deliberately no historical backfill. Writers, projections and service routes are implemented; the RFC remains active for client surfaces and validation |
 | 26 | 25→26 | `longitudinal-store.md` | **implemented 2026-09-24** — adds `drill_runs.longitudinal_profile_disposition` (`profileable` default) and `drill_runs.longitudinal_structure_attribution` (`unattributable_legacy` default; new runs insert `single_player`), the `drill_runs_longitudinal_owner` parent key, and creates `learner_observation_denominators`, `learner_observations`, `learner_structure_stats` and `learner_observation_jobs` with five named indexes. Additive schema only: no backfill and no snapshot rewrite; startup reconciliation queues pre-migration runs. The body is idempotent (column-presence guarded, `IF NOT EXISTS`) so rewound-version fixtures replay it safely |
 | 27 | 26→27 | `evidence-job-durability.md` | **implemented 2026-09-24** — creates `evidence_job_batches`, `evidence_result_sequences`, `evidence_jobs` and `evidence_run_transitions` with the RFC's exact §2 DDL, the two `evidence_run_transitions` append-only triggers and two named indexes (`evidence_jobs_claimable`, `evidence_jobs_run_state`). Additive schema only: no backfill (the in-process queue it replaces never survived a restart) and no run-schema change. The body is table-presence guarded so rewound-version fixtures replay it safely |
+| 28 | 27→28 | `concept-registry.md` | **implemented 2026-09-24** — rebuilds `attempt_concepts` as registered global identities (`concept_key` = `concept:<id>@1` CHECKed against `concept_id`, `registry_schema_version`, `registry_digest`, revision-time `label`, occurrence `pack_id`/`pack_digest`) and creates `attempt_concept_legacy` (closed-reason quarantine) and `concept_registry_migration` (one canonical receipt). A data migration: every legacy `pack:<pack>#<id>` row is resolved through its replayed run, its exact complete-document pack artifact and the compiled registry inside one coordinator-owned transaction, or quarantined; unknown or colliding rows fail closed and roll back to 27. The body is presence-guarded so rewound-version fixtures replay it safely |
 
 ### Live claims
 
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
-| position behind evidence-job-durability | `concept-registry.md` | rewrite attempt_concepts pack-scoped keys to registered global concept identities and canonical labels; fail closed on unknown or colliding legacy rows | `tabiya-claims` |
 | position behind concept-registry | `bot-policy.md` | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite | `tabiya-claims` |
 | position behind bot-policy | `campaign-core.md` | campaign_runs; campaign_run_creations; campaign_events; campaign_mutation_commands; campaign_reward_awards | `tabiya-claims` |
 | position behind campaign-core | `campaign-catalogue-progression.md` | learner_catalogue_sightings; learner_catalogue_projection_state | `tabiya-claims` |

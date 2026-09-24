@@ -18,6 +18,8 @@ export interface PackVocabularyDraft {
   readonly valid: boolean;
   readonly shapeFields: readonly ShapeFieldDraft[];
   readonly principleFields: readonly PrincipleFieldDraft[];
+  /** The draft's `concepts[]` ids in document order (rfc/concept-registry.md §3). */
+  readonly concepts: readonly string[];
 }
 
 function record(value: unknown): Record<string, unknown> | undefined {
@@ -69,9 +71,10 @@ export function readPackVocabulary(documentJson: string): PackVocabularyDraft {
         });
       }
     }
-    return { valid: true, shapeFields, principleFields };
+    const concepts = Array.isArray(document.concepts) ? document.concepts.filter((id): id is string => typeof id === "string") : [];
+    return { valid: true, shapeFields, principleFields, concepts };
   } catch {
-    return { valid: false, shapeFields: [], principleFields: [] };
+    return { valid: false, shapeFields: [], principleFields: [], concepts: [] };
   }
 }
 
@@ -116,4 +119,22 @@ export function setClaimPrinciple(documentJson: string, claimIndex: number, prin
   claims[claimIndex] = next;
   document.feedbackClaims = claims;
   return write(document);
+}
+
+/**
+ * Adds or removes one registered concept id. The picker offers only active registry entries, so
+ * this never writes an arbitrary string; removing is always allowed (including a retired id).
+ */
+export function setPackConcept(documentJson: string, conceptId: string, checked: boolean): string {
+  const document = parseDocument(documentJson);
+  const selected = Array.isArray(document.concepts) ? document.concepts.filter((id): id is string => typeof id === "string" && id !== conceptId) : [];
+  if (checked) selected.push(conceptId);
+  if (selected.length === 0) delete document.concepts; else document.concepts = selected;
+  return write(document);
+}
+
+/** Case-insensitive search over a concept's label and id; an empty query matches everything. */
+export function conceptMatches(entry: { readonly id: string; readonly label: string }, query: string): boolean {
+  const needle = query.trim().toLowerCase();
+  return needle === "" || entry.label.toLowerCase().includes(needle) || entry.id.includes(needle);
 }

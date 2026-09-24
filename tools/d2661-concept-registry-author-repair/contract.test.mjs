@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -13,7 +14,9 @@ import {
   revisionBytes,
 } from "./model.mjs";
 
-const rfc = readFileSync("rfc/concept-registry.md", "utf8");
+// Pinned to the pre-landing tree (the D2898/D2922 rule): the 2026-09-24 implementation discharged
+// the migration claim this repair's text asserted.
+const rfc = execFileSync("git", ["show", "d5f11d706895603911bdca0c6d51eb8543a8bc55:rfc/concept-registry.md"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 const makefile = readFileSync("Makefile", "utf8");
 
 function catalogue() {

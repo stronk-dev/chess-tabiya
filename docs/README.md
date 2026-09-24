@@ -89,6 +89,8 @@ Current completion state is deliberately not copied here. Use the
 - [Content sourcing](content-sourcing.md) — candidates, provenance, licences, source access and
   grounding pipelines.
 - [Pack Studio](pack-studio.md) — durable drafts, publication channels, versions and authoring API.
+- [Concept registry](concept-registry.md) — the one cross-pack concept identity, its compiler,
+  consumers and the migration-28 legacy quarantine.
 - [Pack graduation](pack-graduation.md) — clearance states, reports and official-content boundary.
 - [Shape library](shape-library.md) — reusable structural entries, triggers, plans and Shape Studio.
 - [Repertoire gap finding](repertoire-gap-finding.md) — private repertoire import, coverage scans

@@ -11,6 +11,15 @@
       }
     },
     {
+      "id": "concept-registry-schema",
+      "claimKind": "schema_lane",
+      "source": {
+        "kind": "json_schema",
+        "schemaSlug": "concept-registry",
+        "versionExport": "CONCEPT_REGISTRY_SCHEMA_LANE"
+      }
+    },
+    {
       "id": "evidence-kinds",
       "claimKind": "members",
       "source": {

@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
 
-import { readBackReplay, type DrillRun } from "@chess-tabiya/runtime";
+import { parseConceptRef, readBackReplay, registeredConceptKey, type DrillRun } from "@chess-tabiya/runtime";
+
+import { ATTEMPT_CONCEPT_LEGACY_REASONS } from "./concept-migration.js";
 
 export const ACCOUNT_BUNDLE_MEDIA_TYPE = "application/vnd.tabiya.account+json; version=1";
 export const ACCOUNT_BUNDLE_FORMAT = "tabiya-account-export" as const;
@@ -32,7 +34,7 @@ function table(
 }
 
 /**
- * The exhaustive privacy boundary for storage schema v27. A migration adding a table must add one
+ * The exhaustive privacy boundary for storage schema v28. A migration adding a table must add one
  * entry here in the same change; assertAccountDataInventory enforces set equality at startup/tests.
  */
 export const ACCOUNT_DATA_INVENTORY = Object.freeze([
@@ -45,6 +47,10 @@ export const ACCOUNT_DATA_INVENTORY = Object.freeze([
   table("run_marks", "marks", "project", "hard_delete", { author_learner_id: "delete_row" }),
   table("attempts", "progress", "project", "hard_delete", { learner_id: "delete_row" }),
   table("attempt_concepts", "progress", "project", "hard_delete"),
+  // rfc/concept-registry.md §4: quarantined legacy attributions export as unverified history and
+  // cascade with their attempt; the migration receipt is installation state, never exported.
+  table("attempt_concept_legacy", "progress", "project", "hard_delete"),
+  table("concept_registry_migration", "installation", "exclude", "retain"),
   table("schedules", "progress", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_position_stats", "progress", "project", "hard_delete", { learner_id: "delete_row" }),
   table("progress_meta", "installation", "exclude", "retain"),
@@ -126,7 +132,8 @@ export type JsonValue = JsonScalar | readonly JsonValue[] | { readonly [key: str
 /** Closed field sets for every table-discriminated row emitted by account export V1. */
 export const ACCOUNT_TAGGED_RECORD_FIELDS = {
   attempts: [["run_id", "branch_id", "session_kind", "pack_id", "pack_digest", "root_key", "root_node_id", "root_transpose_key", "branch_label", "branch_intent", "branch_seed", "attempt_no", "countable", "graded", "objective_state", "verdict", "result", "user_ply_count", "checkpointIds", "origin", "schedule_id", "root_due_at_start", "derived_from_run_id", "started_at", "ended_at"]],
-  attempt_concepts: [["run_id", "branch_id", "pack_id", "concept_key", "label"]],
+  attempt_concepts: [["run_id", "branch_id", "pack_id", "pack_digest", "concept_key", "concept", "label"]],
+  attempt_concept_legacy: [["run_id", "branch_id", "pack_id", "raw_key", "label", "reason"]],
   schedules: [["id", "root_key", "session_kind", "pack_id", "root_transpose_key", "kind", "variant", "origin", "state", "due_at", "created_at", "source_run_id", "source_node_id", "started_run_id"]],
   learner_position_stats: [["transpose_key", "seen_count"]],
   run_marks: [
@@ -277,7 +284,7 @@ export function buildAccountBundle(input: AccountBundleInput): AccountBundleV1 {
     account: projected(["learners"], Object.freeze({ ...input.account })),
     ownedRuns: projected(["drill_runs", "run_grants", "imported_games", "run_derivations"], Object.freeze([...input.ownedRuns].sort((a, b) => a.id.localeCompare(b.id)))),
     sharedAccess: projected(["run_grants", "run_marks"], Object.freeze([...input.sharedAccess].sort((a, b) => a.runId.localeCompare(b.runId)))),
-    progress: projected(["attempts", "attempt_concepts", "schedules", "learner_position_stats"], Object.freeze([...input.progress])),
+    progress: projected(["attempts", "attempt_concepts", "attempt_concept_legacy", "schedules", "learner_position_stats"], Object.freeze([...input.progress])),
     marks: projected(["run_marks"], Object.freeze([...input.marks])),
     repertoires: projected(["repertoires", "repertoire_moves", "repertoire_scans", "repertoire_gap_runs"], Object.freeze([...input.repertoires])),
     drafts: projected(["pack_drafts", "shape_drafts", "playtest_documents"], Object.freeze([...input.drafts])),
@@ -393,7 +400,21 @@ function validateTaggedRecords(value: unknown, at: string): void {
     const matched = variants.some((fields) => JSON.stringify(actual) === JSON.stringify([...fields].sort()));
     if (!matched) throw new TypeError(`${at}[${index}].record has unknown or missing fields for ${tableName}`);
     validateJsonValue(tagged.record, `${at}[${index}].record`);
+    if (tableName === "attempt_concepts") validateExportedConcept(record, `${at}[${index}].record`);
+    if (tableName === "attempt_concept_legacy" && !(ATTEMPT_CONCEPT_LEGACY_REASONS as readonly unknown[]).includes(record.reason)) throw new TypeError(`${at}[${index}].record.reason is not a closed quarantine reason`);
   }
+}
+
+/**
+ * Consumer 5 of rfc/concept-registry.md §2: an exported registered row carries an exact
+ * `ConceptRef` whose id agrees with its global key. Export validation never resolves or promotes a
+ * row; a quarantined row stays in `attempt_concept_legacy`.
+ */
+function validateExportedConcept(record: Readonly<Record<string, unknown>>, at: string): void {
+  let ref;
+  try { ref = parseConceptRef(record.concept); } catch (error) { throw new TypeError(`${at}.concept is not an exact concept ref: ${error instanceof Error ? error.message : String(error)}`); }
+  if (record.concept_key !== registeredConceptKey(ref.id)) throw new TypeError(`${at}.concept_key does not match its concept ref`);
+  for (const field of ["run_id", "branch_id", "pack_id", "pack_digest", "label"] as const) stringValue(record[field], `${at}.${field}`);
 }
 
 function validateOwnedRuns(value: unknown): void {

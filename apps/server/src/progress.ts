@@ -1,6 +1,16 @@
-import { branchPath, type DrillRun, type ObjectiveState } from "@chess-tabiya/runtime";
+import {
+  assertCompiledConceptRegistry,
+  branchPath,
+  resolveRegisteredConcept,
+  type CompiledConceptRegistry,
+  type ConceptRef,
+  type DrillRun,
+  type ObjectiveState,
+  type ResolvedConcept,
+} from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
+import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { objectiveRules, type PlanSignatureResolver } from "./pack-orchestrator.js";
 
 export type AttemptVerdict = "stable" | "unstable" | "open";
@@ -190,13 +200,32 @@ export interface AttemptRow {
   readonly endedAt: string;
 }
 
-export interface ConceptTagRow {
-  readonly runId: string;
-  readonly branchId: string;
-  readonly packId: string;
-  readonly conceptKey: string;
-  readonly label: string;
-}
+/**
+ * One pack concept occurrence on one attempt (rfc/concept-registry.md §4). A `registered` row
+ * carries the global key and exact `ConceptRef`; `packId`/`packDigest` are occurrence operands,
+ * never identity. An `unverified` row is a stored pre-registry pack's unregistered id: it lands in
+ * `attempt_concept_legacy` and never enters related attempts, Campaign or Skills.
+ */
+export type ConceptTagRow =
+  | {
+    readonly kind: "registered";
+    readonly runId: string;
+    readonly branchId: string;
+    readonly packId: string;
+    readonly packDigest: string;
+    readonly conceptKey: string;
+    readonly ref: ConceptRef;
+    readonly label: string;
+  }
+  | {
+    readonly kind: "unverified";
+    readonly runId: string;
+    readonly branchId: string;
+    readonly packId: string;
+    readonly rawKey: string;
+    readonly label: string;
+    readonly reason: "unregistered_at_projection";
+  };
 
 export interface AttemptOriginInput {
   readonly origin: AttemptOrigin;
@@ -206,12 +235,24 @@ export interface AttemptOriginInput {
 }
 
 export interface ConceptResolver {
-  resolve(packId: string, raw: string): { readonly key: string; readonly label: string };
+  /** The registered global identity of `raw`, or `undefined` when the registry does not carry it. */
+  resolve(packId: string, raw: string): ResolvedConcept | undefined;
 }
 
-export class PackScopedConceptResolver implements ConceptResolver {
-  resolve(packId: string, raw: string) {
-    return Object.freeze({ key: `pack:${packId}#${raw}`, label: raw });
+/**
+ * The production resolver (rfc/concept-registry.md §4): identity comes only from the compiled
+ * registry. `packId` stays an occurrence operand; it is not part of the key.
+ */
+export class RegisteredConceptResolver implements ConceptResolver {
+  readonly #registry: CompiledConceptRegistry;
+
+  constructor(registry: CompiledConceptRegistry) {
+    assertCompiledConceptRegistry(registry);
+    this.#registry = registry;
+  }
+
+  resolve(_packId: string, raw: string): ResolvedConcept | undefined {
+    return this.#registry.has(raw) ? resolveRegisteredConcept(this.#registry, raw) : undefined;
   }
 }
 
@@ -240,7 +281,7 @@ export function projectAttempts(input: {
   if (run.sessionKind === "imported") {
     return Object.freeze({ attempts: Object.freeze([]), conceptTags: Object.freeze([]) });
   }
-  const resolver = input.concepts ?? new PackScopedConceptResolver();
+  const resolver = input.concepts ?? new RegisteredConceptResolver(installedConceptRegistry());
   const attempts: AttemptRow[] = [];
   const conceptTags: ConceptTagRow[] = [];
   const graded = pack !== undefined && objectiveRules(pack, pack.objective, "/objective", input.resolvePlanSignature).length > 0;
@@ -294,11 +335,19 @@ export function projectAttempts(input: {
     if (pack !== undefined) {
       for (const raw of pack.concepts ?? []) {
         const concept = resolver.resolve(pack.id, raw);
+        if (concept === undefined) {
+          conceptTags.push(Object.freeze({ kind: "unverified", runId: run.id, branchId: branch.id, packId: pack.id, rawKey: `pack:${pack.id}#${raw}`, label: raw, reason: "unregistered_at_projection" }));
+          continue;
+        }
+        if (run.packDigest === null) throw new TypeError(`Pack run ${run.id} has no pack digest for its concept occurrence`);
         conceptTags.push(Object.freeze({
+          kind: "registered",
           runId: run.id,
           branchId: branch.id,
           packId: pack.id,
+          packDigest: run.packDigest,
           conceptKey: concept.key,
+          ref: concept.ref,
           label: concept.label,
         }));
       }

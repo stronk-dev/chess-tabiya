@@ -1,16 +1,27 @@
 <script lang="ts">
-  import type { PrincipleSummary, ShapeSummary } from "./api.js";
-  import { readPackVocabulary, setClaimPrinciple, setPackShapeReference, type ShapeRelation } from "./pack-vocabulary-fields.js";
+  import type { ConceptCatalogueView, PrincipleSummary, ShapeSummary } from "./api.js";
+  import { conceptMatches, readPackVocabulary, setClaimPrinciple, setPackConcept, setPackShapeReference, type ShapeRelation } from "./pack-vocabulary-fields.js";
 
   interface Props {
     documentJson: string;
     shapes: readonly ShapeSummary[];
     principles: readonly PrincipleSummary[];
+    /** The compiled concept registry's projection; absent while it loads or when unavailable. */
+    concepts?: ConceptCatalogueView | undefined;
     onDocumentJson: (documentJson: string) => void;
   }
 
-  let { documentJson, shapes, principles, onDocumentJson }: Props = $props();
+  let { documentJson, shapes, principles, concepts, onDocumentJson }: Props = $props();
   let draft = $derived(readPackVocabulary(documentJson));
+  let conceptQuery = $state("");
+  let selectedConcepts = $derived(new Set(draft.concepts));
+  // rfc/concept-registry.md §3: only active entries are offered; a selected retired or unknown id is
+  // shown so it can be removed, never re-added.
+  let offeredConcepts = $derived((concepts?.entries ?? []).filter((entry) => entry.status === "active" && conceptMatches(entry, conceptQuery)));
+  let heldConcepts = $derived(draft.concepts.flatMap((id) => {
+    const entry = concepts?.entries.find((candidate) => candidate.id === id);
+    return entry?.status === "active" ? [] : [{ id, label: entry?.label ?? id, status: entry?.status ?? "unregistered" }];
+  }));
 </script>
 
 <section class="vocabulary-editor" aria-labelledby="vocabulary-editor-title">
@@ -34,6 +45,27 @@
           </div>
         </details>
       {/each}
+      <details>
+        <summary>Concepts · {selectedConcepts.size} selected</summary>
+        {#if concepts === undefined}
+          <p class="honest">The concept registry is unavailable, so concepts cannot be chosen.</p>
+        {:else}
+          <label class="concept-search">Find a concept <input type="search" bind:value={conceptQuery} aria-describedby="concept-registry-digest" /></label>
+          <p id="concept-registry-digest" class="honest">Registry <code>{concepts.registryDigest}</code>. Concepts are chosen from the registry; new ones are added to the registry as reviewed content, not typed here.</p>
+          {#if heldConcepts.length > 0}
+            <ul class="held-concepts" aria-label="Concepts that cannot be newly chosen">
+              {#each heldConcepts as held}
+                <li><span><strong>{held.label}</strong> <code>{held.id}</code> · {held.status === "retired" ? "retired" : "not in the registry"}</span><button type="button" onclick={() => onDocumentJson(setPackConcept(documentJson, held.id, false))}>Remove</button></li>
+              {/each}
+            </ul>
+          {/if}
+          <div class="picker-list" role="group" aria-label="Registered concepts">
+            {#each offeredConcepts as entry (entry.id)}
+              <label class="picker-choice principle" class:selected={selectedConcepts.has(entry.id)}><input type="checkbox" checked={selectedConcepts.has(entry.id)} onchange={(event) => onDocumentJson(setPackConcept(documentJson, entry.id, event.currentTarget.checked))} /><span><strong>{entry.label}</strong> <code>{entry.id}</code></span></label>
+            {:else}<p>No registered concept matches.</p>{/each}
+          </div>
+        {/if}
+      </details>
       {#each draft.principleFields as field}
         <details>
           <summary>Claim: {field.id} · {field.selected.size} principles</summary>
@@ -66,4 +98,7 @@
   code, small { overflow-wrap: anywhere; }
   .relation { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; margin-top: .4rem; font-size: .82rem; }
   select { max-width: 14rem; }
+  .concept-search { display: grid; gap: .3rem; margin-block: .65rem .4rem; }
+  .held-concepts { display: grid; gap: .4rem; padding: 0; list-style: none; }
+  .held-concepts li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; }
 </style>

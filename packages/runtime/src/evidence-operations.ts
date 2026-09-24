@@ -9,7 +9,10 @@
 import type { DrillPackDefinition, StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 
 import type { DeclaredEvidence } from "./evidence-contract.js";
-import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
+import type { AuthoredFeedbackItemRecord, PackConceptReferencePayload } from "./evidence-factories.js";
+import type { CompiledConceptRegistry } from "./concept-registry.js";
+
+export type { PackConceptReferencePayload } from "./evidence-factories.js";
 import type { CandidateFeatureInput, CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { pivotalMarkerEvidenceItems } from "./pivotal.js";
@@ -50,6 +53,19 @@ export function positionGuidanceEvidence(input: PositionGuidanceEvidenceInput): 
     ...(input.authored ?? []).flatMap((item) => invokeEvidenceValueRoute("pack.authored.claim@1", { item })),
     ...(input.recorded ?? []),
   ]);
+}
+
+/**
+ * rfc/concept-registry.md §3: the identity-only `pack.authored.concept_reference@1` population of
+ * one validated pack — the input Skills and Campaign consume instead of parsing pack JSON. The
+ * registry must be the private compiled registry and the digest the pack's complete-document one.
+ */
+export function packConceptReferenceEvidence(input: {
+  readonly pack: DrillPackDefinition;
+  readonly packDigest: string;
+  readonly registry: CompiledConceptRegistry;
+}): readonly DeclaredEvidence<PackConceptReferencePayload>[] {
+  return invokeEvidenceValueRoute("pack.authored.concept_reference@1", { pack: input.pack, packDigest: input.packDigest, registry: input.registry }) as readonly DeclaredEvidence<PackConceptReferencePayload>[];
 }
 
 /**

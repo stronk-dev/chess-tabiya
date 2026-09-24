@@ -26,7 +26,13 @@ sessions, bearer tokens and token hashes, provider credentials, deployment
 configuration, and installation-wide official content. Durable evidence-job rows (batches, jobs,
 result sequences and application transitions; `evidence-jobs.md`) are run-owned operational
 state: they carry no learner identity, are not exported, and follow their run's deletion
-classification by cascade. Browser-local writer ids,
+classification by cascade. Concept occurrences (`concept-registry.md`) export in the progress
+projection: a registered `attempt_concepts` row carries its exact `ConceptRef` (id, schema
+version, registry revision digest) with its pack/run occurrence, and export validation refuses a
+row whose key disagrees with its ref; quarantined `attempt_concept_legacy` rows export as-is with
+their closed reason and are never promoted. Both cascade with their attempt on deletion. The
+registry itself and the installation's `concept_registry_migration` receipt are installation
+content: neither is exported, and deletion removes no registry revision. Browser-local writer ids,
 board-view preferences, assistance preferences, and workflow presets are named as an
 exclusion because another device's copy is neither account data nor recoverable by the
 server. There is no account-import endpoint.

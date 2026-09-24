@@ -1,10 +1,15 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import test from "node:test";
 
-const rfc = readFileSync("rfc/concept-registry.md", "utf8");
-const backlog = readFileSync("design/BACKLOG.md", "utf8");
-const readme = readFileSync("rfc/README.md", "utf8");
+// The draft contract this target retains was reviewed against the pre-landing tree. Its inputs are
+// pinned to that exact commit (the D2898/D2922 rule): the 2026-09-24 implementation discharged the
+// claims and rewrote the status, which must not erase the evidence of what the draft said.
+const REVIEWED = "d5f11d706895603911bdca0c6d51eb8543a8bc55";
+const reviewed = (file) => execFileSync("git", ["show", `${REVIEWED}:${file}`], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+const rfc = reviewed("rfc/concept-registry.md");
+const backlog = reviewed("design/BACKLOG.md");
+const readme = reviewed("rfc/README.md");
 
 const has = (...values) => values.forEach((value) => assert.ok(rfc.includes(value), `missing ${value}`));
 
