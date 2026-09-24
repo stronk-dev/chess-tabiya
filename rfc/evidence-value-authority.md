@@ -1,9 +1,13 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** draft — author-amended 2026-09-01 through [[D2497]], [[D2496]], [[D2495]], [[D2484]], [[D2327]] and the D2146
-  callable-operation closure; dependency-blocked on the
-  returned semantic convention register/provenance and provider exchange contracts, then fresh
-  independent buildability review
+- **Status:** awaiting D1 — implemented 2026-09-24 (dependency-qualified; D1–D5 stay open, so not `implemented`) — the value
+  receipt, single mint, central invoker, all 210 factories and the permanent
+  `make evidence-value-authority` gate ship; the parts that need the still-draft
+  semantic-convention-provenance (D1), provider-exchange-and-execution (D2) and registered
+  authored provenance fail closed or carry an explicit `pending` dependency, listed in
+  `planning/evidence-value-authority/implementation-2026-09-24.md`. Previously: draft —
+  author-amended 2026-09-01 through [[D2497]], [[D2496]], [[D2495]], [[D2484]], [[D2327]] and the
+  D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -27,7 +31,7 @@
 - **Parent / amends:** follow-up to `rfc/archive/evidence-contract-manifest.md` and
   `rfc/archive/semantic-evidence-selection.md`
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/evidence-value-authority/` once implementing
+- **Planning:** `planning/evidence-value-authority/implementation-2026-09-24.md`
 
 ```tabiya-claims
 none
@@ -496,14 +500,17 @@ A permanent `make evidence-value-authority` target runs:
    profiles, with bindings a checked subset; the same gate additionally requires the factory rows,
    generated route input/result maps and invoker arms to be set-equal;
 4. exact current-route migration equality against the re-derived 192-route / 188-projection
-   baseline, including the four duplicate paths and six no-route declarations;
+   baseline, including the four duplicate paths and six no-route declarations (corrected
+   2026-09-24: the frozen literal receipt is 204 routes / 200 projections after
+   recorded-semantic-path; the gate proves collapse and symbol/shape equality against it);
 5. the §3 9/6/2/3 reviewed grounding table;
 6. convention closure for all six exact-under-convention rows;
 7. no retired-v1 consumer binding; and
 8. all authority positives/falsifiers.
 
-This target joins `SOFTWARE_CONTRACT_TARGETS` and therefore runs in ordinary `make verify` and the
-software-contracts CI job. It is not a pre-push hook and requires no custom environment variables.
+This target joins `verify-software` (corrected 2026-09-24: the Makefile has no
+`SOFTWARE_CONTRACT_TARGETS`) and therefore runs in ordinary `make verify` and the
+`make verify-software` CI job. It is not a pre-push hook and requires no custom environment variables.
 
 ### 9. Implementation order
 
@@ -598,7 +605,9 @@ planes, optional LLM renderer and assistance ceilings.
     exploration-log entry and RFC closeout.
 24. A fresh independent buildability review finds no caller-payload bypass, false authority join,
     missing production call site, undeclared shared-resource claim or green-by-construction test.
-25. The 75-row partition is exactly 38 computed / 25 derived / 9 direct source / 3 authored.
+25. The 75-row partition is exactly the frozen literal receipt's (corrected 2026-09-24 from the
+    stale 38 computed / 25 derived / 9 direct source / 3 authored): 35 computed / 27 derived /
+    9 direct source / 4 authored.
     `recorded.engine.eval@1` and `recorded.tablebase.result@1` consume their exact same-record
     `sourcing.ledger.*` evidence outputs; caller bytes, another record and same-FEN value mutations
     fail before either runtime reading is minted ([[D2327]]).
@@ -623,6 +632,27 @@ None for the owner. Author review must settle exact successor symbol spelling an
 192-route migration table before acceptance; those are buildability obligations, not product choices.
 
 ## Changelog
+
+- 2026-09-24: implemented (claude, worktree `agent-ab369751c08788e1a`). Corrections made while
+  implementing, none widening authority: (a) the migration receipt was re-derived by main's
+  recorded-semantic-path to 204 routes / 200 projections / 198 used / 6 export-only / 60 callable
+  operations and is now a **frozen** baseline, since its source (`evidence-source-adapters.ts`) is
+  deleted; `make evidence-value-authority-route-map` verifies its seal and that every target
+  resolves to the registered factory with equal symbol and shape. (b) Criterion 25's partition was
+  stale against the RFC's own literal receipt; the receipt yields 35/27/9/4 (the recorded readings
+  are derived, `theory.opening_identity.record` and `pack.authored.phase` are authored authority,
+  and promotion-pressure/role-signature derivations are derived). (c) `SOFTWARE_CONTRACT_TARGETS`
+  does not exist; the gate joins `verify-software`. (d) `derived.compare.structure_delta@1`
+  regrounds to `declared_convention/convention` because it now consumes
+  `named_structure@2` (declared convention); keeping `position_rules/exact` would upgrade grounding.
+  (e) `theory.endgame.method_stage@1` sits on the `derived` plane (it derives from setup evidence and
+  `run.record.edge@1` lineage). (f) `derived.structural.predicate_result@1` is grounded
+  `authored_claim/authored`, the only grounding the derivation algebra admits over an authored
+  condition. (g) `theory.endgame.setup_match@1` and `theory.endgame.method_stage@1` ship as
+  honest-unavailable factories (reason + dependency) because no cited/versioned setup convention is
+  registered (D1); the 3/3/0 population and setup positives are therefore not claimed. (h) The shared
+  candidate packet's `createRulesMobilityReadingLegalMovesV1Evidence` stand-in moved into
+  `evidence-factories.ts`; `declareExactLegalMovesEvidence` is retired.
 
 - 2026-09-14: [[D3265]] adds the omitted `sourcing.ledger.citable_text@1` branch of
   `declareSourcingRecordEvidence` to the executable census. The current baseline is 75 generic plus

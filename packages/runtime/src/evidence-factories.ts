@@ -367,7 +367,7 @@ export const createRulesPhaseReadingV2Evidence = fenReading("rules.phase.reading
 /** Derived reading whose declared piece-count inputs are recomputed in the same pass from the FEN. */
 export const createDerivedMaterialReadingRoleSignatureV1Evidence = fenReading("derived.material.reading.role_signature@1", materialRoleSignatureReading, { shape: "derived" });
 /** Derived reading whose declared predicate inputs are recomputed in the same pass from the FEN. */
-export const createDerivedTacticPromotionPressureV1Evidence = fenReading("derived.tactic.promotion_pressure@1", (fen) => promotionPressureReading(fen));
+export const createDerivedTacticPromotionPressureV1Evidence = fenReading("derived.tactic.promotion_pressure@1", (fen) => promotionPressureReading(fen), { shape: "derived" });
 
 // ---------------------------------------------------------------------------------------------
 // Computed: FEN populations
@@ -519,15 +519,15 @@ function transitionLeaf(observation: TransitionObservationValue): string {
   return observation.kind === "move_irreversibility" ? `move_irreversibility.${observation.subkind}` : `${observation.kind}.${observation.direction}`;
 }
 /**
- * One population factory per transition reading leaf (fourteen). These accept the raw recorded
- * edge bytes because the inspector reading is computed on recorded node FENs; the edge must still
- * be a played legal edge or the population is empty.
+ * One population factory per transition reading leaf (fourteen). The edge must be a legal played
+ * edge whose after FEN is the move's result; the reading is computed on the recorded FEN bytes.
  */
 export const TRANSITION_READING_FACTORIES = Object.freeze(Object.fromEntries(TRANSITION_READING_LEAVES.map((leaf) => {
   const route = `rules.transition.reading.${leaf}@1`;
   const symbol = evidenceFactorySymbol(route);
   return [route, factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, moveUci: value("a UCI string", isText), afterFen: FEN }], result: "population" }, (input: EvidenceEdge) => {
-    const reading = memo(`transitionReading|${edgeKey(input)}`, () => transitionReading(validFen(input.beforeFen), input.moveUci, validFen(input.afterFen)));
+    validEdge({ beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen });
+    const reading = memo(`transitionReading|${edgeKey(input)}`, () => transitionReading(input.beforeFen, input.moveUci, input.afterFen));
     return Object.freeze((reading?.observations ?? []).filter((observation) => transitionLeaf(observation) === leaf).map((observation) => mint(route, symbol, observation, { beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen })));
   })];
 })) as Readonly<Record<`rules.transition.reading.${(typeof TRANSITION_READING_LEAVES)[number]}@1`, EvidenceValueFactory<EvidenceEdge, readonly DeclaredEvidence<TransitionObservationValue>[]>>>);
@@ -1128,7 +1128,7 @@ export const createHumanExplorerPositionStatsV1Evidence = (() => {
 const LEDGER_PENDING = "The validated sourcing-ledger record is shape-checked and digested; its durable ledger receipt lands with provider-exchange-and-execution.";
 function ledgerFactory(route: string, kind: string, keys: readonly string[]): EvidenceValueFactory<{ readonly record: SourcingLedgerRecord }, DeclaredEvidence<SourcingLedgerRecord>> {
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "source_receipt", arms: [{ record: value(`a ${kind} sourcing-ledger record`, (candidate) => isRecord(candidate) && candidate.kind === kind && keys.every((key) => key in candidate) && isText(candidate.sourceId) && isText(candidate.retrievedAt)) }], result: "single", dependency: "provider-exchange-and-execution", pending: LEDGER_PENDING }, ({ record }: { readonly record: SourcingLedgerRecord }) =>
+  return factory({ route, symbol, shape: route.startsWith("theory.") ? "authored_authority" : "source_receipt", arms: [{ record: value(`a ${kind} sourcing-ledger record`, (candidate) => isRecord(candidate) && candidate.kind === kind && keys.every((key) => key in candidate) && isText(candidate.sourceId) && isText(candidate.retrievedAt)) }], result: "single", dependency: "provider-exchange-and-execution", pending: LEDGER_PENDING }, ({ record }: { readonly record: SourcingLedgerRecord }) =>
     mint(route, symbol, record, { record }, [evidenceDigest(record)]));
 }
 export const createSourcingLedgerEngineEvalV1Evidence = ledgerFactory("sourcing.ledger.engine_eval@1", "engine_eval", ["kind", "sourceId", "retrievedAt", "values"]);
@@ -1191,10 +1191,12 @@ export const createPackAuthoredClaimV1Evidence = (() => {
 })();
 
 const CLAIM_BINDINGS = new Set(["ledger_bound", "author_attributed", "self_declared"]);
+/** The exact server delivery-sheet claim item keys; any caller-added prose field is refused. */
+const CLAIM_ITEM_KEYS = new Set(["kind", "id", "revealedBy", "anchor", "text", "evidenceTypes", "earnedEvidenceTypes", "binding", "authorSpans", "principles"]);
 export const createPackAuthoredClaimDeliveryV1Evidence = (() => {
   const route = "pack.authored.claim_delivery@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "authored_authority", arms: [{ item: value("a delivery-sheet claim item", (candidate) => isRecord(candidate) && candidate.kind === "claim" && isText(candidate.id) && isText(candidate.text) && Array.isArray(candidate.evidenceTypes) && Array.isArray(candidate.earnedEvidenceTypes) && CLAIM_BINDINGS.has(String(candidate.binding)) && Array.isArray(candidate.principles)) }], result: "single", dependency: "registered-authored-provenance", pending: AUTHORED_PENDING }, ({ item }: { readonly item: { readonly evidenceTypes: readonly string[]; readonly earnedEvidenceTypes: readonly string[] } & Readonly<Record<string, unknown>> }) => {
+  return factory({ route, symbol, shape: "authored_authority", arms: [{ item: value("a closed delivery-sheet claim item", (candidate) => isRecord(candidate) && Object.keys(candidate).every((key) => CLAIM_ITEM_KEYS.has(key)) && candidate.kind === "claim" && isText(candidate.id) && isText(candidate.text) && Array.isArray(candidate.evidenceTypes) && Array.isArray(candidate.earnedEvidenceTypes) && CLAIM_BINDINGS.has(String(candidate.binding)) && Array.isArray(candidate.principles)) }], result: "single", dependency: "registered-authored-provenance", pending: AUTHORED_PENDING }, ({ item }: { readonly item: { readonly evidenceTypes: readonly string[]; readonly earnedEvidenceTypes: readonly string[] } & Readonly<Record<string, unknown>> }) => {
     if (item.earnedEvidenceTypes.some((type) => !item.evidenceTypes.includes(type))) throw new TypeError("Claim delivery earns evidence it does not declare");
     return mint(route, symbol, item, { item }, [evidenceDigest(item)]);
   });

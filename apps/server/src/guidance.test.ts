@@ -468,7 +468,7 @@ describe("adaptive guidance server seams", () => {
       return Response.json({ text: deterministic });
     } });
     expect(await renderVoice(provider, packet, "plain", "marker")).toEqual({ text: deterministic, source: "provider" });
-    expect(bodies).toEqual([{ personaPrompt: "plain", scope: "marker", items: [{ evidence: expect.objectContaining({ producer: { id: "rules.phase", version: 1 }, projection: { id: "rules.phase.reading", version: 1 } }), sentences: [deterministic] }] }]);
+    expect(bodies).toEqual([{ personaPrompt: "plain", scope: "marker", items: [{ evidence: expect.objectContaining({ producer: { id: "rules.phase", version: 1 }, projection: { id: "rules.phase.reading", version: 2 } }), sentences: [deterministic] }] }]);
 
     let failures = 0;
     const failing = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", fetch: async () => { failures += 1; return new Response("no", { status: 503 }); } });
@@ -504,7 +504,10 @@ describe("adaptive guidance server seams", () => {
     const packet = evidencePacket({ run, node: run.nodes[0]!, pack: reasoningDocument, authored: { items: [], hasWithheldAuthoredContent: false } });
     const detector = packet.declared.find((item) => item.projection.id === "rules.phase.reading")!;
     const authored = packet.declared.find((item) => item.projection.id === "pack.authored.phase")!;
-    expect(detector.payload).toEqual(classifyPhase(run.nodes[0]!.fen));
+    // rules.phase.reading@2: the classifier label plus its exact phase-bands@1 decision arm.
+    expect(detector.projection.version).toBe(2);
+    expect(detector.payload).toEqual(phaseBandReading(run.nodes[0]!.fen));
+    expect((detector.payload as { phase: string }).phase).toBe(classifyPhase(run.nodes[0]!.fen).phase);
     expect(authored.payload).toBe(reasoningDocument.phase);
   });
 

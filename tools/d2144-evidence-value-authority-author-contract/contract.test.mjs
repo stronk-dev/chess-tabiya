@@ -1,18 +1,19 @@
-// DISPOSABLE RFC author contract for D2144/D2145. This validates the draft, not production.
+// DISPOSABLE RFC author contract for D2144/D2145. It validated the draft; since the 2026-09-24
+// implementation it pins the RFC text to the implemented state and the frozen migration receipt.
+// The permanent gate is packages/runtime/src/evidence-value-authority.test.ts.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 
 const read = (path) => readFileSync(path, "utf8");
 const rfc = read("rfc/evidence-value-authority.md");
-const adapters = read("packages/runtime/src/evidence-source-adapters.ts");
+const gate = read("packages/runtime/src/evidence-value-authority.test.ts");
+const makefile = read("Makefile");
 const barrel = read("packages/runtime/src/index.ts");
 const catalog = read("packages/runtime/src/evidence-catalog.ts");
 const audit = read("tools/d2144-evidence-seal-audit/value-authority.test.ts");
 const routeReceipt = JSON.parse(read("planning/evidence-foundation-ux/evidence-value-authority-route-map.json"));
 
-const genericRows = [...adapters.matchAll(/export const (declare[A-Za-z]+) = <T extends object>\(payload: T\) => exactObject\("[^"]+", "([^"]+)"/gu)]
-  .map((match) => ({ adapter: match[1], projection: match[2] }));
 
 const literal = [
   "rules.castling.reading.rights",
@@ -36,10 +37,10 @@ const convention = [
 const product = ["rules.phase.reading", "rules.structural.reading.named_structure"];
 const mixed = ["rules.endgame.reading", "rules.pivotal.marker", "rules.structural.predicate.result"];
 
-test("baseline and draft partition the exact current adapter population", () => {
-  assert.equal(genericRows.length, 75);
-  assert.equal(new Set(genericRows.map((row) => row.projection)).size, 75);
-  for (const row of genericRows) assert.match(barrel, new RegExp(`\\b${row.adapter}\\b`, "u"));
+test("the adapter population is retired and the reviewed table still stands", () => {
+  assert.equal(existsSync("packages/runtime/src/evidence-source-adapters.ts"), false);
+  assert.doesNotMatch(barrel, /evidence-source-adapters/u);
+  assert.match(gate, /GENERIC_PARTITION|computed: 35, derived: 27, source_receipt: 9, authored_authority: 4/u);
 
   const reviewed = [...literal, ...convention, ...product, ...mixed];
   assert.equal(reviewed.length, 20);
@@ -66,7 +67,7 @@ test("successors repair rather than silently relabel the five false or mixed row
   ];
   for (const successor of successors) {
     assert.match(rfc, new RegExp(successor.replaceAll(".", "\\."), "u"));
-    if (!successor.endsWith("@2")) assert.doesNotMatch(catalog, new RegExp(`"${successor.split("@")[0].replaceAll(".", "\\.")}"`, "u"));
+    assert.match(catalog, new RegExp(`"${successor.split("@")[0].replaceAll(".", "\\.")}"`, "u"), successor);
   }
   assert.match(rfc, /v1 is retired from new bindings|v1 have zero consumer bindings/u);
   assert.match(rfc, /Lucena\/Philidor\/Vancura setup cannot render without a cited\/versioned setup convention/u);
@@ -112,10 +113,9 @@ test("the draft closes all four authority families without a generic payload esc
 });
 
 test("dependencies and closure gates are explicit rather than hand-waved", () => {
-  assert.match(rfc, /\*\*Status:\*\* draft/u);
-  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2497\]\], \[\[D2496\]\], \[\[D2495\]\], \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
-  assert.match(rfc, /dependency-blocked on the[\s\S]*?semantic convention register\/provenance/u);
-  assert.match(rfc, /provider exchange contracts/u);
+  assert.match(rfc, /\*\*Status:\*\* awaiting D1 — implemented 2026-09-24 \(dependency-qualified/u);
+  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2497\]\], \[\[D2496\]\], \[\[D2495\]\], \[\[D2484\]\], \[\[D2327\]\] and the\s+D2146/u);
+  assert.match(rfc, /semantic-convention-provenance \(D1\), provider-exchange-and-execution \(D2\)/u);
   assert.match(rfc, /semantic-convention-provenance\.md/u);
   assert.match(rfc, /provider-exchange-and-execution\.md/u);
   assert.match(rfc, /semantic-validation-authority\.md/u);
@@ -123,13 +123,11 @@ test("dependencies and closure gates are explicit rather than hand-waved", () =>
   assert.match(rfc, /set equality among all non-retired final catalogue projections, factory rows and authority[\s\S]*?profiles, with bindings a checked subset/u);
   assert.match(rfc, /192-route \/ 188-projection/u);
   assert.match(rfc, /four duplicate paths and six no-route declarations/u);
-  assert.match(audit, /"generic": 75/u);
-  assert.match(audit, /"specialized": 117/u);
-  assert.match(audit, /"total": 192/u);
-  assert.equal(routeReceipt.routes.length, 192);
-  assert.equal(new Set(routeReceipt.routes.map((route) => route.currentProjection)).size, 188);
-  assert.equal(routeReceipt.summary.rowsWithProductionUses, 185);
-  assert.equal(routeReceipt.summary.rowsWithoutProductionUses, 7);
+  assert.match(rfc, /frozen literal receipt is 204 routes \/ 200 projections/u);
+  assert.equal(routeReceipt.routes.length, 204);
+  assert.equal(new Set(routeReceipt.routes.map((route) => route.currentProjection)).size, 200);
+  assert.equal(routeReceipt.summary.rowsWithProductionUses, 198);
+  assert.equal(routeReceipt.summary.rowsWithoutProductionUses, 6);
   assert.deepEqual(routeReceipt.summary.boundProjectionsWithoutProductionUses, []);
   for (const route of routeReceipt.routes) {
     assert.ok(route.targetProfiles.length > 0, route.currentProjection);
@@ -139,7 +137,9 @@ test("dependencies and closure gates are explicit rather than hand-waved", () =>
       assert.doesNotMatch(profile.authorityInputs.join(" "), /producer_authority_parameters|TODO|TBD/u);
     }
   }
-  assert.match(rfc, /joins `SOFTWARE_CONTRACT_TARGETS`/u);
+  assert.match(rfc, /joins `verify-software`/u);
+  assert.match(makefile, /^verify-software:.*\bevidence-value-authority\b/mu);
+  assert.match(makefile, /^evidence-value-authority:\n\t.*evidence-value-authority\.test\.ts/mu);
   assert.match(rfc, /not a pre-push hook and requires no custom environment variables/u);
 });
 
@@ -183,12 +183,12 @@ test("recorded runtime readings derive from their exact sourcing-ledger evidence
 
   assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedEngineEvalV1Evidence[\s\S]*?createSourcingLedgerEngineEvalV1Evidence/u);
   assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedTablebaseResultV1Evidence[\s\S]*?createSourcingLedgerTablebaseResultV1Evidence/u);
-  assert.match(rfc, /38 computed \/ 25 derived \/ 9 direct source \/ 3 authored/u);
+  assert.match(rfc, /35 computed \/ 27 derived \/[\s\S]*?9 direct source \/ 4 authored/u);
 });
 
 test("every used route names an exact callable producer operation", () => {
-  assert.equal(routeReceipt.summary.rowsWithResolvedProducerOperations, 185);
-  assert.equal(routeReceipt.summary.distinctCurrentProducerOperations, 46);
+  assert.equal(routeReceipt.summary.rowsWithResolvedProducerOperations, 198);
+  assert.equal(routeReceipt.summary.distinctCurrentProducerOperations, 60);
   assert.deepEqual(routeReceipt.summary.usedRowsMissingProducerOperations, []);
   assert.deepEqual(routeReceipt.summary.exportOnlyRowsWithProducerOperations, []);
   assert.deepEqual(routeReceipt.summary.moduleOwnedProducerOperations, []);
@@ -211,6 +211,5 @@ test("every used route names an exact callable producer operation", () => {
       assert.doesNotMatch(operation, /#<module>$/u);
     }
   }
-  assert.match(rfc, /185 used routes to 46 exact enclosing callable operations/u);
-  assert.match(rfc, /seven export-only[\s\S]*?carry no current operation/u);
+  assert.match(rfc, /198 used \/ 6 export-only \/ 60 callable[\s\S]*?operations and is now a \*\*frozen\*\* baseline/u);
 });
