@@ -102,7 +102,7 @@ jobs:
         run: >-
           node tools/release/release-set.mjs source-archive --version "$VERSION" --revision "$GITHUB_SHA"
           --out "$RUNNER_TEMP/pre-image/chess-tabiya-$VERSION-source.tar.gz"
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pre-image
           path: ${{ runner.temp }}/pre-image
@@ -151,7 +151,7 @@ jobs:
           --build-arg SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
           --provenance=false --sbom=false
           --output "type=docker,dest=$RUNNER_TEMP/maia-cpu-${{ matrix.arch }}.tar,name=chess-tabiya-maia-cpu:candidate,rewrite-timestamp=true" workers/maia
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: images-${{ matrix.arch }}
           path: ${{ runner.temp }}/*-${{ matrix.arch }}.tar
@@ -232,7 +232,7 @@ jobs:
         run: >-
           node tools/release/native-proof.mjs --images "$IMAGES" --platform "${{ matrix.platform }}"
           --pre-image "$RUNNER_TEMP/pre-image" --out "$RUNNER_TEMP/proof" --idle-seconds 300 --licence-gate enforce
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: proof-${{ matrix.arch }}
           path: ${{ runner.temp }}/proof
@@ -279,7 +279,7 @@ jobs:
           TABIYA_PUBLIC_HOSTNAME=tabiya.example.org docker compose -f compose.appliance.yaml config --quiet
           TABIYA_PUBLIC_HOSTNAME=tabiya.example.org TABIYA_ACME_EMAIL=operator@example.org docker compose -f compose.hosted.yaml config --quiet
           TABIYA_BACKUP_DIRECTORY=/srv/tabiya-backups docker compose -f compose.yaml -f compose.maintenance.yaml config --quiet
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: release-set
           path: ${{ runner.temp }}/release
@@ -399,7 +399,7 @@ jobs:
         run: >-
           node tools/release/verify-release.mjs --dir "$RUNNER_TEMP/release" --repository "$GITHUB_REPOSITORY"
           --tag "$GITHUB_REF_NAME" --bundles "$RUNNER_TEMP/verification"
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: verification
           path: ${{ runner.temp }}/verification
