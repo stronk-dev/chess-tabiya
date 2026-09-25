@@ -103,6 +103,11 @@ describe("rated-game service", () => {
     expect(() => good.service.guidanceAccess(run.id, principal, run.nodes[0]!.id)).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
     expect(() => good.service.reveal(run.id, principal, lease.writerId, AT)).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
     expect(() => good.service.analysis(run.id, principal, lease.writerId, { nodeIds: [run.nodes[0]!.id], kind: "eval" })).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
+    // rfc/hint-distance.md §8 / criterion 13: the common enqueue boundary and the hint path refuse too,
+    // before any job, provider request or hint bytes exist.
+    expect(() => good.service.enqueueEvidence(run.id, principal, { nodeIds: [run.nodes[0]!.id], kind: "eval", movetime: 50 })).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
+    expect(() => good.service.hintAccess(run.id, principal, lease.writerId)).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
+    expect(() => good.service.hintAccess(run.id, principal)).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
 
     await expect(good.service.createRatedGame(request("rated-band", { band: 1600 }), lease)).rejects.toMatchObject({ code: "RATING_BAND_NOT_ON_LADDER" });
     await expect(good.service.createRatedGame(request("rated-material", { start: { fen: "7k/8/8/8/8/8/8/K7 w - - 0 1" } }), lease)).rejects.toMatchObject({ code: "RATING_MATERIAL_OUT_OF_RANGE" });

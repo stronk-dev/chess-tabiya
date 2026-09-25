@@ -54,5 +54,12 @@ sealed source **and** an exact pair-keyed presentation adapter presents it.
   is held (Revise / play anyway). One seat is expanded at a time; board paint is the expanded seat's
   own facts. The client refuses any page compiled under a different final digest.
 - **Review Map** (`reviewMapProjection`, `GET /runs/:id/review`) is unchanged.
-- **Blocked:** Guided Hint is the hint-distance lane's. Pairs whose source is a provider page or a
+- **Guided Hint** (`compileGuidedHintPacket`, served at `POST|GET|DELETE /runs/:id/hints`): its own
+  learner-requested seat beside the module seats — one family×rung disclosure per press, admitted
+  through `module.guided_hint@1` at the checkpoint (open disclosure boundary) timing. It is not a
+  `modules/query` module: the progressive ladder needs the per-decision request protocol. Its 35
+  pairs still carry exact `play.guided_hint@1` seat adapters (sentence, lit squares/halo, one
+  move arrow on the move rung), so presentation coverage stays complete. See
+  [Guided Hint](guided-hint.md).
+- **Blocked:** Pairs whose source is a provider page or a
   multi-edge window the query does not acquire are blocked by name; two declared-awaiting refs remain.

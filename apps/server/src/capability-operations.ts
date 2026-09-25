@@ -21,7 +21,9 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 export type OperationalCapabilityConsumerId =
   | "runtime.session_create" | "runtime.rated_session_create" | "opponent.selection"
   | "runtime.branch_decidedness" | "inspector.human_split" | "inspector.corpus"
-  | "guidance.voice" | "guidance.speech" | "guidance.reasoning_review";
+  | "guidance.voice" | "guidance.speech" | "guidance.reasoning_review"
+  /** rfc/hint-distance.md §7: the Guided Hint module consumer (search source off → honest source-unavailable). */
+  | "module.guided_hint";
 export type CapabilityConsumerId = EvidenceJobConsumerId | OperationalCapabilityConsumerId;
 
 export type OperationCapabilitySource =
@@ -112,6 +114,7 @@ export const RUN_ROUTE_OPERATIONS: readonly CapabilityRouteBranch[] = Object.fre
   run("GET", "review-analysis", none("run.review_analysis")),
   run("GET", "nudge", none("run.nudge")),
   run("POST", "modules/query", none("run.modules.query")),
+  run("POST", "hints", session("run.hint.request", "module.guided_hint")),
   run("GET", "share", none("run.share.list")),
   run("POST", "share", session("run.share.create", "review.story_evidence")),
   run("POST", "flip", create("run.create.flip", "position")),
@@ -138,6 +141,8 @@ export const EXTERNAL_ROUTE_OPERATIONS: readonly CapabilityRouteBranch[] = Objec
   external("GET", "/shared/:token", session("story.public", "review.story_evidence"), { loaded: "publicToken.scope", value: "story_read" }),
   external("GET", "/shared/:token", none("shared.join_page"), { loaded: "publicToken.scope", value: "session_join" }),
   external("DELETE", "/runs/:runId/share/:token", none("run.share.revoke")),
+  external("GET", "/runs/:runId/hints/:requestId", session("run.hint.poll", "module.guided_hint")),
+  external("DELETE", "/runs/:runId/hints/:requestId", none("run.hint.cancel")),
 ]);
 
 /** Each compiled consumer's provider-off effect; `honest_empty` is never collapsed into 503. */
@@ -154,6 +159,7 @@ export const CONSUMER_PROVIDER_OFF: Readonly<Record<CapabilityConsumerId, Provid
   "guidance.voice": "available",
   "guidance.speech": "unavailable",
   "guidance.reasoning_review": "honest_empty",
+  "module.guided_hint": "honest_empty",
 });
 
 /** The closed queued provider population: exactly two gateways, kinds total and disjoint. */

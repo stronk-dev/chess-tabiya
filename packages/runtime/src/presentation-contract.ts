@@ -218,6 +218,8 @@ export const PRESENTATION_CONVENTIONS = Object.freeze({
   "opening-catalogue@1": { label: "the cited opening catalogue" },
   "recorded-comparison@1": { label: "the recorded attempts" },
   "recorded-engine@1": { label: "a stored engine reading" },
+  // rfc/hint-distance.md: one relation-safe occurrence on one bounded searched engine line.
+  "guided-hint@1": { label: "a searched engine line" },
 } as const);
 export type PresentationConventionId = keyof typeof PRESENTATION_CONVENTIONS;
 

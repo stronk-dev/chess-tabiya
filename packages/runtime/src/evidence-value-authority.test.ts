@@ -39,6 +39,8 @@ import { PROVIDER_EXCHANGE_AUTHORITY } from "./provider-exchange.js";
 import { normalizeProviderRequest } from "./provider-requests.js";
 import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, principalVariationCapture, principalVariationRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
 import type { ProviderExecutionCapture, ProviderOperationId, ProviderRequestedIdentityMap } from "./provider-types.js";
+import { HINT_DISCLOSURE_PROJECTION_IDS, HINT_FAMILIES, HINT_HORIZON_PROJECTION_IDS, HINT_RUNGS, type HintFamily } from "./hint-registry.js";
+import { HINT_FAMILY_POSITIVES, sealedHintLine } from "./testing/hint-fixture.js";
 
 /** One scheduler-sealed live delivery per provider operation, keyed by its source route. */
 function providerDeliveries(): readonly (readonly [string, ProviderOperationId, unknown])[] {
@@ -190,8 +192,9 @@ describe("value authority: registry equality", () => {
   it("is set-equal to every non-retired catalogue projection, with bindings a subset (§8.3, criterion 13)", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
     // 216 + the five typed Review projections, forced-mate v2, the concept reference and the
-    // principal-variation source and the Checkpoint-P source-bound citation, less the retired Story eval shift.
-    expect(ACTIVE).toHaveLength(224);
+    // principal-variation source and the Checkpoint-P source-bound citation, less the retired Story eval
+    // shift; + rfc/hint-distance.md's seven horizons and 35 disclosures.
+    expect(ACTIVE).toHaveLength(266);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -258,7 +261,10 @@ describe("value authority: registry equality", () => {
       else expect(ROUTES.has(row.projection), row.projection).toBe(true);
     }
     // The registry is exactly the receipt's targets plus the five no-route factories and method_stage.
-    const extra = [...ROUTES.keys()].filter((route) => !targets.has(route)).sort();
+    // rfc/hint-distance.md's 42 Guided Hint routes post-date the receipt and are counted separately.
+    const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
+    expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
+    const extra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
@@ -943,6 +949,37 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   for (const [route, operation, delivery] of providerDeliveries()) {
     profiles.set(route, { valid: { delivery }, falsify: refused(route, { delivery: (delivery as { readonly payload: unknown }).payload }) });
     void operation;
+  }
+  // rfc/hint-distance.md §1/§3 ([[D1640]]): each family horizon from one sealed searched line and one
+  // sealed family source at ply 1; the falsifier asks for an opponent/absent ply. Each disclosure from
+  // one sealed horizon; the falsifier is a value-unverified wrapper of the same horizon.
+  const hintEdge = (family: HintFamily) => { const fixture = HINT_FAMILY_POSITIVES[family]; return edge(fixture.fen, fixture.moves[0]!); };
+  const hintSource = (family: HintFamily): DeclaredEvidence<unknown> => {
+    const current = hintEdge(family);
+    switch (family) {
+      case "mate_in_one": return sealedOne("rules.tactic.consequence.mate_in_one@1", { fen: current.beforeFen });
+      case "forced_mate": {
+        const proof = invoke("rules.tactic.consequence.forced_mate_after_move@1", { beforeFen: current.beforeFen, breadth: sealedOne("rules.tactic.consequence.reply_breadth@1", current), maxAttackerMoves: 2 }) as { readonly value: DeclaredEvidence<unknown> };
+        return proof.value;
+      }
+      case "double_attack": return sealedOne("rules.tactic.event.double_attack@1", current);
+      case "fork_survives_reply": return sealedOne("derived.tactic.fork_survives_reply@1", { doubleAttack: sealedOne("rules.tactic.event.double_attack@1", current), breadth: sealedOne("rules.tactic.consequence.reply_breadth@1", current) });
+      case "discovered_executed": return (invoke("derived.tactic.discovered_executed@1", { latency: sealedOne("rules.tactic.reading.discovered_latency@1", { fen: current.beforeFen }), rays: invoke("rules.transition.event.slider_ray@1", current) }) as readonly { readonly evidence: DeclaredEvidence<unknown> }[])[0]!.evidence;
+      case "loose_piece": return ((invoke("rules.tactic.event.loose_piece@1", current) as { readonly value: readonly DeclaredEvidence<{ readonly sign: string }>[] }).value).find((value) => value.payload.sign === "lost")!;
+      case "promotion_pressure": return sealedOne("derived.tactic.promotion_pressure@1", { fen: current.afterFen });
+    }
+  };
+  for (const family of HINT_FAMILIES) {
+    const fixture = HINT_FAMILY_POSITIVES[family];
+    const line = sealedHintLine(fixture.fen, fixture.moves);
+    const source = hintSource(family);
+    const route = `derived.hint.horizon.${family}@1`;
+    profiles.set(route, { valid: { line, source, ply: 1 }, falsify: refused(route, { line, source, ply: 2 }) });
+    const horizon = (invoke(route, { line, source, ply: 1 }) as { readonly value: DeclaredEvidence<unknown> }).value;
+    for (const rung of HINT_RUNGS) {
+      const disclosure = `derived.hint.disclosure.${family}.${rung}@1`;
+      profiles.set(disclosure, { valid: { horizon }, falsify: refused(disclosure, { horizon: identity(horizon) }) });
+    }
   }
   const outside = PROVIDER_EXCHANGE_AUTHORITY.makeProviderLocalDomainResult(normalizeProviderRequest("syzygy.position@1", syzygyRequest(INITIAL)), FIXTURE_AT);
   profiles.set("rules.endgame.tablebase_domain@1", { valid: { result: outside }, falsify: refused("rules.endgame.tablebase_domain@1", { result: { ...outside } }) });

@@ -46,7 +46,7 @@ import type {
   ImportSourceKind,
   ImportSourceRequestKind,
 } from "@chess-tabiya/runtime";
-import { parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseReviewStoryReceipt } from "@chess-tabiya/runtime";
+import { parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseHintResponse, parseReviewStoryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
@@ -947,6 +947,26 @@ export interface PgnDownload {
   readonly text: string;
 }
 
+/** rfc/hint-distance.md §7: the POST body. It names a decision and a rung, never a ceiling or source. */
+export interface HintRequestBody {
+  readonly nodeId: string;
+  readonly rung: HintRung;
+  readonly decisionDigest: string;
+  readonly assistance: RequestedAssistanceV1;
+}
+
+/** The Guided Hint seat's operations over one attached run (RunState.requestHint → ApiClient.hint). */
+export interface GuidedHintClient {
+  request(body: HintRequestBody): Promise<HintResponse>;
+  poll(requestId: string): Promise<HintResponse>;
+  cancel(requestId: string): Promise<HintResponse>;
+}
+
+function hintEnvelope(value: unknown): HintResponse {
+  if (value === null || typeof value !== "object" || Array.isArray(value) || Object.keys(value).length !== 1 || !("hint" in value)) throw new TypeError("Hint response is malformed");
+  return parseHintResponse((value as { readonly hint: unknown }).hint);
+}
+
 export class ApiError extends Error {
   readonly status: number;
   readonly code: string;
@@ -1004,6 +1024,10 @@ interface ErrorEnvelope {
 
 export interface RunApi {
   createRun(input: CreateRunRequest, writerId: string): Promise<DrillRun>;
+  /** rfc/hint-distance.md §7: request, poll and cancel one exact Guided Hint operation. */
+  hint?(runId: string, request: HintRequestBody, writerId: string): Promise<HintResponse>;
+  hintPoll?(runId: string, requestId: string): Promise<HintResponse>;
+  hintCancel?(runId: string, requestId: string): Promise<HintResponse>;
   move(
     runId: string,
     input: PlayerMoveRequest,
@@ -1639,6 +1663,18 @@ export class DrillApi implements DrillClientApi {
   }
 
   corpus(runId: string, nodeId: string): Promise<CorpusPage> { return this.#json<unknown>(`/runs/${encoded(runId)}/corpus?nodeId=${encoded(nodeId)}`).then((value) => parseCorpusPage(value, nodeId)); }
+
+  hint(runId: string, request: HintRequestBody, writerId: string): Promise<HintResponse> {
+    return this.#json<unknown>(`/runs/${encoded(runId)}/hints`, { method: "POST", writerId, body: request }).then(hintEnvelope);
+  }
+
+  hintPoll(runId: string, requestId: string): Promise<HintResponse> {
+    return this.#json<unknown>(`/runs/${encoded(runId)}/hints/${encoded(requestId)}`).then(hintEnvelope);
+  }
+
+  hintCancel(runId: string, requestId: string): Promise<HintResponse> {
+    return this.#json<unknown>(`/runs/${encoded(runId)}/hints/${encoded(requestId)}`, { method: "DELETE" }).then(hintEnvelope);
+  }
 
   assistance(runId: string, request: RequestedAssistanceV1): Promise<FinalizedAssistanceV1> {
     return this.#json<unknown>(`/runs/${encoded(runId)}/assistance`, { method: "POST", body: request }).then((value) => {

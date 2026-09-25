@@ -11,6 +11,8 @@
  */
 import {
   AVOIDANCE_FACTORIES,
+  HINT_DISCLOSURE_FACTORIES,
+  HINT_HORIZON_FACTORIES,
   STRUCTURAL_EVENT_FACTORIES,
   STRUCTURAL_PREDICATE_FACTORIES,
   STRUCTURAL_READING_FACTORIES,
@@ -312,6 +314,9 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "live.syzygy.position_result@1": createLiveSyzygyPositionResultV1Evidence,
   "human.explorer.position_page@1": createHumanExplorerPositionPageV1Evidence,
   "rules.endgame.tablebase_domain@1": createRulesEndgameTablebaseDomainV1Evidence,
+  // rfc/hint-distance.md §1.1/§3: seven operator-only horizons and 35 learner disclosures.
+  ...HINT_HORIZON_FACTORIES,
+  ...HINT_DISCLOSURE_FACTORIES,
 });
 
 type Routes = typeof EVIDENCE_VALUE_ROUTES;

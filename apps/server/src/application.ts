@@ -44,6 +44,8 @@ import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js
 import { RunService } from "./service.js";
 import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
+import { CandidatePopulationService } from "./candidate-population-service.js";
+import { HintService } from "./hint-service.js";
 import { PackStudio } from "./pack-studio.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
 import { deploymentRefusal, type DeploymentBoundary } from "./config.js";
@@ -90,6 +92,18 @@ export const REVIEW_EVIDENCE_PROFILE = Object.freeze({
   // rfc/review-map.md §7: the Analyze line records at most this many plies of the searched PV.
   linePlies: 12,
   timeoutMs: 10_000,
+});
+
+/**
+ * rfc/hint-distance.md §2/§10: the Guided Hint search profile. Depth 12 is D1397's measured arm; the
+ * four-ply scan ceiling is fixed; the packet capacity bounds the shared candidate-packet LRU.
+ */
+export const GUIDED_HINT_PROFILE = Object.freeze({
+  depth: 12,
+  timeoutMs: 10_000,
+  maxOperations: 256,
+  packetCapacity: 64,
+  voiceTimeoutMs: 2_000,
 });
 
 /**
@@ -788,7 +802,24 @@ async function composeServices(
       }) as PolicyConfig;
     },
   });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }), campaigns);
+  // rfc/hint-distance.md §7/§10: one application-lifetime hint service over the shared provider
+  // scheduler and the one injected candidate-packet service. The optional voice sees only the
+  // one-item rendered view; its absence or failure never suppresses the deterministic hint.
+  const hints = new HintService({
+    scheduler: providers.scheduler,
+    requestedEngine: async () => {
+      const engine = await providerEngines.start("stockfish-analysis");
+      return Object.freeze({ id: engine.id, version: engine.version });
+    },
+    populations: new CandidatePopulationService({ capacity: GUIDED_HINT_PROFILE.packetCapacity }),
+    depth: GUIDED_HINT_PROFILE.depth,
+    timeoutMs: GUIDED_HINT_PROFILE.timeoutMs,
+    maxOperations: GUIDED_HINT_PROFILE.maxOperations,
+    voiceTimeoutMs: GUIDED_HINT_PROFILE.voiceTimeoutMs,
+    availability: () => providerHealth.exchangeOperationAvailability("stockfish.principal_variation@1"),
+    ...(voiceProvider === undefined ? {} : { voice: (view, sentence) => voiceProvider.render({ scope: "hint", rendered: view }, options.voicePersona ?? "Clear, concise Tabiya voice. Do not add chess claims.", sentence, "hint") }),
+  });
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }), campaigns, hints);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });

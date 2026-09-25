@@ -26,7 +26,7 @@ import { compileEvidenceManifest } from "./evidence-contract.js";
 import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame", "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance", "derived.citation"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame", "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance", "derived.citation", "derived.hint"]);
 const ref = (id: string) => ({ id, version: 1 } as const);
 
 function jsonFiles(url: URL): readonly URL[] {
@@ -49,14 +49,17 @@ describe("primary evidence catalogue", () => {
     expect(EVIDENCE_PRODUCER_IDS).toEqual(EXPECTED_PRODUCERS);
     expect(EVIDENCE_PRODUCERS.map((item) => item.id)).toEqual(EXPECTED_PRODUCERS);
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
-    // rfc/module-registration.md §2.2: nine module consumers join (rules_floor has no evidence; guided_hint is blocked).
-    expect(MODULE_CONSUMER_IDS).toHaveLength(9);
+    // rfc/module-registration.md §2.2: ten module consumers join (rules_floor has no evidence);
+    // rfc/hint-distance.md adds module.guided_hint over its 35 disclosure projections.
+    expect(MODULE_CONSUMER_IDS).toHaveLength(10);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
     // 263 module pairs = the post-successor-rebase 237, the 21 recorded-path v2 successors, and the
     // five review-evidence-compiler projections (four Review Map, one Full Inspector forced-mate v2).
-    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(263);
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([42, 231, 34, 509]); // +1 producer, +1 projection, +1 binding: evidence-presentation Checkpoint P source-bound citation; +7 provider-exchange sources (+1 principal variation, §5.2); +1 producer, +6 projections, +7 bindings (rfc/review-evidence-compiler.md); +1 pack.authored.concept_reference (rfc/concept-registry.md §3)
+    // rfc/hint-distance.md: +35 guided_hint disclosure pairs.
+    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(298);
+    // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([43, 273, 35, 544]); // +1 producer, +1 projection, +1 binding: evidence-presentation Checkpoint P source-bound citation; +7 provider-exchange sources (+1 principal variation, §5.2); +1 producer, +6 projections, +7 bindings (rfc/review-evidence-compiler.md); +1 pack.authored.concept_reference (rfc/concept-registry.md §3)
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 15, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());

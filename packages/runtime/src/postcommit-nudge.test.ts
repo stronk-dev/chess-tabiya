@@ -59,7 +59,9 @@ describe("the grade reaches exactly its two module consumers", () => {
     expect(compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: "spectator", session: "position", evidence: [grade] })).toMatchObject({ kind: "refused", reason: "role_outside_ceiling" });
     expect(compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: "learner", session: "match", evidence: [grade] })).toMatchObject({ kind: "refused", reason: "session_outside_ceiling" });
     expect(compileModulePacket({ module: "postcommit_nudge", timing: "review", ...LEARNER, evidence: [grade] })).toMatchObject({ kind: "refused", reason: "timing_outside_module" });
-    expect(compileModulePacket({ module: "guided_hint", timing: "checkpoint", ...LEARNER, evidence: [grade] })).toMatchObject({ kind: "refused", reason: "module_blocked" });
+    // Guided Hint admits only its 35 disclosure projections: the grade is dropped by the exact consumer view.
+    const hint = compileModulePacket({ module: "guided_hint", timing: "checkpoint", ...LEARNER, evidence: [grade] });
+    expect(hint.kind === "packet" && [hint.offered, hint.facts.length]).toEqual([0, 0]);
     expect(compileModulePacket({ module: "rules_floor", timing: "pre_commit", ...LEARNER, evidence: [grade] })).toMatchObject({ kind: "refused", reason: "module_has_no_evidence" });
   });
 });

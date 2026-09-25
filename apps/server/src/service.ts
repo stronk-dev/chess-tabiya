@@ -13,6 +13,7 @@ import {
   exportPgn,
   fork,
   feedbackDeliveryOpen,
+  hintDecisionStamp,
   feedbackDisclosed,
   groupsFromEvents,
   historyFrom,
@@ -1642,6 +1643,30 @@ export class RunService {
     });
   }
 
+  /**
+   * rfc/hint-distance.md §5/§7/§8: the server-derived facts one Guided Hint request is judged by. The
+   * decision stamp, cursor, open disclosure boundary, viewer role and workflow context all come from the
+   * stored run, never from the caller; an open rated game is refused before any hint bytes or search.
+   * `writerId` is required for a new request (the active writer asks) and omitted for polls.
+   */
+  hintAccess(runId: string, principal: Principal, writerId?: string) {
+    this.#refuseRatedAssistance(runId);
+    const { stored, role } = writerId === undefined ? requireRead(this.#storage, runId, principal) : this.#forWrite(runId, principal, writerId);
+    const run = stored.run;
+    const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId);
+    if (node === undefined) throw new ServerError("STORAGE_FAILURE", `Run ${runId} has no cursor node`);
+    const assistance = this.#assistanceContext(runId, principal, run, role);
+    return Object.freeze({
+      run,
+      node,
+      decision: hintDecisionStamp(run),
+      role: moduleEvidenceRole(role),
+      session: assistance.workflowContext,
+      deliveryOpen: feedbackDeliveryOpen(run),
+      learnerToMove: node.fen.split(" ")[1] === (run.start.side === "white" ? "w" : "b"),
+    });
+  }
+
   guidanceAccess(runId: string, principal: Principal, nodeId: string): GuidanceAccess {
     this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
@@ -2031,6 +2056,9 @@ export class RunService {
   ): AdmittedEvidenceBatch {
     const principal = "learnerId" in principalOrInput ? principalOrInput : this.#principal("legacy-reader");
     const input = "learnerId" in principalOrInput ? maybeInput! : principalOrInput;
+    // rfc/hint-distance.md §8 ([[D1369]]): the common enqueue boundary refuses an open rated game
+    // before any disclosive provider job exists, for every present and future caller.
+    this.#refuseRatedAssistance(runId);
     this.#requiredEvidenceQueue();
     if (this.#storage.admitEvidenceBatch === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Durable evidence storage is not configured");
     const run = requireRead(this.#storage, runId, principal).stored.run;

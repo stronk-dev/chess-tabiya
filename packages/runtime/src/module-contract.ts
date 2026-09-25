@@ -1,4 +1,5 @@
 import type { AnswerDistance, EvidenceForm, EvidenceRole, EvidenceTiming, VersionedEvidenceId } from "./evidence-contract.js";
+import { HINT_RUNGS, hintDeclarationRow, hintDisclosureIdentity, type HintRung } from "./hint-registry.js";
 
 export const MODULE_IDS = Object.freeze([
   "rules_floor", "sight_on_request", "blunder_prevention", "threat_radar",
@@ -54,13 +55,20 @@ export interface ModuleTimingDeclaration {
 }
 
 /**
- * `none` belongs to `rules_floor` alone and `guided_hint@1` to `guided_hint` alone: its exact
- * family×rung disclosure image is owned by `hint-distance`, never a broad fallback ([[D1569]]).
+ * `none` belongs to `rules_floor` alone. rfc/hint-distance.md §9 ([[D1642]]) removed the singular
+ * `guided_hint@1` arm: Guided Hint declares the ordinary branched capability union and, beside it,
+ * the closed `disclosure` declaration below, whose per-row images the compiler checks exactly.
  */
 export type ModuleAnswerContract =
   | { readonly kind: "none" }
-  | { readonly kind: "capabilities"; readonly capabilities: readonly ModuleAnswerCapability[] }
-  | { readonly kind: "guided_hint@1" };
+  | { readonly kind: "capabilities"; readonly capabilities: readonly ModuleAnswerCapability[] };
+
+/** rfc/hint-distance.md §9: only `guided_hint` may declare it, and it must. */
+export interface ModuleDisclosureDeclaration {
+  readonly vocabulary: "guided_hint@1";
+  readonly ceiling: HintRung;
+  readonly compiler: VersionedEvidenceId;
+}
 
 export interface ModuleCeilings {
   readonly disclosure: readonly EvidenceTiming[];
@@ -109,6 +117,8 @@ export interface ModuleDeclaration {
   readonly forms: readonly ModuleForm[];
   readonly rendering: "deterministic";
   readonly noveltyWindow: number;
+  /** rfc/hint-distance.md §9: the progressive-disclosure declaration (Guided Hint only). */
+  readonly disclosure?: ModuleDisclosureDeclaration;
 }
 
 export interface ModuleEvidenceClosure {
@@ -183,10 +193,7 @@ export const MODULE_ANSWER_CAPABILITY_IMAGE: Readonly<Record<ModuleAnswerCapabil
   principal_variation: ["fact", "candidate_moves", "ranked_moves", "move", "principal_variation"],
 } satisfies Record<ModuleAnswerCapability, readonly AnswerDistance[]>);
 
-/**
- * The compiled answer image of one contract. `guided_hint@1` has no image until `hint-distance`
- * publishes its sealed family×rung registry, so that module is blocked rather than widened.
- */
+/** The compiled answer image of one contract: the union of its declared capability branches. */
 export function moduleAnswerImage(contract: ModuleAnswerContract): readonly AnswerDistance[] {
   if (contract.kind !== "capabilities") return Object.freeze([]);
   return Object.freeze([...new Set(contract.capabilities.flatMap((capability) => MODULE_ANSWER_CAPABILITY_IMAGE[capability] ?? []))]);
@@ -206,6 +213,28 @@ function fail(code: ModuleContractErrorCode, message: string): never {
   throw new ModuleContractError(code, message);
 }
 
+/**
+ * rfc/hint-distance.md §9 / criterion 14: projection -> family/rung registry -> disclosure image ->
+ * requested rung -> ceiling. Every accepted row is one exact registry member and declares its exact
+ * answer content; omission is a compile error; `move` may never reach a pre-/at-commit timing.
+ */
+function assertDisclosureDeclaration(module: ModuleDeclaration): void {
+  const disclosure = module.disclosure!;
+  if (disclosure.vocabulary !== "guided_hint@1" || !HINT_RUNGS.includes(disclosure.ceiling) || typeof disclosure.compiler?.id !== "string" || !nonEmpty(disclosure.compiler.id) || !Number.isSafeInteger(disclosure.compiler.version)) fail("MODULE_STAGE_INVALID", `${module.id} has an invalid disclosure declaration`);
+  if (module.answerCeiling.kind !== "capabilities") fail("MODULE_STAGE_INVALID", `${module.id} disclosure needs a branched capability union`);
+  const live = module.timings.some((value) => value.timing === "pre_commit" || value.timing === "at_commit");
+  if (module.accepts.kind !== "manifest") return;
+  for (const accepted of module.accepts.projections) {
+    const identity = accepted.projection.version === 1 ? hintDisclosureIdentity(accepted.projection.id) : undefined;
+    if (identity === undefined) fail("MODULE_STAGE_INVALID", `${module.id} accepts ${refKey(accepted.projection)}, which is not one exact hint disclosure projection`);
+    if (HINT_RUNGS.indexOf(identity.rung) > HINT_RUNGS.indexOf(disclosure.ceiling)) fail("MODULE_STAGE_INVALID", `${module.id} accepts rung ${identity.rung} above its declared ceiling ${disclosure.ceiling}`);
+    if (identity.rung === "move" && live) fail("MODULE_STAGE_INVALID", `${module.id} would admit the move rung at a pre- or at-commit timing`);
+    const image = hintDeclarationRow(identity.family).rungAnswers[identity.rung];
+    if (accepted.answerContent === undefined) fail("MODULE_ANSWER_WIDENS", `${module.id} row ${refKey(accepted.projection)} omits its exact answer content`);
+    if (accepted.answerContent.length !== image.length || accepted.answerContent.some((answer) => !image.includes(answer))) fail("MODULE_ANSWER_WIDENS", `${module.id} row ${refKey(accepted.projection)} declares answer content other than its registry image`);
+  }
+}
+
 function assertDeclaration(module: ModuleDeclaration): void {
   if (!nonEmpty(module.intent) || !nonEmpty(module.learnerAction) || module.rendering !== "deterministic") fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} lacks intent, learner action, or deterministic rendering`);
   if (module.timings.length === 0 || !unique(module.timings.map((value) => value.timing)) || module.forms.length === 0 || !unique(module.forms)) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has an empty or duplicate timing/form declaration`);
@@ -215,11 +244,11 @@ function assertDeclaration(module: ModuleDeclaration): void {
   for (const form of module.forms) if (MODULE_FORM_IMAGE[form] === undefined) fail("MODULE_FORM_UNMAPPED", `${module.id} uses unmapped form ${form}`);
   if (!subset(module.ceilings.disclosure, moduleEvidenceTimings(module))) fail("MODULE_CEILING_INVALID", `${module.id} disclosure ceiling exceeds its module timing image`);
   const contract = module.answerCeiling;
-  if (contract === undefined || !["none", "capabilities", "guided_hint@1"].includes(contract.kind)) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has no answer contract`);
+  if (contract === undefined || !["none", "capabilities"].includes(contract.kind)) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has no answer contract`);
   if (module.id === "rules_floor" ? contract.kind !== "none" : contract.kind === "none") fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} ${module.id === "rules_floor" ? "must declare" : "may not declare"} the none answer contract`);
-  if (module.id === "guided_hint" ? contract.kind !== "guided_hint@1" : contract.kind === "guided_hint@1") fail("MODULE_STAGE_INVALID", `${module.id} ${module.id === "guided_hint" ? "requires" : "cannot declare"} the guided_hint@1 disclosure contract`);
+  if ((module.id === "guided_hint") !== (module.disclosure !== undefined)) fail("MODULE_STAGE_INVALID", `${module.id} ${module.id === "guided_hint" ? "requires" : "cannot declare"} the guided_hint@1 disclosure declaration`);
   if (contract.kind === "capabilities" && (contract.capabilities.length === 0 || !unique(contract.capabilities) || contract.capabilities.some((capability) => !MODULE_ANSWER_CAPABILITIES.includes(capability)))) fail("MODULE_ANSWER_WIDENS", `${module.id} needs a non-empty literal union of known answer capabilities`);
-  if (contract.kind === "guided_hint@1" && module.accepts.kind !== "blocked_dependencies") fail("MODULE_DEPENDENCY_BLOCKED", "guided_hint@1 cannot admit evidence until hint-distance publishes HINT_DISCLOSURE_PROJECTION_IDS");
+  if (module.disclosure !== undefined) assertDisclosureDeclaration(module);
   const answerImage = moduleAnswerImage(contract);
   if (module.emptyBehavior.kind === "family_partitioned") {
     const families = module.emptyBehavior.families;

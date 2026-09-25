@@ -21490,3 +21490,18 @@ Campaign was the one capability with no API, route or content. Now:
     that need owner-approved records;
   - the Maia weights have no licence;
   - the content bundle and core journey are not yet final.
+
+### 2026-09-24 — Guided Hint: the least that helps, on request
+
+- **What the learner gets:** under Guide me, Support or the Campaign kit, the
+  Support region offers "Hint", then "A little more". Each press reveals one
+  more step for the current decision: the idea, then the squares, the piece,
+  the timing and finally the first move. The ladder stops at the context's
+  ceiling (D1639's proposed table) and resets on commit, rewind or reveal.
+- **Where the content comes from:** fixed templates over one sealed Stockfish
+  principal variation and the sealed candidate packet. It never uses recorded
+  projections and never falls back to an engine move.
+- **Boundaries:** rated games are refused at the evidence boundary.
+- **Merge:** Guided Hint merged alongside campaign, taking the `campaign_kit`
+  ceiling.
+- **Owner:** D1639 is still owed.

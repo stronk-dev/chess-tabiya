@@ -33,6 +33,9 @@
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
   import { composedSeats, effectActive, toggleExpanded, type PlaySeatModule, type StagedCue } from "./module-seats.js";
   import { boardPaint } from "./evidence/presented-view.js";
+  import GuidedHintSeat from "./GuidedHintSeat.svelte";
+  import type { GuidedHintClient } from "./api.js";
+  import type { HintDeliveryMarks } from "@chess-tabiya/runtime";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -160,6 +163,8 @@
      * finalized digest this screen renders (intent-presets Checkpoint B).
      */
     onModuleQuery?: ((body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }) => Promise<unknown>) | undefined;
+    /** rfc/hint-distance.md §7: the Guided Hint seat's request/poll/cancel operations. */
+    hints?: GuidedHintClient | undefined;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     onCompareVoice?: (() => Promise<VoicePage>) | undefined;
@@ -236,6 +241,7 @@
     onAssistanceQuery,
     onHumanSplit,
     onModuleQuery,
+    hints,
     onCorpus,
     onVoice,
     onCompareVoice,
@@ -1031,6 +1037,19 @@
     const items = stagedCue?.state === "warning" ? stagedCue.packet.items : seatExpanded === undefined ? [] : seatPackets.get(seatExpanded)?.items ?? [];
     return boardPaint(items);
   });
+  // rfc/hint-distance.md §5/§7: the Guided Hint seat is shown exactly when the server-compiled preset
+  // carries `guided_hint` under a non-off ceiling. The ceiling is the D1639 table, marked proposed.
+  let hintCeiling = $derived(compiledAssistance?.modules.includes("guided_hint") === true ? compiledAssistance.hintCeiling.rung : "off");
+  let hintMarks: HintDeliveryMarks | undefined = $state();
+  function hintAssistanceRequest(): RequestedAssistanceV1 | undefined {
+    try { return compileAssistanceRequest({ contextHint: activeAssistanceProfile, preference }); } catch { return undefined; }
+  }
+  const hintKey = (square: string): DrawShape["orig"] => square as DrawShape["orig"];
+  let hintOverlays: readonly DrawShape[] = $derived(hintMarks === undefined || hintMarks.rung === "pattern" || displayedNode.id !== run.activeCursor.nodeId ? [] : [
+    ...hintMarks.squares.map((square) => ({ orig: hintKey(square), brush: "yellow" })),
+    ...(hintMarks.rung === "square" ? [] : [{ orig: hintKey(hintMarks.piece.square), brush: "green" }]),
+    ...(hintMarks.rung === "move" ? [{ orig: hintKey(hintMarks.arrow.from), dest: hintKey(hintMarks.arrow.to), brush: "green" }] : []),
+  ]);
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let contextPolicy = $derived(workflowContextPolicy(activeAssistanceProfile));
   let requestedPresetId = $derived(requestedPreset(preference, activeAssistanceProfile) ?? contextPolicy.defaultPreset);
@@ -1044,9 +1063,11 @@
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
   let boardOverlays: readonly DrawShape[] = $derived.by(() => {
-    if (effectiveLighting !== "sight" && effectiveLighting !== "evidence") return [];
+    // rfc/hint-distance.md: the learner-requested hint's receipt marks sit beside the seat paint.
+    if (effectiveLighting !== "sight" && effectiveLighting !== "evidence") return hintOverlays;
     const squares = seatFocusSquares ?? seatPaint.squares;
     return [
+      ...hintOverlays,
       ...squares.map((square) => ({ orig: square as DrawShape["orig"], brush: "blue" })),
       ...(assistance.arrows === "off" ? [] : seatPaint.arrows.map((arrow) => ({ orig: arrow.orig as DrawShape["orig"], dest: arrow.dest as DrawShape["orig"], brush: "blue" }))),
     ];
@@ -2244,6 +2265,9 @@
                 </div>
                 {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
               </section>
+            {/if}
+            {#if hints !== undefined && hintCeiling !== "off"}
+              <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} />
             {/if}
             {#if seats.length > 0}
               <ModuleSeats

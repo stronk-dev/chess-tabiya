@@ -2641,6 +2641,7 @@
         onAssistanceQuery={api.assistance === undefined ? undefined : (request) => api.assistance!(session.runState!.run.id, request)}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
         onModuleQuery={api.modules === undefined ? undefined : (body) => api.modules!(session.runState!.run.id, body)}
+        hints={api.hint === undefined ? undefined : controller.hints}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
         onCompareVoice={operationConfigured(capabilities, "render.voice_compare") && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}

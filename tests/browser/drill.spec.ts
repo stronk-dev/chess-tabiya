@@ -583,6 +583,55 @@ test("Just Play explicitly reveals evidence and the next move closes the window"
   await expect(page.getByRole("button", { name: "Load model candidates" })).toHaveCount(0);
 });
 
+test("Guide me: a learner-requested hint climbs one rung per press to the proposed ceiling and resets on commit (rfc/hint-distance.md)", async ({ page }) => {
+  // The labelled mock engine searches the alphabetically first legal move: Na4-b2 double-attacks both rooks.
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill("k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1");
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const seat = page.getByRole("region", { name: "Ask for the least that helps" });
+  // Quiet carries no guided_hint: no seat, and nothing is ever requested proactively.
+  await expect(seat).toHaveCount(0);
+  const hintPosts: string[] = [];
+  page.on("request", (request) => { if (request.method() === "POST" && request.url().endsWith("/hints")) hintPosts.push(String((request.postDataJSON() as { rung: string }).rung)); });
+
+  await page.locator("details.assistance-control summary").click();
+  await page.getByRole("radio", { name: /Guide me/u }).check();
+  await expect(page.locator("details.assistance-control summary")).toHaveAttribute("aria-label", "Support style: Guide me");
+  if (await page.locator("details.assistance-control").evaluate((element) => (element as HTMLDetailsElement).open)) await page.locator("details.assistance-control summary").click();
+  await expect(seat).toBeVisible();
+  expect(hintPosts).toEqual([]);
+
+  // The hint waits for the open disclosure boundary; the refusal is policy, not an empty hint.
+  await seat.getByRole("button", { name: "Hint", exact: true }).click();
+  await expect(seat).toContainText("Hints open once support is shown for this position.");
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  await expect(page.getByText("Support is available for this position until you commit your next move.")).toBeVisible();
+
+  await seat.getByRole("button", { name: "Hint", exact: true }).click();
+  await expect(seat).toContainText("finds a double attack for you.");
+  await expect(seat).not.toContainText("d1");
+  await seat.getByRole("button", { name: "A little more" }).click();
+  await expect(seat).toContainText("It involves d1 and d3.");
+  await seat.getByRole("button", { name: "A little more" }).click();
+  await expect(seat).toContainText("The piece involved is your knight on a4.");
+  await seat.getByRole("button", { name: "A little more" }).click();
+  await expect(seat).toContainText("It appears after this move.");
+  // D1639's proposed Guide me ceiling is `distance`: the move is never revealed here.
+  await expect(seat.getByRole("button", { name: "A little more" })).toBeDisabled();
+  await expect(seat).toContainText("That is as far as this help style goes here.");
+  await expect(seat).not.toContainText("Nb2");
+  expect(hintPosts).toEqual(["pattern", "pattern", "square", "piece", "distance"]);
+  const scan = await new AxeBuilder({ page }).include("#run-support-region").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  expect(scan.violations, JSON.stringify(scan.violations, null, 2)).toEqual([]);
+
+  // Committing a move is a new decision: the ladder resets and the marks clear.
+  await move(page, "h7", "g6");
+  await expect(seat.getByRole("button", { name: "Hint", exact: true })).toBeVisible();
+  await expect(seat).not.toContainText("finds a double attack");
+});
+
 test("imports a repertoire, enters its biggest corpus gap, and records an addressed attempt",async({page})=>{
   await page.goto("/learn");
   await page.getByRole("heading",{name:"Repertoire gaps"}).scrollIntoViewIfNeeded();

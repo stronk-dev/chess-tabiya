@@ -204,8 +204,8 @@ describe("rfc/intent-presets.md — the ∩ algebra, compiled", () => {
     for (const file of ["presets.ts", "assistance-exchange.ts"]) {
       const imports = [...readFileSync(join(__dirname, file), "utf8").matchAll(/from "(\.\/[^"]+)"/gu)].map((match) => match[1]);
       // 2026-09-24: the digest moved to its own module and the exchange now imports the campaign
-      // encounter receipt verifier (campaign-core §5.1) — neither is an eligibility/event/packet symbol.
-      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js", "./assistance-exchange-digest.js", "./campaign-receipt.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
+      // encounter receipt verifier (campaign-core §5.1) and Guided Hint reads the hint registry for its rungs — none is an eligibility/event/packet symbol.
+      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js", "./assistance-exchange-digest.js", "./campaign-receipt.js", "./hint-registry.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
     }
   });
 

@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:97d714df92357fe8dad378476abe518efb270df7ec0860c8929e0c579f7dc7ec",
+    "roadmap": "sha256:b42fe4a2d569b89bbe74502f6bddb00d6da6a4b33e25cbb96e08347ee95b9900",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
     "workState": "sha256:27329d9edacc91061632775f56df8fded2fdaf5d92895c21c67454ec92a2afc3",
-    "rfcRegister": "sha256:896e20cde6a5f520c3a1083f3faf56e38f837eefe5f610bca52cb855f241247f",
+    "rfcRegister": "sha256:28f8a2362bf22d868ec47e0515c427f7057635af36127c8ecfc99ed7754bc645",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
-    "application": "sha256:7f18928dcb7b231fd35d2eda6e005089285a3fe2c7cbf377b223779653660f81",
-    "rest": "sha256:614dc50af846d3c72d4f26f3f4af82ca3b31aa352ac4075e5c4d0434ab7f4fc4"
+    "application": "sha256:e056780071b64ac37af0f97b20395ab79ae0b3f895b179d776efcd4238d14a90",
+    "rest": "sha256:af2e56bab6dabde254d0cd837a42f52f57de12a4d556c4fe04b0cc006f852c51"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 71,
     "activeRfcLifecycle": {
-      "draft": 26,
+      "draft": 25,
       "accepted": 0,
-      "implementing": 35,
+      "implementing": 36,
       "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
@@ -229,20 +229,19 @@
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-24",
-        "summary": "Learner modules now render in play: sight, threat radar, blunder prevention with a staged-move head slot, post-commit and structure nudges, theory breadcrumb, compare coach and the Full Inspector each show admitted facts through sealed presentation receipts, only when the compiled preset carries them, with delivery bound to the final assistance digest. The stable board and one-expanded seat model hold across the matrix. Guided Hint's seat and legacy renderer migration remain.",
+        "summary": "Presets now drive every learner module in play, including Guided Hint: a learner-initiated ladder (idea, squares, piece, timing, first move) under Guide me, Support and the Campaign kit, capped by the context ceiling and grounded only in one sealed engine line plus the sealed candidate packet. Remaining: the owner's D1639 ceiling ruling and legacy renderer migration.",
         "impact": "advanced",
         "evidence": [
-          "packages/runtime/src/module-query.ts",
-          "rfc/evidence-presentation.md",
+          "packages/runtime/src/hint-distance.ts",
+          "rfc/hint-distance.md",
           "rfc/module-registration.md",
-          "rfc/intent-presets.md",
-          "rfc/play-composition.md"
+          "rfc/intent-presets.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "evidence-presentation.md",
-            "digest": "sha256:b98b144e97684b62e10e3e4982436a4fcb19f02dbc2a9410dd9d2ab8583c4804"
+            "id": "hint-distance.md",
+            "digest": "sha256:d013e4061946d674be49b44cf60eacb4bcffae1d197ce322be0246da0425fbc4"
           },
           {
             "kind": "rfc",
@@ -253,11 +252,6 @@
             "kind": "rfc",
             "id": "intent-presets.md",
             "digest": "sha256:4f022f0fcf5bb604a757f39aa1754f2c4e472cbefc5b4304a8419a5358b4fa6f"
-          },
-          {
-            "kind": "rfc",
-            "id": "play-composition.md",
-            "digest": "sha256:bbaaa789bace5896789d1e3d513f6d75a2abcb64fd81b1cc1bac332455df101f"
           },
           {
             "kind": "work_state",

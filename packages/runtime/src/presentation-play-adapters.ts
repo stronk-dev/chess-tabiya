@@ -15,6 +15,40 @@ import type { Color, Role, SquareName } from "chessops/types";
 import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
 import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
 import { factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
+import { hintSentence, type HintDisclosurePayload } from "./hint-horizon.js";
+import { HINT_FAMILIES, HINT_RELATIONS, HINT_RUNGS, hintDisclosureProjectionId, type HintFamily, type HintRelation, type HintRung } from "./hint-registry.js";
+
+/**
+ * rfc/hint-distance.md §3/§4: the Guided Hint disclosure operands. The adapter retains exactly the
+ * packet's own bytes (a lower rung carries no higher field) and renders the one canonical sentence.
+ */
+const hintSchema = s.obj(
+  { rung: s.lit(...HINT_RUNGS), family: s.lit(...HINT_FAMILIES), engine: s.str, bound: s.str },
+  { squares: s.arr(s.square, { min: 1 }), piece: s.obj({ color: s.color, role: s.role, square: s.square }), relation: s.lit(...HINT_RELATIONS), ply: s.nat, san: s.san },
+);
+function hintOperands(payload: HintDisclosurePayload): Readonly<Record<string, unknown>> {
+  return {
+    rung: payload.rung, family: payload.family, engine: payload.attribution.engine, bound: payload.attribution.bound,
+    ...(payload.rung === "pattern" ? {} : { squares: [...payload.targetSquares] }),
+    ...(payload.rung === "piece" || payload.rung === "distance" || payload.rung === "move" ? { piece: { color: payload.actor.color, role: payload.actor.role, square: payload.actor.square } } : {}),
+    ...(payload.rung === "distance" || payload.rung === "move" ? { relation: payload.relation, ply: payload.occurrencePly } : {}),
+    ...(payload.rung === "move" ? { san: payload.firstMove.san } : {}),
+  };
+}
+function hintPayloadOf(value: ReturnType<typeof hintSchema>): HintDisclosurePayload {
+  const need = <T>(field: T | undefined, label: string): T => { if (field === undefined) throw new TypeError(`hint operands omit ${label} at rung ${value.rung}`); return field; };
+  const base = { family: value.family as HintFamily, attribution: { engine: value.engine, bound: value.bound } };
+  const rung = value.rung as HintRung;
+  if (rung === "pattern") return { rung, ...base };
+  const targetSquares = need(value.squares, "squares");
+  if (rung === "square") return { rung, ...base, targetSquares };
+  const actor = need(value.piece, "piece");
+  if (rung === "piece") return { rung, ...base, targetSquares, actor };
+  const relation = need(value.relation, "relation") as HintRelation;
+  const occurrencePly = need(value.ply, "ply") === 1 ? 1 : 3;
+  if (rung === "distance") return { rung, ...base, targetSquares, actor, relation, occurrencePly };
+  return { rung, ...base, targetSquares, actor, relation, occurrencePly, firstMove: { uci: "", san: need(value.san, "san") } };
+}
 
 // ---------------------------------------------------------------------------------------------
 // Registered fact renderers
@@ -149,6 +183,7 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
   "play.compare_route@1": factRenderer(s.obj({ piece: s.str, squares: s.arr(s.square, { min: 2 }) }), (value) => `On this attempt the ${value.piece} travelled ${value.squares.join(" → ")}.`),
   "play.recorded_fork@1": factRenderer(s.obj({ sharedPly: s.nat }), (value) => `The attempts share the first ${plural(value.sharedPly, "ply", "plies")} and part at this fork.`),
   "play.checkpoint_hit@1": factRenderer(s.obj({ plyOffset: s.nat }), (value) => `This attempt reached a checkpoint ${plural(value.plyOffset, "ply", "plies")} after the fork.`),
+  "play.guided_hint@1": factRenderer(hintSchema, (value) => hintSentence(hintPayloadOf(value))),
   "play.objective_transition@1": factRenderer(s.obj({ from: s.lit("active", "preserved", "degraded", "failed", "achieved", "transitioned"), to: s.lit("active", "preserved", "degraded", "failed", "achieved", "transitioned") }), (value) =>
     `On this attempt the objective went from ${OBJECTIVE_WORDS[value.from]} to ${OBJECTIVE_WORDS[value.to]}.`),
 });
@@ -382,6 +417,40 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
     const value = evidence.payload as { readonly terminal: boolean; readonly outcome?: "win" | "loss" | "draw"; readonly plies?: number; readonly objectiveState?: string };
     return { id: "fact_statement", operand: kit.fact("story.consequence@1", "recorded_run", "recorded-run@1", (value.terminal ? { terminal: true, outcome: value.outcome! } : { terminal: false, plies: value.plies!, objectiveState: value.objectiveState! }) as never) };
   });
+
+  // --- guided_hint: one adapter per family x rung disclosure (rfc/hint-distance.md §3, §4). The
+  // learner surface is the Guided Hint seat's closed delivery receipt; this adapter is the same
+  // canonical sentence for any consumer that presents the admitted disclosure.
+  const hintSources = (rung: HintRung): readonly string[] => ["rung", "family", "attribution", ...(rung === "pattern" ? [] : ["targetSquares"]), ...(["piece", "distance", "move"].includes(rung) ? ["actor"] : []), ...(["distance", "move"].includes(rung) ? ["relation", "occurrencePly"] : []), ...(rung === "move" ? ["firstMove"] : [])];
+  const hintSentenceOf = (evidence: DeclaredEvidence<unknown>) => statement("play.guided_hint@1", "guided-hint@1", hintOperands(evidence.payload as HintDisclosurePayload));
+  for (const family of HINT_FAMILIES) {
+    const projection = (rung: HintRung) => V1(hintDisclosureProjectionId(family, rung));
+    // pattern: the family sentence alone (no board coordinate).
+    add("guided_hint", projection("pattern"), "fact_statement", ["sentence"], hintSources("pattern"), ["copied_byte_equal"], hintSentenceOf);
+    // square / piece / distance: the disclosed squares (plus the actor's halo), captioned by the sentence.
+    for (const rung of ["square", "piece", "distance"] as const) {
+      const squareForms: readonly EvidenceForm[] = rung === "square" ? ["lit_squares"] : ["lit_squares", "piece_halo"];
+      add("guided_hint", projection(rung), "square_set", [...squareForms, "sentence"], hintSources(rung), ["copied_byte_equal", "mechanical_transform"], (evidence) => {
+        const payload = evidence.payload as Extract<HintDisclosurePayload, { readonly rung: "square" | "piece" | "distance" }>;
+        const caption = fact("play.guided_hint@1", "guided-hint@1", hintOperands(payload));
+        const squares = payload.rung === "square" ? payload.targetSquares : [payload.actor.square, ...payload.targetSquares];
+        return [kit.squareSet(evidence, squares as readonly SquareName[], "yellow", caption), hintSentenceOf(evidence)];
+      }, { id: `guided_hint_${rung}_marks`, members: [{ component: "square_set", forms: squareForms }, { component: "fact_statement", forms: ["sentence"] }] });
+    }
+    // move: the actor, targets and the one first-move arrow, captioned by the sentence.
+    add("guided_hint", projection("move"), "relation_overlay", ["arrows", "lit_squares", "piece_halo", "sentence"], hintSources("move"), ["copied_byte_equal", "mechanical_transform"], (evidence) => {
+      const payload = evidence.payload as Extract<HintDisclosurePayload, { readonly rung: "move" }>;
+      const from = fromSquare(payload.firstMove.uci);
+      const to = toSquare(payload.firstMove.uci);
+      const nodes = [
+        { square: payload.actor.square as SquareName, role: payload.actor.role, color: payload.actor.color, emphasis: "source" as const },
+        ...(from === payload.actor.square ? [] : [{ square: from, emphasis: "context" as const }]),
+        { square: to, emphasis: "context" as const },
+        ...payload.targetSquares.map((square) => ({ square: square as SquareName, emphasis: "target" as const })),
+      ];
+      return [relation(evidence, nodes, [{ from, to, relation: "moves_to" as const, sign: "state" as const }], "move"), hintSentenceOf(evidence)];
+    }, relationWithStatement(`guided_hint_move_overlay`, ["arrows", "lit_squares", "piece_halo"], ["sentence"]));
+  }
 
   return Object.freeze(specs);
 }

@@ -426,20 +426,19 @@
         "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
         "latestCheckpoint": {
           "at": "2026-09-24",
-          "summary": "Learner modules now render in play: sight, threat radar, blunder prevention with a staged-move head slot, post-commit and structure nudges, theory breadcrumb, compare coach and the Full Inspector each show admitted facts through sealed presentation receipts, only when the compiled preset carries them, with delivery bound to the final assistance digest. The stable board and one-expanded seat model hold across the matrix. Guided Hint's seat and legacy renderer migration remain.",
+          "summary": "Presets now drive every learner module in play, including Guided Hint: a learner-initiated ladder (idea, squares, piece, timing, first move) under Guide me, Support and the Campaign kit, capped by the context ceiling and grounded only in one sealed engine line plus the sealed candidate packet. Remaining: the owner's D1639 ceiling ruling and legacy renderer migration.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/module-query.ts",
-            "rfc/evidence-presentation.md",
+            "packages/runtime/src/hint-distance.ts",
+            "rfc/hint-distance.md",
             "rfc/module-registration.md",
-            "rfc/intent-presets.md",
-            "rfc/play-composition.md"
+            "rfc/intent-presets.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "evidence-presentation.md",
-              "digest": "sha256:b98b144e97684b62e10e3e4982436a4fcb19f02dbc2a9410dd9d2ab8583c4804"
+              "id": "hint-distance.md",
+              "digest": "sha256:d013e4061946d674be49b44cf60eacb4bcffae1d197ce322be0246da0425fbc4"
             },
             {
               "kind": "rfc",
@@ -450,11 +449,6 @@
               "kind": "rfc",
               "id": "intent-presets.md",
               "digest": "sha256:4f022f0fcf5bb604a757f39aa1754f2c4e472cbefc5b4304a8419a5358b4fa6f"
-            },
-            {
-              "kind": "rfc",
-              "id": "play-composition.md",
-              "digest": "sha256:bbaaa789bace5896789d1e3d513f6d75a2abcb64fd81b1cc1bac332455df101f"
             },
             {
               "kind": "work_state",

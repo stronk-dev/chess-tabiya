@@ -91,14 +91,14 @@ export {
 } from "./module-contract.js";
 export { SILENT_ASSISTANCE, accessPermission, permittedAssistance, reviewingGrant, type AssistanceAccess, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export {
-  ASSISTANCE_FIELD_DOMAINS, ASSISTANCE_PREFERENCE_FIELDS, CLAMP_TOKENS, CONFIGURABLE_MODULE_IDS, EMPTY_MODULE_OVERRIDES, HINT_CEILING_TABLE, HINT_RUNGS,
+  ASSISTANCE_FIELD_DOMAINS, ASSISTANCE_PREFERENCE_FIELDS, CLAMP_TOKENS, CONFIGURABLE_MODULE_IDS, EMPTY_MODULE_OVERRIDES, HINT_CEILING_TABLE,
   MODULE_PRESENTATION_FACTS, MODULE_PRESENTATION_SOURCE, PRESET_CONTRACT_ERROR_CODES, PRESET_DECLARATIONS, PRESET_IDS, WORKFLOW_CONTEXT_POLICIES, WORKFLOW_CONTEXTS,
   PreferenceParseError, PresetContractError, PresetRefusalError, assertPresetFoundation, clampFieldValue, contextClamp, deriveContextClamp, deriveModuleFieldCeiling,
   derivePresetProjection, deriveWorkflowContext, fieldRank, hintCeiling, parseWorkflowPreferenceV2, permissionCeiling, permissionToken, pointwiseMin, preferenceDisplayMode,
   preferenceReceipt, presetDeclaration, requestedAssistanceFields, requestedModules, requestedPreset, selectNamedPreset, serializeWorkflowPreferenceV2, setPreferenceField,
   setPreferenceModule, workflowContextPolicy,
   type AssistancePreferenceField, type AssistancePreferenceFields, type ConfigClamp, type ConfigurableModuleId, type ContextContract, type CustomModuleOverrides, type FieldValue,
-  type HintRung, type ModulePresentationFacts, type OrdinaryWorkflowContextId, type OrdinaryWorkflowContextOrigin, type PresetContractErrorCode, type PresetDeclaration, type PresetId,
+  type ModulePresentationFacts, type OrdinaryWorkflowContextId, type OrdinaryWorkflowContextOrigin, type PresetContractErrorCode, type PresetDeclaration, type PresetId,
   type WorkflowContextId, type WorkflowContextPolicy, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2,
 } from "./presets.js";
 export {
@@ -113,7 +113,7 @@ export {
 } from "./assistance-exchange.js";
 export { MODULE_POLICIES, moduleConsumerCeilings, moduleEvidenceRole, modulePolicy, moduleSessions, type ModulePolicy } from "./module-policy.js";
 export {
-  GUIDED_HINT_BLOCKERS,
+  GUIDED_HINT_DISCLOSURE,
   MODULE_AWAITING,
   MODULE_COVERAGE_REFUSALS,
   MODULE_DECLARATIONS,
@@ -1082,3 +1082,22 @@ export * from "./style-atoms.js";
 export * from "./skills-contract.js";
 export * from "./concept-registry.js";
 export * from "./provider-health.js";
+// rfc/hint-distance.md — Guided Hint registry, wire and server-local compiler.
+export {
+  HINT_ABSTENTION_REASONS, HINT_DECLARATION_MATRIX, HINT_DISCLOSURE_BY_RUNG, HINT_DISCLOSURE_PROJECTION_IDS, HINT_DISTANCES, HINT_FAMILIES,
+  HINT_HORIZON_PROJECTION_IDS, HINT_RELATIONS, HINT_RUNGS, HINT_RUNG_FORMS, HINT_SCAN_PLIES, HINT_SEARCH_SOURCE, HINT_SELECTION_ORDER, hintDeclarationRow,
+  hintDisclosureIdentity, hintDisclosureProjectionId, hintDistanceIndex, hintHorizonProjectionId, hintRungIndex, minHintDistance,
+  type HintDeclarationRow, type HintDisclosureProjectionId, type HintDistance, type HintFamily, type HintRelation, type HintRung,
+} from "./hint-registry.js";
+export {
+  HINT_EMPTY_REASONS, HINT_FAILURE_REASONS, HINT_POLICY_REASONS, HINT_SOURCE_REASONS, HintExchangeError, hintDecisionStamp, hintDisclosureBoundarySeq,
+  hintPolicyDecision, hintReceiptDigest, hintRequestId, nextHintRung, parseHintDeliveryReceipt, parseHintResponse,
+  type HintDecisionStamp, type HintDeliveryMarks, type HintDeliveryReceipt, type HintEmptyReason, type HintFailureReason, type HintPieceMark,
+  type HintPolicyDecision, type HintPolicyReason, type HintRequestState, type HintResponse, type HintSourceReason, type HintVoiceState,
+} from "./hint-exchange.js";
+export { HintHorizonMismatch, type HintDisclosurePayload, type HintHorizonOccurrence, type HintPieceIdentity } from "./hint-horizon.js";
+export {
+  HINT_COMPILER_VERSION, HINT_DISCLOSURE_RENDERERS, HINT_FORCED_MATE_ATTACKER_MOVES, assertHintDisclosurePacket, compileGuidedHintPacket,
+  compileHintDeliveryReceipt, compileHintDisclosure, hintHorizonOwner, hintPacketRoots, hintSearchLineEvidence, hintSentence, hintVoiceCheck, selectHintHorizon,
+  type GuidedHintPacket, type HintHorizonAuthority, type HintHorizonSelection, type HintRootIdentity, type SealedHintHorizon,
+} from "./hint-distance.js";

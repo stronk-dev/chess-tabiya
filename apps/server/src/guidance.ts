@@ -31,7 +31,7 @@ import type { AuthoredFeedbackPage } from "./authored-feedback.js";
 import { recordedReadingsAt } from "./position-evidence.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
-export type VoiceScope = "marker" | "reading" | "steering" | "story" | "compare";
+export type VoiceScope = "marker" | "reading" | "steering" | "story" | "compare" | "hint";
 export interface VoiceEvidenceView {
   readonly scope: VoiceScope;
   readonly rendered: RenderedEvidenceView;

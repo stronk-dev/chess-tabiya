@@ -20,6 +20,7 @@ import {
   type EvidenceModuleId,
 } from "./evidence-catalog.js";
 import type { CompiledEvidenceManifest, EvidenceRole, VersionedEvidenceId } from "./evidence-contract.js";
+import { HINT_DISCLOSURE_PROJECTION_IDS, hintDeclarationRow, hintDisclosureIdentity } from "./hint-registry.js";
 import {
   MODULE_IDS,
   compileModuleRegistry,
@@ -52,17 +53,20 @@ export const MODULE_AWAITING: Readonly<Partial<Record<ModuleId, readonly { reado
   full_inspector: Object.freeze([{ projection: ref("pack.authored.classifier"), owner: "module-registration Discharge D2 (leak L12)" }]),
 });
 
-/** `guided_hint` imports only hint-distance's literal family×rung disclosure registry, which does not exist. */
-export const GUIDED_HINT_BLOCKERS: readonly ModuleDependencyBlocker[] = Object.freeze([
-  Object.freeze({ owner: "hint-distance", ledger: "D1639", reason: "HINT_DISCLOSURE_PROJECTION_IDS and HINT_HORIZON_PROJECTION_IDS are not published; a generic or raw-PV hint binding is forbidden ([[D1569]], [[D1455]])." }),
-  Object.freeze({ owner: "module-registration", ledger: "D7", reason: "The sealed rung compiler that emits one derived.hint.disclosure.<family>.<rung>@1 item per request has not landed." }),
-]);
+/**
+ * rfc/hint-distance.md §9: Guided Hint's disclosure declaration. The compiler is the one server-local
+ * rung compiler (`compileHintDisclosure`); the module ceiling is the full ladder, narrowed per request
+ * by the preset/context/access ceiling, never by source availability.
+ */
+export const GUIDED_HINT_DISCLOSURE = Object.freeze({ vocabulary: "guided_hint@1" as const, ceiling: "move" as const, compiler: ref("compileHintDisclosure") });
 
 function acceptance(projection: VersionedEvidenceId): ModuleAcceptanceDeclaration {
   // [[D745]]: an avoidance fact is admissible only with its complete-population denominator.
-  return projection.id.startsWith("derived.semantic_avoidance.")
-    ? Object.freeze({ projection, denominatorRequired: true })
-    : Object.freeze({ projection });
+  if (projection.id.startsWith("derived.semantic_avoidance.")) return Object.freeze({ projection, denominatorRequired: true });
+  // rfc/hint-distance.md §9 / criterion 14: every disclosure row declares its exact answer image.
+  const hint = hintDisclosureIdentity(projection.id);
+  if (hint !== undefined) return Object.freeze({ projection, answerContent: hintDeclarationRow(hint.family).rungAnswers[hint.rung] });
+  return Object.freeze({ projection });
 }
 
 function declarationFor(policy: ModulePolicy): ModuleDeclaration {
@@ -72,7 +76,7 @@ function declarationFor(policy: ModulePolicy): ModuleDeclaration {
   const accepts: ModuleDeclaration["accepts"] = id === "rules_floor"
     ? Object.freeze({ kind: "none" as const, awaiting: Object.freeze([]) })
     : accepted === undefined
-      ? Object.freeze({ kind: "blocked_dependencies" as const, blockers: id === "guided_hint" ? GUIDED_HINT_BLOCKERS : Object.freeze([]), awaiting })
+      ? Object.freeze({ kind: "blocked_dependencies" as const, blockers: Object.freeze([]), awaiting })
       : Object.freeze({ kind: "manifest" as const, projections: Object.freeze(accepted.map(acceptance)), awaiting });
   return Object.freeze({
     id,
@@ -94,6 +98,7 @@ function declarationFor(policy: ModulePolicy): ModuleDeclaration {
     forms: policy.forms,
     rendering: "deterministic" as const,
     noveltyWindow: policy.noveltyWindow,
+    ...(id === "guided_hint" ? { disclosure: GUIDED_HINT_DISCLOSURE } : {}),
   });
 }
 
@@ -240,6 +245,11 @@ export const MODULE_OPERATIONS: readonly ModuleOperation[] = Object.freeze([
     module: "review_map" as const, operation: "reviewMapProjection", timing: "review" as const,
     // rfc/review-evidence-compiler.md: the typed packet projections the evidence panel admits.
     projections: Object.freeze([ref("derived.grade.move_quality"), ref("live.stockfish.eval"), ...RECORDED_PATH_SUCCESSOR_REFS, ...["derived.review.eval_point", "derived.review.eval_delta", "derived.review.mate_transition", "derived.review.wdl_point"].map((id) => ref(id))]),
+  }),
+  // rfc/hint-distance.md §7: one learner-requested disclosure per request, through RunService.hint.
+  Object.freeze({
+    module: "guided_hint" as const, operation: "compileGuidedHintPacket", timing: "checkpoint" as const,
+    projections: HINT_DISCLOSURE_PROJECTION_IDS,
   }),
   Object.freeze({
     // Checkpoint B: the post-commit seat is now delivered by the one query operation.

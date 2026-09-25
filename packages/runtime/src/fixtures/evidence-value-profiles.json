@@ -156,6 +156,300 @@
       "b4fd31cf7282bca53e71ffc5ff138a4e4ad427d7267f9b72670576a05dd46273"
     ]
   },
+  "derived.hint.disclosure.discovered_executed.distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "0d598adde573999b8f8a5a015fd99c08a90db2ef16f732fa367cd6be29e5d71e"
+    ]
+  },
+  "derived.hint.disclosure.discovered_executed.move@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "859ac49afbcfd1cb295fe2dbdddc261c0a7325c73f8599d533cd86114f40387a"
+    ]
+  },
+  "derived.hint.disclosure.discovered_executed.pattern@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "99139a86336b42331f5a43ce586199d0542b7eebcb86555004b8f0f60ea24890"
+    ]
+  },
+  "derived.hint.disclosure.discovered_executed.piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "c382a2bee133b2c15466b8202a9716f9217c84be6bd87b630d03a23d2da97921"
+    ]
+  },
+  "derived.hint.disclosure.discovered_executed.square@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "c89cd27bc97a183d9d142e601ec3c7a8d340aff867ca6476f346d3f7ecad6302"
+    ]
+  },
+  "derived.hint.disclosure.double_attack.distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "76026a29226c1b952e9292cfd01ced7f54f7b6b33c268ab85dc3323d972d43c6"
+    ]
+  },
+  "derived.hint.disclosure.double_attack.move@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "a5ead5450d952ae6e00cfff41bd8b3c75a7960d7d5d9ecbc6052b123b001251c"
+    ]
+  },
+  "derived.hint.disclosure.double_attack.pattern@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "5965febbd4628c2e0b35423e92e8ed1d81938d9b655c2b139c83f71400ad6e88"
+    ]
+  },
+  "derived.hint.disclosure.double_attack.piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "0390ab9d10020613c2f0c2d793a75c190c0f94d9ca3fe87d03b13238ef1a528a"
+    ]
+  },
+  "derived.hint.disclosure.double_attack.square@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "c0bd99c3356fb6f70d0f693617fa29e76a93b40e0c1179a4f9587f7bb398199b"
+    ]
+  },
+  "derived.hint.disclosure.forced_mate.distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "240d7d9421dc513ab4830032c20010414d19366b94db55487a82794f03272319"
+    ]
+  },
+  "derived.hint.disclosure.forced_mate.move@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "1dcdc4fbfc4f27e2e07ecef6add79d308744e51b84a1d7eba8124052ae99216e"
+    ]
+  },
+  "derived.hint.disclosure.forced_mate.pattern@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "81f6c82f820bf2981fb7a55d6df0ca3269a0d3da2e0430cda600200a1859b78e"
+    ]
+  },
+  "derived.hint.disclosure.forced_mate.piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "71259c1a7d61ad2f512970bc29cdcdb555d9512f4846c89faa2dac575fcd3b94"
+    ]
+  },
+  "derived.hint.disclosure.forced_mate.square@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "6c24380ce2fc02619dc6aa1dc4ba78ed6eb96454743b972f173f94c50a6013c9"
+    ]
+  },
+  "derived.hint.disclosure.fork_survives_reply.distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "ef9ed64b5dd2160052f63d785a5cd2476eec5deea878fa316c9e077679deb867"
+    ]
+  },
+  "derived.hint.disclosure.fork_survives_reply.move@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "733f77490a7ec6eb2108bd873ff5abdec0d1a89d81d28ee01a65afc99e3788bb"
+    ]
+  },
+  "derived.hint.disclosure.fork_survives_reply.pattern@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "1e744ab496fed0097987f08a626434a0c1f06e99b6c931196076e19765ac8fa9"
+    ]
+  },
+  "derived.hint.disclosure.fork_survives_reply.piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "23c301ea58d9514923357127685f8b47e3caa728d3bbf5395d6b7ce118ba811d"
+    ]
+  },
+  "derived.hint.disclosure.fork_survives_reply.square@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "36c62d5df0acb84726240ed544af7c41ea270ccabfc389bd5ec0030a96f8670a"
+    ]
+  },
+  "derived.hint.disclosure.loose_piece.distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "a0cd2d97ec3060dc9607474731110baf3c38eac6e8ea83901c1298e5a284cbb8"
+    ]
+  },
+  "derived.hint.disclosure.loose_piece.move@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "03160fce83ff611787e33f91d325a79c3c56c7f68da683c2a8009e15cbccfddd"
+    ]
+  },
+  "derived.hint.disclosure.loose_piece.pattern@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "b9b2913dd98dc4793cde074f8526ebda09471ab9be2c7835b11407f85e059729"
+    ]
+  },
+  "derived.hint.disclosure.loose_piece.piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "61e629a34ca88c7ca8102313273f3d2f181e9dab59384428c54c131a7df0526c"
+    ]
+  },
+  "derived.hint.disclosure.loose_piece.square@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "1370db66ede376b842ba56b25acd40812d43cfdf06db32068f1921be1767dd65"
+    ]
+  },
+  "derived.hint.disclosure.mate_in_one.distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "401731c461f4feba19f92a53b8abeffe736e4d8f86c0f0e49e5d66855c216342"
+    ]
+  },
+  "derived.hint.disclosure.mate_in_one.move@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "bf53fc88b0f1daceb3b939688f6a16f2aa25c2d5f96539a15b221aa2ca4763dc"
+    ]
+  },
+  "derived.hint.disclosure.mate_in_one.pattern@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "fc16623161b631fcaf53a06800317ab15cd3813f18c55237503c900ae56125ce"
+    ]
+  },
+  "derived.hint.disclosure.mate_in_one.piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "53f460664309fe183668989af9858a640662b0796de92c508d98afc4c8ef0185"
+    ]
+  },
+  "derived.hint.disclosure.mate_in_one.square@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "9c62323912dad223a4b73477ca29ae6d5fec0d0a4ebbb4aa8f12f08c0cbea134"
+    ]
+  },
+  "derived.hint.disclosure.promotion_pressure.distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "9faf32845bbf84d867e5a8fcdbb42fa21e18174971bae48825027e9ddb28822d"
+    ]
+  },
+  "derived.hint.disclosure.promotion_pressure.move@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "5e01d7dd281f512f4e9e345695e7a345e8e239e6c93921d8b6e00ded7c8aa19b"
+    ]
+  },
+  "derived.hint.disclosure.promotion_pressure.pattern@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "a959f6e689fe2900a54172c939ac3c0cfb01f1ab669f43e77ed436cbac406c8b"
+    ]
+  },
+  "derived.hint.disclosure.promotion_pressure.piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "e64667526dfcc37f232a44a1846f828a9a7a4715b1509d30a8fb97953f6fa8c4"
+    ]
+  },
+  "derived.hint.disclosure.promotion_pressure.square@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "ec892c6d915042aa29bd49883f599fad0963e8406c0c0ef551a1209afcbb73b1"
+    ]
+  },
+  "derived.hint.horizon.discovered_executed@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "ea84cbbb8cb1b7e656ae860b9d54bf1780958773cc90d0e19a593b3714e78e13"
+    ]
+  },
+  "derived.hint.horizon.double_attack@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "1e7944e02bd2826ba21808f3beaa73dfbfcff404ed78db851e580f518196e814"
+    ]
+  },
+  "derived.hint.horizon.forced_mate@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "3e28145f9e6d07af7d5b1b56a9acaa342abf12b30b0ae5d9b1d14a508481f3d3"
+    ]
+  },
+  "derived.hint.horizon.fork_survives_reply@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "a1f71d9c6216a0aa6872951977755d03e080c1d1cef1f7df385f794bcc51f715"
+    ]
+  },
+  "derived.hint.horizon.loose_piece@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "f456f67f865dd06cc0667e6820f51cbba3d15b8b6ed887e43c166d9673ff5381"
+    ]
+  },
+  "derived.hint.horizon.mate_in_one@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "c90645b46714f0ed3368c64d327d58d5c4bab697aa46c1f2dda75061c7f98677"
+    ]
+  },
+  "derived.hint.horizon.promotion_pressure@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "ba940137fd6b957cd2002a0140a3af077b1612a718bcd37c40ad80d8c90cfee9"
+    ]
+  },
   "derived.king.captured_zone_defender@1": {
     "availability": "available",
     "cardinality": 1,

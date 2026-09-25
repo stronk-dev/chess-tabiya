@@ -1,6 +1,7 @@
 import { accessPermission, type AssistanceAccess, type AssistanceConfig } from "./assistance.js";
 import { MODULE_IDS, type ModuleId, type ModuleInitiative, type ModuleTiming } from "./module-contract.js";
 import { MODULE_POLICIES } from "./module-policy.js";
+import { HINT_DISTANCES, type HintDistance } from "./hint-registry.js";
 import {
   ASSISTANCE_FIELD_DOMAINS,
   ASSISTANCE_PREFERENCE_FIELDS,
@@ -20,13 +21,11 @@ import {
   requestedModules,
   requestedPreset,
   workflowContextPolicy,
-  HINT_RUNGS,
   MODULE_PRESENTATION_FACTS,
   PRESET_IDS,
   type AssistancePreferenceField,
   type AssistancePreferenceFields,
   type ConfigClamp,
-  type HintRung,
   type ModulePresentationFacts,
   type OrdinaryWorkflowContextId,
   type OrdinaryWorkflowContextOrigin,
@@ -258,7 +257,7 @@ export function parseRequestedAssistanceV1(value: unknown): RequestedAssistanceV
 // Stage 2 — authoritative (server).
 
 export interface HintCeilingReceipt {
-  readonly rung: HintRung;
+  readonly rung: HintDistance;
   readonly validation: "proposed";
   readonly ruling: "D1639";
 }
@@ -468,7 +467,7 @@ export function parseFinalizedAssistanceV1(value: unknown): FinalizedAssistanceV
   parseFieldsExact(value.config);
   if (!Array.isArray(value.suppressed) || !Array.isArray(value.effects)) fail("EXCHANGE_SHAPE_INVALID", "suppressions and effects are arrays");
   const hint = value.hintCeiling;
-  if (!plain(hint) || !(HINT_RUNGS as readonly unknown[]).includes(hint.rung)) fail("EXCHANGE_SHAPE_INVALID", "hint ceiling is invalid");
+  if (!plain(hint) || !(HINT_DISTANCES as readonly unknown[]).includes(hint.rung)) fail("EXCHANGE_SHAPE_INVALID", "hint ceiling is invalid");
   assertSuppressions(value.suppressed as SuppressionRecord[]);
   return value as unknown as FinalizedAssistanceV1;
 }
