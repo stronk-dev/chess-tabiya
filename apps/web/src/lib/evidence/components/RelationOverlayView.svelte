@@ -12,17 +12,27 @@
 </script>
 
 <div class="relation" data-component="relation_overlay" data-owner={component.operand.owner.factRef}>
-  <ul class="edges" aria-label={sentence} tabindex="0" onfocus={() => onFocusSquares?.(squares)} onblur={() => onFocusSquares?.(undefined)}>
-    {#each chips as chip (`${chip.from}${chip.to}${chip.phrase}`)}<li class={chip.sign}><span>{chip.from}</span><span aria-hidden="true"> → </span><span>{chip.to}</span></li>{/each}
+  {#if onFocusSquares !== undefined}<button type="button" class="caption" onfocus={() => onFocusSquares?.(squares)} onclick={() => onFocusSquares?.(squares)} onblur={() => onFocusSquares?.(undefined)}>{sentence}</button>
+  {:else}<p class="caption">{sentence}</p>{/if}
+  <ul class="edges" aria-label={sentence}>
+    {#each chips as chip (`${chip.from}${chip.to}${chip.phrase}`)}<li class={chip.sign}>
+      {#if onFocusSquares !== undefined}
+        <button type="button" class="endpoint" aria-label={`${chip.from}: ${sentence}`} onfocus={() => onFocusSquares?.(squares)} onclick={() => onFocusSquares?.(squares)} onblur={() => onFocusSquares?.(undefined)}>{chip.from}</button><span aria-hidden="true"> → </span><button type="button" class="endpoint" aria-label={`${chip.to}: ${sentence}`} onfocus={() => onFocusSquares?.(squares)} onclick={() => onFocusSquares?.(squares)} onblur={() => onFocusSquares?.(undefined)}>{chip.to}</button>
+      {:else}<span>{chip.from}</span><span aria-hidden="true"> → </span><span>{chip.to}</span>{/if}
+    </li>{/each}
   </ul>
   {#if component.operand.convention}<p class="convention">{attribution(component.operand.convention)}</p>{/if}
 </div>
 
 <style>
   .relation{display:grid;gap:.2rem}
+  .caption{margin:0;padding:0;border:0;background:none;font:inherit;font-size:.78rem;color:var(--ink);text-align:left}
+  button{cursor:pointer}
   .edges{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.3rem}
   .edges li{padding:0 .35rem;border:1px solid var(--line);border-radius:.3rem;font-size:.72rem;color:var(--ink);font-variant-numeric:tabular-nums}
   .edges li.lost{border-style:dashed}
   .edges li.gained{border-color:var(--accent)}
+  .endpoint{padding:.125rem 0;border:0;background:none;font:inherit;color:inherit;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .convention{margin:0;font-size:.7rem;color:var(--muted)}
 </style>

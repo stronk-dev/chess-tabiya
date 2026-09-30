@@ -38,8 +38,15 @@ dispatched by `PresentedEvidence.svelte`.
 - `magnitude_trail` draws an SVG whose pixels come only from a registered `MAGNITUDE_SCALE_POLICIES`
   row, with a keyboard-reachable point list.
 - `square_set` carries its caption as a sealed `fact_statement` operand (recomputed on parse);
-  squares are deduplicated at construction.
-- `relation_overlay` edges must join retained nodes; its sentence names only those endpoints.
+  squares are deduplicated at construction. When the owning board supplies its paint callback,
+  caption and retained-square buttons share that fact on focus/activation and clear transient
+  focus on blur. Read-only consumers without that callback show text, not inert buttons.
+- `relation_overlay` edges must join retained nodes; its visible caption and endpoint labels name
+  only those endpoints. Native caption/endpoint controls expose the same full relation through
+  the owning board callback, never a second query or a wider paint budget.
+- Magnitude-trail point controls identify the corresponding circle without changing the registered
+  plot geometry or scale; all values remain readable without hover. Figure captions stay inside
+  their figure in valid first/last-child position.
 - `outcome_split` and `count_with_denominator` draw no bar when the floor is unmet or the total is
   zero, and the withheld state carries `data-abstention`.
 - `structured_document` is coupled to a literal schema in `STRUCTURED_DOCUMENT_SCHEMAS` and is

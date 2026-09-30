@@ -216,6 +216,10 @@ label-sweep:
 	node tools/label-sweep/label-sweep.mjs
 
 .PHONY: component-theme-sweep
+.PHONY: evidence-components-check
+evidence-components-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/evidence/components.test.ts
+
 # rfc/evidence-presentation.md §8.4 / criterion 11: literal, named, system and color-mix colours over
 # the component tree, with a self-check that the keyword lists stay non-empty.
 component-theme-sweep:

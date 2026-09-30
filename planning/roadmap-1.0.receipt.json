@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e90ab2adbb170689ff531f9105a29d73b123e7584a067409ee93be48d7916841",
+    "roadmap": "sha256:6dca054e6714dd37ae698944aa90549eb4a8d8ea7e6326c343581f4998088bf4",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:b1167d3e35032066b4857d12f255a463c8d8fb00e37d434f32b06aa01c97916c",
+    "workState": "sha256:9ce51ac6225405bfbea485987cd428143ceed249e2044f6bc2dac44f13bc213a",
     "rfcRegister": "sha256:61e02545943f4e9fff26abd3798cedc3aceb0ef3efad3b56c2840c4481c20161",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 623,
       "doing": 0,
-      "blocked": 1049,
-      "done": 1244,
+      "blocked": 1052,
+      "done": 1245,
       "refused": 160
     },
     "workItems": {
@@ -290,7 +290,7 @@
       "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
       "latestCheckpoint": {
         "at": "2026-09-30",
-        "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
+        "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/hint-distance.ts",
@@ -301,6 +301,7 @@
           "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
           "planning/platform-alignment/evidence-presentation/voice-current-consumer-2026-09-30.md",
           "planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md",
+          "planning/platform-alignment/evidence-component-input-2026-09-30.md",
           "docs/evidence-presentation.md",
           "apps/web/src/lib/voice-response.ts",
           "apps/server/src/guidance.ts",
@@ -366,6 +367,11 @@
             "kind": "work_state",
             "id": "D3310",
             "digest": "sha256:b0597736462f6bdb02f49a38ea0f6555aa5c8c13b4036ace20c8f784b8a56f5f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3331",
+            "digest": "sha256:51c08408d0eb2b1902cdbb32444dfb615b3e3bba9bab605634d53507b5744679"
           }
         ]
       },

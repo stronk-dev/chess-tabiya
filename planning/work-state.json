@@ -27346,6 +27346,43 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3328",
+      "state": "blocked",
+      "sourceGlyph": "📜",
+      "sourceDigest": "sha256:bbfbd06bcf9b36130dd836908d339634963b9c2c6a10d1cfa58194a042b67bad",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "item:D3330"
+    },
+    {
+      "id": "D3329",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:53614abec6e9c994f8c5d31a2cd872087ec62dc67450dcebe193bf048bbfce90",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "item:D3330"
+    },
+    {
+      "id": "D3330",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:52920e340ed033b8f695343e58bab351aab42e0992482227d785f8162e1b0b19",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Authorize D996 metadata-only migration: 128 entries across 92 packs, 92 projected pack digest changes and 68 ledger restamps, with 19 evaluator roots and all authored content proven unchanged? See explorer-summary-inflight-2026-09-30.md."
+    },
+    {
+      "id": "D3331",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:51c08408d0eb2b1902cdbb32444dfb615b3e3bba9bab605634d53507b5744679",
+      "uxItems": [],
+      "evidence": "planning/platform-alignment/evidence-component-input-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

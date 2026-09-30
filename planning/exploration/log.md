@@ -21775,3 +21775,52 @@ Campaign was the one capability with no API, route or content. Now:
   after the last population-snapshot repair; focused provider controls total 103. Browser CI passed
   56 smoke, five content, 49 matrix and one packaged-production test, one optional skip, zero retries.
   All 819 capability declarations remain unchanged; live work stays zero-untriaged/zero-unrouted.
+
+### 2026-09-30 — Explorer summary implementation encounters the per-release migration boundary
+
+- D3328/D3329 are implemented in working bytes: the literal move-free source projection, exact
+  wire, existing Theory module demand and real external voice transport. Zero/37/100 populations,
+  closed-door/no-demand controls, candidate sentinel exclusion and a decision changed during actual
+  acquisition pass. The complete application proof remains blocked at pack loading.
+- D3330: seven central-dispatch/manifest source closures extend. All 819 committed declarations
+  remain immutable; seven typed successors and one summary append. The canonical plan measures
+  128 judgement entries across 92 packs (92 opponent-selection, 36 structural-condition references).
+  Pack-capability §6/D996 requires a per-release ruling before application; no content was changed.
+- Typecheck, 22 value-authority controls, six history controls and 37 focused transport/census
+  tests pass. The provider gate remains red on three unmigrated-application tests; the earlier full
+  software run was red with 54 failures. No commit, completed RFC or readiness claim is made.
+- Exact receipt: `planning/provider-exchange-and-execution/explorer-summary-inflight-2026-09-30.md`.
+  Durable work states and the execution queue name the migration dependency; the 1.0 goal stays
+  active. This is not a handoff to Claude, and no protected intent or unrelated edits were touched.
+
+### 2026-09-30 — D3330 source and content migration cost independently measured
+
+- The read-only `make explorer-summary-migration-proof` compares fixed predecessor `76faf52c`:
+  819 immutable declarations retained; 19 evaluator-root AST images, 271 existing value profiles,
+  92 packs' non-requirement content and 260 sidecar/shape/principle documents unchanged.
+- The seven closure differences reduce to three changed registry declarations and two newly
+  reachable symbols. Root-source equality is not claimed as exhaustive behavioral simulation.
+  Permanent negatives reject a changed root and changed authored objectives/claims.
+- In-memory requirements project 92 changed pack digests and 68 evidence-ledger restamps. The
+  latter cost is absent from the ordinary planner's current zero-restamp count because judgement
+  prevents emitting mechanical edits. The exact projected images are saved in
+  `planning/provider-exchange-and-execution/explorer-summary-migration-proof-2026-09-30.json`.
+- No pack, source sidecar, claim or lesson was written; no release approval was inferred from
+  the active goal continuation. D3330 remains owner-blocked under D996, with D3328/D3329 depending
+  on it. The implementation stays uncommitted until migration and complete gates pass.
+
+### 2026-09-30 — D3331 independent evidence-component input repair
+
+- The pending D3330 owner migration does not authorize content writes and does not block this
+  existing presentation contract's frontend repair. Four mounted-component negatives first fail:
+  native square/relation controls absent, chart-point controls absent, invalid figure-caption order.
+- Native caption/square/endpoint/point controls now bind the exact retained operand and registered
+  caption, clear transient focus on blur and leave plot geometry/evidence budgets unchanged.
+  Read-only consumers have text instead of inert buttons. Obsolete parent-scoped seat styles are
+  removed; the actual ModuleSeats styles remain.
+- Fifteen mounted-DOM tests, theme/label controls, exact adapter coverage, full typechecking and
+  capability checks pass. Typechecking now has zero errors and zero warnings. Broad application
+  gates remain red on D3330; no full board/browser/owner-use or milestone completion is claimed.
+- Scoped receipt: `planning/platform-alignment/evidence-component-input-2026-09-30.md`.
+  The frontend checkpoint excludes the Explorer implementation and migration; D3328–D3330 remain
+  blocked with their prior measured scope. Tracking closes only D3331, not those dependencies.

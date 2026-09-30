@@ -17,8 +17,8 @@ import {
   type ComponentValue,
   type ConventionReceipt,
 } from "@chess-tabiya/runtime";
-import { mount, unmount, type Component } from "svelte";
-import { describe, expect, it } from "vitest";
+import { flushSync, mount, unmount, type Component } from "svelte";
+import { describe, expect, it, vi } from "vitest";
 
 import AbstentionView from "./components/AbstentionView.svelte";
 import CitationView from "./components/CitationView.svelte";
@@ -130,12 +130,12 @@ const VIEWS: Readonly<Record<ComponentId, Component<{ component: never; sentence
   abstention: AbstentionView as never, structured_document: StructuredDocumentView as never,
 };
 
-function render(id: ComponentId, operand: Fixture): { readonly root: HTMLElement; readonly sentence: string; readonly done: () => void } {
+function render(id: ComponentId, operand: Fixture, onFocusSquares?: (squares: readonly string[] | undefined) => void): { readonly root: HTMLElement; readonly sentence: string; readonly done: () => void } {
   const component = parseComponentValue({ id, operand }) as ComponentValue;
   const sentence = componentValueSentence(component);
   const target = globalThis.document.createElement("div");
   globalThis.document.body.append(target);
-  const instance = mount(VIEWS[id], { target, props: { component: component as never, sentence } });
+  const instance = mount(VIEWS[id], { target, props: { component: component as never, sentence, ...(onFocusSquares === undefined ? {} : { onFocusSquares }) } });
   return { root: target, sentence, done: () => { void unmount(instance); target.remove(); } };
 }
 
@@ -183,6 +183,16 @@ describe("criterion 6: a real zero, a withheld value and an absent producer rend
 });
 
 describe("criterion 7: a convention-requiring component cannot exist without its convention, which renders inside the root", () => {
+  it("D3331: figure captions remain a valid first or last child for observed, zero and withheld values", () => {
+    for (const [id, operand] of [["distribution", MATRIX.distribution.many], ["outcome_split", MATRIX.outcome_split.many], ["outcome_split", MATRIX.outcome_split.zero], ["outcome_split", MATRIX.outcome_split.withheld]] as const) {
+      const { root, done } = render(id, operand);
+      try {
+        const figure = root.querySelector("figure")!;
+        const caption = figure.querySelector("figcaption")!;
+        expect(caption === figure.firstElementChild || caption === figure.lastElementChild).toBe(true);
+      } finally { done(); }
+    }
+  });
   it("refuses a distribution with no convention and draws the attribution inside the figure", () => {
     const { convention: _omitted, ...naked } = MATRIX.distribution.many as Record<string, unknown>;
     expect(() => parseComponentValue({ id: "distribution", operand: naked })).toThrow(/omits convention/u);
@@ -205,12 +215,30 @@ describe("criterion 8: no component renders a percentage it did not compute from
 });
 
 describe("criterion 15: magnitude_trail is a real plot whose geometry comes only from the registered policy", () => {
+  it("D3331: native point controls identify their plotted point without changing measurement geometry", () => {
+    const { root, done } = render("magnitude_trail", MATRIX.magnitude_trail.many);
+    try {
+      const buttons = [...root.querySelectorAll<HTMLButtonElement>(".points button")];
+      expect(buttons).toHaveLength(2);
+      const path = root.querySelector("svg path")!.getAttribute("d");
+      for (const [index, button] of buttons.entries()) {
+        expect(button.type).toBe("button"); expect(button.tabIndex).toBe(0);
+        flushSync(() => button.focus());
+        expect(root.querySelectorAll("circle[data-active='true']")).toHaveLength(1);
+        expect(root.querySelectorAll("svg circle")[index]!.getAttribute("data-active")).toBe("true");
+        flushSync(() => button.click());
+        expect(root.querySelector("svg path")!.getAttribute("d")).toBe(path);
+        flushSync(() => button.blur());
+        expect(root.querySelectorAll("circle[data-active='true']")).toHaveLength(0);
+      }
+    } finally { done(); }
+  });
   it("renders an svg with distinct coordinates for distinct values and a keyboard-reachable point list", () => {
     const { root, done } = render("magnitude_trail", MATRIX.magnitude_trail.many);
     const circles = [...root.querySelectorAll("svg circle")];
     expect(circles).toHaveLength(2);
     expect(circles[0]!.getAttribute("cy")).not.toBe(circles[1]!.getAttribute("cy"));
-    expect(root.querySelectorAll("ol.points li[tabindex='0']")).toHaveLength(2);
+    expect(root.querySelectorAll("ol.points button[type='button']")).toHaveLength(2);
     expect(root.querySelector("svg")?.getAttribute("data-extent")).toMatch(/±8 pawns/u);
     expect(root.querySelector("[title]")).toBeNull();
     done();
@@ -221,6 +249,37 @@ describe("criterion 15: magnitude_trail is a real plot whose geometry comes only
 });
 
 describe("criterion 12: a square set renders exactly one fact, deduplicated", () => {
+  it("D3331: read-only consumers without a board paint callback expose text, not inert controls", () => {
+    for (const id of ["square_set", "relation_overlay"] as const) {
+      const { root, sentence, done } = render(id, MATRIX[id].one);
+      try {
+        expect(root.querySelector("button")).toBeNull();
+        expect(root.querySelector(".caption")!.textContent).toBe(sentence);
+      } finally { done(); }
+    }
+  });
+  it("D3331: caption and every retained square are native keyboard/touch controls for the same fact", () => {
+    const paint = vi.fn();
+    const { root, sentence, done } = render("square_set", MATRIX.square_set.many, paint);
+    try {
+      const caption = root.querySelector<HTMLButtonElement>("button.caption")!;
+      expect(caption).not.toBeNull();
+      expect(caption.textContent).toBe(sentence);
+      expect(caption.type).toBe("button");
+      caption.focus(); expect(paint).toHaveBeenLastCalledWith(["d1", "d8"]);
+      caption.click(); expect(paint).toHaveBeenLastCalledWith(["d1", "d8"]);
+      caption.blur(); expect(paint).toHaveBeenLastCalledWith(undefined);
+      const squares = [...root.querySelectorAll<HTMLButtonElement>("button.chip")];
+      expect(squares).toHaveLength(2);
+      for (const square of squares) {
+        expect(square.tabIndex).toBe(0);
+        expect(square.getAttribute("aria-label")).toContain(sentence);
+        square.focus(); expect(paint).toHaveBeenLastCalledWith([square.textContent]);
+        square.click(); expect(paint).toHaveBeenLastCalledWith([square.textContent]);
+        square.blur(); expect(paint).toHaveBeenLastCalledWith(undefined);
+      }
+    } finally { done(); }
+  });
   it("refuses duplicate squares and renders one caption per fact", () => {
     expect(() => parseComponentValue({ id: "square_set", operand: { ...MATRIX.square_set.many as object, squares: ["d1", "d1"] } })).toThrow(/deduplicated/u);
     const { root, done } = render("square_set", MATRIX.square_set.many);
@@ -231,6 +290,25 @@ describe("criterion 12: a square set renders exactly one fact, deduplicated", ()
 });
 
 describe("criterion 13a: a relation overlay joins only retained endpoints", () => {
+  it("D3331: caption and endpoint controls expose the full retained relation, never another query", () => {
+    const paint = vi.fn();
+    const { root, sentence, done } = render("relation_overlay", MATRIX.relation_overlay.one, paint);
+    try {
+      const caption = root.querySelector<HTMLButtonElement>("button.caption")!;
+      expect(caption).not.toBeNull();
+      expect(caption.textContent).toBe(sentence);
+      const endpoints = [...root.querySelectorAll<HTMLButtonElement>("button.endpoint")];
+      expect(endpoints).toHaveLength(2);
+      const retained = (MATRIX.relation_overlay.one as { nodes: readonly { square: string }[] }).nodes.map((node) => node.square);
+      for (const control of [caption, ...endpoints]) {
+        expect(control.type).toBe("button"); expect(control.tabIndex).toBe(0);
+        control.focus(); expect(paint).toHaveBeenLastCalledWith(retained);
+        control.click(); expect(paint).toHaveBeenLastCalledWith(retained);
+        control.blur(); expect(paint).toHaveBeenLastCalledWith(undefined);
+      }
+      for (const endpoint of endpoints) expect(endpoint.getAttribute("aria-label")).toContain(sentence);
+    } finally { done(); }
+  });
   it("refuses an invented edge endpoint", () => {
     expect(() => parseComponentValue({ id: "relation_overlay", operand: { ...MATRIX.relation_overlay.one as object, edges: [{ from: "f3", to: "g5", relation: "attacks", sign: "state" }] } })).toThrow(/two distinct retained nodes/u);
   });

@@ -20,8 +20,8 @@
       </li>
     {/each}
   </ol>
-  <figcaption class="convention">{attribution(component.operand.convention)}</figcaption>
   <p class="visually-hidden">{sentence}</p>
+  <figcaption class="convention">{attribution(component.operand.convention)}</figcaption>
 </figure>
 
 <style>

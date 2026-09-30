@@ -2934,8 +2934,6 @@
   .assistance-control { position:relative; z-index:6; padding:.35rem .55rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); font-size:.75rem; }
   .guard-prompt { display:grid; gap:.65rem; margin:0; padding:.65rem; border:1px solid var(--accent); border-radius:.7rem; background:color-mix(in srgb,var(--accent) 9%,var(--panel)); }
   .guard-prompt p { margin:.2rem 0 0; font-size:.78rem; color:var(--muted); }
-  .module-seat { display:grid; gap:.35rem; margin:0; padding:.65rem; border:1px solid var(--line); border-radius:.7rem; background:var(--panel); }
-  .module-seat p { margin:0; font-size:.78rem; }
   .guard-actions { display:flex; flex:none; gap:.45rem; }
   .rehearsal-guide { display:grid; gap:.45rem; padding:.8rem; border:1px solid var(--accent); border-radius:.8rem; background:color-mix(in srgb,var(--accent) 7%,var(--panel)); }
   .rehearsal-guide > p, .rehearsal-guide h2 { margin:0; }

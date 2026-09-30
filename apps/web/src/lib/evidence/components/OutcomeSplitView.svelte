@@ -19,13 +19,13 @@
       {#each segments as segment (segment.side)}<li>{segment.label} {segment.share}</li>{/each}
     </ul>
   {/if}
-  <figcaption class="convention">{attribution(component.operand.convention)}</figcaption>
   {#if segments.length > 0}
     <p class="visually-hidden">{sentence}</p>
   {:else}
     <!-- §4b: a withheld or empty split is the abstention rendering: no bar, the reason is an attribute. -->
     <p class="stated" data-abstention={component.operand.total === 0 ? "no_observation" : "floor_not_met"}>{sentence}</p>
   {/if}
+  <figcaption class="convention">{attribution(component.operand.convention)}</figcaption>
 </figure>
 
 <style>
