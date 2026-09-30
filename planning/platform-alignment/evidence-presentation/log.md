@@ -115,3 +115,24 @@ Append-only. This log records author/review/implementation transitions for
   proposed `@2` source and consumer split, both `DrillScreen` and `CompareView` call sites, and
   positive/negative visible fixtures. It is a proposal for RFC review, not an accepted migration
   or a claim that the Inspector structure section is now typed.
+
+## 2026-09-30 — UX branch integrated without losing typed presentation
+
+- The existing UX landing retains `transitionItems`, the explicit recorded-reading presence flag
+  and the admitted Compare/voice path. Phone companion geometry, one-activity Advanced settings,
+  high-contrast Accessibility controls and screen-local streamer mode are now application-bound.
+  The Home rail is repaired under [[D3312]]: an objective state is not a terminal run, and shared
+  runs cannot inflate the learner-history denominator.
+- [[D3313]] was found by the integration matrix, not hidden by a retry. Full redraws detached the
+  Chessground origin during a held touch; the explicit subtree-identity control failed on the old
+  wrapper. Geometry-only cache invalidation, including capture before mouse/touch input, preserves
+  the gesture and animation. The new fixture requires exact h6b6 submission, and all 150
+  six-pack/five-viewport/five-mode cells pass. Component doubles now include the real geometry API.
+- Software passes 2,504 tests plus seven isolated performance tests and its build/policy gates;
+  content passes 218 tests and corpus clearance; browser passes 56 smoke, five content, 49 matrix
+  and one packaged-production journeys (one optional live-Maia latency skip). No remote CI is
+  claimed. K9 is mechanically updated without closing comparative owner-use validation.
+- [[D1479]]'s coach-wall ordering is not integrated without its owner ruling. [[D3309]], the
+  remaining Inspector consumers, raw-id leaks, D1/D9 and owner use still prevent presentation RFC
+  completion. The roadmap checkpoint advances; it does not declare the stable-board/presets
+  milestone or the entire Support experience done.

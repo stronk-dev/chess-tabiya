@@ -69,11 +69,16 @@ test("two learners alternate a native match, pause to branch, and return to the 
     const runId = await startPosition(coach.page);
     await coach.page.goto("/live");
     await coach.page.getByLabel("What do you want to do?").selectOption("native_match");
+    // LIV-a17: the choose moment states the native match's five answers, refusals included.
+    await expect(coach.page.locator("#live-create-preamble")).toContainText("What it does not do");
+    await expect(coach.page.locator("#live-create-preamble")).toContainText("No clocks, no ratings");
     await coach.page.getByLabel("Session title").fill("match session");
     await coach.page.getByLabel("White handle").fill(white.handle);
     await coach.page.getByLabel("Black handle").fill(black.handle);
     await coach.page.getByRole("button", { name: "Create match" }).click();
     await expect(coach.page.getByRole("heading", { name: "match session" })).toBeVisible();
+    // The persist moment: the running surface keeps the same answers standing.
+    await expect(coach.page.locator("#live-session-preamble")).toContainText("No clocks, no ratings");
     await expect(coach.page.getByText(/Either player may propose a coaching pause/)).toBeVisible();
     await expect(coach.page.getByText(/Rehearsal opens only after the other player accepts/)).toBeVisible();
     const sessionId = new URL(coach.page.url()).pathname.split("/").at(-1)!;

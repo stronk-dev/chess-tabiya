@@ -12,7 +12,8 @@ Catppuccin, Gruvbox, One Dark, GitHub Dark, Rosé Pine, Solarized, and Ayu Mirag
 schemes, plus Tabiya's Paper and Warm Dark defaults. Device light/dark mode is
 the default; a browser may pin an explicit mode. A scheme without the chosen
 mode falls back to the accessible Tabiya default for that mode. The board
-catalog contains Brown and Olive. The piece catalog contains Cburnett and
+catalog contains Brown, Olive, and High contrast; High contrast is also reachable from the
+Accessibility settings section and separates its own squares by at least 3:1 luminance. The piece catalog contains Cburnett and
 Lichess Mono. Movement is Normal (250 ms), Fast (120 ms), or None.
 Reduced-motion device preferences always force None. Settings exposes that
 resolved device fact, disables the preference that is not currently in effect,
@@ -78,6 +79,11 @@ replaces gradients with distinct solid, dotted, dashed, and double system-color
 outlines for destinations, captures, premoves, history, selection, and check.
 The occupied-destination capture ring is part of the same measured contrast
 population as ordinary destinations.
+
+Board paint carries two floors, measured over every app theme, mode and board square: CIE76
+ΔE\*ab ≥ 20 (chroma) and a WCAG luminance contrast ≥ 1.5:1 between the painted and bare square,
+so every state survives greyscale and luminance-dominated vision. In light mode the paint anchor
+is ink deepened 30% toward black, which keeps mid-luminance inks (Solarized) above the second floor.
 
 Piece skins are similarly independent. `theme/assets.ts` is the exhaustive
 artwork and redistribution manifest. Adding a board or piece file without a

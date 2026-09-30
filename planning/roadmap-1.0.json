@@ -381,7 +381,7 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Accept the independently-passed D921 Wave-C module amendment, then freshly review the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
+        "nextAction": "Reconcile the existing evidence-foundation branch implementations (semantic validation, bounded local targets, target-policy composition and phase-source composition) with main's newer admitted presentation paths before rebuilding any of them. Then discharge their missing validation/source-population and consumer bindings, finish provider-exchange caller migration, and carry complete grounded evidence through Support, Review, bots and authoring. D3262's search-profile experiment remains research, not production why-move authority.",
         "latestCheckpoint": {
           "at": "2026-09-24",
           "summary": "Collector to fact to module to learner surface is closed at runtime for Review: the typed Review packet, compiled through the provider scheduler and sealed, renders via module.review_map@1, and each node also records a sealed principal-variation delivery that Analyze reveals through Full Inspector with engine attribution. Post-commit Nudge, the recorded semantic path and the candidate packet also run in production.",
@@ -426,7 +426,7 @@
         "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
+          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/hint-distance.ts",
@@ -442,7 +442,15 @@
             "apps/server/src/guidance.ts",
             "apps/web/src/lib/CompareView.svelte",
             "apps/web/src/lib/DrillScreen.svelte",
-            "tests/browser/drill.spec.ts"
+            "apps/web/src/lib/Chessboard.svelte",
+            "apps/web/src/lib/Chessboard.test.ts",
+            "apps/web/src/lib/AssistanceSettings.svelte",
+            "apps/web/src/lib/AccessibilitySettings.svelte",
+            "apps/web/src/lib/streamer-mode.ts",
+            "apps/web/src/lib/home-suggestions.ts",
+            "planning/work-items-1.0.json",
+            "tests/browser/drill.spec.ts",
+            "tests/browser/theme.spec.ts"
           ],
           "anchors": [
             {
@@ -505,7 +513,7 @@
         "state": "blocked_contract",
         "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+        "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
         "latestCheckpoint": {
           "at": "2026-09-24",
           "summary": "Five durable migrations landed in register order today — longitudinal store (26), evidence jobs (27), concept registry (28), bot run lane (29) and campaign-core (30) — so learner history, queued evidence, concept identity, chosen bots and campaign runs all survive restart, backup/restore and upgrade/rollback. Catalogue progression (31) and the social/clock lanes remain.",
@@ -548,7 +556,7 @@
         "state": "blocked_foundation",
         "capabilities": ["evidence", "theory_content", "learner_model", "bots", "campaign", "social_play", "professional", "account_data", "operations"],
         "dependsOn": ["durable-product-state"],
-        "nextAction": "Route principles/theory, longitudinal/profile, registered opponents, campaign, native/social/clocks and professional verbs through createApplication with typed auth, errors, availability and release-container tests.",
+        "nextAction": "Audit the already-routed theory, profile, registered-bot and Campaign families at createApplication, retaining their shipped production doors. Complete missing verbs and native/social/clock/professional families with typed authorization, errors, availability, ownership and release-container journeys; a direct handler or an existing route does not close a whole API family.",
         "latestCheckpoint": {
           "at": "2026-08-31",
           "summary": "The production application route inventory is sealed, while foundation-dependent learner, bot, campaign, social and professional operation families remain incomplete.",

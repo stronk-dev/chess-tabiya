@@ -46,6 +46,11 @@ export function voteStateLabel(state: VoteState): string {
   return "Position changed";
 }
 
+// ux-live-and-social.md §12-5 (LIV-a23): a delay on the board and the time an audience has to answer
+// a vote are different objects. Each is named where it is set, and each says it is not the other.
+export const LIVE_BOARD_DELAY_SENTENCE = "viewers see each move as you commit it. If you are showing a game still being played, set the delay in your streaming software. Voting time only controls when a poll closes; it does not delay the board.";
+export const LIVE_VOTE_TIMING_SENTENCE = "Voting time only decides when this poll closes. It is not a board delay: viewers see each move as you commit it.";
+
 export function invitationStateLabel(state: InvitationState): string {
   if (state === "open") return "Waiting for a response";
   if (state === "accepted") return "Joined";

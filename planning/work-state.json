@@ -27195,6 +27195,33 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/DrillScreen.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3311",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:970aa3c314ac01461c32d52ac637eb6ccea66b790a98ed7a74f6a56290705c42",
+      "uxItems": [],
+      "evidence": "planning/roadmap-1.0.json",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3312",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7ed96da916324c7b9e12b436dd3ae35a5a742dd4ed20c3b02949ce46555d2b35",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/home-suggestions.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3313",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:404f4a7a7aa86d0b61fe8309e65ba4510c106b366803255677d88d1ada9613d7",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

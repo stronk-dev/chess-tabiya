@@ -14,7 +14,7 @@ export const APP_THEME_IDS = [
 ] as const;
 export type AppThemeId = (typeof APP_THEME_IDS)[number];
 
-export const BOARD_THEME_IDS = ["brown", "olive"] as const;
+export const BOARD_THEME_IDS = ["brown", "olive", "contrast"] as const;
 export type BoardThemeId = (typeof BOARD_THEME_IDS)[number];
 
 export const PIECE_SET_IDS = ["cburnett", "mono"] as const;
@@ -48,6 +48,7 @@ export const DEFAULT_THEME_PREFERENCE: ThemePreference = Object.freeze({
 export const BOARD_THEMES = Object.freeze([
   Object.freeze({ id: "brown" as const, label: "Classic brown" }),
   Object.freeze({ id: "olive" as const, label: "Warm olive", validation: "candidate" as const }),
+  Object.freeze({ id: "contrast" as const, label: "High contrast" }),
 ]);
 
 export const PIECE_SETS = Object.freeze([

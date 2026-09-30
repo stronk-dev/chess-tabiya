@@ -46,6 +46,7 @@ vi.mock("@lichess-org/chessground", () => ({
   Chessground: (_element: HTMLElement, config: Config) => {
     chessground.configs.push(config);
     return {
+      state: { dom: { bounds: { clear() {} } } },
       set: chessground.set,
       destroy: chessground.destroy,
     } as unknown as Api;

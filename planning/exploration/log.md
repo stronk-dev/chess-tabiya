@@ -21632,3 +21632,34 @@ Campaign was the one capability with no API, route or content. Now:
 - **What remains:** the proposal is not accepted and no structural collector, manifest or UI bytes
   changed in this follow-up. [[D3309]] stays todo; the prior [[D3310]] move-transition migration
   remains landed and locally verified. The roadmap next action now requires review before code.
+
+### 2026-09-30 — Integrate existing UX work and repair gesture/source fidelity
+
+- **What landed:** the existing Claude UX branch is integrated with main's newer admitted
+  Inspector/Compare paths retained. The phone companion opens below the unchanged board; ordinary
+  help settings lead to one named activity behind Advanced; Accessibility adds a high-contrast
+  board; screen-local streamer mode, factual Home suggestions and import/live/account disclosures
+  are wired through the application. Nineteen UX work items advance to completed on main, including
+  regression coverage for previously shipped behavior; this is not nineteen new capabilities.
+- **What changed:** [[D3311]] repairs stale machine-roadmap execution instructions for already
+  shipped state/API work and the unmerged foundation branch. [[D3312]] keeps Home objective states
+  non-terminal and its partial-history denominator host-owned. The browser matrix then exposed
+  [[D3313]]: a full Chessground redraw replaced the origin of a held touch. A new real-touch
+  fixture was red on source blob `8e5ad0595e7f9ee6205fd8ce4fddcbf5e391cbbe`; geometry-only
+  invalidation makes it green without changing timeouts, assistance or animation policy.
+- **Verification:** `make verify-software` passes 2,504 software tests, seven isolated performance
+  tests and its build/package/policy checks. `make verify-content` passes 218 tests and the corpus
+  clearance check; its first invocation could not verify pnpm signatures under the network sandbox,
+  so the same target was run with network permission, without a version or signature bypass.
+  `make test-browser-ci` passes 56 smoke, five content, 49 matrix and one packaged-production
+  journeys, with the single optional live-Maia latency test skipped. The endgame matrix is 150/150
+  exact plus the held-touch control; K9's comparative owner-use question remains open.
+- **Boundary:** coach-wall ordering is excluded pending [[D1479]] and TCH-a6 is owner-blocked,
+  not completed. The protected B1 residual receives a proposal at
+  `planning/platform-alignment/ux-integration-intent-amendment-2026-09-30.md`; no intent document
+  is edited. No milestone, whole capability, official pack, remote CI result or 1.0 release is
+  promoted. Unrelated D872 harness edits and the other branch work remain untouched.
+- **Next:** reconcile the existing semantic-validation, bounded-target and phase-composition
+  implementations with main's newer presentation/producer paths. Their missing validation,
+  source-population and consumer discharges remain real work; do not rebuild or call them complete
+  from branch-local receipts. [[D3309]] remains proposed, not accepted production authority.

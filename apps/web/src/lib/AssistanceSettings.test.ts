@@ -175,3 +175,21 @@ describe("account lifecycle panel", () => {
     await unmount(component);
   });
 });
+
+describe("export lockout disclosure (IMP-a20)", () => {
+  it("states at the export control that a lost password ends the ability to download, with no recovery", async () => {
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      learner: { id: "learner-a", handle: "alice", createdAt: "2026-08-23T00:00:00.000Z" },
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn(), loadDeletionPreview: async () => preview,
+    } });
+    await tick();
+    const exportPassword = document.querySelector<HTMLInputElement>('input[autocomplete="current-password"]')!;
+    const describedBy = exportPassword.getAttribute("aria-describedby");
+    expect(describedBy).toBe("export-password-limit");
+    const limit = document.getElementById(describedBy!)!;
+    expect(limit.closest("form")).toBe(exportPassword.closest("form"));
+    expect(limit.textContent).toContain("no password recovery");
+    expect(limit.textContent).toContain("this download is no longer possible");
+    await unmount(component);
+  });
+});

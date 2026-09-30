@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const chessground = vi.hoisted(() => ({
   configs: [] as Config[],
-  state: { selected: undefined as string | undefined },
+  state: { selected: undefined as string | undefined, dom: { bounds: { clear: vi.fn<() => void>() } } },
   set: vi.fn<(config: Config) => void>(),
   redrawAll: vi.fn<() => void>(),
   destroy: vi.fn<() => void>(),
@@ -31,6 +31,7 @@ afterEach(() => {
   document.body.replaceChildren();
   chessground.configs.length = 0;
   chessground.state.selected = undefined;
+  chessground.state.dom.bounds.clear.mockClear();
   chessground.set.mockClear();
   chessground.redrawAll.mockClear();
   chessground.destroy.mockClear();
@@ -297,18 +298,39 @@ describe("Chessboard", () => {
       },
     });
     await tick();
-    const redrawsBeforeSelection = chessground.redrawAll.mock.calls.length;
+    const clearsBeforeSelection = chessground.state.dom.bounds.clear.mock.calls.length;
 
     chessground.state.selected = "e2";
     chessground.configs[0]!.events!.select!("e2");
 
     expect(onSelect).toHaveBeenCalledWith("e2");
-    expect(chessground.redrawAll.mock.calls.length).toBeGreaterThan(redrawsBeforeSelection);
+    expect(chessground.state.dom.bounds.clear.mock.calls.length).toBeGreaterThan(clearsBeforeSelection);
+    expect(chessground.redrawAll).not.toHaveBeenCalled();
 
     chessground.state.selected = undefined;
     chessground.configs[0]!.events!.select!("e2");
     expect(onSelect).toHaveBeenLastCalledWith(undefined);
     await unmount(component);
+  });
+
+  it("invalidates pointer bounds before mouse/touch input without rebuilding the interactive subtree", async () => {
+    const target = document.body.appendChild(document.createElement("div"));
+    const component = mount(Chessboard, {
+      target,
+      props: { fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1", startSide: "white", onMove: vi.fn() },
+    });
+    await tick();
+    const board = target.querySelector<HTMLElement>('[aria-label="Chessboard"]')!;
+    for (const type of ["mousedown", "touchstart"]) {
+      chessground.state.dom.bounds.clear.mockClear();
+      board.dispatchEvent(new Event(type, { bubbles: true }));
+      expect(chessground.state.dom.bounds.clear).toHaveBeenCalledOnce();
+      expect(chessground.redrawAll).not.toHaveBeenCalled();
+    }
+    await unmount(component);
+    chessground.state.dom.bounds.clear.mockClear();
+    board.dispatchEvent(new Event("touchstart", { bubbles: true }));
+    expect(chessground.state.dom.bounds.clear).not.toHaveBeenCalled();
   });
 
   it("requests square sight only when the keyboard activates an origin", async () => {

@@ -623,7 +623,12 @@ resize-or-rotate instruction and a Return to Play action.
 
 Selection can reveal a structural caption and move the rendered board without
 resizing it. The Chessground wrapper therefore refreshes its cached bounds on
-the next rendered frame and once again after layout settles. The browser gate
+the next rendered frame and once again after layout settles. Mouse/touch capture
+also invalidates the geometry cache before Chessground reads the gesture. These
+repairs clear only cached bounds: they never call `redrawAll`, replace the
+interactive subtree or reset an in-flight animation. A held-touch browser
+fixture keeps the same `cg-board` connected across selection/layout frames,
+then requires the exact h6b6 submission. The browser gate
 hit-tests the authored source, remeasures after selection and asserts the exact
 outgoing UCI for every served endgame at desktop, tablet and phone projections;
 resting containment or merely observing some legal move is not accepted as

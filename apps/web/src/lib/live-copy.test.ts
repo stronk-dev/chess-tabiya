@@ -5,6 +5,8 @@ import {
   classroomRoleLabel,
   classroomStateLabel,
   invitationStateLabel,
+  LIVE_BOARD_DELAY_SENTENCE,
+  LIVE_VOTE_TIMING_SENTENCE,
   liveLegalMoveChoices,
   liveRoleLabel,
   proposalStateLabel,
@@ -40,5 +42,13 @@ describe("ordinary Live copy", () => {
   it("describes imported legs without exposing branch identities", () => {
     expect(arenaLegState(null, null)).toBe("Waiting for a game import");
     expect(arenaLegState("run:branch:42", "1-0")).toBe("Imported · result 1-0");
+  });
+
+  it("keeps the board delay and the vote's timing as two objects that each disclaim the other (LIV-a23)", () => {
+    expect(LIVE_VOTE_TIMING_SENTENCE).toMatch(/when this poll closes/u);
+    expect(LIVE_VOTE_TIMING_SENTENCE).toMatch(/not a board delay/u);
+    expect(LIVE_BOARD_DELAY_SENTENCE).toMatch(/each move as you commit it/u);
+    expect(LIVE_BOARD_DELAY_SENTENCE).toMatch(/does not delay the board/u);
+    expect(LIVE_VOTE_TIMING_SENTENCE.toLowerCase()).not.toMatch(/\bduration\b/u);
   });
 });

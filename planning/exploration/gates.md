@@ -459,3 +459,19 @@ was unmet from the moment each ruling landed until now.
 amended on [[D996]] to *"measured and ruled per release"*, clause 2 is recorded as passing on
 [[D992]], and [[D3033]] changes the hold's timing boundary: foundation/schema migration may precede
 the gate, while clause 1 still must pass before the scale content wave.
+
+## 2026-09-30 — K9 mechanical input follow-up (D3313)
+
+K9 remains open for comparative usability on owner use; this is not a new CET
+comparison or a speed advantage. Its August 90/90 result above is a dated
+measurement, not proof of every later gesture state.
+
+The UX integration matrix exposed a missing h6b6 touch submission at 1366×768.
+A held-touch negative control then failed deterministically: the original
+`cg-board` became disconnected before touch-end on the pre-repair wrapper
+(source blob `8e5ad0595e7f9ee6205fd8ce4fddcbf5e391cbbe`). D3313 replaces full
+DOM redraws with geometry-cache invalidation. The final browser gate passes
+all 150 exact submissions (six served endgames × five viewports × click, drag,
+touch, keyboard and text), plus the held-touch subtree/submit control. The
+failure and repair are retained here; neither is a comparative usability verdict.
+Evidence: `tests/browser/drill.spec.ts` and `docs/drill-client.md`.

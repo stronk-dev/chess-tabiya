@@ -10,6 +10,7 @@ import type { AssistanceConfig } from "@chess-tabiya/runtime";
 import {
   APP_THEME_IDS,
   BOARD_THEME_IDS,
+  BOARD_THEMES,
   DEFAULT_THEME_PREFERENCE,
   PIECE_SET_IDS,
   type ThemePreference,
@@ -76,7 +77,7 @@ function deltaE(first: Rgb, second: Rgb): number {
 const COLOR_LITERAL = /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/iu;
 const NAMED_COLOR_DECLARATION = /\b(?:color|background(?:-color)?|border(?:-color)?|outline(?:-color)?|fill|stroke)\s*:[^;}\n]*\b(?:white|black|Canvas|CanvasText)\b/iu;
 
-function boardSquares(id: "brown" | "olive"): readonly [string, string] {
+function boardSquares(id: "brown" | "olive" | "contrast"): readonly [string, string] {
   const source = readFileSync(join(themeDirectory, "board-skins", `${id}.css`), "utf8");
   const light = source.match(/background-color:\s*(#[0-9a-f]{6})/iu)?.[1];
   if (light === undefined) throw new Error(`${id} has no declared light square`);
@@ -90,6 +91,15 @@ function boardSquares(id: "brown" | "olive"): readonly [string, string] {
   const dark = composite([0, 0, 0, opacity], rgb(light));
   return [light, `#${dark.map((channel) => Math.round(channel).toString(16).padStart(2, "0")).join("")}`];
 }
+
+/** base.css: light mode anchors board paint to ink deepened 30% toward black; dark mode to surface. */
+function interactionAnchor(palette: { readonly ink: string; readonly surface: string }, mode: string): Rgb {
+  return mode === "dark" ? rgb(palette.surface) : mix(rgb(palette.ink), [0, 0, 0], 0.7);
+}
+
+/** WCAG contrast between a painted square and the bare square: the greyscale-visible signal. */
+const BOARD_PAINT_LUMINANCE_FLOOR = 1.5;
+const HIGH_CONTRAST_SQUARES: readonly (readonly [string, string])[] = [boardSquares("contrast")];
 
 describe("theme foundation", () => {
   it("loads each preference field independently and claims no version", () => {
@@ -155,9 +165,9 @@ describe("theme foundation", () => {
       "paper", "tokyo-night", "dracula", "nord", "catppuccin", "gruvbox",
       "one-dark", "github-dark", "rose-pine", "solarized", "ayu-mirage", "warm-dark",
     ]);
-    expect(BOARD_THEME_IDS).toHaveLength(2);
+    expect(BOARD_THEME_IDS).toHaveLength(3);
     expect(PIECE_SET_IDS).toHaveLength(2);
-    expect(APP_THEME_IDS.length * BOARD_THEME_IDS.length * PIECE_SET_IDS.length).toBe(48);
+    expect(APP_THEME_IDS.length * BOARD_THEME_IDS.length * PIECE_SET_IDS.length).toBe(72);
     for (const theme of Object.values(APP_THEMES)) {
       for (const mode of theme.modes) {
         const palette = theme.palettes[mode];
@@ -241,10 +251,10 @@ describe("theme foundation", () => {
         expect(deltaE(brushes[left]!, brushes[right]!)).toBeGreaterThanOrEqual(20);
       }
     }
-    const boards = [boardSquares("brown"), boardSquares("olive")];
+    const boards = [boardSquares("brown"), boardSquares("olive"), boardSquares("contrast")];
     for (const theme of Object.values(APP_THEMES)) for (const mode of theme.modes) {
       const palette = theme.palettes[mode]!;
-      const anchor = rgb(mode === "dark" ? palette.surface : palette.ink);
+      const anchor = interactionAnchor(palette, mode);
       const paints = [
         [...mix(rgb(palette.warning), anchor, 0.1), 0.75],
         [...mix(rgb(palette.accent), anchor, 0.2), 0.65],
@@ -315,6 +325,39 @@ describe("theme foundation", () => {
     expect(Object.keys(MARK_BRUSHES)).toEqual(["green", "red", "blue", "yellow"]);
     const manifest = JSON.parse(readFileSync(join(sourceDirectory, "..", "public", "manifest.webmanifest"), "utf8")) as Record<string, unknown>;
     expect(manifest.theme_colors).toEqual({ light: "#eeeade", dark: "#16140f" });
+  });
+
+  it("ships a high-contrast board whose own squares separate by luminance, unlike the two field skins (A11-b5)", () => {
+    const [light, dark] = boardSquares("contrast");
+    expect(contrast(light, dark)).toBeGreaterThanOrEqual(3);
+    for (const id of ["brown", "olive"] as const) expect(contrast(...boardSquares(id))).toBeLessThan(2.1);
+    expect(BOARD_THEMES.map((item) => item.id)).toContain("contrast");
+  });
+
+  it("gives every semantic board paint a luminance floor alongside ΔE, so greyscale still shows it (A11-b6)", () => {
+    // ux-accessibility-and-mobile.md §3.4 Finding C: ΔE is chroma-dominated and once rated a
+    // 1.02:1 last-move highlight a pass. A second, luminance-only floor catches a pure hue shift.
+    const hex = (value: Rgb): string => `#${value.map((channel) => Math.round(channel).toString(16).padStart(2, "0")).join("")}`;
+    const results: { readonly label: string; readonly ratio: number }[] = [];
+    for (const board of [boardSquares("brown"), boardSquares("olive"), ...HIGH_CONTRAST_SQUARES]) for (const theme of Object.values(APP_THEMES)) for (const mode of theme.modes) {
+      const palette = theme.palettes[mode]!;
+      const anchor = interactionAnchor(palette, mode);
+      const paints = {
+        "last-move ring": [...anchor, 0.72],
+        "move-dest": [...mix(rgb(palette.accent), anchor, 0.2), 1],
+        selected: [...mix(rgb(palette.accent), anchor, 0.2), 0.65],
+        "occupied-dest ring": [...mix(rgb(palette.accent), anchor, 0.2), 0.75],
+        "check ring": [...mix(rgb(palette.danger), anchor, 0.4), 0.92],
+        premove: [...mix(rgb(palette.muted), anchor, 0.3), 0.65],
+      } satisfies Record<string, readonly [number, number, number, number]>;
+      for (const square of board) for (const [name, paint] of Object.entries(paints)) {
+        results.push({ label: `${name} ${theme.id}/${mode} on ${square}`, ratio: contrast(hex(composite(paint, rgb(square))), square) });
+      }
+    }
+    const failures = results.filter((result) => result.ratio < BOARD_PAINT_LUMINANCE_FLOOR);
+    expect(failures, failures.map((failure) => `${failure.label}: ${failure.ratio.toFixed(2)}`).join("\n")).toEqual([]);
+    // The floor is able to fail: the shipped-before hue-only last-move paint measured 1.02:1.
+    expect(contrast(hex(composite([155, 199, 0, 0.41], rgb("#c0ae91"))), "#c0ae91")).toBeLessThan(BOARD_PAINT_LUMINANCE_FLOOR);
   });
 
   it("keeps critical board states distinguishable without hue alone", () => {

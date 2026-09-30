@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const chessground = vi.hoisted(() => ({ destroy: vi.fn<() => void>() }));
 vi.mock("@lichess-org/chessground", () => ({
-  Chessground: (_element: HTMLElement, _config: Config) => ({ destroy: chessground.destroy, set() {} }) as unknown as Api,
+  Chessground: (_element: HTMLElement, _config: Config) => ({ state: { dom: { bounds: { clear() {} } } }, destroy: chessground.destroy, set() {} }) as unknown as Api,
 }));
 
 import GroupPanel from "./GroupPanel.svelte";

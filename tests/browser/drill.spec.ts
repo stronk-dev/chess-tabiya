@@ -211,6 +211,8 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
 1. d4 *`);
   await page.getByRole("button", { name: "Build game story" }).click();
   await expect(page.getByRole("alert")).toContainText("one game at a time");
+  // IMP-a9: the refusal names the repertoire importer that does accept several games.
+  await expect(page.getByRole("alert")).toContainText("Import repertoire under Learn › Repertoire gaps");
   await page.getByLabel("PGN").fill(`[Event "Browser import"]
 [Site "https://lichess.org/abcd1234"]
 [White "Alice"]
@@ -218,6 +220,7 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
 [Result "1-0"]
 
 1. e4 e5 2. Nf3 Nc6 1-0`);
+  await expect(page.getByLabel("Your side")).toHaveAccessibleDescription(/This PGN names White: Alice and Black: Bob/u);
   await page.getByRole("button", { name: "Build game story" }).click();
   await expect(page).toHaveURL(/\/review\/game\/import-/);
   await expect(page.getByRole("heading", { name: "Alice – Bob" })).toBeVisible();
@@ -398,6 +401,10 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   await expect(page.getByLabel("Current password")).toHaveValue("");
 
   await expect(page.getByRole("heading", { name: "Your data and privacy" })).toBeVisible();
+  // IMP-a12/a14: exactly one standing inventory (the server one), naming abandoned and voided games.
+  await expect(page.getByRole("heading", { name: "What Tabiya has recorded" })).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "What Tabiya has recorded" })).toBeVisible();
+  await expect(page.locator('[data-data-class="behavioral_profiles"]')).toContainText("abandoned and voided games");
   await expect(page.locator(".deletion-preview")).toBeVisible();
   await expect(page.getByRole("button", { name: "Refresh data summary" })).toBeVisible();
   await expect(page.getByText("Live data is removed immediately", { exact: false })).toBeVisible();
@@ -906,7 +913,8 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
     await voteEditor.getByLabel("Move").nth(index).selectOption(moves[index]!);
     await voteEditor.getByLabel("Audience label").nth(index).fill(labels[index]!);
   }
-  await voteEditor.getByLabel("Duration (seconds)").fill("90");
+  await voteEditor.getByLabel("Voting time (seconds)").fill("90");
+  await expect(voteEditor.getByLabel("Voting time (seconds)")).toHaveAccessibleDescription(/It is not a board delay/u);
   await voteEditor.getByRole("button", { name: "Open vote" }).click();
   await expect(page.getByText("Which plan? · Voting open")).toBeVisible();
   await expect(page.getByRole("button", { name: /Vote for Bishop f4/ })).toBeVisible();
@@ -2006,6 +2014,46 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await spectatorContext.close();
 });
 
+test("@matrix a held touch survives selection layout frames and commits the exact endgame move", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, hasTouch: true, isMobile: true });
+  try {
+    const page = await context.newPage();
+    await enableEndgamePolicies(page);
+    await register(page);
+    const pack = ENDGAME_INTERACTION_PACKS[1];
+    await page.getByRole("article").filter({ hasText: pack.title })
+      .getByRole("button", { name: /Rehearse this position/ }).click();
+    await expect(page.getByRole("grid", { name: /Board input.*playable/u })).toBeVisible();
+    const board = page.getByLabel("Chessboard");
+    const subtree = await board.locator("cg-board").elementHandle();
+    if (subtree === null) throw new Error("Chessground has no interactive subtree");
+    const bounds = await board.boundingBox();
+    if (bounds === null) throw new Error("Chessground has no board bounds");
+    const origin = squarePoint(bounds, "h6", "black");
+    const cdp = await context.newCDPSession(page);
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [origin] });
+    await expect(page.locator(".input-status")).toContainText("Square h6 selected.");
+    await board.evaluate(() => new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    }));
+    // A geometry repair must not detach the target before its touchend can reach Chessground.
+    expect(await subtree.evaluate((element) => element.isConnected)).toBe(true);
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    const settled = await board.boundingBox();
+    if (settled === null) throw new Error("Chessground disappeared after the origin touch");
+    const submitted = page.waitForResponse((response) => response.request().method() === "POST"
+      && /\/runs\/[^/]+\/moves$/u.test(new URL(response.url()).pathname));
+    const destination = squarePoint(settled, "b6", "black");
+    await page.touchscreen.tap(destination.x, destination.y);
+    const response = await submitted;
+    expect(response.ok()).toBe(true);
+    expect(response.request().postDataJSON()).toMatchObject({ uci: pack.uci });
+    await expect(page.locator(".input-status")).toContainText("Move committed:");
+  } finally {
+    await context.close();
+  }
+});
+
 test("@matrix every shell route owns the viewport at supported desktop and tablet projections", async ({
   page,
 }) => {
@@ -2095,6 +2143,11 @@ test("@matrix play composition keeps one exact board rectangle through reachable
       await expect(page.locator(".companion-section:visible")).toHaveCount(1);
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
       if (viewport.width <= 719) {
+        // A11-b1 (D1566): the phone's one open region sits below the board and never covers it.
+        const sheet = await page.getByRole("dialog", { name: "Run companion" }).boundingBox();
+        expect(sheet).not.toBeNull();
+        expect(sheet!.y).toBeGreaterThanOrEqual(calm!.y + calm!.height - 0.5);
+        expect(sheet!.height).toBeGreaterThanOrEqual(160);
         await page.getByRole("button", { name: "Collapse companion" }).click();
       }
     }
@@ -3076,16 +3129,22 @@ test("@matrix normal Tab traversal reaches every drill region in both directions
 test("@matrix mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/settings");
+  // SET-a14: ordinary Settings states the in-flow choice; per-activity help sits behind one Advanced door.
+  await expect(page.locator("#playing-settings")).not.toContainText(/\bcontexts?\b/iu);
+  await expect(page.getByRole("group", { name: "Just Play" })).toBeHidden();
+  await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+  await expect(page.getByLabel("Activity")).toHaveValue("position");
   const position = page.getByRole("group", { name: "Just Play" });
   const ambientLabel = position.locator("label").filter({ hasText: "Ambient presence" });
   expect(await ambientLabel.evaluate((element) => getComputedStyle(element).display)).toBe("flex");
   expect(await ambientLabel.evaluate((element) => getComputedStyle(element).alignItems)).toBe("center");
   await expect(page).toHaveTitle("Settings · Tabiya");
   await expect(position.getByLabel("Help style")).toHaveValue("quiet");
-  await position.locator("summary").filter({ hasText: "Advanced" }).click();
+  await position.locator("summary").filter({ hasText: "Individual help channels" }).click();
   await position.getByLabel("Board lighting").selectOption("sight");
   await page.reload();
-  await position.locator("summary").filter({ hasText: "Advanced" }).click();
+  await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+  await position.locator("summary").filter({ hasText: "Individual help channels" }).click();
   await expect(position.getByLabel("Board lighting")).toHaveValue("sight");
   await expect(position.getByLabel("Help style")).toHaveValue("custom");
   await page.goto("/play");

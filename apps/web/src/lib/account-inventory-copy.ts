@@ -22,7 +22,7 @@ export const ACCOUNT_DATA_CLASS_LABELS: Readonly<Record<string, string>> = Objec
   drafts: "Unpublished drafts",
   publications: "Published packs and shapes",
   live_social: "Live sessions, classrooms and share links",
-  behavioral_profiles: "Ratings, rated games and play measurements",
+  behavioral_profiles: "Ratings, rated games (including abandoned and voided games, with the reason) and play measurements",
   device_local_preferences: "Preferences saved on this device",
 });
 

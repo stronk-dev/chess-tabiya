@@ -124,6 +124,7 @@ test("Settings native controls share the token-driven application baseline", asy
   await page.goto("/settings");
   await expect(page.locator("select").first()).toBeVisible();
   // Raw switches sit under each context's Advanced disclosure (rfc/intent-presets.md §7).
+  await page.locator("details.activity-help > summary").click();
   await page.locator("details.advanced-assistance summary").first().click();
   await expect(page.locator('input[type="checkbox"]').first()).toBeVisible();
   await expect(page.locator('input[type="password"]').first()).toBeVisible();
@@ -203,4 +204,31 @@ test("system display preferences keep board semantics visible without colour alo
   const visibleButton = page.locator("button:visible").first();
   await visibleButton.focus();
   expect(await visibleButton.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe("1e-06s");
+});
+
+test("streamer mode hides private chrome on this screen, toggles with Z, and can apply only to runs (LIV-a14)", async ({ page }) => {
+  await register(page);
+  await page.goto("/settings#streamer-mode-settings");
+  const navigation = page.getByRole("navigation", { name: "Primary navigation" });
+  await expect(navigation).toBeVisible();
+  await page.getByRole("radio", { name: "On everywhere" }).check();
+  await expect(navigation).toBeHidden();
+  await expect(page.locator(".shell-topbar .identity-control")).toBeHidden();
+  await expect(page.getByText("Signed in as")).toBeHidden();
+  await expect(page.getByText("It does not change what your viewers see")).toBeVisible();
+  await page.locator("h1#settings-title").click();
+  await page.keyboard.press("z");
+  await expect(navigation).toBeVisible();
+  await expect(page.locator("[data-streamer-announcement]")).toHaveText("Streamer mode off.");
+  await expect(page.getByRole("radio", { name: "Off" })).toBeChecked();
+  await page.getByRole("radio", { name: "Only while playing a run" }).check();
+  await expect(navigation).toBeVisible();
+  await page.goto("/play");
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.locator(".drill .assistance-control")).toBeHidden();
+  await expect(page.locator("#run-support-region")).toBeHidden();
+  await expect(page.getByRole("region", { name: "Branches" })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem("tabiya.streamer-mode.v1"))).toBe("in_run");
 });

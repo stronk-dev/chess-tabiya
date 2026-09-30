@@ -5,7 +5,7 @@ export type RegisterKeyboardRegion = (
 ) => () => void;
 
 export const KEYBOARD_OWNERSHIP = Object.freeze({
-  shell: Object.freeze(["g chords", "? outside a region", "Escape for shell overlays"]),
+  shell: Object.freeze(["g chords", "? outside a region", "Z outside a region", "Escape for shell overlays"]),
   drill: Object.freeze([
     "R",
     "Shift+R",
@@ -26,6 +26,7 @@ export const WORKSPACE_SHORTCUTS = Object.freeze([
   ["G then R", "Review"], ["G then V", "Live"], ["G then C", "Create"],
   ["G then B", "Library"], ["G then S", "Settings"],
   ["G then M", "Focus primary navigation"],
+  ["Z", "Toggle streamer mode (hides your handle, navigation and support panels)"],
 ] as const);
 
 export const DRILL_SHORTCUTS = Object.freeze([
@@ -47,6 +48,8 @@ interface KeyboardActions {
   readonly openHelp: () => void;
   readonly closeHelp: () => void;
   readonly helpIsOpen: () => boolean;
+  /** LIV-a14: streamer mode is shell chrome, toggled by Z outside text entry and the board. */
+  readonly toggleStreamerMode?: () => void;
 }
 
 interface RegionBinding {
@@ -128,6 +131,11 @@ export class ShellKeyboardDispatcher {
       event.preventDefault();
       this.#waitingForChord = true;
       this.#chordTimer = setTimeout(() => this.#clearChord(), 1_200);
+      return;
+    }
+    if (event.key.toLowerCase() === "z" && !event.metaKey && !event.ctrlKey && !event.altKey && this.#actions.toggleStreamerMode !== undefined) {
+      event.preventDefault();
+      this.#actions.toggleStreamerMode();
       return;
     }
     if (event.key === "?" || (event.key === "/" && event.shiftKey)) {

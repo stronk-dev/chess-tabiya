@@ -259,7 +259,9 @@ evidence strips, and results rather than requiring a sideways hunt.
 Opening a compact run region turns the companion into a labelled modal drawer
 only at phone width. It takes focus when opened from outside, makes the board and
 shell inert, contains Tab in both directions, closes on Escape, and restores the
-exact region tab that opened it. At tablet and desktop widths the same element
+exact region tab that opened it. The drawer occupies only the space below the board, timeline
+strip and objective line: the board is pinned to the top of its column at rest, so opening a region
+neither moves nor covers it, and the phone shows the board plus exactly one region. At tablet and desktop widths the same element
 remains an ordinary companion landmark, so modal semantics never leak into the
 side-by-side composition.
 
@@ -353,6 +355,20 @@ The Pixel 7 matrix also traverses Home, Play, Review, Learn, Live, Create,
 Library, and Settings through the production bundle. Each main surface must own
 its width and every control must remain inside the viewport unless a named
 horizontal rail owns that control explicitly.
+
+## Streamer mode
+
+Streamer mode is a posture on the learner's own screen for when they are on camera
+(`design/research/ux-live-and-social.md` §6). Settings offers three browser-local states — Off,
+On everywhere, Only while playing a run — stored under `tabiya.streamer-mode.v1`, and the shell
+binds **Z** (outside form fields and the board) to flip what the current screen shows. While
+active it hides the primary navigation, the shell identity and account handle, the Rating card,
+the run's support style control, Inspector, ambient button and Support region (the companion shows
+Branches instead), and authored timeline markers. It only hides: `streamer-mode.css` contains no
+rule other than `display: none` and the Branches fallback, and a fence test keeps the module
+unreachable from the assistance compiler in both directions. Settings states the limit beside the
+control — it does not change what viewers see and withholds nothing from the run — and that it is
+not the Live **Stream a rehearsal** session.
 
 ## Honest disabled controls
 

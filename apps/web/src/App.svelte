@@ -16,10 +16,12 @@
   import LibraryScreen from "./lib/LibraryScreen.svelte";
   import TheoryEntryScreen from "./lib/TheoryEntryScreen.svelte";
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
+  import LivePreamble from "./lib/LivePreamble.svelte";
   import ReviewMapScreen from "./lib/ReviewMapScreen.svelte";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
   import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel, RETURN_STANDING_EXPLANATION } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
+  import { HOME_RUN_WINDOW, HOME_SUGGESTION_RULE, homeSuggestions } from "./lib/home-suggestions.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
   import { validDistilledDraft } from "./lib/distill-response.js";
@@ -33,7 +35,11 @@
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
   import StatusAnnouncement from "./lib/StatusAnnouncement.svelte";
+  import StreamerModeSettings from "./lib/StreamerModeSettings.svelte";
+  import { loadStreamerMode, saveStreamerMode, streamerModeActive, toggledStreamerMode, type StreamerMode } from "./lib/streamer-mode.js";
+  import "./lib/streamer-mode.css";
   import AppearanceSettings from "./lib/AppearanceSettings.svelte";
+  import AccessibilitySettings from "./lib/AccessibilitySettings.svelte";
   import DistillDraftForm from "./lib/DistillDraftForm.svelte";
   import PackProvenanceEditor from "./lib/PackProvenanceEditor.svelte";
   import ShapePlanSignatureEditor from "./lib/ShapePlanSignatureEditor.svelte";
@@ -106,7 +112,7 @@
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
   import { loadWorkflowPreference, requestedAssistanceConfig } from "./lib/assistance-preference.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
-  import { importFailureCopy } from "./lib/import-presentation.js";
+  import { importFailureCopy, pgnSideHint, REPERTOIRE_IMPORT_POINTER } from "./lib/import-presentation.js";
   import { assertFlipResponse } from "./lib/flip-response.js";
   import { LIVE_SESSION_CREATE_ACTIONS, glossOrFallback, labelFor, labelOrFallback, learnerProse } from "./lib/labels/index.js";
   import {
@@ -114,6 +120,8 @@
     classroomRoleLabel,
     classroomStateLabel,
     invitationStateLabel,
+    LIVE_BOARD_DELAY_SENTENCE,
+    LIVE_VOTE_TIMING_SENTENCE,
     liveLegalMoveChoices,
     liveRoleLabel,
     proposalStateLabel,
@@ -200,6 +208,27 @@
     },
   });
   let route: AppRoute = $state(router.route);
+  // LIV-a14: streamer mode is chrome on this screen only; it never reaches the assistance compiler.
+  const initialStreamerMode = loadStreamerMode(applicationStorage());
+  let streamerMode: StreamerMode = $state(initialStreamerMode);
+  let streamerLastOn: Exclude<StreamerMode, "off"> = $state(initialStreamerMode === "off" ? "always" : initialStreamerMode);
+  let streamerAnnouncement = $state("");
+  let streamerActive = $derived(streamerModeActive(streamerMode, route.name));
+  function setStreamerMode(next: StreamerMode): void {
+    streamerMode = next;
+    if (next !== "off") streamerLastOn = next;
+    saveStreamerMode(next, applicationStorage());
+  }
+  function toggleStreamerMode(): void {
+    setStreamerMode(toggledStreamerMode(streamerMode, streamerMode === "off" ? streamerLastOn : streamerMode, route.name));
+    streamerAnnouncement = streamerModeActive(streamerMode, route.name) ? "Streamer mode on. Your handle, navigation and support panels are hidden on this screen." : "Streamer mode off.";
+  }
+  $effect(() => {
+    const root = document.documentElement;
+    if (streamerActive) root.dataset.streamerMode = "active";
+    else delete root.dataset.streamerMode;
+    return () => { delete root.dataset.streamerMode; };
+  });
   let session: DrillSessionState = $state(controller.state);
   let packs: readonly PackSummary[] = $state([]);
   let relatedPack: DrillPackDefinition | undefined = $state();
@@ -322,6 +351,8 @@
   let importPgn = $state("");
   let importUrl = $state("");
   let importSide: "white" | "black" = $state("white");
+  // IMP-a5: the PGN headers usually answer the side question; a learner choice always wins.
+  let importSideTouched = $state(false);
   let importError: string | undefined = $state();
   let importNotice: string | undefined = $state();
   let importBusy = $state(false);
@@ -338,6 +369,8 @@
   let routeError: string | undefined = $state();
   let shellHelpOpen = $state(false);
   let learner: Learner | undefined = $state();
+  let importSideHint = $derived(pgnSideHint(importPgn, learner?.handle));
+  $effect(() => { const side = importSideHint?.side; if (side !== undefined && !untrack(() => importSideTouched)) importSide = side; });
   let authLoading = $state(true);
   let authError: string | undefined = $state();
   let authHandle = $state("");
@@ -413,6 +446,7 @@
     openHelp: openShellHelp,
     closeHelp: closeShellHelp,
     helpIsOpen: () => shellHelpOpen,
+    toggleStreamerMode,
   });
 
   let recentRun = $derived(runs[0]);
@@ -423,6 +457,8 @@
       return pack === undefined ? [] : [pack];
     }),
   );
+  // ARR-a8: returning learners get suggestions ranked only on facts about their own runs.
+  let threadSuggestions = $derived(homeSuggestions({ runs, packs, excludeRunId: recentRun?.id, totalRuns: runSelection.total }));
   let firstRehearsalPack = $derived(
     packs.find((pack) => pack.id === "conversion-up-a-piece") ?? phaseStarters[0],
   );
@@ -824,7 +860,8 @@
     try {
       if (next.name === "home") {
         const loaded = await Promise.all([
-          initialRunPage(1),
+          // Continue shows the newest run; the thread rail (ARR-a8) ranks facts over the recent page.
+          initialRunPage(HOME_RUN_WINDOW),
           api.packs(),
           api.dueProgress?.() ?? Promise.resolve(EMPTY_DUE_QUEUE),
           api.assignments?.() ?? Promise.resolve([]),
@@ -1207,7 +1244,7 @@
         return;
       }
       if (action === importGeneration) importPreparation = undefined;
-      if (action === importGeneration && source.kind === "pgn" && importPgn === source.pgn) importPgn = "";
+      if (action === importGeneration && source.kind === "pgn" && importPgn === source.pgn) { importPgn = ""; importSideTouched = false; }
       if (action === importGeneration && source.kind === "lichess" && importUrl === source.url) importUrl = "";
       if (stillOwnsReview()) {
         navigate(routePath({ name: "story", runId }));
@@ -2444,6 +2481,7 @@
 </script>
 
 <svelte:window onkeydown={(event) => keyboardDispatcher.handle(event)} />
+<span class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-streamer-announcement>{streamerAnnouncement}</span>
 
 {#if authLoading}
   <main class="auth-gate" aria-busy="true"><p>Loading Tabiya…</p></main>
@@ -2479,7 +2517,7 @@
         {authRegister ? "Use an existing account" : "Create an account"}
       </button>
       {#if authRegister}<p id="registration-data-disclosure" class="honest">Creating an account keeps the games and rehearsals you save, your learning progress, and anything you author or publish. After you confirm your password, Account settings lets you download your record and preview what deletion removes, anonymizes, or keeps as shared or published history.</p>{/if}
-      <p id="registration-password-warning" class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
+      <p id="registration-password-warning" class="honest">There is no password recovery yet. Keep your password somewhere safe: downloading or deleting your data also asks for it.</p>
     </section>
     <PackList
       {packs}
@@ -2554,7 +2592,22 @@
           <p>Authored explanations and measured evidence keep their source. Generated wording may present those records; it does not invent strategy or grade your move.</p>
         </aside>
       </section>
-      {#if phaseStarters.length > 0}
+      {#if threadSuggestions.length > 0}
+        <section class="phase-starters thread-suggestions" aria-labelledby="thread-suggestions-title" aria-describedby="thread-suggestions-rule">
+          <div><p class="eyebrow">Pick up a thread</p><h2 id="thread-suggestions-title">From your own runs.</h2><p id="thread-suggestions-rule" class="honest">{HOME_SUGGESTION_RULE}</p></div>
+          {#each threadSuggestions as suggestion (suggestion.kind + ("runId" in suggestion ? suggestion.runId : suggestion.packId))}
+            <article data-suggestion-kind={suggestion.kind}>
+              <h3>{suggestion.title}</h3>
+              <p>{suggestion.because}</p>
+              {#if "runId" in suggestion}
+                <button type="button" onclick={() => navigate(routePath({ name: "run", runId: suggestion.runId }))}>Open the run</button>
+              {:else}
+                <button type="button" onclick={() => controller.startPack(suggestion.packId)}>Start this rehearsal</button>
+              {/if}
+            </article>
+          {/each}
+        </section>
+      {:else if phaseStarters.length > 0}
         <section class="phase-starters" aria-labelledby="phase-starters-title">
           <div><p class="eyebrow">Pick up a thread</p><h2 id="phase-starters-title">Start from the phase you are working on.</h2></div>
           {#each phaseStarters as pack}
@@ -2712,13 +2765,14 @@
         <label>Lichess game URL <input type="url" placeholder="https://lichess.org/abcdefgh" disabled={importBusy||importPreparation!==undefined} bind:value={importUrl} /></label>
         <span>or paste PGN</span>
         <label>PGN <textarea rows="6" placeholder="[Event …]" disabled={importBusy||importPreparation!==undefined} bind:value={importPgn}></textarea></label>
-        <label>Your side <select disabled={importBusy||importPreparation!==undefined} bind:value={importSide}><option value="white">White</option><option value="black">Black</option></select></label>
+        <label>Your side <select disabled={importBusy||importPreparation!==undefined} aria-describedby={importSideHint ? "import-side-hint" : undefined} bind:value={importSide} onchange={() => { importSideTouched = true; }}><option value="white">White</option><option value="black">Black</option></select></label>
+        {#if importSideHint}<p id="import-side-hint" class="honest">{#if importSideHint.side && !importSideTouched}Your handle is {importSideHint.side === "white" ? "White" : "Black"} in this PGN, so Your side is set to {importSideHint.side === "white" ? "White" : "Black"}. Change it if you played the other side.{:else}This PGN names White: {importSideHint.white ?? "not given"} and Black: {importSideHint.black ?? "not given"}. Choose the side you played.{/if}</p>{/if}
         <p id="import-storage-disclosure" class="honest">Import keeps the game’s PGN tags—including player names—and its moves alongside the parsed main line and the rehearsal branches you add. Comments, engine evaluations and move annotations in the PGN are removed before anything is stored. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
         {#if importPreparation}<p role="status">The game is saved. Finish preparing its Story without importing a duplicate.</p>{/if}
         <button class="primary" type="submit" aria-describedby="import-storage-disclosure import-source-guidance" disabled={importBusy||(importPreparation===undefined&&importUrl.trim()===""&&importPgn.trim()==="")}>{importBusy?"Preparing…":importPreparation?"Finish Story setup":"Build game story"}</button>
         {#if importNotice}<p role="status">{importNotice}</p>{/if}
         {#if importError}<p role="alert">{importError}</p>{/if}
-        <p id="import-source-guidance" class="honest">Chess.com: export one completed game's PGN and paste it here. Export the game, not an analysis tree with variations. Tabiya never links or mines your account.</p>
+        <p id="import-source-guidance" class="honest">Chess.com: export one completed game's PGN and paste it here. Export the game, not an analysis tree with variations. Tabiya never links or mines your account. {REPERTOIRE_IMPORT_POINTER}</p>
       </form>
       <div class="item-list">
         {#each runs as run}
@@ -3093,6 +3147,7 @@
         <label>Session title <input maxlength="120" bind:value={liveTitle} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}/></label>
         <label>What do you want to do? <select value={selectedLiveWorkflow()} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined} onchange={(event)=>chooseLiveWorkflow(event.currentTarget.value as LiveWorkflow)}>{#each LIVE_WORKFLOWS as workflow}<option value={workflow.id}>{workflow.label}</option>{/each}</select></label>
         <p class="session-purpose">{liveWorkflowOption(selectedLiveWorkflow()).summary}</p>
+        <LivePreamble workflow={selectedLiveWorkflow()} id="live-create-preamble" />
         <details><summary>Advanced board handoff</summary><label>Board <select value={liveBoardControl} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined} onchange={(event)=>liveBoardControl=event.currentTarget.value as BoardControl}>{#each liveBoardControlOptions(liveKind) as option}<option value={option.id}>{option.label}</option>{/each}</select></label><p class="honest">The workflow above chooses a useful default. Change handoff only when the group needs free claim or a named rotation.</p></details>
         <label>Classroom (optional) <select bind:value={liveClassroomId} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}><option value="">None</option>{#each classrooms.filter((item)=>item.memberRole==="teacher"&&item.memberState==="active") as classroom}<option value={classroom.id}>{classroom.name}</option>{/each}</select></label>
         <label>Schedule (optional) <input type="datetime-local" bind:value={liveScheduledFor} disabled={liveCreateBusy} aria-describedby={liveCreateBusy?"live-create-busy":undefined}/></label>
@@ -3113,7 +3168,7 @@
     </main>
   {:else if route.name === "live-session"}
     <main class="shell-view" aria-labelledby="session-title">
-      {#if liveDetail}<p class="eyebrow">Live / {liveKindLabel(liveDetail.session.kind)}</p><h1 id="session-title">{liveDetail.session.title}</h1>{#if liveDetail.classroom}<p class="session-context">Classroom: <strong>{liveDetail.classroom.name}</strong></p>{/if}<p>{liveBoardControlLabel(liveDetail.session.boardControl)} · your role: {liveRoleLabel(liveDetail.role)}</p><p class="session-purpose">{liveSessionPurpose(liveDetail.session.kind)}</p>
+      {#if liveDetail}<p class="eyebrow">Live / {liveKindLabel(liveDetail.session.kind)}</p><h1 id="session-title">{liveDetail.session.title}</h1>{#if liveDetail.classroom}<p class="session-context">Classroom: <strong>{liveDetail.classroom.name}</strong></p>{/if}<p>{liveBoardControlLabel(liveDetail.session.boardControl)} · your role: {liveRoleLabel(liveDetail.role)}</p><p class="session-purpose">{liveSessionPurpose(liveDetail.session.kind)}</p><LivePreamble workflow={liveWorkflow(liveDetail.session.kind, liveDetail.session.boardControl)} id="live-session-preamble" />
         {#if liveSessionActionBusy}<p id="live-session-action-busy" role="status">Updating this session…</p>{/if}
         {#if liveSessionActionError}<p role="alert">{liveSessionActionError}</p>{/if}
         {#if liveDetail.match}<section aria-labelledby="match-state-title"><h2 id="match-state-title">Match board</h2><p>{liveDetail.match.pausedAt ? "Paused for rehearsal" : liveDetail.match.pauseProposedBy ? "Pause proposed" : "Live — evidence and rehearsal are withheld"}</p><div class="row-actions">{#if liveDetail.match.pausedAt}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("resume")}>Resume main line</button>{:else}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("propose_pause")}>Propose pause</button>{#if liveDetail.match.pauseProposedBy}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("accept_pause")}>Accept pause</button>{/if}{#if liveDetail.role==="host"}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void operateMatch("pause")}>Coach pause</button>{/if}{/if}</div>{#if liveDetail.role==="host"}<div class="row-actions"><label>Open seat <select bind:value={liveJoinSlot} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}><option value="white">White</option><option value="black">Black</option></select></label><label>Optional handle<input bind:value={liveJoinHandle} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label><button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void mintJoinLink()}>Create friend link</button></div>{#if liveJoinUrl}<p role="status">Friend link: <code>{liveJoinUrl}</code></p>{/if}{/if}</section>{/if}
@@ -3147,8 +3202,9 @@
               <div class="vote-editor">
                 <label>Prompt<input maxlength="120" bind:value={liveVotePrompt} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label>
                 {#each liveVoteOptions as option,index}<div class="row-actions"><label>Move <select value={option.moveUci} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onchange={(event)=>setLiveVoteMove(index,event.currentTarget.value)}><option value="">Choose a legal move</option>{#each liveMoveChoices as choice}<option value={choice.uci}>{choice.san}</option>{/each}</select></label><label>Audience label<input maxlength="40" value={option.label} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} oninput={(event)=>setLiveVoteLabel(index,event.currentTarget.value)}/></label><button type="button" disabled={liveVoteOptions.length<=MIN_LIVE_VOTE_OPTIONS||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>liveVoteOptions=liveVoteOptions.filter((_,candidate)=>candidate!==index)}>Remove</button></div>{/each}
-                <div class="row-actions"><button type="button" disabled={liveVoteOptions.length>=MAX_LIVE_VOTE_OPTIONS||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>liveVoteOptions=[...liveVoteOptions,{moveUci:"",label:""}]}>Add option</button><label>Duration (seconds)<input type="number" min={MIN_LIVE_VOTE_SECONDS} max={MAX_LIVE_VOTE_SECONDS} bind:value={liveVoteDuration} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined}/></label><button type="button" disabled={!liveVoteReady()||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveVoteReady()?"vote-disabled":undefined} onclick={()=>void openLiveVote()}>Open vote</button></div>
+                <div class="row-actions"><button type="button" disabled={liveVoteOptions.length>=MAX_LIVE_VOTE_OPTIONS||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>liveVoteOptions=[...liveVoteOptions,{moveUci:"",label:""}]}>Add option</button><label>Voting time (seconds)<input type="number" min={MIN_LIVE_VOTE_SECONDS} max={MAX_LIVE_VOTE_SECONDS} bind:value={liveVoteDuration} disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy vote-duration-scope":"vote-duration-scope"}/></label><button type="button" disabled={!liveVoteReady()||liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":!liveVoteReady()?"vote-disabled":undefined} onclick={()=>void openLiveVote()}>Open vote</button></div>
               </div>
+              <p id="vote-duration-scope" class="honest">{LIVE_VOTE_TIMING_SENTENCE}</p>
               {#if !liveVoteReady()}<p id="vote-disabled" class="honest">Choose two to eight different legal moves, give each an audience label, and set a duration from 15 seconds to 10 minutes.</p>{/if}
             {/if}
             {#if liveDetail.vote}<p>{liveDetail.vote.window.prompt} · {voteStateLabel(liveDetail.vote.window.state)}</p>{#if liveDetail.vote.window.state==="open"}<div class="vote-options" role="group" aria-label={liveDetail.vote.window.prompt}>{#each liveDetail.vote.tally as item}<button type="button" disabled={liveSessionActionBusy!==undefined} aria-describedby={liveSessionActionBusy!==undefined?"live-session-action-busy":undefined} onclick={()=>void castLiveVote(item.moveUci)}>Vote for {item.label} <span aria-hidden="true">· {item.count}</span></button>{/each}</div>{:else}<ul>{#each liveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul>{/if}{#if liveVoteMessage}<p role="status">{liveVoteMessage}</p>{/if}<p class="honest">{voteAttribution(liveDetail)}</p>{:else}<p>No vote window is open.</p>{/if}
@@ -3188,7 +3244,7 @@
             <div class="row-actions"><button type="button" onclick={()=>void copyLiveOverlayUrl(liveDetail!.session.runId)}>Copy overlay URL</button><button type="button" aria-expanded={liveAudiencePreview} aria-controls="audience-preview" onclick={()=>liveAudiencePreview=!liveAudiencePreview}>{liveAudiencePreview?"Hide audience preview":"See what your audience sees"}</button></div>
             {#if liveOverlayCopyMessage}<p role="status">{liveOverlayCopyMessage}</p>{/if}
             <p class="honest">In OBS, add this URL as a Browser Source, open that source's interaction window, and sign in once inside OBS. The page has a transparent background.</p>
-            <p class="honest"><strong>No board delay:</strong> viewers see each move as you commit it. If you are showing a game still being played, set the delay in your streaming software. Vote duration only controls when a poll closes; it does not delay the board.</p>
+            <p class="honest"><strong>No board delay:</strong> {LIVE_BOARD_DELAY_SENTENCE}</p>
             {#if liveAudiencePreview}<div id="audience-preview" class="audience-preview"><p><strong>Spectator-safe preview</strong> — this is the same projection the browser source renders.</p><iframe title="Audience overlay preview" src={routePath({name:"live-overlay",runId:liveDetail.session.runId})}></iframe></div>{/if}
           </section>
         {/if}
@@ -3255,8 +3311,10 @@
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
       <p class="eyebrow">Preferences and account</p><h1 id="settings-title">Settings</h1>
-      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
+      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#accessibility-settings">Accessibility</a><a href="#streamer-mode-settings">Streamer mode</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
       <AppearanceSettings />
+      <AccessibilitySettings />
+      <StreamerModeSettings mode={streamerMode} onChange={setStreamerMode} />
       <AssistanceSettings {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} loadAccountInventory={api.accountInventory === undefined ? undefined : () => api.accountInventory!()} previewAccountImport={api.previewAccountImport === undefined ? undefined : (bundle) => api.previewAccountImport!(bundle)} commitAccountImport={api.importAccount === undefined ? undefined : (password, bundle) => api.importAccount!(password, bundle)} />
     </main>
   {:else if route.name === "not-found"}
@@ -3345,6 +3403,7 @@
   .phase-starters h3 { margin: .75rem 0 .4rem; font: 500 1.25rem var(--display-font); }
   .phase-starters article p { color: var(--muted); font-size: .85rem; }
   .phase-starters article button { margin-top: auto; }
+  .thread-suggestions article { min-height: 10rem; }
   @media (max-width: 60rem) { .rehearsal-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 45rem) { .home-status, .phase-starters, .rehearsal-loop, .evidence-promise { grid-template-columns: 1fr; } .phase-starters > div { grid-column: 1; } }
   @media (max-width: 50rem) { .public-hero { grid-template-columns: 1fr; } .public-boundary { grid-column: 1; } }

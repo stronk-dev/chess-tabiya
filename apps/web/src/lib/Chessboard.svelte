@@ -3,6 +3,7 @@
   import "@lichess-org/chessground/assets/chessground.cburnett.css";
   import "./theme/board-skins/brown.css";
   import "./theme/board-skins/olive.css";
+  import "./theme/board-skins/contrast.css";
   import "./theme/interaction-paint.css";
   import "./theme/piece-skins/mono.css";
 
@@ -95,7 +96,7 @@
   const semanticBoardId = $props.id();
   let promotionPicker = $state<HTMLDivElement>();
   let board: Api | undefined;
-  let redrawTimer: ReturnType<typeof setTimeout> | undefined;
+  let boundsTimer: ReturnType<typeof setTimeout> | undefined;
   let moveGeneration = 0;
   const theme = useTheme();
   let resolvedTheme: ResolvedTheme = $state(theme.current);
@@ -217,15 +218,21 @@
     dispatch({ type: "pointer_destination", square: controllerSquare(to) });
   }
 
-  function redrawAfterLayout(delay = 0): void {
-    if (redrawTimer !== undefined) clearTimeout(redrawTimer);
-    redrawTimer = setTimeout(() => {
+  function invalidatePointerBounds(): void {
+    // Same invalidation Chessground uses on scroll: no DOM replacement, gesture cancellation,
+    // or animation reset. Its next coordinate read derives the current rectangle.
+    board?.state.dom.bounds.clear();
+  }
+
+  function refreshBoundsAfterLayout(): void {
+    if (boundsTimer !== undefined) clearTimeout(boundsTimer);
+    boundsTimer = setTimeout(() => {
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          if (typeof board?.redrawAll === "function") board.redrawAll();
+          invalidatePointerBounds();
         }),
       );
-    }, delay);
+    }, 0);
   }
 
   function selected(square: Key): void {
@@ -236,9 +243,9 @@
     // so refresh cached pointer bounds on the next rendered frame. Repeat once
     // to cover a second layout pass without leaving the first safe click stale.
     requestAnimationFrame(() => {
-      if (typeof board?.redrawAll === "function") board.redrawAll();
+      invalidatePointerBounds();
       requestAnimationFrame(() => {
-        if (typeof board?.redrawAll === "function") board.redrawAll();
+        invalidatePointerBounds();
         if (board === undefined) return;
         const settled = board.state.selected;
         if (settled === undefined && inputState.phase === "origin_selected") {
@@ -315,9 +322,15 @@
       board?.set({ animation: animationConfig(next.animation) });
     });
     board = Chessground(boardElement, config());
+    // Capture precedes Chessground's child listeners, including the very first gesture after
+    // a layout change. Invalidate only its geometry cache, never the originating touch subtree.
+    boardElement.addEventListener("mousedown", invalidatePointerBounds, { capture: true, passive: true });
+    boardElement.addEventListener("touchstart", invalidatePointerBounds, { capture: true, passive: true });
     return () => {
       unsubscribeTheme();
-      if (redrawTimer !== undefined) clearTimeout(redrawTimer);
+      boardElement.removeEventListener("mousedown", invalidatePointerBounds, true);
+      boardElement.removeEventListener("touchstart", invalidatePointerBounds, true);
+      if (boundsTimer !== undefined) clearTimeout(boundsTimer);
       board?.destroy();
     };
   });
@@ -348,10 +361,9 @@
     // Objective/checkpoint banners can move the board without resizing it.
     // Chessground caches DOM bounds, so redraw after layout settles or the
     // next pointer move is interpreted against the board's former position.
-    // redrawAll resets Chessground's in-flight piece interpolation. Wait for
-    // the selected movement duration before refreshing its cached bounds, so
-    // responsive layout repair and visible movement do not cancel each other.
-    redrawAfterLayout(animationConfig(resolvedTheme.animation).duration);
+    // Full redraw replaces the touch origin and resets interpolation. Geometry-only invalidation
+    // can run immediately without interrupting either an in-flight gesture or visible movement.
+    refreshBoundsAfterLayout();
   });
 
   $effect(() => {

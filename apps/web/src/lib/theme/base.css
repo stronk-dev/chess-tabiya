@@ -19,7 +19,7 @@
    * dark anchor against both bundled board skins.  The percentages are
    * contrast-tested across every app-theme/mode x board-square combination.
    */
-  --interaction-dark-anchor: var(--ink);
+  --interaction-dark-anchor: color-mix(in srgb, var(--ink) 70%, #000);
   --interaction-move: color-mix(in srgb, var(--accent) 20%, var(--interaction-dark-anchor));
   --interaction-history: color-mix(in srgb, var(--warning) 10%, var(--interaction-dark-anchor));
   --interaction-premove: color-mix(in srgb, var(--muted) 30%, var(--interaction-dark-anchor));

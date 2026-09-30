@@ -12,7 +12,7 @@ import fixtureJson from "../../../../schemas/drill_pack.example.json?raw";
 
 vi.mock("@lichess-org/chessground", () => ({
   Chessground: (_element: HTMLElement, _config: Config) =>
-    ({ set() {}, destroy() {} }) as unknown as Api,
+    ({ state: { dom: { bounds: { clear() {} } } }, set() {}, destroy() {} }) as unknown as Api,
 }));
 
 import App from "../App.svelte";
@@ -738,6 +738,25 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("gives a returning learner a thread rail ranked on facts about their own runs (ARR-a8)", async () => {
+    history.replaceState(null, "", "/");
+    const missed: RunSummary = { ...runSummary, id: "run-missed", updatedAt: "2026-08-10T21:00:00.000Z", objectiveState: "failed", recordedMoveCount: 7, branchCount: 2 };
+    const returningApi: DrillClientApi = { ...api(), async runs() { return [runSummary, missed]; }, async runPage() { return { runs: [runSummary, missed], selection: { shown: 2, total: 2 } }; } };
+    // Home once loaded a single run, so the rail had nothing to rank beyond the Continue card.
+    const component = mount(App, { target: target(), props: { api: returningApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.getElementById("thread-suggestions-title")?.textContent).toBe("From your own runs."));
+    const rail = document.querySelector<HTMLElement>(".thread-suggestions")!;
+    expect(document.getElementById(rail.getAttribute("aria-describedby")!)?.textContent).toContain("does not judge your play");
+    const card = rail.querySelector<HTMLElement>('[data-suggestion-kind="short_of_objective"]')!;
+    expect(card.textContent).toContain(`Return to ${packSummary.title}`);
+    expect(card.textContent).toContain("objective missed");
+    expect(rail.querySelector(`[data-suggestion-kind="in_progress"]`)).toBeNull();
+    card.querySelector("button")!.click();
+    await vi.waitFor(() => expect(window.location.pathname).toBe("/play/run/run-missed"));
+    await unmount(component);
+  });
+
   it("shows the public catalogue and resumes the chosen rehearsal after registration", async () => {
     history.replaceState(null, "", "/play");
     let authenticated = false;
@@ -1190,6 +1209,11 @@ describe("application shell", () => {
     expect(document.querySelectorAll("nav a:not(.legal-link)")).toHaveLength(10);
     expect(document.querySelectorAll("nav a.legal-link[href=\"/about\"]")).toHaveLength(1);
     expect(document.querySelector<HTMLAnchorElement>('nav a[href="/review"]')?.textContent).toBe("Review & import");
+    // AUT-b2 under D1563: Create serves authors but stays secondary to the learner's Play and Learn.
+    const destinations = [...document.querySelectorAll<HTMLAnchorElement>("#primary-navigation a")].map((link) => link.getAttribute("href"));
+    expect(destinations.indexOf("/create")).toBeGreaterThan(destinations.indexOf("/play"));
+    expect(destinations.indexOf("/create")).toBeGreaterThan(destinations.indexOf("/learn"));
+    expect(destinations.indexOf("/create")).toBeGreaterThan(destinations.indexOf("/review"));
     document.querySelector<HTMLButtonElement>(".item-list button")!.click();
 
     await vi.waitFor(() => expect(document.querySelector("main.drill")).not.toBeNull());
@@ -1322,7 +1346,7 @@ describe("application shell", () => {
       expect(document.title).not.toBe("Tabiya");
       expectDisabledControlsExplained();
       if (path === "/settings") {
-        expect([...document.querySelectorAll(".settings-toc a")].map((link) => link.textContent)).toEqual(["Appearance", "Playing", "Account", "About"]);
+        expect([...document.querySelectorAll(".settings-toc a")].map((link) => link.textContent)).toEqual(["Appearance", "Accessibility", "Streamer mode", "Playing", "Account", "About"]);
         expect(document.querySelector("#about-deployment-title")?.textContent).toBe("About this deployment");
         expect(document.body.textContent).toContain("Human-like opponents");
         expect(document.body.textContent).toContain("Exact endgame results");
@@ -2318,6 +2342,34 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(reveal).toHaveBeenCalledTimes(2));
     await vi.waitFor(() => expect(window.location.pathname).toMatch(/^\/review\/game\/import-/u));
     expect(importGame).toHaveBeenCalledTimes(1);
+    await unmount(component);
+  });
+
+  it("sets Your side from the PGN's player headers and never overrides the learner's own choice (IMP-a5)", async () => {
+    history.replaceState(null, "", "/review");
+    const importGame = vi.fn(async (input: Parameters<NonNullable<DrillClientApi["importGame"]>>[0]) => ({
+      run: { ...run, id: input.id }, importRecord: {} as never, evidencePass: { jobs: 0 },
+    }));
+    const component = mount(App, { target: target(), props: { api: { ...api(), importGame, reveal: vi.fn(async () => ({} as never)) }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Import one game"));
+    const pgn = document.querySelector<HTMLTextAreaElement>("textarea[placeholder='[Event …]']")!;
+    const side = [...document.querySelectorAll<HTMLLabelElement>("form.import-game label")].find((label) => label.textContent?.startsWith("Your side"))!.querySelector("select")!;
+    expect(side.value).toBe("white");
+    pgn.value = `[Event "Club"]\n[White "Magnus"]\n[Black "Test"]\n[Result "*"]\n\n1. e4 *`;
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(side.value).toBe("black"));
+    expect(document.getElementById("import-side-hint")?.textContent).toContain("Your handle is Black in this PGN");
+    expect(side.getAttribute("aria-describedby")).toBe("import-side-hint");
+    side.value = "white";
+    side.dispatchEvent(new Event("change", { bubbles: true }));
+    pgn.value = `[Event "Club"]\n[White "Magnus"]\n[Black "Test"]\n[Result "*"]\n\n1. d4 *`;
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    await tick();
+    expect(side.value).toBe("white");
+    expect(document.getElementById("import-side-hint")?.textContent).toContain("This PGN names White: Magnus and Black: Test");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Build game story")!.click();
+    await vi.waitFor(() => expect(importGame).toHaveBeenCalledOnce());
+    expect(importGame.mock.calls[0]![0]).toMatchObject({ side: "white" });
     await unmount(component);
   });
 
