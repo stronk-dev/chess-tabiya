@@ -382,10 +382,10 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "The four evidence-foundation implementations, pack capability lanes 0.30–0.32 and built-in learner Syzygy exchange migration are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings plus the remaining Stockfish/Maia/Explorer and supplied/standalone provider migrations. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
+        "nextAction": "The four evidence-foundation implementations, pack capability lanes 0.30–0.32 and built-in learner Syzygy/Explorer exchange acquisitions are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings plus the remaining Stockfish/Maia and supplied/standalone provider migrations. Implement the RFC's Explorer summary wire and exact consumer bindings; acquisition migration does not retire legacy node-shaped identities. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. Supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged.",
+          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. D3326 binds built-in corpus/frontier/return acquisitions to the same Explorer exchange, retaining sparse/zero source success with explicit consumer floors. D3327 propagates real HTTP disconnect to cancellation, proven by the original timer-free negative and authenticated upstream control. Explorer narrow projections/legacy identities, supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -398,7 +398,8 @@
             "rfc/pack-training-forms.md",
             "rfc/famous-games.md",
             "rfc/provider-exchange-and-execution.md",
-            "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md"
+            "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md",
+            "planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md"
           ],
           "anchors": [
             {
@@ -444,7 +445,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:b79120849e050f032836259397e2f1a8bb27c47528a810f2a9ee1f72ce26d53b"
+              "digest": "sha256:b6fb32a629686ef71b1d42ec2524f7348d54938fda69f1e343478fbc423f5ce1"
             },
             {
               "kind": "work_state",
@@ -455,6 +456,16 @@
               "kind": "work_state",
               "id": "D3325",
               "digest": "sha256:fe212b70497190e69d96d76f7e0b0142566021e504fa62f72d27e8e6cafda178"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3326",
+              "digest": "sha256:b9104b0d6fbb2905eb605a56e5d7df80fa3ac2d52681f5f2c355fd797c9d98cb"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3327",
+              "digest": "sha256:5e0ddfc39470ebe80f98fb3a7620c987ecd258231ce04681b22ee91c99dca8d9"
             }
           ]
         },

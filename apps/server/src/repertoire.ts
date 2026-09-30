@@ -8,7 +8,7 @@ import { parseUci } from "chessops/util";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { assertConsumerEvidenceView, canonicalFen, CORPUS_GUARD, corpusPositionEvidence, evidenceForConsumer, transposeKey, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
-import { corpusPopulation, type CorpusAbstentionReason, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
+import { corpusPopulation, corpusSamplePolicy, type CorpusAbstentionReason, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { ServerError } from "./errors.js";
 import { resolveStudySource } from "./import-source.js";
@@ -44,7 +44,8 @@ export function consumeRepertoireCorpus(view: ConsumerEvidenceView<CorpusResult>
 
 function repertoireCorpusEvidence(result: CorpusResult): CorpusResult {
   const declared = corpusPositionEvidence(result);
-  return consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [declared]));
+  // Frontier policy owns this floor, not the source parser. Unlisted mass is never renormalized.
+  return corpusSamplePolicy(consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [declared])), 100);
 }
 
 function position(fen:string):Chess{return Chess.fromSetup(parseFen(fen).unwrap()).unwrap();}

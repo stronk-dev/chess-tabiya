@@ -1,0 +1,279 @@
+import type { AddressInfo } from "node:net";
+import { describe, expect, it, vi } from "vitest";
+import { providerSourceEvidence } from "@chess-tabiya/runtime";
+import { corpusPopulation, corpusSamplePolicy } from "./corpus.js";
+import { ExchangeCorpusSource, corpusPageRequest, healthAdmittedExplorerOperation } from "./provider-corpus.js";
+import { ProviderExchangeScheduler } from "./provider-exchange.js";
+import { ControlledFetch, ManualClock, flush } from "./provider-exchange.test-support.js";
+import { providerOperationDescriptors } from "./provider-operations.js";
+import { testRegistry } from "./provider-health.test-support.js";
+import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { repertoireDigest, scanRepertoire } from "./repertoire.js";
+import { createHttpServer } from "./rest.js";
+
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const NEXT = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
+const query = (fen = START) => ({ ...corpusPopulation(1600, new Date("2026-09-30T12:00:00Z")), fen });
+const body = (total = 120) => ({
+  white: total, draws: 0, black: 0,
+  moves: total === 0 ? [] : [{ uci: "e2e4", san: "e4", white: Math.min(total, 60), draws: 0, black: 0, averageRating: 1640 }],
+  history: [{ month: "2026-09", white: total, draws: 0, black: 0 }],
+  opening: { eco: "A00", name: "Fixture opening" },
+});
+
+async function harness() {
+  const clock = new ManualClock();
+  const healthClock = { get now() { return clock.monotonic; }, set now(value: number) { clock.monotonic = value; }, wall: clock.wall(), advance: () => undefined };
+  const health = await testRegistry({ "explorer-primary": "unverified", "tablebase-primary": "unverified" }, { clock: healthClock });
+  const remote = new ControlledFetch();
+  const scheduler = new ProviderExchangeScheduler({
+    descriptors: { ...providerOperationDescriptors({ engines: null, tablebaseFetch: null, explorerFetch: null, explorerToken: null }), "lichess_explorer.position_page@1": healthAdmittedExplorerOperation(remote.fetch, "fixture-token", health) },
+    maxActive: 2, maxQueued: 4, maxRetainedEntries: 8, maxRetainedWeight: 1_000,
+    retentionTtlMs: 10_000, monotonicNowMs: clock.now, wallNow: clock.wall, timers: clock,
+  });
+  health.registerCacheInventory("explorer-primary", scheduler.retainedInventory("lichess_explorer.position_page@1"));
+  const source = new ExchangeCorpusSource({ scheduler, monotonicNowMs: clock.now });
+  return { source, scheduler, clock, health, remote };
+}
+
+describe("learner Explorer shared exchange", () => {
+  it("propagates premature HTTP disconnect but not normal response completion", async () => {
+    let started!: () => void;
+    let cancelled!: () => void;
+    let completedSignal: AbortSignal | undefined;
+    const didStart = new Promise<void>((resolve) => { started = resolve; });
+    const didCancel = new Promise<void>((resolve) => { cancelled = resolve; });
+    const server = createHttpServer(async (request) => {
+      if (new URL(request.url).pathname === "/normal") { completedSignal = request.signal; return new Response("done"); }
+      started();
+      return new Promise<Response>((resolve) => request.signal.addEventListener("abort", () => { cancelled(); resolve(new Response("cancelled")); }, { once: true }));
+    });
+    try {
+      await new Promise<void>((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+      expect(await (await fetch(`${origin}/normal`)).text()).toBe("done");
+      expect(completedSignal?.aborted).toBe(false);
+      const abort = new AbortController();
+      const pending = fetch(`${origin}/waiting`, { signal: abort.signal });
+      await didStart; abort.abort();
+      await expect(pending).rejects.toMatchObject({ name: "AbortError" });
+      // No upstream timer in this handler can make the assertion pass instead of the disconnect.
+      await didCancel;
+      expect(completedSignal?.aborted).toBe(false);
+    } finally { server.closeAllConnections(); await new Promise<void>((resolve) => server.close(() => resolve())); }
+  });
+  it("shares exact acquisitions while preserving full raw source facts", async () => {
+    const { source, scheduler, remote } = await harness();
+    const stats = source.stats(query());
+    const page = source.page(query());
+    const direct = scheduler.get({ operation: "lichess_explorer.position_page@1", request: corpusPageRequest(query()) }, { id: "direct", budgetMs: 4_000 }, new AbortController().signal);
+    await flush(); expect(remote.calls).toHaveLength(1);
+    const url = new URL(remote.calls[0]!.url);
+    expect(url.origin).toBe("https://explorer.lichess.org");
+    expect(url.searchParams.get("history")).toBe("true");
+    expect(url.searchParams.get("moves")).toBe("12");
+    remote.respond(0, body());
+    const [result, admitted, delivered] = await Promise.all([stats, page, direct]);
+    expect(result).toMatchObject({ kind: "stats", total: 120, moves: [{ san: "e4", playedCount: 60, sharePct: 50 }], recency: { kind: "month", lastPlayedMonth: "2026-09" } });
+    if (admitted.kind !== "page" || delivered.kind !== "success") throw new Error("expected sealed page");
+    expect(admitted.evidence.payload).toBe(providerSourceEvidence("lichess_explorer.position_page@1", delivered.delivery).payload);
+    expect(admitted.evidence.payload.payload.result).toMatchObject({ listed: 60, unlisted: 60, opening: { kind: "reported", eco: "A00" }, moves: [{ averageRating: 1640 }], history: { kind: "reported" } });
+    expect((await source.page(query())).kind).toBe("page");
+    expect(remote.calls).toHaveLength(1);
+  });
+
+  it.each([0, 37, 100])("retains a valid %i-game page before any consumer sample policy", async (total) => {
+    const { source, remote, health } = await harness();
+    const pending = source.stats(query());
+    await flush(); remote.respond(0, body(total));
+    const stats = await pending;
+    expect(stats).toMatchObject({ kind: "stats", total });
+    expect(corpusSamplePolicy(stats, 100)).toMatchObject(total < 100 ? { kind: "abstention", reason: "no_data_at_band" } : { kind: "stats", total });
+    expect(corpusSamplePolicy(stats, 1)).toMatchObject(total === 0 ? { kind: "abstention" } : { kind: "stats", total });
+    expect(health.snapshot().providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "available" });
+    expect((await source.page(query())).kind).toBe("page");
+    expect(remote.calls).toHaveLength(1);
+    expect(JSON.stringify(stats)).not.toContain("NaN");
+  });
+
+  it.each([
+    { moves: [{ uci: "e2e5", san: "e5", white: 1, draws: 0, black: 0 }] },
+    { moves: [{ uci: "e2e4", san: "e4", white: 1, draws: 0, black: 0 }, { uci: "e2e4", san: "e4", white: 1, draws: 0, black: 0 }] },
+    { moves: [{ uci: "e2e4", san: "e4", white: 121, draws: 0, black: 0 }] },
+    { white: "120" }, { history: undefined },
+  ])("refuses malformed source populations before establishing health: %j", async (overrides) => {
+    const { source, remote, scheduler, health } = await harness();
+    const pending = source.page(query());
+    await flush(); remote.respond(0, { ...body(), ...overrides });
+    expect(await pending).toMatchObject({ kind: "source_failure", reason: "invalid_response" });
+    expect(scheduler.stats().retained).toBe(0);
+    expect(health.snapshot().providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "unavailable", reason: "protocol" });
+  });
+
+  it("shares Lichess backoff, serves only exact retained pages and expires absolutely", async () => {
+    const { source, remote, health, clock } = await harness();
+    const first = source.stats(query()); await flush(); remote.respond(0, body()); await first;
+    const failed = source.page(query(NEXT)); await flush(); remote.respond(1, "busy", { status: 429, headers: { "retry-after": "60" } });
+    expect(await failed).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
+    expect(health.operationAvailability("evidence.tablebase_probe")).toMatchObject({ state: "temporarily_blocked", reason: "upstream_backoff" });
+    expect(health.snapshot().providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "degraded_cached_only", validExactEntries: 1 });
+    expect(await source.stats(query())).toMatchObject({ kind: "stats" });
+    expect(await source.stats(query(NEXT))).toMatchObject({ kind: "abstention", reason: "source_unavailable" });
+    expect(remote.calls).toHaveLength(2);
+    await clock.advance(10_000);
+    expect(await source.stats(query())).toMatchObject({ kind: "abstention", reason: "source_unavailable" });
+    expect(remote.calls).toHaveLength(2);
+  });
+
+  it("refuses unordered requests and separates windows and rating buckets", async () => {
+    const { source, remote } = await harness();
+    await expect(source.page({ ...query(), ratings: [1600, 1400] })).rejects.toThrow(/ascending/u);
+    await expect(source.page({ ...query(), speeds: ["rapid", "blitz"] })).rejects.toThrow(/canonical order/u);
+    expect(remote.calls).toHaveLength(0);
+    for (const value of [query(), { ...query(), since: "2025-01" }, { ...query(), ratings: [1400] as const }]) {
+      const pending = source.stats(value); await flush(); remote.respond(remote.calls.length - 1, body()); await pending;
+    }
+    expect(remote.calls).toHaveLength(3);
+  });
+
+  it("does not dispatch a cancelled caller after delayed group admission", async () => {
+    const { source, remote, health } = await harness();
+    const occupied = await health.admit("evidence.tablebase_probe");
+    const abort = new AbortController();
+    const pending = source.stats(query(), { signal: abort.signal });
+    await flush(); expect(remote.calls).toHaveLength(0);
+    abort.abort();
+    expect(await pending).toMatchObject({ kind: "abstention", reason: "source_unavailable" });
+    health.settle(occupied, { kind: "success" }); await flush();
+    expect(remote.calls).toHaveLength(0);
+  });
+
+  it("does not fabricate a source receipt for an already expired caller", async () => {
+    const { source, remote } = await harness();
+    expect(await source.page(query(), { deadlineMonotonic: 0 })).toEqual({ kind: "caller_expired" });
+    expect(await source.stats(query(), { deadlineMonotonic: -1 })).toMatchObject({ kind: "abstention", reason: "source_unavailable" });
+    expect(remote.calls).toHaveLength(0);
+  });
+
+  it("includes queue time in deadlines without aborting a coalesced surviving consumer", async () => {
+    const { source, scheduler, remote, clock } = await harness();
+    const expired = source.stats(query(), { deadlineMonotonic: 10 });
+    const survivor = scheduler.get({ operation: "lichess_explorer.position_page@1", request: corpusPageRequest(query()) }, { id: "survivor", budgetMs: 4_000 }, new AbortController().signal);
+    await flush(); expect(remote.calls).toHaveLength(1);
+    await clock.advance(10);
+    expect(await expired).toMatchObject({ kind: "abstention", reason: "source_unavailable" });
+    expect(remote.calls[0]!.signal.aborted).toBe(false);
+    remote.respond(0, body());
+    expect(await survivor).toMatchObject({ kind: "success" });
+  });
+
+  it("bounds time spent waiting for shared group admission before network dispatch", async () => {
+    const { source, remote, clock, health } = await harness();
+    const occupied = await health.admit("evidence.tablebase_probe");
+    const pending = source.page(query(), { deadlineMonotonic: 10 });
+    await flush(); expect(remote.calls).toHaveLength(0);
+    await clock.advance(10);
+    expect(await pending).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    health.settle(occupied, { kind: "success" }); await flush();
+    expect(remote.calls).toHaveLength(0);
+  });
+
+  it.each([0, 37, 120])("binds repertoire frontier policy without renormalizing unlisted mass (%i games)", async (total) => {
+    const { source, remote } = await harness();
+    const at = "2026-09-30T12:00:00.000Z";
+    const pending = scanRepertoire({ id: "rep", ownerLearnerId: "learner", name: "Black choices", side: "black", rootFen: START, targetElo: 1600, coverageDenominator: 10, sourceKind: "pgn_paste", sourceUrl: null, originalPgn: "", licenceNote: "fixture", digest: repertoireDigest("black", START, []), createdAt: at, updatedAt: at }, [], source, new Date(at));
+    await flush(); expect(remote.calls).toHaveLength(1); remote.respond(0, body(total));
+    const scan = await pending;
+    if (total < 100) {
+      expect(scan.unknown).toEqual([expect.objectContaining({ reason: "no_data_at_band", detail: `total ${total} < 100` })]);
+      expect(scan.gaps).toEqual([]);
+      expect(scan.sourceFailures).toBe(0);
+    } else {
+      expect(scan.unknown).toEqual([]);
+      expect(scan.gaps).toEqual([expect.objectContaining({ replySan: "e4", mass: 0.5 })]);
+      expect(scan.uncoveredMass).toBe(0.5);
+    }
+    expect(remote.calls).toHaveLength(1);
+  });
+
+  it("retains the exact requested population on failure despite caller mutation", async () => {
+    const { source, remote } = await harness();
+    const input = query();
+    const askedSince = input.since;
+    const pending = source.stats(input);
+    input.since = "2025-01";
+    await flush(); remote.respond(0, "down", { status: 503 });
+    expect(await pending).toMatchObject({ kind: "abstention", reason: "source_unavailable", population: { since: askedSince } });
+  });
+
+  it("binds the authenticated production corpus route to the same retained exchange with engines down", { timeout: 30_000 }, async () => {
+    const realFetch = globalThis.fetch;
+    const requests: string[] = [];
+    let markStarted!: () => void;
+    let markAborted!: () => void;
+    const upstreamStarted = new Promise<void>((resolve) => { markStarted = resolve; });
+    const upstreamAborted = new Promise<void>((resolve) => { markAborted = resolve; });
+    vi.stubGlobal("fetch", (async (input, init) => {
+      if (!String(input).startsWith("https://explorer.lichess.org/lichess?")) return realFetch(input, init);
+      requests.push(String(input));
+      expect(new Headers(init?.headers).get("authorization")).toBe("Bearer fixture-token");
+      if (new URL(String(input)).searchParams.get("fen") === NEXT) {
+        return new Promise<Response>((_resolve, reject) => {
+          init!.signal!.addEventListener("abort", () => { markAborted(); reject(Object.assign(new Error("upstream aborted"), { name: "AbortError" })); }, { once: true });
+          markStarted();
+        });
+      }
+      return Response.json(body(37), { headers: { etag: '"fixture"' } });
+    }) satisfies typeof fetch);
+    let application: Awaited<ReturnType<typeof createInMemoryTestApplication>> | undefined;
+    try {
+      application = await createInMemoryTestApplication({ engineMode: "maia", stockfishCommand: "/nonexistent/tabiya-test-stockfish", maiaHost: "127.0.0.1", maiaPort: 1, cookieSecure: false, corpusToken: "fixture-token" });
+      await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await realFetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "explorer_shared", password: "explorer-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const created = await realFetch(`${origin}/runs`, {
+        method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" },
+        body: JSON.stringify({ id: "explorer-run", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }),
+      });
+      expect(created.status, await created.clone().text()).toBe(201);
+      const { run } = await created.json() as { run: { id: string; nodes: { id: string }[] } };
+      const reveal = await realFetch(`${origin}/runs/${run.id}/reveal`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" }, body: "{}" });
+      expect(reveal.status, await reveal.clone().text()).toBe(200);
+      const selected = await realFetch(`${origin}/runs/${run.id}/corpus?nodeId=${run.nodes[0]!.id}`, { headers: { cookie } });
+      const result = await selected.json();
+      expect(selected.status, JSON.stringify(result)).toBe(200);
+      expect(result).toMatchObject({ result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100" } });
+      expect(requests).toHaveLength(1);
+      const delivered = await application.providers.scheduler.get({ operation: "lichess_explorer.position_page@1", request: corpusPageRequest({ ...corpusPopulation(undefined), fen: START }) }, { id: "production-proof", budgetMs: 4_000 }, new AbortController().signal);
+      expect(delivered).toMatchObject({ kind: "success", delivery: { kind: "retained_exact", payload: { result: { totals: { total: 37 } } } } });
+      expect(requests).toHaveLength(1);
+      expect(application.providerHealth.snapshot().providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "available" });
+      const repeated = await realFetch(`${origin}/runs/${run.id}/corpus?nodeId=${run.nodes[0]!.id}`, { headers: { cookie } });
+      expect(repeated.status).toBe(200);
+      expect(requests).toHaveLength(1);
+      const outsider = await realFetch(`${origin}/runs/${run.id}/corpus?nodeId=${run.nodes[0]!.id}`);
+      expect(outsider.status).toBe(401);
+      expect(requests).toHaveLength(1);
+
+      const next = await realFetch(`${origin}/runs`, {
+        method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" },
+        body: JSON.stringify({ id: "explorer-cancel", session: { kind: "position", start: { fen: NEXT, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }),
+      });
+      expect(next.status, await next.clone().text()).toBe(201);
+      const nextRun = (await next.json() as typeof result).run as { id: string; nodes: { id: string }[] };
+      const nextReveal = await realFetch(`${origin}/runs/${nextRun.id}/reveal`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" }, body: "{}" });
+      expect(nextReveal.status).toBe(200);
+      const abort = new AbortController();
+      const cancelled = realFetch(`${origin}/runs/${nextRun.id}/corpus?nodeId=${nextRun.nodes[0]!.id}`, { headers: { cookie }, signal: abort.signal });
+      await upstreamStarted;
+      abort.abort();
+      await expect(cancelled).rejects.toMatchObject({ name: "AbortError" });
+      await upstreamAborted;
+      await flush();
+      expect(application.providerHealth.snapshot().providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "available" });
+      expect(requests).toHaveLength(2);
+    } finally { await application?.close(); vi.unstubAllGlobals(); }
+  });
+});

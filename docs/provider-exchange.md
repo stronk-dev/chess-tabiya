@@ -108,8 +108,9 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
 - §1–§2 F1 execution metadata (compiled paths, `pathId`, confidence inheritance, binding
   source-absence), `/capabilities` path reach and `POST /evidence/availability` with the
   run-subject digests.
-- Remaining legacy Stockfish/Maia callers and corpus/repertoire explorer paths. Built-in learner
-  tablebase probes have migrated (below). Supplied sources and standalone sourcing/research clients
+- Remaining legacy Stockfish/Maia callers. Built-in learner tablebase and Explorer acquisitions
+  have migrated (below). Explorer's compatibility consumers still await the narrow projections.
+  Supplied sources and standalone sourcing/research clients
   are separate, and old node-shaped projections retire only at a proven zero-consumer census.
 - The Maia occurrence projections and the Explorer population summary (§§6, 8 derived
   projections).
@@ -140,3 +141,28 @@ Supplied fixture/custom sources retain their existing explicit composition, and
 legacy projections, migrate every provider, or complete the availability/F1 execution surface.
 Proof: `make provider-exchange-check`, including the authenticated production opponent route with
 optional engines down and the durable evidence queue sharing the same exchange acquisition.
+
+## Learner Explorer acquisition
+
+The built-in `ExchangeCorpusSource` routes live corpus, repertoire and return-frequency requests
+through `lichess_explorer.position_page@1`. It owns no HTTP parser, fetch, queue or cache. The
+shared refuse-only normalizer retains exact population/window/width/history identity and neutral
+FEN counters; unordered requests are refused rather than silently rewritten. `page()` returns
+the whole source-factory-sealed delivery, including opening, rating, history and listed/unlisted
+counts. `stats()` is a temporary compatibility view over that admitted page, not a new source mint.
+It preserves successful zero/sparse counts. Inspector, frontier and return-frequency each apply
+their explicit existing 100-game floor outside acquisition; frontier mass is not renormalized.
+
+`healthAdmittedExplorerOperation` uses the registered parser before health success, preserves real
+HTTP status/Retry-After for the shared Lichess coordinator, and executes only for NEW work. Its
+retained inventory is the scheduler's operation-only inventory. Each caller's deadline includes
+queue/admission time; one cancellation cannot abort surviving coalesced callers. The Node HTTP
+bridge now aborts its Fetch request signal on premature transport closure, never on normal
+response completion, so closing a corpus request releases its waiter and, if last, upstream work.
+
+The authenticated production route proves shared retention with optional engines down and keeps
+its reveal/read authorization and sample policy. Repertoire controls prove sparse abstention
+without provider failure and preservation of unlisted mass. The timer-free HTTP negative first
+failed before transport wiring and passes after it. Narrow population-summary/played-occurrence
+projections, replacement of legacy node-shaped consumer identities and standalone tooling
+migration remain open. No projection or 1.0 capability is declared complete by this checkpoint.

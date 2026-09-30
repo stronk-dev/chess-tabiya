@@ -27328,6 +27328,24 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3326",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b9104b0d6fbb2905eb605a56e5d7df80fa3ac2d52681f5f2c355fd797c9d98cb",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3327",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5e0ddfc39470ebe80f98fb3a7620c987ecd258231ce04681b22ee91c99dca8d9",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

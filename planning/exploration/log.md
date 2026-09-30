@@ -21752,3 +21752,26 @@ Campaign was the one capability with no API, route or content. Now:
   proof; no strict milestone/capability promotes. Supplied/standalone tablebase sources and remaining
   legacy provider/F1 availability work stay open. No content authoring, protected intent edit,
   handoff, new worktree, publication or remote CI claim.
+
+### 2026-09-30 — built-in learner Explorer acquisition and transport cancellation (D3326/D3327)
+
+- **Production:** built-in corpus REST, repertoire and return-frequency requests now share the
+  existing Explorer descriptor/parser/source factory/scheduler and health inventory. Valid sparse
+  and zero populations survive acquisition; each learner consumer retains its explicit existing
+  floor. Raw receipts preserve opening/rating/history/listed-unlisted mass for later narrow views.
+- **Finding and repair:** the first disconnect control could pass at the provider timeout. A
+  timer-free HTTP handler then reproduced missing Node→Fetch signal propagation. Premature closure
+  now cancels the request; normal completion does not. The authenticated corpus route proves
+  last-waiter upstream abort without a health failure, alongside reveal and read authorization.
+- **Verification:** 101 focused provider controls pass, including repertoire policy/mass and
+  production retention with engines down; return-frequency independently tests sparse/zero policy.
+  Final aggregate/browser results are recorded in the Explorer integration receipt before commit.
+- **Closeout:** both new rows have durable path-backed terminal state, queue/log/docs/RFC flow-back
+  and source-anchored roadmap evidence. Narrow summary/occurrence projections, legacy Explorer
+  consumer identities and supplied/standalone migration remain open. No capability/strict milestone,
+  authored-content wave, protected intent change, handoff, new worktree or publication is claimed.
+- **Final gate results:** `make verify` passed software/performance/content and all governance,
+  package and source/value guards. Final `make typecheck test-software` passed 2,715 tests/311 files
+  after the last population-snapshot repair; focused provider controls total 103. Browser CI passed
+  56 smoke, five content, 49 matrix and one packaged-production test, one optional skip, zero retries.
+  All 819 capability declarations remain unchanged; live work stays zero-untriaged/zero-unrouted.

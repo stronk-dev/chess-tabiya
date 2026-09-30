@@ -10,7 +10,7 @@
  */
 import type { ApplicationProviderOperationId } from "@chess-tabiya/runtime";
 
-import type { CorpusQuery, CorpusResult, CorpusSource } from "./corpus.js";
+import type { CorpusQuery, CorpusRequestOptions, CorpusResult, CorpusSource } from "./corpus.js";
 import { ServerError } from "./errors.js";
 import type { ReasoningReviewProvider, ReasoningReviewRequest } from "./external-voice.js";
 import type { TtsProvider, TtsResult } from "./external-tts.js";
@@ -37,13 +37,13 @@ export function healthReportedTablebase(source: TablebaseSource, health: Provide
 /** A local corpus source reporting to `explorer-primary`; `source_unavailable` is a failure. */
 export function healthReportedCorpus(source: CorpusSource, health: ProviderRegistry): CorpusSource {
   return Object.freeze({
-    async stats(query: CorpusQuery): Promise<CorpusResult> {
+    async stats(query: CorpusQuery, options: CorpusRequestOptions = {}): Promise<CorpusResult> {
       try {
-        return await health.run("evidence.explorer_query", async () => {
-          const result = await source.stats(query);
+        return await health.run("evidence.explorer_query", async ({ signal }) => {
+          const result = await source.stats(query, { ...options, signal });
           if (result.kind === "abstention" && result.reason === "source_unavailable") throw new CorpusSourceUnavailable(result);
           return result;
-        }, (error) => error instanceof CorpusSourceUnavailable ? { kind: "failure", reason: "network" } : classifyProviderError(error));
+        }, (error) => error instanceof CorpusSourceUnavailable ? { kind: "failure", reason: "network" } : classifyProviderError(error), options);
       } catch (error) {
         if (error instanceof ProviderUnavailableError) {
           return Object.freeze({ kind: "abstention", reason: "source_unavailable", detail: error.availability.state === "unavailable" ? `provider ${error.availability.reason}` : `provider ${error.availability.state}`, population: Object.freeze({ source: "lichess-explorer", ratings: query.ratings, speeds: query.speeds, since: query.since, until: query.until }) }) as CorpusResult;

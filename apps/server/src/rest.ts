@@ -104,7 +104,7 @@ import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
 import { appendRecordedReadings, evidencePacket, renderedEvidenceItems, renderVoice, type VoiceProvider, type VoiceScope } from "./guidance.js";
 import type { ReasoningReviewProvider } from "./external-voice.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
-import { corpusPopulation, type CorpusSource } from "./corpus.js";
+import { corpusPopulation, corpusSamplePolicy, type CorpusSource } from "./corpus.js";
 import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
 import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
@@ -1756,7 +1756,8 @@ export function createRestHandler(
         const path = historyFrom(access.run, access.run.activeCursor.nodeId);
         const index = path.findIndex((node) => node.id === access.node.id);
         const child = index < 0 ? undefined : path[index + 1];
-        const result = await corpusSource.stats({ ...selectedPopulation, fen: access.node.fen });
+        // Inspector's existing product floor; sparse counts remain successful source evidence.
+        const result = corpusSamplePolicy(await corpusSource.stats({ ...selectedPopulation, fen: access.node.fen }, { signal: request.signal }), 100);
         return json(200, { nodeId: access.node.id, result, committedMoveSan: child?.actor === "user" ? child.moveSan : null });
       }
       if (request.method === "PUT" && route.action === "marks") {
@@ -2273,7 +2274,7 @@ export function createRestHandler(
   };
 }
 
-async function requestFromNode(request: IncomingMessage): Promise<Request> {
+async function requestFromNode(request: IncomingMessage, signal: AbortSignal): Promise<Request> {
   const chunks: Buffer[] = [];
   for await (const chunk of request) {
     chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
@@ -2284,6 +2285,7 @@ async function requestFromNode(request: IncomingMessage): Promise<Request> {
     `http://${request.headers.host ?? "localhost"}${request.url ?? "/"}`,
     {
       method,
+      signal,
       headers: request.headers as HeadersInit,
       ...(method === "GET" || method === "HEAD" ? {} : { body: payload }),
     },
@@ -2301,16 +2303,22 @@ async function writeNodeResponse(
 
 export function createHttpServer(handler: RestHandler): Server {
   return createServer((request, response) => {
-    void requestFromNode(request)
+    const controller = new AbortController();
+    const abort = (): void => controller.abort();
+    const closed = (): void => { if (!response.writableFinished) abort(); };
+    request.once("aborted", abort);
+    response.once("close", closed);
+    void requestFromNode(request, controller.signal)
       .then(handler)
-      .then((result) => writeNodeResponse(response, result))
-      .catch(() =>
+      .then((result) => response.destroyed ? undefined : writeNodeResponse(response, result))
+      .catch(() => response.destroyed ? undefined :
         writeNodeResponse(
           response,
           json(500, {
             error: { code: "INTERNAL_ERROR", message: "Internal server error" },
           }),
         ),
-      );
+      )
+      .finally(() => { request.off("aborted", abort); response.off("close", closed); });
   });
 }

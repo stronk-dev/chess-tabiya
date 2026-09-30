@@ -154,7 +154,7 @@ import {
   type AttemptOriginInput,
   type ReturnStanding,
 } from "./progress.js";
-import { corpusPopulation, type CorpusPopulation, type CorpusSource } from "./corpus.js";
+import { corpusPopulation, corpusSamplePolicy, type CorpusPopulation, type CorpusSource } from "./corpus.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 import { OpponentSelector, type SelectMoveRequest } from "./opponent-selector.js";
 import type { TablebaseSource } from "./tablebase.js";
@@ -2597,7 +2597,8 @@ export class RunService {
         lookups += 1;
         const population = this.#duePopulation(schedule);
         try {
-          const result = await corpus.stats({ ...population, fen: `${schedule.rootTransposeKey} 0 1` });
+          // Return-frequency tie-break's existing sample policy, independent of source parsing.
+          const result = corpusSamplePolicy(await corpus.stats({ ...population, fen: `${schedule.rootTransposeKey} 0 1` }), 100);
           if (result.kind === "stats") frequencies.set(schedule.id, Object.freeze({ games: result.total, population: result.population }));
         } catch {
           // Frequency is only a tie-break; an unavailable corpus leaves the stored order intact.

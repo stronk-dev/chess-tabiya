@@ -22,7 +22,16 @@ export type CorpusAbstentionReason = CorpusResultAbstentionReason;
 
 export interface CorpusQuery extends CorpusPopulation { readonly fen: string; }
 export type CorpusResult = RuntimeCorpusResult<CorpusPopulation>;
-export interface CorpusSource { stats(query: CorpusQuery): Promise<CorpusResult>; }
+export interface CorpusRequestOptions { readonly signal?: AbortSignal; readonly deadlineMonotonic?: number; }
+export interface CorpusSource { stats(query: CorpusQuery, options?: CorpusRequestOptions): Promise<CorpusResult>; }
+
+/** Consumer policy, never source parsing. The caller must supply its own explicit floor. */
+export function corpusSamplePolicy(result: CorpusResult, minimumGames: number): CorpusResult {
+  if (!Number.isSafeInteger(minimumGames) || minimumGames < 1) throw new TypeError("corpus minimumGames must be a positive safe integer");
+  return result.kind === "stats" && result.total < minimumGames
+    ? Object.freeze({ kind: "abstention", reason: "no_data_at_band", detail: `total ${result.total} < ${minimumGames}`, population: result.population })
+    : result;
+}
 
 const DAY = 86_400_000;
 const pct = (value: number, total: number): number => Math.round(value / total * 1000) / 10;

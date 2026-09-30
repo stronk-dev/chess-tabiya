@@ -42,6 +42,7 @@ import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { providerOperationDescriptors, type ProviderEngineClient, type ProviderFetch } from "./provider-operations.js";
 import type { ProviderRegistry } from "./provider-health.js";
 import { healthAdmittedSyzygyOperation } from "./provider-tablebase.js";
+import { healthAdmittedExplorerOperation } from "./provider-corpus.js";
 
 // ---------------------------------------------------------------------------------------------
 // Source factories: one per operation, each the runtime's sole value-authority route
@@ -116,6 +117,7 @@ export interface ProviderTraversalSources {
   readonly explorerToken: string | null;
   /** Application health authority; operator-only composition may omit it. */
   readonly tablebaseHealth?: ProviderRegistry;
+  readonly explorerHealth?: ProviderRegistry;
   readonly bounds?: ProviderExchangeBounds;
   readonly monotonicNowMs?: () => number;
   readonly wallNow?: () => string;
@@ -126,9 +128,10 @@ export function composeProviderTraversalApplication(sources: ProviderTraversalSo
   const bounds = sources.bounds ?? OPERATOR_PROVIDER_BOUNDS;
   const descriptors = providerOperationDescriptors(sources);
   const scheduler = new ProviderExchangeScheduler({
-    descriptors: sources.tablebaseHealth === undefined || sources.tablebaseFetch === null ? descriptors : {
+    descriptors: {
       ...descriptors,
-      "syzygy.position@1": healthAdmittedSyzygyOperation(sources.tablebaseFetch, sources.tablebaseHealth),
+      ...(sources.tablebaseHealth === undefined || sources.tablebaseFetch === null ? {} : { "syzygy.position@1": healthAdmittedSyzygyOperation(sources.tablebaseFetch, sources.tablebaseHealth) }),
+      ...(sources.explorerHealth === undefined || sources.explorerFetch === null ? {} : { "lichess_explorer.position_page@1": healthAdmittedExplorerOperation(sources.explorerFetch, sources.explorerToken, sources.explorerHealth) }),
     },
     maxActive: bounds.maxActive,
     maxQueued: bounds.maxQueued,
@@ -139,6 +142,7 @@ export function composeProviderTraversalApplication(sources: ProviderTraversalSo
     wallNow: sources.wallNow ?? (() => new Date().toISOString()),
   });
   if (sources.tablebaseHealth !== undefined && sources.tablebaseFetch !== null) sources.tablebaseHealth.registerCacheInventory("tablebase-primary", scheduler.retainedInventory("syzygy.position@1"));
+  if (sources.explorerHealth !== undefined && sources.explorerFetch !== null) sources.explorerHealth.registerCacheInventory("explorer-primary", scheduler.retainedInventory("lichess_explorer.position_page@1"));
   return Object.freeze({ scheduler, sourceFactories: PROVIDER_SOURCE_FACTORIES, operatorBudgetMs: bounds.operatorBudgetMs });
 }
 

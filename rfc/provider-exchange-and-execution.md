@@ -11,9 +11,12 @@
   Maia occurrence and Explorer summary derived projections, and the migration of existing learner
   callers. **2026-09-30 checkpoint:** built-in learner tablebase callers now use the shared
   exchange with health/backoff and exact inventory; fractional-clock retention is repaired.
-  Other provider callers and the §§1–2 surface remain open. Receipts:
+  Built-in Explorer acquisition also uses that exchange (D3326), preserving sparse source success
+  with explicit existing consumer floors; actual HTTP disconnect now cancels its waiter (D3327).
+  Legacy Explorer consumer identities, narrow projections, other provider callers and §§1–2 remain open. Receipts:
   `planning/provider-exchange-and-execution/implementation-2026-09-24.md` and
-  `planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md`.
+  `planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md` and
+  `planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md`.
   Previously: draft — durable-delivery parsing author-amended 2026-09-07 on [[D3030]].
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
@@ -2069,6 +2072,13 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-09-30: D3326 binds built-in learner Explorer acquisition to the same descriptor, registered
+  parser, source factory, scheduler and health inventory as direct provider consumers. Sparse/zero
+  pages remain successful acquisitions; Inspector/frontier/return-frequency retain their explicit
+  existing sample floors. D3327 fixes HTTP-to-Fetch disconnect propagation, proven by the original
+  timer-free negative and authenticated corpus route. No new projection, chess judgement, version
+  rewrite, standalone retirement or whole-provider/RFC completion is claimed.
 
 - 2026-09-30: D3324 migrates built-in learner `TablebaseSource.probe` to the existing Syzygy
   descriptor/scheduler/parser/source-factory chain. Health admission and status/Retry-After

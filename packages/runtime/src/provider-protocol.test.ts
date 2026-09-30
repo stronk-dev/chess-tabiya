@@ -125,7 +125,7 @@ describe("provider exchange censuses", () => {
         expect(text, file).not.toMatch(/createHash|subtle\.digest|function sha256|"tabiya\/(?:provider|engine)\./u);
       }
     }
-    for (const file of ["apps/server/src/provider-exchange.ts", "apps/server/src/provider-operations.ts", "apps/server/src/provider-tablebase.ts"]) {
+    for (const file of ["apps/server/src/provider-exchange.ts", "apps/server/src/provider-operations.ts", "apps/server/src/provider-tablebase.ts", "apps/server/src/provider-corpus.ts"]) {
       expect(read(file), file).not.toMatch(/Date\.now\(|new Date\(|performance\.now\(/u);
     }
   });

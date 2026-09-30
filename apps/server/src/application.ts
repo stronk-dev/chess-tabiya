@@ -68,6 +68,7 @@ import { ShapeStudio } from "./shape-studio.js";
 import type { VoiceProvider } from "./guidance.js";
 import type { ReasoningReviewProvider } from "./external-voice.js";
 import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
+import { ExchangeCorpusSource } from "./provider-corpus.js";
 import { RepertoireService } from "./repertoire.js";
 import { ClassroomService } from "./classroom.js";
 import type { TtsProvider } from "./external-tts.js";
@@ -627,7 +628,7 @@ async function composeServices(
   const suppliedCorpus = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : undefined);
   if (builtInCorpus || suppliedCorpus !== undefined) {
     configured.push(builtInCorpus || suppliedCorpus instanceof LichessCorpusSource
-      ? { instanceId: "explorer-primary", implementation: "lichess_http", endpoint: "https://explorer.lichess.ovh/lichess", identity: "lichess-opening-explorer" }
+      ? { instanceId: "explorer-primary", implementation: "lichess_http", endpoint: "https://explorer.lichess.org/lichess", identity: "lichess-opening-explorer" }
       : { instanceId: "explorer-primary", implementation: "local_fixture", endpoint: "fixture-explorer", identity: "fixture explorer" });
   }
   if (options.voiceProvider !== undefined || options.reasoningReviewProvider !== undefined) {
@@ -647,9 +648,6 @@ async function composeServices(
     exchangeArtifact: (instanceId) => exchangeArtifact(instanceId),
     ...(options.providerHealthLog === undefined ? {} : { log: options.providerHealthLog }),
   });
-  const corpusSource = builtInCorpus
-    ? new LichessCorpusSource({ token: options.corpusToken!, health: providerHealth })
-    : suppliedCorpus === undefined ? undefined : healthReportedCorpus(suppliedCorpus, providerHealth);
   const voiceProvider = options.voiceProvider === undefined ? undefined : healthReportedVoice(options.voiceProvider, providerHealth);
   const reasoningReviewProvider = options.reasoningReviewProvider === undefined ? undefined : healthReportedReasoningReview(options.reasoningReviewProvider, providerHealth);
   const ttsProvider = options.ttsProvider === undefined ? undefined : healthReportedTts(options.ttsProvider, providerHealth);
@@ -715,7 +713,11 @@ async function composeServices(
     explorerToken: options.corpusToken ?? null,
     bounds: APPLICATION_PROVIDER_BOUNDS,
     ...(builtInTablebase ? { tablebaseHealth: providerHealth } : {}),
+    ...(builtInCorpus ? { explorerHealth: providerHealth } : {}),
   });
+  const corpusSource = builtInCorpus
+    ? new ExchangeCorpusSource({ scheduler: providers.scheduler, monotonicNowMs: () => providerHealth.monotonicNow() })
+    : suppliedCorpus === undefined ? undefined : healthReportedCorpus(suppliedCorpus, providerHealth);
   const tablebaseSource = !tablebaseConfigured
     ? undefined
     : builtInTablebase

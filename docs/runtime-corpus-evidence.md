@@ -7,7 +7,7 @@ and never grades, recommends, or seeds an opponent move.
 ## Source and population
 
 The server owns the source credential. In a real engines deployment,
-`LICHESS_TOKEN` configures `LichessCorpusSource`; no learner identity, cookie, grant,
+`LICHESS_TOKEN` configures `ExchangeCorpusSource`; no learner identity, cookie, grant,
 or account token reaches the upstream request. Mock deployments use a deterministic
 fixture and perform no network I/O. Capabilities report `lichess-explorer`, `mock`, or
 `none` honestly.
@@ -18,12 +18,22 @@ neutral counters (`0 1`), and build the URL through `URLSearchParams`. A
 the default 1000–2500 population is used. Default speeds are blitz, rapid, and
 classical over the current UTC month plus the preceding 35 months.
 
-The interactive client is separate from the authoring-time batch source. It uses a
-512-entry in-memory LRU, 24-hour positive TTL, identical-request coalescing, one
-upstream request at a time, a four-request waiting queue, a four-second dispatch
-budget, and a 60-second negative cache for 429/5xx responses. It never takes the
-batch `.fetch.lock`, writes source artifacts, retries anonymously, or substitutes a
-wider population.
+The built-in interactive client uses the application's shared provider exchange, not a private
+Explorer queue, parser or cache. Its four-second caller budget includes queue/admission time;
+client disconnect cancels the caller, not a surviving coalesced consumer. Shared application
+bounds are two active/eight queued exchanges, 64 retained entries/4096 weight and absolute ten-minute
+TTL. The Lichess health coordinator serializes new Explorer/tablebase requests and shares 429
+Retry-After backoff. Failures are not retained. Exact valid acquisitions remain readable during
+outage; a different position/window cannot borrow them. It never takes the batch `.fetch.lock`,
+writes source artifacts, retries anonymously, or substitutes a wider population.
+
+The registered request normalizer/parser and source factory validate and seal the complete page:
+legal unique UCI, canonical/provider SAN, safe counts, listed/unlisted mass, rating, opening and
+requested history. Zero and sparse populations are source success. `stats()` is an explicitly
+temporary compatibility view; Inspector, repertoire frontier and return-frequency each own their
+existing 100-game sample policy. The source does not decide sample suitability. Full sealed pages
+remain in the shared exchange; the RFC's narrow summary and exact played-occurrence projections
+are still open. Supplied fixtures/custom sources and standalone authoring tools remain separate.
 
 ## Delivery and API
 
@@ -56,9 +66,11 @@ honest abstention. No LLM renders this surface and no verdict vocabulary is allo
 ## Verification and limits
 
 Tests cover FEN normalization/encoding, population and month arithmetic, count and
-recency derivation, the floor, coalescing/TTL/negative caching, operator-only headers,
+recency derivation, consumer floors, shared coalescing/absolute TTL/backoff, operator-only headers,
 capability/error honesty, disclosure re-closing, ephemerality, preference migration,
-the sentence fence, and the complete Just Play browser flow at zero retries.
+the sentence fence, and the complete Just Play browser flow at zero retries. The focused provider
+gate additionally proves the authenticated real HTTP corpus route, legal-move/count/history
+refusals, independent cancellation, and timer-free transport-disconnect propagation.
 
 Corpus data remains evidence only. Repertoire gap-finding now consumes the same
 population attribution and guard outside runs; see `docs/repertoire-gap-finding.md`.

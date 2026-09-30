@@ -230,6 +230,13 @@ describe("return scheduling (rfc/return-scheduling.md)", () => {
       ["earlier-rare", 101], ["same-day-common", 70_000], ["same-day-rare", 120],
     ]);
     expect(queries).toHaveLength(3);
+    // The consumer preserves its existing floor even when acquisition returns sparse success.
+    totals[keys.rare] = 37;
+    totals[keys.common] = 0;
+    const sparse = await service.dueQueue(principal, at, corpus);
+    expect(sparse.schedules.map((schedule) => [schedule.id, schedule.frequency?.games ?? null])).toEqual([
+      ["earlier-rare", 101], ["same-day-rare", null], ["same-day-common", null],
+    ]);
     const withoutCorpus = await service.dueQueue(principal, at);
     expect(withoutCorpus.schedules.map((schedule) => [schedule.id, schedule.frequency])).toEqual([
       ["earlier-rare", null], ["same-day-rare", null], ["same-day-common", null],
