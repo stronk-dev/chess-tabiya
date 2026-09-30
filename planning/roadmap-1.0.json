@@ -720,7 +720,7 @@
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open.",
+          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open. D3343 now repairs actual TCP identity fragmentation and aborted-probe contamination under one absolute deadline (five JS/Python and six TCP controls; 42 release tests). D3342 confirms source-build wrappers additionally mount a release index they never generate; D3338 is not solved by digest arguments alone. Source/release distribution repair and an actual isolated operator-startup journey remain required.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -740,7 +740,9 @@
             "planning/provider-health-degradation/maia-platform-identity-2026-09-30.md",
             "tools/release/maia-identity.test.mjs",
             "apps/server/src/maia-identity.test.ts",
-            "workers/maia/sidecar.py"
+            "workers/maia/sidecar.py",
+            "planning/provider-health-degradation/maia-identity-framing-2026-09-30.md",
+            "planning/safe-deployment-profiles/source-build-wrapper-audit-2026-09-30.md"
           ],
           "anchors": [
             {
@@ -796,7 +798,7 @@
             {
               "kind": "rfc",
               "id": "provider-health-degradation.md",
-              "digest": "sha256:9090405d1891c082f9d50e5ff817c9e682f3089f0414f04656d83345b0c317ad"
+              "digest": "sha256:863a8e310e0d4450a4cd13c8fe3c60c4b445da59f0ac1fdd2904b9111fa9417e"
             },
             {
               "kind": "work_state",
@@ -807,6 +809,16 @@
               "kind": "work_state",
               "id": "D3341",
               "digest": "sha256:0566d5c5ba245f3f7b341b8f364266af4ef26de6acb044482e273740f31d531a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3342",
+              "digest": "sha256:625e22c354616261fb53f1163606cf67db9dc69a38b836663437df131d514dd8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3343",
+              "digest": "sha256:631ccb3dca406d19046240447e65a21499e830b85a96523c744c68e8f5d544b0"
             }
           ]
         },

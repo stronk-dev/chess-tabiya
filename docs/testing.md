@@ -122,6 +122,7 @@ proxy/configuration checks on both architectures; a local pass is not remote mat
 
 `make maia-identity-check` tests both native config choices and the actual Python sidecar→server
 artifact-probe protocol using every rendered profile's identity metadata. Its UCI process is a
-readiness-only stub, not model inference. The four JS/Python checks also run in the offline
-release-policy tier, and the four TCP tests run in software contracts. Native release CI runs the
+readiness-only stub, not model inference. The five JS/Python checks also run in the offline
+release-policy tier, and the six TCP tests run in software contracts, including observed real
+fragmentation and an abandoned probe followed by intact UCI commands. Native release CI runs the
 named identity target on both architectures. Python 3 is required for these bounded sidecar tests.

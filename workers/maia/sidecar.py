@@ -12,6 +12,7 @@ import signal
 import socket
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 
@@ -69,6 +70,24 @@ def read_until(engine: subprocess.Popen[bytes], expected: bytes) -> None:
             return
 
 
+def read_connection_start(client: socket.socket) -> bytes:
+    """Frame only the identity prefix, preserving ordinary UCI bytes and one absolute deadline."""
+    deadline = time.monotonic() + 5
+    client.settimeout(5)
+    first = client.recv(65_536)
+    while first and first != IDENTITY_REQUEST and IDENTITY_REQUEST.startswith(first):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("identity request deadline")
+        client.settimeout(remaining)
+        chunk = client.recv(len(IDENTITY_REQUEST) - len(first))
+        if not chunk:
+            # A partial probe must not leak into the shared UCI engine's next command.
+            return b""
+        first += chunk
+    return first
+
+
 def main() -> int:
     READY.unlink(missing_ok=True)
     engine = subprocess.Popen(
@@ -106,11 +125,13 @@ def main() -> int:
         except OSError:
             break
         # The first line of a connection may be the identity probe; anything else is UCI traffic.
-        client.settimeout(5)
         try:
-            first = client.recv(65_536)
+            first = read_connection_start(client)
         except OSError:
             first = b""
+        if not first:
+            client.close()
+            continue
         if first.startswith(IDENTITY_REQUEST):
             try:
                 client.sendall(container_identity())

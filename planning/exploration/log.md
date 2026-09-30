@@ -21889,3 +21889,24 @@ Campaign was the one capability with no API, route or content. Now:
   operator-wrapper identity, production/calibration receipts, model rights, official content and
   full release remain open. The D3330 Explorer migration stays unstaged, and no content or
   protected intent changed. Nothing pushed, published or deployed; 1.0 goal stays active.
+
+## 2026-09-30 — fragmented Maia identity capture and truthful operator residue
+
+- The real split-request control first failed at its response deadline: the sidecar forwarded
+  its partial identity command into UCI. D3343 now frames only a possible identity prefix under
+  one absolute five-second monotonic budget. Incomplete probes are discarded; ordinary commands
+  retain original bytes. The same real negative now captures the identical artifact.
+- Five JS/Python and six actual TCP controls pass, including an observed abandoned prefix
+  followed by both coalesced UCI acknowledgements and a fresh identity. Typecheck is warning-free;
+  release policy has 42 passing tests. The fixture is readiness-only, never model inference.
+  Receipt: `planning/provider-health-degradation/maia-identity-framing-2026-09-30.md`.
+- `make deployment-render` still exits 2; its wrapper omits real digest inputs. D3342 additionally
+  records that source-build up wrappers use release-only templates without generating their
+  mounted release index. No real image or stack was started during this audit. The predecessor
+  appliance-drill does not establish the current source-build operator path. Audit:
+  `planning/safe-deployment-profiles/source-build-wrapper-audit-2026-09-30.md`.
+- D3338/D3342 remain release-engineering work, with a full source/release identity and isolated
+  startup exit, not a core-only or synthetic-digest waiver. D3343 closes in work-state/queue/RFC
+  and roadmap receipts. D3330's measured per-release migration approval is requested directly
+  from the owner; no answer is presumed and no content is rewritten. No protected intent or
+  semantic capability image changed. No push, publication, deployment or full 1.0 claim.

@@ -22,6 +22,11 @@ original_socket = socket.socket
 
 
 class AnnouncedSocket(original_socket):
+    def recv(self, count, flags=0):
+        result = super().recv(count, flags)
+        print("RECEIVED:" + str(len(result)), flush=True)
+        return result
+
     def listen(self, backlog=1):
         super().listen(backlog)
         print("PORT:" + str(self.getsockname()[1]), flush=True)

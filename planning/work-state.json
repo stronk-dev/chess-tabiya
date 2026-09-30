@@ -27470,6 +27470,23 @@
       "uxItems": [],
       "evidence": "planning/provider-health-degradation/maia-platform-identity-2026-09-30.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3342",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:625e22c354616261fb53f1163606cf67db9dc69a38b836663437df131d514dd8",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3343",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:631ccb3dca406d19046240447e65a21499e830b85a96523c744c68e8f5d544b0",
+      "uxItems": [],
+      "evidence": "planning/provider-health-degradation/maia-identity-framing-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

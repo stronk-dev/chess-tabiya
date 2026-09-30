@@ -59,3 +59,29 @@ test("the actual Python sidecar chooses native config and refuses malformed maps
   const result = spawnSync("python3", ["-B", "-c", script], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr || String(result.error));
 });
+
+test("identity prefix framing uses one deadline and discards an incomplete probe", () => {
+  const script = [
+    "import importlib.util",
+    "from unittest.mock import patch",
+    "spec = importlib.util.spec_from_file_location('sidecar', 'workers/maia/sidecar.py')",
+    "m = importlib.util.module_from_spec(spec)",
+    "spec.loader.exec_module(m)",
+    "class Client:",
+    "    def __init__(self, chunks): self.chunks, self.timeouts = iter(chunks), []",
+    "    def settimeout(self, value): self.timeouts.append(value)",
+    "    def recv(self, count): return next(self.chunks)",
+    "client = Client([b'tabiya-', b'iden', b'tity\\n'])",
+    "with patch('time.monotonic', side_effect=[100, 101, 102]):",
+    "    assert m.read_connection_start(client) == m.IDENTITY_REQUEST",
+    "assert client.timeouts == [5, 4, 3]",
+    "assert m.read_connection_start(Client([b'tabiya-', b''])) == b''",
+    "assert m.read_connection_start(Client([b'uci\\nisready\\n'])) == b'uci\\nisready\\n'",
+    "with patch('time.monotonic', side_effect=[100, 106]):",
+    "    try: m.read_connection_start(Client([b'tabiya-']))",
+    "    except TimeoutError: pass",
+    "    else: raise AssertionError('deadline was reset')",
+  ].join("\n");
+  const result = spawnSync("python3", ["-B", "-c", script], { encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr || String(result.error));
+});

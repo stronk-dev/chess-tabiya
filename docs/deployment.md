@@ -144,6 +144,10 @@ Not yet implemented from the RFC: the per-route request-body budget registry (D1
 8 MiB cap and the existing account-import reader are not a complete endpoint budget authority.
 D3334/D3335 track the unbuildable selector order and stale operation census. Operator
 `deployment-render`/`deployment-check` wrappers still omit required real Maia digests (D3338);
+they also use release-only templates mounting an index their source-build path never generates
+(D3342). The documented source-build up-appliance/up-hosted path is not currently verified usable;
+adding digest flags alone does not fix it. Audit:
+`planning/safe-deployment-profiles/source-build-wrapper-audit-2026-09-30.md`.
 `verify-deployment` validates configurations with inert fixtures, not deployable sidecar identities.
 Streaming egress is implemented (D1847/D3332); the proxy
 instrument is a disposable upstream, not proof of every packaged export or a product SSE/WebSocket

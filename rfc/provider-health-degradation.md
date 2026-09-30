@@ -806,6 +806,10 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 
 ## Changelog
 
+- 2026-09-30 — D3343 closes the real fragmented-probe failure without changing the identity
+  protocol. A possible identity prefix is framed under one absolute deadline; incomplete probes
+  cannot contaminate subsequent UCI commands. Five JS/Python and six actual TCP controls pass;
+  receipt: `planning/provider-health-degradation/maia-identity-framing-2026-09-30.md`.
 - 2026-09-30 — D3340/D3341 repair release identity: all profiles inject both native platform config
   digests read from immutable registry manifests; the sidecar selects its native config and refuses
   malformed maps without scalar fallback. Four JS/Python and four real TCP controls, release policy,

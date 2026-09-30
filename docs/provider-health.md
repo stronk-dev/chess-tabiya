@@ -121,6 +121,10 @@ sidecar→production probe boundary with a readiness-only UCI stub. It does not 
 prove bot strength. Native release CI runs this bounded identity proof on both architectures;
 local verification covers the current host only.
 
+The sidecar frames fragmented identity requests under one absolute five-second receive budget.
+An abandoned partial probe never enters the shared UCI engine. The permanent TCP tests cover
+fragmentation and cancellation followed by intact UCI commands and a fresh identity capture.
+
 ## Bot roster availability
 
 `BotProviderAvailability` (`apps/server/src/bot-opponent-source.ts`) projects the registry's snapshot
