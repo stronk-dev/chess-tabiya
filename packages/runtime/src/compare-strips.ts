@@ -5,6 +5,7 @@ import type { DrillRun } from "./types.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { presentEvidenceItems, presentedItemOwner, type PresentedEvidenceItem } from "./presentation-contract.js";
 import type { PieceRoute } from "./compare-strip-values.js";
 
 export type { PieceRoute } from "./compare-strip-values.js";
@@ -14,8 +15,19 @@ export interface BranchStrips {
   readonly structure: readonly StripEntry[];
   readonly timing: readonly StripEntry[];
   readonly routes: readonly PieceRoute[];
+  /** The same admitted facts, rendered by their registered comparison components. */
+  readonly presented: Readonly<{
+    structure: readonly PresentedEvidenceItem[];
+    timing: readonly PresentedEvidenceItem[];
+    routes: readonly PresentedEvidenceItem[];
+  }>;
 }
-export interface NarrativeGroup { readonly branchId?: string; readonly sentences: readonly string[]; readonly evidence: readonly DeclaredEvidence<unknown>[] }
+export interface PresentedTrajectoryEntry {
+  readonly plyOffset: number;
+  readonly nodeId: string;
+  readonly item: PresentedEvidenceItem;
+}
+export interface NarrativeGroup { readonly branchId?: string; readonly evidence: readonly DeclaredEvidence<unknown>[] }
 export interface ComparisonNarrative { readonly groups: readonly NarrativeGroup[]; readonly evidence: readonly DeclaredEvidence<unknown>[] }
 
 const ref = (id: string) => ({ id, version: 1 } as const);
@@ -47,6 +59,18 @@ export function comparisonEngineTrajectory(run: DrillRun, comparison: BranchComp
   ));
 }
 
+/** One recorded trajectory point and one sealed component from the same admitted evidence item. */
+export function comparisonPresentedEngineTrajectory(run: DrillRun, comparison: BranchComparison, branchId: string): readonly PresentedTrajectoryEntry[] {
+  const declared = invokeEvidenceValueRoute("derived.compare.engine_trajectory@1", { run, comparison, branchId }) as readonly DeclaredEvidence<ComparisonEvidenceEntry>[];
+  const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("compare.engine_trajectory"), declared);
+  return Object.freeze(presentEvidenceItems(view).map((item) => {
+    const owner = presentedItemOwner(item);
+    if (!view.items.includes(owner as DeclaredEvidence<ComparisonEvidenceEntry>)) throw new TypeError("Comparison trajectory component lost its admitted owner");
+    const entry = (owner as DeclaredEvidence<ComparisonEvidenceEntry>).payload;
+    return Object.freeze({ plyOffset: entry.plyOffset, nodeId: entry.nodeId, item });
+  }));
+}
+
 export function comparisonStrips(run: DrillRun, comparison: BranchComparison): Readonly<Record<string, BranchStrips>> {
   const fork = run.nodes.find((node) => node.id === comparison.forkNodeId);
   if (fork === undefined) throw new TypeError(`Comparison fork ${comparison.forkNodeId} is missing`);
@@ -66,13 +90,24 @@ export function comparisonStrips(run: DrillRun, comparison: BranchComparison): R
     ].sort((a, b) => a.plyOffset - b.plyOffset || a.nodeId.localeCompare(b.nodeId));
     const routeEvidence = invokeEvidenceValueRoute("derived.compare.piece_route@1", input);
     const declared = [...structure.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]), ...timing.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]), ...routeEvidence];
-    const admitted = consumeComparisonStripEvidence(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("compare.structure_strip"), declared));
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("compare.structure_strip"), declared);
+    const admitted = consumeComparisonStripEvidence(view);
     const admittedSet = new Set(admitted);
+    const structureOwners = new Set(structure.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]));
+    const timingOwners = new Set(timing.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]));
+    const routeOwners = new Set<DeclaredEvidence<unknown>>(routeEvidence);
+    const items = presentEvidenceItems(view);
+    const presented = Object.freeze({
+      structure: Object.freeze(items.filter((item) => structureOwners.has(presentedItemOwner(item) as DeclaredEvidence<unknown>))),
+      timing: Object.freeze(items.filter((item) => timingOwners.has(presentedItemOwner(item) as DeclaredEvidence<unknown>))),
+      routes: Object.freeze(items.filter((item) => routeOwners.has(presentedItemOwner(item) as DeclaredEvidence<unknown>))),
+    });
     const value: BranchStrips = Object.freeze({
       evalTrail: Object.freeze([...comparisonEngineTrajectory(run, comparison, column.branchId)].sort((a, b) => a.plyOffset - b.plyOffset).map((entry) => ({ plyOffset: entry.plyOffset, nodeId: entry.nodeId, score: entry.score }))),
       structure: Object.freeze(structure.filter((entry) => entry.evidence !== undefined && admittedSet.has(entry.evidence))),
       timing: Object.freeze(timing.filter((entry) => entry.evidence !== undefined && admittedSet.has(entry.evidence))),
       routes: Object.freeze(admitted.filter((entry) => entry.projection.id === "derived.compare.piece_route").map((entry) => entry.payload as PieceRoute)),
+      presented,
     });
     return [column.branchId, value];
   })));
@@ -80,31 +115,16 @@ export function comparisonStrips(run: DrillRun, comparison: BranchComparison): R
 
 export function comparisonNarrative(run: DrillRun, comparison: BranchComparison, strips = comparisonStrips(run, comparison)): ComparisonNarrative {
   const fork = invokeEvidenceValueRoute("run.record.fork@1", { run, comparison });
-  const sharedPly = (fork.payload as { readonly sharedPly: number }).sharedPly;
-  const sharedSentence = `The recorded branches share ${sharedPly} plies through the fork.`;
-  const groups: NarrativeGroup[] = [{ sentences: Object.freeze([sharedSentence]), evidence: Object.freeze([fork]) }];
+  const groups: NarrativeGroup[] = [{ evidence: Object.freeze([fork]) }];
   for (const column of comparison.columns) {
     const input = { run, comparison, branchId: column.branchId };
     const move = invokeEvidenceValueRoute("run.record.move@1", input);
-    const decision = (move.payload as { readonly moveSan: string | null }).moveSan;
-    const opening = decision === null ? `Branch at offset ${column.ownForkOffset} has no recorded move past the fork.` : `Branch at offset ${column.ownForkOffset} begins with recorded move ${decision}.`;
-    const sentences: string[] = [opening];
     const evidence: DeclaredEvidence<unknown>[] = [move];
-    sentences.push(...strips[column.branchId]!.timing.map((entry) => `${entry.sentence} Source: ${entry.attribution}.`));
     evidence.push(...strips[column.branchId]!.timing.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]));
-    sentences.push(...strips[column.branchId]!.structure.map((entry) => `${entry.sentence} Source: ${entry.attribution}.`));
     evidence.push(...strips[column.branchId]!.structure.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]));
-    for (const delta of invokeEvidenceValueRoute("derived.compare.eval_delta@1", input)) {
-      const payload = delta.payload as { readonly delta: number; readonly plyOffset: number };
-      sentences.push(`Recorded engine evidence changed by ${payload.delta >= 0 ? "+" : ""}${payload.delta} cp at offset ${payload.plyOffset}.`);
-      evidence.push(delta);
-    }
-    for (const item of invokeEvidenceValueRoute("run.record.consequence@1", input)) {
-      const payload = item.evidence.payload as { readonly terminal: boolean; readonly outcome?: unknown; readonly plies?: unknown; readonly objectiveState?: unknown };
-      sentences.push(payload.terminal ? `The recorded branch ends at a board-terminal position with learner result ${String(payload.outcome)}.` : `The recorded branch reaches ${String(payload.plies)} plies with objective state ${String(payload.objectiveState)}.`);
-      evidence.push(item.evidence);
-    }
-    groups.push(Object.freeze({ branchId: column.branchId, sentences: Object.freeze(sentences), evidence: Object.freeze(evidence) }));
+    evidence.push(...invokeEvidenceValueRoute("derived.compare.eval_delta@1", input));
+    evidence.push(...invokeEvidenceValueRoute("run.record.consequence@1", input).map((item) => item.evidence));
+    groups.push(Object.freeze({ branchId: column.branchId, evidence: Object.freeze(evidence) }));
   }
   return Object.freeze({ groups: Object.freeze(groups), evidence: Object.freeze(groups.flatMap((group) => group.evidence)) });
 }

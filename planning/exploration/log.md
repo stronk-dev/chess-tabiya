@@ -21517,3 +21517,23 @@ Campaign was the one capability with no API, route or content. Now:
   owner question [[D3299]] and product-specific release discharges remain open.
 - **Next:** choose an executable production-boundary slice from the live roadmap and RFC register;
   do not infer 1.0 completion from the presence of a route or a dated implementation receipt.
+
+### 2026-09-30 — Migrate Compare's evidence rendering and close a browser-proof blind spot
+
+- **What landed:** Compare's narrative, engine trajectory, strips and position-structure inspector
+  sections consume registered presentation components over admitted evidence. The comparison
+  objective-endpoint contract now represents a missing game result without crashing display or
+  voice ([[D3303]]). The private-profile browser journey asserts a committed `g2→g3` before
+  expecting a measured game ([[D3304]]).
+- **What changed:** a Playwright failure initially looked like a delayed longitudinal projection;
+  its trace instead showed no move POST. The profile's zero-decision answer was correct. Local
+  `make verify-software`, `make verify-content`, `make verify-governance` and all four browser tiers
+  passed on final bytes. The content tier first caught a protocol-word regression in Compare voice;
+  its registered renderer now retains learner copy. The matrix tier exposed another skipped
+  prerequisite in the temporary-help journey ([[D3305]]), now asserted before querying theory.
+  The implementation receipt preserves exact counts and the still-open consumer paths.
+- **What remains:** `rfc/evidence-presentation.md` is implementing, not complete. Other voice
+  templates, Inspector-modal legacy sections, raw-id leaks, D1 and D9 remain; no official pack
+  graduated, and no 1.0 milestone is promoted by this slice.
+- **Next:** finish the remaining current-consumer bindings and keep each release claim tied to a
+  production-boundary browser, API or content proof before closing its owner row.

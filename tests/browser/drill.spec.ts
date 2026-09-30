@@ -478,7 +478,7 @@ test("the private profile opens from Rating and Learn, abstains below each floor
   await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  await move(page, "g2", "g3");
+  await clickMove(page, "g2", "g3");
   await expect(page.locator("[data-status-announcement]")).not.toContainText("Thinking", { timeout: 15_000 });
   const runId = page.url().split("/").at(-1)!;
 
@@ -1710,7 +1710,7 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   const evaluationAxis = page.locator('[data-evidence-consumer="compare.engine_trajectory"]');
   await expect(evaluationAxis).toHaveCount(1);
   await expect(evaluationAxis.locator("tbody tr")).not.toHaveCount(0);
-  await expect(evaluationAxis.locator(".evidence-entry")).toHaveCount(2);
+  await expect(evaluationAxis.locator('[data-component="magnitude"]')).toHaveCount(2);
   await expect(page.locator(".sparkline")).toHaveCount(0);
   await expect.poll(() =>
     page.locator(".strip-band article").evaluateAll((articles) =>
@@ -1726,9 +1726,12 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await expect(
     page.getByText("Checkpoint reached: Critical race resolved."),
   ).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Recorded facts behind this comparison" })).toContainText(
+    "This branch reached an objective endpoint; no learner game result was recorded.",
+  );
   await expect(page.locator(".fork-marker")).toHaveText("Fork");
   await expect(
-    page.locator('.evidence-cell[data-ply-offset="0"] .evidence-entry'),
+    page.locator('.evidence-cell[data-ply-offset="0"] [data-component="magnitude"]'),
   ).toHaveCount(2);
   await page.getByRole("button", { name: "Return to comparison" }).click();
   await expect(comparisonInspectorButton).toBeFocused();
@@ -2248,7 +2251,11 @@ test("@matrix module seats render sealed evidence without moving the board (stat
     // State 9 — honest empty: opened doors state their declared absence inside their own card.
     await showSupport(page);
     const reveal = page.getByRole("button", { name: "Show support for this position" });
-    if (await reveal.isEnabled()) await reveal.click();
+    await expect(reveal).toBeEnabled();
+    await reveal.click();
+    await expect(page.getByRole("region", { name: "Temporary help" })).toContainText(
+      "Support is available for this position until you commit your next move.",
+    );
     await seat("theory_breadcrumb").locator(".seat-row").click();
     await seat("theory_breadcrumb").getByRole("button", { name: "Show" }).click();
     const theory = seat("theory_breadcrumb").locator(".seat-card");

@@ -27124,6 +27124,33 @@
       "uxItems": [],
       "evidence": "planning/roadmap-to-done.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3303",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:91563064f452b71d5b37d1802782c05a1b26346a7aa539c56cfd495e4ab0ba19",
+      "uxItems": [],
+      "evidence": "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3304",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:18ca1e0617b0d48c7901cd5ecf40338f718fa101a0c8df50d521a55b1821d78e",
+      "uxItems": [],
+      "evidence": "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3305",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c80bf14cefeafb95786dc1346068d492e279955020181234946c06bd88581761",
+      "uxItems": [],
+      "evidence": "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -42,7 +42,7 @@ export {
   type ObjectiveTimelineEntry,
 } from "./compare.js";
 export { BRANCH_COLLAPSE_FLOOR, branchDecidedness, collapsedBranchIds, importedMainlineBranchId, renderCollapseExplanation, type AssessmentCategory, type AssessmentObjective, type CollapseExplanation, type Decidedness, type DecidednessGround, type TablebaseCategory as BranchTablebaseCategory } from "./branch-scale.js";
-export { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, consumeComparisonEngineTrajectory, consumeComparisonStripEvidence, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type StripEntry } from "./compare-strips.js";
+export { comparisonEngineTrajectory, comparisonPresentedEngineTrajectory, comparisonNarrative, comparisonStrips, consumeComparisonEngineTrajectory, consumeComparisonStripEvidence, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type PresentedTrajectoryEntry, type StripEntry } from "./compare-strips.js";
 export {
   RuntimeError,
   assertActiveWriter,

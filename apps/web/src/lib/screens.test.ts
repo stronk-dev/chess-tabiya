@@ -2221,9 +2221,14 @@ describe("Layer 3 screens", () => {
     await tick();
     expect(document.querySelector('[role="dialog"][aria-labelledby="comparison-inspector-title"]')).not.toBeNull();
     expect(document.body.textContent).toContain("active → achieved");
-    expect(document.body.textContent).toContain("M-2");
+    expect(document.body.textContent).toContain("mate in 2 for Black");
     expect(document.body.textContent).toContain("Recorded differences by branch");
     expect(document.body.textContent).toContain("Opponent and authored-line context");
+    expect(document.querySelector(".evaluation-axis [data-component='magnitude']")).not.toBeNull();
+    expect(document.querySelector(".strip-band [data-presented]")).not.toBeNull();
+    expect(document.querySelector(".comparison-inspector [data-convention-producer]")).not.toBeNull();
+    expect(document.querySelector(".comparison-inspector")?.textContent).not.toContain("Tabiya structural detector");
+    expect(document.querySelector(".comparison-inspector")?.textContent).toContain("no learner game result was recorded");
     expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("near");
     expect(document.querySelectorAll("[aria-label='Chessboard']")).toHaveLength(2);
     const semanticGrids = [...document.querySelectorAll<HTMLElement>("[data-board-input-grid]")];
@@ -2243,9 +2248,9 @@ describe("Layer 3 screens", () => {
     const evaluationOffsets = new Set(comparison.columns.flatMap((column) => comparison.evidence[column.branchId]!.map((entry) => entry.plyOffset)));
     expect(document.querySelectorAll(".evaluation-axis")).toHaveLength(1);
     expect(document.querySelectorAll(".evaluation-axis tbody tr")).toHaveLength(evaluationOffsets.size);
-    expect(document.querySelectorAll(".evaluation-axis .evidence-entry")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
+    expect(document.querySelectorAll(".evaluation-axis [data-component='magnitude']")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
     expect(document.querySelector(".sparkline")).toBeNull();
-    expect(document.body.textContent).toContain("recorded branches share");
+    expect(document.querySelector(".comparison-inspector")?.textContent).toContain("The attempts share the first 1 ply");
     document.querySelector<HTMLButtonElement>(".comparison-inspector header button")!.click();
     await tick();
     expect(document.querySelector(".comparison-inspector")).toBeNull();

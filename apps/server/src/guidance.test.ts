@@ -108,6 +108,15 @@ describe("adaptive guidance server seams", () => {
     expect(text).toContain("Recorded evaluation change at consequence step 2: −1.65 pawns on the stored scale.");
     expect(text).not.toMatch(/\bcp\b|\bplies\b|\boffset\b|reply-seen|\b(active|preserved)\b/u);
   });
+  it("does not turn an objective endpoint without a game result into a board-terminal claim", () => {
+    const noResult = fixtureEvidence("run.record.consequence@1", { context: "compare", terminal: true, outcome: null });
+    const recordedWin = fixtureEvidence("run.record.consequence@1", { context: "compare", terminal: true, outcome: "win" });
+    const rendered = voiceEvidenceView(fixturePacket(), "compare", [noResult, recordedWin], false).rendered;
+    expect(rendered.items.flatMap((item) => item.sentences)).toEqual([
+      "This branch reached an objective endpoint; no learner game result was recorded.",
+      "This branch reached an objective endpoint; the recorded learner result is win.",
+    ]);
+  });
   it("voices typed Story evaluation changes through the review.story@1 component sentence", () => {
     // rfc/review-evidence-compiler.md: the voice story speaks the sealed component of the typed
     // derived.review.eval_delta@1 item — never a clamped cp scalar.

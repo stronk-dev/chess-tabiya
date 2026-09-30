@@ -114,6 +114,9 @@ function renderRunRecord(evidence: DeclaredEvidence<unknown>): readonly string[]
   if (evidence.projection.id === "run.record.checkpoint_hit") return one(`An authored checkpoint was reached at ${consequenceStep(payload.plyOffset)}.`);
   if (evidence.projection.id === "run.record.objective_transition") return one(`The recorded objective changed from “${objectiveStateCopy(payload.from)}” to “${objectiveStateCopy(payload.to)}.”`);
   if (evidence.projection.id === "run.record.imported_result") return one(`The PGN records the game result as ${String(payload.result)}; the board is not terminal here.`);
+  if (evidence.projection.id === "run.record.consequence" && payload.context === "compare") {
+    return Object.freeze(presentEvidenceItems(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "guidance.voice_compare", version: 1 }, [evidence])).map(presentedSentence));
+  }
   if (payload.terminal === true) return one(learnerOutcomeCopy(payload.outcome));
   return one(`This continuation stops after ${recordedTurnCount(payload.plies)}. ${objectiveStateCopy(payload.objectiveState)}.`);
 }

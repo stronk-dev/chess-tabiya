@@ -116,6 +116,14 @@ export const OBJECTIVE_STATE_LABELS: LabelVocabulary<ObjectiveState> = Object.fr
   achieved: { label: "achieved", valence: "positive" },
   transitioned: { label: "transitioned", valence: "neutral" },
 });
+const COMPARE_OBJECTIVE_COPY: Readonly<Record<ObjectiveState, string>> = Object.freeze({
+  active: "In progress",
+  preserved: "Objective held",
+  degraded: "Objective weakened",
+  failed: "Objective missed",
+  achieved: "Objective reached",
+  transitioned: "Next phase reached",
+});
 export const RUN_OUTCOME_LABELS: LabelVocabulary<RunOutcome> = Object.freeze({
   win: { label: "win", valence: "neutral" },
   loss: { label: "loss", valence: "neutral" },
@@ -410,6 +418,7 @@ interface BaseFactOperands {
   readonly "story.shape_firing@1": Pick<ShapeFiring, "entryId">;
   readonly "story.endgame_classification@1": EndgameClassification;
   readonly "story.consequence@1": { readonly terminal: true; readonly outcome: RunOutcome } | { readonly terminal: false; readonly plies: number; readonly objectiveState: ObjectiveState };
+  readonly "compare.consequence@1": { readonly terminal: true; readonly outcome: RunOutcome | null } | { readonly terminal: false; readonly plies: number; readonly objectiveState: ObjectiveState };
   readonly "story.imported_result@1": { readonly result: PgnResultToken };
   readonly "story.last_level@1": { readonly learnerCentipawns: number };
   readonly "story.title@1": { readonly title: string };
@@ -567,6 +576,11 @@ const FACT_RENDERERS: { readonly [R in FactStatementRendererId]: FactRenderer<R>
   "story.consequence@1": (value) => value.terminal
     ? `Board-terminal result for the learner: ${RUN_OUTCOME_LABELS[value.outcome].label}.`
     : `This continuation stops after ${value.plies} ${value.plies === 1 ? "ply" : "plies"}; the objective is ${OBJECTIVE_STATE_LABELS[value.objectiveState].label}.`,
+  "compare.consequence@1": (value) => value.terminal
+    ? value.outcome === null
+      ? "This branch reached an objective endpoint; no learner game result was recorded."
+      : `This branch reached an objective endpoint; the recorded learner result is ${RUN_OUTCOME_LABELS[value.outcome].label}.`
+    : `This continuation stops after ${value.plies} recorded ${value.plies === 1 ? "turn" : "turns"}. ${COMPARE_OBJECTIVE_COPY[value.objectiveState]}.`,
   "story.imported_result@1": (value) => `The PGN records the game result as ${PGN_RESULT_LABELS[value.result].label}; the board is not terminal here.`,
   "story.last_level@1": () => "The last recorded moment within a pawn of level — Tabiya's recorded-evaluation convention.",
   "story.title@1": (value) => value.title,
@@ -871,6 +885,7 @@ const FACT_OPERAND_PARSERS: { readonly [R in FactStatementRendererId]: (value: u
   "story.shape_firing@1": (value) => { const item = exact(value, ["entryId"], [], "shape firing"); return { entryId: text(item.entryId, "entryId") }; },
   "story.endgame_classification@1": (value) => { const item = exact(value, ["fen", "type", "conventionId", "provenanceNote"], [], "endgame"); text(item.fen, "endgame.fen"); if (item.type !== null) { const type = exact(item.type, ["id", "label"], [], "endgame.type"); oneOf(type.id, ["pawn", "rook-and-pawn-vs-rook", "rook", "queen", "minor"], "endgame.type.id"); text(type.label, "endgame.type.label"); } if (item.conventionId !== "endgame-material-census@1") throw new PresentationError("PRESENTATION_INVALID", "endgame convention is not registered"); text(item.provenanceNote, "endgame.provenanceNote"); return item as unknown as EndgameClassification; },
   "story.consequence@1": (value) => { const record = isRecord(value) ? value : {}; if (record.terminal === true) { const item = exact(value, ["terminal", "outcome"], [], "consequence"); return { terminal: true, outcome: oneOf(item.outcome, ["win", "loss", "draw"], "outcome") }; } const item = exact(value, ["terminal", "plies", "objectiveState"], [], "consequence"); if (item.terminal !== false) throw new PresentationError("PRESENTATION_INVALID", "consequence terminal must be boolean"); return { terminal: false, plies: safeInt(item.plies, "plies"), objectiveState: oneOf(item.objectiveState, Object.keys(OBJECTIVE_STATE_LABELS) as ObjectiveState[], "objectiveState") }; },
+  "compare.consequence@1": (value) => { const record = isRecord(value) ? value : {}; if (record.terminal === true) { const item = exact(value, ["terminal", "outcome"], [], "comparison consequence"); return { terminal: true, outcome: item.outcome === null ? null : oneOf(item.outcome, ["win", "loss", "draw"] as const, "outcome") }; } const item = exact(value, ["terminal", "plies", "objectiveState"], [], "comparison consequence"); if (item.terminal !== false) throw new PresentationError("PRESENTATION_INVALID", "comparison consequence terminal must be boolean"); return { terminal: false, plies: safeInt(item.plies, "plies"), objectiveState: oneOf(item.objectiveState, Object.keys(OBJECTIVE_STATE_LABELS) as ObjectiveState[], "objectiveState") }; },
   "story.imported_result@1": (value) => { const item = exact(value, ["result"], [], "imported result"); return { result: oneOf(item.result, ["1-0", "0-1", "1/2-1/2"], "result") }; },
   "story.last_level@1": (value) => { const item = exact(value, ["learnerCentipawns"], [], "last level"); const cp = safeInt(item.learnerCentipawns, "learnerCentipawns"); if (cp < -100) throw new PresentationError("PRESENTATION_INVALID", "last level must be within a pawn"); return { learnerCentipawns: cp }; },
   "story.title@1": (value) => { const item = exact(value, ["title"], [], "title"); return { title: text(item.title, "title") }; },

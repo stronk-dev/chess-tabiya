@@ -9,6 +9,7 @@ import {
   commitMove,
   compareBranches,
   comparisonEngineTrajectory,
+  comparisonPresentedEngineTrajectory,
   comparisonNarrative,
   comparisonStrips,
   consumeComparisonEngineTrajectory,
@@ -19,6 +20,7 @@ import {
   rewind,
   observationIdentity,
   pivotalMarkers,
+  presentedSentence,
   renderPivotalMarker,
   renderStructuralObservationChange,
   transitionObjective,
@@ -210,6 +212,26 @@ describe("branch comparison", () => {
     expect(comparisonNarrative(run, comparison, strips)).toEqual(first);
     expect(JSON.stringify(first)).not.toMatch(/\b(better|worse|should|best)\b/i);
     expect(Object.values(strips).flatMap((strip) => strip.routes).some((route) => route.pieceId === "White knight from g1")).toBe(true);
+  });
+
+  it("presents admitted trajectory and strip facts from the same recorded comparison", () => {
+    const run = branchedRun();
+    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
+    const strips = comparisonStrips(run, comparison);
+    for (const column of comparison.columns) {
+      const raw = comparisonEngineTrajectory(run, comparison, column.branchId);
+      const presented = comparisonPresentedEngineTrajectory(run, comparison, column.branchId);
+      expect(presented.map((entry) => [entry.plyOffset, entry.nodeId])).toEqual(raw.map((entry) => [entry.plyOffset, entry.nodeId]));
+      expect(presented.every((entry) => entry.item.component.id === "magnitude")).toBe(true);
+      expect(presented.map((entry) => presentedSentence(entry.item)).join(" ")).not.toMatch(/Tabiya structural detector|derived\.compare|sha256:/u);
+      const branch = strips[column.branchId]!;
+      expect(branch.presented.structure.length).toBe(branch.structure.length);
+      expect(branch.presented.timing.length).toBe(branch.timing.length);
+      expect(branch.presented.routes.length).toBe(branch.routes.length);
+      for (const item of [...branch.presented.structure, ...branch.presented.timing, ...branch.presented.routes]) {
+        expect(presentedSentence(item)).not.toMatch(/Tabiya structural detector|derived\.compare|sha256:/u);
+      }
+    }
   });
 
   it("retains moving-piece identity across captures instead of chaining through a vacated square", () => {

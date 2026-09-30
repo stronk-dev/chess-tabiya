@@ -490,9 +490,10 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
     const value = payload as { readonly terminal: boolean; readonly outcome?: string; readonly plies?: number; readonly objectiveState?: string };
     return value.terminal ? { terminal: true, outcome: value.outcome } : { terminal: false, plies: value.plies, objectiveState: value.objectiveState };
   };
-  for (const consumer of ["guidance.voice_story", "guidance.voice_compare"]) {
-    factAdapter(consumer, V1("run.record.consequence"), ["sentence"], ["terminal", "outcome", "plies", "objectiveState"], ["copied_byte_equal"], "story.consequence@1", "recorded-run@1", consequence, "recorded_run");
-  }
+  factAdapter("guidance.voice_story", V1("run.record.consequence"), ["sentence"], ["terminal", "outcome", "plies", "objectiveState"], ["copied_byte_equal"], "story.consequence@1", "recorded-run@1", consequence, "recorded_run");
+  // Comparison's terminal flag means the rehearsal objective ended, not necessarily the chess
+  // game. Its recorded outcome may be null; never borrow Story's board-terminal sentence.
+  factAdapter("guidance.voice_compare", V1("run.record.consequence"), ["sentence"], ["terminal", "outcome", "plies", "objectiveState"], ["copied_byte_equal"], "compare.consequence@1", "recorded-run@1", consequence, "recorded_run");
 
   // --- comparison: the strip, the trajectory and the compare voice
   const recordedScore = (evidence: DeclaredEvidence<unknown>, value: number, unit: "centipawn" | "mate_in"): ComponentValue => ({
