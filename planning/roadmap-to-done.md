@@ -1,6 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
-**Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Machine map:**
+**Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
+2026-09-30 under [[D3302]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -11,41 +12,41 @@ the idea/defect ledger, `rfc/README.md` the lifecycle/resource register,
 ledger-row-to-destination join. `planning/work-items-1.0.json` is the persistent assignment state
 for all 569 UX items. Those are source registers, not competing roadmaps.
 
-The old version said feature work was empty, 39 packs were committed, and no product RFC was
-active. HEAD has 46 active product RFCs, zero graduated packs, 569 indexed UX items, and whole
-workflows with reducers but no API or web door. The old rows are deleted rather than patched
-because their unit was a feature name, not a complete learner journey.
+The 2026-08-24 rebuild replaced feature-name rows with complete learner journeys. The live
+RFC, route, API, UX and milestone counts come from `make roadmap-progress`, not this prose.
+There are still zero graduated official packs; several journeys now have production API and web
+doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
 The engineering foundation is substantial. The product is not close to a full 1.0.
 
-What exists is widest below the client: branch/event runtime, schemas and migrations, engines,
-identity, evidence contracts, collectors, a large REST handler, authoring services,
-classrooms/live primitives, rating arithmetic, and campaign schema/registry/fold. What is
-incomplete is the chain that turns them into one coherent product:
+The below-client foundation is substantial, and several full-stack slices now exist: Review Map,
+Guided Hint and module seats, a phase-first Library, twelve playable bot profiles, a durable
+learner profile, and a draft Campaign pilot. None of those slices alone completes its 1.0
+capability. The remaining work closes the whole chain:
 
 `collector → grounded fact → selected module → persisted workflow state → production API →`
 `opinionated client journey → official content → release proof`
 
 A capability is not complete because one link exists. That makes the current state honest:
 
-- Campaign is **partial mechanism, missing product**: no persistence, endpoint family, route, or
-  authored campaign.
-- Review is **partial mechanism, missing full workflow**: not yet the complete grounded game map,
-  timeline, explanations, and retry/return loop requested.
-- Assistance is **specified foundation, missing ordinary UX**: learners still meet producer labels,
-  raw strings, and a 72-control grid instead of useful modules and presets.
-- Bots are **measured machinery, missing roster/product**: the production profile catalogue is
-  empty.
+- Campaign has a durable run, production API, web map, encounter flow and draft pilot; official
+  content, theory rewards, rated-boss rules and the complete release journey remain open.
+- Review Map, grades, Analyze, retry and compare are live; whole-game evidence coverage,
+  cross-source explanation and the full return journey remain open.
+- Presets, Guided Hint and typed module seats now reach play; legacy renderers, emitter-dependent
+  states, owner-ruled ceilings and non-technical owner-use proof remain open.
+- Twelve registered bot profiles are playable; their strength/personality calibration, honest
+  card promises, route behavior and complete event/Review loop remain open.
 - Content is **a large draft corpus, zero official product**: no graduated pack, and
   manifest/graduation truth remains release-blocking.
 - API breadth was **overstated by REST branch counts**: [[D1532]] found five implemented rating
   families omitted from `application.ts:isApiPath`. They are production-routed now and guarded at
   the real HTTP application boundary; the roadmap retains the distinction for every future family.
-- UX is **an architectural rebuild, not polish**: 569 distinct items; 250 queued now, 61 waiting
-  on a ruling, 116 on an RFC, 118 done, and 24 stale/wrong. Panels still stack above/between content,
-  the board changes size, and evidence leaks as implementation detail.
+- UX remains a complete-journey obligation, not polish. The stable board and structural companion
+  are tested, but the remaining UX-item states and owner-use gates must be read from
+  `make roadmap-progress`; the old primitive-first layout is no longer the current baseline.
 
 Run these for current counts; prose counts are dated evidence, not authority:
 
@@ -1385,11 +1386,11 @@ Primary RFCs: `play-composition`, `pack-training-forms`. UX owners: ARR and CLP 
 
 <!-- roadmap-capability: support -->
 
-**State: stable composition shipped; first honest-empty/action path shipped; compiled modules still missing.** The goal is not rated engine moves. Modules
+**State: presets, Guided Hint and module seats live; completion still partial.** The goal is not rated engine moves. Modules
 translate selected evidence at controlled disclosure distance: theory breadcrumb, pattern,
 relevant square/piece, threat/defence relation, prevention highlight, or an explicit move only when
-the workflow permits. The board/companion shell now provides stable seats, but the eleven typed
-modules, preset-driven activation and their honest-empty paths do not yet inhabit them. Raw
+the workflow permits. The board/companion shell now hosts typed module seats and preset-driven
+activation; emitter-dependent states and legacy renderers remain incomplete. Raw
 engine/Maia/explorer/classifier facts belong in an opt-in inspector.
 
 **1.0 exit:** Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open with useful
@@ -1513,11 +1514,11 @@ claim appliance-tier clearance until F12 supplies the predicate.
 
 <!-- roadmap-capability: review -->
 
-**State: fragments exist, complete Review does not.** Import, story/share, grades, moments, progress
-and retry primitives exist at uneven depths. The current result is neither a strong after-game
-understanding surface nor Tabiya's distinctive return-to-rehearsal loop. [[D1536]] closes the known
-raw cp/enum leaks; story is still capped to opaque cards, the move/phase arc is missing, and engine
-graphics outrank grounded explanation.
+**State: Review Map live; full Review still incomplete.** The map has a navigable move list,
+grounded grade sentences, moments, an eval graph, Analyze and retry/compare doors. Its typed
+evidence packet and module seat are production-routed, but whole-game evidence coverage,
+cross-source explanation and the complete return-to-rehearsal journey remain open. The older
+review returns below are dated history, not a description of the current surface.
 
 The 2026-08-26 compiler checkpoint keeps the typed node-free engine score and separate cp/mate
 domains, but returns the production contract on [[D1644]]–[[D1651]]: reusable White-WDL identity,
@@ -1604,11 +1605,10 @@ Primary RFCs: `move-quality-grades`, `review-map`, `review-evidence-compiler`,
 
 <!-- roadmap-capability: theory_content -->
 
-**State: useful material, zero official release content.** Shapes and principles are reused more
-coherently than one-off concepts, but learners cannot browse them as a real knowledge surface.
-Authoring services are deeper than the client; Library is a duplicate non-clickable listing;
-principles need cited grounding; all 32 manifests measured in [[D1508]] were stale; no pack is
-graduated.
+**State: phase-first Library live; zero official release content.** Learners can search packs,
+principles, shapes, concepts and named openings and follow Rehearse/Understand/Return doors.
+The citation register is pinned and rights-reviewed, but no principle yet cites a source; no pack
+is graduated. The older manifest census below remains historical evidence, not a live count.
 
 **1.0 exit:** licensed/version-pinned theory and evidence ground principles/shapes/claims; the
 capability contract and migration planner prevent blind corpus rewrites; Studio, CLI, CI and
@@ -1686,10 +1686,11 @@ the review/repair chain can be green simultaneously without erasing why the repa
 
 <!-- roadmap-capability: bots -->
 
-**State: measured machinery, no production roster.** Maia bands and policy composition exist;
-route-source research passed; the catalogue still has no composed production profiles, depth
-persistence and trait population block it, and most personality claims are not observable in play.
-Avatars or adjectives do not solve that. The 2026-08-26 buildability return adds the deeper
+**State: twelve registered profiles playable; calibration and personality proof missing.** Runs
+retain the exact selected profile and bot decisions, and the Play picker offers four bands across
+three behavior families. Cards are explicitly uncalibrated; route proposals, observed trait rates,
+strength calibration and the full bot-event/Review journey remain open. Avatars or adjectives do
+not solve that. The 2026-08-26 buildability return added the deeper
 contract blockers: typed shared-probe guard evidence, dependent-trait fallback, compiled trait
 identities, a production composer route, combined selection budget and the owner-ruled picker/card/
 identity surface ([[D1601]], [[D1602]], [[D1603]], [[D1604]], [[D1605]], [[D1606]], [[D1607]],
@@ -1723,11 +1724,11 @@ band-relative honesty and clock-labelled calibration; the drafts still own their
 
 <!-- roadmap-capability: learner_model -->
 
-**State: rating partly surfaced; longitudinal spine draft.** Rating arithmetic/storage and a narrow
-screen exist. Observation store, actor-complete events, background projection, style, skill
-credits, opening performance, drill-down, privacy/sharing and recommendations do not form a
-product. [[D1532]] repaired the five rating/marks/standing families at the production boundary;
-longitudinal/profile APIs remain absent.
+**State: durable longitudinal store and private profile live; full learner model incomplete.**
+Owned observations, background projection and the `/profile` surface now expose bounded habit,
+opening and cross-pack concept-skill facts. Rating, deeper style/skill calibration, drill-down,
+privacy/sharing and recommendations do not yet form the complete product. [[D1532]] repaired the
+five rating/marks/standing families at the production boundary.
 
 The 2026-09-07 cap audit fixes two existing learner-history projections without mistaking them for
 the missing longitudinal product. [[D3138]] gives Learn the exact shown/eligible count for its
@@ -1760,9 +1761,11 @@ Primary RFCs: `longitudinal-store`, `concept-registry`, `player-style`, `learner
 
 <!-- roadmap-capability: campaign -->
 
-**State: reducer without product.** Schema, registry, contracts, validation and fold exist.
-Persistence is blocked in the migration chain; failure-resource research is open; endpoints,
-client route and authored campaigns are absent. [[D1514]] makes Campaign first-class.
+**State: durable draft Campaign pilot live; official journey incomplete.** Migration 30 stores
+campaign runs/events/awards; production endpoints and `/campaign` provide map, preparation,
+kit, encounters, earned rewinds, result and resume. The draft pilot includes an unrated Act-II
+boss. Official content, catalogue/theory rewards, rated-boss composition, accessibility and
+release-image proof remain open. [[D1514]] made Campaign first-class.
 
 **1.0 exit:** versioned campaigns compose registered packs, bots, modules, skills/rating, variants,
 rewards, earned rewinds and a researched consequential-but-non-punitive failure economy; state
@@ -2049,32 +2052,33 @@ fresh review; receipt:
 
 | Surface | Reality | 1.0 owner |
 |---|---|---|
-| Home, Play, run | Live; arrival/composition/layout incomplete | Rehearsal |
-| Review, story | Live; whole-game depth incomplete | Review |
-| Rating, Learn | Live client routes; API boundary/longitudinal product incomplete | Learner model |
+| Home, Play, run | Live; stable board, presets and playable registered bots; first-use and full journey incomplete | Rehearsal / bots |
+| Review, story | Review Map, Analyze and retry/compare live; whole-game depth incomplete | Review |
+| Rating, Learn, Profile | Live; durable observations and private profile, full learner model incomplete | Learner model |
 | Live, session, overlay | Live; social/professional workflows incomplete | Social / Professional |
 | Create | Live; author tooling/parity incomplete | Theory/content |
-| Library | Live but wrong: duplicate listings, no theory/library workflow | Theory/content |
-| Settings | Live but primitive-first; presets/defaults/Advanced hierarchy incomplete | Support |
+| Library | Phase-first search and theory/rehearsal doors live; cited principles and official content missing | Theory/content |
+| Settings | Named presets and collapsed Advanced live; remaining emitter states and owner-use proof open | Support |
 | Campaign | Live 2026-09-24: map, encounters, boss game, result and resume over a draft pilot; official campaign content and rated boss incomplete | Campaign |
 
 ### API families
 
 | State | Families |
 |---|---|
-| Production-routed | `/auth`, `/capabilities`, `/packs`, `/shapes`, `/principles`, `/runs`, `/progress`, `/repertoires`, `/classrooms`, `/assignments`, `/api/shared`, `/shared`, `/select-move`, `/sessions`, `/rated-games`, `/rating`, `/marks`, `/cohorts`; `/healthz` direct |
-| Required and missing | none (`/campaign` production-routed 2026-09-24) |
+| Production-routed | The live 23-family map includes `/campaign` and `/theory` alongside the earlier run, rating and content families; hint and bot-opponent operations are under `/runs`. Inspect `planning/roadmap-1.0.json` and `apps/server/src/application.ts` for exact paths |
+| Required and missing | No absent family in the current map; incomplete verbs, authorization and journey closure remain capability-level work |
 
 This is a family inventory, not a completeness claim. Each capability exit names remaining verbs,
 authorization, errors, availability and journey proof.
 
 ### State and persistence chain
 
-Durable migration head is 25. Live claims serialize longitudinal storage, bot policy, campaign,
-live sources/following, clocks, social play and theory joins. Campaign/API work cannot skip its
-store/bot predecessors. Every link needs a typed reducer, immutable inputs, idempotent jobs,
-resume/rebuild, owner/actor identity, prior-release migration, account lifecycle, and a production
-API/client consumer.
+Durable migration head is 30: longitudinal observations (26), evidence jobs (27), concept registry
+(28), bot profile runs (29) and campaign state (30) landed in that order. Catalogue progression
+(31), live sources/following, clocks, social play and theory launches remain separate successors.
+Every link still needs a typed reducer, immutable inputs, idempotent jobs, resume/rebuild,
+owner/actor identity, prior-release migration, account lifecycle, and a production API/client
+consumer.
 
 The longitudinal-store ninth author repair closes [[D2779]]–[[D2788]] at contract tier. One
 file-backed SQLite authority loads replayed source/owner/journal/authorship truth, parses all five

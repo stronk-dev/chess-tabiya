@@ -21505,3 +21505,15 @@ Campaign was the one capability with no API, route or content. Now:
 - **Merge:** Guided Hint merged alongside campaign, taking the `campaign_kit`
   ceiling.
 - **Owner:** D1639 is still owed.
+
+### 2026-09-30 — Reconcile the 1.0 roadmap after the September landings
+
+- **What landed:** [[D3302]] corrected the roadmap's opening verdict, capability-state summaries
+  and production-surface inventory against the shipped Review Map, Guided Hint/module seats,
+  presets, Library, playable bot roster, learner profile, Campaign pilot and migration head 30.
+  Dated review/author-return history remains intact; no incomplete 1.0 gate was promoted.
+- **What remains:** `make roadmap-progress` still reports four active and five blocked milestones,
+  zero graduated official packs, and incomplete capability dimensions. The acceptance-convergence
+  owner question [[D3299]] and product-specific release discharges remain open.
+- **Next:** choose an executable production-boundary slice from the live roadmap and RFC register;
+  do not infer 1.0 completion from the presence of a route or a dated implementation receipt.

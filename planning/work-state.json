@@ -27115,6 +27115,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/bot-opponent-ply.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3302",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:435fc51768106e59373beaf044221244ffd1fb9bd75ce701ff302a08f53c1e4d",
+      "uxItems": [],
+      "evidence": "planning/roadmap-to-done.md",
+      "evidenceKind": "path"
     }
   ]
 }
