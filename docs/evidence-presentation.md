@@ -24,6 +24,9 @@ dispatched by `PresentedEvidence.svelte`.
   Guidance appends recorded readings after the external voice attempt so a provider never receives
   the bare engine score, but that appended sentence now comes from the same component as Review Map
   and Full Inspector.
+- The voice API reports `recordedReadingsPresent` from that separately admitted, actually rendered
+  reading set. The Inspector's sparse-reading notice uses this boolean, not words in voice prose;
+  the exact client response parser refuses its absence or a non-boolean value.
 - `magnitude_trail` draws an SVG whose pixels come only from a registered `MAGNITUDE_SCALE_POLICIES`
   row, with a keyboard-reachable point list.
 - `square_set` carries its caption as a sealed `fact_statement` operand (recomputed on parse);

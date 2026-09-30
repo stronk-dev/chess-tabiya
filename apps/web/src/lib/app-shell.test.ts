@@ -274,7 +274,7 @@ describe("application shell", () => {
   it("offers imported-story narration only after persona voice is selected", async () => {
     history.replaceState(null, "", "/review/game/route-run");
     const story = reviewPayload({ runId: "route-run", branchId: "main", source: { kind: "pgn_paste", headers: { White: "Ada", Black: "Mina" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" } });
-    const voice = vi.fn(async () => ({ text: "Grounded narration.", source: "provider" as const, scope: "story" as const }));
+    const voice = vi.fn(async () => ({ text: "Grounded narration.", source: "provider" as const, scope: "story" as const, recordedReadingsPresent: false }));
     const storyApi: DrillClientApi = {
       ...api(),
       async capabilities() { return { ...capabilities, providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "explorer-primary": "available", "tablebase-primary": "available", "external-voice": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture", "explorer-primary": "local_fixture", "tablebase-primary": "local_fixture" }) }; },

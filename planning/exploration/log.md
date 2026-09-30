@@ -21588,3 +21588,19 @@ Campaign was the one capability with no API, route or content. Now:
 - **Next:** trace the remaining Inspector-modal sections to their exact admitted components and
   retire each raw-text path at its production consumer, with negative fixtures for provenance and
   raw-id leakage.
+
+### 2026-09-30 — Replace the Inspector's voice-prose notice trigger [[D3308]]
+
+- **What landed:** the server derives `recordedReadingsPresent` from the separately admitted
+  recorded-reading component sentences, returns it with every voice response, and the exact
+  client parser requires a boolean. Both Inspector voice panels now show the sparse-reading
+  notice from that flag, never from a substring of provider or component prose.
+- **What changed:** a new finding surfaced immediately after [[D3307]]: its correct wording
+  migration made an older text-triggered notice disappear. A positive fixture uses new wording
+  with a true flag; a negative fixture uses the old phrase with a false flag. The served-pack
+  server response test proves a real reading returns true. Software and all four browser tiers
+  passed locally; [[D3308]] is closed in ledger and work-state. No remote CI result is claimed.
+- **What remains:** the presentation RFC is still implementing. Other Inspector-modal legacy
+  sections, raw-id leaks, D1/D9, owner-use and the owner's [[D1639]] ceiling ruling remain.
+- **Next:** migrate the remaining Inspector sections from local prose to admitted typed
+  components, with provenance and absence tested at the visible consumer.

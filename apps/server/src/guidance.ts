@@ -80,27 +80,37 @@ export function renderRecordedReadingEvidence(view: ConsumerEvidenceView<unknown
   return Object.freeze(renderPresentedEvidenceView(view).items.flatMap((item) => item.sentences));
 }
 
-export function appendRecordedReadings(text: string, packet: EvidencePacket): string {
+function recordedReadingSentences(packet: EvidencePacket): readonly string[] {
   const view = evidenceForConsumer(EVIDENCE_MANIFEST, { id: "guidance.recorded_reading", version: 1 }, packet.declared);
-  const rendered = renderRecordedReadingEvidence(view).join("\n");
+  return renderRecordedReadingEvidence(view);
+}
+
+function appendReadingSentences(text: string, sentences: readonly string[]): string {
+  const rendered = sentences.join("\n");
   if (rendered === "") return text;
   return text === "" ? rendered : `${text}\n${rendered}`;
 }
 
-export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading", extra: readonly DeclaredEvidence<unknown>[] = [], includePacket = true, budgetMs = VOICE_OPERATION_BUDGET_MS): Promise<{ readonly text: string; readonly source: "provider" | "deterministic" }> {
+export function appendRecordedReadings(text: string, packet: EvidencePacket): string {
+  return appendReadingSentences(text, recordedReadingSentences(packet));
+}
+
+export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading", extra: readonly DeclaredEvidence<unknown>[] = [], includePacket = true, budgetMs = VOICE_OPERATION_BUDGET_MS): Promise<{ readonly text: string; readonly source: "provider" | "deterministic"; readonly recordedReadingsPresent: boolean }> {
   const view = voiceEvidenceView(packet, scope, extra, includePacket);
   const deterministic = view.rendered.items.flatMap((item) => item.sentences).join("\n");
+  const readingSentences = recordedReadingSentences(packet);
+  const recordedReadingsPresent = readingSentences.length > 0;
   // One total deadline covers both attempts (rfc/provider-health-degradation.md §5): the second
   // attempt inherits what the first left and never starts a fresh timeout.
   const deadline = AbortSignal.timeout(Math.max(1, budgetMs));
   for (let attempt = 0; attempt < 2 && !deadline.aborted; attempt += 1) {
     try {
       const output = await provider.render(view, persona, deterministic, scope, deadline);
-      if (voiceCheck(view.rendered, output).valid) return Object.freeze({ text: appendRecordedReadings(output, packet), source: "provider" });
+      if (voiceCheck(view.rendered, output).valid) return Object.freeze({ text: appendReadingSentences(output, readingSentences), source: "provider", recordedReadingsPresent });
     } catch {
       // A provider failure opens its circuit; the next attempt is refused at once, so the
       // deterministic fallback below is reached inside the same budget.
     }
   }
-  return Object.freeze({ text: appendRecordedReadings(deterministic, packet), source: "deterministic" });
+  return Object.freeze({ text: appendReadingSentences(deterministic, readingSentences), source: "deterministic", recordedReadingsPresent });
 }

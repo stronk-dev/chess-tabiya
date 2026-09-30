@@ -2603,7 +2603,7 @@
             {#if assistance.voice === "persona" && !voiceNotice.notConfigured && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
             {#if voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"}<p role="status">Preparing an explanation of this moment…</p>{/if}
             {#if voiceError?.nodeId === openPivotalNodeId && voiceError.scope === "marker"}<p role="alert">{voiceError.text}</p>{/if}
-            {#if voiceNodeId === openPivotalNodeId && voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
+            {#if voiceNodeId === openPivotalNodeId && voicePage?.scope === "marker" && voicePage.recordedReadingsPresent}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
             {#if voiceNodeId === openPivotalNodeId && voicePage?.scope === "marker"}<p class="guidance-sentence">{voicePage.text}</p>{/if}
           {/if}
         </section>
@@ -2618,7 +2618,7 @@
           {#if voiceBusy?.nodeId === displayedNode.id && voiceBusy.scope === "reading"}<p role="status">Preparing an explanation of this position…</p>{/if}
           {#if voiceError?.nodeId === displayedNode.id && voiceError.scope === "reading"}<p role="alert">{voiceError.text}</p>{/if}
           {#if voiceNodeId === displayedNode.id && voicePage?.scope === "reading"}
-            {#if voicePage.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
+            {#if voicePage.recordedReadingsPresent}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
             <p class="guidance-sentence">{voicePage.text}</p>
           {/if}
         </section>

@@ -202,7 +202,7 @@ describe("DrillApi", () => {
       if (url.includes("/corpus")) return json({ nodeId: run.nodes[0]!.id, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } });
       if (url.includes("/voice")) {
         const body = JSON.parse(String(init?.body)) as { readonly scope: string };
-        return json({ text: "fixture", source: "deterministic", scope: body.scope });
+        return json({ text: "fixture", source: "deterministic", scope: body.scope, recordedReadingsPresent: false });
       }
       if (url.includes("/graph")) {
         return json({

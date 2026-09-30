@@ -27169,6 +27169,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/presentation-contract.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3308",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0991a5ca9cddd96c7b4ab6d00e236be9583cd87c813e63435ea3119dd71910ea",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

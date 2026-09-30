@@ -205,7 +205,7 @@ describe("adaptive guidance server seams", () => {
     let calls = 0;
     const provider: VoiceProvider = { async render() { calls += 1; return "Play e2e4 because it is best."; } };
     const packet = fixturePacket();
-    expect(await renderVoice(provider, packet, "plain")).toEqual({ text: "Current position: Opening.", source: "deterministic" });
+    expect(await renderVoice(provider, packet, "plain")).toEqual({ text: "Current position: Opening.", source: "deterministic", recordedReadingsPresent: false });
     expect(calls).toBe(2);
   });
 
@@ -522,12 +522,12 @@ describe("adaptive guidance server seams", () => {
       expect(new Headers(init?.headers).get("authorization")).toBe("Bearer SENTINEL_SECRET");
       return Response.json({ text: deterministic });
     } });
-    expect(await renderVoice(provider, packet, "plain", "marker")).toEqual({ text: deterministic, source: "provider" });
+    expect(await renderVoice(provider, packet, "plain", "marker")).toEqual({ text: deterministic, source: "provider", recordedReadingsPresent: false });
     expect(bodies).toEqual([{ personaPrompt: "plain", scope: "marker", items: [{ evidence: expect.objectContaining({ producer: { id: "rules.phase", version: 1 }, projection: { id: "rules.phase.reading", version: 2 } }), sentences: [deterministic] }] }]);
 
     let failures = 0;
     const failing = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", fetch: async () => { failures += 1; return new Response("no", { status: 503 }); } });
-    expect(await renderVoice(failing, packet, "plain", "story")).toEqual({ text: deterministic, source: "deterministic" });
+    expect(await renderVoice(failing, packet, "plain", "story")).toEqual({ text: deterministic, source: "deterministic", recordedReadingsPresent: false });
     expect(failures).toBe(2);
 
     let timeouts = 0;
@@ -535,7 +535,7 @@ describe("adaptive guidance server seams", () => {
       timeouts += 1;
       return await new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")), { once: true }));
     } });
-    expect(await renderVoice(timeoutProvider, packet, "plain", "reading")).toEqual({ text: deterministic, source: "deterministic" });
+    expect(await renderVoice(timeoutProvider, packet, "plain", "reading")).toEqual({ text: deterministic, source: "deterministic", recordedReadingsPresent: false });
     expect(timeouts).toBe(2);
   });
 
@@ -594,6 +594,7 @@ describe("adaptive guidance server seams", () => {
     const body = await response.json();
     expect(body).toMatchObject({ text: expect.stringContaining("Recorded engine evaluation at this position:") });
     expect(body).toMatchObject({ text: expect.stringContaining("recorded when this pack was authored on 2026-08-15") });
+    expect(body).toMatchObject({ recordedReadingsPresent: true });
     expect(JSON.stringify(bodies)).not.toMatch(/Recorded reading|Stockfish|Syzygy|DTZ|DTM|depth/);
   });
 

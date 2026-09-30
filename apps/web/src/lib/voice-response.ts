@@ -8,7 +8,7 @@ export function parseVoicePage(value: unknown, requestedScope: VoicePage["scope"
   }
   const page = value as Readonly<Record<string, unknown>>;
   const keys = Object.keys(page);
-  if (keys.length !== 3 || !keys.includes("text") || !keys.includes("source") || !keys.includes("scope")) {
+  if (keys.length !== 4 || !keys.includes("text") || !keys.includes("source") || !keys.includes("scope") || !keys.includes("recordedReadingsPresent")) {
     throw new TypeError("voice-response has an invalid shape");
   }
   if (typeof page.text !== "string" || page.text.trim() === "") {
@@ -18,5 +18,6 @@ export function parseVoicePage(value: unknown, requestedScope: VoicePage["scope"
     throw new TypeError("voice-response/source is outside the closed vocabulary");
   }
   if (page.scope !== requestedScope) throw new TypeError("voice-response/scope does not match the request");
-  return Object.freeze({ text: page.text, source: page.source, scope: requestedScope }) as VoicePage;
+  if (typeof page.recordedReadingsPresent !== "boolean") throw new TypeError("voice-response/recordedReadingsPresent must be boolean");
+  return Object.freeze({ text: page.text, source: page.source, scope: requestedScope, recordedReadingsPresent: page.recordedReadingsPresent }) as VoicePage;
 }

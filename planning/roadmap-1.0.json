@@ -426,7 +426,7 @@
         "nextAction": "Finish the remaining Inspector-modal legacy presentation consumers, repair hyphenated raw-id leaks, and discharge evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings now speak their source authoring date through the typed component in Guidance, Review Map and Full Inspector, while staying post-provider. Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
+          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice now follows a validated response boolean rather than voice wording. Other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/hint-distance.ts",
@@ -437,6 +437,7 @@
             "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
             "planning/platform-alignment/evidence-presentation/voice-current-consumer-2026-09-30.md",
             "docs/evidence-presentation.md",
+            "apps/web/src/lib/voice-response.ts",
             "apps/server/src/guidance.ts",
             "apps/web/src/lib/CompareView.svelte"
           ],
@@ -464,7 +465,7 @@
             {
               "kind": "rfc",
               "id": "evidence-presentation.md",
-              "digest": "sha256:f5ff1e0f5c5c6f1b052b5185d4fc6558e41d302694099d8a68528eeff12c812c"
+              "digest": "sha256:9ef427e5e78fccba0d873c5a3d360c815c20a944b2d526167aaacd1e11160cd0"
             },
             {
               "kind": "work_state",
@@ -475,6 +476,11 @@
               "kind": "work_state",
               "id": "D3307",
               "digest": "sha256:c13088bf40cd0a547f2346b7a189185c419515392d6d10143ba4eedb2c4e3570"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3308",
+              "digest": "sha256:0991a5ca9cddd96c7b4ab6d00e236be9583cd87c813e63435ea3119dd71910ea"
             }
           ]
         },

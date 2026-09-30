@@ -73,3 +73,17 @@ Append-only. This log records author/review/implementation transitions for
   matrix and packaged-production tiers passed. The first content launch stopped before tests on
   pnpm's registry identity check under sandbox network restrictions; the unchanged Make target
   passed with registry access. The RFC remains implementing for its other discharges.
+
+## 2026-09-30 — Inspector reading notice bound to response data
+
+- [[D3308]] reproduced after the date-bearing component landed: both Inspector voice panels
+  still searched for the removed phrase `Recorded reading at this position:` to decide whether
+  to explain that pack-authoring readings are sparse. A real reading therefore lost its notice.
+- The voice endpoint now returns required `recordedReadingsPresent`, derived from the sentences
+  actually rendered by the separately admitted recorded-reading consumer. The strict client
+  parser rejects an absent or non-boolean field; marker and current-position panels read that
+  field. Tests show a true flag with unrelated text displays the notice and an old-looking phrase
+  with a false flag does not. Provider input and speech replay remain unchanged.
+- `make verify-software` passed (2,465 software tests, 7 performance plus build/policy checks);
+  all four `make test-browser-ci` tiers passed. The RFC remains implementing: other Inspector
+  sections, raw-id leaks, D1/D9 and owner-use are not discharged by this repair.

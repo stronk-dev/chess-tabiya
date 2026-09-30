@@ -1039,7 +1039,7 @@ describe("Layer 3 screens", () => {
     const preferences = new Map([[assistanceKey("position"), JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })]]);
     const assistanceStorage = { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } };
     const capabilities = { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "external-voice": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture" }) } as Capabilities;
-    const onVoice = vi.fn(async () => ({ text: "Recorded reading at this position: fixture fact.", source: "provider" as const, scope: "marker" as const }));
+    const onVoice = vi.fn(async () => ({ text: "Dated, source-bound engine reading.", source: "provider" as const, scope: "marker" as const, recordedReadingsPresent: true }));
     const component = mountDrill({ target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, capabilities, onVoice, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion } });
     await vi.waitFor(() => expect(document.querySelector(".pivotal-marker")).not.toBeNull());
     // A stale tab's legacy write is not an authority any more (rfc/intent-presets.md §5.3).
@@ -1086,10 +1086,12 @@ describe("Layer 3 screens", () => {
     });
     run = commitMove(run, "b2b3").run;
     run = commitMove(run, "h8h7").run;
+    let recordedReadingsPresent = false;
     const onVoice = vi.fn(async (_nodeId: string, scope: VoicePage["scope"]) => ({
-      text: "Recorded reading at this position: rook and pawn versus rook.",
+      text: recordedReadingsPresent ? "Dated, source-bound rook endgame reading." : "Recorded reading at this position: old-looking but unsupported text.",
       source: "provider" as const,
       scope,
+      recordedReadingsPresent,
     }));
     const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -1112,10 +1114,16 @@ describe("Layer 3 screens", () => {
     const revoice = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Revoice current-position evidence")!;
     revoice.click();
     await vi.waitFor(() => expect(onVoice).toHaveBeenCalledWith(run.activeCursor.nodeId, "reading"));
-    await vi.waitFor(() => expect(document.querySelector('[aria-label="Current-position evidence rendering"]')?.textContent).toContain("rook and pawn versus rook"));
+    const readingSection = document.querySelector('[aria-label="Current-position evidence rendering"]')!;
+    await vi.waitFor(() => expect(readingSection.textContent).toContain("old-looking but unsupported text"));
+    expect(readingSection.textContent).not.toContain(RECORDED_READING_GUARD);
+    recordedReadingsPresent = true;
+    revoice.click();
+    await vi.waitFor(() => expect(readingSection.textContent).toContain("Dated, source-bound rook endgame reading."));
+    expect(readingSection.textContent).toContain(RECORDED_READING_GUARD);
     document.querySelector<HTMLButtonElement>('.timeline button[aria-label^="Rehearsal step 1:"]')!.click();
     await tick();
-    expect(document.querySelector('[aria-label="Current-position evidence rendering"]')?.textContent).not.toContain("rook and pawn versus rook");
+    expect(document.querySelector('[aria-label="Current-position evidence rendering"]')?.textContent).not.toContain("Dated, source-bound rook endgame reading.");
     await unmount(component);
   });
 
@@ -1137,7 +1145,7 @@ describe("Layer 3 screens", () => {
     const onVoice = vi.fn((_nodeId: string, scope: VoicePage["scope"]) => {
       if (onVoice.mock.calls.length === 1) return markerResponse;
       if (onVoice.mock.calls.length === 2) return readingResponse;
-      return Promise.resolve({ text: "crossed-scope payload", source: "provider" as const, scope: scope === "reading" ? "marker" as const : "reading" as const });
+      return Promise.resolve({ text: "crossed-scope payload", source: "provider" as const, scope: scope === "reading" ? "marker" as const : "reading" as const, recordedReadingsPresent: false });
     });
     const component = mountDrill({ target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
@@ -1160,11 +1168,11 @@ describe("Layer 3 screens", () => {
     expect(onVoice.mock.calls[0]).toEqual([pivotal.activeCursor.nodeId, "marker"]);
     expect(onVoice.mock.calls[1]).toEqual([run.activeCursor.nodeId, "reading"]);
 
-    resolveReading({ text: "Current-position explanation.", source: "provider", scope: "reading" });
+    resolveReading({ text: "Current-position explanation.", source: "provider", scope: "reading", recordedReadingsPresent: false });
     await readingResponse;
     await tick();
     expect(readingSection.textContent).toContain("Current-position explanation.");
-    resolveMarker({ text: "Late marker explanation.", source: "provider", scope: "marker" });
+    resolveMarker({ text: "Late marker explanation.", source: "provider", scope: "marker", recordedReadingsPresent: false });
     await markerResponse;
     await tick();
     expect(markerSection.textContent).not.toContain("Late marker explanation.");

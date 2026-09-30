@@ -664,7 +664,7 @@ export type ProgressRecommendation = {readonly kind:"repertoire_gap";readonly re
 export interface ProgressRecommendationPage { readonly recommendations: readonly ProgressRecommendation[]; readonly selection: { readonly shown: number; readonly total: number }; }
 export interface DistillResult {readonly draft:PackDraft;readonly proposals:readonly Record<string,unknown>[];readonly dropped:readonly string[]}
 
-export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story" | "compare"; }
+export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story" | "compare"; readonly recordedReadingsPresent: boolean; }
 
 export interface ImportedGameRecord {
   readonly runId: string;

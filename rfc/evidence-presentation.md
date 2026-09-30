@@ -1783,6 +1783,15 @@ mismatch even within the same calendar day, and the parser rejects an omitted da
 the reading post-provider but now appends its registered component sentence; Review Map and Full
 Inspector carry the same dated component. Other current-consumer work remains open.
 
+**Inspector voice notice [[D3308]] discharged 2026-09-30:** the voice response carries required boolean
+`recordedReadingsPresent`, computed from the sentences actually produced by the separately admitted
+`guidance.recorded_reading@1` consumer. The client parses it as part of the exact response shape and
+uses it, not any substring of the provider's prose, for the notice that readings exist only at
+author-queried positions. A provider cannot set or see the flag. A response with no admitted
+reading returns `false` even if its text happens to contain the old phrase. The marker and
+current-position Inspector paths both obey this invariant; speech continues to read the already
+displayed text without a second external voice request.
+
 ## Questions resolved for this draft
 
 1. **`full_inspector` uses components plus a per-fact provenance/raw drawer.** The owner ruled the
