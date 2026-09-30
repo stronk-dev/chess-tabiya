@@ -33,9 +33,13 @@ observed events retain their complete recorded windows in the sealed payload eve
 though their manifest operands name only the motif-specific identities. They remain evidence facts,
 not claims that a move was intended, forced, best, or good.
 
-**Eligibility** is an exact event-to-consumer permission. It says that a validated event may reach
-that consumer; it does not say the event is useful, visible or enabled. The current 67 rows target
-only `research.semantic_selection@1`. Existing product consumers receive no new evidence.
+**Eligibility** is an exact event-to-consumer permission. It says that an event may reach that
+consumer; it does not say the event is useful, visible or enabled. Every row names its validation
+posture explicitly (`semanticValidation`): `required` compiles eligible only over a `passed`
+generated verdict, while `research_only` is legal only for an author/operator analysis consumer
+whose forms and answers exclude learner prose, board paint, hints, grades and moves. The current 78
+rows target only `research.semantic_selection@1` and are `research_only`. Existing product
+consumers receive no new evidence.
 
 **Selection** compares the played edge with every other legal move from the same parent position.
 The denominator includes alternatives that emit no event. The versioned research policy keeps at
@@ -170,6 +174,40 @@ promotion-race projections: geometry needs its final exact declared input set an
 needs live-or-recorded tablebase authority. Deflection, attraction and bounded mate are compiled;
 the manifest does not advertise the remaining two until their authorities pass the independent
 promotion-seam review.
+
+## Declared, validated, research-only and learner-eligible
+
+`rfc/semantic-validation-authority.md` replaces the old self-generated `semantic-event:<id>` labels
+with four independent authorities:
+
+1. **Declared** — the projection compiles in the F1 manifest and its values carry a sole-factory
+   value receipt. That says what an event *is*, not that the chess predicate is right.
+2. **Validated** — the subject's literal profile in `semantic-validation-profiles.json` carries all
+   six arms (positive, semantic negative, orientation, counterfactual, imported population,
+   external label) and every non-`not_applicable` arm passed. Positives and negatives are data
+   cases in `semantic-validation-cases.json` executed by `semantic-validation-runner.ts` through
+   the registered production operation (`semantic-validation-operations.ts`); each case resolves
+   an independent authority (a moved D1713 assertion whose test body and expectation bytes are
+   digest-frozen, a rules oracle plus proposition, an immutable cited source, or an owner row in
+   the protected `design/research/semantic-validation-owner-authorities.json`). The imported-
+   population arm executes the current operation over the R2 sample (579 sampled edges, 108
+   recorded paths). `make semantic-validation-update` is the only writer of
+   `semantic-validation-receipt.generated.{json,ts}`; `make semantic-validation-check` (part of
+   `verify-software`) recomputes it and fails on any byte difference — so a change to an
+   operation's source closure, a case, a profile or a population result must be regenerated.
+3. **Research-only** — operator analysis may read an unvalidated event; the compiler refuses the
+   same posture for a learner, host, participant or spectator consumer.
+4. **Learner-eligible** — `admitValidatedSemanticInstance` admits one exact instance only when its
+   subject verdict is `passed` *and* the instance carries the sole-factory value receipt with a
+   reproduced payload digest. A missing, alternate or swapped receipt is `event_value_unverified`.
+
+At Slice A, 78 roots have profiles, 38 migrated cases pass (29 positives, 9 negatives), 53 subjects
+carry an executed population receipt and 8 carry D872 external-disagreement receipts — and **zero**
+subjects are validated, because no emitter-level orientation authority exists anywhere. The
+avoidance family (D1716) and king opposition (D1717) abstain on every arm until their successors
+land; the eleven v1 multi-edge window events have no production operation (their v2 successors
+do). Validation never transfers from inputs to a derived event, and a new projection version
+starts with no verdict.
 
 ## Adding a product module
 

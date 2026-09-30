@@ -27222,6 +27222,24 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3314",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:abe8681dba72254747ee2f94223561e3d6c52bee54ce602959b32f64ec2d3e4a",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/integration-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3315",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9984ddf5306b6890a120e4a8086c70afd669d486fd944b9c039afefef5c41dd6",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/integration-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -126,6 +126,79 @@ gate: an AST census of `declareEvidence` callers and factory/invoker importers, 
 equality with the non-retired catalogue, the frozen migration receipt, and one pinned valid case and
 falsifier per factory.
 
+## Bounded material targets (local layer)
+
+`rfc/bounded-policy-targets.md` adds one producer, `derived.bounded_target@1`, declared
+`local/background` through the explicit checked `producer(id, plane, implementation, availability,
+latency, outputs)` constructor (legal pairs: local→sync|background, recorded→sync,
+provider→interactive, build_time→offline). Its three projections are inspector-only:
+
+- `derived.bounded_target.named_material_target@1` — one positive material capture of `threat@1`,
+  joined to the exact sealed threat reading (whose wrapper carries the source `ThreatPassAnchor`
+  bound by the sole threat factory), one legal-exchange item and the source `legal_moves@1` map.
+- `derived.bounded_target.immediate@1` — the outcome of one exact legal candidate: `preserved`, or
+  `removed` by `attacker_captured`, `target_moved`, `capture_illegal` or `exchange_neutralized`
+  (the last two correlated with the deterministic `legal-exchange-for-move@1` post-candidate check).
+- `derived.bounded_target.bounded_return@1` — within three plies, `not_reintroduced`,
+  `reintroduced` (witness plus same-preparation refutation) or `survives_every_defence`.
+
+Application code never mints these: `BoundedTargetBackgroundService.submit` owns the complete set
+(every positive threat exchange × every legal candidate, ≤512 pairs), runs one active and eight
+queued jobs with authority-exact dedup, yields every 64 visited positions through
+`messageChannelMacrotaskYield`, caps 25,000 positions per candidate (typed `budget_exhausted`) and
+100,000 per job, and publishes evidence only when a whole batch completes. `submit` never throws;
+malformed input is the digest-free `rejected/invalid_request` arm. The service is the one
+registered background producer operation (`RUNTIME_EVIDENCE_PRODUCER_OPERATIONS`, checked by
+`evidence-manifest-check`). The facts say nothing about quality, intent or significance; the
+directionless all-defences field may not select a moment. `make bounded-target-census` reruns the
+D1023 populations through these production symbols.
+
+### Reported target-policy readings
+
+`rfc/bounded-target-policy-composition.md` adds `derived.bounded_target_policy@1` (own operation
+local/sync; both paths provider-bearing — `effectiveEvidenceExecution` reports `provider/interactive`,
+and `assertPathEffectiveExecution` refuses any sync consumer binding). Both rows are inspector-only
+and `reported`:
+
+- `derived.bounded_target.engine_target_policy@1` — over two complete same-exchange
+  `live.stockfish.legal_root_table@1` receipts (depths 8 and 10) at the after-candidate position:
+  `nextExecution` (the selected root move is the exact target capture) and
+  `secondOpportunityAvailable` (after the selected move and the selected line's declared reply, the
+  exact capture is legal and positive). Disagreeing depths abstain `depth_category_unstable`.
+- `derived.bounded_target.policy_bounds@1` — one applied Maia band, temperature 0.8, top-p 0.92,
+  width min(8, legal): `nextExecutionMass` is `[m, m]`, `[0, missing]` or `[0, 0]` plus the absence
+  cause; `secondOpportunityAvailableMass` is verified available path mass versus `1 − known
+  failure`. Pages below 0.90 retained mass or with a mass-less row refuse the reading.
+
+`apps/server/src/bounded-target-policy.ts#BoundedTargetPolicyCompositionOperation` (composed in
+`application.ts` over the bounded-target service and the one shared provider scheduler) is the only
+production operation; it keeps no cache or queue of its own and propagates cancellation.
+
+## Phase sources (server-private composition)
+
+`apps/server/src/phase-source-composition.ts` (rfc/phase-source-composition.md) composes one exact
+recorded position (`run.record.position@1`) into a branded `PhaseSourcePoint` with independent
+slots: `openingSources` (current endpoint and catalogue membership, derived once through
+`openingIdentityAt` from the retained occurrence), `rulesPhase` (the sealed `rules.phase.reading@2`
+with its five-arm decision), `rulesEndgame` (`not_applicable` exactly outside the endgame arm, else
+the sealed `rules.endgame.classification@1`), and `tablebase` (`recorded` from a sealed pack
+evidence snapshot — `no_pack_source`, `ledger_unverified` and `ledger_invalid` are distinct from
+recorded absence — plus the live Syzygy provider arm retained exactly: `not_requested`, success,
+local-domain result or source failure). No slot wins, and no root carries a `phase`, `stage`,
+`inBook`, technique, confidence, rank, relevance, hint or selected-source field. `compilePhaseArc(run,
+branchId, deps)` calls the recorded-semantic-path operation itself and emits source-local changes
+only (never `phase_transition`/`left_book`). Support (`guidance.ts#evidencePacket`) consumes the
+current point; Review (`service.review`) compiles the arc and its evidence panel reads the arc's
+retained recorded path. The views never cross the server package. Failures (`PHASE_SOURCE_*`) are
+bugs or corrupt inputs, never "no evidence".
+
+Every public position-consuming operation asserts the exact recorded-position evidence seal
+before reading it; a matching projection label, spread clone or JSON round trip is insufficient.
+Snapshot compilation similarly asserts each recorded reading and the exact tablebase projection.
+The public `assertDeclaredEvidence` validator verifies existing authority; it exposes no mint,
+factory, dispatcher or receipt constructor. `make evidence-foundation-check` retains forged-input
+controls together with the composition, catalogue and sole-value-route tests.
+
 ## Honest homes and raw evidence
 
 Every projection is either bound to a consumer or has one explicit disposition:

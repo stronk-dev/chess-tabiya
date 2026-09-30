@@ -1,12 +1,11 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — sixth author repair complete for [[D3042]]–[[D3046]].** Canonical exported
-  declaration images cover types/modifiers/generics/callables; admission owns a frozen request
-  container; dedup requires byte identity plus exact authority references; the public result
-  assertion is declared and consumed; and malformed input returns pre-identity
-  `rejected/invalid_request`. `make bounded-target-sixth-author-repair` retains the complete
-  chain and passes 5/5 new controls. Another genuinely fresh review and dependency landing are
-  required before implementation.
+- **Status:** implementing —
+  **implemented 2026-09-24 at the owner's direction, no review round.** The threat pass anchor,
+  sole FEN-owning threat factory, three value routes, explicit producer latency, producer-operation
+  census and the closed background service ship with their protocol exported from the barrel. All
+  three projections are inspector-only; zero consumer pairs are declared. Receipt:
+  `planning/bounded-policy-targets/implementation-2026-09-24.md`
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -1358,6 +1357,16 @@ of the public protocol and consumer; and malformed input uses a digest-free
 and passes 5/5 new groups. Another genuinely fresh review still owns acceptance.
 
 ## Changelog
+
+- 2026-09-24 — **implemented at the owner's direction.** Defects fixed inline: (a) §2's root rule
+  admits only disposition-free events, so the inspector-only `immediate@1` could not enter
+  validation as this RFC requires — semantic-validation gains an explicit inspector-only event-root
+  register beside the reading roots; (b) the D1023 harness replayed a pawn's tracked capture without
+  its promotion role and dropped positive captures that also mate, so its 120/69 and 188/130 counts
+  were not the §4 contract's — the production census records 122/71 (authored) and 180/130
+  (imported), lift 4.12×/3.41×, universal 2/0 unchanged; (c) the post-candidate check keeps the
+  source capture's promotion role. The semantic-validation operation's reach stays `required`
+  (zero production callers by §4.2 design).
 
 - 2026-09-06 — sixth author repair for [[D3042]]–[[D3046]]. Sealed complete exported declaration
   ASTs, owned the admitted request container, reconciled dedup with reference ancestry, added and

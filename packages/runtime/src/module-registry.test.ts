@@ -158,7 +158,7 @@ describe("module registration — the compiled production registry", () => {
     const phase = { id: "rules.phase.reading", version: 2 };
     expect(() => compileEvidenceManifest({
       ...EVIDENCE_CONTRACT_DECLARATIONS,
-      eligibility: [...EVIDENCE_CONTRACT_DECLARATIONS.eligibility!, { event: phase, consumer: { id: "module.review_map", version: 1 }, disposition: "eligible", reason: { id: "eligible_validated_literal", version: 1 }, allowedSigns: ["state"], requiredOperands: [], valenceAuthority: [] }],
+      eligibility: [...EVIDENCE_CONTRACT_DECLARATIONS.eligibility!, { event: phase, consumer: { id: "module.review_map", version: 1 }, disposition: "eligible", reason: { id: "eligible_validated_literal", version: 1 }, allowedSigns: ["state"], requiredOperands: [], valenceAuthority: [], semanticValidation: "research_only" }],
     })).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_ELIGIBILITY_ORPHANED" }));
     // Deleting one module adapter while keeping the acceptance fails the binding set equality.
     const withoutAdapter = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, adapters: EVIDENCE_CONTRACT_DECLARATIONS.adapters.filter((adapter) => !(adapter.consumer.id === "module.review_map" && key(adapter.projection) === "derived.grade.move_quality@1")) });

@@ -1,6 +1,12 @@
 # RFC: Bounded target policy composition
 
-- **Status:** draft — blocked on acceptance/implementation of `provider-exchange-and-execution` and `bounded-policy-targets`; independent buildability review required
+- **Status:** implementing —
+  **implemented 2026-09-24 at the owner's direction, no review round.** Both reported projections,
+  the runtime derivations, the server `BoundedTargetPolicyCompositionOperation` composed in
+  `application.ts` over the bounded-target service and the one shared provider scheduler (closing
+  ledger D1655/D1658's production-operation and bounded-execution gaps), and path-effective execution
+  ship. The live D1023 provider population rerun (criteria 4/9) needs real engines and remains open.
+  Receipt: `planning/bounded-policy-targets/composition-implementation-2026-09-24.md`
 - **Author:** codex, from the D1023 result and D1652–D1658 contract-closure handoff
 - **Created:** 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; contract closure `design/research/bounded-policy-target-contract-closure.md`
@@ -345,6 +351,14 @@ None for the composition foundation. Bot admission, Review selection and learner
 separate consumer decisions and cannot weaken these source/derivation boundaries.
 
 ## Changelog
+
+- 2026-09-24 — **implemented at the owner's direction.** Defects fixed inline: (a) a preserved
+  immediate target has no `bounded_return@1`, so both rows' derivation is `anyOf` with and without
+  it (`boundedReturn` is `null` exactly when the immediate was preserved); (b) the provider protocol
+  refuses a Maia width above the legal-move count, so the declared width is min(8, legal) per page;
+  (c) the "declared defender reply" for second-opportunity availability is the selected row's PV
+  second ply, and a missing reply abstains `input_abstained`; (d) F1 had no path-effective execution
+  ([[D1700]]) — `effectiveEvidenceExecution`/`assertPathEffectiveExecution` provide it.
 
 - 2026-08-27 — created as the third layer required by the D1652–D1658 author handoff. It replaces
   the monolithic RFC's interpreted Stockfish “source” and node-shaped Maia reuse with two literal

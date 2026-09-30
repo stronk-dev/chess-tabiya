@@ -58,3 +58,14 @@ law 5.
 `make semantic-validation-fifth-author-repair` passes 5/5 plus strict TypeScript. D2445–D2448 are
 author-repaired; D2449 waits on an explicit owner ruling and a separate owner/Claude-authored root
 commit. Production and learner eligibility remain unauthorized pending fresh independent review.
+
+## 2026-09-30 — Integrate owner-directed Slice A without waiving validation debt
+
+The September 24 implementation is reconciled with main, together with the bounded-target roots:
+81 subjects, 38 passed executable cases, 53 population receipts and eight external receipts.
+Zero profiles fully pass. D0 and the missing independent authority/reach/consumer discharges
+remain open. The protected owner store is not created. D3315 wires its repository-derived
+transition guard into governance CI and a narrow staged pre-commit job; no pre-push restriction is
+added. The RFC and README now agree on implementing, and the execution plan distinguishes the
+mechanism already landed from the remaining family/consumer work. Full integration receipt:
+`planning/evidence-foundation-ux/integration-2026-09-30.md`.

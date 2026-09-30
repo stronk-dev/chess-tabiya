@@ -189,7 +189,7 @@ describe("evidence manifest compiler", () => {
     const baseEvent = {
       projection: { id: "q.output", version: 1 }, derivationAnyOf: [[pRef], [rRef]],
       allowedSigns: ["state" as const], requiredOperands: ["fen"], valence: "none" as const,
-      validation: { positives: ["positive"], hardNegatives: ["negative"] },
+      validation: { profile: { kind: "event" as const, projection: { id: "q.output", version: 1 } } },
     };
     const declarations = (event: typeof baseEvent): EvidenceContractDeclarations => ({
       producers: [producer(projection()), producer({ ...projection("r.output", "r"), disposition: { kind: "operator_only", reason: "fixture input" } }, "r"), producer(output, "q")],
@@ -242,8 +242,9 @@ function semanticDeclarations(): EvidenceContractDeclarations {
   const output = { ...projection(), role: "event" as const };
   return {
     producers: [producer(output)], consumers: [consumer()], adapters: [adapter()],
-    semanticEvents: [{ projection: { id: "p.output", version: 1 }, allowedSigns: ["state"], requiredOperands: ["fen"], valence: "none", validation: { positives: ["positive"], hardNegatives: ["negative"] } }],
-    eligibility: [{ event: { id: "p.output", version: 1 }, consumer: { id: "c", version: 1 }, disposition: "eligible", reason: { id: "eligible", version: 1 }, allowedSigns: ["state"], requiredOperands: ["fen"], valenceAuthority: [] }],
+    semanticEvents: [{ projection: { id: "p.output", version: 1 }, allowedSigns: ["state"], requiredOperands: ["fen"], valence: "none", validation: { profile: { kind: "event", projection: { id: "p.output", version: 1 } } } }],
+    eligibility: [{ event: { id: "p.output", version: 1 }, consumer: { id: "c", version: 1 }, disposition: "eligible", reason: { id: "eligible", version: 1 }, allowedSigns: ["state"], requiredOperands: ["fen"], valenceAuthority: [], semanticValidation: "required" }],
+    semanticValidationVerdicts: [{ subject: { kind: "event", projection: { id: "p.output", version: 1 } }, verdict: "passed" }],
     reasons: [{ id: "eligible", version: 1, stage: "eligibility", meaning: "fixture eligible" }, { id: "empty", version: 1, stage: "selection", meaning: "fixture empty" }],
     selectionPolicies: [{ id: "policy", version: 1, consumer: { id: "c", version: 1 }, disposition: "experimental", minimumAlternatives: 1, maximumSameFamilyShare: 0.2, minimumAlternativeOnlyShare: 0.3, maxFacts: 1, criticalEvents: [{ id: "p.output", version: 1 }] }],
   };
@@ -260,7 +261,7 @@ function semanticErrorCases(): Record<string, EvidenceContractDeclarations> {
     EVIDENCE_EVENT_DERIVATION_MISMATCH: { ...valid, semanticEvents: [{ ...event, derivationInputs: [{ id: "p.output", version: 1 }] }] },
     EVIDENCE_EVENT_SIGN_WIDENS: { ...valid, semanticEvents: [{ ...event, allowedSigns: ["lost"] }] },
     EVIDENCE_EVENT_OPERAND_MISSING: { ...valid, semanticEvents: [{ ...event, requiredOperands: ["missing"] }] },
-    EVIDENCE_EVENT_UNVALIDATED: { ...valid, semanticEvents: [{ ...event, validation: { positives: [], hardNegatives: ["negative"] } }] },
+    EVIDENCE_EVENT_UNVALIDATED: { ...valid, semanticEvents: [{ ...event, validation: { profile: { kind: "event", projection: { id: "other.event", version: 1 } } } }] },
     EVIDENCE_EVENT_PROJECTION_REFUSED: { ...valid, producers: [producer()], eligibility: [], selectionPolicies: [] },
     EVIDENCE_EVENT_VALENCE_UNBACKED: { ...valid, semanticEvents: [{ ...event, valence: "source_required" }] },
     EVIDENCE_ELIGIBILITY_DUPLICATE: { ...valid, eligibility: [row, row] },

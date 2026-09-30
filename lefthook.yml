@@ -33,6 +33,16 @@ pre-commit:
         - "tools/staged-process-contracts*.mjs"
       run: node tools/staged-process-contracts.mjs
 
+    - name: semantic-authority-history
+      glob:
+        - "design/research/semantic-validation-owner-authorities.json"
+        - "packages/runtime/src/semantic-validation*.{ts,json}"
+        - "tools/semantic-validation-owner-transition.ts"
+        - "planning/work-state.json"
+        - "Makefile"
+        - "lefthook.yml"
+      run: make semantic-validation-owner-transition-check
+
     - name: scaffold
       glob:
         - "Makefile"

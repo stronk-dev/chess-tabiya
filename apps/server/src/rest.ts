@@ -76,8 +76,9 @@ import { ACCOUNT_IMPORT_MAX_BYTES } from "./account-import.js";
 import { CAMPAIGN_ERROR_STATUS, ServerError, isCampaignErrorCode } from "./errors.js";
 import { projectClientCapabilities, type CapabilitiesProvider } from "./capabilities.js";
 import { openingIdentityAt, type OpeningCatalogueAvailability } from "./opening-catalogue.js";
+import { compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
 import type { TtsProvider } from "./external-tts.js";
-import { projectPackDocument } from "./pack-registry.js";
+import { projectPackDocument, type PackRecord } from "./pack-registry.js";
 import {
   OpponentSelector,
   parseSelectMoveRequest,
@@ -913,6 +914,11 @@ export function createRestHandler(
   campaigns?: CampaignService,
   hints?: HintService,
 ): RestHandler {
+  // rfc/phase-source-composition.md §5: the Support call site's phase-source dependencies.
+  const phaseSourcesFor = (pack: PackRecord | undefined): PhaseSourceDependencies => Object.freeze({
+    opening: openingCatalogue ?? Object.freeze({ kind: "unavailable" as const, reason: "artifact_missing" as const }),
+    recorded: compileRecordedEvidenceSnapshot(pack === undefined ? { kind: "no_pack_source" } : { kind: "pack", packId: pack.document.id, packDigest: pack.digest, recordedEvidence: pack.recordedEvidence, positionEvidence: pack.positionEvidence }),
+  });
   // The text each voice render displayed, so speech can speak exactly it (bounded, per process).
   const displayedVoice = new DisplayedVoiceText(512);
   /** rfc/intent-presets.md §5.1: stages 1 -> 2 with server-derived context, access and provider state. */
@@ -1907,14 +1913,14 @@ export function createRestHandler(
           const access = service.guidanceAccess(route.runId, principal, comparison.forkNodeId);
           requireGuidanceDisclosure(access);
           const narrative = comparisonNarrative(access.run, comparison, comparisonStrips(access.run, comparison));
-          const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+          const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
           const rendered = await renderVoice(voiceProvider, base, voicePersona, "compare", narrative.evidence, false);
           displayedVoice.remember(route.runId, comparison.forkNodeId, "compare", rendered.text);
           return json(200, { ...rendered, scope });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
-        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
         const rendered = await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra);
@@ -1929,7 +1935,7 @@ export function createRestHandler(
         if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
-        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
         const rendered = renderedEvidenceItems(EVIDENCE_MANIFEST, scope === "story" ? "guidance.voice_story" : "guidance.voice", [...basePacket.declared, ...extra]);

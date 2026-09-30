@@ -144,11 +144,23 @@ export interface SemanticEventDeclaration {
   readonly allowedSigns: readonly SemanticEventSign[];
   readonly requiredOperands: readonly string[];
   readonly valence: "none" | "source_required";
-  readonly validation: {
-    readonly positives: readonly string[];
-    readonly hardNegatives: readonly string[];
-    readonly externalPopulation?: string;
-  };
+  /**
+   * rfc/semantic-validation-authority.md §2: a profile reference only. The profile itself lives in
+   * `semantic-validation-profiles.json`; no validation label is interpolated from the event id.
+   */
+  readonly validation: { readonly profile: SemanticValidationProfileRef };
+}
+
+/** The exact subject a declaration's validation profile is keyed by (event arm only here). */
+export interface SemanticValidationProfileRef {
+  readonly kind: "event";
+  readonly projection: VersionedEvidenceId;
+}
+
+/** The generated per-subject verdict a `required` eligibility row compiles against. */
+export interface SemanticValidationVerdictRow {
+  readonly subject: { readonly kind: "event" | "reading"; readonly projection: VersionedEvidenceId };
+  readonly verdict: "passed" | "unvalidated";
 }
 
 export interface EvidenceEligibilityDeclaration {
@@ -159,6 +171,12 @@ export interface EvidenceEligibilityDeclaration {
   readonly allowedSigns: readonly SemanticEventSign[];
   readonly requiredOperands: readonly string[];
   readonly valenceAuthority: readonly VersionedEvidenceId[];
+  /**
+   * rfc/semantic-validation-authority.md §7.1. `required` compiles eligible only over a `passed`
+   * generated verdict; `research_only` is legal only for an author/operator analysis consumer
+   * whose forms and answers exclude learner prose, board paint, hints, grades and moves.
+   */
+  readonly semanticValidation: "required" | "research_only";
 }
 
 export interface EvidenceReasonDeclaration extends VersionedEvidenceId {
@@ -190,6 +208,8 @@ export interface EvidenceContractDeclarations {
   readonly eligibility?: readonly EvidenceEligibilityDeclaration[];
   readonly reasons?: readonly EvidenceReasonDeclaration[];
   readonly selectionPolicies?: readonly EvidenceSelectionPolicyDeclaration[];
+  /** The generated semantic-validation verdicts (`semantic-validation-receipt.generated.ts`). */
+  readonly semanticValidationVerdicts?: readonly SemanticValidationVerdictRow[];
 }
 
 export interface CompiledEvidenceManifest {
@@ -652,6 +672,9 @@ export function renderEvidenceItems<T>(view: ConsumerEvidenceView<T>, renderers:
   return rendered;
 }
 
+const RESEARCH_FORBIDDEN_FORMS: ReadonlySet<EvidenceForm> = new Set(["sentence", "lit_squares", "arrows", "piece_halo", "audio"]);
+const RESEARCH_FORBIDDEN_ANSWERS: ReadonlySet<AnswerDistance> = new Set(["candidate_moves", "ranked_moves", "move", "principal_variation", "plan", "principle"]);
+
 export function compileEvidenceManifest(declarations: EvidenceContractDeclarations): CompiledEvidenceManifest {
   const producers = [...declarations.producers].sort((left, right) => refKey(left).localeCompare(refKey(right)));
   const consumers = [...declarations.consumers].sort((left, right) => refKey(left).localeCompare(refKey(right)));
@@ -770,10 +793,12 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     }
     if (event.allowedSigns.length === 0 || !subset(event.allowedSigns, projection.signs)) fail("EVIDENCE_EVENT_SIGN_WIDENS", "semantic event signs exceed its projection", [site("semantic-event", event.projection)]);
     if (!subset(event.requiredOperands, projection.operands) || !nonEmptyStrings(event.requiredOperands)) fail("EVIDENCE_EVENT_OPERAND_MISSING", "semantic event requires an operand absent from its projection", [site("semantic-event", event.projection)]);
-    if (event.validation.positives.length === 0 || event.validation.hardNegatives.length === 0 || !nonEmptyStrings(event.validation.positives) || !nonEmptyStrings(event.validation.hardNegatives)) fail("EVIDENCE_EVENT_UNVALIDATED", "semantic event needs executable positive and hard-negative fixtures", [site("semantic-event", event.projection)]);
+    const profile = (event.validation as { readonly profile?: SemanticValidationProfileRef } | undefined)?.profile;
+    if (event.validation === undefined || Object.keys(event.validation).join(",") !== "profile" || profile?.kind !== "event" || refKey(profile.projection) !== key) fail("EVIDENCE_EVENT_UNVALIDATED", "semantic event validation must be exactly one profile reference to its own subject", [site("semantic-event", event.projection)]);
     eventMap.set(key, event);
   }
 
+  const semanticVerdicts = new Map((declarations.semanticValidationVerdicts ?? []).map((row) => [`${row.subject.kind}:${refKey(row.subject.projection)}`, row.verdict] as const));
   const eligibilityMap = new Map<string, EvidenceEligibilityDeclaration>();
   for (const row of eligibility) {
     assertLiteral(row.event, site("eligibility-event", row.event));
@@ -791,6 +816,21 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     for (const authority of row.valenceAuthority) {
       assertLiteral(authority, site("valence-authority", authority));
       if (!projectionMap.has(refKey(authority))) fail("EVIDENCE_EVENT_VALENCE_UNBACKED", "valence authority is absent", [key, site("valence-authority", authority)]);
+    }
+    // rfc/semantic-validation-authority.md §7.1: the validation requirement is explicit per row.
+    if (row.semanticValidation === "research_only") {
+      const researchRoles = consumer.roles.every((role) => role === "author" || role === "operator");
+      const researchTiming = consumer.timing.every((timing) => timing === "analysis");
+      const researchForms = consumer.forms.every((form) => !RESEARCH_FORBIDDEN_FORMS.has(form));
+      const researchAnswers = consumer.answerContent.every((answer) => !RESEARCH_FORBIDDEN_ANSWERS.has(answer));
+      if (!researchRoles || !researchTiming || !researchForms || !researchAnswers) fail("EVIDENCE_EVENT_UNVALIDATED", "research_only semantic eligibility is legal only for an author/operator analysis consumer without learner prose, board paint, hints, grades or moves", [key]);
+    } else if (row.semanticValidation === "required") {
+      if (row.disposition === "eligible") {
+        const verdict = semanticVerdicts.get(`event:${refKey(row.event)}`);
+        if (verdict !== "passed") fail("EVIDENCE_EVENT_UNVALIDATED", `semantic event eligibility requires a passed validation verdict (event_unvalidated: ${verdict ?? "no verdict"})`, [key]);
+      }
+    } else {
+      fail("EVIDENCE_EVENT_UNVALIDATED", "eligibility must declare semanticValidation required or research_only", [key]);
     }
     eligibilityMap.set(key, row);
   }
@@ -854,4 +894,52 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
   bindings.sort((left, right) => `${refKey(left.consumer)}:${refKey(left.projection)}`.localeCompare(`${refKey(right.consumer)}:${refKey(right.projection)}`));
   const material = { producers, projections, consumers, bindings, semanticEvents, eligibility, reasons, selectionPolicies };
   return immutable({ ...material, digest: sha256(canonical(material)) });
+}
+
+/**
+ * Path-effective execution (rfc/bounded-target-policy-composition.md §4, [[D1700]]): a projection's
+ * own producer may be local/sync while one of its literal derivation paths requires a provider.
+ * Effective availability is `provider` when any transitive derivation member is provider-produced,
+ * and its latency is then `interactive`; a consumer binding cannot advertise sync satisfaction.
+ */
+export interface EffectiveEvidenceExecution {
+  readonly availability: AvailabilityMode;
+  readonly latency: LatencyMode;
+  readonly providerPaths: readonly VersionedEvidenceId[];
+}
+
+export function effectiveEvidenceExecution(manifest: CompiledEvidenceManifest, projection: VersionedEvidenceId): EffectiveEvidenceExecution {
+  const key = (value: VersionedEvidenceId): string => `${value.id}@${value.version}`;
+  const projections = new Map(manifest.projections.map((value) => [key(value), value]));
+  const producers = new Map(manifest.producers.map((value) => [key(value), value]));
+  const providers = new Set<string>();
+  const seen = new Set<string>();
+  const visit = (ref: VersionedEvidenceId): void => {
+    const refKeyValue = key(ref);
+    if (seen.has(refKeyValue)) return;
+    seen.add(refKeyValue);
+    const declaration = projections.get(refKeyValue);
+    if (declaration === undefined) throw new TypeError(`No projection ${refKeyValue}`);
+    const producer = producers.get(key(declaration.producer))!;
+    if (producer.availability === "provider") providers.add(refKeyValue);
+    const members = declaration.derivation?.inputs !== undefined ? [declaration.derivation.inputs] : declaration.derivation?.anyOf ?? [];
+    for (const member of members) for (const input of member) visit(input);
+  };
+  visit(projection);
+  const own = producers.get(key(projections.get(key(projection))!.producer))!;
+  if (providers.size === 0) return Object.freeze({ availability: own.availability, latency: own.latency, providerPaths: Object.freeze([]) });
+  const paths = [...providers].sort().map((value) => { const [id, version] = value.split("@"); return Object.freeze({ id: id!, version: Number(version) }); });
+  return Object.freeze({ availability: "provider", latency: "interactive", providerPaths: Object.freeze(paths) });
+}
+
+/** Refuses a provider-bearing projection bound to a sync consumer or lacking provider-off behavior. */
+export function assertPathEffectiveExecution(manifest: CompiledEvidenceManifest, projections: readonly VersionedEvidenceId[]): void {
+  for (const projection of projections) {
+    const effective = effectiveEvidenceExecution(manifest, projection);
+    if (effective.availability !== "provider") continue;
+    for (const binding of manifest.bindings.filter((value) => value.projection.id === projection.id && value.projection.version === projection.version)) {
+      const consumer = manifest.consumers.find((value) => value.id === binding.consumer.id && value.version === binding.consumer.version)!;
+      if (binding.latency.mode === "sync" || consumer.providerOff === undefined) throw new TypeError(`${projection.id}@${projection.version} is provider-bearing but ${binding.consumer.id} advertises sync satisfaction`);
+    }
+  }
 }

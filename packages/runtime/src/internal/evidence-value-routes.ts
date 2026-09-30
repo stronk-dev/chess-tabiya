@@ -158,6 +158,11 @@ import {
   createDerivedTacticCheckZwischenzugObservedV2Evidence,
   createDerivedTacticOverloadExploitationObservedV2Evidence,
   createTheoryEndgameMethodStageV1Evidence,
+  createDerivedBoundedTargetNamedMaterialTargetV1Evidence,
+  createDerivedBoundedTargetImmediateV1Evidence,
+  createDerivedBoundedTargetBoundedReturnV1Evidence,
+  createDerivedBoundedTargetEngineTargetPolicyV1Evidence,
+  createDerivedBoundedTargetPolicyBoundsV1Evidence,
   type EvidenceInputArm,
   type EvidenceValueFactory,
   type EvidenceValueFactoryMeta,
@@ -317,6 +322,13 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   // rfc/hint-distance.md §1.1/§3: seven operator-only horizons and 35 learner disclosures.
   ...HINT_HORIZON_FACTORIES,
   ...HINT_DISCLOSURE_FACTORIES,
+  // rfc/bounded-policy-targets.md §4: the three bounded-target value routes.
+  "derived.bounded_target.named_material_target@1": createDerivedBoundedTargetNamedMaterialTargetV1Evidence,
+  "derived.bounded_target.immediate@1": createDerivedBoundedTargetImmediateV1Evidence,
+  "derived.bounded_target.bounded_return@1": createDerivedBoundedTargetBoundedReturnV1Evidence,
+  // rfc/bounded-target-policy-composition.md §4: the two reported policy derivations.
+  "derived.bounded_target.engine_target_policy@1": createDerivedBoundedTargetEngineTargetPolicyV1Evidence,
+  "derived.bounded_target.policy_bounds@1": createDerivedBoundedTargetPolicyBoundsV1Evidence,
 });
 
 type Routes = typeof EVIDENCE_VALUE_ROUTES;

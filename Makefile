@@ -716,6 +716,27 @@ foundation-source-author-audit:
 
 foundation-source-author-repair: foundation-source-author-contract foundation-source-author-audit
 
+# rfc/semantic-validation-authority.md §6: the generated receipt's only writer and its drift check.
+.PHONY: semantic-validation-update semantic-validation-check semantic-validation-build
+.PHONY: evidence-foundation-check
+evidence-foundation-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts packages/runtime/src/semantic-validation.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/candidate-population-census.test.ts packages/runtime/src/evidence-value-authority.test.ts apps/server/src/bounded-target-policy.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts
+
+semantic-validation-build:
+	./node_modules/.bin/esbuild tools/semantic-validation-build.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/semantic-validation/dist/semantic-validation-build.mjs --log-level=warning
+
+semantic-validation-update: semantic-validation-build
+	node tools/semantic-validation/dist/semantic-validation-build.mjs --write
+
+semantic-validation-check: semantic-validation-build
+	node tools/semantic-validation/dist/semantic-validation-build.mjs --check
+
+# §R4: the owner-authority store is append-only and owner rows predate the case admitting them.
+.PHONY: semantic-validation-owner-transition-check
+semantic-validation-owner-transition-check:
+	./node_modules/.bin/esbuild tools/semantic-validation-owner-transition.ts --bundle --platform=node --format=esm --outfile=tools/semantic-validation/dist/semantic-validation-owner-transition.mjs --log-level=warning
+	node tools/semantic-validation/dist/semantic-validation-owner-transition.mjs $(if $(CI),--ci,)
+
 semantic-validation-closure:
 	./node_modules/.bin/vitest run --config tools/d1711-semantic-validation-closure/vitest.config.ts --reporter=verbose
 
@@ -1976,7 +1997,12 @@ bounded-target-contract:
 	./node_modules/.bin/tsc -p tools/d1652-bounded-target-repair-harness/tsconfig.contract.json --noEmit
 
 bounded-target-census:
-	./node_modules/.bin/vitest run --config tools/d1023-bounded-policy-harness/vitest.config.ts tools/d1023-bounded-policy-harness/exact-target.test.ts
+	./node_modules/.bin/vitest run --config tools/d1023-bounded-policy-harness/vitest.config.ts tools/d1023-bounded-policy-harness/production-census.test.ts
+
+# rfc/bounded-policy-targets.md §7: the production service, factories and protocol tests.
+.PHONY: bounded-target-contract-production
+bounded-target-contract-production:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts
 
 bounded-target-repeat-review:
 	./node_modules/.bin/vitest run --config tools/d1962-bounded-target-repeat-review/vitest.config.ts
@@ -2059,9 +2085,9 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
+verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
 
-verify-governance: register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
+verify-governance: register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 
 # Draft-RFC evidence remains executable, but it is not a release gate. These targets include
 # historical source images, author models, and counterexamples whose job is to inform an RFC review;

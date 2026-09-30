@@ -1,7 +1,6 @@
 import {
-  classifyPhase,
   assertConsumerEvidenceView,
-  endgameClassification,
+  invokeRunRecordPosition,
   evidenceForConsumer,
   matchesStructuralExpression,
   pivotalMarkers,
@@ -24,6 +23,7 @@ import type { AuthoredFeedbackPage } from "./authored-feedback.js";
 import { recordedReadingsAt } from "./position-evidence.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
+import { compilePhaseSourcePoint, compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
 export type VoiceScope = "marker" | "reading" | "steering" | "story" | "compare" | "hint";
 export interface VoiceEvidenceView {
   readonly scope: VoiceScope;
@@ -48,12 +48,21 @@ export function voiceEvidenceView(packet: EvidencePacket, scope: VoiceScope = "r
   return Object.freeze({ scope, rendered: renderedEvidenceItems(EVIDENCE_MANIFEST, consumerForScope(scope), declared) });
 }
 
-export function evidencePacket(input: { readonly run: DrillRun; readonly node: Node; readonly pack?: DrillPackDefinition; readonly packEvidence?: PositionEvidenceIndex; readonly authored: AuthoredFeedbackPage; readonly shapes?: ShapeRegistry }): EvidencePacket {
+/** The unconfigured default: no opening catalogue artifact and no pack evidence snapshot. */
+const DEFAULT_PHASE_SOURCES: PhaseSourceDependencies = Object.freeze({ opening: Object.freeze({ kind: "unavailable" as const, reason: "artifact_missing" as const }), recorded: compileRecordedEvidenceSnapshot({ kind: "no_pack_source" }) });
+
+/**
+ * Support module assembly (rfc/phase-source-composition.md §5): the current position's phase,
+ * opening, endgame and tablebase sources come from one compiled `PhaseSourcePoint`; this operation
+ * performs no ad-hoc phase/endgame join of its own.
+ */
+export function evidencePacket(input: { readonly run: DrillRun; readonly node: Node; readonly pack?: DrillPackDefinition; readonly packEvidence?: PositionEvidenceIndex; readonly authored: AuthoredFeedbackPage; readonly shapes?: ShapeRegistry; readonly phaseSources?: PhaseSourceDependencies }): EvidencePacket {
+  const point = compilePhaseSourcePoint(invokeRunRecordPosition(input.run, input.node.id), input.phaseSources ?? DEFAULT_PHASE_SOURCES);
   const reading = structuralReading(input.node.fen);
-  const detected = classifyPhase(input.node.fen);
+  const detected = point.rulesPhase.payload;
   const phase = input.pack === undefined ? { source: "detector" as const, value: detected.phase } : { source: "author" as const, value: input.pack.phase as PackPhase };
   const markers = pivotalMarkers(input.run, input.node.branchId).filter((marker) => marker.nodeId === input.node.id);
-  const endgame = endgameClassification(input.node.fen);
+  const endgame = point.rulesEndgame.kind === "classified" ? point.rulesEndgame.item.payload : null;
   const shapeRecords = input.shapes === undefined ? [] : input.shapes.list().map((summary) => input.shapes!.get(summary.id)!);
   const plans = shapeRecords.flatMap((record) => matchesStructuralExpression(input.node.fen, record.document.trigger) ? [{ id: record.document.id, name: record.document.name, attribution: `${record.channel}:${record.document.provenance.licence}` }] : []);
   const recorded = recordedReadingsAt(input.packEvidence, input.node, input.run);
@@ -65,6 +74,7 @@ export function evidencePacket(input: { readonly run: DrillRun; readonly node: N
     shapes: shapeRecords.map((record) => ({ id: record.document.id, trigger: record.document.trigger })),
     authored: input.authored.items,
     recorded,
+    phaseSources: { phase: point.rulesPhase, endgame: point.rulesEndgame.kind === "classified" ? [point.rulesEndgame.item] : [] },
   });
   const authored = declared.filter((item) => item.projection.id === "pack.authored.claim").map((item) => item.payload as { readonly id: string; readonly text: string; readonly attribution: string });
   return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), readings: Object.freeze(recorded.map((item) => item.payload)), declared });

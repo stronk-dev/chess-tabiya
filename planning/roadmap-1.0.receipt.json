@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:58a6606d5df31aacf963e474ac751c28db8f81e3f74cbcccfa5361dacad0ebc7",
+    "roadmap": "sha256:3591e6935ed925423851d5efb690d022d8410925f410a717061872c64ada44b7",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:90009a214bca0ec0c16a58b70b0a72c6362792e9eea81304554e390980a581b3",
-    "rfcRegister": "sha256:18bc49cddbe2a5a0399eaaf1f834c36611229e672d588c7df549e099bf3c1951",
+    "workState": "sha256:9e76c64dcb1de668c4de320ac83144036321f25af80aa7e92b66ba2e72024e9f",
+    "rfcRegister": "sha256:c4cb3f00569367ba2914755b26e2faa17922aba6844c4c7a45877e0006d57f9c",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
-    "application": "sha256:e056780071b64ac37af0f97b20395ab79ae0b3f895b179d776efcd4238d14a90",
-    "rest": "sha256:af2e56bab6dabde254d0cd837a42f52f57de12a4d556c4fe04b0cc006f852c51"
+    "application": "sha256:d6be8e4f6644c6831c34bbc29fb51652030be52102700dc83982120fdb9808b0",
+    "rest": "sha256:0e37ea366dbdd3c4ea497350fc7680ac38f8defb36ee830c2e873396140668bd"
   },
   "summary": {
     "capabilities": 14,
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 71,
     "activeRfcLifecycle": {
-      "draft": 25,
+      "draft": 21,
       "accepted": 0,
-      "implementing": 36,
+      "implementing": 40,
       "awaiting": 10,
       "implemented": 0,
       "superseded": 0,
@@ -33,7 +33,7 @@
       "todo": 621,
       "doing": 0,
       "blocked": 1056,
-      "done": 1225,
+      "done": 1227,
       "refused": 160
     },
     "workItems": {
@@ -178,37 +178,38 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Reconcile the existing evidence-foundation branch implementations (semantic validation, bounded local targets, target-policy composition and phase-source composition) with main's newer admitted presentation paths before rebuilding any of them. Then discharge their missing validation/source-population and consumer bindings, finish provider-exchange caller migration, and carry complete grounded evidence through Support, Review, bots and authoring. D3262's search-profile experiment remains research, not production why-move authority.",
+      "nextAction": "The four evidence-foundation implementations are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete the consumer-owned Support/Review/bot/longitudinal bindings. Finish provider-exchange caller migration and pack capability integration before content expansion. D3262's search-profile experiment remains research, not production why-move authority.",
       "latestCheckpoint": {
-        "at": "2026-09-24",
-        "summary": "Collector to fact to module to learner surface is closed at runtime for Review: the typed Review packet, compiled through the provider scheduler and sealed, renders via module.review_map@1, and each node also records a sealed principal-variation delivery that Analyze reveals through Full Inspector with engine attribution. Post-commit Nudge, the recorded semantic path and the candidate packet also run in production.",
+        "at": "2026-09-30",
+        "summary": "The four existing evidence-foundation implementations are integrated with main's Guided Hint and sealed presentation paths retained: semantic-validation Slice A, bounded local targets, target-policy composition and source-retaining phase composition. The catalogue retains 45 producers/278 projections/35 consumers/544 bindings. Support uses one phase point and Review an exact arc; five new target projections remain inspector-only. D3314 seals every phase input boundary. The generated authority reports 81 subjects, 38 cases passed and zero fully validated profiles, so missing independent authorities and consumer discharges remain release blockers.",
         "impact": "advanced",
         "evidence": [
-          "apps/server/src/review-evidence.ts",
-          "rfc/review-evidence-compiler.md",
-          "rfc/provider-exchange-and-execution.md",
-          "rfc/review-map.md"
+          "planning/evidence-foundation-ux/integration-2026-09-30.md",
+          "rfc/semantic-validation-authority.md",
+          "rfc/bounded-policy-targets.md",
+          "rfc/bounded-target-policy-composition.md",
+          "rfc/phase-source-composition.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "review-evidence-compiler.md",
-            "digest": "sha256:8c3934086f64e5b1c019e021cde3b1eafac507721e953b64f74ce8e1e6b1c0d5"
+            "id": "semantic-validation-authority.md",
+            "digest": "sha256:a19391a280d333879d820a4b4a67f243b778c2bec5e7fdf4359e91b8d2ffe41d"
           },
           {
             "kind": "rfc",
-            "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:ebddcc793fb0fb8227bddd1ba41f60fde8bb72681e9d71675dc12272f41f6fbf"
+            "id": "bounded-policy-targets.md",
+            "digest": "sha256:adad1c73106e30119851e91e915d25c3f0346310db1f0d56084af9dadb1edffd"
           },
           {
             "kind": "rfc",
-            "id": "review-map.md",
-            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+            "id": "bounded-target-policy-composition.md",
+            "digest": "sha256:9a22f1d9c559d29de23d5f98fdde0d41d020fbf677c7cbd96c190824ebc1b91a"
           },
           {
-            "kind": "work_state",
-            "id": "D1655",
-            "digest": "sha256:43db4ec531aafc5bfabbdd7dbfacabeb69e6a2a6a3edf007b08e8187edd610f7"
+            "kind": "rfc",
+            "id": "phase-source-composition.md",
+            "digest": "sha256:b5f69c150edb5de01b3a254aab1e20c8703127c0c928d8405ada7e83534e8ff5"
           }
         ]
       },

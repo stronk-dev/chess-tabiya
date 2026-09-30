@@ -1,7 +1,12 @@
 # RFC: Source-retaining phase composition
 
-- **Status:** draft — bounded author repair complete 2026-09-04 on [[D2636]]–[[D2642]];
-  dependency acceptance and another fresh independent review required before implementation
+- **Status:** implementing —
+  **implemented 2026-09-24 at the owner's direction, no review round.** The branded point and arc
+  compilers, the private opening operation, the sealed recorded-evidence snapshot and the retained
+  live Syzygy arms ship; Support (`evidencePacket`) and Review (`service.review`) consume the compiled
+  views. Bot (D4) and longitudinal (D5) handoffs remain with their owning RFCs; the production-symbol
+  corpus census (criteria 1–4) is not yet rerun. Receipt:
+  `planning/phase-source-composition/implementation-2026-09-24.md`
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-09-01
 - **Design refs:** `design/03-product-breadth.md` B2/B4/B10 and evidence architecture;
@@ -416,6 +421,20 @@ operation paths must be refreshed during buildability review; those are author o
 product choices.
 
 ## Changelog
+
+- 2026-09-30: integrated with main's current Guided Hint and sealed presentation paths.
+  [[D3314]] adds declared-input assertions to point/opening/recorded-position operations and
+  recorded snapshots; forged, spread-cloned and JSON-cloned inputs fail permanent tests.
+  Production-symbol corpus census and bot/longitudinal handoffs remain open.
+
+- 2026-09-24: **implemented at the owner's direction.** Defects fixed inline: (a) the pack registry
+  collapsed no-pack, unverified-ledger and invalid-ledger into one empty index, so §2.2's three
+  source-unavailable reasons were not constructible — `PackRecord.recordedEvidence` now carries the
+  exact state; (b) the value-authority layer has no sealed opening-endpoint factory
+  (`theory.opening.*` routes are unavailable-only), so the opening slots retain the exact typed
+  catalogue results inside the private receipt rather than declared wrappers; (c) a failed live
+  Syzygy result carries only a request digest, so the live slot takes the exact request with the
+  result and re-derives the digest to bind the point's full FEN.
 
 - 2026-09-04: fresh independent review returned implementation on [[D2636]]–[[D2642]]; records the
   exact subject/path/tablebase/presentation authorities and replaces one circular corpus invariant.

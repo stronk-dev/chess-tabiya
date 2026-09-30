@@ -21663,3 +21663,32 @@ Campaign was the one capability with no API, route or content. Now:
   implementations with main's newer presentation/producer paths. Their missing validation,
   source-population and consumer discharges remain real work; do not rebuild or call them complete
   from branch-local receipts. [[D3309]] remains proposed, not accepted production authority.
+
+### 2026-09-30 — Integrate the four existing evidence-foundation mechanisms
+
+- **What landed:** the existing evidence-foundation branch at `d1276f49` is reconciled with
+  main's Guided Hint, Campaign, release metadata and sealed presentation paths. Semantic-validation
+  Slice A, local bounded targets, provider target-policy composition and source-retaining phase
+  composition now coexist in one production application. Support uses one phase point and Review
+  an exact recorded-path arc. The catalogue is 45/278/35/544 (producers/projections/consumers/bindings);
+  the five bounded-target projections add zero learner bindings and remain inspector-only.
+- **Repairs:** [[D3314]] closes the phase input-seal gap. A forged-position test was red on the
+  branch code; every public position boundary and recorded snapshot now asserts its evidence.
+  [[D3315]] binds the repository-derived owner-history guard to governance CI and a narrow
+  pre-commit job, without adding any pre-push gate or creating the protected owner store.
+- **Verification:** the focused Make target passes 129 tests. `make verify-software` passes
+  2,584 software tests and seven isolated performance tests plus type/build/package/policy checks.
+  `make verify-content` passes 218 tests and corpus clearance with no errors; the same target
+  required network permission for pinned pnpm signature verification, with no bypass.
+  `make test-browser-ci` passes 56 smoke, five content, 49 matrix and one packaged-production
+  journeys; one optional live-Maia measurement is skipped. Governance and staged hooks are run
+  against the final closeout before commit. No remote CI result or push is claimed.
+- **Release truth:** the regenerated semantic receipt reports 81 subjects, 38 passed executable
+  cases, 53 population receipts and eight external receipts, but **zero fully validated profiles**.
+  Independent authorities, required production reach, live-provider population reruns and
+  bot/longitudinal/presentation consumers remain required. Four RFCs move from stale draft rows to
+  implementing, not archived; no whole capability, milestone or official pack closes.
+- **Next:** complete the remaining validation/source and consumer obligations and reconcile pack
+  capability work before expanding content. D3309 and the why-move search experiment remain held
+  under their own contracts. Unrelated D872 fixture edits and untracked reviewer files are untouched.
+  Detailed receipt: `planning/evidence-foundation-ux/integration-2026-09-30.md`.

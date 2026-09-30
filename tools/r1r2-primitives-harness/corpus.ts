@@ -24,7 +24,7 @@ export interface Transition {
 export function packFiles(): string[] {
   return readdirSync(DRAFTS)
     .filter((name) => name.endsWith(".json"))
-    .filter((name) => !/\.(evidence|job|sources|browser)\.json$/.test(name))
+    .filter((name) => !/\.(evidence|job|sources|browser|graduation)\.json$/.test(name))
     .sort()
     .map((name) => join(DRAFTS, name));
 }

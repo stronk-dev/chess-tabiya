@@ -2,10 +2,12 @@
 
 ## State
 
-Draft fifth-author-repaired on [[D2445]]–[[D2448]] after the 2026-08-31 return. [[D2449]] now has a
-lawful D0 discharge but remains dependency-blocked on the owner-authorised creation of the exact
-empty protected store. The maintained fifth contract passes 5/5 plus strict TypeScript. Product
-implementation remains unauthorised until D0 lands and a fresh independent review accepts the RFC.
+Implementing: the owner-directed September 24 Slice A is integrated on main on 2026-09-30.
+The generated reading is 81 subjects, 38 passed executable cases and zero fully validated
+profiles. [[D2449]] remains the lawful D0 owner bootstrap; absent independent authorities and
+required production reach remain release debt, not waived by mechanism implementation.
+[[D3315]] binds the existing owner-history guard to governance CI and a narrow pre-commit job.
+Current receipt: `planning/evidence-foundation-ux/integration-2026-09-30.md`.
 
 ## Order
 
@@ -22,12 +24,12 @@ implementation remains unauthorised until D0 lands and a fresh independent revie
 8. WAIT: owner authorises, and owner or Claude-on-that-ruling lands, the exact empty protected root.
 9. WAIT: a new independent buildability review executes the maintained author contract and the
    able-to-fail fixtures in RFC §10 against that real prior-commit root.
-10. Implement Slice A only after acceptance; keep every incomplete event research-only.
-11. Implement the value-authority sole-factory boundary before a semantic verdict can pass.
+10. ✅ Owner-directed Slice A integrated; every incomplete event remains research-only.
+11. ✅ Value-authority sole-factory boundary ships; its independent discharges still apply.
 12. Execute authority-bearing family slices B–D, then release exact consumers in Slice E.
 
 ## Boundary
 
-This author pass changes the RFC, disposable contract and planning/register records only. It does
-not change a collector, evidence declaration, learner consumer, schema, content or protected intent
-document.
+This implementation integrates authority machinery, not chess expectations or learner advice.
+It creates no protected owner store, authored content, new learner waiver or protected intent
+rewrite. Slices B–E and the complete consumer boundary remain required for 1.0.
