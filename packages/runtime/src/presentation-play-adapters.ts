@@ -122,7 +122,7 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
   "play.structural_observation@1": factRenderer(observationSchema, observationSentence),
   "play.named_structure@1": factRenderer(namedStructureSchema, (value) => {
     if (STRUCTURE_NAMES[value.id] !== value.name) throw new TypeError("named structure name disagrees with the registered catalogue name");
-    return `The pawn structure matches the ${value.name} in the declared structure catalogue (pawns on ${listPhrase(value.squares)}).`;
+    return `Recognized pawn structure: ${value.name} (pawns on ${listPhrase(value.squares)}).`;
   }),
   "play.castling_rights@1": factRenderer(s.obj({ white: s.obj({ kingside: s.bool, queenside: s.bool }), black: s.obj({ kingside: s.bool, queenside: s.bool }) }), (value) =>
     `Castling rights: White ${wings(value.white)}; Black ${wings(value.black)}.`),
@@ -171,7 +171,7 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
   "play.pawn_connectivity@1": factRenderer(s.obj({ colors: s.arr(s.obj({ color: s.color, islands: s.nat, connectedPairs: s.nat, chains: s.nat }), { min: 1 }) }), (value) =>
     value.colors.map((entry) => `${side(entry.color)} has ${plural(entry.islands, "pawn island")}, ${plural(entry.connectedPairs, "connected pawn pair")} and ${plural(entry.chains, "pawn chain")}.`).join(" ")),
   "play.phase@1": factRenderer(s.obj({ phase: s.lit("opening", "middlegame", "endgame", "unclear") }), (value) =>
-    value.phase === "unclear" ? "The declared game-phase convention does not classify this position." : `Game phase under the declared convention: ${value.phase}.`),
+    value.phase === "unclear" ? "The game phase is not clear from this position." : `Current position: ${value.phase[0]!.toUpperCase()}${value.phase.slice(1)}.`),
   "play.endgame_type@1": factRenderer(s.obj({ label: s.nullable(s.str) }), (value) =>
     value.label === null ? "Endgame; the material is outside the declared endgame convention." : `${value.label} under the declared endgame convention.`),
   "play.endgame_setup@1": factRenderer(s.obj({ technique: s.str, name: s.str }), (value) =>
@@ -181,14 +181,16 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
   "play.authored_claim@1": factRenderer(s.obj({ text: s.str }), (value) => `The pack author wrote: “${value.text}”`),
   "play.compare_structure@1": factRenderer(s.obj({ observation: observationSchema }), (value) => `On this attempt after the fork: ${observationSentence(value.observation)}`),
   "play.compare_route@1": factRenderer(s.obj({ piece: s.str, squares: s.arr(s.square, { min: 2 }) }), (value) => `On this attempt the ${value.piece} travelled ${value.squares.join(" → ")}.`),
-  "play.recorded_fork@1": factRenderer(s.obj({ sharedPly: s.nat }), (value) => `The attempts share the first ${plural(value.sharedPly, "ply", "plies")} and part at this fork.`),
-  "play.checkpoint_hit@1": factRenderer(s.obj({ plyOffset: s.nat }), (value) => `This attempt reached a checkpoint ${plural(value.plyOffset, "ply", "plies")} after the fork.`),
+  "play.recorded_fork@1": factRenderer(s.obj({ sharedPly: s.nat }), (value) => `The lines share the first ${plural(value.sharedPly, "move")} by either side, then separate.`),
+  "play.checkpoint_hit@1": factRenderer(s.obj({ plyOffset: s.nat }), (value) => value.plyOffset === 0
+    ? "This line reached a checkpoint where the lines separate."
+    : `This line reached a checkpoint after ${plural(value.plyOffset, "move")} by either side.`),
   "play.guided_hint@1": factRenderer(hintSchema, (value) => hintSentence(hintPayloadOf(value))),
   "play.objective_transition@1": factRenderer(s.obj({ from: s.lit("active", "preserved", "degraded", "failed", "achieved", "transitioned"), to: s.lit("active", "preserved", "degraded", "failed", "achieved", "transitioned") }), (value) =>
-    `On this attempt the objective went from ${OBJECTIVE_WORDS[value.from]} to ${OBJECTIVE_WORDS[value.to]}.`),
+    `The rehearsal goal changed from ${OBJECTIVE_WORDS[value.from]} to ${OBJECTIVE_WORDS[value.to]}.`),
 });
 
-const OBJECTIVE_WORDS = Object.freeze({ active: "in progress", preserved: "preserved", degraded: "degraded", failed: "failed", achieved: "achieved", transitioned: "transitioned" } as const);
+const OBJECTIVE_WORDS = Object.freeze({ active: "in progress", preserved: "held", degraded: "weakened", failed: "missed", achieved: "reached", transitioned: "the next phase" } as const);
 
 /** Registered magnitude quantities for the play seats' magnitudes. */
 export const PLAY_MAGNITUDE_QUANTITIES: Readonly<Record<string, { readonly label: string }>> = Object.freeze({

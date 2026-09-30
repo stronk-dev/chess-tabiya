@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, phaseBandReading, storyMomentsForRun, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, evidenceForConsumer, phaseBandReading, presentEvidenceItems, presentedSentence, storyMomentsForRun, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 // Test-only compiler fixture for renderer tests (rfc/evidence-value-authority.md §1).
 import { fixtureEvidence, fixtureEvidenceList } from "../../../packages/runtime/src/testing/evidence-fixture.test-support.js";
 import { attachDelivery, evaluationDelivery, importedRun, mainPath, play } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
@@ -12,6 +12,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
 import { projectBotRoster } from "./bot-roster.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import type { EngineHealth, EngineRequest } from "./engine-supervisor.js";
 import { evidencePacket, renderRecordedReadingEvidence, renderVoice, voiceEvidenceView, type VoiceEvidenceView, type VoiceProvider } from "./guidance.js";
 import { OpponentSelector, type SelectorEngineClient } from "./opponent-selector.js";
@@ -72,21 +73,32 @@ describe("adaptive guidance server seams", () => {
     const evidence = [
       fixtureEvidence("rules.phase.reading@2", phaseBandReading(FEN)),
       fixtureEvidence("pack.authored.phase@1", { phase: "middlegame" }),
-      fixtureEvidence("rules.structural.reading.named_structure@2", { id: "iqp-white", name: "Isolated queen's pawn", provenanceNote: "rules.structural:iqp-v1" }),
+      fixtureEvidence("rules.structural.reading.named_structure@2", { id: "iqp-white", name: "White isolated queen's pawn", squares: ["d4"], provenanceNote: "rules.structural:iqp-v1" }),
       fixtureEvidence("pack.authored.claim@1", { id: "claim-one", text: "Keep the pawn protected.", attribution: "authored:checkpoint:17" }),
     ];
     const rendered = voiceEvidenceView(fixturePacket(), "reading", evidence, false).rendered;
     const text = rendered.items.flatMap((item) => item.sentences).join(" ");
     expect(text).toContain("Current position: Opening.");
     expect(text).toContain("Rehearsal focus: Middlegame.");
-    expect(text).toContain("Recognized position structure: Isolated queen's pawn.");
-    expect(text).toContain("Authored guidance: Keep the pawn protected.");
+    expect(text).toContain("Recognized pawn structure: White isolated queen's pawn (pawns on d4).");
+    expect(text).toContain("The pack author wrote: “Keep the pawn protected.”");
     expect(text).not.toMatch(/authored:|checkpoint:17|rules\.structural|phase bands|provenance|pack declares/iu);
+  });
+  it("speaks the exact admitted component sentence for each of two claims sharing one projection", () => {
+    const first = fixtureEvidence("pack.authored.claim@1", { id: "first", text: "Keep d4 covered.", attribution: "author:first" });
+    const second = fixtureEvidence("pack.authored.claim@1", { id: "second", text: "Watch the c-file.", attribution: "author:second" });
+    const admitted = evidenceForConsumer(EVIDENCE_MANIFEST, { id: "guidance.voice", version: 1 }, [first, second]);
+    const components = presentEvidenceItems(admitted);
+    const spoken = voiceEvidenceView(fixturePacket(), "reading", [first, second], false).rendered;
+    expect(spoken.items.map((item) => item.evidence)).toEqual([first, second]);
+    expect(spoken.items.flatMap((item) => item.sentences)).toEqual(components.map(presentedSentence));
+    expect(spoken.items[0]!.sentences).not.toEqual(spoken.items[1]!.sentences);
+    expect(() => voiceEvidenceView(fixturePacket(), "reading", [first, first], false)).toThrow(/voice evidence repeats one admitted value/u);
   });
   it("voices compare structure operands instead of raw detector ids", () => {
     const evidence = fixtureEvidence("derived.compare.structure_delta@1", { observation: { kind: "isolated_pawn", color: "white", file: "d", squares: [] } });
     const rendered = voiceEvidenceView(fixturePacket(), "compare", [evidence], false).rendered;
-    expect(rendered.items[0]!.sentences).toEqual(["White isolated pawn appeared on the d-file. Source: Tabiya structural detector."]);
+    expect(rendered.items[0]!.sentences).toEqual(["On this attempt after the fork: White has a pawn on the d-file and none on either adjacent file."]);
     expect(rendered.items[0]!.sentences.join(" ")).not.toContain("isolated_pawn");
   });
   it("voices comparison records in learner units without protocol vocabulary", () => {
@@ -100,13 +112,23 @@ describe("adaptive guidance server seams", () => {
     ];
     const rendered = voiceEvidenceView(fixturePacket(), "compare", evidence, false).rendered;
     const text = rendered.items.flatMap((item) => item.sentences).join(" ");
-    expect(text).toContain("The continuations share 4 recorded turns before they separate.");
-    expect(text).toContain("The recorded move at consequence step 1 is Nf3.");
-    expect(text).toContain("An authored checkpoint was reached at consequence step 2.");
-    expect(text).toContain("The recorded objective changed from “In progress” to “Objective held.”");
+    expect(text).toContain("The lines share the first 4 moves by either side, then separate.");
+    expect(text).toContain("After the lines separate, recorded move 1 is Nf3.");
+    expect(text).toContain("This line reached a checkpoint after 2 moves by either side.");
+    expect(text).toContain("The rehearsal goal changed from in progress to held.");
     expect(text).toContain("This continuation stops after 3 recorded turns. Objective held.");
-    expect(text).toContain("Recorded evaluation change at consequence step 2: −1.65 pawns on the stored scale.");
+    expect(text).toContain("Stored engine evaluation change on this attempt: −1.65 pawns from White's side (stored engine reading).");
     expect(text).not.toMatch(/\bcp\b|\bplies\b|\boffset\b|reply-seen|\b(active|preserved)\b/u);
+  });
+  it("does not speak a zero-indexed comparison step as move zero", () => {
+    const rendered = voiceEvidenceView(fixturePacket(), "compare", [
+      fixtureEvidence("run.record.move@1", { context: "compare", offset: 0, moveSan: "e6" }),
+      fixtureEvidence("run.record.checkpoint_hit@1", { context: "compare", checkpointId: "start", plyOffset: 0 }),
+    ], false).rendered;
+    expect(rendered.items.flatMap((item) => item.sentences)).toEqual([
+      "At the point the lines separate, the recorded move is e6.",
+      "This line reached a checkpoint where the lines separate.",
+    ]);
   });
   it("does not turn an objective endpoint without a game result into a board-terminal claim", () => {
     const noResult = fixtureEvidence("run.record.consequence@1", { context: "compare", terminal: true, outcome: null });
@@ -140,7 +162,7 @@ describe("adaptive guidance server seams", () => {
     }]);
     const rendered = voiceEvidenceView(fixturePacket(), "story", evidence, false).rendered;
     const sentence = rendered.items.find((item) => item.evidence.projection.id === "theory.shapes.firing")?.sentences[0];
-    expect(sentence).toBe("Recognized position pattern: Carlsbad minority attack.");
+    expect(sentence).toBe("Recognized position pattern: Carlsbad minority attack. Named plans for this structure are general to the kind of position, not advice for this one.");
     expect(sentence).not.toMatch(/carlsbad-minority-attack|catalogue trigger|\bShape\b/u);
   });
   it("rejects bare recorded readings at the deterministic consumer boundary", () => {

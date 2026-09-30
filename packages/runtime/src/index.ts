@@ -201,7 +201,7 @@ export {
   CLAIM_EVIDENCE_TYPE_LABELS, SIDE_LABELS, type ClaimEvidenceType, type LabelVocabularyMembers, type ReviewSide,
   COMPONENT_DECLARATIONS, COMPONENT_IDS, GROUNDING_LABELS, LABEL_VOCABULARIES, OBJECTIVE_STATE_LABELS, PRESENTATION_ADAPTERS, PRESENTATION_CONVENTIONS,
   PRESENTATION_QUESTIONS, PRESENTATION_SELECTION_ONLY, PRESENTATION_SOURCE_REASONS, PresentationError, RECORDED_RELATION_LABELS, RUN_OUTCOME_LABELS,
-  assertPresentationText, assertPresentedEvidenceItem, citationFromEvidence, isPresentedAbstention, parsePresentationReceipt, presentEvidenceItems,
+  assertPresentationText, assertPresentedEvidenceItem, citationFromEvidence, isPresentedAbstention, parsePresentationReceipt, presentEvidenceItems, renderPresentedEvidenceView,
   presentScore, presentSearchBound, presentationAdapter, presentationDigest, presentedSentence, serializePresentedEvidence,
   type AbstentionOperand, type CitationOperand, type ClaimOperand, type ComponentDeclaration, type ComponentId, type ComponentValue, type ConventionReceipt,
   type EnumStateOperand, type FactStatementOperand, type LabelEntry, type LabelVocabulary, type MagnitudeOperand, type PresentationReceipt,

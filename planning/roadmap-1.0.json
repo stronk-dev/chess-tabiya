@@ -423,10 +423,10 @@
         "state": "active",
         "capabilities": ["accessibility", "support", "rehearsal"],
         "dependsOn": ["evidence-to-consumer-spine"],
-        "nextAction": "Finish the remaining guidance voice and Inspector-modal legacy presentation consumers, repair hyphenated raw-id leaks, and discharge evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
+        "nextAction": "Finish the date-bearing recorded-reading component and remaining Inspector-modal legacy presentation consumers, repair hyphenated raw-id leaks, and discharge evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "Presets and Guided Hint still drive the shipped learner module seats. Compare's narrative, trajectory, structural strips, routes and leaf-position facts now render through admitted typed components; a comparison objective endpoint with no game result is safe in display and voice. The other voice templates, Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
+          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice now derive provider/checker sentences from those same sealed components. The recorded-reading suffix retains its authoring date outside that component path until D3307, while Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/hint-distance.ts",
@@ -435,6 +435,8 @@
             "rfc/intent-presets.md",
             "rfc/evidence-presentation.md",
             "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
+            "planning/platform-alignment/evidence-presentation/voice-current-consumer-2026-09-30.md",
+            "apps/server/src/guidance.ts",
             "apps/web/src/lib/CompareView.svelte"
           ],
           "anchors": [
@@ -461,12 +463,17 @@
             {
               "kind": "rfc",
               "id": "evidence-presentation.md",
-              "digest": "sha256:6e42ae195446b371c269d0e3eef266f2032309ba5ae656e13232e8e9bbfb0d35"
+              "digest": "sha256:e84c9d3299a8ef0d1d949ae335a8cd06a5dd90e530fcf16f795d6721830f3c0b"
             },
             {
               "kind": "work_state",
               "id": "D3303",
               "digest": "sha256:91563064f452b71d5b37d1802782c05a1b26346a7aa539c56cfd495e4ab0ba19"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3307",
+              "digest": "sha256:d3769d76e83e18fe7c241e14ce4c2058bdfcff7e666722551611d5428f078deb"
             }
           ]
         },

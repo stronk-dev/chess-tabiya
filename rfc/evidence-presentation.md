@@ -1770,6 +1770,13 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 | D9 | Owner-use/public-use comprehension of these components. §3 is derived from evidence shape and measured tails; no mechanical arm proves a learner understands a bar. Recruited participants are out of 1.0 scope under [[D649]], while the owner-use and eventual public-use falsifiers remain | `planning/platform-alignment/evidence-presentation/participant-plan.md` | owner use before checkpoint-B archival; public use after release | external arm descoped, owner-use open |
 | D10 | The raw Pack/Shape JSON textareas are editing journeys, not `structured_document` viewer coverage. They remain owned by AUT-a25's structured-expression builder with JSON alongside | codex (AUT-a25 in `planning/ux-implementation-index.md`) | AUT-a25 implementation closeout | |
 
+**Current-consumer follow-up [[D3307]] (2026-09-30):** `guidance.recorded_reading@1` retains
+`retrievedAt`, but its registered engine `magnitude` equivalent sentence omits the date while the
+separately admitted, post-provider spoken sentence includes it. Before that final legacy suffix is
+removed, amend the component/adapter contract so the spoken equivalent retains the authoring date,
+and prove the negative case where the date is absent or mismatched. A date in an inaccessible
+payload or digest does not discharge a spoken-provenance obligation.
+
 ## Questions resolved for this draft
 
 1. **`full_inspector` uses components plus a per-fact provenance/raw drawer.** The owner ruled the

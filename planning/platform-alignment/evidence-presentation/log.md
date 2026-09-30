@@ -39,3 +39,20 @@ Append-only. This log records author/review/implementation transitions for
 - `make evidence-presentation-fourth-fresh-review` passes 7/7. No production, manifest, schema,
   content, API, client, archive or protected-design byte changed; exact review:
   `fourth-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-09-30 — main voice current-consumer migration
+
+- Reading, Story and Compare voice now render the same registered, admitted component sentences
+  used by presentation. The sealed voice view joins each sentence to its exact process-local
+  evidence owner before provider input, deterministic fallback and `voiceCheck`; two claims with
+  one projection cannot borrow one another's wording.
+- Registered phase, named-structure, comparison and magnitude copy now uses learner terms and
+  states pawn units. The old named-structure fixture lacked the witness square that its current
+  evidence projection requires; it is now catalogue-correct and structurally valid.
+- Kept the separately admitted recorded-reading suffix: the typed magnitude omits its authoring
+  date. [[D3307]] owns the date-bearing component and negative fixture before migration; it is
+  routed in the active RFC rather than silently dropped.
+- `make verify-content` (218), `make verify-software` (2,464 software + 7 performance), and all
+  four `make test-browser-ci` tiers passed. `make roadmap-check`, `make work-state`, `make
+  work-index` and `make verify-governance` passed on the closeout bytes. The RFC remains
+  implementing; Inspector-modal legacy sections, raw-id leaks, D1/D9 and owner-use stay open.

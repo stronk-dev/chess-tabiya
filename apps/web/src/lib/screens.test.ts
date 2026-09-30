@@ -2250,7 +2250,7 @@ describe("Layer 3 screens", () => {
     expect(document.querySelectorAll(".evaluation-axis tbody tr")).toHaveLength(evaluationOffsets.size);
     expect(document.querySelectorAll(".evaluation-axis [data-component='magnitude']")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
     expect(document.querySelector(".sparkline")).toBeNull();
-    expect(document.querySelector(".comparison-inspector")?.textContent).toContain("The attempts share the first 1 ply");
+    expect(document.querySelector(".comparison-inspector")?.textContent).toContain("The lines share the first 1 move by either side, then separate.");
     document.querySelector<HTMLButtonElement>(".comparison-inspector header button")!.click();
     await tick();
     expect(document.querySelector(".comparison-inspector")).toBeNull();

@@ -156,10 +156,10 @@ const IRREVERSIBILITY_SENTENCES = Object.freeze({
 } as const);
 
 const PACK_PHASE_SENTENCES = Object.freeze({
-  opening: "The pack author places this drill in the opening.",
-  middlegame: "The pack author places this drill in the middlegame.",
-  endgame: "The pack author places this drill in the endgame.",
-  cross_phase: "The pack author marks this drill as spanning more than one game phase.",
+  opening: "Rehearsal focus: Opening.",
+  middlegame: "Rehearsal focus: Middlegame.",
+  endgame: "Rehearsal focus: Endgame.",
+  cross_phase: "Rehearsal focus: A transition between game phases.",
 } as const);
 
 const TABLEBASE_CATEGORIES = Object.freeze({
@@ -297,9 +297,11 @@ export const CONSUMER_FACT_RENDERERS = Object.freeze({
     return `Recorded Syzygy tablebase reading for this position (${plural(value.pieceCount, "piece")}): ${TABLEBASE_CATEGORIES[value.category]} for the side to move${measures.length === 0 ? "" : `, ${measures.join(", ")}`}; queried when this pack was authored on ${value.date}.`;
   }),
   "consumer.recorded_move@1": factRenderer(recordedMoveSchema, (value) => {
-    if (value.move.kind === "none") return "On this attempt no move is recorded after the fork.";
+    if (value.move.kind === "none") return "No move was recorded after the lines separate.";
     const move = value.move.kind === "san" ? value.move.san : coordinates(value.move);
-    return `On this attempt the recorded move at ply ${value.offset} after the fork is ${move}.`;
+    return value.offset === 0
+      ? `At the point the lines separate, the recorded move is ${move}.`
+      : `After the lines separate, recorded move ${value.offset} is ${move}.`;
   }),
   "consumer.story_last_level@1": factRenderer(s.obj({ learnerCentipawns: s.int }), (value) => {
     if (value.learnerCentipawns < -100) throw new PresentationSchemaError("last level must be within a pawn");

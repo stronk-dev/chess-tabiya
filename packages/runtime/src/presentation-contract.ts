@@ -24,11 +24,13 @@ import {
   assertDeclaredEvidence,
   evidenceDigest,
   evidenceValueReceipt,
+  renderEvidenceItems,
   type AnswerDistance,
   type ConsumerEvidenceView,
   type DeclaredEvidence,
   type EvidenceForm,
   type EvidenceGrounding,
+  type RenderedEvidenceView,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
 import { assertMoveQualityGradeSentence, renderMoveQualityGrade, type MoveQualityGrade } from "./grade.js";
@@ -687,7 +689,7 @@ const MAGNITUDE_QUANTITIES: Readonly<Record<string, { readonly label: string }>>
 function genericMagnitudeSentence(operand: MagnitudeOperand): string {
   const quantity = MAGNITUDE_QUANTITIES[`${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`];
   if (quantity === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", "magnitude quantity has no registered sentence");
-  return `${quantity.label}: ${magnitudeValueText(operand)}${operand.saturated ? " (at the instrument's limit)" : ""}${PERSPECTIVE_PHRASES[operand.convention.perspective]} (${conventionAttribution(operand.convention)}).`;
+  return `${quantity.label}: ${magnitudeValueText(operand)}${operand.unit.kind === "centipawn" ? " pawns" : ""}${operand.saturated ? " (at the instrument's limit)" : ""}${PERSPECTIVE_PHRASES[operand.convention.perspective]} (${conventionAttribution(operand.convention)}).`;
 }
 
 function distributionSentence(operand: DistributionOperand): string {
@@ -1425,6 +1427,40 @@ export function presentEvidenceItems(view: ConsumerEvidenceView<unknown>): reado
     const evidenceRef: PresentedEvidenceRef = { producer: { ...evidence.producer }, projection: { ...evidence.projection }, evidenceDigest: `sha256:${evidenceValueReceipt(evidence).payloadDigest}` };
     return components.map((component) => sealPresentedItemForOwner(evidence, evidenceRef, { consumer: { ...view.consumer }, projection: { ...evidence.projection } }, component));
   }));
+}
+
+/**
+ * Voice still consumes the process-sealed RenderedEvidenceView required by voiceCheck. Build that
+ * view only from the equivalent sentences of registered, admitted presentation components. The
+ * owner join prevents a component for another evidence item from widening the voice allow-list.
+ */
+export function renderPresentedEvidenceView(view: ConsumerEvidenceView<unknown>): RenderedEvidenceView {
+  assertConsumerEvidenceView(view);
+  // The process-local owner seal identifies an evidence value, not an occurrence. Repeating the
+  // same object would otherwise multiply its sentences when grouped by owner below.
+  if (new Set(view.items).size !== view.items.length) {
+    throw new PresentationError("PRESENTATION_INVALID", "voice evidence repeats one admitted value");
+  }
+  const sentencesByEvidence = new Map<DeclaredEvidence<unknown>, string[]>();
+  for (const item of presentEvidenceItems(view)) {
+    const owner = presentedItemOwner(item);
+    if (!view.items.includes(owner as DeclaredEvidence<unknown>)) {
+      throw new PresentationError("PRESENTATION_UNSEALED", "presented sentence does not belong to the admitted consumer view");
+    }
+    const evidence = owner as DeclaredEvidence<unknown>;
+    const sentences = sentencesByEvidence.get(evidence) ?? [];
+    sentences.push(presentedSentence(item));
+    sentencesByEvidence.set(evidence, sentences);
+  }
+  for (const evidence of view.items) if ((sentencesByEvidence.get(evidence)?.length ?? 0) === 0) {
+    throw new PresentationError("PRESENTATION_UNREGISTERED", `voice evidence ${refKey(evidence.projection)} has no presented sentence`);
+  }
+  const renderers = Object.fromEntries(view.items.map((evidence) => [refKey(evidence.projection), (item: DeclaredEvidence<unknown>) => {
+    const sentences = sentencesByEvidence.get(item);
+    if (sentences === undefined) throw new PresentationError("PRESENTATION_UNSEALED", "renderer received evidence outside the admitted view");
+    return Object.freeze([...sentences]);
+  }]));
+  return renderEvidenceItems(view, Object.freeze(renderers));
 }
 
 /**

@@ -81,7 +81,7 @@ describe("consumer adapters: position guidance, board sight and the Inspector st
     expect(board.every((item) => item.component.id === "square_set")).toBe(true);
     expect(inspector.every((item) => item.component.id === "fact_statement")).toBe(true);
     expect(sentences(inspector)).toContain("Position reading: open file.");
-    expect(sentences(inspector)).toContain("The pawn structure matches the Maroczy Bind in the declared structure catalogue (pawns on c4 and e4).");
+    expect(sentences(inspector)).toContain("Recognized pawn structure: Maroczy Bind (pawns on c4 and e4).");
     expect(sentences(inspector)).toContain("Position reading: isolated pawn.");
   });
 
@@ -97,10 +97,10 @@ describe("consumer adapters: position guidance, board sight and the Inspector st
     const maroczy = positionGuidanceEvidence({ run: maroczyRun, node: branchPath(maroczyRun, maroczyRun.activeCursor.branchId).at(-1)! });
     for (const consumer of ["guidance.deterministic", "guidance.voice", "guidance.voice_story"]) {
       const spoken = sentences([...present(consumer, middle), ...present(consumer, endgame), ...present(consumer, maroczy)]);
-      expect(spoken).toContain("The pack author places this drill in the middlegame.");
+      expect(spoken).toContain("Rehearsal focus: Middlegame.");
       expect(spoken).toContain("White castled on this move.");
       expect(spoken).toContain("The pack author wrote: “The bishop on c4 eyes f7.”");
-      expect(spoken.some((sentence) => /^Game phase under the declared convention: /u.test(sentence))).toBe(true);
+      expect(spoken.some((sentence) => /^Current position: /u.test(sentence))).toBe(true);
       expect(spoken.some((sentence) => / under the declared endgame convention\.$/u.test(sentence))).toBe(true);
       expect(spoken.some((sentence) => /Maroczy Bind/u.test(sentence))).toBe(true);
     }
@@ -210,7 +210,7 @@ describe("consumer adapters: the evidence-reference sentence and the recorded re
     ].filter((item): item is NonNullable<typeof item> => item !== undefined);
     expect(readings).toHaveLength(2);
     expect(sentences(present("guidance.recorded_reading", readings))).toEqual([
-      "Recorded engine evaluation at this position: +0.20 from White's side (Stockfish 17, depth 20).",
+      "Recorded engine evaluation at this position: +0.20 pawns from White's side (Stockfish 17, depth 20).",
       "Recorded Syzygy tablebase reading for this position (2 pieces): a draw for the side to move; queried when this pack was authored on 2026-08-15.",
     ]);
   });

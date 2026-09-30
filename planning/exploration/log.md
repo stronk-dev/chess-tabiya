@@ -21548,3 +21548,24 @@ Campaign was the one capability with no API, route or content. Now:
   promoted to complete; the nine-milestone shape and zero official graduated packs remain.
 - **Next:** finish the remaining voice/Inspector consumer paths and owner rulings; update the
   checkpoint again only when a separately verified release dimension actually advances.
+
+### 2026-09-30 — Bind main voice to admitted presentation components
+
+- **What landed:** Reading, Story and Compare voice no longer use the parallel hand-written
+  server template registry. The runtime constructs their sealed provider/checker view from the
+  exact registered components and process-local evidence owners. Learner copy names moves rather
+  than plies and gives explicit pawn units. The same-projection/two-claims fixture proves the
+  binding is per evidence value, not merely per projection name; a zero-step fixture refuses the
+  learner-facing phrase “move 0.”
+- **What changed:** the content tier caught a legacy named-structure fixture lacking its required
+  witness squares; that fixture is now valid. The separately admitted recorded-reading suffix
+  remains because its typed magnitude omits the authoring date; [[D3307]] is registered, assigned
+  and routed to the active presentation RFC. `make verify-software`, `make verify-content`, all four
+  browser CI tiers, `make roadmap-check`, `make work-state`, `make work-index` and governance pass
+  on the final closeout. The first governance run caught D3307's missing route; the RFC follow-up
+  corrected it before closeout. The full content gate includes the 92-document graduation check.
+- **What remains:** the presentation RFC is implementing, not archived. Recorded-reading date
+  preservation, remaining Inspector-modal sections, raw-id leak fixes, D1/D9, D1639 and owner-use
+  still prevent a complete support/defaults capability. No official pack graduated.
+- **Next:** make the date-bearing recorded-reading component contract failable, then migrate that
+  suffix and the remaining Inspector consumers without widening the provider's evidence allow-list.

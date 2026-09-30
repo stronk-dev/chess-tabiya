@@ -1401,11 +1401,11 @@ renderers over sealed items, never graders, selectors, chess authorities, or ava
 
 Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`, `assistance-config-register`,
 `evidence-presentation`, `intent-presets`. UX owners: INR and SET items.
-The first ordinary Support closeout now makes the disclosure cost visible before temporary help is
-opened and turns an unrecognized structure into two legitimate loop actions: return focus to the
-board, or rewind only to a runtime-admitted earlier decision. This closes INR-a2/a4 without
-claiming INR-a7's all-module coverage, the still-missing compiled module rail, preset pill, or
-producer-backed hint ladder.
+The first ordinary Support closeout made the disclosure cost visible before temporary help was
+opened and turned an unrecognized structure into two legitimate loop actions: return focus to the
+board, or rewind only to a runtime-admitted earlier decision. That closed INR-a2/a4 at the time;
+the compiled module rail, preset pill and Guided Hint have since landed. INR-a7's all-module
+coverage and the owner-use proof remain open.
 Advanced Settings now applies the shipped workflow ceiling and assistance permission authority:
 Match / Arena's rules-only profile retains its stored preferences but presents all nine optional
 support controls as unavailable with one visible, action-bound explanation. This closes SET-a7;
