@@ -103,3 +103,11 @@ stale pair into `content/packs/` cannot bypass the report by changing roots.
 Release proof remains a separate roadmap obligation: application-boundary API reachability,
 container boot, prior-schema migration, provider degradation, backup/restore, update/rollback and
 artifact/SBOM/signature checks cannot be inferred from the tiers above.
+
+`make http-streaming-check` runs the real Node adapter's streaming/failure controls, also discovered
+by `make test-software`. `make http-streaming-proxy-check` is a separate Docker release-tier check:
+it bundles the same adapter into a disposable upstream, uses the production checksum-pinned Node
+base and exact rendered appliance Caddyfile/image, and proves first-byte-before-completion plus
+disconnect cancellation through trusted TLS. It owns and removes only its random test containers,
+networks and temporary directory. Native release CI runs it on amd64 and arm64. Neither target
+discharges body budgets, WebSocket product routes or the complete self-host release journey.

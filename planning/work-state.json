@@ -14103,12 +14103,12 @@
     },
     {
       "id": "D1847",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3e19622a1c765b15046429d6c1854c9a127ad21a367aa9a9eb2c268b7112d7cd",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bc41258d219b2f9a23c4a3fa38ef53206016ad357604429cdbc4c55879935381",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:safe-deployment-profiles.md"
+      "evidence": "planning/safe-deployment-profiles/http-streaming-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1848",
@@ -27382,6 +27382,15 @@
       "sourceDigest": "sha256:51c08408d0eb2b1902cdbb32444dfb615b3e3bba9bab605634d53507b5744679",
       "uxItems": [],
       "evidence": "planning/platform-alignment/evidence-component-input-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3332",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:66bfcf232bd52bd66dd82e7e35da252b6f9a93c6cf3c8760b2a18020d36c4937",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/http-streaming-2026-09-30.md",
       "evidenceKind": "path"
     }
   ]

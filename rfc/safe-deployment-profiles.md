@@ -1,6 +1,6 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — fourth fresh independent review returned the third repair on
+- **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** The 2026-09-30 D1847/D3332 checkpoint implements streaming egress with real HTTP and pinned rendered TLS-proxy controls; request budgets, full deployment receipts and owner/release discharges remain open. Receipt: `planning/safe-deployment-profiles/http-streaming-2026-09-30.md`. Prior: draft — fourth fresh independent review returned the third repair on
   [[D2978]]–[[D2985]].** TLS, deployment checks, readiness, ingress and mounted-image authority
   remain caller-mintable; migration edits look-alike tables and can bless existing storage; receipt
   parsing does not re-establish the closed profile union. `make safe-deployment-fourth-fresh-review`
@@ -1100,6 +1100,13 @@ component that preserves all three workflows and criteria; doing so is an author
 implementation detail.
 
 ## Changelog
+
+- 2026-09-30: §9 streaming egress now uses the production Node pipeline with backpressure,
+  disconnect cancellation, no-body method/status handling and one terminal failure path.
+  Eleven real HTTP controls and the exact rendered/pinned TLS-proxy first-byte/cancellation
+  proof pass. Native release CI runs the proxy control on both architectures. D1847/D3332 close;
+  D1846, deployment receipts, owner-use, packaged export journeys and the full release matrix
+  remain open. Receipt: `planning/safe-deployment-profiles/http-streaming-2026-09-30.md`.
 
 - 2026-09-24: implemented the directed slice — loopback-only `local` default, `appliance`
   (internal CA) and `hosted` (ACME) Compose profiles behind the digest-pinned Caddy with the

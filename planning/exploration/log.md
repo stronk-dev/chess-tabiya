@@ -21824,3 +21824,22 @@ Campaign was the one capability with no API, route or content. Now:
 - Scoped receipt: `planning/platform-alignment/evidence-component-input-2026-09-30.md`.
   The frontend checkpoint excludes the Explorer implementation and migration; D3328–D3330 remain
   blocked with their prior measured scope. Tracking closes only D3331, not those dependencies.
+
+### 2026-09-30 — D1847/D3332 production HTTP streaming checkpoint
+
+- The training-ramp audit retains the explicit owner rung→clamp decision; no implicit mapping
+  or content migration was chosen. Independent implementing safe-deployment §9 work proceeds.
+- Six original HTTP controls fail on buffering. The production adapter now streams with
+  backpressure, cancels live/late bodies on disconnect, suppresses HEAD/204/304 and refuses
+  partial-response replacement. Unsent export headers are cleared before a typed generic 500.
+- Eleven real HTTP controls pass. The exact rendered appliance Caddyfile and pinned Node/Caddy
+  images prove event-stream/PGN-shaped first bytes before completion and disconnect cancellation
+  through trusted TLS. Normal completion cancels no producer. Only disposable test resources
+  are created/removed; no user deployment, database or content was modified.
+- Native release CI runs the proxy target on both architectures; a scaffold negative catches
+  omitted wiring. Local proof is native-host-only, not a remotely executed matrix. Full typecheck,
+  capability history/source-image checks and scaffold/packaging checks pass.
+- Receipt: `planning/safe-deployment-profiles/http-streaming-2026-09-30.md`. D1847/D3332 close;
+  ingress budgets, complete deployment receipts, packaged-export/owner-use and full release
+  journeys remain open. The Explorer query/import hunks and its owner-blocked migration are
+  excluded from the scoped adapter checkpoint. The 1.0 goal remains active.

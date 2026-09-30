@@ -719,14 +719,18 @@
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-09-24",
-          "summary": "A verifiable release pipeline exists and passes locally: pinned least-privilege workflow, allow-listed runtime content proven by a logged-reads boot, SBOM and licence gates, a release manifest with checksums over every rendered deployment profile, backup/restore/rollback, provider health and an About page reporting the verified release. Publication is gated on steady memory above the ceiling, owner licence records for base-image packages and Maia weights, the official content bundle and a first real workflow run.",
+          "at": "2026-09-30",
+          "summary": "The prior release checkpoint recorded the pinned least-privilege pipeline, allow-listed runtime content, SBOM/licence gates, release manifest/checksums, backup/restore/rollback, provider health and About page; those full proofs are not rerun by this checkpoint. D1847/D3332 now close streaming egress: eleven real HTTP controls and the exact rendered pinned appliance TLS proxy prove first bytes before completion, backpressure and disconnect cancellation without partial-response replacement. Native release CI runs the proxy proof on both architectures, while the local result proves only this host. Ingress budgets, full deployment receipts, packaged-export/owner-use journeys, official content and remaining release/rights/envelope gates remain open; no whole milestone or remote-green claim is made.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
             "rfc/verifiable-runtime-distribution.md",
             "rfc/storage-backup-recovery.md",
-            "rfc/safe-deployment-profiles.md"
+            "rfc/safe-deployment-profiles.md",
+            "planning/safe-deployment-profiles/http-streaming-2026-09-30.md",
+            "apps/server/src/http-streaming.test.ts",
+            "tools/http-streaming-proxy/check.mjs",
+            ".github/workflows/release.yml"
           ],
           "anchors": [
             {
@@ -742,12 +746,22 @@
             {
               "kind": "rfc",
               "id": "safe-deployment-profiles.md",
-              "digest": "sha256:b26a1d4a65c50862156d63c5b722bded914ae8fbc48a01f59a590d3b00bff1cb"
+              "digest": "sha256:81a3abb30a1889b9942aab68a4e31cb45815df80fccf55e0a267c0bed083718d"
             },
             {
               "kind": "work_state",
               "id": "D1846",
               "digest": "sha256:bd4878cac3dc3d44721f7af84359c821c3e9def53e46a78e0c1c53dbedf7ba1f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D1847",
+              "digest": "sha256:bc41258d219b2f9a23c4a3fa38ef53206016ad357604429cdbc4c55879935381"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3332",
+              "digest": "sha256:66bfcf232bd52bd66dd82e7e35da252b6f9a93c6cf3c8760b2a18020d36c4937"
             }
           ]
         },

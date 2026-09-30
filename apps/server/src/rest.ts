@@ -5,6 +5,9 @@ import {
   type ServerResponse,
 } from "node:http";
 import { randomInt, randomUUID } from "node:crypto";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
+import type { ReadableStream as NodeReadableStream } from "node:stream/web";
 
 import {
   BranchQueryError,
@@ -2295,10 +2298,21 @@ async function requestFromNode(request: IncomingMessage, signal: AbortSignal): P
 async function writeNodeResponse(
   response: ServerResponse,
   result: Response,
+  method: string | undefined,
 ): Promise<void> {
   response.statusCode = result.status;
   for (const [name, value] of result.headers) response.setHeader(name, value);
-  response.end(Buffer.from(await result.arrayBuffer()));
+  if (method === "HEAD" || result.status === 204 || result.status === 304 || result.body === null) {
+    // HEAD must not drain an export that the client cannot receive. Release its cursor instead.
+    if (result.body !== null) await result.body.cancel();
+    response.end();
+    return;
+  }
+  // Commit headers without waiting for the producer to finish. pipeline owns backpressure and
+  // destroys/cancels the Web-stream adapter when either side fails or the client disconnects.
+  const body = Readable.fromWeb(result.body as NodeReadableStream<Uint8Array>);
+  response.flushHeaders();
+  await pipeline(body, response);
 }
 
 export function createHttpServer(handler: RestHandler): Server {
@@ -2310,15 +2324,25 @@ export function createHttpServer(handler: RestHandler): Server {
     response.once("close", closed);
     void requestFromNode(request, controller.signal)
       .then(handler)
-      .then((result) => response.destroyed ? undefined : writeNodeResponse(response, result))
-      .catch(() => response.destroyed ? undefined :
-        writeNodeResponse(
+      .then(async (result) => {
+        if (response.destroyed) await result.body?.cancel();
+        else await writeNodeResponse(response, result, request.method);
+      })
+      .catch(async () => {
+        if (response.destroyed || response.writableEnded) return;
+        // A partial response is not replaceable. End the transport without leaking the source
+        // error, appending a second payload, or rejecting an unobserved response-writer promise.
+        if (response.headersSent) { response.destroy(); return; }
+        for (const name of response.getHeaderNames()) response.removeHeader(name);
+        await writeNodeResponse(
           response,
           json(500, {
             error: { code: "INTERNAL_ERROR", message: "Internal server error" },
           }),
-        ),
-      )
+          request.method,
+        );
+      })
+      .catch(() => { response.destroy(); })
       .finally(() => { request.off("aborted", abort); response.off("close", closed); });
   });
 }

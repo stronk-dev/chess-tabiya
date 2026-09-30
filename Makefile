@@ -220,6 +220,15 @@ label-sweep:
 evidence-components-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/evidence/components.test.ts
 
+.PHONY: http-streaming-check
+http-streaming-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-streaming.test.ts
+
+.PHONY: http-streaming-proxy-check
+http-streaming-proxy-check:
+	./node_modules/.bin/esbuild tools/http-streaming-proxy/upstream.ts --bundle --platform=node --format=esm --outfile=.cache/http-streaming-proxy/upstream.mjs --log-level=warning
+	node tools/http-streaming-proxy/check.mjs
+
 # rfc/evidence-presentation.md §8.4 / criterion 11: literal, named, system and color-mix colours over
 # the component tree, with a self-check that the keyword lists stay non-empty.
 component-theme-sweep:

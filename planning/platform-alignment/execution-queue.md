@@ -8,6 +8,12 @@ This is the queue the thematic roadmap was missing. A phase completes on evidenc
 not because its code was started. Within a phase, independent jobs may run in parallel; across a
 dependency edge, they may not.
 
+## Streaming release checkpoint — 2026-09-30
+
+| Item | Owning lane / prerequisite | Required production exit |
+|---|---|---|
+| [[D1847]], [[D3332]] | **DONE 2026-09-30**; release-engineering, implementing safe-deployment §9 | Eleven actual HTTP controls and first-byte/cancellation through the exact rendered pinned TLS proxy pass. Native release CI now runs that target on both architectures. Receipt: `planning/safe-deployment-profiles/http-streaming-2026-09-30.md`. D1846 ingress budgets, complete deployment receipts, packaged-export/owner-use and remote release matrix remain open. |
+
 ## Pack integration residue — checkpoint 2026-09-30
 
 The existing owner-directed capability branch is integrated. Do not rebuild its schema/registry

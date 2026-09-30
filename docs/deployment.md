@@ -126,13 +126,20 @@ restore, upgrade and rollback are covered in
   ports in proxied profiles, the Caddy pin, network graph, Caddyfile invariants, maintenance
   overlay identity and the CPU-tier Maia guard.
 - `make verify-deployment`: `caddy validate` of every rendered profile with the pinned image.
+- `make http-streaming-check`: real Node HTTP first-byte, backpressure, cancellation and failure
+  controls. Responses stream; HEAD/204/304 carry no body, and partial responses cannot become JSON.
+- `make http-streaming-proxy-check`: the production adapter behind the exact rendered appliance
+  Caddyfile and pinned Node/Caddy images. Event-stream and PGN-shaped first bytes arrive before the
+  source can finish; disconnect cancels it. Native release CI runs this on both architectures.
 - `make appliance-drill`: the built image behind real Caddy. It checks HTTP→HTTPS, a client that
   trusts only the exported root, TLS failure without it, no published app port, the Secure
   `__Host-` cookie, exact HSTS, cross-origin refusal through the proxy, and replacement of spoofed
   forwarded headers.
 
-Not yet implemented from the RFC: the per-route request-body budget registry and streaming
-response writer (D1846/D1847); the Caddy 8 MiB cap is the only body bound today. Also missing:
+Not yet implemented from the RFC: the per-route request-body budget registry (D1846); the Caddy
+8 MiB cap is the only body bound today. Streaming egress is implemented (D1847/D3332); the proxy
+instrument is a disposable upstream, not proof of every packaged export or a product SSE/WebSocket
+route. Also missing:
 the mounted compiled deployment image and `deployment-admin` receipts/profile-migration journal;
 the `hosted` file-certificate variant; CSP headers; and owner-device appliance validation
 (discharge D1).

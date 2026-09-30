@@ -1,9 +1,19 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 
 import { checkoutFetchDepth, missingMakeDependencies, missingRequiredText, workflowJob } from "./verify-scaffold.mjs";
 
 const required = ["verify-software", "verify-governance", "verify-content"];
+
+test("native release proof runs streaming through the pinned proxy on both architectures", () => {
+  const release = readFileSync(new URL("../.github/workflows/release.yml", import.meta.url), "utf8");
+  const native = workflowJob(release, "native-proof") ?? "";
+  assert.match(native, /make http-streaming-proxy-check/u);
+  assert.match(native, /platform: linux\/amd64/u);
+  assert.match(native, /platform: linux\/arm64/u);
+  assert.deepEqual(missingRequiredText(native.replace("make http-streaming-proxy-check", ""), ["make http-streaming-proxy-check"]), ["make http-streaming-proxy-check"]);
+});
 
 test("verify dependency guard permits additional checks", () => {
   assert.deepEqual(

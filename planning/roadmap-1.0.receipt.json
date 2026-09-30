@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:6dca054e6714dd37ae698944aa90549eb4a8d8ea7e6326c343581f4998088bf4",
+    "roadmap": "sha256:7a2518d735b4306fb92a9a5e8582657ea99bb03d51f72a3fb576826ae184b532",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:9ce51ac6225405bfbea485987cd428143ceed249e2044f6bc2dac44f13bc213a",
-    "rfcRegister": "sha256:61e02545943f4e9fff26abd3798cedc3aceb0ef3efad3b56c2840c4481c20161",
+    "workState": "sha256:098a3081c79867e61a5dd1e5f4176685c408e5bb89a2427af6a6f166d7a26ff0",
+    "rfcRegister": "sha256:65c8e835350467c2e26c7f7db581d6d67322e6960df51a4b23c3ea33e9bb8d41",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:5a0e55bb9a2ab76b477e1b08f40b8ac44c55c47e051ff14ad18aab024da13c39",
-    "rest": "sha256:526026c467c58e6a1157a216e0d072eccca7123d5c5de9b11883d850063a511c"
+    "rest": "sha256:4fe6733b22676b2fd151bfc37d13cf0222b94dcfedb9afa598678e37ece191db"
   },
   "summary": {
     "capabilities": 14,
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 623,
       "doing": 0,
-      "blocked": 1052,
-      "done": 1245,
+      "blocked": 1051,
+      "done": 1247,
       "refused": 160
     },
     "workItems": {
@@ -604,14 +604,18 @@
       ],
       "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
-        "at": "2026-09-24",
-        "summary": "A verifiable release pipeline exists and passes locally: pinned least-privilege workflow, allow-listed runtime content proven by a logged-reads boot, SBOM and licence gates, a release manifest with checksums over every rendered deployment profile, backup/restore/rollback, provider health and an About page reporting the verified release. Publication is gated on steady memory above the ceiling, owner licence records for base-image packages and Maia weights, the official content bundle and a first real workflow run.",
+        "at": "2026-09-30",
+        "summary": "The prior release checkpoint recorded the pinned least-privilege pipeline, allow-listed runtime content, SBOM/licence gates, release manifest/checksums, backup/restore/rollback, provider health and About page; those full proofs are not rerun by this checkpoint. D1847/D3332 now close streaming egress: eleven real HTTP controls and the exact rendered pinned appliance TLS proxy prove first bytes before completion, backpressure and disconnect cancellation without partial-response replacement. Native release CI runs the proxy proof on both architectures, while the local result proves only this host. Ingress budgets, full deployment receipts, packaged-export/owner-use journeys, official content and remaining release/rights/envelope gates remain open; no whole milestone or remote-green claim is made.",
         "impact": "advanced",
         "evidence": [
           "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
           "rfc/verifiable-runtime-distribution.md",
           "rfc/storage-backup-recovery.md",
-          "rfc/safe-deployment-profiles.md"
+          "rfc/safe-deployment-profiles.md",
+          "planning/safe-deployment-profiles/http-streaming-2026-09-30.md",
+          "apps/server/src/http-streaming.test.ts",
+          "tools/http-streaming-proxy/check.mjs",
+          ".github/workflows/release.yml"
         ],
         "anchors": [
           {
@@ -627,12 +631,22 @@
           {
             "kind": "rfc",
             "id": "safe-deployment-profiles.md",
-            "digest": "sha256:b26a1d4a65c50862156d63c5b722bded914ae8fbc48a01f59a590d3b00bff1cb"
+            "digest": "sha256:81a3abb30a1889b9942aab68a4e31cb45815df80fccf55e0a267c0bed083718d"
           },
           {
             "kind": "work_state",
             "id": "D1846",
             "digest": "sha256:bd4878cac3dc3d44721f7af84359c821c3e9def53e46a78e0c1c53dbedf7ba1f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1847",
+            "digest": "sha256:bc41258d219b2f9a23c4a3fa38ef53206016ad357604429cdbc4c55879935381"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3332",
+            "digest": "sha256:66bfcf232bd52bd66dd82e7e35da252b6f9a93c6cf3c8760b2a18020d36c4937"
           }
         ]
       },

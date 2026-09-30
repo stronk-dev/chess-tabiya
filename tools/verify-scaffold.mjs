@@ -214,6 +214,8 @@ for (const name of ["software-contracts", "repository-governance"]) {
 const releaseVerification = workflowJob(await readText(".github/workflows/release.yml"), "verify");
 const releaseDepth = checkoutFetchDepth(releaseVerification ?? "");
 if (releaseDepth === undefined || (releaseDepth !== 0 && releaseDepth < 2)) failures.push("Release verify needs its first parent for history checks");
+const nativeReleaseProof = workflowJob(await readText(".github/workflows/release.yml"), "native-proof");
+if (!nativeReleaseProof?.includes("make http-streaming-proxy-check")) failures.push("Native release proof needs the pinned TLS-proxy streaming check on each architecture");
 
 const browserWorkflow = await readText(".github/workflows/browser.yml");
 const missingBrowserTiers = missingRequiredText(browserWorkflow, [
