@@ -128,16 +128,24 @@ restore, upgrade and rollback are covered in
 - `make verify-deployment`: `caddy validate` of every rendered profile with the pinned image.
 - `make http-streaming-check`: real Node HTTP first-byte, backpressure, cancellation and failure
   controls. Responses stream; HEAD/204/304 carry no body, and partial responses cannot become JSON.
+- `make http-ingress-check`: real unfinished-upload Host/Origin refusals, progressive original
+  bytes, cancellation followed by a response, strict header bounds and actual 10 s/30 s receive
+  deadlines. Body consumption is lazy; this does not provide the missing endpoint budget registry.
 - `make http-streaming-proxy-check`: the production adapter behind the exact rendered appliance
   Caddyfile and pinned Node/Caddy images. Event-stream and PGN-shaped first bytes arrive before the
   source can finish; disconnect cancels it. Native release CI runs this on both architectures.
+  Unfinished HTTP/1 uploads also receive early 403/413; both proxy profiles enable full duplex.
 - `make appliance-drill`: the built image behind real Caddy. It checks HTTP→HTTPS, a client that
   trusts only the exported root, TLS failure without it, no published app port, the Secure
   `__Host-` cookie, exact HSTS, cross-origin refusal through the proxy, and replacement of spoofed
   forwarded headers.
 
 Not yet implemented from the RFC: the per-route request-body budget registry (D1846); the Caddy
-8 MiB cap is the only body bound today. Streaming egress is implemented (D1847/D3332); the proxy
+8 MiB cap and the existing account-import reader are not a complete endpoint budget authority.
+D3334/D3335 track the unbuildable selector order and stale operation census. Operator
+`deployment-render`/`deployment-check` wrappers still omit required real Maia digests (D3338);
+`verify-deployment` validates configurations with inert fixtures, not deployable sidecar identities.
+Streaming egress is implemented (D1847/D3332); the proxy
 instrument is a disposable upstream, not proof of every packaged export or a product SSE/WebSocket
 route. Also missing:
 the mounted compiled deployment image and `deployment-admin` receipts/profile-migration journal;

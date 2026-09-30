@@ -10,9 +10,11 @@ test("native release proof runs streaming through the pinned proxy on both archi
   const release = readFileSync(new URL("../.github/workflows/release.yml", import.meta.url), "utf8");
   const native = workflowJob(release, "native-proof") ?? "";
   assert.match(native, /make http-streaming-proxy-check/u);
+  assert.match(native, /make verify-deployment/u);
   assert.match(native, /platform: linux\/amd64/u);
   assert.match(native, /platform: linux\/arm64/u);
   assert.deepEqual(missingRequiredText(native.replace("make http-streaming-proxy-check", ""), ["make http-streaming-proxy-check"]), ["make http-streaming-proxy-check"]);
+  assert.deepEqual(missingRequiredText(native.replace("make verify-deployment", ""), ["make verify-deployment"]), ["make verify-deployment"]);
 });
 
 test("verify dependency guard permits additional checks", () => {

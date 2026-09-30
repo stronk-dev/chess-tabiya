@@ -2278,19 +2278,33 @@ export function createRestHandler(
 }
 
 async function requestFromNode(request: IncomingMessage, signal: AbortSignal): Promise<Request> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of request) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-  }
   const method = request.method ?? "GET";
-  const payload = Buffer.concat(chunks).toString("utf8");
+  // Do not pull the upload merely to construct the request: Host/Origin refusal must run before
+  // authentication or body consumption. The consumer retains the original bytes and owns parsing.
+  let iterator: ReturnType<IncomingMessage["iterator"]> | undefined;
+  const body = method === "GET" || method === "HEAD" ? undefined : new ReadableStream<Uint8Array>({
+    async pull(controller) {
+      iterator ??= request.iterator({ destroyOnReturn: false });
+      const { done, value } = await iterator.next();
+      if (done) controller.close();
+      else controller.enqueue(Buffer.isBuffer(value) ? value : Buffer.from(value));
+    },
+    cancel() {
+      // Destroying IncomingMessage here also destroys the response socket, preventing a bounded
+      // reader from delivering its 413. Stop reading; the terminal response closes unread uploads.
+      request.pause();
+      // return() may wait behind a pending next(). Do not make refusal delivery depend on another
+      // upload byte. The terminal response closes the socket; observe the iterator's late teardown.
+      void iterator?.return?.().catch(() => undefined);
+    },
+  }, { highWaterMark: 0 });
   return new Request(
     `http://${request.headers.host ?? "localhost"}${request.url ?? "/"}`,
     {
       method,
       signal,
       headers: request.headers as HeadersInit,
-      ...(method === "GET" || method === "HEAD" ? {} : { body: payload }),
+      ...(body === undefined ? {} : { body, duplex: "half" as const }),
     },
   );
 }
@@ -2298,11 +2312,16 @@ async function requestFromNode(request: IncomingMessage, signal: AbortSignal): P
 async function writeNodeResponse(
   response: ServerResponse,
   result: Response,
-  method: string | undefined,
+  request: IncomingMessage,
 ): Promise<void> {
   response.statusCode = result.status;
   for (const [name, value] of result.headers) response.setHeader(name, value);
-  if (method === "HEAD" || result.status === 204 || result.status === 304 || result.body === null) {
+  // Never reuse a connection with an unread upload after an early policy/size refusal. Finish the
+  // response first, rather than destroying its socket from the request-stream cancellation path.
+  const hasUpload = request.headers["transfer-encoding"] !== undefined ||
+    (request.headers["content-length"] !== undefined && request.headers["content-length"] !== "0");
+  if (hasUpload && !request.readableEnded) response.setHeader("connection", "close");
+  if (request.method === "HEAD" || result.status === 204 || result.status === 304 || result.body === null) {
     // HEAD must not drain an export that the client cannot receive. Release its cursor instead.
     if (result.body !== null) await result.body.cancel();
     response.end();
@@ -2316,7 +2335,16 @@ async function writeNodeResponse(
 }
 
 export function createHttpServer(handler: RestHandler): Server {
-  return createServer((request, response) => {
+  return createServer({
+    insecureHTTPParser: false,
+    maxHeaderSize: 16 * 1_024,
+    headersTimeout: 10_000,
+    requestTimeout: 30_000,
+    keepAliveTimeout: 5_000,
+    keepAliveTimeoutBuffer: 0,
+    // Node's default 30 s polling would defeat the declared 10 s incomplete-header deadline.
+    connectionsCheckingInterval: 1_000,
+  }, (request, response) => {
     const controller = new AbortController();
     const abort = (): void => controller.abort();
     const closed = (): void => { if (!response.writableFinished) abort(); };
@@ -2326,7 +2354,7 @@ export function createHttpServer(handler: RestHandler): Server {
       .then(handler)
       .then(async (result) => {
         if (response.destroyed) await result.body?.cancel();
-        else await writeNodeResponse(response, result, request.method);
+        else await writeNodeResponse(response, result, request);
       })
       .catch(async () => {
         if (response.destroyed || response.writableEnded) return;
@@ -2339,7 +2367,7 @@ export function createHttpServer(handler: RestHandler): Server {
           json(500, {
             error: { code: "INTERNAL_ERROR", message: "Internal server error" },
           }),
-          request.method,
+          request,
         );
       })
       .catch(() => { response.destroy(); })

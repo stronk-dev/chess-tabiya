@@ -12,6 +12,9 @@ dependency edge, they may not.
 
 | Item | Owning lane / prerequisite | Required production exit |
 |---|---|---|
+| [[D3333]], [[D3336]], [[D3337]], [[D3339]] | **DONE 2026-09-30**; release-engineering, implementing safe-deployment §§7–9 | Ten real HTTP ingress controls, five pinned TLS proxy proofs, both pinned Caddy configuration validations, type/capability/scaffold checks pass. Pending-read cancellation's original negative is retained. Receipt: `planning/safe-deployment-profiles/http-ingress-2026-09-30.md`. No full budget or deployment completion. |
+| [[D3334]], [[D3335]] | **READY NOW: contract repair**, release-engineering | Resolve body-contained selector admission order without inventing a new wire protocol; census current auth/Campaign/module plus every unsafe route and specify the complete generated transport/semantic budget join before D1846 implementation. Source audit: `design/research/http-ingress-contract.md`. |
+| [[D3338]] | release-engineering; real Maia image-identity contract | Fix operator wrappers with genuine manifest/config identity. Inert verifier fixtures cannot substitute. Standard configuration verification is repaired separately as D3337. |
 | [[D1847]], [[D3332]] | **DONE 2026-09-30**; release-engineering, implementing safe-deployment §9 | Eleven actual HTTP controls and first-byte/cancellation through the exact rendered pinned TLS proxy pass. Native release CI now runs that target on both architectures. Receipt: `planning/safe-deployment-profiles/http-streaming-2026-09-30.md`. D1846 ingress budgets, complete deployment receipts, packaged-export/owner-use and remote release matrix remain open. |
 
 ## Pack integration residue — checkpoint 2026-09-30

@@ -1101,6 +1101,15 @@ implementation detail.
 
 ## Changelog
 
+- 2026-09-30: D3333/D3336 repair pre-body policy ordering with lazy byte-preserving Node ingress,
+  explicit receive bounds and HTTP/1 full duplex in both pinned proxy templates. Ten native
+  HTTP controls and early 403/413 plus existing streaming controls through the pinned TLS proxy
+  pass. D3337 repairs standard configuration verification; D3338 retains omitted real Maia
+  identities in operator wrappers. D3339 closes pending-read cancellation deadlock, with its
+  original real-socket control retained. D1846 remains open on the §8 contradiction/population gaps
+  D3334/D3335; no replacement wire protocol or budget semantics is accepted by this checkpoint.
+  Receipt: `planning/safe-deployment-profiles/http-ingress-2026-09-30.md`.
+
 - 2026-09-30: §9 streaming egress now uses the production Node pipeline with backpressure,
   disconnect cancellation, no-body method/status handling and one terminal failure path.
   Eleven real HTTP controls and the exact rendered/pinned TLS-proxy first-byte/cancellation

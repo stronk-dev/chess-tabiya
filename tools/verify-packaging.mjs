@@ -8,6 +8,7 @@ import { buildSync } from "esbuild";
 import { GRADUATION_RULING_ANCHOR_ROOTS } from "../apps/server/src/graduation-ruling-roots.mjs";
 import { missingGraduationRulingCopies } from "./graduation-ruling-packaging.mjs";
 import { CADDY_IMAGE, DEPLOYMENT_ARTIFACTS, renderDeployment } from "./render-deployment.mjs";
+import { requireEarlyUploadResponse } from "./verify-caddy.mjs";
 
 function required(condition, message) {
   if (!condition) throw new Error(message);
@@ -106,6 +107,7 @@ for (const profile of ["appliance", "hosted"]) {
   required(maia.ports === undefined && JSON.stringify(Object.keys(maia.networks)) === JSON.stringify(["provider_edge"]), `${profile}: Maia is provider-edge only`);
   required(caddy.depends_on.server.condition === "service_healthy", `${profile}: Caddy waits for application readiness`);
   const caddyfile = renderedArtifacts[`Caddyfile.${profile}`];
+  requireEarlyUploadResponse(caddyfile, profile);
   required(caddyfile.includes("reverse_proxy tabiya-proxy-origin:3000") && caddyfile.includes("health_uri /readyz") && caddyfile.includes("header_up -Forwarded"), `${profile}: Caddyfile must proxy the origin alias with readiness and strip Forwarded`);
   required(caddyfile.includes('Strict-Transport-Security "max-age=31536000"') && !caddyfile.includes("includeSubDomains"), `${profile}: exact HSTS`);
   required(caddyfile.includes("max_size 8MB"), `${profile}: 8 MiB outer body guard`);

@@ -48,19 +48,20 @@ try {
   docker(["network", "create", publicNetwork]);
   ownedNetworks.push(publicNetwork);
   ownedContainers.push(originName);
-  docker(["run", "--detach", "--name", originName, "--network", id, "--network-alias", "tabiya-proxy-origin", "--mount", `type=bind,src=${join(root, ".cache/http-streaming-proxy/upstream.mjs")},dst=/upstream.mjs,readonly`, nodeImage, "node", "/upstream.mjs"]);
+  docker(["run", "--detach", "--name", originName, "--network", id, "--network-alias", "tabiya-proxy-origin", "--env", `TABIYA_FIXTURE_PUBLIC_ORIGIN=https://${hostname}`, "--mount", `type=bind,src=${join(root, ".cache/http-streaming-proxy/upstream.mjs")},dst=/upstream.mjs,readonly`, nodeImage, "node", "/upstream.mjs"]);
   ownedContainers.push(proxyName);
   docker(["run", "--detach", "--name", proxyName, "--network", publicNetwork, "--publish", "127.0.0.1::443", "--env", `TABIYA_PUBLIC_HOSTNAME=${hostname}`, "--mount", `type=bind,src=${config},dst=/etc/caddy/Caddyfile,readonly`, "--mount", `type=bind,src=${data},dst=/data`, CADDY_IMAGE]);
   docker(["network", "connect", id, proxyName]);
   const port = Number(docker(["inspect", "--format", '{{(index (index .NetworkSettings.Ports "443/tcp") 0).HostPort}}', proxyName]));
   assert.ok(Number.isInteger(port) && port > 0, "Docker assigns one disposable loopback TLS port");
   const ca = await until("proxy's public root", () => readFileSync(join(data, "caddy/pki/authorities/local/root.crt")));
-  function open(path, method = "GET") {
+  function open(path, method = "GET", { headers = {}, unfinishedUpload = false } = {}) {
     return new Promise((done, reject) => {
-      const request = https.request({ hostname: "127.0.0.1", port, servername: hostname, ca, path, method, headers: { host: hostname }, timeout: 5_000 }, (response) => { response.pause(); done({ request, response }); });
+      const request = https.request({ hostname: "127.0.0.1", port, servername: hostname, ca, path, method, headers: { host: hostname, ...(method === "POST" ? { origin: `https://${hostname}` } : {}), ...headers }, timeout: 5_000 }, (response) => { response.pause(); done({ request, response }); });
       request.once("error", reject);
       request.once("timeout", () => request.destroy(new Error(`transport deadline: ${method} ${path}`)));
-      request.end();
+      if (unfinishedUpload) { request.flushHeaders(); request.write("X"); }
+      else request.end();
     });
   }
   async function read(path, method = "GET") {
@@ -71,6 +72,21 @@ try {
   }
   await until("proxy readiness", async () => (await read("/readyz")).status === 200 ? true : undefined);
   console.log(`Pinned proxy ready: ${CADDY_IMAGE}; production Node runtime ${nodeImage}`);
+  for (const control of [
+    { path: "/policy-refusal", status: 403, code: "ORIGIN_REFUSED", origin: "https://other.example" },
+    { path: "/bounded-reader", status: 413, code: "BODY_TOO_LARGE", origin: `https://${hostname}` },
+  ]) {
+    const { request, response } = await open(control.path, "POST", {
+      headers: { origin: control.origin, "content-length": "1000000" }, unfinishedUpload: true,
+    });
+    try {
+      assert.equal(response.statusCode, control.status);
+      const chunks = [];
+      for await (const chunk of response) chunks.push(chunk);
+      assert.equal(JSON.parse(Buffer.concat(chunks).toString("utf8")).error.code, control.code);
+      console.log(`PASS unfinished upload receives ${control.code} through rendered TLS proxy`);
+    } finally { request.destroy(); }
+  }
   for (const type of ["text/event-stream", "application/x-chess-pgn"]) {
     const key = encodeURIComponent(type);
     const { response } = await open(`/stream?id=${key}&type=${key}`);

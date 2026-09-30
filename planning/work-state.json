@@ -14096,10 +14096,10 @@
       "id": "D1846",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bd4878cac3dc3d44721f7af84359c821c3e9def53e46a78e0c1c53dbedf7ba1f",
+      "sourceDigest": "sha256:64619fb64c32a1e5e5776a5c50fcdfe09563ccde8ff734fd1f6238ab1c93122b",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:safe-deployment-profiles.md"
+      "blocker": "item:D3334"
     },
     {
       "id": "D1847",
@@ -27391,6 +27391,66 @@
       "sourceDigest": "sha256:66bfcf232bd52bd66dd82e7e35da252b6f9a93c6cf3c8760b2a18020d36c4937",
       "uxItems": [],
       "evidence": "planning/safe-deployment-profiles/http-streaming-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3333",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bc453a81db65cb5d9edfeb0b52ce1cef7cdbe997224c2513999e0f923eaa90e6",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/http-ingress-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3334",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:62f530fac4fcd9ce6596a2bf063418ef9c9ddeaa856cc7f706658a5dc85ad99c",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3335",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bac18d41e03395841fe6adafe0553b570ba5a1513fdf57b884026b7c71ef6a0f",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3336",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8d3c1e602da84fdefba50c8476262eb77895460729e70142aed7aff97adc46aa",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/http-ingress-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3337",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f89cceb169f82968123adfe9ae6aba4ca5063913c8740dbce49609166230f326",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/http-ingress-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3338",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:47f40d10b1e43e8a2798ceb6a39726c8c823cc81384849158cc75178a45dd30d",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3339",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9705da8787ea3ebdd9834a1852a9e87734da477396485004527769c0eef0347c",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/http-ingress-2026-09-30.md",
       "evidenceKind": "path"
     }
   ]

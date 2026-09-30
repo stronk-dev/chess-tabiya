@@ -234,7 +234,9 @@ jobs:
           node tools/release/native-proof.mjs --images "$IMAGES" --platform "${{ matrix.platform }}"
           --pre-image "$RUNNER_TEMP/pre-image" --out "$RUNNER_TEMP/proof" --idle-seconds 300 --licence-gate enforce
       - name: Production HTTP adapter through the pinned rendered TLS proxy
-        run: make http-streaming-proxy-check
+        run: |
+          make http-streaming-proxy-check
+          make verify-deployment
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: proof-${{ matrix.arch }}

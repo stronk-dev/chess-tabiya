@@ -21843,3 +21843,29 @@ Campaign was the one capability with no API, route or content. Now:
   ingress budgets, complete deployment receipts, packaged-export/owner-use and full release
   journeys remain open. The Explorer query/import hunks and its owner-blocked migration are
   excluded from the scoped adapter checkpoint. The 1.0 goal remains active.
+
+### 2026-09-30 — D3333/D3336/D3337/D3339 lazy ingress and proxy early-refusal checkpoint
+
+- Eight original native HTTP negatives fail on unconditional upload buffering/receive defaults.
+  The adapter now exposes a zero-prefetch byte stream; the existing Host/Origin/Fetch-Metadata
+  policy can refuse before consumer body reads. Cancellation preserves the refusal response and
+  unread uploads cannot reuse the connection. Explicit parser/header/body/idle limits are set.
+- A pending-first-read cancellation control exposes the initial repair's iterator teardown
+  deadlock. Cancellation now finishes without awaiting another byte; its late teardown is observed.
+  Ten native ingress controls and eleven egress regressions pass. Real incomplete-header/body
+  requests return native 408 within specific protocol guards; no generic suite timeout is raised.
+- The new pinned TLS negative finds another boundary failure: Caddy receives the early upstream
+  refusal but drains the unfinished HTTP/1 request before returning it. Both proxied templates
+  now enable full duplex; early 403/413, both first-byte bodies and disconnect cancellation pass.
+- `verify-deployment` was itself broken by omitted required Maia digest arguments. Configuration
+  verification now uses explicitly inert render fixtures and validates both exact Caddyfiles
+  against the pin. Real operator-wrapper identities remain D3338. Release CI wires the config
+  check beside the proxy proof on both architectures; only this local host was exercised.
+- D1846 remains open. D3334 records the impossible pre-read resolution of JSON-only selectors;
+  D3335 records the absent current account/Campaign/module operations. Their contract repair is
+  queued, not replaced by a path-only fallback. Dossier: `design/research/http-ingress-contract.md`.
+- Receipt: `planning/safe-deployment-profiles/http-ingress-2026-09-30.md`. Typechecking has zero
+  errors/warnings; capability history/current images and packaging controls pass. No protected
+  intent sentence was falsified; no content, provider identity or semantic version is changed.
+  The unapproved Explorer migration remains unstaged and full application gates remain blocked.
+  No push, deployment, RFC archive or full milestone/1.0 readiness is claimed; goal stays active.

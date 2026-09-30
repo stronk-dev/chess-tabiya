@@ -216,6 +216,7 @@ const releaseDepth = checkoutFetchDepth(releaseVerification ?? "");
 if (releaseDepth === undefined || (releaseDepth !== 0 && releaseDepth < 2)) failures.push("Release verify needs its first parent for history checks");
 const nativeReleaseProof = workflowJob(await readText(".github/workflows/release.yml"), "native-proof");
 if (!nativeReleaseProof?.includes("make http-streaming-proxy-check")) failures.push("Native release proof needs the pinned TLS-proxy streaming check on each architecture");
+if (!nativeReleaseProof?.includes("make verify-deployment")) failures.push("Native release proof needs both pinned rendered Caddy configurations validated on each architecture");
 
 const browserWorkflow = await readText(".github/workflows/browser.yml");
 const missingBrowserTiers = missingRequiredText(browserWorkflow, [

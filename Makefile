@@ -224,6 +224,10 @@ evidence-components-check:
 http-streaming-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-streaming.test.ts
 
+.PHONY: http-ingress-check
+http-ingress-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-ingress.test.ts
+
 .PHONY: http-streaming-proxy-check
 http-streaming-proxy-check:
 	./node_modules/.bin/esbuild tools/http-streaming-proxy/upstream.ts --bundle --platform=node --format=esm --outfile=.cache/http-streaming-proxy/upstream.mjs --log-level=warning
@@ -2527,9 +2531,8 @@ appliance-ca-export:
 # profile with the pinned Caddy, including `caddy validate`.
 verify-deployment:
 	node tools/verify-packaging.mjs
-	@$(MAKE) --no-print-directory deployment-check PROFILE=local
-	@$(MAKE) --no-print-directory deployment-check PROFILE=appliance TABIYA_PUBLIC_HOSTNAME=tabiya.example.org
-	@$(MAKE) --no-print-directory deployment-check PROFILE=hosted TABIYA_PUBLIC_HOSTNAME=tabiya.example.org TABIYA_ACME_EMAIL=operator@example.org
+	node --test tools/verify-caddy.test.mjs
+	node tools/verify-caddy.mjs
 
 # Release-tier drills over the built image; each uses its own Compose project and volumes.
 .PHONY: storage-drill appliance-drill

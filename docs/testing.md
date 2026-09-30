@@ -111,3 +111,11 @@ base and exact rendered appliance Caddyfile/image, and proves first-byte-before-
 disconnect cancellation through trusted TLS. It owns and removes only its random test containers,
 networks and temporary directory. Native release CI runs it on amd64 and arm64. Neither target
 discharges body budgets, WebSocket product routes or the complete self-host release journey.
+
+`make http-ingress-check` runs ten actual HTTP controls, automatically in the software tier.
+Incomplete-header/body cases exercise the real 10 s/30 s production deadlines, with per-case
+deadlock guards; no global timeout is raised. `http-streaming-proxy-check` also proves early
+Origin refusal and cancellation-response delivery on unfinished uploads through pinned TLS.
+`make verify-deployment` validates both exact rendered Caddyfiles with inert identity fixtures,
+not the operator startup wrappers or an actual Maia deployment. Native release CI runs these
+proxy/configuration checks on both architectures; a local pass is not remote matrix evidence.

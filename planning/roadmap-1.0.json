@@ -720,7 +720,7 @@
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "The prior release checkpoint recorded the pinned least-privilege pipeline, allow-listed runtime content, SBOM/licence gates, release manifest/checksums, backup/restore/rollback, provider health and About page; those full proofs are not rerun by this checkpoint. D1847/D3332 now close streaming egress: eleven real HTTP controls and the exact rendered pinned appliance TLS proxy prove first bytes before completion, backpressure and disconnect cancellation without partial-response replacement. Native release CI runs the proxy proof on both architectures, while the local result proves only this host. Ingress budgets, full deployment receipts, packaged-export/owner-use journeys, official content and remaining release/rights/envelope gates remain open; no whole milestone or remote-green claim is made.",
+          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -728,6 +728,11 @@
             "rfc/storage-backup-recovery.md",
             "rfc/safe-deployment-profiles.md",
             "planning/safe-deployment-profiles/http-streaming-2026-09-30.md",
+            "planning/safe-deployment-profiles/http-ingress-2026-09-30.md",
+            "design/research/http-ingress-contract.md",
+            "apps/server/src/http-ingress.test.ts",
+            "apps/server/src/rest.ts",
+            "tools/verify-caddy.mjs",
             "apps/server/src/http-streaming.test.ts",
             "tools/http-streaming-proxy/check.mjs",
             ".github/workflows/release.yml"
@@ -746,12 +751,12 @@
             {
               "kind": "rfc",
               "id": "safe-deployment-profiles.md",
-              "digest": "sha256:81a3abb30a1889b9942aab68a4e31cb45815df80fccf55e0a267c0bed083718d"
+              "digest": "sha256:ed2345da9826fb74c6d8945231b89128c4cd8a2dfbf47f1879bc5dc13f8ac743"
             },
             {
               "kind": "work_state",
               "id": "D1846",
-              "digest": "sha256:bd4878cac3dc3d44721f7af84359c821c3e9def53e46a78e0c1c53dbedf7ba1f"
+              "digest": "sha256:64619fb64c32a1e5e5776a5c50fcdfe09563ccde8ff734fd1f6238ab1c93122b"
             },
             {
               "kind": "work_state",
@@ -762,6 +767,26 @@
               "kind": "work_state",
               "id": "D3332",
               "digest": "sha256:66bfcf232bd52bd66dd82e7e35da252b6f9a93c6cf3c8760b2a18020d36c4937"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3333",
+              "digest": "sha256:bc453a81db65cb5d9edfeb0b52ce1cef7cdbe997224c2513999e0f923eaa90e6"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3336",
+              "digest": "sha256:8d3c1e602da84fdefba50c8476262eb77895460729e70142aed7aff97adc46aa"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3337",
+              "digest": "sha256:f89cceb169f82968123adfe9ae6aba4ca5063913c8740dbce49609166230f326"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3339",
+              "digest": "sha256:9705da8787ea3ebdd9834a1852a9e87734da477396485004527769c0eef0347c"
             }
           ]
         },
