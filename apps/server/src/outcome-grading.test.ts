@@ -14,6 +14,7 @@ import { describe, expect, it } from "vitest";
 
 import { objectiveRules, orchestratePackMove, orchestratePackStart } from "./pack-orchestrator.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const at = "2026-08-12T12:00:00.000Z";
 const fixture = JSON.parse(
@@ -193,7 +194,7 @@ describe("Outcome Drill grading", () => {
   it("compiles the newly declarable draw rules fact without throwing", () => {
     const document = pack("hold");
     (document.objective as any).successConditions = [{ kind: "rules_fact", fact: "draw", to: "achieved" }];
-    const validation = validatePackDocument(document);
+    const validation = validatePackDocument(withDerivedRequires(document));
     expect(validation.valid, JSON.stringify(validation.issues)).toBe(true);
     expect(() => objectiveRules(document)).not.toThrow();
     expect(objectiveRules(document).some((rule) => rule.evidenceRefs.includes("rules:draw"))).toBe(true);

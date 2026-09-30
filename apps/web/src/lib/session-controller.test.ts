@@ -100,6 +100,7 @@ const capabilities: Capabilities = {
     },
   },
   providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "tablebase-primary": "available" }),
+  packCapabilities: { protocol: "tabiya.pack-capabilities", protocolVersion: 1, rows: [] },
   surfaces: {
     play: "available",
     review: "available",

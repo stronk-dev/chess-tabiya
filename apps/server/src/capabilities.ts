@@ -35,6 +35,8 @@ import {
 } from "./evidence-manifest.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { projectBotRoster, type BotRosterRow } from "./bot-roster.js";
+import { projectPackCapabilities, runtimeSupportedCapabilities, type DeploymentProviders, type RuntimeCapabilitySupport } from "./capability/pack-capabilities.js";
+import type { PackCapabilitiesPublicProjectionV1 } from "@chess-tabiya/schema";
 import type { BotProviderAvailabilitySnapshot } from "@chess-tabiya/runtime";
 
 export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
@@ -106,6 +108,8 @@ export interface Capabilities {
   readonly providerHealth: ProviderHealthCapabilities;
   readonly surfaces: SurfaceCapabilities;
   readonly evidenceManifest: EvidenceManifestCapabilities;
+  /** rfc/pack-capability-contract.md §4.2: the SUPPORTED pack-capability projection of this deployment. */
+  readonly packCapabilities: PackCapabilitiesPublicProjectionV1;
 }
 
 export type ClientCapabilities = Omit<Pick<Capabilities,
@@ -121,6 +125,7 @@ export type ClientCapabilities = Omit<Pick<Capabilities,
   | "providerHealth"
   | "surfaces"
   | "evidenceManifest"
+  | "packCapabilities"
 >, "policyProfiles"> & {
   readonly policyProfiles: {
     readonly strong_engine: Omit<StrongEngineProfile, "nodes">;
@@ -151,6 +156,7 @@ export function projectClientCapabilities(value: Capabilities): ClientCapabiliti
     providerHealth: value.providerHealth,
     surfaces: value.surfaces,
     evidenceManifest: value.evidenceManifest,
+    packCapabilities: value.packCapabilities,
   });
 }
 
@@ -310,12 +316,34 @@ function surfaces(health: ProviderHealthCapabilities): SurfaceCapabilities {
   return value;
 }
 
+const PACK_PROVIDER_FAMILY: Readonly<Record<string, keyof DeploymentProviders>> = Object.freeze({
+  "stockfish-analysis": "analysis",
+  "maia-inference": "opponent",
+  "tablebase-primary": "tablebase",
+  "explorer-primary": "corpus",
+  "external-voice": "voice",
+  "external-tts": "tts",
+});
+
+/** Configured instances whose live health is unavailable or recovering, by pack provider family. */
+function packOutages(health: ProviderHealthCapabilities): Partial<Record<keyof DeploymentProviders, { readonly retryAfterMs?: number }>> {
+  const out: Partial<Record<keyof DeploymentProviders, { readonly retryAfterMs?: number }>> = {};
+  for (const snapshot of health.providers) {
+    const family = PACK_PROVIDER_FAMILY[snapshot.instanceId];
+    if (family === undefined) continue;
+    if (snapshot.state === "unavailable") out[family] = snapshot.retryAfterMs === null ? {} : { retryAfterMs: snapshot.retryAfterMs };
+    else if (snapshot.state === "recovering") out[family] = {};
+  }
+  return out;
+}
+
 export class EngineCapabilities implements CapabilitiesProvider {
   readonly #client: CapabilityEngineClient;
   readonly #engineIds: readonly string[];
   readonly #health: ProviderRegistry;
   readonly #strongEngineProfile: StrongEngineProfile;
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
+  readonly #packCapabilities: RuntimeCapabilitySupport;
   readonly #botAvailability: (() => BotProviderAvailabilitySnapshot) | undefined;
 
   constructor(
@@ -326,6 +354,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly health: ProviderRegistry;
       readonly strongEngineProfile?: Partial<StrongEngineProfile>;
       readonly openingCatalogue?: OpeningCatalogueAvailability;
+      readonly packCapabilities?: RuntimeCapabilitySupport;
       /** rfc/bot-policy.md §4.3: exchange-observed provider availability for the roster join. */
       readonly botAvailability?: () => BotProviderAvailabilitySnapshot;
     },
@@ -334,6 +363,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
     this.#engineIds = Object.freeze([...engineIds]);
     this.#health = options.health;
     this.#openingCatalogue = options.openingCatalogue;
+    this.#packCapabilities = options.packCapabilities ?? runtimeSupportedCapabilities();
     this.#botAvailability = options.botAvailability;
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
@@ -397,6 +427,9 @@ export class EngineCapabilities implements CapabilitiesProvider {
       providerHealth: health,
       surfaces: surfaces(health),
       evidenceManifest: evidenceManifestCapabilities(health, this.#openingCatalogue),
+      // rfc/pack-capability-contract.md §5.1: a configured provider whose health is down or recovering is
+      // `temporarily_unavailable` — present and retryable — never removed from the supported set.
+      packCapabilities: projectPackCapabilities(this.#packCapabilities, { unreachable: packOutages(health) }),
     });
   }
 }

@@ -8,6 +8,8 @@ import { execFileSync } from "node:child_process";
 import { assertSemanticValidationOwnerTransition, type SemanticValidationTreeReader } from "../packages/runtime/src/semantic-validation.js";
 
 const ci = process.argv.includes("--ci");
+// A shallow checkout with no parent is not an empty prior authority store.
+if (ci) execFileSync("git", ["rev-parse", "--verify", "HEAD^1"], { stdio: "pipe" });
 
 function gitReader(treeish: string): SemanticValidationTreeReader {
   return (path) => {

@@ -1,4 +1,5 @@
-import { mkdtemp, readFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
+import { access, mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 
@@ -6,6 +7,8 @@ import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it, vi } from "vitest";
 
 import { checkSourcingDirectory } from "./check.js";
+import { withDerivedRequires } from "../capability/pack-capabilities.js";
+import { validatePackDocument } from "../pack-validation.js";
 import { readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import {
   assertMastersRequest,
@@ -76,7 +79,7 @@ describe("famous-games masters sourcing (rfc/famous-games.md)", () => {
     expect(sourceGameFromHeaders(headers, "lichess-masters:aAbqI4ey", "no-rights-asserted")).not.toHaveProperty("event");
   });
 
-  it("criterion 3 (sidecar half): the sourceGame shape is closed over the six required fields", () => {
+  it("the typed sourceGame vocabulary is closed over the six required fields", () => {
     expect(SOURCE_GAME_SCHEMA.required).toEqual(["white", "black", "date", "result", "sourceId", "licenceBasis"]);
     const valid = { white: "A", black: "B", date: "1999.??.??", result: "1/2-1/2", sourceId: "lichess-masters:aAbqI4ey", licenceBasis: "no-rights-asserted" };
     expect(sourceGameIssues(valid)).toEqual([]);
@@ -150,10 +153,9 @@ describe("famous-games masters sourcing (rfc/famous-games.md)", () => {
     await expect(fixtureRecordedMasterGame("Bf3kqP2x")).rejects.toMatchObject({ code: "FIXTURE_REQUEST_MISMATCH" });
   });
 
-  it("emits a strict-clean draft candidate from the recorded game with its sourceGame sidecar", async () => {
+  it("emits a strict-clean draft candidate carrying provenance.sourceGame (lane 0.31)", async () => {
     const output = await emitMastersCandidate({ gameIds: [GAME], splitPly: 6, toPly: 20, learnerSide: "white", phase: "opening", client: { masterGame: fixtureRecordedMasterGame }, outputRoot: await temporary() });
     const pack = await readJson(resolve(output, "pack.json")) as any;
-    const sidecar = await readJson(resolve(output, "source-game.json")) as any;
     const sources = await readJson(resolve(output, "sources.json")) as any;
     expect(pack.id).toMatch(/^masters-carlsen-chadaev-2012-[0-9a-f]{8}-white$/);
     expect(pack.title).toBe("Carlsen, Magnus – Chadaev, Nikolay, Wch Blitz, Astana 2012.07.10");
@@ -162,16 +164,31 @@ describe("famous-games masters sourcing (rfc/famous-games.md)", () => {
     expect(pack.provenance.sources).toHaveLength(1);
     expect(pack.provenance.sources[0]).toContain(MASTERS_RATIONALE);
     expect(pack.provenance.sources[0]).toContain("https://explorer.lichess.org/masters/pgn/aAbqI4ey");
-    expect(pack.provenance).not.toHaveProperty("sourceGame");
-    expect(sidecar).toEqual({ schema: "tabiya.sourcing.source-game.v1", packId: pack.id, sourceGame: expect.objectContaining({ white: "Carlsen, Magnus", sourceId: "lichess-masters:aAbqI4ey" }) });
+    expect(pack.provenance.sourceGame).toEqual(expect.objectContaining({ white: "Carlsen, Magnus", sourceId: "lichess-masters:aAbqI4ey", licenceBasis: "no-rights-asserted" }));
+    expect(pack.requires.map((row: { id: string }) => row.id)).toContain("provenance.sourceGame.licenceBasis.no-rights-asserted");
+    await expect(access(resolve(output, "source-game.json"))).rejects.toThrow();
     expect(sources.entries).toEqual([expect.objectContaining({ sourceId: "lichess-masters", origin: expect.objectContaining({ kind: "http", status: 200 }) })]);
     const checked = await checkSourcingDirectory(output, { strict: true });
     expect(checked.issues.filter((value) => value.severity === "error")).toEqual([]);
-    sidecar.sourceGame.annotator = "Kasparov";
-    await writeCanonicalJson(resolve(output, "source-game.json"), sidecar);
+    pack.provenance.sourceGame.annotator = "Kasparov";
+    await writeCanonicalJson(resolve(output, "pack.json"), pack);
     const tampered = await checkSourcingDirectory(output, { strict: true });
     expect(tampered.valid).toBe(false);
-    expect(tampered.issues.map((value) => value.code)).toContain("SOURCE_GAME_INVALID");
+    await writeCanonicalJson(resolve(output, "source-game.json"), { schema: "tabiya.sourcing.source-game.v1" });
+    expect((await checkSourcingDirectory(output, { strict: true })).issues.map((value) => value.code)).toContain("SOURCE_GAME_SIDECAR_RETIRED");
+  });
+
+  it("criterion 3: $defs/provenance.sourceGame validates the six required fields and rejects a seventh key", () => {
+    const schemaFragment = (JSON.parse(readFileSync(new URL("../../../../schemas/drill_pack.schema.json", import.meta.url), "utf8")) as any).$defs.provenance.properties.sourceGame;
+    expect(JSON.parse(JSON.stringify(SOURCE_GAME_SCHEMA))).toEqual(schemaFragment);
+    const example = JSON.parse(readFileSync(new URL("../../../../schemas/drill_pack.example.json", import.meta.url), "utf8"));
+    const valid = { white: "A", black: "B", date: "1999.??.??", result: "1/2-1/2", sourceId: "lichess-masters:aAbqI4ey", licenceBasis: "no-rights-asserted" };
+    const withGame = withDerivedRequires({ ...example, provenance: { ...example.provenance, sourceGame: valid } });
+    expect(validatePackDocument(withGame).valid).toBe(true);
+    const seventh = { ...withGame, provenance: { ...withGame.provenance, sourceGame: { ...valid, annotator: "someone" } } };
+    expect(validatePackDocument(seventh).issues.map((issue) => issue.path)).toContain("/provenance/sourceGame");
+    const { result: _dropped, ...sixth } = valid;
+    expect(validatePackDocument({ ...withGame, provenance: { ...withGame.provenance, sourceGame: sixth } }).valid).toBe(false);
   });
 
   it("refuses a split ply that hands the first move to the opponent", async () => {
@@ -209,6 +226,8 @@ describe("famous-games masters sourcing (rfc/famous-games.md)", () => {
     const pack = await readJson(packPath) as any;
     pack.feedbackClaims = [{ id: "move-frequency", text: "The move appears in 31.4% of games.", evidenceTypes: ["corpus_observed"] }];
     pack.provenance.sources = [`lichess-explorer — ${EXPLORER_RATIONALE}`];
+    // A feedback claim's evidence type is a closed member: re-derive the capability stamp (§4.1).
+    pack.requires = withDerivedRequires(pack).requires;
     const ledger = await readJson(ledgerPath) as any;
     ledger.packDigest = await digestDrillPack(pack);
     await writeCanonicalJson(packPath, pack);

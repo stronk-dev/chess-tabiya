@@ -34,6 +34,8 @@ import { parseUci } from "chessops/util";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
+import { packRequirementIssues } from "./capability/pack-capabilities.js";
+import { livingPackSchema } from "./pack-schema.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import {
   DECLARED_UNIMPLEMENTED_POLICY_MODES,
@@ -167,15 +169,9 @@ export interface PackSiblingLookup {
 }
 
 let schemaValidator: ValidateFunction | undefined;
-let schemaDocument: Record<string, unknown> | undefined;
 
 function livingSchema(): Record<string, unknown> {
-  if (schemaDocument !== undefined) return schemaDocument;
-  const path = fileURLToPath(
-    new URL("../../../schemas/drill_pack.schema.json", import.meta.url),
-  );
-  schemaDocument = JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>;
-  return schemaDocument;
+  return livingPackSchema();
 }
 
 function validator(): ValidateFunction {
@@ -1603,6 +1599,21 @@ export function validatePackDocument(value: unknown, options: {
     ),
     ...runtimeIssues(document, options.shapes, options.packs, options.principles, options.compileObjectiveRules),
     ...packConceptIssues(document, options.concepts ?? installedConceptRegistry()),
+    // rfc/pack-training-forms.md §3.1: the ramp is ordered by attempt and only tightens.
+    ...(document.assistanceCeilingRamp ?? []).flatMap((step, index, steps) => {
+      const previous = steps[index - 1];
+      if (previous === undefined) return [];
+      if (step.throughAttempt <= previous.throughAttempt) return [runtimeIssue("ASSISTANCE_RAMP_NOT_INCREASING", `/assistanceCeilingRamp/${index}/throughAttempt`, "ramp steps must be ordered by strictly increasing throughAttempt")];
+      if (step.ceilingRung > previous.ceilingRung) return [runtimeIssue("ASSISTANCE_RAMP_WIDENS", `/assistanceCeilingRamp/${index}/ceilingRung`, "a later attempt may not permit a higher rung than an earlier one; the ramp only tightens")];
+      return [];
+    }),
+    // rfc/pack-capability-contract.md §4.1: the declared capability requirements byte-equal the
+    // derivation from this document's own content (criterion 3).
+    ...packRequirementIssues(document as unknown as Readonly<Record<string, unknown>>, {
+      schema: livingSchema(),
+      ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
+      ...(options.principles === undefined ? {} : { principles: options.principles }),
+    }).map((issue) => runtimeIssue(issue.code, issue.path, issue.message)),
   ];
   return Object.freeze({
     valid: !issues.some((issue) => issue.severity === "error"),

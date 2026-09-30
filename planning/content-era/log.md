@@ -3880,3 +3880,19 @@ until a second pass measured the pack start positions the sentence actually name
   packs remain drafts. Batch verification now accepts `FILES=...` and loads that fixture once.
 - This mechanical wave does not author claim bindings: `expression-census` `backedClaims` remains
   **1**. [[D470]] closes; the authored population and explorer-evidence waves remain open.
+
+## 2026-09-30 — Qualified pack-capability mechanical migration integrated
+
+- Integrated the already owner-qualified D3033 mechanical stamp wave with schema lanes
+  0.30–0.32: 92 content documents (86 production packs and six browser fixtures) receive derived
+  `requires`; 68 evidence ledgers retain their records with updated pack digest references.
+  The schema example and 11 separate schema fixtures are also stamped, including main's newer
+  Campaign boss fixture. They do not inflate production content denominators.
+- No chess moves, judgement, authored claims, claim bindings or training-set content is authored.
+  This is compatibility migration, not a content graduation. All packs retain their prior status;
+  no official pack graduates. The compatibility checker verifies exact derived requirements on
+  104 documents, and the planner independently reads its defined 352-document population.
+- `make verify-content` passes 223 tests/23 files and corpus clearance without errors. Browser
+  content journeys and the packaged app pass. Persisted user documents are never silently
+  re-stamped: invalid/unsupported stored admission is refused with operator diagnostics and bytes
+  retained. Receipt: `planning/pack-capability-contract/integration-2026-09-30.md`.

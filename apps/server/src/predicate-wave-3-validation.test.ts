@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 
 import { objectiveRules, planSignatureResolver } from "./pack-orchestrator.js";
 import { structuralIssues, validatePackDocument, type PackShapeLookup } from "./pack-validation.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const json = (relative: string): any => JSON.parse(readFileSync(new URL(relative, import.meta.url), "utf8"));
 const pack = json(resolvePackPath("carlsbad-minority-attack")) as DrillPackDefinition;
@@ -18,7 +19,7 @@ describe("predicate wave 3 validation", () => {
   it("resolves the Carlsbad plan consequence and refuses every unresolved form", () => {
     const planPack = structuredClone(pack) as DrillPackDefinition;
     (planPack.objective as any).successConditions = [{ kind: "plan_consequence", planClassId: "minority-attack", to: "achieved" }];
-    expect(validatePackDocument(planPack, { shapes: lookup() }).valid).toBe(true);
+    expect(validatePackDocument(withDerivedRequires(planPack, { shapes: lookup() }), { shapes: lookup() }).valid).toBe(true);
     const resolved = planSignatureResolver(planPack, lookup());
     expect(objectiveRules(planPack, planPack.objective, "/objective", resolved)[0]?.evidenceRefs).toEqual([
       "planClass#minority-attack",

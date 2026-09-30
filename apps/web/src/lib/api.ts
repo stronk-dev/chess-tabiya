@@ -5,6 +5,7 @@ import type {
   PackPhase,
 } from "@chess-tabiya/schema/drill-pack";
 import type { ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
+import type { PackCapabilitiesPublicProjectionV1 } from "@chess-tabiya/schema/capability";
 import type {
   BranchComparison,
   CorpusPopulation,
@@ -627,6 +628,8 @@ export interface Capabilities {
   /** The live provider-health snapshot (rfc/provider-health-degradation.md §9), parsed by the runtime. */
   readonly providerHealth: ProviderHealthCapabilities;
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
+  /** rfc/pack-capability-contract.md §4.2, parsed by the shared schema-package authority. */
+  readonly packCapabilities: PackCapabilitiesPublicProjectionV1;
   readonly evidenceManifest: {
     readonly digest: string;
     readonly counts: { readonly producers: number; readonly projections: number; readonly consumers: number; readonly bindings: number; readonly semanticEvents: number; readonly eligibility: number; readonly reasons: number; readonly selectionPolicies: number };

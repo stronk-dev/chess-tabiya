@@ -11,7 +11,8 @@
     "./principle-entry": "./src/principle-entry/index.ts",
     "./campaign": "./src/campaign/index.ts",
     "./pack-path": "./src/pack-path/index.ts",
-    "./release-manifest": "./src/release-manifest/index.ts"
+    "./release-manifest": "./src/release-manifest/index.ts",
+    "./capability": "./src/capability/index.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"

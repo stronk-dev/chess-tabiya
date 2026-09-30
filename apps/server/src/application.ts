@@ -39,6 +39,7 @@ import {
 } from "./opponent-selector.js";
 import { PackRegistry } from "./pack-registry.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { runtimeSupportedCapabilities, type DeploymentProviders } from "./capability/pack-capabilities.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -514,11 +515,15 @@ export async function composeApplication(
   const concepts = installedConceptRegistry();
   const shapes = await ShapeRegistry.loadDefault();
   const principles = await PrincipleRegistry.loadDefault();
+  // rfc/pack-capability-contract.md §4.2/§5.1: the configured capability identities of this
+  // deployment. A provider the operator did not configure makes its capabilities `unsupported`.
+  const capabilitySupport = runtimeSupportedCapabilities({ providers: configuredPackProviders(options), shapes: shapes.list(), principles: principles.list() });
   const registry = await PackRegistry.loadDefault({
     development: options.development === true,
     shapes,
     principles,
     concepts,
+    capabilities: capabilitySupport,
     ...(options.draftPackFile === undefined
       ? {}
       : { draftFile: options.draftPackFile }),
@@ -546,6 +551,20 @@ export async function composeApplication(
   }
 }
 
+/**
+ * Which provider families this deployment configures, by the same rules composeServices uses to
+ * register provider instances (configuration answers "exists"; health answers "reachable").
+ */
+function configuredPackProviders(options: ApplicationOptions): DeploymentProviders {
+  const engineMode = options.engineMode ?? "mock";
+  const suppliedTablebase = options.tablebaseSource === null ? undefined : options.tablebaseSource;
+  const builtInTablebase = options.tablebaseSource === undefined && engineMode === "maia";
+  const fixtureTablebase = suppliedTablebase ?? (options.tablebaseSource === undefined && engineMode === "mock" ? new FixtureTablebaseSource() : undefined);
+  const tablebase = builtInTablebase || (fixtureTablebase !== undefined && !(fixtureTablebase instanceof FixtureTablebaseSource && !fixtureTablebase.configured));
+  const corpus = (options.corpusSource === undefined && engineMode === "maia" && options.corpusToken !== undefined) || options.corpusSource !== undefined || engineMode === "mock";
+  return Object.freeze({ opponent: true, analysis: true, corpus, tablebase, voice: options.voiceProvider !== undefined || options.reasoningReviewProvider !== undefined, tts: options.ttsProvider !== undefined });
+}
+
 async function composeServices(
   options: ApplicationOptions,
   composition: LongitudinalComposition,
@@ -565,7 +584,9 @@ async function composeServices(
   })));
   await shapeStudio.hydrate();
   const studio = new PackStudio(storage, registry, shapes, principles);
-  studio.hydrate();
+  for (const refusal of studio.hydrate()) {
+    console.error(`stored pack admission refused: ${refusal.source} ${refusal.digest} ${refusal.code}; stored bytes retained`);
+  }
   const engineMode = options.engineMode ?? "mock";
   let supervisor: EngineSupervisor | undefined;
   let selector: OpponentSelector;
@@ -667,7 +688,7 @@ async function composeServices(
     capabilities = new EngineCapabilities(engines, [
       "stockfish-analysis",
       "maia-5m",
-    ], { health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot() });
+    ], { health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot(), packCapabilities: registry.capabilities });
     evidenceExecutor = new StockfishEvidenceExecutor(
       supervisor,
       analysisSpec.id,
@@ -687,7 +708,7 @@ async function composeServices(
       ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot(),
+      health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot(), packCapabilities: registry.capabilities,
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }

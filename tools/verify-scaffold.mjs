@@ -207,10 +207,13 @@ const missingVerifyTiers = missingRequiredText(workflow, [
 if (!workflow.includes("pnpm install --frozen-lockfile") || missingVerifyTiers.length > 0) {
   failures.push(`CI workflow: missing named verification tiers: ${missingVerifyTiers.join(", ")}`);
 }
-const governanceJob = workflowJob(workflow, "repository-governance");
-if (governanceJob === undefined || checkoutFetchDepth(governanceJob) !== undefined) {
-  failures.push("CI workflow: repository-governance must remain valid on the default shallow checkout");
+for (const name of ["software-contracts", "repository-governance"]) {
+  const depth = checkoutFetchDepth(workflowJob(workflow, name) ?? "");
+  if (depth === undefined || (depth !== 0 && depth < 2)) failures.push(`CI workflow: ${name} needs its first parent for history checks (fetch-depth >= 2 or 0)`);
 }
+const releaseVerification = workflowJob(await readText(".github/workflows/release.yml"), "verify");
+const releaseDepth = checkoutFetchDepth(releaseVerification ?? "");
+if (releaseDepth === undefined || (releaseDepth !== 0 && releaseDepth < 2)) failures.push("Release verify needs its first parent for history checks");
 
 const browserWorkflow = await readText(".github/workflows/browser.yml");
 const missingBrowserTiers = missingRequiredText(browserWorkflow, [

@@ -155,6 +155,7 @@ const capabilities: Capabilities = {
     },
   },
   providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "explorer-primary": "available", "tablebase-primary": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture", "explorer-primary": "local_fixture", "tablebase-primary": "local_fixture" }),
+  packCapabilities: { protocol: "tabiya.pack-capabilities", protocolVersion: 1, rows: [] },
   surfaces: {
     play: "available",
     review: "available",

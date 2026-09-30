@@ -10,6 +10,7 @@ import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 
 import { StockfishEvidenceExecutor } from "../evidence-queue.js";
 import { PackRegistry, projectPackDocument } from "../pack-registry.js";
+import { withDerivedRequires } from "../capability/pack-capabilities.js";
 import { checkSourcingDirectory } from "./check.js";
 import { readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import {
@@ -87,6 +88,8 @@ describe("Syzygy sourcing", () => {
       },
       successConditions: [],
     };
+    // The objective change moves closed members, so the capability stamp is re-derived (rfc/pack-capability-contract.md §4.1).
+    pack.requires = withDerivedRequires(pack).requires;
 
     const stampedLedger = { ...(ledger as Record<string, unknown>), packDigest: await digestDrillPack(pack) };
     const verified = await PackRegistry.fromDocuments([

@@ -8,6 +8,21 @@ This is the queue the thematic roadmap was missing. A phase completes on evidenc
 not because its code was started. Within a phase, independent jobs may run in parallel; across a
 dependency edge, they may not.
 
+## Pack integration residue — checkpoint 2026-09-30
+
+The existing owner-directed capability branch is integrated. Do not rebuild its schema/registry
+mechanisms or mistake its pure training helpers for completed journeys. Durable execution state
+and ownership remain in `planning/work-state.json`; source evidence is
+`planning/pack-capability-contract/integration-2026-09-30.md`.
+
+| Item | Owning lane / prerequisite | Required production exit |
+|---|---|---|
+| [[D3317]] | assistance-and-presentation; `rfc/pack-training-forms.md` D2 and owner ADR-0006 discharge | Persisted attempt number selects the exact owner-defined rung→nine-field clamp projection. Enforce the existing assistance intersection in live runs, including rewind, restart and reveal; a pure numeric helper is insufficient. |
+| [[D3318]] | content-and-theory; executable training-form obligations in that RFC, after its actual prerequisites | Load and expose ordered training sets through API/client progression, repeat/re-offer and schedule isolation; apply scaled tempo in real play. Authored examples remain a separate discharge. |
+| [[D3322]] | core-loop; audit the existing tempo/objective contract before modifying the run authority | Bind the published unauthored `outpaced → failed` default to a real run transition and prove its terminal behavior. A source-site census or exported helper cannot discharge this. |
+
+These rows are continuation work, not additional acceptance or a waiver of open owner questions.
+
 ## Phase 0 — truth and measurement
 
 | Order | Job | State | Deliverable / closeout |

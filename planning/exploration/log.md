@@ -21692,3 +21692,25 @@ Campaign was the one capability with no API, route or content. Now:
   capability work before expanding content. D3309 and the why-move search experiment remain held
   under their own contracts. Unrelated D872 fixture edits and untracked reviewer files are untouched.
   Detailed receipt: `planning/evidence-foundation-ux/integration-2026-09-30.md`.
+
+### 2026-09-30 — Integrate pack compatibility and retain the live training residue
+
+- **What landed:** the existing owner-directed pack-capability branch at `90600757` is reconciled
+  in the same main checkout. Schema lanes 0.30–0.32, the initial 819-declaration registry, exact
+  derived requirements, shared public handshake/parser and separately gated planner/applier now
+  coexist with main's evidence foundation and learner surfaces. Three RFCs remain implementing,
+  not archived; their stale draft register rows are corrected and checkpoint-anchored.
+- **Repairs:** D3316 closes dynamic/restart admission bypass while retaining refused stored bytes.
+  D3319 adds an independent Git-history baseline so regeneration cannot hide same-version drift.
+  D3320 supplies actual parent history to consuming CI jobs and refuses missing parents. D3321
+  stamps the newer Campaign fixture and independently discovers browser schema fixtures.
+- **Measured journeys:** 130 focused tests, 223 content tests, 56 smoke/five content/49 matrix/one
+  packaged-production browser tests pass; one optional live-Maia measurement is skipped. Full
+  software and final governance/commit gates are recorded in the integration receipt before commit.
+- **Still open:** D3317 live ramp/clamp projection, D3318 real training-set progression/re-offer/
+  tempo/schedule isolation, and D3322 the unauthored tempo helper's missing direct run consumer.
+  Pure helpers are not full features. No semantic profile, whole capability, milestone or official
+  pack closes; no push or remote CI result is claimed.
+- **Next:** finish provider and consumer obligations against the integrated foundation before
+  widening authored content. Detailed receipt: `planning/pack-capability-contract/integration-2026-09-30.md`.
+  Unrelated D872 edits and untracked reviewer files remain untouched.

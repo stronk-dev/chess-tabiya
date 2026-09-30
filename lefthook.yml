@@ -43,6 +43,14 @@ pre-commit:
         - "lefthook.yml"
       run: make semantic-validation-owner-transition-check
 
+    - name: capability-history
+      glob:
+        - "packages/runtime/src/capability/**/*.{ts,json}"
+        - "tools/capability-history*.mjs"
+        - "Makefile"
+        - "lefthook.yml"
+      run: node tools/capability-history.mjs --staged
+
     - name: scaffold
       glob:
         - "Makefile"

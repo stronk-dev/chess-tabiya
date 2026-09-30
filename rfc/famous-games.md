@@ -1,6 +1,6 @@
 # RFC: Famous games — lifting the masters refusal and making a cited game machine-readable
 
-- **Status:** implementing — 2026-09-24. §1, §4 and §5 ship (criteria 1, 2, 4–8 green); the `sourceGame` shape ships as a validated candidate sidecar. The pack-schema half of criterion 3 and criterion 9's lane-0.31 landing are **queued behind lane 0.30** (`pack-capability-contract.md`, unlanded), because landing order follows the numbers. Receipt: `planning/famous-games/implementation-2026-09-24.md`. Prior status: draft — 2026-08-23
+- **Status:** implementing — 2026-09-24. §1, §3, §4 and §5 ship; criteria 1–9 green. Pack-schema lane 0.31 landed behind lane 0.30: `$defs/provenance.sourceGame` is in the pack schema, the masters emitter writes it into the pack, and the interim `source-game.json` sidecar is retired. Receipts: `planning/famous-games/implementation-2026-09-24.md` and `planning/pack-capability-contract/implementation-2026-09-24.md`. Prior status: draft — 2026-08-23
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` §Library (packs, games, positions, historical sources); `design/01-training-model.md` (authored framing over a played consequence)
@@ -11,7 +11,7 @@
 - **Planning:** `planning/famous-games/` (once implementing)
 
 ```tabiya-claims
-pack-schema | lane 0.31 | $defs/provenance.sourceGame (new, closed object: white, black, event, site, date, round, result, sourceId, licenceBasis)
+none
 ```
 
 ## Summary
@@ -298,6 +298,10 @@ Proposed; ids assigned at landing. Head was **D1142** at drafting.
 
 ## Changelog
 
+- 2026-09-30 — integrated the existing lane-0.31 schema and in-pack masters provenance on main.
+  The sidecar is retired at its reader, not retained as a second authority. Remaining authored and
+  learner-facing discharges stay open; receipt: `planning/pack-capability-contract/integration-2026-09-30.md`.
+
 - 2026-09-24 — implementing (owner request in session; no further review cycle). Shipped: the four
   §1 rows (`capabilities.ts`, now at line ~207 — the bundled row had already been re-marked
   `unmeasured` pending this RFC); `ExplorerClient.masterGame`/`mastersStats` on the one explorer
@@ -312,3 +316,10 @@ Proposed; ids assigned at landing. Head was **D1142** at drafting.
   spending owner ruling [[D1060]]. Scoped to the authoring path; learner-facing import deferred
   once the shipped `source_kind` CHECK was found closed and its migration position already claimed
   by `live-sources`.
+- 2026-09-24 (**lane 0.31 landed** behind the pack-capability contract's lane 0.30): §3's object is
+  `$defs/provenance.sourceGame`, closed, six required fields; the masters emitter writes it into
+  `provenance`, and the interim sidecar is retired rather than kept as a second authority
+  (`sourcing-check` refuses a leftover one as `SOURCE_GAME_SIDECAR_RETIRED`). Criterion 3's pack half
+  and criterion 9 are tests (`masters.test.ts`; the register's landed 0.31 row). Its two closed
+  vocabularies (`result`, `licenceBasis`) are capability members like every other closed member, so a
+  pack carrying `sourceGame` stamps them in `requires`. The `tabiya-claims` block is now `none`.

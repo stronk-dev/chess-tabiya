@@ -13,6 +13,7 @@ import {
 import type { runExpressionCensus } from "../expression-census.js";
 import { EMITTER_GRADUATION_CLEARANCE_PLANS, type EmitterGraduationClearancePlan } from "../graduation-blocker-templates.mjs";
 import { objectiveRules } from "../pack-orchestrator.js";
+import { withDerivedRequires } from "../capability/pack-capabilities.js";
 import { validateClaimBindings } from "./claim-binding.js";
 import { readJson, writeCanonicalJson } from "./canonical.js";
 import { resolvePointer } from "./check.js";
@@ -243,10 +244,12 @@ export function attachEmitterGraduationClearances(document: unknown): DrillPackD
       clearance: emitterGraduationClearance(pack, entry.id) as SchemaGraduationClearance,
     });
   });
-  return Object.freeze({
+  // rfc/pack-capability-contract.md §4.1: every emitter finalises here, so every emitted pack carries
+  // the one derived capability stamp before it is validated, digested or written.
+  return Object.freeze(withDerivedRequires({
     ...pack,
     provenance: Object.freeze({ ...pack.provenance, graduationBlockers: Object.freeze(graduationBlockers) }),
-  });
+  }) as DrillPackDefinition);
 }
 
 function contentDeclarationPrecondition(pack: DrillPackDefinition, entryId: string, clearance: GraduationClearance, plan: EmitterGraduationClearancePlan): boolean {
@@ -397,7 +400,8 @@ export async function clearGraduationEntries(file: string, options: { readonly n
     transitions.push({ id: blocking.id, from: "blocking", to: "resolved", clearance, evidence: result.evidence });
     return { id: blocking.id, state: "resolved", statement: blocking.statement, resolved: { at: at.slice(0, 10), clearance, by: result.evidence } };
   });
-  const nextPack = { ...pack, provenance: { ...pack.provenance, graduationBlockers: nextEntries } };
+  // An entry's state is a closed member, so a transition re-derives the capability stamp (§4.1).
+  const nextPack = transitions.length === 0 ? pack : withDerivedRequires({ ...pack, provenance: { ...pack.provenance, graduationBlockers: nextEntries } });
   const after = await digestDrillPack(nextPack);
   const nextLedger = { ...ledger, packDigest: after };
   const transition: GraduationTransitionResult = Object.freeze({ schema: "tabiya.graduation.transition.v1", packId: pack.id, at, packDigestBefore: before, packDigestAfter: after, transitions: Object.freeze(transitions), held: Object.freeze(held) });

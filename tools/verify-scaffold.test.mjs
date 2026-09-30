@@ -71,6 +71,17 @@ test("workflow job extraction does not borrow checkout policy from another job",
   assert.equal(checkoutFetchDepth(workflowJob(workflow, "repository-governance") ?? ""), undefined);
 });
 
+test("each history-consuming verification job fetches its own parent", async () => {
+  const { readFile } = await import("node:fs/promises");
+  for (const [path, jobs] of [["../.github/workflows/verify.yml", ["software-contracts", "repository-governance"]], ["../.github/workflows/release.yml", ["verify"]]]) {
+    const text = await readFile(new URL(path, import.meta.url), "utf8");
+    for (const name of jobs) {
+      const depth = checkoutFetchDepth(workflowJob(text, name) ?? "");
+      assert.ok(depth === 0 || (typeof depth === "number" && depth >= 2), `${path} ${name} cannot validate history on a missing parent`);
+    }
+  }
+});
+
 test("governance and draft-RFC evidence remain separate Make targets", () => {
   const makefile = `verify-governance: register-check status-parity work-index\nverify-rfc-evidence: example-fresh-review example-author-repair\n`;
   assert.deepEqual(

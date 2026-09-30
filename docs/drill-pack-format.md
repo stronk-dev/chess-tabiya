@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.29; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.32; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -121,6 +121,56 @@ manifest entry; and support authored prose only. Citations are available to auth
 and the advanced evidence inspector, never as position readings or measurements. Timing-window
 notes now allow 2,000 characters and remain printed verbatim by `make graduation-report`; the
 learner-facing authored objective-assessment note retains its 400-character cap.
+
+Version 0.30 (`rfc/pack-capability-contract.md`) makes every pack declare the evaluator meaning it
+depends on. The root `requires` array is **required** and holds canonical structured capability
+requirements — `{ "id": "structuralFeature.outpost", "version": { "kind": "integer", "value": 1 } }`,
+or a `semver` arm for a resolved `shape.<id>`/`principle.<id>` — ordered by id with no duplicates. It
+is derived, never authored: the single drill-pack reader (`validatePackDocument`) re-derives it from
+the document's own content through the generated applicability image
+(`packages/schema/src/capability/applicability.generated.ts`) and refuses a missing, duplicated,
+reordered, under- or over-declared array. Every writer — the sourcing emitters, Studio saves and
+registration, graduation clearance — stamps it through the one function; an author runs
+`make pack-stamp FILE=<pack.json>` after editing content. The stamp is inside `digestDrillPack`.
+
+Each capability is a declaration in `packages/runtime/src/capability/` with a semantics digest over
+the schema member, the interpreter arms and constant tables that define it (closed through
+TypeScript symbol references), its convention prose, its F1 projection or resolved entry, and the
+lockfile-pinned packages it reaches. `make capability-check` fails when a meaning changes at the same
+version. Its Git-history guard separately retains every committed declaration, so regenerating the
+image cannot hide a same-version change. The narrow pre-commit check reads staged bytes; CI compares
+the commit with its first parent and refuses a missing parent. The remedy is to revert or retain the
+old declaration, add its versioned successor and a transition to `lifecycle.ts`, and run
+`make capability-declarations`, after which `make migration-plan` names every pack or shape whose
+requirement was superseded as judgement debt (`make migration-apply-ready` refuses while any exists).
+`GET /capabilities` publishes `packCapabilities`: the configured active/deprecated capabilities with a
+separate `supported`/`temporarily_unavailable` reachability. A pack requiring a capability this
+deployment does not carry is refused at registration (HTTP 422 `PACK_CAPABILITY_UNSUPPORTED`) and
+excluded from the listing; the boot survives it.
+
+Dynamic community and playtest insertion uses the same validator and handshake as disk loading.
+At restart, stored documents that lack the current stamp or require unsupported capabilities are
+not admitted. The application reports their digest and refusal code, retains their stored bytes,
+and continues loading valid peers. It does not silently migrate a persisted author's document.
+
+Version 0.31 adds optional `provenance.sourceGame` inside the digested pack. It requires White and
+Black names, date, result, source ID and a declared licence basis; event, site and round are optional.
+The masters emitter writes this object rather than the retired source-game sidecar. These are
+source-game facts, not analysis or learner outcome judgements.
+
+Version 0.32 adds optional `assistanceCeilingRamp`: ordered steps with positive `throughAttempt`
+and `ceilingRung` 0–5. Validation refuses unordered attempts or a ceiling that later increases;
+rung 6 is outside the grammar. The pure helper resolves a 1-based attempt to its first covering
+step, then rung 0 past the last step. **Live enforcement is not yet implemented**: the persisted
+attempt→nine-field clamp projection remains D3317, not an effect of merely carrying this field.
+
+The same schema carries `$defs/trainingSet`, a **sibling artifact, never a drill-pack field**, with
+`formatVersion: "0.1"`, ID/title/provenance, ordered `{packId, ordinal}` members, optional pass
+mark, and optional ordered tempo cycles with budget scales. `validateTrainingSet` checks contiguous
+unique ordinals, member/pass-mark scope, registered members at publication, and authored timing
+windows for tempo members when given a pack lookup. Pure helpers count existing objective verdicts
+and scale authored budgets; no move is graded. **Loading, API/client progression, repeat-set and
+live scaled-tempo behavior remain D3318**. Valid format is not a completed training feature.
 
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability

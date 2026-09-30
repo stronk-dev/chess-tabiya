@@ -1,6 +1,6 @@
 # RFC: Pack training forms — the set grain, pass marks, the guided first pass, and tempo cycles
 
-- **Status:** draft — 2026-08-23
+- **Status:** implementing — 2026-09-24, lane 0.32 landed at the owner's direction as far as the format is executable: `assistanceCeilingRamp` and `$defs/trainingSet` ship with their validators and the pure pass-mark, ramp and tempo mechanics (criteria 1–8, 10–12 tests; 9 at the pure-function level). No learner surface serves a set yet, and the ramp is not wired into the live nine-field assistance clamp — see the changelog. Receipt: `planning/pack-capability-contract/implementation-2026-09-24.md`. Prior status: draft — 2026-08-23
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/01-training-model.md` §blocked/varied repetition; `design/05-in-run-experience.md` §3 (the assistance ladder) and §3a (the ∩ algebra); `design/03-product-breadth.md` §Library
@@ -11,7 +11,7 @@
 - **Planning:** `planning/training-methods/`
 
 ```tabiya-claims
-pack-schema | lane 0.32 | DrillPackDefinition.assistanceCeilingRamp (new, optional) + $defs/trainingSet (new sibling artefact, own formatVersion 0.1)
+none
 ```
 
 ## Summary
@@ -345,9 +345,34 @@ Proposed — id assigned at landing; head was **D1310** at drafting.
 
 ## Changelog
 
+- **2026-09-30** — integrated the format/mechanics checkpoint on main. Live ramp-to-assistance
+  enforcement is recorded as [[D3317]], and the full training-set loader/API/client progression,
+  repeat-set and live tempo journey as [[D3318]]. Criteria exercised only by pure helpers do not
+  discharge a production consumer; this RFC remains implementing, not archived.
+
 - **2026-08-23** — drafted from `planning/training-methods/rfc-derivation.md` on
   [[D1310]], alongside `rfc/return-scheduling.md`. The split is failure isolation:
   the scheduler defect must not wait behind an unruled pack field. Restructured
   during drafting — the derivation carried pass marks, the guided ramp and tempo
   cycles as three items; measurement found all three blocked on the same missing set
   grain, so §1 pays for it once and the rest became cheap.
+- **2026-09-24** — **lane 0.32 landed** behind 0.30 and 0.31. Shipped: optional
+  `assistanceCeilingRamp` (`{throughAttempt, ceilingRung}` with `ceilingRung` a closed 0–5 enum, so
+  rung 6 is a schema refusal; the single reader refuses an unordered or widening ramp);
+  `$defs/trainingSet` inside the pack schema (the register row's own spelling — a sibling artefact
+  with its own `formatVersion` 0.1, never a pack field, so `digestDrillPack` is untouched);
+  `validateTrainingSet` (ordinal gaps/duplicates named by member, pass-mark scope, cycle ordinals,
+  tempo members without timing windows named, unregistered packs refused at publication); and
+  `packages/runtime/src/training-forms.ts` (`rampCeilingRung`, `narrowedRung`, `passMarkCompletion`,
+  `scaledLuxuryBudget`, `cycleOrder`). **Corrected inline:** §2 says a member passes when its attempt
+  resolves `stable` "under `ObjectiveGrading`"; the shipped vocabulary is the attempt verdict
+  (`stable | unstable | open`, `apps/server/src/progress.ts`), which the pass mark now counts; and the
+  completion payload carries `passed` and `reoffer` only — criterion 11 forbids the count itself, so
+  the count is not a field at all. **Not executable here, and why:** the ramp's rung numbers
+  (design/05 §3's 0–5 ladder, cited by number) have no shipped projection onto the nine-field
+  `ConfigClamp` the ∩ algebra actually narrows (`packages/runtime/src/presets.ts`); choosing that
+  projection is the open ADR-0006 half (open question 1), so the ramp narrows a rung number and is not
+  yet applied to a live run. No set is loaded, listed or served (D3's authored content and a set
+  surface are both absent), so criterion 9 is asserted on the pure sequencer. D5 is partly
+  discharged: the ramp's rungs are capability members; set membership is not a pack capability
+  because no pack names a set.

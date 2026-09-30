@@ -1183,6 +1183,39 @@ export * from "./style-contract.js";
 export * from "./style-atoms.js";
 export * from "./skills-contract.js";
 export * from "./concept-registry.js";
+export {
+  CAPABILITY_DECLARATIONS,
+  CAPABILITY_HISTORIES,
+  CAPABILITY_REGISTRY,
+  CLAIM_BINDING_CAPABILITY_ID,
+  PACK_MEANING_CONSUMERS,
+  CapabilityRegistryError,
+  buildCapabilityRegistry,
+  followSuccessors,
+  type CapabilityAvailability,
+  type CapabilityDeclaration,
+  type CapabilityHistory,
+  type CapabilityLifecycleRow,
+  type CapabilityMeaningSource,
+  type CapabilityRegistry,
+  type CapabilityRegistryErrorCode,
+  type CapabilitySiteRef,
+  type CapabilitySubjectKind,
+  type GeneratedCapabilityDeclaration,
+  type RefusalAuthority,
+  type SemanticDisposition,
+  type WithdrawalRefusal,
+} from "./capability/registry.js";
+export { CAPABILITY_LIFECYCLE } from "./capability/lifecycle.js";
+export {
+  cycleOrder,
+  narrowedRung,
+  passMarkCompletion,
+  rampCeilingRung,
+  scaledLuxuryBudget,
+  type MemberVerdict,
+  type SetCompletion,
+} from "./training-forms.js";
 export * from "./provider-health.js";
 // rfc/hint-distance.md — Guided Hint registry, wire and server-local compiler.
 export {

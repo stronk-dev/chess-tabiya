@@ -175,6 +175,7 @@ describe("DrillApi", () => {
             availability: [],
             bindings: [],
           },
+          packCapabilities: { protocol: "tabiya.pack-capabilities", protocolVersion: 1, rows: [] },
         });
       }
       if (url.endsWith("/packs")) return json([]);

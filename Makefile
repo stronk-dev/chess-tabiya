@@ -1726,6 +1726,75 @@ pack-capability-seventeenth-fresh-review: pack-capability-sixteenth-author-repai
 pack-capability-cut-fresh-review:
 	node --test tools/d3120-pack-capability-cut-fresh-review/review.test.mjs
 
+# rfc/pack-capability-contract.md (pack schema lane 0.30) — the implemented capability contract.
+# The generators write; every `-check` target compares without writing and is a release gate.
+CAPABILITY_CONTRACT_BUNDLE = ./node_modules/.bin/esbuild apps/server/src/capability/contract.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/capability-contract.js --log-level=warning
+CAPABILITY_MIGRATION_BUNDLE = ./node_modules/.bin/esbuild apps/server/src/capability/migration-cli.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/capability-migration.js --log-level=warning
+.PHONY: pack-capability-integration-check
+pack-capability-integration-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/capability/capability.test.ts apps/server/src/capability/pack-capability-contract.test.ts apps/server/src/pack-studio.test.ts apps/server/src/training-forms.test.ts apps/web/src/lib/capability-response.test.ts
+
+.PHONY: capability-applicability capability-applicability-check capability-declarations capability-check capability-census capability-site-check capability-lifecycle-check pack-capability-check pack-stamp migration-plan migration-plan-check migration-apply-ready migration-apply
+capability-applicability:
+	node tools/d2152-pack-capability-author-repair/contract.mjs --update
+	$(CAPABILITY_CONTRACT_BUNDLE)
+	node apps/server/dist/capability-contract.js applicability --write
+
+capability-applicability-check:
+	$(CAPABILITY_CONTRACT_BUNDLE)
+	node apps/server/dist/capability-contract.js applicability
+
+capability-declarations: capability-applicability
+	$(CAPABILITY_CONTRACT_BUNDLE)
+	node apps/server/dist/capability-contract.js declarations --write
+
+.PHONY: capability-history-check
+capability-history-check:
+	node --test tools/capability-history.test.mjs
+	node tools/capability-history.mjs $(if $(CI),--ci,)
+
+capability-check: capability-history-check
+	$(CAPABILITY_CONTRACT_BUNDLE)
+	node apps/server/dist/capability-contract.js check
+
+capability-census:
+	$(CAPABILITY_CONTRACT_BUNDLE)
+	node apps/server/dist/capability-contract.js census
+
+capability-site-check:
+	$(CAPABILITY_CONTRACT_BUNDLE)
+	node apps/server/dist/capability-contract.js site-check
+
+capability-lifecycle-check:
+	$(CAPABILITY_MIGRATION_BUNDLE)
+	node apps/server/dist/capability-migration.js lifecycle-check
+
+pack-capability-check:
+	$(CAPABILITY_MIGRATION_BUNDLE)
+	node apps/server/dist/capability-migration.js corpus-check
+
+pack-stamp:
+	@test -n "$(FILE)" || (echo "Usage: make pack-stamp FILE=<path-to-pack.json>" >&2; exit 2)
+	./node_modules/.bin/esbuild apps/server/src/capability/stamp-cli.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/pack-stamp.js --log-level=warning
+	node apps/server/dist/pack-stamp.js $(FILE)
+
+migration-plan:
+	@$(CAPABILITY_MIGRATION_BUNDLE)
+	@node apps/server/dist/capability-migration.js plan
+
+migration-plan-check:
+	$(CAPABILITY_MIGRATION_BUNDLE)
+	node apps/server/dist/capability-migration.js plan-check
+
+migration-apply-ready:
+	$(CAPABILITY_MIGRATION_BUNDLE)
+	node apps/server/dist/capability-migration.js apply-ready
+
+migration-apply:
+	@test -n "$(FILE)" || (echo "Usage: make migration-apply FILE=<pack path>|all" >&2; exit 2)
+	$(CAPABILITY_MIGRATION_BUNDLE)
+	node apps/server/dist/capability-migration.js apply --file=$(FILE)
+
 .PHONY: shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair shared-resource-bootstrap-collision-core-second-author-repair shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair shared-resource-bootstrap-tenth-fresh-review shared-resource-bootstrap-tenth-author-repair
 shared-resource-bootstrap-collision-core-author-contract:
 	node --test tools/d3034-shared-resource-bootstrap-collision-core-author-contract/contract.test.mjs
@@ -2085,7 +2154,7 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check
+verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check
 
 verify-governance: register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 
@@ -2106,7 +2175,7 @@ feedback-binding-audit:
 capability-watch-check:
 	$(CI_NODE) tools/capability-watch-harness/check.mjs design/research/capability-watch.json planning/platform-alignment/capability-watch/results.json
 
-verify-content: test-content graduation-clearance-corpus-check
+verify-content: test-content graduation-clearance-corpus-check pack-capability-check
 
 verify: verify-software verify-governance verify-content
 verify: export ENGINES_REQUIRED := 1

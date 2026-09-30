@@ -16,6 +16,7 @@ import { PackRegistry } from "./pack-registry.js";
 import { createRestHandler } from "./rest.js";
 import { RunService, sameEngine } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-14T12:00:00.000Z";
@@ -110,7 +111,7 @@ async function setup(pack?: DrillPackDefinition, maiaMoves?: readonly string[], 
   const selector = new RecordingSelector(engines);
   const evidence = new RecordingEvidence();
   const queue = new EvidenceJobQueue(evidence, { maxConcurrency: 1 });
-  const registry = pack === undefined ? undefined : await PackRegistry.fromDocuments([{ source: "group-pack", value: pack }]);
+  const registry = pack === undefined ? undefined : await PackRegistry.fromDocuments([{ source: "group-pack", value: withDerivedRequires(pack) }]);
   const service = new RunService(storage, { evidenceQueue: queue, opponentSelector: selector, ...(registry === undefined ? {} : { packRegistry: registry }) });
   return { storage, engines, selector, evidence, queue, registry, service, handler: createRestHandler(service, selector) };
 }
@@ -285,7 +286,7 @@ describe("branch-group service and REST contract", () => {
   });
 
   it("does not release a pack-wide claim when a group seed mates before an authored sibling is reached", async () => {
-    const document: DrillPackDefinition = {
+    const document: DrillPackDefinition = withDerivedRequires({
       id: "group-terminal-claim",
       version: "0.1.0",
       title: "Group terminal claim fixture",
@@ -306,7 +307,7 @@ describe("branch-group service and REST contract", () => {
       opponentPolicy: { mode: "human_common", seedMode: "fixed", targetElo: 1600 },
       feedbackPolicy: "segment_end",
       provenance: { reviewStatus: "draft", sources: [], reviewers: [] },
-    } as DrillPackDefinition;
+    }) as unknown as DrillPackDefinition;
     const environment = await setup(document); stores.push(environment.storage);
     const created = await request(environment.handler, "POST", "/runs", {
       id: "group-terminal-claim-run",

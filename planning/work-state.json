@@ -4605,12 +4605,12 @@
     },
     {
       "id": "D576",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:cd9dfe950769a2fde76e11eb72955d8167320de6e5d050462d66651dadaae512",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:375e2e151c36cb07cdcc95aed1a2271a5be0e7ae8da357994909f28b9e6f04cd",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D577",
@@ -8224,21 +8224,21 @@
     },
     {
       "id": "D1003",
-      "state": "blocked",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:425813eead49534286ca4ea2d6ccad0003c52279c6b3281d9e2646d7d03a5b58",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cadf4a212280d412538d13d311a6c429c96d53f592aa187f4791ae525cebd0ec",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1004",
-      "state": "blocked",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:627580f884638d783eccd69acbd1f17b800429a7cef1ed0e393a3e3c6ff31c1d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:47342a9eaacb46bbf0c9cb33c08b169ab0282d402cafd7b3f5377b7ec774c277",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1005",
@@ -12623,12 +12623,12 @@
     },
     {
       "id": "D1620",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5f1a37cf55b953f37c8e9238bb18c0a7670664558cda491fd50d688b9ff7fd8f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0b8946bf049c2b0e600cbb09b79f435ce403084ec006698019397774001e51fc",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1621",
@@ -25495,39 +25495,39 @@
     },
     {
       "id": "D3120",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4338e51e9a530e392fd30e404f9fa33e90bddf1b50a6529a977d60ae9f44cb4a",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:618bc9ac5c8df8f6ee0cf2b516e96f538aca675c506f27622f25d39b9e6eaa7a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3121",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:662bfcb15bc08168c33001ae53f36803d82ed3a6685b7587d2ddf65378b969e1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:89c662b06c71cea0299aae6d3334302a72bdcc55901da556cc5e91cedae5313b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3122",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:10fab2bf18606892efabdd17220005354d7e01c5353eefa853ca5e27b2d3ab34",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c678ac43085a6e454ca7ba214a64c58aa6a62954f6878e1743f005bab684d06b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3123",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5230118501f7ca7bf2808ee64becccf80247ee3d73aeca15cdcef52b8b2d2eae",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f14690ba7d549ae8a1f434b19863049fbbef868e9bf5d9ec7c63ccd0087f02a1",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3124",
@@ -27240,6 +27240,67 @@
       "uxItems": [],
       "evidence": "planning/evidence-foundation-ux/integration-2026-09-30.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3316",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:89573edbd2ad19dcf96edfdd7ebf782eab49718207e2dc593708722a5d586468",
+      "uxItems": [],
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3317",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7d70317467e687323e79013f92fecc1ef2707bce3fa270ebb3617342f3985758",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:pack-training-forms.md"
+    },
+    {
+      "id": "D3318",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ec89183c24d24c788ef5f24eea4eb07fc097f080de0c1347808925016c459b45",
+      "uxItems": [],
+      "owner": "content-and-theory"
+    },
+    {
+      "id": "D3319",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3fe4cc4b58e7325d0a1d54786f1ab914bcd3b906d29b3bbee1f26b59d71a2c81",
+      "uxItems": [],
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3320",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:143c283fb509f6bd1cd5425c84bf4253890530dd24ddfa637803b13eaf3eaf33",
+      "uxItems": [],
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3321",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:923085b65d6663226020ad3c552c7008804193a85d853ed1d783919d33df6b9e",
+      "uxItems": [],
+      "evidence": "planning/pack-capability-contract/integration-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3322",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f31c7a9e07ad0fc283acc85dc2018d30ad6028d3f3a7036ee9d2bd7e8b181103",
+      "uxItems": [],
+      "owner": "core-loop"
     }
   ]
 }

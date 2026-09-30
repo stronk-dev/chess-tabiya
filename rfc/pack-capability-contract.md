@@ -1,16 +1,6 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **bounded post-cut author repair complete 2026-09-07 on
-  [[D3120]], [[D3121]], [[D3122]] and [[D3123]]; one fresh acceptance check remains.**
-  The smaller contract now owns only capability identity, pack declaration, deployment
-  reachability and the same-commit 86-production/6-browser-fixture schema migration. The durable evidence-job
-  model, the HTTP capability-operation census and every asynchronous-settlement criterion left this
-  document for registered successor draft `rfc/evidence-job-durability.md`,
-  whose exact open inherited set is named in its Status line; §4.1a's D560 compatibility reader was cut on
-  the [[D3033]] ruling; seventeen rounds of review narrative moved to
-  `planning/pack-capability-contract/review-history.md`. What remains is the contract the twelve
-  non-self-referential dependents are waiting on. No implementation is authorised and D560 stays
-  whole.
+- **Status:** implementing — landed 2026-09-24 at the owner's direction (no further review round). Pack schema lane 0.30 ships: the structured capability algebra, the closed registry (756 declarations) with semantics digests closed through TypeScript symbol references and lockfile-pinned packages, the generated applicability image, the four-root census, the `requires` stamp checked byte-for-byte in the single drill-pack reader, the registration handshake (422 `PACK_CAPABILITY_UNSUPPORTED`, listing exclusion, boot survival), the `packCapabilities` public projection parsed by one shared authority on both sides, the lifecycle algebra and total legacy-refusal migration, and the read-only planner with its separate applier. The 92-document migration (86 production + 6 browser fixtures) is applied in the implementing commit under [[D3033]]; D560 stays whole for authored content. Criteria 1–19 are tests; corrections are in the changelog. Receipt: `planning/pack-capability-contract/implementation-2026-09-24.md`. Prior status: draft — bounded post-cut author repair complete 2026-09-07 on [[D3120]]–[[D3123]].
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -26,7 +16,7 @@
 - **Planning:** `planning/platform-alignment/` (`f3-derivation.md`)
 
 ```tabiya-claims
-pack-schema | lane 0.30 | requires (new, required array of capability requirement objects on the pack root); $defs/capabilityRequirement (new, closed object: id, version)
+none
 ```
 
 ## Post-cut review obligations
@@ -1509,6 +1499,18 @@ Proposed at the 2026-09-06 cut (unnumbered per [[D1503]]; renumber at landing):
 
 ## Changelog
 
+- 2026-09-30 — integrated the recorded owner-directed implementation on main against the current
+  Guided Hint and evidence foundation, producing the **initial** 819-declaration registry at this
+  landing (the branch's 756 count is historical). [[D3316]] closes dynamic/stored admission through
+  the single validator and deployment handshake; invalid/unsupported persisted documents remain in
+  storage, are excluded without failing boot, and are reported. [[D3319]] binds every committed
+  declaration/version to Git history as well as tree recomputation: regeneration cannot replace a
+  prior meaning, sources or dependency set. Working-tree, staged-index and CI first-parent fixtures
+  exercise the guard; [[D3320]] requires a real CI parent, and [[D3321]] independently enumerates
+  the schema-browser fixtures rather than confusing them with the sealed 92-document population.
+  This is an implementation integration, not archival or a new owner ruling; later semantic
+  migrations and authored content keep their existing gates.
+
 Entries before 2026-09-06 are at `planning/pack-capability-contract/review-history.md`.
 
 - 2026-09-06 (**cut to the blocking obligation**): §4.1a's D560 compatibility reader cut on
@@ -1526,3 +1528,36 @@ Entries before 2026-09-06 are at `planning/pack-capability-contract/review-histo
   made the initial schema migration same-commit under [[D3033]], registered the evidence-job
   successor with its truthful storage claim, and named the 86-production/6-browser-fixture split.
   [[D3120]]–[[D3123]] remain open pending one fresh acceptance check.
+- 2026-09-24 (**implemented at the owner's direction; genuine defects corrected inline, each now a test**):
+  (1) **The sealed 0.28/0.29 stages were never applied.** Both lanes landed independently
+  (`71cc8954`, `72dffeeb`) with different bytes; the 0.30 stage is re-based on the shipped 0.29 schema
+  with its patch unchanged, and the transition artifact (v4) records the superseded stages, the
+  post-conditions and the migrated population. (2) **`closed-schema-members-v1` dropped whole
+  vocabularies** — every `structuralExpression`/`transitionExpression` node but `all|any`, every
+  `simpleTrigger` arm and every union with a second `const` (`assessedBy`, `deviationCost`,
+  `graduationClearance`) — and its `shape-<hash>` fallback renamed a capability on any branch edit.
+  v2 recognises value unions (const or enum discriminator) and key unions; `stable-schema-member-v3`
+  identifies branches by discriminator, key, or structural discriminator and fails rather than
+  hashing; the owner is the terminal `$defs` key. The live inventory is 438 members (the RFC's 397
+  counted a never-shipped 0.29). (3) **Seven interpreter-root sites named symbols that no longer
+  exist** (`evaluateSuccessCondition`, `successConditionEvidenceRefs`, `evaluateSimpleTrigger`,
+  `ENGINE_CONDITION_DEFAULTS`, …) and the census found 16 undeclared interpreters; the authority now
+  names the real sites and splits them into meaning `sites` (digested per member arm) and
+  `admissionSites` (validators and satisfiability refuters: census-accounted, not digested). Closure
+  stops at other families' meaning sites, so a feature's meaning lives in that feature's capability
+  and the D566 fixture judges exactly the three predicate-bearing shapes. (4) **`tempo.unauthored_default`
+  named `unauthoredTempoTransition`, which has no production caller** (`capability-site-check`); the
+  row now names the published default only. (5) **The lifecycle algebra contradicted itself**: every
+  real deprecation (`pawn_count`→`piece_count`, `plan_consequence`→`structural_feature`) is a
+  cross-subject replacement, which §5 forbade. A subject's CURRENT row may now name another subject;
+  obsolete rows still advance within their subject. `retryVariants`' catalogue arm is the
+  `catalogue.variant_relation` subject @1→@2 (`variantOf`); `piece_reach_count scope:"every"` has no
+  truthful successor and stays active rather than receive an invented one. F1's parallel projection
+  versions (14 pairs) may stay active side by side. (6) **§5a had drifted**: four refused rows were
+  added after drafting (multi-band queries → refuted; artificial move delay → pending_decision D820;
+  topGames/recentGames and third-party annotations → refused under `famous-games` criteria 2 and 8),
+  one was renamed (MultiPV), and the cross-learner row is no longer the reversed R10 — the cohort
+  standing ships as its own reached row and what remains refused is R10(a). (7) Criterion 3's
+  "derives exactly" four capabilities is the §2.7 four-row fixture table; against the real authority
+  every pack also derives the 13 evaluators and its closed members. (8) Convention declarations carry
+  a `convention_entry` source (the prose is the meaning; the table's AST is not).

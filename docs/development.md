@@ -92,6 +92,12 @@ claims and deliberately preserved open questions; it reads those documents and n
 `make docs-check` requires every direct `docs/*.md` document to appear exactly once in the canonical
 index and keeps the repository README linked to the architecture, feature, extension and contributor
 entry points. It is part of `make verify-governance`.
+Pack compatibility is checked by `make capability-check` in the software tier and
+`make pack-capability-check` in the content tier. `make capability-history-check` independently
+checks immutable committed capability declarations; generation cannot discharge that check by
+rewriting the same version. History-consuming CI jobs check out two commits and refuse a missing
+parent rather than fetching during verification. `make pack-capability-integration-check` is the
+focused schema, handshake, Studio restart, training-format and wire-parser regression suite.
 Draft RFCs keep their author models, historical review images and counterexamples under their named
 Make targets. Run the relevant target while changing that RFC; `make verify-rfc-evidence` is the
 optional whole-portfolio audit. These review artifacts are not part of `make verify` or required CI,

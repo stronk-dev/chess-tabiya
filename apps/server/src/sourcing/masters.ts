@@ -24,7 +24,7 @@ import { checkSourcingDirectory } from "./check.js";
 import { MASTERS_RATIONALE, MASTERS_SOURCE_ID, mastersGameUrl, requireSingleMastersGame, type MastersGame } from "./explorer.js";
 import { attachEmitterGraduationClearances } from "./graduation-clear.js";
 import type { NormalizedOpeningMove } from "./openings.js";
-import { SOURCE_GAME_RESULTS, SOURCE_GAME_SIDECAR_SCHEMA, sourceGameIssues, type SourceGame, type SourceGameLicenceBasis, type SourceGameSidecar } from "./source-game.js";
+import { SOURCE_GAME_RESULTS, sourceGameIssues, type SourceGame, type SourceGameLicenceBasis } from "./source-game.js";
 import { type EvidenceLedger, type SourceManifest, SourcingError } from "./types.js";
 
 // Same node shape as the openings emitter's chain. Kept local: `openings.ts` is an input to the
@@ -174,6 +174,8 @@ export async function emitMastersCandidate(options: MastersEmitOptions): Promise
       sources: [mastersSourceLine(game.sourceGame, gameId)],
       licence: "CC-BY-SA-4.0",
       graduationBlockers: [emitterGraduationBlocker("mechanical-objective-placeholder"), emitterGraduationBlocker("authored-teaching-absent")],
+      // rfc/famous-games.md §3, pack-schema lane 0.31: the cited game's typed identity.
+      sourceGame: game.sourceGame,
     },
   });
   const validation = validatePackDocument(pack);
@@ -186,24 +188,22 @@ export async function emitMastersCandidate(options: MastersEmitOptions): Promise
     packDigest: await digestDrillPack(pack),
     sourcedAt: fetched.source.retrievedAt,
     // The start position is reached by replaying the source game's legal mainline; that replay is
-    // the only fact this ledger records. The game identity lives in source-game.json.
+    // the only fact this ledger records. The game identity lives in provenance.sourceGame.
     records: [{ kind: "position_legality", anchor: { fen: pack.start.fen }, sourceId: fetched.source.sourceId, retrievedAt: fetched.source.retrievedAt, grounds: "machine_validation", values: { fen: pack.start.fen, legalMovesAvailable: true }, supports: ["/start/fen"] }],
     abstentions: [],
   };
-  const sidecar: SourceGameSidecar = { schema: SOURCE_GAME_SIDECAR_SCHEMA, packId: pack.id, sourceGame: game.sourceGame };
   const output = resolve(options.outputRoot ?? "content/candidates", id);
   const args = { game: gameId, splitPly: options.splitPly, ...(options.toPly === undefined ? {} : { toPly: options.toPly }), learnerSide: options.learnerSide, phase: options.phase };
   const etag = fetched.source.origin.kind === "http" ? fetched.source.origin.etag : null;
   const job = { schema: "tabiya.sourcing.job.v1", pipeline: "masters", args, sourceEtags: [etag], emissionJobDigest: emissionJobDigest("masters", args, [etag]) };
   try {
     const existing = await readJson(resolve(output, "job.json")) as Record<string, unknown>;
-    await Promise.all(["pack.json", "evidence.json", "sources.json", "source-game.json"].map((file) => access(resolve(output, file))));
+    await Promise.all(["pack.json", "evidence.json", "sources.json"].map((file) => access(resolve(output, file))));
     if (existing.emissionJobDigest === job.emissionJobDigest && (await checkSourcingDirectory(output)).valid) return output;
   } catch { /* missing, changed or invalid output is re-emitted below */ }
   await writeCanonicalJson(resolve(output, "pack.json"), pack);
   await writeCanonicalJson(resolve(output, "evidence.json"), ledger);
   await writeCanonicalJson(resolve(output, "sources.json"), manifest);
-  await writeCanonicalJson(resolve(output, "source-game.json"), sidecar);
   await writeCanonicalJson(resolve(output, "job.json"), job);
   return output;
 }

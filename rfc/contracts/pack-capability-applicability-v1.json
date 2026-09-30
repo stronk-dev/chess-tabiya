@@ -1,32 +1,48 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "artifact": "tabiya.pack-capability-applicability.authority.v2",
+  "artifact": "tabiya.pack-capability-applicability.authority.v3",
   "schema": {
     "path": "schemas/drill_pack.schema.json",
-    "sha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0",
+    "sha256": "7915fcac771bfe7f22fbd8eaaf3487e03d21dbf996ae0fd382083e5c80133c24",
     "targetTransition": "rfc/contracts/pack-capability-schema-transition-v1.json",
-    "targetSha256": "f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db"
+    "canonicalSha256": "ead208d1689d9ee3e5965493b11b11494561007f2d53026a7d3c91825313f2ce"
   },
   "closedVocabulary": {
-    "inventoryAlgorithm": "closed-schema-members-v1",
-    "inventorySha256": "f645ee0e677a9fa3aa340b0ba4f76d7a4d66eb997255c711116bcae6fbf14257",
-    "enumNodes": 106,
-    "enumMembers": 321,
-    "discriminatedOneOfNodes": 16,
-    "discriminatedOneOfMembers": 76,
-    "mappedMembers": 397,
-    "excludedMembers": 0,
-    "mappingAlgorithm": "stable-schema-member-v2",
-    "expandedMappingSha256": "a4b424ee765f4ae556f399895f90de5a5d469722214d753c2ac53fc4d8fd86a7",
+    "inventoryAlgorithm": "closed-schema-members-v2",
+    "mappingAlgorithm": "stable-schema-member-v3",
     "generator": "tools/d2152-pack-capability-author-repair/contract.mjs",
+    "inventorySha256": "352bce1865e96b4c5e3fb1bdfe7c4c7a2ba3605e885c7c6671c3f5f6a7ffa7fc",
+    "expandedMappingSha256": "b7813c569037ac3460ae6aca81371db9618389eea0eb4bd6137328edb0fb2ff4",
+    "counts": {
+      "enumNodes": 108,
+      "enumMembers": 330,
+      "valueUnionNodes": 20,
+      "valueUnionMembers": 104,
+      "keyUnionNodes": 6,
+      "keyUnionMembers": 19,
+      "mappedMembers": 453,
+      "excludedMembers": 0
+    },
     "sourceInventory": [
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "*"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "0-1"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "1-0"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/result",
+        "member": "1/2-1/2"
+      },
       {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence",
         "member": "abstained"
-      },
-      {
-        "schemaPointer": "/$defs/deviation/properties/class",
-        "member": "accepted_alternative"
       },
       {
         "schemaPointer": "/$defs/graduationEntry",
@@ -35,6 +51,10 @@
       {
         "schemaPointer": "/$defs/graduationEntry/properties/state",
         "member": "accepted"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/class",
+        "member": "accepted_alternative"
       },
       {
         "schemaPointer": "/$defs/conditionBase/properties/to",
@@ -53,7 +73,7 @@
         "member": "after"
       },
       {
-        "schemaPointer": "/$defs/structuralExpression/oneOf/0/properties/kind",
+        "schemaPointer": "/$defs/structuralExpression",
         "member": "all"
       },
       {
@@ -61,7 +81,7 @@
         "member": "all"
       },
       {
-        "schemaPointer": "/$defs/transitionExpression/oneOf/0/properties/kind",
+        "schemaPointer": "/$defs/transitionExpression",
         "member": "all"
       },
       {
@@ -69,7 +89,7 @@
         "member": "alternate_plan_class"
       },
       {
-        "schemaPointer": "/$defs/structuralExpression/oneOf/0/properties/kind",
+        "schemaPointer": "/$defs/structuralExpression",
         "member": "any"
       },
       {
@@ -81,7 +101,7 @@
         "member": "any"
       },
       {
-        "schemaPointer": "/$defs/transitionExpression/oneOf/0/properties/kind",
+        "schemaPointer": "/$defs/transitionExpression",
         "member": "any"
       },
       {
@@ -89,10 +109,14 @@
         "member": "arrival"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "schemaPointer": "/$defs/graduationClearance",
         "member": "assessment_grounded"
       },
       {
+        "schemaPointer": "/$defs/simpleTrigger",
+        "member": "atAuthoredBoundary"
+      },
+      {
         "schemaPointer": "/$defs/materialBalance/properties/comparison",
         "member": "atLeast"
       },
@@ -203,6 +227,22 @@
       {
         "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/comparison",
         "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/simpleTrigger",
+        "member": "atPly"
+      },
+      {
+        "schemaPointer": "/$defs/simpleTrigger",
+        "member": "atSpineNode"
+      },
+      {
+        "schemaPointer": "/$defs/deviationLocation",
+        "member": "atStart"
+      },
+      {
+        "schemaPointer": "/$defs/simpleTrigger",
+        "member": "atStart"
       },
       {
         "schemaPointer": "/$defs/transitionFeature",
@@ -211,6 +251,14 @@
       {
         "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
         "member": "author_principle"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy",
+        "member": "authored"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance/oneOf/10/properties/templateId",
+        "member": "authored-teaching-absent"
       },
       {
         "schemaPointer": "/$defs/fileTemplateFeature",
@@ -223,10 +271,6 @@
       {
         "schemaPointer": "/$defs/transitionExpression/oneOf/3/properties/at",
         "member": "before"
-      },
-      {
-        "schemaPointer": "/$defs/structuralFeature",
-        "member": "bishop_on_shade"
       },
       {
         "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
@@ -247,6 +291,10 @@
       {
         "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/role",
         "member": "bishop"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "bishop_on_shade"
       },
       {
         "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/color",
@@ -409,10 +457,6 @@
         "member": "blessed-loss"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry",
-        "member": "blocking"
-      },
-      {
         "schemaPointer": "/$defs/graduationEntry/properties/state",
         "member": "blocking"
       },
@@ -429,6 +473,18 @@
         "member": "castled"
       },
       {
+        "schemaPointer": "/$defs/deviationCost",
+        "member": "category"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "cc-by-sa-4.0"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "cc0"
+      },
+      {
         "schemaPointer": "/$defs/successCondition/oneOf/3/properties/fact",
         "member": "checkmate"
       },
@@ -437,16 +493,20 @@
         "member": "checkpoint"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
         "member": "citable_text"
-      },
-      {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
-        "member": "claim_bound"
       },
       {
         "schemaPointer": "/$defs/reasoningKeyPoint/properties/ground",
         "member": "claim"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance",
+        "member": "claim_bound"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry",
+        "member": "clearance"
       },
       {
         "schemaPointer": "/$defs/transitionFeature/oneOf/5/properties/subkind",
@@ -469,6 +529,10 @@
         "member": "contains"
       },
       {
+        "schemaPointer": "/$defs/graduationClearance",
+        "member": "content_declared"
+      },
+      {
         "schemaPointer": "/$defs/structuralFeature/oneOf/16/properties/zone",
         "member": "corner"
       },
@@ -483,6 +547,10 @@
       {
         "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/basis",
         "member": "count"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost",
+        "member": "cp"
       },
       {
         "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/2/properties/score",
@@ -553,16 +621,16 @@
         "member": "different_material_details"
       },
       {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/form",
+        "member": "direct"
+      },
+      {
         "schemaPointer": "/$defs/squareTemplateFeature",
         "member": "direct_attack_count"
       },
       {
         "schemaPointer": "/$defs/structuralFeature",
         "member": "direct_attack_count"
-      },
-      {
-        "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/form",
-        "member": "direct"
       },
       {
         "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/form",
@@ -617,12 +685,24 @@
         "member": "endgame"
       },
       {
-        "schemaPointer": "/$defs/engineCondition",
-        "member": "engine_eval_swing"
+        "schemaPointer": "/$defs/deviationCost/oneOf/0/properties/basis",
+        "member": "engine"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/basis",
+        "member": "engine"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy",
+        "member": "engine"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
         "member": "engine_eval"
+      },
+      {
+        "schemaPointer": "/$defs/engineCondition",
+        "member": "engine_eval_swing"
       },
       {
         "schemaPointer": "/$defs/engineCondition",
@@ -631,14 +711,6 @@
       {
         "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
         "member": "engine_validated"
-      },
-      {
-        "schemaPointer": "/$defs/deviationCost/oneOf/0/properties/basis",
-        "member": "engine"
-      },
-      {
-        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/basis",
-        "member": "engine"
       },
       {
         "schemaPointer": "/$defs/materialBalance/properties/comparison",
@@ -721,16 +793,32 @@
         "member": "execute_break"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
         "member": "explorer_frequency"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
         "member": "explorer_position_census"
       },
       {
         "schemaPointer": "/$defs/conditionBase/properties/to",
         "member": "failed"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression",
+        "member": "feature"
+      },
+      {
+        "schemaPointer": "/$defs/transitionExpression",
+        "member": "feature"
+      },
+      {
+        "schemaPointer": "/$defs/deviationLocation",
+        "member": "fen"
+      },
+      {
+        "schemaPointer": "/$defs/simpleTrigger",
+        "member": "fenPredicate"
       },
       {
         "schemaPointer": "/$defs/structuralExpression/oneOf/3/properties/axis",
@@ -743,6 +831,10 @@
       {
         "schemaPointer": "/$defs/objectiveType",
         "member": "follow_theory"
+      },
+      {
+        "schemaPointer": "/$defs/windowOpening",
+        "member": "fromStart"
       },
       {
         "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/direction",
@@ -821,14 +913,6 @@
         "member": "isolated_pawn"
       },
       {
-        "schemaPointer": "/$defs/structuralFeature",
-        "member": "king_opposition"
-      },
-      {
-        "schemaPointer": "/$defs/structuralFeature",
-        "member": "king_zone"
-      },
-      {
         "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
         "member": "king"
       },
@@ -843,6 +927,14 @@
       {
         "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/role",
         "member": "king"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "king_opposition"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "king_zone"
       },
       {
         "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
@@ -873,12 +965,12 @@
         "member": "learner"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
-        "member": "ledger_record"
-      },
-      {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence",
         "member": "ledger"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance",
+        "member": "ledger_record"
       },
       {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
@@ -889,12 +981,12 @@
         "member": "light"
       },
       {
-        "schemaPointer": "/$defs/structuralFeature",
-        "member": "line_blockers"
-      },
-      {
         "schemaPointer": "/properties/mode",
         "member": "line"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "line_blockers"
       },
       {
         "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/1/properties/to",
@@ -941,20 +1033,44 @@
         "member": "maroczy-bind"
       },
       {
-        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/2/properties/score",
+        "schemaPointer": "/$defs/deviationCost",
         "member": "mate"
       },
       {
-        "schemaPointer": "/$defs/successCondition",
-        "member": "material_balance"
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/2/properties/score",
+        "member": "mate"
       },
       {
         "schemaPointer": "/$defs/deviationCost/oneOf/0/properties/basis",
         "member": "material"
       },
       {
+        "schemaPointer": "/$defs/simpleTrigger",
+        "member": "materialBalance"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "material_balance"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance/oneOf/10/properties/templateId",
+        "member": "mechanical-objective-needs-grounding"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance/oneOf/10/properties/templateId",
+        "member": "mechanical-objective-placeholder"
+      },
+      {
         "schemaPointer": "/properties/phase",
         "member": "middlegame"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression",
+        "member": "mirrored"
+      },
+      {
+        "schemaPointer": "/$defs/moveCondition",
+        "member": "moveUci"
       },
       {
         "schemaPointer": "/$defs/transitionFeature",
@@ -965,8 +1081,36 @@
         "member": "named_structure"
       },
       {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "no-rights-asserted"
+      },
+      {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
         "member": "no_data_at_band"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression",
+        "member": "not"
+      },
+      {
+        "schemaPointer": "/$defs/transitionExpression",
+        "member": "not"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance",
+        "member": "objective_graded"
+      },
+      {
+        "schemaPointer": "/$defs/windowOpening",
+        "member": "onMove"
+      },
+      {
+        "schemaPointer": "/$defs/windowOpening",
+        "member": "onTrigger"
+      },
+      {
+        "schemaPointer": "/$defs/tempoVerdict",
+        "member": "open"
       },
       {
         "schemaPointer": "/$defs/fileTemplateFeature",
@@ -977,24 +1121,24 @@
         "member": "open_file"
       },
       {
-        "schemaPointer": "/$defs/tempoVerdict",
-        "member": "open"
-      },
-      {
         "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/direction",
         "member": "opened"
-      },
-      {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
-        "member": "opening_identity"
       },
       {
         "schemaPointer": "/properties/phase",
         "member": "opening"
       },
       {
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
+        "member": "opening_identity"
+      },
+      {
         "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/against",
         "member": "opponent"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance/oneOf/10/properties/templateId",
+        "member": "opponent-policy-authored"
       },
       {
         "schemaPointer": "/properties/retryVariants/items/properties/kind",
@@ -1045,22 +1189,6 @@
         "member": "passed_pawn"
       },
       {
-        "schemaPointer": "/$defs/transitionFeature/oneOf/5/properties/subkind",
-        "member": "pawn_break"
-      },
-      {
-        "schemaPointer": "/$defs/structuralFeature",
-        "member": "pawn_count"
-      },
-      {
-        "schemaPointer": "/$defs/squareTemplateFeature",
-        "member": "pawn_safe_square"
-      },
-      {
-        "schemaPointer": "/$defs/structuralFeature",
-        "member": "pawn_safe_square"
-      },
-      {
         "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
         "member": "pawn"
       },
@@ -1075,6 +1203,22 @@
       {
         "schemaPointer": "/$defs/fenPredicate",
         "member": "pawnStructure"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/5/properties/subkind",
+        "member": "pawn_break"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "pawn_count"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "member": "pawn_safe_square"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "pawn_safe_square"
       },
       {
         "schemaPointer": "/$defs/opponentPolicy/properties/seedMode",
@@ -1093,6 +1237,26 @@
         "member": "permanent_property"
       },
       {
+        "schemaPointer": "/$defs/distanceTarget",
+        "member": "piece"
+      },
+      {
+        "schemaPointer": "/$defs/moveCondition",
+        "member": "piece"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "member": "piece"
+      },
+      {
+        "schemaPointer": "/$defs/fenPredicate",
+        "member": "pieceOnSquare"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression",
+        "member": "pieceOnSquare"
+      },
+      {
         "schemaPointer": "/$defs/structuralFeature",
         "member": "piece_count"
       },
@@ -1105,16 +1269,12 @@
         "member": "piece_reach_count"
       },
       {
-        "schemaPointer": "/$defs/distanceTarget",
-        "member": "piece"
+        "schemaPointer": "/$defs/deviation/properties/mistake/items",
+        "member": "plan"
       },
       {
-        "schemaPointer": "/$defs/squareTemplateFeature",
-        "member": "piece"
-      },
-      {
-        "schemaPointer": "/$defs/fenPredicate",
-        "member": "pieceOnSquare"
+        "schemaPointer": "/properties/mode",
+        "member": "plan"
       },
       {
         "schemaPointer": "/$defs/successCondition",
@@ -1125,28 +1285,32 @@
         "member": "plan_defense"
       },
       {
-        "schemaPointer": "/$defs/deviation/properties/mistake/items",
-        "member": "plan"
-      },
-      {
-        "schemaPointer": "/properties/mode",
-        "member": "plan"
+        "schemaPointer": "/$defs/structuralExpression",
+        "member": "plan_signature"
       },
       {
         "schemaPointer": "/$defs/objectiveType",
         "member": "play_until_checkpoint"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "schemaPointer": "/$defs/graduationClearance",
         "member": "pointer_authored"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
-        "member": "position_legality"
+        "schemaPointer": "/$defs/graduationClearance",
+        "member": "pointer_equals"
+      },
+      {
+        "schemaPointer": "/$defs/transitionExpression",
+        "member": "position"
       },
       {
         "schemaPointer": "/$defs/windowClosing",
         "member": "position"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
+        "member": "position_legality"
       },
       {
         "schemaPointer": "/$defs/opponentPolicy/properties/mode",
@@ -1189,12 +1353,20 @@
         "member": "provenance_note"
       },
       {
+        "schemaPointer": "/$defs/provenance/properties/sourceGame/properties/licenceBasis",
+        "member": "public-domain"
+      },
+      {
         "schemaPointer": "/$defs/provenance/properties/reviewStatus",
         "member": "published"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
         "member": "puzzle_provenance"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression",
+        "member": "quantified"
       },
       {
         "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
@@ -1225,7 +1397,11 @@
         "member": "reach_structure"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "schemaPointer": "/$defs/graduationClearance/oneOf/10/properties/templateId",
+        "member": "recorded-play-needs-authoring"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance",
         "member": "referent_removed"
       },
       {
@@ -1239,6 +1415,10 @@
       {
         "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/direction",
         "member": "released"
+      },
+      {
+        "schemaPointer": "/$defs/trainingSet/properties/passMark/properties/onFail",
+        "member": "repeat_set"
       },
       {
         "schemaPointer": "/$defs/deviation/properties/class",
@@ -1313,7 +1493,7 @@
         "member": "segment_end"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "schemaPointer": "/$defs/graduationClearance",
         "member": "shape_firing"
       },
       {
@@ -1335,6 +1515,14 @@
       {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
         "member": "source_unavailable"
+      },
+      {
+        "schemaPointer": "/$defs/windowTrigger/properties/atWindow",
+        "member": "spendAtLeast"
+      },
+      {
+        "schemaPointer": "/$defs/deviationLocation",
+        "member": "spineNodeId"
       },
       {
         "schemaPointer": "/$defs/reasoningKeyPoint/properties/ground",
@@ -1361,16 +1549,24 @@
         "member": "strong_engine"
       },
       {
-        "schemaPointer": "/$defs/successCondition",
-        "member": "structural_feature"
-      },
-      {
         "schemaPointer": "/$defs/reasoningKeyPoint/properties/ground",
         "member": "structural"
       },
       {
         "schemaPointer": "/$defs/fenPredicate",
         "member": "structuralFeature"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "structural_feature"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy",
+        "member": "syzygy"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/basis",
+        "member": "tablebase"
       },
       {
         "schemaPointer": "/$defs/engineCondition",
@@ -1385,20 +1581,20 @@
         "member": "tablebase_exact"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "schemaPointer": "/$defs/graduationClearance/oneOf/1/properties/recordKind",
         "member": "tablebase_result"
       },
       {
-        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/basis",
-        "member": "tablebase"
+        "schemaPointer": "/$defs/deviation/properties/mistake/items",
+        "member": "tactical"
       },
       {
         "schemaPointer": "/$defs/deviation/properties/class",
         "member": "tactical_error"
       },
       {
-        "schemaPointer": "/$defs/deviation/properties/mistake/items",
-        "member": "tactical"
+        "schemaPointer": "/$defs/graduationClearance/oneOf/10/properties/templateId",
+        "member": "target-elo-authored"
       },
       {
         "schemaPointer": "/$defs/objectiveGrading/properties/resolveAt",
@@ -1409,12 +1605,12 @@
         "member": "theory_strict"
       },
       {
-        "schemaPointer": "/$defs/successCondition",
-        "member": "timing_window"
-      },
-      {
         "schemaPointer": "/$defs/deviation/properties/mistake/items",
         "member": "timing"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "timing_window"
       },
       {
         "schemaPointer": "/$defs/tempoVerdict",
@@ -1441,16 +1637,24 @@
         "member": "transposeKey"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "schemaPointer": "/$defs/graduationClearance",
         "member": "unbuilt"
       },
       {
-        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "schemaPointer": "/$defs/deviationCost",
+        "member": "unmeasurable"
+      },
+      {
+        "schemaPointer": "/$defs/graduationClearance",
         "member": "unreachable"
       },
       {
         "schemaPointer": "/$defs/provenance/properties/corpusEvidence",
         "member": "unsourced"
+      },
+      {
+        "schemaPointer": "/$defs/windowTrigger/properties/atWindow",
+        "member": "verdict"
       },
       {
         "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/color",
@@ -1607,11 +1811,38 @@
       {
         "schemaPointer": "/$defs/successCondition/oneOf/1/properties/result",
         "member": "win"
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 0
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 1
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 2
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 3
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 4
+      },
+      {
+        "schemaPointer": "/properties/assistanceCeilingRamp/items/properties/ceilingRung",
+        "member": 5
       }
     ]
   },
   "always": [
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "grade.move_quality",
         "version": {
@@ -1619,18 +1850,19 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/grade.ts#moveQualityGrade",
         "packages/runtime/src/grade.ts#classFromThresholds"
       ],
       "dependencies": [
         "packages/runtime/src/grade.ts#GRADE_CONVENTION"
-      ],
-      "selector": {
-        "kind": "always"
-      }
+      ]
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "objective.state_machine",
         "version": {
@@ -1638,18 +1870,19 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/objective.ts#evaluateObjective",
         "packages/runtime/src/objective.ts#transitionObjective"
       ],
       "dependencies": [
         "packages/runtime/src/objective-state.ts#assertObjectiveTransition"
-      ],
-      "selector": {
-        "kind": "always"
-      }
+      ]
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "objective.transition_legality",
         "version": {
@@ -1657,16 +1890,17 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/objective-state.ts#assertObjectiveTransition",
         "packages/runtime/src/objective-state.ts#ALLOWED_TRANSITIONS"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "outcome.terminal",
         "version": {
@@ -1674,15 +1908,16 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/outcome.ts#terminalOutcome"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "tempo.window",
         "version": {
@@ -1690,17 +1925,18 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/tempo.ts#evaluateWindow"
       ],
       "dependencies": [
         "packages/runtime/src/tempo.ts#UNAUTHORED_TEMPO_DEFAULTS"
-      ],
-      "selector": {
-        "kind": "always"
-      }
+      ]
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "tempo.unauthored_default",
         "version": {
@@ -1708,16 +1944,17 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
-        "packages/runtime/src/tempo.ts#UNAUTHORED_TEMPO_DEFAULTS",
-        "packages/runtime/src/tempo.ts#unauthoredTempoTransition"
+        "packages/runtime/src/tempo.ts#UNAUTHORED_TEMPO_DEFAULTS"
       ],
       "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "note": "unauthoredTempoTransition was named here as the consumer and has no production caller (capability-site-check, 2026-09-24); the published default is the only production reader"
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "line.membership",
         "version": {
@@ -1725,15 +1962,16 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/line.ts#lineMembership"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "trajectory.verdict",
         "version": {
@@ -1741,15 +1979,16 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/trajectory.ts#trajectoryVerdict"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "branch.decidedness",
         "version": {
@@ -1757,17 +1996,18 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/branch-scale.ts#branchDecidedness"
       ],
       "dependencies": [
         "packages/runtime/src/branch-scale.ts#RANK"
-      ],
-      "selector": {
-        "kind": "always"
-      }
+      ]
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "guard.immediate",
         "version": {
@@ -1775,6 +2015,7 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "apps/server/src/guard.ts#applyRulesGuard",
         "apps/server/src/guard.ts#applyRecordedEngineGuard"
@@ -1782,12 +2023,12 @@
       "dependencies": [
         "packages/runtime/src/objective.ts#MATERIAL_VALUES",
         "apps/server/src/sourcing/tablebase-category.ts#CATEGORY_RANK"
-      ],
-      "selector": {
-        "kind": "always"
-      }
+      ]
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "reasoning.key_point_match",
         "version": {
@@ -1795,15 +2036,16 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/reasoning.ts#matchKeyPoints"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "claim.earning",
         "version": {
@@ -1811,16 +2053,17 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "apps/server/src/authored-feedback.ts#projectAuthoredFeedback",
         "apps/server/src/sourcing/claim-binding.ts#MACHINE_LABEL_EVIDENCE_KINDS"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "opponent.selection",
         "version": {
@@ -1828,16 +2071,17 @@
           "value": 1
         }
       },
+      "subject": "verdict_producer",
       "sites": [
         "apps/server/src/opponent-selector.ts#OpponentSelector",
         "apps/server/src/opponent-selector.ts#neutralTiebreakKey"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     },
     {
+      "selector": {
+        "kind": "always"
+      },
       "capability": {
         "id": "guard.defaults",
         "version": {
@@ -1845,13 +2089,11 @@
           "value": 1
         }
       },
+      "subject": "constant_table",
       "sites": [
         "apps/server/src/guard-conditions.ts#baseGuardConditionSettings"
       ],
-      "dependencies": [],
-      "selector": {
-        "kind": "always"
-      }
+      "dependencies": []
     }
   ],
   "resolvedReferences": [
@@ -1881,63 +2123,170 @@
       "value": "id"
     }
   ],
+  "memberDependencies": {
+    "rule": "literal author rows; a target must be a declared capability and a projection target must be accepted by one of the three pack-meaning consumers",
+    "rows": [
+      {
+        "capability": "structuralFeature.outpost",
+        "dependsOn": [
+          "structuralFeature.pawn_safe_square"
+        ],
+        "reason": "outpost truth requires pawn_safe_square truth on the same square (matchesStructuralFeature's outpost arm calls pawnSafety)"
+      }
+    ],
+    "projectionRule": {
+      "structuralFeature": "every structuralFeature union member K depends on projection rules.structural.predicate.K when that projection is accepted by authoring.predicate",
+      "engineCondition": {
+        "engine_eval_swing": [
+          "live.stockfish.eval"
+        ],
+        "engine_mate_appears": [
+          "live.stockfish.eval"
+        ],
+        "tablebase_category_regression": [
+          "live.syzygy.category"
+        ],
+        "tablebase_dtz_regression": [
+          "live.syzygy.distance"
+        ]
+      }
+    }
+  },
   "metadataExclusions": [
     "/properties/requires",
     "/$defs/capabilityRequirement",
     "/$defs/capabilityVersion"
   ],
   "meaningAuthority": {
-    "baseSource": "exact-schema-member-image-v1",
+    "baseSource": "exact-schema-member-image-v2",
     "dependencyAlgorithm": "typescript-symbol-reference-closure-v1",
     "interpreterRoots": [
       {
         "subject": "SuccessCondition",
+        "schemaPointer": "/$defs/successCondition",
+        "property": "kind",
         "sites": [
-          "apps/server/src/pack-orchestrator.ts#evaluateSuccessCondition",
-          "apps/server/src/pack-orchestrator.ts#successConditionEvidenceRefs"
-        ]
+          "apps/server/src/pack-orchestrator.ts#successPredicate",
+          "apps/server/src/pack-orchestrator.ts#conditionEvidenceRefs",
+          "packages/runtime/src/objective.ts#evaluateObjectivePredicate"
+        ],
+        "admissionSites": []
       },
       {
         "subject": "SimpleTrigger",
+        "schemaPointer": "/$defs/simpleTrigger",
+        "property": "in",
         "sites": [
-          "apps/server/src/pack-orchestrator.ts#evaluateSimpleTrigger",
+          "apps/server/src/pack-orchestrator.ts#simpleTriggerMatches",
           "apps/server/src/pack-orchestrator.ts#compiledOpeningTrigger"
-        ]
+        ],
+        "admissionSites": []
       },
       {
         "subject": "StructuralExpression",
+        "schemaPointer": "/$defs/structuralExpression",
+        "property": "kind",
         "sites": [
+          "apps/server/src/pack-orchestrator.ts#containsPlanSignature",
+          "apps/server/src/pack-orchestrator.ts#expandStructuralExpression",
+          "packages/runtime/src/structural-evidence.ts#evaluateNode",
+          "packages/runtime/src/structure.ts#evaluateStructuralExpressionWithWitness",
           "packages/runtime/src/structure.ts#matchesStructuralExpression",
-          "packages/runtime/src/structure.ts#mirrorExpression"
+          "packages/runtime/src/structure.ts#mirrorExpression",
+          "packages/runtime/src/structure.ts#structuralFeatureKinds"
+        ],
+        "admissionSites": [
+          "apps/server/src/expression-satisfiability.ts#allRefutation",
+          "apps/server/src/expression-satisfiability.ts#isPawnBackRank",
+          "apps/server/src/expression-satisfiability.ts#leafRefutation",
+          "apps/server/src/expression-satisfiability.ts#refuteStructuralExpression",
+          "apps/server/src/pack-validation.ts#runtimeIssues",
+          "apps/server/src/pack-validation.ts#structuralIssues",
+          "apps/server/src/shape-validation.ts#containsPlanSignature"
         ]
       },
       {
         "subject": "StructuralFeature",
+        "schemaPointer": "/$defs/structuralFeature",
+        "property": "kind",
         "sites": [
           "packages/runtime/src/structure.ts#matchesStructuralFeature",
-          "packages/runtime/src/structure.ts#structuralFeatureKinds"
+          "packages/runtime/src/structure.ts#mirrorFeature"
+        ],
+        "admissionSites": [
+          "apps/server/src/expression-satisfiability.ts#comparisonRefutes",
+          "apps/server/src/expression-satisfiability.ts#interval",
+          "apps/server/src/expression-satisfiability.ts#leafRefutation",
+          "apps/server/src/expression-satisfiability.ts#range",
+          "apps/server/src/expression-satisfiability.ts#refuteStructuralExpression",
+          "apps/server/src/pack-validation.ts#structuralIssues"
         ]
+      },
+      {
+        "subject": "FileTemplateFeature",
+        "schemaPointer": "/$defs/fileTemplateFeature",
+        "property": "kind",
+        "sites": [
+          "packages/runtime/src/structure.ts#mirrorFileTemplate"
+        ],
+        "admissionSites": []
+      },
+      {
+        "subject": "SquareTemplateFeature",
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "property": "kind",
+        "sites": [
+          "packages/runtime/src/structure.ts#mirrorSquareTemplate"
+        ],
+        "admissionSites": []
       },
       {
         "subject": "TransitionExpression",
+        "schemaPointer": "/$defs/transitionExpression",
+        "property": "kind",
         "sites": [
-          "packages/runtime/src/transition.ts#matchesTransitionExpression",
-          "packages/runtime/src/transition.ts#transitionReading"
+          "apps/server/src/pack-orchestrator.ts#expandTransitionExpression",
+          "packages/runtime/src/transition.ts#matchesTransitionExpressionUnchecked",
+          "packages/runtime/src/transition.ts#transitionFeatureKinds"
+        ],
+        "admissionSites": [
+          "apps/server/src/pack-validation.ts#transitionExpressionIssues"
         ]
       },
       {
-        "subject": "ObjectivePredicate",
+        "subject": "FenPredicate",
+        "schemaPointer": "/$defs/fenPredicate",
+        "property": "type",
         "sites": [
-          "packages/runtime/src/objective.ts#evaluateObjectivePredicate"
-        ]
+          "packages/runtime/src/objective.ts#matchesFenPredicate"
+        ],
+        "admissionSites": []
       },
       {
         "subject": "EngineCondition",
+        "schemaPointer": "/$defs/engineCondition",
+        "property": "kind",
         "sites": [
           "apps/server/src/guard.ts#applyRecordedEngineGuard",
-          "apps/server/src/guard-conditions.ts#ENGINE_CONDITION_DEFAULTS"
+          "apps/server/src/guard.ts#guardEvidence",
+          "apps/server/src/guard.ts#tablebaseCondition",
+          "apps/server/src/guard-conditions.ts#overrideGuardConditionSettings"
+        ],
+        "admissionSites": [
+          "apps/server/src/pack-validation.ts#runtimeIssues"
         ]
       }
+    ],
+    "censusTypes": [
+      "SuccessCondition",
+      "SimpleTrigger",
+      "StructuralExpression",
+      "StructuralFeature",
+      "FileTemplateFeature",
+      "SquareTemplateFeature",
+      "TransitionExpression",
+      "FenPredicate",
+      "EngineCondition"
     ],
     "constantRoots": [
       {
@@ -2043,6 +2392,28 @@
         ]
       }
     ],
+    "conventions": {
+      "module": "packages/runtime/src/evidence-catalog.ts",
+      "tables": [
+        "BREADTH_CONVENTION_TEXT",
+        "SEMANTIC_CONVENTION_TEXT"
+      ],
+      "ids": {
+        "localNonLosing": "local-non-losing",
+        "candidateMajority": "candidate-majority",
+        "kingZone": "king-zone",
+        "kingShelter": "king-shelter",
+        "materialRole": "material-role-signature",
+        "pressureLine": "pressure-line",
+        "squareControl": "square-control",
+        "pawnRelations": "pawn-relations",
+        "defenceDuty": "defence-duty",
+        "overloadConflict": "overload-conflict",
+        "mateProof": "mate-proof",
+        "raceArrival": "race-arrival",
+        "observedWindow": "observed-window"
+      }
+    },
     "externalSources": [
       {
         "package": "chessops",
@@ -2058,18 +2429,110 @@
         ],
         "attachment": "transitive-import-closure"
       }
-    ]
+    ],
+    "siteRule": "sites interpret meaning (evaluate, expand, witness) and are digested per member arm; admissionSites only admit or refuse a document (validators, satisfiability refuters) and are census-accounted but not digested"
   },
+  "lifecycleSubjects": [
+    {
+      "subjectId": "catalogue.variant_relation",
+      "subject": "vocabulary_arm",
+      "versions": [
+        {
+          "version": 1,
+          "sites": [
+            "apps/server/src/pack-validation.ts#runtimeIssues"
+          ],
+          "note": "the retryVariants catalogue form"
+        },
+        {
+          "version": 2,
+          "sites": [
+            "apps/server/src/pack-registry.ts#projectPackDocument"
+          ],
+          "note": "the variantOf catalogue form, published by the pack projection"
+        }
+      ]
+    },
+    {
+      "subjectId": "retryVariants.scheduler",
+      "subject": "vocabulary_arm",
+      "versions": [
+        {
+          "version": 1,
+          "sites": [
+            "apps/server/src/progress.ts#rotatedRetryVariant"
+          ]
+        }
+      ]
+    },
+    {
+      "subjectId": "trajectory.leg_opponent_policy",
+      "subject": "verdict_producer",
+      "versions": [
+        {
+          "version": 1,
+          "sites": [
+            "packages/runtime/src/trajectory.ts#legIndexAt"
+          ]
+        }
+      ]
+    },
+    {
+      "subjectId": "trajectory.leg_shapes",
+      "subject": "resolved_reference",
+      "versions": [
+        {
+          "version": 1,
+          "sites": [
+            "apps/server/src/pack-validation.ts#runtimeIssues"
+          ]
+        }
+      ]
+    },
+    {
+      "subjectId": "assistance.arrows",
+      "subject": "assistance_surface",
+      "versions": [
+        {
+          "version": 1,
+          "sites": []
+        }
+      ]
+    },
+    {
+      "subjectId": "error.SIMULATE_BUDGET_EXCEEDED",
+      "subject": "error_contract",
+      "versions": [
+        {
+          "version": 1,
+          "sites": []
+        }
+      ]
+    },
+    {
+      "subjectId": "claim.binding",
+      "subject": "contract_identity",
+      "versions": [
+        {
+          "version": 1,
+          "sites": [
+            "packages/runtime/src/capability/registry.ts#CLAIM_BINDING_CAPABILITY_ID"
+          ]
+        }
+      ]
+    }
+  ],
   "stableIdentity": {
-    "algorithm": "stable-schema-member-v2",
+    "algorithm": "stable-schema-member-v3",
     "owner": "nearest root property or $defs terminal key",
-    "branch": "discriminator property plus discriminator const value",
+    "branch": "value union: discriminator plus its const/enum values; key union: key-<required key>; shared value: plus the structural discriminator's required set; other: const properties, else the required set",
     "member": "exact scalar member",
     "forbiddenInputs": [
       "oneOf array ordinal",
+      "branch content hash",
       "$defs container depth",
       "source file location"
     ]
   },
-  "expandedAuthoritySha256": "76620efd3801c1f07adcb3f5525ebc603cbaada062066f63726b6eb5a7a794a3"
+  "expandedAuthoritySha256": "6b5615fb9af04e84bdfd4c21f5ec18e244fdb299816cd394cae997df05f0f39d"
 }

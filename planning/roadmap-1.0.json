@@ -316,13 +316,14 @@
         "dependsOn": [],
         "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the browser repair and the narrowed stable-governance topology are implemented but not remotely discharged.",
         "latestCheckpoint": {
-          "at": "2026-09-07",
-          "summary": "Required governance is now the ten stable repository invariants rather than a 47-target aggregate containing 37 active-draft and historical review artifacts. Draft-RFC evidence remains available through an explicit opt-in target, the governance checkout is shallow again, and the scaffold prevents review-shaped gates from returning to required CI. The repaired browser journey and this topology still require one paired green GitHub run on the exact pushed revision.",
+          "at": "2026-09-30",
+          "summary": "Required governance remains stable repository invariants rather than the former portfolio of active-draft/historical review artifacts; draft-RFC evidence remains opt-in. The earlier depth-one checkout checkpoint is superseded: implemented capability and semantic-authority history guards require an actual first parent, so software/governance/release verify jobs now fetch depth two and refuse missing history. Per-job scaffold tests bind that requirement; there is no verification-time fetch or new pre-push gate. Live work remains assigned and the roadmap exposes incomplete consumers. A paired green GitHub verify/browser run on the exact pushed revision still awaits authorized publication, so this milestone remains active.",
           "impact": "advanced",
-          "evidence": ["Makefile", ".github/workflows/verify.yml", "tests/browser/drill.spec.ts", "tools/verify-scaffold.mjs", "tools/verify-scaffold.test.mjs", "docs/testing.md", "planning/work-state.json", "planning/exploration/log.md"],
+          "evidence": ["Makefile", ".github/workflows/verify.yml", ".github/workflows/release.yml", "tests/browser/drill.spec.ts", "tools/verify-scaffold.mjs", "tools/verify-scaffold.test.mjs", "tools/capability-history.mjs", "docs/testing.md", "planning/work-state.json", "planning/exploration/log.md", "planning/pack-capability-contract/integration-2026-09-30.md"],
           "anchors": [
             {"kind": "work_state", "id": "D3076", "digest": "sha256:ac92f80f050423d605513ffe32e607ceb379f1684f2ab466510402ce08a42871"},
-            {"kind": "work_state", "id": "D3077", "digest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03"}
+            {"kind": "work_state", "id": "D3077", "digest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03"},
+            {"kind": "work_state", "id": "D3320", "digest": "sha256:143c283fb509f6bd1cd5425c84bf4253890530dd24ddfa637803b13eaf3eaf33"}
           ]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
@@ -381,17 +382,21 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "The four evidence-foundation implementations are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete the consumer-owned Support/Review/bot/longitudinal bindings. Finish provider-exchange caller migration and pack capability integration before content expansion. D3262's search-profile experiment remains research, not production why-move authority.",
+        "nextAction": "The four evidence-foundation implementations and pack capability lanes 0.30–0.32 are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings and provider-exchange caller migration. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "The four existing evidence-foundation implementations are integrated with main's Guided Hint and sealed presentation paths retained: semantic-validation Slice A, bounded local targets, target-policy composition and source-retaining phase composition. The catalogue retains 45 producers/278 projections/35 consumers/544 bindings. Support uses one phase point and Review an exact arc; five new target projections remain inspector-only. D3314 seals every phase input boundary. The generated authority reports 81 subjects, 38 cases passed and zero fully validated profiles, so missing independent authorities and consumer discharges remain release blockers.",
+          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
             "rfc/semantic-validation-authority.md",
             "rfc/bounded-policy-targets.md",
             "rfc/bounded-target-policy-composition.md",
-            "rfc/phase-source-composition.md"
+            "rfc/phase-source-composition.md",
+            "planning/pack-capability-contract/integration-2026-09-30.md",
+            "rfc/pack-capability-contract.md",
+            "rfc/pack-training-forms.md",
+            "rfc/famous-games.md"
           ],
           "anchors": [
             {
@@ -413,6 +418,21 @@
               "kind": "rfc",
               "id": "phase-source-composition.md",
               "digest": "sha256:b5f69c150edb5de01b3a254aab1e20c8703127c0c928d8405ada7e83534e8ff5"
+            },
+            {
+              "kind": "rfc",
+              "id": "pack-capability-contract.md",
+              "digest": "sha256:6680c771dd77c8ba549d6274f604eca9373d4b1be85ff1dbf5c58859c29272f2"
+            },
+            {
+              "kind": "rfc",
+              "id": "pack-training-forms.md",
+              "digest": "sha256:ed3b80d97c090b0aafdef3db78d1e4cbdf934980461de7ae9e031904f0343bf1"
+            },
+            {
+              "kind": "rfc",
+              "id": "famous-games.md",
+              "digest": "sha256:69545e3b12e45e4a1a6cba81255232640f0423a219c76123ea578c09db5f1c95"
             }
           ]
         },
