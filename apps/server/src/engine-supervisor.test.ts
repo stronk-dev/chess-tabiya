@@ -2,7 +2,8 @@ import { existsSync, readFileSync } from "node:fs";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { EngineSupervisor, parseEngineOptions } from "./engine-supervisor.js";
+import { EngineSupervisor, parseEngineOptions, type EngineSupervisorOptions } from "./engine-supervisor.js";
+import { SharedEngineSupervisor } from "./shared-engine-supervisor.js";
 import { assertAdvertisedCapabilityDispositions } from "./capabilities.js";
 import { OpponentSelector } from "./opponent-selector.js";
 import {
@@ -121,6 +122,48 @@ describe("UCI engine supervisor", () => {
 
   afterEach(async () => {
     await Promise.all(supervisors.splice(0).map((supervisor) => supervisor.shutdown()));
+  });
+
+  function sharedSupervisor(onLifecycle?: EngineSupervisorOptions["onLifecycle"]): EngineSupervisor {
+    const script = "const r=require('readline').createInterface({input:process.stdin});let busy=false;r.on('line',l=>{if(l==='uci'){console.log('id name Stockfish 18');console.log('uciok')}else if(l==='isready')console.log('readyok');else if(l.startsWith('go ')){if(busy)console.log('OVERLAP');busy=true;setTimeout(()=>{busy=false;console.log('bestmove e2e4')},20)}else if(l==='quit')process.exit(0)});";
+    const physical = { id: "analysis", kind: "judge" as const, command: process.execPath, args: ["-e", script], options: { Threads: 1, Hash: 16, MultiPV: 1 }, restartBackoff: { initialMs: 1, maximumMs: 1, maximumAttempts: 0 } };
+    const supervisor = new SharedEngineSupervisor([physical, { ...physical, id: "play", kind: "opponent", sharedProcessWith: "analysis" }], onLifecycle === undefined ? {} : { onLifecycle });
+    supervisors.push(supervisor);
+    return supervisor;
+  }
+
+  it("logical roles share exactly one spawn, queue, artifact/generation and shutdown", async () => {
+    const events: { engineId: string; kind: string }[] = [];
+    const supervisor = sharedSupervisor((event) => events.push(event));
+    const [analysis, play] = await Promise.all([supervisor.start("analysis"), supervisor.start("play")]);
+    expect(analysis).toMatchObject({ id: "analysis", kind: "judge", name: "Stockfish", version: "18" });
+    expect(play).toMatchObject({ id: "play", kind: "opponent", name: "Stockfish", version: "18" });
+    expect(events).toEqual([{ engineId: "analysis", kind: "starting" }, { engineId: "play", kind: "starting" }, { engineId: "analysis", kind: "ready" }, { engineId: "play", kind: "ready" }]);
+    const request = { commands: ["go depth 1"], until: (line: string) => line.startsWith("bestmove "), timeoutMs: 1000 };
+    const results = await Promise.all([supervisor.execute("analysis", request), supervisor.execute("play", request)]);
+    expect(results).toEqual([["bestmove e2e4"], ["bestmove e2e4"]]);
+    expect(supervisor.transcript("analysis").filter(({ line }) => line.startsWith("spawn "))).toHaveLength(1);
+    expect(supervisor.transcript("play")).toEqual(supervisor.transcript("analysis"));
+    expect(supervisor.establishedGeneration("play")).toBe(supervisor.establishedGeneration("analysis"));
+    const capture = await supervisor.exchange("play", { ...request, resetCommands: ["ucinewgame"] });
+    expect(capture.identity.id).toBe("play");
+    expect(capture.identity.kind).toBe("opponent");
+    expect(capture.generation).toBe(supervisor.establishedGeneration("analysis"));
+    expect(capture.artifact).toBe(supervisor.artifact("analysis"));
+    expect((await supervisor.checkHealth("play")).identity).toEqual(play);
+    await supervisor.shutdown();
+    expect(supervisor.health("analysis").status).toBe("stopped");
+    expect(supervisor.health("play").status).toBe("stopped");
+  });
+
+  it("refuses sharing across changed launch, profile, model, missing targets or alias chains", () => {
+    const root = { id: "root", kind: "judge" as const, command: "stockfish", options: { Hash: 16 } };
+    const alias = { ...root, id: "alias", kind: "opponent" as const, sharedProcessWith: "root" };
+    for (const changed of [{ command: "other" }, { options: { Hash: 32 } }, { modelId: "other" }, { args: ["extra"] }, { sharedProcessWith: "missing" }]) {
+      expect(() => new SharedEngineSupervisor([root, { ...alias, ...changed }])).toThrow(/identical physical/);
+    }
+    expect(() => new SharedEngineSupervisor([root, alias, { ...alias, id: "third", sharedProcessWith: "alias" }])).toThrow(/no alias chains/);
+    expect(() => new SharedEngineSupervisor([{ ...alias, sharedProcessWith: "alias" }])).toThrow(/no alias chains/);
   });
 
   it("parses the full advertised UCI option contract", () => {

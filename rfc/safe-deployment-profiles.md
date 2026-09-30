@@ -13,6 +13,13 @@
   actual CPU appliance/hosted configuration checks pass; D3338/D3342 retain the full isolated
   operator journey. Receipt: `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`.
 - **Created:** 2026-08-27
+- **Implementation checkpoint 2026-10-01, actual journey:** the source drill drives the real
+  build/check/up/CA-export wrappers with native CPU Maia and isolated owned volumes/loopback
+  ports. Eight startup/TLS/account/ingress groups pass under unchanged limits after the D3347/
+  D3348 allocation repair. The full journey remains red on the measured D3349 Maia option
+  incompatibility; no mock substitution or premature closeout. Exact-index software verification
+  excludes held D3330 without a Git worktree. Receipt:
+  `planning/safe-deployment-profiles/source-appliance-journey-2026-10-01.md`.
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
 - **Exploration gate:** O13 / D616 selected the stronger appliance floor; R18/F12-A measured and routed D607 as ready to draft
 - **Depends on:** `storage-backup-recovery.md` for database maintenance exclusion; `rfc/archive/identity-and-authorization.md`

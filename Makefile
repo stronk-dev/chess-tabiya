@@ -2476,6 +2476,9 @@ DEPLOY_RENDER_DIR := .cache/deploy/local-build
 LOCAL_SERVER_IMAGE := chess-tabiya-server:dev
 LOCAL_MAIA_IMAGE := chess-tabiya-maia:dev
 DEPLOY_TIER ?= core
+# Respect Compose's standard file list when an operator explicitly supplies one; otherwise use
+# the source-rendered profile. The isolated appliance drill uses an owned loopback-port overlay.
+deployment_compose = docker compose $(if $(COMPOSE_FILE),,-f "$(DEPLOY_RENDER_DIR)/$(1)")
 MAINTENANCE_COMPOSE := docker compose -f compose.yaml -f compose.maintenance.yaml
 STORAGE_ADMIN := $(MAINTENANCE_COMPOSE) run --rm storage-admin
 
@@ -2514,11 +2517,11 @@ source-deployment-identity-drill:
 deployment-check: deployment-render
 	@case "$(PROFILE)" in local|appliance|hosted) ;; *) echo "Usage: make deployment-check PROFILE=<local|appliance|hosted> [TABIYA_PUBLIC_HOSTNAME=<name>] [TABIYA_ACME_EMAIL=<email>]" >&2; exit 2;; esac
 	@if [ "$(PROFILE)" = local ]; then \
-		docker compose -f $(DEPLOY_RENDER_DIR)/compose.yaml config --quiet; \
+		$(call deployment_compose,compose.yaml) config --quiet; \
 	else \
 		test -n "$(TABIYA_PUBLIC_HOSTNAME)" || { echo "TABIYA_PUBLIC_HOSTNAME is required for $(PROFILE)" >&2; exit 2; }; \
 		node tools/source-deployment.mjs --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE) --check-hostname "$(TABIYA_PUBLIC_HOSTNAME)" || exit $$?; \
-		TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.$(PROFILE).yaml $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) config --quiet || exit $$?; \
+		TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" $(call deployment_compose,compose.$(PROFILE).yaml) $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) config --quiet || exit $$?; \
 		docker run --rm --network none -e TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" -e TABIYA_ACME_EMAIL="$(or $(TABIYA_ACME_EMAIL),operator@example.org)" \
 			-v "$(abspath $(DEPLOY_RENDER_DIR))/Caddyfile.$(PROFILE):/etc/caddy/Caddyfile:ro" \
 			$$(node -e 'import("./tools/render-deployment.mjs").then((m) => console.log(m.CADDY_IMAGE))') \
@@ -2530,7 +2533,7 @@ up-appliance:
 	@test -n "$(TABIYA_PUBLIC_HOSTNAME)" || { echo "TABIYA_PUBLIC_HOSTNAME is required for appliance" >&2; exit 2; }
 	@$(MAKE) --no-print-directory deployment-build
 	@$(MAKE) --no-print-directory deployment-check PROFILE=appliance
-	ENGINE_MODE=$(if $(filter cpu,$(DEPLOY_TIER)),maia,mock) TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.appliance.yaml $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) up --detach --pull never
+	ENGINE_MODE=$(if $(filter cpu,$(DEPLOY_TIER)),maia,mock) TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" $(call deployment_compose,compose.appliance.yaml) $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) up --detach --pull never
 	@echo "Tabiya (appliance profile): https://$(TABIYA_PUBLIC_HOSTNAME) — trust the root from 'make appliance-ca-export OUT=<file>' on every device"
 
 up-hosted:
@@ -2538,13 +2541,13 @@ up-hosted:
 	@test -n "$(TABIYA_PUBLIC_HOSTNAME)" || { echo "TABIYA_PUBLIC_HOSTNAME is required for hosted" >&2; exit 2; }
 	@$(MAKE) --no-print-directory deployment-build
 	@$(MAKE) --no-print-directory deployment-check PROFILE=hosted
-	ENGINE_MODE=$(if $(filter cpu,$(DEPLOY_TIER)),maia,mock) TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.hosted.yaml $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) up --detach --pull never
+	ENGINE_MODE=$(if $(filter cpu,$(DEPLOY_TIER)),maia,mock) TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" $(call deployment_compose,compose.hosted.yaml) $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) up --detach --pull never
 	@echo "Tabiya (hosted profile): https://$(TABIYA_PUBLIC_HOSTNAME)"
 
 # Copies only the PUBLIC root certificate of the appliance's internal CA (never its key).
 appliance-ca-export:
 	@case "$(OUT)" in /*) ;; *) echo "Usage: make appliance-ca-export OUT=<absolute-file>" >&2; exit 2;; esac
-	TABIYA_PUBLIC_HOSTNAME="$(or $(TABIYA_PUBLIC_HOSTNAME),unused.example.org)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.appliance.yaml cp caddy:/data/caddy/pki/authorities/local/root.crt "$(OUT)"
+	TABIYA_PUBLIC_HOSTNAME="$(or $(TABIYA_PUBLIC_HOSTNAME),unused.example.org)" $(call deployment_compose,compose.appliance.yaml) cp caddy:/data/caddy/pki/authorities/local/root.crt "$(OUT)"
 	@echo "Install $(OUT) as a trusted root on each device (docs/deployment.md)."
 
 # Docker-tier deployment verification (not part of `make verify`): renders and validates every
@@ -2555,14 +2558,34 @@ verify-deployment:
 	node tools/verify-caddy.mjs
 
 # Release-tier drills over the built image; each uses its own Compose project and volumes.
-.PHONY: storage-drill appliance-drill
+.PHONY: storage-drill appliance-drill appliance-drill-staged staged-software-contracts engine-memory-drill engine-sharing-check maia-option-contract-drill
 storage-drill:
 	docker compose build server
 	node tools/appliance-drill.mjs storage --image $(LOCAL_SERVER_IMAGE)
 
 appliance-drill:
-	docker compose build server
-	node tools/appliance-drill.mjs appliance --image $(LOCAL_SERVER_IMAGE)
+	pnpm exec esbuild tools/source-appliance-client.ts --bundle --platform=node --format=esm --outfile=.cache/deploy/source-appliance-client.mjs
+	node tools/source-appliance-drill.mjs --out .cache/deploy/source-appliance-proof.json
+
+# Exact-index counterpart, as used by staged-process-contracts. No Git worktree, stash or resets;
+# pending unrelated source changes cannot silently enter the Docker build being verified.
+appliance-drill-staged:
+	node tools/staged-appliance-drill.mjs
+
+staged-software-contracts:
+	node tools/staged-appliance-drill.mjs --software
+
+# Diagnosis only: measure real native Stockfish process allocation independently of app startup.
+# Its generous diagnostic limit is NOT a deployment limit or passing release-envelope receipt.
+engine-memory-drill:
+	node tools/engine-memory-drill.mjs --image $(LOCAL_SERVER_IMAGE)
+
+maia-option-contract-drill:
+	@test -n "$(MAIA_IMAGE_ID)" || (echo "Usage: make maia-option-contract-drill MAIA_IMAGE_ID=sha256:<actual-local-id>" >&2; exit 2)
+	node tools/maia-option-contract-drill.mjs --image $(MAIA_IMAGE_ID)
+
+engine-sharing-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-protocol.test.ts apps/server/src/engine-binary-digest.test.ts apps/server/src/engine-supervisor.test.ts apps/server/src/engine-supervisor-exchange.test.ts apps/server/src/provider-health.test.ts apps/server/src/provider-traversal.test.ts
 
 storage-maintenance-check:
 	@case "$(TABIYA_BACKUP_DIRECTORY)" in /*) ;; *) echo "Set TABIYA_BACKUP_DIRECTORY to an absolute host directory (e.g. TABIYA_BACKUP_DIRECTORY=$$HOME/tabiya-backups)" >&2; exit 2;; esac

@@ -1,0 +1,18 @@
+{
+  "question": "D3349",
+  "scope": "offline native runtime-user UCI advertisement; not a played bot or deployment proof",
+  "image": "sha256:9e096c8a9511225778fb1485b0c1792e4ea76b9a32e3c30ea81a0dee29f147bc",
+  "platform": "linux/arm64",
+  "observedAt": "2026-09-30T23:23:00.192Z",
+  "options": [
+    "option name Elo type spin default 1500 min 0 max 5000",
+    "option name SelfElo type spin default 1500 min 0 max 5000",
+    "option name OppoElo type spin default 1500 min 0 max 5000",
+    "option name Temperature type string default 1.0",
+    "option name TopP type string default 1.0",
+    "option name MultiPV type spin default 5 min 1 max 20"
+  ],
+  "modelReady": true,
+  "exchangeContractCompatible": false,
+  "incompatibility": "Temperature and TopP are decimal string options without numeric spin bounds"
+}

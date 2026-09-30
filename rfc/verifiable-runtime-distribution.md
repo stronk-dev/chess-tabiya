@@ -15,6 +15,14 @@
   Receipt: `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`. Publication,
   rights, content, resource and complete release-journey gates remain open.
 - **Created:** 2026-08-27
+- **Implementation checkpoint 2026-10-01, memory and real appliance:** analysis/play share one
+  identical native Stockfish process with logical identities and serialized requests preserved;
+  launched-binary hashing streams through a server-only adapter proven equal to the unchanged
+  central fixed-domain authority. No parser/semantic/capability/pack identity restamps or larger
+  resource limits. Actual startup/TLS/account passes; D3349 blocks real registered-bot play and
+  therefore D3347's play-time envelope discharge. Receipt:
+  `planning/safe-deployment-profiles/source-appliance-journey-2026-10-01.md`. No publication,
+  rights, content, calibration, steady-state or complete journey gate is cleared by startup.
 - **Design refs:** `design/02-product-shape.md` self-hostable appliance floor; `design/03-product-breadth.md` B8
 - **Exploration gate:** R18 measured the built images, rights surface and release workflow; O13/D616 selected signed/attested multi-architecture `core`/`cpu`/`accelerated` tiers
 - **Depends on:** F12-A deployment profiles; F12-C recovery revision identity; F12-D provider health; implemented runtime opening catalogue

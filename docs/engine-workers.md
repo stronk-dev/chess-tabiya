@@ -31,6 +31,27 @@ per engine. For each child it:
 - accepts an abort signal for searches, sends UCI `stop`, and leaves the child
   available for the next queued request when the engine responds normally.
 
+The real application shares one native Stockfish process between the analysis and play logical
+roles. `sharedProcessWith` is accepted only when the complete launch/options specification matches
+the physical role; missing targets, chains and differing options refuse. Both roles retain their
+own declared identities and health transitions, but share the same serialized request lane,
+generation, artifact and transcript. Shutdown stops each physical process once. This avoids loading
+two identical NNUE networks inside the unchanged 512 MiB server limit; searches still state/reset
+their own options and cannot overlap on that process.
+
+Application startup reads the resolved launched binary in 64 KiB chunks through the server's
+standard-library SHA-256 adapter. Permanent tests compare it with the unchanged runtime
+`digestEngineBinary` fixed-domain authority, including chunk/padding boundaries and failed reads.
+The frozen base supervisor is unchanged; the sharing adapter delegates to its existing queue,
+restart and exchange machinery. The runtime parser/semantic source closure, capability declarations and authored pack digests are
+not rewritten by this allocation repair. Run `make engine-sharing-check` for these contracts.
+
+Actual model compatibility is a separate unresolved boundary: pinned Maia3 advertises Temperature
+and TopP as decimal UCI string options, while the current provider-exchange admission requires
+numeric spin bounds. D3349 owns this mismatch; `readyok` and a healthy container do not prove a
+registered profile can play through that exchange. The current refusal remains in place pending
+acceptance of the measured decimal-option amendment.
+
 Real-engine application startup also checks every ready engine's retained UCI
 option table against the published capability-disposition register. Coverage is
 per instrument: a Stockfish row cannot satisfy a Maia option, and an absent or

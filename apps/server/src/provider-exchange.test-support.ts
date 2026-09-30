@@ -4,7 +4,7 @@
  */
 import { digestEngineBinary, exactLegalMoves, providerUtf8 } from "@chess-tabiya/runtime";
 
-import type { EngineExchangeCapture, EngineExchangeRequest, EngineHealth, EngineIdentity } from "./engine-supervisor.js";
+import type { EngineExchangeCapture, EngineExchangeRequest, EngineHealth, EngineIdentity, EngineOption } from "./engine-supervisor.js";
 import type { ProviderTimers } from "./provider-exchange.js";
 import type { ProviderEngineClient, ProviderFetch } from "./provider-operations.js";
 
@@ -79,7 +79,7 @@ export class FakeEngines implements ProviderEngineClient {
   version = "19";
   calls: EngineExchangeRequest[] = [];
   respond: (request: EngineExchangeRequest) => readonly string[] = (request) => stockfishDepthLines(request);
-  maiaOptions = [
+  maiaOptions: EngineOption[] = [
     { name: "Elo", type: "spin" as const, default: "1500", min: 1000, max: 2600 },
     { name: "MultiPV", type: "spin" as const, default: "1", min: 1, max: 64 },
     { name: "Temperature", type: "spin" as const, default: "1", min: 0, max: 5 },

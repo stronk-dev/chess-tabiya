@@ -1,0 +1,50 @@
+{
+  "scope": "diagnosis, not a release envelope",
+  "image": "chess-tabiya-server:dev",
+  "measurements": [
+    {
+      "label": "node-only",
+      "current": 13893632,
+      "peak": 14147584,
+      "processes": []
+    },
+    {
+      "label": "one-stockfish-ready",
+      "current": 213590016,
+      "peak": 294862848,
+      "processes": [
+        {
+          "pid": 13,
+          "status": [
+            "VmRSS:\t  305348 kB",
+            "RssAnon:\t  192036 kB",
+            "RssFile:\t  113312 kB"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "two-stockfish-ready",
+      "current": 414965760,
+      "peak": 494374912,
+      "processes": [
+        {
+          "pid": 13,
+          "status": [
+            "VmRSS:\t  305348 kB",
+            "RssAnon:\t  192036 kB",
+            "RssFile:\t  113312 kB"
+          ]
+        },
+        {
+          "pid": 16,
+          "status": [
+            "VmRSS:\t  307332 kB",
+            "RssAnon:\t  194076 kB",
+            "RssFile:\t  113256 kB"
+          ]
+        }
+      ]
+    }
+  ]
+}

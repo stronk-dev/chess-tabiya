@@ -180,6 +180,16 @@ describe("§6 Maia live bounds are refuse-only", () => {
     expect(await get(noContainer, { requestedWidth: 1 })).toMatchObject({ reason: "provider_unavailable" });
   });
 
+  it("D3349: the actual pinned Maia decimal-string advertisement cannot pass the current contract", async () => {
+    // Exact option form measured by make maia-option-contract-drill, not an invented spin range.
+    // This is a negative compatibility control, NOT evidence that a real bot can play.
+    const engines = new FakeEngines();
+    engines.maiaOptions = engines.maiaOptions.map((option) => option.name === "Temperature" || option.name === "TopP"
+      ? { name: option.name, type: "string", default: "1.0" } : option);
+    expect(await get(engines, { requestedWidth: 1 })).toMatchObject({ kind: "source_failure", reason: "provider_unavailable", providerDetail: "Maia does not advertise numeric Temperature bounds" });
+    expect(engines.calls).toHaveLength(0);
+  });
+
   it("history-conditioned and exact-FEN requests to one final position never alias", () => {
     const engines = new FakeEngines();
     const digest = (position: unknown) => scheduler(engines).normalizedRequestDigest({ operation: "maia.policy_page@1", request: { ...MAIA_REQUEST, position } as never });

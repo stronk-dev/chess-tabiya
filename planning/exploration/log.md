@@ -21937,3 +21937,37 @@ Campaign was the one capability with no API, route or content. Now:
   proof. Per-release migration approval remains unanswered and content stays untouched. No
   protected intent, archive or semantic capability image edited in this checkpoint. No push,
   publication/deployment, remote CI-green or 1.0 completion claim; the goal remains active.
+
+## 2026-10-01 — direct appliance implementation, bounded allocation and exact-index verification
+
+- The real source build/check/up/CA-export wrappers now have an isolated, UUID-owned appliance
+  instrument with actual model identities, loopback TLS and an actual learner account. Eight
+  startup/TLS/account/ingress groups pass. The unchanged complete bot/rewind/compare/restart/pack
+  exit still fails; configuration, readiness and startup are not recorded as playability.
+- D3347's original 512 MiB/no-swap startup OOM was measured, not hidden with a larger production
+  limit. Native Stockfish processes each cost about 192 MiB anonymous RSS. Application-only
+  physical process sharing preserves the base supervisor's serialization/restart rules; D3348's
+  64 KiB streaming executable digest removes the whole-file buffer. Actual startup now stays
+  within the original envelope. Play-time memory remains open behind D3349.
+- The first allocation drafts changed frozen authority roots. Exact-index gates caught them;
+  D3350 removes those drafts instead of restamping declarations or content. The final adapters
+  leave the runtime digest/base-supervisor authorities unchanged. D3351 supplies private snapshot
+  Git metadata/index/hooks plus read-only immutable source history without touching live state.
+  Nine permanent snapshot controls pass.
+- The complete normal staged verify-software target passes on exact-index tree
+  abf1f138f1a9b71173f228ceed95795cf0dce2d2: 315 files/2752 software tests, four files/seven
+  performance tests, warning-free types and all downstream software contracts. History retains
+  819 declarations; all 819 current meanings match. The canonical 352-document migration plan
+  has zero mechanical writes, judgement changes, refusals or sidecar restamps. Release policy
+  (60 tests) and actual pinned CPU deployment configuration checks also pass. These are local
+  receipts, not an assertion of remote CI success or full appliance completion.
+- D3349 is the measured remaining real-model blocker: pinned Maia advertises Temperature/TopP
+  as decimal string options without bounds, while the accepted contract requires bounded spin
+  options. The actual model remains healthy but production admission refuses. An inline owner
+  approval question and a source-grounded amendment are recorded directly; presenting the
+  question is not approval. No invented ranges, fallback engine or admission change is made.
+- Ledger/work-state/queue/RFC checkpoints/roadmap are updated in the same change set. Held D3330
+  Explorer migration and unrelated shared-tree edits remain untouched; neither content writes
+  nor per-release consent are presumed. No protected intent/archive change, milestone completion,
+  managed worktree, push, publication or operator deployment. Remaining approval dependencies
+  are explicit rather than handed back as instructions to paste into another agent.

@@ -142,18 +142,39 @@ restore, upgrade and rollback are covered in
   Caddyfile and pinned Node/Caddy images. Event-stream and PGN-shaped first bytes arrive before the
   source can finish; disconnect cancels it. Native release CI runs this on both architectures.
   Unfinished HTTP/1 uploads also receive early 403/413; both proxy profiles enable full duplex.
-- `make appliance-drill`: the built image behind real Caddy. It checks HTTP→HTTPS, a client that
-  trusts only the exported root, TLS failure without it, no published app port, the Secure
-  `__Host-` cookie, exact HSTS, cross-origin refusal through the proxy, and replacement of spoofed
-  forwarded headers.
+- `make appliance-drill`: the actual source `make deployment-build` → `make up-appliance` →
+  `make appliance-ca-export` path, with native CPU Maia, its real OCI/image join and no fake release
+  index. It owns a UUID project, learner/CA volumes and loopback-only ephemeral proxy ports.
+  Transport checks cover HTTP→HTTPS, exported-root trust, untrusted TLS refusal, unpublished app/
+  engine ports, Secure `__Host-` cookies, HSTS, cross-origin refusal and spoofed-header replacement.
+  The full exit also requires a real registered-bot reply and idempotent retry, rewind/fork/
+  comparison, restart/login/resume and a served-pack run. It fails rather than substituting a
+  fixture or alternate engine. Only its own test project/volumes/tags are removed on exit.
+- `make appliance-drill-staged`: runs that same journey over an exact Git-index snapshot with
+  fresh frozen-lockfile dependency links. It does not create a Git worktree, stash/reset changes
+  or include concurrent unstaged edits. Its operational proof records the tested tree and states
+  that this is not a published release or an owner-device discharge.
+- `make staged-software-contracts`: runs the existing complete `verify-software` target over the
+  same exact-index mechanism, rather than asserting that a dirty-tree result proves staged bytes.
+  The snapshot has private test-only Git metadata/index/hooks and reads the actual immutable
+  committed history. It never shares the operator's writable index/hooks or redirects all fixture
+  Git commands through global environment variables. No history gate is skipped.
+
+The wrappers honor standard `COMPOSE_FILE` when explicitly supplied; otherwise they use their
+generated profile file. The drill's only Compose overlay changes proxy ports to owned loopback
+ports. It retains the actual server/engine memory ceilings, network isolation and Caddy image.
 
 Not yet implemented from the RFC: the per-route request-body budget registry (D1846); the Caddy
 8 MiB cap and the existing account-import reader are not a complete endpoint budget authority.
 D3334/D3335 track the unbuildable selector order and stale operation census. Source wrappers now
 capture a genuine native OCI/image join and omit release-only index mounts/claims. The CPU source
 build, actual non-root Maia readiness/identity, both operator configuration checks and
-source/release Compose security parity pass. D3338/D3342 remain open for the complete isolated
-up-wrapper TLS/account/run journey; a configuration pass is not that exit. Receipt:
+source/release Compose security parity pass. The exact-index journey now additionally proves
+real startup/TLS/account/ingress; the full exit is still red on D3349's actual Maia option-table
+mismatch. D3347's initial OOM is repaired at startup by shared Stockfish allocation and bounded
+binary hashing, but play-time memory still awaits that bot exit. D3338/D3342 stay open; eight
+passed transport groups are not a full journey. Latest receipt:
+`planning/safe-deployment-profiles/source-appliance-journey-2026-10-01.md`. Prior receipt:
 `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`.
 `verify-deployment` validates configurations with inert fixtures, not deployable sidecar identities.
 Streaming egress is implemented (D1847/D3332); the proxy

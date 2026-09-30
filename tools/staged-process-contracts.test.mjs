@@ -6,6 +6,7 @@ import path from "node:path";
 import test from "node:test";
 
 import { assertStagedLogsAppendOnly, assertStagedRoadmapFlowback, materializeGitIndex, PROCESS_CONTRACT_TARGETS } from "./staged-process-contracts.mjs";
+import { attachSnapshotHistory } from "./staged-application-snapshot.mjs";
 
 function committedRepository(context) {
   const root = mkdtempSync(path.join(tmpdir(), "tabiya-log-fixture-"));
@@ -40,6 +41,33 @@ test("materializes staged bytes without unstaged or untracked working-tree chang
 
   assert.equal(readFileSync(path.join(snapshot, "tracked.txt"), "utf8"), "staged\n");
   assert.equal(existsSync(path.join(snapshot, "untracked.txt")), false);
+});
+
+test("software snapshot retains actual history with a private index/hooks, not shared Git env", (context) => {
+  const { root, log } = committedRepository(context);
+  const snapshot = mkdtempSync(path.join(tmpdir(), "tabiya-software-history-"));
+  context.after(() => rmSync(snapshot, { recursive: true, force: true }));
+  const git = (cwd, args) => execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
+  const head = git(root, ["rev-parse", "HEAD"]);
+  writeFileSync(log, "# Log\n\nfirst\n\nstaged\n");
+  git(root, ["add", "planning/exploration/log.md"]);
+  const tree = git(root, ["write-tree"]);
+  const index = readFileSync(path.join(root, ".git", "index"));
+  materializeGitIndex(root, snapshot);
+  attachSnapshotHistory({ root, snapshot, head, tree });
+  assert.equal(git(snapshot, ["rev-parse", "HEAD"]), head);
+  assert.equal(git(snapshot, ["write-tree"]), tree);
+  assert.equal(git(snapshot, ["show", "HEAD:planning/exploration/log.md"]), "# Log\n\nfirst");
+  assert.equal(git(snapshot, ["show", ":planning/exploration/log.md"]), "# Log\n\nfirst\n\nstaged");
+  writeFileSync(path.join(snapshot, ".git", "hooks", "test-only"), "snapshot owns hooks");
+  writeFileSync(path.join(snapshot, "private.txt"), "snapshot-only\n");
+  git(snapshot, ["add", "private.txt"]);
+  assert.deepEqual(readFileSync(path.join(root, ".git", "index")), index);
+  assert.equal(existsSync(path.join(root, ".git", "hooks", "test-only")), false);
+  assert.equal(existsSync(path.join(root, "private.txt")), false);
+  assert.throws(() => attachSnapshotHistory({ root, snapshot: root, head, tree }), /operator checkout/);
+  assert.throws(() => attachSnapshotHistory({ root, snapshot, head, tree }), /foreign Git metadata/);
+  assert.throws(() => attachSnapshotHistory({ root, snapshot, head: "HEAD", tree }), /immutable/);
 });
 
 test("runs the complete governance subset used by the pre-commit hook", () => {

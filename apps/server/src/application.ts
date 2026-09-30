@@ -76,7 +76,8 @@ import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } 
 import { ExchangeTablebaseSource } from "./provider-tablebase.js";
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
 import { TheoryLibrary } from "./theory-library.js";
-import { binaryArtifactProbe } from "./engine-supervisor.js";
+import { streamingBinaryArtifactProbe } from "./engine-binary-digest.js";
+import { SharedEngineSupervisor } from "./shared-engine-supervisor.js";
 import { OPERATOR_PROVIDER_BOUNDS, composeProviderTraversalApplication, type ProviderExchangeBounds, type ProviderTraversalApplication } from "./provider-traversal.js";
 import { BotOpponentProviders } from "./bot-opponent-operation.js";
 import { BotProviderAvailability } from "./bot-opponent-source.js";
@@ -660,14 +661,17 @@ async function composeServices(
     const stockfish = stockfishCommand;
     const analysisSpec = stockfishAnalysisSpec(stockfish);
     const maiaProbe = maiaContainerProbe(maiaHost, maiaPort);
-    const engines = new EngineSupervisor([
+    const engines = new SharedEngineSupervisor([
       maiaNetworkSpec(maiaHost, maiaPort),
-      stockfishPlaySpec({ command: stockfish }),
+      // Both roles have identical deterministic launch/options and one serialized request lane.
+      // A second native NNUE process alone costs ~192 MiB anonymous RSS (D3347); keep the
+      // declared 512 MiB application limit, logical identities and request reset contract.
+      { ...stockfishPlaySpec({ command: stockfish }), sharedProcessWith: analysisSpec.id },
       analysisSpec,
     ], {
       // Provider exchanges need the launched artifact of each generation: the hashed analysis
       // binary, and the running Maia container's OCI identity reported by its sidecar.
-      artifactProbe: (spec) => spec.id === analysisSpec.id ? binaryArtifactProbe(spec) : spec.id === "maia-5m" ? maiaProbe(spec) : Promise.resolve(null),
+      artifactProbe: (spec) => spec.id === analysisSpec.id ? streamingBinaryArtifactProbe(spec) : spec.id === "maia-5m" ? maiaProbe(spec) : Promise.resolve(null),
       onLifecycle: providerHealth.engineLifecycleSink({ "maia-5m": "maia-inference", "stockfish-play": "stockfish-play", "stockfish-analysis": "stockfish-analysis" }),
     });
     supervisor = engines;

@@ -2,20 +2,18 @@
 // Docker-tier production-boundary drills over the BUILT server image (not tsx/source):
 //   rfc/storage-backup-recovery.md criterion 10 — cold-volume boot, current restart, manual
 //     backup/verify, fresh-volume restore + boot, rehearsal, and live-server maintenance refusal;
-//   rfc/safe-deployment-profiles.md criteria 3, 5, 7 — the appliance profile behind the pinned
-//     Caddy with its internal CA: HTTP→HTTPS, a client trusting only the exported root, no
-//     published application port, Secure __Host- cookies and origin refusal.
 // Every drill uses its own Compose project and volumes and removes exactly those afterwards; it
 // never touches the default `chess-tabiya` project or its data volume.
 //
 //   node tools/appliance-drill.mjs storage   [--image chess-tabiya-server:dev]
-//   node tools/appliance-drill.mjs appliance [--image chess-tabiya-server:dev]
+// Appliance proof now lives in `make appliance-drill`: actual up-wrapper, real CPU engine,
+// isolated loopback proxy and played/resumed rehearsal, not this obsolete fixture launch path.
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { renderDeployment } from "./render-deployment.mjs";
+import { renderSourceDeployment } from "./render-deployment.mjs";
 
 const mode = process.argv[2];
 const imageIndex = process.argv.indexOf("--image");
@@ -57,7 +55,7 @@ function receipt(result) {
 }
 
 async function storageDrill() {
-  const rendered = renderDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev", maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigests: { "linux/amd64": `sha256:${"0".repeat(64)}`, "linux/arm64": `sha256:${"0".repeat(64)}` } });
+  const rendered = renderSourceDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev" });
   for (const [name, text] of Object.entries(rendered)) writeFileSync(join(work, name), text);
   const backups = join(work, "backups");
   run("mkdir", ["-p", backups]);
@@ -120,44 +118,11 @@ async function storageDrill() {
   required(replaced.result === "succeeded" && typeof replaced.preRestoreBackupId === "string", "guarded replacement first publishes a pre_restore bundle");
 }
 
-async function applianceDrill() {
-  const hostname = "tabiya.example.test";
-  const rendered = renderDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev", maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigests: { "linux/amd64": `sha256:${"0".repeat(64)}`, "linux/arm64": `sha256:${"0".repeat(64)}` } });
-  for (const [name, text] of Object.entries(rendered)) writeFileSync(join(work, name), text);
-  const volume = `${id}-data`;
-  const env = { TABIYA_PUBLIC_HOSTNAME: hostname, TABIYA_DATA_VOLUME: volume };
-  const compose = (...args) => run("docker", ["compose", "-p", id, "-f", join(work, "compose.appliance.yaml"), ...args], { env });
-  cleanups.push(() => {
-    run("docker", ["compose", "-p", id, "-f", join(work, "compose.appliance.yaml"), "down", "--volumes", "--remove-orphans"], { env, allowFailure: true });
-    run("docker", ["volume", "rm", "-f", volume], { allowFailure: true });
-  });
-  compose("up", "--detach", "--no-build");
-  const root = join(work, "root.crt");
-  await until("Caddy internal root", async () => (compose("cp", "caddy:/data/caddy/pki/authorities/local/root.crt", root) && true));
-  const resolve = ["--resolve", `${hostname}:443:127.0.0.1`, "--resolve", `${hostname}:80:127.0.0.1`];
-  const curl = (...args) => run("curl", ["-sS", "--max-time", "10", ...resolve, ...args], { allowFailure: true });
-  await until("HTTPS readiness", async () => (curl("--cacert", root, "-o", "/dev/null", "-w", "%{http_code}", `https://${hostname}/readyz`).stdout === "200" ? true : undefined));
-  required(true, "HTTPS through Caddy reaches /readyz with only the exported root trusted");
-  const untrusted = curl("-o", "/dev/null", "-w", "%{http_code}", `https://${hostname}/readyz`);
-  required(untrusted.status !== 0, "a client without the exported root fails TLS (no click-through)");
-  const redirect = curl("-o", "/dev/null", "-w", "%{http_code} %{redirect_url}", `http://${hostname}/`).stdout;
-  required(/^30[178] https:\/\/tabiya\.example\.test\//u.test(redirect), `HTTP redirects to HTTPS (${redirect})`);
-  const ports = compose("ps", "--format", "json", "server").stdout;
-  required(!/"PublishedPort":\s*[1-9]/u.test(ports), "the application port is not published on the host");
-  const headers = curl("--cacert", root, "-D", "-", "-o", "/dev/null", "-H", "content-type: application/json", "-H", `origin: https://${hostname}`, "--data", JSON.stringify({ handle: "appliance", password: "appliance-password-long" }), `https://${hostname}/auth/register`).stdout;
-  required(/^set-cookie: __Host-tabiya_session=[^;]+; HttpOnly; SameSite=Strict; Path=\/; Max-Age=\d+; Secure/imu.test(headers), "HTTPS issues a Secure host-only __Host- session cookie");
-  required(/^strict-transport-security: max-age=31536000\r?$/imu.test(headers), "HSTS is exactly max-age=31536000");
-  const forged = curl("--cacert", root, "-o", "/dev/null", "-w", "%{http_code}", "-H", "content-type: application/json", "-H", "origin: https://evil.example.org", "--data", "{}", `https://${hostname}/auth/login`).stdout;
-  required(forged === "403", "a cross-origin write is refused through the proxy");
-  const spoofed = curl("--cacert", root, "-o", "/dev/null", "-w", "%{http_code}", "-H", "x-forwarded-host: evil.example.org", "-H", "forwarded: host=evil.example.org;proto=http", `https://${hostname}/capabilities`).stdout;
-  required(spoofed === "200", "client-supplied forwarded headers are replaced by Caddy");
-}
 
 try {
   if (mode === "storage") await storageDrill();
-  else if (mode === "appliance") await applianceDrill();
   else {
-    console.error("usage: appliance-drill.mjs <storage|appliance> [--image <ref>]");
+    console.error("usage: appliance-drill.mjs storage [--image <ref>]; for appliance use make appliance-drill");
     process.exitCode = 2;
   }
   if (process.exitCode === undefined) console.error(`${mode} drill: OK`);

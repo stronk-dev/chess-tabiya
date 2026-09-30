@@ -1,0 +1,99 @@
+{
+  "protocol": "tabiya.source-appliance-proof@1",
+  "scope": "native source build, real model, loopback transport; not a published release or owner-device proof",
+  "sources": {
+    "mode": "git-index",
+    "tree": "fee58dc14282a6e5b6f4c8895ab61c28ef5abcfd",
+    "includesUnstagedChanges": false
+  },
+  "startedAt": "2026-09-30T23:36:09.930Z",
+  "finishedAt": "2026-09-30T23:37:00.835Z",
+  "images": {
+    "distribution": "source-build",
+    "tier": "cpu",
+    "platform": "linux/arm64",
+    "serverImage": "sha256:14640b35d63b9c49fc604189c12564bcdf87e66b6ed990c445ab2e5bad67b32c",
+    "maia": {
+      "runtime": "oci",
+      "imageId": "sha256:9e096c8a9511225778fb1485b0c1792e4ea76b9a32e3c30ea81a0dee29f147bc",
+      "manifestDigest": "sha256:59bf6e09945a72b0979f38b677fc8b04021d0c56e67074cc099a2fe5e88b9f2f",
+      "configDigest": "sha256:9e096c8a9511225778fb1485b0c1792e4ea76b9a32e3c30ea81a0dee29f147bc"
+    }
+  },
+  "checks": [
+    "owned project, volumes, loopback-only proxy ports and actual immutable CPU identities",
+    "actual make up-appliance build/check/start path preserves the preflight subject",
+    "TLS readiness using only the actual make-exported internal CA",
+    "untrusted TLS fails without a click-through",
+    "HTTP redirects to the exact HTTPS origin",
+    "built web shell and truthful source-build About",
+    "real learner registration with Secure host-only cookie and exact HSTS",
+    "cross-origin write refusal and spoofed-forwarded-header replacement"
+  ],
+  "result": "failed",
+  "failure": "APPLIANCE_PROOF_REFUSED: Maia is not an observed real available provider",
+  "providers": [
+    {
+      "instanceId": "stockfish-play",
+      "familyId": "stockfish",
+      "implementation": "uci_sidecar",
+      "generation": "sha256:7b914bb0793d12f5d784944fc778b91006bf505dfc7cd2b85c7b0d227d809936",
+      "checkedAt": "2026-09-30T23:36:41.423Z",
+      "lastSuccessAt": "2026-09-30T23:36:41.423Z",
+      "lastFailureAt": null,
+      "state": "available",
+      "reason": null
+    },
+    {
+      "instanceId": "stockfish-analysis",
+      "familyId": "stockfish",
+      "implementation": "uci_sidecar",
+      "generation": "sha256:75bea6e1e735d50dd9d684d9e211b1dae59d37c0e8d0fccb1e90b857faf2b8b4",
+      "checkedAt": "2026-09-30T23:36:41.504Z",
+      "lastSuccessAt": "2026-09-30T23:36:41.504Z",
+      "lastFailureAt": null,
+      "state": "available",
+      "reason": null
+    },
+    {
+      "instanceId": "maia-inference",
+      "familyId": "maia",
+      "implementation": "uci_sidecar",
+      "generation": "sha256:b58fc852675c8af4ae4364533692608d73c80c76f6bb45a04cc799ab95af32e7",
+      "checkedAt": "2026-09-30T23:36:41.429Z",
+      "lastSuccessAt": "2026-09-30T23:36:41.036Z",
+      "lastFailureAt": "2026-09-30T23:36:41.429Z",
+      "state": "unavailable",
+      "reason": "process_exit",
+      "retryAfterMs": 0,
+      "cacheScope": "none"
+    }
+  ],
+  "serviceStates": [
+    {
+      "name": "/tabiya-appliance-proof-3f4d2495-c1e0-467a-b3d9-0394e7eceefb-caddy-1",
+      "status": "running",
+      "restarting": false,
+      "oomKilled": false,
+      "exitCode": 0,
+      "health": null
+    },
+    {
+      "name": "/tabiya-appliance-proof-3f4d2495-c1e0-467a-b3d9-0394e7eceefb-maia-1",
+      "status": "running",
+      "restarting": false,
+      "oomKilled": false,
+      "exitCode": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "/tabiya-appliance-proof-3f4d2495-c1e0-467a-b3d9-0394e7eceefb-server-1",
+      "status": "running",
+      "restarting": false,
+      "oomKilled": false,
+      "exitCode": 0,
+      "health": "healthy"
+    }
+  ],
+  "cleanup": "owned project and volumes removed"
+}
