@@ -27151,6 +27151,15 @@
       "uxItems": [],
       "evidence": "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3306",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1f3582fbc0ba5a188db107f61585996a598cf67d9a35f4eb173e8aada32f993c",
+      "uxItems": [],
+      "evidence": "planning/roadmap-1.0.json",
+      "evidenceKind": "path"
     }
   ]
 }

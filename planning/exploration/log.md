@@ -21537,3 +21537,14 @@ Campaign was the one capability with no API, route or content. Now:
   graduated, and no 1.0 milestone is promoted by this slice.
 - **Next:** finish the remaining current-consumer bindings and keep each release claim tied to a
   production-boundary browser, API or content proof before closing its owner row.
+
+### 2026-09-30 — Advance the machine 1.0 checkpoint after Compare landed
+
+- **What landed:** [[D3306]] removed a stale machine-roadmap next action that still ordered the
+  already-shipped module seats and preset activation. The stable-board-and-presets checkpoint now
+  names the bounded Compare consumer migration and its exact remaining presentation/owner work.
+- **What changed:** the checkpoint is dated to the implementation receipt and anchored to the live
+  `evidence-presentation` register row plus [[D3303]]'s closed work-state source. No milestone was
+  promoted to complete; the nine-milestone shape and zero official graduated packs remain.
+- **Next:** finish the remaining voice/Inspector consumer paths and owner rulings; update the
+  checkpoint again only when a separately verified release dimension actually advances.

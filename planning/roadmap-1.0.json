@@ -423,16 +423,19 @@
         "state": "active",
         "capabilities": ["accessibility", "support", "rehearsal"],
         "dependsOn": ["evidence-to-consumer-spine"],
-        "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+        "nextAction": "Finish the remaining guidance voice and Inspector-modal legacy presentation consumers, repair hyphenated raw-id leaks, and discharge evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
-          "at": "2026-09-24",
-          "summary": "Presets now drive every learner module in play, including Guided Hint: a learner-initiated ladder (idea, squares, piece, timing, first move) under Guide me, Support and the Campaign kit, capped by the context ceiling and grounded only in one sealed engine line plus the sealed candidate packet. Remaining: the owner's D1639 ceiling ruling and legacy renderer migration.",
+          "at": "2026-09-30",
+          "summary": "Presets and Guided Hint still drive the shipped learner module seats. Compare's narrative, trajectory, structural strips, routes and leaf-position facts now render through admitted typed components; a comparison objective endpoint with no game result is safe in display and voice. The other voice templates, Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/hint-distance.ts",
             "rfc/hint-distance.md",
             "rfc/module-registration.md",
-            "rfc/intent-presets.md"
+            "rfc/intent-presets.md",
+            "rfc/evidence-presentation.md",
+            "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
+            "apps/web/src/lib/CompareView.svelte"
           ],
           "anchors": [
             {
@@ -454,6 +457,16 @@
               "kind": "work_state",
               "id": "D1639",
               "digest": "sha256:f8ca05acf47fe5b45f4ba69dc3788e09a0d6469584676b3a3d74104a539d56a0"
+            },
+            {
+              "kind": "rfc",
+              "id": "evidence-presentation.md",
+              "digest": "sha256:6e42ae195446b371c269d0e3eef266f2032309ba5ae656e13232e8e9bbfb0d35"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3303",
+              "digest": "sha256:91563064f452b71d5b37d1802782c05a1b26346a7aa539c56cfd495e4ab0ba19"
             }
           ]
         },

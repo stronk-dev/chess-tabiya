@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b42fe4a2d569b89bbe74502f6bddb00d6da6a4b33e25cbb96e08347ee95b9900",
+    "roadmap": "sha256:7a94f3b05bbc05d310e8fbca6d1276231036e2b584b236520abf25c2e5074de7",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:d91c9c74116391b706aa19a15bce69e845529dcf6b2dd54229f0c16ab622ee7b",
+    "workState": "sha256:bd9ff1355c34db694cd7c2ad4ca57c9816e2438319b7bbbae839e4c5f0ba468d",
     "rfcRegister": "sha256:08193efb1494a817f6193d4a0e9397b6a51a06de9d1757078634237c490f9ac3",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 620,
       "doing": 0,
       "blocked": 1056,
-      "done": 1218,
+      "done": 1219,
       "refused": 160
     },
     "workItems": {
@@ -226,16 +226,19 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, related-rehearsal vocabulary and truthful preset identity, then land the eleven typed module seats, preset activation/defaults, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+      "nextAction": "Finish the remaining guidance voice and Inspector-modal legacy presentation consumers, repair hyphenated raw-id leaks, and discharge evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
       "latestCheckpoint": {
-        "at": "2026-09-24",
-        "summary": "Presets now drive every learner module in play, including Guided Hint: a learner-initiated ladder (idea, squares, piece, timing, first move) under Guide me, Support and the Campaign kit, capped by the context ceiling and grounded only in one sealed engine line plus the sealed candidate packet. Remaining: the owner's D1639 ceiling ruling and legacy renderer migration.",
+        "at": "2026-09-30",
+        "summary": "Presets and Guided Hint still drive the shipped learner module seats. Compare's narrative, trajectory, structural strips, routes and leaf-position facts now render through admitted typed components; a comparison objective endpoint with no game result is safe in display and voice. The other voice templates, Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/hint-distance.ts",
           "rfc/hint-distance.md",
           "rfc/module-registration.md",
-          "rfc/intent-presets.md"
+          "rfc/intent-presets.md",
+          "rfc/evidence-presentation.md",
+          "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
+          "apps/web/src/lib/CompareView.svelte"
         ],
         "anchors": [
           {
@@ -257,6 +260,16 @@
             "kind": "work_state",
             "id": "D1639",
             "digest": "sha256:f8ca05acf47fe5b45f4ba69dc3788e09a0d6469584676b3a3d74104a539d56a0"
+          },
+          {
+            "kind": "rfc",
+            "id": "evidence-presentation.md",
+            "digest": "sha256:6e42ae195446b371c269d0e3eef266f2032309ba5ae656e13232e8e9bbfb0d35"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3303",
+            "digest": "sha256:91563064f452b71d5b37d1802782c05a1b26346a7aa539c56cfd495e4ab0ba19"
           }
         ]
       },
