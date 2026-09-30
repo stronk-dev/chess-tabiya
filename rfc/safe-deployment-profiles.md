@@ -8,6 +8,10 @@
   bounded fourth author repair and another genuinely fresh review precede acceptance or production
   implementation.
 - **Author:** Codex on the owner's O13 Choice-C ruling
+- **Implementation checkpoint 2026-10-01:** source and release share security templates without
+  source-only fake index claims. Native CPU OCI/image joins, real model identity/readiness and
+  actual CPU appliance/hosted configuration checks pass; D3338/D3342 retain the full isolated
+  operator journey. Receipt: `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`.
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
 - **Exploration gate:** O13 / D616 selected the stronger appliance floor; R18/F12-A measured and routed D607 as ready to draft

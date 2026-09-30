@@ -53,7 +53,7 @@ RUN grep -A1 '^setuptools==' "/opt/chess-tabiya/requirements-cpu-linux-${TARGETA
     && rm -rf /tmp/setuptools.txt /opt/maia3/build /root/.cache
 
 # The exact Maia3-5M weight bytes, SHA-256 checked (not merely tested for pathname existence).
-ADD --checksum=sha256:ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f562524f \
+ADD --checksum=sha256:ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f562524f --chmod=0444 \
     https://huggingface.co/UofTCSSLab/Maia3-5M/resolve/b6559de2398d7140b985f28fd2c19fb5e47ddabe/maia3-5m.pt \
     /opt/maia3-models/maia3-5m.pt
 
@@ -63,14 +63,20 @@ COPY NOTICE.txt /usr/share/doc/chess-tabiya-maia/NOTICE.txt
 
 # Final validation with networking disabled: CPU-only torch, no GPU distribution or library, the
 # offline model handshake, and the weight digest.
-RUN --network=none python -c "import torch, sys; sys.exit(0 if torch.version.cuda is None and not torch.backends.cuda.is_built() else 'torch is not the CPU-only build')" \
+RUN --network=none chmod 0755 /opt/maia3-models \
+    && chmod 0444 /opt/maia3-models/maia3-5m.pt \
+    && python -c "import torch, sys; sys.exit(0 if torch.version.cuda is None and not torch.backends.cuda.is_built() else 'torch is not the CPU-only build')" \
     && echo "ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f562524f  /opt/maia3-models/maia3-5m.pt" | sha256sum -c - \
-    && printf 'uci\nisready\nquit\n' | maia3-uci --model 5m --checkpoint-path /opt/maia3-models/maia3-5m.pt --use-uci-history | grep -qx readyok \
     && useradd --system --uid 10001 --home-dir /nonexistent --shell /usr/sbin/nologin maia
 
 ENV HF_HUB_OFFLINE=1
 ENV MAIA_READY_FILE=/tmp/ready
 USER maia
+
+# Validate as the actual runtime uid, not root: a remote ADD's default mode can otherwise let
+# this image build successfully while every deployed sidecar fails to read its model.
+RUN --network=none test -r /opt/maia3-models/maia3-5m.pt \
+    && printf 'uci\nisready\nquit\n' | maia3-uci --model 5m --checkpoint-path /opt/maia3-models/maia3-5m.pt --use-uci-history | grep -qx readyok
 
 LABEL org.opencontainers.image.title="chess-tabiya-maia-cpu" \
       org.opencontainers.image.description="Tabiya Maia3 human-move-model sidecar, CPU-only (cpu tier)" \

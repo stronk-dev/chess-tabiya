@@ -2475,6 +2475,7 @@ export TABIYA_APPLICATION_REVISION
 DEPLOY_RENDER_DIR := .cache/deploy/local-build
 LOCAL_SERVER_IMAGE := chess-tabiya-server:dev
 LOCAL_MAIA_IMAGE := chess-tabiya-maia:dev
+DEPLOY_TIER ?= core
 MAINTENANCE_COMPOSE := docker compose -f compose.yaml -f compose.maintenance.yaml
 STORAGE_ADMIN := $(MAINTENANCE_COMPOSE) run --rm storage-admin
 
@@ -2495,7 +2496,19 @@ down:
 	docker compose --profile engines --profile devcontainer down --remove-orphans
 
 deployment-render:
-	node tools/render-deployment.mjs --out $(DEPLOY_RENDER_DIR) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE)
+	node tools/source-deployment.mjs --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE)
+
+.PHONY: deployment-build source-deployment-check source-deployment-identity-drill
+deployment-build:
+	node tools/source-deployment.mjs --build --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE) $(if $(TABIYA_PUBLIC_HOSTNAME),--check-hostname "$(TABIYA_PUBLIC_HOSTNAME)",)
+
+# Permanent source/release separation and native OCI-image identity controls; no daemon needed.
+source-deployment-check:
+	node --test tools/release/source-deployment.test.mjs
+
+# Docker tier: uses the previously built CPU image and its byte-joined native OCI export.
+source-deployment-identity-drill:
+	node tools/source-deployment-identity-drill.mjs --out $(DEPLOY_RENDER_DIR)
 
 # PROFILE=local|appliance|hosted; proxied profiles need TABIYA_PUBLIC_HOSTNAME (and hosted TABIYA_ACME_EMAIL).
 deployment-check: deployment-render
@@ -2504,8 +2517,8 @@ deployment-check: deployment-render
 		docker compose -f $(DEPLOY_RENDER_DIR)/compose.yaml config --quiet; \
 	else \
 		test -n "$(TABIYA_PUBLIC_HOSTNAME)" || { echo "TABIYA_PUBLIC_HOSTNAME is required for $(PROFILE)" >&2; exit 2; }; \
-		node tools/render-deployment.mjs --out $(DEPLOY_RENDER_DIR) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE) --check-hostname "$(TABIYA_PUBLIC_HOSTNAME)"; \
-		TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.$(PROFILE).yaml config --quiet; \
+		node tools/source-deployment.mjs --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE) --check-hostname "$(TABIYA_PUBLIC_HOSTNAME)" || exit $$?; \
+		TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.$(PROFILE).yaml $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) config --quiet || exit $$?; \
 		docker run --rm --network none -e TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" -e TABIYA_ACME_EMAIL="$(or $(TABIYA_ACME_EMAIL),operator@example.org)" \
 			-v "$(abspath $(DEPLOY_RENDER_DIR))/Caddyfile.$(PROFILE):/etc/caddy/Caddyfile:ro" \
 			$$(node -e 'import("./tools/render-deployment.mjs").then((m) => console.log(m.CADDY_IMAGE))') \
@@ -2514,16 +2527,18 @@ deployment-check: deployment-render
 	@echo "deployment-check $(PROFILE): OK"
 
 up-appliance:
+	@test -n "$(TABIYA_PUBLIC_HOSTNAME)" || { echo "TABIYA_PUBLIC_HOSTNAME is required for appliance" >&2; exit 2; }
+	@$(MAKE) --no-print-directory deployment-build
 	@$(MAKE) --no-print-directory deployment-check PROFILE=appliance
-	docker compose build server
-	TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.appliance.yaml up --detach
+	ENGINE_MODE=$(if $(filter cpu,$(DEPLOY_TIER)),maia,mock) TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.appliance.yaml $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) up --detach --pull never
 	@echo "Tabiya (appliance profile): https://$(TABIYA_PUBLIC_HOSTNAME) — trust the root from 'make appliance-ca-export OUT=<file>' on every device"
 
 up-hosted:
 	@test -n "$(TABIYA_ACME_EMAIL)" || { echo "TABIYA_ACME_EMAIL is required for hosted" >&2; exit 2; }
+	@test -n "$(TABIYA_PUBLIC_HOSTNAME)" || { echo "TABIYA_PUBLIC_HOSTNAME is required for hosted" >&2; exit 2; }
+	@$(MAKE) --no-print-directory deployment-build
 	@$(MAKE) --no-print-directory deployment-check PROFILE=hosted
-	docker compose build server
-	TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.hosted.yaml up --detach
+	ENGINE_MODE=$(if $(filter cpu,$(DEPLOY_TIER)),maia,mock) TABIYA_PUBLIC_HOSTNAME="$(TABIYA_PUBLIC_HOSTNAME)" TABIYA_ACME_EMAIL="$(TABIYA_ACME_EMAIL)" docker compose -f $(DEPLOY_RENDER_DIR)/compose.hosted.yaml $(if $(filter cpu,$(DEPLOY_TIER)),--profile engines,) up --detach --pull never
 	@echo "Tabiya (hosted profile): https://$(TABIYA_PUBLIC_HOSTNAME)"
 
 # Copies only the PUBLIC root certificate of the appliance's internal CA (never its key).

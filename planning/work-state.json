@@ -27440,7 +27440,7 @@
       "id": "D3338",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:47f40d10b1e43e8a2798ceb6a39726c8c823cc81384849158cc75178a45dd30d",
+      "sourceDigest": "sha256:e86237f5446ff295f8b870f3ed272906deb4e99c6cdcfb8562a653ed8d9a813f",
       "uxItems": [],
       "owner": "release-engineering"
     },
@@ -27475,7 +27475,7 @@
       "id": "D3342",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:625e22c354616261fb53f1163606cf67db9dc69a38b836663437df131d514dd8",
+      "sourceDigest": "sha256:ea547636dccf011623d7115896e55c7e907f3e290ae77b66df55757f3675aa4d",
       "uxItems": [],
       "owner": "release-engineering"
     },
@@ -27486,6 +27486,33 @@
       "sourceDigest": "sha256:631ccb3dca406d19046240447e65a21499e830b85a96523c744c68e8f5d544b0",
       "uxItems": [],
       "evidence": "planning/provider-health-degradation/maia-identity-framing-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3344",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5e0f825da060964bdc1900adc84d9aef3214b9118ae5a49006579a83bbb11323",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/source-build-identity-2026-10-01.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3345",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0a6f5e92d568984bab06a0342773a2b407f484800bd044c9eb5204d0c5e0837b",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/source-build-identity-2026-10-01.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3346",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3866b04c30d5def375a29b5a53c66208b5b025856cf50218dba2ebf0d0b69b65",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/source-build-identity-2026-10-01.md",
       "evidenceKind": "path"
     }
   ]

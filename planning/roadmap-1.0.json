@@ -719,8 +719,8 @@
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-09-30",
-          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open. D3343 now repairs actual TCP identity fragmentation and aborted-probe contamination under one absolute deadline (five JS/Python and six TCP controls; 42 release tests). D3342 confirms source-build wrappers additionally mount a release index they never generate; D3338 is not solved by digest arguments alone. Source/release distribution repair and an actual isolated operator-startup journey remain required.",
+          "at": "2026-10-01",
+          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open. D3343 now repairs actual TCP identity fragmentation and aborted-probe contamination under one absolute deadline (five JS/Python and six TCP controls; 42 release tests). D3342 confirms source-build wrappers additionally mount a release index they never generate; D3338 is not solved by digest arguments alone. Source/release distribution repair and an actual isolated operator-startup journey remain required. October 1 advances D3338/D3342 with shared source/release security templates, no unproduced source index, genuine native OCI/config/rootfs joins and both CPU configuration checks. Actual builds repair D3344 unsupported Buildx formatting and D3345 mixed-media dangling index. D3346 repairs non-root model startup: the original offline negative now loads the actual model and returns exact TCP identity and both UCI acknowledgements under no network/1536 MiB/no swap. Eleven source controls enter normal release-policy CI (53 tests); Compose parity, pinned Caddy and types pass. Working-tree images include held Explorer changes, not committed-release evidence. The complete isolated up-wrapper TLS/account/run journey and bot/release gates remain open.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -742,13 +742,21 @@
             "apps/server/src/maia-identity.test.ts",
             "workers/maia/sidecar.py",
             "planning/provider-health-degradation/maia-identity-framing-2026-09-30.md",
-            "planning/safe-deployment-profiles/source-build-wrapper-audit-2026-09-30.md"
+            "planning/safe-deployment-profiles/source-build-wrapper-audit-2026-09-30.md",
+            "planning/safe-deployment-profiles/source-build-identity-2026-10-01.md",
+            "tools/source-deployment.mjs",
+            "tools/source-deployment-identity-drill.mjs",
+            "tools/release/lib/local-maia-identity.mjs",
+            "tools/release/source-deployment.test.mjs",
+            "tools/render-deployment.mjs",
+            "tools/verify-packaging.mjs",
+            "workers/maia/Dockerfile"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "verifiable-runtime-distribution.md",
-              "digest": "sha256:92325d90a2d8d0535b6659d1b97a0684e079a8f07c2100dd71910ebbfbf5f298"
+              "digest": "sha256:1ff49e36c8541fd99871e793ca536c1282bcea02783254b107b3fd8c7719ea52"
             },
             {
               "kind": "rfc",
@@ -758,7 +766,7 @@
             {
               "kind": "rfc",
               "id": "safe-deployment-profiles.md",
-              "digest": "sha256:ed2345da9826fb74c6d8945231b89128c4cd8a2dfbf47f1879bc5dc13f8ac743"
+              "digest": "sha256:0a42bbca967141b446c91ee6ef6c4d3246a497eea4139481c38f1ae49a1e0654"
             },
             {
               "kind": "work_state",
@@ -813,12 +821,27 @@
             {
               "kind": "work_state",
               "id": "D3342",
-              "digest": "sha256:625e22c354616261fb53f1163606cf67db9dc69a38b836663437df131d514dd8"
+              "digest": "sha256:ea547636dccf011623d7115896e55c7e907f3e290ae77b66df55757f3675aa4d"
             },
             {
               "kind": "work_state",
               "id": "D3343",
               "digest": "sha256:631ccb3dca406d19046240447e65a21499e830b85a96523c744c68e8f5d544b0"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3344",
+              "digest": "sha256:5e0f825da060964bdc1900adc84d9aef3214b9118ae5a49006579a83bbb11323"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3345",
+              "digest": "sha256:0a6f5e92d568984bab06a0342773a2b407f484800bd044c9eb5204d0c5e0837b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3346",
+              "digest": "sha256:3866b04c30d5def375a29b5a53c66208b5b025856cf50218dba2ebf0d0b69b65"
             }
           ]
         },

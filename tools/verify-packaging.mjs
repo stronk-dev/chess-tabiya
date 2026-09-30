@@ -7,7 +7,7 @@ import { buildSync } from "esbuild";
 
 import { GRADUATION_RULING_ANCHOR_ROOTS } from "../apps/server/src/graduation-ruling-roots.mjs";
 import { missingGraduationRulingCopies } from "./graduation-ruling-packaging.mjs";
-import { CADDY_IMAGE, DEPLOYMENT_ARTIFACTS, renderDeployment } from "./render-deployment.mjs";
+import { CADDY_IMAGE, DEPLOYMENT_ARTIFACTS, renderDeployment, renderSourceDeployment } from "./render-deployment.mjs";
 import { requireEarlyUploadResponse } from "./verify-caddy.mjs";
 
 function required(condition, message) {
@@ -117,6 +117,33 @@ for (const profile of ["appliance", "hosted"]) {
 }
 
 // rfc/storage-backup-recovery.md criterion 12 — the maintenance overlay uses the server's exact image.
+// D3342: source builds share the exact release security/resource topology, but neither mount nor
+// claim a verified release index. These are inert projection fixtures, never deployed identities.
+const sourceDirectory = join(renderedDirectory, "source");
+const { mkdirSync } = await import("node:fs");
+mkdirSync(sourceDirectory);
+const sourceConfig = `sha256:${"d".repeat(64)}`;
+const sourceArtifacts = renderSourceDeployment({ serverImage: digest, maiaImage: sourceConfig, maiaIdentity: { runtime: "oci", imageId: sourceConfig, configDigest: sourceConfig, manifestDigest: digest } });
+for (const [file, text] of Object.entries(sourceArtifacts)) writeFileSync(join(sourceDirectory, file), text);
+for (const [file, env] of [["compose.yaml", process.env], ["compose.appliance.yaml", proxyEnv], ["compose.hosted.yaml", proxyEnv]]) {
+  const releaseConfig = composeConfigWith(env, ["-f", join(renderedDirectory, file), "--profile", "engines"]);
+  const config = composeConfigWith(env, ["-f", join(sourceDirectory, file), "--profile", "engines"]);
+  const { server, maia } = config.services;
+  required(!("TABIYA_RELEASE_MANIFEST" in server.environment) && !("TABIYA_SERVER_IMAGE" in server.environment), `${file}: source cannot claim a release index`);
+  required(!server.volumes.some((volume) => volume.target === "/run/chess-tabiya/release-manifest.json"), `${file}: source cannot mount an unproduced index`);
+  required(maia.environment.MAIA_CONFIG_DIGEST === sourceConfig && !("MAIA_PLATFORM_CONFIG_DIGESTS" in maia.environment), `${file}: source retains exactly its native config identity`);
+  // Compare actual Compose projections after removing only the declared distribution differences.
+  for (const value of [config, releaseConfig]) {
+    delete value.name;
+    for (const role of ["server", "maia", "storage-admin"]) if (value.services[role]) delete value.services[role].image;
+    for (const key of ["TABIYA_RELEASE_MANIFEST", "TABIYA_SERVER_IMAGE"]) delete value.services.server.environment[key];
+    value.services.server.volumes = value.services.server.volumes.filter((volume) => volume.target !== "/run/chess-tabiya/release-manifest.json");
+    for (const key of ["MAIA_IMAGE_ID", "MAIA_MANIFEST_DIGEST", "MAIA_CONFIG_DIGEST", "MAIA_PLATFORM_CONFIG_DIGESTS"]) delete value.services.maia.environment[key];
+    if (value.services.caddy) value.services.caddy.volumes = value.services.caddy.volumes.map((volume) => volume.target === "/etc/caddy/Caddyfile" ? { ...volume, source: "<same Caddyfile>" } : volume);
+  }
+  required(JSON.stringify(config) === JSON.stringify(releaseConfig), `${file}: source/release security or resource topology drifted`);
+}
+
 for (const [label, base, overlay] of [["development", "compose.yaml", "compose.maintenance.yaml"], ["release", releasePath, join(renderedDirectory, "compose.maintenance.yaml")]]) {
   const missing = spawnSync("docker", ["compose", "-f", base, "-f", overlay, "config", "--quiet"], { encoding: "utf8", env: { ...process.env, TABIYA_BACKUP_DIRECTORY: "" } });
   required(missing.status !== 0, `${label} maintenance: an unset backup directory must refuse`);

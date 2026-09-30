@@ -9,6 +9,11 @@
   the bot production route and the measured core steady-state excess are resolved. The
   `release-manifest-schema` register claim is still blocked by [[D2363]]; claims stay `none`.
 - **Author:** Codex on the owner's O13 Choice-C resource-tier ruling
+- **Implementation checkpoint 2026-10-01:** D3346 repairs a real non-root Maia image startup
+  failure; the build's offline model handshake now runs after `USER maia`. Genuine native source
+  OCI exports join to loaded images; source deployment is not a verified release installation.
+  Receipt: `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`. Publication,
+  rights, content, resource and complete release-journey gates remain open.
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` self-hostable appliance floor; `design/03-product-breadth.md` B8
 - **Exploration gate:** R18 measured the built images, rights surface and release workflow; O13/D616 selected signed/attested multi-architecture `core`/`cpu`/`accelerated` tiers

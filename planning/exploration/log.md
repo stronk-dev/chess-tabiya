@@ -21910,3 +21910,30 @@ Campaign was the one capability with no API, route or content. Now:
   and roadmap receipts. D3330's measured per-release migration approval is requested directly
   from the owner; no answer is presumed and no content is rewritten. No protected intent or
   semantic capability image changed. No push, publication, deployment or full 1.0 claim.
+
+## 2026-10-01 — source distribution identity and actual non-root Maia startup
+
+- D3338/D3342 advance through a real native CPU source build, not synthetic deployable digests.
+  One shared template renderer distinguishes source installation from verified release index
+  mounting. Byte/size/platform/rootfs joins bind exported OCI manifests/configs to Docker's actual
+  loaded images; all Compose services use immutable local image IDs. Both CPU appliance/hosted
+  configuration checks and identical source/release security projections pass.
+- Actual builds caught D3344 (unsupported Buildx inspect format) and D3345 (mixed-media index
+  pointing to a missing manifest blob). Real protocol parsing and matching OCI exporter media
+  types repair them; foreign builders/images and malformed descriptors refuse.
+- The first actual offline native Maia image then failed as uid 10001 with a model-file
+  PermissionError despite its root-only build check passing. D3346 now sets explicit directory
+  and file modes and checks readiness after USER maia. The original negative passes real model
+  startup, exact TCP identity and both UCI acknowledgements under no network/1,536 MiB/no swap.
+  The UUID-owned test container is removed; the dedicated pinned local builder/cache is retained
+  without changing any selected/foreign builder. Receipt:
+  `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`.
+- Eleven permanent source controls join the normal release-policy CI glob; release policy has
+  53 passing tests, types are warning-free, both pinned Caddyfiles validate and schema/scaffold
+  checks pass. D3344–D3346 close with work-state, queue, RFC and roadmap evidence. D3338/D3342
+  remain open for the complete isolated up-wrapper TLS/account/run journey. About's existing
+  missing-index not_attached behavior is explicitly preserved, not misstated as shipped refusal.
+- The local working-tree image includes held D3330 Explorer changes, not a committed-release
+  proof. Per-release migration approval remains unanswered and content stays untouched. No
+  protected intent, archive or semantic capability image edited in this checkpoint. No push,
+  publication/deployment, remote CI-green or 1.0 completion claim; the goal remains active.

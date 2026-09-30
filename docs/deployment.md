@@ -58,6 +58,13 @@ make up-appliance TABIYA_PUBLIC_HOSTNAME=tabiya.home.arpa
 make appliance-ca-export OUT=$HOME/tabiya-root.crt
 ```
 
+For the CPU-only human opponent, add `DEPLOY_TIER=cpu` to the source up command. It builds and
+loads a native Maia image plus an OCI layout, verifies their identity join, then renders immutable
+local image IDs. `make deployment-build DEPLOY_TIER=cpu` performs only the build/render step;
+`make source-deployment-identity-drill` verifies real offline model readiness and TCP identity.
+The dedicated pinned `tabiya-source-v1` builder retains its cache without changing your selected
+builder. Source builds report `releaseIndex: not_attached`; they are not verified release installs.
+
 Install `tabiya-root.crt` as a trusted root on each device. A browser "Not private" warning means
 setup failed; never click through it. Only the public root is exported. Caddy's CA key stays in
 its `caddy-data` volume, which is secret operational state and is **not** part of a database
@@ -142,12 +149,12 @@ restore, upgrade and rollback are covered in
 
 Not yet implemented from the RFC: the per-route request-body budget registry (D1846); the Caddy
 8 MiB cap and the existing account-import reader are not a complete endpoint budget authority.
-D3334/D3335 track the unbuildable selector order and stale operation census. Operator
-`deployment-render`/`deployment-check` wrappers still omit required real Maia digests (D3338);
-they also use release-only templates mounting an index their source-build path never generates
-(D3342). The documented source-build up-appliance/up-hosted path is not currently verified usable;
-adding digest flags alone does not fix it. Audit:
-`planning/safe-deployment-profiles/source-build-wrapper-audit-2026-09-30.md`.
+D3334/D3335 track the unbuildable selector order and stale operation census. Source wrappers now
+capture a genuine native OCI/image join and omit release-only index mounts/claims. The CPU source
+build, actual non-root Maia readiness/identity, both operator configuration checks and
+source/release Compose security parity pass. D3338/D3342 remain open for the complete isolated
+up-wrapper TLS/account/run journey; a configuration pass is not that exit. Receipt:
+`planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`.
 `verify-deployment` validates configurations with inert fixtures, not deployable sidecar identities.
 Streaming egress is implemented (D1847/D3332); the proxy
 instrument is a disposable upstream, not proof of every packaged export or a product SSE/WebSocket

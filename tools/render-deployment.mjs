@@ -32,13 +32,28 @@ export function validPublicHostname(value) {
   return !(value.endsWith(".local") || value.endsWith(".localhost") || value === "localhost");
 }
 
-export function renderDeployment({ serverImage, maiaImage, maiaManifestDigest, maiaConfigDigests, root = ROOT }) {
+function renderTemplates({ serverImage, maiaImage, releaseEnvironment, releaseVolume, maiaEnvironment, root }) {
   for (const [name, value] of [["server", serverImage], ["maia", maiaImage]]) {
     if (typeof value !== "string" || !/^[a-z0-9./:_-]+(?:@sha256:[0-9a-f]{64})?$/u.test(value)) {
       throw new Error(`invalid ${name} image reference ${JSON.stringify(value)}`);
     }
   }
-  // rfc/provider-health-degradation.md: the Maia sidecar proves its container identity from these.
+  const rendered = {};
+  for (const [name, source] of Object.entries(DEPLOYMENT_ARTIFACTS)) {
+    const text = readFileSync(join(root, source), "utf8")
+      .replaceAll("__RELEASE_ENVIRONMENT__", releaseEnvironment)
+      .replaceAll("__RELEASE_VOLUME__", releaseVolume)
+      .replaceAll("__MAIA_IDENTITY_ENVIRONMENT__", maiaEnvironment)
+      .replaceAll("__SERVER_IMAGE__", serverImage)
+      .replaceAll("__MAIA_IMAGE__", maiaImage);
+    if (/__[A-Z_]+__/u.test(text)) throw new Error(`${source} left an unrendered placeholder`);
+    rendered[name] = text;
+  }
+  return rendered;
+}
+
+export function renderDeployment({ serverImage, maiaImage, maiaManifestDigest, maiaConfigDigests, root = ROOT }) {
+  // Release callers must supply both native configs, never a source-build fallback.
   if (maiaConfigDigests === null || typeof maiaConfigDigests !== "object" || Array.isArray(maiaConfigDigests)
     || Object.keys(maiaConfigDigests).sort().join(",") !== "linux/amd64,linux/arm64") {
     throw new Error("maia platform configs must contain exactly linux/amd64 and linux/arm64");
@@ -49,17 +64,24 @@ export function renderDeployment({ serverImage, maiaImage, maiaManifestDigest, m
       throw new Error(`invalid maia identity/config ${name} digest ${JSON.stringify(value)}`);
     }
   }
-  const rendered = {};
-  for (const [name, source] of Object.entries(DEPLOYMENT_ARTIFACTS)) {
-    const text = readFileSync(join(root, source), "utf8")
-      .replaceAll("__SERVER_IMAGE__", serverImage)
-      .replaceAll("__MAIA_IMAGE__", maiaImage)
-      .replaceAll("__MAIA_MANIFEST_DIGEST__", maiaManifestDigest)
-      .replaceAll("__MAIA_PLATFORM_CONFIG_DIGESTS__", JSON.stringify(configs));
-    if (/__[A-Z_]+__/u.test(text)) throw new Error(`${source} left an unrendered placeholder`);
-    rendered[name] = text;
+  return renderTemplates({ serverImage, maiaImage, root,
+    releaseEnvironment: "      # The verified post-image release index (docs/release.md).\n      TABIYA_RELEASE_MANIFEST: /run/chess-tabiya/release-manifest.json\n      TABIYA_SERVER_IMAGE: __SERVER_IMAGE__",
+    releaseVolume: "      # Download the release index next to this file; startup verifies its join.\n      - ./release-manifest.json:/run/chess-tabiya/release-manifest.json:ro",
+    maiaEnvironment: `      MAIA_IMAGE_ID: __MAIA_IMAGE__\n      MAIA_MANIFEST_DIGEST: ${maiaManifestDigest}\n      MAIA_PLATFORM_CONFIG_DIGESTS: '${JSON.stringify(configs)}'`,
+  });
+}
+
+/** Source builds use the same security topology, but are not a verified release installation. */
+export function renderSourceDeployment({ serverImage, maiaImage, maiaIdentity, root = ROOT }) {
+  let maiaEnvironment = "      # No engine artifact is claimed until a local OCI export is joined to the loaded image.";
+  if (maiaIdentity !== undefined) {
+    if (maiaIdentity.runtime !== "oci" || maiaIdentity.imageId !== maiaImage || maiaIdentity.configDigest !== maiaImage
+      || ![maiaIdentity.imageId, maiaIdentity.manifestDigest, maiaIdentity.configDigest].every((value) => typeof value === "string" && /^sha256:[0-9a-f]{64}$/u.test(value))) {
+      throw new TypeError("source Maia identity must join the immutable loaded image and its OCI config");
+    }
+    maiaEnvironment = `      MAIA_IMAGE_ID: ${maiaIdentity.imageId}\n      MAIA_MANIFEST_DIGEST: ${maiaIdentity.manifestDigest}\n      MAIA_CONFIG_DIGEST: ${maiaIdentity.configDigest}`;
   }
-  return rendered;
+  return renderTemplates({ serverImage, maiaImage, root, releaseEnvironment: "      # Source build: no post-image release index is mounted or claimed.", releaseVolume: "", maiaEnvironment });
 }
 
 function argument(argv, name) {
