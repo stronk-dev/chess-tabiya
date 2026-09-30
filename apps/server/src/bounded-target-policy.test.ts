@@ -15,7 +15,7 @@ import {
   type EngineTargetPolicyReading,
 } from "@chess-tabiya/runtime";
 
-import { BoundedTargetPolicyCompositionOperation, type BoundedTargetPolicyRequest, type BoundedTargetPolicyResult } from "./bounded-target-policy.js";
+import { BoundedTargetPolicyCompositionOperation, type BoundedTargetPolicyCompositionDependencies, type BoundedTargetPolicyRequest, type BoundedTargetPolicyResult } from "./bounded-target-policy.js";
 import { MockProviderEngineClient, type MockProviderEngineOptions } from "./mock-provider-engine.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
@@ -29,7 +29,7 @@ const base = (overrides: Partial<BoundedTargetPolicyRequest> = {}): BoundedTarge
   return value as unknown as BoundedTargetPolicyRequest;
 };
 
-function compose(options: MockProviderEngineOptions = {}, bounds: { readonly maxQueued?: number } = {}) {
+function compose(options: MockProviderEngineOptions = {}, bounds: { readonly maxQueued?: number; readonly requestedEngine?: BoundedTargetPolicyCompositionDependencies["requestedEngine"] } = {}) {
   const engines = new MockProviderEngineClient(options);
   const scheduler = new ProviderExchangeScheduler({
     descriptors: providerOperationDescriptors({ engines, tablebaseFetch: null, explorerFetch: null, explorerToken: null }),
@@ -39,7 +39,7 @@ function compose(options: MockProviderEngineOptions = {}, bounds: { readonly max
   const operation = new BoundedTargetPolicyCompositionOperation({
     targets: createBoundedTargetBackgroundService(),
     scheduler,
-    requestedEngine: async () => { const identity = await engines.start("stockfish-analysis"); return { id: identity.id, version: identity.version }; },
+    requestedEngine: bounds.requestedEngine ?? (async () => { const identity = await engines.start("stockfish-analysis"); return { id: identity.id, version: identity.version }; }),
     providerTimeoutMs: 20_000,
   });
   return { operation, scheduler };
@@ -181,6 +181,28 @@ describe("Maia one-band bounds (§3, criteria 5–9)", () => {
 });
 
 describe("the composed operation (§5, criteria 10–12)", () => {
+  it.each(["stockfish", "both"] as const)("[10] keeps local facts and successful peers when Stockfish startup rejects (%s)", async (arms) => {
+    let tableReads = 0;
+    const { operation } = compose({ rootScore: () => { tableReads += 1; return "cp 0"; } }, {
+      requestedEngine: async () => { throw new Error("private engine startup failure"); },
+    });
+    const result = completed(await run(operation, base({ arms })));
+    expect(result.local.target.payload.captureUci).toBe("c2a4");
+    expect(result.stockfish).toMatchObject({ kind: "abstained", reason: "input_abstained" });
+    expect(result.maia?.kind ?? null).toBe(arms === "both" ? "evidence" : null);
+    expect(tableReads).toBe(0);
+    expect(JSON.stringify(result)).not.toContain("private engine startup failure");
+  });
+
+  it("[11] returns cancellation rather than leaking an engine startup exception", async () => {
+    const controller = new AbortController();
+    const { operation } = compose({}, { requestedEngine: () => {
+      controller.abort();
+      throw new Error("engine startup rejected during cancellation");
+    } });
+    expect(await run(operation, base({ arms: "stockfish" }), controller.signal)).toEqual({ kind: "refused", reason: "cancelled" });
+  });
+
   it("[10] executes both arms through the application-composed operation", async () => {
     const { operation } = compose({ rootScore: (_fen, move) => move === "c2a4" ? "cp 300" : "cp 0" });
     const result = completed(await run(operation, base()));

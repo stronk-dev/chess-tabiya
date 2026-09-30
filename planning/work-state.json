@@ -27301,6 +27301,15 @@
       "sourceDigest": "sha256:f31c7a9e07ad0fc283acc85dc2018d30ad6028d3f3a7036ee9d2bd7e8b181103",
       "uxItems": [],
       "owner": "core-loop"
+    },
+    {
+      "id": "D3323",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:36568023c81d98505b3e103dbbdf55c1f7b7be77ad29add003f08d0d670d85d6",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/integration-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

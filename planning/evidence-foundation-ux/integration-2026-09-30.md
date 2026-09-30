@@ -72,3 +72,29 @@ untriaged work, register C1–C8, status P1–P7 and roadmap R1–R10 green. No 
 is claimed.
 The generated receipt reads committed authority sources; the two unrelated dirty D872 test files
 do not supply its moved-assertion authorities and remain outside this change set.
+
+## Post-integration provider startup repair — D3323
+
+After the pack-capability integration at `134eeebb`, a production boundary audit found that
+Stockfish identity acquisition was awaited outside the typed failure path. Three new negative
+controls were red: Stockfish-only startup rejection, combined startup rejection with a valid
+independent Maia arm, and cancellation during a synchronous startup exception.
+
+`BoundedTargetPolicyCompositionOperation.#stockfish` now returns the already declared
+`input_abstained` result for acquisition failure and checks cancellation before scheduling tables.
+The total operation retains sealed local facts and a successful peer arm; cancellation remains a
+total `cancelled` refusal. Failed startup schedules zero Stockfish tables and does not expose the
+private exception text. There is no new absence verdict, grading, source factory, private cache or
+learner binding. The shared scheduler still owns actual provider exchanges.
+
+`make evidence-foundation-check` passes **132 tests/eight files**, including the three original
+red controls. `make capability-check` retains all **819 committed declarations** and confirms
+current source digests without regenerating any declaration. `make semantic-validation-check`
+confirms the unchanged generated authority: **81 subjects, zero passed profiles**, 38 passed cases,
+53 population and eight external receipts. Final `make verify` passes **2,682 software tests/309
+files, seven isolated performance tests, 223 content tests/23 files**, and governance, source,
+package/release and compatibility checks. `make test-browser-smoke` passes **56 tests**, with one
+optional live-Maia skip and zero retries. `make staged-process-contracts` passes the exact closeout:
+zero untriaged/unrouted live items, unchanged lifecycle/resource ownership and current roadmap
+anchors. Git hooks remain enabled at commit. The full browser/content/matrix/packaged suite also
+passed on the preceding integration checkpoint; no UI or HTTP route changes in this repair.

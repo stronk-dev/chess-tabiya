@@ -20,6 +20,7 @@ and ownership remain in `planning/work-state.json`; source evidence is
 | [[D3317]] | assistance-and-presentation; `rfc/pack-training-forms.md` D2 and owner ADR-0006 discharge | Persisted attempt number selects the exact owner-defined rung→nine-field clamp projection. Enforce the existing assistance intersection in live runs, including rewind, restart and reveal; a pure numeric helper is insufficient. |
 | [[D3318]] | content-and-theory; executable training-form obligations in that RFC, after its actual prerequisites | Load and expose ordered training sets through API/client progression, repeat/re-offer and schedule isolation; apply scaled tempo in real play. Authored examples remain a separate discharge. |
 | [[D3322]] | core-loop; audit the existing tempo/objective contract before modifying the run authority | Bind the published unauthored `outpaced → failed` default to a real run transition and prove its terminal behavior. A source-site census or exported helper cannot discharge this. |
+| [[D3323]] | evidence-foundation; already implementing bounded-target-policy composition | Stockfish startup rejection must produce the existing typed abstention, retain local facts and an independent successful Maia arm, and preserve total cancellation. No new grading or learner binding is authorized. |
 
 These rows are continuation work, not additional acceptance or a waiver of open owner questions.
 

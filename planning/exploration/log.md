@@ -21714,3 +21714,20 @@ Campaign was the one capability with no API, route or content. Now:
 - **Next:** finish provider and consumer obligations against the integrated foundation before
   widening authored content. Detailed receipt: `planning/pack-capability-contract/integration-2026-09-30.md`.
   Unrelated D872 edits and untracked reviewer files remain untouched.
+
+### 2026-09-30 — Preserve typed bounded-target results when Stockfish startup fails
+
+- **Finding and repair:** D3323 reproduced Stockfish-only and combined startup rejection plus
+  cancellation as three untyped operation failures. The engine arm now returns its existing
+  `input_abstained` result; sealed local facts and a successful Maia peer survive, cancellation
+  remains a total refusal, and failed acquisition schedules no Stockfish tables or leaked error text.
+- **Boundary:** this process-local operation remains inspector-only with zero learner bindings.
+  No new chess claim, grade, source receipt or search policy is minted. Provider exchanges remain
+  scheduler-owned. All 819 committed capability declarations remain exact; no regeneration was used.
+- **Verification:** 132 focused foundation tests pass, including the original red controls, and
+  capability/semantic checks pass. The unchanged semantic authority is 81 subjects with zero fully
+  validated profiles. Full aggregate and browser-smoke results are recorded in
+  `planning/evidence-foundation-ux/integration-2026-09-30.md` before commit. The roadmap receives an
+  evidence-anchored incremental checkpoint, not a capability/milestone promotion.
+- **Remaining:** live provider population and actual consumer bindings still gate 1.0. The work
+  continues locally with no Claude paste/handoff, new worktree, push or remote CI claim.

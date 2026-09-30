@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:fe203dbe54fe63922dc0f48a36ee2f19dab52c1c2fc207cda950c7ed65b4c86f",
+    "roadmap": "sha256:ea579e220147aed9af757da1b51cc3e6bbd730df2c58a008852c14c3c4315105",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:7c436f062c70e92efc50f01db25899156286b0d6ca3c8a9f3deed063503e9d65",
+    "workState": "sha256:5064db35749d315f2c7f166e75feff7aaa994e052631d6e4fcf6a4d6a3d3e7e6",
     "rfcRegister": "sha256:346c2ac1b381461072e1fd75c2cff665d8864a1693112e3d6ee0d08ce987bf90",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 623,
       "doing": 0,
       "blocked": 1049,
-      "done": 1239,
+      "done": 1240,
       "refused": 160
     },
     "workItems": {
@@ -189,7 +189,7 @@
       "nextAction": "The four evidence-foundation implementations and pack capability lanes 0.30–0.32 are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings and provider-exchange caller migration. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
       "latestCheckpoint": {
         "at": "2026-09-30",
-        "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes.",
+        "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. The original three red controls pass and all 819 committed meanings remain unchanged.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -237,6 +237,11 @@
             "kind": "rfc",
             "id": "famous-games.md",
             "digest": "sha256:69545e3b12e45e4a1a6cba81255232640f0423a219c76123ea578c09db5f1c95"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3323",
+            "digest": "sha256:36568023c81d98505b3e103dbbdf55c1f7b7be77ad29add003f08d0d670d85d6"
           }
         ]
       },

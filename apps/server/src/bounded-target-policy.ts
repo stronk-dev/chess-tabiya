@@ -141,7 +141,14 @@ export class BoundedTargetPolicyCompositionOperation {
   }
 
   async #stockfish(local: BoundedTargetPolicyLocalFacts, request: BoundedTargetPolicyRequest, scope: ProviderRequestScope, signal: AbortSignal): Promise<EngineTargetPolicyFactoryResult> {
-    const engine = await this.#dependencies.requestedEngine();
+    let engine: Awaited<ReturnType<BoundedTargetPolicyCompositionDependencies["requestedEngine"]>>;
+    try {
+      engine = await this.#dependencies.requestedEngine();
+    } catch {
+      // Acquisition failure is missing input, not loss of valid local facts or a peer arm.
+      return engineAbstained("input_abstained");
+    }
+    if (signal.aborted) return engineAbstained("input_abstained");
     const results = await Promise.all(ENGINE_DEPTHS.map((depth) => this.#dependencies.scheduler.get({
       operation: "stockfish.legal_root_table@1",
       request: Object.freeze({ fen: local.immediate.payload.afterFen, bound: Object.freeze({ kind: "depth", value: depth }), requestedWidth: "all_legal", moveIdentity: "chessops-king-takes-rook@1", requestedEngine: Object.freeze({ id: engine.id, version: engine.version }), timeoutMs: this.#dependencies.providerTimeoutMs }) satisfies StockfishLegalRootTableRequest,
