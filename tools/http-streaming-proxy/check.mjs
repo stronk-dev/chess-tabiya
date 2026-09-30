@@ -37,7 +37,7 @@ async function until(label, probe, timeoutMs = 30_000) {
 try {
   const nodeImage = /^FROM (docker\.io\/library\/node:[^\s]+@sha256:[0-9a-f]{64}) /mu.exec(readFileSync(join(root, "apps/server/Dockerfile"), "utf8"))?.[1];
   assert.ok(nodeImage, "the upstream runtime must use the production checksum-pinned Node base");
-  const rendered = renderDeployment({ serverImage: nodeImage, maiaImage: nodeImage, maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigest: `sha256:${"0".repeat(64)}` });
+  const rendered = renderDeployment({ serverImage: nodeImage, maiaImage: nodeImage, maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigests: { "linux/amd64": `sha256:${"0".repeat(64)}`, "linux/arm64": `sha256:${"0".repeat(64)}` } });
   const config = join(work, "Caddyfile.appliance");
   writeFileSync(config, rendered["Caddyfile.appliance"]);
   const data = join(work, "data");

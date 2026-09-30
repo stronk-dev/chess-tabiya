@@ -67,6 +67,9 @@ services:
       MAIA_LISTEN_HOST: 0.0.0.0
       MAIA_LISTEN_PORT: "7000"
       MAIA_READY_FILE: /tmp/ready
+      MAIA_IMAGE_ID: __MAIA_IMAGE__
+      MAIA_MANIFEST_DIGEST: __MAIA_MANIFEST_DIGEST__
+      MAIA_PLATFORM_CONFIG_DIGESTS: '__MAIA_PLATFORM_CONFIG_DIGESTS__'
     networks:
       - provider_edge
     healthcheck:

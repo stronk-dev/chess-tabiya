@@ -27452,6 +27452,24 @@
       "uxItems": [],
       "evidence": "planning/safe-deployment-profiles/http-ingress-2026-09-30.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3340",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:abaf49b49875618d1bbfc510f93167e5ef950634e660fac16d35fbd904dee7cc",
+      "uxItems": [],
+      "evidence": "planning/provider-health-degradation/maia-platform-identity-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3341",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0566d5c5ba245f3f7b341b8f364266af4ef26de6acb044482e273740f31d531a",
+      "uxItems": [],
+      "evidence": "planning/provider-health-degradation/maia-platform-identity-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

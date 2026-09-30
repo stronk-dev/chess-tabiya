@@ -217,6 +217,7 @@ if (releaseDepth === undefined || (releaseDepth !== 0 && releaseDepth < 2)) fail
 const nativeReleaseProof = workflowJob(await readText(".github/workflows/release.yml"), "native-proof");
 if (!nativeReleaseProof?.includes("make http-streaming-proxy-check")) failures.push("Native release proof needs the pinned TLS-proxy streaming check on each architecture");
 if (!nativeReleaseProof?.includes("make verify-deployment")) failures.push("Native release proof needs both pinned rendered Caddy configurations validated on each architecture");
+if (!nativeReleaseProof?.includes("make maia-identity-check")) failures.push("Native release proof needs Maia identity transport on each architecture");
 
 const browserWorkflow = await readText(".github/workflows/browser.yml");
 const missingBrowserTiers = missingRequiredText(browserWorkflow, [

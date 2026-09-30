@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import platform
 import re
 import selectors
 import signal
@@ -28,8 +29,24 @@ DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
 def container_identity() -> bytes:
     image_id = os.environ.get("MAIA_IMAGE_ID", "")
     manifest = os.environ.get("MAIA_MANIFEST_DIGEST", "")
-    config = os.environ.get("MAIA_CONFIG_DIGEST", "")
-    if image_id == "" or not DIGEST.match(manifest) or not DIGEST.match(config):
+    # Release metadata contains both platform configs; choose the actual running architecture.
+    # The scalar remains a development-only input when no release map was supplied. An invalid
+    # release map never falls back to it, even if that scalar would be well formed.
+    config = ""
+    encoded_configs = os.environ.get("MAIA_PLATFORM_CONFIG_DIGESTS")
+    if encoded_configs is None:
+        config = os.environ.get("MAIA_CONFIG_DIGEST", "")
+    else:
+        try:
+            configs = json.loads(encoded_configs)
+            native = {"x86_64": "linux/amd64", "aarch64": "linux/arm64", "arm64": "linux/arm64"}.get(platform.machine())
+            if isinstance(configs, dict) and set(configs) == {"linux/amd64", "linux/arm64"} and all(
+                isinstance(value, str) and DIGEST.fullmatch(value) for value in configs.values()
+            ):
+                config = configs.get(native, "")
+        except (ValueError, TypeError):
+            pass
+    if image_id == "" or not DIGEST.fullmatch(manifest) or not DIGEST.fullmatch(config):
         body = {"unavailable": "container identity was not injected into this deployment"}
     else:
         body = {"runtime": "oci", "imageId": image_id, "manifestDigest": manifest, "configDigest": config}

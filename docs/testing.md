@@ -119,3 +119,9 @@ Origin refusal and cancellation-response delivery on unfinished uploads through 
 `make verify-deployment` validates both exact rendered Caddyfiles with inert identity fixtures,
 not the operator startup wrappers or an actual Maia deployment. Native release CI runs these
 proxy/configuration checks on both architectures; a local pass is not remote matrix evidence.
+
+`make maia-identity-check` tests both native config choices and the actual Python sidecar→server
+artifact-probe protocol using every rendered profile's identity metadata. Its UCI process is a
+readiness-only stub, not model inference. The four JS/Python checks also run in the offline
+release-policy tier, and the four TCP tests run in software contracts. Native release CI runs the
+named identity target on both architectures. Python 3 is required for these bounded sidecar tests.

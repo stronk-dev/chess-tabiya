@@ -2211,6 +2211,11 @@ release-policy-check:
 	node --test tools/release/*.test.mjs
 	node tools/release/release-policy.mjs
 
+.PHONY: maia-identity-check
+maia-identity-check:
+	node --test tools/release/maia-identity.test.mjs
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/maia-identity.test.ts
+
 # Builds the release server image natively, proves the allow-list/census, SBOM + licence gate,
 # embedded NOTICE/licences, a loader-traced boot to /healthz under 512 MiB without swap, and a local
 # prerelease release set (manifest + SHA256SUMS + mounted-index About join). Pushes nothing.

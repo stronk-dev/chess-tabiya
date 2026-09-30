@@ -10,6 +10,7 @@ import { execFileSync } from "node:child_process";
 import { appendFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
+import { readPlatformConfigDigests } from "./lib/platform-configs.mjs";
 
 const { values } = parseArgs({ options: {
   images: { type: "string" }, sha: { type: "string" }, maia: { type: "string" }, "github-output": { type: "string" },
@@ -31,10 +32,9 @@ if (values.images !== undefined) {
     }
     run("docker", ["buildx", "imagetools", "create", "-t", `${repositories[role]}:candidate-${values.sha}`, ...Object.values(platforms).map((digest) => `${repositories[role]}@${digest}`)]);
     const index = JSON.parse(run("docker", ["buildx", "imagetools", "inspect", `${repositories[role]}:candidate-${values.sha}`, "--format", "{{json .Manifest}}"])).digest;
-    // The provider-health identity probe reports a config digest; record the amd64 platform's
-    // (the rendered Compose carries one value, as tools/render-deployment.mjs defines it).
-    const config = JSON.parse(run("docker", ["buildx", "imagetools", "inspect", "--raw", `${repositories[role]}@${platforms["linux/amd64"]}`])).config.digest;
-    images[role] = { subject: `${repositories[role]}@${index}`, platforms, fossEligible: true, configDigest: config };
+    const configDigests = readPlatformConfigDigests(repositories[role], platforms,
+      (subject) => run("docker", ["buildx", "imagetools", "inspect", "--raw", subject]));
+    images[role] = { subject: `${repositories[role]}@${index}`, platforms, fossEligible: true, configDigests };
   }
   output([`images=${JSON.stringify(images)}`]);
   console.log(JSON.stringify(images, null, 2));

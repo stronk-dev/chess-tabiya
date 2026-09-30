@@ -43,7 +43,8 @@ const digest = `sha256:${"a".repeat(64)}`;
 const serverImage = `ghcr.io/stronk-dev/chess-tabiya-server@${digest}`;
 const maiaImage = `ghcr.io/stronk-dev/chess-tabiya-maia@${digest}`;
 const renderedDirectory = mkdtempSync(join(tmpdir(), "chess-tabiya-deploy-"));
-const renderedArtifacts = renderDeployment({ serverImage, maiaImage, maiaManifestDigest: digest, maiaConfigDigest: `sha256:${"b".repeat(64)}` });
+const fixtureConfigs = { "linux/amd64": `sha256:${"b".repeat(64)}`, "linux/arm64": `sha256:${"c".repeat(64)}` };
+const renderedArtifacts = renderDeployment({ serverImage, maiaImage, maiaManifestDigest: digest, maiaConfigDigests: fixtureConfigs });
 required(
   JSON.stringify(Object.keys(renderedArtifacts).sort()) === JSON.stringify(Object.keys(DEPLOYMENT_ARTIFACTS).sort()),
   "Every deployment artifact must render",
@@ -134,6 +135,9 @@ const { withoutMaia } = await import("./release/lib/release-set.mjs");
 for (const [file, env] of [["compose.yaml", process.env], ["compose.appliance.yaml", proxyEnv], ["compose.hosted.yaml", proxyEnv]]) {
   const config = composeConfigWith(env, ["-f", join(renderedDirectory, file), "--profile", "engines"]);
   const { server, maia } = config.services;
+  required(maia.environment.MAIA_IMAGE_ID === maiaImage && maia.environment.MAIA_MANIFEST_DIGEST === digest, `${file}: real Maia identity fields must be rendered for every profile`);
+  required(JSON.stringify(JSON.parse(maia.environment.MAIA_PLATFORM_CONFIG_DIGESTS)) === JSON.stringify(fixtureConfigs), `${file}: both native config digests must survive Compose interpolation`);
+  required(!("MAIA_CONFIG_DIGEST" in maia.environment), `${file}: a release cannot carry the legacy single-platform config`);
   required(server.volumes.some((volume) => volume.target === "/run/chess-tabiya/release-manifest.json" && volume.read_only === true), `${file}: the release index must be mounted read-only`);
   required(server.environment.TABIYA_SERVER_IMAGE === serverImage, `${file}: the server must declare its digest-pinned subject`);
   required(Number(server.mem_limit) === 512 * 1024 * 1024 && Number(server.memswap_limit) === 512 * 1024 * 1024, `${file}: 512 MiB core limit without swap`);

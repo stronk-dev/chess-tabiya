@@ -72,14 +72,16 @@ const WITHHELD = `localhost/maia-withheld@sha256:${"0".repeat(64)}`;
 
 /**
  * Renders the six deployment files for a release into `dir`. `maia` is `{ subject, manifestDigest,
- * configDigest }`, or null when the release withholds maia-cpu (the sidecar is then removed).
+ * configDigests: { "linux/amd64", "linux/arm64" } }`, or null when Maia is withheld.
  */
 export function writeReleaseDeployment(dir, { serverSubject, maia = null }) {
   const rendered = renderDeployment({
     serverImage: serverSubject,
     maiaImage: maia?.subject ?? WITHHELD,
     maiaManifestDigest: maia?.manifestDigest ?? `sha256:${"0".repeat(64)}`,
-    maiaConfigDigest: maia?.configDigest ?? `sha256:${"0".repeat(64)}`,
+    maiaConfigDigests: maia?.configDigests ?? (maia === null ? {
+      "linux/amd64": `sha256:${"0".repeat(64)}`, "linux/arm64": `sha256:${"0".repeat(64)}`,
+    } : undefined),
   });
   for (const [name, text] of Object.entries(rendered)) {
     const final = maia === null ? withoutMaia(text) : text;

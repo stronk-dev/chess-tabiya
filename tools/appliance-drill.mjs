@@ -57,7 +57,7 @@ function receipt(result) {
 }
 
 async function storageDrill() {
-  const rendered = renderDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev", maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigest: `sha256:${"0".repeat(64)}` });
+  const rendered = renderDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev", maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigests: { "linux/amd64": `sha256:${"0".repeat(64)}`, "linux/arm64": `sha256:${"0".repeat(64)}` } });
   for (const [name, text] of Object.entries(rendered)) writeFileSync(join(work, name), text);
   const backups = join(work, "backups");
   run("mkdir", ["-p", backups]);
@@ -122,7 +122,7 @@ async function storageDrill() {
 
 async function applianceDrill() {
   const hostname = "tabiya.example.test";
-  const rendered = renderDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev", maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigest: `sha256:${"0".repeat(64)}` });
+  const rendered = renderDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev", maiaManifestDigest: `sha256:${"0".repeat(64)}`, maiaConfigDigests: { "linux/amd64": `sha256:${"0".repeat(64)}`, "linux/arm64": `sha256:${"0".repeat(64)}` } });
   for (const [name, text] of Object.entries(rendered)) writeFileSync(join(work, name), text);
   const volume = `${id}-data`;
   const env = { TABIYA_PUBLIC_HOSTNAME: hostname, TABIYA_DATA_VOLUME: volume };

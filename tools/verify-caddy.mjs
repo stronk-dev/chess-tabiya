@@ -16,7 +16,7 @@ export function validateCaddyProfiles() {
   const fixtureDigest = `sha256:${"a".repeat(64)}`;
   const artifacts = renderDeployment({
     serverImage: `fixture.invalid/server@${fixtureDigest}`, maiaImage: `fixture.invalid/maia@${fixtureDigest}`,
-    maiaManifestDigest: fixtureDigest, maiaConfigDigest: `sha256:${"b".repeat(64)}`,
+    maiaManifestDigest: fixtureDigest, maiaConfigDigests: { "linux/amd64": `sha256:${"b".repeat(64)}`, "linux/arm64": `sha256:${"c".repeat(64)}` },
   });
   const work = mkdtempSync(join(tmpdir(), "tabiya-caddy-validate-"));
   try {

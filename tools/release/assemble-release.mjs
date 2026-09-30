@@ -31,7 +31,7 @@ for (const role of Object.keys(images)) {
 const maiaImage = images["maia-cpu"];
 writeReleaseDeployment(out, {
   serverSubject: images.server.subject,
-  maia: maiaImage === undefined ? null : { subject: maiaImage.subject, manifestDigest: maiaImage.subject.split("@")[1], configDigest: maiaImage.configDigest },
+  maia: maiaImage === undefined ? null : { subject: maiaImage.subject, manifestDigest: maiaImage.subject.split("@")[1], configDigests: maiaImage.configDigests },
 });
 writeFileSync(join(out, RELEASE_MANIFEST_NAME), generateReleaseManifest({
   dir: out,

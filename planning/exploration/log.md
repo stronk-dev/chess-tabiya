@@ -21869,3 +21869,23 @@ Campaign was the one capability with no API, route or content. Now:
   intent sentence was falsified; no content, provider identity or semantic version is changed.
   The unapproved Explorer migration remains unstaged and full application gates remain blocked.
   No push, deployment, RFC archive or full milestone/1.0 readiness is claimed; goal stays active.
+
+## 2026-09-30 — native Maia release identity, D3340/D3341
+
+- The release publisher read only the amd64 config; appliance/hosted omitted sidecar identity.
+  Permanent capture/render/Python negatives first reproduced these defects. The publisher now
+  reads both immutable platform manifests; assembly/rendering retain both native config digests.
+  All profiles inject the map and the sidecar selects its actual CPU, refusing incomplete,
+  malformed or extra-platform maps and unknown architectures without scalar fallback.
+- Four JS/Python controls and four real sidecar→production probe TCP controls pass. The latter
+  use each rendered profile's metadata and an explicitly readiness-only UCI stub, not inference.
+  The first TCP run caught the host's arm64 versus Linux aarch64 spelling; both now select arm64.
+- Release policy (41 tests), actual Compose identity projection, three verifier controls, both
+  pinned Caddy validations, five previous TLS proxy proofs, warning-free types and fourteen
+  scaffold/hook controls pass. Native release CI requires the identity target on both architectures;
+  no remotely executed matrix, real Maia model or complete bot journey is claimed.
+- D3340/D3341 close with the queue, work-state, RFC checkpoint and roadmap receipt. Receipt:
+  `planning/provider-health-degradation/maia-platform-identity-2026-09-30.md`. D3338's actual
+  operator-wrapper identity, production/calibration receipts, model rights, official content and
+  full release remain open. The D3330 Explorer migration stays unstaged, and no content or
+  protected intent changed. Nothing pushed, published or deployed; 1.0 goal stays active.

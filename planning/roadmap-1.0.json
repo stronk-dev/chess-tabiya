@@ -720,7 +720,7 @@
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made.",
+          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -735,7 +735,12 @@
             "tools/verify-caddy.mjs",
             "apps/server/src/http-streaming.test.ts",
             "tools/http-streaming-proxy/check.mjs",
-            ".github/workflows/release.yml"
+            ".github/workflows/release.yml",
+            "rfc/provider-health-degradation.md",
+            "planning/provider-health-degradation/maia-platform-identity-2026-09-30.md",
+            "tools/release/maia-identity.test.mjs",
+            "apps/server/src/maia-identity.test.ts",
+            "workers/maia/sidecar.py"
           ],
           "anchors": [
             {
@@ -787,6 +792,21 @@
               "kind": "work_state",
               "id": "D3339",
               "digest": "sha256:9705da8787ea3ebdd9834a1852a9e87734da477396485004527769c0eef0347c"
+            },
+            {
+              "kind": "rfc",
+              "id": "provider-health-degradation.md",
+              "digest": "sha256:9090405d1891c082f9d50e5ff817c9e682f3089f0414f04656d83345b0c317ad"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3340",
+              "digest": "sha256:abaf49b49875618d1bbfc510f93167e5ef950634e660fac16d35fbd904dee7cc"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3341",
+              "digest": "sha256:0566d5c5ba245f3f7b341b8f364266af4ef26de6acb044482e273740f31d531a"
             }
           ]
         },

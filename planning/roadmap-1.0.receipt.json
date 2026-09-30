@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:011177b7315fb732a15c27e9ac5812c5e0d6ec3cccd5463edf140c7fda4039a9",
+    "roadmap": "sha256:2767715d3d2b13a567d6bdacf8b05b4940d1fe2827fc1fddac10cd3ee216718f",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:f9177e4c64fa60ac40a687d6b0abacfd4ecfaa0d3bacb077a5e2b33484ee3220",
-    "rfcRegister": "sha256:fbbcf83fe1b66b5aeaf6b474c048633af19cdbc4073277aab99212b6abf7ae45",
+    "workState": "sha256:7a4740ecd3f4b8906a669b0f4dba0834fb1a7be482cbc92af32b7707e968ba7a",
+    "rfcRegister": "sha256:54d78c4859173cb4feada96a3688f05a8d8249fb63b482a38722fe2d9a9dba93",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:5a0e55bb9a2ab76b477e1b08f40b8ac44c55c47e051ff14ad18aab024da13c39",
@@ -33,7 +33,7 @@
       "todo": 626,
       "doing": 0,
       "blocked": 1051,
-      "done": 1251,
+      "done": 1253,
       "refused": 160
     },
     "workItems": {
@@ -605,7 +605,7 @@
       "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
         "at": "2026-09-30",
-        "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made.",
+        "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open.",
         "impact": "advanced",
         "evidence": [
           "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -620,7 +620,12 @@
           "tools/verify-caddy.mjs",
           "apps/server/src/http-streaming.test.ts",
           "tools/http-streaming-proxy/check.mjs",
-          ".github/workflows/release.yml"
+          ".github/workflows/release.yml",
+          "rfc/provider-health-degradation.md",
+          "planning/provider-health-degradation/maia-platform-identity-2026-09-30.md",
+          "tools/release/maia-identity.test.mjs",
+          "apps/server/src/maia-identity.test.ts",
+          "workers/maia/sidecar.py"
         ],
         "anchors": [
           {
@@ -672,6 +677,21 @@
             "kind": "work_state",
             "id": "D3339",
             "digest": "sha256:9705da8787ea3ebdd9834a1852a9e87734da477396485004527769c0eef0347c"
+          },
+          {
+            "kind": "rfc",
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:9090405d1891c082f9d50e5ff817c9e682f3089f0414f04656d83345b0c317ad"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3340",
+            "digest": "sha256:abaf49b49875618d1bbfc510f93167e5ef950634e660fac16d35fbd904dee7cc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3341",
+            "digest": "sha256:0566d5c5ba245f3f7b341b8f364266af4ef26de6acb044482e273740f31d531a"
           }
         ]
       },

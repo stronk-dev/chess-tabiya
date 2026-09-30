@@ -806,6 +806,12 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 
 ## Changelog
 
+- 2026-09-30 — D3340/D3341 repair release identity: all profiles inject both native platform config
+  digests read from immutable registry manifests; the sidecar selects its native config and refuses
+  malformed maps without scalar fallback. Four JS/Python and four real TCP controls, release policy,
+  packaging, pinned proxy/configuration and type checks pass. Receipt:
+  `planning/provider-health-degradation/maia-platform-identity-2026-09-30.md`. This is not inference,
+  bot calibration, a remote release matrix or D3338's local-wrapper discharge.
 - 2026-09-24 — **implemented at the one claim-free checkpoint** on the owner's direct-implementation
   ruling, with no review round. Receipt:
   `planning/provider-health-degradation/implementation-receipt-2026-09-24.md`. It maps each criterion

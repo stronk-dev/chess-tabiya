@@ -4,7 +4,7 @@
 // workflow, the local Make targets and tools/verify-packaging.mjs.
 //
 //   node tools/render-deployment.mjs --out <dir> --server-image <ref> --maia-image <ref> \
-//     --maia-manifest-digest <sha256:…> --maia-config-digest <sha256:…>
+//     --maia-manifest-digest <sha256:…> --maia-amd64-config-digest <sha256:…> --maia-arm64-config-digest <sha256:…>
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,16 +32,21 @@ export function validPublicHostname(value) {
   return !(value.endsWith(".local") || value.endsWith(".localhost") || value === "localhost");
 }
 
-export function renderDeployment({ serverImage, maiaImage, maiaManifestDigest, maiaConfigDigest, root = ROOT }) {
+export function renderDeployment({ serverImage, maiaImage, maiaManifestDigest, maiaConfigDigests, root = ROOT }) {
   for (const [name, value] of [["server", serverImage], ["maia", maiaImage]]) {
     if (typeof value !== "string" || !/^[a-z0-9./:_-]+(?:@sha256:[0-9a-f]{64})?$/u.test(value)) {
       throw new Error(`invalid ${name} image reference ${JSON.stringify(value)}`);
     }
   }
   // rfc/provider-health-degradation.md: the Maia sidecar proves its container identity from these.
-  for (const [name, value] of [["maia manifest", maiaManifestDigest], ["maia config", maiaConfigDigest]]) {
+  if (maiaConfigDigests === null || typeof maiaConfigDigests !== "object" || Array.isArray(maiaConfigDigests)
+    || Object.keys(maiaConfigDigests).sort().join(",") !== "linux/amd64,linux/arm64") {
+    throw new Error("maia platform configs must contain exactly linux/amd64 and linux/arm64");
+  }
+  const configs = { "linux/amd64": maiaConfigDigests["linux/amd64"], "linux/arm64": maiaConfigDigests["linux/arm64"] };
+  for (const [name, value] of [["maia manifest", maiaManifestDigest], ...Object.entries(configs)]) {
     if (typeof value !== "string" || !/^sha256:[0-9a-f]{64}$/u.test(value)) {
-      throw new Error(`invalid ${name} digest ${JSON.stringify(value)}`);
+      throw new Error(`invalid maia identity/config ${name} digest ${JSON.stringify(value)}`);
     }
   }
   const rendered = {};
@@ -50,7 +55,7 @@ export function renderDeployment({ serverImage, maiaImage, maiaManifestDigest, m
       .replaceAll("__SERVER_IMAGE__", serverImage)
       .replaceAll("__MAIA_IMAGE__", maiaImage)
       .replaceAll("__MAIA_MANIFEST_DIGEST__", maiaManifestDigest)
-      .replaceAll("__MAIA_CONFIG_DIGEST__", maiaConfigDigest);
+      .replaceAll("__MAIA_PLATFORM_CONFIG_DIGESTS__", JSON.stringify(configs));
     if (/__[A-Z_]+__/u.test(text)) throw new Error(`${source} left an unrendered placeholder`);
     rendered[name] = text;
   }
@@ -68,9 +73,9 @@ if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(
   const serverImage = argument(argv, "--server-image");
   const maiaImage = argument(argv, "--maia-image");
   const maiaManifestDigest = argument(argv, "--maia-manifest-digest");
-  const maiaConfigDigest = argument(argv, "--maia-config-digest");
-  if (out === undefined || serverImage === undefined || maiaImage === undefined || maiaManifestDigest === undefined || maiaConfigDigest === undefined) {
-    console.error("usage: render-deployment.mjs --out <dir> --server-image <ref> --maia-image <ref> --maia-manifest-digest <sha256:…> --maia-config-digest <sha256:…>");
+  const maiaConfigDigests = { "linux/amd64": argument(argv, "--maia-amd64-config-digest"), "linux/arm64": argument(argv, "--maia-arm64-config-digest") };
+  if (out === undefined || serverImage === undefined || maiaImage === undefined || maiaManifestDigest === undefined || Object.values(maiaConfigDigests).some((value) => value === undefined)) {
+    console.error("usage: render-deployment.mjs --out <dir> --server-image <ref> --maia-image <ref> --maia-manifest-digest <sha256:…> --maia-amd64-config-digest <sha256:…> --maia-arm64-config-digest <sha256:…>");
     process.exit(2);
   }
   const hostname = argument(argv, "--check-hostname");
@@ -79,6 +84,6 @@ if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(
     process.exit(2);
   }
   mkdirSync(out, { recursive: true });
-  for (const [name, text] of Object.entries(renderDeployment({ serverImage, maiaImage, maiaManifestDigest, maiaConfigDigest }))) writeFileSync(join(out, name), text);
+  for (const [name, text] of Object.entries(renderDeployment({ serverImage, maiaImage, maiaManifestDigest, maiaConfigDigests }))) writeFileSync(join(out, name), text);
   console.error(`rendered ${Object.keys(DEPLOYMENT_ARTIFACTS).length} deployment artifacts into ${out}`);
 }

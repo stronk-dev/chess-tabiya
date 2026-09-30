@@ -104,12 +104,22 @@ failed optional provider never changes its status.
 
 Before each networked-Maia generation spawns, `maiaContainerProbe` sends one `tabiya-identity`
 request to the sidecar. The sidecar answers with the OCI identity the release compiler injected
-(`MAIA_IMAGE_ID`, `MAIA_MANIFEST_DIGEST`, `MAIA_CONFIG_DIGEST`, rendered from the registry's own
-build outputs in `.github/workflows/release.yml`). Without that identity the probe returns `null`.
+(`MAIA_IMAGE_ID`, `MAIA_MANIFEST_DIGEST` and `MAIA_PLATFORM_CONFIG_DIGESTS`, rendered from the registry's
+own immutable platform manifests in `.github/workflows/release.yml`). The local, appliance and hosted
+release profiles all carry the same two-platform map. The sidecar selects its running CPU's config,
+not the amd64 config on arm64; missing/extra platforms, malformed digests or unknown architectures
+return unavailable. An invalid release map cannot fall back to the legacy scalar.
+Without that identity the probe returns `null`.
 Maia exchanges, and therefore bots, then report `unavailable (protocol)`, while ordinary Maia
 opponent selection stays available. A locally built development image has no registry manifest.
-To use bots in development `maia` mode, start the sidecar with those three variables set to the
-image's real digests.
+To use bots in development `maia` mode, start the sidecar with its real image/manifest identity and
+either the real two-platform config map, or the development-only `MAIA_CONFIG_DIGEST` for that exact
+native image when no map is supplied. A fixture digest never proves a development image's identity.
+
+`make maia-identity-check` checks per-platform capture, all rendered profiles and the actual TCP
+sidecar→production probe boundary with a readiness-only UCI stub. It does not run Maia inference or
+prove bot strength. Native release CI runs this bounded identity proof on both architectures;
+local verification covers the current host only.
 
 ## Bot roster availability
 

@@ -45,7 +45,7 @@ services:
       # The running container's OCI identity (the Maia provider-exchange artifact capture).
       MAIA_IMAGE_ID: __MAIA_IMAGE__
       MAIA_MANIFEST_DIGEST: __MAIA_MANIFEST_DIGEST__
-      MAIA_CONFIG_DIGEST: __MAIA_CONFIG_DIGEST__
+      MAIA_PLATFORM_CONFIG_DIGESTS: '__MAIA_PLATFORM_CONFIG_DIGESTS__'
     healthcheck:
       test: ["CMD", "test", "-f", "/tmp/ready"]
       interval: 5s

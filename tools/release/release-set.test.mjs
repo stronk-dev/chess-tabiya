@@ -41,7 +41,7 @@ function fixture({ version = "1.0.0", withMaia = true, finalDischarge = true, re
   for (const [role, image] of Object.entries(images)) {
     for (const platform of Object.keys(image.platforms)) writeFileSync(join(dir, "sbom", `${role}-${platform.replace("/", "-")}.spdx.json`), `{"spdxVersion":"SPDX-2.3","role":"${role}"}\n`);
   }
-  writeReleaseDeployment(dir, { serverSubject: server, maia: withMaia ? { subject: maia, manifestDigest: digest("2"), configDigest: digest("a") } : null });
+  writeReleaseDeployment(dir, { serverSubject: server, maia: withMaia ? { subject: maia, manifestDigest: digest("2"), configDigests: { "linux/amd64": digest("a"), "linux/arm64": digest("b") } } : null });
   const coreReceipt = (platform) => ({ platform, tier: "core", imageDigests: [server], journeyId: "core.release_journey@1", productionProfileDigest: null, candidateWindow: null, steadyRssMiB: 80, peakRssMiB: 200, unpackedImageBytes: 500 * 1024 * 1024, coldReadyMs: 4_000 });
   const cpuReceipt = (platform) => ({ platform, tier: "cpu", imageDigests: [maia, server].sort(), journeyId: "bot.production_selection@1", productionProfileDigest: digest("7"), candidateWindow: { operation: "maia.policy_page@1", requested: 20, observed: 20, coverage: "bounded_top_k" }, steadyRssMiB: 1_000, peakRssMiB: 1_500, unpackedImageBytes: 1_900 * 1024 * 1024, coldReadyMs: 60_000 });
   const text = generateReleaseManifest({

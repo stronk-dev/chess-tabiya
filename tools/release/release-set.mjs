@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // rfc/verifiable-runtime-distribution.md §1/§8 — post-image release-set commands.
 //
-//   compose   --out DIR --server SUBJECT [--maia SUBJECT --maia-manifest-digest D --maia-config-digest D]
+//   compose --out DIR --server SUBJECT [--maia SUBJECT --maia-manifest-digest D --maia-amd64-config-digest D --maia-arm64-config-digest D]
 //   manifest  --dir DIR --version V --revision SHA --created-at ISO --images FILE
 //             --pre-image FILE --source-archive NAME [--receipts FILE] [--repository URL]
 //   checksums --dir DIR
@@ -37,7 +37,8 @@ const { values } = parseArgs({
     server: { type: "string" },
     maia: { type: "string" },
     "maia-manifest-digest": { type: "string" },
-    "maia-config-digest": { type: "string" },
+    "maia-amd64-config-digest": { type: "string" },
+    "maia-arm64-config-digest": { type: "string" },
     images: { type: "string" },
     receipts: { type: "string" },
     "pre-image": { type: "string" },
@@ -56,7 +57,9 @@ switch (command) {
   case "compose": {
     const out = resolve(values.out);
     mkdirSync(out, { recursive: true });
-    const maia = values.maia === undefined ? null : { subject: values.maia, manifestDigest: values["maia-manifest-digest"], configDigest: values["maia-config-digest"] };
+    const maia = values.maia === undefined ? null : { subject: values.maia, manifestDigest: values["maia-manifest-digest"], configDigests: {
+      "linux/amd64": values["maia-amd64-config-digest"], "linux/arm64": values["maia-arm64-config-digest"],
+    } };
     writeReleaseDeployment(out, { serverSubject: values.server, maia });
     console.log(`wrote ${DEPLOYMENT_FILES.length} deployment files to ${values.out}`);
     break;
