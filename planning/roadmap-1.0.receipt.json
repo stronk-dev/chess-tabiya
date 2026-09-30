@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:04a9078591fa23a9abab164865aad6de713a8ef5c3f3f05859bfd25f6080bf3f",
+    "roadmap": "sha256:866ce35bcecb3d3f3c7cc281adc21b4924369653e3f9b926a6d707358480db0b",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:0c99d525dcd173d80c6ff4b741661a53c7032efdcc7c8eb3837a1eba5c589202",
-    "rfcRegister": "sha256:de28813d4a1dff34d9b8abca390999bb4d418e7d91b3d7be5034b181c6ebcaef",
+    "workState": "sha256:04e28aa74264f8e1213de20494885826137e966ec10e601b6a7e635318605d22",
+    "rfcRegister": "sha256:18bc49cddbe2a5a0399eaaf1f834c36611229e672d588c7df549e099bf3c1951",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:e056780071b64ac37af0f97b20395ab79ae0b3f895b179d776efcd4238d14a90",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 620,
+      "todo": 621,
       "doing": 0,
       "blocked": 1056,
-      "done": 1221,
+      "done": 1222,
       "refused": 160
     },
     "workItems": {
@@ -226,10 +226,10 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Finish the remaining Inspector-modal legacy presentation consumers, repair hyphenated raw-id leaks, and discharge evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
+      "nextAction": "Repair D3309's structural-reading operand loss before migrating that Inspector section; finish the other Inspector-modal legacy consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
       "latestCheckpoint": {
         "at": "2026-09-30",
-        "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice now follows a validated response boolean rather than voice wording. Other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
+        "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/hint-distance.ts",
@@ -242,7 +242,9 @@
           "docs/evidence-presentation.md",
           "apps/web/src/lib/voice-response.ts",
           "apps/server/src/guidance.ts",
-          "apps/web/src/lib/CompareView.svelte"
+          "apps/web/src/lib/CompareView.svelte",
+          "apps/web/src/lib/DrillScreen.svelte",
+          "tests/browser/drill.spec.ts"
         ],
         "anchors": [
           {
@@ -268,7 +270,7 @@
           {
             "kind": "rfc",
             "id": "evidence-presentation.md",
-            "digest": "sha256:9ef427e5e78fccba0d873c5a3d360c815c20a944b2d526167aaacd1e11160cd0"
+            "digest": "sha256:b81fcb675530439224ff14b71130130945d3395b18cedc3377010d3a9edaf39f"
           },
           {
             "kind": "work_state",
@@ -284,6 +286,16 @@
             "kind": "work_state",
             "id": "D3308",
             "digest": "sha256:0991a5ca9cddd96c7b4ab6d00e236be9583cd87c813e63435ea3119dd71910ea"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3309",
+            "digest": "sha256:a6864a1e96a1e37d6ce88a897fd3bbda1a097e8c5b964829f3aaa2eec387f9de"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3310",
+            "digest": "sha256:b0597736462f6bdb02f49a38ea0f6555aa5c8c13b4036ace20c8f784b8a56f5f"
           }
         ]
       },

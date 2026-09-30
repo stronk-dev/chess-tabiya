@@ -21604,3 +21604,20 @@ Campaign was the one capability with no API, route or content. Now:
   sections, raw-id leaks, D1/D9, owner-use and the owner's [[D1639]] ceiling ruling remain.
 - **Next:** migrate the remaining Inspector sections from local prose to admitted typed
   components, with provenance and absence tested at the visible consumer.
+
+### 2026-09-30 — Realign presentation with concurrent branches and migrate one Inspector consumer
+
+- **What landed:** [[D3310]] replaces the visible move-transition Inspector's local observation
+  prose with sealed `inspector.move_transition@1` components. The collapsed control and honest
+  no-edge/no-fact state remain. A committed-pawn browser journey requires a real typed component;
+  `make verify-software` and all four `make test-browser-ci` tiers passed locally.
+- **What changed:** current `main` has three separate clean Claude worktrees (evidence foundation,
+  UX, pack capability) with unmerged commits. The UX branch changes phone-board geometry in
+  `DrillScreen`, not this Inspector section; its edits were not staged or merged here. Inspection
+  also found [[D3309]]: the position-structure adapter's `kind`/`squares` payload would erase side,
+  role, count, file and shade shown by the current renderer, so that visual migration was held.
+- **What remains:** [[D3309]] needs a declared-operand and strict-renderer repair plus visible
+  fidelity tests. The presentation RFC's other Inspector consumers, raw-id leaks, D1/D9 and owner
+  use remain; the 1.0 milestone is still active and no official pack graduated in this slice.
+- **Next:** repair the structural admitted fact without reducing detail, then migrate that visible
+  Inspector section. Recheck branch integration before touching shared catalogue bytes.

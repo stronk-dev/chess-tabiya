@@ -1792,6 +1792,17 @@ reading returns `false` even if its text happens to contain the old phrase. The 
 current-position Inspector paths both obey this invariant; speech continues to read the already
 displayed text without a second external voice request.
 
+**Inspector transition current-consumer [[D3310]] discharged 2026-09-30:** the visible
+`inspector.move_transition@1` section now compiles sealed presented items from the exact recorded
+edge and renders those items through the registered component. It retains the collapsed-by-default
+control and an explicit empty state; the browser journey asserts an actual typed fact component on
+a committed pawn move. The adjacent structural section is **not** thereby complete: [[D3309]]
+found that its current adapter keeps only `kind` and `squares` while the older visible renderer
+truthfully names side, role, count, file and shade. Its source operand declaration, strict
+kind-partitioned renderer and positive/negative visible fidelity fixtures must land together before
+that section may switch. Neither a generic `Position reading: ...` substitute nor a local prose
+side channel discharges the current-consumer obligation.
+
 ## Questions resolved for this draft
 
 1. **`full_inspector` uses components plus a per-fact provenance/raw drawer.** The owner ruled the

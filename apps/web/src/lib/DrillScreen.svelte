@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameClassification, endgameSetupMatches, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, PRIMARY_EVIDENCE_MANIFEST, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, declareTransitionReadingEvidence, endgameClassification, endgameSetupMatches, evidenceForConsumer, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presentEvidenceItems, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick, untrack } from "svelte";
 
@@ -25,7 +25,6 @@
   import GroupPanel from "./GroupPanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { renderStructuralExpressionSpec, renderStructuralObservation } from "./structural-sentences.js";
-  import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
   import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
   import ModuleSeats from "./ModuleSeats.svelte";
@@ -848,12 +847,16 @@
   let rawStructure = $derived(structuralReading(displayedNode.fen));
   let structure = $derived({ ...rawStructure, features: positionStructureEvidence(rawStructure) });
   let sightFeatures = $derived(selectedSquareSightEvidence(rawStructure));
-  let transition = $derived.by(() => {
+  let transitionItems = $derived.by(() => {
     if (displayedNode.parentId === null || displayedNode.moveUci === null) return null;
     const parent = run.nodes.find((node) => node.id === displayedNode.parentId);
     if (parent === undefined) return null;
     const reading = transitionReading(parent.fen, displayedNode.moveUci, displayedNode.fen);
-    return reading === null ? null : { ...reading, observations: moveTransitionEvidence(reading) };
+    return reading === null ? null : presentEvidenceItems(evidenceForConsumer(
+      PRIMARY_EVIDENCE_MANIFEST,
+      { id: "inspector.move_transition", version: 1 },
+      declareTransitionReadingEvidence(reading),
+    ));
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameClassification(displayedNode.fen));
@@ -2572,7 +2575,7 @@
         </section>
         <section class="transition-reading" aria-label="Evidence inspector: move transition" data-evidence-consumer="inspector.move_transition">
           <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>Move transition</button>
-          {#if transitionOpen}<div class="transition-facts">{#if transition === null || transition.observations.length === 0}<p>No rung-0 transition observations at this move.</p>{/if}{#each transition?.observations ?? [] as observation}<p>{renderTransitionObservation(observation)}</p>{/each}</div>{/if}
+          {#if transitionOpen}<div class="transition-facts">{#if transitionItems === null || transitionItems.length === 0}<p>No rung-0 transition observations at this move.</p>{:else}<PresentedEvidence items={transitionItems} />{/if}</div>{/if}
         </section>
         <section aria-label="Human-model evidence" data-evidence-consumer="inspector.human_split">
           <h3>Human move model</h3>

@@ -428,7 +428,9 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
   await transitionButton.click();
   await expect(transitionButton).toHaveAttribute("aria-expanded", "true");
-  await expect(page.getByRole("region", { name: "Evidence inspector: move transition" })).toContainText(/geometric transition census|halfmove clock|irreversibility convention/);
+  const transitionRegion = page.getByRole("region", { name: "Evidence inspector: move transition" });
+  await expect(transitionRegion.locator('.transition-facts [data-presented="fact_statement"]')).not.toHaveCount(0);
+  await expect(transitionRegion).toContainText(/geometric count|fifty-move count/);
   await transitionButton.click();
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
   await page.getByRole("button", { name: "Return to play" }).click();

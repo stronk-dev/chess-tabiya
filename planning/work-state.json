@@ -27178,6 +27178,23 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/DrillScreen.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3309",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a6864a1e96a1e37d6ce88a897fd3bbda1a097e8c5b964829f3aaa2eec387f9de",
+      "uxItems": [],
+      "owner": "assistance-and-presentation"
+    },
+    {
+      "id": "D3310",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b0597736462f6bdb02f49a38ea0f6555aa5c8c13b4036ace20c8f784b8a56f5f",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

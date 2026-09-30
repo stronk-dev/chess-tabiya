@@ -87,3 +87,20 @@ Append-only. This log records author/review/implementation transitions for
 - `make verify-software` passed (2,465 software tests, 7 performance plus build/policy checks);
   all four `make test-browser-ci` tiers passed. The RFC remains implementing: other Inspector
   sections, raw-id leaks, D1/D9 and owner-use are not discharged by this repair.
+
+## 2026-09-30 — Inspector transition admitted at the visible section
+
+- [[D3310]] closes the move-transition side channel: `DrillScreen` no longer converts the
+  `inspector.move_transition@1` admitted reading back to observations for a local prose loop. The
+  exact recorded edge compiles sealed presented items, and the section renders them only after
+  the learner opens it. The no-edge/no-fact state remains an explicit empty message.
+- The Carlsbad browser journey asserts a real `fact_statement` inside the opened Inspector
+  transition section after a committed pawn move; merely having an adapter in the registry could
+  not pass it. `make verify-software` passed 2,465 tests plus seven performance tests and the
+  packaged build/policy checks; `make test-browser-ci` passed 55 smoke, five content, 48 matrix
+  and one packaged-production tests, with one optional Maia latency test skipped.
+- [[D3309]] remains open. The adjacent structure adapter currently admits only `kind` and
+  `squares`, but the visible old renderer says side, role, count, file and shade. A bare component
+  swap would lose true information. That producer/adapter fidelity contract, with typed positive
+  and negative fixtures, precedes the structure UI migration. No remote CI or RFC completion is
+  claimed.

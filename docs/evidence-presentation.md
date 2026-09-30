@@ -27,6 +27,13 @@ dispatched by `PresentedEvidence.svelte`.
 - The voice API reports `recordedReadingsPresent` from that separately admitted, actually rendered
   reading set. The Inspector's sparse-reading notice uses this boolean, not words in voice prose;
   the exact client response parser refuses its absence or a non-boolean value.
+- The Inspector's move-transition section now renders the exact `inspector.move_transition@1`
+  admitted reading through `PresentedEvidence`, with an explicit empty state before a recorded
+  edge or when no transition fact is emitted. Its collapse control remains a learner choice.
+- The adjacent position-structure section still uses the older observation renderer: the existing
+  typed adapter retains only kind and squares, losing side, piece count, role, file and shade from
+  several real readings. [[D3309]] holds that migration until the declared operands and strict
+  presentation renderer preserve the full facts; swapping only the component would be a regression.
 - `magnitude_trail` draws an SVG whose pixels come only from a registered `MAGNITUDE_SCALE_POLICIES`
   row, with a keyboard-reachable point list.
 - `square_set` carries its caption as a sealed `fact_statement` operand (recomputed on parse);
