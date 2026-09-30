@@ -9,7 +9,11 @@
   operator CLI. **Not yet:** §1–§2 F1 execution metadata/confidence and binding algebra, the
   `/capabilities` path reach and `POST /evidence/availability` with the run-subject digests, the
   Maia occurrence and Explorer summary derived projections, and the migration of existing learner
-  callers. Receipt: `planning/provider-exchange-and-execution/implementation-2026-09-24.md`.
+  callers. **2026-09-30 checkpoint:** built-in learner tablebase callers now use the shared
+  exchange with health/backoff and exact inventory; fractional-clock retention is repaired.
+  Other provider callers and the §§1–2 surface remain open. Receipts:
+  `planning/provider-exchange-and-execution/implementation-2026-09-24.md` and
+  `planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md`.
   Previously: draft — durable-delivery parsing author-amended 2026-09-07 on [[D3030]].
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
@@ -2065,6 +2069,14 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-09-30: D3324 migrates built-in learner `TablebaseSource.probe` to the existing Syzygy
+  descriptor/scheduler/parser/source-factory chain. Health admission and status/Retry-After
+  backoff are execution-owned; an operation-only shared-cache inventory preserves exact service
+  during outages. Production opponent and durable evidence controls prove actual consumption.
+  D3325 repairs fractional monotonic retention with its original red clock/production controls.
+  Supplied/standalone sources, legacy other-provider callers, F1 execution/availability and derived
+  occurrence/summary obligations remain open; no projection is retired or authority widened.
 
 - 2026-09-24: §5.2 adds `stockfish.principal_variation@1` (sixth `provider-protocol` member, landed in
   the same change) to restore Review's Analyze line. The Review evidence compiler moved Review onto

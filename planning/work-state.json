@@ -27310,6 +27310,24 @@
       "uxItems": [],
       "evidence": "planning/evidence-foundation-ux/integration-2026-09-30.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3324",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cdfcb3ce7e8831fb6563e8caad2d5e95de5c3cd16d1dea56bd877e484bbea24f",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3325",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fe212b70497190e69d96d76f7e0b0142566021e504fa62f72d27e8e6cafda178",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md",
+      "evidenceKind": "path"
     }
   ]
 }

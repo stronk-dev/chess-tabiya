@@ -2,13 +2,13 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ea579e220147aed9af757da1b51cc3e6bbd730df2c58a008852c14c3c4315105",
+    "roadmap": "sha256:353502f1e752a40a63b43b9cdc6b1a85f7ea87f8761371c7c0509bea799956ee",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:5064db35749d315f2c7f166e75feff7aaa994e052631d6e4fcf6a4d6a3d3e7e6",
-    "rfcRegister": "sha256:346c2ac1b381461072e1fd75c2cff665d8864a1693112e3d6ee0d08ce987bf90",
+    "workState": "sha256:4f86c55d32937db4823dee49b81585e42a7e707fc14c14a1dd5df864260478a0",
+    "rfcRegister": "sha256:892060e5ba89a5abee40101fd41c96cdcad14da6ad2556f20475536ba612b0a8",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
-    "application": "sha256:4aea17af1cfb28f4d55dedb273d0e0380263616a84ea015ddcbd34b0088b6188",
+    "application": "sha256:c447f424dc097a394bcc8caf5208cd29bd5e77d4d0699c75bba2cedd229be8bc",
     "rest": "sha256:b5d9ddcf9e9877fef75f099c89d0060218e171ffff96f96f89ec702c524e780b"
   },
   "summary": {
@@ -33,7 +33,7 @@
       "todo": 623,
       "doing": 0,
       "blocked": 1049,
-      "done": 1240,
+      "done": 1242,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "The four evidence-foundation implementations and pack capability lanes 0.30–0.32 are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings and provider-exchange caller migration. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
+      "nextAction": "The four evidence-foundation implementations, pack capability lanes 0.30–0.32 and built-in learner Syzygy exchange migration are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings plus the remaining Stockfish/Maia/Explorer and supplied/standalone provider migrations. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
       "latestCheckpoint": {
         "at": "2026-09-30",
-        "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. The original three red controls pass and all 819 committed meanings remain unchanged.",
+        "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. Supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -200,7 +200,9 @@
           "planning/pack-capability-contract/integration-2026-09-30.md",
           "rfc/pack-capability-contract.md",
           "rfc/pack-training-forms.md",
-          "rfc/famous-games.md"
+          "rfc/famous-games.md",
+          "rfc/provider-exchange-and-execution.md",
+          "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md"
         ],
         "anchors": [
           {
@@ -242,6 +244,21 @@
             "kind": "work_state",
             "id": "D3323",
             "digest": "sha256:36568023c81d98505b3e103dbbdf55c1f7b7be77ad29add003f08d0d670d85d6"
+          },
+          {
+            "kind": "rfc",
+            "id": "provider-exchange-and-execution.md",
+            "digest": "sha256:b79120849e050f032836259397e2f1a8bb27c47528a810f2a9ee1f72ce26d53b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3324",
+            "digest": "sha256:cdfcb3ce7e8831fb6563e8caad2d5e95de5c3cd16d1dea56bd877e484bbea24f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3325",
+            "digest": "sha256:fe212b70497190e69d96d76f7e0b0142566021e504fa62f72d27e8e6cafda178"
           }
         ]
       },

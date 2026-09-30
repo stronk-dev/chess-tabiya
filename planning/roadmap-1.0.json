@@ -382,10 +382,10 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "The four evidence-foundation implementations and pack capability lanes 0.30–0.32 are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings and provider-exchange caller migration. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
+        "nextAction": "The four evidence-foundation implementations, pack capability lanes 0.30–0.32 and built-in learner Syzygy exchange migration are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings plus the remaining Stockfish/Maia/Explorer and supplied/standalone provider migrations. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
         "latestCheckpoint": {
           "at": "2026-09-30",
-          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. The original three red controls pass and all 819 committed meanings remain unchanged.",
+          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. Supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -396,7 +396,9 @@
             "planning/pack-capability-contract/integration-2026-09-30.md",
             "rfc/pack-capability-contract.md",
             "rfc/pack-training-forms.md",
-            "rfc/famous-games.md"
+            "rfc/famous-games.md",
+            "rfc/provider-exchange-and-execution.md",
+            "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md"
           ],
           "anchors": [
             {
@@ -438,6 +440,21 @@
               "kind": "work_state",
               "id": "D3323",
               "digest": "sha256:36568023c81d98505b3e103dbbdf55c1f7b7be77ad29add003f08d0d670d85d6"
+            },
+            {
+              "kind": "rfc",
+              "id": "provider-exchange-and-execution.md",
+              "digest": "sha256:b79120849e050f032836259397e2f1a8bb27c47528a810f2a9ee1f72ce26d53b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3324",
+              "digest": "sha256:cdfcb3ce7e8831fb6563e8caad2d5e95de5c3cd16d1dea56bd877e484bbea24f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3325",
+              "digest": "sha256:fe212b70497190e69d96d76f7e0b0142566021e504fa62f72d27e8e6cafda178"
             }
           ]
         },

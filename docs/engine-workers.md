@@ -344,6 +344,12 @@ provider. It is deterministic, capability-published, and records its applied pol
 synthetic provider identity. It never falls back to Stockfish or Maia on outage or above
 the seven-piece boundary; see `tablebase-grounding.md`.
 
+The built-in application's tablebase source now traverses the shared provider exchange, including
+exact legal-move validation, acquisition receipts, deduplication and bounded absolute retention.
+The same source serves run objectives and durable tablebase evidence; provider-health admission
+and shared Lichess backoff occur only on new exchange executions. Supplied fixtures and standalone
+research clients remain distinct. See `provider-exchange.md` for the migration boundary.
+
 The capability payload publishes Maia's measured resistance only at mode scope. It names
 the 15-position/270-probe corpus and its measured DTZ-percentile and slowest/fastest-losing
 rates; no selection or candidate is assigned a resistance score. The capability-disposition

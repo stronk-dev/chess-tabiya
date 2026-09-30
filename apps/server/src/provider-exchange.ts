@@ -142,6 +142,7 @@ export class ProviderExchangeScheduler {
   readonly #pending = new Map<ProviderPendingDigest, Job>();
   readonly #queue: Job[] = [];
   readonly #retained = new Map<ProviderPendingDigest, RetainedEntry>();
+  readonly #retainedRevisions = new Map<ProviderOperationId, number>();
   #active = 0;
   #lastMonotonic = Number.NEGATIVE_INFINITY;
 
@@ -196,6 +197,41 @@ export class ProviderExchangeScheduler {
     return Object.freeze({ active: this.#active, queued: this.#queue.length, pending: this.#pending.size, retained: this.#retained.size, retainedWeight: [...this.#retained.values()].reduce((sum, entry) => sum + entry.weight, 0) });
   }
 
+  /** Health inventory only: no request keys, payloads or acquisition door leave the scheduler. */
+  retainedInventory(operation: ProviderOperationId): {
+    validExactEntries(nowMonotonicMs: number, generation: string): number;
+    revision(): number;
+    invalidateExcept(generation: string | null): void;
+  } {
+    this.#descriptor(operation);
+    return Object.freeze({
+      validExactEntries: (now: number, _generation: string): number => {
+        const descriptor = this.#descriptor(operation);
+        let count = 0;
+        for (const [key, entry] of this.#retained) {
+          if (entry.acquisition.operation !== operation) continue;
+          if (now >= entry.expiresAtMonotonic || !descriptor.admitRetained(entry.acquisition as never)) this.#removeRetained(key);
+          else count += 1;
+        }
+        return count;
+      },
+      revision: () => this.#retainedRevisions.get(operation) ?? 0,
+      // The registry invokes this on a generation transition. Conservatively retire the entire
+      // operation population; an acquisition from the old configured endpoint cannot survive it.
+      invalidateExcept: (_generation: string | null): void => {
+        for (const [key, entry] of this.#retained) if (entry.acquisition.operation === operation) this.#removeRetained(key);
+      },
+    });
+  }
+
+  #removeRetained(key: ProviderPendingDigest): void {
+    const entry = this.#retained.get(key);
+    if (entry === undefined) return;
+    this.#retained.delete(key);
+    const operation = entry.acquisition.operation;
+    this.#retainedRevisions.set(operation, (this.#retainedRevisions.get(operation) ?? 0) + 1);
+  }
+
   async get<K extends ProviderOperationId>(request: TypedProviderRequest<K>, scope: ProviderRequestScope, signal: AbortSignal): Promise<TypedProviderResult<K>> {
     if (typeof scope !== "object" || scope === null || typeof scope.id !== "string" || scope.id === "") throw new ProviderRequestInvalid("scope.id must be a non-empty string");
     if (!Number.isSafeInteger(scope.budgetMs) || scope.budgetMs < 1) throw new ProviderRequestInvalid("scope.budgetMs must be a positive safe integer");
@@ -217,7 +253,7 @@ export class ProviderExchangeScheduler {
     if (retained !== undefined) {
       const now = this.#now();
       if (now >= retained.expiresAtMonotonic || !descriptor.admitRetained(retained.acquisition as ProviderAcquisitionReceipt<K>)) {
-        this.#retained.delete(key);
+        this.#removeRetained(key);
       } else {
         retained.lastServedAtMonotonic = now;
         const delivery = PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "retained_exact", acquisition: retained.acquisition as ProviderAcquisitionReceipt<K>, payload: retained.payload as ProviderOperationResultMap[K], payloadReceipt: retained.payloadReceipt as never, servedAt: this.#civil() });
@@ -409,19 +445,22 @@ export class ProviderExchangeScheduler {
     if (weight > this.#maxRetainedWeight) return; // served live, never retained
     const now = this.#now();
     const expires = now + this.#retentionTtlMs;
-    if (!Number.isSafeInteger(expires)) return;
+    // The production high-resolution clock is fractional. Expiry is an instant, not a count;
+    // refuse only overflow or precision loss that cannot represent an advancing deadline.
+    if (!Number.isFinite(expires) || expires <= now) return;
     for (const [candidateKey, entry] of this.#retained) {
       const entryDescriptor = this.#descriptor(entry.acquisition.operation);
-      if (now >= entry.expiresAtMonotonic || !entryDescriptor.admitRetained(entry.acquisition as never)) this.#retained.delete(candidateKey);
+      if (now >= entry.expiresAtMonotonic || !entryDescriptor.admitRetained(entry.acquisition as never)) this.#removeRetained(candidateKey);
     }
-    this.#retained.delete(key);
+    this.#removeRetained(key);
     let total = [...this.#retained.values()].reduce((sum, entry) => sum + entry.weight, 0);
     while (this.#retained.size + 1 > this.#maxRetainedEntries || total + weight > this.#maxRetainedWeight) {
       const victim = [...this.#retained.values()].sort((left, right) => left.lastServedAtMonotonic - right.lastServedAtMonotonic || (left.key < right.key ? -1 : left.key > right.key ? 1 : 0))[0];
       if (victim === undefined) return;
-      this.#retained.delete(victim.key);
+      this.#removeRetained(victim.key);
       total -= victim.weight;
     }
     this.#retained.set(key, { key, acquisition, payload, payloadReceipt, weight, retainedAtMonotonic: now, lastServedAtMonotonic: now, expiresAtMonotonic: expires });
+    this.#retainedRevisions.set(acquisition.operation, (this.#retainedRevisions.get(acquisition.operation) ?? 0) + 1);
   }
 }

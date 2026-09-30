@@ -21731,3 +21731,24 @@ Campaign was the one capability with no API, route or content. Now:
   evidence-anchored incremental checkpoint, not a capability/milestone promotion.
 - **Remaining:** live provider population and actual consumer bindings still gate 1.0. The work
   continues locally with no Claude paste/handoff, new worktree, push or remote CI claim.
+
+### 2026-09-30 — Built-in learner Syzygy uses the shared exchange; fractional retention repaired
+
+- **Production implementation:** D3324 binds the built-in tablebase source supplied to opponent
+  selection, objectives and durable evidence to the existing shared descriptor, scheduler, parser
+  and source factory. Health admission, shared Lichess status/Retry-After backoff, exact retained
+  inventory, full FEN identity and independent waiter deadlines remain authoritative. No private
+  learner provider queue/cache or invented chess outcome is added.
+- **Instrument finding:** the authenticated production route received a second live acquisition
+  rather than cached service. D3325's deterministic fractional-clock control reproduced zero
+  retention: an integer-expiry guard rejected normal production monotonic samples. Finite advancing
+  expiry fixes it while retaining absolute TTL; the original controls pass.
+- **Verification:** 82 focused provider tests pass, including production HTTP with optional engines
+  down, independent durable queue binding, retention, outage, backoff, invalid response and cancelled
+  admission. Typecheck has zero errors and seven existing warnings. Aggregate/browser/capability
+  results are recorded before commit in
+  `planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md`.
+- **Closeout and boundary:** D3324/D3325 have path-backed terminal state and source-anchored roadmap
+  proof; no strict milestone/capability promotes. Supplied/standalone tablebase sources and remaining
+  legacy provider/F1 availability work stay open. No content authoring, protected intent edit,
+  handoff, new worktree, publication or remote CI claim.

@@ -85,6 +85,8 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
   is bounded by entries and total weight. It uses LRU/ASCII eviction and an absolute,
   non-refreshing TTL. Failures are never retained. Retained engine results are refused after a
   generation change.
+  Absolute expiry accepts fractional monotonic instants (the production high-resolution clock),
+  not only integer fixture clocks. Non-finite or non-advancing expiry is still non-retainable.
 - **Durability (bot replay, D3030).** Stored bytes become a delivery only through
   `parsePersistedProviderDelivery`. It closes the image, re-normalizes the request, re-runs the
   parser and recomputes every digest, then issues fresh seals.
@@ -106,11 +108,35 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
 - §1–§2 F1 execution metadata (compiled paths, `pathId`, confidence inheritance, binding
   source-absence), `/capabilities` path reach and `POST /evidence/availability` with the
   run-subject digests.
-- Migration of the existing learner callers onto the exchange. Today those are the opponent
-  selector, the evidence queue, `TablebaseSource.probe` and the corpus/repertoire explorer paths,
-  and they keep their shipped clients. The old node-shaped projections retire only when the
-  consumer census reaches zero.
+- Remaining legacy Stockfish/Maia callers and corpus/repertoire explorer paths. Built-in learner
+  tablebase probes have migrated (below). Supplied sources and standalone sourcing/research clients
+  are separate, and old node-shaped projections retire only at a proven zero-consumer census.
 - The Maia occurrence projections and the Explorer population summary (§§6, 8 derived
   projections).
 - (Shipped by `rfc/provider-health-degradation.md`: the Maia container-identity probe for the
   networked sidecar; see `docs/provider-health.md`.)
+
+## Learner tablebase probes
+
+`createApplication` now supplies one `ExchangeTablebaseSource` to the opponent selector, run
+service and durable evidence queue when the built-in Lichess tablebase is configured. It calls the
+application's shared `syzygy.position@1` operation and source factory, then returns the admitted
+position unchanged through the existing `TablebaseSource` interface. It owns no HTTP parser,
+fetch, queue or cache. Both FEN clocks remain in exact request identity. More than seven pieces
+uses the sealed local preflight and maps to the existing `TABLEBASE_OUT_OF_RANGE`; provider failure
+maps to `TABLEBASE_UNAVAILABLE` without a fabricated win/draw/loss or engine fallback.
+
+`healthAdmittedSyzygyOperation` places provider-health admission inside NEW scheduler execution,
+after local preflight, retained lookup and exact-key coalescing. It retains status/Retry-After only
+within that execution for shared Lichess backoff, and uses the registered parser to validate the
+capture before establishing provider health. The scheduler remains the only receipt constructor.
+An operation-only cache inventory exposes counts/revisions, not keys or results; expiry, eviction
+and invalidation remove exact entries. An outage does not prevent reading a valid exact acquisition
+but cannot make a different position available. Each coalesced caller retains its own deadline;
+work cancelled during health admission never dispatches later.
+
+Supplied fixture/custom sources retain their existing explicit composition, and
+`LichessTablebaseSource` remains for standalone tooling. This checkpoint does not retire their
+legacy projections, migrate every provider, or complete the availability/F1 execution surface.
+Proof: `make provider-exchange-check`, including the authenticated production opponent route with
+optional engines down and the durable evidence queue sharing the same exchange acquisition.

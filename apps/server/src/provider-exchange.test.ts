@@ -40,6 +40,20 @@ const scope = (budgetMs = 10_000) => ({ id: "test", budgetMs });
 const signal = () => new AbortController().signal;
 
 describe("§4 shared scheduler", () => {
+  it("retains and expires with fractional monotonic samples, as performance.now uses in production", async () => {
+    const { scheduler, clock, tablebase } = harness({ retentionTtlMs: 10 });
+    clock.monotonic = 1_000.25;
+    const pending = scheduler.get(syzygy(KQK), scope(), signal());
+    await flush(); tablebase.respond(0, syzygyBody(KQK)); await pending;
+    expect(scheduler.stats().retained).toBe(1);
+    await clock.advance(9.75);
+    expect(await scheduler.get(syzygy(KQK), scope(), signal())).toMatchObject({ kind: "success", delivery: { kind: "retained_exact" } });
+    await clock.advance(0.25);
+    const expired = scheduler.get(syzygy(KQK), scope(), signal());
+    await flush();
+    expect(tablebase.calls).toHaveLength(2);
+    tablebase.respond(1, syzygyBody(KQK)); await expired;
+  });
   it("returns every result under the one request-digest authority and refuses invalid requests before queueing", async () => {
     const { scheduler, tablebase } = harness();
     const digest = scheduler.normalizedRequestDigest(syzygy(KQK));

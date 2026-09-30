@@ -1,0 +1,225 @@
+import type { AddressInfo } from "node:net";
+import { describe, expect, it, vi } from "vitest";
+import { providerSourceEvidence, type SyzygyPositionRequest } from "@chess-tabiya/runtime";
+
+import { ProviderExchangeScheduler } from "./provider-exchange.js";
+import { ControlledFetch, ManualClock, flush, syzygyBody } from "./provider-exchange.test-support.js";
+import { providerOperationDescriptors } from "./provider-operations.js";
+import { testRegistry } from "./provider-health.test-support.js";
+import { ExchangeTablebaseSource, healthAdmittedSyzygyOperation } from "./provider-tablebase.js";
+import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { EvidenceJobQueue } from "./evidence-queue.js";
+import { RunService } from "./service.js";
+import { SQLiteRunStorage } from "./storage.js";
+
+const FEN = "8/8/8/8/8/8/3Q4/k1K5 w - - 0 1";
+const OTHER = "8/8/8/8/8/8/3R4/k1K5 w - - 0 1";
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const request = (fen = FEN): SyzygyPositionRequest => ({ rules: "chess", variant: "standard", fen, timeoutMs: 4_000 });
+
+async function harness() {
+  const clock = new ManualClock();
+  const healthClock = { get now() { return clock.monotonic; }, set now(value: number) { clock.monotonic = value; }, wall: clock.wall(), advance: () => undefined };
+  const health = await testRegistry({ "tablebase-primary": "unverified", "explorer-primary": "unverified" }, { clock: healthClock });
+  const remote = new ControlledFetch();
+  const base = providerOperationDescriptors({ engines: null, tablebaseFetch: null, explorerFetch: null, explorerToken: null });
+  const scheduler = new ProviderExchangeScheduler({
+    descriptors: { ...base, "syzygy.position@1": healthAdmittedSyzygyOperation(remote.fetch, health) },
+    maxActive: 2, maxQueued: 4, maxRetainedEntries: 8, maxRetainedWeight: 1_000,
+    retentionTtlMs: 10_000, monotonicNowMs: clock.now, wallNow: clock.wall, timers: clock,
+  });
+  health.registerCacheInventory("tablebase-primary", scheduler.retainedInventory("syzygy.position@1"));
+  const source = new ExchangeTablebaseSource({ scheduler, monotonicNowMs: clock.now, timeoutMs: 4_000, health });
+  return { source, scheduler, clock, remote, health };
+}
+
+describe("learner Syzygy shared exchange", () => {
+  it("shares acquisition, parsing and retention with direct provider consumers", async () => {
+    const { source, scheduler, remote } = await harness();
+    const learner = source.probe(FEN);
+    const direct = scheduler.get({ operation: "syzygy.position@1", request: request() }, { id: "test-direct", budgetMs: 4_000 }, new AbortController().signal);
+    await flush();
+    expect(remote.calls).toHaveLength(1);
+    remote.respond(0, syzygyBody(FEN));
+    const [position, delivery] = await Promise.all([learner, direct]);
+    expect(delivery.kind).toBe("success");
+    if (delivery.kind !== "success") throw new Error("expected sealed delivery");
+    expect(providerSourceEvidence("syzygy.position@1", delivery.delivery).payload.payload.position).toBe(position);
+    expect(await source.probe(FEN)).toBe(position);
+    expect(remote.calls).toHaveLength(1);
+    expect(scheduler.stats()).toMatchObject({ retained: 1 });
+  });
+
+  it("does not alias either FEN clock and expires at the absolute TTL boundary", async () => {
+    const { source, remote, clock } = await harness();
+    for (const fen of [FEN, FEN.replace("0 1", "1 1"), FEN.replace("0 1", "0 2")]) {
+      const pending = source.probe(fen);
+      await flush();
+      remote.respond(remote.calls.length - 1, syzygyBody(fen));
+      await pending;
+    }
+    expect(remote.calls).toHaveLength(3);
+    await clock.advance(9_999);
+    await source.probe(FEN);
+    await clock.advance(1);
+    const expired = source.probe(FEN);
+    await flush();
+    expect(remote.calls).toHaveLength(4);
+    remote.respond(3, syzygyBody(FEN));
+    await expired;
+  });
+
+  it("publishes an operation-only inventory with revisions for insertion, expiry and invalidation", async () => {
+    const { source, remote, scheduler, clock } = await harness();
+    const inventory = scheduler.retainedInventory("syzygy.position@1");
+    const other = scheduler.retainedInventory("stockfish.position_evaluation@1");
+    const initial = inventory.revision();
+    const pending = source.probe(FEN);
+    await flush(); remote.respond(0, syzygyBody(FEN)); await pending;
+    expect(inventory.validExactEntries(clock.monotonic, "current")).toBe(1);
+    expect(other.validExactEntries(clock.monotonic, "current")).toBe(0);
+    expect(inventory.revision()).toBeGreaterThan(initial);
+    expect(Object.keys(inventory).sort()).toEqual(["invalidateExcept", "revision", "validExactEntries"]);
+    const inserted = inventory.revision();
+    await clock.advance(10_000);
+    expect(inventory.validExactEntries(clock.monotonic, "current")).toBe(0);
+    expect(inventory.revision()).toBeGreaterThan(inserted);
+    const refreshed = source.probe(FEN);
+    await flush(); remote.respond(1, syzygyBody(FEN)); await refreshed;
+    const revision = inventory.revision();
+    inventory.invalidateExcept("successor-generation");
+    expect(inventory.validExactEntries(clock.monotonic, "successor-generation")).toBe(0);
+    expect(inventory.revision()).toBeGreaterThan(revision);
+    expect(other.revision()).toBe(0);
+  });
+
+  it("keeps local domain refusal separate from network absence", async () => {
+    const { source, remote, health } = await harness();
+    await expect(source.probe(START)).rejects.toMatchObject({ code: "TABLEBASE_OUT_OF_RANGE" });
+    expect(remote.calls).toHaveLength(0);
+    expect(health.operationAvailability("evidence.tablebase_probe").state).toBe("requestable_unverified");
+  });
+
+  it("retains exact answers during shared Lichess backoff without admitting unknown positions", async () => {
+    const { source, remote, health, clock } = await harness();
+    const first = source.probe(FEN);
+    await flush(); remote.respond(0, syzygyBody(FEN)); await first;
+    const failed = source.probe(OTHER);
+    await flush(); remote.respond(1, "busy", { status: 429, headers: { "retry-after": "60" } });
+    await expect(failed).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE", details: { retryAfterMs: 60_000 } });
+    expect(health.operationAvailability("evidence.explorer_query")).toMatchObject({ state: "temporarily_blocked", reason: "upstream_backoff" });
+    expect(health.snapshot().providers.find((row) => row.instanceId === "tablebase-primary")).toMatchObject({ state: "degraded_cached_only", validExactEntries: 1 });
+    await source.probe(FEN);
+    await expect(source.probe(OTHER)).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+    expect(remote.calls).toHaveLength(2);
+    await clock.advance(10_000);
+    expect(health.snapshot().providers.find((row) => row.instanceId === "tablebase-primary")).toMatchObject({ state: "unavailable" });
+  });
+
+  it("refuses missing or illegal provider moves before health records success, and never retains the failure", async () => {
+    const { source, remote, scheduler, health } = await harness();
+    const pending = source.probe(FEN);
+    await flush();
+    remote.respond(0, { category: "win", dtz: 1, precise_dtz: 1, moves: [] });
+    await expect(pending).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+    expect(scheduler.stats().retained).toBe(0);
+    expect(health.snapshot().providers.find((row) => row.instanceId === "tablebase-primary")).toMatchObject({ state: "unavailable", reason: "protocol" });
+  });
+
+  it("keeps invalid-response failure identity even when older exact answers remain cached", async () => {
+    const { source, remote, scheduler } = await harness();
+    const first = source.probe(FEN);
+    await flush(); remote.respond(0, syzygyBody(FEN)); await first;
+    const bad = scheduler.get({ operation: "syzygy.position@1", request: request(OTHER) }, { id: "invalid-peer", budgetMs: 4_000 }, new AbortController().signal);
+    await flush(); remote.respond(1, { category: "win", dtz: 1, precise_dtz: 1, moves: [] });
+    expect(await bad).toMatchObject({ kind: "source_failure", reason: "invalid_response" });
+    await expect(source.probe(FEN)).resolves.toMatchObject({ category: "win" });
+    expect(remote.calls).toHaveLength(2);
+  });
+
+  it("does not dispatch a cancelled request after waiting for Lichess group admission", async () => {
+    const { source, remote, clock, health } = await harness();
+    const occupied = await health.admit("evidence.explorer_query");
+    const pending = source.probe(FEN, { deadlineMonotonic: 10 });
+    await flush();
+    expect(remote.calls).toHaveLength(0);
+    await clock.advance(10);
+    await expect(pending).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+    health.settle(occupied, { kind: "success" });
+    await flush();
+    expect(remote.calls).toHaveLength(0);
+    expect(health.operationAvailability("evidence.tablebase_probe").state).toBe("requestable_unverified");
+  });
+
+  it("gives coalesced callers independent deadlines without aborting the surviving caller", async () => {
+    const { source, remote, clock } = await harness();
+    const short = source.probe(FEN, { deadlineMonotonic: 10 });
+    const long = source.probe(FEN, { deadlineMonotonic: 1_000 });
+    await flush();
+    await clock.advance(10);
+    await expect(short).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+    expect(remote.calls[0]!.signal.aborted).toBe(false);
+    remote.respond(0, syzygyBody(FEN));
+    await expect(long).resolves.toMatchObject({ category: "win" });
+    expect(remote.calls).toHaveLength(1);
+  });
+
+  it("binds the durable evidence queue to the same sealed provider acquisition", async () => {
+    const { source, scheduler, remote } = await harness();
+    const storage = new SQLiteRunStorage(":memory:");
+    const queue = new EvidenceJobQueue({ async execute() { throw new Error("unexpected engine execution"); } }, { tablebaseSource: source });
+    const service = new RunService(storage, { evidenceQueue: queue });
+    try {
+      const run = await service.create({
+        id: "exchange-tablebase-evidence", session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+        policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73, createdAt: "2026-09-30T12:00:00.000Z",
+      }, "writer");
+      const root = run.nodes[0]!;
+      storage.admitInternalEvidence(run.id, [{
+        origin: "run_enrichment", idempotencyKey: `run_enrichment@1:${root.id}`,
+        request: { schema: "evidence_batch_request@1", runId: run.id, origin: "run_enrichment", jobs: [{ schema: "evidence_job_request@1", runId: run.id, nodeId: root.id, fen: FEN, kind: "tablebase", depth: null, movetime: null, multiPv: null, timeoutMs: null, objectiveRequest: null }] },
+      }]);
+      const direct = scheduler.get({ operation: "syzygy.position@1", request: request() }, { id: "other-consumer", budgetMs: 4_000 }, new AbortController().signal);
+      await flush();
+      expect(remote.calls).toHaveLength(1);
+      remote.respond(0, syzygyBody(FEN));
+      const delivered = await direct;
+      expect(delivered.kind).toBe("success");
+      await queue.whenIdle();
+      expect(queue.page(run.id).results[0]?.payload).toMatchObject({ kind: "tablebase", source: "tablebase_exact", values: { fen: FEN, category: "win", dtz: 5, sourceId: "tablebase.lichess.org" } });
+      expect(remote.calls).toHaveLength(1);
+    } finally { await queue.whenIdle(); storage.close(); }
+  });
+
+  it("reaches the shared exchange from the authenticated production opponent route with engines down", { timeout: 30_000 }, async () => {
+    const realFetch = globalThis.fetch;
+    let requests = 0;
+    const fetcher: typeof fetch = async (input, init) => {
+      if (!String(input).startsWith("https://tablebase.lichess.org/standard?")) return realFetch(input, init);
+      requests += 1;
+      const fen = new URL(String(input)).searchParams.get("fen")!;
+      return new Response(JSON.stringify(syzygyBody(fen)), { status: 200, headers: { etag: '"fixture"' } });
+    };
+    vi.stubGlobal("fetch", fetcher);
+    let application: Awaited<ReturnType<typeof createInMemoryTestApplication>> | undefined;
+    try {
+      application = await createInMemoryTestApplication({ engineMode: "maia", stockfishCommand: "/nonexistent/tabiya-test-stockfish", maiaHost: "127.0.0.1", maiaPort: 1, cookieSecure: false });
+      await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await realFetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "syzygy_shared", password: "tablebase-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const selected = await realFetch(`${origin}/select-move`, {
+        method: "POST", headers: { "content-type": "application/json", cookie },
+        body: JSON.stringify({ startFen: FEN, historyUci: [], policy: { mode: "perfect_tablebase", policyConfigDigest: `sha256:${"a".repeat(64)}` }, seed: 73 }),
+      });
+      const body = await selected.json();
+      expect(selected.status, JSON.stringify(body)).toBe(200);
+      expect(body).toMatchObject({ policyModeApplied: "perfect_tablebase" });
+      const delivered = await application.providers.scheduler.get({ operation: "syzygy.position@1", request: request() }, { id: "production-proof", budgetMs: 4_000 }, new AbortController().signal);
+      expect(delivered).toMatchObject({ kind: "success", delivery: { kind: "retained_exact" } });
+      expect(requests).toBe(1);
+      expect(application.providerHealth.snapshot().providers.find((row) => row.instanceId === "tablebase-primary")).toMatchObject({ state: "available" });
+    } finally { await application?.close(); vi.unstubAllGlobals(); }
+  });
+});

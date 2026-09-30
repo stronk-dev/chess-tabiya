@@ -72,6 +72,7 @@ import { RepertoireService } from "./repertoire.js";
 import { ClassroomService } from "./classroom.js";
 import type { TtsProvider } from "./external-tts.js";
 import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } from "./tablebase.js";
+import { ExchangeTablebaseSource } from "./provider-tablebase.js";
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
 import { TheoryLibrary } from "./theory-library.js";
 import { binaryArtifactProbe } from "./engine-supervisor.js";
@@ -590,6 +591,7 @@ async function composeServices(
   const engineMode = options.engineMode ?? "mock";
   let supervisor: EngineSupervisor | undefined;
   let selector: OpponentSelector;
+  let opponentEngines: ConstructorParameters<typeof OpponentSelector>[0];
   let capabilities: EngineCapabilities;
   let evidenceExecutor: EvidenceExecutor;
   // rfc/provider-health-degradation.md §1: configuration answers only "exists, with which
@@ -648,11 +650,6 @@ async function composeServices(
   const corpusSource = builtInCorpus
     ? new LichessCorpusSource({ token: options.corpusToken!, health: providerHealth })
     : suppliedCorpus === undefined ? undefined : healthReportedCorpus(suppliedCorpus, providerHealth);
-  const tablebaseSource = !tablebaseConfigured
-    ? undefined
-    : builtInTablebase
-      ? new LichessTablebaseSource({ health: providerHealth })
-      : healthReportedTablebase(fixtureTablebase!, providerHealth);
   const voiceProvider = options.voiceProvider === undefined ? undefined : healthReportedVoice(options.voiceProvider, providerHealth);
   const reasoningReviewProvider = options.reasoningReviewProvider === undefined ? undefined : healthReportedReasoningReview(options.reasoningReviewProvider, providerHealth);
   const ttsProvider = options.ttsProvider === undefined ? undefined : healthReportedTts(options.ttsProvider, providerHealth);
@@ -684,7 +681,7 @@ async function composeServices(
       engines.health("stockfish-analysis"),
       engines.health("maia-5m"),
     ]);
-    selector = new OpponentSelector(engines, { health: providerHealth, ...(tablebaseSource === undefined ? {} : { tablebaseSource }) });
+    opponentEngines = engines;
     capabilities = new EngineCapabilities(engines, [
       "stockfish-analysis",
       "maia-5m",
@@ -701,12 +698,7 @@ async function composeServices(
     providerHealth.recordHandshake("maia-inference");
     providerHealth.recordHandshake("stockfish-play");
     providerHealth.recordHandshake("stockfish-analysis");
-    selector = new OpponentSelector(mock, {
-      maiaEngineId: "mock-opponent",
-      strongEngineId: "mock-opponent",
-      health: providerHealth,
-      ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
-    });
+    opponentEngines = mock;
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
       health: providerHealth, openingCatalogue, botAvailability: () => botAvailability.snapshot(), packCapabilities: registry.capabilities,
     });
@@ -722,6 +714,17 @@ async function composeServices(
     explorerFetch: engineMode === "maia" && options.corpusToken !== undefined ? providerFetch : null,
     explorerToken: options.corpusToken ?? null,
     bounds: APPLICATION_PROVIDER_BOUNDS,
+    ...(builtInTablebase ? { tablebaseHealth: providerHealth } : {}),
+  });
+  const tablebaseSource = !tablebaseConfigured
+    ? undefined
+    : builtInTablebase
+      ? new ExchangeTablebaseSource({ scheduler: providers.scheduler, monotonicNowMs: () => providerHealth.monotonicNow(), health: providerHealth })
+      : healthReportedTablebase(fixtureTablebase!, providerHealth);
+  selector = new OpponentSelector(opponentEngines, {
+    ...(engineMode === "mock" ? { maiaEngineId: "mock-opponent", strongEngineId: "mock-opponent" } : {}),
+    health: providerHealth,
+    ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
   });
   // rfc/bot-policy.md §4.1/§4.5: the opponent-ply operation's provider half. It shares the ONE
   // scheduler (no bot-only fetch, queue or cache) and feeds every outcome into the availability

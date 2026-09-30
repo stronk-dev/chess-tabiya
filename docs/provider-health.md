@@ -42,6 +42,12 @@ any snapshot that contains a `local_fixture`.
 
 ## States and operation availability
 
+For built-in learner Syzygy, new exchange executions—not callers or cached reads—enter provider
+health. The shared exchange reports its operation-only retained inventory so an outage remains
+`degraded_cached_only` only while a valid exact acquisition actually exists. Lichess 429
+Retry-After applies to the shared tablebase/Explorer group; malformed legal-move populations cannot
+establish success. See [provider exchange](provider-exchange.md#learner-tablebase-probes).
+
 A snapshot row is one of six state-specific arms: `not_configured`, `unverified`, `recovering`,
 `available`, `degraded_cached_only` and `unavailable`. The runtime parser rejects any field that
 does not belong to an arm. Operations project to seven availability arms: `available`,
