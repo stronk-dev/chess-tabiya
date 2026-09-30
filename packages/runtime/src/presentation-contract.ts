@@ -277,6 +277,8 @@ export interface MagnitudeOperand {
   readonly unit: MagnitudeUnit;
   readonly convention: ConventionReceipt;
   readonly saturated: boolean;
+  /** Only recorded.engine.eval@1: exact authoring-time timestamp retained from the admitted reading. */
+  readonly retrievedAt?: string;
 }
 /** §3.1 per-row withholding: the row stays visible, its share is not drawn. */
 export type DistributionWithheldReason = "below_outcome_floor";
@@ -687,9 +689,12 @@ function magnitudeValueText(operand: MagnitudeOperand): string {
 const MAGNITUDE_QUANTITIES: Readonly<Record<string, { readonly label: string }>> = Object.freeze({ ...PLAY_MAGNITUDE_QUANTITIES, ...INSPECTOR_MAGNITUDE_QUANTITIES, ...CONSUMER_MAGNITUDE_QUANTITIES });
 
 function genericMagnitudeSentence(operand: MagnitudeOperand): string {
-  const quantity = MAGNITUDE_QUANTITIES[`${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`];
+  const source = `${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`;
+  const quantity = MAGNITUDE_QUANTITIES[source];
   if (quantity === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", "magnitude quantity has no registered sentence");
-  return `${quantity.label}: ${magnitudeValueText(operand)}${operand.unit.kind === "centipawn" ? " pawns" : ""}${operand.saturated ? " (at the instrument's limit)" : ""}${PERSPECTIVE_PHRASES[operand.convention.perspective]} (${conventionAttribution(operand.convention)}).`;
+  if ((source === "recorded.engine.eval@1") !== (operand.retrievedAt !== undefined)) throw new PresentationError("PRESENTATION_INVALID", "magnitude authoring timestamp does not match its source");
+  const date = operand.retrievedAt === undefined ? "" : `; recorded when this pack was authored on ${operand.retrievedAt.slice(0, 10)}`;
+  return `${quantity.label}: ${magnitudeValueText(operand)}${operand.unit.kind === "centipawn" ? " pawns" : ""}${operand.saturated ? " (at the instrument's limit)" : ""}${PERSPECTIVE_PHRASES[operand.convention.perspective]} (${conventionAttribution(operand.convention)}${date}).`;
 }
 
 function distributionSentence(operand: DistributionOperand): string {
@@ -858,13 +863,19 @@ function parseConvention(value: unknown): ConventionReceipt {
 }
 
 function parseMagnitude(value: unknown): MagnitudeOperand {
-  const item = exact(value, ["value", "unit", "convention", "saturated"], [], "magnitude");
+  const item = exact(value, ["value", "unit", "convention", "saturated"], ["retrievedAt"], "magnitude");
   const unit = exact(item.unit, ["kind"], [], "unit");
   const kind = oneOf(unit.kind, ["centipawn", "mate_in", "percent", "count", "elo", "clock_ms", "distance_to_zero"], "unit.kind");
   if (typeof item.saturated !== "boolean") throw new PresentationError("PRESENTATION_INVALID", "saturated must be boolean");
   const magnitude = safeInt(item.value, "magnitude.value");
   if (kind === "mate_in" && magnitude === 0) throw new PresentationError("PRESENTATION_INVALID", "a mate distance is never zero");
-  return { value: magnitude, unit: { kind } as MagnitudeUnit, convention: parseConvention(item.convention), saturated: item.saturated };
+  const convention = parseConvention(item.convention);
+  const recorded = `${convention.sourceProjection.id}@${convention.sourceProjection.version}` === "recorded.engine.eval@1";
+  if (recorded !== (item.retrievedAt !== undefined)) throw new PresentationError("PRESENTATION_INVALID", "recorded engine magnitude must carry its authoring timestamp, and other magnitudes must not");
+  if (recorded && (typeof item.retrievedAt !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/u.test(item.retrievedAt) || !Number.isFinite(Date.parse(item.retrievedAt)) || new Date(item.retrievedAt).toISOString().slice(0, 10) !== item.retrievedAt.slice(0, 10))) {
+    throw new PresentationError("PRESENTATION_INVALID", "recorded engine magnitude has no valid UTC authoring timestamp");
+  }
+  return { value: magnitude, unit: { kind } as MagnitudeUnit, convention, saturated: item.saturated, ...(recorded ? { retrievedAt: item.retrievedAt as string } : {}) };
 }
 
 function parseScoreReceipt(value: unknown): ReviewScoreReceipt {
@@ -1408,6 +1419,15 @@ export function presentationAdapter(consumer: VersionedEvidenceId, projection: V
   return ADAPTERS_BY_KEY.get(adapterKey(consumer, projection));
 }
 
+/** A copied authoring timestamp is checked against its admitted source, not just parsed as prose. */
+export function assertPresentationSourceRetention(evidence: DeclaredEvidence<unknown>, components: readonly ComponentValue[]): void {
+  if (refKey(evidence.projection) !== "recorded.engine.eval@1") return;
+  const sourceTimestamp = (evidence.payload as { readonly retrievedAt?: unknown }).retrievedAt;
+  if (components.length !== 1 || components[0]?.id !== "magnitude" || components[0].operand.retrievedAt !== sourceTimestamp) {
+    throw new PresentationError("PRESENTATION_INVALID", "recorded engine component changed or omitted its source authoring timestamp");
+  }
+}
+
 /**
  * The one production construction path: a real `ConsumerEvidenceView` → exact adapters → sealed
  * items owned by their admitted evidence. A missing adapter is a build failure, never a fallback.
@@ -1424,6 +1444,7 @@ export function presentEvidenceItems(view: ConsumerEvidenceView<unknown>): reado
     const components: readonly ComponentValue[] = Array.isArray(constructed) ? constructed : [constructed as ComponentValue];
     const expected = adapterComponents(entry);
     if (components.length !== expected.length || components.some((component, index) => component.id !== expected[index])) throw new PresentationError("PRESENTATION_INVALID", `${entry.key} constructed ${components.map((component) => component.id).join("+")}, not ${expected.join("+")}`);
+    assertPresentationSourceRetention(evidence, components);
     const evidenceRef: PresentedEvidenceRef = { producer: { ...evidence.producer }, projection: { ...evidence.projection }, evidenceDigest: `sha256:${evidenceValueReceipt(evidence).payloadDigest}` };
     return components.map((component) => sealPresentedItemForOwner(evidence, evidenceRef, { consumer: { ...view.consumer }, projection: { ...evidence.projection } }, component));
   }));

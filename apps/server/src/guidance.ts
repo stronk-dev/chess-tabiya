@@ -6,7 +6,6 @@ import {
   matchesStructuralExpression,
   pivotalMarkers,
   positionGuidanceEvidence,
-  renderRecordedReading,
   renderPresentedEvidenceView,
   structuralReading,
   voiceCheck,
@@ -76,10 +75,9 @@ export function renderRecordedReadingEvidence(view: ConsumerEvidenceView<unknown
   if (view.consumer.id !== "guidance.recorded_reading" || view.consumer.version !== 1) {
     throw new TypeError("Expected guidance.recorded_reading@1 consumer view");
   }
-  // The recorded-reading sentence retains the authoring date. The current magnitude component
-  // does not; keep this separately admitted, post-provider path until its component contract
-  // can carry the date without silently weakening source attribution.
-  return Object.freeze(view.items.flatMap((item) => renderRecordedReading(item.payload as Parameters<typeof renderRecordedReading>[0])));
+  // Readings stay post-provider: the external voice never receives a bare engine score. Their
+  // suffix now uses the same source-bound component equivalent as the learner presentation.
+  return Object.freeze(renderPresentedEvidenceView(view).items.flatMap((item) => item.sentences));
 }
 
 export function appendRecordedReadings(text: string, packet: EvidencePacket): string {

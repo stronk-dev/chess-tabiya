@@ -566,7 +566,7 @@ describe("adaptive guidance server seams", () => {
     expect(authored.payload).toEqual({ phase: reasoningDocument.phase });
   });
 
-  it("keeps recorded readings out of provider input and appends their frozen prose for the learner", async () => {
+  it("keeps recorded readings out of provider input and appends their dated component sentences for the learner", async () => {
     const pack = JSON.parse(readFileSync(new URL("../../../content/drafts/anti-caro-advance.json", import.meta.url), "utf8")) as DrillPackDefinition;
     const ledger = JSON.parse(readFileSync(new URL("../../../content/drafts/anti-caro-advance.evidence.json", import.meta.url), "utf8")) as unknown;
     const manifest = JSON.parse(readFileSync(new URL("../../../content/drafts/anti-caro-advance.sources.json", import.meta.url), "utf8")) as unknown;
@@ -591,7 +591,9 @@ describe("adaptive guidance server seams", () => {
     const handler = createRestHandler(service, undefined, undefined, undefined, undefined, undefined, undefined, undefined, provider);
     const response = await handler(request(`/runs/${run.id}/voice`, "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }));
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ text: expect.stringContaining("Recorded reading at this position: Stockfish 18") });
+    const body = await response.json();
+    expect(body).toMatchObject({ text: expect.stringContaining("Recorded engine evaluation at this position:") });
+    expect(body).toMatchObject({ text: expect.stringContaining("recorded when this pack was authored on 2026-08-15") });
     expect(JSON.stringify(bodies)).not.toMatch(/Recorded reading|Stockfish|Syzygy|DTZ|DTM|depth/);
   });
 

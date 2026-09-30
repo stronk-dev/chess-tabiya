@@ -525,12 +525,13 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
   factAdapter("guidance.voice_compare", V1("run.record.move"), ["sentence"], ["offset", "moveSan"], ["copied_byte_equal", "mechanical_transform"], "consumer.recorded_move@1", "recorded-run@1", recordedMoveOperands, "recorded_run");
 
   // --- recorded readings (authoring-time ledger readings delivered as guidance)
-  add("guidance.recorded_reading", V1("recorded.engine.eval"), "magnitude", ["sentence"], ["values"], ["copied_byte_equal", "retained_convention"], (evidence) => {
-    const values = (evidence.payload as { readonly values: { readonly centipawns?: number; readonly mateIn?: number; readonly depth: number; readonly engineName: string; readonly engineVersion: string } }).values;
+  add("guidance.recorded_reading", V1("recorded.engine.eval"), "magnitude", ["sentence"], ["retrievedAt", "values"], ["copied_byte_equal", "retained_convention"], (evidence) => {
+    const reading = evidence.payload as { readonly retrievedAt: string; readonly values: { readonly centipawns?: number; readonly mateIn?: number; readonly depth: number; readonly engineName: string; readonly engineVersion: string } };
+    const values = reading.values;
     const convention = kit.convention(evidence, { kind: "recorded_search", engine: { name: values.engineName, version: values.engineVersion }, depth: values.depth }, "white");
     return values.mateIn === undefined
-      ? { id: "magnitude", operand: { value: values.centipawns!, unit: { kind: "centipawn" }, convention, saturated: false } }
-      : { id: "magnitude", operand: { value: values.mateIn, unit: { kind: "mate_in" }, convention, saturated: false } };
+      ? { id: "magnitude", operand: { value: values.centipawns!, unit: { kind: "centipawn" }, convention, saturated: false, retrievedAt: reading.retrievedAt } }
+      : { id: "magnitude", operand: { value: values.mateIn, unit: { kind: "mate_in" }, convention, saturated: false, retrievedAt: reading.retrievedAt } };
   });
   factAdapter("guidance.recorded_reading", V1("recorded.tablebase.result"), ["sentence"], ["retrievedAt", "values"], ["copied_byte_equal", "mechanical_transform"], "consumer.recorded_tablebase@1", "recorded-engine@1", (payload) => {
     const reading = payload as { readonly retrievedAt: string; readonly values: { readonly category: string; readonly pieceCount: number; readonly dtz: number | null; readonly dtm: number | null } };

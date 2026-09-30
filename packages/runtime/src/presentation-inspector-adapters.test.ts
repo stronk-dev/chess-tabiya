@@ -78,6 +78,10 @@ describe("inspector / post-commit nudge / review map adapters: real evidence thr
         for (const entry of parsed) {
           const sentence = presentedSentence(entry);
           expect(assertPresentationText(sentence)).toBe(sentence);
+          if (binding.projection.id === "recorded.engine.eval") {
+            const sourceDate = (item.payload as { readonly retrievedAt: string }).retrievedAt.slice(0, 10);
+            expect(sentence, `${label}: source date must survive presentation`).toContain(`authored on ${sourceDate}`);
+          }
           for (const pattern of FORBIDDEN) expect(sentence, `${label}: ${sentence}`).not.toMatch(pattern);
           if (consumer === "module.postcommit_nudge") expect(sentence.split(/\s+/u).length, `${label}: ${sentence}`).toBeLessThanOrEqual(50);
         }

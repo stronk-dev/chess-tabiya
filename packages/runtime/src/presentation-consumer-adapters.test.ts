@@ -14,7 +14,9 @@ import { declareStructuralReadingEvidence, declareTransitionReadingEvidence } fr
 import {
   PRESENTATION_ADAPTERS,
   adapterComponents,
+  assertPresentationSourceRetention,
   assertPresentationText,
+  parseComponentValue,
   parsePresentationReceipt,
   presentEvidenceItems,
   presentedSentence,
@@ -209,10 +211,17 @@ describe("consumer adapters: the evidence-reference sentence and the recorded re
       recordedReadingEvidence({ kind: "tablebase_result", anchor: { fen: "8/8/8/8/8/8/8/K6k w - - 0 1" }, sourceId: "syzygy", retrievedAt: "2026-08-15T12:00:00.000Z", grounds: "machine_validation", values: { category: "draw", dtz: null, precise_dtz: null, dtm: null, pieceCount: 2, checkmate: false, stalemate: false, insufficient_material: true }, supports: [] } as never),
     ].filter((item): item is NonNullable<typeof item> => item !== undefined);
     expect(readings).toHaveLength(2);
-    expect(sentences(present("guidance.recorded_reading", readings))).toEqual([
-      "Recorded engine evaluation at this position: +0.20 pawns from White's side (Stockfish 17, depth 20).",
+    const presented = present("guidance.recorded_reading", readings);
+    expect(sentences(presented)).toEqual([
+      "Recorded engine evaluation at this position: +0.20 pawns from White's side (Stockfish 17, depth 20; recorded when this pack was authored on 2026-01-01).",
       "Recorded Syzygy tablebase reading for this position (2 pieces): a draw for the side to move; queried when this pack was authored on 2026-08-15.",
     ]);
+    const engine = presented[0]!.component;
+    if (engine.id !== "magnitude") throw new Error("recorded engine reading must remain a magnitude");
+    expect(() => parseComponentValue({ ...engine, operand: { ...engine.operand, retrievedAt: undefined } })).toThrow(/authoring timestamp/u);
+    expect(() => parseComponentValue({ ...engine, operand: { ...engine.operand, retrievedAt: "2026-02-30T00:00:00Z" } })).toThrow(/valid UTC authoring timestamp/u);
+    expect(() => assertPresentationSourceRetention(readings[0]!, [{ ...engine, operand: { ...engine.operand, retrievedAt: "2026-01-01T00:00:01Z" } }])).toThrow(/source authoring timestamp/u);
+    expect(() => assertPresentationSourceRetention(readings[0]!, [engine])).not.toThrow();
   });
 });
 

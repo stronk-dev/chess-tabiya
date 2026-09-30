@@ -823,12 +823,13 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     const perspective: ConventionReceipt["perspective"] = values.perspective === "white" || black ? "white" : "not_applicable";
     const sign = black ? -1 : 1;
     const convention = kit.convention(evidence, { kind: "recorded_search", engine: engineIdentity(values), depth: depthOf(values) }, perspective);
-    if (Number.isSafeInteger(values.centipawns)) return { id: "magnitude", operand: { value: sign * values.centipawns, unit: { kind: "centipawn" }, convention, saturated: false } };
-    if (Number.isSafeInteger(values.mateIn) && values.mateIn !== 0) return { id: "magnitude", operand: { value: sign * values.mateIn, unit: { kind: "mate_in" }, convention, saturated: false } };
+    const recordedAt = evidence.projection.id === "recorded.engine.eval" ? { retrievedAt: payloadOf(evidence).retrievedAt as string } : {};
+    if (Number.isSafeInteger(values.centipawns)) return { id: "magnitude", operand: { value: sign * values.centipawns, unit: { kind: "centipawn" }, convention, saturated: false, ...recordedAt } };
+    if (Number.isSafeInteger(values.mateIn) && values.mateIn !== 0) return { id: "magnitude", operand: { value: sign * values.mateIn, unit: { kind: "mate_in" }, convention, saturated: false, ...recordedAt } };
     throw new TypeError("an engine reading without a numeric score is an abstention");
   };
   const stockfishEval = single("magnitude", ["values"], ["mechanical_transform", "retained_convention"], (evidence) => engineMagnitude(evidence, payloadOf(evidence).values));
-  const recordedEval = single("magnitude", ["values"], ["mechanical_transform", "retained_convention"], (evidence) => engineMagnitude(evidence, payloadOf(evidence).values));
+  const recordedEval = single("magnitude", ["retrievedAt", "values"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => engineMagnitude(evidence, payloadOf(evidence).values));
   const stockfishWdl = single("fact_statement", ["values"], ["mechanical_transform"], (evidence) => {
     const values = payloadOf(evidence).values;
     return statement("inspector.engine_wdl@1", "recorded-engine@1", { win: values.win, draw: values.draw, loss: values.loss, engine: engineName(values) });

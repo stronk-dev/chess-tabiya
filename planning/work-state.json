@@ -27163,11 +27163,12 @@
     },
     {
       "id": "D3307",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d3769d76e83e18fe7c241e14ce4c2058bdfcff7e666722551611d5428f078deb",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c13088bf40cd0a547f2346b7a189185c419515392d6d10143ba4eedb2c4e3570",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "packages/runtime/src/presentation-contract.ts",
+      "evidenceKind": "path"
     }
   ]
 }

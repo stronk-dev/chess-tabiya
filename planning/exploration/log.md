@@ -21569,3 +21569,22 @@ Campaign was the one capability with no API, route or content. Now:
   still prevent a complete support/defaults capability. No official pack graduated.
 - **Next:** make the date-bearing recorded-reading component contract failable, then migrate that
   suffix and the remaining Inspector consumers without widening the provider's evidence allow-list.
+
+### 2026-09-30 — Close the recorded-reading provenance gap [[D3307]]
+
+- **What landed:** the recorded engine `magnitude` carries the exact source `retrievedAt`, speaks
+  its pack-authoring date, and refuses missing or unequal timestamps. Guidance's post-provider
+  reading now uses the registered component sentence; Review Map and Full Inspector use the same
+  date-bearing component. The provider still never sees the bare engine reading.
+- **What changed:** the first full software run failed on two Inspector/Review Map adapters that
+  had not retained the timestamp; that failure expanded the fix to all three served consumers.
+  The repaired software, content, browser and packaged-production gates passed locally. The
+  content target first stopped before tests on pnpm's sandbox-blocked registry identity check; the
+  unchanged Make target passed with registry access. [[D3307]] is closed in the ledger and
+  work-state. The presentation RFC and the stable-board-and-presets milestone remain active.
+- **What remains:** Inspector-modal legacy sections, raw-id leaks, the presentation RFC's D1/D9,
+  and the owner's per-context Guided Hint ceiling [[D1639]]. The content graduation count has not
+  advanced; this was a presentation-source repair, not an authored-content wave.
+- **Next:** trace the remaining Inspector-modal sections to their exact admitted components and
+  retire each raw-text path at its production consumer, with negative fixtures for provenance and
+  raw-id leakage.

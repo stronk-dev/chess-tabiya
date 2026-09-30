@@ -18,6 +18,12 @@ dispatched by `PresentedEvidence.svelte`.
 - Numbers carry their `ConventionReceipt` (search execution, recorded search, exact tablebase, human
   model, human population or a registered declared convention); the attribution renders inside the
   component root. Shares are computed by the component from counts; no operand carries a percentage.
+- A magnitude over `recorded.engine.eval@1` also carries the exact source `retrievedAt`; its
+  equivalent sentence states the pack-authoring date. Construction checks timestamp equality with
+  the admitted reading, including the time of day. Other magnitude sources cannot carry this field.
+  Guidance appends recorded readings after the external voice attempt so a provider never receives
+  the bare engine score, but that appended sentence now comes from the same component as Review Map
+  and Full Inspector.
 - `magnitude_trail` draws an SVG whose pixels come only from a registered `MAGNITUDE_SCALE_POLICIES`
   row, with a keyboard-reachable point list.
 - `square_set` carries its caption as a sealed `fact_statement` operand (recomputed on parse);

@@ -56,3 +56,20 @@ Append-only. This log records author/review/implementation transitions for
   four `make test-browser-ci` tiers passed. `make roadmap-check`, `make work-state`, `make
   work-index` and `make verify-governance` passed on the closeout bytes. The RFC remains
   implementing; Inspector-modal legacy sections, raw-id leaks, D1/D9 and owner-use stay open.
+
+## 2026-09-30 — recorded-reading source date through the component
+
+- [[D3307]] is fixed at the source boundary, not only in copy. `magnitude` now requires the exact
+  `retrievedAt` for `recorded.engine.eval@1` and refuses it for other projections. The adapter
+  copies that field and construction compares it with the admitted reading; an omitted field or a
+  one-second same-day mismatch fails. The equivalent sentence states the pack-authoring date.
+- Guidance's recorded-reading suffix stays after the external voice attempt, so raw engine scores
+  remain absent from provider input. It now renders through the same typed component as Review Map
+  and Full Inspector; the last hand-written recorded-reading voice path is gone. The three served
+  consumers have date assertions in software tests.
+- The first software run exposed two undated Inspector/Review Map adapters and failed. Updating
+  those consumers made the second full software gate green (2,464 tests, 7 performance). Content
+  passed (218 tests; 92-document graduation check); browser smoke, real-content, responsive
+  matrix and packaged-production tiers passed. The first content launch stopped before tests on
+  pnpm's registry identity check under sandbox network restrictions; the unchanged Make target
+  passed with registry access. The RFC remains implementing for its other discharges.
