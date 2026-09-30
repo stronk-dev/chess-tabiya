@@ -1798,10 +1798,13 @@ edge and renders those items through the registered component. It retains the co
 control and an explicit empty state; the browser journey asserts an actual typed fact component on
 a committed pawn move. The adjacent structural section is **not** thereby complete: [[D3309]]
 found that its current adapter keeps only `kind` and `squares` while the older visible renderer
-truthfully names side, role, count, file and shade. Its source operand declaration, strict
-kind-partitioned renderer and positive/negative visible fidelity fixtures must land together before
-that section may switch. Neither a generic `Position reading: ...` substitute nor a local prose
-side channel discharges the current-consumer obligation.
+truthfully names side, role, count, file and shade. The versioned evidence contract forbids
+rewriting those `@1` operand declarations in place. The proposed [[D3309]] successor plan is
+`planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md`:
+sixteen `@2` readings, kind-partitioned operands/rendering, both Inspector and Compare call sites,
+and positive/negative visible fidelity fixtures. This is a proposed amendment for review, **not**
+accepted implementation authority. Neither a generic `Position reading: ...` substitute nor a
+local prose side channel discharges the current-consumer obligation.
 
 ## Questions resolved for this draft
 

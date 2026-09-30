@@ -104,3 +104,14 @@ Append-only. This log records author/review/implementation transitions for
   swap would lose true information. That producer/adapter fidelity contract, with typed positive
   and negative fixtures, precedes the structure UI migration. No remote CI or RFC completion is
   claimed.
+
+## 2026-09-30 — D3309 requires a versioned reading successor
+
+- Re-read `rfc/archive/evidence-contract-manifest.md` §4.2 and the existing named-structure
+  successor: a declared-operand change increments the projection version. The sixteen emitting
+  `rules.structural.reading.<kind>@1` rows cannot be widened in place just to make the visual
+  migration easy. `pawn_count` is matcher-only and named-structure already has `@2`.
+- `d3309-structural-fidelity-2026-09-30.md` records the exact sixteen-family operand matrix,
+  proposed `@2` source and consumer split, both `DrillScreen` and `CompareView` call sites, and
+  positive/negative visible fixtures. It is a proposal for RFC review, not an accepted migration
+  or a claim that the Inspector structure section is now typed.

@@ -423,7 +423,7 @@
         "state": "active",
         "capabilities": ["accessibility", "support", "rehearsal"],
         "dependsOn": ["evidence-to-consumer-spine"],
-        "nextAction": "Repair D3309's structural-reading operand loss before migrating that Inspector section; finish the other Inspector-modal legacy consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
+        "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-09-30",
           "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
@@ -436,6 +436,7 @@
             "rfc/evidence-presentation.md",
             "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
             "planning/platform-alignment/evidence-presentation/voice-current-consumer-2026-09-30.md",
+            "planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md",
             "docs/evidence-presentation.md",
             "apps/web/src/lib/voice-response.ts",
             "apps/server/src/guidance.ts",
@@ -487,7 +488,7 @@
             {
               "kind": "work_state",
               "id": "D3309",
-              "digest": "sha256:a6864a1e96a1e37d6ce88a897fd3bbda1a097e8c5b964829f3aaa2eec387f9de"
+              "digest": "sha256:2deb9e66cc7e67c1ec26e1092e7e9e7b9ab697b7501972ba56bab7496d6079d1"
             },
             {
               "kind": "work_state",

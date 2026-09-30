@@ -32,8 +32,9 @@ dispatched by `PresentedEvidence.svelte`.
   edge or when no transition fact is emitted. Its collapse control remains a learner choice.
 - The adjacent position-structure section still uses the older observation renderer: the existing
   typed adapter retains only kind and squares, losing side, piece count, role, file and shade from
-  several real readings. [[D3309]] holds that migration until the declared operands and strict
-  presentation renderer preserve the full facts; swapping only the component would be a regression.
+  several real readings. [[D3309]] holds that migration until versioned `@2` successor readings
+  and a strict presentation renderer preserve the full facts; changing `@1` in place or swapping
+  only the component would be a regression.
 - `magnitude_trail` draws an SVG whose pixels come only from a registered `MAGNITUDE_SCALE_POLICIES`
   row, with a keyboard-reachable point list.
 - `square_set` carries its caption as a sealed `fact_statement` operand (recomputed on parse);

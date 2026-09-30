@@ -21621,3 +21621,14 @@ Campaign was the one capability with no API, route or content. Now:
   use remain; the 1.0 milestone is still active and no official pack graduated in this slice.
 - **Next:** repair the structural admitted fact without reducing detail, then migrate that visible
   Inspector section. Recheck branch integration before touching shared catalogue bytes.
+
+### 2026-09-30 — Hold D3309 behind the evidence version rule
+
+- **What changed:** the evidence-contract manifest's §4.2 requires a new projection version when
+  declared operands change. The sixteen live structural reading `@1` families cannot simply gain
+  side/count/file/shade fields in place. A source-backed D3309 migration proposal now names `@2`
+  successors, a narrow board-sight versus detailed-Inspector consumer split, and visible positive
+  and negative fixtures in `planning/platform-alignment/evidence-presentation/`.
+- **What remains:** the proposal is not accepted and no structural collector, manifest or UI bytes
+  changed in this follow-up. [[D3309]] stays todo; the prior [[D3310]] move-transition migration
+  remains landed and locally verified. The roadmap next action now requires review before code.

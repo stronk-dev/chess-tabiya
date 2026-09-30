@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:866ce35bcecb3d3f3c7cc281adc21b4924369653e3f9b926a6d707358480db0b",
+    "roadmap": "sha256:08f55ba6eb7ff64c607a2e57b20e702dd9cf2765a54e2502d4261814068565f4",
     "workItems": "sha256:80326a14fde6b722667a7df82cb1484b4b37e2b759dc856b062c204edb7a04cb",
-    "workState": "sha256:04e28aa74264f8e1213de20494885826137e966ec10e601b6a7e635318605d22",
+    "workState": "sha256:89f8ef21368d50199a59d1dae35afb6c62a9e70db1d0bc031bc082500204e5d7",
     "rfcRegister": "sha256:18bc49cddbe2a5a0399eaaf1f834c36611229e672d588c7df549e099bf3c1951",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -226,7 +226,7 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Repair D3309's structural-reading operand loss before migrating that Inspector section; finish the other Inspector-modal legacy consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
+      "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
       "latestCheckpoint": {
         "at": "2026-09-30",
         "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
@@ -239,6 +239,7 @@
           "rfc/evidence-presentation.md",
           "planning/platform-alignment/evidence-presentation/compare-current-consumer-2026-09-30.md",
           "planning/platform-alignment/evidence-presentation/voice-current-consumer-2026-09-30.md",
+          "planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md",
           "docs/evidence-presentation.md",
           "apps/web/src/lib/voice-response.ts",
           "apps/server/src/guidance.ts",
@@ -290,7 +291,7 @@
           {
             "kind": "work_state",
             "id": "D3309",
-            "digest": "sha256:a6864a1e96a1e37d6ce88a897fd3bbda1a097e8c5b964829f3aaa2eec387f9de"
+            "digest": "sha256:2deb9e66cc7e67c1ec26e1092e7e9e7b9ab697b7501972ba56bab7496d6079d1"
           },
           {
             "kind": "work_state",
