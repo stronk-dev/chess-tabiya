@@ -169,7 +169,11 @@ Pinned Maia ranks MultiPV candidates but does not normally expose the already
 computed move-policy probability. The AGPL-published patch at
 `workers/maia/patches/maia3-uci-policy-mass.patch` is checked and applied during
 the image build. It adds `policy <mass>` to each UCI info line without changing
-chess logic. WDL remains a human-outcome prediction and is never substituted for
+chess logic. Source softmax uses double precision for reported policy probabilities and emits
+17 significant digits: D3352 measured an all-legal float32 sum above the existing parser tolerance.
+Weights/logits and upstream move sampling are unchanged; probabilities are not clamped or
+re-normalized in the parser. The runtime-user offline image check queries both original failing
+history-conditioned pages at width 20 before an image is admitted. WDL remains a human-outcome prediction and is never substituted for
 move-policy mass. If a future pin loses the patched field, theory selection emits
 `DEGRADED_POLICY_MASS` and uses inverse-rank weighting.
 

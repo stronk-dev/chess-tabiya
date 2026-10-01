@@ -27539,11 +27539,10 @@
       "id": "D3349",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1a2fff410c562f8ffda683dbbda8851ff7faac0d00bef69defba4f5fc4e2474e",
+      "sourceDigest": "sha256:54cbde356f49c943355ef6a8d8322231c483f2ae27a46fdb07fa9b46f5845e01",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Approve the recorded pinned Maia decimal-option amendment, or hold for independent review? No response has been received; presenting the question is not approval."
+      "owner": "evidence-foundation",
+      "blocker": "item:D3353"
     },
     {
       "id": "D3350",
@@ -27562,6 +27561,33 @@
       "uxItems": [],
       "evidence": "planning/safe-deployment-profiles/staged-software-contracts-2026-10-01.json",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3352",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a98da5a003ed5f0de01812518fee8e94afd661bf20d94d19e01b141e19fdf7c3",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "item:D3353"
+    },
+    {
+      "id": "D3353",
+      "state": "blocked",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:221c6f01f63053a1dbd71ec524ece290023d585e180a189d137214fb59ed3e59",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "May we remove only old cache from the dedicated tabiya-source-v1 builder to free Docker VM space, without removing images, containers or learner-data volumes?"
+    },
+    {
+      "id": "D3354",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:150411437172367268f06b9e4a71a5d727cd1dffa9c9b4d281bbd1ef21c295d9",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

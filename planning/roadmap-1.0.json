@@ -384,8 +384,8 @@
         "dependsOn": ["foundation-contracts"],
         "nextAction": "The four evidence-foundation implementations, pack capability lanes 0.30–0.32 and built-in learner Syzygy/Explorer exchange acquisitions are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings plus the remaining Stockfish/Maia and supplied/standalone provider migrations. Implement the RFC's Explorer summary wire and exact consumer bindings; acquisition migration does not retire legacy node-shaped identities. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
         "latestCheckpoint": {
-          "at": "2026-09-30",
-          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. D3326 binds built-in corpus/frontier/return acquisitions to the same Explorer exchange, retaining sparse/zero source success with explicit consumer floors. D3327 propagates real HTTP disconnect to cancellation, proven by the original timer-free negative and authenticated upstream control. Explorer narrow projections/legacy identities, supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged.",
+          "at": "2026-10-01",
+          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. D3326 binds built-in corpus/frontier/return acquisitions to the same Explorer exchange, retaining sparse/zero source success with explicit consumer floors. D3327 propagates real HTTP disconnect to cancellation, proven by the original timer-free negative and authenticated upstream control. Explorer narrow projections/legacy identities, supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged. October 1 implements the owner-approved D3349 pinned Maia decimal-string admission repair with strict request/identity/generation capture and protocol diagnostics. D3352 source-policy double precision/round-trip emission passes actual offline runtime-user full-width model checks without changing weights, sampling, frozen parser/digests or pack meanings. The full real-bot/appliance exit remains open: D3353 fresh-volume Docker disk exhaustion blocks startup; D3354 separately owns incorrect storage contention diagnostics. Offline output and software tests are not a played-bot receipt.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -399,7 +399,9 @@
             "rfc/famous-games.md",
             "rfc/provider-exchange-and-execution.md",
             "planning/provider-exchange-and-execution/tablebase-integration-2026-09-30.md",
-            "planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md"
+            "planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md",
+            "planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md",
+            "planning/provider-exchange-and-execution/maia-policy-float32-negative-2026-10-01.json"
           ],
           "anchors": [
             {
@@ -445,7 +447,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:b6fb32a629686ef71b1d42ec2524f7348d54938fda69f1e343478fbc423f5ce1"
+              "digest": "sha256:85d108d5a8ecc4211cc62f98d7e1110276c64ea07b6662717ec170dd8b6099c3"
             },
             {
               "kind": "work_state",
@@ -720,7 +722,7 @@
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-10-01",
-          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open. D3343 now repairs actual TCP identity fragmentation and aborted-probe contamination under one absolute deadline (five JS/Python and six TCP controls; 42 release tests). D3342 confirms source-build wrappers additionally mount a release index they never generate; D3338 is not solved by digest arguments alone. Source/release distribution repair and an actual isolated operator-startup journey remain required. October 1 advances D3338/D3342 with shared source/release security templates, no unproduced source index, genuine native OCI/config/rootfs joins and both CPU configuration checks. Actual builds repair D3344 unsupported Buildx formatting and D3345 mixed-media dangling index. D3346 repairs non-root model startup: the original offline negative now loads the actual model and returns exact TCP identity and both UCI acknowledgements under no network/1536 MiB/no swap. Eleven source controls enter normal release-policy CI (53 tests); Compose parity, pinned Caddy and types pass. Working-tree images include held Explorer changes, not committed-release evidence. The complete isolated up-wrapper TLS/account/run journey and bot/release gates remain open. The real exact-index source up/CA-export journey now passes eight TLS/account/ingress groups under unchanged 512/1536 MiB no-swap limits. Application-only shared Stockfish allocation and bounded binary hashing remove the observed startup OOM without changing frozen parser/semantic/capability/pack identities (D3348/D3350). The complete normal staged verify-software target passes: 2752 software tests, seven performance tests, warning-free types and downstream contracts, including 819 retained/matching declarations and a zero-write/zero-restamp migration plan. D3351 closes with private snapshot history; no historical baseline or source identity is bypassed. Actual registered-bot play remains red on D3349: pinned Maia decimal string options cannot satisfy the accepted spin-bounds contract. Its amendment is directly recorded; no assumed bounds or fallback. D3338/D3342 and D3347 play-time memory remain blocked by D3349; publication, held D3330 and owner/release discharges remain open.",
+          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open. D3343 now repairs actual TCP identity fragmentation and aborted-probe contamination under one absolute deadline (five JS/Python and six TCP controls; 42 release tests). D3342 confirms source-build wrappers additionally mount a release index they never generate; D3338 is not solved by digest arguments alone. Source/release distribution repair and an actual isolated operator-startup journey remain required. October 1 advances D3338/D3342 with shared source/release security templates, no unproduced source index, genuine native OCI/config/rootfs joins and both CPU configuration checks. Actual builds repair D3344 unsupported Buildx formatting and D3345 mixed-media dangling index. D3346 repairs non-root model startup: the original offline negative now loads the actual model and returns exact TCP identity and both UCI acknowledgements under no network/1536 MiB/no swap. Eleven source controls enter normal release-policy CI (53 tests); Compose parity, pinned Caddy and types pass. Working-tree images include held Explorer changes, not committed-release evidence. The complete isolated up-wrapper TLS/account/run journey and bot/release gates remain open. The real exact-index source up/CA-export journey now passes eight TLS/account/ingress groups under unchanged 512/1536 MiB no-swap limits. Application-only shared Stockfish allocation and bounded binary hashing remove the observed startup OOM without changing frozen parser/semantic/capability/pack identities (D3348/D3350). The complete normal staged verify-software target passes: 2752 software tests, seven performance tests, warning-free types and downstream contracts, including 819 retained/matching declarations and a zero-write/zero-restamp migration plan. D3351 closes with private snapshot history; no historical baseline or source identity is bypassed. October 1 owner approval implements D3349 exact pinned decimal option admission; D3352 repairs reported policy mass with source double precision/round-trip emission. Actual offline runtime-user e4/d4 full-width model checks pass; weights, logits, sampling, frozen parser/digests and all existing pack/capability meanings stay unchanged. The full actual appliance journey is still red before play: D3353 records Docker bavail=0 and independently reproduced uid-1000 fresh-volume SQLite errcode 13 disk exhaustion. Scoped builder-cache cleanup approval is requested, not assumed; D3354 owns misclassification as maintenance contention. The drill now requires real cgroup play-time peaks and no OOM/automatic restart, but these checks have not passed because startup stops first. D3338/D3342/D3347 and D3349/D3352 remain open; complete staged software verification is tracked independently in the new receipt. No publication, held D3330 consent, owner-device discharge, steady-state resource gate, RFC archival or milestone completion is claimed.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -760,13 +762,19 @@
             "tools/staged-appliance-drill.mjs",
             "planning/safe-deployment-profiles/staged-software-contracts-2026-10-01.json",
             "tools/staged-application-snapshot.mjs",
-            "tools/staged-process-contracts.test.mjs"
+            "tools/staged-process-contracts.test.mjs",
+            "rfc/provider-exchange-and-execution.md",
+            "planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md",
+            "planning/provider-exchange-and-execution/maia-compatibility-software-2026-10-01.json",
+            "planning/provider-exchange-and-execution/maia-compatibility-storage-negative-2026-10-01.json",
+            "planning/provider-exchange-and-execution/docker-storage-diagnostic-2026-10-01.json",
+            "workers/maia/check-policy-mass.py"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "verifiable-runtime-distribution.md",
-              "digest": "sha256:5f7304b61b94a1eb2fcda1c7fb1bdcbe2d8a8f14dde5536ddbdf0bc30efb2790"
+              "digest": "sha256:a09b983e778d93c74ee188b28094e9374a5306f6bd34a08207889d49e497606e"
             },
             {
               "kind": "rfc",
@@ -776,7 +784,7 @@
             {
               "kind": "rfc",
               "id": "safe-deployment-profiles.md",
-              "digest": "sha256:fcbe90d86ff932a7fdbcc7dd525e6e876ec234018dc480b89924b1b5172662d6"
+              "digest": "sha256:bd09d1c385d3c993e60f0ad254b6db729371fd8e036a6acdfab2d77f58f0c5ba"
             },
             {
               "kind": "work_state",
@@ -871,7 +879,7 @@
             {
               "kind": "work_state",
               "id": "D3349",
-              "digest": "sha256:1a2fff410c562f8ffda683dbbda8851ff7faac0d00bef69defba4f5fc4e2474e"
+              "digest": "sha256:54cbde356f49c943355ef6a8d8322231c483f2ae27a46fdb07fa9b46f5845e01"
             },
             {
               "kind": "work_state",
@@ -882,6 +890,26 @@
               "kind": "work_state",
               "id": "D3351",
               "digest": "sha256:8a80b94a1ca64be461c7008492ee18f05e6c4e1191f1d9f7090b7d21f1b35557"
+            },
+            {
+              "kind": "rfc",
+              "id": "provider-exchange-and-execution.md",
+              "digest": "sha256:85d108d5a8ecc4211cc62f98d7e1110276c64ea07b6662717ec170dd8b6099c3"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3352",
+              "digest": "sha256:a98da5a003ed5f0de01812518fee8e94afd661bf20d94d19e01b141e19fdf7c3"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3353",
+              "digest": "sha256:221c6f01f63053a1dbd71ec524ece290023d585e180a189d137214fb59ed3e59"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3354",
+              "digest": "sha256:150411437172367268f06b9e4a71a5d727cd1dffa9c9b4d281bbd1ef21c295d9"
             }
           ]
         },

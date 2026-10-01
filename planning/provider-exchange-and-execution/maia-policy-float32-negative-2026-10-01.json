@@ -1,0 +1,74 @@
+{
+  "question": "D3352",
+  "scope": "actual offline model responses, not sealed provider evidence or a played bot",
+  "image": "sha256:9e096c8a9511225778fb1485b0c1792e4ea76b9a32e3c30ea81a0dee29f147bc",
+  "platform": "linux/arm64",
+  "observedAt": "2026-10-01T01:30:50.434Z",
+  "commands": [
+    "uci",
+    "isready",
+    "setoption name Elo value 1400",
+    "setoption name Temperature value 1",
+    "setoption name TopP value 1",
+    "setoption name MultiPV value 20",
+    "position startpos moves e2e4",
+    "go",
+    "position startpos moves d2d4",
+    "go",
+    "quit"
+  ],
+  "pages": [
+    {
+      "rows": [
+        "info depth 1 multipv 1 score cp -63 wdl 456 25 519 policy 0.522408127785 pv e7e5",
+        "info depth 1 multipv 2 score cp -19 wdl 478 25 497 policy 0.129739627242 pv c7c5",
+        "info depth 1 multipv 3 score cp -26 wdl 473 28 499 policy 0.0935394316912 pv d7d5",
+        "info depth 1 multipv 4 score cp -25 wdl 475 25 500 policy 0.0811482742429 pv e7e6",
+        "info depth 1 multipv 5 score cp -23 wdl 475 27 498 policy 0.0657687857747 pv c7c6",
+        "info depth 1 multipv 6 score cp -35 wdl 469 27 504 policy 0.0275353658944 pv d7d6",
+        "info depth 1 multipv 7 score cp -13 wdl 481 25 494 policy 0.0271746311337 pv g7g6",
+        "info depth 1 multipv 8 score cp -47 wdl 463 27 510 policy 0.0188165679574 pv b7b6",
+        "info depth 1 multipv 9 score cp -35 wdl 469 27 504 policy 0.013286286965 pv b8c6",
+        "info depth 1 multipv 10 score cp -17 wdl 478 27 495 policy 0.0107768569142 pv g8f6",
+        "info depth 1 multipv 11 score cp -29 wdl 472 27 501 policy 0.00262142717838 pv a7a6",
+        "info depth 1 multipv 12 score cp -32 wdl 472 24 504 policy 0.00200543017127 pv f7f5",
+        "info depth 1 multipv 13 score cp -52 wdl 462 24 514 policy 0.00119529943913 pv g7g5",
+        "info depth 1 multipv 14 score cp -17 wdl 479 25 496 policy 0.00107604498044 pv a7a5",
+        "info depth 1 multipv 15 score cp -31 wdl 472 25 503 policy 0.000840695924126 pv h7h5",
+        "info depth 1 multipv 16 score cp -44 wdl 465 26 509 policy 0.000753600674216 pv h7h6",
+        "info depth 1 multipv 17 score cp -60 wdl 457 26 517 policy 0.000723119301256 pv f7f6",
+        "info depth 1 multipv 18 score cp -70 wdl 453 24 523 policy 0.00040176170296 pv b7b5",
+        "info depth 1 multipv 19 score cp -90 wdl 442 26 532 policy 9.75458169705e-05 pv b8a6",
+        "info depth 1 multipv 20 score cp -77 wdl 448 27 525 policy 9.11207025638e-05 pv g8h6"
+      ],
+      "bestmove": "bestmove e7e5",
+      "policyMass": 1.0000000014918125
+    },
+    {
+      "rows": [
+        "info depth 1 multipv 1 score cp -74 wdl 450 26 524 policy 0.497129142284 pv d7d5",
+        "info depth 1 multipv 2 score cp -50 wdl 462 26 512 policy 0.128166422248 pv g8f6",
+        "info depth 1 multipv 3 score cp -45 wdl 465 25 510 policy 0.0936863273382 pv e7e6",
+        "info depth 1 multipv 4 score cp -16 wdl 480 24 496 policy 0.0920667052269 pv e7e5",
+        "info depth 1 multipv 5 score cp -42 wdl 466 26 508 policy 0.0452409684658 pv g7g6",
+        "info depth 1 multipv 6 score cp -30 wdl 472 26 502 policy 0.0317050851882 pv d7d6",
+        "info depth 1 multipv 7 score cp -30 wdl 472 26 502 policy 0.0301376152784 pv c7c5",
+        "info depth 1 multipv 8 score cp -61 wdl 456 27 517 policy 0.0293060280383 pv c7c6",
+        "info depth 1 multipv 9 score cp -45 wdl 465 25 510 policy 0.0185025501996 pv b7b6",
+        "info depth 1 multipv 10 score cp -40 wdl 468 24 508 policy 0.0157581772655 pv f7f5",
+        "info depth 1 multipv 11 score cp -45 wdl 464 27 509 policy 0.00840437691659 pv b8c6",
+        "info depth 1 multipv 12 score cp -59 wdl 457 27 516 policy 0.00210313894786 pv a7a6",
+        "info depth 1 multipv 13 score cp -46 wdl 464 26 510 policy 0.00177914288361 pv h7h6",
+        "info depth 1 multipv 14 score cp -52 wdl 461 26 513 policy 0.00145953719039 pv f7f6",
+        "info depth 1 multipv 15 score cp -54 wdl 461 24 515 policy 0.00139368057717 pv b7b5",
+        "info depth 1 multipv 16 score cp -40 wdl 467 26 507 policy 0.00126733887009 pv a7a5",
+        "info depth 1 multipv 17 score cp -16 wdl 479 26 495 policy 0.000956854724791 pv h7h5",
+        "info depth 1 multipv 18 score cp -87 wdl 443 27 530 policy 0.000736709160265 pv g7g5",
+        "info depth 1 multipv 19 score cp -93 wdl 440 27 533 policy 0.000117172967293 pv g8h6",
+        "info depth 1 multipv 20 score cp -106 wdl 433 28 539 policy 8.30093486002e-05 pv b8a6"
+      ],
+      "bestmove": "bestmove e7e5",
+      "policyMass": 0.9999999831195592
+    }
+  ]
+}

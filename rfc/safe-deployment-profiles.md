@@ -12,6 +12,13 @@
   source-only fake index claims. Native CPU OCI/image joins, real model identity/readiness and
   actual CPU appliance/hosted configuration checks pass; D3338/D3342 retain the full isolated
   operator journey. Receipt: `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`.
+- **Implementation checkpoint 2026-10-01, Maia compatibility:** the approved provider admission
+  and source precision repairs pass actual offline model validation. The appliance now requires
+  actual cgroup play-time peaks, exact limits and no OOM/automatic restart after both play phases;
+  permanent controls refuse forged subjects/limits/peaks. The full journey still fails before
+  play on D3353 fresh-volume Docker disk exhaustion, independently diagnosed as SQLite errcode 13.
+  No play-time receipt is claimed. Receipt:
+  `planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md`.
 - **Created:** 2026-08-27
 - **Implementation checkpoint 2026-10-01, actual journey:** the source drill drives the real
   build/check/up/CA-export wrappers with native CPU Maia and isolated owned volumes/loopback

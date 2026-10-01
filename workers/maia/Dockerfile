@@ -22,11 +22,11 @@ RUN rm -f /etc/apt/sources.list.d/debian.sources \
     && apt-get -o Acquire::Retries=5 update \
     && apt-get install -y --no-install-recommends patch=2.7.6-7 \
     && rm -rf /var/lib/apt/lists/* \
-    && echo "3aedf724d937bc3634406ad2ce1f7b62bc77e42b667bbee04cba021d56018ff6  /inputs/maia3-uci-policy-mass.patch" | sha256sum -c - \
+    && echo "c478be220e85ae0ba1300fe266bf6b0c2045ad80c8dc78f448c18df3d0b02253  /inputs/maia3-uci-policy-mass.patch" | sha256sum -c - \
     && mkdir -p /opt/maia3 \
     && tar -xzf /inputs/maia3.tar.gz -C /opt/maia3 --strip-components=1 \
-    && patch -d /opt/maia3 -p1 --dry-run < /inputs/maia3-uci-policy-mass.patch \
-    && patch -d /opt/maia3 -p1 < /inputs/maia3-uci-policy-mass.patch
+    && patch -d /opt/maia3 -p1 --fuzz=0 --dry-run < /inputs/maia3-uci-policy-mass.patch \
+    && patch -d /opt/maia3 -p1 --fuzz=0 < /inputs/maia3-uci-policy-mass.patch
 
 # ---------------------------------------------------------------------------------------------
 # Runtime (`cpu`).
@@ -58,6 +58,7 @@ ADD --checksum=sha256:ba14208b2992d85502f5fb501934abf6aaaeb355e9f3fdf90e326911f5
     /opt/maia3-models/maia3-5m.pt
 
 COPY sidecar.py /opt/chess-tabiya/maia-sidecar.py
+COPY check-policy-mass.py /opt/chess-tabiya/check-policy-mass.py
 COPY patches/maia3-uci-policy-mass.patch /opt/chess-tabiya/patches/maia3-uci-policy-mass.patch
 COPY NOTICE.txt /usr/share/doc/chess-tabiya-maia/NOTICE.txt
 
@@ -76,7 +77,8 @@ USER maia
 # Validate as the actual runtime uid, not root: a remote ADD's default mode can otherwise let
 # this image build successfully while every deployed sidecar fails to read its model.
 RUN --network=none test -r /opt/maia3-models/maia3-5m.pt \
-    && printf 'uci\nisready\nquit\n' | maia3-uci --model 5m --checkpoint-path /opt/maia3-models/maia3-5m.pt --use-uci-history | grep -qx readyok
+    && printf 'uci\nisready\nquit\n' | maia3-uci --model 5m --checkpoint-path /opt/maia3-models/maia3-5m.pt --use-uci-history | grep -qx readyok \
+    && python /opt/chess-tabiya/check-policy-mass.py
 
 LABEL org.opencontainers.image.title="chess-tabiya-maia-cpu" \
       org.opencontainers.image.description="Tabiya Maia3 human-move-model sidecar, CPU-only (cpu tier)" \

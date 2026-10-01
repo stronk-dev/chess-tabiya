@@ -21971,3 +21971,39 @@ Campaign was the one capability with no API, route or content. Now:
   nor per-release consent are presumed. No protected intent/archive change, milestone completion,
   managed worktree, push, publication or operator deployment. Remaining approval dependencies
   are explicit rather than handed back as instructions to paste into another agent.
+
+
+## 2026-10-01 — owner-approved Maia repair; real play remains host-blocked
+
+- Implemented the bounded D3349 amendment under the owner approval recorded before production.
+  Actual pinned decimal string advertisements replace invented spin ranges; requests, integer
+  bounds, exact model/container identity and same-generation capture stay strict. Malformed
+  advertisements report protocol, not a process crash. Scripted/Mock positives remain labelled.
+- D3352 actual raw e4 mass (1.0000000014918125) motivates source double-precision softmax and
+  round-trip reporting, not a parser-tolerance increase. Weights/logits/upstream sampling stay
+  unchanged. The checksum-bound zero-fuzz patch and native offline runtime-user width-20 e4/d4
+  model build pass (0.9999999999999999 / 1.0); material and notice digests match. Keep original
+  negatives, including the distinct build-stage failure; do not call that a played-bot receipt.
+- The complete make staged-software-contracts passes at exact-index tree
+  272d99c1dc67d88a444664e11a2ef72f1b94d6e9: 315 files/2755 software tests, four files/seven
+  performance tests, zero type errors/warnings and all downstream contracts. Release policy has
+  63 controls. History retains 819 meanings; the 352-document migration plan has zero mechanical
+  edits, judgements, refusals or sidecar restamps. Existing build assertions now require zero-fuzz
+  application, precise policy output and unchanged sampling; no failing test is removed.
+- Full actual appliance remains red before play, not waived: D3353 captures Docker bavail=0 and
+  independently reproduced uid-1000 fresh-volume SQLite errcode 13 (database or disk is full).
+  Requested permission to clear old dedicated Tabiya builder cache; no image/data-volume prune
+  or cache deletion is assumed. D3354 separately queues truthful storage failure classification.
+  Original test project/volumes and disposable diagnostics are cleaned; operator data untouched.
+- Actual play-time kernel peaks/no OOM/no automatic restarts are now mandatory in the unchanged
+  full journey, with negative subject/limit/peak controls. They have not passed this blocked run.
+  D3349/D3352 and D3338/D3342/D3347 remain open. Ledger, work-state, RFC register/checkpoints,
+  queue and roadmap flow back together; no full capability, milestone or RFC archival follows.
+- Receipt: planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md,
+  with software, original source-mass, final appliance and independent host diagnostic JSONs.
+  No protected intent/archive, held D3330 consent, pack restamps, managed Git worktree, push,
+  publication or operator deployment. Next: approved scoped cache cleanup, unchanged complete
+  bot/rehearsal/memory rerun, then the accepted-storage diagnostic repair.
+- Final exact-index staged process contracts pass: register C1–C8, lifecycle P1–P7, zero
+  unrouted/untriaged rows, roadmap R1–R10 and its sealed receipt, plus intent parity. Normal
+  docs-index checks pass. The appliance remains red; these checks do not discharge its exit.

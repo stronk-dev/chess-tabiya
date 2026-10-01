@@ -38,9 +38,11 @@ describe("Maia production sidecar definition", () => {
     // patch replace the live `git clone`; the dry run still refuses a patch that does not apply.
     expect(dockerfile).not.toContain("git clone");
     expect(dockerfile).toContain(
-      "patch -d /opt/maia3 -p1 --dry-run < /inputs/maia3-uci-policy-mass.patch",
+      "patch -d /opt/maia3 -p1 --fuzz=0 --dry-run < /inputs/maia3-uci-policy-mass.patch",
     );
-    expect(policyPatch).toContain("policy {float(item['policy']):.12g}");
+    expect(policyPatch).toContain("torch.softmax(logits.double(), dim=-1)");
+    expect(policyPatch).toContain("policy {float(item['policy']):.17g}");
+    expect(policyPatch).not.toMatch(/^[+-].*sample_from_logits\(/mu);
     expect(policyPatch).not.toContain("policy {cp}");
   });
 

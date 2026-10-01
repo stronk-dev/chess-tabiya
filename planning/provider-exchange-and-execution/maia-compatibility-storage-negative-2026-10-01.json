@@ -1,0 +1,100 @@
+{
+  "protocol": "tabiya.source-appliance-proof@1",
+  "scope": "native source build, real model, loopback transport; not a published release or owner-device proof",
+  "project": "tabiya-appliance-proof-4a43558b-86fc-4b80-ac1e-c76d3478dffc",
+  "hostname": "tabiya-appliance-proof-4a43558b-86fc-4b80-ac1e-c76d3478dffc.example.test",
+  "startedAt": "2026-10-01T01:43:10.322Z",
+  "checks": [
+    "owned project, volumes, loopback-only proxy ports and actual immutable CPU identities"
+  ],
+  "result": "failed",
+  "images": {
+    "distribution": "source-build",
+    "tier": "cpu",
+    "platform": "linux/arm64",
+    "serverImage": "sha256:fc02684b66bee0b821c8eccd1b960f3d1a7b73beb5f59ae907dd990343efafd0",
+    "maia": {
+      "runtime": "oci",
+      "imageId": "sha256:6a837c5207dcc3dce8d6acffcae7477e6d061a45a4e34576b88bbc9947536406",
+      "manifestDigest": "sha256:9277a3e585c656d02fb24a6fb98b3eaece456482c05de64c5fb33502d832460b",
+      "configDigest": "sha256:6a837c5207dcc3dce8d6acffcae7477e6d061a45a4e34576b88bbc9947536406"
+    }
+  },
+  "failure": "make failed (2): \n\n",
+  "failureServiceLogs": "maia-1    | loading Maia3 checkpoint /opt/maia3-models/maia3-5m.pt\nmaia-1    | Maia3 ready\nserver-1  | {\"event\":\"storage_prepare_receipt\",\"receipt\":{\"protocol\":\"tabiya-storage-admin-receipt\",\"protocolVersion\":1,\"operationId\":\"4ac12f21-927e-4efa-a30d-cccaafc750dc\",\"applicationRevision\":\"dev+38f0148ed0ed15047f6f230b9586c8eab1b8328d\",\"elapsedMs\":3,\"paths\":[],\"operation\":\"prepare_start\",\"result\":\"refused\",\"code\":\"MAINTENANCE_LOCKED\"}}\nserver-1  | {\"event\":\"storage_prepare_receipt\",\"receipt\":{\"protocol\":\"tabiya-storage-admin-receipt\",\"protocolVersion\":1,\"operationId\":\"f6381d07-f422-429c-b700-449a91a741da\",\"applicationRevision\":\"dev+38f0148ed0ed15047f6f230b9586c8eab1b8328d\",\"elapsedMs\":1,\"paths\":[],\"operation\":\"prepare_start\",\"result\":\"refused\",\"code\":\"MAINTENANCE_LOCKED\"}}\nserver-1  | {\"event\":\"storage_prepare_receipt\",\"receipt\":{\"protocol\":\"tabiya-storage-admin-receipt\",\"protocolVersion\":1,\"operationId\":\"f6289dde-8f1a-4a80-9beb-7eea10d60af3\",\"applicationRevision\":\"dev+38f0148ed0ed15047f6f230b9586c8eab1b8328d\",\"elapsedMs\":2,\"paths\":[],\"operation\":\"prepare_start\",\"result\":\"refused\",\"code\":\"MAINTENANCE_LOCKED\"}}\n",
+  "failureServiceStates": [
+    {
+      "name": "/tabiya-appliance-proof-4a43558b-86fc-4b80-ac1e-c76d3478dffc-caddy-1",
+      "state": {
+        "Status": "created",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "0001-01-01T00:00:00Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      }
+    },
+    {
+      "name": "/tabiya-appliance-proof-4a43558b-86fc-4b80-ac1e-c76d3478dffc-maia-1",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 70361,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T01:44:18.029597001Z",
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-10-01T01:44:23.112383712Z",
+              "End": "2026-10-01T01:44:23.177020004Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "/tabiya-appliance-proof-4a43558b-86fc-4b80-ac1e-c76d3478dffc-server-1",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 70718,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T01:44:25.39347263Z",
+        "FinishedAt": "2026-10-01T01:44:25.127601088Z",
+        "Health": {
+          "Status": "starting",
+          "FailingStreak": 0,
+          "Log": []
+        }
+      }
+    }
+  ],
+  "cleanup": "owned project and volumes removed",
+  "finishedAt": "2026-10-01T01:44:27.362Z",
+  "sources": {
+    "mode": "git-index",
+    "head": "6cf4016ee01018b0349d798c2c3f2f8e281ebc8e",
+    "tree": "38f0148ed0ed15047f6f230b9586c8eab1b8328d",
+    "includesUnstagedChanges": false
+  }
+}

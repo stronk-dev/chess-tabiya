@@ -16,10 +16,15 @@ and runtime Hugging Face access is disabled. The entry point always includes
 `--use-uci-history`; callers must still send `position fen <start> moves <full
 history>` for every selection.
 
-The image applies `patches/maia3-uci-policy-mass.patch` with `git apply --check`
+The image verifies `patches/maia3-uci-policy-mass.patch` by checksum and `patch --dry-run`
 against the pinned source before installation. The patch adds no chess logic: it
-only emits Maia's already-computed move-policy scalar as `policy <mass>` on each
-MultiPV `info` line. This keeps policy mass distinct from the model's WDL output.
+emits the move-policy scalar as `policy <mass>` on each MultiPV `info` line. Reported
+softmax arithmetic uses float64 and 17-digit output to avoid the measured float32 all-legal
+sum above one; weights, logits and upstream sampled bestmove are unchanged. This keeps policy
+mass distinct from the model's WDL output. `check-policy-mass.py` queries the actual offline
+model on both regression positions at width 20 as the final runtime user. It refuses missing,
+non-finite, incomplete or excess-mass pages under the parser's existing tolerance, without
+clamping or enlarging a tolerance. This is source validation, not bot calibration.
 
 Build and inspect:
 

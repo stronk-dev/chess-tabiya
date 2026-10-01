@@ -52,11 +52,30 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
   constructors (subpath `@chess-tabiya/runtime/provider-exchange-authority`), the assertions and the
   durable `serializeProviderDelivery` / `parsePersistedProviderDelivery` boundary.
 - `apps/server/src/provider-exchange.ts` contains `ProviderExchangeScheduler`.
-- `apps/server/src/provider-operations.ts` contains the five descriptors.
+- `apps/server/src/provider-operations.ts` contains the six descriptors.
 - `apps/server/src/engine-supervisor.ts#exchange` runs one serialized task. That task captures the
   generation, identity, option image and launched artifact, and runs the `finally` reset.
-- `apps/server/src/provider-traversal.ts` is the operator capability, the five `providerTraversal*`
+- `apps/server/src/provider-traversal.ts` is the operator capability, the six `providerTraversal*`
   callables and the CLI.
+
+## Pinned Maia option admission
+
+The supported Maia3 model/source profile (`MAIA3_MODEL_ID` / `MAIA3_SOURCE_COMMIT`) advertises
+Temperature and TopP as decimal `string` options, not bounded integer `spin` options. §6 was
+owner-amended on 2026-10-01 against the pinned source and actual offline model advertisement.
+The descriptor requires unique names, the supported option types and finite positive decimal
+defaults (TopP at most one); it never invents a Temperature maximum. Requests stay finite,
+Temperature strictly positive and TopP in `(0,1]`, without clamping or replacement values.
+Advertised integer Elo/MultiPV bounds, legal width and timeout limits still apply. Request
+normalization and literal decimal command bytes are unchanged.
+
+Checks run before commands and over the captured response. The model/version and established
+generation must remain the requested pinned ones, and the response requires its actual captured
+container. Unsupported/missing/duplicate/malformed options are `invalid_response`, which provider
+health reports as `protocol`, not a claim that the process crashed. Identity/generation mismatch
+refuses separately. Labelled Mock Maia uses the same decimal grammar but remains labelled synthetic
+data; only the actual appliance journey proves real bot play. Amendment and retained source evidence:
+`planning/provider-exchange-and-execution/maia-decimal-option-amendment-2026-10-01.md`.
 
 ## Guarantees
 

@@ -80,10 +80,10 @@ export class FakeEngines implements ProviderEngineClient {
   calls: EngineExchangeRequest[] = [];
   respond: (request: EngineExchangeRequest) => readonly string[] = (request) => stockfishDepthLines(request);
   maiaOptions: EngineOption[] = [
-    { name: "Elo", type: "spin" as const, default: "1500", min: 1000, max: 2600 },
-    { name: "MultiPV", type: "spin" as const, default: "1", min: 1, max: 64 },
-    { name: "Temperature", type: "spin" as const, default: "1", min: 0, max: 5 },
-    { name: "TopP", type: "spin" as const, default: "1", min: 0, max: 1 },
+    { name: "Elo", type: "spin" as const, default: "1500", min: 0, max: 5000 },
+    { name: "MultiPV", type: "spin" as const, default: "1", min: 1, max: 20 },
+    { name: "Temperature", type: "string" as const, default: "1.0" },
+    { name: "TopP", type: "string" as const, default: "1.0" },
   ];
   containerCaptured = true;
   identity(engineId: string): EngineIdentity {

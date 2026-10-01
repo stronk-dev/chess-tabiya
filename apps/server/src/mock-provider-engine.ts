@@ -33,15 +33,15 @@ const OPTION_IMAGE = Object.freeze({ advertisedUciOptionLines: Object.freeze(["o
 const MAIA_IDENTITY: EngineIdentity = Object.freeze({ id: MAIA, kind: "opponent", name: "Mock Maia", version: MAIA3_SOURCE_COMMIT, modelId: MAIA3_MODEL_ID, seedHonored: false, eloHonored: true });
 const MAIA_OPTIONS: readonly EngineOption[] = Object.freeze([
   Object.freeze({ name: "Elo", type: "spin" as const, default: "1500", min: MAIA3_BAND_RANGE.min, max: MAIA3_BAND_RANGE.max }),
-  Object.freeze({ name: "MultiPV", type: "spin" as const, default: "1", min: 1, max: 64 }),
-  Object.freeze({ name: "Temperature", type: "spin" as const, default: "1", min: 0, max: 10 }),
-  Object.freeze({ name: "TopP", type: "spin" as const, default: "1", min: 0, max: 1 }),
+  Object.freeze({ name: "MultiPV", type: "spin" as const, default: "1", min: 1, max: 20 }),
+  Object.freeze({ name: "Temperature", type: "string" as const, default: "1.0" }),
+  Object.freeze({ name: "TopP", type: "string" as const, default: "1.0" }),
 ]);
 const MAIA_OPTION_IMAGE = Object.freeze({ advertisedUciOptionLines: Object.freeze([
   `option name Elo type spin default 1500 min ${MAIA3_BAND_RANGE.min} max ${MAIA3_BAND_RANGE.max}`,
-  "option name MultiPV type spin default 1 min 1 max 64",
-  "option name Temperature type spin default 1 min 0 max 10",
-  "option name TopP type spin default 1 min 0 max 1",
+  "option name MultiPV type spin default 1 min 1 max 20",
+  "option name Temperature type string default 1.0",
+  "option name TopP type string default 1.0",
 ]), appliedSetoptionCommands: Object.freeze([]) });
 const MOCK_DIGEST = (label: string): `sha256:${string}` => `sha256:${sha256Hex(label)}`;
 const MAIA_CONTAINER = digestEngineContainer({ runtime: "oci", imageId: "tabiya-mock-maia:labelled-stand-in", manifestDigest: MOCK_DIGEST("tabiya mock maia manifest"), configDigest: MOCK_DIGEST("tabiya mock maia config") });

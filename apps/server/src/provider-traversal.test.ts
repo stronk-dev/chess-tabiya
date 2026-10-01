@@ -149,7 +149,7 @@ describe("§9 operator traversal", () => {
   });
 });
 
-describe("§6 Maia live bounds are refuse-only", () => {
+describe("§6 pinned Maia decimal options and live bounds are refuse-only", () => {
   const scheduler = (engines: FakeEngines) => new ProviderExchangeScheduler({ descriptors: { ...providerOperationDescriptors({ engines, tablebaseFetch: null, explorerFetch: null, explorerToken: null }), "maia.policy_page@1": MaiaPolicyPageOperation(engines) }, maxActive: 1, maxQueued: 1, maxRetainedEntries: 1, maxRetainedWeight: 1, retentionTtlMs: 1, monotonicNowMs: () => 0, wallNow: () => "2026-09-24T12:00:00.000Z" });
   const get = (engines: FakeEngines, patch: Record<string, unknown>) => scheduler(engines).get({ operation: "maia.policy_page@1", request: { ...MAIA_REQUEST, ...patch } as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
 
@@ -160,34 +160,82 @@ describe("§6 Maia live bounds are refuse-only", () => {
     expect(engines.calls[0]!.commands).toEqual(["setoption name Elo value 1500", "setoption name Temperature value 1", "setoption name TopP value 0.95", "setoption name MultiPV value 2", `position fen ${START}`, "go"]);
     for (const band of [999, 2401]) await expect(get(engines, { band })).rejects.toThrow(ProviderRequestInvalid);
     for (const band of [1000, 2400]) expect((await get(engines, { band })).kind).toBe("success");
-    await expect(get(engines, { temperature: 6 })).rejects.toThrow(/temperature/u);
+    // The pinned source advertises no Temperature maximum. Preserve literal finite decimals.
+    for (const temperature of [0.01, 0.7, 1.25, 6]) {
+      expect((await get(engines, { temperature, topP: 0.05 })).kind).toBe("success");
+      expect(engines.calls.at(-1)!.commands).toContain(`setoption name Temperature value ${temperature}`);
+      expect(engines.calls.at(-1)!.commands).toContain("setoption name TopP value 0.05");
+    }
     await expect(get(engines, { band: 1500.5 })).rejects.toThrow(ProviderRequestInvalid);
     await expect(get(engines, { temperature: 0 })).rejects.toThrow(ProviderRequestInvalid);
+    for (const temperature of [-1, NaN, Infinity, -Infinity]) await expect(get(engines, { temperature })).rejects.toThrow(ProviderRequestInvalid);
+    for (const topP of [0, -1, NaN, Infinity]) await expect(get(engines, { topP })).rejects.toThrow(ProviderRequestInvalid);
     await expect(get(engines, { topP: 1.01 })).rejects.toThrow(ProviderRequestInvalid);
     await expect(get(engines, { timeoutMs: 60_001 })).rejects.toThrow(ProviderRequestInvalid);
     engines.maiaOptions = engines.maiaOptions.map((option) => (option.name === "MultiPV" ? { ...option, max: 1 } : option));
     await expect(get(engines, {})).rejects.toThrow(/MultiPV maximum/u);
   });
 
-  it("treats missing numeric option bounds and an uncaptured container as unavailability", async () => {
+  it("reports a missing decimal option as protocol incompatibility and refuses an uncaptured container", async () => {
     const engines = new FakeEngines();
     engines.respond = () => ["info depth 1 multipv 1 policy 0.5 pv e2e4", "bestmove e2e4"];
     engines.maiaOptions = engines.maiaOptions.filter((option) => option.name !== "TopP");
-    expect(await get(engines, { requestedWidth: 1 })).toMatchObject({ kind: "source_failure", reason: "provider_unavailable", providerDetail: "Maia does not advertise numeric TopP bounds" });
+    expect(await get(engines, { requestedWidth: 1 })).toMatchObject({ kind: "source_failure", reason: "invalid_response", providerDetail: "Maia must advertise exactly one TopP option" });
     const noContainer = new FakeEngines();
     noContainer.containerCaptured = false;
     noContainer.respond = engines.respond;
     expect(await get(noContainer, { requestedWidth: 1 })).toMatchObject({ reason: "provider_unavailable" });
   });
 
-  it("D3349: the actual pinned Maia decimal-string advertisement cannot pass the current contract", async () => {
-    // Exact option form measured by make maia-option-contract-drill, not an invented spin range.
-    // This is a negative compatibility control, NOT evidence that a real bot can play.
+  it("D3349: admits the actual advertisement grammar, never synthetic numeric ranges or malformed defaults", async () => {
+    // Scripted transport carrying the measured option form; real inference is an appliance gate.
+    const invalidOptions = [
+      { name: "Temperature", type: "spin", default: "1", min: 0, max: 5 },
+      { name: "Temperature", type: "string", default: "1.0", min: 0 },
+      ...["", "garbage", "NaN", "Infinity", "1e999", "0x1", " 1.0", "0", "-0.1"].map((value) => ({ name: "Temperature", type: "string" as const, default: value })),
+      ...["1.1", "0", "-1", "NaN"].map((value) => ({ name: "TopP", type: "string" as const, default: value })),
+      { name: "MultiPV", type: "spin", default: "1", min: 1, max: Infinity },
+      { name: "MultiPV", type: "spin", default: "1", min: 0, max: 20 },
+      { name: "MultiPV", type: "spin", default: "1", min: 2, max: 1 },
+      { name: "Elo", type: "string", default: "1500" },
+    ] as const;
+    for (const invalid of invalidOptions) {
+      const engines = new FakeEngines();
+      engines.maiaOptions = engines.maiaOptions.map((option) => option.name === invalid.name ? invalid : option);
+      expect(await get(engines, { requestedWidth: 1 })).toMatchObject({ kind: "source_failure", reason: "invalid_response" });
+      expect(engines.calls).toHaveLength(0);
+    }
+    for (const name of ["Elo", "MultiPV", "Temperature", "TopP"]) {
+      const engines = new FakeEngines();
+      engines.maiaOptions.push(engines.maiaOptions.find((option) => option.name === name)!);
+      expect(await get(engines, {})).toMatchObject({ reason: "invalid_response" });
+      expect(engines.calls).toHaveLength(0);
+    }
+  });
+
+  it("refuses wrong requested/live model identities before commands and replaced generations after capture", async () => {
+    for (const patch of [{ version: "unverified-source" }, { modelId: "unverified-model" }, { eloHonored: false }, { id: "foreign-engine" }]) {
+      const engines = new FakeEngines();
+      const identity = engines.identity.bind(engines);
+      engines.identity = (id) => ({ ...identity(id), ...patch });
+      expect(await get(engines, {})).toMatchObject({ kind: "source_failure", reason: "identity_mismatch" });
+      expect(engines.calls).toHaveLength(0);
+    }
+    const requested = new FakeEngines();
+    expect(await get(requested, { requestedModel: { ...MAIA_REQUEST.requestedModel, version: "wrong-version" } })).toMatchObject({ reason: "identity_mismatch" });
+    expect(requested.calls).toHaveLength(0);
+    const replaced = new FakeEngines();
+    replaced.respond = () => { replaced.generation++; return ["info depth 1 multipv 1 policy 0.5 pv e2e4", "bestmove e2e4"]; };
+    expect(await get(replaced, { requestedWidth: 1 })).toMatchObject({ reason: "identity_mismatch", providerDetail: "Maia generation changed during option admission/exchange" });
+  });
+
+  it("rechecks the captured option table rather than trusting pre-exchange admission", async () => {
     const engines = new FakeEngines();
-    engines.maiaOptions = engines.maiaOptions.map((option) => option.name === "Temperature" || option.name === "TopP"
-      ? { name: option.name, type: "string", default: "1.0" } : option);
-    expect(await get(engines, { requestedWidth: 1 })).toMatchObject({ kind: "source_failure", reason: "provider_unavailable", providerDetail: "Maia does not advertise numeric Temperature bounds" });
-    expect(engines.calls).toHaveLength(0);
+    engines.respond = () => {
+      engines.maiaOptions = engines.maiaOptions.filter((option) => option.name !== "TopP");
+      return ["info depth 1 multipv 1 policy 0.5 pv e2e4", "bestmove e2e4"];
+    };
+    expect(await get(engines, { requestedWidth: 1 })).toMatchObject({ reason: "invalid_response", providerDetail: "Maia must advertise exactly one TopP option" });
   });
 
   it("history-conditioned and exact-FEN requests to one final position never alias", () => {

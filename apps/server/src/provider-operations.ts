@@ -26,7 +26,7 @@ import {
 
 import { appliedTargetElo, engineBandProfile } from "./engine-band.js";
 import type { EngineExchangeCapture, EngineExchangeRequest, EngineHealth, EngineIdentity, EngineOption } from "./engine-supervisor.js";
-import { MAIA3_BAND_RANGE } from "./maia.js";
+import { MAIA3_BAND_RANGE, MAIA3_MODEL_ID, MAIA3_SOURCE_COMMIT } from "./maia.js";
 import {
   ProviderSourceUnavailable,
   type ProviderExecutionContext,
@@ -113,16 +113,37 @@ export function StockfishPrincipalVariationOperation(engines: ProviderEngineClie
 // §6 Maia
 // ---------------------------------------------------------------------------------------------
 
-function numericOption(options: readonly EngineOption[] | undefined, name: string): { readonly min: number; readonly max: number } {
-  const option = options?.find((candidate) => candidate.name === name);
-  if (option === undefined || option.type !== "spin" || option.min === undefined || option.max === undefined) {
-    throw new ProviderSourceUnavailable("provider_unavailable", `Maia does not advertise numeric ${name} bounds`);
-  }
-  return { min: option.min, max: option.max };
+function requiredOption(options: readonly EngineOption[] | undefined, name: string): EngineOption {
+  const matches = options?.filter((candidate) => candidate.name === name) ?? [];
+  if (matches.length !== 1) throw new ProviderSourceUnavailable("invalid_response", `Maia must advertise exactly one ${name} option`);
+  return matches[0]!;
 }
 
-/** Refuse-only live bounds (§6): nothing is clamped; a missing bound is unavailability. */
+function numericOption(options: readonly EngineOption[] | undefined, name: string): { readonly min: number; readonly max: number } {
+  const option = requiredOption(options, name);
+  if (option.type !== "spin" || !Number.isSafeInteger(option.min) || !Number.isSafeInteger(option.max) || option.min! > option.max!) {
+    throw new ProviderSourceUnavailable("invalid_response", `Maia does not advertise valid integer ${name} bounds`);
+  }
+  return { min: option.min!, max: option.max! };
+}
+
+/** Pinned Maia3 cmd_setoption accepts float strings; its UCI has NO decimal min/max. */
+function decimalOption(options: readonly EngineOption[] | undefined, name: "Temperature" | "TopP"): void {
+  const option = requiredOption(options, name);
+  const numeric = typeof option.default === "string" && /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/u.test(option.default) ? Number(option.default) : NaN;
+  if (option.type !== "string" || option.min !== undefined || option.max !== undefined || !Number.isFinite(numeric) || numeric <= 0 || (name === "TopP" && numeric > 1)) {
+    throw new ProviderSourceUnavailable("invalid_response", `Maia ${name} does not match the pinned decimal-string option profile`);
+  }
+}
+
+/** Refuse-only §6 profile: no invented decimal bounds, clamping or silent default. */
 function checkMaiaLiveBounds(request: { readonly band: number; readonly temperature: number; readonly topP: number; readonly requestedWidth: number }, health: EngineHealth, options: readonly EngineOption[] | undefined): number {
+  const identity = health.identity;
+  if (identity?.id !== MAIA_ENGINE_ID || identity.kind !== "opponent" || identity.modelId !== MAIA3_MODEL_ID || identity.version !== MAIA3_SOURCE_COMMIT) {
+    throw new ProviderSourceUnavailable("identity_mismatch", "Maia decimal options require the pinned model/source identity");
+  }
+  numericOption(options, "Elo");
+  if (health.bandOption !== "Elo") throw new ProviderSourceUnavailable("invalid_response", "Maia must apply the advertised Elo option");
   const profile = engineBandProfile(health);
   if (profile.min === null || profile.max === null) throw new ProviderRequestInvalid("Maia advertises no complete band range");
   const min = Math.max(profile.min, MAIA3_BAND_RANGE.min);
@@ -130,11 +151,11 @@ function checkMaiaLiveBounds(request: { readonly band: number; readonly temperat
   if (min > max) throw new ProviderRequestInvalid("Maia's effective band range is empty");
   if (request.band < min || request.band > max) throw new ProviderRequestInvalid(`band ${request.band} is outside ${min}..${max}`);
   const multiPv = numericOption(options, "MultiPV");
+  if (multiPv.min < 1) throw new ProviderSourceUnavailable("invalid_response", "Maia MultiPV must advertise a positive minimum");
+  if (request.requestedWidth < multiPv.min) throw new ProviderRequestInvalid(`requestedWidth ${request.requestedWidth} is below the advertised MultiPV minimum ${multiPv.min}`);
   if (request.requestedWidth > multiPv.max) throw new ProviderRequestInvalid(`requestedWidth ${request.requestedWidth} exceeds the advertised MultiPV maximum ${multiPv.max}`);
-  const temperature = numericOption(options, "Temperature");
-  if (request.temperature < temperature.min || request.temperature > temperature.max) throw new ProviderRequestInvalid(`temperature ${request.temperature} is outside the advertised ${temperature.min}..${temperature.max}`);
-  const topP = numericOption(options, "TopP");
-  if (request.topP < topP.min || request.topP > topP.max) throw new ProviderRequestInvalid(`topP ${request.topP} is outside the advertised ${topP.min}..${topP.max}`);
+  decimalOption(options, "Temperature");
+  decimalOption(options, "TopP");
   let applied: number | undefined;
   try {
     applied = appliedTargetElo(health, request.band);
@@ -156,9 +177,13 @@ export function MaiaPolicyPageOperation(engines: ProviderEngineClient | null): P
       const { request } = identity;
       await engines.start(MAIA_ENGINE_ID);
       const before = engines.health(MAIA_ENGINE_ID);
+      const generation = engines.establishedGeneration(MAIA_ENGINE_ID);
+      if (generation === null) throw new ProviderSourceUnavailable("identity_mismatch", "Maia has no established generation");
+      if (before.identity?.modelId !== request.requestedModel.id || before.identity.version !== request.requestedModel.version) throw new ProviderSourceUnavailable("identity_mismatch", "Maia live model/source differs from the requested identity");
       checkMaiaLiveBounds(request, before, before.options);
       const capture = await engineExchange(engines, MAIA_ENGINE_ID, maiaCommandImage(request), [], context);
-      // Same-exchange proof: the generation that ran the commands advertises the same bounds.
+      if (capture.generation !== generation || engines.establishedGeneration(MAIA_ENGINE_ID) !== generation) throw new ProviderSourceUnavailable("identity_mismatch", "Maia generation changed during option admission/exchange");
+      // Same-exchange proof: the generation that ran the commands advertises the supported profile.
       checkMaiaLiveBounds(request, { ...before, ...(capture.identity === undefined ? {} : { identity: capture.identity }), options: capture.options }, capture.options);
       const identityCaptured = capture.identity;
       if (identityCaptured.modelId === undefined) throw new ProviderSourceUnavailable("identity_mismatch", "the Maia generation reports no model id");

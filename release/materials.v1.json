@@ -117,7 +117,7 @@
     "sourceArchive": { "url": "https://github.com/CSSLab/maia3/archive/1e13597c42d4858b7cfd7cfdae01e297263364b2.tar.gz", "sha256": "sha256:774c363dd2f2d10d6996ef5ef0bdba473ae769a79e442132bd82d0e999b7b488" },
     "declaredExpression": "AGPL-3.0-only",
     "licenseFile": { "path": "LICENSE", "sha256": "sha256:8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef" },
-    "patch": { "path": "workers/maia/patches/maia3-uci-policy-mass.patch", "sha256": "sha256:3aedf724d937bc3634406ad2ce1f7b62bc77e42b667bbee04cba021d56018ff6" },
+    "patch": { "path": "workers/maia/patches/maia3-uci-policy-mass.patch", "sha256": "sha256:c478be220e85ae0ba1300fe266bf6b0c2045ad80c8dc78f448c18df3d0b02253" },
     "weight": {
       "repository": "UofTCSSLab/Maia3-5M",
       "revision": "b6559de2398d7140b985f28fd2c19fb5e47ddabe",

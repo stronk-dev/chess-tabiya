@@ -1,33 +1,38 @@
 # Codex queue — rewritten in full 2026-08-16
 
-## 2026-10-01 current checkpoint — direct implementation, not a relay prompt
+## 2026-10-01 current checkpoint — scoped Maia repair, truthful blocked play exit
 
-The actual source appliance path now tests the real wrappers/model/TLS/account boundary over
-explicitly owned, isolated resources. D3348's whole-binary allocation and D3350's frozen-closure
-hazard are repaired without raising memory limits or restamping packs. D3347's startup OOM no
-longer occurs; keep its play-time envelope obligation open.
+The owner-approved D3349 amendment is implemented directly under provider-exchange §6. Actual
+pinned string options replace invented decimal spin ranges; requests/commands, integer bounds,
+model/source/container and same-generation capture stay strict. Malformed advertisements report
+protocol, not a fictitious process exit. D3352 repairs reported source policy arithmetic using
+float64/round-trip output without changing weights, sampling, parser tolerances or digest domains.
+The actual offline runtime-user native image build passes both width-20 e4/d4 pages, with zero-fuzz
+source application and synchronized patch/materials/notice digests.
 
-D3351 repairs the software runner's private history context: retain the actual immutable source
-HEAD, isolated snapshot index/hooks and read-only object access. Never bypass a historical baseline
-or redirect fixture Git commands into the operator checkout. The complete normal verify-software
-gate passes over exact-index tree abf1f138f1a9b71173f228ceed95795cf0dce2d2: 2752 software tests,
-7 performance tests, types and downstream contracts, including 819 retained/matching capability
-declarations and a zero-write/zero-restamp migration plan. D3351 is closed with the retained
-staged-software-contracts-2026-10-01.json receipt; full real-bot appliance proof remains separate.
+Receipt: planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md.
+Complete staged software proof belongs to maia-compatibility-software-2026-10-01.json; do not
+reuse an earlier gate receipt for these new source bytes. The complete normal Make gate is required,
+including historical meaning checks, migration proof, types and downstream contracts.
 
-**Next dependency: D3349.** The actual Maia advertisement contradicts the accepted §6 option
-contract: decimal `string` options, not numeric bounded `spin` options. The researched amendment
-is recorded directly at
-`planning/provider-exchange-and-execution/maia-decimal-option-amendment-2026-10-01.md`.
-Review/accept that bounded admission repair before changing production; do not invent ranges or
-call synthetic provider positives real-bot proof. Then rerun unchanged `make appliance-drill-staged`
-to finish D3338/D3342 and D3347's play-time memory exit. Its eight TLS/account groups already pass;
-the real bot/branch/restart/pack groups do not yet pass.
+**Next dependency: D3353, scoped Docker-space approval.** The final real appliance rerun fails
+at fresh storage startup, before bot play. Docker bavail=0 and uid 1000 SQLite on a new disposable
+volume reproduces errcode 13: database or disk is full. Old cache in the dedicated Tabiya builder
+is 2.679 GB reclaimable; owner permission to remove that cache was requested, not assumed. Never
+prune global images or existing learner volumes. After approved cleanup, rerun unchanged
+make appliance-drill-staged: actual registered replies/retry, rewind/fork/compare, restart/login/
+resume, served-pack creation and both actual cgroup envelope observations must all pass.
+D3349/D3352 and D3338/D3342/D3347 remain open until their complete exits; offline output is not play.
 
-Held D3330 still needs the explicit per-release migration ruling before content writes; exact-index
-verification excludes those unstaged edits and does not discharge that migration. No protected
-intent, pack, capability image or ledger sidecar is silently restamped. Publication, owner devices,
-hosted live ACME, calibration and steady-state resource/release gates remain separate.
+D3354 is queued separately under storage-backup-recovery: preserve real SQLITE_BUSY/LOCKED
+contention as refusal, but do not mislabel disk/I/O/permission errors as MAINTENANCE_LOCKED.
+Add deterministic classification controls without relaxing storage exclusion or widening receipts.
+
+Prior D3348/D3350/D3351 remain closed on their original receipts: bounded hashing/shared allocation,
+frozen-authority preservation, and exact-index private history. The full staged tests exclude held
+D3330 Explorer changes without a worktree, stash or content rewrite. Per-release migration consent,
+publication, owner devices, hosted live ACME, calibration and steady-state resource/release gates
+remain separate. No full 1.0 milestone or product RFC archival is claimed.
 
 ## 0-CONTENT-TIER-SHARED-SETUP. ✅ D2119 retired after re-measurement
 

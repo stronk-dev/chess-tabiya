@@ -71,6 +71,20 @@ export function assertPlayedMove(before, after, uci, actor) {
     && event.data.node?.id === node.id && event.data.node.moveUci === uci && event.data.node.actor === actor), "missing authoritative move event");
 }
 
+/** A successful API reply cannot hide an automatic restart or a larger live memory envelope. */
+export function validateRunningEnvelope(container, { project, service, limitBytes }, peakBytes) {
+  requireCheck(PROJECT.test(project) && ["server", "maia"].includes(service), "unknown runtime envelope subject");
+  requireCheck(container.Config?.Labels?.["com.docker.compose.project"] === project
+    && container.Config?.Labels?.["com.docker.compose.service"] === service, "foreign runtime envelope container");
+  requireCheck(container.State?.Running === true && container.State.OOMKilled === false
+    && container.RestartCount === 0, `${service} crashed, OOM-killed or automatically restarted during play`);
+  requireCheck(container.HostConfig?.Memory === limitBytes && container.HostConfig.MemorySwap === limitBytes,
+    `${service} live memory/no-swap envelope changed`);
+  requireCheck(Number.isSafeInteger(peakBytes) && peakBytes > 0 && peakBytes <= limitBytes,
+    `${service} cgroup peak is missing or exceeds its envelope`);
+  return { service, limitBytes, peakBytes, oomKilled: false, automaticRestarts: 0 };
+}
+
 async function freePort() {
   const socket = createServer();
   await new Promise((done, reject) => { socket.once("error", reject); socket.listen(0, "127.0.0.1", done); });
@@ -127,6 +141,22 @@ export async function sourceApplianceDrill({ out }) {
     return response;
   }
   const json = (path, options, status = 200) => JSON.parse(expect(http(path, options), status, path).body);
+  function observeEnvelopes(phase) {
+    const observations = ["server", "maia"].map((service) => {
+      const id = compose("ps", "--quiet", service).stdout.trim();
+      requireCheck(/^[0-9a-f]{64}$/u.test(id), `missing unique ${service} container`);
+      const [container] = JSON.parse(command("docker", ["inspect", id]).stdout);
+      // Validate ownership before exec, then require a real kernel measurement, not Docker's limit.
+      const subject = { project, service, limitBytes: (service === "server" ? 512 : 1536) * 1024 * 1024 };
+      requireCheck(container.Config?.Labels?.["com.docker.compose.project"] === project
+        && container.Config?.Labels?.["com.docker.compose.service"] === service, "foreign runtime envelope container");
+      const raw = command("docker", ["exec", id, "cat", "/sys/fs/cgroup/memory.peak"]).stdout.trim();
+      requireCheck(/^[0-9]+$/u.test(raw), `invalid ${service} cgroup peak`);
+      return validateRunningEnvelope(container, subject, Number(raw));
+    });
+    proof.resourceEnvelopes = [...(proof.resourceEnvelopes ?? []), { phase, observations }];
+    checked(`actual cgroup play-time envelope, no OOM/automatic restarts (${phase})`);
+  }
   try {
     writeFileSync(join(directory, "ports.yaml"), loopbackOverlay(httpPort, tlsPort));
     // Preflight checks safety before the actual up wrapper may create resources. No skip-build path.
@@ -204,6 +234,7 @@ export async function sourceApplianceDrill({ out }) {
     requireCheck(comparison.comparison !== undefined, "comparison missing");
     proof.run = { id: runId, nodes: run.nodes.length, branches: run.branches.length, profile: profile.reference, compared: [firstBranch, secondBranch] };
     checked("rewind, distinct branch, second real bot reply and comparison through TLS");
+    observeEnvelopes("before intentional server restart");
     compose("restart", "server");
     await until("restarted HTTPS readiness", () => { const response = http("/readyz"); return response.exit === 0 && response.status === 200 ? true : undefined; });
     const login = expect(http("/auth/login", { method: "POST", body: { handle: "applianceproof", password: "appliance-proof-password" } }), 200, "login after restart");
@@ -218,6 +249,7 @@ export async function sourceApplianceDrill({ out }) {
     requireCheck(packs.length > 0, "no actual drill packs served");
     json("/runs", { method: "POST", body: { id: "appliance-proof-pack", seed: 2, policyConfig, session: { kind: "pack", packId: packs[0].id } } }, 201);
     checked("real served pack creates a run without rewriting content");
+    observeEnvelopes("after durable resume and served-pack creation");
     proof.result = "passed";
   } catch (error) {
     proof.failure = error.message;

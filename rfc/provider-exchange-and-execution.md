@@ -19,6 +19,13 @@
   `planning/provider-exchange-and-execution/explorer-integration-2026-09-30.md`.
   Previously: draft — durable-delivery parsing author-amended 2026-09-07 on [[D3030]].
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
+- **Implementation checkpoint 2026-10-01, owner-approved Maia repair:** §6 admits the measured
+  pinned decimal-string option profile with strict identity/generation/default checks; malformed
+  advertisements report protocol, not process exit. Source-policy float64/round-trip emission
+  repairs actual excess mass without changing weights, sampling or frozen parser/digest meanings.
+  Offline runtime-user model checks pass; the complete appliance rerun is red on D3353 Docker
+  volume exhaustion before play. D3349/D3352 remain open for their full exit. Receipt:
+  `planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md`.
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
   capabilities; `design/05-in-run-experience.md` assistance ceilings and no-provider degradation
@@ -1353,10 +1360,19 @@ Request admission is refuse-only; this operation never clamps or silently defaul
   move count or the live advertised `MultiPV` spin maximum. `timeoutMs` is `1..60_000`, the existing
   serialized Maia-exchange ceiling. A missing advertised band or MultiPV bound, empty effective
   range, zero, fraction, overflow or out-of-range value is `INVALID_REQUEST`, not a clamped page.
-- `temperature` and `topP` are finite. Temperature is strictly greater than zero and must lie inside
-  the live advertised `Temperature` option bounds. Top-p is in `(0,1]` and must also lie inside the
-  live advertised `TopP` option bounds. A missing or non-numeric advertised option makes the
-  operation unavailable; it does not authorize an assumed range.
+- `temperature` and `topP` are finite. Temperature is strictly greater than zero; top-p is in
+  `(0,1]`. The supported decimal option profile is the pinned Maia3 model/source identity
+  (`MAIA3_MODEL_ID` / `MAIA3_SOURCE_COMMIT`). Its source-verified UCI advertisement declares
+  `Temperature` and `TopP` as `string` options without min/max, and `cmd_setoption` applies
+  `float(value)`. Require exactly one option of each name, that type, no invented bounds and
+  finite positive decimal defaults (TopP at most one). Do not infer a Temperature maximum from
+  the absence of bounds, clamp a request or encode decimals as integer `spin` values. A missing,
+  duplicate, malformed or unsupported option profile is `invalid_response` / health `protocol`,
+  not evidence of `process_exit`. Unknown model/source versions remain `identity_mismatch`.
+  These checks run before commands and again over the same-exchange capture. A replaced
+  generation, absent captured container or mismatched requested model cannot deliver evidence.
+  Labelled Mock Maia keeps its mock identity and advertises the same option grammar; a mock is
+  never actual model inference. No other decimal option profile is admitted by this amendment.
 - `requestedModel.id/version` must equal the live serialized exchange's required `modelId/version`.
   `appliedTargetElo(health, request.band)` must return the same integer as `request.band`; absent
   `eloHonored`, a different applied value or an identity change during the exchange is
@@ -1379,8 +1395,9 @@ The supervisor task captures the live `EngineIdentity`, advertised option image,
 the exact command transcript before accepting the response. The page repeats temperature, top-p
 and requested width exactly from that sealed requested identity; it never reports a separately
 selected value. Boundary fixtures cover 1000/2400 bands, just-outside bands, zero/fractional/unsafe
-integers, temperature zero/non-finite/advertised edges, top-p zero/one/above-one, absent option
-bounds, width at/above legal and advertised limits, timeout 1/60,000/60,001, non-honored Elo,
+integers, temperature zero/non-finite/positive decimals, top-p zero/one/above-one, missing/duplicate/
+malformed/unsupported option profiles, width at/above legal and advertised limits,
+timeout 1/60,000/60,001, non-honored Elo,
 requested/applied divergence, model/generation changes and every literal command line.
 
 `human.maia.policy_page@1` has payload
@@ -2072,6 +2089,14 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-10-01: owner approved the bounded D3349 compatibility repair ("ok, whatever is proper
+  foundation and best practices"). §6 now names the measured pinned decimal-string profile,
+  keeps strict finite request and advertised band/MultiPV checks, requires pre/post-capture
+  identity/generation checks and reports option incompatibility as protocol failure. Acceptance
+  is limited to this amendment, not the RFC's remaining §§1–2/projection obligations or held
+  D3330 migration. Source and actual advertisement:
+  `planning/provider-exchange-and-execution/maia-decimal-option-amendment-2026-10-01.md`.
 
 - 2026-09-30: D3326 binds built-in learner Explorer acquisition to the same descriptor, registered
   parser, source factory, scheduler and health inventory as direct provider consumers. Sparse/zero

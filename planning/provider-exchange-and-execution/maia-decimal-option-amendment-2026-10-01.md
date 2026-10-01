@@ -1,7 +1,10 @@
 # D3349 — proposed §6 decimal-option repair, 2026-10-01
 
-Status: researched implementation return / proposed amendment. **Not accepted; no production
-admission change is authorized by this file.** Owner: evidence-foundation. The proposal is written
+Status: bounded amendment accepted by the owner on 2026-10-01 after source/actual-image verification:
+"ok, whatever is proper foundation and best practices", in response to the explicit request to
+amend the incompatible requirement, implement it here and rerun the complete appliance journey.
+Production implementation may proceed under amended §6; no other RFC obligation or per-release
+migration approval is discharged. Owner: evidence-foundation. The amendment is written
 here directly; it is not an instruction for Marco to relay to another agent.
 
 ## Observed incompatibility
@@ -15,8 +18,9 @@ Retained observation: `planning/safe-deployment-profiles/maia-option-contract-20
 [V] Pinned upstream `cmd_uci` advertises those strings; `cmd_setoption` applies `float(value)`.
 There is no finite advertised upper Temperature bound to recover. Source:
 [Maia3 UCI at the pinned commit](https://raw.githubusercontent.com/CSSLab/maia3/1e13597c42d4858b7cfd7cfdae01e297263364b2/maia3/uci.py),
-`cmd_uci`, `cmd_setoption`, `sample_from_logits`. The local patch only adds policy-mass output
-(`workers/maia/patches/maia3-uci-policy-mass.patch`), not option bounds.
+`cmd_uci`, `cmd_setoption`, `sample_from_logits`. At the initial observation, the local patch only
+added policy-mass output, not option bounds. The subsequent D3352 precision repair is separately
+recorded; it changes reported policy arithmetic, not the options, weights or sampling function.
 
 [V] `rfc/provider-exchange-and-execution.md` §6 demands numeric live bounds;
 `apps/server/src/provider-operations.ts#numericOption` requires `type: "spin"` plus min/max.
@@ -29,7 +33,7 @@ startup/TLS/account/ingress groups, then fails Maia availability. The container 
 the exchange failure maps generic `provider_unavailable` to `process_exit` in
 `ProviderRegistry.settleExchange`. That label does not establish a process crash.
 
-## Proposed bounded change to §6
+## Accepted bounded change to §6
 
 Replace only the impossible decimal-option admission clause:
 
@@ -46,7 +50,9 @@ Replace only the impossible decimal-option admission clause:
    under its own declared profile, not by projecting them onto pinned Maia3.
 4. The response remains a bounded top-k policy page. Temperature/TopP are captured request
    operands, not an invented claim that the candidate policy probabilities are transformed by
-   them. No grading, new chess judgement, schema lane, capability migration or pack rewrite.
+   them. No grading, new chess judgement or schema lane. Capability migration/pack rewrites are
+   not implicitly authorized: if a frozen authority changes, derive the concrete migration proof
+   and obtain the required per-release approval before any restamp.
 5. Separately retain a typed configuration/protocol incompatibility when the known profile is
    refused. Never label an option-table incompatibility as an observed process exit or heal
    availability using a fixture, cached delivery or mere `readyok`.

@@ -14,6 +14,13 @@
   OCI exports join to loaded images; source deployment is not a verified release installation.
   Receipt: `planning/safe-deployment-profiles/source-build-identity-2026-10-01.md`. Publication,
   rights, content, resource and complete release-journey gates remain open.
+- **Implementation checkpoint 2026-10-01, precise model source:** the checksum-bound patch applies
+  with zero fuzz and emits double-precision policy mass; upstream weights/logits/sampling remain
+  unchanged. Actual offline runtime-user width-20 e4/d4 model checks pass inside the native image
+  build; materials and notice bind the new patch. Full appliance play-time proof remains red on
+  D3353 Docker-volume exhaustion, not cleared by model readiness or offline output. No publication,
+  steady-state resource or cross-platform release proof follows. Receipt:
+  `planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md`.
 - **Created:** 2026-08-27
 - **Implementation checkpoint 2026-10-01, memory and real appliance:** analysis/play share one
   identical native Stockfish process with logical identities and serialized requests preserved;

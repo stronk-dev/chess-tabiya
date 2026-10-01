@@ -1,0 +1,18 @@
+{
+  "protocol": "tabiya.source-appliance-proof@1",
+  "scope": "native source build, real model, loopback transport; not a published release or owner-device proof",
+  "project": "tabiya-appliance-proof-692ad042-d3a1-411a-a9f9-e875260f6bf5",
+  "hostname": "tabiya-appliance-proof-692ad042-d3a1-411a-a9f9-e875260f6bf5.example.test",
+  "startedAt": "2026-10-01T01:35:58.757Z",
+  "checks": [],
+  "result": "failed",
+  "retentionNote": "Build-stage failure during the source-policy patch repair; this receipt has no runtime checks and does not prove the earlier observed bot-protocol failure.",
+  "failure": "make failed (2): \n\n",
+  "finishedAt": "2026-10-01T01:36:11.308Z",
+  "sources": {
+    "mode": "git-index",
+    "head": "6cf4016ee01018b0349d798c2c3f2f8e281ebc8e",
+    "tree": "bbcc6679fe5ad68f2c933531b3276cb28e0e9ff8",
+    "includesUnstagedChanges": false
+  }
+}

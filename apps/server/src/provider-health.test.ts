@@ -282,6 +282,11 @@ describe("snapshot currency and release receipts (criterion 9, 13)", () => {
 });
 
 describe("exchange availability (bot-policy D7)", () => {
+  it("reports option-table incompatibility as protocol failure, not a process crash", async () => {
+    const registry = await testRegistry({ "maia-inference": "available" });
+    registry.settleExchange({ kind: "source_failure", operation: "maia.policy_page@1", normalizedRequestDigest: `sha256:${"a".repeat(64)}` as never, failedAt: "2026-10-01T12:00:00.000Z", reason: "invalid_response", providerDetail: "Maia Temperature does not match the pinned decimal-string option profile" });
+    expect(snapshotOf(registry, "maia-inference")).toMatchObject({ state: "unavailable", reason: "protocol" });
+  });
   it("serves Maia pages only when the running generation carries its container identity", async () => {
     let captured = false;
     const registry = await testRegistry({ "maia-inference": "available", "stockfish-analysis": "available" }, { exchangeArtifact: (instanceId) => instanceId !== "maia-inference" || captured });

@@ -2582,7 +2582,7 @@ engine-memory-drill:
 
 maia-option-contract-drill:
 	@test -n "$(MAIA_IMAGE_ID)" || (echo "Usage: make maia-option-contract-drill MAIA_IMAGE_ID=sha256:<actual-local-id>" >&2; exit 2)
-	node tools/maia-option-contract-drill.mjs --image $(MAIA_IMAGE_ID)
+	node tools/maia-option-contract-drill.mjs --image $(MAIA_IMAGE_ID) $(if $(filter 1,$(POLICY)),--policy,)
 
 engine-sharing-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-protocol.test.ts apps/server/src/engine-binary-digest.test.ts apps/server/src/engine-supervisor.test.ts apps/server/src/engine-supervisor-exchange.test.ts apps/server/src/provider-health.test.ts apps/server/src/provider-traversal.test.ts

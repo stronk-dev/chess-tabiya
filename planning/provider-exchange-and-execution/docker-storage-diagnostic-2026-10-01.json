@@ -1,0 +1,32 @@
+{
+  "scope": "read-only Docker space observation and isolated fresh-volume SQLite diagnostic; not a deployment receipt",
+  "at": "2026-10-01",
+  "image": "docker.io/library/node:24.21.0-bookworm-slim@sha256:0e0ff40c39bc087845bfb27465a0df4ea419520094bc35842ff83dd8cbe6f9b6",
+  "runtimeUid": 1000,
+  "rootFilesystem": {
+    "type": 2035054128,
+    "bsize": 4096,
+    "frsize": 4096,
+    "blocks": 32946809,
+    "bfree": 1596112,
+    "bavail": 0,
+    "files": 8388608,
+    "ffree": 6507162
+  },
+  "newDisposableVolumeSqlite": {
+    "message": "database or disk is full",
+    "code": "ERR_SQLITE_ERROR",
+    "errcode": 13,
+    "errstr": "database or disk is full"
+  },
+  "overlayTmpControl": "uid 1000 can acquire a new SQLite lock on container /tmp; the fresh-volume failure is separately reproduced",
+  "existingDataMounted": false,
+  "network": "none",
+  "cleanup": "diagnostic containers and their anonymous volume removed by docker run --rm",
+  "dedicatedBuilder": {
+    "name": "tabiya-source-v1",
+    "observedReclaimable": "2.679GB",
+    "cleanupApproval": "requested, not assumed",
+    "cacheRemoved": false
+  }
+}

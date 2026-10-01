@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { assertPlayedMove, isolatedEnvironment, loopbackOverlay, validateIsolatedCompose } from "../source-appliance-drill.mjs";
+import { assertPlayedMove, isolatedEnvironment, loopbackOverlay, validateIsolatedCompose, validateRunningEnvelope } from "../source-appliance-drill.mjs";
 import { CADDY_IMAGE } from "../render-deployment.mjs";
 
 const project = "tabiya-appliance-proof-00000000-0000-4000-8000-000000000000";
@@ -88,4 +88,20 @@ test("a successful response or unchanged node is not a played move", () => {
   assert.throws(() => assertPlayedMove(before, after, "d2d4", "user"));
   assert.throws(() => assertPlayedMove(before, after, "e2e4", "opponent"));
   assert.throws(() => assertPlayedMove(before, { ...after, events: before.events }, "e2e4", "user"));
+});
+
+test("real runtime envelope refuses foreign ownership, OOM, restart, raised limits and missing peaks", () => {
+  const subject = { project, service: "server", limitBytes: 512 * 1024 * 1024 };
+  const fixture = () => ({ Config: { Labels: { "com.docker.compose.project": project, "com.docker.compose.service": "server" } }, State: { Running: true, OOMKilled: false }, RestartCount: 0, HostConfig: { Memory: subject.limitBytes, MemorySwap: subject.limitBytes } });
+  assert.deepEqual(validateRunningEnvelope(fixture(), subject, 200 * 1024 * 1024), { service: "server", limitBytes: subject.limitBytes, peakBytes: 200 * 1024 * 1024, oomKilled: false, automaticRestarts: 0 });
+  for (const mutate of [
+    (c) => { c.Config.Labels["com.docker.compose.project"] = "chess-tabiya"; },
+    (c) => { c.Config.Labels["com.docker.compose.service"] = "caddy"; },
+    (c) => { c.State.Running = false; },
+    (c) => { c.State.OOMKilled = true; },
+    (c) => { c.RestartCount = 1; },
+    (c) => { c.HostConfig.Memory *= 2; },
+    (c) => { c.HostConfig.MemorySwap *= 2; },
+  ]) { const container = fixture(); mutate(container); assert.throws(() => validateRunningEnvelope(container, subject, 1)); }
+  for (const peak of [undefined, NaN, Infinity, 0, -1, 1.5, subject.limitBytes + 1]) assert.throws(() => validateRunningEnvelope(fixture(), subject, peak));
 });

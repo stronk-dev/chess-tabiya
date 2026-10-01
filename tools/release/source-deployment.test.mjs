@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import test from "node:test";
 import { renderDeployment, renderSourceDeployment } from "../render-deployment.mjs";
 import { localMaiaIdentity } from "./lib/local-maia-identity.mjs";
@@ -124,4 +125,37 @@ test("the actual CPU image fixes model permissions and validates readiness as it
   assert.match(runtime, /RUN --network=none test -r \/opt\/maia3-models\/maia3-5m\.pt/);
   assert.match(runtime, /maia3-uci --model 5m --checkpoint-path \/opt\/maia3-models\/maia3-5m\.pt --use-uci-history/);
   assert.doesNotMatch(runtime, /USER root/);
+});
+
+test("actual model policy regression runs offline after USER; source arithmetic is precise without changing sampling", () => {
+  const dockerfile = readFileSync("workers/maia/Dockerfile", "utf8");
+  const patch = readFileSync("workers/maia/patches/maia3-uci-policy-mass.patch", "utf8");
+  assert.match(dockerfile.slice(dockerfile.indexOf("USER maia\n")), /python \/opt\/chess-tabiya\/check-policy-mass\.py/);
+  assert.match(patch, /torch\.softmax\(logits\.double\(\), dim=-1\)/);
+  assert.match(patch, /:\.17g/);
+  assert.doesNotMatch(patch, /^[+-].*sample_from_logits\(/mu);
+  const check = readFileSync("workers/maia/check-policy-mass.py", "utf8");
+  assert.match(check, /position startpos moves e2e4/);
+  assert.match(check, /position startpos moves d2d4/);
+  assert.match(check, /len\(rows\) != 20/);
+  assert.match(check, /mass <= 1 \+ 1e-9/);
+});
+
+test("policy build validator refuses the actual float32 negative and malformed pages", () => {
+  execFileSync("python3", ["-B", "-c", `
+import json, runpy
+validate = runpy.run_path("workers/maia/check-policy-mass.py")["validate_pages"]
+page = [f"info depth 1 multipv {i+1} policy 0.05 pv e2e4" for i in range(20)] + ["bestmove e2e4"]
+assert len(validate(page + page)) == 2
+old = json.load(open("planning/provider-exchange-and-execution/maia-policy-float32-negative-2026-10-01.json"))
+actual = [line for p in old["pages"] for line in p["rows"] + [p["bestmove"]]]
+for bad in [actual, page, page[:-2] + ["bestmove e2e4"] + page,
+            [line.replace("policy 0.05", "policy NaN") for line in page] + page,
+            [line.replace("policy 0.05", "policy 0.06") for line in page] + page]:
+    try:
+        validate(bad)
+    except ValueError:
+        continue
+    raise AssertionError("invalid source page was admitted")
+`], { stdio: "pipe" });
 });
