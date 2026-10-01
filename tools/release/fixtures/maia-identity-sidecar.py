@@ -10,14 +10,17 @@ spec.loader.exec_module(sidecar)
 sidecar.HOST = "127.0.0.1"
 sidecar.PORT = 0
 sidecar.READY = Path(sys.argv[1])
-stub = """import sys
+stub = """import os, sys
 for line in sys.stdin:
     command = line.strip()
-    if command == "uci": print("uciok", flush=True)
+    if command == "uci":
+        if len(sys.argv) > 1 and sys.argv[1] == "--model-id":
+            print("id name fixture-" + str(os.getpid()), flush=True)
+        print("uciok", flush=True)
     elif command == "isready": print("readyok", flush=True)
     elif command == "quit": break
 """
-sidecar.COMMAND = [sys.executable, "-u", "-c", stub]
+sidecar.COMMAND = [sys.executable, "-u", "-c", stub, *sys.argv[2:]]
 original_socket = socket.socket
 
 

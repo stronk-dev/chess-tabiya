@@ -1,5 +1,6 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-01, completed source journey:** D3355 binds resume to the existing graph API; D3356 makes client quit connection-scoped rather than killing the shared Maia child. The real native appliance journey passes registered bot replies/retries, branch comparison, durable resume, another bot reply after server restart, served-pack creation and both unchanged cgroup envelopes with zero automatic restarts. D3354 distinguishes real SQLite contention from failed storage initialization. Receipt: `planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md`. Earlier negative checkpoints remain historical; no full RFC archival, migration consent or publication follows.
 - **Status:** implementing 2026-09-24 (claude, at the owner's direction to implement without review
   rounds). §§3–9 core ships: `provider-protocol` members landed; one digest registry; the five
   operation-keyed normalizers, descriptors and parsers; scheduler-sealed receipts and deliveries;

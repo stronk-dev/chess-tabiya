@@ -1,5 +1,6 @@
 # RFC: Verifiable runtime distribution and resource tiers
 
+- **Implementation checkpoint 2026-10-01, completed source journey:** D3355 binds resume to the existing graph API; D3356 makes client quit connection-scoped rather than killing the shared Maia child. The real native appliance journey passes registered bot replies/retries, branch comparison, durable resume, another bot reply after server restart, served-pack creation and both unchanged cgroup envelopes with zero automatic restarts. D3354 distinguishes real SQLite contention from failed storage initialization. Receipt: `planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md`. Earlier negative checkpoints remain historical; no full RFC archival, migration consent or publication follows.
 - **Status:** **implementing — implementation landed on the owner's 2026-09-24 direction (no review round); release
   publication remains gated.** The pipeline, images, policy, manifest v1, allow-list, About surface
   and local verification are in the tree

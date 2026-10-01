@@ -27438,12 +27438,12 @@
     },
     {
       "id": "D3338",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d2250dc62fd67f677b886d63f92ca33639a04ed40b33dd8a76f1dd758938a378",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4663a5acc01be8d9921b689f4c682b495558a5f09585a60abea2f54c998e0077",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "item:D3349"
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3339",
@@ -27474,12 +27474,12 @@
     },
     {
       "id": "D3342",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3e5e0539d29769f97af94985789f2437eefa0a610118188d429aa34ccd13b69b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7a1531d88bcc9c423e9d8625c5e74902fdb50406ddee372016632a7ef9a6e146",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "item:D3349"
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3343",
@@ -27519,12 +27519,12 @@
     },
     {
       "id": "D3347",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2bfbf21a1266253599e051e663f76e7a62e9b4b22b19495d2e84a0ef90808f2f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1c876a5605909f8831232c9993c22da8ae6d5e0ae5feabd68ea85b7572376f86",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "item:D3349"
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3348",
@@ -27537,12 +27537,12 @@
     },
     {
       "id": "D3349",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7c7526c7f452ba8849d1216dcce34de28a215a41e3f3772197bceaf1c8d480b6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2f2968a10c85ae343b565669561aad966c1f68412d7ae4240cd8d1b26e10422d",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "item:D3355"
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3350",
@@ -27564,12 +27564,12 @@
     },
     {
       "id": "D3352",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2f940dbe4c6669a8bf26ee6f2cca001503ca1e48c6c21b724ab9a57c86989412",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1a3ce87917df04ee63c1939069e767b9dced0d34bfd43aafa5a3261f47cb8a17",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "item:D3355"
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3353",
@@ -27582,19 +27582,30 @@
     },
     {
       "id": "D3354",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:150411437172367268f06b9e4a71a5d727cd1dffa9c9b4d281bbd1ef21c295d9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b63ef9468acce4e29d5cb00e939c1746852bd93a25b3baa201df0cfbacd93b31",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3355",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f4f73a6381a09b84f07a9b14a68dd3654e5d7c87e5b64ca3474018ec07e3566d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8b13b993b39e0f05ce6b3b5f7eac10db354e0b74e52426b8a82fb593a9b0791b",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3356",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fe61320782df497247bd180d4ca98966acdabeeafbe11492d16f1a3379676d28",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -22028,3 +22028,37 @@ Campaign was the one capability with no API, route or content. Now:
   planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.json
   and its .md companion. The instrument removed only its UUID-owned test project/volumes.
   Next: repair the existing graph probe contract with a permanent control and rerun all exits.
+
+### 2026-10-01 — Complete source-appliance play/resume exit and repair shared Maia lifetime
+
+- Finished D3355 graph-route/shape repair with permanent old-shape and same-count state
+  corruption controls. The strengthened actual journey resumes exact edges/branches/cursor
+  and demands another registered Maia reply/idempotent retry after application restart.
+- That real journey exposed D3356: application UCI quit killed the shared Maia child and
+  caused an automatic container restart. Original native negative is retained. Bounded
+  complete-line framing now keeps client quit connection-scoped; only sidecar shutdown ends
+  the model. Fragmented/coalesced/oversized controls and actual TCP same-child reconnect pass.
+- Finished D3354 under storage-backup-recovery: only SQLite busy/locked codes, including
+  extended codes, classify as refused contention; disk/I/O/permission/other initialization
+  errors are failed/INTERNAL_ERROR. Database cleanup and directory failure are in the same
+  boundary. Real unopenable-path and deterministic classification controls retain exclusion.
+- Normal appliance-drill-staged passes all 16 native actual-model groups including final
+  memory checks: unchanged 512/1536 MiB no-swap envelopes, no OOM or automatic restarts.
+  Source tree 0080bbd85faf913487fd3b911a3011072551f520 includes the storage repair.
+- The complete software gate caught a newly added fixture PID line changing an existing
+  exact response; opt-in fixture reporting repairs the regression without weakening its
+  assertion. Final staged-software-contracts passes: 2,757 software and seven performance
+  tests, warning-free types, 66 release controls and every downstream contract. Exact tree
+  74353d28a49ec421b1e1de426b8c1814831b83f6 retains all 819 capability meanings and a zero-write/
+  zero-restamp 352-document migration plan. Docs-index checks pass.
+- D3338/D3342/D3347/D3349/D3352/D3354/D3355/D3356 close on these narrow tested exits. Queue,
+  work-state, RFC checkpoints/register and roadmap flow back in the same change set. Product
+  RFCs remain implementing and whole milestones/capabilities unchanged; publication/rights,
+  owner devices, steady-state memory and all other existing obligations remain separate.
+- D3330 per-release Explorer migration approval was asked directly, not inferred. Held
+  source/content and unowned auxiliary files remain untouched. No protected intent/archive
+  edit, managed worktree, broad staging, cache/data pruning, push or publication.
+- Receipts: planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md,
+  its software/appliance JSONs and maia-client-shutdown-negative-2026-10-01.json.
+- Final staged process gates pass: register C1–C8, lifecycle P1–P7, zero unrouted/untriaged,
+  roadmap R1–R10/sealed index receipt and protected-intent parity. Normal hooks remain enabled.

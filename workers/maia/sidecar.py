@@ -88,6 +88,28 @@ def read_connection_start(client: socket.socket) -> bytes:
     return first
 
 
+class ClientCommands:
+    """Frame complete UCI lines; a client's quit releases its lease, not the shared child."""
+
+    def __init__(self) -> None:
+        self.pending = b""
+
+    def feed(self, data: bytes) -> tuple[bytes, bool]:
+        self.pending += data
+        forwarded = bytearray()
+        while b"\n" in self.pending:
+            line, self.pending = self.pending.split(b"\n", 1)
+            if len(line) > 65_536:
+                raise ValueError("UCI command exceeds the connection limit")
+            if line.strip() == b"quit":
+                self.pending = b""
+                return bytes(forwarded), True
+            forwarded.extend(line + b"\n")
+        if len(self.pending) > 65_536:
+            raise ValueError("UCI command exceeds the connection limit")
+        return bytes(forwarded), False
+
+
 def main() -> int:
     READY.unlink(missing_ok=True)
     engine = subprocess.Popen(
@@ -138,10 +160,19 @@ def main() -> int:
             finally:
                 client.close()
             continue
-        if first:
+        commands = ClientCommands()
+        try:
+            forwarded, quit_requested = commands.feed(first)
+        except ValueError:
+            client.close()
+            continue
+        if forwarded:
             assert engine.stdin is not None
-            engine.stdin.write(first)
+            engine.stdin.write(forwarded)
             engine.stdin.flush()
+        if quit_requested:
+            client.close()
+            continue
         client.setblocking(False)
         selector = selectors.DefaultSelector()
         selector.register(client, selectors.EVENT_READ, "client")
@@ -155,15 +186,23 @@ def main() -> int:
                         if not data:
                             connected = False
                             break
-                        assert engine.stdin is not None
-                        engine.stdin.write(data)
-                        engine.stdin.flush()
+                        forwarded, quit_requested = commands.feed(data)
+                        if forwarded:
+                            assert engine.stdin is not None
+                            engine.stdin.write(forwarded)
+                            engine.stdin.flush()
+                        if quit_requested:
+                            connected = False
+                            break
                     else:
                         data = os.read(engine.stdout.fileno(), 65_536)
                         if not data:
                             connected = False
                             break
                         client.sendall(data)
+        except (ConnectionError, ValueError):
+            # A disconnected or oversized client cannot kill the container-owned model.
+            pass
         finally:
             selector.close()
             client.close()

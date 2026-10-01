@@ -85,3 +85,64 @@ test("identity prefix framing uses one deadline and discards an incomplete probe
   const result = spawnSync("python3", ["-B", "-c", script], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr || String(result.error));
 });
+
+test("client commands frame fragmented/coalesced quit without forwarding child shutdown", () => {
+  const script = [
+    "import importlib.util",
+    "spec = importlib.util.spec_from_file_location('sidecar', 'workers/maia/sidecar.py')",
+    "m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)",
+    "commands = m.ClientCommands()",
+    "assert commands.feed(b'uc') == (b'', False)",
+    "assert commands.feed(b'i\\nisready\\nqu') == (b'uci\\nisready\\n', False)",
+    "assert commands.feed(b'it\\nposition startpos\\n') == (b'', True)",
+    "assert commands.pending == b''",
+    "assert m.ClientCommands().feed(b'uci\\nquit\\n') == (b'uci\\n', True)",
+    "assert m.ClientCommands().feed(b' quit\\r\\n') == (b'', True)",
+    "assert m.ClientCommands().feed(b'setoption name quit value 1\\n') == (b'setoption name quit value 1\\n', False)",
+    "for data in [b'x' * 65537, b'x' * 65537 + b'\\n']:",
+    "    try: m.ClientCommands().feed(data)",
+    "    except ValueError: pass",
+    "    else: raise AssertionError('oversized command admitted')",
+    "assert m.ClientCommands().feed(b'x' * 65536 + b'\\n') == (b'x' * 65536 + b'\\n', False)",
+  ].join("\n");
+  const result = spawnSync("python3", ["-B", "-c", script], { encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr || String(result.error));
+});
+
+test("actual TCP client quit and reconnect retain the same bridge and model child", () => {
+  const script = [
+    "import json, socket, subprocess, sys, tempfile",
+    "with tempfile.TemporaryDirectory(prefix='tabiya-maia-quit-') as directory:",
+    "    child = subprocess.Popen([sys.executable, '-B', 'tools/release/fixtures/maia-identity-sidecar.py', directory + '/ready', '--model-id'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)",
+    "    try:",
+    "        line = child.stdout.readline(); assert line.startswith('PORT:'), line",
+    "        port = int(line.split(':')[1])",
+    "        def contact():",
+    "            client = socket.create_connection(('127.0.0.1', port), timeout=3)",
+    "            client.sendall(b'uci\\nisready\\n')",
+    "            output = b''",
+    "            while b'readyok\\n' not in output:",
+    "                data = client.recv(65536); assert data, output; output += data",
+    "            identity = next(line for line in output.splitlines() if line.startswith(b'id name fixture-'))",
+    "            return client, identity",
+    "        client, first_identity = contact()",
+    "        while True:",
+    "            line = child.stdout.readline()",
+    "            if line.startswith('RECEIVED:'): break",
+    "        client.sendall(b'qu')",
+    "        assert child.stdout.readline().startswith('RECEIVED:'), 'fragment not received'",
+    "        client.sendall(b'it\\n')",
+    "        assert client.recv(65536) == b'', 'quit did not close connection'; client.close()",
+    "        assert child.poll() is None, 'client quit killed the sidecar'",
+    "        client, second_identity = contact()",
+    "        assert second_identity == first_identity, 'reconnect replaced the model child'",
+    "        client.sendall(b'quit\\n'); assert client.recv(65536) == b''; client.close()",
+    "        assert child.poll() is None, 'second quit killed the sidecar'",
+    "    finally:",
+    "        child.terminate()",
+    "        try: child.communicate(timeout=3)",
+    "        except subprocess.TimeoutExpired: child.kill(); child.communicate()",
+  ].join("\n");
+  const result = spawnSync("python3", ["-B", "-c", script], { encoding: "utf8", timeout: 15_000 });
+  assert.equal(result.status, 0, result.stderr || String(result.error));
+});

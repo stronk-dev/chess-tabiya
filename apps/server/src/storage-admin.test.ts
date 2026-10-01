@@ -36,6 +36,7 @@ import {
   STORAGE_COMPATIBILITY,
   StorageAdminError,
   StorageLock,
+  classifyStorageLockFailure,
   verifyOperation,
   errorReceipt,
   type StorageAdminReceiptV1,
@@ -174,6 +175,28 @@ describe("closed identities (§2, §9)", () => {
 });
 
 describe("paths and the storage lock (§1)", () => {
+  it("refuses only actual SQLite busy/locked codes, not disk/I/O/permission failures", () => {
+    for (const errcode of [5, 6, 261, 262, 517]) {
+      expect(classifyStorageLockFailure({ code: "ERR_SQLITE_ERROR", errcode }))
+        .toMatchObject({ result: "refused", code: "MAINTENANCE_LOCKED" });
+    }
+    for (const error of [
+      ...[8, 10, 13, 14, 23, 0, -1, NaN, Infinity, 5.5].map((errcode) => ({ code: "ERR_SQLITE_ERROR", errcode })),
+      { code: "EACCES", errcode: 5 }, { code: "ERR_SQLITE_ERROR" }, new Error("disk full"), null,
+    ]) {
+      expect(classifyStorageLockFailure(error)).toMatchObject({ result: "failed", code: "INTERNAL_ERROR" });
+    }
+  });
+
+  it("a real unopenable lock path fails rather than claiming another process holds it", () => {
+    const directory = temp();
+    const paths = resolveStoragePaths({ database: join(directory, "data", "test.sqlite"), backupRoot: join(directory, "backups") });
+    let caught: unknown;
+    try { StorageLock.acquire({ ...paths, lock: directory }); } catch (error) { caught = error; }
+    expect(caught).toBeInstanceOf(StorageAdminError);
+    expect(caught).toMatchObject({ result: "failed", code: "INTERNAL_ERROR" });
+  });
+
   it("refuses memory, relative, same-directory and nested backup roots", async () => {
     const directory = temp();
     await expectAdminError(() => resolveStoragePaths({ database: ":memory:" }), "PATH_REFUSED");

@@ -1,44 +1,34 @@
 # Codex queue — rewritten in full 2026-08-16
 
-## 2026-10-01 current checkpoint — scoped Maia repair, truthful blocked play exit
+## 2026-10-01 current checkpoint — real source journey complete; Explorer remains held
 
-The owner-approved D3349 amendment is implemented directly under provider-exchange §6. Actual
-pinned string options replace invented decimal spin ranges; requests/commands, integer bounds,
-model/source/container and same-generation capture stay strict. Malformed advertisements report
-protocol, not a fictitious process exit. D3352 repairs reported source policy arithmetic using
-float64/round-trip output without changing weights, sampling, parser tolerances or digest domains.
-The actual offline runtime-user native image build passes both width-20 e4/d4 pages, with zero-fuzz
-source application and synchronized patch/materials/notice digests.
+D3338/D3342/D3347/D3349/D3352/D3355/D3356 now discharge their narrow real source-appliance
+exit: actual build/check/up/CA-export, TLS/account, registered Maia replies/idempotent retries,
+rewind/fork/compare, intentional server restart, exact persisted graph resume, another bot reply,
+served-pack creation and both unchanged memory observations pass without OOM/automatic restart.
+D3355 fixes the probe path/shape and adds same-count state-corruption controls. D3356 makes
+client quit connection-scoped; sidecar shutdown alone terminates the shared model. D3354
+distinguishes real SQLite contention from failed disk/I/O/permission initialization.
 
-Receipt: planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md.
-Complete staged software proof belongs to maia-compatibility-software-2026-10-01.json; do not
-reuse an earlier gate receipt for these new source bytes. The complete normal Make gate is required,
-including historical meaning checks, migration proof, types and downstream contracts.
+Receipt: planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md, with
+actual native positive, original automatic-restart negative and final software JSONs. Original
+disk/resume negatives remain retained. Release-policy and docs checks pass; complete staged
+software and tracking gates must pass before this checkpoint commits. Earlier fixture regression
+was caught by the complete software gate and repaired with an opt-in PID test flag.
 
-**D3353 resolved by owner cleanup; next dependency: D3355, resume probe contract.** Docker now
-has 11,161,088,000 available bytes. The unchanged normal make appliance-drill-staged passes
-fresh storage, TLS/account, registered real Maia replies/idempotent retries and rewind/fork/
-comparison. The first kernel peak observation passes unchanged limits without OOM or automatic
-restart. Restart readiness/login pass, then the instrument requests nonexistent GET /runs/:id
-and reads .run; the REST/browser contract is /runs/:id/graph and .graph. Correct only the probe
-and retain a permanent control, then rerun the complete journey, including durable graph,
-post-restart provider health, served-pack creation and both memory-envelope observations.
-Receipt: planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md
-and its full JSON. Post-restart Maia process_exit/startup logs need observing; do not infer
-restored provider health from the earlier successful replies. No additional cleanup permission
-is needed or inferred. Never prune global images or existing learner volumes. D3349/D3352 and
-D3338/D3342/D3347 remain open until their complete exits; this question-only turn changed
-tracking, not production or the probe. Earlier disk exhaustion and software receipts are retained.
+**Next dependency: D3330, pending measured per-release approval.** The Explorer-summary
+integration and proof remain uncommitted and separate. Approval would cover 128 metadata
+entries across 92 packs, 92 projected pack digest changes and 68 ledger restamps; all 19
+evaluator roots and authored content were measured unchanged. The owner was asked directly;
+no answer is inferred from Docker cleanup or from finishing this independent appliance work.
+After approval, remeasure the exact pending bytes and complete the migration plus full gates.
+Do not regenerate same-version identities, touch unowned files, prune global resources or
+claim that this checkpoint leaves the whole shared tree clean.
 
-D3354 is queued separately under storage-backup-recovery: preserve real SQLITE_BUSY/LOCKED
-contention as refusal, but do not mislabel disk/I/O/permission errors as MAINTENANCE_LOCKED.
-Add deterministic classification controls without relaxing storage exclusion or widening receipts.
-
-Prior D3348/D3350/D3351 remain closed on their original receipts: bounded hashing/shared allocation,
-frozen-authority preservation, and exact-index private history. The full staged tests exclude held
-D3330 Explorer changes without a worktree, stash or content rewrite. Per-release migration consent,
-publication, owner devices, hosted live ACME, calibration and steady-state resource/release gates
-remain separate. No full 1.0 milestone or product RFC archival is claimed.
+Prior D3348/D3350/D3351 remain closed on their original receipts. Provider exchange, deployment,
+distribution and storage RFCs remain implementing: publication/rights, owner devices, hosted
+live ACME, calibration, steady-state resource/release gates and other discharges are separate.
+No complete 1.0 capability, milestone or RFC archival follows.
 
 ## 0-CONTENT-TIER-SHARED-SETUP. ✅ D2119 retired after re-measurement
 

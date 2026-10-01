@@ -1,0 +1,550 @@
+{
+  "protocol": "tabiya.source-appliance-proof@1",
+  "scope": "native source build, real model, loopback transport; not a published release or owner-device proof",
+  "project": "tabiya-appliance-proof-b2cb86eb-58e2-400b-a74a-eefaf67f83f8",
+  "hostname": "tabiya-appliance-proof-b2cb86eb-58e2-400b-a74a-eefaf67f83f8.example.test",
+  "startedAt": "2026-10-01T09:13:14.316Z",
+  "checks": [
+    "owned project, volumes, loopback-only proxy ports and actual immutable CPU identities",
+    "actual make up-appliance build/check/start path preserves the preflight subject",
+    "TLS readiness using only the actual make-exported internal CA",
+    "untrusted TLS fails without a click-through",
+    "HTTP redirects to the exact HTTPS origin",
+    "built web shell and truthful source-build About",
+    "real learner registration with Secure host-only cookie and exact HSTS",
+    "cross-origin write refusal and spoofed-forwarded-header replacement",
+    "actual application observes ready native Maia, not a fixture or configuration flag",
+    "learner move, actual registered Maia bot reply and idempotent retry",
+    "rewind, distinct branch, second real bot reply and comparison through TLS",
+    "actual cgroup play-time envelope, no OOM/automatic restarts (before intentional server restart)",
+    "server restart, secure login and durable rehearsal resume",
+    "actual registered Maia reply and idempotent retry after server restart",
+    "real served pack creates a run without rewriting content",
+    "actual cgroup play-time envelope, no OOM/automatic restarts (after durable resume and served-pack creation)"
+  ],
+  "result": "passed",
+  "images": {
+    "distribution": "source-build",
+    "tier": "cpu",
+    "platform": "linux/arm64",
+    "serverImage": "sha256:b422abb89013873fcf906ff8e0e9c5ead84ad788739edebf0604841ee07d73d2",
+    "maia": {
+      "runtime": "oci",
+      "imageId": "sha256:27474b971e84d6801163121ccec699b816fbcd77dfc2260ff4e637a4d7f65a10",
+      "manifestDigest": "sha256:dbd0b06810a49b76f3ead65c17b9fdd8f4ab466b871dddc5f9f7a91a49d3a99e",
+      "configDigest": "sha256:27474b971e84d6801163121ccec699b816fbcd77dfc2260ff4e637a4d7f65a10"
+    }
+  },
+  "providers": {
+    "generatedAt": "2026-10-01T09:13:48.540Z",
+    "providers": [
+      {
+        "instanceId": "stockfish-play",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:7b914bb0793d12f5d784944fc778b91006bf505dfc7cd2b85c7b0d227d809936",
+        "checkedAt": "2026-10-01T09:13:47.057Z",
+        "lastSuccessAt": "2026-10-01T09:13:47.057Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "stockfish-analysis",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:75bea6e1e735d50dd9d684d9e211b1dae59d37c0e8d0fccb1e90b857faf2b8b4",
+        "checkedAt": "2026-10-01T09:13:47.132Z",
+        "lastSuccessAt": "2026-10-01T09:13:47.132Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "maia-inference",
+        "familyId": "maia",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:b58fc852675c8af4ae4364533692608d73c80c76f6bb45a04cc799ab95af32e7",
+        "checkedAt": "2026-10-01T09:13:47.274Z",
+        "lastSuccessAt": "2026-10-01T09:13:47.274Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "tablebase-primary",
+        "familyId": "tablebase",
+        "implementation": "lichess_http",
+        "generation": "sha256:e7996997ad4b330d751ff0740974fc89862ecd328263c261607d8db6f181ba3b",
+        "state": "unverified",
+        "retryAfterMs": null
+      },
+      {
+        "instanceId": "explorer-primary",
+        "familyId": "explorer",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-voice",
+        "familyId": "voice",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-tts",
+        "familyId": "tts",
+        "state": "not_configured"
+      }
+    ],
+    "operations": [
+      {
+        "operation": "opponent.stockfish_play",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "operation": "opponent.maia_inference",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.stockfish_analysis",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-analysis"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.tablebase_probe",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.explorer_query",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "explorer-primary"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_compare",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_story",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "review.reasoning",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.speech",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-tts"
+          ],
+          "reason": "not_configured"
+        }
+      }
+    ],
+    "policyModes": [
+      {
+        "mode": "human_common",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "strong_engine",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "mode": "theory_strict",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "perfect_tablebase",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "mode": "practical_resistance",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "maia-inference",
+            "tablebase-primary"
+          ]
+        }
+      }
+    ]
+  },
+  "botReplies": [
+    {
+      "requestId": "botreq_f71cbb270e4c4fb8a2fc8415687b1da1",
+      "moveUci": "e7e5",
+      "result": "committed",
+      "retry": "replayed_idempotent"
+    },
+    {
+      "requestId": "botreq_94ee7442aa644ce4b84ddb3ac2350554",
+      "moveUci": "d7d5",
+      "result": "committed",
+      "retry": "replayed_idempotent"
+    },
+    {
+      "requestId": "botreq_d4874884f9aa43b1896cd3b14c204d2c",
+      "moveUci": "c7c6",
+      "result": "committed",
+      "retry": "replayed_idempotent"
+    }
+  ],
+  "run": {
+    "id": "appliance-proof-run",
+    "nodes": 5,
+    "branches": 2,
+    "profile": {
+      "id": "human-baseline.1400@1",
+      "family": "human-baseline",
+      "band": 1400,
+      "version": 1,
+      "digest": "sha256:8441145ea4a9276a91560a736442b4bbce21bfb3b7ebd2a737b2dcb9b6cff467",
+      "model": {
+        "id": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+        "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2"
+      },
+      "sampler": {
+        "temperature": 0.8,
+        "topP": 0.92,
+        "requestedWidth": 20,
+        "returnedMassFloor": 0.97
+      },
+      "orderedLayers": [
+        "sampler.maia_reconstruction@1"
+      ]
+    },
+    "compared": [
+      "appliance-proof-run:branch:0",
+      "appliance-proof-run:branch:1"
+    ],
+    "nodesAfterRestart": 7
+  },
+  "resourceEnvelopes": [
+    {
+      "phase": "before intentional server restart",
+      "observations": [
+        {
+          "service": "server",
+          "limitBytes": 536870912,
+          "peakBytes": 514506752,
+          "oomKilled": false,
+          "automaticRestarts": 0
+        },
+        {
+          "service": "maia",
+          "limitBytes": 1610612736,
+          "peakBytes": 295727104,
+          "oomKilled": false,
+          "automaticRestarts": 0
+        }
+      ]
+    },
+    {
+      "phase": "after durable resume and served-pack creation",
+      "observations": [
+        {
+          "service": "server",
+          "limitBytes": 536870912,
+          "peakBytes": 465010688,
+          "oomKilled": false,
+          "automaticRestarts": 0
+        },
+        {
+          "service": "maia",
+          "limitBytes": 1610612736,
+          "peakBytes": 295727104,
+          "oomKilled": false,
+          "automaticRestarts": 0
+        }
+      ]
+    }
+  ],
+  "providersAfterRestart": {
+    "generatedAt": "2026-10-01T09:13:55.940Z",
+    "providers": [
+      {
+        "instanceId": "stockfish-play",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:7b914bb0793d12f5d784944fc778b91006bf505dfc7cd2b85c7b0d227d809936",
+        "checkedAt": "2026-10-01T09:13:55.441Z",
+        "lastSuccessAt": "2026-10-01T09:13:55.441Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "stockfish-analysis",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:75bea6e1e735d50dd9d684d9e211b1dae59d37c0e8d0fccb1e90b857faf2b8b4",
+        "checkedAt": "2026-10-01T09:13:55.517Z",
+        "lastSuccessAt": "2026-10-01T09:13:55.517Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "maia-inference",
+        "familyId": "maia",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:b58fc852675c8af4ae4364533692608d73c80c76f6bb45a04cc799ab95af32e7",
+        "checkedAt": "2026-10-01T09:13:55.655Z",
+        "lastSuccessAt": "2026-10-01T09:13:55.655Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "tablebase-primary",
+        "familyId": "tablebase",
+        "implementation": "lichess_http",
+        "generation": "sha256:e7996997ad4b330d751ff0740974fc89862ecd328263c261607d8db6f181ba3b",
+        "state": "unverified",
+        "retryAfterMs": null
+      },
+      {
+        "instanceId": "explorer-primary",
+        "familyId": "explorer",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-voice",
+        "familyId": "voice",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-tts",
+        "familyId": "tts",
+        "state": "not_configured"
+      }
+    ],
+    "operations": [
+      {
+        "operation": "opponent.stockfish_play",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "operation": "opponent.maia_inference",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.stockfish_analysis",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-analysis"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.tablebase_probe",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.explorer_query",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "explorer-primary"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_compare",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_story",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "review.reasoning",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.speech",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-tts"
+          ],
+          "reason": "not_configured"
+        }
+      }
+    ],
+    "policyModes": [
+      {
+        "mode": "human_common",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "strong_engine",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "mode": "theory_strict",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "perfect_tablebase",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "mode": "practical_resistance",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "maia-inference",
+            "tablebase-primary"
+          ]
+        }
+      }
+    ]
+  },
+  "cleanup": "owned project and volumes removed",
+  "finishedAt": "2026-10-01T09:13:59.958Z",
+  "sources": {
+    "mode": "git-index",
+    "head": "e41c1a9596163c49a464a239cef91b84c32c2770",
+    "tree": "0080bbd85faf913487fd3b911a3011072551f520",
+    "includesUnstagedChanges": false
+  }
+}

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { assertPlayedMove, isolatedEnvironment, loopbackOverlay, validateIsolatedCompose, validateRunningEnvelope } from "../source-appliance-drill.mjs";
+import { assertPlayedMove, isolatedEnvironment, loopbackOverlay, readResumedGraph, validateIsolatedCompose, validateRunningEnvelope } from "../source-appliance-drill.mjs";
 import { CADDY_IMAGE } from "../render-deployment.mjs";
 
 const project = "tabiya-appliance-proof-00000000-0000-4000-8000-000000000000";
@@ -88,6 +88,30 @@ test("a successful response or unchanged node is not a played move", () => {
   assert.throws(() => assertPlayedMove(before, after, "d2d4", "user"));
   assert.throws(() => assertPlayedMove(before, after, "e2e4", "opponent"));
   assert.throws(() => assertPlayedMove(before, { ...after, events: before.events }, "e2e4", "user"));
+});
+
+test("resume reads the real graph route/shape and rejects same-count state corruption", () => {
+  const before = { id: "run/with space", nodes: [{ id: "root", fen: "start" }, { id: "child", parentId: "root", fen: "after", moveUci: "e2e4" }], branches: [{ id: "b", rootNodeId: "root" }], activeCursor: { nodeId: "child", branchId: "b" } };
+  const graph = structuredClone(before);
+  let calls = 0;
+  assert.equal(readResumedGraph((path) => {
+    calls++;
+    assert.equal(path, "/runs/run%2Fwith%20space/graph");
+    return { graph };
+  }, before), graph);
+  assert.equal(calls, 1);
+  assert.throws(() => readResumedGraph(() => ({ run: before }), before), /no matching graph/);
+  for (const mutate of [
+    (g) => { g.id = "foreign"; },
+    (g) => { g.nodes[1].fen = "different"; },
+    (g) => { g.nodes[1].parentId = "child"; },
+    (g) => { g.nodes[1].moveUci = "d2d4"; },
+    (g) => { g.branches[0].id = "other"; },
+    (g) => { g.activeCursor.nodeId = "root"; },
+  ]) {
+    const changed = structuredClone(before); mutate(changed);
+    assert.throws(() => readResumedGraph(() => ({ graph: changed }), before));
+  }
 });
 
 test("real runtime envelope refuses foreign ownership, OOM, restart, raised limits and missing peaks", () => {

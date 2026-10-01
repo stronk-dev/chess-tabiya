@@ -1,0 +1,648 @@
+{
+  "protocol": "tabiya.source-appliance-proof@1",
+  "scope": "native source build, real model, loopback transport; not a published release or owner-device proof",
+  "project": "tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a",
+  "hostname": "tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test",
+  "startedAt": "2026-10-01T09:03:27.440Z",
+  "checks": [
+    "owned project, volumes, loopback-only proxy ports and actual immutable CPU identities",
+    "actual make up-appliance build/check/start path preserves the preflight subject",
+    "TLS readiness using only the actual make-exported internal CA",
+    "untrusted TLS fails without a click-through",
+    "HTTP redirects to the exact HTTPS origin",
+    "built web shell and truthful source-build About",
+    "real learner registration with Secure host-only cookie and exact HSTS",
+    "cross-origin write refusal and spoofed-forwarded-header replacement",
+    "actual application observes ready native Maia, not a fixture or configuration flag",
+    "learner move, actual registered Maia bot reply and idempotent retry",
+    "rewind, distinct branch, second real bot reply and comparison through TLS",
+    "actual cgroup play-time envelope, no OOM/automatic restarts (before intentional server restart)",
+    "server restart, secure login and durable rehearsal resume",
+    "actual registered Maia reply and idempotent retry after server restart",
+    "real served pack creates a run without rewriting content"
+  ],
+  "result": "failed",
+  "images": {
+    "distribution": "source-build",
+    "tier": "cpu",
+    "platform": "linux/arm64",
+    "serverImage": "sha256:644e82e818a9bdcc03e275cefdc00dfd2b021294fd5ae9c2689a2a6fc7685b52",
+    "maia": {
+      "runtime": "oci",
+      "imageId": "sha256:6a837c5207dcc3dce8d6acffcae7477e6d061a45a4e34576b88bbc9947536406",
+      "manifestDigest": "sha256:9277a3e585c656d02fb24a6fb98b3eaece456482c05de64c5fb33502d832460b",
+      "configDigest": "sha256:6a837c5207dcc3dce8d6acffcae7477e6d061a45a4e34576b88bbc9947536406"
+    }
+  },
+  "providers": {
+    "generatedAt": "2026-10-01T09:04:21.966Z",
+    "providers": [
+      {
+        "instanceId": "stockfish-play",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:7b914bb0793d12f5d784944fc778b91006bf505dfc7cd2b85c7b0d227d809936",
+        "checkedAt": "2026-10-01T09:04:12.318Z",
+        "lastSuccessAt": "2026-10-01T09:04:12.318Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "stockfish-analysis",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:75bea6e1e735d50dd9d684d9e211b1dae59d37c0e8d0fccb1e90b857faf2b8b4",
+        "checkedAt": "2026-10-01T09:04:12.400Z",
+        "lastSuccessAt": "2026-10-01T09:04:12.400Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "maia-inference",
+        "familyId": "maia",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:b58fc852675c8af4ae4364533692608d73c80c76f6bb45a04cc799ab95af32e7",
+        "checkedAt": "2026-10-01T09:04:12.605Z",
+        "lastSuccessAt": "2026-10-01T09:04:12.605Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "tablebase-primary",
+        "familyId": "tablebase",
+        "implementation": "lichess_http",
+        "generation": "sha256:e7996997ad4b330d751ff0740974fc89862ecd328263c261607d8db6f181ba3b",
+        "state": "unverified",
+        "retryAfterMs": null
+      },
+      {
+        "instanceId": "explorer-primary",
+        "familyId": "explorer",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-voice",
+        "familyId": "voice",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-tts",
+        "familyId": "tts",
+        "state": "not_configured"
+      }
+    ],
+    "operations": [
+      {
+        "operation": "opponent.stockfish_play",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "operation": "opponent.maia_inference",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.stockfish_analysis",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-analysis"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.tablebase_probe",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.explorer_query",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "explorer-primary"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_compare",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_story",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "review.reasoning",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.speech",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-tts"
+          ],
+          "reason": "not_configured"
+        }
+      }
+    ],
+    "policyModes": [
+      {
+        "mode": "human_common",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "strong_engine",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "mode": "theory_strict",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "perfect_tablebase",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "mode": "practical_resistance",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "maia-inference",
+            "tablebase-primary"
+          ]
+        }
+      }
+    ]
+  },
+  "botReplies": [
+    {
+      "requestId": "botreq_cf112d7c6dff4acbad0962aa8fee38b5",
+      "moveUci": "e7e5",
+      "result": "committed",
+      "retry": "replayed_idempotent"
+    },
+    {
+      "requestId": "botreq_293e725f078f4aa1b0a81b16b8f7d199",
+      "moveUci": "d7d5",
+      "result": "committed",
+      "retry": "replayed_idempotent"
+    },
+    {
+      "requestId": "botreq_e1d073be62634d8b85e3281fc23d77fd",
+      "moveUci": "c7c6",
+      "result": "committed",
+      "retry": "replayed_idempotent"
+    }
+  ],
+  "run": {
+    "id": "appliance-proof-run",
+    "nodes": 5,
+    "branches": 2,
+    "profile": {
+      "id": "human-baseline.1400@1",
+      "family": "human-baseline",
+      "band": 1400,
+      "version": 1,
+      "digest": "sha256:8441145ea4a9276a91560a736442b4bbce21bfb3b7ebd2a737b2dcb9b6cff467",
+      "model": {
+        "id": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+        "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2"
+      },
+      "sampler": {
+        "temperature": 0.8,
+        "topP": 0.92,
+        "requestedWidth": 20,
+        "returnedMassFloor": 0.97
+      },
+      "orderedLayers": [
+        "sampler.maia_reconstruction@1"
+      ]
+    },
+    "compared": [
+      "appliance-proof-run:branch:0",
+      "appliance-proof-run:branch:1"
+    ],
+    "nodesAfterRestart": 7
+  },
+  "resourceEnvelopes": [
+    {
+      "phase": "before intentional server restart",
+      "observations": [
+        {
+          "service": "server",
+          "limitBytes": 536870912,
+          "peakBytes": 451821568,
+          "oomKilled": false,
+          "automaticRestarts": 0
+        },
+        {
+          "service": "maia",
+          "limitBytes": 1610612736,
+          "peakBytes": 284114944,
+          "oomKilled": false,
+          "automaticRestarts": 0
+        }
+      ]
+    }
+  ],
+  "providersAfterRestart": {
+    "generatedAt": "2026-10-01T09:04:41.196Z",
+    "providers": [
+      {
+        "instanceId": "stockfish-play",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:7b914bb0793d12f5d784944fc778b91006bf505dfc7cd2b85c7b0d227d809936",
+        "checkedAt": "2026-10-01T09:04:30.036Z",
+        "lastSuccessAt": "2026-10-01T09:04:30.036Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "stockfish-analysis",
+        "familyId": "stockfish",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:75bea6e1e735d50dd9d684d9e211b1dae59d37c0e8d0fccb1e90b857faf2b8b4",
+        "checkedAt": "2026-10-01T09:04:30.530Z",
+        "lastSuccessAt": "2026-10-01T09:04:30.530Z",
+        "lastFailureAt": null,
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "maia-inference",
+        "familyId": "maia",
+        "implementation": "uci_sidecar",
+        "generation": "sha256:614ce8a01eb562c6a50ad15e326350ee48debb64424cd4424afbc70e7111757b",
+        "checkedAt": "2026-10-01T09:04:31.100Z",
+        "lastSuccessAt": "2026-10-01T09:04:31.100Z",
+        "lastFailureAt": "2026-10-01T09:04:30.513Z",
+        "state": "available",
+        "reason": null
+      },
+      {
+        "instanceId": "tablebase-primary",
+        "familyId": "tablebase",
+        "implementation": "lichess_http",
+        "generation": "sha256:e7996997ad4b330d751ff0740974fc89862ecd328263c261607d8db6f181ba3b",
+        "state": "unverified",
+        "retryAfterMs": null
+      },
+      {
+        "instanceId": "explorer-primary",
+        "familyId": "explorer",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-voice",
+        "familyId": "voice",
+        "state": "not_configured"
+      },
+      {
+        "instanceId": "external-tts",
+        "familyId": "tts",
+        "state": "not_configured"
+      }
+    ],
+    "operations": [
+      {
+        "operation": "opponent.stockfish_play",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "operation": "opponent.maia_inference",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.stockfish_analysis",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-analysis"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.tablebase_probe",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "operation": "evidence.explorer_query",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "explorer-primary"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_compare",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.voice_story",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "review.reasoning",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-voice"
+          ],
+          "reason": "not_configured"
+        }
+      },
+      {
+        "operation": "render.speech",
+        "availability": {
+          "state": "unavailable",
+          "instanceIds": [
+            "external-tts"
+          ],
+          "reason": "not_configured"
+        }
+      }
+    ],
+    "policyModes": [
+      {
+        "mode": "human_common",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "strong_engine",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "stockfish-play"
+          ]
+        }
+      },
+      {
+        "mode": "theory_strict",
+        "availability": {
+          "state": "available",
+          "instanceIds": [
+            "maia-inference"
+          ]
+        }
+      },
+      {
+        "mode": "perfect_tablebase",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "tablebase-primary"
+          ]
+        }
+      },
+      {
+        "mode": "practical_resistance",
+        "availability": {
+          "state": "requestable_unverified",
+          "instanceIds": [
+            "maia-inference",
+            "tablebase-primary"
+          ]
+        }
+      }
+    ]
+  },
+  "failure": "APPLIANCE_PROOF_REFUSED: maia crashed, OOM-killed or automatically restarted during play",
+  "failureServiceLogs": "maia-1  | loading Maia3 checkpoint /opt/maia3-models/maia3-5m.pt\nmaia-1  | Maia3 ready\nmaia-1  | loading Maia3 checkpoint /opt/maia3-models/maia3-5m.pt\nmaia-1  | Maia3 ready\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.3165026,\"msg\":\"maxprocs: Leaving GOMAXPROCS=14: CPU quota undefined\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.3165271,\"msg\":\"GOMEMLIMIT is updated\",\"GOMEMLIMIT\":15073601126,\"previous\":9223372036854775807}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.31653,\"msg\":\"using config from file\",\"file\":\"/etc/caddy/Caddyfile\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.316531,\"msg\":\"adapted config to JSON\",\"adapter\":\"caddyfile\"}\ncaddy-1  | {\"level\":\"warn\",\"ts\":1790845460.3165329,\"logger\":\"admin\",\"msg\":\"admin endpoint disabled\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.3178904,\"logger\":\"tls.cache.maintenance\",\"msg\":\"started background certificate maintenance\",\"cache\":\"0x63f17281bd00\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.3615828,\"logger\":\"http.auto_https\",\"msg\":\"server is listening only on the HTTPS port but has no TLS connection policies; adding one to enable TLS\",\"server_name\":\"srv0\",\"https_port\":443}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.3616333,\"logger\":\"http.auto_https\",\"msg\":\"enabling automatic HTTP->HTTPS redirects\",\"server_name\":\"srv0\"}\ncaddy-1  | {\"level\":\"warn\",\"ts\":1790845460.4027672,\"logger\":\"http\",\"msg\":\"HTTP/2 skipped because it requires TLS\",\"network\":\"tcp\",\"addr\":\":80\"}\ncaddy-1  | {\"level\":\"warn\",\"ts\":1790845460.402791,\"logger\":\"http\",\"msg\":\"HTTP/3 skipped because it requires TLS\",\"network\":\"tcp\",\"addr\":\":80\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.402793,\"logger\":\"http.log\",\"msg\":\"server running\",\"name\":\"remaining_auto_https_redirects\",\"protocols\":[\"h1\",\"h2\",\"h3\"]}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.4265032,\"logger\":\"http\",\"msg\":\"enabling HTTP/3 listener\",\"addr\":\":443\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.4393435,\"msg\":\"failed to sufficiently increase receive buffer size (was: 208 kiB, wanted: 7168 kiB, got: 416 kiB). See https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes for details.\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.449548,\"logger\":\"http.log\",\"msg\":\"server running\",\"name\":\"srv0\",\"protocols\":[\"h1\",\"h2\",\"h3\"]}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.449576,\"logger\":\"http\",\"msg\":\"enabling automatic TLS certificate management\",\"domains\":[\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\"]}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.4983828,\"logger\":\"tls.obtain\",\"msg\":\"acquiring lock\",\"identifier\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.5083256,\"logger\":\"tls\",\"msg\":\"cleaning storage unit\",\"storage\":\"FileStorage:/data/caddy\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.5083342,\"logger\":\"tls.obtain\",\"msg\":\"lock acquired\",\"identifier\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.5084248,\"logger\":\"tls.obtain\",\"msg\":\"obtaining certificate\",\"identifier\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.5340915,\"logger\":\"tls\",\"msg\":\"finished cleaning storage units\"}\ncaddy-1  | {\"level\":\"warn\",\"ts\":1790845460.6619039,\"logger\":\"pki.ca.local\",\"msg\":\"installing root certificate (you might be prompted for password)\",\"path\":\"storage:pki/authorities/local/root.crt\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.665812,\"msg\":\"warning: \\\"certutil\\\" is not available, install \\\"certutil\\\" with \\\"apt install libnss3-tools\\\" or \\\"yum install nss-tools\\\" and try again\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.6658251,\"msg\":\"define JAVA_HOME environment variable to use the Java trust\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.668686,\"logger\":\"tls.obtain\",\"msg\":\"certificate obtained successfully\",\"identifier\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"issuer\":\"local\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.6687624,\"logger\":\"tls.obtain\",\"msg\":\"releasing lock\",\"identifier\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.7019544,\"msg\":\"certificate installed properly in linux trusts\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.702097,\"msg\":\"autosaved config (load with --resume flag)\",\"file\":\"/config/caddy/autosave.json\"}\ncaddy-1  | {\"level\":\"info\",\"ts\":1790845460.702105,\"msg\":\"serving initial configuration\"}\nserver-1  | {\"event\":\"storage_prepare_receipt\",\"receipt\":{\"protocol\":\"tabiya-storage-admin-receipt\",\"protocolVersion\":1,\"operationId\":\"968c32f3-49e6-46c3-b7a6-8519812c6e84\",\"applicationRevision\":\"dev+c28b83cf98c3471fa419fb73038d1e6b647edc3e\",\"elapsedMs\":2437,\"paths\":[{\"role\":\"database\",\"identity\":\"live\"}],\"operation\":\"prepare_start\",\"result\":\"succeeded\",\"action\":\"fresh\",\"sourceStorageVersion\":null,\"targetStorageVersion\":30,\"backupId\":null,\"checks\":[\"compatibility\"]}}\nserver-1  | storage migration 1: add and backfill run summaries\nserver-1  | storage migration 2: learner identity and run grants\nserver-1  | storage migration 3: quarantine pre-0.5 run snapshots\nserver-1  | storage migration 4: upgrade v0.5 run snapshots to v0.6\nserver-1  | storage migration 5: record policyModeApplied as unknown on v0.6 selections\nserver-1  | storage migration 6: attempt records, concept tags, schedules, and history stats\nserver-1  | storage migration 7: pack studio drafts and registered versions\nserver-1  | storage migration 8: branch origin and prediction event run schema\nserver-1  | storage migration 9: live sessions, journal, proposals, votes, invitations, and arena legs\nserver-1  | storage migration 10: shape studio drafts and registered versions\nserver-1  | storage migration 11: branch groups run schema\nserver-1  | storage migration 12: imported games and run schema\nserver-1  | storage migration 13: public story tokens and run derivations\nserver-1  | storage migration 14: native matches and session join tokens\nserver-1  | storage migration 15: learner repertoires, scans, and gap-run links\nserver-1  | storage migration 16: immediate guard run schema\nserver-1  | storage migration 17: stated reasoning run schema\nserver-1  | storage migration 18: perfect tablebase run schema\nserver-1  | storage migration 19: practical resistance run schema\nserver-1  | storage migration 20: engine request record run schema\nserver-1  | storage migration 21: engine leverage run schema\ncaddy-1  | {\"level\":\"error\",\"ts\":1790845464.4199297,\"logger\":\"http.log.error\",\"msg\":\"dial tcp 172.18.0.2:3000: connect: connection refused\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65394\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.001489458,\"status\":502,\"err_id\":\"2y77t4p53\",\"err_trace\":\"reverseproxy.statusError (reverseproxy.go:1626)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845465.44801,\"logger\":\"http.log.error\",\"msg\":\"dial tcp 172.18.0.2:3000: connect: connection refused\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65410\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.001762125,\"status\":502,\"err_id\":\"sdkgvu91i\",\"err_trace\":\"reverseproxy.statusError (reverseproxy.go:1626)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845466.4869936,\"logger\":\"http.log.error\",\"msg\":\"dial tcp 172.18.0.2:3000: connect: connection refused\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65424\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.002738042,\"status\":502,\"err_id\":\"7w389y8p4\",\"err_trace\":\"reverseproxy.statusError (reverseproxy.go:1626)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845467.5124123,\"logger\":\"http.log.error\",\"msg\":\"dial tcp 172.18.0.2:3000: connect: connection refused\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65440\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.001398458,\"status\":502,\"err_id\":\"k34ce4haa\",\"err_trace\":\"reverseproxy.statusError (reverseproxy.go:1626)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845468.5547163,\"logger\":\"http.log.error\",\"msg\":\"dial tcp 172.18.0.2:3000: connect: connection refused\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65454\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.002845,\"status\":502,\"err_id\":\"7vppz0ijd\",\"err_trace\":\"reverseproxy.statusError (reverseproxy.go:1626)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845469.5972004,\"logger\":\"http.log.error\",\"msg\":\"dial tcp 172.18.0.2:3000: connect: connection refused\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65458\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"Cookie\":[\"REDACTED\"],\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.001495334,\"status\":502,\"err_id\":\"bvvn39z7q\",\"err_trace\":\"reverseproxy.statusError (reverseproxy.go:1626)\"}\ncaddy-1   | {\"level\":\"info\",\"ts\":1790845470.3689966,\"logger\":\"http.handlers.reverse_proxy.health_checker.active\",\"msg\":\"HTTP request failed\",\"host\":\"tabiya-proxy-origin:3000\",\"error\":\"Get \\\"http://tabiya-proxy-origin:3000/readyz\\\": dial tcp 172.18.0.2:3000: connect: connection refused\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845470.6236966,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65472\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000123542,\"status\":503,\"err_id\":\"q8hmvvjaz\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\nserver-1  | storage migration 22: learner board annotations\nserver-1  | storage migration 23: opponent ordering basis run schema\nserver-1  | storage migration 24: classrooms, assignments, submissions, and expiring run grants\nserver-1  | storage migration 25: learner ratings, rated games, periods, standings, and marks\nserver-1  | storage migration 26: longitudinal observation ledger, structure stats, and projection jobs\nserver-1  | storage migration 27: durable evidence job batches, jobs, result sequences and application transitions\nserver-1  | storage migration 28: registered global concept identities and the legacy concept quarantine\nserver-1  | storage migration 29: bot profile run schema\nserver-1  | storage migration 30: campaign runs, creations, events, charged commands and durable awards\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845471.6590629,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"65480\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000290958,\"status\":503,\"err_id\":\"ny1tt4u32\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845472.6944726,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62268\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"Cookie\":[\"REDACTED\"],\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000426375,\"status\":503,\"err_id\":\"w78eb39wf\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845473.7310498,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62282\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000100792,\"status\":503,\"err_id\":\"4fxyvcgna\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845474.7509785,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62288\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"Cookie\":[\"REDACTED\"],\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.00009725,\"status\":503,\"err_id\":\"r5syv9ghb\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845475.77707,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62290\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000268875,\"status\":503,\"err_id\":\"dhj9a92ay\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845476.9340641,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62292\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"],\"User-Agent\":[\"curl/8.7.1\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000217958,\"status\":503,\"err_id\":\"p25dr48rw\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845477.9833252,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62300\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000617,\"status\":503,\"err_id\":\"w7gfvm5a0\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845479.0219333,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62302\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"],\"Cookie\":[\"REDACTED\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.00020975,\"status\":503,\"err_id\":\"nupytnyx0\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"error\",\"ts\":1790845480.0480099,\"logger\":\"http.log.error\",\"msg\":\"no upstreams available\",\"request\":{\"remote_ip\":\"172.21.0.1\",\"remote_port\":\"62304\",\"client_ip\":\"172.21.0.1\",\"proto\":\"HTTP/2.0\",\"method\":\"GET\",\"host\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"uri\":\"/readyz\",\"headers\":{\"Cookie\":[\"REDACTED\"],\"User-Agent\":[\"curl/8.7.1\"],\"Accept\":[\"*/*\"]},\"tls\":{\"resumed\":false,\"version\":772,\"cipher_suite\":4867,\"proto\":\"h2\",\"server_name\":\"tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test\",\"ech\":false}},\"duration\":0.000292125,\"status\":503,\"err_id\":\"ihf0g7032\",\"err_trace\":\"reverseproxy.(*Handler).proxyLoopIteration (reverseproxy.go:640)\"}\ncaddy-1   | {\"level\":\"info\",\"ts\":1790845480.3807516,\"logger\":\"http.handlers.reverse_proxy.health_checker.active\",\"msg\":\"host is up\",\"host\":\"tabiya-proxy-origin:3000\"}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:b58fc852675c\",\"previousState\":\"unverified\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-play\",\"generationPrefix\":\"sha256:7b914bb0793d\",\"previousState\":\"unverified\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-analysis\",\"generationPrefix\":\"sha256:75bea6e1e735\",\"previousState\":\"unverified\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:b58fc852675c\",\"previousState\":\"unavailable\",\"state\":\"available\",\"reason\":null,\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-play\",\"generationPrefix\":\"sha256:7b914bb0793d\",\"previousState\":\"unavailable\",\"state\":\"available\",\"reason\":null,\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-analysis\",\"generationPrefix\":\"sha256:75bea6e1e735\",\"previousState\":\"unavailable\",\"state\":\"available\",\"reason\":null,\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"startup_receipt\",\"storageVersion\":30,\"databasePath\":\"/data/chess-tabiya.sqlite\",\"longitudinal\":{\"scanned\":0,\"created\":0,\"advanced\":0,\"revisionReset\":0,\"suppressed\":0,\"digest\":\"sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\"}}\nserver-1  | chess-tabiya appliance profile listening on 0.0.0.0:3000; public origin https://tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test (maia)\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-play\",\"generationPrefix\":\"sha256:7b914bb0793d\",\"previousState\":\"available\",\"state\":\"unavailable\",\"reason\":\"cancelled_by_shutdown\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-analysis\",\"generationPrefix\":\"sha256:75bea6e1e735\",\"previousState\":\"available\",\"state\":\"unavailable\",\"reason\":\"cancelled_by_shutdown\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:b58fc852675c\",\"previousState\":\"available\",\"state\":\"unavailable\",\"reason\":\"cancelled_by_shutdown\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"storage_prepare_receipt\",\"receipt\":{\"protocol\":\"tabiya-storage-admin-receipt\",\"protocolVersion\":1,\"operationId\":\"f51630e7-d07a-42de-bf67-a5c292d68c09\",\"applicationRevision\":\"dev+c28b83cf98c3471fa419fb73038d1e6b647edc3e\",\"elapsedMs\":2583,\"paths\":[{\"role\":\"database\",\"identity\":\"live\"}],\"operation\":\"prepare_start\",\"result\":\"succeeded\",\"action\":\"current\",\"sourceStorageVersion\":30,\"targetStorageVersion\":30,\"backupId\":null,\"checks\":[\"integrity\",\"foreign_keys\",\"inventory\",\"compatibility\"]}}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:b58fc852675c\",\"previousState\":\"unverified\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-play\",\"generationPrefix\":\"sha256:7b914bb0793d\",\"previousState\":\"unverified\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-analysis\",\"generationPrefix\":\"sha256:75bea6e1e735\",\"previousState\":\"unverified\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-play\",\"generationPrefix\":\"sha256:7b914bb0793d\",\"previousState\":\"unavailable\",\"state\":\"available\",\"reason\":null,\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"stockfish\",\"instanceId\":\"stockfish-analysis\",\"generationPrefix\":\"sha256:75bea6e1e735\",\"previousState\":\"unavailable\",\"state\":\"available\",\"reason\":null,\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:b58fc852675c\",\"previousState\":\"unavailable\",\"state\":\"unavailable\",\"reason\":\"process_exit\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":5001}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:b58fc852675c\",\"previousState\":\"unavailable\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":5001}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:9f7302aa8e95\",\"previousState\":\"unavailable\",\"state\":\"unavailable\",\"reason\":\"process_exit\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":5001}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:9f7302aa8e95\",\"previousState\":\"unavailable\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":5001}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:9f7302aa8e95\",\"previousState\":\"unavailable\",\"state\":\"unavailable\",\"reason\":\"process_exit\",\"operation\":\"opponent.maia_inference\",\"durationMs\":null,\"retryAfterMs\":5001}\nserver-1  | {\"event\":\"startup_receipt\",\"storageVersion\":30,\"databasePath\":\"/data/chess-tabiya.sqlite\",\"longitudinal\":{\"scanned\":1,\"created\":0,\"advanced\":0,\"revisionReset\":0,\"suppressed\":0,\"digest\":\"sha256:3fd3a0f300494217cf3b1919ecfe0e9434b2a98889ec5b08b8d030ab8f524c2f\"}}\nserver-1  | chess-tabiya appliance profile listening on 0.0.0.0:3000; public origin https://tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a.example.test (maia)\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:614ce8a01eb5\",\"previousState\":\"unavailable\",\"state\":\"unavailable\",\"reason\":\"startup\",\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\nserver-1  | {\"event\":\"provider_health_transition\",\"familyId\":\"maia\",\"instanceId\":\"maia-inference\",\"generationPrefix\":\"sha256:614ce8a01eb5\",\"previousState\":\"unavailable\",\"state\":\"available\",\"reason\":null,\"operation\":\"supervisor.lifecycle\",\"durationMs\":null,\"retryAfterMs\":null}\n",
+  "failureServiceStates": [
+    {
+      "name": "/tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a-caddy-1",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 162800,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T09:04:19.871079971Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      }
+    },
+    {
+      "name": "/tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a-maia-1",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 163157,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T09:04:29.588899378Z",
+        "FinishedAt": "2026-10-01T09:04:29.544626211Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-10-01T09:04:16.731748636Z",
+              "End": "2026-10-01T09:04:16.816334178Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-10-01T09:04:21.81859118Z",
+              "End": "2026-10-01T09:04:21.855054722Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-10-01T09:04:26.856001002Z",
+              "End": "2026-10-01T09:04:26.903124835Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-10-01T09:04:34.70287138Z",
+              "End": "2026-10-01T09:04:34.743206047Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-10-01T09:04:39.746460674Z",
+              "End": "2026-10-01T09:04:39.814523299Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "/tabiya-appliance-proof-b9d811cc-37f5-42f4-96b4-55a672ab775a-server-1",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 163012,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T09:04:24.267834084Z",
+        "FinishedAt": "2026-10-01T09:04:24.060091584Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-10-01T09:04:12.258867092Z",
+              "End": "2026-10-01T09:04:12.429028509Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-10-01T09:04:17.434073053Z",
+              "End": "2026-10-01T09:04:19.467596929Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-10-01T09:04:29.389989836Z",
+              "End": "2026-10-01T09:04:29.520375545Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-10-01T09:04:34.524290089Z",
+              "End": "2026-10-01T09:04:34.775398214Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "cleanup": "owned project and volumes removed",
+  "finishedAt": "2026-10-01T09:04:45.373Z",
+  "sources": {
+    "mode": "git-index",
+    "head": "e41c1a9596163c49a464a239cef91b84c32c2770",
+    "tree": "c28b83cf98c3471fa419fb73038d1e6b647edc3e",
+    "includesUnstagedChanges": false
+  }
+}

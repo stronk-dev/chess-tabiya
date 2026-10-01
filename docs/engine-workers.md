@@ -165,6 +165,13 @@ supported shortcut. First contact found no UCI seed option, so Maia capabilities
 and selections record `seedHonored: false`. Exact retry behavior comes from the
 event log and selection cache rather than a false seed guarantee.
 
+The TCP sidecar owns one model child. A client's complete UCI `quit` closes only that
+connection; it does not terminate the shared child or restart the container when the
+application restarts. Commands are newline-framed with a 65,536-byte per-line bound,
+including fragmented/coalesced transport reads. Only sidecar shutdown sends the child's
+terminal `quit`. The appliance journey checks a real bot reply after application restart
+and requires zero automatic Maia container restarts throughout.
+
 Pinned Maia ranks MultiPV candidates but does not normally expose the already
 computed move-policy probability. The AGPL-published patch at
 `workers/maia/patches/maia3-uci-policy-mass.patch` is checked and applied during

@@ -247,6 +247,17 @@ export function resolveStoragePaths(input: { readonly database: string; readonly
  * released by the kernel on process death, so a stale lock file is never a false owner; contention
  * refuses immediately (busy timeout 0). File contents are not authority.
  */
+/** Only SQLite's busy/locked primary codes mean a different process owns this lock. */
+export function classifyStorageLockFailure(error: unknown): StorageAdminError {
+  const sqlite = error as { code?: unknown; errcode?: unknown } | null;
+  if (sqlite?.code === "ERR_SQLITE_ERROR" && typeof sqlite.errcode === "number"
+    && Number.isSafeInteger(sqlite.errcode) && sqlite.errcode > 0 && sqlite.errcode <= 0x7fffffff
+    && [5, 6].includes(sqlite.errcode & 0xff)) {
+    return refuse("MAINTENANCE_LOCKED", "another server or maintenance process holds the storage lock");
+  }
+  return fail("INTERNAL_ERROR", "the storage lock could not be initialized or acquired");
+}
+
 export class StorageLock {
   readonly #database: DatabaseSync;
   readonly path: string;
@@ -258,21 +269,17 @@ export class StorageLock {
   }
 
   static acquire(paths: StoragePaths): StorageLock {
-    mkdirSync(dirname(paths.lock), { recursive: true });
-    let database: DatabaseSync;
+    let database: DatabaseSync | undefined;
     try {
+      mkdirSync(dirname(paths.lock), { recursive: true });
       database = new DatabaseSync(paths.lock);
       database.exec("PRAGMA busy_timeout = 0");
       // The lock database never holds data: no rollback journal, so no sidecar outlives a crash.
       database.exec("PRAGMA journal_mode = OFF");
-    } catch (error) {
-      throw refuse("MAINTENANCE_LOCKED", `the storage lock could not be opened: ${(error as Error).message}`);
-    }
-    try {
       database.exec("BEGIN EXCLUSIVE");
-    } catch {
-      database.close();
-      throw refuse("MAINTENANCE_LOCKED", "another server or maintenance process holds the storage lock");
+    } catch (error) {
+      try { database?.close(); } catch { /* preserve the original failure classification */ }
+      throw classifyStorageLockFailure(error);
     }
     return new StorageLock(database, paths.lock);
   }

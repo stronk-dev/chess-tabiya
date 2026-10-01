@@ -1,5 +1,6 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
+- **Implementation checkpoint 2026-10-01, completed source journey:** D3355 binds resume to the existing graph API; D3356 makes client quit connection-scoped rather than killing the shared Maia child. The real native appliance journey passes registered bot replies/retries, branch comparison, durable resume, another bot reply after server restart, served-pack creation and both unchanged cgroup envelopes with zero automatic restarts. D3354 distinguishes real SQLite contention from failed storage initialization. Receipt: `planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md`. Earlier negative checkpoints remain historical; no full RFC archival, migration consent or publication follows.
 - **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — fifth fresh independent review returned the fourth repair on
   [[D2972]]–[[D2977]].** Storage subjects and semantic check results remain caller-mintable;
   terminal journal phases accept contradictory disk images; publication is a string-list check;

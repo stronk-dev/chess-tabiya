@@ -71,6 +71,18 @@ export function assertPlayedMove(before, after, uci, actor) {
     && event.data.node?.id === node.id && event.data.node.moveUci === uci && event.data.node.actor === actor), "missing authoritative move event");
 }
 
+/** Resume uses the production graph projection, not an invented run endpoint/response. */
+export function readResumedGraph(json, before) {
+  const graph = json(`/runs/${encodeURIComponent(before.id)}/graph`).graph;
+  requireCheck(graph?.id === before.id && Array.isArray(graph.nodes) && Array.isArray(graph.branches),
+    "resume returned no matching graph");
+  const edges = (nodes) => nodes.map(({ id, parentId, fen, moveUci }) => ({ id, parentId, fen, moveUci }));
+  assert.deepEqual(edges(graph.nodes), edges(before.nodes), "restart changed rehearsal nodes/edges");
+  assert.deepEqual(graph.branches, before.branches, "restart changed rehearsal branches");
+  assert.deepEqual(graph.activeCursor, before.activeCursor, "restart changed rehearsal cursor");
+  return graph;
+}
+
 /** A successful API reply cannot hide an automatic restart or a larger live memory envelope. */
 export function validateRunningEnvelope(container, { project, service, limitBytes }, peakBytes) {
   requireCheck(PROJECT.test(project) && ["server", "maia"].includes(service), "unknown runtime envelope subject");
@@ -240,9 +252,16 @@ export async function sourceApplianceDrill({ out }) {
     const login = expect(http("/auth/login", { method: "POST", body: { handle: "applianceproof", password: "appliance-proof-password" } }), 200, "login after restart");
     cookie = /^set-cookie: (__Host-tabiya_session=[^;]+)/imu.exec(login.headers)?.[1];
     requireCheck(cookie !== undefined, "login did not issue a session");
-    const resumed = json(`/runs/${runId}`).run;
-    requireCheck(resumed.nodes.length === run.nodes.length && resumed.branches.length === run.branches.length, "restart lost rehearsal branches");
+    readResumedGraph(json, run);
     checked("server restart, secure login and durable rehearsal resume");
+    proof.providersAfterRestart = await until("real Maia availability after server restart", () => {
+      const health = json("/capabilities").providerHealth;
+      const provider = health.providers.find((entry) => entry.instanceId === "maia-inference");
+      return provider?.implementation === "uci_sidecar" && provider.state === "available" ? health : undefined;
+    });
+    play("c2c4"); reply();
+    proof.run.nodesAfterRestart = run.nodes.length;
+    checked("actual registered Maia reply and idempotent retry after server restart");
     // Content is a separate real boundary; never hide an unresolved-pack failure behind the
     // successfully played ad-hoc position. The held Explorer migration may make this red.
     const packs = json("/packs");
