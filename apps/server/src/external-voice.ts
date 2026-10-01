@@ -1,4 +1,4 @@
-import { assertRenderedEvidenceView } from "@chess-tabiya/runtime";
+import { assertRenderedEvidenceView, renderedProviderItems } from "@chess-tabiya/runtime";
 
 import type { VoiceEvidenceView, VoiceProvider, VoiceScope } from "./guidance.js";
 import { ProviderHttpError } from "./provider-health.js";
@@ -54,7 +54,7 @@ export class ExternalHttpVoiceProvider implements VoiceProvider, ReasoningReview
           "content-type": "application/json",
           ...(this.#key === undefined ? {} : { authorization: `Bearer ${this.#key}` }),
         },
-        body: JSON.stringify({ personaPrompt: persona, scope, items: view.rendered.items.map((item) => ({ evidence: item.evidence, sentences: item.sentences })) }),
+        body: JSON.stringify({ personaPrompt: persona, scope, items: renderedProviderItems(view.rendered) }),
         signal: controller.signal,
       });
       if (!response.ok) throw new ProviderHttpError(response.status, response.headers.get("retry-after"), `Voice provider returned ${response.status}`);

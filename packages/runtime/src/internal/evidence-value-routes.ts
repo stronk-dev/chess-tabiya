@@ -65,6 +65,7 @@ import {
   createDerivedTacticSquareClearanceObservedV1Evidence,
   createHumanExplorerPopulationV1Evidence,
   createHumanExplorerPositionPageV1Evidence,
+  createDerivedExplorerPopulationSummaryV1Evidence,
   createHumanMaiaPolicyPageV1Evidence,
   createLiveStockfishLegalRootTableV1Evidence,
   createLiveStockfishPositionEvalV1Evidence,
@@ -318,6 +319,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "human.maia.policy_page@1": createHumanMaiaPolicyPageV1Evidence,
   "live.syzygy.position_result@1": createLiveSyzygyPositionResultV1Evidence,
   "human.explorer.position_page@1": createHumanExplorerPositionPageV1Evidence,
+  "derived.explorer.population_summary@1": createDerivedExplorerPopulationSummaryV1Evidence,
   "rules.endgame.tablebase_domain@1": createRulesEndgameTablebaseDomainV1Evidence,
   // rfc/hint-distance.md §1.1/§3: seven operator-only horizons and 35 learner disclosures.
   ...HINT_HORIZON_FACTORIES,

@@ -3896,3 +3896,10 @@ until a second pass measured the pack start positions the sentence actually name
   content journeys and the packaged app pass. Persisted user documents are never silently
   re-stamped: invalid/unsupported stored admission is refused with operator diagnostics and bytes
   retained. Receipt: `planning/pack-capability-contract/integration-2026-09-30.md`.
+
+## 2026-10-01 — Owner-approved Explorer requirement metadata migration
+
+- Applied the D3330/D996 owner ruling through canonical requirement derivation: 92 content packs (86 production plus six browser fixtures), 68 matching ledger packDigest fields and 12 separate schema example/fixtures. There are 172 metadata-only file updates.
+- Authored moves, objectives, claims/bindings, evidence records, shapes/principles and publication states are unchanged. All 819 committed capability declarations remain retained; only the new summary and seven typed successors append. This is compatibility migration, not new content or graduation. No user-stored document is silently re-stamped.
+- Complete content gate passes 223 tests/23 files, clearance has zero errors, all 104 exact requirement declarations match, and the canonical 352-document migration plan has zero remaining rows. Full staged software and browser CI also pass. D3330 closes this migration; D3358 separately retains broad source-closure coupling.
+- Receipt: planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md and its before/after measurements; owner ruling: explorer-metadata-ruling-2026-10-01.md in the same directory.

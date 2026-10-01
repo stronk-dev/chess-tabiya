@@ -49,7 +49,6 @@ export const MODULE_SELECTION_POLICY: VersionedEvidenceId = ref("production.modu
  * never fabricated. Each carries the owner whose landing compiles it.
  */
 export const MODULE_AWAITING: Readonly<Partial<Record<ModuleId, readonly { readonly projection: VersionedEvidenceId; readonly owner: string }[]>>> = Object.freeze({
-  theory_breadcrumb: Object.freeze([{ projection: ref("derived.explorer.population_summary"), owner: "provider-exchange-and-execution (§2.3(c) move-free Explorer summary)" }]),
   full_inspector: Object.freeze([{ projection: ref("pack.authored.classifier"), owner: "module-registration Discharge D2 (leak L12)" }]),
 });
 

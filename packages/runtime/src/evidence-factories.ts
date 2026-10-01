@@ -153,6 +153,9 @@ import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdenti
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
 import { providerProtocolRow } from "./provider-protocol.js";
+import { CORPUS_GUARD } from "./population-guard.js";
+import type { ExplorerPopulationSummary } from "./explorer-summary.js";
+import type { ExplorerPositionPage } from "./provider-types.js";
 import type { FixedBoundPrincipalVariation, ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
 import { hintDisclosurePayload, hintHorizonOccurrence, type HintDisclosurePayload, type HintHorizonOccurrence } from "./hint-horizon.js";
 import { HINT_FAMILIES, HINT_RUNGS, HINT_SEARCH_SOURCE, hintDeclarationRow, hintDisclosureProjectionId, hintHorizonProjectionId, type HintDisclosureProjectionId, type HintFamily, type HintRung } from "./hint-registry.js";
@@ -1362,6 +1365,21 @@ export const createLiveStockfishPrincipalVariationV1Evidence = providerSourceFac
 export const createHumanMaiaPolicyPageV1Evidence = providerSourceFactory("maia.policy_page@1");
 export const createLiveSyzygyPositionResultV1Evidence = providerSourceFactory("syzygy.position@1");
 export const createHumanExplorerPositionPageV1Evidence = providerSourceFactory("lichess_explorer.position_page@1");
+
+export const createDerivedExplorerPopulationSummaryV1Evidence = (() => {
+  const route = "derived.explorer.population_summary@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ page: sealed("human.explorer.position_page@1") }], result: "single", dependency: "provider-exchange-and-execution" }, ({ page }: { readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">> }): DeclaredEvidence<ExplorerPopulationSummary> => {
+    const { request, result } = page.payload.payload;
+    return mint(route, symbol, Object.freeze({
+      page,
+      position: Object.freeze({ positionFen4: request.positionFen4, requestFen6: request.requestFen6, population: Object.freeze({ ratingBuckets: request.ratingBuckets, speeds: request.speeds, since: request.since, until: request.until }) }),
+      totals: result.totals, listed: result.listed, unlisted: result.unlisted, averageRating: result.averageRating,
+      opening: result.opening, history: result.history,
+      disclosure: Object.freeze({ guard: "CORPUS_GUARD", statement: CORPUS_GUARD }),
+    }), { page }, [page]);
+  });
+})();
 
 /** §7: the one adapter for the scheduler-sealed whole Syzygy outside-domain envelope. */
 export const createRulesEndgameTablebaseDomainV1Evidence = (() => {

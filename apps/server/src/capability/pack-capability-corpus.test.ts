@@ -7,7 +7,7 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { capabilityId, capabilityKey } from "@chess-tabiya/schema";
+import { capabilityId } from "@chess-tabiya/schema";
 import { CAPABILITY_LIFECYCLE, buildCapabilityRegistry, type CapabilityLifecycleRow } from "@chess-tabiya/runtime";
 import { GENERATED_CAPABILITY_DECLARATIONS } from "../../../../packages/runtime/src/capability/declarations.generated.js";
 
@@ -81,23 +81,34 @@ describe("criterion 13 — the D566 regression", () => {
     // Bumping the evaluator declarations to @2 clears them; only resolved shapes still differ, and
     // a shape can only move by its own (judged) semver.
     const integerSubjects = [...new Set(mismatched.filter((key) => key.includes("@i:")).map((key) => key.slice(0, key.indexOf("@"))))];
-    // A subject that already has a lifecycle row keeps its current disposition at @2.
-    const bumps: CapabilityLifecycleRow[] = integerSubjects.map((subjectId) => ({ subjectId, versions: [
-      { version: { kind: "integer", value: 1 }, disposition: { kind: "deprecated", successor: capabilityId(subjectId, 2), reason: "D566 fixture", reasonCode: "superseded" } },
-      { version: { kind: "integer", value: 2 }, disposition: CAPABILITY_LIFECYCLE.find((row) => row.subjectId === subjectId)?.versions.at(-1)?.disposition ?? { kind: "active" } },
-    ] }));
+    // Advance each affected CURRENT integer version, retaining its existing history.
+    // A transitive dispatcher may already be @2; reusing @2 would mutate a pinned identity.
+    const successorVersions = new Map<string, number>();
+    const bumps: CapabilityLifecycleRow[] = integerSubjects.map((subjectId) => {
+      const history = CAPABILITY_LIFECYCLE.find((row) => row.subjectId === subjectId);
+      const current = history?.versions.at(-1);
+      const version = current?.version.kind === "integer" ? current.version.value : 1;
+      successorVersions.set(subjectId, version + 1);
+      return { subjectId, versions: [
+        ...(history?.versions.slice(0, -1) ?? []),
+        { version: { kind: "integer", value: version }, disposition: { kind: "deprecated", successor: capabilityId(subjectId, version + 1), reason: "D566 fixture", reasonCode: "superseded" } },
+        { version: { kind: "integer", value: version + 1 }, disposition: current?.disposition ?? { kind: "active" } },
+      ] };
+    });
     const lifecycle = [...CAPABILITY_LIFECYCLE.filter((row) => !integerSubjects.includes(row.subjectId)), ...bumps];
     const bumped = buildContract({ root: ROOT, overrides, lifecycle }).declarations;
     const remaining = compareDeclarations(GENERATED_CAPABILITY_DECLARATIONS, bumped).filter((row) => row.kind === "digest_mismatch").map((row) => row.key);
     expect(remaining.every((key) => key.startsWith("shape.")), remaining.join(", ")).toBe(true);
 
     // The plan lists the three predicate-bearing shapes in judgement[], not mechanical[].
-    const added = bumped.filter((row) => integerSubjects.includes(row.subjectId) && row.id.version.kind === "integer" && row.id.version.value === 2);
+    const added = bumped.filter((row) => integerSubjects.includes(row.subjectId) && row.id.version.kind === "integer" && row.id.version.value === successorVersions.get(row.subjectId));
     const registry = buildCapabilityRegistry([...GENERATED_CAPABILITY_DECLARATIONS, ...added], lifecycle);
     const plan = buildMigrationPlan({ root: ROOT, schema, population: walkPopulation(ROOT), readDocument: (path) => JSON.parse(read(path)) as unknown, registry });
     const judgedShapes = [...new Set(plan.judgement.map((row) => row.document).filter((path) => path.startsWith("content/shapes/")))].sort();
     expect(judgedShapes).toEqual(["content/shapes/knight-vs-bishop.json", "content/shapes/maroczy-bind.json", "content/shapes/open-centre.json"]);
     expect(plan.mechanical.map((row) => row.document)).not.toEqual(expect.arrayContaining(judgedShapes));
-    expect(plan.judgement.every((row) => capabilityKey(row.successor).endsWith("@i:2"))).toBe(true);
+    expect(plan.judgement.every((row) => row.successor.version.kind === "integer" && row.successor.version.value === successorVersions.get(row.successor.id))).toBe(true);
+    expect(successorVersions.get("structuralFeature.pawn_safe_square")).toBe(2);
+    expect(successorVersions.get("structuralFeature.outpost")).toBe(2);
   }, SLOW);
 });

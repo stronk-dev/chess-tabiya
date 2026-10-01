@@ -46,8 +46,8 @@ function canonical(value: unknown): string {
 describe("primary evidence catalogue", () => {
   it("compiles all audited producer paths and current consumer operations", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
-    expect(EVIDENCE_PRODUCER_IDS).toEqual(EXPECTED_PRODUCERS);
-    expect(EVIDENCE_PRODUCERS.map((item) => item.id)).toEqual(EXPECTED_PRODUCERS);
+    expect(EVIDENCE_PRODUCER_IDS).toEqual([...EXPECTED_PRODUCERS, "derived.explorer"]);
+    expect(EVIDENCE_PRODUCERS.map((item) => item.id)).toEqual([...EXPECTED_PRODUCERS, "derived.explorer"]);
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     // rfc/module-registration.md §2.2: ten module consumers join (rules_floor has no evidence);
     // rfc/hint-distance.md adds module.guided_hint over its 35 disclosure projections.
@@ -57,10 +57,10 @@ describe("primary evidence catalogue", () => {
     // 263 module pairs = the post-successor-rebase 237, the 21 recorded-path v2 successors, and the
     // five review-evidence-compiler projections (four Review Map, one Full Inspector forced-mate v2).
     // rfc/hint-distance.md: +35 guided_hint disclosure pairs.
-    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(298);
+    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([45, 278, 35, 544]); // +1 producer, +1 projection, +1 binding: evidence-presentation Checkpoint P source-bound citation; +7 provider-exchange sources (+1 principal variation, §5.2); +1 producer, +6 projections, +7 bindings (rfc/review-evidence-compiler.md); +1 pack.authored.concept_reference (rfc/concept-registry.md §3)
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([46, 279, 35, 545]); // +1 producer/projection/theory binding: provider-exchange §8 move-free Explorer summary.
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 16, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());

@@ -25,7 +25,7 @@ import { branchPath } from "./branch-path.js";
 import { compareBranches } from "./compare.js";
 import { ENDGAME_SETUP_CONVENTIONS } from "./endgame-setup.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
+import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
 import { invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
@@ -45,6 +45,8 @@ import {
 import { postcommitEdgeEvidence } from "./postcommit-nudge.js";
 import type { ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, Node } from "./types.js";
+import { transposeKey } from "./chess.js";
+import type { ExplorerPopulationSummary } from "./explorer-summary.js";
 
 export const MODULE_QUERY_PROTOCOL = "module.query_page@1" as const;
 
@@ -148,6 +150,9 @@ export function moduleDecisionStamp(run: DrillRun): ModuleDecisionStamp {
 export interface ModuleSourceContext {
   readonly shapes?: readonly ShapeTriggerSource[];
   readonly authoredAt?: (nodeId: string) => readonly AuthoredFeedbackItemRecord[];
+  /** Server-acquired source over the exact timing subject, never a browser payload. */
+  readonly explorerSummary?: DeclaredEvidence<ExplorerPopulationSummary>;
+  readonly explorerUnavailable?: string;
 }
 
 /** One demanded source's closed result (§2.5.2 `ModuleSourceResult`). */
@@ -248,6 +253,10 @@ export interface ModuleSubject {
 
 function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, context: ModuleSourceContext): readonly ModuleSourceResult[] {
   const fen = subject.fen;
+  if (context.explorerSummary !== undefined) {
+    assertDeclaredEvidence(context.explorerSummary);
+    if (context.explorerSummary.projection.id !== "derived.explorer.population_summary" || context.explorerSummary.projection.version !== 1) throw new TypeError("Expected exact Explorer summary authority");
+  }
   // "What can the opponent do to me": the threat convention reads the position with the learner to
   // move (it passes the turn itself); a mate/loose reading needs the named side to move.
   const learnerToMove = turnOf(fen) === subject.learner ? fen : passFen(fen);
@@ -282,6 +291,11 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
       ...(context.authoredAt?.(subject.node.id) ?? []).map((item) => route("pack.authored.claim@1", { item })),
       ...(context.shapes === undefined || context.shapes.length === 0 ? [] : [route("theory.shapes.firing@1", { entries: context.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: subject.node.id, fen }] })]),
       route("theory.opening.current_endpoint@1", { fen }),
+      ...(context.explorerSummary === undefined
+        ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: context.explorerUnavailable ?? "not_requested" })]
+        : context.explorerSummary.payload.position.positionFen4 !== transposeKey(fen)
+          ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: "position_mismatch" })]
+          : [route("derived.explorer.population_summary@1", { page: context.explorerSummary.payload.page })]),
     ];
     case "compare_coach": return compareSources(run, subject);
     case "postcommit_nudge": {

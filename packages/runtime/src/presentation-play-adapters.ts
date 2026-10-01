@@ -17,6 +17,8 @@ import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, R
 import { factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
 import { hintSentence, type HintDisclosurePayload } from "./hint-horizon.js";
 import { HINT_FAMILIES, HINT_RELATIONS, HINT_RUNGS, hintDisclosureProjectionId, type HintFamily, type HintRelation, type HintRung } from "./hint-registry.js";
+import { CORPUS_GUARD } from "./population-guard.js";
+import { explorerPopulationSummaryWire, type ExplorerPopulationSummary } from "./explorer-summary.js";
 
 /**
  * rfc/hint-distance.md §3/§4: the Guided Hint disclosure operands. The adapter retains exactly the
@@ -119,6 +121,8 @@ const RAY_VERBS: Readonly<Record<ReturnType<typeof rayKinds>, string>> = Object.
 });
 
 export const PLAY_FACT_RENDERERS = Object.freeze({
+  "play.explorer_summary@1": factRenderer(s.obj({ total: s.nat, white: s.nat, draws: s.nat, black: s.nat, ratings: s.arr(s.nat), speeds: s.arr(s.str), since: s.nullable(s.str), until: s.nullable(s.str), opening: s.nullable(s.str), disclosure: s.lit(CORPUS_GUARD) }), (value) =>
+    `Lichess Explorer: ${plural(value.total, "game")} in rating bands ${value.ratings.join(", ")} (${value.speeds.join(", ")}; ${value.since ?? "all dates"} to ${value.until ?? "now"}). White won ${value.white}, ${value.draws} drawn, Black won ${value.black}.${value.opening === null ? "" : ` Reported opening: ${value.opening}.`} ${value.disclosure}`),
   "play.structural_observation@1": factRenderer(observationSchema, observationSentence),
   "play.named_structure@1": factRenderer(namedStructureSchema, (value) => {
     if (STRUCTURE_NAMES[value.id] !== value.name) throw new TypeError("named structure name disagrees with the registered catalogue name");
@@ -378,6 +382,10 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
     statement("play.shape@1", "shape-catalogue@1", { title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
 
   // --- theory_breadcrumb: cited or authored theory for this position (module-registration §4.7)
+  add("theory_breadcrumb", V1("derived.explorer.population_summary"), "fact_statement", ["list", "panel", "sentence"], ["position", "totals", "opening", "disclosure"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
+    const summary = explorerPopulationSummaryWire(evidence as DeclaredEvidence<ExplorerPopulationSummary>);
+    return statement("play.explorer_summary@1", "explorer-population@1", { total: summary.totals.total, white: summary.totals.white, draws: summary.totals.draws, black: summary.totals.black, ratings: summary.position.population.ratingBuckets, speeds: summary.position.population.speeds, since: summary.position.population.since, until: summary.position.population.until, opening: summary.opening.kind === "reported" ? `${summary.opening.eco} ${summary.opening.name}` : null, disclosure: summary.disclosure.statement });
+  });
   add("theory_breadcrumb", V1("theory.shapes.firing"), "fact_statement", ["panel", "sentence"], ["entryId"], ["mechanical_transform"], (evidence) =>
     statement("play.shape@1", "shape-catalogue@1", { title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
   add("theory_breadcrumb", V1("theory.opening.current_endpoint"), "fact_statement", ["list", "panel", "sentence"], ["eco", "name"], ["copied_byte_equal"], (evidence) => {

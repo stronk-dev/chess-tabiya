@@ -227,6 +227,16 @@ no parallel packet sentence array that either side can widen. Maia candidates, E
 transition counts, engine principal variations, and recorded engine/tablebase prose do not enter
 merely because the catalogue knows they exist.
 
+The Theory module admits `derived.explorer.population_summary@1`, a move-free derivation
+from one sealed Explorer position page. It retains the exact queried position/window,
+WDL/counts, listed/unlisted mass, reported rating/opening/history and the population
+disclaimer; zero and sparse populations remain valid facts, not recommendations.
+The external wire replaces internal source ancestry with only the provider, normalized
+request digest, response digest and live/retained delivery kind. Raw candidate rows stay
+sealed internally for provenance and never enter the module receipt or external voice body.
+Acquisition follows authenticated, finalized Theory demand; closed feedback, Quiet and
+unrequested Theory trigger no provider work. Authority and decision are rechecked after I/O.
+
 Compare and Story use declared `run.record` facts and deterministic `derived.*` projections rather
 than trusting parallel prose arrays. Comparison trajectories, structure/timing strips, and recorded
 piece routes pass their distinct admitted consumers. Story moments, prominence rank, title, public

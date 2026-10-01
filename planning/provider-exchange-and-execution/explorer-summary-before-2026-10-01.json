@@ -1,0 +1,585 @@
+{
+  "baseline": "76faf52c",
+  "sourceBaseline": "80815d3e",
+  "mode": "read_only",
+  "authorization": "measurement_only_not_authorization",
+  "applied": false,
+  "retainedDeclarations": 819,
+  "successors": [
+    "engineCondition.engine_eval_swing",
+    "engineCondition.engine_mate_appears",
+    "engineCondition.tablebase_category_regression",
+    "engineCondition.tablebase_dtz_regression",
+    "fenPredicate.structuralFeature",
+    "opponent.practical_slice",
+    "opponent.selection"
+  ],
+  "unchangedEvaluatorRoots": 19,
+  "unchangedExistingValueProfiles": 271,
+  "changedClosureSites": [
+    "packages/runtime/src/evidence-catalog.ts#EVIDENCE_PRODUCERS",
+    "packages/runtime/src/evidence-catalog.ts#MODULE_CONSUMER_ACCEPTS",
+    "packages/runtime/src/internal/evidence-value-routes.ts#EVIDENCE_VALUE_ROUTES"
+  ],
+  "newClosureSites": [
+    "packages/runtime/src/evidence-factories.ts#createDerivedExplorerPopulationSummaryV1Evidence",
+    "packages/runtime/src/population-guard.ts#CORPUS_GUARD"
+  ],
+  "unchangedAuthoredPacks": 92,
+  "unchangedSidecarsShapesPrinciplesExceptPackDigest": 260,
+  "projectedPackDigestChanges": [
+    {
+      "document": "content/drafts/anti-caro-advance-early-c5.json",
+      "from": "sha256:405b8d25e3cb4f0002378ec4270908fd3699c6ea5704e362c02a443f3a7ca7dc",
+      "to": "sha256:7d27a065628d672219e3d8c7a3d8fcea37eb055b208459d9a15df98b741199de",
+      "ledger": "content/drafts/anti-caro-advance-early-c5.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-caro-advance.json",
+      "from": "sha256:0cdf9bcb78985a524a05ffeff6ae63195cec52348ca479a27a62d4e1b4b33139",
+      "to": "sha256:36e9844fdbae35e75e685ecbe400232b856b31dd8a6ef0c7ded738a6664defa2",
+      "ledger": "content/drafts/anti-caro-advance.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-dutch-leningrad-white.json",
+      "from": "sha256:4c373b8ee68ee6032d9f5907556a827e04303ccea7dfdef6f701e1fcec5c7658",
+      "to": "sha256:1db1be06dfc31b01af1ce459488c277767b0c83396de1f91402a4943615c6f70",
+      "ledger": "content/drafts/anti-dutch-leningrad-white.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-french-advance-white.json",
+      "from": "sha256:d1c2f4ba56af9a5a88749c738600f5c8a528c3b8f226d9e22dc8136318d4844b",
+      "to": "sha256:9ab5d66c64af5af88c7ab0d0a0cc7fc0caf0e25dfb2cf4c5d1c5a6f96a126fec",
+      "ledger": "content/drafts/anti-french-advance-white.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-italian-center-attack-black.json",
+      "from": "sha256:55141cbae851bb3c9fbb8ae7e219862a1b27247d958dabc6ca39fdc8da74712d",
+      "to": "sha256:27d5b0873668910366887e58974a72657a9b4b6fa63188cfed045fa98d903c2e",
+      "ledger": "content/drafts/anti-italian-center-attack-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-kid-classical-white.json",
+      "from": "sha256:c800b6e0f0e4ff91732fb94ffa4778b42e2b90cf109db40cfeb97eba3f95c5df",
+      "to": "sha256:1113d1fd120fe6c985d6b3f0d7e5c7a9b9737f9db8bdd5df6c1b87b402dd196d",
+      "ledger": "content/drafts/anti-kid-classical-white.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-london-black.json",
+      "from": "sha256:681b80e32e95e54126ccfd28e594cd07da204885987a20b6e50a2d45df40a9b6",
+      "to": "sha256:8b0a3c4b0a8df9c93fd0c8e4d6018da460c545e895f96b01d357ff2cc1d658fd",
+      "ledger": "content/drafts/anti-london-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-scandinavian-white.json",
+      "from": "sha256:6bb1f77c4d986b8516930cad881f4f27c4764b1930e0994d7b3e4787e2bd485a",
+      "to": "sha256:e68910612911144df277a024520f2cea07a333d96c5d467ae7eb11156c30fc43",
+      "ledger": "content/drafts/anti-scandinavian-white.evidence.json"
+    },
+    {
+      "document": "content/drafts/anti-sicilian-najdorf-english-attack.json",
+      "from": "sha256:64fe3ea8e022dbd78bf5f1798dba7117b05b77ec54643d085e965c537318d1e5",
+      "to": "sha256:fa6c73088aca8335bd3344792f42f934c07a77aac6c2d2b18962748e61df1717",
+      "ledger": "content/drafts/anti-sicilian-najdorf-english-attack.evidence.json"
+    },
+    {
+      "document": "content/drafts/berlin-queenless-press.json",
+      "from": "sha256:2afd726c4c01fc672c812e742809601248e3573268a9cfee96b8833fb519e303",
+      "to": "sha256:e45dd46f129a0271437ca272d30040f35cdc38152636e8db1ea88114fb02a4c0",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/carlsbad-minority-attack.json",
+      "from": "sha256:c6d0f76daddccb974a24c8193dda3cf73690fae220ef83ca9e573cd2dfc6cbf3",
+      "to": "sha256:054f9dc89ae4bbbe86bf5aa91f9985b910884dfa1652b81c4a9b4c98235fdfb6",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/caro-kann-advance-black.json",
+      "from": "sha256:d5017e62122637008e95c923a3d44817a16c87017c1ab3ac8e9e6b28679d7b96",
+      "to": "sha256:f581f850dd2242bcf4f9b67f3042b15f6a96b5d3d5142cad037845d75e38375b",
+      "ledger": "content/drafts/caro-kann-advance-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/closed-centre-chain-black-base-strike.json",
+      "from": "sha256:40b060507bde9d5ab2a9fab38818f2537743d77d79d339eedd8233b315a136c1",
+      "to": "sha256:fa94495898f6d72ddd6e8705fa181fde6ef1dc59f1c16b0bdd89720f988a6984",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/conversion-up-a-piece.json",
+      "from": "sha256:2e1a4dd8847b96562f7a9cf3cebe6030fc1c40f79b79752ec0be34b74421c64a",
+      "to": "sha256:870fa08dfbb17515658b2d84593e912448c4eec8f38c1e07a2e7205c71f968a2",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/dragon-yugoslav-race.json",
+      "from": "sha256:fd049fe3ee851f89b275c28f02a5c5511ca036c3735568bfd6eb5f3297105dca",
+      "to": "sha256:2eaa4e3dc3303fb9306e08ab707647ad397b559a2a07e1e28f8f311def01387f",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/french-advance-black.json",
+      "from": "sha256:6bb4b094b3f455e24b7bd82f765349e87f2582af7bd1ba2ecbbb37ae2796136a",
+      "to": "sha256:e0d3cddce3a7ec3008f29acfe292e0495d9923bf4d0bd1693928a38b534ff84e",
+      "ledger": "content/drafts/french-advance-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/french-advance-chain-white.json",
+      "from": "sha256:5b258032c32b1188dc6a737b6f2b43044d324e169cbdfdfdcf0b6e6be4edeec8",
+      "to": "sha256:42a014d38c49b55aab2853e2443c01602c02175fea6e2fbb67458055b325f238",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/grunfeld-exchange-fianchetto.json",
+      "from": "sha256:1b0f7503c372e39c8037222e0d129328c794daa806b2a84936d96a9bb89d87c2",
+      "to": "sha256:a1362a4d4d88c4a16604b20d184dfbb3951d46b010fc939c1aa7cb75f0992793",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/immediate-guard.browser.json",
+      "from": "sha256:3e76531cec400eaa526b52b2dc8b42d80ac268bc1ea3b7f52fedc9608a049f5f",
+      "to": "sha256:163b733a6bb2598cc87369d44df37c85c56e967e2f6e0eb1ceb40f6177b11698",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/iqp-black-tarrasch-defence.json",
+      "from": "sha256:7b7583f70c8b636ca1ba142685d393e7341f6816f68beea71f8099eb1f577373",
+      "to": "sha256:af0f3f47fe4a2b2b65eab5bd087c306533f29dd50ed3ceb9c59499dfc05d55e3",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/iqp-white-panov-attack.json",
+      "from": "sha256:ed6bf1d026b700ced347f730153e8681d8a342d60989a40e5bb08b01791ca015",
+      "to": "sha256:6805ee6580eb7c88dbffaa59fd43f7001ac827dedf33e04f11629ae344468ef6",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/italian-center-attack-white.json",
+      "from": "sha256:af09e487f5a27248d9df10c824623eea584145eaf672301adf9e033f3e4d0790",
+      "to": "sha256:7f930af8c1d78f6f2abd2ee5cdb51bc8e346820148d649c8205ece00d14ffb35",
+      "ledger": "content/drafts/italian-center-attack-white.evidence.json"
+    },
+    {
+      "document": "content/drafts/kid-classical-black.json",
+      "from": "sha256:aec680467b4bd2b7dc221b3ee17c8f1cf35839ae5f213e13c050f8889349dbbe",
+      "to": "sha256:9ecdb019eae1ecc137ad860acb7798c84bf6110519cf01ec8c2824c638ce1f44",
+      "ledger": "content/drafts/kid-classical-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/kid-mar-del-plata-white.json",
+      "from": "sha256:12b06ccf8828741cbde053d873d5472c1de57569e189395920c228a8dd18a678",
+      "to": "sha256:a7a69a442b55944af24b952328f9d8362417b07bd5f49d5c6b93d9cfc74e7bb1",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/leningrad-dutch-black.json",
+      "from": "sha256:848798069190bd2fea1821223f1b980f6935f8ab07b6255320b860ea64e05d37",
+      "to": "sha256:1835b1b1690c55716f81ade0c5f11d5bf3807d163176197c56cadf1aa5441d4d",
+      "ledger": "content/drafts/leningrad-dutch-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/line-boundary.browser.json",
+      "from": "sha256:809059d4715153ef42f142d8ed0b9937cd94eccb442c790b95d7d3e5b2d3e5c8",
+      "to": "sha256:9623022d90a0a53efdcd35d21504b457f11903da96045b50cf13edbbf3ed78e2",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/london-system-white.json",
+      "from": "sha256:6c3f2c0b74054c4863531d200df774ba137644febd4d39009b96afc98edccf11",
+      "to": "sha256:3fb9223effe34db4b00ba9ec3474192370a1c121b2de868639b835863cff9553",
+      "ledger": "content/drafts/london-system-white.evidence.json"
+    },
+    {
+      "document": "content/drafts/london-wedge-black-counterplay.json",
+      "from": "sha256:bf8f3e38f5740761f11460a3b75ffb853c1e2c33e3ac985c8b2b9069ae046ed0",
+      "to": "sha256:de611b15ace5d45559e1b73eb19119b72069a0811a7efb0ea4960e077a498fef",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/lucena-bridge-convert.json",
+      "from": "sha256:aa3160e4f08c665f637012fa5aefb8e9b01efa415a16186ae34b6daeca5f1bc4",
+      "to": "sha256:e01a35a8d19186d8a9b9a0589b86554faeed40d01b5996d7e42395b907c28993",
+      "ledger": "content/drafts/lucena-bridge-convert.evidence.json"
+    },
+    {
+      "document": "content/drafts/maroczy-bind-white-squeeze.json",
+      "from": "sha256:032d8121a108edd78aa1f6ed68119cb7a6e1dc1404683c2135a240f946dd49cc",
+      "to": "sha256:266c95ae18530f6f6c34f2e16f5ff6608fe48a9b15d73c3a1ce3e8414d56c219",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/mate-bishop-knight.json",
+      "from": "sha256:40ffc22aabf799895029d3850cf7cf30645e6202a635756fabd9713b06496278",
+      "to": "sha256:f75c18f902d2d1da3901ec50d311f577ba7c2f2f593ec28c7b6fb46363b150c1",
+      "ledger": "content/drafts/mate-bishop-knight.evidence.json"
+    },
+    {
+      "document": "content/drafts/mate-k-q-technique.json",
+      "from": "sha256:073dfbce806398e71bedebcd1219ffc86569bf7e64aa63ac4f20f73dd64b0836",
+      "to": "sha256:78d299951b11865bad54d56e6f97043d04efd3f7aaca606e723caef54790882f",
+      "ledger": "content/drafts/mate-k-q-technique.evidence.json"
+    },
+    {
+      "document": "content/drafts/mate-k-r-technique.json",
+      "from": "sha256:ddae3aab0171eed920cb8f73fedb648f040b7a140b2fa706716aefbbd758b6ef",
+      "to": "sha256:fdcbe1ffe4ad76671a60d1480fd1d69df31b15ecda75d03203356b645e3c22b9",
+      "ledger": "content/drafts/mate-k-r-technique.evidence.json"
+    },
+    {
+      "document": "content/drafts/mate-two-bishops.json",
+      "from": "sha256:95ae9a67d4cca64eb4e4c665e237396bb238236d4f42062cb7b55cfa467c8b53",
+      "to": "sha256:a5c79327416e58b86f5a24ffd367a202595fcfdb753274f462be34906bde2bf8",
+      "ledger": "content/drafts/mate-two-bishops.evidence.json"
+    },
+    {
+      "document": "content/drafts/najdorf-english-attack-black.json",
+      "from": "sha256:abf0efddaaabb9a264668c7a4a3fc8cf82f8a9fa9a3ead8cab98bdb61e263ec0",
+      "to": "sha256:6b657e8af644b9efd4ea764248bd09b42ceb932477ba98f0966ae48b4007011d",
+      "ledger": "content/drafts/najdorf-english-attack-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/nimzo-doubled-c-pawns.json",
+      "from": "sha256:eb24207db8ed55bc09bb852681c7213f65c3851785810d064947f51f4121952c",
+      "to": "sha256:27b16748c47441d0c6441ee13b6b382f338352d577c9be803ff1833532247a1c",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/open-centre-french-exchange-black.json",
+      "from": "sha256:46dc329ee863f8ea96f219daffc609bfa28f5d60203b1a5ec5ae1364269e0562",
+      "to": "sha256:180669aca1423c23a94e65d650978081ebf36d421b163feccb4ebf6d3a14bb4d",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/open-centre-ruy-exchange.json",
+      "from": "sha256:f9f731b83ca3b06c09765c7ce4b922c98e1042e446ad4538b8957652f5975c31",
+      "to": "sha256:a629661dbbd2b5b3bdb48abdd502e3943c30744120f6a52f95532459b7355f74",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/opening-principles-black.json",
+      "from": "sha256:e1c92ce87b1704686505b49afcabf9ffab971f8626be6d83ce8b73aa8ef7e912",
+      "to": "sha256:3ec434e3874d858baa1fc384773d49e1d25a020210eef3f8f6dd0672cc2d699f",
+      "ledger": "content/drafts/opening-principles-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/opening-principles-white.json",
+      "from": "sha256:08ff1bed3a554a60212a99a27687b8ecc4cf7ac0344465c1d0f270da7d69ec33",
+      "to": "sha256:dcd73e2e397d04e802420b6f2d5efe5eb9b26482c9af3ef3e48dc4adf37cd900",
+      "ledger": "content/drafts/opening-principles-white.evidence.json"
+    },
+    {
+      "document": "content/drafts/opponent-intent-early-queen.json",
+      "from": "sha256:fa92a391327abfe71c9ce46c5c605c871cb88db9129d193183acf5e67d0e8391",
+      "to": "sha256:ad2260584d96698ffbc0a3037121a3a2e2aa5a469626c1305cff73930dd512fc",
+      "ledger": "content/drafts/opponent-intent-early-queen.evidence.json"
+    },
+    {
+      "document": "content/drafts/opposite-bishops-fortress-hold.json",
+      "from": "sha256:6b3b8a3e81758c678d206ed8b80758a83b8ad9024d24948f8c6fe473aa91aabf",
+      "to": "sha256:37d2515543d4af1ad8fda2d860e27818f9b9d11d425d67e9e409fd2ed07edc60",
+      "ledger": "content/drafts/opposite-bishops-fortress-hold.evidence.json"
+    },
+    {
+      "document": "content/drafts/outcome-hold.browser.json",
+      "from": "sha256:890a7160060cd78b1c900ffbf03710248a41e51e400be127a9dce02afa4d5def",
+      "to": "sha256:c106848229d7d1fe19e94dcf68ea817f2999269b1c6d1dafcb80aa3cbd1bc143",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/outcome-resist.browser.json",
+      "from": "sha256:966911cb62642fb9087889cb92881f9d85d9ad168a15d084498c246624a0f1af",
+      "to": "sha256:896adc1a5389cd70c687c32657963f29d51994cb433a273fbc2f3cc34c8063e8",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/pawn-breakthrough-convert.json",
+      "from": "sha256:14b1943eb78b3153b35ce720bc5d0c97f0645996b508759faf3d0cf36377af43",
+      "to": "sha256:42d05533ed5a9c9a868ce9aae94e17ca67663be90d9c5ad0971fc92703458fb9",
+      "ledger": "content/drafts/pawn-breakthrough-convert.evidence.json"
+    },
+    {
+      "document": "content/drafts/pawn-opposition-convert.json",
+      "from": "sha256:c1d3aaa0de04b8a987ff0eb025baab0e3887e3e86a9b33fed891d228f363f45a",
+      "to": "sha256:ecc2fc0a08d189b8cb45bcd895b23adf30b2898a97a512ca989a55becc373516",
+      "ledger": "content/drafts/pawn-opposition-convert.evidence.json"
+    },
+    {
+      "document": "content/drafts/philidor-passive-rook-convert.json",
+      "from": "sha256:bd8cc74f688973d18720ad8604851b28702063f791ece3fa10f22e390aa3d3df",
+      "to": "sha256:86b35e8d468015a2bfea257ee16c7cdd148e11a0b88cfa7937a9ec8017b3e3ad",
+      "ledger": "content/drafts/philidor-passive-rook-convert.evidence.json"
+    },
+    {
+      "document": "content/drafts/philidor-third-rank-hold.json",
+      "from": "sha256:5d2701d6d16f5825243a9aa166574539631444990cbcb85d3c9dc1ce39678197",
+      "to": "sha256:9f3069328d8b315fbdd4c3414bb1de271f9d21d185086af99ba7a29aa241b9b2",
+      "ledger": "content/drafts/philidor-third-rank-hold.evidence.json"
+    },
+    {
+      "document": "content/drafts/queen-vs-pawn-seventh-convert.json",
+      "from": "sha256:40878484cff847fb8f958ee6d8eb36e96a23efc69878d8f20c9f7d504d34a8c2",
+      "to": "sha256:2ff5f3944847d26b00f47b982464f70a9a1f350c701f1342c1bfb32fbae0d2e3",
+      "ledger": "content/drafts/queen-vs-pawn-seventh-convert.evidence.json"
+    },
+    {
+      "document": "content/drafts/rook-4v3-same-side.json",
+      "from": "sha256:c973a5e0675ae896777928de65ec88d5c0e5fb43234865378d05cf7f1ae149ca",
+      "to": "sha256:254c9c58dca1b804324ef93158107706fce4baa43df5738abf3e4cacdfc00250",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/scandinavian-mainline-black.json",
+      "from": "sha256:6aed94978b176ec63c1242b77c6a907dfd848f02704b30bd484109b7cab4e31f",
+      "to": "sha256:e8de1e84569157b6f4704a8d3d779c84873271e29031e7614a213c97d366ebf6",
+      "ledger": "content/drafts/scandinavian-mainline-black.evidence.json"
+    },
+    {
+      "document": "content/drafts/stated-reasoning.browser.json",
+      "from": "sha256:ffa87d10be742c239636a81dbdf66c20b1758f53186610800ff88aefca3b1731",
+      "to": "sha256:7c200369949f33179904e81dee6e3db92d620e6be790e79da4f80d222e9c51cd",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/trajectory-caro-advance-chain-bishops.json",
+      "from": "sha256:8c54881234390bf5230ccefc0047c625dc85ebc07a126abb0795ba8a7f5a8e52",
+      "to": "sha256:dee1a9839cef417a0b983293b149690ac2ab40fb64a820caa78200ed3fceed75",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/trajectory-legs.browser.json",
+      "from": "sha256:f01693290eb0d9e62e2a0c9f0342a7fae91df8b46711a11c960598406e08ca0d",
+      "to": "sha256:9e0a7384ba1aa53e394c900157ccd35395bd9aebb34d3e02b667bfa46f144e9f",
+      "ledger": null
+    },
+    {
+      "document": "content/drafts/trajectory-mate-bishop-knight.json",
+      "from": "sha256:f6cc8e4ca398cde357f95c2f9f1564afdfe185c6e3e949be47eb8ad9c9adf5a8",
+      "to": "sha256:83b8cef23e7477e9ff8f58db236f0ae88754cfdb438a16e9df3f23b7826ba269",
+      "ledger": "content/drafts/trajectory-mate-bishop-knight.evidence.json"
+    },
+    {
+      "document": "content/drafts/trajectory-qgd-exchange-minority.json",
+      "from": "sha256:f54355b89df988b0616651b3b263bca4cfe00a60bd4ebcab3d45e6eebeef5992",
+      "to": "sha256:48fd8bc7d75d261705b4683d2407db045d76a75b8226092be8e7b3597802fedf",
+      "ledger": null
+    },
+    {
+      "document": "content/candidates/a87-dutch-defense-leningrad-variation/pack.json",
+      "from": "sha256:086a4cee5b63ea88aa07882a442bb60017e6f1a4a79bb62247561eb61f4ed00b",
+      "to": "sha256:16191070555ae0a8c8922c29c08beab2c3154e03701bcf947fb12e2a56fb4560",
+      "ledger": "content/candidates/a87-dutch-defense-leningrad-variation/evidence.json"
+    },
+    {
+      "document": "content/candidates/b12-caro-kann-defense-advance-variation-short-variation/pack.json",
+      "from": "sha256:7b6863b00f7c9ed06cadc79c09adcf41ff7c88cede79b65d374e9910ad52fbd2",
+      "to": "sha256:12efac6fa94f9e7b59bc466d5a907e9a59638ff09731ce6dc4e6df3c848d4cda",
+      "ledger": "content/candidates/b12-caro-kann-defense-advance-variation-short-variation/evidence.json"
+    },
+    {
+      "document": "content/candidates/b90-sicilian-defense-najdorf-variation-english-attack/pack.json",
+      "from": "sha256:400741a683bf83810c0804234ac491507c9c6c1cd5828d39db13aa452d001cc5",
+      "to": "sha256:d736c87b8b5f509e39763e5eff16486748a9d915ff9bcd4269b3385b48c78b79",
+      "ledger": "content/candidates/b90-sicilian-defense-najdorf-variation-english-attack/evidence.json"
+    },
+    {
+      "document": "content/candidates/c02-french-defense-advance-variation-main-line/pack.json",
+      "from": "sha256:f1137b0b950b198d9576f8d48cc152b1d40ac7f5ed47887b7c8e0b75141c5a3f",
+      "to": "sha256:4bc785b437e7a6772b5f776e91608f167d26dd7829e9e28b8bbb8ba8448a38cb",
+      "ledger": "content/candidates/c02-french-defense-advance-variation-main-line/evidence.json"
+    },
+    {
+      "document": "content/candidates/c02-french-defense-advance-variation/pack.json",
+      "from": "sha256:2fb3b0ee22c9f2bf0f22d7c22416547317b6d700631569fb0da6a6308104a521",
+      "to": "sha256:2fa043beb7ea023ddf16ebc53a31c1a45cb742a39eb4e45864be573eb60b2f07",
+      "ledger": "content/candidates/c02-french-defense-advance-variation/evidence.json"
+    },
+    {
+      "document": "content/candidates/c54-italian-game-classical-variation-center-attack/pack.json",
+      "from": "sha256:bb23ca47e1bd399b8e6691c830875b4cdbbad4509d1026af57c8fd7c73021f6b",
+      "to": "sha256:87fd998fe2fa7ac5bc1ddcd24304ed90e3114255421b0c324ea1ef506b54f67f",
+      "ledger": "content/candidates/c54-italian-game-classical-variation-center-attack/evidence.json"
+    },
+    {
+      "document": "content/candidates/d02-queen-s-pawn-game-london-system/pack.json",
+      "from": "sha256:0e4dfddb30e4490b8faffa6179b1ce8462a17d519daf58d4821cd37017a1679e",
+      "to": "sha256:e7f80d6117f54a9b78a6a7ff6dd91ecdca4a0381a857b623bdf20f7168a02a23",
+      "ledger": "content/candidates/d02-queen-s-pawn-game-london-system/evidence.json"
+    },
+    {
+      "document": "content/candidates/d35-queen-s-gambit-declined-exchange-variation/pack.json",
+      "from": "sha256:6111d2db9a8643380d447ed7af2b599b151e5e440fb79f763726c217d663d12c",
+      "to": "sha256:e439e21219c761672657d0f0946fab9f9d7f622c9671314db6d58475d5a6ff94",
+      "ledger": "content/candidates/d35-queen-s-gambit-declined-exchange-variation/evidence.json"
+    },
+    {
+      "document": "content/candidates/e99-king-s-indian-defense-orthodox-variation-classical-system-traditional-line/pack.json",
+      "from": "sha256:c6e72d5b1a7d28130377bc072d570fc93dca738a0ddc3c9eea0618c5d5c42de0",
+      "to": "sha256:9ffbd1a77c3a5ad9fc10bfbbd5efecd2fbb3261b0101ebbb14120ce7ac904603",
+      "ledger": "content/candidates/e99-king-s-indian-defense-orthodox-variation-classical-system-traditional-line/evidence.json"
+    },
+    {
+      "document": "content/candidates/endgame-rook-4v3-same-side-root/pack.json",
+      "from": "sha256:cb77fbfb66d05ace8d826069c7a8cce5c9fa9660c61530a4e43185213990f439",
+      "to": "sha256:3397052f2d34a44df4807dd47768aad04a03c3df592d9a96bb36caaf59eff0a7",
+      "ledger": "content/candidates/endgame-rook-4v3-same-side-root/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00008/pack.json",
+      "from": "sha256:d15da57e8aef24abfd2cfe7ae5f95474de8cc563cb4816a738f842486cdfc5c4",
+      "to": "sha256:4f7538b1352744b586d9279da8257eecd4e8e29d5684e4706359b848948707b0",
+      "ledger": "content/candidates/onramp-00008/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-0000d/pack.json",
+      "from": "sha256:2216876634e4b15adbd95ba8a38923bce2b0aa1cb2214ebdadb33ca636a0e1db",
+      "to": "sha256:31c690fff471c003d5cb48c416cff8de35990240ab5a44fad820b5fe1311a8c8",
+      "ledger": "content/candidates/onramp-0000d/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-000lc/pack.json",
+      "from": "sha256:65a9c82c9ed2ff532628514370e427a92be7987978a9bcc8ad14b909f94d563e",
+      "to": "sha256:498118213ee745c238de5bad26af9ed73aefa4911daef3e5aaa73f2cbe9e5c77",
+      "ledger": "content/candidates/onramp-000lc/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-001wr/pack.json",
+      "from": "sha256:267102a9a53df0f7536f77f4cf5ebfe0f3a8711f4e4bddab0c151284fbb8305d",
+      "to": "sha256:7e1bca9b5a44ca68716684a2a9cbc8f5cd8ad9eaaa73a78e6850a93a02063796",
+      "ledger": "content/candidates/onramp-001wr/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-001xl/pack.json",
+      "from": "sha256:08384d1cfeefe91586abec5e63d403d4dcb616d3a669ddae4c1c404c41fb9930",
+      "to": "sha256:244de7a83d3d7b54d0420e20e1a33760682c83b3749c0c33fa54a3b574455724",
+      "ledger": "content/candidates/onramp-001xl/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-003ep/pack.json",
+      "from": "sha256:03154afa0b5c386efa63028b6addc090942c69078086c933dce30a6b6ba3c858",
+      "to": "sha256:4257df2007fbe11affcac414573966f07ea24fb78518d50439a430798ad83b14",
+      "ledger": "content/candidates/onramp-003ep/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-004mt/pack.json",
+      "from": "sha256:d4c5c84b4d68213341c0c8edf70c62f0d33555bb944026433a63e517678402b2",
+      "to": "sha256:8b6fb6c2d1247fc0777f8022f55b5298b3db029edb938bda00fda19cb2e3e34d",
+      "ledger": "content/candidates/onramp-004mt/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-0050w/pack.json",
+      "from": "sha256:8d385da78e092b3064011450f7a9cd1f4bac377bbf602ee4477271416f2614c5",
+      "to": "sha256:0d35e3abf0a609090daa1cc0d3af3c407a87ee32c4aa6340b0f249ba53f0f5e6",
+      "ledger": "content/candidates/onramp-0050w/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-007tv/pack.json",
+      "from": "sha256:ad6a781d066a8192c6ca8f969f029537f0855b801e3b50423cd4bd6678ec4df1",
+      "to": "sha256:3c916b65ea45cd05ebb20a0265e503d03fb2dded8779e973f9b08024f48d6192",
+      "ledger": "content/candidates/onramp-007tv/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-009fp/pack.json",
+      "from": "sha256:1ebdc5cbe7c74e52faebda18adf8362fbeed783e63b646eacf790345ad872a51",
+      "to": "sha256:b5642c4091cc1d0432f3e33f30f2d5afea362578d9fbc81589d6b2e84a125462",
+      "ledger": "content/candidates/onramp-009fp/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00aas/pack.json",
+      "from": "sha256:d74c21b0aff605617e67b4c3182910d155da1a0f34868b50d264265eb362c00a",
+      "to": "sha256:7df55a2e6f9c5733c7e8ce6988a7f03c63ae43a9db0ecbd1a1d347b4da19baff",
+      "ledger": "content/candidates/onramp-00aas/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00ab1/pack.json",
+      "from": "sha256:ce6821c655c3e49819c76c098ef99a232c6dff6180cf8bfdaef77a7f21160973",
+      "to": "sha256:8dd0ade5bf2d2a899e97c665235bb190de3faf51fa783269bf062f2301224ad4",
+      "ledger": "content/candidates/onramp-00ab1/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00adi/pack.json",
+      "from": "sha256:16a9643c07c3d36650198e49364edfca105504b84c2abe98efc8aacd285aa11a",
+      "to": "sha256:08012aa09205eb51095c75e867a2d035276aba1fed97702013b57a6eadb666f4",
+      "ledger": "content/candidates/onramp-00adi/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00aho/pack.json",
+      "from": "sha256:ea558ef060d7bcf55fd775131e18c0d8f415b17110dcee91b77baf34d6d4891a",
+      "to": "sha256:7b65dc25f095d6c8355bfd67ca40aad59440e2e7b17b1fa2b6f95b2cd61394d7",
+      "ledger": "content/candidates/onramp-00aho/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00bts/pack.json",
+      "from": "sha256:ec38932a543d22887bfe9c7bc330c3ae4e19a453fa2d3b28edb770ace4da6315",
+      "to": "sha256:ccc2d784c7c6716714ee0729b23d0418fe0d4a6911a9975bad8dcd7ff6562955",
+      "ledger": "content/candidates/onramp-00bts/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00cy1/pack.json",
+      "from": "sha256:60892bfcbd987c5d32a1afa023818dd5b116cebd8d5770ce480a264aeee2254e",
+      "to": "sha256:7a30101e2e7089393dbbc0e81742c785dfed37fc45c03f647593ff6c0179d248",
+      "ledger": "content/candidates/onramp-00cy1/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00dnp/pack.json",
+      "from": "sha256:44c9308ea7b21cd826e4659ad36b865c9f77c87f439292e4bb37a411a8ea8387",
+      "to": "sha256:8982bb289c7558189663960d0fae8112663c1d901c626f1a83e3ddcb81da959c",
+      "ledger": "content/candidates/onramp-00dnp/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00evs/pack.json",
+      "from": "sha256:8d128983ee0a094e7cf788ef26a0b15e15a12d4524c4b99ca5484d7864b9f1d1",
+      "to": "sha256:571c8e700372b8abba82f9751c239c33f0b54d6743f4126384a116f6259f1b20",
+      "ledger": "content/candidates/onramp-00evs/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00icz/pack.json",
+      "from": "sha256:1206c58877c03809fd3acc3a30ed280b31dca97866e326f62b92d7460155a8c6",
+      "to": "sha256:eed5f9f34ec4e9eb77fc3a9e109e3a679d220b870d1b71a077e1683c3198064a",
+      "ledger": "content/candidates/onramp-00icz/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00jcd/pack.json",
+      "from": "sha256:92ecbaa2320e1023af9c8e865d535a1e5f700e9fc2bc066266502e67a94a9c99",
+      "to": "sha256:74ad3626541f5781d6a9041dc22a80eb11a6d93e984f8fbd3601e17f5444b584",
+      "ledger": "content/candidates/onramp-00jcd/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00jph/pack.json",
+      "from": "sha256:8a3b27158b35537ad491bd5b661cc9fa51ecaaa584217ef8cd14bdf5fc0f088d",
+      "to": "sha256:d49ebdca4b4dcc10eedc01ca36cbfb065bc51f9f50d4ba5d00a08d363f70e12d",
+      "ledger": "content/candidates/onramp-00jph/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00kzf/pack.json",
+      "from": "sha256:8e4c5d9208d8f7c4a5786a3b74264af06961a7c4419f8e4921addd59f09fd211",
+      "to": "sha256:391e187e118d421979c386aaf30bd75e84aaed67cddbea5daaccc7ba107fdc4d",
+      "ledger": "content/candidates/onramp-00kzf/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00nej/pack.json",
+      "from": "sha256:5956d7f16b7295dc8cc37854345c266d81aa92b0c42f962915ad8067d04ce4bd",
+      "to": "sha256:a74c7ca88b615a956447a6f099b1a6f2ae42215c1eb795e6b86b19af01f63e9a",
+      "ledger": "content/candidates/onramp-00nej/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00o8m/pack.json",
+      "from": "sha256:e2b573f549c4634056c3a4ecbf084ded2e052003c9e3ec68adbafbc19ce10610",
+      "to": "sha256:bffbebac2985d3d1563b0b3e6a6c9d18816425b4fb99672efde1a16b26b9a42f",
+      "ledger": "content/candidates/onramp-00o8m/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00pgi/pack.json",
+      "from": "sha256:69dc8f07b158ee90df2516f82d184ea2cb6a647c7aa4fb5c2679a4eefa32c603",
+      "to": "sha256:be0a888808ed99a40eecf8ad1667dca4fd81fda916d128fd33ea5544bcad1e70",
+      "ledger": "content/candidates/onramp-00pgi/evidence.json"
+    },
+    {
+      "document": "content/candidates/onramp-00puc/pack.json",
+      "from": "sha256:70a072624c47a2262a10e3010473d853eae904a8896ecb30dcc20e4cebd3bae4",
+      "to": "sha256:e6a75c75204100cfb28cda8b1d756d823831186c14b7cc123f61a2e18e57c754",
+      "ledger": "content/candidates/onramp-00puc/evidence.json"
+    }
+  ],
+  "projectedLedgerRestamps": 68
+}

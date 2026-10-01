@@ -391,6 +391,7 @@ export {
   claimDeliveryEvidence,
   corpusPageEvidence,
   corpusPositionEvidence,
+  deriveExplorerPopulationSummary,
   evidenceReferenceEvidence,
   guardConditionEvidence,
   humanSplitPageEvidence,
@@ -1079,6 +1080,7 @@ export {
 } from "./material-state.js";
 
 export { CORPUS_GUARD } from "./population-guard.js";
+export { explorerPopulationSummaryWire, renderedProviderItems, type ExplorerPopulationSummary, type ExplorerPopulationSummaryWire } from "./explorer-summary.js";
 
 export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",

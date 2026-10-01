@@ -18,16 +18,42 @@
       "name": "Work truth, measurement, and release accounting",
       "release": "core",
       "owner": "coordinator",
-      "rfcs": ["measurement-records.md"],
+      "rfcs": [
+        "measurement-records.md"
+      ],
       "completion": {
-        "evidence": ["partial", "Measurements retain inputs, revisions, and negative results."],
-        "state": ["proven", "Every ledger and UX item has durable validated execution state; live work has a roadmap capability owner or the explicit untriaged/unowned state, and the untriaged ceiling only falls."],
-        "api": ["not_applicable", "This slice governs delivery rather than a product endpoint."],
-        "experience": ["not_applicable", "This slice has no learner surface."],
-        "defaults": ["not_applicable", "This slice has no learner configuration."],
-        "content": ["partial", "Research, RFC, implementation, content, and release closeouts flow back into this roadmap."],
-        "verification": ["partial", "Roadmap coverage, work routing, RFC state, registers, and protected intent are checked."],
-        "release": ["partial", "A release cannot claim 1.0 while any core capability remains incomplete."]
+        "evidence": [
+          "partial",
+          "Measurements retain inputs, revisions, and negative results."
+        ],
+        "state": [
+          "proven",
+          "Every ledger and UX item has durable validated execution state; live work has a roadmap capability owner or the explicit untriaged/unowned state, and the untriaged ceiling only falls."
+        ],
+        "api": [
+          "not_applicable",
+          "This slice governs delivery rather than a product endpoint."
+        ],
+        "experience": [
+          "not_applicable",
+          "This slice has no learner surface."
+        ],
+        "defaults": [
+          "not_applicable",
+          "This slice has no learner configuration."
+        ],
+        "content": [
+          "partial",
+          "Research, RFC, implementation, content, and release closeouts flow back into this roadmap."
+        ],
+        "verification": [
+          "partial",
+          "Roadmap coverage, work routing, RFC state, registers, and protected intent are checked."
+        ],
+        "release": [
+          "partial",
+          "A release cannot claim 1.0 while any core capability remains incomplete."
+        ]
       }
     },
     {
@@ -50,10 +76,10 @@
         "runtime-opening-identity.md",
         "exact-legal-mobility.md",
         "breadth-collectors.md",
-      "evidence-move-selector.md",
-      "shared-candidate-evidence-packet.md",
-      "semantic-consequence-search.md",
-      "candidate-collector-registry.md",
+        "evidence-move-selector.md",
+        "shared-candidate-evidence-packet.md",
+        "semantic-consequence-search.md",
+        "candidate-collector-registry.md",
         "candidate-population-service.md",
         "bounded-policy-targets.md",
         "bounded-target-policy-composition.md",
@@ -62,14 +88,38 @@
         "phase-source-composition.md"
       ],
       "completion": {
-        "evidence": ["partial", "Typed engine, tablebase, human-model, explorer, theory, structural, tactical, transition, counterfactual, and availability facts preserve operands and provenance."],
-        "state": ["partial", "Collected facts compile into one versioned packet and semantic-event vocabulary without raw-string side channels."],
-        "api": ["partial", "Every admitted producer is requestable or scheduled through a declared server path with abstention and latency semantics."],
-        "experience": ["blocked", "No ordinary learner surface consumes raw producers; modules receive selected facts only."],
-        "defaults": ["blocked", "Consumer-specific eligibility, sign, novelty, importance, phase, and answer-distance policies are compiled rather than inferred in UI code."],
-        "content": ["blocked", "Pack capabilities and claim anchors declare exactly which evidence each authored statement needs."],
-        "verification": ["partial", "Positive, hard-negative, mirrored, counterfactual, imported, and external labelled fixtures cover every family and detect vacuous predicates."],
-        "release": ["blocked", "The production manifest proves producer to projection to selector to consumer reach and honest unavailability."]
+        "evidence": [
+          "partial",
+          "Typed engine, tablebase, human-model, explorer, theory, structural, tactical, transition, counterfactual, and availability facts preserve operands and provenance."
+        ],
+        "state": [
+          "partial",
+          "Collected facts compile into one versioned packet and semantic-event vocabulary without raw-string side channels."
+        ],
+        "api": [
+          "partial",
+          "Every admitted producer is requestable or scheduled through a declared server path with abstention and latency semantics."
+        ],
+        "experience": [
+          "blocked",
+          "No ordinary learner surface consumes raw producers; modules receive selected facts only."
+        ],
+        "defaults": [
+          "blocked",
+          "Consumer-specific eligibility, sign, novelty, importance, phase, and answer-distance policies are compiled rather than inferred in UI code."
+        ],
+        "content": [
+          "blocked",
+          "Pack capabilities and claim anchors declare exactly which evidence each authored statement needs."
+        ],
+        "verification": [
+          "partial",
+          "Positive, hard-negative, mirrored, counterfactual, imported, and external labelled fixtures cover every family and detect vacuous predicates."
+        ],
+        "release": [
+          "blocked",
+          "The production manifest proves producer to projection to selector to consumer reach and honest unavailability."
+        ]
       }
     },
     {
@@ -77,16 +127,43 @@
       "name": "Arrival, play, consequence, rewind, branch, compare, and replay",
       "release": "core",
       "owner": "core-loop",
-      "rfcs": ["play-composition.md", "pack-training-forms.md"],
+      "rfcs": [
+        "play-composition.md",
+        "pack-training-forms.md"
+      ],
       "completion": {
-        "evidence": ["partial", "The loop can consume grounded evidence without becoming an engine review screen."],
-        "state": ["proven", "Immutable run graph, forks, rewinds, comparisons, leases, and pack-optional runs survive resume."],
-        "api": ["partial", "All run actions are reachable through the production application and carry typed errors."],
-        "experience": ["partial", "The board shell and one-expanded companion queue are stable; first-run teaching, module-backed consequence guidance, and complete return flows remain incomplete."],
-        "defaults": ["blocked", "Just Play, plan, outcome, trajectory, and imported-game flows each start with an opinionated composition."],
-        "content": ["blocked", "Each training form has representative official content and honest empty behavior."],
-        "verification": ["partial", "Desktop, phone, keyboard, touch, resume, branch, compare, and failure paths run as full journeys."],
-        "release": ["blocked", "The complete loop passes against the release image and persisted database, not fixtures alone."]
+        "evidence": [
+          "partial",
+          "The loop can consume grounded evidence without becoming an engine review screen."
+        ],
+        "state": [
+          "proven",
+          "Immutable run graph, forks, rewinds, comparisons, leases, and pack-optional runs survive resume."
+        ],
+        "api": [
+          "partial",
+          "All run actions are reachable through the production application and carry typed errors."
+        ],
+        "experience": [
+          "partial",
+          "The board shell and one-expanded companion queue are stable; first-run teaching, module-backed consequence guidance, and complete return flows remain incomplete."
+        ],
+        "defaults": [
+          "blocked",
+          "Just Play, plan, outcome, trajectory, and imported-game flows each start with an opinionated composition."
+        ],
+        "content": [
+          "blocked",
+          "Each training form has representative official content and honest empty behavior."
+        ],
+        "verification": [
+          "partial",
+          "Desktop, phone, keyboard, touch, resume, branch, compare, and failure paths run as full journeys."
+        ],
+        "release": [
+          "blocked",
+          "The complete loop passes against the release image and persisted database, not fixtures alone."
+        ]
       }
     },
     {
@@ -103,14 +180,38 @@
         "intent-presets.md"
       ],
       "completion": {
-        "evidence": ["blocked", "Each module names its eligible projections, disclosure distance, timing, role, and abstention."],
-        "state": ["partial", "Preset, workflow context, assistance ceiling, learner overrides, and disclosure events compose deterministically."],
-        "api": ["blocked", "Module views and availability come from one server contract; provider use cannot widen evidence."],
-        "experience": ["partial", "The stable board and structural companion seats ship; ordinary play still lacks the eleven evidence-backed learner modules, preset-driven disclosure, and complete honest-empty states."],
-        "defaults": ["blocked", "Quiet, Guided, Support, Drill, Review, Stream, Academy, and Campaign start useful; 72 primitive controls remain Advanced."],
-        "content": ["blocked", "Theory-only, pattern, square, piece, distance, move, prevention, and honest-empty examples are authored and tested."],
-        "verification": ["blocked", "Leakage, word budget, interruption, source-off, LLM-off, per-context ceiling, and responsive layout matrices pass."],
-        "release": ["blocked", "Provider-off support remains truthful and useful; Advanced exposes every primitive without becoming the default workflow."]
+        "evidence": [
+          "blocked",
+          "Each module names its eligible projections, disclosure distance, timing, role, and abstention."
+        ],
+        "state": [
+          "partial",
+          "Preset, workflow context, assistance ceiling, learner overrides, and disclosure events compose deterministically."
+        ],
+        "api": [
+          "blocked",
+          "Module views and availability come from one server contract; provider use cannot widen evidence."
+        ],
+        "experience": [
+          "partial",
+          "The stable board and structural companion seats ship; ordinary play still lacks the eleven evidence-backed learner modules, preset-driven disclosure, and complete honest-empty states."
+        ],
+        "defaults": [
+          "blocked",
+          "Quiet, Guided, Support, Drill, Review, Stream, Academy, and Campaign start useful; 72 primitive controls remain Advanced."
+        ],
+        "content": [
+          "blocked",
+          "Theory-only, pattern, square, piece, distance, move, prevention, and honest-empty examples are authored and tested."
+        ],
+        "verification": [
+          "blocked",
+          "Leakage, word budget, interruption, source-off, LLM-off, per-context ceiling, and responsive layout matrices pass."
+        ],
+        "release": [
+          "blocked",
+          "Provider-off support remains truthful and useful; Advanced exposes every primitive without becoming the default workflow."
+        ]
       }
     },
     {
@@ -126,14 +227,38 @@
         "return-scheduling.md"
       ],
       "completion": {
-        "evidence": ["partial", "Grades, phases, opening identity, semantic changes, human context, and source-normalized values remain separate evidence."],
-        "state": ["partial", "Review moments retain exact run, node, learner side, source, selection reason, and retry target."],
-        "api": ["partial", "Import, story, review compilation, sharing, retry, and return scheduling are reachable and paginated."],
-        "experience": ["missing", "A whole-game map and move timeline explain a bounded set of grounded moments, opening/phase arc, and next actions without dumping scores or only eight opaque cards."],
-        "defaults": ["blocked", "Review prioritizes grounded narrative and replay doors; raw engine traces are opt-in inspector material."],
-        "content": ["blocked", "Representative games cover blunder, missed chance, quiet improvement, theory departure, tactic, endgame, decided position, and honest no-comment cases."],
-        "verification": ["blocked", "Learner-side result, cp/WDL/mate/DTZ normalization, suppression, chronology, sharing, and LLM-off truth have end-to-end fixtures."],
-        "release": ["blocked", "A finished native, bot, imported, campaign, and social game each enters the same review-and-return journey."]
+        "evidence": [
+          "partial",
+          "Grades, phases, opening identity, semantic changes, human context, and source-normalized values remain separate evidence."
+        ],
+        "state": [
+          "partial",
+          "Review moments retain exact run, node, learner side, source, selection reason, and retry target."
+        ],
+        "api": [
+          "partial",
+          "Import, story, review compilation, sharing, retry, and return scheduling are reachable and paginated."
+        ],
+        "experience": [
+          "missing",
+          "A whole-game map and move timeline explain a bounded set of grounded moments, opening/phase arc, and next actions without dumping scores or only eight opaque cards."
+        ],
+        "defaults": [
+          "blocked",
+          "Review prioritizes grounded narrative and replay doors; raw engine traces are opt-in inspector material."
+        ],
+        "content": [
+          "blocked",
+          "Representative games cover blunder, missed chance, quiet improvement, theory departure, tactic, endgame, decided position, and honest no-comment cases."
+        ],
+        "verification": [
+          "blocked",
+          "Learner-side result, cp/WDL/mate/DTZ normalization, suppression, chronology, sharing, and LLM-off truth have end-to-end fixtures."
+        ],
+        "release": [
+          "blocked",
+          "A finished native, bot, imported, campaign, and social game each enters the same review-and-return journey."
+        ]
       }
     },
     {
@@ -149,14 +274,38 @@
         "famous-games.md"
       ],
       "completion": {
-        "evidence": ["partial", "Licensed, revision-pinned theory and exact chess evidence back principles, shapes, claims, and opening identities."],
-        "state": ["partial", "Draft, official, provenance, capability, migration, and graduation states are machine-readable and non-vacuous."],
-        "api": ["missing", "Principles, shapes, theory search, packs, author lint/playtest/register/withdraw, and exact drill joins have production application routes."],
-        "experience": ["missing", "Searchable phase-first library and author workflow support find, understand, rehearse, return, preview, validate, and publish."],
-        "defaults": ["blocked", "Learners see official material first with disclosed community drafts; authors see advanced provenance and capability detail."],
-        "content": ["missing", "A varied official 1.0 corpus spans openings, middlegames, endgames, trajectories, modes, levels, structures, tactics, and counter-cases."],
-        "verification": ["blocked", "Fresh manifests, capability plans, citations, source licences, negative fixtures, regression playtests, and graduation reports gate every official item."],
-        "release": ["blocked", "The runtime image contains only an allow-listed immutable content bundle; zero stale or workstation-local provenance paths ship."]
+        "evidence": [
+          "partial",
+          "Licensed, revision-pinned theory and exact chess evidence back principles, shapes, claims, and opening identities."
+        ],
+        "state": [
+          "partial",
+          "Draft, official, provenance, capability, migration, and graduation states are machine-readable and non-vacuous."
+        ],
+        "api": [
+          "missing",
+          "Principles, shapes, theory search, packs, author lint/playtest/register/withdraw, and exact drill joins have production application routes."
+        ],
+        "experience": [
+          "missing",
+          "Searchable phase-first library and author workflow support find, understand, rehearse, return, preview, validate, and publish."
+        ],
+        "defaults": [
+          "blocked",
+          "Learners see official material first with disclosed community drafts; authors see advanced provenance and capability detail."
+        ],
+        "content": [
+          "missing",
+          "A varied official 1.0 corpus spans openings, middlegames, endgames, trajectories, modes, levels, structures, tactics, and counter-cases."
+        ],
+        "verification": [
+          "blocked",
+          "Fresh manifests, capability plans, citations, source licences, negative fixtures, regression playtests, and graduation reports gate every official item."
+        ],
+        "release": [
+          "blocked",
+          "The runtime image contains only an allow-listed immutable content bundle; zero stale or workstation-local provenance paths ship."
+        ]
       }
     },
     {
@@ -164,16 +313,45 @@
       "name": "Human-like opponents, personalities, roster, and bot events",
       "release": "core",
       "owner": "bot-play",
-      "rfcs": ["bot-policy.md", "bot-roster.md", "bot-route-source.md", "opponent-experience.md"],
+      "rfcs": [
+        "bot-policy.md",
+        "bot-roster.md",
+        "bot-route-source.md",
+        "opponent-experience.md"
+      ],
       "completion": {
-        "evidence": ["partial", "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."],
-        "state": ["blocked", "The fifth fresh review proves a genuine profile digest can carry substituted family/layer semantics and coordinated durable rewrites can select a sampler-excluded move; replay/provider authority is not yet trustworthy."],
-        "api": ["partial", "Opponent discovery and selection expose only registered profiles and reproduce their policy after resume."],
-        "experience": ["missing", "A learner chooses an honest bot card and experiences its behavior in play, history, rematches, review, and local bot tournaments."],
-        "defaults": ["blocked", "Strength is a measured rung, personality is behavior, and no generic Elo knob or adjective-only persona is presented."],
-        "content": ["blocked", "The 4 by 3 roster, openings/routes, profile copy, names, absences, and calibration reports are populated."],
-        "verification": ["blocked", "The retained 31+6 controls and eight fifth-review falsifiers pass, but exact profile binding, reconstruction from provider truth, durable replay, request grammar, unique guard rows, current health authority, repository compilation, calibration, phase/endgame and human-likeness gates remain."],
-        "release": ["blocked", "CPU-capable provider-off opponents remain playable and every stronger optional engine degrades visibly."]
+        "evidence": [
+          "partial",
+          "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."
+        ],
+        "state": [
+          "blocked",
+          "The fifth fresh review proves a genuine profile digest can carry substituted family/layer semantics and coordinated durable rewrites can select a sampler-excluded move; replay/provider authority is not yet trustworthy."
+        ],
+        "api": [
+          "partial",
+          "Opponent discovery and selection expose only registered profiles and reproduce their policy after resume."
+        ],
+        "experience": [
+          "missing",
+          "A learner chooses an honest bot card and experiences its behavior in play, history, rematches, review, and local bot tournaments."
+        ],
+        "defaults": [
+          "blocked",
+          "Strength is a measured rung, personality is behavior, and no generic Elo knob or adjective-only persona is presented."
+        ],
+        "content": [
+          "blocked",
+          "The 4 by 3 roster, openings/routes, profile copy, names, absences, and calibration reports are populated."
+        ],
+        "verification": [
+          "blocked",
+          "The retained 31+6 controls and eight fifth-review falsifiers pass, but exact profile binding, reconstruction from provider truth, durable replay, request grammar, unique guard rows, current health authority, repository compilation, calibration, phase/endgame and human-likeness gates remain."
+        ],
+        "release": [
+          "blocked",
+          "CPU-capable provider-off opponents remain playable and every stronger optional engine degrades visibly."
+        ]
       }
     },
     {
@@ -181,16 +359,45 @@
       "name": "Rating, longitudinal observations, skills, style, and recommendations",
       "release": "core",
       "owner": "learner-history",
-      "rfcs": ["longitudinal-store.md", "player-style.md", "learner-rating.md", "skills.md"],
+      "rfcs": [
+        "longitudinal-store.md",
+        "player-style.md",
+        "learner-rating.md",
+        "skills.md"
+      ],
       "completion": {
-        "evidence": ["partial", "Every metric has occurrence and opportunity denominators, actor attribution, phase/decision splits, revision, confidence, and source drill-down."],
-        "state": ["blocked", "The tenth fresh longitudinal review returned the durable foundation: named mutations are receipt-only, duplicate requests cancel work, source cuts regress, lifecycle states disagree, retries/reclaims cannot run, legacy provenance is inverted, and source identity changed without authority."],
-        "api": ["partial", "Rating, history, rated-game, marks, and cohort-standing families cross the production application boundary; longitudinal/profile APIs are absent."],
-        "experience": ["partial", "Rating works as a narrow surface; complete history, opening performance, skill credit, style dimensions, privacy, sharing, and grounded recommendations do not."],
-        "defaults": ["blocked", "Profiles abstain until denominators clear; no universal confidence badge, GM twin, personality verdict, weakness ranking, or advice leakage."],
-        "content": ["blocked", "Metric explanations, examples, counterexamples, and related drills exist for every published dimension."],
-        "verification": ["partial", "Rating isolation and calibration pass; the longitudinal predecessor chain and 8/8 tenth-review counterexamples pass, but actual mutation/invalidation atomicity, lifecycle closure, actor attribution, rebuild, privacy, cost, recommendation, and presentation gates remain."],
-        "release": ["blocked", "Learners can export/delete all profile data and rebuild projections from immutable owned events."]
+        "evidence": [
+          "partial",
+          "Every metric has occurrence and opportunity denominators, actor attribution, phase/decision splits, revision, confidence, and source drill-down."
+        ],
+        "state": [
+          "blocked",
+          "The tenth fresh longitudinal review returned the durable foundation: named mutations are receipt-only, duplicate requests cancel work, source cuts regress, lifecycle states disagree, retries/reclaims cannot run, legacy provenance is inverted, and source identity changed without authority."
+        ],
+        "api": [
+          "partial",
+          "Rating, history, rated-game, marks, and cohort-standing families cross the production application boundary; longitudinal/profile APIs are absent."
+        ],
+        "experience": [
+          "partial",
+          "Rating works as a narrow surface; complete history, opening performance, skill credit, style dimensions, privacy, sharing, and grounded recommendations do not."
+        ],
+        "defaults": [
+          "blocked",
+          "Profiles abstain until denominators clear; no universal confidence badge, GM twin, personality verdict, weakness ranking, or advice leakage."
+        ],
+        "content": [
+          "blocked",
+          "Metric explanations, examples, counterexamples, and related drills exist for every published dimension."
+        ],
+        "verification": [
+          "partial",
+          "Rating isolation and calibration pass; the longitudinal predecessor chain and 8/8 tenth-review counterexamples pass, but actual mutation/invalidation atomicity, lifecycle closure, actor attribution, rebuild, privacy, cost, recommendation, and presentation gates remain."
+        ],
+        "release": [
+          "blocked",
+          "Learners can export/delete all profile data and rebuild projections from immutable owned events."
+        ]
       }
     },
     {
@@ -198,16 +405,45 @@
       "name": "Campaign, progression, encounters, resources, and failure",
       "release": "core",
       "owner": "campaign",
-      "rfcs": ["campaign-core.md", "campaign-boss-games.md", "campaign-catalogue-progression.md", "training-mode-variants.md"],
+      "rfcs": [
+        "campaign-core.md",
+        "campaign-boss-games.md",
+        "campaign-catalogue-progression.md",
+        "training-mode-variants.md"
+      ],
       "completion": {
-        "evidence": ["partial", "Encounter eligibility and rewards spend only registered pack, module, rating, skill, and bot facts."],
-        "state": ["partial", "The seventh fresh review returned the foundation because charged commands can report committed without performing their play mutation or appending a Campaign event; provider, assistance, review, event and curriculum authority also remain caller-mintable."],
-        "api": ["missing", "Enter, read, seal, fail, reward, spend, unlock, resume, and abandon endpoints do not exist."],
-        "experience": ["missing", "There is no campaign route, map, encounter flow, resource explanation, failure result, or return path in the web app."],
-        "defaults": ["blocked", "Campaign has an opinionated preset and earned modules never disappear because of an unrelated settings choice."],
-        "content": ["missing", "No authored campaign exists; 1.0 needs a complete, replayable pilot with varied encounter and boss forms."],
-        "verification": ["blocked", "The seventh fresh review retains the complete author chain and passes seven new authority counterexamples plus strict TypeScript; a bounded repair, another fresh review, and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."],
-        "release": ["blocked", "The campaign survives upgrade and backup/restore and never locks the open library or sells progression."]
+        "evidence": [
+          "partial",
+          "Encounter eligibility and rewards spend only registered pack, module, rating, skill, and bot facts."
+        ],
+        "state": [
+          "partial",
+          "The seventh fresh review returned the foundation because charged commands can report committed without performing their play mutation or appending a Campaign event; provider, assistance, review, event and curriculum authority also remain caller-mintable."
+        ],
+        "api": [
+          "missing",
+          "Enter, read, seal, fail, reward, spend, unlock, resume, and abandon endpoints do not exist."
+        ],
+        "experience": [
+          "missing",
+          "There is no campaign route, map, encounter flow, resource explanation, failure result, or return path in the web app."
+        ],
+        "defaults": [
+          "blocked",
+          "Campaign has an opinionated preset and earned modules never disappear because of an unrelated settings choice."
+        ],
+        "content": [
+          "missing",
+          "No authored campaign exists; 1.0 needs a complete, replayable pilot with varied encounter and boss forms."
+        ],
+        "verification": [
+          "blocked",
+          "The seventh fresh review retains the complete author chain and passes seven new authority counterexamples plus strict TypeScript; a bounded repair, another fresh review, and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."
+        ],
+        "release": [
+          "blocked",
+          "The campaign survives upgrade and backup/restore and never locks the open library or sells progression."
+        ]
       }
     },
     {
@@ -226,14 +462,38 @@
         "variants.md"
       ],
       "completion": {
-        "evidence": ["partial", "Provider identity, live/finished state, clocks, result, variant, fair-play boundary, and source sanitization are retained."],
-        "state": ["partial", "Sessions and imports exist; native pairing, two-player rating, live-source growth, enforced clocks, invitation transitions, and event-ready aggregation remain."],
-        "api": ["partial", "Sessions work; provider challenge/follow/result return, native pairing, clocks, variants, and complete invitation lifecycle are unfinished."],
-        "experience": ["partial", "Live screens exist but creation, joining, voting, Arena, native play, pause consent, errors, and return are not coherent guided workflows."],
-        "defaults": ["blocked", "Casual native, rated native, imported, live-follow, Arena, and match each have explicit terms and assistance ceilings."],
-        "content": ["partial", "Representative provider, clock, result, malformed input, variant, disconnect, and rematch fixtures exist across all supported paths."],
-        "verification": ["blocked", "Two-device play, resume, timeout, draw, result attribution, abuse boundary, provider-off fallback, review, and tournament-readiness tests pass."],
-        "release": ["blocked", "The release states what is native, provider-backed, casual, rated, enforced, or unsupported without implying public matchmaking operations."]
+        "evidence": [
+          "partial",
+          "Provider identity, live/finished state, clocks, result, variant, fair-play boundary, and source sanitization are retained."
+        ],
+        "state": [
+          "partial",
+          "Sessions and imports exist; native pairing, two-player rating, live-source growth, enforced clocks, invitation transitions, and event-ready aggregation remain."
+        ],
+        "api": [
+          "partial",
+          "Sessions work; provider challenge/follow/result return, native pairing, clocks, variants, and complete invitation lifecycle are unfinished."
+        ],
+        "experience": [
+          "partial",
+          "Live screens exist but creation, joining, voting, Arena, native play, pause consent, errors, and return are not coherent guided workflows."
+        ],
+        "defaults": [
+          "blocked",
+          "Casual native, rated native, imported, live-follow, Arena, and match each have explicit terms and assistance ceilings."
+        ],
+        "content": [
+          "partial",
+          "Representative provider, clock, result, malformed input, variant, disconnect, and rematch fixtures exist across all supported paths."
+        ],
+        "verification": [
+          "blocked",
+          "Two-device play, resume, timeout, draw, result attribution, abuse boundary, provider-off fallback, review, and tournament-readiness tests pass."
+        ],
+        "release": [
+          "blocked",
+          "The release states what is native, provider-backed, casual, rated, enforced, or unsupported without implying public matchmaking operations."
+        ]
       }
     },
     {
@@ -241,16 +501,42 @@
       "name": "Coach, classroom, streamer, casting, and audience workflows",
       "release": "breadth",
       "owner": "professional-workflows",
-      "rfcs": ["casting.md"],
+      "rfcs": [
+        "casting.md"
+      ],
       "completion": {
-        "evidence": ["partial", "All projections inherit role, assistance ceiling, withholding, delay, attribution, and learner consent."],
-        "state": ["partial", "Classrooms, assignments, sessions, proposals, marks, and votes exist; invitation transitions and durable compositions remain incomplete."],
-        "api": ["partial", "Teacher/live endpoints exist; viewer links, audience voting client, provider bridge, submissions review, and full role enforcement remain."],
-        "experience": ["missing", "Teach Live, Review Submission, Stream, audience preview, streamer chrome, simul overview, and explained setup are not complete workflows."],
-        "defaults": ["blocked", "Academy and Stream compositions are named presets, not inherited Just Play settings or raw role controls."],
-        "content": ["blocked", "Worked coach, submission, cast, vote, delayed-evidence, and honest-empty scenarios ship."],
-        "verification": ["blocked", "Role-bypass, accessibility projection, consent, audience truth, delay, reconnect, overlay, and two-account abuse cases pass."],
-        "release": ["blocked", "No workflow promises chat, moderation, delay, provider integration, or authority that the deployment does not provide."]
+        "evidence": [
+          "partial",
+          "All projections inherit role, assistance ceiling, withholding, delay, attribution, and learner consent."
+        ],
+        "state": [
+          "partial",
+          "Classrooms, assignments, sessions, proposals, marks, and votes exist; invitation transitions and durable compositions remain incomplete."
+        ],
+        "api": [
+          "partial",
+          "Teacher/live endpoints exist; viewer links, audience voting client, provider bridge, submissions review, and full role enforcement remain."
+        ],
+        "experience": [
+          "missing",
+          "Teach Live, Review Submission, Stream, audience preview, streamer chrome, simul overview, and explained setup are not complete workflows."
+        ],
+        "defaults": [
+          "blocked",
+          "Academy and Stream compositions are named presets, not inherited Just Play settings or raw role controls."
+        ],
+        "content": [
+          "blocked",
+          "Worked coach, submission, cast, vote, delayed-evidence, and honest-empty scenarios ship."
+        ],
+        "verification": [
+          "blocked",
+          "Role-bypass, accessibility projection, consent, audience truth, delay, reconnect, overlay, and two-account abuse cases pass."
+        ],
+        "release": [
+          "blocked",
+          "No workflow promises chat, moderation, delay, provider integration, or authority that the deployment does not provide."
+        ]
       }
     },
     {
@@ -258,16 +544,43 @@
       "name": "Responsive layout, accessible board input, theming, and PWA",
       "release": "core",
       "owner": "client-platform",
-      "rfcs": ["accessible-board-input.md", "theming.md"],
+      "rfcs": [
+        "accessible-board-input.md",
+        "theming.md"
+      ],
       "completion": {
-        "evidence": ["not_applicable", "This slice consumes product semantics but creates no chess truth."],
-        "state": ["partial", "One board-input controller and theme preferences exist; global focus, responsive composition, and offline/update state remain."],
-        "api": ["not_applicable", "Existing APIs must remain usable under every supported input and viewport."],
-        "experience": ["partial", "Board input and the in-run stable-board shell are broad; route-wide overflow, focus/shortcut, device, mobile-shell, PWA, zoom and post-gesture coverage remain incomplete."],
-        "defaults": ["partial", "Device theme and permanent board cells have defaults; animation, density, panel placement, and small-screen composition do not."],
-        "content": ["partial", "Piece assets and themes exist; previews, licence presentation, offline shell, and update UX remain."],
-        "verification": ["partial", "Board matrices pass; every route still needs keyboard, screen-reader, zoom, contrast, reduced-motion, phone, tablet, desktop, and post-gesture layout proof."],
-        "release": ["blocked", "PWA install/update/offline behavior, supported viewport floor, asset licences, and owner-device discharge are complete."]
+        "evidence": [
+          "not_applicable",
+          "This slice consumes product semantics but creates no chess truth."
+        ],
+        "state": [
+          "partial",
+          "One board-input controller and theme preferences exist; global focus, responsive composition, and offline/update state remain."
+        ],
+        "api": [
+          "not_applicable",
+          "Existing APIs must remain usable under every supported input and viewport."
+        ],
+        "experience": [
+          "partial",
+          "Board input and the in-run stable-board shell are broad; route-wide overflow, focus/shortcut, device, mobile-shell, PWA, zoom and post-gesture coverage remain incomplete."
+        ],
+        "defaults": [
+          "partial",
+          "Device theme and permanent board cells have defaults; animation, density, panel placement, and small-screen composition do not."
+        ],
+        "content": [
+          "partial",
+          "Piece assets and themes exist; previews, licence presentation, offline shell, and update UX remain."
+        ],
+        "verification": [
+          "partial",
+          "Board matrices pass; every route still needs keyboard, screen-reader, zoom, contrast, reduced-motion, phone, tablet, desktop, and post-gesture layout proof."
+        ],
+        "release": [
+          "blocked",
+          "PWA install/update/offline behavior, supported viewport floor, asset licences, and owner-device discharge are complete."
+        ]
       }
     },
     {
@@ -277,14 +590,38 @@
       "owner": "account-and-data",
       "rfcs": [],
       "completion": {
-        "evidence": ["not_applicable", "This slice transports provenance but creates no chess truth."],
-        "state": ["partial", "Identity, authorization, account export/delete, and writer leases exist; guest/claim, complete bundle, and future profile/social coverage remain."],
-        "api": ["partial", "Auth/export/delete work; account-level import, portability versioning, backup/restore, and complete object coverage remain."],
-        "experience": ["partial", "Login, destructive previews, and a standing read-only account-data summary exist; first-run account timing, twelve-class inventory copy, download progress, import conflicts, and recovery remain unfinished."],
-        "defaults": ["blocked", "Private self-hosting, data minimization, explicit sharing, and no ambient coach access are the defaults."],
-        "content": ["not_applicable", "Fixtures cover account object classes rather than chess content."],
-        "verification": ["partial", "Lifecycle tests exist; full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."],
-        "release": ["blocked", "A documented, tested backup/restore/update/rollback path and complete portable account bundle ship."]
+        "evidence": [
+          "not_applicable",
+          "This slice transports provenance but creates no chess truth."
+        ],
+        "state": [
+          "partial",
+          "Identity, authorization, account export/delete, and writer leases exist; guest/claim, complete bundle, and future profile/social coverage remain."
+        ],
+        "api": [
+          "partial",
+          "Auth/export/delete work; account-level import, portability versioning, backup/restore, and complete object coverage remain."
+        ],
+        "experience": [
+          "partial",
+          "Login, destructive previews, and a standing read-only account-data summary exist; first-run account timing, twelve-class inventory copy, download progress, import conflicts, and recovery remain unfinished."
+        ],
+        "defaults": [
+          "blocked",
+          "Private self-hosting, data minimization, explicit sharing, and no ambient coach access are the defaults."
+        ],
+        "content": [
+          "not_applicable",
+          "Fixtures cover account object classes rather than chess content."
+        ],
+        "verification": [
+          "partial",
+          "Lifecycle tests exist; full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."
+        ],
+        "release": [
+          "blocked",
+          "A documented, tested backup/restore/update/rollback path and complete portable account bundle ship."
+        ]
       }
     },
     {
@@ -292,16 +629,46 @@
       "name": "CI parity, packaging, deployment, observability, and release",
       "release": "core",
       "owner": "release-engineering",
-      "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md", "provider-health-degradation.md", "opponent-recovery-journey.md", "verifiable-runtime-distribution.md"],
+      "rfcs": [
+        "storage-backup-recovery.md",
+        "safe-deployment-profiles.md",
+        "provider-health-degradation.md",
+        "opponent-recovery-journey.md",
+        "verifiable-runtime-distribution.md"
+      ],
       "completion": {
-        "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
-        "state": ["partial", "Schema/register/work/intent checks and three workflows exist. The rebuilt local server image now reaches health with Maia and the copied draft corpus after the 2026-09-23 runtime-dependency and RFC-reference packaging repairs; this is a first-boot proof, not a deployment profile. Storage and deployment contract models still lack proof against real storage, filesystem, mounted-file, TLS, HTTP and ingress operations."],
-        "api": ["partial", "Health exists, but `/capabilities` still converts constructor flags into availability and the client still deletes controls when a provider is absent. Provider health was cut to its blocking obligation on 2026-09-06: its twelve-round author model is retired as acceptance authority and the production implementation is now the proof, with durable opponent recovery split into opponent-recovery-journey.md. Route integration, readiness, metrics policy and production-boundary coverage remain."],
-        "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
-        "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
-        "content": ["blocked", "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."],
-        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; fresh storage and deployment reviews now execute fourteen real-authority attacks while retaining both predecessor chains."],
-        "release": ["blocked", "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."]
+        "evidence": [
+          "not_applicable",
+          "This slice verifies evidence machinery but creates no chess truth."
+        ],
+        "state": [
+          "partial",
+          "Schema/register/work/intent checks and three workflows exist. The rebuilt local server image now reaches health with Maia and the copied draft corpus after the 2026-09-23 runtime-dependency and RFC-reference packaging repairs; this is a first-boot proof, not a deployment profile. Storage and deployment contract models still lack proof against real storage, filesystem, mounted-file, TLS, HTTP and ingress operations."
+        ],
+        "api": [
+          "partial",
+          "Health exists, but `/capabilities` still converts constructor flags into availability and the client still deletes controls when a provider is absent. Provider health was cut to its blocking obligation on 2026-09-06: its twelve-round author model is retired as acceptance authority and the production implementation is now the proof, with durable opponent recovery split into opponent-recovery-journey.md. Route integration, readiness, metrics policy and production-boundary coverage remain."
+        ],
+        "experience": [
+          "blocked",
+          "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."
+        ],
+        "defaults": [
+          "partial",
+          "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."
+        ],
+        "content": [
+          "blocked",
+          "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."
+        ],
+        "verification": [
+          "partial",
+          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; fresh storage and deployment reviews now execute fourteen real-authority attacks while retaining both predecessor chains."
+        ],
+        "release": [
+          "blocked",
+          "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."
+        ]
       }
     }
   ],
@@ -312,18 +679,45 @@
         "id": "release-truth",
         "wave": 0,
         "state": "active",
-        "capabilities": ["governance", "operations"],
+        "capabilities": [
+          "governance",
+          "operations"
+        ],
         "dependsOn": [],
         "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the browser repair and the narrowed stable-governance topology are implemented but not remotely discharged.",
         "latestCheckpoint": {
           "at": "2026-09-30",
           "summary": "Required governance remains stable repository invariants rather than the former portfolio of active-draft/historical review artifacts; draft-RFC evidence remains opt-in. The earlier depth-one checkout checkpoint is superseded: implemented capability and semantic-authority history guards require an actual first parent, so software/governance/release verify jobs now fetch depth two and refuse missing history. Per-job scaffold tests bind that requirement; there is no verification-time fetch or new pre-push gate. Live work remains assigned and the roadmap exposes incomplete consumers. A paired green GitHub verify/browser run on the exact pushed revision still awaits authorized publication, so this milestone remains active.",
           "impact": "advanced",
-          "evidence": ["Makefile", ".github/workflows/verify.yml", ".github/workflows/release.yml", "tests/browser/drill.spec.ts", "tools/verify-scaffold.mjs", "tools/verify-scaffold.test.mjs", "tools/capability-history.mjs", "docs/testing.md", "planning/work-state.json", "planning/exploration/log.md", "planning/pack-capability-contract/integration-2026-09-30.md"],
+          "evidence": [
+            "Makefile",
+            ".github/workflows/verify.yml",
+            ".github/workflows/release.yml",
+            "tests/browser/drill.spec.ts",
+            "tools/verify-scaffold.mjs",
+            "tools/verify-scaffold.test.mjs",
+            "tools/capability-history.mjs",
+            "docs/testing.md",
+            "planning/work-state.json",
+            "planning/exploration/log.md",
+            "planning/pack-capability-contract/integration-2026-09-30.md"
+          ],
           "anchors": [
-            {"kind": "work_state", "id": "D3076", "digest": "sha256:ac92f80f050423d605513ffe32e607ceb379f1684f2ab466510402ce08a42871"},
-            {"kind": "work_state", "id": "D3077", "digest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03"},
-            {"kind": "work_state", "id": "D3320", "digest": "sha256:143c283fb509f6bd1cd5425c84bf4253890530dd24ddfa637803b13eaf3eaf33"}
+            {
+              "kind": "work_state",
+              "id": "D3076",
+              "digest": "sha256:ac92f80f050423d605513ffe32e607ceb379f1684f2ab466510402ce08a42871"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3077",
+              "digest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3320",
+              "digest": "sha256:143c283fb509f6bd1cd5425c84bf4253890530dd24ddfa637803b13eaf3eaf33"
+            }
           ]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
@@ -332,8 +726,20 @@
         "id": "foundation-contracts",
         "wave": 1,
         "state": "active",
-        "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
-        "dependsOn": ["release-truth"],
+        "capabilities": [
+          "evidence",
+          "support",
+          "review",
+          "theory_content",
+          "bots",
+          "learner_model",
+          "campaign",
+          "social_play",
+          "professional"
+        ],
+        "dependsOn": [
+          "release-truth"
+        ],
         "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
         "latestCheckpoint": {
           "at": "2026-09-24",
@@ -380,12 +786,21 @@
         "id": "evidence-to-consumer-spine",
         "wave": 1,
         "state": "active",
-        "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
-        "dependsOn": ["foundation-contracts"],
-        "nextAction": "The four evidence-foundation implementations, pack capability lanes 0.30–0.32 and built-in learner Syzygy/Explorer exchange acquisitions are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings plus the remaining Stockfish/Maia and supplied/standalone provider migrations. Implement the RFC's Explorer summary wire and exact consumer bindings; acquisition migration does not retire legacy node-shaped identities. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
+        "capabilities": [
+          "evidence",
+          "support",
+          "review",
+          "bots",
+          "learner_model",
+          "theory_content"
+        ],
+        "dependsOn": [
+          "foundation-contracts"
+        ],
+        "nextAction": "The four evidence-foundation implementations, pack capability lanes 0.30–0.32 and built-in learner Syzygy/Explorer exchange acquisitions are integrated on main; do not rebuild them. Discharge the 81-subject validation population's missing independent authorities and required production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings plus the remaining Stockfish/Maia and supplied/standalone provider migrations. The move-free Explorer summary/receipt wire and authenticated Theory binding are integrated; finish exact played occurrences and remaining legacy bindings; acquisition migration does not retire legacy node-shaped identities. Close live training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge these consumers. Content expansion remains held until foundation contracts stabilize. D3262's search-profile experiment remains research, not production why-move authority.",
         "latestCheckpoint": {
           "at": "2026-10-01",
-          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. D3326 binds built-in corpus/frontier/return acquisitions to the same Explorer exchange, retaining sparse/zero source success with explicit consumer floors. D3327 propagates real HTTP disconnect to cancellation, proven by the original timer-free negative and authenticated upstream control. Explorer narrow projections/legacy identities, supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged. October 1 implements the owner-approved D3349 pinned Maia decimal-string admission repair with strict request/identity/generation capture and protocol diagnostics. D3352 source-policy double precision/round-trip emission passes actual offline runtime-user full-width model checks without changing weights, sampling, frozen parser/digests or pack meanings. The full real-bot/appliance exit remains open: D3353 fresh-volume Docker disk exhaustion blocks startup; D3354 separately owns incorrect storage contention diagnostics. Offline output and software tests are not a played-bot receipt. Later October 1 owner cleanup resolves D3353: 11,161,088,000 available bytes and unchanged exact-index fresh-volume startup now pass. Real registered Maia replies/retries, rewind/fork/comparison and the first cgroup peak/no-OOM/no-automatic-restart observation also pass. The full journey remains failed at D3355: the resume probe calls nonexistent GET /runs/:id and reads .run rather than the implemented /runs/:id/graph and .graph. Restart readiness/login pass, but durable graph, post-restart Maia health, served pack and second memory observation are not discharged. D3354 stays queued; no production edit, further cleanup permission, migration consent or milestone completion follows. Receipt: planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md. Completed later October 1: D3355 resumes the real graph API with exact state checks; D3356 keeps client quit from terminating the shared Maia child; D3354 classifies actual SQLite contention separately from disk/I/O/permission failures. The complete native source appliance passes 16 groups including registered replies/retries, branch comparison, durable resume, post-restart bot play, served pack and both unchanged no-OOM/no-automatic-restart envelopes. D3338/D3342/D3347/D3349/D3352/D3354/D3355/D3356 close their narrow exits. Final full staged software gates pass 2757 tests plus seven performance tests and all downstream contracts; all 819 meanings stay unchanged with zero migration restamps. Held D3330 migration approval, publication/rights, owner devices, steady-state memory and other RFC obligations remain separate; no whole milestone or capability closes. Receipt: planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md.",
+          "summary": "The four evidence-foundation implementations remain integrated with Guided Hint and sealed presentation. Pack capability/schema lanes 0.30–0.32 now join them: initial 819-declaration registry, exact derived requirements, shared handshake/parser and separately gated migration. Dynamic/restart admission refuses invalid/unsupported stored documents without deleting them. Independent Git-history checks prevent regeneration from hiding same-version drift; history-consuming CI has its parent. The mechanical migration covers 92 content documents plus the schema example/11 fixtures and 68 ledger digest stamps, not new chess content. Training ramps and sets remain format/mechanics checkpoints with D3317/D3318/D3322 open. Semantic authority is still 81 subjects, 38 passed cases and zero fully validated profiles; no whole capability or milestone closes. D3323 makes Stockfish startup failure a typed abstention without discarding valid local facts or a successful Maia peer; cancellation remains total. D3324 binds built-in opponent/objective/evidence tablebase callers to the shared receipt-bearing Syzygy exchange with health/backoff and exact inventory; authenticated production and durable queue tests prove the binding. D3325 fixes production fractional-clock retention with original red controls. D3326 binds built-in corpus/frontier/return acquisitions to the same Explorer exchange, retaining sparse/zero source success with explicit consumer floors. D3327 propagates real HTTP disconnect to cancellation, proven by the original timer-free negative and authenticated upstream control. Explorer narrow projections/legacy identities, supplied/standalone sources and other legacy provider migrations remain open; all 819 committed capability meanings remain unchanged. October 1 implements the owner-approved D3349 pinned Maia decimal-string admission repair with strict request/identity/generation capture and protocol diagnostics. D3352 source-policy double precision/round-trip emission passes actual offline runtime-user full-width model checks without changing weights, sampling, frozen parser/digests or pack meanings. The full real-bot/appliance exit remains open: D3353 fresh-volume Docker disk exhaustion blocks startup; D3354 separately owns incorrect storage contention diagnostics. Offline output and software tests are not a played-bot receipt. Later October 1 owner cleanup resolves D3353: 11,161,088,000 available bytes and unchanged exact-index fresh-volume startup now pass. Real registered Maia replies/retries, rewind/fork/comparison and the first cgroup peak/no-OOM/no-automatic-restart observation also pass. The full journey remains failed at D3355: the resume probe calls nonexistent GET /runs/:id and reads .run rather than the implemented /runs/:id/graph and .graph. Restart readiness/login pass, but durable graph, post-restart Maia health, served pack and second memory observation are not discharged. D3354 stays queued; no production edit, further cleanup permission, migration consent or milestone completion follows. Receipt: planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md. Completed later October 1: D3355 resumes the real graph API with exact state checks; D3356 keeps client quit from terminating the shared Maia child; D3354 classifies actual SQLite contention separately from disk/I/O/permission failures. The complete native source appliance passes 16 groups including registered replies/retries, branch comparison, durable resume, post-restart bot play, served pack and both unchanged no-OOM/no-automatic-restart envelopes. D3338/D3342/D3347/D3349/D3352/D3354/D3355/D3356 close their narrow exits. Final full staged software gates pass 2757 tests plus seven performance tests and all downstream contracts; all 819 meanings stay unchanged with zero migration restamps. Held D3330 migration approval, publication/rights, owner devices, steady-state memory and other RFC obligations remain separate; no whole milestone or capability closes. Receipt: planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md. Later October 1 the owner explicitly approves D3330/D996 metadata updates. The sealed Explorer summary, exact move-free receipt wire, demand-gated Theory route and actual external voice boundary pass focused and authenticated composed HTTP controls. The metadata-only wave updates 92 packs/68 ledger digests and 12 schema example/fixtures, preserving authored chess content, all 819 committed declarations and 19 evaluator roots; the registry appends eight declarations. Canonical planning has zero remaining migration rows. D3357 repairs stale proof/version/refusal controls and refreshes generated semantic-validation receipts without changing the 81-subject/38-case verdict population; D3358 retains broad source-closure coupling separately. Browser CI passes 111 journeys with one optional latency skip. The final exact-index software gate passes all 2769 software tests, seven performance tests and downstream contracts; real-content passes 223 tests, browser CI passes 111 journeys, and governance passes. D3328/D3329/D3330/D3357 close their scoped exits; D3358 remains owned. No whole milestone closes.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -403,7 +818,8 @@
             "planning/provider-exchange-and-execution/maia-decimal-compatibility-2026-10-01.md",
             "planning/provider-exchange-and-execution/maia-policy-float32-negative-2026-10-01.json",
             "planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md",
-            "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md"
+            "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
+            "planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md"
           ],
           "anchors": [
             {
@@ -449,7 +865,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:72035c33255f6285781f624f05e52dfe93557fe1183a45e02c95b60b74f2e91e"
+              "digest": "sha256:b76d32d4416038783b359e0de488fd62ce8030c81faa9126f63dd8ccfe091de5"
             },
             {
               "kind": "work_state",
@@ -470,6 +886,26 @@
               "kind": "work_state",
               "id": "D3327",
               "digest": "sha256:5e0ddfc39470ebe80f98fb3a7620c987ecd258231ce04681b22ee91c99dca8d9"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3328",
+              "digest": "sha256:8c419618d7e370bff269e14659cbb05e562f290f5b27f7f3985392ff4f7483ea"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3329",
+              "digest": "sha256:ca5aa439424159d0e5fe5ae8b7f1ca4bff20e7af3947c320c19b5868be4ed250"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3330",
+              "digest": "sha256:8231a089719b6201b2fc98b366a78c994faf802a16f29ed03702eed9908f0e68"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3357",
+              "digest": "sha256:a15bca187bf93d2d8c0b13682a4f8000112518a59f5bf279e3e0730ed9d53fdf"
             }
           ]
         },
@@ -479,8 +915,14 @@
         "id": "stable-board-and-presets",
         "wave": 2,
         "state": "active",
-        "capabilities": ["accessibility", "support", "rehearsal"],
-        "dependsOn": ["evidence-to-consumer-spine"],
+        "capabilities": [
+          "accessibility",
+          "support",
+          "rehearsal"
+        ],
+        "dependsOn": [
+          "evidence-to-consumer-spine"
+        ],
         "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-09-30",
@@ -575,8 +1017,17 @@
         "id": "durable-product-state",
         "wave": 2,
         "state": "blocked_contract",
-        "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
-        "dependsOn": ["foundation-contracts"],
+        "capabilities": [
+          "learner_model",
+          "bots",
+          "campaign",
+          "social_play",
+          "account_data",
+          "operations"
+        ],
+        "dependsOn": [
+          "foundation-contracts"
+        ],
         "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
         "latestCheckpoint": {
           "at": "2026-09-24",
@@ -618,15 +1069,36 @@
         "id": "production-api-closure",
         "wave": 2,
         "state": "blocked_foundation",
-        "capabilities": ["evidence", "theory_content", "learner_model", "bots", "campaign", "social_play", "professional", "account_data", "operations"],
-        "dependsOn": ["durable-product-state"],
+        "capabilities": [
+          "evidence",
+          "theory_content",
+          "learner_model",
+          "bots",
+          "campaign",
+          "social_play",
+          "professional",
+          "account_data",
+          "operations"
+        ],
+        "dependsOn": [
+          "durable-product-state"
+        ],
         "nextAction": "Audit the already-routed theory, profile, registered-bot and Campaign families at createApplication, retaining their shipped production doors. Complete missing verbs and native/social/clock/professional families with typed authorization, errors, availability, ownership and release-container journeys; a direct handler or an existing route does not close a whole API family.",
         "latestCheckpoint": {
           "at": "2026-08-31",
           "summary": "The production application route inventory is sealed, while foundation-dependent learner, bot, campaign, social and professional operation families remain incomplete.",
           "impact": "held",
-          "evidence": ["apps/server/src/application.ts", "planning/roadmap-to-done.md"],
-          "anchors": [{"kind": "work_state", "id": "D1532", "digest": "sha256:b44111952a53ef3e8b52977715088d3e73864be98b2c69171ad8c5d61d6f5e09"}]
+          "evidence": [
+            "apps/server/src/application.ts",
+            "planning/roadmap-to-done.md"
+          ],
+          "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D1532",
+              "digest": "sha256:b44111952a53ef3e8b52977715088d3e73864be98b2c69171ad8c5d61d6f5e09"
+            }
+          ]
         },
         "exit": "No feature is declared live from a direct REST handler alone; every advertised family crosses the production application and release-image boundary."
       },
@@ -634,8 +1106,23 @@
         "id": "complete-learner-journeys",
         "wave": 3,
         "state": "blocked_foundation",
-        "capabilities": ["rehearsal", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional", "accessibility", "account_data"],
-        "dependsOn": ["stable-board-and-presets", "production-api-closure"],
+        "capabilities": [
+          "rehearsal",
+          "support",
+          "review",
+          "theory_content",
+          "bots",
+          "learner_model",
+          "campaign",
+          "social_play",
+          "professional",
+          "accessibility",
+          "account_data"
+        ],
+        "dependsOn": [
+          "stable-board-and-presets",
+          "production-api-closure"
+        ],
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-24",
@@ -677,8 +1164,21 @@
         "id": "official-content",
         "wave": 4,
         "state": "blocked_foundation",
-        "capabilities": ["theory_content", "rehearsal", "support", "review", "bots", "learner_model", "campaign", "social_play", "professional"],
-        "dependsOn": ["evidence-to-consumer-spine", "complete-learner-journeys"],
+        "capabilities": [
+          "theory_content",
+          "rehearsal",
+          "support",
+          "review",
+          "bots",
+          "learner_model",
+          "campaign",
+          "social_play",
+          "professional"
+        ],
+        "dependsOn": [
+          "evidence-to-consumer-spine",
+          "complete-learner-journeys"
+        ],
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
         "latestCheckpoint": {
           "at": "2026-09-24",
@@ -719,12 +1219,29 @@
         "id": "release-candidate-proof",
         "wave": 5,
         "state": "blocked_foundation",
-        "capabilities": ["governance", "evidence", "rehearsal", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional", "accessibility", "account_data", "operations"],
-        "dependsOn": ["official-content"],
+        "capabilities": [
+          "governance",
+          "evidence",
+          "rehearsal",
+          "support",
+          "review",
+          "theory_content",
+          "bots",
+          "learner_model",
+          "campaign",
+          "social_play",
+          "professional",
+          "accessibility",
+          "account_data",
+          "operations"
+        ],
+        "dependsOn": [
+          "official-content"
+        ],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-10-01",
-          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open. D3343 now repairs actual TCP identity fragmentation and aborted-probe contamination under one absolute deadline (five JS/Python and six TCP controls; 42 release tests). D3342 confirms source-build wrappers additionally mount a release index they never generate; D3338 is not solved by digest arguments alone. Source/release distribution repair and an actual isolated operator-startup journey remain required. October 1 advances D3338/D3342 with shared source/release security templates, no unproduced source index, genuine native OCI/config/rootfs joins and both CPU configuration checks. Actual builds repair D3344 unsupported Buildx formatting and D3345 mixed-media dangling index. D3346 repairs non-root model startup: the original offline negative now loads the actual model and returns exact TCP identity and both UCI acknowledgements under no network/1536 MiB/no swap. Eleven source controls enter normal release-policy CI (53 tests); Compose parity, pinned Caddy and types pass. Working-tree images include held Explorer changes, not committed-release evidence. The complete isolated up-wrapper TLS/account/run journey and bot/release gates remain open. The real exact-index source up/CA-export journey now passes eight TLS/account/ingress groups under unchanged 512/1536 MiB no-swap limits. Application-only shared Stockfish allocation and bounded binary hashing remove the observed startup OOM without changing frozen parser/semantic/capability/pack identities (D3348/D3350). The complete normal staged verify-software target passes: 2752 software tests, seven performance tests, warning-free types and downstream contracts, including 819 retained/matching declarations and a zero-write/zero-restamp migration plan. D3351 closes with private snapshot history; no historical baseline or source identity is bypassed. October 1 owner approval implements D3349 exact pinned decimal option admission; D3352 repairs reported policy mass with source double precision/round-trip emission. Actual offline runtime-user e4/d4 full-width model checks pass; weights, logits, sampling, frozen parser/digests and all existing pack/capability meanings stay unchanged. The full actual appliance journey is still red before play: D3353 records Docker bavail=0 and independently reproduced uid-1000 fresh-volume SQLite errcode 13 disk exhaustion. Scoped builder-cache cleanup approval is requested, not assumed; D3354 owns misclassification as maintenance contention. The drill now requires real cgroup play-time peaks and no OOM/automatic restart, but these checks have not passed because startup stops first. D3338/D3342/D3347 and D3349/D3352 remain open; complete staged software verification is tracked independently in the new receipt. No publication, held D3330 consent, owner-device discharge, steady-state resource gate, RFC archival or milestone completion is claimed. Later October 1 owner cleanup resolves D3353: 11,161,088,000 available bytes and unchanged exact-index fresh-volume startup now pass. Real registered Maia replies/retries, rewind/fork/comparison and the first cgroup peak/no-OOM/no-automatic-restart observation also pass. The full journey remains failed at D3355: the resume probe calls nonexistent GET /runs/:id and reads .run rather than the implemented /runs/:id/graph and .graph. Restart readiness/login pass, but durable graph, post-restart Maia health, served pack and second memory observation are not discharged. D3354 stays queued; no production edit, further cleanup permission, migration consent or milestone completion follows. Receipt: planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md. Completed later October 1: D3355 resumes the real graph API with exact state checks; D3356 keeps client quit from terminating the shared Maia child; D3354 classifies actual SQLite contention separately from disk/I/O/permission failures. The complete native source appliance passes 16 groups including registered replies/retries, branch comparison, durable resume, post-restart bot play, served pack and both unchanged no-OOM/no-automatic-restart envelopes. D3338/D3342/D3347/D3349/D3352/D3354/D3355/D3356 close their narrow exits. Final full staged software gates pass 2757 tests plus seven performance tests and all downstream contracts; all 819 meanings stay unchanged with zero migration restamps. Held D3330 migration approval, publication/rights, owner devices, steady-state memory and other RFC obligations remain separate; no whole milestone or capability closes. Receipt: planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md.",
+          "summary": "D3333/D3336/D3337/D3339 advance the prior D1847/D3332 egress checkpoint: lazy original-byte request bodies now permit pre-body policy refusal, explicit receive bounds pass actual 408 controls, and HTTP/1 full duplex delivers early upload 403/413 through the pinned TLS proxy. Pending-read cancellation no longer waits for an upload byte. Ten ingress cases, eleven egress cases, five pinned proxy proofs and both rendered Caddy configuration validations pass. Native release CI wires proxy/config proof on both architectures; local proof covers only this host. The standard deployment validator is repaired without inventing real Maia identities. Endpoint budget semantics/current route census (D1846/D3334/D3335), real local deployment identities (D3338), full deployment receipts, packaged-export/owner-use journeys, official content and release/rights/envelope gates remain open. Prior broad release proofs are not rerun; no milestone or remote-green claim is made. D3340/D3341 also repair all-profile Maia identity and the amd64-only config leak: both immutable platform configs are retained, the native sidecar/probe captures the matching artifact, and malformed maps abstain. Four JS/Python and four real TCP controls, release policy, actual Compose/config validation and warning-free types pass. This is bounded identity transport with a readiness-only UCI stub, not model inference, bot calibration or remote architecture proof; D3338 remains open. D3343 now repairs actual TCP identity fragmentation and aborted-probe contamination under one absolute deadline (five JS/Python and six TCP controls; 42 release tests). D3342 confirms source-build wrappers additionally mount a release index they never generate; D3338 is not solved by digest arguments alone. Source/release distribution repair and an actual isolated operator-startup journey remain required. October 1 advances D3338/D3342 with shared source/release security templates, no unproduced source index, genuine native OCI/config/rootfs joins and both CPU configuration checks. Actual builds repair D3344 unsupported Buildx formatting and D3345 mixed-media dangling index. D3346 repairs non-root model startup: the original offline negative now loads the actual model and returns exact TCP identity and both UCI acknowledgements under no network/1536 MiB/no swap. Eleven source controls enter normal release-policy CI (53 tests); Compose parity, pinned Caddy and types pass. Working-tree images include held Explorer changes, not committed-release evidence. The complete isolated up-wrapper TLS/account/run journey and bot/release gates remain open. The real exact-index source up/CA-export journey now passes eight TLS/account/ingress groups under unchanged 512/1536 MiB no-swap limits. Application-only shared Stockfish allocation and bounded binary hashing remove the observed startup OOM without changing frozen parser/semantic/capability/pack identities (D3348/D3350). The complete normal staged verify-software target passes: 2752 software tests, seven performance tests, warning-free types and downstream contracts, including 819 retained/matching declarations and a zero-write/zero-restamp migration plan. D3351 closes with private snapshot history; no historical baseline or source identity is bypassed. October 1 owner approval implements D3349 exact pinned decimal option admission; D3352 repairs reported policy mass with source double precision/round-trip emission. Actual offline runtime-user e4/d4 full-width model checks pass; weights, logits, sampling, frozen parser/digests and all existing pack/capability meanings stay unchanged. The full actual appliance journey is still red before play: D3353 records Docker bavail=0 and independently reproduced uid-1000 fresh-volume SQLite errcode 13 disk exhaustion. Scoped builder-cache cleanup approval is requested, not assumed; D3354 owns misclassification as maintenance contention. The drill now requires real cgroup play-time peaks and no OOM/automatic restart, but these checks have not passed because startup stops first. D3338/D3342/D3347 and D3349/D3352 remain open; complete staged software verification is tracked independently in the new receipt. No publication, held D3330 consent, owner-device discharge, steady-state resource gate, RFC archival or milestone completion is claimed. Later October 1 owner cleanup resolves D3353: 11,161,088,000 available bytes and unchanged exact-index fresh-volume startup now pass. Real registered Maia replies/retries, rewind/fork/comparison and the first cgroup peak/no-OOM/no-automatic-restart observation also pass. The full journey remains failed at D3355: the resume probe calls nonexistent GET /runs/:id and reads .run rather than the implemented /runs/:id/graph and .graph. Restart readiness/login pass, but durable graph, post-restart Maia health, served pack and second memory observation are not discharged. D3354 stays queued; no production edit, further cleanup permission, migration consent or milestone completion follows. Receipt: planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md. Completed later October 1: D3355 resumes the real graph API with exact state checks; D3356 keeps client quit from terminating the shared Maia child; D3354 classifies actual SQLite contention separately from disk/I/O/permission failures. The complete native source appliance passes 16 groups including registered replies/retries, branch comparison, durable resume, post-restart bot play, served pack and both unchanged no-OOM/no-automatic-restart envelopes. D3338/D3342/D3347/D3349/D3352/D3354/D3355/D3356 close their narrow exits. Final full staged software gates pass 2757 tests plus seven performance tests and all downstream contracts; all 819 meanings stay unchanged with zero migration restamps. Held D3330 migration approval, publication/rights, owner devices, steady-state memory and other RFC obligations remain separate; no whole milestone or capability closes. Receipt: planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md. Later October 1 D3330's owner-approved metadata migration and Explorer Theory/voice integration pass full software/content/browser/governance gates; the prior held-approval statement is historical. This is compatibility/consumer completion, not publication, hosted deployment, rights clearance or milestone completion.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -898,7 +1415,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:72035c33255f6285781f624f05e52dfe93557fe1183a45e02c95b60b74f2e91e"
+              "digest": "sha256:b76d32d4416038783b359e0de488fd62ce8030c81faa9126f63dd8ccfe091de5"
             },
             {
               "kind": "work_state",
@@ -964,50 +1481,222 @@
     "CMP": "ux-campaign.md"
   },
   "appRoutes": [
-    ["home", "rehearsal", "live"],
-    ["play", "rehearsal", "live"],
-    ["review", "review", "live"],
-    ["rating", "learner_model", "live"],
-    ["profile", "learner_model", "live"],
-    ["learn", "learner_model", "live"],
-    ["live", "social_play", "live"],
-    ["create", "theory_content", "live"],
-    ["library", "theory_content", "live"],
-    ["pack", "theory_content", "live"],
-    ["shape-entry", "theory_content", "live"],
-    ["principle-entry", "theory_content", "live"],
-    ["opening-entry", "theory_content", "live"],
-    ["settings", "support", "live_but_inadequate"],
-    ["run", "rehearsal", "live"],
-    ["story", "review", "live_but_inadequate"],
-    ["live-session", "social_play", "live_but_inadequate"],
-    ["live-overlay", "professional", "live_but_inadequate"],
-    ["campaign", "campaign", "live"],
-    ["campaign-run", "campaign", "live"]
+    [
+      "home",
+      "rehearsal",
+      "live"
+    ],
+    [
+      "play",
+      "rehearsal",
+      "live"
+    ],
+    [
+      "review",
+      "review",
+      "live"
+    ],
+    [
+      "rating",
+      "learner_model",
+      "live"
+    ],
+    [
+      "profile",
+      "learner_model",
+      "live"
+    ],
+    [
+      "learn",
+      "learner_model",
+      "live"
+    ],
+    [
+      "live",
+      "social_play",
+      "live"
+    ],
+    [
+      "create",
+      "theory_content",
+      "live"
+    ],
+    [
+      "library",
+      "theory_content",
+      "live"
+    ],
+    [
+      "pack",
+      "theory_content",
+      "live"
+    ],
+    [
+      "shape-entry",
+      "theory_content",
+      "live"
+    ],
+    [
+      "principle-entry",
+      "theory_content",
+      "live"
+    ],
+    [
+      "opening-entry",
+      "theory_content",
+      "live"
+    ],
+    [
+      "settings",
+      "support",
+      "live_but_inadequate"
+    ],
+    [
+      "run",
+      "rehearsal",
+      "live"
+    ],
+    [
+      "story",
+      "review",
+      "live_but_inadequate"
+    ],
+    [
+      "live-session",
+      "social_play",
+      "live_but_inadequate"
+    ],
+    [
+      "live-overlay",
+      "professional",
+      "live_but_inadequate"
+    ],
+    [
+      "campaign",
+      "campaign",
+      "live"
+    ],
+    [
+      "campaign-run",
+      "campaign",
+      "live"
+    ]
   ],
   "apiFamilies": [
-    ["/auth", "account_data", "live"],
-    ["/capabilities", "operations", "live"],
-    ["/opening-identity", "evidence", "live"],
-    ["/packs", "theory_content", "live"],
-    ["/shapes", "theory_content", "live"],
-    ["/runs", "rehearsal", "live"],
-    ["/progress", "learner_model", "live"],
-    ["/repertoires", "theory_content", "live"],
-    ["/classrooms", "professional", "live"],
-    ["/assignments", "professional", "live"],
-    ["/api/shared", "social_play", "live"],
-    ["/shared", "social_play", "live"],
-    ["/select-move", "bots", "live"],
-    ["/sessions", "social_play", "live"],
-    ["/rated-games", "learner_model", "live"],
-    ["/rating", "learner_model", "live"],
-    ["/learner-profile", "learner_model", "live"],
-    ["/marks", "learner_model", "live"],
-    ["/cohorts", "learner_model", "live"],
-    ["/principles", "theory_content", "live"],
-    ["/theory", "theory_content", "live"],
-    ["/campaign", "campaign", "live"],
-    ["/healthz", "operations", "live_direct"]
+    [
+      "/auth",
+      "account_data",
+      "live"
+    ],
+    [
+      "/capabilities",
+      "operations",
+      "live"
+    ],
+    [
+      "/opening-identity",
+      "evidence",
+      "live"
+    ],
+    [
+      "/packs",
+      "theory_content",
+      "live"
+    ],
+    [
+      "/shapes",
+      "theory_content",
+      "live"
+    ],
+    [
+      "/runs",
+      "rehearsal",
+      "live"
+    ],
+    [
+      "/progress",
+      "learner_model",
+      "live"
+    ],
+    [
+      "/repertoires",
+      "theory_content",
+      "live"
+    ],
+    [
+      "/classrooms",
+      "professional",
+      "live"
+    ],
+    [
+      "/assignments",
+      "professional",
+      "live"
+    ],
+    [
+      "/api/shared",
+      "social_play",
+      "live"
+    ],
+    [
+      "/shared",
+      "social_play",
+      "live"
+    ],
+    [
+      "/select-move",
+      "bots",
+      "live"
+    ],
+    [
+      "/sessions",
+      "social_play",
+      "live"
+    ],
+    [
+      "/rated-games",
+      "learner_model",
+      "live"
+    ],
+    [
+      "/rating",
+      "learner_model",
+      "live"
+    ],
+    [
+      "/learner-profile",
+      "learner_model",
+      "live"
+    ],
+    [
+      "/marks",
+      "learner_model",
+      "live"
+    ],
+    [
+      "/cohorts",
+      "learner_model",
+      "live"
+    ],
+    [
+      "/principles",
+      "theory_content",
+      "live"
+    ],
+    [
+      "/theory",
+      "theory_content",
+      "live"
+    ],
+    [
+      "/campaign",
+      "campaign",
+      "live"
+    ],
+    [
+      "/healthz",
+      "operations",
+      "live_direct"
+    ]
   ]
 }

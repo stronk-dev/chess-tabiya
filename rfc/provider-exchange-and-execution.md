@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-01, Explorer summary:** §8's sealed move-free population projection, exact receipt-only wire and registered Theory renderer are integrated through authenticated finalized module demand. Sparse/zero populations survive without a source suitability floor; closed/Quiet/unrequested demand performs no acquisition, and changed decisions are refused after I/O. Actual outbound voice controls retain internal ancestry while excluding raw candidate rows. The owner's D3330/D996 ruling authorizes only canonical requirement/digest updates: 92 packs, 68 ledgers and 12 schema example/fixture documents, preserving authored content, 819 retained declarations and 19 evaluator roots. Receipt: `planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md`. Complete final staged software, real-content, browser CI and governance gates pass; D3328/D3329/D3330/D3357 close their scoped exits. Maia occurrence projections, legacy Explorer identities and §§1–2 remain open.
+
 - **Implementation checkpoint 2026-10-01, completed source journey:** D3355 binds resume to the existing graph API; D3356 makes client quit connection-scoped rather than killing the shared Maia child. The real native appliance journey passes registered bot replies/retries, branch comparison, durable resume, another bot reply after server restart, served-pack creation and both unchanged cgroup envelopes with zero automatic restarts. D3354 distinguishes real SQLite contention from failed storage initialization. Receipt: `planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md`. Earlier negative checkpoints remain historical; no full RFC archival, migration consent or publication follows.
 - **Status:** implementing 2026-09-24 (claude, at the owner's direction to implement without review
   rounds). §§3–9 core ships: `provider-protocol` members landed; one digest registry; the five
@@ -9,7 +11,7 @@
   `parsePersistedProviderDelivery` boundary for [[D3030]]; the application composition; and the
   operator CLI. **Not yet:** §1–§2 F1 execution metadata/confidence and binding algebra, the
   `/capabilities` path reach and `POST /evidence/availability` with the run-subject digests, the
-  Maia occurrence and Explorer summary derived projections, and the migration of existing learner
+  Maia occurrence derived projections, and the migration of remaining existing learner
   callers. **2026-09-30 checkpoint:** built-in learner tablebase callers now use the shared
   exchange with health/backoff and exact inventory; fractional-clock retention is repaired.
   Built-in Explorer acquisition also uses that exchange (D3326), preserving sparse source success

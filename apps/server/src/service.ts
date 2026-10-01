@@ -41,9 +41,11 @@ import {
   moduleEvidenceRole,
   postcommitNudgePacket,
   queryModules,
+  deriveExplorerPopulationSummary,
   ModuleQueryError,
   type FinalizedAssistanceV1,
   type ModuleQueryRequest,
+  type ModuleSourceContext,
   compileReviewPacketForSubject,
   exactLegalMoves,
   createReviewPrefixAuthority,
@@ -155,6 +157,7 @@ import {
   type ReturnStanding,
 } from "./progress.js";
 import { corpusPopulation, corpusSamplePolicy, type CorpusPopulation, type CorpusSource } from "./corpus.js";
+import type { ExchangeCorpusSource } from "./provider-corpus.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 import { OpponentSelector, type SelectMoveRequest } from "./opponent-selector.js";
 import type { TablebaseSource } from "./tablebase.js";
@@ -2806,7 +2809,7 @@ export class RunService {
    * persisted): post-commit/checkpoint/review receipts join their existing durable boundary events;
    * pre-/at-commit receipts are the ephemeral request receipts ([[D1866]]).
    */
-  queryModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest) {
+  queryModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = {}) {
     this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
@@ -2824,6 +2827,7 @@ export class RunService {
       return queryModules({
         run, assistance, request, ...this.#moduleViewer(runId, principal, run, role),
         sources: {
+          ...explorer,
           shapes,
           authoredAt: (nodeId: string) => authored.filter((item) => boundaryNodes.get(item.revealedBy.eventSeq) === nodeId) as never,
         },
@@ -2835,6 +2839,26 @@ export class RunService {
       }
       throw error;
     }
+  }
+
+  /** Provider work follows authenticated finalized demand, never a raw browser module choice. */
+  async queryModulesWithProviders(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, corpus?: Pick<ExchangeCorpusSource, "page">, signal?: AbortSignal) {
+    // The pure preview validates authority/subject/disclosure and determines admitted demand.
+    // It does not persist novelty, history or credit and is never returned to the browser.
+    const preview = this.queryModules(runId, principal, assistance, request);
+    if (!preview.packets.some((packet) => packet.module === "theory_breadcrumb")) return preview;
+    const { stored } = requireRead(this.#storage, runId, principal);
+    const node = stored.run.nodes.find((candidate) => candidate.id === preview.subjectNodeId)!;
+    const pack = isPackSession(stored.run) ? this.#requiredRegisteredPack(stored.run) : undefined;
+    const authored = pack === undefined ? stored.run.opponentPolicy : trajectoryPolicyAt(pack.document, stored.run, node.id)?.policy ?? stored.run.opponentPolicy;
+    const acquired = await corpus?.page({ ...corpusPopulation(authored.mode === "human_common" ? authored.targetElo : undefined), fen: node.fen }, signal === undefined ? {} : { signal });
+    if (signal?.aborted) throw Object.assign(new Error("Module request cancelled"), { name: "AbortError" });
+    const explorer = acquired?.kind === "page" ? { explorerSummary: deriveExplorerPopulationSummary(acquired.evidence) }
+      : { explorerUnavailable: acquired === undefined ? "not_configured" : acquired.kind === "caller_expired" ? "deadline_exceeded" : acquired.reason };
+    // Re-read authorization/run after I/O. A changed decision must not disclose an old request.
+    const page = this.queryModules(runId, principal, assistance, request, explorer);
+    if (page.decision.digest !== preview.decision.digest) throw new ServerError("INVALID_REQUEST", "Module decision changed while acquiring Explorer evidence");
+    return page;
   }
 
   #assistanceContext(runId: string, principal: Principal, run: DrillRun, role: RunRole) {

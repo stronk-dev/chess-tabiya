@@ -40,7 +40,7 @@ export function moduleQuerySourceRoutes(module: ModuleId, accepted: readonly str
     case "threat_radar": return ["rules.tactic.consequence.threat@1", "rules.tactic.consequence.mate_in_one@1", "rules.tactic.reading.loose_piece@1", "rules.tactic.reading.back_rank@1", "rules.tactic.reading.trapped_piece@1", "rules.tactic.reading.ray_classification@1", "derived.tactic.defender_exposure@1"];
     case "blunder_prevention": return ["rules.tactic.consequence.threat@1", "rules.tactic.consequence.mate_in_one@1", "rules.tactic.reading.loose_piece@1"];
     case "structure_nudge": return ["rules.structural.reading.named_structure@2", "rules.phase.reading@2", "rules.endgame.classification@1", "rules.structural.reading.space@1", "rules.structural.reading.pawn_connectivity@1", "theory.endgame.setup_match@1", "theory.shapes.firing@1"];
-    case "theory_breadcrumb": return ["pack.authored.claim@1", "theory.shapes.firing@1", "theory.opening.current_endpoint@1"];
+    case "theory_breadcrumb": return ["pack.authored.claim@1", "theory.shapes.firing@1", "theory.opening.current_endpoint@1", "derived.explorer.population_summary@1"];
     case "compare_coach": return ["run.record.fork@1", "run.record.consequence@1", "run.record.objective_transition@1", "run.record.checkpoint_hit@1", "derived.compare.structure_delta@1", "derived.compare.eval_delta@1", "derived.compare.engine_trajectory@1", "derived.compare.piece_route@1"];
     case "full_inspector": return accepted.filter((route) => routeReads(route, "fen") || routeReads(route, "afterFen|beforeFen|moveUci") || (PACKET_ROUTE_KINDS[route] !== undefined && routeReads(route, "packet")));
     default: return [];

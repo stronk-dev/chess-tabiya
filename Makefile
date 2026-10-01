@@ -999,8 +999,16 @@ evidence-seal-audit:
 # resource/census, the scheduler, descriptors, operator traversals and the supervisor exchange).
 # Regenerate the parser digest with UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1 after a parser change.
 .PHONY: provider-exchange-check provider-traversal
+.PHONY: explorer-summary-migration-proof
+explorer-summary-migration-proof:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/capability/explorer-summary-migration-proof.test.ts
+	./node_modules/.bin/esbuild tools/explorer-summary-migration-proof/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-summary-migration-proof.js --log-level=warning
+	node apps/server/dist/explorer-summary-migration-proof.js $(ARGS)
+
 provider-exchange-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/provider-exchange.test.ts packages/runtime/src/provider-protocol.test.ts apps/server/src/provider-exchange.test.ts apps/server/src/provider-traversal.test.ts apps/server/src/provider-tablebase.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/engine-supervisor-exchange.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/explorer-summary-voice.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/provider-exchange.test.ts packages/runtime/src/provider-protocol.test.ts packages/runtime/src/explorer-summary.test.ts apps/server/src/provider-exchange.test.ts apps/server/src/provider-traversal.test.ts apps/server/src/provider-tablebase.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/engine-supervisor-exchange.test.ts
 
 # The process-local operator/research door: `make provider-traversal OP=<operation>` reads one JSON
 # request from stdin (operations: stockfish-legal-roots, stockfish-position-evaluation, stockfish-principal-variation,

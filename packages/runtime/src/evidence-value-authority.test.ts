@@ -198,7 +198,7 @@ describe("value authority: registry equality", () => {
     // shift; + rfc/hint-distance.md's seven horizons and 35 disclosures.
     // + the three bounded-target routes (rfc/bounded-policy-targets.md §4) and the two policy routes
     // (rfc/bounded-target-policy-composition.md §4).
-    expect(ACTIVE).toHaveLength(271);
+    expect(ACTIVE).toHaveLength(272);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -275,7 +275,7 @@ describe("value authority: registry equality", () => {
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
     // Plus rfc/bounded-policy-targets.md §4 and rfc/bounded-target-policy-composition.md §4 routes.
     // Plus rfc/evidence-presentation.md Checkpoint P's source-bound citation derivation.
-    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.population_summary@1", "derived.grade.move_quality@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -955,6 +955,10 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   // same delivery's bare payload (stripping the receipt is not representable).
   for (const [route, operation, delivery] of providerDeliveries()) {
     profiles.set(route, { valid: { delivery }, falsify: refused(route, { delivery: (delivery as { readonly payload: unknown }).payload }) });
+    if (operation === "lichess_explorer.position_page@1") {
+      const page = invoke(route, { delivery });
+      profiles.set("derived.explorer.population_summary@1", { valid: { page }, falsify: refused("derived.explorer.population_summary@1", { page: { ...(page as object) } }) });
+    }
     void operation;
   }
   // rfc/hint-distance.md §1/§3 ([[D1640]]): each family horizon from one sealed searched line and one

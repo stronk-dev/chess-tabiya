@@ -22062,3 +22062,11 @@ Campaign was the one capability with no API, route or content. Now:
   its software/appliance JSONs and maia-client-shutdown-negative-2026-10-01.json.
 - Final staged process gates pass: register C1–C8, lifecycle P1–P7, zero unrouted/untriaged,
   roadmap R1–R10/sealed index receipt and protected-intent parity. Normal hooks remain enabled.
+
+## 2026-10-01 — Explorer Theory/voice consumer and approved metadata migration
+
+- The owner explicitly approved D3330/D996 metadata/hash updates. Implementing provider-exchange §8 now binds one sealed move-free population summary to authenticated finalized Theory demand and the actual external voice boundary. Closed/Quiet/unrequested demand performs no acquisition; stale decisions refuse after I/O. Sparse/zero population facts are retained without move recommendations.
+- Canonical requirements change on 92 packs and 12 schema example/fixtures; only packDigest changes in 68 ledgers. All authored chess content, 819 retained declarations, 19 evaluator roots and 271 existing value-profile fixtures remain unchanged. Eight declarations append; the complete canonical 352-document plan has zero remaining migration rows. No user-stored document or publication state is rewritten.
+- Final exact-index software passes 2769 tests/318 files plus seven performance tests/four files and every downstream gate. Real-content passes 223 tests/23 files and all 104 requirement declarations. Browser CI passes 111 journeys, with one optional real-Maia latency skip. Governance passes; final staged closeout checks run before commit.
+- D3328/D3329/D3330/D3357 close their scoped exits. D3357 repairs source-baseline/version/refusal negatives and refreshes generated validation receipts after the complete gate caught drift; 38/38 cases and profile verdicts are unchanged. D3358 retains transitive dispatcher/receipt coupling as owned analysis work.
+- Receipt: planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md, with owner ruling, before/after metadata measurements, retained stale-receipt negative and final exact-index software JSON. Provider §§1–2, exact occurrences/legacy identities, other source retirement and owner-use remain separate; no whole 1.0 milestone or RFC archival. Unrelated files remain untouched; no push, worktree or publication.

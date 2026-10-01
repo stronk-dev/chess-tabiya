@@ -27349,31 +27349,30 @@
     },
     {
       "id": "D3328",
-      "state": "blocked",
-      "sourceGlyph": "📜",
-      "sourceDigest": "sha256:bbfbd06bcf9b36130dd836908d339634963b9c2c6a10d1cfa58194a042b67bad",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8c419618d7e370bff269e14659cbb05e562f290f5b27f7f3985392ff4f7483ea",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "item:D3330"
+      "evidence": "planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3329",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:53614abec6e9c994f8c5d31a2cd872087ec62dc67450dcebe193bf048bbfce90",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ca5aa439424159d0e5fe5ae8b7f1ca4bff20e7af3947c320c19b5868be4ed250",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "item:D3330"
+      "evidence": "planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3330",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:52920e340ed033b8f695343e58bab351aab42e0992482227d785f8162e1b0b19",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8231a089719b6201b2fc98b366a78c994faf802a16f29ed03702eed9908f0e68",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Authorize D996 metadata-only migration: 128 entries across 92 packs, 92 projected pack digest changes and 68 ledger restamps, with 19 evaluator roots and all authored content proven unchanged? See explorer-summary-inflight-2026-09-30.md."
+      "evidence": "planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3331",
@@ -27606,6 +27605,23 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3357",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a15bca187bf93d2d8c0b13682a4f8000112518a59f5bf279e3e0730ed9d53fdf",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3358",
+      "state": "todo",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:7709f92f430bc529d896b2a5c06c497b696dbc6841ae60500c8bbfc75b6ef739",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

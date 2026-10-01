@@ -91,3 +91,11 @@ D3328/D3329/D3330 remain live. No milestone, RFC archive or 1.0 capability close
 Legacy consumer identities, Maia/Explorer occurrence projections, §§1–2 execution/availability
 metadata, consumer retirement and UX owner-use remain separate work. Unrelated agent edits stay
 untouched. The active 1.0 goal is neither paused nor complete; no handoff to Claude is required.
+
+## Superseding October 1 checkpoint
+
+The owner approved the measured metadata/hash updates in
+`explorer-metadata-ruling-2026-10-01.md`. The migration is applied and the canonical plan has
+zero remaining rows. The composed authenticated Theory consumer now passes. See
+`explorer-summary-integration-2026-10-01.md` and the new before/after JSONs for current scope
+and verification; the September 30 red/held observations above are historical, not current blockers.

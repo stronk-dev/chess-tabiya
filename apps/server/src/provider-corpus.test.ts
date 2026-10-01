@@ -1,6 +1,6 @@
 import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
-import { providerSourceEvidence } from "@chess-tabiya/runtime";
+import { compileAssistanceRequest, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import { corpusPopulation, corpusSamplePolicy } from "./corpus.js";
 import { ExchangeCorpusSource, corpusPageRequest, healthAdmittedExplorerOperation } from "./provider-corpus.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
@@ -10,6 +10,10 @@ import { testRegistry } from "./provider-health.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { repertoireDigest, scanRepertoire } from "./repertoire.js";
 import { createHttpServer } from "./rest.js";
+import { createRestHandler } from "./rest.js";
+import { RunService } from "./service.js";
+import { SQLiteRunStorage } from "./storage.js";
+import { EvidenceJobQueue } from "./evidence-queue.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const NEXT = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
@@ -37,6 +41,57 @@ async function harness() {
 }
 
 describe("learner Explorer shared exchange", () => {
+  it.each([0, 37, 100])("binds the real theory query to a move-free %i-game population without a sample floor", async (total) => {
+    const { source, remote, clock } = await harness();
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    try {
+      const service = new RunService(storage, { evidenceQueue: new EvidenceJobQueue({ async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }; } }) });
+      const fen = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
+      await service.create({ id: "population", session: { kind: "position", start: { fen, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 }, "writer");
+      service.move("population", "writer", "g8f6");
+      const nodeId = storage.read("population")!.run.activeCursor.nodeId;
+      const handler = createRestHandler(service, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, source);
+      const assistance = (preset: "quiet" | "theory_only") => compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+      const request = (preset: "quiet" | "theory_only", requested: readonly string[] = ["theory_breadcrumb"]) => new Request("http://tabiya.test/runs/population/modules/query", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ assistance: assistance(preset), query: { timing: "post_commit", subjectNodeId: nodeId, requested } }) });
+      // No raw provider work before the feedback door, or without admitted module demand.
+      expect((await handler(request("theory_only"))).status).toBe(409);
+      expect(remote.calls).toHaveLength(0);
+      service.reveal("population", "writer");
+      expect((await handler(request("quiet"))).status).toBe(200);
+      expect((await handler(request("theory_only", []))).status).toBe(200);
+      expect(remote.calls).toHaveLength(0);
+      const pending = handler(request("theory_only"));
+      await flush();
+      expect(remote.calls).toHaveLength(1);
+      const subjectFen = storage.read("population")!.run.nodes.find((node) => node.id === nodeId)!.fen;
+      expect(new URL(remote.calls[0]!.url).searchParams.get("fen")).toBe(`${subjectFen.split(" ").slice(0, 4).join(" ")} 0 1`);
+      remote.respond(0, { ...body(total), moves: total === 0 ? [] : [{ uci: "a2a3", san: "MOVE_ROW_SENTINEL_DO_NOT_DISCLOSE", white: Math.min(total, 20), draws: 0, black: 0 }] });
+      const response = await pending;
+      expect(response.status).toBe(200);
+      const page = ((await response.json()) as { page: ModuleQueryPage }).page;
+      const theory = page.packets.find((packet) => packet.module === "theory_breadcrumb")!;
+      const sentences = parsePresentationReceipt(theory.receipt).map(presentedSentence).join(" ");
+      expect(sentences).toContain(`${total} games`);
+      expect(sentences).toContain("not what is good");
+      expect(JSON.stringify(page)).not.toMatch(/MOVE_ROW_SENTINEL|"a2a3"|canonicalUci|providerSan/u);
+      expect((await handler(request("theory_only"))).status).toBe(200);
+      expect(remote.calls).toHaveLength(1);
+      if (total === 37) {
+        // A real acquisition may finish after the learner changes the decision. Never disclose it.
+        await clock.advance(10_001);
+        const stale = handler(request("theory_only"));
+        await flush();
+        expect(remote.calls).toHaveLength(2);
+        service.move("population", "writer", "a2a3");
+        service.reveal("population", "writer");
+        remote.respond(1, { ...body(total), moves: [] });
+        const refused = await stale;
+        expect(refused.status).toBe(400);
+        expect(await refused.json()).toMatchObject({ error: { code: "INVALID_REQUEST", message: "Module decision changed while acquiring Explorer evidence" } });
+      }
+    } finally { storage.close(); }
+  });
+
   it("propagates premature HTTP disconnect but not normal response completion", async () => {
     let started!: () => void;
     let cancelled!: () => void;
@@ -223,7 +278,7 @@ describe("learner Explorer shared exchange", () => {
           markStarted();
         });
       }
-      return Response.json(body(37), { headers: { etag: '"fixture"' } });
+      return Response.json({ ...body(37), moves: new URL(String(input)).searchParams.get("fen")!.includes(" b ") ? [{ uci: "a7a6", san: "MOVE_ROW_SENTINEL_DO_NOT_DISCLOSE", white: 20, draws: 0, black: 0 }] : body(37).moves }, { headers: { etag: '"fixture"' } });
     }) satisfies typeof fetch);
     let application: Awaited<ReturnType<typeof createInMemoryTestApplication>> | undefined;
     try {
@@ -257,6 +312,28 @@ describe("learner Explorer shared exchange", () => {
       expect(outsider.status).toBe(401);
       expect(requests).toHaveLength(1);
 
+      const committed = await realFetch(`${origin}/runs/${run.id}/moves`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" }, body: JSON.stringify({ uci: "g1f3" }) });
+      expect(committed.status, await committed.clone().text()).toBe(200);
+      const movedRun = (await committed.json() as { run: { activeCursor: { nodeId: string } } }).run;
+      const committedReveal = await realFetch(`${origin}/runs/${run.id}/reveal`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" }, body: "{}" });
+      expect(committedReveal.status).toBe(200);
+      // The actual authenticated, composed module endpoint uses the admitted sparse page,
+      // even though the legacy corpus consumer rejected it under its own 100-game policy.
+      const moduleBody = {
+        assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "theory_only", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }),
+        query: { timing: "post_commit", subjectNodeId: movedRun.activeCursor.nodeId, requested: ["theory_breadcrumb"] },
+      };
+      const moduleQuery = await realFetch(`${origin}/runs/${run.id}/modules/query`, { method: "POST", headers: { "content-type": "application/json", cookie }, body: JSON.stringify(moduleBody) });
+      expect(moduleQuery.status, await moduleQuery.clone().text()).toBe(200);
+      const modulePage = (await moduleQuery.json() as { page: ModuleQueryPage }).page;
+      const moduleTheory = modulePage.packets.find((packet) => packet.module === "theory_breadcrumb")!;
+      expect(parsePresentationReceipt(moduleTheory.receipt).map(presentedSentence).join(" ")).toContain("37 games");
+      expect(JSON.stringify(moduleTheory.receipt)).not.toMatch(/"e2e4"|canonicalUci|providerSan/u);
+      expect(requests).toHaveLength(2);
+      const unauthenticatedModule = await realFetch(`${origin}/runs/${run.id}/modules/query`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(moduleBody) });
+      expect(unauthenticatedModule.status).toBe(401);
+      expect(requests).toHaveLength(2);
+
       const next = await realFetch(`${origin}/runs`, {
         method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" },
         body: JSON.stringify({ id: "explorer-cancel", session: { kind: "position", start: { fen: NEXT, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }),
@@ -273,7 +350,7 @@ describe("learner Explorer shared exchange", () => {
       await upstreamAborted;
       await flush();
       expect(application.providerHealth.snapshot().providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "available" });
-      expect(requests).toHaveLength(2);
+      expect(requests).toHaveLength(3);
     } finally { await application?.close(); vi.unstubAllGlobals(); }
   });
 });

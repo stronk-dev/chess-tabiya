@@ -137,19 +137,19 @@ describe("module registration — the compiled production registry", () => {
 
   it("[A2] declared / compiled / awaiting pairs are derived and set-equal to the compiled bindings", () => {
     const awaiting = Object.values(MODULE_AWAITING).flat().map((value) => key(value!.projection));
-    expect(awaiting.sort()).toEqual(["derived.explorer.population_summary@1", "pack.authored.classifier@1"]);
+    expect(awaiting.sort()).toEqual(["pack.authored.classifier@1"]);
     expect(awaiting.every((projection) => !PRIMARY_EVIDENCE_MANIFEST.projections.some((value) => key(value) === projection))).toBe(true);
     const bound = PRIMARY_EVIDENCE_MANIFEST.bindings.filter((binding) => binding.consumer.id.startsWith("module.")).map((binding) => `${binding.consumer.id.slice("module.".length)}\u0000${key(binding.projection)}`).sort();
     expect([...pairs].sort()).toEqual(bound);
     // Drift tripwires, derived: 237 post-rebase + 21 recorded-path successors + 5 typed Review
     // projections (rfc/review-evidence-compiler.md) + 35 Guided Hint disclosures (rfc/hint-distance.md)
-    // compiled; 2 awaiting.
-    expect(pairs).toHaveLength(298);
+    // + the Explorer summary; 1 awaiting.
+    expect(pairs).toHaveLength(299);
     expect(pairs.length + awaiting.length).toBe(300);
-    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(187);
+    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(188);
     expect(Object.fromEntries(MODULE_REGISTRY.modules.map((module) => [module.id, accepted(module).length]))).toEqual({
       rules_floor: 0, sight_on_request: 23, blunder_prevention: 3, threat_radar: 7, postcommit_nudge: 52, structure_nudge: 7,
-      theory_breadcrumb: 3, guided_hint: 35, compare_coach: 8, review_map: 85, full_inspector: 75,
+      theory_breadcrumb: 4, guided_hint: 35, compare_coach: 8, review_map: 85, full_inspector: 75,
     });
     // Semantic eligibility and the research selection policy are untouched (§2.2).
     expect(PRIMARY_EVIDENCE_MANIFEST.eligibility.every((row) => row.consumer.id === "research.semantic_selection")).toBe(true);

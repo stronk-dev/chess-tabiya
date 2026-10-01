@@ -26,6 +26,8 @@ import { STRUCTURAL_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 import type { DrillRun, EvidencePayload, Node, SelectionEngineIdentity } from "./types.js";
 import type { RecordedReading } from "./voice.js";
 import type { RecordedEdge } from "./recorded-edge.js";
+import type { ExplorerPopulationSummary } from "./explorer-summary.js";
+import type { ExplorerPositionPage } from "./provider-types.js";
 import type { ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
 
 /**
@@ -217,6 +219,11 @@ const PROVIDER_SOURCE_ROUTES = Object.freeze({
   "syzygy.position@1": "live.syzygy.position_result@1",
   "lichess_explorer.position_page@1": "human.explorer.position_page@1",
 } as const satisfies { readonly [K in ProviderOperationId]: string });
+
+/** The sole move-free Explorer derivation; callers supply only the admitted source page. */
+export function deriveExplorerPopulationSummary(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerPopulationSummary> {
+  return invokeEvidenceValueRoute("derived.explorer.population_summary@1", { page });
+}
 
 /**
  * The exact operation-keyed provider source projection for one scheduler-sealed delivery

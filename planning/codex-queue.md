@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-01 current Explorer checkpoint — Explorer integration and approved metadata migration complete
+
+D3330 now has explicit owner approval, recorded in explorer-metadata-ruling-2026-10-01.md.
+The exact migration changes only requirements and matching ledger digests: 92 packs/68 ledgers
+plus the schema example/11 fixtures. The canonical plan has zero remaining migration rows.
+The sealed move-free population projection, narrow wire, demand-gated Theory route and actual
+voice boundary pass 151 focused tests, including the authenticated composed HTTP application.
+Real-content contracts pass 223 tests and all 104 requirement declarations match. Final exact-index software passes 2769 tests plus seven performance tests and downstream
+contracts; browser CI passes 111 journeys with one optional latency skip; governance passes.
+D3328/D3329/D3330/D3357 are closed. D3358 retains broad dispatcher coupling for analysis.
+
+After final gate closeout, continue the existing provider RFC obligations: §§1–2 path/availability
+and exact Maia/Explorer played occurrences, then migrate legacy consumer identities and sources.
+Do not rebuild the summary or ask again for the approved metadata update.
+
+
 ## 2026-10-01 current checkpoint — real source journey complete; Explorer remains held
 
 D3338/D3342/D3347/D3349/D3352/D3355/D3356 now discharge their narrow real source-appliance

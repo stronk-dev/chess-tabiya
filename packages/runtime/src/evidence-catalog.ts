@@ -151,7 +151,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
-  "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy",
+  "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy", "derived.explorer",
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
@@ -1192,6 +1192,9 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("derived.bounded_target", "derived", "packages/runtime/src/bounded-target.ts", "local", "background", BOUNDED_TARGET_OUTPUTS),
   // rfc/bounded-target-policy-composition.md §4: own operation local/sync; both paths provider-bearing.
   producer("derived.bounded_target_policy", "derived", "apps/server/src/bounded-target-policy.ts", "local", "sync", BOUNDED_TARGET_POLICY_OUTPUTS),
+  producer("derived.explorer", "derived", "packages/runtime/src/evidence-factories.ts:createDerivedExplorerPopulationSummaryV1Evidence", "local", "sync", [
+    projection("derived.explorer", "derived.explorer.population_summary", "derived", { payloadType: "ExplorerPopulationSummary", semantics: "Move-free Lichess Explorer population summary computed only from the admitted whole page; retains position/window, WDL totals, listed/unlisted mass, rating, reported opening/history and the exact CORPUS_GUARD disclosure, with the complete source delivery retained internally for provenance.", grounding: "human_corpus", exactness: "measured", confidence: "reported", operands: ["page", "position", "totals", "listed", "unlisted", "averageRating", "opening", "history", "disclosure"], answerContent: ["fact"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, dependsOn: [ref("human.explorer.position_page")], derivation: { inputs: [ref("human.explorer.position_page")] }, limitations: ["Counts describe play, not quality. No moves, recommendations, strategic intent, completeness or sample suitability. Only explorerPopulationSummaryWire transports this payload, replacing the internal source with its exact four-field receipt."] }),
+  ]),
 ]);
 
 // ---------------------------------------------------------------------------------------------
@@ -1272,7 +1275,7 @@ export const MODULE_CONSUMER_ACCEPTS = Object.freeze({
     "theory.shapes.firing", "rules.structural.reading.named_structure", "rules.structural.reading.space",
     "rules.structural.reading.pawn_connectivity", "rules.phase.reading", "rules.endgame.reading",
   ]),
-  theory_breadcrumb: rebased(["pack.authored.claim", "theory.shapes.firing", "theory.opening.current_endpoint"]),
+  theory_breadcrumb: rebased(["pack.authored.claim", "theory.shapes.firing", "theory.opening.current_endpoint", "derived.explorer.population_summary"]),
   // rfc/hint-distance.md §3/§9: the literal family x rung disclosure registry, never a horizon,
   // raw PV, Syzygy, authored claim or endgame reading ([[D1569]]).
   guided_hint: HINT_DISCLOSURE_PROJECTION_IDS,

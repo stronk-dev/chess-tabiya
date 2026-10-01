@@ -108,6 +108,7 @@ import { appendRecordedReadings, evidencePacket, renderedEvidenceItems, renderVo
 import type { ReasoningReviewProvider } from "./external-voice.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { corpusPopulation, corpusSamplePolicy, type CorpusSource } from "./corpus.js";
+import { ExchangeCorpusSource } from "./provider-corpus.js";
 import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
 import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
@@ -1847,7 +1848,7 @@ export function createRestHandler(
           if (error instanceof ModuleQueryError) throw invalid(error.message);
           throw error;
         }
-        return json(200, { page: service.queryModules(route.runId, principal, finalized, query) });
+        return json(200, { page: await service.queryModulesWithProviders(route.runId, principal, finalized, query, corpusSource instanceof ExchangeCorpusSource ? corpusSource : undefined, request.signal) });
       }
       if (route.action === "deletion-preview") {
         requireJson(request);
