@@ -15,14 +15,20 @@ Complete staged software proof belongs to maia-compatibility-software-2026-10-01
 reuse an earlier gate receipt for these new source bytes. The complete normal Make gate is required,
 including historical meaning checks, migration proof, types and downstream contracts.
 
-**Next dependency: D3353, scoped Docker-space approval.** The final real appliance rerun fails
-at fresh storage startup, before bot play. Docker bavail=0 and uid 1000 SQLite on a new disposable
-volume reproduces errcode 13: database or disk is full. Old cache in the dedicated Tabiya builder
-is 2.679 GB reclaimable; owner permission to remove that cache was requested, not assumed. Never
-prune global images or existing learner volumes. After approved cleanup, rerun unchanged
-make appliance-drill-staged: actual registered replies/retry, rewind/fork/compare, restart/login/
-resume, served-pack creation and both actual cgroup envelope observations must all pass.
-D3349/D3352 and D3338/D3342/D3347 remain open until their complete exits; offline output is not play.
+**D3353 resolved by owner cleanup; next dependency: D3355, resume probe contract.** Docker now
+has 11,161,088,000 available bytes. The unchanged normal make appliance-drill-staged passes
+fresh storage, TLS/account, registered real Maia replies/idempotent retries and rewind/fork/
+comparison. The first kernel peak observation passes unchanged limits without OOM or automatic
+restart. Restart readiness/login pass, then the instrument requests nonexistent GET /runs/:id
+and reads .run; the REST/browser contract is /runs/:id/graph and .graph. Correct only the probe
+and retain a permanent control, then rerun the complete journey, including durable graph,
+post-restart provider health, served-pack creation and both memory-envelope observations.
+Receipt: planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md
+and its full JSON. Post-restart Maia process_exit/startup logs need observing; do not infer
+restored provider health from the earlier successful replies. No additional cleanup permission
+is needed or inferred. Never prune global images or existing learner volumes. D3349/D3352 and
+D3338/D3342/D3347 remain open until their complete exits; this question-only turn changed
+tracking, not production or the probe. Earlier disk exhaustion and software receipts are retained.
 
 D3354 is queued separately under storage-backup-recovery: preserve real SQLITE_BUSY/LOCKED
 contention as refusal, but do not mislabel disk/I/O/permission errors as MAINTENANCE_LOCKED.

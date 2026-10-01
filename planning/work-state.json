@@ -27539,10 +27539,10 @@
       "id": "D3349",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:54cbde356f49c943355ef6a8d8322231c483f2ae27a46fdb07fa9b46f5845e01",
+      "sourceDigest": "sha256:7c7526c7f452ba8849d1216dcce34de28a215a41e3f3772197bceaf1c8d480b6",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "item:D3353"
+      "blocker": "item:D3355"
     },
     {
       "id": "D3350",
@@ -27566,26 +27566,33 @@
       "id": "D3352",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a98da5a003ed5f0de01812518fee8e94afd661bf20d94d19e01b141e19fdf7c3",
+      "sourceDigest": "sha256:2f940dbe4c6669a8bf26ee6f2cca001503ca1e48c6c21b724ab9a57c86989412",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "item:D3353"
+      "blocker": "item:D3355"
     },
     {
       "id": "D3353",
-      "state": "blocked",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:221c6f01f63053a1dbd71ec524ece290023d585e180a189d137214fb59ed3e59",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bc25ea33b53b90b94539729f06e72cf6ed92785f35ad633416b9142871767c81",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "May we remove only old cache from the dedicated tabiya-source-v1 builder to free Docker VM space, without removing images, containers or learner-data volumes?"
+      "evidence": "planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3354",
       "state": "todo",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:150411437172367268f06b9e4a71a5d727cd1dffa9c9b4d281bbd1ef21c295d9",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3355",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f4f73a6381a09b84f07a9b14a68dd3654e5d7c87e5b64ca3474018ec07e3566d",
       "uxItems": [],
       "owner": "release-engineering"
     }

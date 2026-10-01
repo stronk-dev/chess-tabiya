@@ -22007,3 +22007,24 @@ Campaign was the one capability with no API, route or content. Now:
 - Final exact-index staged process contracts pass: register C1–C8, lifecycle P1–P7, zero
   unrouted/untriaged rows, roadmap R1–R10 and its sealed receipt, plus intent parity. Normal
   docs-index checks pass. The appliance remains red; these checks do not discharge its exit.
+
+### 2026-10-01 — Owner cleanup clears disk startup; real play passes, resume probe defect exposed
+
+- Owner asked whether their cleanup sufficed. Docker available bytes are now 11,161,088,000
+  (10.394573211669922 GiB), not zero; no agent cache pruning or operator-data deletion occurred.
+- Normal make appliance-drill-staged tests committed HEAD 494baa4d, exact tree
+  fb4049f786f8254c6b1faa1c72af75162aff63fc, excluding held unstaged Explorer edits.
+  Fresh storage, TLS/account, actual registered Maia replies/retries, rewind/fork/comparison
+  and the first cgroup peaks/no-OOM/no-automatic-restart check pass under unchanged limits.
+- Restart readiness and secure login pass; the probe then calls nonexistent GET /runs/:id
+  and reads .run, where the implemented REST/browser contract is /runs/:id/graph and .graph.
+  D3355 records this instrument defect. It does not demonstrate lost durable state. Served
+  pack and second envelope remain untested; post-restart Maia process_exit/startup logs also
+  need a fresh health observation after probe repair. Full journey remains failed.
+- D3353 closes on owner cleanup and actual startup; D3349/D3352 now block on live D3355.
+  D3338/D3342/D3347 and D3354 remain open. Queue, durable work-state and roadmap flow back;
+  no capability/milestone/RFC archival, held migration consent or production edit follows.
+- Retained complete negative and scoped analysis:
+  planning/provider-exchange-and-execution/maia-appliance-cleanup-rerun-2026-10-01.json
+  and its .md companion. The instrument removed only its UUID-owned test project/volumes.
+  Next: repair the existing graph probe contract with a permanent control and rerun all exits.
