@@ -100,6 +100,10 @@ describe("§9 operator traversal", () => {
       expect(result.projection).toBe(row.sourceProjection);
       expect(result.parser).toBe(row.parserId);
       expect(result.operation).toBe(row.operation);
+      expect(result.execution).toMatchObject({
+        own: { availability: "provider", latency: "interactive", providerOperation: row.operation },
+        paths: [{ derivationChoices: [], effectiveLatency: "interactive", sourceRequirements: [{ occurrence: [], availability: "provider", providerOperation: row.operation }] }],
+      });
     }
   });
 
@@ -113,6 +117,24 @@ describe("§9 operator traversal", () => {
     const local = new Output();
     expect(await runProviderTraversalCli(application, ["syzygy-position"], JSON.stringify({ ...REQUESTS["syzygy-position"], fen: START }), local)).toBe(0);
     expect(local.json()).toMatchObject({ kind: "local_domain_result", payload: { kind: "outside_domain", pieceCount: 32 } });
+  });
+
+  it("refuses crossed execution roots and factory identities before acquiring a provider", async () => {
+    for (const patch of [
+      { projection: PROVIDER_SOURCE_FACTORIES["maia.policy_page@1"].projection },
+      { symbol: PROVIDER_SOURCE_FACTORIES["maia.policy_page@1"].symbol },
+      { projection: { id: "live.syzygy.position", version: 1 } },
+    ]) {
+      const { application, engines, tablebase, explorer } = fixtureApplication();
+      const original = application.sourceFactories["syzygy.position@1"];
+      const crossed = { ...application, sourceFactories: { ...application.sourceFactories, "syzygy.position@1": { ...original, ...patch } } };
+      const out = new Output();
+      await expect(runProviderTraversalCli(crossed, ["syzygy-position"], JSON.stringify(REQUESTS["syzygy-position"]), out)).rejects.toThrow(/crossed execution\/source factory|EXECUTION_GRAPH_INVALID/u);
+      expect(engines.calls).toHaveLength(0);
+      expect(tablebase.calls).toHaveLength(0);
+      expect(explorer.calls).toHaveLength(0);
+      expect(out.text).toBe("");
+    }
   });
 
   it("refuses unknown operations, extra arguments, malformed or extra request fields and forged capabilities", async () => {
@@ -349,10 +371,10 @@ describe("built provider-traversal CLI", () => {
   (STOCKFISH === undefined ? it.skip : it)("measures a real all-legal root table and fixed-bound evaluation through one Stockfish generation", async () => {
     const roots = await cli(["stockfish-legal-roots"], JSON.stringify({ ...REQUESTS["stockfish-legal-roots"], requestedEngine: { id: "stockfish-analysis", version: await stockfishVersion() } }), { STOCKFISH_COMMAND: STOCKFISH! });
     expect(roots.code, roots.stdout).toBe(0);
-    expect(JSON.parse(roots.stdout)).toMatchObject({ kind: "evidence_success", projection: "live.stockfish.legal_root_table@1", generation: 1 });
+    expect(JSON.parse(roots.stdout)).toMatchObject({ kind: "evidence_success", projection: "live.stockfish.legal_root_table@1", generation: 1, execution: { own: { providerOperation: "stockfish.legal_root_table@1" }, paths: [{ sourceRequirements: [{ occurrence: [], projection: { id: "live.stockfish.legal_root_table", version: 1 }, providerOperation: "stockfish.legal_root_table@1" }] }] } });
     const evaluation = await cli(["stockfish-position-evaluation"], JSON.stringify({ ...REQUESTS["stockfish-position-evaluation"], requestedEngine: { id: "stockfish-analysis", version: await stockfishVersion() } }), { STOCKFISH_COMMAND: STOCKFISH! });
     expect(evaluation.code, evaluation.stdout).toBe(0);
-    expect(JSON.parse(evaluation.stdout)).toMatchObject({ kind: "evidence_success", projection: "live.stockfish.position_eval@1" });
+    expect(JSON.parse(evaluation.stdout)).toMatchObject({ kind: "evidence_success", projection: "live.stockfish.position_eval@1", execution: { own: { providerOperation: "stockfish.position_evaluation@1" }, paths: [{ sourceRequirements: [{ occurrence: [], projection: { id: "live.stockfish.position_eval", version: 1 }, providerOperation: "stockfish.position_evaluation@1" }] }] } });
   }, 120_000);
 });
 

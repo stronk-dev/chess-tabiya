@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Exact Maia occurrence primitives now ship with ordered derivation and historical run-subject authority (D3359/D3360/D3362). Finish compiled execution paths, binding source-absence algebra, the closed source-occurrence resolver census and POST /evidence/availability over authorized historical heads. D3363 retains Inspector migration: its next-move distribution has no observed played move and must not be relabelled or retired without a truthful consumer contract. Then complete remaining legacy Stockfish/Maia/Explorer caller retirement and consumer-owned Support/Review/bot/longitudinal joins. Do not rebuild integrated sources or Explorer summary. Independent semantic authorities and production reach remain open; training progression/tempo and ramp-to-clamp remain D3318/D3322/D3317. Content expansion stays held for stable contracts; D3262 remains research rather than production why-move authority.",
+        "nextAction": "D3365 ships the strict literal execution compiler and actual operator caller. Migrate remaining raw/narrow provider sources truthfully before whole-manifest execution/digest integration; complete binding source-absence algebra, the closed occurrence-resolver census and POST /evidence/availability over authorized historical heads. D3363 retains Inspector's next-move distribution contract, which has no observed played move. Then close consumer-owned Support/Review/bot/longitudinal joins. Do not rebuild integrated acquisitions or Explorer summary, relabel legacy payloads or omit uncompileable rows. Independent semantic authorities and production reach remain open; content expansion stays held for stable contracts.",
         "latestCheckpoint": {
           "at": "2026-10-04",
-          "summary": "D3362 implements separate history-conditioned run-move and exact-FEN observed-move Maia projections through the sole value factory. Exact run joins replay the sealed historical edge path through current read-access checks; crossed histories/heads/branches, clocks, page/subject forgeries and real grant revocation pass twelve focused tests. The whole sealed page survives; missing bounded top-k candidates remain unobserved, never probability zero or move quality. The manifest has 47 producers/281 projections/35 consumers/545 bindings, with no new learner bindings. Full software passes 2794 tests/322 files, seven performance tests/four files and all downstream checks, with zero type errors/Svelte warnings. Content passes 223 tests/23 files and all 104 requirements; browser CI passes 111 journeys with one optional latency skip and no retries. Canonical metadata retains 842 predecessor declarations, adds seven compatibility successors and two occurrence declarations (851 total), and changes requirements in 104 documents and only packDigest in 68 ledgers. Authored fields, source/dependency identities, evaluator modules, validation cases/verdicts and 272 prior factory outcomes are unchanged. The 352-document migration plan has zero remaining rows. Inspector contract repair (D3363), compiled execution/availability, source-absence aggregation and legacy retirement remain open; no whole capability or milestone changes state. D3364 additionally repairs actual durable tablebase cancellation: rewind/shutdown detach the worker waiter without waiting for remote completion; shared peers retain their acquisition. Six new controls pass at the adapter and SQLite worker boundaries. The existing source/protocol/parser and all 851 declarations remain unchanged; this is not legacy-source retirement or milestone completion. Final exact-index software for this repair passes 2800 tests/322 files, all seven unchanged performance contracts and downstream gates; content/provider/browser/governance pass. The earlier concurrent timing failure is retained in the receipt, not dismissed or used to weaken the threshold.",
+          "summary": "D3362 implements separate history-conditioned run-move and exact-FEN observed-move Maia projections through the sole value factory. Exact run joins replay the sealed historical edge path through current read-access checks; crossed histories/heads/branches, clocks, page/subject forgeries and real grant revocation pass twelve focused tests. The whole sealed page survives; missing bounded top-k candidates remain unobserved, never probability zero or move quality. The manifest has 47 producers/281 projections/35 consumers/545 bindings, with no new learner bindings. Full software passes 2794 tests/322 files, seven performance tests/four files and all downstream checks, with zero type errors/Svelte warnings. Content passes 223 tests/23 files and all 104 requirements; browser CI passes 111 journeys with one optional latency skip and no retries. Canonical metadata retains 842 predecessor declarations, adds seven compatibility successors and two occurrence declarations (851 total), and changes requirements in 104 documents and only packDigest in 68 ledgers. Authored fields, source/dependency identities, evaluator modules, validation cases/verdicts and 272 prior factory outcomes are unchanged. The 352-document migration plan has zero remaining rows. Inspector contract repair (D3363), compiled execution/availability, source-absence aggregation and legacy retirement remain open; no whole capability or milestone changes state. D3364 additionally repairs actual durable tablebase cancellation: rewind/shutdown detach the worker waiter without waiting for remote completion; shared peers retain their acquisition. Six new controls pass at the adapter and SQLite worker boundaries. The existing source/protocol/parser and all 851 declarations remain unchanged; this is not legacy-source retirement or milestone completion. Final exact-index software for this repair passes 2800 tests/322 files, all seven unchanged performance contracts and downstream gates; content/provider/browser/governance pass. The earlier concurrent timing failure is retained in the receipt, not dismissed or used to weaken the threshold. D3365 additionally implements strict ordered Cartesian paths, repeated source occurrence addresses, per-path latency maxima and registered path identity. All six actual operator traversals validate their compiled operation/factory before acquisition and return the image on success. Thirty-one focused tests include actual Maia/Explorer derived paths, crossed factories and built real Stockfish output. The whole legacy catalogue intentionally refuses strict compilation; execution/digest integration, binding absence, public availability, D1700/D1701 and D3363 remain open. Existing semantic and all 851 capability receipts remain current; no authored-content or metadata change is required. Final exact-index software passes 2814 tests/323 files, seven unchanged performance tests/four files and all downstream gates. Content passes 223 tests/23 files and all 104 requirements; provider checks pass 228 tests, browser CI passes 111 journeys with one optional skip/no retries, and governance passes. Full migration/availability obligations remain open.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -827,7 +827,9 @@
             "planning/provider-exchange-and-execution/maia-occurrence-implementation-2026-10-04.md",
             "planning/provider-exchange-and-execution/maia-occurrence-metadata-2026-10-04.json",
             "planning/provider-exchange-and-execution/tablebase-cancellation-2026-10-04.md",
-            "planning/provider-exchange-and-execution/tablebase-cancellation-software-2026-10-04.json"
+            "planning/provider-exchange-and-execution/tablebase-cancellation-software-2026-10-04.json",
+            "planning/provider-exchange-and-execution/execution-paths-2026-10-04.md",
+            "planning/provider-exchange-and-execution/execution-paths-software-2026-10-04.json"
           ],
           "anchors": [
             {
@@ -873,7 +875,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:ddda979db055db25038e9e3f49bb414b1bfb235ee0f31d1304f955c6647b71fb"
+              "digest": "sha256:de51272b052bc48ef7071de274b351608136f45def8a980fa98ee5a53161cac3"
             },
             {
               "kind": "work_state",
@@ -944,6 +946,11 @@
               "kind": "work_state",
               "id": "D3364",
               "digest": "sha256:1a2238d3c4f278edb1875b6eca4c719ac4472d55652ad2743ce59d552ed264dd"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3365",
+              "digest": "sha256:087c3a066566214342f2347e03d83cd65903d99052160424a873935ca19aea0c"
             }
           ]
         },
@@ -1453,7 +1460,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:ddda979db055db25038e9e3f49bb414b1bfb235ee0f31d1304f955c6647b71fb"
+              "digest": "sha256:de51272b052bc48ef7071de274b351608136f45def8a980fa98ee5a53161cac3"
             },
             {
               "kind": "work_state",

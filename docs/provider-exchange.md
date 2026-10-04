@@ -57,6 +57,10 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
   generation, identity, option image and launched artifact, and runs the `finally` reset.
 - `apps/server/src/provider-traversal.ts` is the operator capability, the six `providerTraversal*`
   callables and the CLI.
+- `packages/runtime/src/evidence-execution.ts` compiles literal execution paths. Nested choices
+  form Cartesian products; repeated inputs retain their full occurrence addresses; semantic
+  `dependsOn` edges are not additional execution inputs. The registered digest constructor owns
+  path identity, and each path retains its slowest selected latency and exact non-local leaves.
 
 ## Pinned Maia option admission
 
@@ -114,25 +118,32 @@ data; only the actual appliance journey proves real bot play. Amendment and reta
 
 `make provider-traversal OP=syzygy-position < request.json` builds the server and runs
 `node apps/server/dist/provider-traversal.js`. The CLI output is a diagnostic
-projection/receipt digest line. Exit codes: 0 evidence or local-domain result, 3 typed source
+projection/receipt digest line with the compiled execution image on evidence success. Each
+traversal validates its registered operation, whole-delivery type and source-factory identity
+before acquiring anything. Exit codes: 0 evidence or local-domain result, 3 typed source
 failure, 64 usage error. `PROVIDER_TRAVERSAL_OFFLINE=1` disables network providers.
 `LICHESS_EXPLORER_TOKEN` enables the explorer and `STOCKFISH_COMMAND` selects the engine. The
 bounds are explicit operator values (`OPERATOR_PROVIDER_BOUNDS`) and are not production capacity.
 
 `make provider-exchange-check` runs the focused contract. After a parser source change, regenerate
 the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
+`make evidence-execution-check` runs the literal-path/compiler and actual CLI regression suites.
 
 ## Not yet shipped
 
-- §1–§2 F1 execution metadata (compiled paths, `pathId`, confidence inheritance, binding
-  source-absence), `/capabilities` path reach and `POST /evidence/availability` with the
-  run-subject digests.
+- Whole-manifest §1 execution integration and §2 binding source-absence algebra, `/capabilities`
+  path reach and `POST /evidence/availability`. The strict compiler and operator traversal caller
+  now ship, but the legacy catalogue still fails whole-image compilation on unregistered provider
+  payloads. It must be migrated truthfully before `CompiledEvidenceManifest.execution` and its
+  manifest digest can claim a complete image; no row is silently excluded or assigned a fallback
+  operation. Exact run-subject authority ships separately; it is not the availability endpoint.
 - Remaining legacy Stockfish/Maia callers. Built-in learner tablebase and Explorer acquisitions
   have migrated (below). Explorer's compatibility consumers still await the narrow projections.
   Supplied sources and standalone sourcing/research clients
   are separate, and old node-shaped projections retire only at a proven zero-consumer census.
-- The Maia occurrence projections and the Explorer population summary (§§6, 8 derived
-  projections).
+- Inspector's Maia next-move distribution and remaining legacy Explorer consumer identities.
+  The separate Maia observed-move occurrence projections and the integrated move-free Explorer
+  population summary ship; this does not retire their older, different consumer contracts.
 - (Shipped by `rfc/provider-health-degradation.md`: the Maia container-identity probe for the
   networked sidecar; see `docs/provider-health.md`.)
 

@@ -798,6 +798,7 @@ export {
 } from "./bounded-target-policy.js";
 export type { BoundedTargetPolicyBoundsFactoryResult, EngineTargetPolicyFactoryResult } from "./evidence-factories.js";
 export { assertPathEffectiveExecution, effectiveEvidenceExecution, type EffectiveEvidenceExecution } from "./evidence-contract.js";
+export { compileProjectionExecution, compileManifestExecution, EvidenceExecutionError, type CompiledProjectionExecution } from "./evidence-execution.js";
 export { assertEvidenceProducerOperations, evidenceProducerOperation, type EvidenceProducerOperation } from "./evidence-producer-operations.js";
 export { threatEvidencePassAnchor } from "./threat-pass-authority.js";
 export { messageChannelMacrotaskYield } from "./cooperative-yield.js";

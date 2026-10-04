@@ -27675,6 +27675,15 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/tablebase-cancellation-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3365",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:087c3a066566214342f2347e03d83cd65903d99052160424a873935ca19aea0c",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/execution-paths-2026-10-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 literal execution compiler checkpoint
+
+D3365 implements ordered Cartesian paths, exact repeated source occurrences, registered path
+digests and per-path latency maxima. The actual operator traversals compile and check their
+operation/factory before acquisition and return the compiled image on evidence success. Actual
+Maia and Explorer derivations are permanent controls, not just synthetic graphs. Receipt:
+`planning/provider-exchange-and-execution/execution-paths-2026-10-04.md`.
+
+Continue whole-manifest execution integration, legacy source migrations, binding source-absence
+and exact-subject availability. The whole legacy catalogue intentionally refuses strict
+compilation; D1700/D1701, D3363 and full provider completion remain open. Do not invent provider
+identities, silently exclude legacy rows or promote a learner milestone from operator proof.
+
 ## 2026-10-04 tablebase cancellation checkpoint
 
 D3364 carries the durable worker's abort signal through the application's tablebase adapter

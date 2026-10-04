@@ -16,8 +16,11 @@ import { basename } from "node:path";
 
 import {
   PROVIDER_PROTOCOL_RESOURCE,
+  PRIMARY_EVIDENCE_MANIFEST,
   ProviderRequestInvalid,
+  compileProjectionExecution,
   providerSourceEvidence,
+  type CompiledProjectionExecution,
   type DeclaredEvidence,
   type ExplorerPositionPageRequest,
   type MaiaPolicyPageRequest,
@@ -167,17 +170,20 @@ function assertOperatorCapability(value: unknown): asserts value is ProviderOper
 export type ProviderEvidenceTraversalResult<K extends ProviderOperationId> =
   | ProviderSourceFailure<K>
   | ProviderLocalDomainResult<K>
-  | Readonly<{ kind: "evidence_success"; operation: K; normalizedRequestDigest: ProviderRequestDigest; evidence: DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>> }>;
+  | Readonly<{ kind: "evidence_success"; operation: K; normalizedRequestDigest: ProviderRequestDigest; execution: CompiledProjectionExecution; evidence: DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>> }>;
 
 async function traverse<K extends ProviderOperationId>(application: ProviderTraversalApplication, capability: ProviderOperatorCapability, operation: K, request: ProviderOperationRequestMap[K]): Promise<ProviderEvidenceTraversalResult<K>> {
   assertOperatorCapability(capability);
+  const factory = application.sourceFactories[operation] as ProviderSourceFactory<K>;
+  const execution = compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, factory.projection);
+  const registered = PROVIDER_PROTOCOL_RESOURCE.payload.operations.find(row => row.operation === operation)!;
+  if (execution.own.providerOperation !== operation || factory.symbol !== registered.sourceFactoryId) throw new TypeError(`${operation} has a crossed execution/source factory`);
   const result = await application.scheduler.get({ operation, request } as never, { id: `operator:${operation}`, budgetMs: application.operatorBudgetMs }, new AbortController().signal);
   if (result.kind !== "success") return result as ProviderEvidenceTraversalResult<K>;
   if (result.operation !== operation) throw new TypeError(`scheduler returned ${result.operation} for ${operation}`);
-  const factory = application.sourceFactories[operation] as ProviderSourceFactory<K>;
   const evidence = factory.make(result.delivery as ProviderDelivery<ProviderOperationResultMap[K], K>);
   if (evidence.projection.id !== factory.projection.id || evidence.projection.version !== factory.projection.version) throw new TypeError(`${operation} reached ${evidence.projection.id}@${evidence.projection.version}`);
-  return Object.freeze({ kind: "evidence_success", operation, normalizedRequestDigest: result.normalizedRequestDigest, evidence });
+  return Object.freeze({ kind: "evidence_success", operation, normalizedRequestDigest: result.normalizedRequestDigest, execution, evidence });
 }
 
 export function providerTraversalStockfishLegalRoots(application: ProviderTraversalApplication, capability: ProviderOperatorCapability, request: StockfishLegalRootTableRequest): Promise<ProviderEvidenceTraversalResult<"stockfish.legal_root_table@1">> {
@@ -263,6 +269,7 @@ export async function runProviderTraversalCli(application: ProviderTraversalAppl
       kind: "evidence_success",
       operation: result.operation,
       projection: `${result.evidence.projection.id}@${result.evidence.projection.version}`,
+      execution: result.execution,
       normalizedRequestDigest: result.normalizedRequestDigest,
       delivery: delivery.kind,
       responseDigest: delivery.acquisition.responseDigest,
