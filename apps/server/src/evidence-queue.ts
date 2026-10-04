@@ -9,7 +9,7 @@
  *
  * The two gateways are the whole queued provider population (criterion 21):
  * `evidence.stockfish_analysis` → `#execute` → `EvidenceExecutor.execute`, and
- * `evidence.tablebase_probe` → `#tablebasePayload` → `TablebaseSource.probe`.
+ * `evidence.tablebase_probe` → `#tablebasePayload` → registered whole-source admission.
  */
 import {
   normalizeInboundMove,
@@ -34,6 +34,7 @@ import {
 } from "./evidence-job-store.js";
 import { EvidenceJobCorrupt, evidenceRefForJob, type EvidenceJobRow, type QueuedProviderOperationId } from "./evidence-jobs.js";
 import type { TablebaseSource } from "./tablebase.js";
+import { queuedTablebasePosition } from "./queued-tablebase.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
 
 export interface EvidenceJobInput {
@@ -384,7 +385,7 @@ export class EvidenceJobQueue {
 
   async #tablebasePayload(job: EvidenceJob, signal: AbortSignal): Promise<EvidencePayload> {
     if (this.#tablebase === undefined) throw new TypeError("Tablebase evidence source is not configured");
-    const result = await this.#tablebase.probe(job.fen, { signal });
+    const result = await queuedTablebasePosition(this.#tablebase, job.fen, { signal });
     return Object.freeze({
       kind: "tablebase",
       source: "tablebase_exact",

@@ -37,6 +37,67 @@ async function harness() {
 }
 
 describe("learner Syzygy shared exchange", () => {
+  async function queuedTablebase(source: TablebaseSource) {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    const queue = new EvidenceJobQueue({ async execute() { throw new Error("tablebase work must not run the engine executor"); } }, {
+      tablebaseSource: source, retry: { maxAttempts: 1, retryDelayMs: 0 },
+    });
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const run = await service.create({
+      id: "whole-source-tablebase-worker", session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73, createdAt: "2026-10-05T00:00:00.000Z",
+    }, "writer");
+    const root = run.nodes[0]!;
+    storage.admitInternalEvidence(run.id, [{
+      origin: "run_enrichment", idempotencyKey: `queued-whole-source@1:${root.id}`,
+      request: { schema: "evidence_batch_request@1", runId: run.id, origin: "run_enrichment", jobs: [{ schema: "evidence_job_request@1", runId: run.id, nodeId: root.id, fen: FEN, kind: "tablebase", depth: null, movetime: null, multiPv: null, timeoutMs: null, objectiveRequest: null }] },
+    }]);
+    return { storage, queue, service, run };
+  }
+
+  it("admits the whole source before staging the actual durable tablebase packet", async () => {
+    const { source, remote } = await harness();
+    const bare = vi.spyOn(source, "probe").mockRejectedValue(new Error("durable modern source must not use bare probe"));
+    const app = await queuedTablebase(source);
+    try {
+      await flush(); expect(remote.calls).toHaveLength(1);
+      remote.respond(0, syzygyBody(FEN));
+      await app.queue.whenIdle();
+      expect(app.storage.evidenceJobs.jobsForRun(app.run.id)).toMatchObject([{ state: "settled_success" }]);
+      expect(app.queue.page(app.run.id).results).toMatchObject([{ payload: { kind: "tablebase", values: { fen: FEN, category: "win", pieceCount: 3, sourceId: "tablebase.lichess.org" } } }]);
+      app.service.reveal(app.run.id, "writer", "2026-10-05T00:00:01.000Z");
+      const handler = createRestHandler(app.service);
+      const applied = await handler(new Request(`http://tabiya.test/runs/${app.run.id}/evidence`, { method: "POST", headers: { "x-writer-id": "writer", "content-type": "application/json" }, body: JSON.stringify({ resultSeq: app.queue.page(app.run.id).results[0]!.seq, at: "2026-10-05T00:00:01.000Z" }) }));
+      expect(applied.status).toBe(200);
+      expect(app.storage.read(app.run.id)!.run.events.filter(event => event.type === "evidence.attached")).toMatchObject([{ data: { payload: { kind: "tablebase", values: { fen: FEN, category: "win" } } } }]);
+      expect(bare).not.toHaveBeenCalled();
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      await app.queue.close(); app.storage.close(); bare.mockRestore();
+    }
+  });
+
+  it.each(["position", "halfmove", "fullmove", "clone", "failure"])("does not stage an exact durable fact from a modern %s defect", async arm => {
+    const { source, remote } = await harness();
+    const fen = arm === "position" ? OTHER : arm === "halfmove" ? FEN.replace("0 1", "1 1") : arm === "fullmove" ? FEN.replace("0 1", "0 2") : FEN;
+    const pending = source.probeEvidence(fen);
+    await flush(); remote.respond(0, syzygyBody(fen));
+    const evidence = await pending;
+    const bare = vi.fn(async () => ({ category: "win" as const, dtz: 1, moves: [] }));
+    const app = await queuedTablebase({ kind: "lichess", probe: bare, async probeEvidence() {
+      if (arm === "failure") throw new Error("source unavailable");
+      return arm === "clone" ? { ...evidence } as TablebaseProbeEvidence : evidence;
+    } });
+    try {
+      await app.queue.whenIdle();
+      expect(bare).not.toHaveBeenCalled();
+      expect(app.queue.page(app.run.id).results).toEqual([]);
+      const jobs = app.storage.evidenceJobs.jobsForRun(app.run.id);
+      expect(jobs).toMatchObject([{ state: "settled_empty", settlement: { kind: "empty", reason: "provider_unavailable" } }]);
+      expect(app.storage.read(app.run.id)!.run.events.filter(event => event.type === "evidence.attached")).toEqual([]);
+    } finally { await app.queue.close(); app.storage.close(); }
+  });
+
   async function decidedness(source: TablebaseSource, disclosed = true, fen = FEN) {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     const queue = new EvidenceJobQueue({ async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 0, perspective: "white" } }; } });

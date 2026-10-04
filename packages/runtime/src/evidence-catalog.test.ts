@@ -49,7 +49,7 @@ describe("primary evidence catalogue", () => {
     expect(EVIDENCE_PRODUCER_IDS).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia"]);
     // Declarations are unordered compiler input; compare the exact inventory, retaining duplicates.
     expect(EVIDENCE_PRODUCERS.map((item) => item.id).sort()).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia"].sort());
-    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(24);
+    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(25);
     // rfc/module-registration.md §2.2: ten module consumers join (rules_floor has no evidence);
     // rfc/hint-distance.md adds module.guided_hint over its 35 disclosure projections.
     expect(MODULE_CONSUMER_IDS).toHaveLength(10);
@@ -61,13 +61,14 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 282, 36, 547]); // provider §7: opponent selection and comparison decidedness consume the whole source.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 282, 37, 548]); // provider §7: opponent selection, comparison and queued tablebase work consume the whole source.
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");
     expect(manifest.bindings.filter(binding => binding.projection.id === "live.syzygy.position_result")).toEqual([
       expect.objectContaining({ projection: { id: "live.syzygy.position_result", version: 2 }, consumer: { id: "opponent.selection", version: 1 } }),
       expect.objectContaining({ projection: { id: "live.syzygy.position_result", version: 2 }, consumer: { id: "runtime.branch_decidedness", version: 1 }, sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } }),
+      expect.objectContaining({ projection: { id: "live.syzygy.position_result", version: 2 }, consumer: { id: "runtime.queued_tablebase", version: 1 }, sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } }),
     ]);
     for (const id of ["derived.maia.run_move_occurrence", "derived.maia.exact_fen_move_occurrence"]) {
       expect(manifest.projections.find(projection => projection.id === id)?.disposition?.kind).toBe("operator_only");

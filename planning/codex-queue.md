@@ -1,5 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 queued tablebase checkpoint
+
+D3377 closes source admission at the actual durable tablebase worker: sealed source,
+exact requested/payload FEN and clocks, no modern-to-bare fallback, and existing durable
+settlement/cancellation/standalone behavior retained. Actual SQLite/HTTP controls and
+gateway census pass 134 focused tests. Final exact-index software passes 2,898 tests and
+seven isolated performance tests; content passes 223 tests with all 104 requirements.
+Receipt: `planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md`.
+
+Whole-source durable persistence remains open. Continue executable consumer migrations
+and explicit policies before whole-manifest execution/resolution/availability. D3363,
+D3370, D3373 and D3376 retain their separate contract holds; do not choose different
+bot moves, drop a terminating selection or conflate current/historical opening identity.
+Routine metadata maintenance is implementation bookkeeping, not another owner decision.
+
 ## 2026-10-05 comparison evidence checkpoint
 
 D3375 closes branch-decidedness through its actual registered whole-source consumer,

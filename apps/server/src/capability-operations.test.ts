@@ -22,6 +22,7 @@ import type { RunService } from "./service.js";
 
 const rest = readFileSync(new URL("./rest.ts", import.meta.url), "utf8");
 const queueSource = readFileSync(new URL("./evidence-queue.ts", import.meta.url), "utf8");
+const tablebaseGatewaySource = readFileSync(new URL("./queued-tablebase.ts", import.meta.url), "utf8");
 const serviceSource = readFileSync(new URL("./service.ts", import.meta.url), "utf8");
 
 /** The live `(method, action)` population, parsed independently from `rest.ts`. */
@@ -157,10 +158,14 @@ describe("criterion 21 — queued providers are a closed operation population ([
       const body = queueSource.slice(queueSource.indexOf(`async ${method}(`));
       expect(body.slice(0, body.indexOf("\n  }\n")), gateway.gateway).toContain(`${gateway.call}(`);
     }
-    // The worker class calls no other provider surface: one execute and one probe, nothing else.
+    // The worker has exactly one engine call and one tablebase admission boundary.
+    // Direct tablebase calls belong only to the shared admission helper.
     const worker = queueSource.slice(queueSource.indexOf("export class EvidenceJobQueue"), queueSource.indexOf("export interface EvidenceEngineClient"));
     expect(worker.match(/\.execute\(/gu)).toHaveLength(1);
-    expect(worker.match(/\.probe\(/gu)).toHaveLength(1);
+    expect(worker.match(/queuedTablebasePosition\(/gu)).toHaveLength(1);
+    expect(worker).not.toMatch(/\.probe(?:Evidence)?\(/u);
+    expect(tablebaseGatewaySource.match(/source\.probe\(/gu)).toHaveLength(1);
+    expect(tablebaseGatewaySource.match(/source\.probeEvidence\(/gu)).toHaveLength(1);
     expect(worker).not.toMatch(/\.(?:select|enumerate|exchange)\(|scheduler\.get\(/u);
   });
 

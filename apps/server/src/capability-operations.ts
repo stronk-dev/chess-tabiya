@@ -165,7 +165,7 @@ export const CONSUMER_PROVIDER_OFF: Readonly<Record<CapabilityConsumerId, Provid
 /** The closed queued provider population: exactly two gateways, kinds total and disjoint. */
 export const QUEUED_PROVIDER_GATEWAYS: readonly { readonly operation: QueuedProviderOperationId; readonly gateway: string; readonly call: string; readonly kinds: readonly string[] }[] = Object.freeze([
   Object.freeze({ operation: "evidence.stockfish_analysis", gateway: "EvidenceJobQueue.#execute", call: "this.#executor.execute", kinds: Object.freeze(["bestline", "eval", "wdl"]) }),
-  Object.freeze({ operation: "evidence.tablebase_probe", gateway: "EvidenceJobQueue.#tablebasePayload", call: "this.#tablebase.probe", kinds: Object.freeze(["tablebase"]) }),
+  Object.freeze({ operation: "evidence.tablebase_probe", gateway: "EvidenceJobQueue.#tablebasePayload", call: "queuedTablebasePosition", kinds: Object.freeze(["tablebase"]) }),
 ]);
 
 /** The three sealed enqueue origins and their production owners. */

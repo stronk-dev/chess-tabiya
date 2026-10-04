@@ -27783,6 +27783,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:runtime-opening-identity.md"
+    },
+    {
+      "id": "D3377",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:785831605dda42b9b5d266e6ac2cb99b57b53daa2eb2324a9ec94426d8b7b3e6",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

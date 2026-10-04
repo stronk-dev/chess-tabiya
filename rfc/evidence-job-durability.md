@@ -1,5 +1,7 @@
 # RFC: Evidence job durability — admission, lease, settlement, and the HTTP capability-operation census
 
+- **Implementation checkpoint 2026-10-05:** D3377 admits the sealed whole tablebase source and exact requested/payload FEN at the actual registered queued consumer before producing the existing durable packet. Forged/crossed/failed modern sources produce no result or attachment and never retry bare probe; existing leases, cancellation, retry, origin-specific settlement and standalone compatibility remain. The normal focused target passes 134 tests. Whole-source durable persistence and complete RFC discharge remain open. Receipt: `planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md`.
+
 - **Implementation checkpoint 2026-10-04:** D3374 validates the raw Stockfish task's completed main-line iteration before the worker's existing settlement boundary. Invalid/short/bounded/alternate output becomes unavailable and never attaches chess evidence. Commands, reset/cancellation, leases and existing packet shape remain unchanged. D3373 separately owns the whole-source migration contract; no complete RFC discharge. Receipt: `planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md`.
 
 - **Status:** implementing — **implementation landed 2026-09-24 at migration 27** under the owner's

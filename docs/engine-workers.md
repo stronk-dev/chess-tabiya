@@ -399,6 +399,15 @@ further acquisitions; advancing the branch cannot attach an old leaf's result to
 the new one. Standalone sources without the receipt method retain explicit compatibility.
 `make branch-tablebase-check` covers this route and its absence/disclosure controls.
 
+The durable worker likewise admits one sealed whole source through
+`runtime.queued_tablebase@1` before creating its existing narrow packet. Requested
+and payload FENs must both match the job, including clocks; a copied, crossed or
+failed modern source cannot fall back to bare probe or produce an attachment.
+The abort signal still reaches the shared exchange, and durable leases, retries,
+origin-specific settlement and standalone compatibility are unchanged.
+`make queued-tablebase-check` covers actual SQLite staging, HTTP attachment and
+source-refusal controls. Whole-source persistence remains a separate migration.
+
 The capability payload publishes Maia's measured resistance only at mode scope. It names
 the 15-position/270-probe corpus and its measured DTZ-percentile and slowest/fastest-losing
 rates; no selection or candidate is assigned a resistance score. The capability-disposition

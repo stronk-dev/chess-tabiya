@@ -162,7 +162,7 @@ export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
   "theory.shape_firing", "compare.structure_strip", "compare.engine_trajectory", "inspector.human_split",
   "inspector.corpus", "opponent.selection", "guidance.authored_claim",
   "board.pivotal_marker", "review.story", "runtime.repertoire_scan", "authoring.claim_binding",
-  "guidance.voice_compare", "guidance.voice_story", "runtime.branch_decidedness",
+  "guidance.voice_compare", "guidance.voice_story", "runtime.branch_decidedness", "runtime.queued_tablebase",
 ] as const);
 
 /**
@@ -1388,6 +1388,7 @@ const PIVOTAL_MARKER_IDS = Object.freeze(["derived.pivotal.irreversibility", "de
 const POSITION_GUIDANCE_IDS = Object.freeze([ref2("rules.phase.reading"), "pack.authored.phase", ref2("rules.structural.reading.named_structure"), ...PIVOTAL_MARKER_IDS, "rules.endgame.classification", "pack.authored.claim"]);
 const allTransitionReadingIds = TRANSITION_READING_PROJECTION_IDS;
 const CONSUMER_SPECS: readonly ConsumerSpec[] = [
+  { id: "runtime.queued_tablebase", implementation: "consumeQueuedTablebaseEvidence", projections: [ref2("live.syzygy.position_result")], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"], providerOff: "unavailable", sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "runtime.branch_decidedness", implementation: "consumeBranchDecidednessEvidence", projections: [ref2("live.syzygy.position_result")], timing: ["review", "analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"], providerOff: "honest_empty", sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } },
   { id: "authoring.predicate", implementation: "structuralEvidenceForAuthoring", projections: [authoredStructuralConditionId, structuralPredicateResultId, ...allPredicateIds], timing: ["analysis"], roles: ["author"], forms: ["machine_condition"], answerContent: ["fact"] },
   { id: "runtime.objective_condition", implementation: "structuralEvidenceForObjective", projections: [structuralPredicateResultId, "live.stockfish.eval", "live.syzygy.category"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },

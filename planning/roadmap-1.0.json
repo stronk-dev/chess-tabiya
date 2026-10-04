@@ -800,7 +800,7 @@
         "nextAction": "Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3376 requires registered shared opening schema/source authority before Review bindings; D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not invent a played move, substitute a PV move or conflate current and historical openings. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3375 migrates the actual authenticated branch-decidedness consumer to whole sealed Syzygy v2, explicit required-source honest-empty policy and full FEN/clock matching. Before every probe and after I/O it checks the actual read grant, disclosure window and selected leaf. Modern failure never retries bare data; standalone compatibility remains explicit. Actual HTTP, crossed positions/clocks, forgeries, withheld/out-of-domain and multi-branch access-change controls pass: 75 focused tests. Final exact-index software passes 2892 tests/325 files, seven isolated performance tests, warning-free types and downstream build, packaging, source/value/history, lifecycle and migration checks at 2f05522d9748d9097600c04b69e559d62ccddd72. Content passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. Browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; complete governance passes, with final exact-index process checks and normal hooks preceding commit. Source bytes stay identical after the software snapshot. All 885 predecessors remain unchanged, seven v10 successors append, all 275 factory outcomes remain unchanged, and only 104 requirement stamps/68 ledger digests refresh. No authored content changes or graduation. The 352-document migration plan is empty; semantic validation remains 38/38 cases with zero fully passed profiles. Failed/incomplete and pre-multi-branch checkpoints remain separate from final proof. D3376 is owned and blocked on opening authority; D3363/D3370/D3373 and full migration/policy/execution/resolution/availability remain open. Zero untriaged/1678 live items; no whole RFC, capability or milestone promotion.",
+          "summary": "D3377 implements whole sealed Syzygy source admission at the actual queued tablebase consumer before the existing durable packet. Requested/payload FENs include clocks; forged/crossed/failed modern sources never fall back to bare probe or attach evidence. Standalone compatibility and durable leases/retry/cancellation/settlement remain unchanged. Actual SQLite/HTTP controls and gateway census pass 134 focused tests. Final exact-index software passes 2898 tests/325 files, seven isolated performance tests and downstream contracts at 37c1957cc83d787e71100663076bd33c9bb570ef; content passes 223 tests/23 files, zero clearance errors and all 104 requirements. Authored content and predecessor meanings remain unchanged. The initial failed snapshot is retained separately from final proof. Zero untriaged/1678 live items. Whole-source persistence, D3363/D3370/D3373/D3376 and complete migration/policy/execution/resolution/availability remain open; no full RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -859,7 +859,10 @@
             "planning/provider-exchange-and-execution/branch-decidedness-2026-10-04.md",
             "planning/provider-exchange-and-execution/branch-decidedness-software-2026-10-05.json",
             "planning/provider-exchange-and-execution/branch-decidedness-metadata-2026-10-05.json",
-            "rfc/runtime-opening-identity.md"
+            "rfc/runtime-opening-identity.md",
+            "planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md",
+            "planning/provider-exchange-and-execution/queued-tablebase-software-2026-10-05.json",
+            "planning/provider-exchange-and-execution/queued-tablebase-software-negative-2026-10-05.json"
           ],
           "anchors": [
             {
@@ -905,7 +908,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:4c5a8627a477e02917504b5fbbcd9b560e3ca4803da021791b8b4f8a3925fbba"
+              "digest": "sha256:69a2f2e05844e267a50286f92ece64d44ea0602aeddec564c9a5f8fd6c254dbb"
             },
             {
               "kind": "work_state",
@@ -1030,7 +1033,7 @@
             {
               "kind": "rfc",
               "id": "evidence-job-durability.md",
-              "digest": "sha256:9cc47bfc16691105de1eea710cfe07fb2827405ca51ce094e1ff54b839829512"
+              "digest": "sha256:f549301702461745243bb10dbe1d044504930fc504744584142d5ad0d8836db8"
             },
             {
               "kind": "work_state",
@@ -1056,6 +1059,11 @@
               "kind": "rfc",
               "id": "runtime-opening-identity.md",
               "digest": "sha256:fe3720444945aa4cd900d2778434cdfb76ea69cd990f52a161ebe25386f92945"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3377",
+              "digest": "sha256:785831605dda42b9b5d266e6ac2cb99b57b53daa2eb2324a9ec94426d8b7b3e6"
             }
           ]
         },
@@ -1565,7 +1573,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:4c5a8627a477e02917504b5fbbcd9b560e3ca4803da021791b8b4f8a3925fbba"
+              "digest": "sha256:69a2f2e05844e267a50286f92ece64d44ea0602aeddec564c9a5f8fd6c254dbb"
             },
             {
               "kind": "work_state",
