@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-04, exact Maia occurrences:** §6's history-conditioned run-move and separate exact-FEN observed-move projections now use the sole value factory. Run joins consume authenticated, sealed historical edge authority, replay the ordered prefix and preserve the whole provider page; exact-FEN joins validate an explicitly observed legal move without claiming a history. Twelve focused tests cover transpositions, clocks, crossed branches/heads, seal forgeries and actual grant revocation. D3362 owns these primitives; D3363 keeps the Inspector next-move-distribution contract and legacy retirement open. Execution paths, source-absence aggregation and public availability remain open. Receipt: `planning/provider-exchange-and-execution/maia-occurrence-implementation-2026-10-04.md`.
+
 - **Implementation checkpoint 2026-10-04, run-subject authority:** §2's three closed digest domains, canonical schema-backed event validation, exact historical prefix/node/edge resolution and recorded-item membership now run through the authenticated `RunService` access boundary. Independent digest vectors, crossed/post-head occurrences, runtime seal forgeries and real grant revocation pass 12 focused tests. D3360 owns this prerequisite; the public availability operation, compiled execution paths, closed source-occurrence resolver census and Maia/Inspector migration remain open. D3361 removes an ignored identical schema key without changing its parsed meaning. Receipt: `planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md`.
 
 - **Implementation checkpoint 2026-10-04, ordered derivation operands:** §1's literal order and repeated input occurrences are accepted by the shared manifest compiler and preserved in semantic-event matching. Empty members, duplicate alternatives, missing dependencies, cycles and per-member widening remain refused. D3359 owns this prerequisite only; execution path images, source-absence aggregation, exact-subject availability and Maia occurrence migrations remain open. Receipt: `planning/provider-exchange-and-execution/derivation-occurrences-2026-10-04.md`.
@@ -15,7 +17,7 @@
   `parsePersistedProviderDelivery` boundary for [[D3030]]; the application composition; and the
   operator CLI. **Not yet:** §1–§2 F1 execution metadata/confidence and binding algebra, the
   `/capabilities` path reach and `POST /evidence/availability` integration of the run-subject authority, the
-  Maia occurrence derived projections, and the migration of remaining existing learner
+  Maia occurrence consumer migration (the two §6 primitives now ship), and the migration of remaining existing learner
   callers. **2026-09-30 checkpoint:** built-in learner tablebase callers now use the shared
   exchange with health/backoff and exact inventory; fractional-clock retention is repaired.
   Built-in Explorer acquisition also uses that exchange (D3326), preserving sparse source success

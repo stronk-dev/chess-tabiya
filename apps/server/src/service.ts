@@ -44,6 +44,7 @@ import {
   postcommitNudgePacket,
   queryModules,
   deriveExplorerPopulationSummary,
+  deriveMaiaRunMoveOccurrence,
   ModuleQueryError,
   type FinalizedAssistanceV1,
   type ModuleQueryRequest,
@@ -1688,6 +1689,11 @@ export class RunService {
 
   evidenceItemAccess(principal: Principal, subject: EvidenceAvailabilitySubjectRef, itemDigest: RunEvidenceItemDigest) {
     return requireRunEvidenceItem(this.#storage, principal, subject, itemDigest);
+  }
+
+  /** Internal provider join; authorization and historical identity precede reading the page. */
+  maiaRunMoveOccurrence(principal: Principal, subject: EvidenceAvailabilitySubjectRef, page: Parameters<typeof deriveMaiaRunMoveOccurrence>[0]) {
+    return deriveMaiaRunMoveOccurrence(page, this.evidenceSubjectAccess(principal, subject));
   }
 
   guidanceAccess(runId: string, principal: Principal, nodeId: string): GuidanceAccess {

@@ -155,6 +155,8 @@ import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provi
 import { providerProtocolRow } from "./provider-protocol.js";
 import { CORPUS_GUARD } from "./population-guard.js";
 import type { ExplorerPopulationSummary } from "./explorer-summary.js";
+import { maiaExactFenOccurrencePayload, maiaRunOccurrencePayload, type MaiaExactFenMoveOccurrence, type MaiaOccurrencePageEvidence, type MaiaRunMoveOccurrence } from "./maia-occurrence.js";
+import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
 import type { ExplorerPositionPage } from "./provider-types.js";
 import type { FixedBoundPrincipalVariation, ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
 import { hintDisclosurePayload, hintHorizonOccurrence, type HintDisclosurePayload, type HintHorizonOccurrence } from "./hint-horizon.js";
@@ -1378,6 +1380,28 @@ export const createDerivedExplorerPopulationSummaryV1Evidence = (() => {
       opening: result.opening, history: result.history,
       disclosure: Object.freeze({ guard: "CORPUS_GUARD", statement: CORPUS_GUARD }),
     }), { page }, [page]);
+  });
+})();
+
+export const createDerivedMaiaRunMoveOccurrenceV1Evidence = (() => {
+  const route = "derived.maia.run_move_occurrence@1";
+  const symbol = evidenceFactorySymbol(route);
+  const isResolvedEdge = (candidate: unknown): boolean => {
+    try { assertResolvedRunSubject(candidate as ResolvedRunSubject); return (candidate as ResolvedRunSubject).subject.kind === "run_edge"; }
+    catch { return false; }
+  };
+  return factory({ route, symbol, shape: "derived", arms: [{ page: sealed("human.maia.policy_page@1"), resolved: value("a sealed historical run edge", isResolvedEdge), edge: sealed("run.record.edge@1") }], result: "single", dependency: "provider-exchange-and-execution" }, ({ page, resolved, edge }: { readonly page: MaiaOccurrencePageEvidence; readonly resolved: ResolvedRunSubject; readonly edge: DeclaredEvidence<RecordedEdge> }): DeclaredEvidence<MaiaRunMoveOccurrence> => {
+    const payload = maiaRunOccurrencePayload(page, resolved, edge);
+    return mint(route, symbol, payload, { page, subject: resolved.subject, edge }, [page, edge]);
+  });
+})();
+
+export const createDerivedMaiaExactFenMoveOccurrenceV1Evidence = (() => {
+  const route = "derived.maia.exact_fen_move_occurrence@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ page: sealed("human.maia.policy_page@1"), observedMoveUci: value("an observed canonical legal move", (candidate) => typeof candidate === "string" && candidate.length > 0) }], result: "single", dependency: "provider-exchange-and-execution" }, ({ page, observedMoveUci }: { readonly page: MaiaOccurrencePageEvidence; readonly observedMoveUci: string }): DeclaredEvidence<MaiaExactFenMoveOccurrence> => {
+    const payload = maiaExactFenOccurrencePayload(page, observedMoveUci);
+    return mint(route, symbol, payload, { page, observedMoveUci }, [page]);
   });
 })();
 

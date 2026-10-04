@@ -27649,6 +27649,23 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3362",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:376970240dae3eea380650e370276f4b52153f74bd08982e1cebc2ab2aae9dfc",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/maia-occurrence-implementation-2026-10-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3363",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e33330262e49b9d3750dba198bbd0fc7bea6fb1887145a5bb1194a25ffa610d0",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

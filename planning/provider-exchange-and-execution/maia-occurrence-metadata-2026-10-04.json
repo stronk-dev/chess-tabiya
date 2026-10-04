@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "baseline": "dbccd67f",
+  "declarations": {
+    "retained": 842,
+    "current": 851,
+    "successors": [
+      "engineCondition.engine_eval_swing",
+      "engineCondition.engine_mate_appears",
+      "engineCondition.tablebase_category_regression",
+      "engineCondition.tablebase_dtz_regression",
+      "fenPredicate.structuralFeature",
+      "opponent.practical_slice",
+      "opponent.selection"
+    ],
+    "newProjectionDeclarations": [
+      "derived.maia.exact_fen_move_occurrence",
+      "derived.maia.run_move_occurrence"
+    ],
+    "sourceIdentityChanges": 0,
+    "dependencyIdentityChanges": 0
+  },
+  "evaluatorModulesUnchanged": [
+    "apps/server/src/guard.ts",
+    "apps/server/src/guard-conditions.ts",
+    "packages/runtime/src/objective.ts",
+    "apps/server/src/opponent-selector.ts"
+  ],
+  "factoryProfiles": {
+    "retained": 272,
+    "current": 274,
+    "retainedOutcomeChanges": 0
+  },
+  "semanticValidationDelta": {
+    "changedOperationReceipts": [
+      {
+        "id": "runtime.semantic.bounded_target_batch",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.breadth_edge",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.complete_alternatives",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.duty_edge",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.local_edge",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.recorded_path",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.recorded_sequence",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.structural_edge",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      },
+      {
+        "id": "runtime.semantic.transition_edge",
+        "addedFiles": [
+          "packages/runtime/src/maia-occurrence.ts",
+          "packages/runtime/src/run-subject-digest.ts",
+          "packages/runtime/src/run-subject.ts"
+        ],
+        "removedFiles": []
+      }
+    ],
+    "changedPopulationReceiptDigests": 53,
+    "otherChanges": [],
+    "caseAndVerdictChanges": 0
+  },
+  "changedDocuments": 104,
+  "changedContentPacks": 92,
+  "versionTransitions": 129,
+  "ledgerDigestChanges": 68,
+  "authoredFieldChanges": 0
+}

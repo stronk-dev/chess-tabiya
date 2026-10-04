@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 current provider checkpoint — exact Maia occurrence primitives
+
+D3362 implements the separate history-conditioned run-move and exact-FEN observed-move
+projections through the sole value factory. Historical joins use current read grants and sealed
+run-edge authority, not a caller's path or the present cursor. Twelve focused tests include
+transposed paths, clocks, crossed heads/branches, forgery and actual grant revocation. Routine
+canonical metadata updates retain 842 predecessor declarations and all authored content;
+851 declarations now include seven compatibility successors and these two new projections.
+Receipt: `planning/provider-exchange-and-execution/maia-occurrence-implementation-2026-10-04.md`.
+
+Continue compiled execution/source-absence paths and exact-subject availability. D3363 retains
+the Inspector contract repair: its candidate page describes next moves, not an observed played
+move. Do not fabricate that operand or retire legacy policy callers on a helper-only census.
+This checkpoint does not complete Inspector, the provider RFC or the evidence milestone.
+Routine metadata/hash updates need no further owner question.
+
 ## 2026-10-04 current provider checkpoint — exact run subjects
 
 D3360 implements the three run digest domains, historical prefix/node/edge resolution and sealed

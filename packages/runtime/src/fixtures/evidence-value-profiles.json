@@ -499,6 +499,20 @@
       "4d98edab413b8e3764fe0af1fb3771d9f0f4f05d27ceb7d902886667dcb3138f"
     ]
   },
+  "derived.maia.exact_fen_move_occurrence@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "225ef769e69dc240b98dc8dc7b212962c303f642caed30ac54ec0da52b467f02"
+    ]
+  },
+  "derived.maia.run_move_occurrence@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "58201cb67db48810a110e06cd5fa79c4b1d40c2f593adbeb1a40df817c07435d"
+    ]
+  },
   "derived.material.event.role_asymmetry@1": {
     "availability": "available",
     "cardinality": 1,

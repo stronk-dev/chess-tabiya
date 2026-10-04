@@ -543,7 +543,7 @@
       "id": "fenPredicate.structuralFeature",
       "version": {
         "kind": "integer",
-        "value": 4
+        "value": 5
       }
     },
     {
@@ -683,7 +683,7 @@
       "id": "opponent.selection",
       "version": {
         "kind": "integer",
-        "value": 4
+        "value": 5
       }
     },
     {

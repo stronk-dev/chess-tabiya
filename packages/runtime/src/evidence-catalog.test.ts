@@ -46,8 +46,9 @@ function canonical(value: unknown): string {
 describe("primary evidence catalogue", () => {
   it("compiles all audited producer paths and current consumer operations", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
-    expect(EVIDENCE_PRODUCER_IDS).toEqual([...EXPECTED_PRODUCERS, "derived.explorer"]);
-    expect(EVIDENCE_PRODUCERS.map((item) => item.id)).toEqual([...EXPECTED_PRODUCERS, "derived.explorer"]);
+    expect(EVIDENCE_PRODUCER_IDS).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia"]);
+    // Declarations are unordered compiler input; compare the exact inventory, retaining duplicates.
+    expect(EVIDENCE_PRODUCERS.map((item) => item.id).sort()).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia"].sort());
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     // rfc/module-registration.md §2.2: ten module consumers join (rules_floor has no evidence);
     // rfc/hint-distance.md adds module.guided_hint over its 35 disclosure projections.
@@ -60,7 +61,11 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([46, 279, 35, 545]); // +1 producer/projection/theory binding: provider-exchange §8 move-free Explorer summary.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 281, 35, 545]); // provider §6 adds two operator-only Maia occurrence projections, no learner bindings.
+    for (const id of ["derived.maia.run_move_occurrence", "derived.maia.exact_fen_move_occurrence"]) {
+      expect(manifest.projections.find(projection => projection.id === id)?.disposition?.kind).toBe("operator_only");
+      expect(manifest.bindings.some(binding => binding.projection.id === id)).toBe(false);
+    }
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([78, 78, 16, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());

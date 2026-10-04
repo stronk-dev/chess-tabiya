@@ -151,7 +151,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
-  "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy", "derived.explorer",
+  "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy", "derived.explorer", "derived.maia",
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
@@ -1091,6 +1091,26 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("human.maia", "human.maia.candidate_wdl", "human", { role: "source_record", payloadType: "MaiaCandidateWdlProjection", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["nodeId", "engine", "targetElo", "candidates"], answerContent: ["evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure", "empty_population"] }, limitations: ["Per-candidate model WDL is retained exactly for inspection; it is not a move grade, recommendation, or middlegame oracle."] }),
     projection("human.maia", "human.maia.event", "human", { role: "event", payloadType: "EvidencePayload.human_model_predicted", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["kind", "source", "values"], answerContent: ["candidate_moves", "move"], forms: ["panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure"] }, limitations: ["Attached model event records a model output, not move quality or advice."] }),
     projection("human.maia", "human.maia.policy_page", "human", { role: "source_record", payloadType: "ProviderEvidenceDelivery<MaiaPolicyPage, \"maia.policy_page@1\">", grounding: "human_model", exactness: "measured", confidence: "reported", semantics: "One bounded top-k Maia policy page for a history-conditioned or exact-FEN request under a declared model, band, temperature, top-p and width, sealed with the same-exchange receipts.", operands: PROVIDER_DELIVERY_OPERANDS, answerContent: ["candidate_moves"], forms: ["list", "panel"], abstention: { possible: true, reasons: PROVIDER_SOURCE_REASONS }, limitations: ["Model mass is likelihood under one declared request, never move quality, intent or a player diagnosis; unlisted mass is unobserved, not impossible."], disposition: PROVIDER_OPERATOR_ONLY }),
+  ]),
+  producer("derived.maia", "derived", "packages/runtime/src/maia-occurrence.ts; packages/runtime/src/evidence-factories.ts", "local", "sync", [
+    projection("derived.maia", "derived.maia.run_move_occurrence", "derived", {
+      payloadType: "MaiaRunMoveOccurrence", grounding: "declared_convention", exactness: "measured", confidence: "reported",
+      semantics: "One history-conditioned policy page joined to an actually committed move at an exact historical run head. The start FEN and ordered before-move path come only from the sealed stored subject and exact recorded edge; every prior edge is legally replayed.",
+      operands: ["page", "run"], answerContent: ["candidate_moves"], forms: ["list", "panel"],
+      abstention: { possible: true, reasons: ["input_abstained", "identity_mismatch"] },
+      dependsOn: [ref("human.maia.policy_page"), ref("run.record.edge")], derivation: { inputs: [ref("human.maia.policy_page"), ref("run.record.edge")] },
+      limitations: ["The page remains a bounded top-k model observation, never move quality, intent or personality. A missing candidate is unobserved, not impossible.", "Inspector's next-move page has no observed move and is not this occurrence; D3363 owns its separate migration."],
+      disposition: PROVIDER_OPERATOR_ONLY,
+    }),
+    projection("derived.maia", "derived.maia.exact_fen_move_occurrence", "derived", {
+      payloadType: "MaiaExactFenMoveOccurrence", grounding: "human_model", exactness: "measured", confidence: "reported",
+      semantics: "One exact-FEN Maia policy page joined to an explicitly observed canonical legal move at exactly that request FEN; no run history or node is inferred.",
+      operands: ["page", "position"], answerContent: ["candidate_moves"], forms: ["list", "panel"],
+      abstention: { possible: true, reasons: ["input_abstained", "identity_mismatch"] },
+      dependsOn: [ref("human.maia.policy_page")], derivation: { inputs: [ref("human.maia.policy_page")] },
+      limitations: ["No run/history attribution, move quality, intent or personality. The observed move need not occur in the bounded candidate page; absence does not imply zero probability."],
+      disposition: PROVIDER_OPERATOR_ONLY,
+    }),
   ]),
   producer("human.explorer", "human", "apps/server/src/corpus.ts; apps/server/src/rest.ts", "provider", "interactive", [
     projection("human.explorer", "human.explorer.population", "human", { role: "source_record", payloadType: "CorpusPage", grounding: "human_corpus", exactness: "measured", confidence: "reported", operands: ["nodeId", "result", "committedMoveSan"], answerContent: ["fact", "candidate_moves"], forms: ["list", "panel"], abstention: { possible: true, reasons: CORPUS_RESULT_ABSTENTION_REASONS }, limitations: ["On-request inspector page; population counts do not grade or recommend a move."] }),

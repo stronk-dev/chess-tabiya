@@ -66,6 +66,8 @@ import {
   createHumanExplorerPopulationV1Evidence,
   createHumanExplorerPositionPageV1Evidence,
   createDerivedExplorerPopulationSummaryV1Evidence,
+  createDerivedMaiaRunMoveOccurrenceV1Evidence,
+  createDerivedMaiaExactFenMoveOccurrenceV1Evidence,
   createHumanMaiaPolicyPageV1Evidence,
   createLiveStockfishLegalRootTableV1Evidence,
   createLiveStockfishPositionEvalV1Evidence,
@@ -171,6 +173,8 @@ import {
 
 /** The literal route table: exact projection ref → its one production factory. */
 const EVIDENCE_VALUE_ROUTES = Object.freeze({
+  "derived.maia.run_move_occurrence@1": createDerivedMaiaRunMoveOccurrenceV1Evidence,
+  "derived.maia.exact_fen_move_occurrence@1": createDerivedMaiaExactFenMoveOccurrenceV1Evidence,
   "authored.structural_condition.input@1": createAuthoredStructuralConditionInputV1Evidence,
   "derived.activity.event.open_file_occupancy@1": createDerivedActivityEventOpenFileOccupancyV1Evidence,
   "derived.citation.attribution@1": createDerivedCitationAttributionV1Evidence,

@@ -37,8 +37,19 @@ silently replace the requested position. The server's `evidenceSubjectAccess`/`e
 methods require current read access before resolution. This does **not** yet expose the planned
 availability HTTP operation or complete occurrence-to-provider bindings.
 
-The current compiled closure is 41 producers, 230 projections, 34 consumers and 508 bindings,
-plus 78 semantic-event declarations, 78 eligibility rows, 15 refusal reasons and one selection
+The Maia occurrence joins are `deriveMaiaRunMoveOccurrence(page, resolved)` and
+`deriveMaiaExactFenMoveOccurrence(page, observedMoveUci)`, backed by the sole value factory.
+The first requires a privately sealed historical run edge and an exactly matching ordered
+history-conditioned provider request; its path replays through the recorded-edge authority.
+`RunService.maiaRunMoveOccurrence` checks current read access before reading the supplied page.
+The second validates an explicitly observed legal move at the exact-FEN request position and
+claims no run history. Both retain the whole sealed page. A legal move absent from bounded
+top-k remains unobserved, not impossible or poor quality. These are operator-only projections;
+Inspector's existing next-move distribution still has no observed-move operand and is not
+silently relabelled as an occurrence (D3363).
+
+The current compiled closure is 47 producers, 281 projections, 35 consumers and 545 bindings,
+plus 78 semantic-event declarations, 78 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,

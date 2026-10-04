@@ -392,6 +392,8 @@ export {
   corpusPageEvidence,
   corpusPositionEvidence,
   deriveExplorerPopulationSummary,
+  deriveMaiaRunMoveOccurrence,
+  deriveMaiaExactFenMoveOccurrence,
   evidenceReferenceEvidence,
   guardConditionEvidence,
   humanSplitPageEvidence,

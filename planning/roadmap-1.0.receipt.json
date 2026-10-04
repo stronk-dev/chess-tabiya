@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8d6ba551f3319c2eebbe5238f9abf2b25436bc5dde143709619e1c104d3df76e",
+    "roadmap": "sha256:3531178754200bca7362fd2c06bce3d63c6e6bc38fb6222b6b3e2c84bcb33062",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:7185f942d790a0ca4f89bf3b40aa129cd7aa139eb79930f2bbbc5db7cefeb76a",
-    "rfcRegister": "sha256:e016c4471e136f2ad5b5d704a18a5e7d2eb3c61d69f8ff6c63a8c5fa403228bf",
+    "workState": "sha256:efd53a583469f58c2430873c90bccc68b4ec63e7b3a8f2a1840224546c21bd4f",
+    "rfcRegister": "sha256:75e237b47add7b8df07df7367db5ed5572492551b6c1977974091d1cd63d5dd7",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:9012d85008bc05c9971ab8722161b03cc918ccb03a0b8d0491d82e1d85a95137",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 626,
+      "todo": 627,
       "doing": 0,
       "blocked": 1048,
-      "done": 1276,
+      "done": 1277,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Ordered derivation operands and exact historical run-subject authority now ship (D3359/D3360). Finish the provider RFC's compiled execution paths, binding source-absence algebra, closed source-occurrence resolver census and POST /evidence/availability over the authorized heads; then exact Maia occurrence/Inspector migration and remaining legacy Stockfish/Maia/Explorer caller retirement. Do not rebuild the integrated sources or Explorer summary. Discharge independent semantic authorities and production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings. Training progression/tempo and the owner-defined ramp-to-clamp projection remain D3318/D3322/D3317. Content expansion stays held for contract stability; D3262 remains research rather than production why-move authority.",
+      "nextAction": "Exact Maia occurrence primitives now ship with ordered derivation and historical run-subject authority (D3359/D3360/D3362). Finish compiled execution paths, binding source-absence algebra, the closed source-occurrence resolver census and POST /evidence/availability over authorized historical heads. D3363 retains Inspector migration: its next-move distribution has no observed played move and must not be relabelled or retired without a truthful consumer contract. Then complete remaining legacy Stockfish/Maia/Explorer caller retirement and consumer-owned Support/Review/bot/longitudinal joins. Do not rebuild integrated sources or Explorer summary. Independent semantic authorities and production reach remain open; training progression/tempo and ramp-to-clamp remain D3318/D3322/D3317. Content expansion stays held for stable contracts; D3262 remains research rather than production why-move authority.",
       "latestCheckpoint": {
         "at": "2026-10-04",
-        "summary": "The shared provider foundation, Guided Hint/sealed presentation, Explorer Theory/voice integration and ordered derivation operands remain implemented. D3360 adds the three exact run digest domains, canonical event validation, historical prefix/node/edge and recorded-item resolution through current read grants; independent vectors, forged/crossed/post-head occurrences and real grant revocation pass 12 focused tests. Full software passes 2782 tests/320 files plus seven performance tests/four files and downstream checks; content passes 223 tests/23 files and all 104 declarations. Browser CI passes 111 journeys with one optional real-Maia latency skip and no retries; governance and production bundles pass. D3361 removes an ignored schema duplicate without changing its parsed meaning. Canonical validation freshness changes only implementation receipt hashes, preserving all cases and verdicts, still zero fully validated profiles. Seven compatibility successors append to 835 unchanged predecessors (842 total); canonical requirements change on 104 documents and only packDigest changes on 68 ledgers. Every authored field, source/dependency identity and 19 evaluator-root images remain unchanged; the 352-document plan has zero remaining migration rows. Public availability, execution paths, source-occurrence joins and Maia/Inspector migration remain open. D3358 owns broad receipt/source coupling; training progression/tempo and ramp-to-clamp remain D3318/D3322/D3317. This is a run-authority prerequisite, not whole producer-to-consumer closure; no capability or milestone changes state.",
+        "summary": "D3362 implements separate history-conditioned run-move and exact-FEN observed-move Maia projections through the sole value factory. Exact run joins replay the sealed historical edge path through current read-access checks; crossed histories/heads/branches, clocks, page/subject forgeries and real grant revocation pass twelve focused tests. The whole sealed page survives; missing bounded top-k candidates remain unobserved, never probability zero or move quality. The manifest has 47 producers/281 projections/35 consumers/545 bindings, with no new learner bindings. Full software passes 2794 tests/322 files, seven performance tests/four files and all downstream checks, with zero type errors/Svelte warnings. Content passes 223 tests/23 files and all 104 requirements; browser CI passes 111 journeys with one optional latency skip and no retries. Canonical metadata retains 842 predecessor declarations, adds seven compatibility successors and two occurrence declarations (851 total), and changes requirements in 104 documents and only packDigest in 68 ledgers. Authored fields, source/dependency identities, evaluator modules, validation cases/verdicts and 272 prior factory outcomes are unchanged. The 352-document migration plan has zero remaining rows. Inspector contract repair (D3363), compiled execution/availability, source-absence aggregation and legacy retirement remain open; no whole capability or milestone changes state.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -212,7 +212,9 @@
           "planning/provider-exchange-and-execution/derivation-occurrences-2026-10-04.md",
           "planning/provider-exchange-and-execution/derivation-occurrences-metadata-2026-10-04.json",
           "planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md",
-          "planning/provider-exchange-and-execution/run-subject-metadata-2026-10-04.json"
+          "planning/provider-exchange-and-execution/run-subject-metadata-2026-10-04.json",
+          "planning/provider-exchange-and-execution/maia-occurrence-implementation-2026-10-04.md",
+          "planning/provider-exchange-and-execution/maia-occurrence-metadata-2026-10-04.json"
         ],
         "anchors": [
           {
@@ -258,7 +260,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:37137e7663397596b90ff0bdbffa6176ea3509883e0fc58201725f3b114f0e30"
+            "digest": "sha256:58708dfbb1c0a8aeb6ba025b69484256512202b24ffad18127d948593a8680d6"
           },
           {
             "kind": "work_state",
@@ -314,6 +316,16 @@
             "kind": "work_state",
             "id": "D3361",
             "digest": "sha256:6f6f85dc649d1b6089bce0381d58ccdbe1695e873d2514d0ebb894a7c4967b92"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3362",
+            "digest": "sha256:376970240dae3eea380650e370276f4b52153f74bd08982e1cebc2ab2aae9dfc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3363",
+            "digest": "sha256:e33330262e49b9d3750dba198bbd0fc7bea6fb1887145a5bb1194a25ffa610d0"
           }
         ]
       },
@@ -823,7 +835,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:37137e7663397596b90ff0bdbffa6176ea3509883e0fc58201725f3b114f0e30"
+            "digest": "sha256:58708dfbb1c0a8aeb6ba025b69484256512202b24ffad18127d948593a8680d6"
           },
           {
             "kind": "work_state",

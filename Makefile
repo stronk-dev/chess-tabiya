@@ -998,7 +998,9 @@ evidence-seal-audit:
 # registry, parsers and parser-implementation digest, seals and the durable boundary, the protocol
 # resource/census, the scheduler, descriptors, operator traversals and the supervisor exchange).
 # Regenerate the parser digest with UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1 after a parser change.
-.PHONY: provider-exchange-check provider-traversal run-subject-check
+.PHONY: provider-exchange-check provider-traversal run-subject-check maia-occurrence-check
+maia-occurrence-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/maia-occurrence.test.ts apps/server/src/maia-occurrence-access.test.ts
 run-subject-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/run-subject.test.ts apps/server/src/run-subject-access.test.ts
 .PHONY: explorer-summary-migration-proof
@@ -1007,7 +1009,7 @@ explorer-summary-migration-proof:
 	./node_modules/.bin/esbuild tools/explorer-summary-migration-proof/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-summary-migration-proof.js --log-level=warning
 	node apps/server/dist/explorer-summary-migration-proof.js $(ARGS)
 
-provider-exchange-check: run-subject-check
+provider-exchange-check: run-subject-check maia-occurrence-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-contract.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/explorer-summary-voice.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts
@@ -1023,6 +1025,11 @@ provider-traversal: build
 # registry = non-retired catalogue, receipts, positives and falsifiers for every factory.
 evidence-value-authority:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts
+
+# Explicit opt-in refresh of permanent computed factory profiles, not the frozen migration receipt.
+.PHONY: evidence-value-profile-update
+evidence-value-profile-update:
+	UPDATE_EVIDENCE_VALUE_PROFILES=1 ./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts -t "runs a valid authority case and a falsifier"
 
 evidence-value-authority-author-contract:
 	node --test tools/d2144-evidence-value-authority-author-contract/contract.test.mjs

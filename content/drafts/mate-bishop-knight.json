@@ -1036,7 +1036,7 @@
       "id": "opponent.selection",
       "version": {
         "kind": "integer",
-        "value": 4
+        "value": 5
       }
     },
     {

@@ -27,6 +27,8 @@ import type { DrillRun, EvidencePayload, Node, SelectionEngineIdentity } from ".
 import type { RecordedReading } from "./voice.js";
 import type { RecordedEdge } from "./recorded-edge.js";
 import type { ExplorerPopulationSummary } from "./explorer-summary.js";
+import type { MaiaExactFenMoveOccurrence, MaiaOccurrencePageEvidence, MaiaRunMoveOccurrence } from "./maia-occurrence.js";
+import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
 import type { ExplorerPositionPage } from "./provider-types.js";
 import type { ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
 
@@ -223,6 +225,21 @@ const PROVIDER_SOURCE_ROUTES = Object.freeze({
 /** The sole move-free Explorer derivation; callers supply only the admitted source page. */
 export function deriveExplorerPopulationSummary(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerPopulationSummary> {
   return invokeEvidenceValueRoute("derived.explorer.population_summary@1", { page });
+}
+
+/** History and move bytes come only from the selected, sealed historical run edge. */
+export function deriveMaiaRunMoveOccurrence(page: MaiaOccurrencePageEvidence, resolved: ResolvedRunSubject): DeclaredEvidence<MaiaRunMoveOccurrence> {
+  assertResolvedRunSubject(resolved);
+  if (resolved.subject.kind !== "run_edge") throw new TypeError("Maia run occurrence requires a run edge");
+  const { run, subject } = resolved;
+  const parent = run.nodes.find(node => node.id === subject.beforeNodeId)!;
+  const child = run.nodes.find(node => node.id === subject.afterNodeId)!;
+  const edge = recordedEdgeEvidence(run, parent, child);
+  return invokeEvidenceValueRoute("derived.maia.run_move_occurrence@1", { page, resolved, edge });
+}
+
+export function deriveMaiaExactFenMoveOccurrence(page: MaiaOccurrencePageEvidence, observedMoveUci: string): DeclaredEvidence<MaiaExactFenMoveOccurrence> {
+  return invokeEvidenceValueRoute("derived.maia.exact_fen_move_occurrence@1", { page, observedMoveUci });
 }
 
 /**
