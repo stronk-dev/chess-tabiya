@@ -1032,7 +1032,11 @@ explorer-summary-migration-proof:
 	./node_modules/.bin/esbuild tools/explorer-summary-migration-proof/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-summary-migration-proof.js --log-level=warning
 	node apps/server/dist/explorer-summary-migration-proof.js $(ARGS)
 
-provider-exchange-check: run-subject-check maia-occurrence-check evidence-execution-check
+.PHONY: bot-source-authority-check
+bot-source-authority-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/bot-opponent-source.test.ts apps/server/src/bot-policy-compiler.test.ts apps/server/src/bot-opponent-ply.test.ts
+
+provider-exchange-check: run-subject-check maia-occurrence-check evidence-execution-check bot-source-authority-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-contract.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/explorer-summary-voice.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts

@@ -191,6 +191,23 @@ describe("run lane 0.18: create, resume and rematch carry the exact profile (A1)
 });
 
 describe("POST /runs/:runId/opponent-ply (A2, A6, A8; D3027/D3028)", () => {
+  it("refuses an acquisition's copied delivery without committing an opponent move (D3368)", async () => {
+    const actual = providersFor(new MockProviderEngineClient());
+    const forged: BotOpponentAcquirer = {
+      async acquire(input) {
+        const result = await actual.acquire(input);
+        if (result.maia.kind !== "success") throw new Error("expected genuine acquisition");
+        return { ...result, maia: { ...result.maia, delivery: { ...result.maia.delivery } } };
+      },
+    };
+    const { handler, storage } = setup({ acquirer: forged });
+    const run = await createBotRun(handler, "bot-forged-source");
+    const response = await call(handler, "POST", "/runs/bot-forged-source/opponent-ply", plyBody(run, requestId("forgedsource")));
+    expect((await response.json() as { error: { result: unknown } }).error.result).toEqual(BOT_OPPONENT_PLY_RESULTS.provider_failed);
+    expect(response.status).toBe(502);
+    expect(storage.read(run.id)!.run.events).toEqual(run.events);
+  });
+
   it("commits one move + decision + operation + deliveries atomically, seeded by the server", async () => {
     const { handler, storage } = setup();
     const run = await createBotRun(handler, "bot-ply");

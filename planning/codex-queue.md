@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 bot source admission checkpoint
+
+D3368 implements the bot RFC's actual shared-delivery assertion and private immutable
+source-view admission at adaptation, compiler and replay boundaries. Focused genuine-source
+tests pass, including retained/save-reload equivalence and a REST refusal with no committed
+move. Full exact-index software, content, provider, browser CI and governance pass. Only
+D3368 closes; final staged-process checks and normal hooks run before commit. Receipt:
+`planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md`.
+
+Continue the remaining raw opponent and durable evidence consumers, then whole-manifest
+execution/digest, source-absence algebra and authorized availability. This does not discharge
+bot calibration/latency or promote a whole RFC/milestone. Routine metadata maintenance remains
+authorized implementation, not an owner question.
+
 ## 2026-10-04 exact retained-source checkpoint
 
 D3367 registers Syzygy's retained whole-source v1/factory explicitly beside default v2

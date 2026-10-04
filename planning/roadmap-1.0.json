@@ -800,7 +800,7 @@
         "nextAction": "Migrate remaining raw/narrow Stockfish, Maia and durable tablebase consumers before whole-manifest execution/digest integration. Retained whole-source versions are now explicitly registered (D3367); never infer operations, omit historical rows or relabel legacy payloads. Complete binding source-absence algebra, the closed occurrence-resolver census and POST /evidence/availability over authorized historical heads. D3363 retains Inspector's next-move distribution contract, not a fabricated observed move. Then close consumer-owned Support/Review/bot/longitudinal joins. Preserve shared acquisitions and narrow Explorer summary. Independent semantic authorities and production reach remain open; content expansion stays held for stable contracts.",
         "latestCheckpoint": {
           "at": "2026-10-04",
-          "summary": "D3367 registers the exact retained Syzygy whole-source v1/factory alongside current v2 in provider resource image v3. Compiler and factories resolve the same source registration; new requests derive their default route from the sole current operation row. Unlisted versions, bare/crossed payloads, forged deliveries and swapped/missing registry bindings still refuse; both source versions keep distinct path identities. No new operation or learner binding, acquisition downgrade or selection-rule change. Canonical maintenance preserves all 859 predecessor declarations, adds seven explicit successors (866 total), retains all 275 factory outcomes and all authored chess content, and changes only requirements plus 68 matching ledger hashes. Semantic observations/cases/external evidence/verdicts stay identical; the 352-document migration plan is empty. Complete exact-index software passes 2822 tests/323 files and seven performance tests/four files, with zero type errors/Svelte warnings and downstream contracts. Content passes 223 tests/23 files; provider passes 236 tests; browser CI passes 111 journeys with one optional skip and zero retries. Raw legacy consumers, D3363, whole-manifest execution/digest, binding absence and exact-subject availability remain open; no complete RFC, capability or milestone is promoted.",
+          "summary": "D3368 repairs bot source authority at actual adaptation/compiler/replay boundaries: shared delivery assertions precede payload reads, private immutable views reject copies and source substitutions, invalid Maia yields typed no-move, and optional invalid Stockfish abstains the whole guard. Genuine live/retained/save-reload sources preserve selection. Full exact-index software passes 2834 tests/324 files, seven isolated performance tests and downstream contracts. Real content passes 223 tests/23 files with zero clearance errors; provider checks pass 315 tests including 79 bot controls; browser CI passes 111 journeys with one optional skip and zero retries. Governance passes. All 866 declarations and 275 factory outcomes remain unchanged, semantic validation stays current and the 352-document migration plan is empty. No sampling, profile, source identity or authored content changes. Legacy raw consumers, D3363, whole-manifest execution/digest, binding absence, exact-subject availability and bot calibration/latency remain open; no whole RFC or milestone is promoted.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -836,7 +836,10 @@
             "planning/provider-exchange-and-execution/tablebase-selection-software-negative-2026-10-04.json",
             "planning/provider-exchange-and-execution/source-history-2026-10-04.md",
             "planning/provider-exchange-and-execution/source-history-metadata-2026-10-04.json",
-            "planning/provider-exchange-and-execution/source-history-software-2026-10-04.json"
+            "planning/provider-exchange-and-execution/source-history-software-2026-10-04.json",
+            "planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md",
+            "planning/provider-exchange-and-execution/bot-source-authority-software-2026-10-04.json",
+            "rfc/bot-policy.md"
           ],
           "anchors": [
             {
@@ -882,7 +885,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:2df4bcb5bec04c107ed968f544e684baab8e19b14328ec5e3dc3fa48f9009608"
+              "digest": "sha256:b9fac5218e5a22b048453fff8b15984b1375d7e6df03c3d1674febbdf68a36ca"
             },
             {
               "kind": "work_state",
@@ -968,6 +971,16 @@
               "kind": "work_state",
               "id": "D3367",
               "digest": "sha256:78fbe32b364d1c890ab98c9bd6fda3a34856d2c71ddf915c09faa8577f849786"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3368",
+              "digest": "sha256:5c2362dae2452cb763d132787506fc3be2743023bdc333515445a9cd5df32888"
+            },
+            {
+              "kind": "rfc",
+              "id": "bot-policy.md",
+              "digest": "sha256:8170db8a7d61f5ccbb251bf995eeb8b30280370481d758333d5f00bde370c1bc"
             }
           ]
         },
@@ -1477,7 +1490,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:2df4bcb5bec04c107ed968f544e684baab8e19b14328ec5e3dc3fa48f9009608"
+              "digest": "sha256:b9fac5218e5a22b048453fff8b15984b1375d7e6df03c3d1674febbdf68a36ca"
             },
             {
               "kind": "work_state",

@@ -1,5 +1,7 @@
 # RFC: Bot policy
 
+- **Source admission checkpoint 2026-10-04:** D3368 asserts shared operation-specific delivery seals before adaptation and private immutable source-view registration before compilation/replay. Forgeries yield typed Maia no-move or whole-guard abstention; legitimate retained and reconstructed sources preserve decisions. No sampling/profile/layer change; latency, calibration and full completion remain open. Receipt: `planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md`.
+
 - **Status:** **implementing — second owner-directed landing 2026-09-24: a learner can choose and play
   a registered bot.** Run lane 0.18 + migration 29 persist the exact profile reference and one
   decision/operation/delivery envelope per bot move; `POST /runs/:runId/opponent-ply` is mounted
@@ -1474,6 +1476,13 @@ selection record, never a parallel definitions store; **D937** — the endgame f
 as a named future measured layer (Open question 4).
 
 ## Changelog
+
+- 2026-10-04: D3368 implements §3's shared delivery assertions and private immutable
+  source-view admission at adaptation, compiler and replay. Forged Maia produces typed
+  no-move; forged optional Stockfish abstains the whole guard. Genuine live/retained and
+  save-reload sources preserve decisions. No profile, sampler, layer or threshold change;
+  full release latency/calibration and Stage B remain open. Receipt:
+  `planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md`.
 
 - 2026-08-22: created, executing `planning/platform-alignment/bot-policy/f8-dependency-map.md`
   under the O8 owner ruling of 2026-08-22.

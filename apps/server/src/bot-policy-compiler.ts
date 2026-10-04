@@ -32,6 +32,7 @@ import {
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 
 import { drawPolicyMoveBy, reconstructMaiaDistribution, seededPolicyUnit, type PolicyMassRow } from "./bot-policy-catalog.js";
+import { isBotMaiaSourceView, isBotStockfishSourceView } from "./bot-opponent-source.js";
 import { canonicalSha256, type Sha256 } from "./bot-profile-digest.js";
 import { neutralTiebreakKey } from "./opponent-selector.js";
 
@@ -300,6 +301,7 @@ export type BotMaiaRefusal =
 // Compiler.
 
 function admitMaia(page: BotMaiaPolicyPage, root: BotOperationRootAuthority, legal: BotExactLegalMoveMap, entry: BotProfileCatalogEntry): BotMaiaRefusal | undefined {
+  if (!isBotMaiaSourceView(page)) return "invalid_response";
   const profile = entry.reference;
   if (page.operation !== "maia.policy_page@1" || page.coverage !== "bounded_top_k") return "invalid_response";
   if (page.request.startFen !== root.startFen || !same(page.request.historyUci, root.historyUci)) return "maia_root_mismatch";
@@ -343,6 +345,7 @@ function deriveGuard(
     return { kind: "abstained", reason: stockfish.reason === "deadline" ? "guard_deadline" : stockfish.reason === "unavailable" ? "guard_unavailable" : "guard_source_failure", scores: none };
   }
   const table = stockfish.payload;
+  if (!isBotStockfishSourceView(table)) return { kind: "abstained", reason: "guard_source_failure", scores: none };
   const declared = BOT_LAYER_DECLARATIONS["guard.severe_error@1"].parameters;
   if (table.operation !== "stockfish.legal_root_table@1" || table.request.engine !== declared.engine
     || table.request.searchBound.kind !== declared.searchBound.kind || table.request.searchBound.value !== declared.searchBound.value
@@ -548,6 +551,10 @@ export interface BotPolicyReplayAuthority {
  */
 export function sealBotPolicyReplayAuthority(input: BotPolicyReplayAuthority): BotPolicyReplayAuthority {
   if (!ROOTS.has(input.root) || !LEGAL_MAPS.has(input.legal) || !CLASSIFIER_VIEWS.has(input.classifiers)) refuse("replay authority carries unsealed views");
+  if (input.maia.kind === "success" && !isBotMaiaSourceView(input.maia.payload)
+    || input.stockfish?.kind === "success" && !isBotStockfishSourceView(input.stockfish.payload)) {
+    refuse("replay authority carries unsealed provider source views");
+  }
   const entry = resolveBotProfileReference(input.profile);
   const value = Object.freeze({ ...input, profile: entry.reference });
   REPLAY_AUTHORITIES.add(value);

@@ -20,6 +20,8 @@
  * input and no private health state.
  */
 import {
+  assertProviderDelivery,
+  ProviderSealRefused,
   BOT_LAYER_DECLARATIONS,
   botEffectiveRequestedWidth,
   exactLegalMoves,
@@ -44,6 +46,20 @@ import type { ProviderRegistry, ProviderReleaseReceipt } from "./provider-health
 
 type MaiaDelivery = ProviderDelivery<MaiaPolicyPage, "maia.policy_page@1">;
 type StockfishDelivery = ProviderDelivery<StockfishLegalRootTable, "stockfish.legal_root_table@1">;
+
+// Source views are private immutable projections of asserted deliveries, not caller-owned
+// compiler inputs. Reload must re-enter the sole shared parser and these adapters.
+const MAIA_VIEWS = new WeakSet<object>();
+const STOCKFISH_VIEWS = new WeakSet<object>();
+class BotSourceAdmissionRefused extends TypeError {}
+
+export function isBotMaiaSourceView(value: unknown): value is BotMaiaPolicyPage {
+  return typeof value === "object" && value !== null && MAIA_VIEWS.has(value);
+}
+
+export function isBotStockfishSourceView(value: unknown): value is BotStockfishRootTable {
+  return typeof value === "object" && value !== null && STOCKFISH_VIEWS.has(value);
+}
 
 // ---------------------------------------------------------------------------------------------
 // Requests (the shared request types; the bot adds no private request shape).
@@ -101,11 +117,12 @@ function sourceIdentity(delivery: MaiaDelivery | StockfishDelivery) {
 
 /** The bot view of one admitted shared Maia page. Rows keep Maia's raw policy mass. */
 export function adaptMaiaDelivery(delivery: MaiaDelivery): BotMaiaPolicyPage {
+  assertProviderDelivery("maia.policy_page@1", delivery);
   const page = delivery.payload;
   const position = page.request.position;
-  if (position.kind !== "history_conditioned") throw new TypeError("bot Maia pages are history-conditioned");
+  if (position.kind !== "history_conditioned") throw new BotSourceAdmissionRefused("bot Maia pages are history-conditioned");
   const actual = delivery.acquisition.actualIdentity;
-  return Object.freeze({
+  const view = Object.freeze({
     operation: "maia.policy_page@1",
     request: Object.freeze({
       startFen: position.startFen,
@@ -121,6 +138,8 @@ export function adaptMaiaDelivery(delivery: MaiaDelivery): BotMaiaPolicyPage {
     rows: Object.freeze(page.candidates.map((candidate) => Object.freeze({ moveUci: candidate.moveUci, rawMass: candidate.probability }))),
     source: sourceIdentity(delivery),
   });
+  MAIA_VIEWS.add(view);
+  return view;
 }
 
 /**
@@ -128,8 +147,9 @@ export function adaptMaiaDelivery(delivery: MaiaDelivery): BotMaiaPolicyPage {
  * side's perspective (`root_mates` positive), which the guard treats as a whole-guard abstention.
  */
 export function adaptStockfishDelivery(delivery: StockfishDelivery): BotStockfishRootTable {
+  assertProviderDelivery("stockfish.legal_root_table@1", delivery);
   const table = delivery.payload;
-  return Object.freeze({
+  const view = Object.freeze({
     operation: "stockfish.legal_root_table@1",
     request: Object.freeze({
       fen: table.request.fen,
@@ -146,6 +166,8 @@ export function adaptStockfishDelivery(delivery: StockfishDelivery): BotStockfis
     }))),
     source: sourceIdentity(delivery),
   });
+  STOCKFISH_VIEWS.add(view);
+  return view;
 }
 
 export type BotSourceFailure = "unavailable" | "deadline" | "invalid_response";
@@ -158,12 +180,24 @@ export function botSourceFailure(reason: string): BotSourceFailure {
 }
 
 export function botMaiaSource(result: TypedProviderResult<"maia.policy_page@1">): BotProviderResult<BotMaiaPolicyPage> {
-  if (result.kind === "success") return Object.freeze({ kind: "success", payload: adaptMaiaDelivery(result.delivery) });
+  if (result.kind === "success") {
+    try { return Object.freeze({ kind: "success", payload: adaptMaiaDelivery(result.delivery) }); }
+    catch (error) {
+      if (!(error instanceof ProviderSealRefused || error instanceof BotSourceAdmissionRefused)) throw error;
+      return Object.freeze({ kind: "failure", reason: "invalid_response" });
+    }
+  }
   return Object.freeze({ kind: "failure", reason: result.kind === "source_failure" ? botSourceFailure(result.reason) : "invalid_response" });
 }
 
 export function botStockfishSource(result: TypedProviderResult<"stockfish.legal_root_table@1">): BotProviderResult<BotStockfishRootTable> {
-  if (result.kind === "success") return Object.freeze({ kind: "success", payload: adaptStockfishDelivery(result.delivery) });
+  if (result.kind === "success") {
+    try { return Object.freeze({ kind: "success", payload: adaptStockfishDelivery(result.delivery) }); }
+    catch (error) {
+      if (!(error instanceof ProviderSealRefused)) throw error;
+      return Object.freeze({ kind: "failure", reason: "invalid_response" });
+    }
+  }
   return Object.freeze({ kind: "failure", reason: result.kind === "source_failure" ? botSourceFailure(result.reason) : "invalid_response" });
 }
 

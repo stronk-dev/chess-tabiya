@@ -41,6 +41,14 @@ list.
 
 `apps/server/src/bot-policy-compiler.ts` is the one execution path.
 
+The provider adapters assert exact shared delivery seals before reading Maia or Stockfish.
+They alone produce immutable, privately registered bot source views. Compiler and replay
+admission reject spread/JSON copies and substituted views: invalid Maia yields typed no-move;
+an invalid optional Stockfish source abstains the whole guard. Saved deliveries reconstruct
+through the shared operation-specific parser and those same adapters, never a stored-view mint.
+Live and retained-exact deliveries use identical selection rules. A genuine exact-FEN Maia
+page cannot stand in for the bot's history-conditioned request.
+
 1. `sealBotRootAuthority` replays the run's start FEN and history to the root position and derives
    the root and history digests itself. `compileBotLegalMoveMap` and `compileBotClassifierView`
    derive the exact legal map and the `pawn_move@1` legal-board view from that root. All three are

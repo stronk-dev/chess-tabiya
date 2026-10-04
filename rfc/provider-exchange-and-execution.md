@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-04, bot source admission:** D3368 enforces the exact shared delivery assertion at bot adaptation and privately registered immutable views at compiler/replay admission. Copied/crossed sources produce typed no-move or whole-guard abstention; persisted and retained sources reconstruct through the same authority. Legacy raw consumers, whole-manifest execution/digest and availability remain open. Receipt: `planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md`.
+
 - **Implementation checkpoint 2026-10-04, retained whole-source history:** D3367 explicitly registers the frozen Syzygy source/factory v1 alongside current v2 in provider resource image v3. Both the strict execution compiler and source factory resolve this same exact binding; default acquisition follows the sole current operation row, replacing the copied route table. Unknown versions, bare/crossed payloads, forged deliveries and missing/swapped retained bindings refuse. No new operation, learner binding or default downgrade. Full legacy migration, whole-manifest execution/digest and availability remain open. Receipt: `planning/provider-exchange-and-execution/source-history-2026-10-04.md`.
 
 - **Implementation checkpoint 2026-10-04, whole-source opponent tablebase selection:** D3366 carries the built-in sealed Syzygy source through the actual opponent consumer for root and practical-resistance replies, refusing crossed FENs/clocks, forgeries and modern-source failure without a bare-probe fallback. The operator-only source v1 is retained; bound source v2 and provider resource image v2 preserve immutable declaration history while retaining operation/parser v1. Standalone/fixture sources, durable legacy packets, other raw provider consumers, whole-manifest execution and availability remain open. Receipt: `planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
@@ -2104,6 +2106,13 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-10-04: D3368 implements bot source admission through asserted shared deliveries
+  and privately registered immutable views. Compiler/replay reject source copies; live,
+  retained and parser-reconstructed sources preserve selection. This repairs migration
+  step 5's bot boundary without changing any provider operation or widening a source
+  projection. Legacy consumers, full execution/digest and availability remain open.
+  Receipt: `planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md`.
 
 - 2026-10-04: D3367 registers the exact retained Syzygy whole-source v1/factory in the
   protocol resource while preserving default v2 acquisition. Compiler and factory source

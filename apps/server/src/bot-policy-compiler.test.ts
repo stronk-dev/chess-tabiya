@@ -30,6 +30,17 @@ import {
 } from "./bot-policy-compiler.js";
 import { canonicalSha256 } from "./bot-profile-digest.js";
 import { neutralTiebreakKey } from "./opponent-selector.js";
+import { adaptMaiaDelivery, adaptStockfishDelivery } from "./bot-opponent-source.js";
+import { PROVIDER_EXCHANGE_AUTHORITY } from "../../../packages/runtime/src/provider-exchange.js";
+import { normalizeProviderRequest } from "../../../packages/runtime/src/provider-requests.js";
+import { FIXTURE_AT, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest } from "../../../packages/runtime/src/provider-test-fixtures.js";
+import type { ProviderExecutionCapture, ProviderOperationId, ProviderRequestedIdentityMap } from "../../../packages/runtime/src/provider-types.js";
+
+function delivery<K extends ProviderOperationId>(operation: K, requested: ProviderRequestedIdentityMap[K], capture: ProviderExecutionCapture<K>) {
+  const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt({ operation, requestedIdentity: requested, capture, requestedAt: FIXTURE_AT, retrievedAt: FIXTURE_AT });
+  const parsed = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+  return PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, ...parsed, servedAt: FIXTURE_AT });
+}
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const HEAD = `sha256:${"a".repeat(64)}`;
@@ -45,25 +56,20 @@ function views(root: BotOperationRootAuthority) {
 }
 
 function maia(entry: BotProfileCatalogEntry, rows: readonly (readonly [string, number])[], request: Partial<BotMaiaPolicyPage["request"]> = {}): BotProviderResult<BotMaiaPolicyPage> {
-  return {
-    kind: "success",
-    payload: {
-      operation: "maia.policy_page@1",
-      request: {
-        startFen: START,
-        historyUci: [],
-        band: entry.reference.band,
-        model: entry.reference.model,
-        temperature: entry.reference.sampler.temperature,
-        topP: entry.reference.sampler.topP,
-        requestedWidth: entry.reference.sampler.requestedWidth,
-        ...request,
-      },
-      actual: { modelId: entry.reference.model.id, version: entry.reference.model.version },
-      coverage: "bounded_top_k",
-      rows: rows.map(([moveUci, rawMass]) => ({ moveUci, rawMass })),
-    },
-  };
+  try {
+    const identity = normalizeProviderRequest("maia.policy_page@1", maiaRequest({ kind: "history_conditioned", startFen: request.startFen ?? START, historyUci: request.historyUci ?? [] }, {
+      requestedModel: request.model ?? entry.reference.model,
+      band: request.band ?? entry.reference.band,
+      temperature: request.temperature ?? entry.reference.sampler.temperature,
+      topP: request.topP ?? entry.reference.sampler.topP,
+      requestedWidth: request.requestedWidth ?? entry.reference.sampler.requestedWidth,
+    }));
+    const lines = [...rows.map(([move, probability], index) => `info depth 1 multipv ${index + 1} policy ${probability} pv ${move}`), `bestmove ${rows[0]?.[0] ?? "(none)"}`];
+    return { kind: "success", payload: adaptMaiaDelivery(delivery("maia.policy_page@1", identity, maiaCapture(identity, lines))) };
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+    return { kind: "failure", reason: "invalid_response" };
+  }
 }
 
 const START_MOVES = ["a2a3", "a2a4", "b1a3", "b1c3", "b2b3", "b2b4", "c2c3", "c2c4", "d2d3", "d2d4", "e2e3", "e2e4", "f2f3", "f2f4", "g1f3", "g1h3", "g2g3", "g2g4", "h2h3", "h2h4"];
@@ -75,7 +81,14 @@ function stockfish(scores: Readonly<Record<string, BotStockfishScore | number>> 
     return { moveUci, depth: options.depth ?? 8, score };
   });
   if (options.duplicate !== undefined) rows.push({ moveUci: options.duplicate, depth: 8, score: { kind: "centipawns", value: 999 } });
-  return { kind: "success", payload: { operation: "stockfish.legal_root_table@1", request: { fen: options.fen ?? START, engine: "stockfish-guard@1", searchBound: { kind: "depth", value: 8 }, perspective: "root_side" }, rows } };
+  try {
+    const identity = normalizeProviderRequest("stockfish.legal_root_table@1", legalRootRequest(options.fen ?? START));
+    const lines = legalRootLines(options.fen ?? START, rows.map(row => ({ move: row.moveUci, score: `${row.score.kind === "centipawns" ? "cp" : "mate"} ${row.score.value}`, depth: row.depth })), 8);
+    return { kind: "success", payload: adaptStockfishDelivery(delivery("stockfish.legal_root_table@1", identity, legalRootCapture(identity, lines))) };
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+    return { kind: "failure", reason: "invalid_response" };
+  }
 }
 
 function execute(input: Omit<Parameters<typeof compileBotPolicyExecution>[0], "root" | "legal" | "classifiers"> & { readonly root?: BotOperationRootAuthority }): BotPolicyExecution {
@@ -184,9 +197,10 @@ describe("guard authority (bot-policy §2.4, A3)", () => {
       ["guard_source_failure", { kind: "failure", reason: "invalid_response" }],
       ["guard_mixed_domain", stockfish({ ...GUARD_SCORES, h2h4: { kind: "mate", value: -3 } })],
       ["guard_mate_domain", stockfish(Object.fromEntries(START_MOVES.map((move) => [move, { kind: "mate", value: 5 }])))],
-      ["guard_candidate_mismatch", stockfish(GUARD_SCORES, { duplicate: "e2e4" })],
-      ["guard_candidate_mismatch", stockfish(GUARD_SCORES, { drop: "h2h3" })],
-      ["guard_candidate_mismatch", stockfish(GUARD_SCORES, { fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1" })],
+      // Invalid tables are now refused by the shared parser, before a guard view exists.
+      ["guard_source_failure", stockfish(GUARD_SCORES, { duplicate: "e2e4" })],
+      ["guard_source_failure", stockfish(GUARD_SCORES, { drop: "h2h3" })],
+      ["guard_candidate_mismatch", stockfish(GUARD_SCORES, { fen: START.replace("0 1", "0 2") })],
       ["guard_source_failure", stockfish(GUARD_SCORES, { depth: 7 })],
       ["empty_after_mask", stockfish({ b1c3: 900 })],
     ];
@@ -202,7 +216,7 @@ describe("guard authority (bot-policy §2.4, A3)", () => {
 
   it("never lets a duplicate Stockfish row choose which score becomes guard truth ([[D3029]])", () => {
     const decision = run(stockfish({ ...GUARD_SCORES, g2g4: -270 }, { duplicate: "g2g4" }));
-    expect(decision.layers[1]).toEqual({ id: "guard.severe_error@1", action: "abstained", reason: "guard_candidate_mismatch" });
+    expect(decision.layers[1]).toEqual({ id: "guard.severe_error@1", action: "abstained", reason: "guard_source_failure" });
   });
 
   it("baseline never requests or records the guard", () => {
@@ -250,11 +264,12 @@ describe("source admission and no-move results (bot-policy §4.3, A10)", () => {
   });
 
   it.each([
-    ["maia_empty_page", () => maia(entry, [])],
-    ["maia_duplicate_move", () => maia(entry, [["e2e4", 0.5], ["e2e4", 0.4]])],
-    ["maia_move_outside_legal_map", () => maia(entry, [["e2e5", 0.9], ["d2d4", 0.1]])],
-    ["maia_invalid_mass", () => maia(entry, [["e2e4", 1.4]])],
-    ["maia_root_mismatch", () => maia(entry, BASE_ROWS, { historyUci: ["e2e4"] })],
+    // The shared operation refuses malformed pages before they can be adapted/sealed.
+    ["invalid_response", () => maia(entry, [])],
+    ["invalid_response", () => maia(entry, [["e2e4", 0.5], ["e2e4", 0.4]])],
+    ["invalid_response", () => maia(entry, [["e2e5", 0.9], ["d2d4", 0.1]])],
+    ["invalid_response", () => maia(entry, [["e2e4", 1.4]])],
+    ["maia_root_mismatch", () => maia(entry, BASE_ROWS, { startFen: START.replace("0 1", "0 2") })],
     ["maia_profile_mismatch", () => maia(entry, BASE_ROWS, { band: 1800 })],
     ["maia_profile_mismatch", () => maia(entry, BASE_ROWS, { temperature: 1 })],
     ["maia_profile_mismatch", () => maia(entry, BASE_ROWS, { requestedWidth: 8 })],

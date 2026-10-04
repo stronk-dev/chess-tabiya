@@ -27702,6 +27702,15 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/source-history-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3368",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5c2362dae2452cb763d132787506fc3be2743023bdc333515445a9cd5df32888",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md",
+      "evidenceKind": "path"
     }
   ]
 }
