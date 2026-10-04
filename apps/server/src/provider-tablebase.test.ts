@@ -1,6 +1,6 @@
 import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
-import { providerSourceEvidence, type SyzygyPositionRequest } from "@chess-tabiya/runtime";
+import { exactLegalMoves, providerSourceEvidence, type SyzygyPositionRequest } from "@chess-tabiya/runtime";
 
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { ControlledFetch, ManualClock, flush, syzygyBody } from "./provider-exchange.test-support.js";
@@ -11,6 +11,8 @@ import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { OpponentSelector } from "./opponent-selector.js";
+import type { TablebaseProbeEvidence, TablebaseSource } from "./tablebase.js";
 
 const FEN = "8/8/8/8/8/8/3Q4/k1K5 w - - 0 1";
 const OTHER = "8/8/8/8/8/8/3R4/k1K5 w - - 0 1";
@@ -34,6 +36,94 @@ async function harness() {
 }
 
 describe("learner Syzygy shared exchange", () => {
+  it("selects through whole provider evidence without re-wrapping the bare compatibility position", async () => {
+    const { source, remote, clock } = await harness();
+    const bare = vi.spyOn(source, "probe").mockRejectedValue(new Error("legacy bare-position path must not be used"));
+    const selector = new OpponentSelector({
+      async execute() { throw new Error("unexpected engine execution"); },
+      health(id) { return { id, status: "stopped", restartCount: 0 }; },
+    }, { tablebaseSource: source, monotonicNowMs: clock.now, wallNow: clock.wall });
+    const selection = selector.select({ startFen: FEN, historyUci: [], policy: { mode: "perfect_tablebase", policyConfigDigest: `sha256:${"a".repeat(64)}` }, seed: 73 }).then(value => ({ value }), error => ({ error }));
+    try {
+      await flush();
+      expect(remote.calls).toHaveLength(1);
+      remote.respond(0, syzygyBody(FEN));
+      expect(await selection).toMatchObject({ value: { policyModeApplied: "perfect_tablebase" } });
+      expect(bare).not.toHaveBeenCalled();
+    } finally {
+      if (remote.calls.length !== 0) remote.respond(0, syzygyBody(FEN));
+      await selection;
+      bare.mockRestore();
+    }
+  });
+
+  it.each([OTHER, FEN.replace("0 1", "1 2")])("refuses an admitted page for a different exact FEN, including clocks (%s)", async crossedFen => {
+    const { source, remote, clock } = await harness();
+    const page = source.probeEvidence(crossedFen);
+    await flush();
+    remote.respond(0, syzygyBody(crossedFen));
+    const evidence = await page;
+    const bare = vi.fn(async () => { throw new Error("must not fall back to bare data"); });
+    const crossed: TablebaseSource = { kind: "lichess", probe: bare, async probeEvidence() { return evidence; } };
+    const selector = new OpponentSelector({ async execute() { throw new Error("unexpected engine"); }, health(id) { return { id, status: "stopped", restartCount: 0 }; } }, { tablebaseSource: crossed, monotonicNowMs: clock.now });
+    await expect(selector.select({ startFen: FEN, historyUci: [], policy: { mode: "perfect_tablebase", policyConfigDigest: `sha256:${"a".repeat(64)}` }, seed: 73 })).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE", message: "Tablebase evidence does not match the requested position" });
+    expect(bare).not.toHaveBeenCalled();
+    expect(remote.calls).toHaveLength(1);
+  });
+
+  it("refuses forged evidence and does not retry provider failures through the legacy method", async () => {
+    const { source, remote, clock } = await harness();
+    const page = source.probeEvidence(FEN);
+    await flush();
+    remote.respond(0, syzygyBody(FEN));
+    const evidence = await page;
+    const bare = vi.fn(async () => { throw new Error("must not fall back to bare data"); });
+    for (const answer of [
+      async () => ({ ...evidence }) as TablebaseProbeEvidence,
+      async () => { throw Object.assign(new Error("source unavailable"), { code: "TABLEBASE_UNAVAILABLE" }); },
+    ]) {
+      const selector = new OpponentSelector({ async execute() { throw new Error("unexpected engine"); }, health(id) { return { id, status: "stopped", restartCount: 0 }; } }, { tablebaseSource: { kind: "lichess", probe: bare, probeEvidence: answer }, monotonicNowMs: clock.now });
+      await expect(selector.select({ startFen: FEN, historyUci: [], policy: { mode: "perfect_tablebase", policyConfigDigest: `sha256:${"a".repeat(64)}` }, seed: 73 })).rejects.toThrow();
+    }
+    expect(bare).not.toHaveBeenCalled();
+  });
+
+  it("keeps whole deliveries for the practical-resistance root and both candidate reply positions", async () => {
+    // Synthetic source-control rows, not an assertion of real tablebase outcomes or bot strength.
+    const root = "8/8/8/8/8/2k5/4K3/7R b - - 0 1";
+    const b3 = "8/8/8/8/8/1k6/4K3/7R w - - 1 2";
+    const c2 = "8/8/8/8/8/8/2k1K3/7R w - - 1 2";
+    const body = (fen: string) => ({
+      category: fen === root ? "loss" : "win", dtz: fen === root ? -20 : 19, precise_dtz: null,
+      moves: exactLegalMoves(fen).map(move => ({ uci: move.uci, san: move.uci, category: fen === root ? ["c3b3", "c3c2"].includes(move.uci) ? "win" : "loss" : move.uci === (fen === b3 ? "h1h3" : "e2f2") ? "draw" : "loss", dtz: 0, precise_dtz: 0 })),
+    });
+    const { source, remote, clock } = await harness();
+    const bare = vi.spyOn(source, "probe").mockRejectedValue(new Error("legacy root or child probe must not be used"));
+    const selector = new OpponentSelector({
+      async execute(_id, value) {
+        const first = value.commands.find(command => command.startsWith("position "))!.endsWith("c3b3");
+        return ["info depth 1 multipv 1 policy 0.1 pv " + (first ? "h1h3" : "h1h2"), "info depth 1 multipv 2 policy 0.9 pv e2f2", "bestmove e2f2"];
+      },
+      health(id) { return { id, status: "ready", restartCount: 0, identity: { id, kind: "opponent", name: "Synthetic Maia", version: "fixture", seedHonored: false, eloHonored: true }, bandOption: "Elo", bandRange: { min: 1000, max: 2400 } }; },
+    }, { tablebaseSource: source, monotonicNowMs: clock.now });
+    const selection = selector.select({ startFen: root, historyUci: [], policy: { mode: "practical_resistance", policyConfigDigest: `sha256:${"a".repeat(64)}`, targetElo: 1800 }, seed: 73 }).then(value => ({ value }), error => ({ error }));
+    try {
+      for (const [index, fen] of [root, b3, c2].entries()) {
+        await flush();
+        expect(remote.calls, fen).toHaveLength(index + 1);
+        expect(new URL(remote.calls[index]!.url).searchParams.get("fen")).toBe(fen);
+        remote.respond(index, body(fen));
+      }
+      expect(await selection).toMatchObject({ value: { policyModeApplied: "practical_resistance", moveUci: "c3c2", candidates: [{ moveUci: "c3b3", concessionRatio: 0.1 }, { moveUci: "c3c2", concessionRatio: 0.9 }] } });
+      expect(bare).not.toHaveBeenCalled();
+      expect(remote.calls).toHaveLength(3);
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, body(new URL(remote.calls[index]!.url).searchParams.get("fen")!));
+      await selection;
+      bare.mockRestore();
+    }
+  });
+
   it("detaches an aborted caller without cancelling a peer's shared acquisition", async () => {
     const { source, remote, scheduler } = await harness();
     const controller = new AbortController();
@@ -336,6 +426,7 @@ describe("learner Syzygy shared exchange", () => {
       return new Response(JSON.stringify(syzygyBody(fen)), { status: 200, headers: { etag: '"fixture"' } });
     };
     vi.stubGlobal("fetch", fetcher);
+    const bare = vi.spyOn(ExchangeTablebaseSource.prototype, "probe").mockRejectedValue(new Error("production selection must keep the sealed delivery"));
     let application: Awaited<ReturnType<typeof createInMemoryTestApplication>> | undefined;
     try {
       application = await createInMemoryTestApplication({ engineMode: "maia", stockfishCommand: "/nonexistent/tabiya-test-stockfish", maiaHost: "127.0.0.1", maiaPort: 1, cookieSecure: false });
@@ -355,6 +446,7 @@ describe("learner Syzygy shared exchange", () => {
       expect(delivered).toMatchObject({ kind: "success", delivery: { kind: "retained_exact" } });
       expect(requests).toBe(1);
       expect(application.providerHealth.snapshot().providers.find((row) => row.instanceId === "tablebase-primary")).toMatchObject({ state: "available" });
-    } finally { await application?.close(); vi.unstubAllGlobals(); }
+      expect(bare).not.toHaveBeenCalled();
+    } finally { await application?.close(); bare.mockRestore(); vi.unstubAllGlobals(); }
   });
 });

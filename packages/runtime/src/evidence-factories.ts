@@ -1341,11 +1341,12 @@ function isSealedDelivery(operation: ProviderOperationId, candidate: unknown): b
 
 const hexOf = (digest: string): string => digest.slice("sha256:".length);
 
-function providerSourceFactory<K extends ProviderOperationId>(operation: K): EvidenceValueFactory<{ readonly delivery: ProviderDelivery<ProviderOperationResultMap[K], K> }, DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>>> {
+function providerSourceFactory<K extends ProviderOperationId>(operation: K, predecessor?: "syzygy-position-v1"): EvidenceValueFactory<{ readonly delivery: ProviderDelivery<ProviderOperationResultMap[K], K> }, DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>>> {
   const row = providerProtocolRow(operation);
-  const route = row.sourceProjection;
+  if (predecessor !== undefined && operation !== "syzygy.position@1") throw new TypeError("Only the frozen Syzygy source predecessor is retained");
+  const route = predecessor === undefined ? row.sourceProjection : "live.syzygy.position_result@1";
   const symbol = evidenceFactorySymbol(route);
-  if (symbol !== row.sourceFactoryId) throw new TypeError(`${operation} source factory symbol ${symbol} disagrees with the provider-protocol resource ${row.sourceFactoryId}`);
+  if (predecessor === undefined && symbol !== row.sourceFactoryId) throw new TypeError(`${operation} source factory symbol ${symbol} disagrees with the provider-protocol resource ${row.sourceFactoryId}`);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ delivery: value(`a scheduler-sealed ${operation} provider delivery`, (candidate) => isSealedDelivery(operation, candidate)) }], result: "single", dependency: "provider-exchange-and-execution" }, ({ delivery }: { readonly delivery: ProviderDelivery<ProviderOperationResultMap[K], K> }) => {
     assertProviderDelivery(operation, delivery);
     const { acquisition, payloadReceipt } = delivery;
@@ -1365,7 +1366,8 @@ export const createLiveStockfishLegalRootTableV1Evidence = providerSourceFactory
 export const createLiveStockfishPositionEvalV1Evidence = providerSourceFactory("stockfish.position_evaluation@1");
 export const createLiveStockfishPrincipalVariationV1Evidence = providerSourceFactory("stockfish.principal_variation@1");
 export const createHumanMaiaPolicyPageV1Evidence = providerSourceFactory("maia.policy_page@1");
-export const createLiveSyzygyPositionResultV1Evidence = providerSourceFactory("syzygy.position@1");
+export const createLiveSyzygyPositionResultV1Evidence = providerSourceFactory("syzygy.position@1", "syzygy-position-v1");
+export const createLiveSyzygyPositionResultV2Evidence = providerSourceFactory("syzygy.position@1");
 export const createHumanExplorerPositionPageV1Evidence = providerSourceFactory("lichess_explorer.position_page@1");
 
 export const createDerivedExplorerPopulationSummaryV1Evidence = (() => {

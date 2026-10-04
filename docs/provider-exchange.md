@@ -17,7 +17,7 @@ provider-private shortcut.
 | `stockfish.position_evaluation@1` | stockfish | `stockfish-analysis` supervisor | `live.stockfish.position_eval@1` | `stockfish-position-evaluation` |
 | `stockfish.principal_variation@1` | stockfish | `stockfish-analysis` supervisor | `live.stockfish.principal_variation@1` | `stockfish-principal-variation` |
 | `maia.policy_page@1` | maia | `maia-5m` supervisor | `human.maia.policy_page@1` | `maia-policy-page` |
-| `syzygy.position@1` | syzygy | `https://tablebase.lichess.org/standard` | `live.syzygy.position_result@1` | `syzygy-position` |
+| `syzygy.position@1` | syzygy | `https://tablebase.lichess.org/standard` | `live.syzygy.position_result@2` | `syzygy-position` |
 | `lichess_explorer.position_page@1` | lichess_explorer | `https://explorer.lichess.org/lichess` | `human.explorer.position_page@1` | `explorer-position-page` |
 
 The literal rows live in `PROVIDER_PROTOCOL_RESOURCE` (`packages/runtime/src/provider-protocol.ts`).
@@ -139,6 +139,9 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
   operation. Exact run-subject authority ships separately; it is not the availability endpoint.
 - Remaining legacy Stockfish/Maia callers. Built-in learner tablebase and Explorer acquisitions
   have migrated (below). Explorer's compatibility consumers still await the narrow projections.
+  D3367 also owns the retained whole-source execution seam: Syzygy v1 remains frozen while the
+  current protocol selects v2; strict whole-image completion must register or retire that
+  history explicitly rather than guessing or excluding it.
   Supplied sources and standalone sourcing/research clients
   are separate, and old node-shaped projections retire only at a proven zero-consumer census.
 - Inspector's Maia next-move distribution and remaining legacy Explorer consumer identities.
@@ -148,6 +151,15 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
   networked sidecar; see `docs/provider-health.md`.)
 
 ## Learner tablebase probes
+
+The built-in opponent selector now consumes the whole source delivery through
+`probeEvidence` and `opponent.selection@1` before reading any position. It checks the
+registered execution operation, seal and exact requested/payload FEN (including clocks).
+Root and practical-resistance reply probes share this path; provider failure cannot
+fall back to the bare compatibility probe. The bound source is the v2 successor;
+the operator-only v1 declaration remains frozen. Standalone/fixture sources and the
+durable worker's old packet remain distinct pending their own migration. Receipt:
+`planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
 
 `createApplication` now supplies one `ExchangeTablebaseSource` to the opponent selector, run
 service and durable evidence queue when the built-in Lichess tablebase is configured. It calls the

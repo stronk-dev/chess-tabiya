@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 whole-source tablebase opponent checkpoint
+
+D3366 migrates built-in root and practical-resistance reply selection to the whole registered
+Syzygy delivery, with exact FEN/clock and factory/consumer admission before reading the position.
+Modern failure never falls back to a bare probe. Source v2 preserves the operator-only v1;
+canonical metadata maintenance preserves authored content and frozen history. Receipt:
+`planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
+
+Reconcile D3367's retained whole-source execution registration explicitly, without inference
+or silently omitting historical rows. Continue the remaining legacy Stockfish/Maia/durable packet and standalone-source migrations,
+then whole-manifest execution/digest, binding absence and exact-subject availability. D3363's
+Inspector distribution is still not an observed-move occurrence. No provider RFC or learner
+milestone is complete; routine metadata/hash maintenance needs no further owner question.
+
 ## 2026-10-04 literal execution compiler checkpoint
 
 D3365 implements ordered Cartesian paths, exact repeated source occurrences, registered path

@@ -25,7 +25,7 @@ export const PROVIDER_PROTOCOL_MEMBERS = [
 
 export const PROVIDER_PROTOCOL_RESOURCE = Object.freeze({
   id: "provider-protocol",
-  version: 1,
+  version: 2,
   payload: Object.freeze({
     operations: Object.freeze([
       Object.freeze({ member: "lichess_explorer_position_page_v1", operation: "lichess_explorer.position_page@1", provider: "lichess_explorer", endpoint: Object.freeze({ kind: "https", origin: "https://explorer.lichess.org", path: "/lichess" }), parserId: "parse.lichess_explorer_position_page@1", sourceProjection: "human.explorer.position_page@1", sourceFactoryId: "createHumanExplorerPositionPageV1Evidence", cliName: "explorer-position-page" }),
@@ -33,7 +33,7 @@ export const PROVIDER_PROTOCOL_RESOURCE = Object.freeze({
       Object.freeze({ member: "stockfish_legal_root_table_v1", operation: "stockfish.legal_root_table@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_legal_root_table@1", sourceProjection: "live.stockfish.legal_root_table@1", sourceFactoryId: "createLiveStockfishLegalRootTableV1Evidence", cliName: "stockfish-legal-roots" }),
       Object.freeze({ member: "stockfish_position_evaluation_v1", operation: "stockfish.position_evaluation@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_position_evaluation@1", sourceProjection: "live.stockfish.position_eval@1", sourceFactoryId: "createLiveStockfishPositionEvalV1Evidence", cliName: "stockfish-position-evaluation" }),
       Object.freeze({ member: "stockfish_principal_variation_v1", operation: "stockfish.principal_variation@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_principal_variation@1", sourceProjection: "live.stockfish.principal_variation@1", sourceFactoryId: "createLiveStockfishPrincipalVariationV1Evidence", cliName: "stockfish-principal-variation" }),
-      Object.freeze({ member: "syzygy_position_v1", operation: "syzygy.position@1", provider: "syzygy", endpoint: Object.freeze({ kind: "https", origin: "https://tablebase.lichess.org", path: "/standard" }), parserId: "parse.syzygy_position@1", sourceProjection: "live.syzygy.position_result@1", sourceFactoryId: "createLiveSyzygyPositionResultV1Evidence", cliName: "syzygy-position" }),
+      Object.freeze({ member: "syzygy_position_v1", operation: "syzygy.position@1", provider: "syzygy", endpoint: Object.freeze({ kind: "https", origin: "https://tablebase.lichess.org", path: "/standard" }), parserId: "parse.syzygy_position@1", sourceProjection: "live.syzygy.position_result@2", sourceFactoryId: "createLiveSyzygyPositionResultV2Evidence", cliName: "syzygy-position" }),
     ] as const),
     digestDomains: PROVIDER_DIGEST_DOMAINS,
   }),

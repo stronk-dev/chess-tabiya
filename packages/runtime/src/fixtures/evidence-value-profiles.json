@@ -1032,6 +1032,13 @@
       "b44f766f3389f7cc1592090c24eec2f749331457bb419e9b05a79049fe764ddc"
     ]
   },
+  "live.syzygy.position_result@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "b44f766f3389f7cc1592090c24eec2f749331457bb419e9b05a79049fe764ddc"
+    ]
+  },
   "live.syzygy.probe_result@1": {
     "availability": "available",
     "cardinality": 1,

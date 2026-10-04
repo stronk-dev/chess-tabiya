@@ -1,0 +1,53 @@
+{
+  "baseline": "a0f9d45e",
+  "retainedDeclarations": 851,
+  "candidateDeclarations": 859,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 6
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 6
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 6
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 6
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 6
+    },
+    {
+      "subject": "live.syzygy.position_result",
+      "version": 2
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 6
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 6
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 274,
+  "newFactoryProfiles": [
+    "live.syzygy.position_result@2"
+  ],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "unregistered",
+    "debt": "D3367"
+  },
+  "scope": "built-in Syzygy admission and compatibility metadata; no authored content or validation graduation"
+}

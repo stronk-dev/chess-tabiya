@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-04, whole-source opponent tablebase selection:** D3366 carries the built-in sealed Syzygy source through the actual opponent consumer for root and practical-resistance replies, refusing crossed FENs/clocks, forgeries and modern-source failure without a bare-probe fallback. The operator-only source v1 is retained; bound source v2 and provider resource image v2 preserve immutable declaration history while retaining operation/parser v1. Standalone/fixture sources, durable legacy packets, other raw provider consumers, whole-manifest execution and availability remain open. Receipt: `planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
+
 - **Implementation checkpoint 2026-10-04, literal path compiler:** D3365 implements ordered Cartesian expansion, full source-occurrence addresses, exact registered path identity and per-path/worst-case latency. All six actual operator traversals check their compiled source operation and registered factory before acquisition, returning execution metadata on evidence success. Permanent controls include the actual Maia occurrence and integrated Explorer summary derivations plus crossed factories and real built Stockfish CLI output. The full legacy catalogue intentionally refuses strict compilation: whole-manifest `execution`/digest integration, source-absence binding algebra, public availability, D3363 and legacy migrations remain open. Receipt: `planning/provider-exchange-and-execution/execution-paths-2026-10-04.md`.
 
 - **Implementation checkpoint 2026-10-04, exact Maia occurrences:** §6's history-conditioned run-move and separate exact-FEN observed-move projections now use the sole value factory. Run joins consume authenticated, sealed historical edge authority, replay the ordered prefix and preserve the whole provider page; exact-FEN joins validate an explicitly observed legal move without claiming a history. Twelve focused tests cover transpositions, clocks, crossed branches/heads, seal forgeries and actual grant revocation. D3362 owns these primitives; D3363 keeps the Inspector next-move-distribution contract and legacy retirement open. Execution paths, source-absence aggregation and public availability remain open. Receipt: `planning/provider-exchange-and-execution/maia-occurrence-implementation-2026-10-04.md`.
@@ -2100,6 +2102,17 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-10-04: D3366 implements whole-source Syzygy admission at the actual opponent selector
+  and authenticated HTTP route, including every practical-resistance reply probe. Canonical
+  compatibility maintenance preserves all historical declarations and authored chess content.
+  Source v2 binds only to the operator-role opponent consumer; the six provider operation
+  members, parsers and digest meanings are unchanged. No full legacy or availability closeout.
+  Receipt: `planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
+
+  D3367 separately records retained whole-source execution history: the current protocol
+  selects source v2 while frozen v1 and its factory remain. The strict compiler refuses v1.
+  Registration/retirement must be explicit before the whole-manifest exit can close.
 
 - 2026-10-04: D3364 repairs the production durable tablebase worker's dropped cancellation
   signal. Rewind/shutdown now detach that waiter through the existing shared scheduler;

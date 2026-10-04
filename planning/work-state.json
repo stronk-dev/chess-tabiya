@@ -27684,6 +27684,23 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/execution-paths-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3366",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b3416d8ae34cc8ad9358d4179ae1a5f82aa381c7ab072365229f9d6433fc8e96",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3367",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:05238a7d8f02b4f5d50da64b1b6d743effd8c8e78db4331c205b879387eb0ec7",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

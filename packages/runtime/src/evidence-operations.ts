@@ -218,7 +218,7 @@ const PROVIDER_SOURCE_ROUTES = Object.freeze({
   "stockfish.position_evaluation@1": "live.stockfish.position_eval@1",
   "stockfish.principal_variation@1": "live.stockfish.principal_variation@1",
   "maia.policy_page@1": "human.maia.policy_page@1",
-  "syzygy.position@1": "live.syzygy.position_result@1",
+  "syzygy.position@1": "live.syzygy.position_result@2",
   "lichess_explorer.position_page@1": "human.explorer.position_page@1",
 } as const satisfies { readonly [K in ProviderOperationId]: string });
 

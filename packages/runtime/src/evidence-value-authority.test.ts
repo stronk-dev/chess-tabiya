@@ -67,6 +67,7 @@ function providerDeliveries(): readonly (readonly [string, ProviderOperationId, 
     ["live.stockfish.principal_variation@1", "stockfish.principal_variation@1", seal("stockfish.principal_variation@1", line, principalVariationCapture(line, ["info depth 12 score cp 20 pv e2e4 e7e5", "bestmove e2e4"]))],
     ["human.maia.policy_page@1", "maia.policy_page@1", seal("maia.policy_page@1", maia, maiaCapture(maia, ["info depth 1 multipv 1 policy 0.4 pv e2e4", "info depth 1 multipv 2 policy 0.3 pv d2d4", "bestmove e2e4"]))],
     ["live.syzygy.position_result@1", "syzygy.position@1", seal("syzygy.position@1", syzygy, httpCapture("syzygy.position@1", syzygyBody(kqk)))],
+    ["live.syzygy.position_result@2", "syzygy.position@1", seal("syzygy.position@1", syzygy, httpCapture("syzygy.position@1", syzygyBody(kqk)))],
     ["human.explorer.position_page@1", "lichess_explorer.position_page@1", seal("lichess_explorer.position_page@1", explorer, httpCapture("lichess_explorer.position_page@1", explorerBody()))],
   ];
 }
@@ -202,7 +203,8 @@ describe("value authority: registry equality", () => {
     // + the three bounded-target routes (rfc/bounded-policy-targets.md §4) and the two policy routes
     // (rfc/bounded-target-policy-composition.md §4).
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
-    expect(ACTIVE).toHaveLength(274);
+    // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
+    expect(ACTIVE).toHaveLength(275);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -279,7 +281,7 @@ describe("value authority: registry equality", () => {
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
     // Plus rfc/bounded-policy-targets.md §4 and rfc/bounded-target-policy-composition.md §4 routes.
     // Plus rfc/evidence-presentation.md Checkpoint P's source-bound citation derivation.
-    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.population_summary@1", "derived.grade.move_quality@1", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.run_move_occurrence@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.population_summary@1", "derived.grade.move_quality@1", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.run_move_occurrence@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "live.syzygy.position_result@2", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {

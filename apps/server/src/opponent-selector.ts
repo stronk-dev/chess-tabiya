@@ -8,6 +8,8 @@ import { parseUci } from "chessops/util";
 import {
   applicationProviderExecution,
   assertConsumerEvidenceView,
+  assertProviderDelivery,
+  compileProjectionExecution,
   opponentProviderEvidence as declareOpponentProviderEvidence,
   evidenceForConsumer,
   PolicyMassError,
@@ -22,6 +24,8 @@ import {
   type ConsumerEvidenceView,
   type ApplicationProviderOperationId,
   type ProviderInstanceId,
+  type LiveSyzygyPosition,
+  type ProviderEvidenceDelivery,
 } from "@chess-tabiya/runtime";
 
 import type {
@@ -224,7 +228,7 @@ const DEFAULT_TEMPERATURE = 0.8;
 const DEFAULT_TOP_P = 0.92;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/;
 
-type OpponentProviderPayload = readonly string[] | TablebasePosition;
+type OpponentProviderPayload = readonly string[] | TablebasePosition | ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">;
 
 export function consumeOpponentSelectionEvidence(view: ConsumerEvidenceView<OpponentProviderPayload>): readonly OpponentProviderPayload[] {
   assertConsumerEvidenceView(view);
@@ -712,8 +716,25 @@ export class OpponentSelector {
     return this.#health.run(operation, ({ signal, remainingMs }) => this.#client.execute(engineId, { ...request, timeoutMs: Math.max(1, remainingMs), signal }), classifyEngineFailure, { deadlineMonotonic: deadline });
   }
 
-  #probe(fen: string, deadline: number): Promise<TablebasePosition> {
-    return this.#tablebase!.probe(fen, { deadlineMonotonic: deadline });
+  async #probe(fen: string, deadline: number): Promise<TablebasePosition> {
+    const source = this.#tablebase!;
+    if (source.probeEvidence === undefined) {
+      // Explicit standalone/fixture compatibility, not a fallback after provider failure.
+      return opponentProviderEvidence("syzygy", await source.probe(fen, { deadlineMonotonic: deadline }));
+    }
+    const evidence = await source.probeEvidence(fen, { deadlineMonotonic: deadline });
+    if (evidence.projection.id !== "live.syzygy.position_result" || evidence.projection.version !== 2) {
+      throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase source returned another evidence projection");
+    }
+    const execution = compileProjectionExecution(EVIDENCE_MANIFEST, evidence.projection);
+    if (execution.own.providerOperation !== "syzygy.position@1") throw new TypeError("Tablebase source has another execution operation");
+    const admitted = consumeOpponentSelectionEvidence(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "opponent.selection", version: 1 }, [evidence]));
+    const delivery = admitted[0] as ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">;
+    assertProviderDelivery("syzygy.position@1", delivery);
+    if (delivery.payload.fen !== fen || delivery.acquisition.requestedIdentity.request.fen !== fen) {
+      throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase evidence does not match the requested position");
+    }
+    return delivery.payload.position;
   }
 
   cacheSize(): number {
@@ -935,7 +956,7 @@ export class OpponentSelector {
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const position = opponentProviderEvidence("syzygy", await this.#probe(fen, deadline));
+    const position = await this.#probe(fen, deadline);
     if (position.category === "unknown") {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase category is unknown", { details: { retryAfterMs: 60_000 } });
     }
@@ -974,7 +995,7 @@ export class OpponentSelector {
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const root = opponentProviderEvidence("syzygy", await this.#probe(fen, deadline));
+    const root = await this.#probe(fen, deadline);
     if (root.category === "unknown") {
       throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", "The root outcome class is unknown");
     }
@@ -998,7 +1019,7 @@ export class OpponentSelector {
     for (const candidate of preserving) {
       const child = play(board, candidate.uci, `tablebase reply ${candidate.uci}`);
       const childFen = makeFen(child.toSetup());
-      const childTablebase = opponentProviderEvidence("syzygy", await this.#probe(childFen, deadline));
+      const childTablebase = await this.#probe(childFen, deadline);
       if (childTablebase.category === "unknown") {
         throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", `Outcome class after ${candidate.uci} is unknown`);
       }

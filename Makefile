@@ -1005,6 +1005,16 @@ evidence-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-execution.test.ts apps/server/src/provider-traversal.test.ts
 tablebase-cancellation-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-tablebase.test.ts apps/server/src/evidence-queue.test.ts
+.PHONY: tablebase-selection-metadata-check tablebase-selection-metadata-edits tablebase-selection-metadata-update
+tablebase-selection-metadata-check:
+	./node_modules/.bin/esbuild tools/d3366-tablebase-selection-metadata/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/tablebase-selection-metadata.js --log-level=warning
+	node apps/server/dist/tablebase-selection-metadata.js
+tablebase-selection-metadata-edits:
+	./node_modules/.bin/esbuild tools/d3366-tablebase-selection-metadata/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/tablebase-selection-metadata.js --log-level=warning
+	node apps/server/dist/tablebase-selection-metadata.js --edits
+tablebase-selection-metadata-update:
+	./node_modules/.bin/esbuild tools/d3366-tablebase-selection-metadata/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/tablebase-selection-metadata.js --log-level=warning
+	node apps/server/dist/tablebase-selection-metadata.js --apply-metadata
 maia-occurrence-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/maia-occurrence.test.ts apps/server/src/maia-occurrence-access.test.ts
 run-subject-check:

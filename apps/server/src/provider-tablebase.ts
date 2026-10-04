@@ -10,7 +10,7 @@ import { ServerError } from "./errors.js";
 import { ProviderSourceUnavailable, type ProviderExchangeScheduler, type ProviderOperationDescriptor } from "./provider-exchange.js";
 import { ProviderHttpError, ProviderUnavailableError, classifyProviderError, type ProviderRegistry } from "./provider-health.js";
 import { SyzygyPositionOperation, type ProviderFetch } from "./provider-operations.js";
-import type { TablebasePosition, TablebaseProbeOptions, TablebaseSource } from "./tablebase.js";
+import type { TablebasePosition, TablebaseProbeEvidence, TablebaseProbeOptions, TablebaseSource } from "./tablebase.js";
 
 /** Preserve the actual status/Retry-After for the shared Lichess admission/backoff authority. */
 export function healthAdmittedSyzygyOperation(fetcher: ProviderFetch, health: ProviderRegistry): ProviderOperationDescriptor<"syzygy.position@1"> {
@@ -68,6 +68,10 @@ export class ExchangeTablebaseSource implements TablebaseSource {
   }) {}
 
   async probe(fen: string, options: TablebaseProbeOptions = {}): Promise<TablebasePosition> {
+    return (await this.probeEvidence(fen, options)).payload.payload.position;
+  }
+
+  async probeEvidence(fen: string, options: TablebaseProbeOptions = {}): Promise<TablebaseProbeEvidence> {
     const timeoutMs = this.options.timeoutMs ?? 4_000;
     const remaining = options.deadlineMonotonic === undefined ? timeoutMs : Math.min(timeoutMs, Math.floor(options.deadlineMonotonic - this.options.monotonicNowMs()));
     if (remaining <= 0) throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase operation deadline exceeded", { details: { retryAfterMs: 0 } });
@@ -80,6 +84,6 @@ export class ExchangeTablebaseSource implements TablebaseSource {
       const retryAfterMs = state !== undefined && "retryAfterMs" in state ? state.retryAfterMs : result.reason === "queue_full" ? 4_000 : 0;
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase exchange unavailable", { details: { retryAfterMs } });
     }
-    return providerSourceEvidence("syzygy.position@1", result.delivery).payload.payload.position;
+    return providerSourceEvidence("syzygy.position@1", result.delivery);
   }
 }

@@ -1,4 +1,4 @@
-import { transposeKey } from "@chess-tabiya/runtime";
+import { transposeKey, type DeclaredEvidence, type LiveSyzygyPosition, type ProviderEvidenceDelivery } from "@chess-tabiya/runtime";
 import type { AssessmentCategory } from "@chess-tabiya/schema/drill-pack";
 import { ServerError } from "./errors.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
@@ -15,7 +15,13 @@ export const OBJECTIVE_ASSESSMENT_SETS = Object.freeze({
 } satisfies Readonly<Record<"win" | "hold" | "save" | "resist", readonly TablebaseCategory[]>>);
 export interface TablebaseMove { readonly uci:string; readonly san:string; readonly category:TablebaseCategory; readonly dtz:number|null; readonly preciseDtz:number|null }
 export interface TablebasePosition { readonly category:TablebaseCategory; readonly dtz:number|null; readonly preciseDtz?:number|null; readonly moves:readonly TablebaseMove[] }
-export interface TablebaseSource { readonly kind:"lichess"|"mock"; probe(fen:string, options?: TablebaseProbeOptions):Promise<TablebasePosition> }
+export type TablebaseProbeEvidence = DeclaredEvidence<ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">>;
+export interface TablebaseSource {
+  readonly kind: "lichess" | "mock";
+  probe(fen: string, options?: TablebaseProbeOptions): Promise<TablebasePosition>;
+  /** Built-in provider path. Standalone/fixture sources do not manufacture this authority. */
+  probeEvidence?(fen: string, options?: TablebaseProbeOptions): Promise<TablebaseProbeEvidence>;
+}
 
 export function invertTablebaseCategory(category:TablebaseCategory):TablebaseCategory { const pairs:Record<TablebaseCategory,TablebaseCategory>={win:"loss","syzygy-win":"syzygy-loss","maybe-win":"maybe-loss","cursed-win":"blessed-loss",draw:"draw","blessed-loss":"cursed-win","maybe-loss":"maybe-win","syzygy-loss":"syzygy-win",loss:"win",unknown:"unknown"};return pairs[category]; }
 function category(value:unknown):TablebaseCategory{if(typeof value!=="string"||!(TABLEBASE_CATEGORIES as readonly string[]).includes(value))throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase returned an unknown category",{details:{retryAfterMs:60_000}});return value as TablebaseCategory;}
