@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2a190f1d4b446ec9732e8ad5ecdf10977d7cbc6d2e5564ee80297855618030a8",
+    "roadmap": "sha256:5a7d388e4748b0e61a86935b65b5d529e1980d54fc8281989d3ffa8f52cc8dca",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:7cdcda84d8f94b36addd1156d8d3f344087f410a837f4f57c3742ca50beaa076",
-    "rfcRegister": "sha256:1580f89da58bcd524eb630157a4dabf58a99efa08165b12986bc30e6970e7aa6",
+    "workState": "sha256:4640fa9d88667f455854f3c0fe46300b9373d6aaa9fd9936c6f8ade852eaa71b",
+    "rfcRegister": "sha256:398f35583d152c373d78c4bf72262ee71012def861d7c604f96d7048a7628b90",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:9012d85008bc05c9971ab8722161b03cc918ccb03a0b8d0491d82e1d85a95137",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1050,
-      "done": 1286,
+      "blocked": 1051,
+      "done": 1287,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not drop bestmove, substitute a PV move or infer a played move. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+      "nextAction": "Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3376 requires registered shared opening schema/source authority before Review bindings; D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not invent a played move, substitute a PV move or conflate current and historical openings. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
       "latestCheckpoint": {
-        "at": "2026-10-04",
-        "summary": "D3374 closes the actual queued Stockfish main-line/task-bound reducer defect without claiming whole-source migration. Twelve controls reproduced the old defect; the final normal focused suite passes 58 tests including SQLite unavailable/no-attachment, exact-depth, greatest-depth/tie, MultiPV, bounded-line, mixed-iteration, termination and separate actual-bestmove controls. Exact-index software passes 2880 tests/325 files, seven isolated performance tests, warning-free types and downstream build, packaging, value/source/history, lifecycle and migration gates. Content passes 223 tests/23 files, zero clearance errors and all 104 requirements. Browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; governance passes, with final staged-process checks/hooks preceding commit. Source bytes remain identical after the software snapshot. All 885 capability declarations stay unchanged; no metadata or authored-content restamp is needed; the 352-document migration plan has zero rows. Semantic validation remains 38/38 cases with zero fully passed profiles. D3373 is owned and blocked on the terminating-selection/MultiPV/durable source migration contract; D3363/D3370 and complete migration/policy/execution/resolution/availability remain open. Tracker has zero untriaged/1677 live items. No whole RFC, capability or milestone is promoted.",
+        "at": "2026-10-05",
+        "summary": "D3375 migrates the actual authenticated branch-decidedness consumer to whole sealed Syzygy v2, explicit required-source honest-empty policy and full FEN/clock matching. Before every probe and after I/O it checks the actual read grant, disclosure window and selected leaf. Modern failure never retries bare data; standalone compatibility remains explicit. Actual HTTP, crossed positions/clocks, forgeries, withheld/out-of-domain and multi-branch access-change controls pass: 75 focused tests. Final exact-index software passes 2892 tests/325 files, seven isolated performance tests, warning-free types and downstream build, packaging, source/value/history, lifecycle and migration checks at 2f05522d9748d9097600c04b69e559d62ccddd72. Content passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. Browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; complete governance passes, with final exact-index process checks and normal hooks preceding commit. Source bytes stay identical after the software snapshot. All 885 predecessors remain unchanged, seven v10 successors append, all 275 factory outcomes remain unchanged, and only 104 requirement stamps/68 ledger digests refresh. No authored content changes or graduation. The 352-document migration plan is empty; semantic validation remains 38/38 cases with zero fully passed profiles. Failed/incomplete and pre-multi-branch checkpoints remain separate from final proof. D3376 is owned and blocked on opening authority; D3363/D3370/D3373 and full migration/policy/execution/resolution/availability remain open. Zero untriaged/1678 live items; no whole RFC, capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -244,7 +244,11 @@
           "planning/review/transition-operands-metadata-2026-10-04.json",
           "rfc/evidence-job-durability.md",
           "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
-          "planning/provider-exchange-and-execution/queued-stockfish-software-2026-10-04.json"
+          "planning/provider-exchange-and-execution/queued-stockfish-software-2026-10-04.json",
+          "planning/provider-exchange-and-execution/branch-decidedness-2026-10-04.md",
+          "planning/provider-exchange-and-execution/branch-decidedness-software-2026-10-05.json",
+          "planning/provider-exchange-and-execution/branch-decidedness-metadata-2026-10-05.json",
+          "rfc/runtime-opening-identity.md"
         ],
         "anchors": [
           {
@@ -290,7 +294,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:12bb5b57e58f37564efe937fe5f3eddea9e143ef37d646c82b4cf46c3240374a"
+            "digest": "sha256:4c5a8627a477e02917504b5fbbcd9b560e3ca4803da021791b8b4f8a3925fbba"
           },
           {
             "kind": "work_state",
@@ -426,6 +430,21 @@
             "kind": "work_state",
             "id": "D3374",
             "digest": "sha256:47a940f8d576b6898942aaded332ae6a61ebcdc3344b93666a13d2a3a2c0bcc1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3375",
+            "digest": "sha256:0bb1057dcb107a1c6a20424a638e65fcc09921d6744af360190e16ca28efd4fd"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3376",
+            "digest": "sha256:61dce8b3bca7ec1b0e2a20086919f5afc167c96728602dac613360ae7d54a340"
+          },
+          {
+            "kind": "rfc",
+            "id": "runtime-opening-identity.md",
+            "digest": "sha256:fe3720444945aa4cd900d2778434cdfb76ea69cd990f52a161ebe25386f92945"
           }
         ]
       },
@@ -935,7 +954,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:12bb5b57e58f37564efe937fe5f3eddea9e143ef37d646c82b4cf46c3240374a"
+            "digest": "sha256:4c5a8627a477e02917504b5fbbcd9b560e3ca4803da021791b8b4f8a3925fbba"
           },
           {
             "kind": "work_state",

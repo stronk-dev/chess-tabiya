@@ -390,6 +390,15 @@ The same source serves run objectives and durable tablebase evidence; provider-h
 and shared Lichess backoff occur only on new exchange executions. Supplied fixtures and standalone
 research clients remain distinct. See `provider-exchange.md` for the migration boundary.
 
+Branch-comparison decidedness also consumes the whole sealed source through its registered
+machine-only consumer. It checks the exact requested leaf FEN, including clocks, before
+reading its category; a crossed or forged source remains unknown, and a modern failure
+never retries a bare probe. The read grant, feedback delivery window and current leaf are
+rechecked before each acquisition and afterward. A change during one branch's probe stops
+further acquisitions; advancing the branch cannot attach an old leaf's result to
+the new one. Standalone sources without the receipt method retain explicit compatibility.
+`make branch-tablebase-check` covers this route and its absence/disclosure controls.
+
 The capability payload publishes Maia's measured resistance only at mode scope. It names
 the 15-position/270-probe corpus and its measured DTZ-percentile and slowest/fastest-losing
 rates; no selection or candidate is assigned a resistance score. The capability-disposition

@@ -5,12 +5,14 @@ import {
 } from "@chess-tabiya/runtime";
 
 import { consumeGuardCondition } from "./guard.js";
+import { consumeBranchDecidednessEvidence } from "./branch-tablebase.js";
 import { renderRecordedReadingEvidence, renderedEvidenceItems, voiceEvidenceView } from "./guidance.js";
 import { consumeOpponentSelectionEvidence } from "./opponent-selector.js";
 import { consumeRepertoireCorpus } from "./repertoire.js";
 import { consumeClaimBindingRecords } from "./sourcing/claim-binding.js";
 
 export const SERVER_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
+  evidenceConsumerOperation("runtime.branch_decidedness", consumeBranchDecidednessEvidence),
   evidenceConsumerOperation("runtime.guard_condition", consumeGuardCondition),
   evidenceConsumerOperation("guidance.deterministic", renderedEvidenceItems),
   evidenceConsumerOperation("guidance.voice", voiceEvidenceView),

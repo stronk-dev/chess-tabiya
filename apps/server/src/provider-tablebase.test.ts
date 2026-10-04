@@ -1,6 +1,6 @@
 import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
-import { exactLegalMoves, providerSourceEvidence, type SyzygyPositionRequest } from "@chess-tabiya/runtime";
+import { branchPath, exactLegalMoves, providerSourceEvidence, type SyzygyPositionRequest } from "@chess-tabiya/runtime";
 
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { ControlledFetch, ManualClock, flush, syzygyBody } from "./provider-exchange.test-support.js";
@@ -10,6 +10,7 @@ import { ExchangeTablebaseSource, healthAdmittedSyzygyOperation } from "./provid
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { RunService } from "./service.js";
+import { createRestHandler } from "./rest.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { OpponentSelector } from "./opponent-selector.js";
 import type { TablebaseProbeEvidence, TablebaseSource } from "./tablebase.js";
@@ -36,6 +37,158 @@ async function harness() {
 }
 
 describe("learner Syzygy shared exchange", () => {
+  async function decidedness(source: TablebaseSource, disclosed = true, fen = FEN) {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    const queue = new EvidenceJobQueue({ async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 0, perspective: "white" } }; } });
+    const service = new RunService(storage, { tablebaseSource: source, evidenceQueue: queue });
+    const at = "2026-10-04T12:00:00.000Z";
+    const run = await service.create({
+      id: "whole-source-decidedness", session: { kind: "position", start: { fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73, createdAt: at,
+    }, "writer");
+    if (disclosed) service.reveal(run.id, "writer", at);
+    const handler = createRestHandler(service);
+    return { storage, service, queue, run, async read() {
+      const response = await handler(new Request(`http://tabiya.test/runs/${run.id}/branch-decidedness`, { method: "POST", headers: { "content-type": "application/json", "x-writer-id": "writer" }, body: JSON.stringify({ branchIds: [run.branches[0]!.id] }) }));
+      expect(response.status).toBe(200);
+      return (await response.json() as { decidedness: Record<string, unknown> }).decidedness[run.branches[0]!.id];
+    } };
+  }
+
+  it("uses the whole source at the actual branch-decidedness HTTP boundary and retains exact answers", async () => {
+    const { source, remote } = await harness();
+    const bare = vi.spyOn(source, "probe").mockRejectedValue(new Error("bare probe must not be used"));
+    const app = await decidedness(source);
+    const pending = app.read();
+    try {
+      await flush();
+      expect(remote.calls).toHaveLength(1);
+      remote.respond(0, syzygyBody(FEN));
+      expect(await pending).toMatchObject({ state: "decided", ground: { kind: "tablebase", category: "win", nodeId: app.run.nodes[0]!.id, pieces: 3 } });
+      expect(await app.read()).toMatchObject({ state: "decided", ground: { category: "win" } });
+      expect(remote.calls).toHaveLength(1);
+      expect(bare).not.toHaveBeenCalled();
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      await pending;
+      app.storage.close(); bare.mockRestore();
+    }
+  });
+
+  it.each([OTHER, FEN.replace("0 1", "1 2")])("cannot decide a branch from another sealed exact FEN (%s)", async crossedFen => {
+    const { source, remote } = await harness();
+    const pending = source.probeEvidence(crossedFen);
+    await flush(); remote.respond(0, syzygyBody(crossedFen));
+    const evidence = await pending;
+    const bare = vi.fn(async () => ({ category: "win" as const, dtz: 1, moves: [] }));
+    const app = await decidedness({ kind: "lichess", probe: bare, async probeEvidence() { return evidence; } });
+    try {
+      expect(await app.read()).toEqual({ state: "unknown", reason: "provider_unavailable" });
+      expect(bare).not.toHaveBeenCalled();
+    } finally { app.storage.close(); }
+  });
+
+  it.each(["clone", "failure"])("never turns a modern %s into a bare decidedness answer", async arm => {
+    const { source, remote } = await harness();
+    const pending = source.probeEvidence(FEN);
+    await flush(); remote.respond(0, syzygyBody(FEN));
+    const evidence = await pending;
+    const bare = vi.fn(async () => ({ category: "win" as const, dtz: 1, moves: [] }));
+    const app = await decidedness({ kind: "lichess", probe: bare, async probeEvidence() {
+      if (arm === "failure") throw new Error("source unavailable");
+      return { ...evidence } as TablebaseProbeEvidence;
+    } });
+    try {
+      expect(await app.read()).toEqual({ state: "unknown", reason: "provider_unavailable" });
+      expect(bare).not.toHaveBeenCalled();
+    } finally { app.storage.close(); }
+  });
+
+  it.each([false, true])("does not acquire tablebase evidence when feedback is withheld or material is outside domain (domain=%s)", async outside => {
+    const { source, remote } = await harness();
+    const whole = vi.spyOn(source, "probeEvidence"), bare = vi.spyOn(source, "probe");
+    const app = await decidedness(source, outside, outside ? START : FEN);
+    try {
+      expect(await app.read()).toEqual({ state: "unknown", reason: outside ? "out_of_range" : "withheld" });
+      expect(whole).not.toHaveBeenCalled(); expect(bare).not.toHaveBeenCalled(); expect(remote.calls).toHaveLength(0);
+    } finally { app.storage.close(); whole.mockRestore(); bare.mockRestore(); }
+  });
+
+  it.each([false, true])("does not attach an in-flight answer to a newly advanced branch (reopened=%s)", async reopened => {
+    const { source, remote } = await harness();
+    const app = await decidedness(source);
+    const pending = app.read();
+    try {
+      await flush(); expect(remote.calls).toHaveLength(1);
+      app.service.move(app.run.id, "writer", "d2d3", { at: "2026-10-04T12:00:01.000Z" });
+      if (reopened) app.service.reveal(app.run.id, "writer", "2026-10-04T12:00:02.000Z");
+      remote.respond(0, syzygyBody(FEN));
+      expect(await pending).toEqual({ state: "unknown", reason: reopened ? "not_probed" : "withheld" });
+      if (!reopened) {
+        expect(await app.read()).toEqual({ state: "unknown", reason: "withheld" });
+        expect(remote.calls).toHaveLength(1);
+      }
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      await pending; await app.queue.close(); app.storage.close();
+    }
+  });
+
+  it.each(["window", "grant"])("stops a multi-branch acquisition after the %s changes during the first probe", async arm => {
+    const { source, remote } = await harness();
+    const app = await decidedness(source);
+    const at = "2026-10-04T12:00:00.000Z";
+    app.service.move(app.run.id, "writer", "d2d3", { at });
+    const forked = app.service.fork(app.run.id, "writer", app.run.nodes[0]!.id, { at });
+    app.service.reveal(app.run.id, "writer", at);
+    const reader = { learnerId: "multi-branch-reader", handle: "multi-branch-reader" };
+    const actor = { learnerId: "__legacy", writerId: "writer" };
+    app.storage.createLearner({ id: reader.learnerId, handle: reader.handle, passwordHash: "!", createdAt: at });
+    app.storage.grantRole(app.run.id, reader.learnerId, "spectator", actor, at);
+    const firstFen = branchPath(forked.run, forked.run.branches[0]!.id).at(-1)!.fen;
+    const pending = app.service.branchDecidedness(app.run.id, reader, forked.run.branches.map(branch => branch.id)).then(value => ({ value }), error => ({ error }));
+    try {
+      await flush(); expect(remote.calls).toHaveLength(1);
+      if (arm === "window") app.service.move(app.run.id, "writer", "d2d4", { at });
+      else app.storage.revokeGrant(app.run.id, reader.learnerId, actor);
+      remote.respond(0, syzygyBody(firstFen));
+      await flush();
+      // Settle an incorrectly started second request as well, so the negative fails on
+      // acquisition count rather than hanging until the test timeout.
+      for (let index = 1; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      const result = await pending;
+      expect(remote.calls).toHaveLength(1);
+      if (arm === "window") expect(result).toEqual({ value: Object.fromEntries(forked.run.branches.map(branch => [branch.id, { state: "unknown", reason: "withheld" }])) });
+      else expect(result).toMatchObject({ error: { code: "RUN_NOT_FOUND" } });
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      await pending; await app.queue.close(); app.storage.close();
+    }
+  });
+
+  it("rechecks a real read grant after acquisition and performs no work for an unauthorized reader", async () => {
+    const { source, remote } = await harness();
+    const app = await decidedness(source);
+    const reader = { learnerId: "comparison-reader", handle: "comparison-reader" };
+    const actor = { learnerId: "__legacy", writerId: "writer" };
+    const at = "2026-10-04T12:00:00.000Z";
+    app.storage.createLearner({ id: reader.learnerId, handle: reader.handle, passwordHash: "!", createdAt: at });
+    let pending: Promise<unknown> | undefined;
+    try {
+      await expect(app.service.branchDecidedness(app.run.id, reader, [app.run.branches[0]!.id])).rejects.toMatchObject({ code: "RUN_NOT_FOUND" });
+      expect(remote.calls).toHaveLength(0);
+      app.storage.grantRole(app.run.id, reader.learnerId, "spectator", actor, at);
+      pending = app.service.branchDecidedness(app.run.id, reader, [app.run.branches[0]!.id]).then(value => ({ value }), error => ({ error }));
+      await flush(); expect(remote.calls).toHaveLength(1);
+      app.storage.revokeGrant(app.run.id, reader.learnerId, actor);
+      remote.respond(0, syzygyBody(FEN));
+      expect(await pending).toMatchObject({ error: { code: "RUN_NOT_FOUND" } });
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      await pending; await app.queue.close(); app.storage.close();
+    }
+  });
+
   it("selects through whole provider evidence without re-wrapping the bare compatibility position", async () => {
     const { source, remote, clock } = await harness();
     const bare = vi.spyOn(source, "probe").mockRejectedValue(new Error("legacy bare-position path must not be used"));

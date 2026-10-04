@@ -1005,6 +1005,16 @@ evidence-seal-audit:
 .PHONY: provider-exchange-check provider-traversal run-subject-check maia-occurrence-check
 .PHONY: tablebase-cancellation-check
 .PHONY: evidence-execution-check
+.PHONY: branch-tablebase-check
+.PHONY: branch-tablebase-metadata-check branch-tablebase-metadata-update
+branch-tablebase-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/branch-tablebase-metadata.js --log-level=warning
+	node apps/server/dist/branch-tablebase-metadata.js --branch-decidedness
+branch-tablebase-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/branch-tablebase-metadata.js --log-level=warning
+	node apps/server/dist/branch-tablebase-metadata.js --branch-decidedness --apply-metadata
+branch-tablebase-check: evidence-manifest-check
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-tablebase.test.ts apps/server/src/pack-optional-runs.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts
 evidence-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-execution.test.ts apps/server/src/provider-traversal.test.ts
 tablebase-cancellation-check:

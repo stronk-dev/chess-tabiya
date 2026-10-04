@@ -1,6 +1,7 @@
 import type { CampaignEncounterReceipt } from "@chess-tabiya/runtime";
 import type { EvidenceAvailabilitySubjectRef, RunEvidenceItemDigest } from "@chess-tabiya/runtime/run-subject";
 import { requireRunEvidenceItem, requireRunSubject } from "./run-subject-access.js";
+import { branchTablebasePosition } from "./branch-tablebase.js";
 import {
   applyObjectiveEvidenceProposal,
   appendOpponentPly,
@@ -2039,13 +2040,17 @@ export class RunService {
     const free = branchDecidedness(run, { ...(objective === undefined ? {} : { objective }) });
     for (const branchId of branchIds) {
       if (free[branchId]?.state === "decided") continue;
-      if (!feedbackDisclosed(run)) { unresolved[branchId] = "withheld"; continue; }
+      // An earlier branch may have awaited I/O. Revalidate before each new acquisition,
+      // not just at the end, so a closed window or revoked grant stops further work.
+      const acquisitionRun = requireRead(this.#storage, runId, principal).stored.run;
+      if (!feedbackDeliveryOpen(acquisitionRun)) { unresolved[branchId] = "withheld"; continue; }
       const path = branchPath(run, branchId), leaf = path.at(-1)!;
+      if (branchPath(acquisitionRun, branchId).at(-1)!.id !== leaf.id) { unresolved[branchId] = "not_probed"; continue; }
       const pieces = countFenPieces(leaf.fen);
       if (pieces > 7) { unresolved[branchId] = "out_of_range"; continue; }
       if (this.#tablebase === undefined) { unresolved[branchId] = "provider_unavailable"; continue; }
       try {
-        const raw = await this.#tablebase.probe(leaf.fen);
+        const raw = await branchTablebasePosition(this.#tablebase, leaf.fen);
         const sideToMove = leaf.fen.split(" ")[1] === "b" ? "black" : "white";
         const category = learnerCategory(sideToMove, raw.category, run.start.side);
         tablebase[branchId] = { category, pieces, sourceId: "syzygy" };
@@ -2053,7 +2058,19 @@ export class RunService {
         unresolved[branchId] = "provider_unavailable";
       }
     }
-    const projected = branchDecidedness(run, { ...(objective === undefined ? {} : { objective }), tablebase, unresolved });
+    // Authorization, disclosure and the selected leaf may change while the remote is awaited.
+    // Never label a newly advanced branch with the old leaf's valid-but-different tablebase fact.
+    const current = requireRead(this.#storage, runId, principal).stored.run;
+    for (const branchId of branchIds) {
+      if (!feedbackDeliveryOpen(current)) {
+        delete tablebase[branchId];
+        unresolved[branchId] = "withheld";
+      } else if (branchPath(current, branchId).at(-1)!.id !== branchPath(run, branchId).at(-1)!.id) {
+        delete tablebase[branchId];
+        unresolved[branchId] = "not_probed";
+      }
+    }
+    const projected = branchDecidedness(current, { ...(objective === undefined ? {} : { objective }), tablebase, unresolved });
     return Object.freeze(Object.fromEntries(branchIds.map((id) => [id, projected[id]!])));
   }
 

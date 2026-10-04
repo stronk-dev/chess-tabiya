@@ -3931,3 +3931,10 @@ until a second pass measured the pack start positions the sentence actually name
 - Canonical maintenance updates 104 requirement stamps and only packDigest on 68 evidence ledgers. The independent f55c1fe3 comparison proves zero authored changes across all 104 pack/example/fixture documents and 192 other source documents. This is compatibility metadata, not authored content expansion, graduation, publication or user-document migration.
 - Content verification passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. The 352-document migration plan has zero remaining rows. Full software, isolated performance, provider, browser CI and governance also pass. Only D3371 closes; complete foundation and official-content milestones remain open.
 - Receipts: planning/review/transition-operands-2026-10-04.md and transition-operands-metadata-2026-10-04.json.
+
+## 2026-10-05 — Branch comparison compatibility metadata
+
+- D3375's whole-source admission and explicit binding absence policy require seven canonical source-closure successors. Routine metadata/hash maintenance is applied without another owner question. All 885 predecessor declarations remain unchanged, seven v10 successors append and all 275 factory outcomes retain their meanings.
+- Only requirements in 104 pack/example/fixture documents and packDigest in 68 evidence ledgers change. Independent comparison against e20c4898 proves every authored field and 192 other source documents unchanged; guard/objective computations and opponent selection remain byte-identical. No moves, claims, lessons, publication status, graduation or user-stored document is changed.
+- Normal content verification passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. The 352-document migration plan has zero outstanding rows. Complete software, isolated performance, browser CI and governance also pass. Only D3375 closes; official-content and the full provider/foundation milestones remain open.
+- Receipts: planning/provider-exchange-and-execution/branch-decidedness-2026-10-04.md and branch-decidedness-metadata-2026-10-05.json in the same directory.

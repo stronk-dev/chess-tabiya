@@ -17,8 +17,9 @@ import { assertAuthoredContentUnchanged, assertLedgerMetadataUnchanged } from ".
 // Reuse the same preservation checks for D3369; each mode names its committed predecessor.
 const BINDING_ABSENCE = process.argv.includes("--binding-absence");
 const REVIEW_TRANSITIONS = process.argv.includes("--review-transitions");
+const BRANCH_DECIDEDNESS = process.argv.includes("--branch-decidedness");
 const REVIEW_SUCCESSORS = ["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"];
-const BASELINE = REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
+const BASELINE = BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
 const SUCCESSORS = [
   "engineCondition.engine_eval_swing", "engineCondition.engine_mate_appears",
   "engineCondition.tablebase_category_regression", "engineCondition.tablebase_dtz_regression",
@@ -45,7 +46,7 @@ async function proof(editsOnly: boolean) {
   assert.deepEqual(appended.map(row => row.subjectId).sort(), SUCCESSORS);
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
-    assert.equal(row.id.version.value, REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
+    assert.equal(row.id.version.value, BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
   }
   const oldProfiles = JSON.parse(old("packages/runtime/src/fixtures/evidence-value-profiles.json"));
   const profiles = JSON.parse(read("packages/runtime/src/fixtures/evidence-value-profiles.json"));
@@ -117,7 +118,7 @@ async function proof(editsOnly: boolean) {
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
     retainedFactoryOutcomes: Object.keys(oldProfiles).length - successors.size, newFactoryProfiles: [...successors.values()].sort(),
     retainedSourceExecution: { projection: "live.syzygy.position_result@1", state: "registered", operation: "syzygy.position@1" },
-    scope: REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
+    scope: BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
   };
 }
 

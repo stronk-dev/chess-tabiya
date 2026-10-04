@@ -301,7 +301,8 @@ describe("consumer adapters: author/operator structured documents (criterion 14)
   it("classifies the twenty non-module consumers and every module consumer exactly once", () => {
     const consumers = PRESENTATION_CONSUMER_CLASSES.map((row) => row.consumer);
     expect(new Set(consumers).size).toBe(consumers.length);
-    expect(PRESENTATION_CONSUMER_CLASSES.filter((row) => !row.consumer.startsWith("module.")).length).toBe(20);
+    expect(PRESENTATION_CONSUMER_CLASSES.filter((row) => !row.consumer.startsWith("module.")).length).toBe(21);
+    expect(presentationConsumerClass("runtime.branch_decidedness@1")).toBe("non_presentational_operation");
     expect(presentationConsumerClass("module.full_inspector@1")).toBe("inspector_presented");
     expect(presentationConsumerClass("module.review_map@1")).toBe("module_presented");
   });

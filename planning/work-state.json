@@ -27765,6 +27765,24 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3375",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0bb1057dcb107a1c6a20424a638e65fcc09921d6744af360190e16ca28efd4fd",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/branch-decidedness-2026-10-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3376",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:61dce8b3bca7ec1b0e2a20086919f5afc167c96728602dac613360ae7d54a340",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:runtime-opening-identity.md"
     }
   ]
 }

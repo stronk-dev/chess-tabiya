@@ -1,0 +1,47 @@
+{
+  "baseline": "e20c4898",
+  "retainedDeclarations": 885,
+  "candidateDeclarations": 892,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 10
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 10
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 10
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 10
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 10
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 10
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 10
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 275,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged"
+}

@@ -70,6 +70,7 @@ export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRo
   classRow("opponent.selection@1", "non_presentational_operation", "apps/server/src/opponent-selector.ts", "consumeOpponentSelectionEvidence"),
   classRow("review.story@1", "ordinary_presented", "packages/runtime/src/story.ts", "renderReviewStoryReceipt"),
   classRow("runtime.evidence_ref@1", "inspector_presented", "apps/web/src/lib/evidence-sentences.ts", "renderDeclaredEvidenceRef"),
+  classRow("runtime.branch_decidedness@1", "non_presentational_operation", "apps/server/src/branch-tablebase.ts", "consumeBranchDecidednessEvidence"),
   classRow("runtime.repertoire_scan@1", "non_presentational_operation", "apps/server/src/repertoire.ts", "consumeRepertoireCorpus"),
   classRow("theory.shape_firing@1", "ordinary_presented", "packages/runtime/src/shape-firing.ts", "consumeShapeFiring"),
   ...MODULE_CONSUMER_IDS.map((id) => classRow(`${id}@1`, id === "module.full_inspector" ? "inspector_presented" : "module_presented", "packages/runtime/src/evidence-catalog.ts", id)),

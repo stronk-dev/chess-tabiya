@@ -1,5 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 comparison evidence checkpoint
+
+D3375 closes branch-decidedness through its actual registered whole-source consumer,
+including exact FEN/clocks, explicit absence and grant/window/leaf checks before each
+acquisition and afterward. The normal focused target passes 75 tests, complete exact-index
+software passes 2,892 tests and seven isolated performance tests, and content passes 223
+tests with all 104 exact requirements. Browser CI passes 111 journeys, one optional skip
+and zero retries; governance passes. Final staged-process checks/hooks precede commit. Receipt:
+`planning/provider-exchange-and-execution/branch-decidedness-2026-10-04.md`. Routine
+requirement/hash maintenance is authorized and preserves all authored content.
+
+D3376 owns the opening authority seam: server catalogue lookups cannot directly enter
+runtime evidence factories without the accepted shared-schema/source-authority contract.
+Current endpoint, membership and deepest historical identity stay distinct; no raw string
+or lookup callback bypass. Continue executable consumer migrations, explicit policies and
+the full execution/resolution/availability chain; D3363/D3370/D3373 remain separate holds.
+
 ## 2026-10-04 queued Stockfish checkpoint
 
 D3374 repairs completed main-line selection in the actual durable executor. The normal Make
