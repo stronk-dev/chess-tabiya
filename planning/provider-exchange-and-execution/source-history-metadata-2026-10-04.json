@@ -1,0 +1,47 @@
+{
+  "baseline": "c0114e28",
+  "retainedDeclarations": 859,
+  "candidateDeclarations": 866,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 7
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 7
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 7
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 7
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 7
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 7
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 7
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 275,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "explicit retained whole-source execution; current acquisition and authored content unchanged"
+}

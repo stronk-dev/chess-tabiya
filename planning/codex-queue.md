@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 exact retained-source checkpoint
+
+D3367 registers Syzygy's retained whole-source v1/factory explicitly beside default v2
+in provider resource image v3. The strict compiler and factories share that source authority;
+default routes derive from current operation rows rather than a duplicate table. Unregistered
+versions, bare/crossed payloads and forged deliveries still refuse. Receipt:
+`planning/provider-exchange-and-execution/source-history-2026-10-04.md`.
+
+Continue raw Stockfish/Maia/durable-packet and standalone consumer migrations, then the complete
+manifest execution/digest, source-absence algebra and authorized historical-subject availability.
+D3363 preserves Inspector's next-move distribution contract. No complete RFC or 1.0 milestone
+is promoted. Routine canonical metadata/hash maintenance remains normal implementation work.
+
 ## 2026-10-04 whole-source tablebase opponent checkpoint
 
 D3366 migrates built-in root and practical-resistance reply selection to the whole registered
@@ -8,8 +21,8 @@ Modern failure never falls back to a bare probe. Source v2 preserves the operato
 canonical metadata maintenance preserves authored content and frozen history. Receipt:
 `planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
 
-Reconcile D3367's retained whole-source execution registration explicitly, without inference
-or silently omitting historical rows. Continue the remaining legacy Stockfish/Maia/durable packet and standalone-source migrations,
+D3367's retained whole-source registration is discharged by the checkpoint above, without
+inference or historical omissions. Continue the remaining legacy Stockfish/Maia/durable packet and standalone-source migrations,
 then whole-manifest execution/digest, binding absence and exact-subject availability. D3363's
 Inspector distribution is still not an observed-move occurrence. No provider RFC or learner
 milestone is complete; routine metadata/hash maintenance needs no further owner question.

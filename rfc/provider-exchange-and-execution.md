@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-04, retained whole-source history:** D3367 explicitly registers the frozen Syzygy source/factory v1 alongside current v2 in provider resource image v3. Both the strict execution compiler and source factory resolve this same exact binding; default acquisition follows the sole current operation row, replacing the copied route table. Unknown versions, bare/crossed payloads, forged deliveries and missing/swapped retained bindings refuse. No new operation, learner binding or default downgrade. Full legacy migration, whole-manifest execution/digest and availability remain open. Receipt: `planning/provider-exchange-and-execution/source-history-2026-10-04.md`.
+
 - **Implementation checkpoint 2026-10-04, whole-source opponent tablebase selection:** D3366 carries the built-in sealed Syzygy source through the actual opponent consumer for root and practical-resistance replies, refusing crossed FENs/clocks, forgeries and modern-source failure without a bare-probe fallback. The operator-only source v1 is retained; bound source v2 and provider resource image v2 preserve immutable declaration history while retaining operation/parser v1. Standalone/fixture sources, durable legacy packets, other raw provider consumers, whole-manifest execution and availability remain open. Receipt: `planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
 
 - **Implementation checkpoint 2026-10-04, literal path compiler:** D3365 implements ordered Cartesian expansion, full source-occurrence addresses, exact registered path identity and per-path/worst-case latency. All six actual operator traversals check their compiled source operation and registered factory before acquisition, returning execution metadata on evidence success. Permanent controls include the actual Maia occurrence and integrated Explorer summary derivations plus crossed factories and real built Stockfish CLI output. The full legacy catalogue intentionally refuses strict compilation: whole-manifest `execution`/digest integration, source-absence binding algebra, public availability, D3363 and legacy migrations remain open. Receipt: `planning/provider-exchange-and-execution/execution-paths-2026-10-04.md`.
@@ -2102,6 +2104,14 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-10-04: D3367 registers the exact retained Syzygy whole-source v1/factory in the
+  protocol resource while preserving default v2 acquisition. Compiler and factory source
+  lookup share the same authority; the duplicate default route list is removed. Unknown
+  versions, crossed operations/factories and raw/forged payloads remain refused. No new
+  operation, learner binding, parser or selection rule. Canonical maintenance preserves
+  predecessor declarations, authored content and validation outcomes. Receipt:
+  `planning/provider-exchange-and-execution/source-history-2026-10-04.md`.
 
 - 2026-10-04: D3366 implements whole-source Syzygy admission at the actual opponent selector
   and authenticated HTTP route, including every practical-resistance reply probe. Canonical

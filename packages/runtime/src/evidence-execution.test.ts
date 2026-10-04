@@ -24,6 +24,24 @@ function fixture(outputs: readonly ProjectionDeclaration[], otherProducers: read
 }
 
 describe("literal provider projection execution", () => {
+  it("retains exact historical whole-source execution without replacing the current source", () => {
+    const previous = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "live.syzygy.position_result", version: 1 });
+    const current = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "live.syzygy.position_result", version: 2 });
+    expect(previous.own.providerOperation).toBe("syzygy.position@1");
+    expect(previous.paths[0]!.sourceRequirements[0]!.projection.version).toBe(1);
+    expect(current.paths[0]!.sourceRequirements[0]!.projection.version).toBe(2);
+    expect(previous.paths[0]!.pathId).not.toBe(current.paths[0]!.pathId);
+    expect(PROVIDER_PROTOCOL_RESOURCE.payload.operations.find(row => row.operation === "syzygy.position@1")!.sourceProjection).toBe("live.syzygy.position_result@2");
+    const retained = EVIDENCE_MANIFEST.projections.find(row => row.id === "live.syzygy.position_result" && row.version === 1)!;
+    for (const changed of [
+      { ...retained, version: 3 },
+      { ...retained, id: "fixture.similar_source" },
+    ]) expect(() => compileProjectionExecution({ ...EVIDENCE_MANIFEST, projections: [...EVIDENCE_MANIFEST.projections, changed] }, changed)).toThrow(/EXECUTION_SOURCE_UNREGISTERED/u);
+    for (const payloadType of ["TablebasePosition", 'ProviderEvidenceDelivery<MaiaPolicyPage,"syzygy.position@1">']) {
+      expect(() => compileProjectionExecution({ ...EVIDENCE_MANIFEST, projections: EVIDENCE_MANIFEST.projections.map(row => row === retained ? { ...row, payloadType } : row) }, retained)).toThrow(/EXECUTION_SOURCE_PAYLOAD/u);
+    }
+  });
+
   it("uses the registered operation and whole delivery on all six actual source projections", () => {
     for (const row of PROVIDER_PROTOCOL_RESOURCE.payload.operations) {
       const [id, version] = row.sourceProjection.split("@");

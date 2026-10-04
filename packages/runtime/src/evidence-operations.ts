@@ -31,6 +31,7 @@ import type { MaiaExactFenMoveOccurrence, MaiaOccurrencePageEvidence, MaiaRunMov
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
 import type { ExplorerPositionPage } from "./provider-types.js";
 import type { ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
+import { providerProtocolRow } from "./provider-protocol.js";
 
 /**
  * rfc/bounded-policy-targets.md §1: the complete sealed authority set a bounded-target batch owns,
@@ -213,15 +214,6 @@ export function candidateFeatureVectorEvidence(input: { readonly beforeFen: stri
   return invokeEvidenceValueRoute("derived.opponent.candidate_feature_vector@1", input);
 }
 
-const PROVIDER_SOURCE_ROUTES = Object.freeze({
-  "stockfish.legal_root_table@1": "live.stockfish.legal_root_table@1",
-  "stockfish.position_evaluation@1": "live.stockfish.position_eval@1",
-  "stockfish.principal_variation@1": "live.stockfish.principal_variation@1",
-  "maia.policy_page@1": "human.maia.policy_page@1",
-  "syzygy.position@1": "live.syzygy.position_result@2",
-  "lichess_explorer.position_page@1": "human.explorer.position_page@1",
-} as const satisfies { readonly [K in ProviderOperationId]: string });
-
 /** The sole move-free Explorer derivation; callers supply only the admitted source page. */
 export function deriveExplorerPopulationSummary(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerPopulationSummary> {
   return invokeEvidenceValueRoute("derived.explorer.population_summary@1", { page });
@@ -248,8 +240,7 @@ export function deriveMaiaExactFenMoveOccurrence(page: MaiaOccurrencePageEvidenc
  * the caller; a delivery of another operation fails the route's seal assertion.
  */
 export function providerSourceEvidence<K extends ProviderOperationId>(operation: K, delivery: ProviderDelivery<ProviderOperationResultMap[K], K>): DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>> {
-  const route = PROVIDER_SOURCE_ROUTES[operation];
-  if (route === undefined) throw new TypeError(`Unknown provider operation ${String(operation)}`);
+  const route = providerProtocolRow(operation).sourceProjection;
   return invokeEvidenceValueRoute(route, { delivery } as never) as unknown as DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>>;
 }
 

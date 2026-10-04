@@ -25,7 +25,7 @@ export const PROVIDER_PROTOCOL_MEMBERS = [
 
 export const PROVIDER_PROTOCOL_RESOURCE = Object.freeze({
   id: "provider-protocol",
-  version: 2,
+  version: 3,
   payload: Object.freeze({
     operations: Object.freeze([
       Object.freeze({ member: "lichess_explorer_position_page_v1", operation: "lichess_explorer.position_page@1", provider: "lichess_explorer", endpoint: Object.freeze({ kind: "https", origin: "https://explorer.lichess.org", path: "/lichess" }), parserId: "parse.lichess_explorer_position_page@1", sourceProjection: "human.explorer.position_page@1", sourceFactoryId: "createHumanExplorerPositionPageV1Evidence", cliName: "explorer-position-page" }),
@@ -35,11 +35,17 @@ export const PROVIDER_PROTOCOL_RESOURCE = Object.freeze({
       Object.freeze({ member: "stockfish_principal_variation_v1", operation: "stockfish.principal_variation@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_principal_variation@1", sourceProjection: "live.stockfish.principal_variation@1", sourceFactoryId: "createLiveStockfishPrincipalVariationV1Evidence", cliName: "stockfish-principal-variation" }),
       Object.freeze({ member: "syzygy_position_v1", operation: "syzygy.position@1", provider: "syzygy", endpoint: Object.freeze({ kind: "https", origin: "https://tablebase.lichess.org", path: "/standard" }), parserId: "parse.syzygy_position@1", sourceProjection: "live.syzygy.position_result@2", sourceFactoryId: "createLiveSyzygyPositionResultV2Evidence", cliName: "syzygy-position" }),
     ] as const),
+    // Exact retained whole-source bindings. These are NOT default acquisition routes or new
+    // operations. An unlisted version never inherits an operation from its name/payload shape.
+    retainedSources: Object.freeze([
+      Object.freeze({ operation: "syzygy.position@1", sourceProjection: "live.syzygy.position_result@1", sourceFactoryId: "createLiveSyzygyPositionResultV1Evidence" }),
+    ] as const),
     digestDomains: PROVIDER_DIGEST_DOMAINS,
   }),
 } as const);
 
 export type ProviderProtocolOperationRow = (typeof PROVIDER_PROTOCOL_RESOURCE.payload.operations)[number];
+export type ProviderProtocolSourceBinding = Pick<ProviderProtocolOperationRow, "operation" | "sourceProjection" | "sourceFactoryId"> | (typeof PROVIDER_PROTOCOL_RESOURCE.payload.retainedSources)[number];
 export type ProviderProtocolMember = (typeof PROVIDER_PROTOCOL_MEMBERS)[number];
 export type ProviderCliName = ProviderProtocolOperationRow["cliName"];
 
@@ -56,6 +62,13 @@ export function providerProtocolRow<K extends ProviderOperationId>(operation: K)
   const row = PROVIDER_PROTOCOL_RESOURCE.payload.operations.find((candidate) => candidate.operation === operation);
   if (row === undefined) throw new TypeError(`Unknown provider operation: ${String(operation)}`);
   return row as Extract<ProviderProtocolOperationRow, { readonly operation: K }>;
+}
+
+/** Resolve one exact current/retained source; never choose a default or infer an operation. */
+export function providerProtocolSourceBinding(sourceProjection: string): ProviderProtocolSourceBinding | undefined {
+  const matches = [...PROVIDER_PROTOCOL_RESOURCE.payload.operations, ...PROVIDER_PROTOCOL_RESOURCE.payload.retainedSources].filter(row => row.sourceProjection === sourceProjection);
+  if (matches.length > 1) throw new TypeError(`Ambiguous provider source binding: ${sourceProjection}`);
+  return matches[0];
 }
 
 export const PROVIDER_OPERATION_IDS: readonly ProviderOperationId[] = Object.freeze(PROVIDER_PROTOCOL_RESOURCE.payload.operations.map((row) => row.operation));

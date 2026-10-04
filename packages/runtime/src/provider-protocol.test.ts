@@ -10,7 +10,7 @@ import { evidenceFactorySymbol } from "./evidence-factories.js";
 import { evidenceValueRouteRegistry } from "./internal/evidence-value-routes.js";
 import { PROVIDER_DIGEST_DOMAINS } from "./provider-digest.js";
 import { PROVIDER_RESPONSE_PARSERS } from "./provider-parsers.js";
-import { PROVIDER_OPERATION_IDS, PROVIDER_PROTOCOL_MEMBERS, PROVIDER_PROTOCOL_RESOURCE, providerProtocolMember } from "./provider-protocol.js";
+import { PROVIDER_OPERATION_IDS, PROVIDER_PROTOCOL_MEMBERS, PROVIDER_PROTOCOL_RESOURCE, providerProtocolMember, providerProtocolSourceBinding } from "./provider-protocol.js";
 import { PROVIDER_REQUEST_NORMALIZERS } from "./provider-requests.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -24,7 +24,13 @@ function validateProtocol(resource: Resource, members: readonly string[]): reado
   const errors: string[] = [];
   const rows = resource.payload.operations;
   const operations = rows.map((row) => row.operation);
+  const sources = [...rows, ...resource.payload.retainedSources];
+  if (new Set(sources.map(row => row.sourceProjection)).size !== sources.length) errors.push("source projections are not unique");
   const sorted = (values: readonly string[]) => [...values].sort();
+  // Whole-delivery factory arms only. Legacy packet/UCI/source-ledger arms and the local-domain
+  // result are deliberately separate and must not acquire operation authority through this join.
+  const factorySources = evidenceValueRouteRegistry().filter(meta => meta.shape === "source_receipt" && meta.dependency === "provider-exchange-and-execution" && meta.arms.every(arm => Object.keys(arm).length === 1 && "delivery" in arm));
+  if (JSON.stringify(sorted(sources.map(row => row.sourceProjection))) !== JSON.stringify(sorted(factorySources.map(meta => meta.route)))) errors.push(`provider source bindings differ from the sole registered whole-source factories: ${sorted(factorySources.map(meta => meta.route)).join(", ")}`);
   if (JSON.stringify(sorted(rows.map((row) => row.member))) !== JSON.stringify(sorted(members))) errors.push("tuple members differ from resource rows");
   for (const row of rows) {
     if (row.member !== providerProtocolMember(row.operation)) errors.push(`${row.operation}: member ${row.member} is not derived`);
@@ -35,6 +41,15 @@ function validateProtocol(resource: Resource, members: readonly string[]): reado
     else if (!projection.payloadType.includes(`"${row.operation}"`)) errors.push(`${row.operation}: ${row.sourceProjection} payload is not its ProviderEvidenceDelivery`);
     const route = evidenceValueRouteRegistry().find((meta) => meta.route === row.sourceProjection);
     if (route === undefined || route.symbol !== row.sourceFactoryId || evidenceFactorySymbol(row.sourceProjection) !== row.sourceFactoryId) errors.push(`${row.operation}: factory ${row.sourceFactoryId} is not the route's sole factory`);
+  }
+  for (const retained of resource.payload.retainedSources) {
+    const current = rows.find(row => row.operation === retained.operation);
+    const projection = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => `${row.id}@${row.version}` === retained.sourceProjection);
+    const currentProjection = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => `${row.id}@${row.version}` === current?.sourceProjection);
+    if (current === undefined) errors.push(`${retained.sourceProjection}: retained operation is not registered`);
+    if (projection === undefined || currentProjection === undefined || projection.payloadType !== currentProjection.payloadType) errors.push(`${retained.sourceProjection}: retained whole payload differs from its current operation`);
+    const route = evidenceValueRouteRegistry().find(meta => meta.route === retained.sourceProjection);
+    if (route === undefined || route.symbol !== retained.sourceFactoryId || evidenceFactorySymbol(retained.sourceProjection) !== retained.sourceFactoryId) errors.push(`${retained.sourceProjection}: retained factory is not the route's sole factory`);
   }
   if (JSON.stringify(sorted(operations)) !== JSON.stringify(sorted(Object.keys(PROVIDER_REQUEST_NORMALIZERS)))) errors.push("normalizers differ from operations");
   if (JSON.stringify(sorted(operations)) !== JSON.stringify(sorted(Object.keys(PROVIDER_RESPONSE_PARSERS)))) errors.push("parsers differ from operations");
@@ -70,6 +85,25 @@ describe("provider-protocol resource (criterion 36)", () => {
     const claimed = claimMembers();
     // Either the claim is still live (then it names exactly these members) or it has landed.
     if (claimed.length > 0) expect([...claimed].sort()).toEqual([...PROVIDER_PROTOCOL_MEMBERS]);
+  });
+
+  it("registers retained whole sources exactly, without downgrading default operation routes", () => {
+    expect(PROVIDER_PROTOCOL_RESOURCE.payload.retainedSources).toEqual([
+      { operation: "syzygy.position@1", sourceProjection: "live.syzygy.position_result@1", sourceFactoryId: "createLiveSyzygyPositionResultV1Evidence" },
+    ]);
+    for (const source of [...PROVIDER_PROTOCOL_RESOURCE.payload.operations, ...PROVIDER_PROTOCOL_RESOURCE.payload.retainedSources]) expect(providerProtocolSourceBinding(source.sourceProjection)).toBe(source);
+    for (const absent of ["live.syzygy.position_result@3", "live.stockfish.eval@1", "fixture.similar_source@1"]) expect(providerProtocolSourceBinding(absent)).toBeUndefined();
+    const mutate = (patch: (copy: { payload: { retainedSources: Record<string, unknown>[] } }) => void): Resource => {
+      const copy = JSON.parse(JSON.stringify(PROVIDER_PROTOCOL_RESOURCE));
+      patch(copy);
+      return copy;
+    };
+    expect(validateProtocol(mutate(copy => { copy.payload.retainedSources[0]!.operation = "maia.policy_page@1"; }), PROVIDER_PROTOCOL_MEMBERS).join("\n")).toMatch(/retained whole payload/u);
+    expect(validateProtocol(mutate(copy => { copy.payload.retainedSources[0]!.operation = "fixture.unknown@1"; }), PROVIDER_PROTOCOL_MEMBERS).join("\n")).toMatch(/retained operation/u);
+    expect(validateProtocol(mutate(copy => { copy.payload.retainedSources[0]!.sourceFactoryId = "createLiveSyzygyPositionResultV2Evidence"; }), PROVIDER_PROTOCOL_MEMBERS).join("\n")).toMatch(/retained factory/u);
+    expect(validateProtocol(mutate(copy => { copy.payload.retainedSources[0]!.sourceProjection = "live.syzygy.position_result@2"; }), PROVIDER_PROTOCOL_MEMBERS).join("\n")).toMatch(/not unique/u);
+    expect(validateProtocol(mutate(copy => { copy.payload.retainedSources[0]!.sourceProjection = "live.syzygy.position_result@3"; }), PROVIDER_PROTOCOL_MEMBERS).join("\n")).toMatch(/retained whole payload/u);
+    expect(validateProtocol(mutate(copy => { copy.payload.retainedSources = []; }), PROVIDER_PROTOCOL_MEMBERS).join("\n")).toMatch(/source bindings differ/u);
   });
 
   it("a copied list, a count-preserving parser/factory swap and an absent member all fail", () => {

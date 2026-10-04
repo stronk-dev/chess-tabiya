@@ -7,7 +7,7 @@
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import type { AvailabilityMode, CompiledEvidenceManifest, LatencyMode, ProjectionDeclaration, VersionedEvidenceId } from "./evidence-contract.js";
 import { digestProviderPath } from "./provider-digest.js";
-import { PROVIDER_PROTOCOL_RESOURCE } from "./provider-protocol.js";
+import { providerProtocolSourceBinding } from "./provider-protocol.js";
 import type { ProviderOperationId } from "./provider-types.js";
 
 export interface CompiledProjectionExecution {
@@ -63,7 +63,7 @@ export class EvidenceExecutionError extends TypeError {
 }
 
 function providerOperation(projection: ProjectionDeclaration, availability: AvailabilityMode): ProviderOperationId | null {
-  const protocol = PROVIDER_PROTOCOL_RESOURCE.payload.operations.find(row => row.sourceProjection === key(projection));
+  const protocol = providerProtocolSourceBinding(key(projection));
   if (availability !== "provider") {
     if (protocol !== undefined) throw new EvidenceExecutionError("EXECUTION_SOURCE_PAYLOAD", `${key(projection)} is a registered provider source but advertises ${availability}`);
     return null;

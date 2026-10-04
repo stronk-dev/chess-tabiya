@@ -1006,6 +1006,13 @@ evidence-execution-check:
 tablebase-cancellation-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-tablebase.test.ts apps/server/src/evidence-queue.test.ts
 .PHONY: tablebase-selection-metadata-check tablebase-selection-metadata-edits tablebase-selection-metadata-update
+.PHONY: provider-source-history-check provider-source-history-metadata-update
+provider-source-history-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/provider-source-history.js --log-level=warning
+	node apps/server/dist/provider-source-history.js
+provider-source-history-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/provider-source-history.js --log-level=warning
+	node apps/server/dist/provider-source-history.js --apply-metadata
 tablebase-selection-metadata-check:
 	./node_modules/.bin/esbuild tools/d3366-tablebase-selection-metadata/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/tablebase-selection-metadata.js --log-level=warning
 	node apps/server/dist/tablebase-selection-metadata.js

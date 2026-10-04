@@ -142,6 +142,22 @@ describe("§3 same-exchange receipts and seals", () => {
 });
 
 describe("value-authority source factories (evidence-value-authority D2)", () => {
+  it("retains the sealed Syzygy predecessor factory without changing the default successor", () => {
+    const delivery = fixtures()["syzygy.position@1"];
+    const retained = invokeEvidenceValueRoute("live.syzygy.position_result@1", { delivery });
+    const current = providerSourceEvidence("syzygy.position@1", delivery);
+    assertDeclaredEvidence(retained);
+    expect(retained.projection).toEqual({ id: "live.syzygy.position_result", version: 1 });
+    expect(current.projection).toEqual({ id: "live.syzygy.position_result", version: 2 });
+    expect(retained.payload).toBe(delivery);
+    expect(current.payload).toBe(delivery);
+    expect(evidenceValueReceipt(retained).factory).toBe("createLiveSyzygyPositionResultV1Evidence");
+    expect(evidenceValueReceipt(current).factory).toBe("createLiveSyzygyPositionResultV2Evidence");
+    for (const invalid of [delivery.payload, { ...delivery }, fixtures()["maia.policy_page@1"]]) {
+      expect(() => invokeEvidenceValueRoute("live.syzygy.position_result@1", { delivery: invalid } as never)).toThrow(/scheduler-sealed syzygy/u);
+    }
+  });
+
   it("each operation reaches exactly its projection through the sole factory and seals the whole delivery", () => {
     const expected = {
       "stockfish.legal_root_table@1": "live.stockfish.legal_root_table@1",

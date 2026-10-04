@@ -27,6 +27,14 @@ and `provider-protocol.test.ts` prove several things are one set: the tuple, the
 operation-keyed type maps, parsers, normalizers, projections, factories, CLI arms and the ten digest
 domains.
 
+Resource image v3 explicitly retains Syzygy's whole-source v1 factory alongside the current
+v2 acquisition route. `providerProtocolSourceBinding` resolves an exact registered version;
+the compiler and factory both use this authority. New requests always select the current row.
+Retained source history neither grants a learner binding nor turns a bare legacy packet into a
+whole delivery. Current/retained paths have distinct versioned identities; unknown versions,
+crossed whole payloads and forged deliveries refuse. The source census checks the registered
+whole-delivery factories rather than counting legacy source-shaped packets as modern evidence.
+
 `stockfish.principal_variation@1` (§5.2) is the bounded engine line. It is a separate operation so
 that the evaluation delivery stays score/WDL only. Its request is the evaluation's single-line bound
 grammar plus a refuse-only `maxPlies` (`1..MAX_PRINCIPAL_VARIATION_PLIES` = 32). Its command image
@@ -139,9 +147,8 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
   operation. Exact run-subject authority ships separately; it is not the availability endpoint.
 - Remaining legacy Stockfish/Maia callers. Built-in learner tablebase and Explorer acquisitions
   have migrated (below). Explorer's compatibility consumers still await the narrow projections.
-  D3367 also owns the retained whole-source execution seam: Syzygy v1 remains frozen while the
-  current protocol selects v2; strict whole-image completion must register or retire that
-  history explicitly rather than guessing or excluding it.
+  D3367's retained whole-source registration is implemented; strict whole-image completion
+  still refuses the remaining raw legacy provider projections rather than guessing or excluding them.
   Supplied sources and standalone sourcing/research clients
   are separate, and old node-shaped projections retire only at a proven zero-consumer census.
 - Inspector's Maia next-move distribution and remaining legacy Explorer consumer identities.

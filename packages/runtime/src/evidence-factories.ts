@@ -152,7 +152,7 @@ import { recordedPieceRoutes, structureDeltaEntries } from "./compare-strip-valu
 import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdentity } from "./types.js";
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
-import { providerProtocolRow } from "./provider-protocol.js";
+import { providerProtocolRow, providerProtocolSourceBinding } from "./provider-protocol.js";
 import { CORPUS_GUARD } from "./population-guard.js";
 import type { ExplorerPopulationSummary } from "./explorer-summary.js";
 import { maiaExactFenOccurrencePayload, maiaRunOccurrencePayload, type MaiaExactFenMoveOccurrence, type MaiaOccurrencePageEvidence, type MaiaRunMoveOccurrence } from "./maia-occurrence.js";
@@ -1346,7 +1346,8 @@ function providerSourceFactory<K extends ProviderOperationId>(operation: K, pred
   if (predecessor !== undefined && operation !== "syzygy.position@1") throw new TypeError("Only the frozen Syzygy source predecessor is retained");
   const route = predecessor === undefined ? row.sourceProjection : "live.syzygy.position_result@1";
   const symbol = evidenceFactorySymbol(route);
-  if (predecessor === undefined && symbol !== row.sourceFactoryId) throw new TypeError(`${operation} source factory symbol ${symbol} disagrees with the provider-protocol resource ${row.sourceFactoryId}`);
+  const binding = providerProtocolSourceBinding(route);
+  if (binding === undefined || binding.operation !== operation || symbol !== binding.sourceFactoryId) throw new TypeError(`${operation} source factory symbol ${symbol} disagrees with the exact provider-protocol source binding`);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ delivery: value(`a scheduler-sealed ${operation} provider delivery`, (candidate) => isSealedDelivery(operation, candidate)) }], result: "single", dependency: "provider-exchange-and-execution" }, ({ delivery }: { readonly delivery: ProviderDelivery<ProviderOperationResultMap[K], K> }) => {
     assertProviderDelivery(operation, delivery);
     const { acquisition, payloadReceipt } = delivery;

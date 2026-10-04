@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Resolve D3367's retained whole-source execution registration explicitly, then migrate remaining raw/narrow Stockfish, Maia and durable tablebase consumers before whole-manifest execution/digest integration. Complete binding source-absence algebra, the closed occurrence-resolver census and POST /evidence/availability over authorized historical heads. D3363 retains Inspector's next-move distribution contract, not a fabricated observed move. Then close consumer-owned Support/Review/bot/longitudinal joins. Preserve shared acquisitions and narrow Explorer summary; never infer operations, omit historical rows or relabel legacy payloads. Independent semantic authorities and production reach remain open; content expansion stays held for stable contracts.",
+        "nextAction": "Migrate remaining raw/narrow Stockfish, Maia and durable tablebase consumers before whole-manifest execution/digest integration. Retained whole-source versions are now explicitly registered (D3367); never infer operations, omit historical rows or relabel legacy payloads. Complete binding source-absence algebra, the closed occurrence-resolver census and POST /evidence/availability over authorized historical heads. D3363 retains Inspector's next-move distribution contract, not a fabricated observed move. Then close consumer-owned Support/Review/bot/longitudinal joins. Preserve shared acquisitions and narrow Explorer summary. Independent semantic authorities and production reach remain open; content expansion stays held for stable contracts.",
         "latestCheckpoint": {
           "at": "2026-10-04",
-          "summary": "D3366 migrates the built-in Syzygy opponent root and every practical-resistance reply probe to whole-source, machine-only admission before selection. Exact FEN/clock checks, runtime seals and modern failure without bare fallback are verified at the actual selector and authenticated HTTP route. Bound source v2 preserves operator-only v1; all six operation/parser/digest meanings remain unchanged. Canonical compatibility updates retain 851 historical declarations, add eight successors (859 total), preserve all 104 authored documents and all 274 prior factory outcomes, and restamp only requirements plus 68 ledger hashes. The 352-document migration plan has no remaining rows. Full exact-index software passes 2819 tests/323 files and seven performance tests/four files, with zero type errors/Svelte warnings and downstream contracts. Content passes 223 tests/23 files and all 104 requirements; provider passes 233 tests; browser CI passes 111 journeys, one optional skip, zero retries. The initial machine-only fence failure is retained, corrected in production declarations and verified without weakening its test. D3367 records retained-source execution history as owned todo. Other legacy consumers, D3363, whole-manifest integration, binding absence and exact-subject availability remain open; no complete RFC, capability or milestone is promoted.",
+          "summary": "D3367 registers the exact retained Syzygy whole-source v1/factory alongside current v2 in provider resource image v3. Compiler and factories resolve the same source registration; new requests derive their default route from the sole current operation row. Unlisted versions, bare/crossed payloads, forged deliveries and swapped/missing registry bindings still refuse; both source versions keep distinct path identities. No new operation or learner binding, acquisition downgrade or selection-rule change. Canonical maintenance preserves all 859 predecessor declarations, adds seven explicit successors (866 total), retains all 275 factory outcomes and all authored chess content, and changes only requirements plus 68 matching ledger hashes. Semantic observations/cases/external evidence/verdicts stay identical; the 352-document migration plan is empty. Complete exact-index software passes 2822 tests/323 files and seven performance tests/four files, with zero type errors/Svelte warnings and downstream contracts. Content passes 223 tests/23 files; provider passes 236 tests; browser CI passes 111 journeys with one optional skip and zero retries. Raw legacy consumers, D3363, whole-manifest execution/digest, binding absence and exact-subject availability remain open; no complete RFC, capability or milestone is promoted.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -833,7 +833,10 @@
             "planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md",
             "planning/provider-exchange-and-execution/tablebase-selection-metadata-2026-10-04.json",
             "planning/provider-exchange-and-execution/tablebase-selection-software-2026-10-04.json",
-            "planning/provider-exchange-and-execution/tablebase-selection-software-negative-2026-10-04.json"
+            "planning/provider-exchange-and-execution/tablebase-selection-software-negative-2026-10-04.json",
+            "planning/provider-exchange-and-execution/source-history-2026-10-04.md",
+            "planning/provider-exchange-and-execution/source-history-metadata-2026-10-04.json",
+            "planning/provider-exchange-and-execution/source-history-software-2026-10-04.json"
           ],
           "anchors": [
             {
@@ -879,7 +882,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:04d81a30acc2107d48de857936bf2c6879ab83166d837691e078d5ebd69d2f01"
+              "digest": "sha256:2df4bcb5bec04c107ed968f544e684baab8e19b14328ec5e3dc3fa48f9009608"
             },
             {
               "kind": "work_state",
@@ -964,7 +967,7 @@
             {
               "kind": "work_state",
               "id": "D3367",
-              "digest": "sha256:05238a7d8f02b4f5d50da64b1b6d743effd8c8e78db4331c205b879387eb0ec7"
+              "digest": "sha256:78fbe32b364d1c890ab98c9bd6fda3a34856d2c71ddf915c09faa8577f849786"
             }
           ]
         },
@@ -1474,7 +1477,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:04d81a30acc2107d48de857936bf2c6879ab83166d837691e078d5ebd69d2f01"
+              "digest": "sha256:2df4bcb5bec04c107ed968f544e684baab8e19b14328ec5e3dc3fa48f9009608"
             },
             {
               "kind": "work_state",
