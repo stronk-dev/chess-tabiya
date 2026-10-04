@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 current provider checkpoint — ordered occurrences
+
+D3359 repairs the manifest compiler's set-valued derivation inputs: repeated source types and
+literal order now survive compilation and semantic-event matching. This is the §1 prerequisite,
+not the full path/availability contract. The normal provider target includes permanent regression
+tests. Canonical metadata updates retain every prior declaration and all authored chess content.
+Receipt: `planning/provider-exchange-and-execution/derivation-occurrences-2026-10-04.md`.
+
+Continue the provider RFC's compiled execution paths and exact-subject availability, Maia
+occurrence/Inspector migration and remaining legacy provider callers. Do not claim any of those
+obligations closed by this compiler repair; routine measured metadata/hash updates are not another
+owner question.
+
 ## 2026-10-01 current Explorer checkpoint — Explorer integration and approved metadata migration complete
 
 D3330 now has explicit owner approval, recorded in explorer-metadata-ruling-2026-10-01.md.

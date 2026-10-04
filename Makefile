@@ -1006,6 +1006,7 @@ explorer-summary-migration-proof:
 	node apps/server/dist/explorer-summary-migration-proof.js $(ARGS)
 
 provider-exchange-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-contract.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/explorer-summary-voice.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/provider-exchange.test.ts packages/runtime/src/provider-protocol.test.ts packages/runtime/src/explorer-summary.test.ts apps/server/src/provider-exchange.test.ts apps/server/src/provider-traversal.test.ts apps/server/src/provider-tablebase.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/engine-supervisor-exchange.test.ts

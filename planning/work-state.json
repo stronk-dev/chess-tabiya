@@ -27622,6 +27622,15 @@
       "sourceDigest": "sha256:7709f92f430bc529d896b2a5c06c497b696dbc6841ae60500c8bbfc75b6ef739",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3359",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:59464d86cb4b3d428ca1f8cec6230f4b5f77b259a7dd056d127b58208acc1441",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/derivation-occurrences-2026-10-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

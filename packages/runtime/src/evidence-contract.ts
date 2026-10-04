@@ -332,7 +332,9 @@ function derivationMembers(projection: ProjectionDeclaration): readonly (readonl
 }
 
 function derivationMemberKey(member: readonly VersionedEvidenceId[]): string {
-  return [...member].map(refKey).sort().join("|");
+  // provider-exchange §1: literal input order and multiplicity name distinct occurrences.
+  // Two position_eval operands are not one source; [before, after] is not [after, before].
+  return member.map(refKey).join("|");
 }
 
 function budgetNarrows(candidate: number | null, ceiling: number | null): boolean {
@@ -707,7 +709,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
       const memberKeys = members.map(derivationMemberKey);
       const invalidDerivation = derivation !== undefined && (
         hasInputs === hasAnyOf || members.length === 0 ||
-        members.some((member) => member.length === 0 || new Set(member.map(refKey)).size !== member.length) ||
+        members.some((member) => member.length === 0) ||
         new Set(memberKeys).size !== memberKeys.length
       );
       if (projection.payloadType.trim() === "" || projection.semantics.trim() === "" || projection.forms.length === 0 || projection.answerContent.length === 0 || !nonEmptyStrings(projection.operands) || !nonEmptyStrings(projection.limitations) || !abstentionValid || !dispositionValid || invalidDerivation) fail("EVIDENCE_PROJECTION_INCOMPLETE", "projection semantics are incomplete", [site("projection", projection, producer.implementation)]);
@@ -786,7 +788,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     const declaredMemberKeys = declaredMembers.map(derivationMemberKey);
     const eventMemberKeys = eventMembers.map(derivationMemberKey);
     const eventDeclaresBothForms = event.derivationInputs !== undefined && event.derivationAnyOf !== undefined;
-    const invalidEventMembers = eventMembers.some((member) => member.length === 0 || new Set(member.map(refKey)).size !== member.length)
+    const invalidEventMembers = eventMembers.some((member) => member.length === 0)
       || new Set(eventMemberKeys).size !== eventMemberKeys.length;
     if (eventDeclaresBothForms || invalidEventMembers || !setEqual(eventMemberKeys, declaredMemberKeys)) {
       fail("EVIDENCE_EVENT_DERIVATION_MISMATCH", "semantic event derivation inputs disagree with its projection", [site("semantic-event", event.projection)]);

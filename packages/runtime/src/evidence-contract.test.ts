@@ -20,6 +20,7 @@ import {
   type EvidenceContractDeclarations,
   type ProducerDeclaration,
   type ProjectionDeclaration,
+  type VersionedEvidenceId,
 } from "./evidence-contract.js";
 
 // Test-only compiler fixture (rfc/evidence-value-authority.md §1): wrappers for the contract's own
@@ -168,8 +169,9 @@ describe("evidence manifest compiler", () => {
     expect(code(declarations(derived({ anyOf: [[pRef], [rRef]] })))).toBeUndefined();
     expect(code(declarations(derived({ anyOf: [] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
     expect(code(declarations(derived({ anyOf: [[]] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
-    expect(code(declarations(derived({ anyOf: [[pRef, pRef]] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
-    expect(code(declarations(derived({ anyOf: [[pRef, rRef], [rRef, pRef]] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
+    expect(code(declarations(derived({ anyOf: [[pRef, pRef]] })))).toBeUndefined();
+    expect(code(declarations(derived({ anyOf: [[pRef, rRef], [rRef, pRef]] })))).toBeUndefined();
+    expect(code(declarations(derived({ anyOf: [[pRef, rRef], [pRef, rRef]] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
     expect(code(declarations(derived({ anyOf: [[pRef], [rRef]] }, { exactness: "exact" })))).toBeUndefined();
     const measuredR = { ...r, exactness: "measured" as const };
     const widened: EvidenceContractDeclarations = {
@@ -201,6 +203,30 @@ describe("evidence manifest compiler", () => {
     expect(code(declarations({ ...baseEvent, derivationAnyOf: [[pRef], [pRef]] }))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
     expect(code(declarations({ ...baseEvent, derivationAnyOf: [[pRef, pRef], [rRef]] }))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
     expect(code(declarations({ ...baseEvent, derivationAnyOf: [[pRef]] }))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
+  });
+
+  it("retains repeated input occurrences and ordered semantic-event operands", () => {
+    const pRef = { id: "p.output", version: 1 } as const;
+    const rRef = { id: "r.output", version: 1 } as const;
+    const qRef = { id: "q.output", version: 1 } as const;
+    const declarations = (inputs: readonly VersionedEvidenceId[], eventInputs = inputs): EvidenceContractDeclarations => ({
+      producers: [producer(projection()), producer({ ...projection("r.output", "r"), disposition: { kind: "operator_only", reason: "fixture input" } }, "r"), producer({
+        ...projection("q.output", "q"), role: "event", plane: "derived", derivation: { inputs },
+      }, "q")],
+      consumers: [consumer([pRef, qRef])],
+      adapters: [adapter(), adapter({ id: "aq", producer: { id: "q", version: 1 }, projection: qRef })],
+      semanticEvents: [{ projection: qRef, derivationInputs: eventInputs, allowedSigns: ["state"], requiredOperands: ["fen"], valence: "none", validation: { profile: { kind: "event", projection: qRef } } }],
+    });
+    // The same source type at two positions is two operands, not a duplicate declaration.
+    const repeated = declarations([pRef, pRef]);
+    expect(code(repeated)).toBeUndefined();
+    expect(compileEvidenceManifest(repeated).semanticEvents[0]!.derivationInputs).toEqual([pRef, pRef]);
+    expect(code(declarations([pRef, pRef], [pRef]))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
+    // Different before/after orders cannot match merely because the id set is equal.
+    const ordered = declarations([pRef, rRef]);
+    expect(code(ordered)).toBeUndefined();
+    expect(code(declarations([pRef, rRef], [rRef, pRef]))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
+    expect(compileEvidenceManifest(ordered).digest).not.toBe(compileEvidenceManifest(declarations([rRef, pRef])).digest);
   });
 
   it("refuses global lift, learned score and population rank as policy inputs", () => {

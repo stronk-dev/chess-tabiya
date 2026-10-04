@@ -22,6 +22,12 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
+Derivation members retain literal input order and repeated occurrences: two readings of the same
+source type at different positions are two operands. Reversing input order is a different member;
+identical alternatives remain invalid. Semantic-event declarations must retain the same ordered
+members, including multiplicity. This compiler check does not replace a factory's exact-position
+join or establish that two provider deliveries have been admitted.
+
 The current compiled closure is 41 producers, 230 projections, 34 consumers and 508 bindings,
 plus 78 semantic-event declarations, 78 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.

@@ -1,0 +1,72 @@
+{
+  "baseline": "b11bccd7",
+  "retainedDeclarations": 827,
+  "currentDeclarations": 835,
+  "successors": [
+    {
+      "id": "engineCondition.engine_eval_swing",
+      "version": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    {
+      "id": "engineCondition.engine_mate_appears",
+      "version": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    {
+      "id": "engineCondition.tablebase_category_regression",
+      "version": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    {
+      "id": "engineCondition.tablebase_dtz_regression",
+      "version": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    {
+      "id": "fenPredicate.structuralFeature",
+      "version": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    {
+      "id": "opponent.practical_slice",
+      "version": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    {
+      "id": "opponent.selection",
+      "version": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    {
+      "id": "selection.semantic_policy",
+      "version": {
+        "kind": "integer",
+        "value": 2
+      }
+    }
+  ],
+  "authoredDocumentsChecked": 104,
+  "changedRequirements": 129,
+  "changedDocuments": 104,
+  "changedContentPacks": 92,
+  "ledgerRestamps": 68,
+  "authoredChanges": 0,
+  "frozenDeclarationChanges": 0,
+  "sourceIdentityChanges": 0,
+  "dependencyIdentityChanges": 0
+}
