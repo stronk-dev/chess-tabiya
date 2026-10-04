@@ -1,0 +1,229 @@
+[
+  {
+    "subjectId": "derived.review.eval_delta",
+    "id": {
+      "id": "derived.review.eval_delta",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    "subject": "projection",
+    "sources": [
+      {
+        "kind": "f1_projection",
+        "projection": {
+          "id": "derived.review.eval_delta",
+          "version": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "id": "derived.review.eval_point",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      }
+    ],
+    "semanticsDigest": "sha256:c530ad656fa24a216627f2bd47293bbf19a674cd5ae79ed80da20e20decf97a3",
+    "availability": "local"
+  },
+  {
+    "subjectId": "derived.review.mate_transition",
+    "id": {
+      "id": "derived.review.mate_transition",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    "subject": "projection",
+    "sources": [
+      {
+        "kind": "f1_projection",
+        "projection": {
+          "id": "derived.review.mate_transition",
+          "version": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "id": "derived.review.eval_point",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      }
+    ],
+    "semanticsDigest": "sha256:9ba5486e5eb4d630c17673e4a1c99102a4e376339e55afea0fe6f0bb7c772695",
+    "availability": "local"
+  },
+  {
+    "subjectId": "derived.story.rank",
+    "id": {
+      "id": "derived.story.rank",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    "subject": "projection",
+    "sources": [
+      {
+        "kind": "f1_projection",
+        "projection": {
+          "id": "derived.story.rank",
+          "version": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "id": "derived.pivotal.human_divergence",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "derived.pivotal.irreversibility",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "derived.pivotal.option_collapse",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "derived.pivotal.phase_change",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "derived.review.eval_delta",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "derived.review.mate_transition",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "derived.story.last_level",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "rules.endgame.classification",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "run.record.consequence",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "run.record.imported_result",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "theory.shapes.firing",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      }
+    ],
+    "semanticsDigest": "sha256:c6f8a50eb49f05079835cacab4d56ef1c3b8a22409ee68ca5e4ed64e24b95ace",
+    "availability": "local"
+  },
+  {
+    "subjectId": "derived.story.title",
+    "id": {
+      "id": "derived.story.title",
+      "version": {
+        "kind": "integer",
+        "value": 1
+      }
+    },
+    "subject": "projection",
+    "sources": [
+      {
+        "kind": "f1_projection",
+        "projection": {
+          "id": "derived.story.title",
+          "version": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "id": "derived.story.rank",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "rules.endgame.classification",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "run.record.consequence",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "id": "run.record.imported_result",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      }
+    ],
+    "semanticsDigest": "sha256:5fd312c305e9c4fd87aa82ee72eaec9a3115386bae9244c7f36c4ea962832c53",
+    "availability": "local"
+  }
+]

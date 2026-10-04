@@ -1041,6 +1041,15 @@ evidence-binding-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts
 
 .PHONY: binding-absence-metadata-check binding-absence-metadata-update
+.PHONY: review-transition-metadata-check review-transition-metadata-update
+review-transition-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/review-transition-metadata.js --log-level=warning
+	node apps/server/dist/review-transition-metadata.js --review-transitions
+
+review-transition-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/review-transition-metadata.js --log-level=warning
+	node apps/server/dist/review-transition-metadata.js --review-transitions --apply-metadata
+
 binding-absence-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/binding-absence-metadata.js --log-level=warning
 	node apps/server/dist/binding-absence-metadata.js --binding-absence

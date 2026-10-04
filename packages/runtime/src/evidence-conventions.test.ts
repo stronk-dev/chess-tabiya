@@ -1,8 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
+import { capabilityKey } from "@chess-tabiya/schema";
 
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { CAPABILITY_REGISTRY } from "./capability/registry.js";
 import {
   DECLARED_CONVENTION_INHERITANCE,
   INSTANCE_CONVENTION_PROJECTIONS,
@@ -31,6 +33,20 @@ const ROOT = new URL("../../../", import.meta.url);
 const read = (path: string): string => readFileSync(new URL(path, ROOT), "utf8");
 const key = (value: { readonly id: string; readonly version: number }): string => `${value.id}@${value.version}`;
 const refs = (route: string): readonly string[] => (PROJECTION_CONVENTION_TABLE.get(route)?.refs ?? []).map(key);
+
+// A landed-contract citation names its historical version, not today's executable route.
+// Accept a retained predecessor only through a declared same-subject successor that is present
+// and active now. The capability-history gate separately proves its declaration was not rewritten.
+function projectionWitnessExists(witness: string): boolean {
+  if (PRIMARY_EVIDENCE_MANIFEST.projections.some((projection) => key(projection) === witness)) return true;
+  const match = /^(.+)@([1-9]\d*)$/u.exec(witness);
+  if (match === null) return false;
+  const historical = CAPABILITY_REGISTRY.declarations.find((row) => row.subject === "projection" && row.id.id === match[1] && row.id.version.kind === "integer" && row.id.version.value === Number(match[2]));
+  if (historical?.disposition.kind !== "deprecated" || historical.disposition.successor.id !== historical.subjectId) return false;
+  const successor = historical.disposition.successor;
+  if (successor.version.kind !== "integer" || CAPABILITY_REGISTRY.byKey.get(capabilityKey(successor))?.disposition.kind !== "active") return false;
+  return PRIMARY_EVIDENCE_MANIFEST.projections.some((projection) => projection.id === successor.id && projection.version === successor.version.value);
+}
 
 interface InitialRow { readonly ref: string; readonly definition: string; readonly limitations: readonly string[]; readonly witnesses: readonly string[] }
 const initial = JSON.parse(read("planning/semantic-convention-provenance/initial-declarations.json")) as { readonly snapshotRef: string; readonly declarations: readonly InitialRow[] };
@@ -100,19 +116,28 @@ describe("semantic-convention registry (rfc/semantic-convention-provenance.md §
     expect(conventionSemanticDigest(first)).not.toBe(conventionSemanticDigest(declaration({ definition: "Changed meaning." })));
   });
 
-  it("resolves every landed-contract witness: projection refs in the manifest, file#symbol in the tree", () => {
-    const projections = new Set(PRIMARY_EVIDENCE_MANIFEST.projections.map(key));
+  it("resolves every landed-contract witness: current or retained projection refs, file#symbol in the tree", () => {
     for (const value of CONVENTION_REGISTRY.declarations) {
       for (const authority of value.authority) {
         if (authority.kind !== "landed_contract") continue;
         for (const witness of authority.witnesses) {
-          if (/@\d+$/u.test(witness)) { expect(projections.has(witness), `${conventionRefKey(value.ref)} witness ${witness}`).toBe(true); continue; }
+          if (/@\d+$/u.test(witness)) { expect(projectionWitnessExists(witness), `${conventionRefKey(value.ref)} witness ${witness}`).toBe(true); continue; }
           const [file, symbol] = witness.split("#");
           expect(existsSync(new URL(file!, ROOT)), witness).toBe(true);
           if (symbol !== undefined) expect(read(file!), witness).toContain(symbol.split(".")[0]);
         }
       }
     }
+  });
+
+  it("resolves frozen Story citations without admitting unknown or future projection versions", () => {
+    for (const id of ["derived.story.rank", "derived.story.title"]) {
+      expect(projectionWitnessExists(`${id}@1`)).toBe(true);
+      expect(projectionWitnessExists(`${id}@2`)).toBe(true);
+      expect(projectionWitnessExists(`${id}@3`)).toBe(false);
+    }
+    expect(projectionWitnessExists("missing.projection@1")).toBe(false);
+    expect(projectionWitnessExists("opponent.selection@8")).toBe(false);
   });
 });
 

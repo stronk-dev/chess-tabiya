@@ -16,12 +16,15 @@ import { assertAuthoredContentUnchanged, assertLedgerMetadataUnchanged } from ".
 
 // Reuse the same preservation checks for D3369; each mode names its committed predecessor.
 const BINDING_ABSENCE = process.argv.includes("--binding-absence");
-const BASELINE = BINDING_ABSENCE ? "efe67940" : "c0114e28";
+const REVIEW_TRANSITIONS = process.argv.includes("--review-transitions");
+const REVIEW_SUCCESSORS = ["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"];
+const BASELINE = REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
 const SUCCESSORS = [
   "engineCondition.engine_eval_swing", "engineCondition.engine_mate_appears",
   "engineCondition.tablebase_category_regression", "engineCondition.tablebase_dtz_regression",
   "fenPredicate.structuralFeature", "opponent.practical_slice", "opponent.selection",
   ...(BINDING_ABSENCE ? ["selection.semantic_policy"] : []),
+  ...(REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS : []),
 ].sort();
 const read = (path: string) => readFileSync(resolve(path), "utf8");
 const old = (path: string) => execFileSync("git", ["show", `${BASELINE}:${path}`], { encoding: "utf8", maxBuffer: 16_000_000 });
@@ -42,12 +45,23 @@ async function proof(editsOnly: boolean) {
   assert.deepEqual(appended.map(row => row.subjectId).sort(), SUCCESSORS);
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
-    assert.equal(row.id.version.value, BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
+    assert.equal(row.id.version.value, REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
   }
   const oldProfiles = JSON.parse(old("packages/runtime/src/fixtures/evidence-value-profiles.json"));
   const profiles = JSON.parse(read("packages/runtime/src/fixtures/evidence-value-profiles.json"));
-  for (const [key, value] of Object.entries(oldProfiles)) assert.equal(canonicalJson(profiles[key]), canonicalJson(value), `Factory outcome changed: ${key}`);
-  assert.deepEqual(Object.keys(profiles).filter(key => !Object.hasOwn(oldProfiles, key)), []);
+  const successors = REVIEW_TRANSITIONS ? new Map(REVIEW_SUCCESSORS.map(id => [`${id}@1`, `${id}@2`])) : new Map<string, string>();
+  for (const [key, value] of Object.entries(oldProfiles)) {
+    const successor = successors.get(key);
+    if (successor === undefined) assert.equal(canonicalJson(profiles[key]), canonicalJson(value), `Factory outcome changed: ${key}`);
+    else {
+      assert.equal(Object.hasOwn(profiles, key), false, `Superseded factory is still current: ${key}`);
+      const { payloadDigests: _oldDigest, ...oldOutcome } = value as Record<string, unknown>;
+      const { payloadDigests: _newDigest, ...newOutcome } = profiles[successor];
+      assert.equal(canonicalJson(newOutcome), canonicalJson(oldOutcome), `Successor changed availability/cardinality: ${key}`);
+      if (key.startsWith("derived.story.")) assert.equal(canonicalJson(profiles[successor]), canonicalJson(value), `Story output changed: ${key}`);
+    }
+  }
+  assert.deepEqual(Object.keys(profiles).filter(key => !Object.hasOwn(oldProfiles, key)).sort(), [...successors.values()].sort());
   const previousReceipt = JSON.parse(old("packages/runtime/src/semantic-validation-receipt.generated.json"));
   const currentReceipt = JSON.parse(read("packages/runtime/src/semantic-validation-receipt.generated.json"));
   for (const key of Object.keys(previousReceipt).filter(key => key !== "operations" && key !== "populations")) assert.equal(canonicalJson(currentReceipt[key]), canonicalJson(previousReceipt[key]), `Semantic validation outcome changed: ${key}`);
@@ -101,9 +115,9 @@ async function proof(editsOnly: boolean) {
     successors: appended.map(row => ({ subject: row.subjectId, version: row.id.version.value })),
     unchangedAuthoredDocuments: paths.length, requirementStampChanges: changedPacks,
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
-    retainedFactoryOutcomes: Object.keys(oldProfiles).length, newFactoryProfiles: [],
+    retainedFactoryOutcomes: Object.keys(oldProfiles).length - successors.size, newFactoryProfiles: [...successors.values()].sort(),
     retainedSourceExecution: { projection: "live.syzygy.position_result@1", state: "registered", operation: "syzygy.position@1" },
-    scope: BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
+    scope: REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
   };
 }
 

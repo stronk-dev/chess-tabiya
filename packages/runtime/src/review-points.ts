@@ -28,9 +28,9 @@ export interface ReviewEnginePoint {
   readonly evaluation: DeclaredEvidence<StockfishPositionEvaluation>;
 }
 
-/** `derived.review.eval_delta@1`: cp→cp only, White perspective, both points retained. */
+/** `derived.review.eval_delta@2`: cp→cp only, White perspective, both points retained. */
 export interface ReviewEvalDelta {
-  readonly projectionId: "derived.review.eval_delta@1";
+  readonly projectionId: "derived.review.eval_delta@2";
   readonly before: DeclaredEvidence<ReviewEnginePoint>;
   readonly after: DeclaredEvidence<ReviewEnginePoint>;
   readonly deltaCp: number;
@@ -39,9 +39,9 @@ export interface ReviewEvalDelta {
 export const MATE_TRANSITION_KINDS = Object.freeze(["appeared", "disappeared", "side_changed", "distance_changed"] as const);
 export type MateTransitionKind = (typeof MATE_TRANSITION_KINDS)[number];
 
-/** `derived.review.mate_transition@1`. */
+/** `derived.review.mate_transition@2`. */
 export interface ReviewMateTransition {
-  readonly projectionId: "derived.review.mate_transition@1";
+  readonly projectionId: "derived.review.mate_transition@2";
   readonly before: DeclaredEvidence<ReviewEnginePoint>;
   readonly after: DeclaredEvidence<ReviewEnginePoint>;
   readonly changes: readonly [MateTransitionKind, ...MateTransitionKind[]];

@@ -1,0 +1,30 @@
+{
+  "derived.review.eval_delta@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "9d117aad3b17e09f37fc96af8918a99dfca5c70e01f38518bb6f1581fa3c11dd"
+    ]
+  },
+  "derived.review.mate_transition@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "323da3a26b2cf945a3ac34b979766b9819e6d5c21745cfc26efddd2a98ac0238"
+    ]
+  },
+  "derived.story.rank@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "918aafe7884d69f44932c93f1f1defd9908704fb86436397e76ae22eff80c628"
+    ]
+  },
+  "derived.story.title@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "45fdb99827997d4b7c760583fad030f5ecbdd69e981be7b1e29b4bd433e51655"
+    ]
+  }
+}

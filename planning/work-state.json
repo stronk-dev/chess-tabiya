@@ -27732,12 +27732,12 @@
     },
     {
       "id": "D3371",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:review-evidence-compiler.md",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d6cbe574e650e3d0848a6b78f03f1f9040fe74d74418e1a6594a4e047576c2eb",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7d291d3784409cd79b9ea191182a21931a80e16957574b16baa7c9f3e35289a6",
+      "uxItems": [],
+      "evidence": "planning/review/transition-operands-2026-10-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3372",

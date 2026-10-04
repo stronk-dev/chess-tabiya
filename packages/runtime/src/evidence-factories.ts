@@ -1188,12 +1188,12 @@ export const createDerivedStoryLastLevelV1Evidence = (() => {
 const MOMENT_KIND_SOURCES: Readonly<Record<string, string>> = Object.freeze({
   irreversibility: "derived.pivotal.irreversibility@1", phase_change: "derived.pivotal.phase_change@1",
   human_divergence: "derived.pivotal.human_divergence@1", option_collapse: "derived.pivotal.option_collapse@1",
-  eval_pivot: "derived.review.eval_delta@1", mate_transition: "derived.review.mate_transition@1", last_level: "derived.story.last_level@1",
+  eval_pivot: "derived.review.eval_delta@2", mate_transition: "derived.review.mate_transition@2", last_level: "derived.story.last_level@1",
   endgame_entry: "rules.endgame.classification@1", shape_span: "theory.shapes.firing@1",
 });
 
-export const createDerivedStoryRankV1Evidence = (() => {
-  const route = "derived.story.rank@1";
+export const createDerivedStoryRankV2Evidence = (() => {
+  const route = "derived.story.rank@2";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ moments: value("a Story moment list", Array.isArray) }], result: "single" }, ({ moments }: { readonly moments: readonly StoryMoment[] }) => {
     const sources: DeclaredEvidence<unknown>[] = [];
@@ -1204,7 +1204,7 @@ export const createDerivedStoryRankV1Evidence = (() => {
         if (!required.some((candidate) => routes.has(candidate))) throw new TypeError(`Story moment kind ${kind} has no sealed ${required.join(" | ")} evidence`);
       }
       // The moment's typed evaluation pair must be exactly the endpoints of its sealed transition.
-      const transition = moment.evidence.find((item) => sealedRoute(item) === "derived.review.eval_delta@1" || sealedRoute(item) === "derived.review.mate_transition@1")?.payload as ReviewEvalDelta | ReviewMateTransition | undefined;
+      const transition = moment.evidence.find((item) => sealedRoute(item) === "derived.review.eval_delta@2" || sealedRoute(item) === "derived.review.mate_transition@2")?.payload as ReviewEvalDelta | ReviewMateTransition | undefined;
       if (moment.evaluation !== null) {
         if (transition === undefined) throw new TypeError("Story moment evaluation has no sealed review transition");
         const before = transition.before.payload.evaluation.payload.payload.score;
@@ -1232,27 +1232,27 @@ export const createDerivedReviewEvalPointV1Evidence = (() => {
   });
 })();
 
-export const createDerivedReviewEvalDeltaV1Evidence = (() => {
-  const route = "derived.review.eval_delta@1";
+export const createDerivedReviewEvalDeltaV2Evidence = (() => {
+  const route = "derived.review.eval_delta@2";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("derived.review.eval_point@1"), after: sealed("derived.review.eval_point@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ before, after }: { readonly before: DeclaredEvidence<ReviewEnginePoint>; readonly after: DeclaredEvidence<ReviewEnginePoint> }): EvidenceAvailability<DeclaredEvidence<ReviewEvalDelta>> => {
     const comparability = reviewPointComparability(before.payload, after.payload);
     if (comparability !== "comparable") return unavailable(comparability);
     const beforeCp = reviewPointCentipawns(before.payload), afterCp = reviewPointCentipawns(after.payload);
     if (beforeCp === null || afterCp === null) return unavailable("mate_operand");
-    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_delta@1" as const, before, after, deltaCp: afterCp - beforeCp }), { before, after }, [before, after]));
+    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_delta@2" as const, before, after, deltaCp: afterCp - beforeCp }), { before, after }, [before, after]));
   });
 })();
 
-export const createDerivedReviewMateTransitionV1Evidence = (() => {
-  const route = "derived.review.mate_transition@1";
+export const createDerivedReviewMateTransitionV2Evidence = (() => {
+  const route = "derived.review.mate_transition@2";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("derived.review.eval_point@1"), after: sealed("derived.review.eval_point@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ before, after }: { readonly before: DeclaredEvidence<ReviewEnginePoint>; readonly after: DeclaredEvidence<ReviewEnginePoint> }): EvidenceAvailability<DeclaredEvidence<ReviewMateTransition>> => {
     const comparability = reviewPointComparability(before.payload, after.payload);
     if (comparability !== "comparable") return unavailable(comparability);
     const changes = mateTransitionChanges(before.payload.evaluation.payload.payload.score, after.payload.evaluation.payload.payload.score);
     if (typeof changes === "string") return unavailable(changes);
-    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.mate_transition@1" as const, before, after, changes }), { before, after }, [before, after]));
+    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.mate_transition@2" as const, before, after, changes }), { before, after }, [before, after]));
   });
 })();
 
@@ -1275,10 +1275,10 @@ export const createDerivedReviewWdlPointV1Evidence = (() => {
   });
 })();
 
-export const createDerivedStoryTitleV1Evidence = (() => {
-  const route = "derived.story.title@1";
+export const createDerivedStoryTitleV2Evidence = (() => {
+  const route = "derived.story.title@2";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ story: value("a Story title input", isRecord), rank: sealed("derived.story.rank@1") }], result: "single" }, ({ story, rank }: { readonly story: StoryTitleInput; readonly rank: DeclaredEvidence<{ readonly rank: readonly string[] }> }) => {
+  return factory({ route, symbol, shape: "derived", arms: [{ story: value("a Story title input", isRecord), rank: sealed("derived.story.rank@2") }], result: "single" }, ({ story, rank }: { readonly story: StoryTitleInput; readonly rank: DeclaredEvidence<{ readonly rank: readonly string[] }> }) => {
     if (!sameDigest(story.rank, rank.payload.rank)) throw new TypeError("Story title rank is not its sealed rank evidence");
     const title = suggestTitle(story);
     return mint(route, symbol, Object.freeze({ title, rank: story.rank, outcome: story.outcome }), { story: { side: story.side, outcome: story.outcome, rank: story.rank }, rank }, [rank]);

@@ -1,7 +1,7 @@
 // rfc/review-evidence-compiler.md §5: the Story compatibility compiler over the typed Review packet.
 //
 // Story no longer reads an untyped engine scalar. Every moment is built from exact packet items:
-// cp pivots from `derived.review.eval_delta@1`, mate moments from `derived.review.mate_transition@1`
+// cp pivots from `derived.review.eval_delta@2`, mate moments from `derived.review.mate_transition@2`
 // (never a cp sentinel), last-level from cp review points converted to the learner's perspective at
 // this consumer. Each moment carries distinct decision / evidence / stop identities and sealed
 // presentation components; the wire carries only closed `PresentationReceipt`s.
@@ -210,12 +210,12 @@ export function reviewStoryMoments(packet: ReviewEvidencePacket): StoryProjectio
       const id = item.projection.id;
       if (id.startsWith("derived.pivotal.")) { const value = at(node.nodeId); value.kinds.add((item.payload as PivotalMarker).kind); value.evidence.push(item); }
       else if (projectionIs(item, "derived.review.eval_point")) points.push(item as DeclaredEvidence<ReviewEnginePoint>);
-      else if (projectionIs(item, "derived.review.eval_delta")) {
+      else if (projectionIs(item, "derived.review.eval_delta", 2)) {
         const delta = item.payload as ReviewEvalDelta;
         if (Math.abs(delta.deltaCp) < STORY_PIVOT_CP) continue;
         const value = at(node.nodeId); value.kinds.add("eval_pivot"); value.evidence.push(item);
         value.evaluation = { before: reviewScoreReceipt(delta.before.payload.evaluation.payload.payload.score), after: reviewScoreReceipt(delta.after.payload.evaluation.payload.payload.score) };
-      } else if (projectionIs(item, "derived.review.mate_transition")) {
+      } else if (projectionIs(item, "derived.review.mate_transition", 2)) {
         const transition = item.payload as ReviewMateTransition;
         const value = at(node.nodeId); value.kinds.add("mate_transition"); value.evidence.push(item);
         value.evaluation = { before: reviewScoreReceipt(transition.before.payload.evaluation.payload.payload.score), after: reviewScoreReceipt(transition.after.payload.evaluation.payload.payload.score) };
@@ -253,10 +253,10 @@ export function reviewStoryMoments(packet: ReviewEvidencePacket): StoryProjectio
     })];
   }).sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId));
   const rank = rankStoryMoments(moments);
-  const rankEvidence = invokeEvidenceValueRoute("derived.story.rank@1", { moments });
+  const rankEvidence = invokeEvidenceValueRoute("derived.story.rank@2", { moments });
   if ((rankEvidence.payload as { readonly rank: readonly string[] }).rank.join("|") !== rank.join("|")) throw new TypeError("Story rank factory disagrees with the moment ranking");
   const titleInput: StoryTitleInput = { side: packet.subject.learnerSide, outcome: titleOutcome(outcome), moments, rank };
-  const titleEvidence = invokeEvidenceValueRoute("derived.story.title@1", { story: titleInput, rank: rankEvidence as DeclaredEvidence<{ readonly rank: readonly string[] }> });
+  const titleEvidence = invokeEvidenceValueRoute("derived.story.title@2", { story: titleInput, rank: rankEvidence as DeclaredEvidence<{ readonly rank: readonly string[] }> });
   const [titleComponent] = renderReviewStoryComponents(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_STORY, [titleEvidence]));
   if (titleComponent === undefined) throw new TypeError("Story title has no presentation component");
   return Object.freeze({

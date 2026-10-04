@@ -1,0 +1,68 @@
+{
+  "baseline": "f55c1fe3",
+  "retainedDeclarations": 874,
+  "candidateDeclarations": 885,
+  "successors": [
+    {
+      "subject": "derived.review.eval_delta",
+      "version": 2
+    },
+    {
+      "subject": "derived.review.mate_transition",
+      "version": 2
+    },
+    {
+      "subject": "derived.story.rank",
+      "version": 2
+    },
+    {
+      "subject": "derived.story.title",
+      "version": 2
+    },
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 9
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 9
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 9
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 9
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 9
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 9
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 9
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 271,
+  "newFactoryProfiles": [
+    "derived.review.eval_delta@2",
+    "derived.review.mate_transition@2",
+    "derived.story.rank@2",
+    "derived.story.title@2"
+  ],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged"
+}

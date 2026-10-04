@@ -429,17 +429,17 @@ export const REVIEW_PACKET_SOURCE_ADAPTERS = Object.freeze([
     const point = pointOf(execution, slot.nodeId);
     return isPoint(point) ? available([point]) : stateOnly(point);
   } }),
-  Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.eval_delta@1", projection: V1("derived.review.eval_delta"), family: "engine_eval", grain: "incoming_edge", parser: exactPayload(["projectionId", "before", "after", "deltaCp"], "derived.review.eval_delta@1"), operation: (slot, execution) => {
+  Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.eval_delta@2", projection: V2("derived.review.eval_delta"), family: "engine_eval", grain: "incoming_edge", parser: exactPayload(["projectionId", "before", "after", "deltaCp"], "derived.review.eval_delta@2"), operation: (slot, execution) => {
     const points = edgePoints(slot, execution);
     if (!("before" in points)) return stateOnly(points);
-    const delta = invokeEvidenceValueRoute("derived.review.eval_delta@1", points);
+    const delta = invokeEvidenceValueRoute("derived.review.eval_delta@2", points);
     if (delta.kind === "available") return available([delta.value]);
     return stateOnly(delta.reason === "mate_operand" ? NO_OBSERVATION : { kind: "unavailable", reason: "input_abstained" });
   } }),
-  Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.mate_transition@1", projection: V1("derived.review.mate_transition"), family: "engine_eval", grain: "incoming_edge", parser: exactPayload(["projectionId", "before", "after", "changes"], "derived.review.mate_transition@1"), operation: (slot, execution) => {
+  Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.mate_transition@2", projection: V2("derived.review.mate_transition"), family: "engine_eval", grain: "incoming_edge", parser: exactPayload(["projectionId", "before", "after", "changes"], "derived.review.mate_transition@2"), operation: (slot, execution) => {
     const points = edgePoints(slot, execution);
     if (!("before" in points)) return stateOnly(points);
-    const transition = invokeEvidenceValueRoute("derived.review.mate_transition@1", points);
+    const transition = invokeEvidenceValueRoute("derived.review.mate_transition@2", points);
     if (transition.kind === "available") return available([transition.value]);
     return stateOnly(transition.reason === "no_mate_operand" || transition.reason === "no_mate_transition" ? NO_OBSERVATION : { kind: "unavailable", reason: "input_abstained" });
   } }),

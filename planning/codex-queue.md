@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 Review transition operand checkpoint
+
+D3371 migrates the live delta and mate-transition declarations, factories, packet adapters,
+Review Map, Story, voice and presentation/inspector bindings to exact v2 successors. Both
+ordered endpoints now have distinct execution occurrences. Story rank/title advance to v2
+only for corrected dependencies; computations and frozen predecessor meanings are preserved.
+Focused production-boundary and metadata-preservation checks pass, as do full exact-index software
+(2,865 tests and seven isolated performance tests), content, provider, browser CI and governance.
+Only D3371 closes; normal staged-process checks and hooks run before commit. Receipt:
+`planning/review/transition-operands-2026-10-04.md`.
+
+Next remains actual raw-consumer migration and explicit binding-policy adoption, whole-manifest
+execution/digest, closed source resolution and authenticated availability. D3363 and D3370
+remain separate source contracts. No whole RFC or milestone is promoted. Routine canonical
+metadata/hash maintenance is authorized implementation, not an owner question.
+
 ## 2026-10-04 Review engine recovery checkpoint
 
 D3372 repairs configured-engine discovery in the actual Review coordinator. Pending lookups

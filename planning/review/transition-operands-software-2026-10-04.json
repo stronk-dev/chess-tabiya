@@ -1,0 +1,12 @@
+{
+  "target": "verify-software",
+  "sources": {
+    "mode": "git-index",
+    "head": "f55c1fe3685d0a0b3e00d4629adae988e188d52d",
+    "tree": "a14ce366068ce2c6101900d7f31896228772f59c",
+    "includesUnstagedChanges": false
+  },
+  "result": "passed",
+  "exitCode": 0,
+  "error": null
+}

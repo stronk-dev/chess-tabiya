@@ -14,6 +14,8 @@ import { canonicalFen, positionFromFen } from "./chess.js";
 import { compileConceptRegistry, conceptRegistryDigest, conceptRegistryHeadBytes, conceptRegistryRevisionBytes } from "./concept-registry.js";
 import { compareBranches } from "./compare.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { GENERATED_CAPABILITY_DECLARATIONS } from "./capability/declarations.generated.js";
+import { CAPABILITY_LIFECYCLE } from "./capability/lifecycle.js";
 import {
   assertDeclaredEvidence,
   evidenceDigest,
@@ -192,9 +194,30 @@ describe("value authority: static closure", () => {
 const ACTIVE = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => projection.disposition?.kind !== "retired").map(exact).sort();
 const RETIRED = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => projection.disposition?.kind === "retired").map(exact).sort();
 /** Receipt targets retired after migration, each with its typed successor route. */
-const RETIRED_AFTER_MIGRATION: ReadonlyMap<string, string> = new Map([["derived.story.eval_shift@1", "derived.review.eval_delta@1"]]);
+const RETIRED_AFTER_MIGRATION: ReadonlyMap<string, string> = new Map([
+  ["derived.story.eval_shift@1", "derived.review.eval_delta@2"],
+  ["derived.story.rank@1", "derived.story.rank@2"],
+  ["derived.story.title@1", "derived.story.title@2"],
+]);
+
+const REVIEW_V1_ROUTES = ["derived.review.eval_delta@1", "derived.review.mate_transition@1", "derived.story.rank@1", "derived.story.title@1"] as const;
 
 describe("value authority: registry equality", () => {
+  it("preserves frozen Review/Story predecessors without executable routes or bindings", () => {
+    const frozen = JSON.parse(read("packages/runtime/src/fixtures/review-transition-predecessors.json")) as typeof GENERATED_CAPABILITY_DECLARATIONS;
+    expect(frozen.map((row) => `${row.id.id}@${row.id.version.value}`).sort()).toEqual([...REVIEW_V1_ROUTES].sort());
+    for (const row of frozen) {
+      expect(GENERATED_CAPABILITY_DECLARATIONS.find((candidate) => candidate.id.id === row.id.id && candidate.id.version.value === 1)).toEqual(row);
+      expect(CAPABILITY_LIFECYCLE.find((candidate) => candidate.subjectId === row.subjectId)?.versions).toMatchObject([
+        { version: { kind: "integer", value: 1 }, disposition: { kind: "deprecated", successor: { id: row.subjectId, version: { kind: "integer", value: 2 } } } },
+        { version: { kind: "integer", value: 2 }, disposition: { kind: "active" } },
+      ]);
+      expect(PRIMARY_EVIDENCE_MANIFEST.projections.filter((candidate) => candidate.id === row.subjectId).map((candidate) => candidate.version)).toEqual([2]);
+      expect(() => invoke(`${row.id.id}@1`, {})).toThrow(/Unknown evidence value route/u);
+    }
+    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter((binding) => REVIEW_V1_ROUTES.includes(exact(binding.projection) as typeof REVIEW_V1_ROUTES[number]))).toEqual([]);
+  });
+
   it("is set-equal to every non-retired catalogue projection, with bindings a subset (§8.3, criterion 13)", () => {
     expect([...ROUTES.keys()].sort()).toEqual(ACTIVE);
     // 216 + the five typed Review projections, forced-mate v2, the concept reference and the
@@ -249,7 +272,11 @@ describe("value authority: registry equality", () => {
         // is removed with the projection, and the typed Review successor carries the evidence.
         if (RETIRED_AFTER_MIGRATION.has(target.projection)) {
           expect(ROUTES.has(target.projection), target.projection).toBe(false);
-          expect(ROUTES.has(RETIRED_AFTER_MIGRATION.get(target.projection)!), target.projection).toBe(true);
+          const successor = RETIRED_AFTER_MIGRATION.get(target.projection)!;
+          expect(ROUTES.get(successor), target.projection).toMatchObject({ symbol: evidenceFactorySymbol(successor), shape: target.factoryShape });
+          // Story's typed transition replaced the old scalar; the rank/title successor is a
+          // one-to-one route migration with unchanged computation and a corrected input identity.
+          if (target.projection !== "derived.story.eval_shift@1") targets.set(successor, new Set([row.currentProjection]));
           continue;
         }
         const meta = ROUTES.get(target.projection);
@@ -281,7 +308,7 @@ describe("value authority: registry equality", () => {
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
     // Plus rfc/bounded-policy-targets.md §4 and rfc/bounded-target-policy-composition.md §4 routes.
     // Plus rfc/evidence-presentation.md Checkpoint P's source-bound citation derivation.
-    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.population_summary@1", "derived.grade.move_quality@1", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.run_move_occurrence@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@1", "derived.review.eval_point@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "live.syzygy.position_result@2", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.population_summary@1", "derived.grade.move_quality@1", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.run_move_occurrence@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@2", "derived.review.eval_point@1", "derived.review.mate_transition@2", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "live.syzygy.position_result@2", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -881,8 +908,8 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const reviewPoint = (index: number, raw: string) => invoke("derived.review.eval_point@1", { evaluation: reviewDelivery(mainPath[index]!.fen, raw), position: sealedOne("run.record.position@1", { run, nodeId: mainPath[index]!.id }) }) as { readonly kind: string; readonly value: DeclaredEvidence<unknown> };
   profiles.set("derived.review.eval_point@1", { valid: { evaluation: reviewDelivery(mainPath[1]!.fen, "cp 30"), position: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }) }, falsify: refused("derived.review.eval_point@1", { evaluation: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }), position: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }) }) });
   const reviewBefore = reviewPoint(1, "cp 30").value, reviewAfter = reviewPoint(2, "cp -250").value, reviewMated = reviewPoint(2, "mate 2").value;
-  profiles.set("derived.review.eval_delta@1", { valid: { before: reviewBefore, after: reviewAfter }, falsify: refused("derived.review.eval_delta@1", { before: reviewBefore, after: reviewAfter, deltaCp: 5 }) });
-  profiles.set("derived.review.mate_transition@1", { valid: { before: reviewBefore, after: reviewMated }, falsify: refused("derived.review.mate_transition@1", { before: reviewBefore, after: reviewDelivery(mainPath[2]!.fen, "mate 2") }) });
+  profiles.set("derived.review.eval_delta@2", { valid: { before: reviewBefore, after: reviewAfter }, falsify: refused("derived.review.eval_delta@2", { before: reviewBefore, after: reviewAfter, deltaCp: 5 }) });
+  profiles.set("derived.review.mate_transition@2", { valid: { before: reviewBefore, after: reviewMated }, falsify: refused("derived.review.mate_transition@2", { before: reviewBefore, after: reviewDelivery(mainPath[2]!.fen, "mate 2") }) });
   const normalized = sealedOne("derived.review.wdl_white@1", { evaluation: reviewDelivery(mainPath[1]!.fen, "cp 30") });
   profiles.set("derived.review.wdl_white@1", { valid: { evaluation: reviewDelivery(mainPath[1]!.fen, "cp 30") }, falsify: refused("derived.review.wdl_white@1", { evaluation: normalized }) });
   profiles.set("derived.review.wdl_point@1", { valid: { normalized, position: sealedOne("run.record.position@1", { run, nodeId: mainPath[1]!.id }) }, falsify: refused("derived.review.wdl_point@1", { normalized, position: normalized }) });
@@ -894,12 +921,12 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     profiles.set(route, { valid: fixture, falsify: refused(route, { ...fixture, detail: {} }) });
   }
   profiles.set("derived.opening.deepest_reached@1", { valid: { run, branchId: main }, falsify: refused("derived.opening.deepest_reached@1", { run, branchId: main, deepest: {} }) });
-  const shift = (invoke("derived.review.eval_delta@1", { before: reviewBefore, after: reviewAfter }) as { readonly value: DeclaredEvidence<{ readonly before: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }>; readonly after: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }> }> }).value;
+  const shift = (invoke("derived.review.eval_delta@2", { before: reviewBefore, after: reviewAfter }) as { readonly value: DeclaredEvidence<{ readonly before: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }>; readonly after: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }> }> }).value;
   const moment = { nodeId: mainPath[2]!.id, decisionNodeId: mainPath[1]!.id, evidenceNodeId: mainPath[2]!.id, stopNodeId: mainPath[2]!.id, entryNodeId: mainPath[1]!.id, ply: 2, san: null, fen: mainPath[2]!.fen, kinds: ["eval_pivot"], sentences: [], components: [], evidence: [shift], phase: "middlegame", evaluation: { before: shift.payload.before.payload.evaluation.payload.payload.score, after: shift.payload.after.payload.evaluation.payload.payload.score } };
-  profiles.set("derived.story.rank@1", { valid: { moments: [moment] }, falsify: refused("derived.story.rank@1", { moments: [{ ...moment, kinds: ["phase_change"] }] }) });
-  const rank = invoke("derived.story.rank@1", { moments: [moment] }) as DeclaredEvidence<{ rank: readonly string[] }>;
+  profiles.set("derived.story.rank@2", { valid: { moments: [moment] }, falsify: refused("derived.story.rank@2", { moments: [{ ...moment, kinds: ["phase_change"] }] }) });
+  const rank = invoke("derived.story.rank@2", { moments: [moment] }) as DeclaredEvidence<{ rank: readonly string[] }>;
   const story = { side: "white", outcome: { kind: "unfinished" }, moments: [moment], rank: rank.payload.rank };
-  profiles.set("derived.story.title@1", { valid: { story, rank }, falsify: refused("derived.story.title@1", { story: { ...story, rank: ["forged"] }, rank }) });
+  profiles.set("derived.story.title@2", { valid: { story, rank }, falsify: refused("derived.story.title@2", { story: { ...story, rank: ["forged"] }, rank }) });
 
   // Provider, model, corpus, ledger and authored sources.
   const packet = (kind: string, source = "engine_validated", values: Record<string, unknown> = { centipawns: 20 }) => ({ packet: { kind, source, values } });
@@ -1065,6 +1092,23 @@ const PROFILE_FILE = new URL("fixtures/evidence-value-profiles.json", import.met
 const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
+  it("changes only transition identity and preserves the predecessor's calculation and Story output", () => {
+    const previous = JSON.parse(read("packages/runtime/src/fixtures/review-transition-v1-profiles.json")) as Record<string, Outcome>;
+    expect(Object.keys(previous).sort()).toEqual([...REVIEW_V1_ROUTES].sort());
+    const profiles = buildProfiles();
+    for (const predecessor of REVIEW_V1_ROUTES) {
+      const route = predecessor.replace(/@1$/u, "@2");
+      const result = invoke(route, profiles.get(route)!.valid!) as DeclaredEvidence<unknown> | { readonly kind: "available"; readonly value: DeclaredEvidence<unknown> };
+      const item = "value" in result ? result.value : result;
+      assertDeclaredEvidence(item);
+      // Only the projectionId field changes in a transition payload. Ordered sealed endpoints,
+      // delta/change values and both Story payloads must reproduce the committed v1 digests.
+      const payload = item.payload as Record<string, unknown>;
+      const normalized = predecessor.startsWith("derived.review.") ? { ...payload, projectionId: predecessor } : payload;
+      expect({ availability: "available", cardinality: 1, payloadDigests: [evidenceDigest(normalized)] }, route).toEqual(previous[predecessor]);
+    }
+  });
+
   it("runs a valid authority case and a falsifier for every registry route, pinned by payload digest", () => {
     const profiles = buildProfiles();
     expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());

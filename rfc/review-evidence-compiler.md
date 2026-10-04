@@ -1,6 +1,8 @@
 # RFC: Review evidence compiler
 
-- **Implementation checkpoint 2026-10-04:** D3372 repairs engine discovery at the production coordinator: only pending lookups coalesce; configured startup failure remains provider_failed and a later authorized window can recover without resetting provider attempts or duplicating durable evidence. D3371 keeps the incorrect one-operand v1 transition declarations and versioned consumer repair open. Receipt: `planning/review/engine-identity-recovery-2026-10-04.md`. This is not full RFC completion or new acceptance.
+- **Implementation checkpoint 2026-10-04:** D3371 closes §3's declaration-cardinality defect through v2 transitions and exact live consumer migration; Story rank/title v2 describe successor dependencies without changing calculations. Permanent execution, frozen-history and calculation-compatibility controls, full exact-index software (2,865 tests plus seven isolated performance tests), content, provider, browser CI and governance pass. Receipt: `planning/review/transition-operands-2026-10-04.md`. This is not full RFC completion or new acceptance.
+
+- **Prior implementation checkpoint 2026-10-04:** D3372 repairs engine discovery at the production coordinator: only pending lookups coalesce; configured startup failure remains provider_failed and a later authorized window can recover without resetting provider attempts or duplicating durable evidence. D3371 keeps the incorrect one-operand v1 transition declarations and versioned consumer repair open. Receipt: `planning/review/engine-identity-recovery-2026-10-04.md`. This is not full RFC completion or new acceptance.
 
 - **Status:** **implementing — landed 2026-09-24 at the owner's direction (implement directly, no
   review round); receipt `planning/evidence-foundation-ux/review-evidence-compiler-implementation-2026-09-24.md`.**
@@ -66,8 +68,8 @@ successor, and lands one packet compiler:
    exact canonical FEN, engine identity and one search bound;
 2. `derived.review.eval_point@1` — binds that source to an exact `run.record.position@1` item rather
    than placing a run node on the source;
-3. `derived.review.eval_delta@1` — cp→cp only, with both points retained;
-4. `derived.review.mate_transition@1` — mate appearance, disappearance or mate→mate distance/side
+3. `derived.review.eval_delta@2` — cp→cp only, with both points retained;
+4. `derived.review.mate_transition@2` — mate appearance, disappearance or mate→mate distance/side
    change, never a cp conversion;
 5. `derived.review.wdl_white@1` — the shared delivery's raw side-to-move WDL normalized once to
    White while literally retaining that delivery;
@@ -202,6 +204,21 @@ joining it to an exact recorded position.
 
 ## 3. Derived transitions
 
+### Versioned declaration repair 2026-10-04
+
+D3371 corrects declaration cardinality, not the computations below. The current identities are
+`derived.review.eval_delta@2` and `derived.review.mate_transition@2`; each declares the ordered
+inputs `[eval_point@1, eval_point@1]`, matching its before/after factory arms. Their v1 capability
+declarations remain frozen in lifecycle history and have no current factory or consumer binding.
+Story rank/title advance to v2 solely to declare these successor inputs; ordering, thresholds,
+title composition and learner perspective remain unchanged. Review packet adapters, Review Map,
+Story, voice and inspector bindings migrate together. No persisted run payload is rewritten:
+transitions and Story projections are computed from the recorded evaluation deliveries on read.
+The permanent execution test requires both provider and recorded-position occurrences, while
+the authority gate proves old routes refuse and every current route has a valid case/falsifier.
+This repair applies the already implemented two-point contract; it is not new acceptance or a
+whole-RFC discharge. Routine canonical metadata is refreshed without overwriting old meanings.
+
 Both transition projections consume two `derived.review.eval_point@1` items. They are general
 typed comparisons, not claims that the points are adjacent; `compileReviewEvidence` chooses
 adjacent same-branch pairs by the recorded path. The nested deliveries must use the same actual
@@ -214,7 +231,7 @@ neither can be required equal across two positions — corrected 2026-09-24.)
 
 ```ts
 interface ReviewEvalDelta {
-  readonly projectionId: "derived.review.eval_delta@1";
+  readonly projectionId: "derived.review.eval_delta@2";
   readonly before: ReviewEnginePoint;
   readonly after: ReviewEnginePoint;
   readonly deltaCp: number;
@@ -236,7 +253,7 @@ claim or recommendation.
 type MateTransitionKind = "appeared" | "disappeared" | "side_changed" | "distance_changed";
 
 interface ReviewMateTransition {
-  readonly projectionId: "derived.review.mate_transition@1";
+  readonly projectionId: "derived.review.mate_transition@2";
   readonly before: ReviewEnginePoint;
   readonly after: ReviewEnginePoint;
   readonly changes: readonly [MateTransitionKind, ...MateTransitionKind[]];
@@ -549,7 +566,7 @@ Unknown keys fail instead of becoming an accidental evidence channel.
 consequence window. A root occurrence, off-path endpoint, stop before evidence, missing recorded
 edge or independently supplied retry point fails construction. Its wire counterpart
 contains the closed presentation receipt produced from those same components, never a parallel
-sentence or source-label array. The title is likewise the `derived.story.title@1` component receipt,
+sentence or source-label array. The title is likewise the `derived.story.title@2` component receipt,
 not a free string. `projectPublicReviewStory(receipt)` may drop family/progress/provider metadata and
 component kinds that the public policy does not admit, but each retained component is copied from
 the same already-selected `PresentationReceipt` with its evidence reference, adapter identity and
@@ -675,9 +692,9 @@ The server-local compatibility compiler consumes typed `ReviewEnginePoint` items
 closed `ReviewScoreReceipt` union. Browser `StoryEvaluation` is deleted rather than widened into a
 forgeable evidence lookalike. `STORY_MATE_CP` and every mate→cp clamp are deleted.
 
-- `eval_pivot` consumes only `derived.review.eval_delta@1` and may retain the existing absolute
+- `eval_pivot` consumes only `derived.review.eval_delta@2` and may retain the existing absolute
   150-cp product convention until the Review Map policy replaces it;
-- a new `mate_transition` moment consumes `derived.review.mate_transition@1` without a scalar;
+- a new `mate_transition` moment consumes `derived.review.mate_transition@2` without a scalar;
 - `last_level` evaluates cp points only and converts White evidence to learner perspective at this
   consumer: `learnerCp = side === "white" ? whiteCp : -whiteCp`. A mate point cannot satisfy or fail
   the within-one-pawn convention. Sign-mirrored White/Black learner fixtures must produce the same
@@ -718,7 +735,7 @@ forgeable evidence lookalike. `STORY_MATE_CP` and every mate→cp clamp are dele
   absence internals do not leak into either JSON shape.
 
 The existing `derived.story.eval_shift@1` is retired once no consumer remains; it is not silently
-redefined over the new union. `derived.story.rank@1` declares the new mate-transition input before
+redefined over the new union. `derived.story.rank@2` declares the new mate-transition input before
 Story may rank it.
 
 ## 6. Selection boundary
@@ -1056,6 +1073,7 @@ unauthorized until another genuinely fresh review and all declared dependencies 
 
 ## Changelog
 
+- 2026-10-04: D3371 corrects transition declaration cardinality with v2 delta/mate and Story rank/title identities, migrates current factories/adapters/consumers together, preserves frozen v1 meanings and verifies unchanged calculations. Complete RFC discharges remain open.
 - 2026-10-04: D3372 repairs transient configured-engine discovery and read-only failure observation under §4.1/D1077; pending identity coalescing, recovered/version-changed identity and unchanged attempt/durable history have permanent controls. D3371 records the live delta/mate declaration cardinality mismatch for versioned author repair. Remaining discharges and full RFC status are unchanged.
 
 - 2026-09-24 **Analyze line restored.** This RFC's landing left Analyze always reporting "no engine

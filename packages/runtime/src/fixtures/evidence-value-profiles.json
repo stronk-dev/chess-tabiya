@@ -605,11 +605,11 @@
       "9247cde839b8cf922b5c27ba55dc4357d9fb0b9516a59806a4eea1f6322f4f5d"
     ]
   },
-  "derived.review.eval_delta@1": {
+  "derived.review.eval_delta@2": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "9d117aad3b17e09f37fc96af8918a99dfca5c70e01f38518bb6f1581fa3c11dd"
+      "41a63a19f95922601b8a15dca23e23fb14572f6109d3bffd62115c79154827f6"
     ]
   },
   "derived.review.eval_point@1": {
@@ -619,11 +619,11 @@
       "8dab8ecedb7461e0cf4716a9942443f4848bfda86a18ae4db611cd6720e7d284"
     ]
   },
-  "derived.review.mate_transition@1": {
+  "derived.review.mate_transition@2": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "323da3a26b2cf945a3ac34b979766b9819e6d5c21745cfc26efddd2a98ac0238"
+      "3acf41fd4121abb50ff0bf58c66319438371fa93294f37ef8917d7c1606b0368"
     ]
   },
   "derived.review.wdl_point@1": {
@@ -738,14 +738,14 @@
       "8a95117f5b332e54364605163eae57f950d47145f788967dba1050da96ecccb0"
     ]
   },
-  "derived.story.rank@1": {
+  "derived.story.rank@2": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
       "918aafe7884d69f44932c93f1f1defd9908704fb86436397e76ae22eff80c628"
     ]
   },
-  "derived.story.title@1": {
+  "derived.story.title@2": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [

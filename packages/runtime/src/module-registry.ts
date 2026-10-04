@@ -243,7 +243,7 @@ export const MODULE_OPERATIONS: readonly ModuleOperation[] = Object.freeze([
   Object.freeze({
     module: "review_map" as const, operation: "reviewMapProjection", timing: "review" as const,
     // rfc/review-evidence-compiler.md: the typed packet projections the evidence panel admits.
-    projections: Object.freeze([ref("derived.grade.move_quality"), ref("live.stockfish.eval"), ...RECORDED_PATH_SUCCESSOR_REFS, ...["derived.review.eval_point", "derived.review.eval_delta", "derived.review.mate_transition", "derived.review.wdl_point"].map((id) => ref(id))]),
+    projections: Object.freeze([ref("derived.grade.move_quality"), ref("live.stockfish.eval"), ...RECORDED_PATH_SUCCESSOR_REFS, ref("derived.review.eval_point"), { id: "derived.review.eval_delta", version: 2 }, { id: "derived.review.mate_transition", version: 2 }, ref("derived.review.wdl_point")]),
   }),
   // rfc/hint-distance.md §7: one learner-requested disclosure per request, through RunService.hint.
   Object.freeze({

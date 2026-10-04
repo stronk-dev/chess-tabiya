@@ -14,8 +14,8 @@ best move or principal variation. Review derives:
 | projection | meaning |
 |---|---|
 | `derived.review.eval_point@1` | the delivery joined to one `run.record.position@1` occurrence by byte-identical canonical FEN |
-| `derived.review.eval_delta@1` | cp→cp only, White perspective, both points retained |
-| `derived.review.mate_transition@1` | `appeared | disappeared | side_changed | distance_changed`; never a cp conversion |
+| `derived.review.eval_delta@2` | cp→cp only, White perspective, both ordered points retained and declared |
+| `derived.review.mate_transition@2` | `appeared | disappeared | side_changed | distance_changed`; both ordered points declared; never a cp conversion |
 | `derived.review.wdl_white@1` | raw side-to-move WDL normalized once to White (node-free) |
 | `derived.review.wdl_point@1` | that normalization joined to one exact occurrence |
 
@@ -65,9 +65,14 @@ scheduler produces `provider_off`. The next `ensureBranch` may discover a recove
 discovery itself starts no provider attempt and never resets existing failure/exhaustion history.
 Fully delivered or terminal branches perform neither discovery nor new provider work.
 
-The transition factories retain both before/after points, but their v1 manifest declarations
-currently name only one point occurrence. D3371 tracks the versioned declaration/consumer repair;
-strict execution metadata is not yet a complete description of those transitions.
+Both transition derivations declare `[eval_point@1, eval_point@1]` in before/after order.
+Strict execution retains separate provider and recorded-position occurrences for each endpoint.
+Review packet adapters, Review Map, Story and presentation bindings use transition v2;
+Story rank/title use v2 to declare those successor dependencies, with unchanged ordering and
+title composition. The four predecessor capability declarations remain frozen and deprecated
+in history; they have no current factory or binding. These projections are recomputed from
+recorded deliveries, not migrated stored run fields. Metadata refresh uses the normal Make
+targets and preserves authored pack/evidence claims.
 
 ## The Analyze line
 

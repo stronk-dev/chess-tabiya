@@ -963,7 +963,7 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     add(FULL, V("derived.tactic.square_clearance_observed", version), BOARD4, squareClearance);
   }
   for (const kind of ["human_divergence", "irreversibility", "option_collapse", "phase_change"]) add(FULL, V(`derived.pivotal.${kind}`), PS, pivotal);
-  add(FULL, V("derived.story.rank"), LP, storyRank);
+  add(FULL, V("derived.story.rank", 2), LP, storyRank);
   add(FULL, V("derived.tactic.discovered_executed"), BOARD4, discoveredExecuted);
   add(FULL, V("derived.tactic.fork_survives_reply"), LP, forkSurvives);
   add(FULL, V("derived.tactic.overloaded_defender_response_conflict"), LP, overloadConflict);

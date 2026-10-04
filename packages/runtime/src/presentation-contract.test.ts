@@ -131,7 +131,7 @@ describe("evidence presentation Checkpoint A: the sealed path and the closed wir
     const position = invokeEvidenceValueRoute("run.record.position@1", { run, nodeId: path[1]!.id });
     // run.record.position@1 is not bound to module.review_map@1, so it is not admitted, not presented.
     expect(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_MAP, [position]))).toEqual([]);
-    expect(PRESENTATION_SELECTION_ONLY).toEqual(["review.story@1\u0000derived.story.rank@1"]);
+    expect(PRESENTATION_SELECTION_ONLY).toEqual(["review.story@1\u0000derived.story.rank@2"]);
   });
 
   it("maps every review.story@1 binding to exactly one adapter or the selection-only list, and every adapter to a real binding", () => {

@@ -607,11 +607,11 @@ function abstentionSentence(operand: AbstentionOperand): string {
 function magnitudeSentence(operand: MagnitudeOperand): string {
   const basis = operand.convention.basis;
   const quantityKey = `${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`;
-  if (quantityKey !== "derived.review.eval_delta@1" && quantityKey !== "derived.review.eval_point@1") return genericMagnitudeSentence(operand);
+  if (quantityKey !== "derived.review.eval_delta@2" && quantityKey !== "derived.review.eval_point@1") return genericMagnitudeSentence(operand);
   if (basis.kind !== "search") throw new PresentationError("PRESENTATION_INVALID", "an engine magnitude requires a search convention");
   const attribution = `${engineLabel(basis.execution.engine)}, ${presentSearchBound(basis.execution.bound)}`;
   const quantity = `${operand.convention.sourceProjection.id}@${operand.convention.sourceProjection.version}`;
-  if (quantity === "derived.review.eval_delta@1") {
+  if (quantity === "derived.review.eval_delta@2") {
     if (operand.unit.kind !== "centipawn") throw new PresentationError("PRESENTATION_INVALID", "an evaluation change is centipawn-typed");
     return `Recorded engine evaluation changed by ${pawns(operand.value)} pawns from White's side across this move (${attribution}).`;
   }
@@ -1253,6 +1253,7 @@ export interface ProjectionPresentationAdapter {
 }
 
 const V1 = (id: string): VersionedEvidenceId => Object.freeze({ id, version: 1 });
+const V2 = (id: string): VersionedEvidenceId => Object.freeze({ id, version: 2 });
 
 function searchConvention(evidence: DeclaredEvidence<unknown>, delivery: StockfishPositionEvaluation): ConventionReceipt {
   return {
@@ -1384,14 +1385,14 @@ export const PRESENTATION_ADAPTERS: readonly ProjectionPresentationAdapter[] = O
   adapter({ consumer: REVIEW_STORY, projection: V1("run.record.consequence"), component: "fact_statement", forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["terminal", "outcome"], assertions: ["copied_byte_equal"], construct: fact("story.consequence@1", "recorded_run", "recorded-run@1", (payload) => { const value = payload as { readonly terminal: boolean; readonly outcome?: RunOutcome; readonly plies?: number; readonly objectiveState?: ObjectiveState }; return value.terminal ? { terminal: true, outcome: value.outcome! } : { terminal: false, plies: value.plies!, objectiveState: value.objectiveState! }; }) }),
   adapter({ consumer: REVIEW_STORY, projection: V1("run.record.imported_result"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["result"], assertions: ["copied_byte_equal"], construct: fact("story.imported_result@1", "recorded_run", "recorded-run@1", (payload) => ({ result: (payload as { readonly result: PgnResultToken }).result })) }),
   adapter({ consumer: REVIEW_STORY, projection: V1("rules.endgame.classification"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["fen", "type", "conventionId", "provenanceNote"], assertions: ["copied_byte_equal"], construct: fact("story.endgame_classification@1", "declared_convention", "story-compatibility@1", (payload) => payload as EndgameClassification) }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("derived.review.eval_delta"), component: "magnitude", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
+  adapter({ consumer: REVIEW_STORY, projection: V2("derived.review.eval_delta"), component: "magnitude", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
+  adapter({ consumer: REVIEW_STORY, projection: V2("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
   adapter({ consumer: REVIEW_STORY, projection: V1("derived.story.last_level"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["recordedResult", "evaluation"], assertions: ["mechanical_transform"], construct: fact("story.last_level@1", "declared_convention", "story-last-level@1", (payload) => ({ learnerCentipawns: (payload as { readonly evaluation: { readonly learnerCentipawns: number } }).evaluation.learnerCentipawns })) }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("derived.story.title"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["title"], assertions: ["copied_byte_equal"], construct: fact("story.title@1", "declared_convention", "story-compatibility@1", (payload) => ({ title: (payload as { readonly title: string }).title })) }),
+  adapter({ consumer: REVIEW_STORY, projection: V2("derived.story.title"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["title"], assertions: ["copied_byte_equal"], construct: fact("story.title@1", "declared_convention", "story-compatibility@1", (payload) => ({ title: (payload as { readonly title: string }).title })) }),
   // module.review_map@1 — the Review Map evidence panel seat (module-registration A5 slice)
   adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.eval_point"), component: "magnitude", forms: ["list", "panel"], sourceOperands: ["position", "evaluation"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalPointComponent }),
-  adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.eval_delta"), component: "magnitude", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
-  adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
+  adapter({ consumer: REVIEW_MAP, projection: V2("derived.review.eval_delta"), component: "magnitude", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
+  adapter({ consumer: REVIEW_MAP, projection: V2("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
   adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.wdl_point"), component: "fact_statement", forms: ["list", "panel"], sourceOperands: ["position", "normalized"], assertions: ["copied_byte_equal", "mechanical_transform", "retained_convention"], construct: wdlPointComponent }),
   adapter({ consumer: REVIEW_MAP, projection: V1("derived.grade.move_quality"), component: "fact_statement", forms: ["panel", "sentence"], sourceOperands: ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "depthOrMovetime"], assertions: ["copied_byte_equal"], construct: fact("module.move_quality_grade@1", "declared_convention", "grade-convention@1", (payload) => payload as MoveQualityGrade) }),
   // Checkpoint B: only the trade keeps the relation-label statement; the ten board-bound recorded
@@ -1414,7 +1415,7 @@ if (ADAPTERS_BY_KEY.size !== PRESENTATION_ADAPTERS.length) throw new Presentatio
 for (const entry of PRESENTATION_ADAPTERS) if (entry.assertions.length === 0) throw new PresentationError("PRESENTATION_UNREGISTERED", `${entry.key} declares no retention assertion`);
 
 /** Selection-only bindings with no visual component (§2.3, [[D2048]]); presenting them is refused. */
-export const PRESENTATION_SELECTION_ONLY: readonly string[] = Object.freeze([adapterKey(REVIEW_STORY, V1("derived.story.rank"))]);
+export const PRESENTATION_SELECTION_ONLY: readonly string[] = Object.freeze([adapterKey(REVIEW_STORY, V2("derived.story.rank"))]);
 
 export function presentationAdapter(consumer: VersionedEvidenceId, projection: VersionedEvidenceId): ProjectionPresentationAdapter | undefined {
   return ADAPTERS_BY_KEY.get(adapterKey(consumer, projection));

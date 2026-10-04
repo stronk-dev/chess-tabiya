@@ -396,7 +396,7 @@ function accuracyFor(side: GradeSide, decisions: readonly Decision[]): ReviewAcc
 }
 
 /** The packet projections the Review Map panel admits through `module.review_map@1`. */
-const REVIEW_PANEL_PROJECTIONS: ReadonlySet<string> = new Set(["derived.review.eval_point@1", "derived.review.eval_delta@1", "derived.review.mate_transition@1", "derived.review.wdl_point@1"]);
+const REVIEW_PANEL_PROJECTIONS: ReadonlySet<string> = new Set(["derived.review.eval_point@1", "derived.review.eval_delta@2", "derived.review.mate_transition@2", "derived.review.wdl_point@1"]);
 
 /**
  * The typed packet at one move, through the module registry: admission by `module.review_map@1`

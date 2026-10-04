@@ -24,6 +24,22 @@ function fixture(outputs: readonly ProjectionDeclaration[], otherProducers: read
 }
 
 describe("literal provider projection execution", () => {
+  it("declares both ordered endpoints of each actual Review transition", () => {
+    for (const id of ["derived.review.eval_delta", "derived.review.mate_transition"]) {
+      const execution = compileProjectionExecution(EVIDENCE_MANIFEST, { id, version: 2 });
+      expect(execution.paths).toHaveLength(1);
+      expect(execution.paths[0]!.derivationChoices[0]!.inputs).toEqual([
+        ref("derived.review.eval_point"), ref("derived.review.eval_point"),
+      ]);
+      expect(execution.paths[0]!.sourceRequirements).toEqual([
+        { occurrence: [0, 0], projection: ref(SOURCE_ID), availability: "provider", providerOperation: "stockfish.position_evaluation@1" },
+        { occurrence: [0, 1], projection: ref("run.record.position"), availability: "recorded", providerOperation: null },
+        { occurrence: [1, 0], projection: ref(SOURCE_ID), availability: "provider", providerOperation: "stockfish.position_evaluation@1" },
+        { occurrence: [1, 1], projection: ref("run.record.position"), availability: "recorded", providerOperation: null },
+      ]);
+    }
+  });
+
   it("retains exact historical whole-source execution without replacing the current source", () => {
     const previous = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "live.syzygy.position_result", version: 1 });
     const current = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "live.syzygy.position_result", version: 2 });

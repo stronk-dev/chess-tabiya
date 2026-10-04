@@ -3924,3 +3924,10 @@ until a second pass measured the pack start positions the sentence actually name
 - Canonical requirements update 104 documents (92 content packs and 12 schema example/fixtures), with 129 version transitions; only packDigest changes on 68 ledgers. Independent comparison against dbccd67f proves zero authored pack/ledger field changes. This is compatibility bookkeeping, not authored content expansion, graduation, publication or user-document migration.
 - Normal content verification passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. The canonical 352-document migration plan has zero outstanding rows; software and browser CI also pass. D3362 closes only the occurrence primitives; D3363 and the provider/official-content milestones remain open.
 - Receipts: planning/provider-exchange-and-execution/maia-occurrence-implementation-2026-10-04.md and maia-occurrence-metadata-2026-10-04.json.
+
+## 2026-10-04 — Review declaration compatibility metadata
+
+- D3371 applies the existing two-endpoint Review contract with v2 transition/Story projections. The owner's routine metadata/hash direction is applied without a new approval question. All 874 predecessor capability declarations remain unchanged and 11 successors append; the seven shared interpreter successors retain the unchanged evaluator files and authored operands.
+- Canonical maintenance updates 104 requirement stamps and only packDigest on 68 evidence ledgers. The independent f55c1fe3 comparison proves zero authored changes across all 104 pack/example/fixture documents and 192 other source documents. This is compatibility metadata, not authored content expansion, graduation, publication or user-document migration.
+- Content verification passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. The 352-document migration plan has zero remaining rows. Full software, isolated performance, provider, browser CI and governance also pass. Only D3371 closes; complete foundation and official-content milestones remain open.
+- Receipts: planning/review/transition-operands-2026-10-04.md and transition-operands-metadata-2026-10-04.json.

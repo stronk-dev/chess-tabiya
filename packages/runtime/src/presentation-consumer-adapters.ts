@@ -328,6 +328,7 @@ export const CONSUMER_MAGNITUDE_QUANTITIES: Readonly<Record<string, { readonly l
 // ---------------------------------------------------------------------------------------------
 
 const V1 = (id: string, version = 1): VersionedEvidenceId => Object.freeze({ id, version });
+const V2 = (id: string): VersionedEvidenceId => V1(id, 2);
 const record = (value: unknown): Readonly<Record<string, unknown>> => (typeof value === "object" && value !== null && !Array.isArray(value) ? value as Readonly<Record<string, unknown>> : {});
 const text = (value: unknown): string | undefined => (typeof value === "string" && value.trim() !== "" ? value : undefined);
 const integer = (value: unknown): number | undefined => (Number.isSafeInteger(value) ? value as number : undefined);
@@ -471,18 +472,18 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
 
   // --- the Story voice: the review.story evidence re-voiced as sentences
   const story = "guidance.voice_story";
-  add(story, V1("derived.review.eval_delta"), "magnitude", ["sentence"], ["before", "after", "deltaCp"], ["copied_byte_equal", "retained_convention"], (evidence) => {
+  add(story, V2("derived.review.eval_delta"), "magnitude", ["sentence"], ["before", "after", "deltaCp"], ["copied_byte_equal", "retained_convention"], (evidence) => {
     const delta = evidence.payload as ReviewEvalDelta;
     return { id: "magnitude", operand: { value: delta.deltaCp, unit: { kind: "centipawn" }, convention: kit.searchConvention(evidence, delta.after.payload.evaluation.payload), saturated: false } };
   });
-  factAdapter(story, V1("derived.review.mate_transition"), ["sentence"], ["before", "after", "changes"], ["copied_byte_equal", "retained_convention"], "review.mate_transition@1", "review-mate-transition@1", (payload) => {
+  factAdapter(story, V2("derived.review.mate_transition"), ["sentence"], ["before", "after", "changes"], ["copied_byte_equal", "retained_convention"], "review.mate_transition@1", "review-mate-transition@1", (payload) => {
     const transition = payload as ReviewMateTransition;
     const after = (transition.after.payload as ReviewEnginePoint).evaluation.payload.payload;
     const before = (transition.before.payload as ReviewEnginePoint).evaluation.payload.payload;
     return { changes: [...transition.changes], before: before.score, after: after.score, engine: { name: after.engine.name, version: after.engine.version }, bound: after.bound };
   });
   factAdapter(story, V1("derived.story.last_level"), ["sentence"], ["evaluation"], ["mechanical_transform"], "consumer.story_last_level@1", "story-last-level@1", (payload) => ({ learnerCentipawns: (payload as { readonly evaluation: { readonly learnerCentipawns: number } }).evaluation.learnerCentipawns }));
-  factAdapter(story, V1("derived.story.title"), ["sentence"], ["title"], ["copied_byte_equal"], "story.title@1", "story-compatibility@1", (payload) => ({ title: (payload as { readonly title: string }).title }));
+  factAdapter(story, V2("derived.story.title"), ["sentence"], ["title"], ["copied_byte_equal"], "story.title@1", "story-compatibility@1", (payload) => ({ title: (payload as { readonly title: string }).title }));
   factAdapter(story, V1("run.record.imported_result"), ["sentence"], ["result"], ["copied_byte_equal"], "story.imported_result@1", "recorded-run@1", (payload) => ({ result: (payload as { readonly result: string }).result }), "recorded_run");
   factAdapter(story, V1("theory.shapes.firing"), ["sentence"], ["entryId"], ["mechanical_transform"], "play.shape@1", "shape-catalogue@1", (payload) => ({ title: shapeTitle((payload as { readonly entryId: string }).entryId) }));
   factAdapter("theory.shape_firing", V1("theory.shapes.firing"), ["panel", "sentence", "timeline_marker"], ["entryId"], ["mechanical_transform"], "play.shape@1", "shape-catalogue@1", (payload) => ({ title: shapeTitle((payload as { readonly entryId: string }).entryId) }));

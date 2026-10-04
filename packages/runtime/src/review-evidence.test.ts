@@ -112,10 +112,10 @@ describe("review evidence compiler: typed shared delivery and Review projections
       if (point.kind !== "available") throw new Error("abstained");
       return point.value;
     });
-    const delta = invokeEvidenceValueRoute("derived.review.eval_delta@1", { before: p0!, after: p1! });
+    const delta = invokeEvidenceValueRoute("derived.review.eval_delta@2", { before: p0!, after: p1! });
     expect(delta.kind === "available" && delta.value.payload.deltaCp).toBe(-55);
     expect(delta.kind === "available" && delta.value.payload.before).toBe(p0);
-    expect(invokeEvidenceValueRoute("derived.review.eval_delta@1", { before: p1!, after: p2! })).toEqual({ kind: "unavailable", reason: "mate_operand" });
+    expect(invokeEvidenceValueRoute("derived.review.eval_delta@2", { before: p1!, after: p2! })).toEqual({ kind: "unavailable", reason: "mate_operand" });
     // A genuine +1000 cp stays typed +1000 cp.
     const big = evaluatedGame(["cp 0", "cp -1000"], { id: "big" });
     const bigState = reviewDurableEngineStates(big, mainPath(big)).get(mainPath(big)[1]!.id) as Extract<ReviewProviderNodeState, { kind: "delivered" }>;

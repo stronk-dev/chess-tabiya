@@ -65,7 +65,7 @@ describe("grounded game story (typed Review packet)", () => {
     const base = { moments: [], rank: [], outcome: { kind: "recorded_result" as const, result: "1-0" as const } };
     expect(suggestTitle({ ...base, side: "white" })).toBe("Won at the finish");
     expect(suggestTitle({ ...base, side: "black" })).toBe("The turning point at the finish");
-    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find((projection) => projection.id === "derived.story.title" && projection.version === 1);
+    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find((projection) => projection.id === "derived.story.title" && projection.version === 2);
     expect(declaration?.semantics).toContain("learner-relative");
     expect(declaration?.semantics).not.toContain("White-relative");
   });

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4b95a85925d3db0026ea3eb48249c93515be272fb9ea42ab84db0c1e140f36d2",
+    "roadmap": "sha256:d891971a0d1d263ce3b7de4d41359d834966e9f510d974c30f09b900a74c18f0",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:b53f18a643f85590365a3283c9a77edad49f9c5cfe0eb34a68e4a9e4fcb03a5b",
-    "rfcRegister": "sha256:bcd58d3dcd20d008ba48a8a5f265047f24c5c9723c5b4439fcb92dc95e7670b1",
+    "workState": "sha256:b706a0c9687b2c7e831ae230eedddc510d0f6d446b40f091cc71c7a6c354dda5",
+    "rfcRegister": "sha256:f5e98923454ebf80b8766ff42f0d2a7e6421c69d13410cc54c3a0cbbab52dd54",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:9012d85008bc05c9971ab8722161b03cc918ccb03a0b8d0491d82e1d85a95137",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1050,
-      "done": 1284,
+      "blocked": 1049,
+      "done": 1285,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair D3371’s live Review before/after projection lineage with versioned consumer migration, preserving frozen meanings. Migrate actual raw/narrow consumers and adopt explicit binding policies, then compile the whole manifest/execution digest and closed occurrence-resolver census before authenticated POST /evidence/availability. D3370 requires an explicit sampled-Maia result source or approved sampler migration; a candidate page cannot preserve bestmove/off-window behaviour by picking its first candidate. D3363 remains the separate Inspector distribution contract. Complete consumer-owned Support/Review/bot/longitudinal joins and independent semantic authorities; content expansion stays held for stable contracts.",
+      "nextAction": "Migrate actual raw/narrow consumers and adopt explicit binding policies, then compile the whole manifest/execution digest and closed occurrence-resolver census before authenticated POST /evidence/availability. D3370 requires an explicit sampled-Maia result source or approved sampler migration; a candidate page cannot preserve bestmove/off-window behaviour by picking its first candidate. D3363 remains the separate Inspector distribution contract. Complete consumer-owned Support/Review/bot/longitudinal joins and independent semantic authorities; content expansion stays held for stable contracts.",
       "latestCheckpoint": {
         "at": "2026-10-04",
-        "summary": "D3372 repairs actual Review engine discovery: pending identity lookups coalesce, configured failures remain provider_failed in read-only observation, and a later authorized window recovers without resetting attempt history or duplicating durable evidence. New branches discover the current successful engine version; settled reads do no extra work. Six new production-coordinator controls pass, alongside full exact-index software (2861 tests/325 files, seven isolated performance tests), warning-free types and downstream contracts. All 874 capability declarations and semantic validation remain current; the 352-document migration plan has no rows or restamps. D3371 records the live delta/mate declarations missing their second point occurrence and remains blocked on versioned author repair. Earlier binding execution/algebra checkpoint D3369 remains verified, but actual policy adoption, raw migrations, D3363/D3370, whole-manifest execution/digest, closed source resolution and availability are still open. Content passes 223 tests/23 files with zero clearance errors; provider gates pass 365 test executions plus the separate Review target’s 33; browser CI passes 111 journeys with one optional real-Maia latency skip and zero retries; governance passes; no whole RFC, capability or milestone is promoted.",
+        "summary": "D3371 closes the actual Review declaration-cardinality defect through exact v2 transitions and live consumer migration; Story rank/title successors declare corrected dependencies without changing calculations. Ordered endpoint execution, old-route refusal, frozen-history and payload-compatibility controls pass. Complete exact-index software passes 2865 tests/325 files and seven isolated performance tests with warning-free types and downstream build, packaging, authority/history, lifecycle and migration gates. Content passes 223 tests/23 files, zero clearance errors and all 104 exact requirements; provider checks pass 367 executions plus Review runtime 33; browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; governance passes. Metadata retains all 874 original declarations and 271 unaffected factory results; 11 successors append, only 104 requirement stamps and 68 ledger digests refresh, and all authored content remains unchanged. The 352-document migration plan has zero remaining rows. D3372 and earlier binding execution remain verified. Actual raw migrations, consumer-policy adoption, whole-manifest execution/digest, closed occurrence resolution, availability and D3363/D3370 remain open; no whole RFC, capability or milestone is promoted.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -238,7 +238,10 @@
           "apps/server/src/review-evidence.ts",
           "apps/server/src/review-evidence.test.ts",
           "planning/review/engine-identity-recovery-2026-10-04.md",
-          "planning/review/engine-identity-recovery-software-2026-10-04.json"
+          "planning/review/engine-identity-recovery-software-2026-10-04.json",
+          "planning/review/transition-operands-2026-10-04.md",
+          "planning/review/transition-operands-software-2026-10-04.json",
+          "planning/review/transition-operands-metadata-2026-10-04.json"
         ],
         "anchors": [
           {
@@ -394,12 +397,12 @@
           {
             "kind": "rfc",
             "id": "review-evidence-compiler.md",
-            "digest": "sha256:4b75b6874dd6052bc11498e21725a17bd7d6ef32da7987ab8e420401c2d30299"
+            "digest": "sha256:b19fc900a8daf39599f9f97c679d669e72c81dc3dc8f54ac7a5276dc197c6eec"
           },
           {
             "kind": "work_state",
             "id": "D3371",
-            "digest": "sha256:d6cbe574e650e3d0848a6b78f03f1f9040fe74d74418e1a6594a4e047576c2eb"
+            "digest": "sha256:7d291d3784409cd79b9ea191182a21931a80e16957574b16baa7c9f3e35289a6"
           },
           {
             "kind": "work_state",
