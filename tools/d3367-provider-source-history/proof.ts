@@ -14,11 +14,14 @@ import { ShapeRegistry } from "../../apps/server/src/shape-registry.js";
 import { PrincipleRegistry } from "../../apps/server/src/principle-registry.js";
 import { assertAuthoredContentUnchanged, assertLedgerMetadataUnchanged } from "../explorer-summary-migration-proof/proof.js";
 
-const BASELINE = "c0114e28";
+// Reuse the same preservation checks for D3369; each mode names its committed predecessor.
+const BINDING_ABSENCE = process.argv.includes("--binding-absence");
+const BASELINE = BINDING_ABSENCE ? "efe67940" : "c0114e28";
 const SUCCESSORS = [
   "engineCondition.engine_eval_swing", "engineCondition.engine_mate_appears",
   "engineCondition.tablebase_category_regression", "engineCondition.tablebase_dtz_regression",
   "fenPredicate.structuralFeature", "opponent.practical_slice", "opponent.selection",
+  ...(BINDING_ABSENCE ? ["selection.semantic_policy"] : []),
 ].sort();
 const read = (path: string) => readFileSync(resolve(path), "utf8");
 const old = (path: string) => execFileSync("git", ["show", `${BASELINE}:${path}`], { encoding: "utf8", maxBuffer: 16_000_000 });
@@ -39,7 +42,7 @@ async function proof(editsOnly: boolean) {
   assert.deepEqual(appended.map(row => row.subjectId).sort(), SUCCESSORS);
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
-    assert.equal(row.id.version.value, 7);
+    assert.equal(row.id.version.value, BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
   }
   const oldProfiles = JSON.parse(old("packages/runtime/src/fixtures/evidence-value-profiles.json"));
   const profiles = JSON.parse(read("packages/runtime/src/fixtures/evidence-value-profiles.json"));
@@ -100,7 +103,7 @@ async function proof(editsOnly: boolean) {
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
     retainedFactoryOutcomes: Object.keys(oldProfiles).length, newFactoryProfiles: [],
     retainedSourceExecution: { projection: "live.syzygy.position_result@1", state: "registered", operation: "syzygy.position@1" },
-    scope: "explicit retained whole-source execution; current acquisition and authored content unchanged",
+    scope: BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
   };
 }
 

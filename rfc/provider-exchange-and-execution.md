@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-04, binding execution:** D3369 implements the closed source-absence vocabulary, strict per-consumer binding/path compilation with transitive policy and latency checks, and required-unavailable > required-empty > optional-omission aggregation. The algebra consumes already-resolved exact-subject results, not reach/health flags; it is not production source resolution. Actual policies/consumer adoption, whole-manifest execution/digest and public availability remain open. D3370 records the sampled Maia result missing from a bounded policy page; no first-candidate substitution is authorized. Receipt: `planning/provider-exchange-and-execution/binding-absence-2026-10-04.md`.
+
 - **Implementation checkpoint 2026-10-04, bot source admission:** D3368 enforces the exact shared delivery assertion at bot adaptation and privately registered immutable views at compiler/replay admission. Copied/crossed sources produce typed no-move or whole-guard abstention; persisted and retained sources reconstruct through the same authority. Legacy raw consumers, whole-manifest execution/digest and availability remain open. Receipt: `planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md`.
 
 - **Implementation checkpoint 2026-10-04, retained whole-source history:** D3367 explicitly registers the frozen Syzygy source/factory v1 alongside current v2 in provider resource image v3. Both the strict execution compiler and source factory resolve this same exact binding; default acquisition follows the sole current operation row, replacing the copied route table. Unknown versions, bare/crossed payloads, forged deliveries and missing/swapped retained bindings refuse. No new operation, learner binding or default downgrade. Full legacy migration, whole-manifest execution/digest and availability remain open. Receipt: `planning/provider-exchange-and-execution/source-history-2026-10-04.md`.
@@ -2106,6 +2108,12 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-10-04: D3369 implements strict binding execution and closed absence aggregation,
+  preserving current consumer declarations and legacy refusal. Fifty focused checks include
+  21 new tests. Actual consumer policy migration/resolution remains open; D3370 requires
+  an explicit Maia sampled-result source or approved sampler migration before raw retirement.
+  Receipt: `planning/provider-exchange-and-execution/binding-absence-2026-10-04.md`.
 
 - 2026-10-04: D3368 implements bot source admission through asserted shared deliveries
   and privately registered immutable views. Compiler/replay reject source copies; live,

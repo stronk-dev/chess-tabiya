@@ -1,0 +1,51 @@
+{
+  "baseline": "efe67940",
+  "retainedDeclarations": 866,
+  "candidateDeclarations": 874,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 8
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 8
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 8
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 8
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 8
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 8
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 8
+    },
+    {
+      "subject": "selection.semantic_policy",
+      "version": 3
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 275,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged"
+}

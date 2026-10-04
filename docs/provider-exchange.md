@@ -139,7 +139,22 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
 
 ## Not yet shipped
 
-- Whole-manifest §1 execution integration and §2 binding source-absence algebra, `/capabilities`
+The binding execution primitives now implement §2's closed optional/required source-absence
+policy and its aggregation precedence. `compileEvidenceConsumerExecution` strictly compiles
+each bound path, requires literal policy for transitive provider leaves, and refuses bindings
+whose latency admits no execution path. `aggregateEvidenceConsumerSourceAvailability` validates
+the complete set of already-resolved binding/path results and generates compatibility
+`providerOff` output. Required unavailable wins over honest-empty; optional failures omit only
+their item. Missing policies and raw sources refuse instead of being silently defaulted.
+
+These primitives do not resolve sources or prove per-subject availability. Actual binding-policy
+migration and production adoption, the complete manifest execution image/digest and authorized
+availability operation remain unshipped. Maia's sampled `bestmove`/off-window contract cannot be
+replaced by a policy page's first candidate; D3370 records this source-contract gap. Receipt:
+`planning/provider-exchange-and-execution/binding-absence-2026-10-04.md`.
+
+
+- Whole-manifest §1 execution integration and §2 actual binding-policy adoption, `/capabilities`
   path reach and `POST /evidence/availability`. The strict compiler and operator traversal caller
   now ship, but the legacy catalogue still fails whole-image compilation on unregistered provider
   payloads. It must be migrated truthfully before `CompiledEvidenceManifest.execution` and its

@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 binding execution checkpoint
+
+D3369 implements closed absence policy, strict binding-to-path/latency compilation and
+required-unavailable > required-empty > optional-omission aggregation. The focused target
+passes 50 tests including 21 new controls. This is compiler/algebra, not production source
+resolution or migrated consumer defaults. Complete exact-index software, real-content,
+provider, browser and governance gates pass. Routine canonical metadata preserves all
+authored content and predecessor declarations. Receipt:
+`planning/provider-exchange-and-execution/binding-absence-2026-10-04.md`.
+
+Continue actual raw consumers and binding policy adoption, whole-manifest execution/digest,
+the closed occurrence resolver and authenticated availability. D3370 needs an explicit Maia
+sampled-result source or approved sampler migration: a bounded policy page cannot preserve
+the sampled bestmove/off-window behaviour by choosing its first candidate. D3363 remains
+the distinct Inspector distribution contract. Metadata/hash maintenance is authorized.
+
 ## 2026-10-04 bot source admission checkpoint
 
 D3368 implements the bot RFC's actual shared-delivery assertion and private immutable

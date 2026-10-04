@@ -11,6 +11,18 @@ export type EvidenceRole = "learner" | "host" | "participant" | "spectator" | "a
 export type AvailabilityMode = "local" | "recorded" | "provider" | "build_time";
 export type LatencyMode = "sync" | "interactive" | "background" | "offline";
 export type ProviderOffBehavior = "available" | "honest_empty" | "unavailable";
+/** Provider exchange §2. Literal binding policy, never inferred from providerOff. */
+export type BindingSourceAbsence =
+  | { readonly necessity: "optional"; readonly whenNoPath: "omit_optional_item" }
+  | { readonly necessity: "required"; readonly whenNoPath: "honest_empty" | "operation_unavailable" };
+
+export function isBindingSourceAbsence(value: unknown): value is BindingSourceAbsence {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const row = value as Record<string, unknown>;
+  if (Object.keys(row).length !== 2 || !Object.hasOwn(row, "necessity") || !Object.hasOwn(row, "whenNoPath")) return false;
+  return row.necessity === "optional" ? row.whenNoPath === "omit_optional_item"
+    : row.necessity === "required" && (row.whenNoPath === "honest_empty" || row.whenNoPath === "operation_unavailable");
+}
 export type SemanticEventSign = ProjectionDeclaration["signs"][number];
 
 export interface VersionedEvidenceId { readonly id: string; readonly version: number }
@@ -121,6 +133,7 @@ export interface AdapterDeclaration {
   readonly latency: EvidenceLatency;
   readonly budget: EvidenceBudget;
   readonly providerOff?: ProviderOffBehavior;
+  readonly sourceAbsence?: BindingSourceAbsence;
 }
 
 export interface EvidenceBinding {
@@ -135,6 +148,7 @@ export interface EvidenceBinding {
   readonly answerContent: readonly AnswerDistance[];
   readonly latency: EvidenceLatency;
   readonly budget: EvidenceBudget;
+  readonly sourceAbsence?: BindingSourceAbsence;
 }
 
 export interface SemanticEventDeclaration {
@@ -870,7 +884,8 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     const widens = !subset(adapter.forms, projection.forms) || !subset(adapter.forms, consumer.forms) || !subset(adapter.answerContent, projection.answerContent) || !subset(adapter.answerContent, consumer.answerContent) || !subset(adapter.timing, consumer.timing) || !subset(adapter.roles, consumer.roles) || !subset(adapter.sessions, consumer.sessions) || !latencyNarrows(adapter.latency, consumer.latency) || !budgetNarrows(adapter.budget.maxFacts, consumer.budget.maxFacts) || !budgetNarrows(adapter.budget.maxForms, consumer.budget.maxForms);
     if (widens) fail("EVIDENCE_BINDING_WIDENS", "adapter exceeds a producer projection or consumer ceiling", [site("adapter", adapter, adapter.implementation), site("projection", projection), site("consumer", consumer, consumer.implementation)]);
     if (producer.availability === "provider" && (adapter.providerOff === undefined || adapter.providerOff !== consumer.providerOff)) fail("EVIDENCE_PROVIDER_FALLBACK_MISSING", "provider-backed binding lacks the consumer's explicit provider-off behavior", [site("adapter", adapter, adapter.implementation), site("producer", producer, producer.implementation), site("consumer", consumer, consumer.implementation)]);
-    bindings.push(immutable({ producer: { ...adapter.producer }, projection: { ...adapter.projection }, consumer: { ...adapter.consumer }, adapter: { id: adapter.id, version: adapter.version }, timing: [...adapter.timing].sort(), roles: [...adapter.roles].sort(), sessions: [...adapter.sessions].sort(), forms: [...adapter.forms].sort(), answerContent: [...adapter.answerContent].sort(), latency: { ...adapter.latency }, budget: { ...adapter.budget } }));
+    if (adapter.sourceAbsence !== undefined && !isBindingSourceAbsence(adapter.sourceAbsence)) fail("EVIDENCE_PROVIDER_FALLBACK_MISSING", "binding source absence must be a closed optional/required declaration", [site("adapter", adapter, adapter.implementation)]);
+    bindings.push(immutable({ producer: { ...adapter.producer }, projection: { ...adapter.projection }, consumer: { ...adapter.consumer }, adapter: { id: adapter.id, version: adapter.version }, timing: [...adapter.timing].sort(), roles: [...adapter.roles].sort(), sessions: [...adapter.sessions].sort(), forms: [...adapter.forms].sort(), answerContent: [...adapter.answerContent].sort(), latency: { ...adapter.latency }, budget: { ...adapter.budget }, ...(adapter.sourceAbsence === undefined ? {} : { sourceAbsence: { ...adapter.sourceAbsence } }) }));
   }
 
   for (const row of eligibility) {

@@ -27711,6 +27711,24 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3369",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5ebb75687a46bfc0c72fcb92f54352c9f57103bc408cc0d66c1f18ac5c2bf8ec",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/binding-absence-2026-10-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3370",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-exchange-and-execution.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:47c0f7adb4067c11b0f9498316ad29ce39f5cd69574ebdb854f73e90f4b7c1b4",
+      "uxItems": []
     }
   ]
 }

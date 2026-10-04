@@ -1036,7 +1036,20 @@ explorer-summary-migration-proof:
 bot-source-authority-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/bot-opponent-source.test.ts apps/server/src/bot-policy-compiler.test.ts apps/server/src/bot-opponent-ply.test.ts
 
-provider-exchange-check: run-subject-check maia-occurrence-check evidence-execution-check bot-source-authority-check
+.PHONY: evidence-binding-execution-check
+evidence-binding-execution-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts
+
+.PHONY: binding-absence-metadata-check binding-absence-metadata-update
+binding-absence-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/binding-absence-metadata.js --log-level=warning
+	node apps/server/dist/binding-absence-metadata.js --binding-absence
+
+binding-absence-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/binding-absence-metadata.js --log-level=warning
+	node apps/server/dist/binding-absence-metadata.js --binding-absence --apply-metadata
+
+provider-exchange-check: run-subject-check maia-occurrence-check evidence-execution-check bot-source-authority-check evidence-binding-execution-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-contract.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/explorer-summary-voice.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts
