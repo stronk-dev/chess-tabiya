@@ -34,6 +34,141 @@ async function harness() {
 }
 
 describe("learner Syzygy shared exchange", () => {
+  it("detaches an aborted caller without cancelling a peer's shared acquisition", async () => {
+    const { source, remote, scheduler } = await harness();
+    const controller = new AbortController();
+    let cancelled = false;
+    const first = source.probe(FEN, { signal: controller.signal }).catch((error: unknown) => {
+      expect(error).toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+      cancelled = true;
+    });
+    const peer = source.probe(FEN);
+    try {
+      await flush();
+      expect(remote.calls).toHaveLength(1);
+      controller.abort();
+      await flush();
+      expect(cancelled).toBe(true);
+      expect(remote.calls[0]!.signal.aborted).toBe(false);
+      remote.respond(0, syzygyBody(FEN));
+      await expect(peer).resolves.toMatchObject({ category: "win" });
+      expect(scheduler.stats()).toMatchObject({ retained: 1 });
+    } finally {
+      if (remote.calls.length !== 0) remote.respond(0, syzygyBody(FEN));
+      await Promise.allSettled([first, peer]);
+    }
+  });
+
+  it("does not start acquisition for an already-aborted caller", async () => {
+    const { source, remote } = await harness();
+    const controller = new AbortController();
+    controller.abort();
+    let cancelled = false;
+    const pending = source.probe(FEN, { signal: controller.signal }).catch((error: unknown) => {
+      expect(error).toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+      cancelled = true;
+    });
+    try {
+      await flush();
+      expect(cancelled).toBe(true);
+      expect(remote.calls).toHaveLength(0);
+    } finally {
+      if (remote.calls.length !== 0) remote.respond(0, syzygyBody(FEN));
+      await pending;
+    }
+  });
+
+  it.each([false, true])("shuts down the actual durable worker without waiting for the remote (peer=%s)", async (hasPeer) => {
+    const { source, remote, scheduler } = await harness();
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    const queue = new EvidenceJobQueue({ async execute() { throw new Error("unexpected engine execution"); } }, { tablebaseSource: source });
+    const service = new RunService(storage, { evidenceQueue: queue });
+    let peer: ReturnType<typeof source.probe> | undefined;
+    let shutdown: Promise<void> | undefined;
+    try {
+      const run = await service.create({
+        id: `tablebase-shutdown-${hasPeer}`, session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+        policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73, createdAt: "2026-10-04T12:00:00.000Z",
+      }, "writer");
+      const root = run.nodes[0]!;
+      storage.admitInternalEvidence(run.id, [{
+        origin: "run_enrichment", idempotencyKey: `run_enrichment@1:${root.id}`,
+        request: { schema: "evidence_batch_request@1", runId: run.id, origin: "run_enrichment", jobs: [{ schema: "evidence_job_request@1", runId: run.id, nodeId: root.id, fen: FEN, kind: "tablebase", depth: null, movetime: null, multiPv: null, timeoutMs: null, objectiveRequest: null }] },
+      }]);
+      if (hasPeer) peer = source.probe(FEN);
+      await flush();
+      expect(remote.calls).toHaveLength(1);
+      let stopped = false;
+      shutdown = queue.close().then(() => { stopped = true; });
+      await flush();
+      expect(stopped).toBe(true);
+      expect(remote.calls[0]!.signal.aborted).toBe(!hasPeer);
+      expect(queue.page(run.id).results).toEqual([]);
+      expect(queue.failures(run.id)).toEqual([]);
+      expect(storage.evidenceJobs.jobsForRun(run.id)).toMatchObject([{ state: "retry_wait", retryBasis: { kind: "shutdown" } }]);
+      if (peer !== undefined) {
+        remote.respond(0, syzygyBody(FEN));
+        await expect(peer).resolves.toMatchObject({ category: "win" });
+        expect(scheduler.stats()).toMatchObject({ retained: 1 });
+      } else {
+        expect(scheduler.stats()).toMatchObject({ retained: 0 });
+      }
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      await Promise.allSettled([shutdown ?? queue.close(), ...(peer === undefined ? [] : [peer])]);
+      storage.close();
+    }
+  });
+
+  it("rewinds away from an in-flight tablebase job and aborts its unshared acquisition", async () => {
+    const { source, remote, scheduler } = await harness();
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    const queue = new EvidenceJobQueue({ async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 0, perspective: "white" } }; } }, { tablebaseSource: source });
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const at = "2026-10-04T12:00:00.000Z";
+    try {
+      const run = await service.create({
+        id: "tablebase-rewind", session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+        policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73, createdAt: at,
+      }, "writer");
+      const moved = service.move(run.id, "writer", "d2d3", { at }).run;
+      await queue.whenIdle();
+      const node = moved.nodes.find((candidate) => candidate.id === moved.activeCursor.nodeId)!;
+      storage.admitInternalEvidence(run.id, [{
+        origin: "run_enrichment", idempotencyKey: `tablebase-cancellation-control@1:${node.id}`,
+        request: { schema: "evidence_batch_request@1", runId: run.id, origin: "run_enrichment", jobs: [{ schema: "evidence_job_request@1", runId: run.id, nodeId: node.id, fen: node.fen, kind: "tablebase", depth: null, movetime: null, multiPv: null, timeoutMs: null, objectiveRequest: null }] },
+      }]);
+      await flush();
+      expect(remote.calls).toHaveLength(1);
+      service.rewind(run.id, "writer", { nodeId: run.activeCursor.nodeId }, at);
+      await flush();
+      expect(remote.calls[0]!.signal.aborted).toBe(true);
+      await queue.whenIdle();
+      expect(storage.evidenceJobs.jobsForRun(run.id).filter((job) => job.request.kind === "tablebase")).toMatchObject([{ state: "cancelled" }]);
+      expect(queue.page(run.id).results.filter((result) => result.payload.kind === "tablebase")).toEqual([]);
+      expect(queue.failures(run.id)).toEqual([]);
+      expect(scheduler.stats()).toMatchObject({ retained: 0 });
+    } finally {
+      for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, syzygyBody(FEN));
+      await queue.close();
+      storage.close();
+    }
+  });
+
+  it("cancels a waiter before Lichess admission without dispatching it later", async () => {
+    const { source, remote, health } = await harness();
+    const occupied = await health.admit("evidence.explorer_query");
+    const controller = new AbortController();
+    const pending = source.probe(FEN, { signal: controller.signal });
+    await flush();
+    expect(remote.calls).toHaveLength(0);
+    controller.abort();
+    await expect(pending).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+    health.settle(occupied, { kind: "success" });
+    await flush();
+    expect(remote.calls).toHaveLength(0);
+  });
+
   it("shares acquisition, parsing and retention with direct provider consumers", async () => {
     const { source, scheduler, remote } = await harness();
     const learner = source.probe(FEN);

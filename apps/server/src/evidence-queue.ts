@@ -309,7 +309,7 @@ export class EvidenceJobQueue {
     let raw: EvidencePayload;
     try {
       raw = operation === "evidence.tablebase_probe"
-        ? await this.#tablebasePayload(executorJob(job))
+        ? await this.#tablebasePayload(executorJob(job), signal)
         : await this.#executor.execute(executorJob(job), signal);
     } catch (error) {
       if (signal.aborted) {
@@ -382,9 +382,9 @@ export class EvidenceJobQueue {
     };
   }
 
-  async #tablebasePayload(job: EvidenceJob): Promise<EvidencePayload> {
+  async #tablebasePayload(job: EvidenceJob, signal: AbortSignal): Promise<EvidencePayload> {
     if (this.#tablebase === undefined) throw new TypeError("Tablebase evidence source is not configured");
-    const result = await this.#tablebase.probe(job.fen);
+    const result = await this.#tablebase.probe(job.fen, { signal });
     return Object.freeze({
       kind: "tablebase",
       source: "tablebase_exact",

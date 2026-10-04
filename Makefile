@@ -999,6 +999,9 @@ evidence-seal-audit:
 # resource/census, the scheduler, descriptors, operator traversals and the supervisor exchange).
 # Regenerate the parser digest with UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1 after a parser change.
 .PHONY: provider-exchange-check provider-traversal run-subject-check maia-occurrence-check
+.PHONY: tablebase-cancellation-check
+tablebase-cancellation-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-tablebase.test.ts apps/server/src/evidence-queue.test.ts
 maia-occurrence-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/maia-occurrence.test.ts apps/server/src/maia-occurrence-access.test.ts
 run-subject-check:

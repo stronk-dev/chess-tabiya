@@ -73,7 +73,7 @@ export class ExchangeTablebaseSource implements TablebaseSource {
     if (remaining <= 0) throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase operation deadline exceeded", { details: { retryAfterMs: 0 } });
     const result = await this.options.scheduler.get({
       operation: "syzygy.position@1", request: { rules: "chess", variant: "standard", fen, timeoutMs },
-    }, { id: "learner:tablebase", budgetMs: remaining }, new AbortController().signal);
+    }, { id: "learner:tablebase", budgetMs: remaining }, options.signal ?? new AbortController().signal);
     if (result.kind === "local_domain_result") throw new ServerError("TABLEBASE_OUT_OF_RANGE", `Syzygy covers at most seven pieces; received ${result.payload.pieceCount}`);
     if (result.kind === "source_failure") {
       const state = this.options.health?.snapshot().providers.find((row) => row.instanceId === "tablebase-primary");

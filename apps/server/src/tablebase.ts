@@ -23,8 +23,8 @@ function finiteOrNull(value:unknown):number|null{if(value===null)return null;if(
 export function parseTablebasePosition(raw:unknown):TablebasePosition{if(raw===null||typeof raw!=="object"||Array.isArray(raw))throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase returned an invalid response",{details:{retryAfterMs:60_000}});const body=raw as Record<string,unknown>;if(!Array.isArray(body.moves))throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase response omitted legal moves",{details:{retryAfterMs:60_000}});return Object.freeze({category:category(body.category),dtz:finiteOrNull(body.dtz),preciseDtz:finiteOrNull(body.precise_dtz??null),moves:Object.freeze(body.moves.map((value)=>{if(value===null||typeof value!=="object"||Array.isArray(value))throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase returned an invalid move",{details:{retryAfterMs:60_000}});const move=value as Record<string,unknown>;if(typeof move.uci!=="string"||typeof move.san!=="string")throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase returned an invalid move",{details:{retryAfterMs:60_000}});return Object.freeze({uci:move.uci,san:move.san,category:category(move.category),dtz:finiteOrNull(move.dtz),preciseDtz:finiteOrNull(move.precise_dtz)});} ))});}
 
 interface CacheEntry {readonly value?:TablebasePosition;readonly error?:ServerError;readonly expiresAt:number}
-/** Per-probe options: the caller's operation deadline, shared across every stage (§5). */
-export interface TablebaseProbeOptions { readonly deadlineMonotonic?: number }
+/** Per-probe caller scope. The application exchange owns per-waiter deadline/cancellation. */
+export interface TablebaseProbeOptions { readonly deadlineMonotonic?: number; readonly signal?: AbortSignal }
 
 /**
  * The Lichess Syzygy client. With a provider-health registry attached, every NEW live request is

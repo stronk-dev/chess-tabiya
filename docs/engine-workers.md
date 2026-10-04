@@ -299,6 +299,14 @@ nodes' non-terminal and staged jobs in the rewind's own commit and aborts runnin
 fake executor that deliberately ignores cancellation proves late results are discarded; a
 real Stockfish test proves `stop` is sent.
 
+The application's shared tablebase source receives the same worker abort signal. Rewind
+detaches the cancelled job; shutdown returns its durable lease to `retry_wait` with a
+`shutdown` basis without waiting for the remote response. The scheduler aborts a shared
+acquisition only when its final waiter leaves. A remaining caller can still receive and
+retain the exact result. Permanent queue/source tests run with
+`make tablebase-cancellation-check` and in the normal software tier. Offline legacy clients
+remain distinct; this proves the production exchange boundary, not their retirement.
+
 ## Capabilities
 
 `GET /capabilities` never probes an engine. `policyModes` lists the modes whose provider is

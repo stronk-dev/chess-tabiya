@@ -2099,6 +2099,15 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-10-04: D3364 repairs the production durable tablebase worker's dropped cancellation
+  signal. Rewind/shutdown now detach that waiter through the existing shared scheduler;
+  acquisition aborts only after its last waiter leaves, and a surviving peer can retain success.
+  Six permanent adapter/SQLite worker controls cover cancellation before dispatch, shared peers,
+  actual rewind and shutdown retry state. No provider protocol, source identity, parser, packet
+  format or learner semantics change. Compiled execution/availability and other legacy caller
+  migrations remain open. Receipt:
+  `planning/provider-exchange-and-execution/tablebase-cancellation-2026-10-04.md`.
+
 - 2026-10-01: owner approved the bounded D3349 compatibility repair ("ok, whatever is proper
   foundation and best practices"). §6 now names the measured pinned decimal-string profile,
   keeps strict finite request and advertised band/MultiPV checks, requires pre/post-capture

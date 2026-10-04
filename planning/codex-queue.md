@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 tablebase cancellation checkpoint
+
+D3364 carries the durable worker's abort signal through the application's tablebase adapter
+to the shared scheduler. Permanent controls exercise actual rewind/shutdown and a surviving
+coalesced peer; no new source authority or fallback is introduced. Receipt:
+`planning/provider-exchange-and-execution/tablebase-cancellation-2026-10-04.md`.
+
+Continue compiled execution/source-absence and exact-subject availability, then truthful
+consumer migration. Legacy source retirement and D3363 remain open. Routine canonical
+metadata/hash maintenance is authorized implementation work, not another owner decision.
+
 ## 2026-10-04 current provider checkpoint — exact Maia occurrence primitives
 
 D3362 implements the separate history-conditioned run-move and exact-FEN observed-move
