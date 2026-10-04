@@ -1,5 +1,7 @@
 # RFC: Evidence job durability — admission, lease, settlement, and the HTTP capability-operation census
 
+- **Implementation checkpoint 2026-10-04:** D3374 validates the raw Stockfish task's completed main-line iteration before the worker's existing settlement boundary. Invalid/short/bounded/alternate output becomes unavailable and never attaches chess evidence. Commands, reset/cancellation, leases and existing packet shape remain unchanged. D3373 separately owns the whole-source migration contract; no complete RFC discharge. Receipt: `planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md`.
+
 - **Status:** implementing — **implementation landed 2026-09-24 at migration 27** under the owner's
   direct-implementation direction for this session; no review round preceded landing, and
   consolidation, review and the Active-row status transition belong to the register owner. The

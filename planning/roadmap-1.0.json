@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Migrate actual raw/narrow consumers and adopt explicit binding policies, then compile the whole manifest/execution digest and closed occurrence-resolver census before authenticated POST /evidence/availability. D3370 requires an explicit sampled-Maia result source or approved sampler migration; a candidate page cannot preserve bestmove/off-window behaviour by picking its first candidate. D3363 remains the separate Inspector distribution contract. Complete consumer-owned Support/Review/bot/longitudinal joins and independent semantic authorities; content expansion stays held for stable contracts.",
+        "nextAction": "Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not drop bestmove, substitute a PV move or infer a played move. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
         "latestCheckpoint": {
           "at": "2026-10-04",
-          "summary": "D3371 closes the actual Review declaration-cardinality defect through exact v2 transitions and live consumer migration; Story rank/title successors declare corrected dependencies without changing calculations. Ordered endpoint execution, old-route refusal, frozen-history and payload-compatibility controls pass. Complete exact-index software passes 2865 tests/325 files and seven isolated performance tests with warning-free types and downstream build, packaging, authority/history, lifecycle and migration gates. Content passes 223 tests/23 files, zero clearance errors and all 104 exact requirements; provider checks pass 367 executions plus Review runtime 33; browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; governance passes. Metadata retains all 874 original declarations and 271 unaffected factory results; 11 successors append, only 104 requirement stamps and 68 ledger digests refresh, and all authored content remains unchanged. The 352-document migration plan has zero remaining rows. D3372 and earlier binding execution remain verified. Actual raw migrations, consumer-policy adoption, whole-manifest execution/digest, closed occurrence resolution, availability and D3363/D3370 remain open; no whole RFC, capability or milestone is promoted.",
+          "summary": "D3374 closes the actual queued Stockfish main-line/task-bound reducer defect without claiming whole-source migration. Twelve controls reproduced the old defect; the final normal focused suite passes 58 tests including SQLite unavailable/no-attachment, exact-depth, greatest-depth/tie, MultiPV, bounded-line, mixed-iteration, termination and separate actual-bestmove controls. Exact-index software passes 2880 tests/325 files, seven isolated performance tests, warning-free types and downstream build, packaging, value/source/history, lifecycle and migration gates. Content passes 223 tests/23 files, zero clearance errors and all 104 requirements. Browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; governance passes, with final staged-process checks/hooks preceding commit. Source bytes remain identical after the software snapshot. All 885 capability declarations stay unchanged; no metadata or authored-content restamp is needed; the 352-document migration plan has zero rows. Semantic validation remains 38/38 cases with zero fully passed profiles. D3373 is owned and blocked on the terminating-selection/MultiPV/durable source migration contract; D3363/D3370 and complete migration/policy/execution/resolution/availability remain open. Tracker has zero untriaged/1677 live items. No whole RFC, capability or milestone is promoted.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -852,7 +852,10 @@
             "planning/review/engine-identity-recovery-software-2026-10-04.json",
             "planning/review/transition-operands-2026-10-04.md",
             "planning/review/transition-operands-software-2026-10-04.json",
-            "planning/review/transition-operands-metadata-2026-10-04.json"
+            "planning/review/transition-operands-metadata-2026-10-04.json",
+            "rfc/evidence-job-durability.md",
+            "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
+            "planning/provider-exchange-and-execution/queued-stockfish-software-2026-10-04.json"
           ],
           "anchors": [
             {
@@ -898,7 +901,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:da3a441499cba71d5a42002e99f76289165515d18d57a36911a1d988b150bd7d"
+              "digest": "sha256:12bb5b57e58f37564efe937fe5f3eddea9e143ef37d646c82b4cf46c3240374a"
             },
             {
               "kind": "work_state",
@@ -1019,6 +1022,21 @@
               "kind": "work_state",
               "id": "D3372",
               "digest": "sha256:850d01fe71f3a23133f54798f75869a85cab83ea6165cecbaef58dbdc74ef435"
+            },
+            {
+              "kind": "rfc",
+              "id": "evidence-job-durability.md",
+              "digest": "sha256:9cc47bfc16691105de1eea710cfe07fb2827405ca51ce094e1ff54b839829512"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3373",
+              "digest": "sha256:8e74d39966d609d00bf7bd83e649e2b02f7ecc7846203977fcce8afb365a2b11"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3374",
+              "digest": "sha256:47a940f8d576b6898942aaded332ae6a61ebcdc3344b93666a13d2a3a2c0bcc1"
             }
           ]
         },
@@ -1528,7 +1546,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:da3a441499cba71d5a42002e99f76289165515d18d57a36911a1d988b150bd7d"
+              "digest": "sha256:12bb5b57e58f37564efe937fe5f3eddea9e143ef37d646c82b4cf46c3240374a"
             },
             {
               "kind": "work_state",

@@ -182,6 +182,65 @@ describe("evidence job queue", () => {
     ]);
   });
 
+  it.each(["eval", "wdl", "bestline"] as const)("keeps completed main-line %s evidence rather than the last MultiPV row", async (kind) => {
+    const executor = new StockfishEvidenceExecutor({ async execute() {
+      return [
+        "info depth 12 multipv 1 score cp 32 wdl 400 500 100 pv e2e4 e7e5",
+        "info depth 12 multipv 2 score cp 99 wdl 900 100 0 pv d2d4 d7d5",
+        "info depth 12 multipv 1 score cp 77 lowerbound wdl 800 200 0 pv g1f3 g8f6",
+        "bestmove e2e4",
+      ];
+    } }, "stockfish-analysis", 3);
+    const result = await executor.execute({ id: "multipv", runId: "run", nodeId: "node", fen: INITIAL_FEN, kind, depth: 12 }, new AbortController().signal);
+    expect(result.values).toMatchObject(kind === "eval" ? { centipawns: 32, bestMoveUci: "e2e4", depth: 12 }
+      : kind === "wdl" ? { win: 400, draw: 500, loss: 100, depth: 12 }
+        : { movesUci: ["e2e4", "e7e5"], depth: 12 });
+  });
+
+  it("chooses greatest completed movetime depth and latest arrival only on equal depth", async () => {
+    const executor = new StockfishEvidenceExecutor({ async execute() {
+      return ["info depth 15 score cp 30", "info depth 15 score cp 32", "info depth 10 score cp 99", "bestmove e2e4"];
+    } }, "stockfish-analysis", 1);
+    await expect(executor.execute({ id: "time", runId: "run", nodeId: "node", fen: INITIAL_FEN, kind: "eval", movetime: 40 }, new AbortController().signal)).resolves.toMatchObject({ values: { centipawns: 32, depth: 15 } });
+  });
+
+  it("preserves the terminating selection rather than substituting the PV's first move", async () => {
+    const executor = new StockfishEvidenceExecutor({ async execute() {
+      return ["info depth 12 score cp 32 pv e2e4 e7e5", "bestmove d2d4 ponder d7d5"];
+    } }, "stockfish-analysis", 1);
+    await expect(executor.execute({ id: "selected", runId: "run", nodeId: "node", fen: INITIAL_FEN, kind: "eval", depth: 12 }, new AbortController().signal)).resolves.toMatchObject({ values: { centipawns: 32, bestMoveUci: "d2d4" } });
+  });
+
+  it.each([
+    ["short depth", "eval", ["info depth 11 score cp 32", "bestmove e2e4"]],
+    ["only alternate line", "eval", ["info depth 12 multipv 2 score cp 32", "bestmove e2e4"]],
+    ["only bounded score", "eval", ["info depth 12 score cp 32 upperbound", "bestmove e2e4"]],
+    ["missing termination", "eval", ["info depth 12 score cp 32"]],
+    ["output after termination", "eval", ["info depth 12 score cp 32", "bestmove e2e4", "info depth 12 score cp 99"]],
+    ["score and WDL in different iterations", "wdl", ["info depth 12 score cp 32", "info depth 12 wdl 400 500 100", "bestmove e2e4"]],
+    ["incomplete PV iteration", "bestline", ["info depth 12 pv e2e4", "bestmove e2e4"]],
+    ["malformed WDL mass", "wdl", ["info depth 12 score cp 32 wdl 700 500 100", "bestmove e2e4"]],
+    ["malformed bestmove", "eval", ["info depth 12 score cp 32", "bestmove"]],
+  ] as const)("refuses %s as validated queued evidence", async (_name, kind, lines) => {
+    const executor = new StockfishEvidenceExecutor({ async execute() { return lines; } }, "stockfish-analysis", 1);
+    await expect(executor.execute({ id: "invalid", runId: "run", nodeId: "node", fen: INITIAL_FEN, kind, depth: 12 }, new AbortController().signal)).rejects.toThrow(TypeError);
+  });
+
+  it("settles invalid raw search output unavailable without attaching chess evidence", async () => {
+    const executor = new StockfishEvidenceExecutor({ async execute() {
+      return ["info depth 12 multipv 2 score cp 900 pv e2e4", "bestmove e2e4"];
+    } }, "stockfish-analysis", 2);
+    const queue = new EvidenceJobQueue(executor);
+    const store = storage();
+    const service = new RunService(store, { evidenceQueue: queue });
+    const run = await service.create(createInput("invalid-search"), "writer-a");
+    service.enqueueEvidence(run.id, { nodeId: run.activeCursor.nodeId, kind: "eval", depth: 12 });
+    await queue.whenIdle();
+    expect(store.evidenceJobs.jobsForRun(run.id).map((job) => job.state)).toEqual(["settled_unavailable"]);
+    expect(queue.page(run.id).results).toEqual([]);
+    expect(store.read(run.id)!.run.events.some((event) => event.type === "evidence.attached")).toBe(false);
+  });
+
   it("stages exact tablebase evidence without serving move verdicts", async () => {
     const fen = "4k3/8/8/8/8/8/7P/4K3 w - - 0 1";
     const tablebase = new FixtureTablebaseSource({

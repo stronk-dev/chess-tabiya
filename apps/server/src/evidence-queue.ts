@@ -22,7 +22,7 @@ import {
 } from "@chess-tabiya/runtime";
 
 import type { EngineRequest } from "./engine-supervisor.js";
-import { ServerError, engineUnavailable } from "./errors.js";
+import { ServerError } from "./errors.js";
 import {
   DEFAULT_EVIDENCE_RETRY_POLICY,
   EvidenceProviderLate,
@@ -410,20 +410,42 @@ export interface EvidenceEngineClient {
   execute(engineId: string, request: EngineRequest): Promise<readonly string[]>;
 }
 
-function lastInfo(lines: readonly string[], token: RegExp, engineId: string): string {
-  const line = [...lines].reverse().find((candidate) => token.test(candidate));
-  if (line === undefined) {
-    throw engineUnavailable(
-      engineId,
-      0,
-      new Error("Stockfish returned no requested evidence"),
-    );
+/**
+ * The legacy durable gateway still returns narrow packets, not whole provider deliveries.
+ * Apply the completed main-line invariant from provider-exchange §5.1/§5.2 here too: one
+ * task, one unbounded scored iteration, exact requested depth or greatest movetime depth.
+ * Configurable MultiPV does not turn a rank-2 line into the position's evaluation/PV.
+ */
+function completedInfo(lines: readonly string[], job: EvidenceJob): { readonly line: string; readonly bestMove: string } {
+  const terminal = lines.findIndex((line) => /^bestmove(?:\s|$)/u.test(line));
+  if (terminal < 0 || terminal !== lines.length - 1) throw new TypeError("Stockfish evidence must end at its first bestmove");
+  const bestMove = /^bestmove (\S+)(?: ponder \S+)?$/u.exec(lines[terminal]!)?.[1];
+  if (bestMove === undefined) throw new TypeError("Stockfish evidence has a malformed bestmove");
+  let selected: { readonly line: string; readonly depth: number } | undefined;
+  for (const line of lines.slice(0, terminal)) {
+    if (!line.startsWith("info ")) continue;
+    const rank = /(?:^|\s)multipv (\S+)/u.exec(line)?.[1];
+    if (rank !== undefined && rank !== "1") continue;
+    if (/(?:^|\s)(?:lowerbound|upperbound)(?:\s|$)/u.test(line)) continue;
+    const depth = depthValue(line);
+    const score = /(?:^|\s)score (cp|mate) (-?\d+)(?=\s|$)/u.exec(line);
+    if (depth === undefined || !Number.isSafeInteger(depth) || depth < 0 || score === null) continue;
+    if (!Number.isSafeInteger(Number(score[2])) || (score[1] === "mate" && Number(score[2]) === 0)) throw new TypeError("Stockfish evidence has an invalid score");
+    if (job.kind === "wdl") {
+      const wdl = /(?:^|\s)wdl (\d+) (\d+) (\d+)(?=\s|$)/u.exec(line);
+      if (wdl === null) continue;
+      const values = wdl.slice(1).map(Number);
+      if (values.some((value) => !Number.isSafeInteger(value) || value > 1000) || values.reduce((sum, value) => sum + value, 0) !== 1000) throw new TypeError("Stockfish evidence has an invalid WDL tuple");
+    }
+    if (job.kind === "bestline" && !/(?:^|\s)pv [a-h][1-8][a-h][1-8][qrbn]?(?=\s|$)/u.test(line)) continue;
+    if (job.depth !== undefined ? depth === job.depth : selected === undefined || depth >= selected.depth) selected = { line, depth };
   }
-  return line;
+  if (selected === undefined) throw new TypeError("Stockfish returned no completed main-line evidence at the requested bound");
+  return { line: selected.line, bestMove };
 }
 
 function depthValue(line: string): number | undefined {
-  const match = /\bdepth (\d+)\b/.exec(line);
+  const match = /(?:^|\s)depth (\d+)(?=\s|$)/u.exec(line);
   return match === null ? undefined : Number(match[1]);
 }
 
@@ -474,14 +496,9 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
       signal,
     });
 
+    const { line, bestMove } = completedInfo(lines, job);
     if (job.kind === "eval") {
-      const line = lastInfo(
-        lines,
-        /\bscore (?:cp|mate) -?\d+\b/,
-        this.#engineId,
-      );
       const score = /\bscore (cp|mate) (-?\d+)\b/.exec(line)!;
-      const bestMove = [...lines].reverse().find((candidate) => candidate.startsWith("bestmove "))?.split(/\s+/)[1];
       return Object.freeze({
         kind: "eval",
         source: "engine_validated",
@@ -491,13 +508,12 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
             ? { centipawns: whitePerspectiveScore(Number(score[2]), job.fen) }
             : { mateIn: whitePerspectiveScore(Number(score[2]), job.fen) }),
           perspective: "white",
-          ...(bestMove === undefined || bestMove === "(none)" ? {} : { bestMoveUci: normalizeInboundMove(job.fen, bestMove, "engine_bestmove").moveUci }),
+          ...(bestMove === "(none)" || bestMove === "0000" ? {} : { bestMoveUci: normalizeInboundMove(job.fen, bestMove, "engine_bestmove").moveUci }),
           ...(depthValue(line) === undefined ? {} : { depth: depthValue(line) }),
         }),
       });
     }
     if (job.kind === "wdl") {
-      const line = lastInfo(lines, /\bwdl \d+ \d+ \d+\b/, this.#engineId);
       const wdl = /\bwdl (\d+) (\d+) (\d+)\b/.exec(line)!;
       return Object.freeze({
         kind: "wdl",
@@ -511,11 +527,6 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
         }),
       });
     }
-    const line = lastInfo(
-      lines,
-      /\bpv [a-h][1-8][a-h][1-8][qrbn]?/,
-      this.#engineId,
-    );
     const movesUci = line
       .slice(line.indexOf(" pv ") + 4)
       .trim()

@@ -27747,6 +27747,24 @@
       "uxItems": [],
       "evidence": "planning/review/engine-identity-recovery-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3373",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8e74d39966d609d00bf7bd83e649e2b02f7ecc7846203977fcce8afb365a2b11",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-exchange-and-execution.md"
+    },
+    {
+      "id": "D3374",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:47a940f8d576b6898942aaded332ae6a61ebcdc3344b93666a13d2a3a2c0bcc1",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

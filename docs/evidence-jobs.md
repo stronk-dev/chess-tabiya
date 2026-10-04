@@ -43,6 +43,19 @@ stale, expired or cross-database lease settles nothing. Shutdown returns in-flig
 `retry_wait`. Provider unavailability retries under the composed policy (application: four claims,
 five seconds apart) and then takes the origin's terminal effect; no absence ever mints evidence.
 
+## Stockfish result admission
+
+The queued Stockfish executor selects a completed, unbounded main-line iteration, not the last
+UCI token match. Depth jobs require the requested depth; movetime jobs use the greatest completed
+depth with latest-arrival ties. Score, WDL and PV are never assembled across iterations, and the
+task must end at its first `bestmove`. An alternate MultiPV line cannot supply the position's
+evidence. Invalid output follows the existing unavailable settlement and attaches no chess fact.
+
+This gateway still stores narrow durable packets. Its terminating selection is independent of the
+PV's first move and remains preserved. Migration to whole shared provider deliveries requires the
+separate D3373 source contract; this repair does not claim that migration or rewrite old evidence.
+Run `make queued-stockfish-check` for the executor, durability and authoring controls.
+
 ## Application
 
 `POST /runs/:id/evidence {resultSeq}` runs one storage transaction over the CAS-owned run: it

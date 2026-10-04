@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 queued Stockfish checkpoint
+
+D3374 repairs completed main-line selection in the actual durable executor. The normal Make
+target passes 58 tests, including twelve controls that reproduced the previous defect and a
+SQLite unavailable/no-attachment control. Complete exact-index software passes 2,880 tests and
+seven isolated performance tests; content, 111 browser CI journeys and governance pass. Final
+staged-process checks and normal hooks run before commit. Receipt:
+`planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md`.
+
+D3373 requires an explicit durable terminating-selection/MultiPV source migration contract;
+the whole score/WDL source and separately bounded PV cannot preserve the existing eval packet
+by themselves. It is assigned to evidence-foundation, alongside the distinct D3363 Inspector
+distribution and D3370 sampled Maia contracts. Continue other actual migrations, explicit
+binding policies, whole-manifest execution/digest, source resolution and availability. Routine
+metadata/hash refresh remains authorized implementation, not an owner question.
+
 ## 2026-10-04 Review transition operand checkpoint
 
 D3371 migrates the live delta and mate-transition declarations, factories, packet adapters,

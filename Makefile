@@ -75,6 +75,10 @@ test-software:
 test-performance:
 	pnpm test:performance
 
+.PHONY: queued-stockfish-check
+queued-stockfish-check:
+	./node_modules/.bin/vitest run apps/server/src/evidence-queue.test.ts apps/server/src/evidence-job-durability.test.ts apps/server/src/sourcing/syzygy.test.ts
+
 test-content:
 	pnpm test:content
 
