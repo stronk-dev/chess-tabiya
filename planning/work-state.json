@@ -27631,6 +27631,24 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/derivation-occurrences-2026-10-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3360",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fe093042827799df90dd5aa8d12490ee4445e54c921ea7e902fcd2c131d316b1",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3361",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6f6f85dc649d1b6089bce0381d58ccdbe1695e873d2514d0ebb894a7c4967b92",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

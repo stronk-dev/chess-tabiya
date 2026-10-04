@@ -1,4 +1,6 @@
 import type { CampaignEncounterReceipt } from "@chess-tabiya/runtime";
+import type { EvidenceAvailabilitySubjectRef, RunEvidenceItemDigest } from "@chess-tabiya/runtime/run-subject";
+import { requireRunEvidenceItem, requireRunSubject } from "./run-subject-access.js";
 import {
   applyObjectiveEvidenceProposal,
   appendOpponentPly,
@@ -1677,6 +1679,15 @@ export class RunService {
       deliveryOpen: feedbackDeliveryOpen(run),
       learnerToMove: node.fen.split(" ")[1] === (run.start.side === "white" ? "w" : "b"),
     });
+  }
+
+  /** Provider-exchange §2 authority; HTTP source availability is a separate remaining consumer. */
+  evidenceSubjectAccess(principal: Principal, subject: EvidenceAvailabilitySubjectRef) {
+    return requireRunSubject(this.#storage, principal, subject);
+  }
+
+  evidenceItemAccess(principal: Principal, subject: EvidenceAvailabilitySubjectRef, itemDigest: RunEvidenceItemDigest) {
+    return requireRunEvidenceItem(this.#storage, principal, subject, itemDigest);
   }
 
   guidanceAccess(runId: string, principal: Principal, nodeId: string): GuidanceAccess {

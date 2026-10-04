@@ -107,6 +107,12 @@ importers:
 
   packages/schema:
     dependencies:
+      ajv:
+        specifier: 8.17.1
+        version: 8.17.1
+      ajv-formats:
+        specifier: 3.0.1
+        version: 3.0.1(ajv@8.17.1)
       chessops:
         specifier: 0.15.1
         version: 0.15.1
@@ -114,12 +120,6 @@ importers:
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
-      ajv:
-        specifier: 8.17.1
-        version: 8.17.1
-      ajv-formats:
-        specifier: 3.0.1
-        version: 3.0.1(ajv@8.17.1)
 
 packages:
 

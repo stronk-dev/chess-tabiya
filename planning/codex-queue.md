@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 current provider checkpoint — exact run subjects
+
+D3360 implements the three run digest domains, historical prefix/node/edge resolution and sealed
+recorded-item membership through the current read-access authority. The focused tests include real
+grant revocation. D3361 removes a duplicate schema key with no parsed-schema change. Canonical
+validation freshness requires seven compatibility successors and matching requirements/ledger
+digests; all 835 predecessors, authored fields and evaluator-root images are retained. Receipt:
+`planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md`.
+
+Continue §1's compiled execution paths and §2's closed source-occurrence resolution/availability
+operation, then exact Maia occurrence/Inspector migration and remaining legacy callers. The new
+authority does not itself complete HTTP availability or source joins. Keep these obligations open;
+routine canonical metadata/hash updates need no further owner question.
+
 ## 2026-10-04 current provider checkpoint — ordered occurrences
 
 D3359 repairs the manifest compiler's set-valued derivation inputs: repeated source types and

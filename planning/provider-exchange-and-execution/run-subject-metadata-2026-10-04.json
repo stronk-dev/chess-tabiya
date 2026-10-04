@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "baseline": "77afe7a7",
+  "changedDocuments": 104,
+  "changedContentPacks": 92,
+  "versionTransitions": 129,
+  "ledgerDigestChanges": 68,
+  "authoredFieldChanges": 0,
+  "declarations": {
+    "retained": 835,
+    "current": 842,
+    "successors": [
+      "engineCondition.engine_eval_swing",
+      "engineCondition.engine_mate_appears",
+      "engineCondition.tablebase_category_regression",
+      "engineCondition.tablebase_dtz_regression",
+      "fenPredicate.structuralFeature",
+      "opponent.practical_slice",
+      "opponent.selection"
+    ],
+    "sourceIdentityChanges": 0,
+    "dependencyIdentityChanges": 0
+  },
+  "evaluatorModulesUnchanged": [
+    "apps/server/src/guard.ts",
+    "apps/server/src/guard-conditions.ts",
+    "packages/runtime/src/objective.ts",
+    "apps/server/src/opponent-selector.ts"
+  ],
+  "evaluatorRootsUnchanged": 19,
+  "runSchemaCanonicalImageUnchanged": true,
+  "semanticValidationDelta": {
+    "fields": [
+      "schemaVersion",
+      "writer",
+      "rootDigest",
+      "profileDigest",
+      "caseDigest",
+      "externalDigest",
+      "operations",
+      "population",
+      "cases",
+      "populations",
+      "externals",
+      "verdicts"
+    ],
+    "changes": 62,
+    "changesByLeaf": {
+      "implementationDigest": 9,
+      "predicateImplementationDigest": 53
+    },
+    "otherChanges": [],
+    "firstOperationFilesAdded": []
+  }
+}

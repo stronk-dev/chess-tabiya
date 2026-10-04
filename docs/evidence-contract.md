@@ -28,6 +28,15 @@ identical alternatives remain invalid. Semantic-event declarations must retain t
 members, including multiplicity. This compiler check does not replace a factory's exact-position
 join or establish that two provider deliveries have been admitted.
 
+Run-subject identity is a separate authority, exported through `@chess-tabiya/runtime/run-subject`.
+Its three digest constructors cover an exact historical event head, a complete attachment event at
+that head, and a resolved prefix/node/edge subject. Event validation reads the canonical run schema;
+branch and edge resolution use the existing recorded-path/replay authorities. Resolved subjects
+carry a private runtime seal and a frozen historical projection, so the current cursor cannot
+silently replace the requested position. The server's `evidenceSubjectAccess`/`evidenceItemAccess`
+methods require current read access before resolution. This does **not** yet expose the planned
+availability HTTP operation or complete occurrence-to-provider bindings.
+
 The current compiled closure is 41 producers, 230 projections, 34 consumers and 508 bindings,
 plus 78 semantic-event declarations, 78 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.

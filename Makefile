@@ -998,14 +998,16 @@ evidence-seal-audit:
 # registry, parsers and parser-implementation digest, seals and the durable boundary, the protocol
 # resource/census, the scheduler, descriptors, operator traversals and the supervisor exchange).
 # Regenerate the parser digest with UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1 after a parser change.
-.PHONY: provider-exchange-check provider-traversal
+.PHONY: provider-exchange-check provider-traversal run-subject-check
+run-subject-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/run-subject.test.ts apps/server/src/run-subject-access.test.ts
 .PHONY: explorer-summary-migration-proof
 explorer-summary-migration-proof:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/capability/explorer-summary-migration-proof.test.ts
 	./node_modules/.bin/esbuild tools/explorer-summary-migration-proof/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-summary-migration-proof.js --log-level=warning
 	node apps/server/dist/explorer-summary-migration-proof.js $(ARGS)
 
-provider-exchange-check:
+provider-exchange-check: run-subject-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-contract.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/explorer-summary-voice.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts

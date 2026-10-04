@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Ordered derivation inputs now preserve repeated occurrence identity (D3359); finish the provider RFC's compiled execution paths, source-absence aggregation and exact authorized run-subject availability, then exact Maia occurrence/Inspector migration and remaining legacy Stockfish/Maia/Explorer caller retirement. Do not rebuild the integrated foundations or Explorer summary. Discharge missing independent semantic authorities and required production reach, rerun phase/target policy measurements through production symbols, and finish consumer-owned Support/Review/bot/longitudinal bindings. Close training-set progression/tempo (D3318/D3322) and the owner-defined ramp-to-clamp projection (D3317); schema/pure helpers do not discharge them. Content expansion remains held for contract stability. D3262's search experiment remains research, not production why-move authority.",
+        "nextAction": "Ordered derivation operands and exact historical run-subject authority now ship (D3359/D3360). Finish the provider RFC's compiled execution paths, binding source-absence algebra, closed source-occurrence resolver census and POST /evidence/availability over the authorized heads; then exact Maia occurrence/Inspector migration and remaining legacy Stockfish/Maia/Explorer caller retirement. Do not rebuild the integrated sources or Explorer summary. Discharge independent semantic authorities and production reach, rerun phase/target policy measurements through production symbols, and complete consumer-owned Support/Review/bot/longitudinal bindings. Training progression/tempo and the owner-defined ramp-to-clamp projection remain D3318/D3322/D3317. Content expansion stays held for contract stability; D3262 remains research rather than production why-move authority.",
         "latestCheckpoint": {
           "at": "2026-10-04",
-          "summary": "The four evidence-foundation implementations, shared provider acquisitions, Guided Hint/sealed presentation and the October 1 move-free Explorer Theory/voice integration remain on main. The native source appliance's real registered Maia reply/retry/branch/compare/restart/resume journey is verified without claiming publication or a complete release. D3359 now repairs the shared manifest compiler's ordered repeated derivation operands and semantic-event member matching; original red regressions and permanent refusal controls pass. Normal full software verification passes 2770 tests/318 files plus seven performance tests/four files and downstream contracts; real-content passes 223 tests/23 files, browser CI passes 111 journeys with one optional latency skip and no retries. Routine metadata updates retain all 827 previous declarations, append eight next-version successors (835 total), preserve every authored chess field across 104 content/example/fixture documents, and update only canonical requirements plus 68 ledger packDigest fields. The 352-document plan has zero outstanding migration rows. Generated semantic validation is current but remains at 81 subjects, 38/38 cases and zero fully validated profiles. Compiled execution paths, binding source-absence aggregation, exact-subject availability, Maia occurrence/Inspector migration and other legacy provider callers remain open. D3358 retains broad transitive source coupling; training progression/tempo and ramp-to-clamp projection remain D3318/D3322/D3317. Content expansion/graduation stays held for foundation stability. This is a compiler prerequisite, not full producer-to-consumer closure; no capability or milestone changes state.",
+          "summary": "The shared provider foundation, Guided Hint/sealed presentation, Explorer Theory/voice integration and ordered derivation operands remain implemented. D3360 adds the three exact run digest domains, canonical event validation, historical prefix/node/edge and recorded-item resolution through current read grants; independent vectors, forged/crossed/post-head occurrences and real grant revocation pass 12 focused tests. Full software passes 2782 tests/320 files plus seven performance tests/four files and downstream checks; content passes 223 tests/23 files and all 104 declarations. Browser CI passes 111 journeys with one optional real-Maia latency skip and no retries; governance and production bundles pass. D3361 removes an ignored schema duplicate without changing its parsed meaning. Canonical validation freshness changes only implementation receipt hashes, preserving all cases and verdicts, still zero fully validated profiles. Seven compatibility successors append to 835 unchanged predecessors (842 total); canonical requirements change on 104 documents and only packDigest changes on 68 ledgers. Every authored field, source/dependency identity and 19 evaluator-root images remain unchanged; the 352-document plan has zero remaining migration rows. Public availability, execution paths, source-occurrence joins and Maia/Inspector migration remain open. D3358 owns broad receipt/source coupling; training progression/tempo and ramp-to-clamp remain D3318/D3322/D3317. This is a run-authority prerequisite, not whole producer-to-consumer closure; no capability or milestone changes state.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -821,7 +821,9 @@
             "planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md",
             "planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md",
             "planning/provider-exchange-and-execution/derivation-occurrences-2026-10-04.md",
-            "planning/provider-exchange-and-execution/derivation-occurrences-metadata-2026-10-04.json"
+            "planning/provider-exchange-and-execution/derivation-occurrences-metadata-2026-10-04.json",
+            "planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md",
+            "planning/provider-exchange-and-execution/run-subject-metadata-2026-10-04.json"
           ],
           "anchors": [
             {
@@ -867,7 +869,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:7e0e2a540cf53accb0bfd5525141d72159a2a266d6c6ea88cd7904517fbed292"
+              "digest": "sha256:37137e7663397596b90ff0bdbffa6176ea3509883e0fc58201725f3b114f0e30"
             },
             {
               "kind": "work_state",
@@ -913,6 +915,16 @@
               "kind": "work_state",
               "id": "D3359",
               "digest": "sha256:59464d86cb4b3d428ca1f8cec6230f4b5f77b259a7dd056d127b58208acc1441"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3360",
+              "digest": "sha256:fe093042827799df90dd5aa8d12490ee4445e54c921ea7e902fcd2c131d316b1"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3361",
+              "digest": "sha256:6f6f85dc649d1b6089bce0381d58ccdbe1695e873d2514d0ebb894a7c4967b92"
             }
           ]
         },
@@ -1422,7 +1434,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:7e0e2a540cf53accb0bfd5525141d72159a2a266d6c6ea88cd7904517fbed292"
+              "digest": "sha256:37137e7663397596b90ff0bdbffa6176ea3509883e0fc58201725f3b114f0e30"
             },
             {
               "kind": "work_state",

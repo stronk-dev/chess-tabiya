@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **Implementation checkpoint 2026-10-04, run-subject authority:** §2's three closed digest domains, canonical schema-backed event validation, exact historical prefix/node/edge resolution and recorded-item membership now run through the authenticated `RunService` access boundary. Independent digest vectors, crossed/post-head occurrences, runtime seal forgeries and real grant revocation pass 12 focused tests. D3360 owns this prerequisite; the public availability operation, compiled execution paths, closed source-occurrence resolver census and Maia/Inspector migration remain open. D3361 removes an ignored identical schema key without changing its parsed meaning. Receipt: `planning/provider-exchange-and-execution/run-subject-identity-2026-10-04.md`.
+
 - **Implementation checkpoint 2026-10-04, ordered derivation operands:** §1's literal order and repeated input occurrences are accepted by the shared manifest compiler and preserved in semantic-event matching. Empty members, duplicate alternatives, missing dependencies, cycles and per-member widening remain refused. D3359 owns this prerequisite only; execution path images, source-absence aggregation, exact-subject availability and Maia occurrence migrations remain open. Receipt: `planning/provider-exchange-and-execution/derivation-occurrences-2026-10-04.md`.
 
 - **Implementation checkpoint 2026-10-01, Explorer summary:** §8's sealed move-free population projection, exact receipt-only wire and registered Theory renderer are integrated through authenticated finalized module demand. Sparse/zero populations survive without a source suitability floor; closed/Quiet/unrequested demand performs no acquisition, and changed decisions are refused after I/O. Actual outbound voice controls retain internal ancestry while excluding raw candidate rows. The owner's D3330/D996 ruling authorizes only canonical requirement/digest updates: 92 packs, 68 ledgers and 12 schema example/fixture documents, preserving authored content, 819 retained declarations and 19 evaluator roots. Receipt: `planning/provider-exchange-and-execution/explorer-summary-integration-2026-10-01.md`. Complete final staged software, real-content, browser CI and governance gates pass; D3328/D3329/D3330/D3357 close their scoped exits. Maia occurrence projections, legacy Explorer identities and §§1–2 remain open.
@@ -12,7 +14,7 @@
   adapter (the D2 receipts of `evidence-value-authority.md`); the durable
   `parsePersistedProviderDelivery` boundary for [[D3030]]; the application composition; and the
   operator CLI. **Not yet:** §1–§2 F1 execution metadata/confidence and binding algebra, the
-  `/capabilities` path reach and `POST /evidence/availability` with the run-subject digests, the
+  `/capabilities` path reach and `POST /evidence/availability` integration of the run-subject authority, the
   Maia occurrence derived projections, and the migration of remaining existing learner
   callers. **2026-09-30 checkpoint:** built-in learner tablebase callers now use the shared
   exchange with health/backoff and exact inventory; fractional-clock retention is repaired.

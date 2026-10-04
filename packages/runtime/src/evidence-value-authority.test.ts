@@ -176,7 +176,9 @@ describe("value authority: static closure", () => {
     const manifest = JSON.parse(read("packages/runtime/package.json")) as { readonly exports: Readonly<Record<string, string>> };
     // The provider scheduler-only subpath carries receipt constructors, not an evidence mint; its sole
     // importer is census-checked in provider-protocol.test.ts.
-    expect(Object.keys(manifest.exports).sort()).toEqual([".", "./provider-exchange-authority", "./rating"]);
+    // The run-subject subpath computes/validates historical identities; it exports no evidence
+    // mint, dispatcher or factory. Keep this closed inventory literal, not a wildcard allowance.
+    expect(Object.keys(manifest.exports).sort()).toEqual([".", "./provider-exchange-authority", "./rating", "./run-subject"]);
     expect(Object.values(manifest.exports).some((path) => /internal|factories|test-support/u.test(path))).toBe(false);
   });
 });
