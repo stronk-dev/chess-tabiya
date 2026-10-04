@@ -1,5 +1,7 @@
 # RFC: Provider health and honest degradation
 
+- **Implementation checkpoint 2026-10-05:** D3378 preserves a supplied tablebase source's modern evidence method, receiver and sealed result at application composition. Both source methods receive the health operation's abort signal and deadline; cancellation leaves health unchanged. D3379 returns typed tablebase unavailable for failed source admission rather than HTTP 500. Real authenticated selection and cancellation controls pass in the normal 143-test focused gate. Remaining RFC obligations are not discharged by this adapter repair. Receipt: `planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md`.
+
 - **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model
   chain is retired as this RFC's acceptance authority and moved to
   `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; durable opponent

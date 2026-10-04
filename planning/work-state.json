@@ -27792,6 +27792,24 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3378",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e1a6717d9208e5404c36e76e4651ae43affabc92195c017f15715c68dbba228f",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3379",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1b6e8c2bc62cfe445b5ecb2e597d36bc100531449f43363a8451352638894544",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

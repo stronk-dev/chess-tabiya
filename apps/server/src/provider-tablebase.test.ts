@@ -6,6 +6,7 @@ import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { ControlledFetch, ManualClock, flush, syzygyBody } from "./provider-exchange.test-support.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
 import { testRegistry } from "./provider-health.test-support.js";
+import { healthReportedTablebase } from "./provider-health-adapters.js";
 import { ExchangeTablebaseSource, healthAdmittedSyzygyOperation } from "./provider-tablebase.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
@@ -37,6 +38,79 @@ async function harness() {
 }
 
 describe("learner Syzygy shared exchange", () => {
+  it("preserves the evidence method and class receiver through health wrapping", async () => {
+    const { source, remote } = await harness();
+    const health = await testRegistry({ "tablebase-primary": "unverified" });
+    const wrapped = healthReportedTablebase(source, health);
+    expect(wrapped.probeEvidence).toBeTypeOf("function");
+    const pending = wrapped.probeEvidence!(FEN);
+    await flush(); remote.respond(0, syzygyBody(FEN));
+    const evidence = await pending;
+    expect(evidence.payload.payload.fen).toBe(FEN);
+    expect(health.operationAvailability("evidence.tablebase_probe").state).toBe("available");
+  });
+
+  it.each([false, true])("forwards active caller cancellation through the health-wrapped %s modern arm", async modern => {
+    const health = await testRegistry({ "tablebase-primary": "unverified" });
+    let signal: AbortSignal | undefined;
+    let deadline: number | undefined;
+    const wait = vi.fn(async (_fen: string, options: { signal?: AbortSignal; deadlineMonotonic?: number } = {}) => {
+      signal = options.signal;
+      deadline = options.deadlineMonotonic;
+      return new Promise<never>((_resolve, reject) => options.signal?.addEventListener("abort", () => reject(Object.assign(new Error("cancelled"), { name: "AbortError" })), { once: true }));
+    });
+    const wrapped = healthReportedTablebase({ kind: "lichess", probe: wait, ...(modern ? { probeEvidence: wait } : {}) }, health);
+    const caller = new AbortController();
+    const pending = modern ? wrapped.probeEvidence!(FEN, { signal: caller.signal }) : wrapped.probe(FEN, { signal: caller.signal });
+    const settled = pending.then(value => ({ value }), error => ({ error }));
+    await flush();
+    caller.abort();
+    const outcome = await settled;
+    expect(outcome).toMatchObject({ error: { name: "AbortError" } });
+    expect(wait).toHaveBeenCalledTimes(1);
+    expect(deadline).toBeTypeOf("number");
+    expect(signal).toBeDefined();
+    expect(signal).not.toBe(caller.signal);
+    expect(signal!.aborted).toBe(true);
+    expect(health.operationAvailability("evidence.tablebase_probe").state).toBe("requestable_unverified");
+  });
+
+  it("does not invent a modern method or start work for a cancelled standalone request", async () => {
+    const health = await testRegistry({ "tablebase-primary": "unverified" });
+    const probe = vi.fn(async () => ({ category: "win" as const, dtz: 1, moves: [] }));
+    const wrapped = healthReportedTablebase({ kind: "mock", probe }, health);
+    expect("probeEvidence" in wrapped).toBe(false);
+    const caller = new AbortController(); caller.abort();
+    await expect(wrapped.probe(FEN, { signal: caller.signal })).rejects.toMatchObject({ name: "AbortError" });
+    expect(probe).not.toHaveBeenCalled();
+    expect(health.operationAvailability("evidence.tablebase_probe").state).toBe("requestable_unverified");
+  });
+
+  it.each(["success", "position", "clock", "clone", "failure"])("retains supplied modern tablebase authority through authenticated application selection (%s)", { timeout: 30_000 }, async arm => {
+    const { source, remote } = await harness();
+    const fen = arm === "position" ? OTHER : arm === "clock" ? FEN.replace("0 1", "1 1") : FEN;
+    const pending = source.probeEvidence(fen);
+    await flush(); remote.respond(0, syzygyBody(fen));
+    const evidence = await pending;
+    const bare = vi.fn(async () => evidence.payload.payload.position);
+    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, tablebaseSource: { kind: "lichess", probe: bare, async probeEvidence() {
+      if (arm === "failure") throw new Error("source unavailable");
+      return arm === "clone" ? { ...evidence } as TablebaseProbeEvidence : evidence;
+    } } });
+    try {
+      await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "supplied_syzygy", password: "tablebase-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const selected = await fetch(`${origin}/select-move`, { method: "POST", headers: { "content-type": "application/json", cookie }, body: JSON.stringify({ startFen: FEN, historyUci: [], policy: { mode: "perfect_tablebase", policyConfigDigest: `sha256:${"a".repeat(64)}` }, seed: 73 }) });
+      const body = await selected.json();
+      expect(selected.status, JSON.stringify(body)).toBe(arm === "success" ? 200 : 503);
+      if (arm === "success") expect(body).toMatchObject({ policyModeApplied: "perfect_tablebase" });
+      expect(bare).not.toHaveBeenCalled();
+    } finally { await application.close(); }
+  });
+
   async function queuedTablebase(source: TablebaseSource) {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     const queue = new EvidenceJobQueue({ async execute() { throw new Error("tablebase work must not run the engine executor"); } }, {

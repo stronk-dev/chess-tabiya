@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ef5313a26c45ede648816bd023f40b84314e3bb20770475ffb365b3db446ff8e",
+    "roadmap": "sha256:c67df7bba9c822d9e4a23f7f8475a39610a12d82187be1656733d79b6ba3a8e7",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:54642e5c729979ba510a3d40a200823ba120f3c79e8770b3dc5fdb1037bc432e",
-    "rfcRegister": "sha256:43cc7614efe7ef640aaf2378d321ce60baf2bb7ee69420dc47618eb0d001e5a9",
+    "workState": "sha256:38855d766a1c159c74471d5c39328915846a78cf2e8b70cea6b80383567498ec",
+    "rfcRegister": "sha256:cf1998bd305ab11291d30ad53e432dd656c85b701986fbd484bb78da14f91e05",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:9012d85008bc05c9971ab8722161b03cc918ccb03a0b8d0491d82e1d85a95137",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 0,
       "blocked": 1051,
-      "done": 1288,
+      "done": 1290,
       "refused": 160
     },
     "workItems": {
@@ -189,7 +189,7 @@
       "nextAction": "Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3376 requires registered shared opening schema/source authority before Review bindings; D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not invent a played move, substitute a PV move or conflate current and historical openings. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3377 implements whole sealed Syzygy source admission at the actual queued tablebase consumer before the existing durable packet. Requested/payload FENs include clocks; forged/crossed/failed modern sources never fall back to bare probe or attach evidence. Standalone compatibility and durable leases/retry/cancellation/settlement remain unchanged. Actual SQLite/HTTP controls and gateway census pass 134 focused tests. Final exact-index software passes 2898 tests/325 files, seven isolated performance tests and downstream contracts at 37c1957cc83d787e71100663076bd33c9bb570ef; content passes 223 tests/23 files, zero clearance errors and all 104 requirements. Authored content and predecessor meanings remain unchanged. The initial failed snapshot is retained separately from final proof. Zero untriaged/1678 live items. Whole-source persistence, D3363/D3370/D3373/D3376 and complete migration/policy/execution/resolution/availability remain open; no full RFC, capability or milestone promotion.",
+        "summary": "D3378 repairs application health wrapping so modern tablebase evidence, class receiver and cancellation/deadline survive composition; D3379 returns typed unavailable for invalid source admission rather than HTTP 500, without a fallback move or bare probe. Actual authenticated HTTP and cancellation controls pass the normal 143-test focused gate. Final exact-index software passes 2907 tests/325 files, seven isolated performance tests and downstream contracts at 86dc041939f0a2e43a84b60c2f7ee994d6855525. Successful selection, authored fields and predecessor meanings remain unchanged. Zero untriaged/1678 live items. Whole-source persistence, D3363/D3370/D3373/D3376 and full execution/resolution/availability remain open; no full RFC, capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -251,7 +251,10 @@
           "rfc/runtime-opening-identity.md",
           "planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md",
           "planning/provider-exchange-and-execution/queued-tablebase-software-2026-10-05.json",
-          "planning/provider-exchange-and-execution/queued-tablebase-software-negative-2026-10-05.json"
+          "planning/provider-exchange-and-execution/queued-tablebase-software-negative-2026-10-05.json",
+          "rfc/provider-health-degradation.md",
+          "planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md",
+          "planning/provider-exchange-and-execution/health-source-authority-software-2026-10-05.json"
         ],
         "anchors": [
           {
@@ -297,7 +300,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:69a2f2e05844e267a50286f92ece64d44ea0602aeddec564c9a5f8fd6c254dbb"
+            "digest": "sha256:5a0409c20f08a406e1a8a389c53dc49a16c8c6f6c6c543de135fcec738e4ee8b"
           },
           {
             "kind": "work_state",
@@ -453,6 +456,21 @@
             "kind": "work_state",
             "id": "D3377",
             "digest": "sha256:785831605dda42b9b5d266e6ac2cb99b57b53daa2eb2324a9ec94426d8b7b3e6"
+          },
+          {
+            "kind": "rfc",
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:40ae62618ff3cc66c1c41eb79012356f377a308568194d3643e9a4e125a6bacf"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3378",
+            "digest": "sha256:e1a6717d9208e5404c36e76e4651ae43affabc92195c017f15715c68dbba228f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3379",
+            "digest": "sha256:1b6e8c2bc62cfe445b5ecb2e597d36bc100531449f43363a8451352638894544"
           }
         ]
       },
@@ -892,7 +910,7 @@
           {
             "kind": "rfc",
             "id": "provider-health-degradation.md",
-            "digest": "sha256:863a8e310e0d4450a4cd13c8fe3c60c4b445da59f0ac1fdd2904b9111fa9417e"
+            "digest": "sha256:40ae62618ff3cc66c1c41eb79012356f377a308568194d3643e9a4e125a6bacf"
           },
           {
             "kind": "work_state",
@@ -962,7 +980,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:69a2f2e05844e267a50286f92ece64d44ea0602aeddec564c9a5f8fd6c254dbb"
+            "digest": "sha256:5a0409c20f08a406e1a8a389c53dc49a16c8c6f6c6c543de135fcec738e4ee8b"
           },
           {
             "kind": "work_state",

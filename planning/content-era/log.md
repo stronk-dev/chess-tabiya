@@ -3944,3 +3944,9 @@ until a second pass measured the pack start positions the sentence actually name
 - D3377 adds source admission at the actual queued tablebase consumer. Canonical generation retains all 892 declarations and appends seven v11 successors, preserving all 275 factory outcomes. Metadata/hash maintenance is an authorized mechanical implementation step, not another owner decision.
 - Independent comparison against ca2770f5 proves every authored field across 104 pack/example/fixture documents and 192 other source documents unchanged. Only 104 requirement stamps and 68 ledger pack digests refresh; guard/objective computations and opponent selection stay byte-identical. No authored content wave, graduation, publication or user-stored migration.
 - Normal content verification passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. The 352-document migration plan has no remaining rows. Full staged software/performance, browser CI and governance pass. Receipt: planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md.
+
+
+## 2026-10-05 — Application tablebase compatibility maintenance
+
+- The D3378/D3379 source repair retains all authored fields and 899 predecessor declarations, appending two opponent v12 successors. Canonical generation refreshes only 104 requirement stamps and 68 ledger digests; the independent 53e449e7 comparison preserves all 275 factory outcomes and proves successful selection plus guard/objective computations unchanged apart from typed admission refusal.
+- Normal content verification passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. Full software/performance, browser CI and governance pass. No authored content wave, graduation, publication or user-document migration is claimed. Receipt: planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md.

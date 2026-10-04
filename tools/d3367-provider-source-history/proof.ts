@@ -19,9 +19,10 @@ const BINDING_ABSENCE = process.argv.includes("--binding-absence");
 const REVIEW_TRANSITIONS = process.argv.includes("--review-transitions");
 const BRANCH_DECIDEDNESS = process.argv.includes("--branch-decidedness");
 const QUEUED_TABLEBASE = process.argv.includes("--queued-tablebase");
+const HEALTH_TABLEBASE = process.argv.includes("--health-tablebase");
 const REVIEW_SUCCESSORS = ["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"];
-const BASELINE = QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
-const SUCCESSORS = [
+const BASELINE = HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
+const SUCCESSORS = HEALTH_TABLEBASE ? ["opponent.practical_slice", "opponent.selection"] : [
   "engineCondition.engine_eval_swing", "engineCondition.engine_mate_appears",
   "engineCondition.tablebase_category_regression", "engineCondition.tablebase_dtz_regression",
   "fenPredicate.structuralFeature", "opponent.practical_slice", "opponent.selection",
@@ -47,7 +48,7 @@ async function proof(editsOnly: boolean) {
   assert.deepEqual(appended.map(row => row.subjectId).sort(), SUCCESSORS);
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
-    assert.equal(row.id.version.value, QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
+    assert.equal(row.id.version.value, HEALTH_TABLEBASE ? 12 : QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
   }
   const oldProfiles = JSON.parse(old("packages/runtime/src/fixtures/evidence-value-profiles.json"));
   const profiles = JSON.parse(read("packages/runtime/src/fixtures/evidence-value-profiles.json"));
@@ -71,7 +72,18 @@ async function proof(editsOnly: boolean) {
   assert.equal(canonicalJson(withoutDigest(currentReceipt.operations, "implementationDigest")), canonicalJson(withoutDigest(previousReceipt.operations, "implementationDigest")), "Validation operations changed beyond implementation digests");
   assert.equal(canonicalJson(withoutDigest(currentReceipt.populations, "predicateImplementationDigest")), canonicalJson(withoutDigest(previousReceipt.populations, "predicateImplementationDigest")), "Validation population observations changed");
   // These evaluators and the opponent selector are unchanged at this checkpoint.
-  for (const path of ["apps/server/src/guard.ts", "apps/server/src/guard-conditions.ts", "packages/runtime/src/objective.ts", "apps/server/src/opponent-selector.ts"]) assert.equal(read(path), old(path), `Evaluator changed: ${path}`);
+  for (const path of ["apps/server/src/guard.ts", "apps/server/src/guard-conditions.ts", "packages/runtime/src/objective.ts", ...(HEALTH_TABLEBASE ? [] : ["apps/server/src/opponent-selector.ts"])]) assert.equal(read(path), old(path), `Evaluator changed: ${path}`);
+  if (HEALTH_TABLEBASE) {
+    const path = "apps/server/src/opponent-selector.ts", current = read(path);
+    const startMarker = "\n    try {\n      const evidence = await source.probeEvidence";
+    const catchMarker = '\n    } catch (error) {\n      if (error instanceof TypeError) throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase source evidence failed admission", { details: { retryAfterMs: 0 } });\n      throw error;\n    }';
+    assert.equal(current.split(startMarker).length, 2, "Expected one admission wrapper");
+    assert.equal(current.split(catchMarker).length, 2, "Expected the exact typed-unavailable catch");
+    const start = current.indexOf(startMarker), bodyStart = start + "\n    try {".length, end = current.indexOf(catchMarker, bodyStart);
+    assert.ok(end > bodyStart);
+    const withoutCatch = current.slice(0, start) + current.slice(bodyStart, end).replace(/^  /gmu, "") + current.slice(end + catchMarker.length);
+    assert.equal(withoutCatch, old(path), "Selection source changed beyond the exact error wrapper");
+  }
   const shapes = await ShapeRegistry.loadDefault(resolve(root, "content/shapes"));
   const principles = await PrincipleRegistry.loadDefault(resolve(root, "content/principles"));
   const population = walkPopulation(root);
@@ -119,7 +131,7 @@ async function proof(editsOnly: boolean) {
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
     retainedFactoryOutcomes: Object.keys(oldProfiles).length - successors.size, newFactoryProfiles: [...successors.values()].sort(),
     retainedSourceExecution: { projection: "live.syzygy.position_result@1", state: "registered", operation: "syzygy.position@1" },
-    scope: QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
+    scope: HEALTH_TABLEBASE ? "health-wrapped source authority and typed admission failure; authored content, guard/objective computations and successful selection code unchanged" : QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
   };
 }
 

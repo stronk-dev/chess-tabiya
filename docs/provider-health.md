@@ -67,6 +67,13 @@ serialized.
 - Two transient opens inside five minutes mean the next success produces `recovering(1/2)`, and a
   second consecutive success produces `available`. Cache hits never count.
 - Caller cancellation leaves health unchanged.
+
+The application adapter preserves a supplied tablebase source's optional `probeEvidence`
+method, receiver and sealed result. It forwards the health operation's abort signal and
+absolute deadline to either source method. Sources without that method remain explicitly
+standalone; modern failure never becomes a bare-probe fallback. At opponent selection,
+invalid source admission returns typed `TABLEBASE_UNAVAILABLE` rather than an HTTP 500.
+Authenticated HTTP and cancellation controls live in `provider-tablebase.test.ts`.
 - A group allows one live request at a time. Callers queue first-in, first-out within their own
   deadline. A claim is token-bound and expires on its lease, and a stale claim can neither renew nor
   clear its successor.

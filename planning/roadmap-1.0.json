@@ -800,7 +800,7 @@
         "nextAction": "Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3376 requires registered shared opening schema/source authority before Review bindings; D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not invent a played move, substitute a PV move or conflate current and historical openings. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3377 implements whole sealed Syzygy source admission at the actual queued tablebase consumer before the existing durable packet. Requested/payload FENs include clocks; forged/crossed/failed modern sources never fall back to bare probe or attach evidence. Standalone compatibility and durable leases/retry/cancellation/settlement remain unchanged. Actual SQLite/HTTP controls and gateway census pass 134 focused tests. Final exact-index software passes 2898 tests/325 files, seven isolated performance tests and downstream contracts at 37c1957cc83d787e71100663076bd33c9bb570ef; content passes 223 tests/23 files, zero clearance errors and all 104 requirements. Authored content and predecessor meanings remain unchanged. The initial failed snapshot is retained separately from final proof. Zero untriaged/1678 live items. Whole-source persistence, D3363/D3370/D3373/D3376 and complete migration/policy/execution/resolution/availability remain open; no full RFC, capability or milestone promotion.",
+          "summary": "D3378 repairs application health wrapping so modern tablebase evidence, class receiver and cancellation/deadline survive composition; D3379 returns typed unavailable for invalid source admission rather than HTTP 500, without a fallback move or bare probe. Actual authenticated HTTP and cancellation controls pass the normal 143-test focused gate. Final exact-index software passes 2907 tests/325 files, seven isolated performance tests and downstream contracts at 86dc041939f0a2e43a84b60c2f7ee994d6855525. Successful selection, authored fields and predecessor meanings remain unchanged. Zero untriaged/1678 live items. Whole-source persistence, D3363/D3370/D3373/D3376 and full execution/resolution/availability remain open; no full RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -862,7 +862,10 @@
             "rfc/runtime-opening-identity.md",
             "planning/provider-exchange-and-execution/queued-tablebase-2026-10-05.md",
             "planning/provider-exchange-and-execution/queued-tablebase-software-2026-10-05.json",
-            "planning/provider-exchange-and-execution/queued-tablebase-software-negative-2026-10-05.json"
+            "planning/provider-exchange-and-execution/queued-tablebase-software-negative-2026-10-05.json",
+            "rfc/provider-health-degradation.md",
+            "planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md",
+            "planning/provider-exchange-and-execution/health-source-authority-software-2026-10-05.json"
           ],
           "anchors": [
             {
@@ -908,7 +911,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:69a2f2e05844e267a50286f92ece64d44ea0602aeddec564c9a5f8fd6c254dbb"
+              "digest": "sha256:5a0409c20f08a406e1a8a389c53dc49a16c8c6f6c6c543de135fcec738e4ee8b"
             },
             {
               "kind": "work_state",
@@ -1064,6 +1067,21 @@
               "kind": "work_state",
               "id": "D3377",
               "digest": "sha256:785831605dda42b9b5d266e6ac2cb99b57b53daa2eb2324a9ec94426d8b7b3e6"
+            },
+            {
+              "kind": "rfc",
+              "id": "provider-health-degradation.md",
+              "digest": "sha256:40ae62618ff3cc66c1c41eb79012356f377a308568194d3643e9a4e125a6bacf"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3378",
+              "digest": "sha256:e1a6717d9208e5404c36e76e4651ae43affabc92195c017f15715c68dbba228f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3379",
+              "digest": "sha256:1b6e8c2bc62cfe445b5ecb2e597d36bc100531449f43363a8451352638894544"
             }
           ]
         },
@@ -1503,7 +1521,7 @@
             {
               "kind": "rfc",
               "id": "provider-health-degradation.md",
-              "digest": "sha256:863a8e310e0d4450a4cd13c8fe3c60c4b445da59f0ac1fdd2904b9111fa9417e"
+              "digest": "sha256:40ae62618ff3cc66c1c41eb79012356f377a308568194d3643e9a4e125a6bacf"
             },
             {
               "kind": "work_state",
@@ -1573,7 +1591,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:69a2f2e05844e267a50286f92ece64d44ea0602aeddec564c9a5f8fd6c254dbb"
+              "digest": "sha256:5a0409c20f08a406e1a8a389c53dc49a16c8c6f6c6c543de135fcec738e4ee8b"
             },
             {
               "kind": "work_state",

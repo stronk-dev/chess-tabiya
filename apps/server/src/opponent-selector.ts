@@ -722,19 +722,24 @@ export class OpponentSelector {
       // Explicit standalone/fixture compatibility, not a fallback after provider failure.
       return opponentProviderEvidence("syzygy", await source.probe(fen, { deadlineMonotonic: deadline }));
     }
-    const evidence = await source.probeEvidence(fen, { deadlineMonotonic: deadline });
-    if (evidence.projection.id !== "live.syzygy.position_result" || evidence.projection.version !== 2) {
-      throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase source returned another evidence projection");
+    try {
+      const evidence = await source.probeEvidence(fen, { deadlineMonotonic: deadline });
+      if (evidence.projection.id !== "live.syzygy.position_result" || evidence.projection.version !== 2) {
+        throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase source returned another evidence projection");
+      }
+      const execution = compileProjectionExecution(EVIDENCE_MANIFEST, evidence.projection);
+      if (execution.own.providerOperation !== "syzygy.position@1") throw new TypeError("Tablebase source has another execution operation");
+      const admitted = consumeOpponentSelectionEvidence(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "opponent.selection", version: 1 }, [evidence]));
+      const delivery = admitted[0] as ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">;
+      assertProviderDelivery("syzygy.position@1", delivery);
+      if (delivery.payload.fen !== fen || delivery.acquisition.requestedIdentity.request.fen !== fen) {
+        throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase evidence does not match the requested position");
+      }
+      return delivery.payload.position;
+    } catch (error) {
+      if (error instanceof TypeError) throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase source evidence failed admission", { details: { retryAfterMs: 0 } });
+      throw error;
     }
-    const execution = compileProjectionExecution(EVIDENCE_MANIFEST, evidence.projection);
-    if (execution.own.providerOperation !== "syzygy.position@1") throw new TypeError("Tablebase source has another execution operation");
-    const admitted = consumeOpponentSelectionEvidence(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "opponent.selection", version: 1 }, [evidence]));
-    const delivery = admitted[0] as ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">;
-    assertProviderDelivery("syzygy.position@1", delivery);
-    if (delivery.payload.fen !== fen || delivery.acquisition.requestedIdentity.request.fen !== fen) {
-      throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase evidence does not match the requested position");
-    }
-    return delivery.payload.position;
   }
 
   cacheSize(): number {

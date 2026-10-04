@@ -1007,6 +1007,13 @@ evidence-seal-audit:
 .PHONY: evidence-execution-check
 .PHONY: branch-tablebase-check
 .PHONY: queued-tablebase-check
+.PHONY: health-tablebase-metadata-check health-tablebase-metadata-update
+health-tablebase-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/health-tablebase-metadata.js --log-level=warning
+	node apps/server/dist/health-tablebase-metadata.js --health-tablebase
+health-tablebase-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/health-tablebase-metadata.js --log-level=warning
+	node apps/server/dist/health-tablebase-metadata.js --health-tablebase --apply-metadata
 .PHONY: queued-tablebase-metadata-check queued-tablebase-metadata-update
 queued-tablebase-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/queued-tablebase-metadata.js --log-level=warning

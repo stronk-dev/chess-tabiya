@@ -22,15 +22,22 @@ const DOMAIN: ProviderSettlement = Object.freeze({ kind: "success" });
 
 /** A local tablebase source (fixture or local service) reporting to `tablebase-primary`. */
 export function healthReportedTablebase(source: TablebaseSource, health: ProviderRegistry): TablebaseSource {
+  const withHealth = <T>(options: TablebaseProbeOptions, execute: (options: TablebaseProbeOptions) => Promise<T>): Promise<T> => health.run(
+    "evidence.tablebase_probe",
+    ({ signal, ticket }) => execute({ ...options, signal, deadlineMonotonic: ticket.deadlineMonotonic }),
+    // An uncovered position is the source's domain answer, not a provider failure.
+    (error) => error instanceof ServerError ? DOMAIN : classifyProviderError(error),
+    options,
+  );
+  const probeEvidence = source.probeEvidence;
   return Object.freeze({
     kind: source.kind,
-    probe: (fen: string, options: TablebaseProbeOptions = {}): Promise<TablebasePosition> => health.run(
-      "evidence.tablebase_probe",
-      () => source.probe(fen, options),
-      // A position the source does not cover is its domain answer, not a provider failure.
-      (error) => error instanceof ServerError ? DOMAIN : classifyProviderError(error),
-      options.deadlineMonotonic === undefined ? {} : { deadlineMonotonic: options.deadlineMonotonic },
-    ),
+    probe: (fen: string, options: TablebaseProbeOptions = {}): Promise<TablebasePosition> => withHealth(options, operationOptions => source.probe(fen, operationOptions)),
+    // Retain the method and its receiver; neither clone the sealed source nor invent
+    // an evidence path for standalone providers that do not implement one.
+    ...(probeEvidence === undefined ? {} : {
+      probeEvidence: (fen: string, options: TablebaseProbeOptions = {}) => withHealth(options, operationOptions => probeEvidence.call(source, fen, operationOptions)),
+    }),
   });
 }
 

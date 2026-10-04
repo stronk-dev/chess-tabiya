@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 application tablebase authority checkpoint
+
+D3378 repairs application composition: health wrapping retains modern evidence authority,
+the class receiver and cancellation/deadline forwarding instead of exposing only bare probe.
+D3379 makes failed admission typed unavailable at authenticated selection, with no move or
+fallback. The normal focused gate passes 143 tests across seven files.
+Receipt: `planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md`.
+
+Continue the executable source migrations and declared binding policies, then complete
+execution/resolution/availability. Whole-source persistence and D3363/D3370/D3373/D3376
+retain their separate holds; this repair does not complete the provider RFCs or 1.0.
+
 ## 2026-10-05 queued tablebase checkpoint
 
 D3377 closes source admission at the actual durable tablebase worker: sealed source,
