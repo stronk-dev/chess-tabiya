@@ -57,6 +57,18 @@ never-started cancel restores history, a started cancel consumes an attempt, exh
 and a full store refuses unseen work with `attempt_history_capacity`. Mock-engine deployments run
 the same exchange over the labelled `Mock Stockfish` client (`mock-provider-engine.ts`).
 
+Engine discovery is shared only while its lookup is pending. A later authorized window asks
+for the current identity again; a failed lookup cannot permanently disable Review. With a
+configured scheduler, null, rejected or synchronously thrown identity lookup produces
+`unavailable/provider_failed`, visible through read-only `observe`. Only an unconfigured
+scheduler produces `provider_off`. The next `ensureBranch` may discover a recovered engine;
+discovery itself starts no provider attempt and never resets existing failure/exhaustion history.
+Fully delivered or terminal branches perform neither discovery nor new provider work.
+
+The transition factories retain both before/after points, but their v1 manifest declarations
+currently name only one point occurrence. D3371 tracks the versioned declaration/consumer repair;
+strict execution metadata is not yet a complete description of those transitions.
+
 ## The Analyze line
 
 The Review Map's explicit Analyze action (`GET /runs/:id/review-analysis`, rfc/review-map.md §7)

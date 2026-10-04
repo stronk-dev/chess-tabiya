@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-04 Review engine recovery checkpoint
+
+D3372 repairs configured-engine discovery in the actual Review coordinator. Pending lookups
+coalesce, settled lookups do not poison later windows, read-only observation keeps provider_failed
+distinct from provider_off, and recovery preserves provider attempt ceilings and durable evidence.
+The focused normal Make target passes 33 tests including six new recovery/identity controls.
+Receipt: `planning/review/engine-identity-recovery-2026-10-04.md`.
+
+D3371 is blocked on versioned Review declaration repair: the accepted contract and factories
+consume before/after points, but the v1 delta and mate-transition manifest rows each declare one
+point. Correct the live lineage/consumer migration, preserve frozen capability history, and add
+actual two-occurrence execution controls. Do not repair the retired Story mate-to-cp projection
+or stamp changed semantics onto its predecessor. D3363/D3370 and complete source resolution,
+binding adoption, manifest execution/digest and availability remain open. Routine canonical
+metadata/hash maintenance is authorized, not an owner question.
+
 ## 2026-10-04 binding execution checkpoint
 
 D3369 implements closed absence policy, strict binding-to-path/latency compilation and

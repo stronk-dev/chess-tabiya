@@ -27729,6 +27729,24 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:47c0f7adb4067c11b0f9498316ad29ce39f5cd69574ebdb854f73e90f4b7c1b4",
       "uxItems": []
+    },
+    {
+      "id": "D3371",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "blocker": "rfc:review-evidence-compiler.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d6cbe574e650e3d0848a6b78f03f1f9040fe74d74418e1a6594a4e047576c2eb",
+      "uxItems": []
+    },
+    {
+      "id": "D3372",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:850d01fe71f3a23133f54798f75869a85cab83ea6165cecbaef58dbdc74ef435",
+      "uxItems": [],
+      "evidence": "planning/review/engine-identity-recovery-2026-10-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

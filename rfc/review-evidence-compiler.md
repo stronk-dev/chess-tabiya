@@ -1,5 +1,7 @@
 # RFC: Review evidence compiler
 
+- **Implementation checkpoint 2026-10-04:** D3372 repairs engine discovery at the production coordinator: only pending lookups coalesce; configured startup failure remains provider_failed and a later authorized window can recover without resetting provider attempts or duplicating durable evidence. D3371 keeps the incorrect one-operand v1 transition declarations and versioned consumer repair open. Receipt: `planning/review/engine-identity-recovery-2026-10-04.md`. This is not full RFC completion or new acceptance.
+
 - **Status:** **implementing — landed 2026-09-24 at the owner's direction (implement directly, no
   review round); receipt `planning/evidence-foundation-ux/review-evidence-compiler-implementation-2026-09-24.md`.**
   The five Review projections and forced-mate v2 compile in the manifest with factories and pinned
@@ -1053,6 +1055,8 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-10-04: D3372 repairs transient configured-engine discovery and read-only failure observation under §4.1/D1077; pending identity coalescing, recovered/version-changed identity and unchanged attempt/durable history have permanent controls. D3371 records the live delta/mate declaration cardinality mismatch for versioned author repair. Remaining discharges and full RFC status are unchanged.
 
 - 2026-09-24 **Analyze line restored.** This RFC's landing left Analyze always reporting "no engine
   line is recorded", because the typed evaluation delivery has no PV (refusal 7). The coordinator

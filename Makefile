@@ -1615,6 +1615,10 @@ semantic-collectors-promotion-third-author-repair:
 review-evidence-author-contract:
 	node --test tools/d1969-review-evidence-author-harness/*.test.mts
 
+.PHONY: review-evidence-runtime-check
+review-evidence-runtime-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/review-evidence.test.ts packages/runtime/src/review-evidence.test.ts
+
 .PHONY: review-evidence-fresh-review
 review-evidence-fresh-review: review-evidence-author-contract
 	node --test tools/d2631-review-evidence-fresh-review/contract.test.mjs

@@ -7,9 +7,10 @@ import { parseReviewStoryReceipt, presentedSentence } from "@chess-tabiya/runtim
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
+import type { EngineExchangeRequest } from "./engine-supervisor.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
-import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
+import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator, type ReviewEvidenceCoordinatorOptions } from "./review-evidence.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
@@ -32,7 +33,7 @@ const swinging = (fen: string) => {
   return { score: `cp ${whiteToMove ? white : -white}`, wdl: [300, 400, 300] as const };
 };
 
-function harness(options: { readonly engine?: MockProviderEngineClient; readonly windowNodes?: number; readonly maxOutstandingPerRun?: number; readonly maxTrackedRuns?: number; readonly attempts?: ReviewAttemptOutcomeStore; readonly queue?: EvidenceJobQueue } = {}) {
+function harness(options: { readonly engine?: MockProviderEngineClient; readonly providerOff?: boolean; readonly requestedEngine?: ReviewEvidenceCoordinatorOptions["requestedEngine"]; readonly windowNodes?: number; readonly maxOutstandingPerRun?: number; readonly maxTrackedRuns?: number; readonly attempts?: ReviewAttemptOutcomeStore; readonly queue?: EvidenceJobQueue } = {}) {
   const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
   stores.push(storage);
   const engine = options.engine ?? new MockProviderEngineClient({ score: swinging });
@@ -42,7 +43,7 @@ function harness(options: { readonly engine?: MockProviderEngineClient; readonly
   const counting = { get: ((...args: Parameters<typeof scheduler.get>) => { if (args[0].operation === "stockfish.principal_variation@1") lineGets += 1; else gets += 1; return scheduler.get(...args); }) as typeof scheduler.get, normalizedRequestDigest: scheduler.normalizedRequestDigest.bind(scheduler) };
   const attempts = options.attempts ?? new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 64, maxAttemptsPerRequest: 2 });
   const coordinator = new ReviewEvidenceCoordinator({
-    scheduler: counting as never, requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), storage, attempts,
+    scheduler: options.providerOff === true ? null : counting as never, requestedEngine: options.requestedEngine ?? (async () => ({ id: "stockfish-analysis", version: "mock-1" })), storage, attempts,
     windowNodes: options.windowNodes ?? 3, maxOutstandingPerRun: options.maxOutstandingPerRun ?? 2, maxTrackedRuns: options.maxTrackedRuns ?? 4, maxAttemptsPerRequest: 2, movetimeMs: 50, linePlies: 8, timeoutMs: 2_000,
   });
   const service = new RunService(storage, { reviewEvidence: coordinator, ...(options.queue === undefined ? {} : { evidenceQueue: options.queue }) });
@@ -108,6 +109,104 @@ describe("ReviewAttemptOutcomeStore (criterion 13)", () => {
 });
 
 describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)", () => {
+  it("shares only a pending identity lookup across branches, with no lookup or request from observation", async () => {
+    let resolveIdentity!: (identity: { id: string; version: string } | null) => void;
+    let identities = 0;
+    const identity = new Promise<{ id: string; version: string } | null>((resolve) => { resolveIdentity = resolve; });
+    const { service, coordinator, gets } = harness({ requestedEngine: () => { identities += 1; return identity; } });
+    const first = await service.importGame({ id: "review-shared-identity-a", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    const second = await service.importGame({ id: "review-shared-identity-b", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    expect(identities).toBe(1);
+    expect(gets()).toBe(0);
+    resolveIdentity(null);
+    await coordinator.whenIdle();
+    for (const imported of [first, second]) {
+      expect([...coordinator.observe(imported.run.id, imported.run.branches[0]!.id).states.values()]).toEqual(imported.run.nodes.map(() => ({ kind: "unavailable", reason: "provider_failed" })));
+    }
+    expect(identities).toBe(1);
+    expect(gets()).toBe(0);
+  });
+
+  it("reads the current successful engine identity for a new branch while preserving earlier deliveries", async () => {
+    let version = "mock-1";
+    class ChangingIdentity extends MockProviderEngineClient {
+      override async start(engineId: string) { return { ...await super.start(engineId), version }; }
+      override health(engineId: string) {
+        const health = super.health(engineId);
+        return { ...health, ...(health.identity === undefined ? {} : { identity: { ...health.identity, version } }) };
+      }
+      override async exchange(engineId: string, request: EngineExchangeRequest) {
+        const capture = await super.exchange(engineId, request);
+        return { ...capture, identity: { ...capture.identity, version } };
+      }
+    }
+    const { service, coordinator, storage } = harness({ engine: new ChangingIdentity({ score: swinging }), requestedEngine: async () => ({ id: "stockfish-analysis", version }) });
+    const first = await service.importGame({ id: "review-version-a", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    const priorEvents = storage.read(first.run.id)!.run.events;
+    version = "mock-2";
+    const second = await service.importGame({ id: "review-version-b", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    const points = [...coordinator.observe(second.run.id, second.run.branches[0]!.id).states.values()];
+    expect(points).toHaveLength(second.run.nodes.length);
+    expect(points.every((state) => state.kind === "delivered" && state.delivery.payload.payload.engine.version === "mock-2")).toBe(true);
+    expect(storage.read(first.run.id)!.run.events).toEqual(priorEvents);
+  });
+
+  it("reserves provider_off for an unconfigured scheduler and performs no identity lookup", async () => {
+    let identities = 0;
+    const { service, coordinator, gets, attempts } = harness({ providerOff: true, requestedEngine: async () => { identities += 1; throw new Error("must not run"); } });
+    const imported = await service.importGame({ id: "review-provider-off", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    expect([...coordinator.observe(imported.run.id, imported.run.branches[0]!.id).states.values()]).toEqual(imported.run.nodes.map(() => ({ kind: "unavailable", reason: "provider_off" })));
+    expect(identities).toBe(0);
+    expect(gets()).toBe(0);
+    expect(attempts.size).toBe(0);
+  });
+
+  it.each(["null", "reject", "throw"] as const)("recovers a configured engine after identity lookup %s without erasing attempt history", async (failure) => {
+    let identities = 0;
+    let recovered = false;
+    const { service, coordinator, storage, attempts, gets } = harness({
+      requestedEngine: () => {
+        identities += 1;
+        if (recovered) return Promise.resolve({ id: "stockfish-analysis", version: "mock-1" });
+        if (failure === "throw") throw new Error("private startup failure");
+        return failure === "null" ? Promise.resolve(null) : Promise.reject(new Error("private startup failure"));
+      },
+    });
+    const exhausted = attempts.acquire("unrelated-exhausted-request");
+    if (exhausted.kind !== "owner") throw new Error("owner expected");
+    exhausted.start();
+    exhausted.settle({ kind: "non_retryable_failure", reason: "invalid_response", generation: 1 });
+    const imported = await service.importGame({ id: `review-identity-${failure}`, side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    const observed = coordinator.observe(imported.run.id, imported.run.branches[0]!.id);
+    expect([...observed.states.values()].every((state) => state.kind === "unavailable" && state.reason === "provider_failed")).toBe(true);
+    expect(gets()).toBe(0);
+    expect(attempts.size).toBe(1);
+    expect(JSON.stringify([...observed.states.values()])).not.toContain("private startup failure");
+
+    recovered = true;
+    service.reveal(imported.run.id, "writer");
+    service.story(imported.run.id, principal);
+    await coordinator.whenIdle();
+    const receipt = service.story(imported.run.id, principal);
+    await coordinator.whenIdle();
+    expect(receipt.families.engine_eval.availableNodeCount).toBe(imported.run.nodes.length);
+    expect(receipt.families.engine_eval.unavailable).toEqual([]);
+    expect(identities).toBeGreaterThan(1);
+    expect(gets()).toBe(imported.run.nodes.length);
+    expect(storage.read(imported.run.id)!.run.events.filter((event) => event.type === "evidence.attached")).toHaveLength(imported.run.nodes.length);
+    expect(attempts.outcome("unrelated-exhausted-request")).toMatchObject({ kind: "non_retryable_failure", attempts: 1 });
+    const settledCalls = gets();
+    const settledIdentities = identities;
+    service.story(imported.run.id, principal);
+    await coordinator.whenIdle();
+    expect(gets()).toBe(settledCalls);
+    expect(identities).toBe(settledIdentities);
+  });
+
   it("imports, enriches in bounded windows over the scheduler only, attaches durably and settles the receipt", async () => {
     let executed = 0;
     const executor: EvidenceExecutor = { async execute() { executed += 1; return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }; } };

@@ -218,6 +218,8 @@ interface BranchTracker {
   readonly active: Map<string, { readonly controller: AbortController; readonly requestKey: string }>;
   /** Terminal per-node states from settled attempts (reconstructible from the bounded store). */
   readonly terminal: Map<string, ReviewProviderNodeState>;
+  /** Failed configured-engine discovery; not a started/exhausted provider attempt. */
+  identityUnavailable: boolean;
   lastUsed: number;
 }
 
@@ -259,15 +261,20 @@ export class ReviewEvidenceCoordinator {
   }
 
   #requestedEngine(): Promise<{ readonly id: string; readonly version: string } | null> {
-    this.#engine ??= this.#options.requestedEngine().catch(() => null);
-    return this.#engine;
+    if (this.#engine !== undefined) return this.#engine;
+    // Share acquisition while pending, never cache failure or a former engine version forever.
+    // The callback may throw synchronously as well as reject its returned promise.
+    const lookup = Promise.resolve().then(() => this.#options.requestedEngine()).catch(() => null);
+    this.#engine = lookup;
+    void lookup.then(() => { if (this.#engine === lookup) this.#engine = undefined; });
+    return lookup;
   }
 
   #tracker(runId: string, branchId: string): BranchTracker {
     const key = `${runId}\u0000${branchId}`;
     let tracker = this.#trackers.get(key);
     if (tracker === undefined) {
-      tracker = { key, active: new Map(), terminal: new Map(), lastUsed: 0 };
+      tracker = { key, active: new Map(), terminal: new Map(), identityUnavailable: false, lastUsed: 0 };
       this.#trackers.set(key, tracker);
     }
     tracker.lastUsed = ++this.#clock;
@@ -320,6 +327,7 @@ export class ReviewEvidenceCoordinator {
       const terminal = tracker?.terminal.get(node.id);
       if (terminal !== undefined) { states.set(node.id, terminal); continue; }
       if (tracker?.active.has(node.id) === true) { states.set(node.id, Object.freeze({ kind: "pending" as const, jobCount: 1, retrying: 0 })); continue; }
+      if (tracker?.identityUnavailable === true) { states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const })); continue; }
       states.set(node.id, tracker === undefined ? Object.freeze({ kind: "not_requested" as const }) : Object.freeze({ kind: "not_yet_scheduled" as const }));
     }
     return Object.freeze({ states });
@@ -370,12 +378,16 @@ export class ReviewEvidenceCoordinator {
   }
 
   async #start(runId: string, branchId: string, tracker: BranchTracker, nodes: readonly { readonly id: string; readonly fen: string }[], states: Map<string, ReviewProviderNodeState>): Promise<void> {
+    // Fully delivered/terminal branches and subscribers need no new engine discovery.
+    if (nodes.length === 0) return;
     const engine = await this.#requestedEngine();
     const scheduler = this.#options.scheduler!;
     if (engine === null) {
-      for (const node of nodes) states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_off" as const }));
+      tracker.identityUnavailable = true;
+      for (const node of nodes) states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const }));
       return;
     }
+    tracker.identityUnavailable = false;
     const work: Promise<void>[] = [];
     for (const node of nodes) {
       const request = this.#request(node.fen, engine);
