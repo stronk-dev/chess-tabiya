@@ -224,6 +224,17 @@ become unknown, without compatibility fallback. Application health wrapping reta
 page methods, receivers and cancellation/deadline; real typed source failures remain unchanged.
 Standalone sources lacking a page method retain their explicit compatibility path.
 
+The authenticated Theory module query accepts the declared optional `page` capability,
+including supplied sources preserved by health wrapping; it does not require a concrete
+source class. Finalized module demand and read/disclosure authority are checked before
+acquisition. The service compiles the population-summary source path, captures the exact
+position/population/window, and admits the sealed delivery against that request. Crossed
+identities, copied authority and acquisition failure produce module-level absence, never
+bare-statistics fallback. Sparse and empty valid pages remain usable summary facts, without
+a sample floor. Raw move rows stay out of the module wire and external voice inputs.
+After I/O, the service rechecks grants and the decision; transport disconnect cancels the
+supplied source through its health adapter without poisoning provider health.
+
 `healthAdmittedExplorerOperation` uses the registered parser before health success, preserves real
 HTTP status/Retry-After for the shared Lichess coordinator, and executes only for NEW work. Its
 retained inventory is the scheduler's operation-only inventory. Each caller's deadline includes
@@ -234,6 +245,6 @@ response completion, so closing a corpus request releases its waiter and, if las
 The authenticated production route proves shared retention with optional engines down and keeps
 its reveal/read authorization and sample policy. Repertoire controls prove sparse abstention
 without provider failure and preservation of unlisted mass. The timer-free HTTP negative first
-failed before transport wiring and passes after it. Narrow population-summary/played-occurrence
-projections, replacement of legacy node-shaped consumer identities and standalone tooling
+failed before transport wiring and passes after it. The move-free population summary ships;
+played-occurrence projections, replacement of legacy node-shaped consumer identities and standalone tooling
 migration remain open. No projection or 1.0 capability is declared complete by this checkpoint.

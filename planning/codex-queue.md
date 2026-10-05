@@ -1,5 +1,27 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 Theory source checkpoint
+
+D3381 retains supplied modern Explorer page capabilities through authenticated module
+composition. D3382 checks the captured position/population/window against sealed payload
+and acquisition identities after compiling the registered source path. Crossed/copied/failed
+pages produce honest module absence, not raw fallback. Actual HTTP controls cover sparse
+and empty pages, demand/disclosure, receiver/deadline forwarding, changed decisions,
+revoked grants and disconnect cancellation. The normal focused gate passes 63 tests and
+clean types. Receipt: `planning/provider-exchange-and-execution/theory-source-admission-2026-10-05.md`.
+
+Next executable item: D3383, the due queue's bare-statistics return-frequency tie-break.
+Admit the whole modern source and exact root/population/window through a declared compiled
+view; preserve same-day ordering, stored-order fallback, 100-game policy and intake/lookup
+limits. Prove actual authenticated scheduling and crossed/copied/failed controls, with no
+modern-to-bare fallback. Explicit standalone compatibility remains distinct.
+
+Continue actual source migrations and explicit consumer policies, then whole-manifest
+execution/resolution/availability. D3363/D3370/D3373/D3376 retain separate source contracts;
+whole-source persistence and zero-consumer legacy retirement remain open. No metadata
+refresh is needed here; such refreshes remain routine maintenance, not feature progress
+or consent questions. The provider RFC and full 1.0 goal are not complete.
+
 ## 2026-10-05 repertoire frontier checkpoint
 
 D3380 migrates actual gap scans through the declared whole-source Explorer frontier,
@@ -14,9 +36,7 @@ execution/resolution/availability. D3363/D3370/D3373/D3376, durable whole-source
 and zero-consumer legacy retirement retain their distinct contracts. Compatibility stamps
 are routine maintenance, not feature progress, consent questions or release completion.
 
-Next executable item: D3381, the Theory module route's concrete-class check discarding
-supplied modern Explorer page capabilities. Repair authenticated composition, retain finalized
-demand/read/disclosure and cancellation, and test exact admitted sources without bare fallback.
+The subsequently shipped D3381/D3382 Theory source checkpoint is recorded above.
 
 ## 2026-10-05 application tablebase authority checkpoint
 

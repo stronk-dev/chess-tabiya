@@ -512,6 +512,17 @@ Receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 
+**2026-10-05 Theory checkpoint ([[D3381]], [[D3382]]):** supplied modern Explorer
+pages now reach authenticated module composition through their declared capability.
+The service compiles the source path and admits exact position/population/window and
+sealed delivery identities. Sparse and empty pages remain facts without a sample floor;
+copied/crossed/failed pages produce honest absence without bare fallback. Real HTTP
+controls prove cancellation, grant revocation and changed-decision refusal. The normal
+focused gate passes 63 tests and clean types. No capability/content hash refresh is needed.
+This advances a production Theory consumer, not full execution/resolution/availability,
+legacy retirement, whole-source persistence or a milestone. Receipt:
+`planning/provider-exchange-and-execution/theory-source-admission-2026-10-05.md`.
+
 **2026-10-05 repertoire checkpoint ([[D3380]]):** actual gap scans now consume a declared
 frontier retaining the sealed Explorer page and exact requested position/population/window.
 Copied, crossed or failed modern evidence becomes unknown, never a bare-statistics retry.

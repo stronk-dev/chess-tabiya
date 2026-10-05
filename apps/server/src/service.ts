@@ -44,6 +44,8 @@ import {
   moduleEvidenceRole,
   postcommitNudgePacket,
   queryModules,
+  assertProviderDelivery,
+  compileProjectionExecution,
   deriveExplorerPopulationSummary,
   deriveMaiaRunMoveOccurrence,
   ModuleQueryError,
@@ -161,7 +163,8 @@ import {
   type ReturnStanding,
 } from "./progress.js";
 import { corpusPopulation, corpusSamplePolicy, type CorpusPopulation, type CorpusSource } from "./corpus.js";
-import type { ExchangeCorpusSource } from "./provider-corpus.js";
+import { corpusPageRequest, type ExplorerPageAcquisition } from "./provider-corpus.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 import { OpponentSelector, type SelectMoveRequest } from "./opponent-selector.js";
 import type { TablebaseSource } from "./tablebase.js";
@@ -2876,7 +2879,7 @@ export class RunService {
   }
 
   /** Provider work follows authenticated finalized demand, never a raw browser module choice. */
-  async queryModulesWithProviders(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, corpus?: Pick<ExchangeCorpusSource, "page">, signal?: AbortSignal) {
+  async queryModulesWithProviders(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, corpus?: Pick<CorpusSource, "page">, signal?: AbortSignal) {
     // The pure preview validates authority/subject/disclosure and determines admitted demand.
     // It does not persist novelty, history or credit and is never returned to the browser.
     const preview = this.queryModules(runId, principal, assistance, request);
@@ -2885,10 +2888,37 @@ export class RunService {
     const node = stored.run.nodes.find((candidate) => candidate.id === preview.subjectNodeId)!;
     const pack = isPackSession(stored.run) ? this.#requiredRegisteredPack(stored.run) : undefined;
     const authored = pack === undefined ? stored.run.opponentPolicy : trajectoryPolicyAt(pack.document, stored.run, node.id)?.policy ?? stored.run.opponentPolicy;
-    const acquired = await corpus?.page({ ...corpusPopulation(authored.mode === "human_common" ? authored.targetElo : undefined), fen: node.fen }, signal === undefined ? {} : { signal });
+    const population = corpusPopulation(authored.mode === "human_common" ? authored.targetElo : undefined);
+    const captured = Object.freeze({ ...population, fen: node.fen, ratings: Object.freeze([...population.ratings]), speeds: Object.freeze([...population.speeds]) });
+    let explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = { explorerUnavailable: "not_configured" };
+    if (corpus?.page !== undefined) {
+      const execution = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "derived.explorer.population_summary", version: 1 });
+      if (execution.paths.length !== 1 || execution.paths[0]!.sourceRequirements.length !== 1 || execution.paths[0]!.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Theory population summary has another source operation");
+      let acquired: ExplorerPageAcquisition | undefined;
+      try {
+        // Call on the supplied receiver. Modern failure never falls back to bare statistics.
+        acquired = await corpus.page(captured, signal === undefined ? {} : { signal });
+      } catch {
+        explorer = { explorerUnavailable: "provider_unavailable" };
+      }
+      if (acquired?.kind === "page") {
+        try {
+          const summary = deriveExplorerPopulationSummary(acquired.evidence);
+          const delivery = summary.payload.page.payload;
+          assertProviderDelivery("lichess_explorer.position_page@1", delivery);
+          const expected = corpusPageRequest(captured, delivery.payload.request.timeoutMs);
+          // A genuine seal establishes source authority, not this caller's subject/population.
+          explorer = canonicalizeJson(delivery.payload.request) === canonicalizeJson(expected)
+            && canonicalizeJson(delivery.acquisition.requestedIdentity.request) === canonicalizeJson(expected)
+            ? { explorerSummary: summary } : { explorerUnavailable: "identity_mismatch" };
+        } catch {
+          explorer = { explorerUnavailable: "invalid_response" };
+        }
+      } else if (acquired !== undefined) {
+        explorer = { explorerUnavailable: acquired.kind === "caller_expired" ? "deadline_exceeded" : acquired.reason };
+      }
+    }
     if (signal?.aborted) throw Object.assign(new Error("Module request cancelled"), { name: "AbortError" });
-    const explorer = acquired?.kind === "page" ? { explorerSummary: deriveExplorerPopulationSummary(acquired.evidence) }
-      : { explorerUnavailable: acquired === undefined ? "not_configured" : acquired.kind === "caller_expired" ? "deadline_exceeded" : acquired.reason };
     // Re-read authorization/run after I/O. A changed decision must not disclose an old request.
     const page = this.queryModules(runId, principal, assistance, request, explorer);
     if (page.decision.digest !== preview.decision.digest) throw new ServerError("INVALID_REQUEST", "Module decision changed while acquiring Explorer evidence");

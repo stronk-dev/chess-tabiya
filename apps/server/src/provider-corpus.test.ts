@@ -189,6 +189,134 @@ describe("learner Explorer shared exchange", () => {
     expect(stats).not.toHaveBeenCalled();
   });
 
+  it.each(["success", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy", "changed", "revoked", "disconnect"])("admits supplied Theory pages at authenticated application composition (%s)", { timeout: 30_000 }, async arm => {
+    const { source, remote } = await harness();
+    const total = arm === "sparse" ? 37 : arm === "zero" ? 0 : 120;
+    const delayed = ["changed", "revoked", "disconnect"].includes(arm);
+    let release!: () => void;
+    let started!: () => void;
+    let aborted!: () => void;
+    const released = new Promise<void>(resolve => { release = resolve; });
+    const didStart = new Promise<void>(resolve => { started = resolve; });
+    const didAbort = new Promise<void>(resolve => { aborted = resolve; });
+    const stats = vi.fn(async () => ({ kind: "stats" as const, ...body(), total: 120,
+      moves: [{ san: "RAW_FALLBACK_DO_NOT_DISCLOSE", uci: "e2e4", playedCount: 60, sharePct: 50, white: 60, draws: 0, black: 0 }],
+      recency: { kind: "absent" as const }, population: corpusPopulation(undefined) }));
+    class SuppliedSource implements CorpusSource {
+      readonly #source = source;
+      readonly stats = stats;
+      calls = 0;
+      async page(asked: CorpusQuery, options: CorpusRequestOptions = {}) {
+        this.calls += 1;
+        expect(options.signal).toBeDefined();
+        expect(options.deadlineMonotonic).toBeTypeOf("number");
+        expect(Object.isFrozen(asked)).toBe(true);
+        expect(Object.isFrozen(asked.ratings)).toBe(true);
+        if (arm === "failure") throw new Error("source unavailable");
+        const crossed = arm === "position" ? { ...asked, fen: START }
+          : arm === "ratings" ? { ...asked, ratings: [1400] as const }
+          : arm === "speeds" ? { ...asked, speeds: ["rapid"] as const }
+          : arm === "dates" ? { ...asked, since: "2025-01" } : asked;
+        const acquiring = this.#source.page(crossed, options);
+        await flush();
+        if (delayed) {
+          remote.calls.at(-1)!.signal.addEventListener("abort", aborted, { once: true });
+          started();
+          await released;
+        }
+        if (arm !== "disconnect") remote.respond(remote.calls.length - 1, arm === "typed_failure" ? { ...body(), white: "invalid" }
+          : { ...body(total), moves: total === 0 ? [] : [{ uci: arm === "position" ? "e2e4" : "a7a6", san: "MOVE_ROW_SENTINEL_DO_NOT_DISCLOSE", white: Math.min(total, 20), draws: 0, black: 0 }] });
+        const acquired = await acquiring;
+        return arm === "clone" && acquired.kind === "page" ? { ...acquired, evidence: { ...acquired.evidence } } : acquired;
+      }
+    }
+    const supplied = new SuppliedSource();
+    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
+    try {
+      await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "theory_owner", password: "theory-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const headers = { "content-type": "application/json", cookie, "x-writer-id": "theory-writer" };
+      const created = await fetch(`${origin}/runs`, { method: "POST", headers,
+        body: JSON.stringify({ id: "supplied-theory", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
+      expect(created.status, await created.clone().text()).toBe(201);
+      const route = `${origin}/runs/supplied-theory`;
+      let queryHeaders = headers;
+      if (arm === "revoked") {
+        const guest = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "theory_guest", password: "theory-guest-password" }) });
+        expect(guest.status).toBe(201);
+        queryHeaders = { ...headers, cookie: guest.headers.get("set-cookie")!.split(";", 1)[0]! };
+        // Only a host (or reviewing grant) may request this assistance in a live run.
+        expect((await fetch(`${route}/grants`, { method: "POST", headers, body: JSON.stringify({ op: "grant", handle: "theory_guest", role: "host" }) })).status).toBe(200);
+      }
+      const committed = await fetch(`${route}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: "g1f3" }) });
+      expect(committed.status, await committed.clone().text()).toBe(200);
+      const { run } = await committed.json() as { run: { activeCursor: { nodeId: string } } };
+      const requested = (preset: "quiet" | "theory_only", modules: readonly string[] = ["theory_breadcrumb"]) => JSON.stringify({
+        assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: [] } } }),
+        query: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: modules },
+      });
+      const caller = new AbortController();
+      const ask = (preset: "quiet" | "theory_only", modules?: readonly string[]) => fetch(`${route}/modules/query`, { method: "POST", headers: queryHeaders, body: requested(preset, modules), signal: caller.signal });
+      expect((await fetch(`${route}/modules/query`, { method: "POST", headers: { "content-type": "application/json" }, body: requested("theory_only") })).status).toBe(401);
+      expect((await ask("theory_only")).status).toBe(409);
+      expect(supplied.calls).toBe(0);
+      expect((await fetch(`${route}/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+      expect((await ask("quiet")).status).toBe(200);
+      expect((await ask("theory_only", [])).status).toBe(200);
+      expect(supplied.calls).toBe(0);
+      const pending = ask("theory_only");
+      if (delayed) {
+        await Promise.race([didStart, pending.then(async response => { throw new Error(`Expected source acquisition, got ${response.status}: ${await response.clone().text()}`); })]);
+        if (arm === "disconnect") {
+          const refusal = expect(pending).rejects.toMatchObject({ name: "AbortError" });
+          caller.abort();
+          await refusal;
+          await didAbort;
+          release();
+          await flush();
+          expect(remote.calls.at(-1)!.signal.aborted).toBe(true);
+          expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("requestable_unverified");
+          expect(stats).not.toHaveBeenCalled();
+          return;
+        }
+        if (arm === "changed") {
+          expect((await fetch(`${route}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: "a7a6" }) })).status).toBe(200);
+          expect((await fetch(`${route}/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+        } else {
+          expect((await fetch(`${route}/grants`, { method: "POST", headers, body: JSON.stringify({ op: "revoke", handle: "theory_guest" }) })).status).toBe(200);
+        }
+        release();
+      }
+      const response = await pending;
+      if (arm === "changed" || arm === "revoked") {
+        expect(response.status, await response.clone().text()).toBe(arm === "changed" ? 400 : 404);
+        const failure = await response.text();
+        expect(failure).toContain(arm === "changed" ? "Module decision changed" : "RUN_NOT_FOUND");
+        expect(failure).not.toMatch(/\d+ games|MOVE_ROW_SENTINEL/u);
+        expect(stats).not.toHaveBeenCalled();
+        return;
+      }
+      expect(response.status, await response.clone().text()).toBe(200);
+      const { page } = await response.json() as { page: ModuleQueryPage };
+      const theory = page.packets.find(packet => packet.module === "theory_breadcrumb")!;
+      const sentences = parsePresentationReceipt(theory.receipt).map(presentedSentence).join(" ");
+      if (["success", "sparse", "zero"].includes(arm)) {
+        expect(sentences).toContain(`${total} games`);
+        expect(sentences).toContain("not what is good");
+      } else {
+        expect(sentences).not.toMatch(/\d+ games/u);
+        expect(JSON.stringify(page)).toContain(arm === "legacy" ? "not_configured" : arm === "failure" ? "provider_unavailable"
+          : ["position", "ratings", "speeds", "dates"].includes(arm) ? "identity_mismatch" : "invalid_response");
+      }
+      expect(JSON.stringify(page)).not.toMatch(/MOVE_ROW_SENTINEL|RAW_FALLBACK|canonicalUci|providerSan|"a7a6"/u);
+      expect(supplied.calls).toBe(arm === "legacy" ? 0 : 1);
+      expect(stats).not.toHaveBeenCalled();
+    } finally { release(); await application.close(); }
+  });
+
   it.each([0, 37, 100])("binds the real theory query to a move-free %i-game population without a sample floor", async (total) => {
     const { source, remote, clock } = await harness();
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
