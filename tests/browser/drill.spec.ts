@@ -641,6 +641,47 @@ test("Guide me: a learner-requested hint climbs one rung per press to the propos
   await expect(seat).not.toContainText("finds a double attack");
 });
 
+test("Guided Hint retries a failed request explicitly without changing its decision or rung", async ({ page }) => {
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill("k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1");
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await page.locator("details.assistance-control summary").click();
+  await page.getByRole("radio", { name: /Guide me/u }).check();
+  if (await page.locator("details.assistance-control").evaluate(element => (element as HTMLDetailsElement).open)) await page.locator("details.assistance-control summary").click();
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  const seat = page.getByRole("region", { name: "Ask for the least that helps" });
+  const posts: unknown[] = [];
+  const trace: string[] = [];
+  let failedId: string | undefined;
+  page.on("request", request => {
+    if (request.method() === "DELETE" && /\/hints\/[a-f0-9]{32}$/u.test(request.url())) trace.push("DELETE");
+  });
+  await page.route("**/runs/*/hints", async route => {
+    if (route.request().method() !== "POST") { await route.continue(); return; }
+    trace.push("POST");
+    posts.push(route.request().postDataJSON());
+    if (posts.length > 1) { await route.continue(); return; }
+    // Simulate the typed failed transport reply using a real server-issued operation identity.
+    // Retry then traverses the actual DELETE and fresh production POST, not a mocked success.
+    const response = await route.fetch();
+    const body = await response.json() as { hint: { state: string; requestId?: string; delivery?: { requestId: string } } };
+    failedId = body.hint.requestId ?? body.hint.delivery?.requestId;
+    expect(failedId).toMatch(/^[a-f0-9]{32}$/u);
+    await route.fulfill({ response, json: { hint: { state: "failed", requestId: failedId, rung: "pattern", reason: "internal_error" } } });
+  });
+  await seat.getByRole("button", { name: "Hint", exact: true }).click();
+  await expect(seat).toContainText("The hint could not be prepared. Try again.");
+  expect(trace).toEqual(["POST"]);
+  await expect(seat.locator(".hint-sentence")).toHaveCount(0);
+  await seat.getByRole("button", { name: "Hint", exact: true }).click();
+  await expect(seat).toContainText("finds a double attack for you.");
+  expect(trace).toEqual(["POST", "DELETE", "POST"]);
+  expect(posts[1]).toEqual(posts[0]);
+  await expect(seat.getByRole("button", { name: "A little more" })).toBeVisible();
+  await expect(seat).not.toContainText("Nb2");
+});
+
 test("imports a repertoire, enters its biggest corpus gap, and records an addressed attempt",async({page})=>{
   await page.goto("/learn");
   await page.getByRole("heading",{name:"Repertoire gaps"}).scrollIntoViewIfNeeded();

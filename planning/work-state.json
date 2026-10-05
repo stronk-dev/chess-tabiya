@@ -28089,6 +28089,58 @@
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
+    },
+    {
+      "id": "D3411",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f095c6b9607fa9c52d5c89d736165a8a63e4c9ee8da35639a23852a1296cae95",
+      "uxItems": [],
+      "evidence": "apps/server/src/hint-lifetime.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3412",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:173ab680655d4ad7d4e4af120d51289fbbc6a503c7cfd1560b3d49f8ac374376",
+      "uxItems": [],
+      "evidence": "apps/server/src/hint-lifetime.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3413",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a439bb50556afb74d667c9c59366d4dcacc8d341f3af3f0230bcc83227b99086",
+      "uxItems": [],
+      "evidence": "apps/server/src/hint-lifetime.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3414",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d643a844591be3efe536f8b96c857c96fea1fea5b000045dd4555e747930ac22",
+      "uxItems": [],
+      "evidence": "apps/server/src/hint-lifetime.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3415",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:227a30c395332fb8bd11436252ec936a6d17c3bc905ab5811561567def833ec9",
+      "uxItems": [],
+      "owner": "assistance-and-presentation"
+    },
+    {
+      "id": "D3416",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:87d1937ddff2e37fdec93da4f1577f6870756011ad8cfb38e9a01b6e74c014b8",
+      "uxItems": [],
+      "owner": "assistance-and-presentation"
     }
   ]
 }

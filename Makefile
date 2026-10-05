@@ -2859,6 +2859,11 @@ capability-consumer-versions-check:
 guided-hint-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/guided-hint-execution.test.ts apps/server/src/hint-execution-preflight.test.ts apps/server/src/hint-service.test.ts packages/runtime/src/hint-distance.test.ts packages/runtime/src/evidence-binding-execution.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/evidence-catalog.test.ts
 
+.PHONY: guided-hint-lifetime-check
+guided-hint-lifetime-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/hint-lifetime.test.ts apps/server/src/hint-service.test.ts apps/server/src/provider-health.test.ts apps/web/src/lib/guided-hint.test.ts
+	$(MAKE) typecheck
+
 .PHONY: guided-hint-execution-metadata-update guided-hint-execution-metadata-check
 guided-hint-execution-metadata-update:
 	$(MAKE) semantic-validation-update capability-declarations

@@ -869,7 +869,7 @@ async function composeServices(
     maxOperations: GUIDED_HINT_PROFILE.maxOperations,
     voiceTimeoutMs: GUIDED_HINT_PROFILE.voiceTimeoutMs,
     availability: () => providerHealth.exchangeOperationAvailability("stockfish.principal_variation@1"),
-    ...(voiceProvider === undefined ? {} : { voice: (view, sentence) => voiceProvider.render({ scope: "hint", rendered: view }, options.voicePersona ?? "Clear, concise Tabiya voice. Do not add chess claims.", sentence, "hint") }),
+    ...(voiceProvider === undefined ? {} : { voice: (view, sentence, signal) => voiceProvider.render({ scope: "hint", rendered: view }, options.voicePersona ?? "Clear, concise Tabiya voice. Do not add chess claims.", sentence, "hint", signal) }),
   });
   const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }), campaigns, hints);
   const staticDirectory =
@@ -987,6 +987,7 @@ async function composeServices(
     }),
     async close() {
       draining = true;
+      await hints.close();
       providerHealth.shutdown();
       await new Promise<void>((resolveClose, reject) => {
         if (!server.listening) { resolveClose(); return; }

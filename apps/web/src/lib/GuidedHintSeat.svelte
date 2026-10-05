@@ -42,6 +42,7 @@
   let response: HintResponse | undefined = $state();
   let busy = $state(false);
   let activeRequestId: string | undefined;
+  let retryRequestId: string | undefined;
   let generation = 0;
 
   let next = $derived(nextHintRung(progress, decisionDigest, ceiling));
@@ -63,8 +64,9 @@
 
   function reset(): void {
     generation += 1;
-    const pending = activeRequestId;
+    const pending = activeRequestId ?? retryRequestId;
     activeRequestId = undefined;
+    retryRequestId = undefined;
     if (pending !== undefined) void client.cancel(pending).catch(() => undefined);
     progress = undefined;
     response = undefined;
@@ -78,7 +80,7 @@
     void run.id;
     untrack(reset);
   });
-  onDestroy(() => { generation += 1; if (activeRequestId !== undefined) void client.cancel(activeRequestId).catch(() => undefined); onMarks?.(undefined); });
+  onDestroy(() => { generation += 1; const pending = activeRequestId ?? retryRequestId; if (pending !== undefined) void client.cancel(pending).catch(() => undefined); onMarks?.(undefined); });
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -91,6 +93,14 @@
     const body: HintRequestBody = { nodeId: run.activeCursor.nodeId, rung, decisionDigest: digest, assistance };
     busy = true;
     try {
+      // A failed operation is still an idempotently settled server record. Explicit retry
+      // removes that exact record before re-POSTing the same decision/rung; polling never retries.
+      if (retryRequestId !== undefined) {
+        try { await client.cancel(retryRequestId); }
+        catch (error) { if (!(error instanceof ApiError && error.status === 404)) throw error; }
+        if (mine !== generation) return;
+        retryRequestId = undefined;
+      }
       let current = await client.request(body);
       for (let attempt = 0; current.state === "pending" && attempt < 200; attempt += 1) {
         if (mine !== generation) return;
@@ -114,6 +124,7 @@
         return;
       }
       response = current;
+      retryRequestId = current.state === "source_unavailable" || current.state === "failed" ? current.requestId : undefined;
       if (current.state === "available") {
         progress = { decisionDigest: digest, revealed: rung };
         onMarks?.(current.delivery.marks);

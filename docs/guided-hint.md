@@ -85,6 +85,21 @@ repeated POSTs join the same operation. `HintService` (`apps/server/src/hint-ser
 process-local and bounded. All rungs of one decision share one search, and every packet comes
 from the injected application-lifetime `CandidatePopulationService`.
 
+The shared horizon is keyed by the complete decision digest, including its branch and event
+head, not merely by a node/FEN. A different decision cannot reuse a sealed occurrence from
+the previous one. Pending engine discovery coalesces; failed discovery and unavailable horizons
+are not retained as successful caches. Settled operation responses remain idempotent. **Try again**
+explicitly deletes the failed operation before re-posting the unchanged decision and rung; a
+restart's 404 is harmless, but a failed cancellation does not start a replacement. Nothing retries
+autonomously or advances the rung on failure.
+
+Each operation owns its cancellation lifetime. Cancel, stale, eviction and application shutdown
+abort its private voice request through the actual health/provider boundary and detach promptly
+even from a source that ignores abort. Cancelling one shared-search subscriber preserves its peers;
+the final subscriber aborts the search. Late results cannot publish into a replacement operation
+or update provider health. The optional voice keeps its two-second deadline and byte-identical
+deterministic fallback; shutdown drains hint operations before closing provider health.
+
 Every request first compiles all 35 exact Guided Hint bindings, including a request
 that would reuse a retained horizon. Missing search is a required-source failure;
 an available search with no selected occurrence is separately honest-empty. A bad
@@ -97,6 +112,10 @@ starts (`#refuseRatedAssistance`).
 
 ## Tests
 
+- `make guided-hint-lifetime-check` covers exact-decision caches, discovery recovery, subscriber
+  lifetimes, eviction, stale/cancel/shutdown, ignored aborts and mounted retry controls. Its real
+  authenticated HTTP tests exercise application → health → external voice → outbound fetch,
+  including the actual two-second deadline and late health isolation.
 - `make guided-hint-execution-check` includes the complete family/rung source-policy
   contract and authenticated invalid-policy/latency/extra-binding controls, both cold
   and after a cached search, plus a successful request/poll shared-search control.
@@ -108,7 +127,8 @@ starts (`#refuseRatedAssistance`).
   all through `createApplication`.
 - `apps/web/src/lib/guided-hint.test.ts` covers the wire and the seat.
 - The browser journey in `tests/browser/drill.spec.ts` runs Guide me → Hint → A little more
-  up to the ceiling, then resets on commit.
+  up to the ceiling, then resets on commit. A separate transport-failure journey proves explicit
+  DELETE → unchanged POST retry and subsequent ladder continuation against the real server.
 
 The empty-response controls treat request IDs as opaque identifiers, even when their hex
 digits resemble a move. Extra move, sentence, PV or delivery fields remain refused by the

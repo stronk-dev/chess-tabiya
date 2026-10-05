@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { compileAssistanceRequest, hintDecisionStamp, hintReceiptDigest, type DrillRun, type HintDeliveryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime";
 
-import { DrillApi, type GuidedHintClient, type HintRequestBody } from "./api.js";
+import { ApiError, DrillApi, type GuidedHintClient, type HintRequestBody } from "./api.js";
 import GuidedHintSeat from "./GuidedHintSeat.svelte";
 
 const revealedRun = (id = "hint-run", seq = 2): DrillRun => ({
@@ -126,5 +126,62 @@ describe("GuidedHintSeat", () => {
     expect(document.body.textContent).toContain("Hints open once support is shown for this position.");
     expect(button().textContent?.trim()).toBe("Hint");
     unmount(component);
+  });
+
+  it.each(["source_unavailable", "failed"] as const)("explicit retry removes %s before repeating the exact decision/rung", async state => {
+    const run = revealedRun();
+    const failedId = "f".repeat(32);
+    const trace: string[] = [];
+    const bodies: HintRequestBody[] = [];
+    const client: GuidedHintClient = {
+      async request(body) {
+        trace.push("POST"); bodies.push(body);
+        return bodies.length === 1
+          ? state === "failed" ? { state, requestId: failedId, rung: body.rung, reason: "internal_error" } : { state, requestId: failedId, rung: body.rung, reason: "provider_unavailable" }
+          : { state: "available", delivery: receipt(run, body.rung) };
+      },
+      async poll() { throw new Error("not pending"); },
+      async cancel(requestId) { trace.push(`DELETE:${requestId}`); return { state: "cancelled", requestId, rung: "pattern" }; },
+    };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
+    await settle();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+    expect(trace).toEqual(["POST"]); // No retry without a second human request.
+    expect(document.querySelector(".hint-sentence")).toBeNull();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+    expect(trace).toEqual(["POST", `DELETE:${failedId}`, "POST"]);
+    expect(bodies[1]).toEqual(bodies[0]);
+    expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
+    expect(document.querySelector(".hint-actions button")?.textContent?.trim()).toBe("A little more");
+    await unmount(component);
+  });
+
+  it.each([404, 500])("retry cancellation HTTP %s only permits re-POST when the old id is gone", async status => {
+    const run = revealedRun();
+    const request = vi.fn<GuidedHintClient["request"]>(async body => ({ state: "source_unavailable", requestId: "f".repeat(32), rung: body.rung, reason: "provider_unavailable" }));
+    const client: GuidedHintClient = { request, async poll() { throw new Error("not pending"); }, async cancel() { throw new ApiError(status, "CANCEL_FAILED", "cancel failed"); } };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
+    await settle();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+    expect(request).toHaveBeenCalledTimes(status === 404 ? 2 : 1);
+    await unmount(component);
+  });
+
+  it("teardown during explicit retry cancellation cannot launch a replacement hint", async () => {
+    const run = revealedRun();
+    let finish!: () => void;
+    const cancelled = new Promise<void>(resolve => { finish = resolve; });
+    const request = vi.fn<GuidedHintClient["request"]>(async body => ({ state: "failed", requestId: "f".repeat(32), rung: body.rung, reason: "internal_error" }));
+    const cancel = vi.fn<GuidedHintClient["cancel"]>(async requestId => { await cancelled; return { state: "cancelled", requestId, rung: "pattern" }; });
+    const client: GuidedHintClient = { request, cancel, async poll() { throw new Error("not pending"); } };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
+    await settle();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+    expect(cancel).toHaveBeenCalled();
+    await unmount(component);
+    finish(); await settle();
+    expect(request).toHaveBeenCalledTimes(1);
   });
 });

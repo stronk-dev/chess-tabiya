@@ -1205,7 +1205,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:56b3f75a01f19fe2027c51026da2adc320f55d0d0f9d2792225fc1e2bf8344be"
+              "digest": "sha256:a3f7e0ae85d2f9112ea20e8cfae1f755b45e062d0347949ece65e3a3f94e1a4c"
             },
             {
               "kind": "work_state",
@@ -1280,8 +1280,8 @@
         ],
         "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
-          "at": "2026-09-30",
-          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open.",
+          "at": "2026-10-05",
+          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open. D3411–D3414 repair operation-owned voice cancellation/deadline/shutdown through authenticated outbound HTTP, recover failed engine discovery without losing idempotency, make explicit learner retry delete the failed record before unchanged re-POST, and key retained sealed horizons by complete decision identity. Sixty focused tests and clean types pass; four predecessor mutations fail fourteen assertions, then restored fixed bytes pass. The rebuilt browser retry journey passes. This scoped reliability checkpoint does not discharge full evidence availability, integrated latency, Advanced hintDistance, proposed ceilings or owner use.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/hint-distance.ts",
@@ -1306,13 +1306,17 @@
             "apps/web/src/lib/home-suggestions.ts",
             "planning/work-items-1.0.json",
             "tests/browser/drill.spec.ts",
-            "tests/browser/theme.spec.ts"
+            "tests/browser/theme.spec.ts",
+            "apps/server/src/hint-lifetime.test.ts",
+            "apps/server/src/hint-service.ts",
+            "apps/web/src/lib/guided-hint.test.ts",
+            "docs/guided-hint.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:56b3f75a01f19fe2027c51026da2adc320f55d0d0f9d2792225fc1e2bf8344be"
+              "digest": "sha256:a3f7e0ae85d2f9112ea20e8cfae1f755b45e062d0347949ece65e3a3f94e1a4c"
             },
             {
               "kind": "rfc",
@@ -1363,6 +1367,26 @@
               "kind": "work_state",
               "id": "D3331",
               "digest": "sha256:51c08408d0eb2b1902cdbb32444dfb615b3e3bba9bab605634d53507b5744679"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3411",
+              "digest": "sha256:f095c6b9607fa9c52d5c89d736165a8a63e4c9ee8da35639a23852a1296cae95"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3412",
+              "digest": "sha256:173ab680655d4ad7d4e4af120d51289fbbc6a503c7cfd1560b3d49f8ac374376"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3413",
+              "digest": "sha256:a439bb50556afb74d667c9c59366d4dcacc8d341f3af3f0230bcc83227b99086"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3414",
+              "digest": "sha256:d643a844591be3efe536f8b96c857c96fea1fea5b000045dd4555e747930ac22"
             }
           ]
         },

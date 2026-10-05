@@ -95,12 +95,29 @@ interface Operation {
   readonly rung: HintRung;
   readonly decisionDigest: string;
   readonly horizonKey: string;
+  readonly controller: AbortController;
+  horizon?: HorizonJob;
   state: HintResponse;
   settled: boolean;
   lastUsed: number;
 }
 
 const SOURCE_REASONS: readonly HintSourceReason[] = ["provider_unavailable", "deadline_exceeded", "queue_full", "cancelled", "invalid_response", "identity_mismatch"];
+
+/** Detach even from an abort-ignoring provider, observing its late rejection without publishing it. */
+async function untilAborted<T>(signal: AbortSignal, start: () => Promise<T>): Promise<T> {
+  if (signal.aborted) throw new Error("cancelled");
+  let onAbort: (() => void) | undefined;
+  try {
+    return await new Promise<T>((resolve, reject) => {
+      onAbort = () => reject(new Error("cancelled"));
+      signal.addEventListener("abort", onAbort, { once: true });
+      try { void start().then(resolve, reject); } catch (error) { reject(error); }
+    });
+  } finally {
+    if (onAbort !== undefined) signal.removeEventListener("abort", onAbort);
+  }
+}
 
 export class HintService {
   readonly #options: HintServiceOptions;
@@ -109,11 +126,13 @@ export class HintService {
   readonly #inflight = new Set<Promise<void>>();
   #clock = 0;
   #engine: Promise<{ readonly id: string; readonly version: string } | null> | undefined;
+  #closed = false;
 
   constructor(options: HintServiceOptions) {
     for (const [label, value] of [["depth", options.depth], ["timeoutMs", options.timeoutMs], ["maxOperations", options.maxOperations]] as const) {
       if (!Number.isSafeInteger(value) || value < 1) throw new TypeError(`HintService ${label} must be a positive safe integer`);
     }
+    if (options.voiceTimeoutMs !== undefined && (!Number.isSafeInteger(options.voiceTimeoutMs) || options.voiceTimeoutMs < 1)) throw new TypeError("HintService voiceTimeoutMs must be a positive safe integer");
     // Criterion 15: the one application-lifetime packet service is injected; a request-local cache is refused.
     if (!(options.populations instanceof CandidatePopulationService)) throw new TypeError("HintService requires the injected CandidatePopulationService");
     this.#options = options;
@@ -122,6 +141,15 @@ export class HintService {
   /** Resolves when no hint work is in flight (tests and graceful shutdown). */
   async whenIdle(): Promise<void> {
     while (this.#inflight.size > 0) await Promise.allSettled([...this.#inflight]);
+  }
+
+  /** Stop private voice calls and detach every shared-search subscriber before application teardown. */
+  async close(): Promise<void> {
+    this.#closed = true;
+    for (const operation of this.#operations.values()) this.#drop(operation);
+    for (const job of this.#horizons.values()) job.controller.abort();
+    this.#horizons.clear();
+    await this.whenIdle();
   }
 
   get operationCount(): number { return this.#operations.size; }
@@ -137,6 +165,7 @@ export class HintService {
   /** §7 step 1–2: join or create the exact operation; returns its current state. */
   request(access: HintAccess, rung: HintRung): HintResponse {
     const requestId = this.requestIdFor(access.decision.digest, rung);
+    if (this.#closed) return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "cancelled" });
     // Compile the complete family/rung contract before identity, search, packet or
     // voice acquisition, including requests that would reuse a retained horizon.
     // A malformed contract is not source absence or an uninformative chess position.
@@ -152,7 +181,7 @@ export class HintService {
     }
     let operation = this.#operations.get(requestId);
     if (operation === undefined) {
-      operation = { requestId, runId: access.run.id, rung, decisionDigest: access.decision.digest, horizonKey: `${access.run.id}\u0000${access.decision.cursor.nodeId}\u0000${access.fen}`, state: Object.freeze({ state: "pending", requestId, rung }), settled: false, lastUsed: ++this.#clock };
+      operation = { requestId, runId: access.run.id, rung, decisionDigest: access.decision.digest, horizonKey: `${access.run.id}\u0000${access.decision.digest}\u0000${access.fen}`, controller: new AbortController(), state: Object.freeze({ state: "pending", requestId, rung }), settled: false, lastUsed: ++this.#clock };
       this.#operations.set(requestId, operation);
       this.#evict();
       const work = this.#run(operation, access).catch(() => this.#settle(operation!, Object.freeze({ state: "failed", requestId, rung, reason: "internal_error" })));
@@ -185,19 +214,21 @@ export class HintService {
 
   #drop(operation: Operation): void {
     this.#operations.delete(operation.requestId);
+    operation.controller.abort();
     if (!operation.settled) {
       operation.settled = true;
-      this.#release(operation.horizonKey);
+      this.#release(operation);
     }
   }
 
-  #release(key: string): void {
-    const job = this.#horizons.get(key);
+  #release(operation: Operation): void {
+    const job = operation.horizon;
     if (job === undefined) return;
     job.subscribers -= 1;
     if (job.subscribers <= 0) {
       job.controller.abort();
-      this.#horizons.delete(key);
+      // An abandoned job may finish after a new same-key flight has been installed.
+      if (this.#horizons.get(operation.horizonKey) === job) this.#horizons.delete(operation.horizonKey);
     }
   }
 
@@ -213,13 +244,18 @@ export class HintService {
     operation.settled = true;
     operation.state = state;
     // The horizon stays cached for the decision's other rungs; only a subscriber count is released.
-    const job = this.#horizons.get(operation.horizonKey);
+    const job = operation.horizon;
     if (job !== undefined) job.subscribers = Math.max(0, job.subscribers - 1);
   }
 
   #requestedEngine(): Promise<{ readonly id: string; readonly version: string } | null> {
-    this.#engine ??= this.#options.requestedEngine().catch(() => null);
-    return this.#engine;
+    if (this.#engine !== undefined) return this.#engine;
+    // Discovery coalesces only while pending. A failed start must not permanently pin null,
+    // and a later authorized operation discovers the then-current launched engine identity.
+    const pending = Promise.resolve().then(() => this.#options.requestedEngine()).catch(() => null);
+    this.#engine = pending;
+    void pending.finally(() => { if (this.#engine === pending) this.#engine = undefined; });
+    return pending;
   }
 
   #horizon(key: string, access: HintAccess): HorizonJob {
@@ -228,6 +264,12 @@ export class HintService {
       const controller = new AbortController();
       job = { controller, result: this.#compileHorizon(access, controller.signal), subscribers: 0 };
       this.#horizons.set(key, job);
+      const created = job;
+      void job.result.then(outcome => {
+        // Only real selected/empty chess results are retained. Provider/startup absence
+        // cannot hide recovery on the next request, or delete a replacement flight.
+        if ((outcome.kind === "source_unavailable" || outcome.kind === "failed") && this.#horizons.get(key) === created) this.#horizons.delete(key);
+      }, () => { if (this.#horizons.get(key) === created) this.#horizons.delete(key); });
       while (this.#horizons.size > this.#options.maxOperations) {
         const oldest = this.#horizons.keys().next().value!;
         if (oldest === key) break;
@@ -241,6 +283,7 @@ export class HintService {
 
   async #compileHorizon(access: HintAccess, signal: AbortSignal): Promise<HorizonOutcome> {
     const engine = await this.#requestedEngine();
+    if (signal.aborted) return Object.freeze({ kind: "source_unavailable", reason: "cancelled" });
     if (engine === null) return Object.freeze({ kind: "source_unavailable", reason: "provider_unavailable" });
     const request: TypedProviderRequest<"stockfish.principal_variation@1"> = Object.freeze({
       operation: "stockfish.principal_variation@1" as const,
@@ -269,28 +312,32 @@ export class HintService {
     return selection.kind === "selected" ? Object.freeze({ kind: "selected", horizon: selection.horizon }) : Object.freeze({ kind: "empty", reason: selection.reason });
   }
 
-  async #voice(view: RenderedEvidenceView, sentence: string): Promise<HintVoiceState> {
+  async #voice(view: RenderedEvidenceView, sentence: string, signal: AbortSignal): Promise<HintVoiceState> {
     const voice = this.#options.voice;
     if (voice === undefined) return Object.freeze({ state: "fallback", reason: "provider_unavailable" });
     const controller = new AbortController();
+    const onAbort = (): void => controller.abort();
+    signal.addEventListener("abort", onAbort, { once: true });
+    if (signal.aborted) controller.abort();
     const timeout = setTimeout(() => controller.abort(), this.#options.voiceTimeoutMs ?? 2_000);
     try {
-      const output = await Promise.race([
-        voice(view, sentence, controller.signal),
-        new Promise<never>((_, reject) => controller.signal.addEventListener("abort", () => reject(new Error("deadline_exceeded")), { once: true })),
-      ]);
+      const output = await untilAborted(controller.signal, () => voice(view, sentence, controller.signal));
+      if (controller.signal.aborted) throw new Error("cancelled");
       if (typeof output !== "string" || output.trim() === "") return Object.freeze({ state: "fallback", reason: "refused" });
       return hintVoiceCheck(view, output).valid ? Object.freeze({ state: "rendered", sentence: output }) : Object.freeze({ state: "fallback", reason: "invalid_output" });
     } catch {
       return Object.freeze({ state: "fallback", reason: controller.signal.aborted ? "deadline_exceeded" : "provider_unavailable" });
     } finally {
       clearTimeout(timeout);
+      signal.removeEventListener("abort", onAbort);
     }
   }
 
   async #run(operation: Operation, access: HintAccess): Promise<void> {
     const { requestId, rung } = operation;
-    const outcome = await this.#horizon(operation.horizonKey, access).result;
+    const job = this.#horizon(operation.horizonKey, access);
+    operation.horizon = job;
+    const outcome = await untilAborted(operation.controller.signal, () => job.result);
     if (operation.settled) return;
     if (outcome.kind === "source_unavailable") { this.#settle(operation, Object.freeze({ state: "source_unavailable", requestId, rung, reason: outcome.reason })); return; }
     if (outcome.kind === "empty") { this.#settle(operation, Object.freeze({ state: "honest_empty", requestId, rung, reason: outcome.reason })); return; }
@@ -298,7 +345,7 @@ export class HintService {
     const packet = compileGuidedHintPacket({ disclosure: compileHintDisclosure(outcome.horizon, rung), role: access.role, session: access.session });
     if (packet.kind !== "rendered") { this.#settle(operation, Object.freeze({ state: "failed", requestId, rung, reason: "contract_violation" })); return; }
     const sentence = packet.view.items[0]!.sentences.join(" ");
-    const voice: HintVoiceState = access.voiceRequested ? await this.#voice(packet.view, sentence) : Object.freeze({ state: "not_requested" });
+    const voice: HintVoiceState = access.voiceRequested ? await this.#voice(packet.view, sentence, operation.controller.signal) : Object.freeze({ state: "not_requested" });
     if (operation.settled) return;
     const delivery = compileHintDeliveryReceipt({ requestId, runId: access.run.id, decision: access.decision, packet, voice });
     this.#settle(operation, Object.freeze({ state: "available", delivery }));

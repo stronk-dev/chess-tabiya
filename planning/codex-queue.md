@@ -1,5 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 Guided Hint lifetime and recovery checkpoint — implemented
+
+[[D3411]]–[[D3414]] now implement operation-owned cancellation through the application/health/
+outbound voice boundary, shutdown draining, pending-only engine discovery, explicit failed-record
+DELETE → unchanged POST retry, and full-decision horizon identity. The normal focused target passes
+60 tests and clean types; four controlled predecessor mutations produce 14 failed assertions,
+then the restored fixed bytes pass. Authenticated HTTP covers actual startup recovery and the
+two-second external voice deadline, not only injected callbacks. The browser retry journey passes
+against the rebuilt server. Complete local gates are recorded in the append-only exploration log.
+No provider/source hold, ceiling table, Advanced codec, integrated latency or owner-use discharge
+is waived; no full RFC, capability or milestone is complete. Continue source/execution/availability
+foundation work below, rather than repeatedly re-verifying this closed bounded checkpoint.
+
+Next bounded Hint lifecycle items, recorded from the closeout code audit rather than hidden:
+[[D3415]] owns horizon-pressure eviction (prefer unsubscribed retained results over a surviving
+live search), and [[D3416]] owns the client's pending poll-cap/transport-error cleanup identity.
+Reproduce both with permanent controls, then repair under the existing §7 contract. They remain
+todo, not covered by the four closed defects above; no new source or product ruling is needed.
+
 ## 2026-10-05 calibration production binding and exact-opening capacity wave
 
 [[D3408]] is complete at the research-bridge boundary: A2's bounded policy description is corrected,

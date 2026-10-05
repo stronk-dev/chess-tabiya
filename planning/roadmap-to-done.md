@@ -1440,6 +1440,14 @@ the workflow permits. The board/companion shell now hosts typed module seats and
 activation; emitter-dependent states and legacy renderers remain incomplete. Raw
 engine/Maia/explorer/classifier facts belong in an opt-in inspector.
 
+The 2026-10-05 [[D3411]]–[[D3414]] checkpoint repairs Guided Hint's actual lifetime and recovery:
+operation cancellation/deadline reaches outbound voice and health, shutdown drains it, failed
+engine discovery can recover, explicit learner retry deletes the failed record before unchanged
+re-POST, and retained horizons cannot cross decision head/branch changes. Permanent authenticated
+HTTP and mounted controls plus a rebuilt browser retry journey prove this bounded improvement
+(`docs/guided-hint.md`). It does not complete the proposed ceiling table, Advanced codec, integrated
+latency, all emitter-dependent support choices or owner-use obligations.
+
 **1.0 exit:** Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open with useful
 defaults and promises; module doors name learner questions; one unasked interrupter may claim
 attention; theory-only and honest-empty paths are first-class; touch/hover/focus highlights never
