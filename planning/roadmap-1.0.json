@@ -839,7 +839,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
+          "summary": "D3420 detaches cancelled durable worker flights and returns exact shutdown leases before close resolves, independent of provider/upgrader acknowledgement. Three clean predecessor controls fail; five new permanent SQLite cases pass within 54 focused tests and clean types. Same-owner database reopen at generation 2 fences late success/rejection; independent active/queued survivors remain live. Physical I/O stays source-owned; no source, schema or capacity changes. D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/evidence-manifest.test.ts",
@@ -953,7 +953,10 @@
             "apps/server/src/provider-exchange.test.ts",
             "apps/server/src/provider-exchange.test-support.ts",
             "docs/provider-exchange.md",
-            "planning/exploration/log.md"
+            "planning/exploration/log.md",
+            "apps/server/src/evidence-queue.ts",
+            "apps/server/src/evidence-job-durability.test.ts",
+            "docs/evidence-jobs.md"
           ],
           "anchors": [
             {
@@ -1124,7 +1127,7 @@
             {
               "kind": "rfc",
               "id": "evidence-job-durability.md",
-              "digest": "sha256:f549301702461745243bb10dbe1d044504930fc504744584142d5ad0d8836db8"
+              "digest": "sha256:503e4f69d06b55d5c29e875f82f9b5a3137216536cfa1bcd89d5ad752abadc74"
             },
             {
               "kind": "work_state",
@@ -1280,6 +1283,11 @@
               "kind": "work_state",
               "id": "D3419",
               "digest": "sha256:e601fc9c0b84ba250a185d9c3d29c450a854c62e1432151cc46829b22988ebd7"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3420",
+              "digest": "sha256:0614166443ef5f8cc4c806796f92e422ef58981705cce185a937f3c283e3c48b"
             }
           ]
         },

@@ -1057,6 +1057,10 @@ queued-tablebase-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-tablebase.test.ts apps/server/src/evidence-queue.test.ts apps/server/src/evidence-job-durability.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/capability-operations.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts
 evidence-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-execution.test.ts apps/server/src/provider-traversal.test.ts
+.PHONY: evidence-worker-lifetime-check
+evidence-worker-lifetime-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/evidence-queue.test.ts apps/server/src/evidence-job-durability.test.ts
+	$(MAKE) typecheck
 tablebase-cancellation-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-tablebase.test.ts apps/server/src/evidence-queue.test.ts
 .PHONY: tablebase-selection-metadata-check tablebase-selection-metadata-edits tablebase-selection-metadata-update

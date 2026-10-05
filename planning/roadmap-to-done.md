@@ -37,6 +37,10 @@ A capability is not complete because one link exists. That makes the current sta
   cross-source explanation and the full return journey remain open.
 - Presets, Guided Hint and typed module seats now reach play; legacy renderers, emitter-dependent
   states, owner-ruled ceilings and non-technical owner-use proof remain open.
+  The shared scheduler and durable evidence worker now release logical capacity on cancellation
+  without provider acknowledgement; shutdown returns exact SQLite leases before closing, and
+  late completions cannot settle replacement generations ([[D3419]], [[D3420]]). This bounded
+  foundation repair does not complete source resolution, availability or the consumer journeys.
 - Twelve registered bot profiles are playable; their strength/personality calibration, honest
   card promises, route behavior and complete event/Review loop remain open.
   The frozen distribution reference is selected/priced and profile arms now bind the actual

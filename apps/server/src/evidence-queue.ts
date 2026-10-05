@@ -285,12 +285,31 @@ export class EvidenceJobQueue {
   }
 
   async #run(lease: EvidenceJobLease, controller: AbortController): Promise<void> {
+    const signal = controller.signal;
+    let onAbort!: () => void;
+    const abandoned = new Promise<void>((resolve) => {
+      onAbort = () => {
+        try {
+          // Return the exact lease before releasing shutdown's logical flight. Actual provider
+          // I/O can ignore abort; it cannot own the durable retry or keep close() pending.
+          if (signal.reason === SHUTDOWN) this.store.returnForShutdown(lease);
+        } catch {
+          // A storage fault/conflicting lease leaves the authoritative row for expiry recovery.
+        }
+        resolve();
+      };
+      if (signal.aborted) onAbort();
+      else signal.addEventListener("abort", onAbort, { once: true });
+    });
     try {
-      await this.#execute(lease, controller.signal);
+      // The losing execution still has rejection handling, and every post-I/O boundary in
+      // #execute refuses an aborted signal before durable settlement or further acquisition.
+      if (!signal.aborted) await Promise.race([this.#execute(lease, signal), abandoned]);
     } catch {
       // A settlement refusal leaves the row for lease-expiry recovery; nothing is fabricated.
     } finally {
-      this.#active.delete(lease.jobId);
+      signal.removeEventListener("abort", onAbort);
+      if (this.#active.get(lease.jobId) === controller) this.#active.delete(lease.jobId);
       this.#pump();
     }
   }
@@ -313,18 +332,12 @@ export class EvidenceJobQueue {
         ? await this.#tablebasePayload(executorJob(job), signal)
         : await this.#executor.execute(executorJob(job), signal);
     } catch (error) {
-      if (signal.aborted) {
-        if (signal.reason === SHUTDOWN) store.returnForShutdown(lease);
-        return;
-      }
+      if (signal.aborted) return;
       const failure = store.failProviderRequest(request, failureReason(error), error instanceof Error ? error.message : String(error));
       store.settleProviderUnavailable(lease, failure, this.#retry, instance);
       return;
     }
-    if (signal.aborted) {
-      if (signal.reason === SHUTDOWN) store.returnForShutdown(lease);
-      return;
-    }
+    if (signal.aborted) return;
     // An executor that declares no compiled instance (test doubles) is identified by its own
     // claim; production executors declare one, so a crossed engine claim is refused.
     if (operation === "evidence.stockfish_analysis" && this.#executor.instanceId === undefined) {
@@ -349,10 +362,7 @@ export class EvidenceJobQueue {
         evidenceRefs: Object.freeze([...new Set([...objective.evidenceRefs, reference])]),
       }));
     }
-    if (signal.aborted) {
-      if (signal.reason === SHUTDOWN) store.returnForShutdown(lease);
-      return;
-    }
+    if (signal.aborted) return;
     try {
       store.settleSuccess(delivery, proposal);
     } catch (error) {

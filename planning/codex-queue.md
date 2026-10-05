@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3420]] repairs durable worker cancellation/shutdown detachment under evidence-job-durability:
+ignored abort no longer holds logical capacity or delays the shutdown retry_wait transition.
+Real SQLite controls cover a stalled objective upgrader, independent surviving jobs, late success
+and rejection after same-owner reopen at generation 2, and no fabricated settlement. Three clean
+predecessor controls fail; five permanent cases pass in the normal 54-test gate with clean types.
+Broad closeout is logged before commit. Source contracts and physical I/O cancellation ownership
+remain unchanged; no full RFC or milestone is promoted. Continue the open foundation joins below.
+
+[[D3318]] remains a full training-set journey, not a loader/listing checkbox. The current format
+RFC has no durable set-session/cycle/restart or mutation identity contract and claims no storage
+lane for one. Resolve that authority before progression APIs and resumable UI; pure sequencing,
+global pack attempts or a browser-only cursor must not impersonate a stored set attempt.
+
 [[D3419]] now enforces the shared scheduler's existing hard-deadline and cancellation contract:
 direct monotonic checks, early-timer rearming and exactly-once logical lease release prevent
 abort-ignoring late completion from retaining evidence or retiring same-key replacement work.

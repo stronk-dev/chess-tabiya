@@ -28170,6 +28170,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/provider-exchange.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3420",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0614166443ef5f8cc4c806796f92e422ef58981705cce185a937f3c283e3c48b",
+      "uxItems": [],
+      "evidence": "apps/server/src/evidence-job-durability.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

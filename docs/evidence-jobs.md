@@ -43,6 +43,16 @@ stale, expired or cross-database lease settles nothing. Shutdown returns in-flig
 `retry_wait`. Provider unavailability retries under the composed policy (application: four claims,
 five seconds apart) and then takes the origin's terminal effect; no absence ever mints evidence.
 
+Cancellation releases the worker's logical concurrency slot without waiting for a provider or
+objective upgrader to acknowledge abort. Shutdown returns each live exact lease to `retry_wait`
+before releasing its flight and resolving `close()`. If storage cannot accept that transition,
+the durable row remains authoritative for lease-expiry recovery; shutdown does not fabricate a
+settlement. Late success or rejection cannot write evidence, disturb a surviving job, or settle a
+replacement lease generation, including after the database reopens under the same worker name.
+Provider transports still own physical I/O cancellation: freeing a logical slot does not prove a
+remote request stopped. Run `make evidence-worker-lifetime-check` for the real SQLite cancellation,
+shutdown, reopen and stalled-upgrader controls plus workspace typechecking.
+
 ## Stockfish result admission
 
 The queued Stockfish executor selects a completed, unbounded main-line iteration, not the last

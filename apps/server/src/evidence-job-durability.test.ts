@@ -16,6 +16,7 @@ import {
   rewind,
   type DrillRun,
   type EvidencePayload,
+  type ObjectiveEvidenceProposal,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -143,6 +144,17 @@ function count(database: DatabaseSync, table: string): number {
 }
 
 const noGuard = (run: DrillRun) => ({ run, emitted: [] as never[] });
+
+function pendingValue<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (error: Error) => void;
+  const promise = new Promise<T>((done, fail) => { resolve = done; reject = fail; });
+  return { promise, resolve, reject };
+}
+
+async function flushWorker(): Promise<void> {
+  for (let tick = 0; tick < 30; tick += 1) await Promise.resolve();
+}
 
 // -----------------------------------------------------------------------------------------------
 describe("criterion 22 — admission survives asynchronous settlement and restart ([[D2520]], [[D2527]])", () => {
@@ -497,6 +509,143 @@ describe("criterion 26 — rewind and cancellation are one commit ([[D2529]], [[
 
 // -----------------------------------------------------------------------------------------------
 describe("criterion 27 — settlement and consumption remain exact ([[D2543]], [[D2587]], [[D2589]], [[D2673]]–[[D2676]])", () => {
+  it.each(["resolve", "reject"] as const)("returns an abort-ignoring source before shutdown resolves and fences its late %s after reopen", async (outcome) => {
+    const path = databasePath();
+    const storage = openStorage(path);
+    const { run, rootId } = seedRun(storage);
+    const admitted = storage.admitEvidenceBatch({ idempotencyKey: "ignored-shutdown", request: batchRequest(run, "explicit_analysis", [jobRequest(run, rootId)]) });
+    const oldGate = pendingValue<EvidencePayload>();
+    const newGate = pendingValue<EvidencePayload>();
+    const old = new EvidenceJobQueue({ instanceId: INSTANCE, execute: () => oldGate.promise }, { owner: "same-worker", maxConcurrency: 1 });
+    old.attach(storage);
+    await flushWorker();
+    expect(storage.evidenceJobs.job(admitted.jobs[0]!.id)).toMatchObject({ state: "running", leaseGeneration: 1 });
+    let closed = false;
+    const closing = old.close().then(() => { closed = true; });
+    let replacement: EvidenceJobQueue | undefined;
+    try {
+      await flushWorker();
+      expect(closed).toBe(true);
+      expect(storage.evidenceJobs.job(admitted.jobs[0]!.id)).toMatchObject({ state: "retry_wait", retryBasis: { kind: "shutdown" } });
+      storage.close();
+      const reopened = openStorage(path);
+      replacement = new EvidenceJobQueue({ instanceId: INSTANCE, execute: () => newGate.promise }, { owner: "same-worker", maxConcurrency: 1 });
+      replacement.attach(reopened);
+      await flushWorker();
+      expect(reopened.evidenceJobs.job(admitted.jobs[0]!.id)).toMatchObject({ state: "running", leaseGeneration: 2 });
+      if (outcome === "resolve") oldGate.resolve(evalPayload(99));
+      else oldGate.reject(new Error("abandoned provider failed after replacement claimed"));
+      await flushWorker();
+      expect(reopened.evidenceJobs.job(admitted.jobs[0]!.id)).toMatchObject({ state: "running", leaseGeneration: 2 });
+      expect(reopened.evidenceJobs.page(run.id).results).toEqual([]);
+      newGate.resolve(evalPayload(20));
+      await replacement.whenIdle();
+      expect(reopened.evidenceJobs.page(run.id).results).toMatchObject([{ payload: { values: { centipawns: 20 } } }]);
+      expect(reopened.evidenceJobs.job(admitted.jobs[0]!.id)).toMatchObject({ state: "settled_success", leaseGeneration: 2, attemptCount: 2 });
+    } finally {
+      oldGate.resolve(evalPayload()); newGate.resolve(evalPayload());
+      await closing;
+      await replacement?.close();
+    }
+  });
+
+  it("rewind releases an ignored-abort flight without disturbing the surviving root job", async () => {
+    const storage = openStorage(databasePath());
+    const { run, rootId, childId } = seedRun(storage);
+    const admitted = storage.admitEvidenceBatch({ idempotencyKey: "cancel-capacity", request: batchRequest(run, "explicit_analysis", [jobRequest(run, childId), jobRequest(run, rootId)]) });
+    const childGate = pendingValue<EvidencePayload>();
+    const rootGate = pendingValue<EvidencePayload>();
+    const starts: string[] = [];
+    const queue = new EvidenceJobQueue({ instanceId: INSTANCE, execute: (job) => {
+      starts.push(job.nodeId);
+      return job.nodeId === childId ? childGate.promise : rootGate.promise;
+    } }, { maxConcurrency: 1 });
+    queue.attach(storage);
+    try {
+      expect(starts).toEqual([childId]);
+      storage.commitRewindWithEvidenceCancellation(rewind(run, rootId, START).run, LEASE, [childId]);
+      await flushWorker();
+      expect(starts).toEqual([childId, rootId]);
+      expect(storage.evidenceJobs.job(admitted.jobs[0]!.id)).toMatchObject({ state: "cancelled", leaseGeneration: 2 });
+      expect(storage.evidenceJobs.job(admitted.jobs[1]!.id)).toMatchObject({ state: "running", leaseGeneration: 1 });
+      childGate.resolve(evalPayload(99));
+      await flushWorker();
+      expect(storage.evidenceJobs.page(run.id).results).toEqual([]);
+      expect(storage.evidenceJobs.job(admitted.jobs[1]!.id)).toMatchObject({ state: "running", leaseGeneration: 1 });
+      rootGate.resolve(evalPayload(20));
+      await queue.whenIdle();
+      expect(storage.evidenceJobs.page(run.id).results).toMatchObject([{ payload: { values: { centipawns: 20 } } }]);
+    } finally {
+      childGate.resolve(evalPayload()); rootGate.resolve(evalPayload());
+      await queue.close();
+    }
+  });
+
+  it("cancelling one active flight preserves another active flight and starts its queued peer", async () => {
+    const storage = openStorage(databasePath());
+    const first = seedRun(storage, "cancelled-run");
+    const second = seedRun(storage, "surviving-run");
+    const cancelled = storage.admitEvidenceBatch({ idempotencyKey: "active-cancel", request: batchRequest(first.run, "explicit_analysis", [jobRequest(first.run, first.childId)]) });
+    const surviving = storage.admitEvidenceBatch({ idempotencyKey: "active-survivor", request: batchRequest(second.run, "explicit_analysis", [jobRequest(second.run, second.childId), jobRequest(second.run, second.rootId)]) });
+    const gates = [pendingValue<EvidencePayload>(), pendingValue<EvidencePayload>(), pendingValue<EvidencePayload>()];
+    const starts: string[] = [];
+    const signals: AbortSignal[] = [];
+    const queue = new EvidenceJobQueue({ instanceId: INSTANCE, execute: (job, signal) => {
+      const index = starts.length;
+      starts.push(job.id);
+      signals.push(signal);
+      return gates[index]!.promise;
+    } }, { maxConcurrency: 2 });
+    queue.attach(storage);
+    try {
+      expect(starts).toEqual([cancelled.jobs[0]!.id, surviving.jobs[0]!.id]);
+      storage.commitRewindWithEvidenceCancellation(rewind(first.run, first.rootId, START).run, LEASE, [first.childId]);
+      await flushWorker();
+      expect(starts).toEqual([cancelled.jobs[0]!.id, surviving.jobs[0]!.id, surviving.jobs[1]!.id]);
+      expect(signals.map((signal) => signal.aborted)).toEqual([true, false, false]);
+      expect(storage.evidenceJobs.jobsForRun(second.run.id)).toMatchObject([{ state: "running", leaseGeneration: 1 }, { state: "running", leaseGeneration: 1 }]);
+      gates[0]!.reject(new Error("cancelled source rejected late"));
+      gates[1]!.resolve(evalPayload(30));
+      gates[2]!.resolve(evalPayload(40));
+      await queue.whenIdle();
+      expect(storage.evidenceJobs.page(first.run.id).results).toEqual([]);
+      expect(storage.evidenceJobs.page(second.run.id).results).toHaveLength(2);
+      expect(storage.evidenceJobs.job(cancelled.jobs[0]!.id)).toMatchObject({ state: "cancelled", leaseGeneration: 2 });
+      expect(storage.evidenceJobs.jobsForRun(second.run.id)).toMatchObject([{ state: "settled_success", leaseGeneration: 1 }, { state: "settled_success", leaseGeneration: 1 }]);
+    } finally {
+      for (const gate of gates) gate.resolve(evalPayload());
+      await queue.close();
+    }
+  });
+
+  it("shutdown returns a source-complete job even while its objective upgrader remains pending", async () => {
+    const storage = openStorage(databasePath());
+    const { run, childId } = seedRun(storage);
+    const child = node(run, childId);
+    const objectiveRequest = { runId: run.id, packId: "fixture-pack", packDigest: `sha256:${"d".repeat(64)}`, nodeId: childId, fen: child.fen, objectiveState: child.objectiveState, evidenceRefs: [], policyConfig };
+    storage.admitInternalEvidence(run.id, [{ origin: "run_enrichment", idempotencyKey: `run_enrichment@1:${childId}`, request: batchRequest(run, "run_enrichment", [{ ...jobRequest(run, childId), objectiveRequest }]) }]);
+    const gate = pendingValue<ObjectiveEvidenceProposal | null>();
+    let upgrading = false;
+    const queue = new EvidenceJobQueue({ instanceId: INSTANCE, async execute() { return evalPayload(); } }, { objectiveUpgrader: { evaluate() { upgrading = true; return gate.promise; } } });
+    queue.attach(storage);
+    await flushWorker();
+    expect(upgrading).toBe(true);
+    let closed = false;
+    const closing = queue.close().then(() => { closed = true; });
+    try {
+      await flushWorker();
+      expect(closed).toBe(true);
+      expect(storage.evidenceJobs.jobsForRun(run.id)).toMatchObject([{ state: "retry_wait", retryBasis: { kind: "shutdown" } }]);
+      gate.resolve(null);
+      await flushWorker();
+      expect(storage.evidenceJobs.page(run.id).results).toEqual([]);
+      expect(storage.evidenceJobs.jobsForRun(run.id)).toMatchObject([{ state: "retry_wait", retryBasis: { kind: "shutdown" } }]);
+    } finally {
+      gate.resolve(null);
+      await closing;
+    }
+  });
+
   it("recovers expired leases on restart, returns shutdown work to retry_wait and fences stale receipts", async () => {
     const path = databasePath();
     const clock = new Clock();
