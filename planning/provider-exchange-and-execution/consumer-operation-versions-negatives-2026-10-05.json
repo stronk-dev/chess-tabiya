@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-05",
+  "scope": ["D3400"],
+  "readings": [
+    {
+      "command": "make consumer-operation-version-check",
+      "phase": "predecessor",
+      "tests": 58,
+      "passed": 56,
+      "failed": 2,
+      "findings": [
+        "Two declared versions of one consumer family are rejected as duplicate bare IDs.",
+        "An exact duplicate declaration overwrites its predecessor and reaches callable drift instead of a duplicate-declaration refusal."
+      ]
+    },
+    {
+      "command": "make consumer-operation-version-check typecheck evidence-manifest-check",
+      "phase": "first integration",
+      "tests": 60,
+      "passed": 60,
+      "finding": "The focused tests pass, but pnpm typecheck cannot write its package-manager cache within the sandbox.",
+      "repair": "Run the same normal Make targets with the required filesystem permission; types and the actual manifest then pass. No command-specific environment workaround is introduced."
+    },
+    {
+      "command": "make staged-software-contracts",
+      "phase": "first exact-index gate",
+      "tree": "7f051b94ef7637a11023d56e16be37e7857567d0",
+      "result": "failed",
+      "exitCode": 2,
+      "tests": 3073,
+      "passed": 3073,
+      "files": 329,
+      "performanceTests": 7,
+      "performanceFiles": 4,
+      "finding": "Tests, performance, scaffold, packaging, release policy, presentation coverage, manifest and value authority pass; semantic-validation-check refuses its two stale generated receipts after the shared contract source changes.",
+      "repair": "Regenerate using make semantic-validation-update, prove only nine implementation and 53 population implementation digests changed with all other receipt content identical. The dependent capability mismatch below also requires canonical successors and requirement stamps before final exact-index verification."
+    },
+    {
+      "command": "make capability-check",
+      "phase": "semantic receipt regenerated",
+      "result": "failed",
+      "finding": "Seven current guard/predicate/opponent capability source digests no longer match after the shared validation-receipt refresh.",
+      "repair": "Add seven explicit successor versions, retain all 942 predecessors, then use make consumer-operation-version-metadata-update. Its complete preservation proof checks all factory outcomes, evaluator bytes, authored fields, source documents and exact canonical stamps before writing."
+    },
+    {
+      "command": "make staged-software-contracts",
+      "phase": "receipt-only retry",
+      "result": "interrupted",
+      "exitCode": 130,
+      "finding": "The retry was cancelled once the independent capability check proved its frozen source image still incomplete. It is not counted as a passed run.",
+      "repair": "Run the final exact-index gate only after the complete canonical metadata update."
+    }
+  ],
+  "finalFocused": {
+    "command": "make consumer-operation-version-check",
+    "tests": 61,
+    "passed": 61,
+    "files": 4,
+    "controls": [
+      "Existing version-1 default and frozen identities.",
+      "Coexisting version-1 and version-2 declarations each require their registered callable.",
+      "Missing successor, duplicate exact declaration and duplicate exact operation refuse.",
+      "Eight malformed versions refuse at construction and assertion.",
+      "Duplicate expected families, malformed declarations, unrelated replacements and callable drift refuse.",
+      "A non-callable object with the correct implementation name is refused at assertion."
+    ]
+  },
+  "unchanged": [
+    "No consumer declaration, binding, source projection or provider operation is replaced or retired.",
+    "No performance threshold, timeout or retry count is weakened.",
+    "Complete modern Explorer binding execution and legacy retirement are not claimed from this prerequisite."
+  ]
+}

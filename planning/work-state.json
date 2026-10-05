@@ -27990,6 +27990,15 @@
       "uxItems": [],
       "evidence": "planning/safe-deployment-profiles/application-security-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3400",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cf3f1e690ebeb2006dd84d384372f50904819e26e8da327df894b826347f94ef",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/consumer-operation-versions-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

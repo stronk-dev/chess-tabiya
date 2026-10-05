@@ -1,5 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 consumer-version checkpoint and Explorer execution handoff
+
+D3400 closes exact declared id/version operation registration, retaining version-1 defaults
+and requiring each declared version's callable. The focused gate passes 61 tests; complete
+exact-index software passes 3073 tests/329 files plus seven isolated performance tests.
+Content passes 223 tests and all 104 requirements; complete rebuilt browser CI passes
+119 journeys, one existing optional skip and zero retries. Canonical maintenance retains
+942 predecessors, all factory outcomes and authored fields while appending seven source-stamp
+successors. Receipt: `planning/provider-exchange-and-execution/consumer-operation-versions-2026-10-05.md`.
+
+Next: separate modern Explorer execution from explicitly retained standalone compatibility.
+Register exact successor consumer/adapter/renderer/operation tuples and migrate actual
+Inspector, repertoire and return-frequency to complete binding preflight before provider I/O.
+Retain every current version's contract; do not let a v1 callable witness an omitted v2.
+Do not skip invalid bindings, relabel bare results as sealed pages, or claim full availability
+or legacy retirement from a valid single projection.
+
 ## 2026-10-05 application security and Rating reload checkpoint
 
 D3395/D3396/D3398/D3399 close: the actual application owns its exact non-CSP response

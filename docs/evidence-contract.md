@@ -22,6 +22,15 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
+Consumer operation registration uses exact id/version identities. `evidenceConsumerOperation`
+defaults to version 1 for existing callers and takes an explicit positive safe-integer version
+for a declared successor. `assertEvidenceConsumerOperations` requires a callable matching
+every declared version in each expected operation family; registering the predecessor does
+not witness its successor. Duplicate declaration or operation tuples, invalid versions,
+missing expected families, unexpected operations and implementation-name drift refuse.
+This permits coexisting versions without changing or retiring an existing consumer contract.
+It does not compile that consumer's source bindings or establish provider availability.
+
 Derivation members retain literal input order and repeated occurrences: two readings of the same
 source type at different positions are two operands. Reversing input order is a different member;
 identical alternatives remain invalid. Semantic-event declarations must retain the same ordered
@@ -57,7 +66,7 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 47 producers, 281 projections, 35 consumers and 545 bindings,
+The current compiled closure is 47 producers, 285 projections, 38 consumers and 552 bindings,
 plus 78 semantic-event declarations, 78 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 

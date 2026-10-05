@@ -2770,6 +2770,20 @@ application-security-check:
 application-security-browser:
 	./node_modules/.bin/playwright test tests/browser/security.spec.ts --project desktop-chromium
 
+.PHONY: consumer-operation-version-check
+consumer-operation-version-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-consumer-operations.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-catalog.test.ts apps/server/src/evidence-manifest.test.ts
+
+.PHONY: consumer-operation-version-metadata-update consumer-operation-version-metadata-check
+consumer-operation-version-metadata-update:
+	$(MAKE) semantic-validation-update
+	$(MAKE) capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/consumer-operation-version-metadata.js --log-level=warning
+	node apps/server/dist/consumer-operation-version-metadata.js --consumer-versions --apply-metadata
+consumer-operation-version-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/consumer-operation-version-metadata.js --log-level=warning
+	node apps/server/dist/consumer-operation-version-metadata.js --consumer-versions
+
 staged-software-contracts:
 	node tools/staged-appliance-drill.mjs --software
 

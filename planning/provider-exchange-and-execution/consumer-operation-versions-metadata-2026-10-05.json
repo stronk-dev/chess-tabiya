@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-05",
+  "command": "make consumer-operation-version-metadata-update",
+  "baseline": "f3ee48c5",
+  "retainedDeclarations": 942,
+  "candidateDeclarations": 949,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 17
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 17
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 17
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 17
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 17
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 19
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 19
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 278,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "Exact consumer id/version callable registration only; all predecessor declarations, factory outcomes, authored content and guard/objective/opponent computations remain unchanged. Modern Explorer binding compilation and legacy retirement remain open",
+  "semanticReceipt": {
+    "operations": 9,
+    "populationReceipts": 53,
+    "changedFields": [
+      "operations[].implementationDigest",
+      "populations[].predicateImplementationDigest"
+    ],
+    "everyOtherReceiptFieldUnchanged": true,
+    "heldTestsOutsideImportClosures": true
+  },
+  "metadataApprovalRequired": false
+}

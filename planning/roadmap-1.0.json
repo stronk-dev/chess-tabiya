@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Repair per-member confidence/citation representability before the full all-not_applicable inheritance guard and target-descriptor migration. D3390 closes malformed confidence-domain admission; D3391/D3392 remain contract-held without relabelling sources. Continue literal binding-policy adoption at actual consumers, then complete manifest execution/digest, exact occurrence resolution and authenticated availability. D3363/D3370/D3373/D3376 retain distinct Maia candidate/sample, terminating-selection/MultiPV Stockfish and opening-schema/source contracts. Whole-source persistence and zero-consumer retirement remain open. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+        "nextAction": "Register exact modern Explorer successor consumer/adapter/renderer/operation tuples and migrate Inspector, repertoire and return-frequency to complete binding preflight before provider I/O, preserving standalone compatibility and every current contract. D3400 closes exact-version operation registration only. Do not skip invalid legacy bindings or infer availability from one projection. Then complete manifest execution/digest, exact occurrence resolution and authenticated availability. D3391/D3392 confidence representability and D3363/D3370/D3373/D3376 source contracts remain held; whole-source persistence, zero-consumer retirement, complete Support/Review/bot/longitudinal joins and independent semantic validation remain open.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3390 closes the shared manifest's invalid confidence-domain admission, with seven malformed-value controls and seven independent actual-catalogue mutations; 58 focused tests retain production application composition and existing reported/mixed inheritance. The disposable actual 285-projection/122-derived census exposes a three-row local target correction and citation alternatives requiring incompatible confidence scalars. D3391/D3392 remain explicitly owned and contract-held; the attempted full guard and target-descriptor edits were undone, with no source promotion or citation exemption. Full exact-index software passes 3027 tests/327 files plus seven isolated performance tests and downstream contracts at 7da34e3917ffe92684266b95db8af8a03bd810ea. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 111 journeys, one optional skip and zero retries. Canonical preservation retains 934 predecessors, all 278 factory outcomes and authored content; 942 declarations resolve. Only D3390 closes: zero untriaged/1680 live. Complete provider execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376 remain open; no RFC, capability or milestone promotion.",
+          "summary": "D3400 closes exact declared id/version consumer operation registration. Version-1 defaults remain; every declared version requires its callable, and duplicate declarations, missing successors, malformed versions and non-callable forgeries refuse. Current consumer bindings remain unchanged. The focused gate passes 61 tests and clean types. Complete final exact-index software passes 3073 tests/329 files plus seven isolated performance tests and downstream contracts at 8d58a423c418016694a18d03af18072ba189d243. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries. Canonical maintenance retains 942 predecessors, all 278 factory outcomes and authored content; seven successors produce 949 declarations and only canonical stamps/hashes change. Only D3400 closes: zero untriaged/1682 live. Modern Explorer complete binding execution, full manifest execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -888,7 +888,11 @@
             "planning/provider-exchange-and-execution/confidence-census-2026-10-05.json",
             "planning/provider-exchange-and-execution/confidence-domain-metadata-2026-10-05.json",
             "planning/provider-exchange-and-execution/confidence-domain-negatives-2026-10-05.json",
-            "planning/provider-exchange-and-execution/confidence-domain-software-2026-10-05.json"
+            "planning/provider-exchange-and-execution/confidence-domain-software-2026-10-05.json",
+            "planning/provider-exchange-and-execution/consumer-operation-versions-2026-10-05.md",
+            "planning/provider-exchange-and-execution/consumer-operation-versions-software-2026-10-05.json",
+            "planning/provider-exchange-and-execution/consumer-operation-versions-metadata-2026-10-05.json",
+            "planning/provider-exchange-and-execution/consumer-operation-versions-negatives-2026-10-05.json"
           ],
           "anchors": [
             {
@@ -934,7 +938,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:912c64236ea122c9f0802c8b1eb521ed5bf07e8df0fd6347aceb267cf42efd96"
+              "digest": "sha256:c559ee2f304b9979ff32fda65dfcaf18a17222c444e2e8a713234d97db1c1efa"
             },
             {
               "kind": "work_state",
@@ -1175,6 +1179,11 @@
               "kind": "work_state",
               "id": "D3392",
               "digest": "sha256:11237f89eb8b3eba9d40281ef711d1cd39243914712aae0bb0a030dfff3cd58b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3400",
+              "digest": "sha256:cf3f1e690ebeb2006dd84d384372f50904819e26e8da327df894b826347f94ef"
             }
           ]
         },
@@ -1717,7 +1726,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:912c64236ea122c9f0802c8b1eb521ed5bf07e8df0fd6347aceb267cf42efd96"
+              "digest": "sha256:c559ee2f304b9979ff32fda65dfcaf18a17222c444e2e8a713234d97db1c1efa"
             },
             {
               "kind": "work_state",

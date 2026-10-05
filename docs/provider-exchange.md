@@ -70,6 +70,14 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
   `dependsOn` edges are not additional execution inputs. The registered digest constructor owns
   path identity, and each path retains its slowest selected latency and exact non-local leaves.
 
+The operation census checks exact consumer id/version pairs. Existing version-1 registrations
+remain valid; a declared successor requires its own callable registration, even when both
+versions share an implementation. Duplicate declarations cannot overwrite one another.
+`make consumer-operation-version-check` covers coexistence, omitted successors, undeclared or
+malformed versions, callable drift and non-callable forgeries. This is a prerequisite for
+separating modern Explorer execution from standalone compatibility, not a completed migration
+of Inspector, repertoire or return-frequency binding contracts.
+
 ## Inspector population
 
 Inspector uses `derived.explorer.inspector_population@1`: canonical move rows, WDL counts,

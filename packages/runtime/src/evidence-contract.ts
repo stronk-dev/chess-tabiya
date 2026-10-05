@@ -90,31 +90,51 @@ export interface EvidenceConsumerOperation {
 export function evidenceConsumerOperation(
   id: string,
   operation: CallableFunction,
+  version = 1,
 ): EvidenceConsumerOperation {
   if (id.trim() === "") throw new TypeError("Evidence consumer operation id must not be empty");
   if (typeof operation !== "function") throw new TypeError(`Evidence consumer operation ${id} must be callable`);
-  return Object.freeze({ consumer: Object.freeze({ id, version: 1 }), operation });
+  if (!Number.isSafeInteger(version) || version < 1) throw new TypeError(`Evidence consumer operation ${id} has invalid version`);
+  return Object.freeze({ consumer: Object.freeze({ id, version }), operation });
 }
 
+/** Require every declared version in the expected consumer families to have its real callable. */
 export function assertEvidenceConsumerOperations(
   expectedIds: readonly string[],
   declarations: readonly ConsumerDeclaration[],
   operations: readonly EvidenceConsumerOperation[],
 ): void {
-  const expected = [...expectedIds].sort();
-  const ids = operations.map((entry) => entry.consumer.id);
-  if (new Set(ids).size !== ids.length) throw new TypeError("Evidence consumer operations contain a duplicate id");
-  if ([...ids].sort().join("\0") !== expected.join("\0")) {
-    throw new TypeError("Evidence consumer operations are not set-equal to the current operation catalogue");
+  const identity = (ref: VersionedEvidenceId): string => `${ref.id}@${ref.version}`;
+  const expected = new Set(expectedIds);
+  if (expected.size !== expectedIds.length) throw new TypeError("Evidence consumer operations contain a duplicate expected id");
+  const byIdentity = new Map<string, ConsumerDeclaration>();
+  for (const declaration of declarations) {
+    if (!Number.isSafeInteger(declaration.version) || declaration.version < 1) throw new TypeError(`Evidence consumer declaration ${declaration.id} has invalid version`);
+    const key = identity(declaration);
+    if (byIdentity.has(key)) throw new TypeError(`Evidence consumer declarations contain a duplicate id/version ${key}`);
+    byIdentity.set(key, declaration);
   }
-  const byId = new Map(declarations.map((declaration) => [declaration.id, declaration]));
+  for (const id of expected) {
+    if (!declarations.some(declaration => declaration.id === id)) throw new TypeError(`Evidence consumer operation ${id} has no manifest declaration`);
+  }
+  const registered = new Set<string>();
   for (const entry of operations) {
-    if (entry.consumer.version !== 1) throw new TypeError(`Evidence consumer operation ${entry.consumer.id} has unsupported version ${entry.consumer.version}`);
-    const declaration = byId.get(entry.consumer.id);
-    if (declaration === undefined) throw new TypeError(`Evidence consumer operation ${entry.consumer.id} has no manifest declaration`);
+    if (!Number.isSafeInteger(entry.consumer.version) || entry.consumer.version < 1) throw new TypeError(`Evidence consumer operation ${entry.consumer.id} has invalid version`);
+    if (typeof entry.operation !== "function") throw new TypeError(`Evidence consumer operation ${entry.consumer.id} must be callable`);
+    const key = identity(entry.consumer);
+    if (registered.has(key)) throw new TypeError(`Evidence consumer operations contain a duplicate id/version ${key}`);
+    registered.add(key);
+    const declaration = byIdentity.get(key);
+    if (declaration === undefined) throw new TypeError(`Evidence consumer operation ${entry.consumer.id} has unsupported version ${entry.consumer.version}`);
     if (declaration.implementation !== entry.operation.name) {
       throw new TypeError(`Evidence consumer operation ${entry.consumer.id} declares ${declaration.implementation} but exports ${entry.operation.name}`);
     }
+  }
+  // Every version in each current family must have its exact registered callable. An older
+  // operation is not a witness for a successor, and an unrelated family cannot fill a hole.
+  const required = [...byIdentity.values()].filter(declaration => expected.has(declaration.id)).map(identity);
+  if (required.length !== registered.size || required.some(key => !registered.has(key))) {
+    throw new TypeError("Evidence consumer operations are not set-equal to the current operation catalogue");
   }
 }
 
