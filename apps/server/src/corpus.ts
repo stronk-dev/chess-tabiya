@@ -15,6 +15,7 @@ import {
   type Speed,
 } from "./sourcing/explorer.js";
 import { ProviderHttpError, ProviderUnavailableError, classifyProviderError, type ProviderRegistry } from "./provider-health.js";
+import type { ExplorerPageAcquisition } from "./provider-corpus.js";
 
 /** The runtime owns the Explorer result shape and its abstention-reason tuple (D3103). */
 export type CorpusPopulation = RuntimeCorpusPopulation<RatingGroup, Speed>;
@@ -23,7 +24,11 @@ export type CorpusAbstentionReason = CorpusResultAbstentionReason;
 export interface CorpusQuery extends CorpusPopulation { readonly fen: string; }
 export type CorpusResult = RuntimeCorpusResult<CorpusPopulation>;
 export interface CorpusRequestOptions { readonly signal?: AbortSignal; readonly deadlineMonotonic?: number; }
-export interface CorpusSource { stats(query: CorpusQuery, options?: CorpusRequestOptions): Promise<CorpusResult>; }
+export interface CorpusSource {
+  stats(query: CorpusQuery, options?: CorpusRequestOptions): Promise<CorpusResult>;
+  /** Modern source authority. Absence means explicit standalone compatibility, not fallback. */
+  page?(query: CorpusQuery, options?: CorpusRequestOptions): Promise<ExplorerPageAcquisition>;
+}
 
 /** Consumer policy, never source parsing. The caller must supply its own explicit floor. */
 export function corpusSamplePolicy(result: CorpusResult, minimumGames: number): CorpusResult {

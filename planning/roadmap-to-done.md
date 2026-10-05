@@ -512,6 +512,16 @@ Receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 
+**2026-10-05 repertoire checkpoint ([[D3380]]):** actual gap scans now consume a declared
+frontier retaining the sealed Explorer page and exact requested position/population/window.
+Copied, crossed or failed modern evidence becomes unknown, never a bare-statistics retry.
+The consumer keeps its 100-game floor and unlisted mass; supplied page methods survive
+application health wrapping with their receiver and cancellation/deadline. Authenticated
+import/scan controls pass the normal 93-test focused gate and clean types. This advances
+one production consumer, not whole-source persistence, legacy retirement, full
+execution/resolution/availability or the evidence capability's completion. Receipt:
+`planning/provider-exchange-and-execution/repertoire-frontier-2026-10-05.md`.
+
 <!-- roadmap-capability: evidence -->
 
 **State: deep but incomplete.** The evidence contract/manifest and many structural, tactical,

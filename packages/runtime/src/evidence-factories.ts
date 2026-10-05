@@ -155,6 +155,7 @@ import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provi
 import { providerProtocolRow, providerProtocolSourceBinding } from "./provider-protocol.js";
 import { CORPUS_GUARD } from "./population-guard.js";
 import type { ExplorerPopulationSummary } from "./explorer-summary.js";
+import type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 import { maiaExactFenOccurrencePayload, maiaRunOccurrencePayload, type MaiaExactFenMoveOccurrence, type MaiaOccurrencePageEvidence, type MaiaRunMoveOccurrence } from "./maia-occurrence.js";
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
 import type { ExplorerPositionPage } from "./provider-types.js";
@@ -1383,6 +1384,16 @@ export const createDerivedExplorerPopulationSummaryV1Evidence = (() => {
       opening: result.opening, history: result.history,
       disclosure: Object.freeze({ guard: "CORPUS_GUARD", statement: CORPUS_GUARD }),
     }), { page }, [page]);
+  });
+})();
+
+export const createDerivedExplorerRepertoireFrontierV1Evidence = (() => {
+  const route = "derived.explorer.repertoire_frontier@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ page: sealed("human.explorer.position_page@1") }], result: "single", dependency: "provider-exchange-and-execution" }, ({ page }: { readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">> }): DeclaredEvidence<ExplorerRepertoireFrontier> => {
+    assertProviderDelivery("lichess_explorer.position_page@1", page.payload);
+    const { request, result } = page.payload.payload;
+    return mint(route, symbol, Object.freeze({ page, request, totals: result.totals, moves: result.moves, listed: result.listed, unlisted: result.unlisted, history: result.history }), { page }, [page]);
   });
 })();
 

@@ -11,6 +11,7 @@
 import type { ApplicationProviderOperationId } from "@chess-tabiya/runtime";
 
 import type { CorpusQuery, CorpusRequestOptions, CorpusResult, CorpusSource } from "./corpus.js";
+import type { ExplorerPageAcquisition } from "./provider-corpus.js";
 import { ServerError } from "./errors.js";
 import type { ReasoningReviewProvider, ReasoningReviewRequest } from "./external-voice.js";
 import type { TtsProvider, TtsResult } from "./external-tts.js";
@@ -43,7 +44,29 @@ export function healthReportedTablebase(source: TablebaseSource, health: Provide
 
 /** A local corpus source reporting to `explorer-primary`; `source_unavailable` is a failure. */
 export function healthReportedCorpus(source: CorpusSource, health: ProviderRegistry): CorpusSource {
+  const page = source.page;
   return Object.freeze({
+    ...(page === undefined ? {} : {
+      async page(query: CorpusQuery, options: CorpusRequestOptions = {}): Promise<ExplorerPageAcquisition> {
+        let absence: Exclude<ExplorerPageAcquisition, { kind: "page" }> | undefined;
+        try {
+          return await health.run("evidence.explorer_query", async ({ signal, ticket }) => {
+            const result = await page.call(source, query, { ...options, signal, deadlineMonotonic: ticket.deadlineMonotonic });
+            if (result.kind !== "page") { absence = result; throw new CorpusPageUnavailable(result); }
+            return result;
+          }, error => {
+            if (!(error instanceof CorpusPageUnavailable)) return classifyProviderError(error);
+            const result = error.result;
+            if (result.kind === "caller_expired" || result.reason === "cancelled") return { kind: "cancelled", by: "caller" };
+            return { kind: "failure", reason: result.reason === "deadline_exceeded" ? "timeout" : result.reason === "queue_full" ? "overloaded" : result.reason === "invalid_response" || result.reason === "identity_mismatch" ? "protocol" : "network" };
+          }, options);
+        } catch (error) {
+          // Keep the actual source's failure unchanged; never mint a replacement receipt.
+          if (absence !== undefined && (error instanceof CorpusPageUnavailable || error instanceof ProviderUnavailableError)) return absence;
+          throw error;
+        }
+      },
+    }),
     async stats(query: CorpusQuery, options: CorpusRequestOptions = {}): Promise<CorpusResult> {
       try {
         return await health.run("evidence.explorer_query", async ({ signal }) => {
@@ -64,6 +87,12 @@ export function healthReportedCorpus(source: CorpusSource, health: ProviderRegis
 class CorpusSourceUnavailable extends Error {
   constructor(readonly result: CorpusResult) {
     super("corpus source unavailable");
+  }
+}
+
+class CorpusPageUnavailable extends Error {
+  constructor(readonly result: Exclude<ExplorerPageAcquisition, { kind: "page" }>) {
+    super("corpus page unavailable");
   }
 }
 

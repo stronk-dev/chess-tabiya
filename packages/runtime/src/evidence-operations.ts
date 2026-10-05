@@ -27,6 +27,7 @@ import type { DrillRun, EvidencePayload, Node, SelectionEngineIdentity } from ".
 import type { RecordedReading } from "./voice.js";
 import type { RecordedEdge } from "./recorded-edge.js";
 import type { ExplorerPopulationSummary } from "./explorer-summary.js";
+import type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 import type { MaiaExactFenMoveOccurrence, MaiaOccurrencePageEvidence, MaiaRunMoveOccurrence } from "./maia-occurrence.js";
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
 import type { ExplorerPositionPage } from "./provider-types.js";
@@ -217,6 +218,11 @@ export function candidateFeatureVectorEvidence(input: { readonly beforeFen: stri
 /** The sole move-free Explorer derivation; callers supply only the admitted source page. */
 export function deriveExplorerPopulationSummary(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerPopulationSummary> {
   return invokeEvidenceValueRoute("derived.explorer.population_summary@1", { page });
+}
+
+/** Whole source and unlisted mass remain available to the frontier's own sample policy. */
+export function deriveExplorerRepertoireFrontier(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerRepertoireFrontier> {
+  return invokeEvidenceValueRoute("derived.explorer.repertoire_frontier@1", { page });
 }
 
 /** History and move bytes come only from the selected, sealed historical run edge. */

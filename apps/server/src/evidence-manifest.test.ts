@@ -52,7 +52,7 @@ describe("server evidence manifest aggregate", () => {
   it("exposes only consumer-safe binding summaries, never payloads or provider secrets", async () => {
     const value = evidenceManifestCapabilities(await testProviderHealth({ "stockfish-analysis": "available", "maia-inference": "available", "external-voice": "unverified", "explorer-primary": "unverified", "tablebase-primary": "unverified" }));
     expect(value.digest).toMatch(/^[a-f0-9]{64}$/);
-    expect(value.counts).toEqual({ producers: 47, projections: 282, consumers: 37, bindings: 548, semanticEvents: 78, eligibility: 78, reasons: 16, selectionPolicies: 1 });
+    expect(value.counts).toEqual({ producers: 47, projections: 283, consumers: 37, bindings: 549, semanticEvents: 78, eligibility: 78, reasons: 16, selectionPolicies: 1 });
     expect(JSON.stringify(value)).not.toMatch(/bestMoveUci|principalVariation|apiKey|authoredText/);
     expect(value.bindings.every((binding) => binding.consumerId.length > 0 && binding.projectionId.length > 0)).toBe(true);
   });

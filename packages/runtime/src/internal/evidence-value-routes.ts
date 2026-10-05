@@ -20,6 +20,7 @@ import {
   TRANSITION_READING_FACTORIES,
   admitInputValue,
   createAuthoredStructuralConditionInputV1Evidence,
+  createDerivedExplorerRepertoireFrontierV1Evidence,
   createDerivedActivityEventOpenFileOccupancyV1Evidence,
   createDerivedCompareEngineTrajectoryV1Evidence,
   createDerivedCompareEvalDeltaV1Evidence,
@@ -326,6 +327,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "live.syzygy.position_result@2": createLiveSyzygyPositionResultV2Evidence,
   "human.explorer.position_page@1": createHumanExplorerPositionPageV1Evidence,
   "derived.explorer.population_summary@1": createDerivedExplorerPopulationSummaryV1Evidence,
+  "derived.explorer.repertoire_frontier@1": createDerivedExplorerRepertoireFrontierV1Evidence,
   "rules.endgame.tablebase_domain@1": createRulesEndgameTablebaseDomainV1Evidence,
   // rfc/hint-distance.md §1.1/§3: seven operator-only horizons and 35 learner disclosures.
   ...HINT_HORIZON_FACTORIES,

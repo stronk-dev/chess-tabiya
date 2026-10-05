@@ -6,10 +6,11 @@ import { makeSan } from "chessops/san";
 import { parseUci } from "chessops/util";
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { assertConsumerEvidenceView, canonicalFen, CORPUS_GUARD, corpusPositionEvidence, evidenceForConsumer, transposeKey, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, assertProviderDelivery, canonicalFen, CORPUS_GUARD, compileProjectionExecution, corpusPositionEvidence, deriveExplorerRepertoireFrontier, evidenceForConsumer, transposeKey, type ConsumerEvidenceView, type ExplorerRepertoireFrontier } from "@chess-tabiya/runtime";
 
 import { corpusPopulation, corpusSamplePolicy, type CorpusAbstentionReason, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
+import { corpusPageRequest } from "./provider-corpus.js";
 import { ServerError } from "./errors.js";
 import { resolveStudySource } from "./import-source.js";
 import { parseRepertoirePgn, RepertoirePgnError } from "./repertoire-pgn.js";
@@ -36,7 +37,7 @@ export interface UnknownGapRow {readonly key:string;readonly representativeFen:s
 
 interface Frontier {readonly fen:string;readonly key:string;readonly mass:number;readonly line:readonly string[];readonly ply:number;readonly alternate:boolean}
 
-export function consumeRepertoireCorpus(view: ConsumerEvidenceView<CorpusResult>): CorpusResult {
+export function consumeRepertoireCorpus<T extends CorpusResult | ExplorerRepertoireFrontier>(view: ConsumerEvidenceView<T>): T {
   assertConsumerEvidenceView(view);
   if (view.consumer.id !== "runtime.repertoire_scan" || view.consumer.version !== 1 || view.items.length !== 1) throw new TypeError("Expected one runtime.repertoire_scan@1 evidence item");
   return view.items[0]!.payload;
@@ -46,6 +47,32 @@ function repertoireCorpusEvidence(result: CorpusResult): CorpusResult {
   const declared = corpusPositionEvidence(result);
   // Frontier policy owns this floor, not the source parser. Unlisted mass is never renormalized.
   return corpusSamplePolicy(consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [declared])), 100);
+}
+
+async function repertoireFrontier(source: CorpusSource, query: Parameters<CorpusSource["stats"]>[0]): Promise<CorpusResult> {
+  if (source.page === undefined) return repertoireCorpusEvidence(await source.stats(query));
+  const captured = Object.freeze({ ...query, ratings: Object.freeze([...query.ratings]), speeds: Object.freeze([...query.speeds]) });
+  const { fen: _fen, ...population } = captured;
+  try {
+    const acquired = await source.page(captured);
+    if (acquired.kind !== "page") return Object.freeze({ kind: "abstention", reason: "source_unavailable", detail: "Explorer frontier source unavailable", population });
+    const execution = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "derived.explorer.repertoire_frontier", version: 1 });
+    if (execution.paths.length !== 1 || execution.paths[0]!.sourceRequirements.length !== 1 || execution.paths[0]!.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Explorer frontier has another source operation");
+    const declared = deriveExplorerRepertoireFrontier(acquired.evidence);
+    const frontier = consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [declared]));
+    const delivery = frontier.page.payload;
+    assertProviderDelivery("lichess_explorer.position_page@1", delivery);
+    const expected = corpusPageRequest(captured, frontier.request.timeoutMs);
+    if (canonicalizeJson(frontier.request) !== canonicalizeJson(expected) || canonicalizeJson(delivery.acquisition.requestedIdentity.request) !== canonicalizeJson(expected)) throw new TypeError("Explorer frontier does not match the requested position/population");
+    const months = frontier.history.kind === "reported" ? frontier.history.rows.filter(row => row.played > 0).map(row => row.period).sort() : [];
+    const newest = months.at(-1);
+    return corpusSamplePolicy(Object.freeze({ kind: "stats", ...frontier.totals,
+      moves: Object.freeze(frontier.moves.map(row => Object.freeze({ san: row.canonicalSan, uci: row.canonicalUci, playedCount: row.played, sharePct: frontier.totals.total === 0 ? 0 : Math.round(row.played / frontier.totals.total * 1_000) / 10, ...row.counts })).sort((a, b) => b.playedCount - a.playedCount || a.san.localeCompare(b.san))),
+      recency: newest === undefined ? Object.freeze({ kind: "absent" }) : Object.freeze({ kind: "month", lastPlayedMonth: newest }), population }), 100);
+  } catch {
+    // Modern failure is honest unknown, never an invitation to retry an unsealed path.
+    return Object.freeze({ kind: "abstention", reason: "source_unavailable", detail: "Explorer frontier source admission unavailable", population });
+  }
 }
 
 function position(fen:string):Chess{return Chess.fromSetup(parseFen(fen).unwrap()).unwrap();}
@@ -63,7 +90,7 @@ export async function scanRepertoire(record:RepertoireRecord,moves:readonly Repe
   while(frontier.length>0){const nextByKey=new Map<string,Frontier>();for(const item of frontier){reached.add(item.key);if(item.ply>=60){truncated=true;unqueried++;continue;}if(expanded.has(`${item.alternate?"a":"m"}:${item.key}`))continue;const chess=position(item.fen);
       if(chess.isEnd())continue;
       if(chess.turn===record.side){const choices=answers.get(item.key)??[];for(const answer of choices){const child=play(item.fen,answer.moveUci),alternate=item.alternate||answer.rank!==0;mergeFrontier(nextByKey,{fen:child.fen,key:transposeKey(child.fen),mass:item.mass,line:Object.freeze([...item.line,answer.moveSan]),ply:item.ply+1,alternate});}continue;}
-      if(queries>=300){truncated=true;unqueried++;continue;}queries++;const stats=repertoireCorpusEvidence(await source.stats({...population,fen:item.fen}));if(stats.kind==="abstention"){if(stats.reason==="source_unavailable")sourceFailures++;unknown.push(Object.freeze({key:item.key,representativeFen:item.fen,line:item.line,reason:stats.reason,detail:stats.detail,pathMass:item.mass,gamesUntilPosition:Math.max(1,Math.round(1/item.mass))}));continue;}
+      if(queries>=300){truncated=true;unqueried++;continue;}queries++;const stats=await repertoireFrontier(source,{...population,fen:item.fen});if(stats.kind==="abstention"){if(stats.reason==="source_unavailable")sourceFailures++;unknown.push(Object.freeze({key:item.key,representativeFen:item.fen,line:item.line,reason:stats.reason,detail:stats.detail,pathMass:item.mass,gamesUntilPosition:Math.max(1,Math.round(1/item.mass))}));continue;}
       for(const reply of stats.moves){const mass=item.mass*(reply.playedCount/stats.total);if(mass<bound)continue;let child;try{child=play(item.fen,reply.uci);}catch{continue;}const key=transposeKey(child.fen),line=Object.freeze([...item.line,reply.san]),covered=answers.has(key);if(!covered){if(item.alternate){alternateGaps.set(key,Object.freeze({key,representativeFen:child.fen,replySan:reply.san,replyUci:reply.uci,line,behindAlternate:true}));}else{const prior=gaps.get(key),combined=(prior?.mass??0)+mass;gaps.set(key,Object.freeze({key,representativeFen:child.fen,replySan:reply.san,replyUci:reply.uci,line:prior!==undefined&&prior.line.length<=line.length?prior.line:line,mass:combined,gamesUntilSeen:Math.max(1,Math.round(1/combined))}));}continue;}mergeFrontier(nextByKey,{fen:child.fen,key,mass,line,ply:item.ply+1,alternate:item.alternate});}
       expanded.add(`${item.alternate?"a":"m"}:${item.key}`);
     }frontier=[...nextByKey.values()];}

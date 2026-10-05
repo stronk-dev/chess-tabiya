@@ -217,6 +217,13 @@ counts. `stats()` is a temporary compatibility view over that admitted page, not
 It preserves successful zero/sparse counts. Inspector, frontier and return-frequency each apply
 their explicit existing 100-game floor outside acquisition; frontier mass is not renormalized.
 
+Repertoire frontiers now use their declared whole-source projection rather than adapting to
+bare statistics before admission. The scan checks exact request/payload/acquisition identity
+and consumes the registered view. Wrong windows, copied seals and failed modern sources
+become unknown, without compatibility fallback. Application health wrapping retains supplied
+page methods, receivers and cancellation/deadline; real typed source failures remain unchanged.
+Standalone sources lacking a page method retain their explicit compatibility path.
+
 `healthAdmittedExplorerOperation` uses the registered parser before health success, preserves real
 HTTP status/Retry-After for the shared Lichess coordinator, and executes only for NEW work. Its
 retained inventory is the scheduler's operation-only inventory. Each caller's deadline includes

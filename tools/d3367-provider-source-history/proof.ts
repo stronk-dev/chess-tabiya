@@ -20,14 +20,16 @@ const REVIEW_TRANSITIONS = process.argv.includes("--review-transitions");
 const BRANCH_DECIDEDNESS = process.argv.includes("--branch-decidedness");
 const QUEUED_TABLEBASE = process.argv.includes("--queued-tablebase");
 const HEALTH_TABLEBASE = process.argv.includes("--health-tablebase");
+const REPERTOIRE_FRONTIER = process.argv.includes("--repertoire-frontier");
 const REVIEW_SUCCESSORS = ["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"];
-const BASELINE = HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
+const BASELINE = REPERTOIRE_FRONTIER ? "dd5b5194" : HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
 const SUCCESSORS = HEALTH_TABLEBASE ? ["opponent.practical_slice", "opponent.selection"] : [
   "engineCondition.engine_eval_swing", "engineCondition.engine_mate_appears",
   "engineCondition.tablebase_category_regression", "engineCondition.tablebase_dtz_regression",
   "fenPredicate.structuralFeature", "opponent.practical_slice", "opponent.selection",
   ...(BINDING_ABSENCE ? ["selection.semantic_policy"] : []),
   ...(REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS : []),
+  ...(REPERTOIRE_FRONTIER ? ["derived.explorer.repertoire_frontier"] : []),
 ].sort();
 const read = (path: string) => readFileSync(resolve(path), "utf8");
 const old = (path: string) => execFileSync("git", ["show", `${BASELINE}:${path}`], { encoding: "utf8", maxBuffer: 16_000_000 });
@@ -48,7 +50,8 @@ async function proof(editsOnly: boolean) {
   assert.deepEqual(appended.map(row => row.subjectId).sort(), SUCCESSORS);
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
-    assert.equal(row.id.version.value, HEALTH_TABLEBASE ? 12 : QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
+    const precedingVersions = previous.filter(oldRow => oldRow.subjectId === row.subjectId).map(oldRow => Number(oldRow.id.version.value));
+    assert.equal(row.id.version.value, REPERTOIRE_FRONTIER ? precedingVersions.length === 0 ? 1 : Math.max(...precedingVersions) + 1 : HEALTH_TABLEBASE ? 12 : QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
   }
   const oldProfiles = JSON.parse(old("packages/runtime/src/fixtures/evidence-value-profiles.json"));
   const profiles = JSON.parse(read("packages/runtime/src/fixtures/evidence-value-profiles.json"));
@@ -64,12 +67,25 @@ async function proof(editsOnly: boolean) {
       if (key.startsWith("derived.story.")) assert.equal(canonicalJson(profiles[successor]), canonicalJson(value), `Story output changed: ${key}`);
     }
   }
-  assert.deepEqual(Object.keys(profiles).filter(key => !Object.hasOwn(oldProfiles, key)).sort(), [...successors.values()].sort());
+  const newProfiles = [...successors.values(), ...(REPERTOIRE_FRONTIER ? ["derived.explorer.repertoire_frontier@1"] : [])].sort();
+  assert.deepEqual(Object.keys(profiles).filter(key => !Object.hasOwn(oldProfiles, key)).sort(), newProfiles);
   const previousReceipt = JSON.parse(old("packages/runtime/src/semantic-validation-receipt.generated.json"));
   const currentReceipt = JSON.parse(read("packages/runtime/src/semantic-validation-receipt.generated.json"));
   for (const key of Object.keys(previousReceipt).filter(key => key !== "operations" && key !== "populations")) assert.equal(canonicalJson(currentReceipt[key]), canonicalJson(previousReceipt[key]), `Semantic validation outcome changed: ${key}`);
   const withoutDigest = (rows: readonly Record<string, unknown>[], field: string) => rows.map(({ [field]: _digest, ...retained }) => retained);
-  assert.equal(canonicalJson(withoutDigest(currentReceipt.operations, "implementationDigest")), canonicalJson(withoutDigest(previousReceipt.operations, "implementationDigest")), "Validation operations changed beyond implementation digests");
+  const currentOperations = withoutDigest(currentReceipt.operations, "implementationDigest");
+  if (REPERTOIRE_FRONTIER) {
+    // The shared runtime closure gains exactly the new type module, not new observations,
+    // operation identities, reach rules or an arbitrary replacement file population.
+    for (const operation of currentOperations) {
+      const prior = previousReceipt.operations.find((row: { id: string }) => row.id === operation.id);
+      assert.ok(prior, `New validation operation: ${operation.id}`);
+      const files = operation.files as string[];
+      assert.deepEqual(files.filter(path => path !== "packages/runtime/src/explorer-frontier.ts"), prior.files, `Unexpected closure files: ${operation.id}`);
+      operation.files = files.filter(path => path !== "packages/runtime/src/explorer-frontier.ts");
+    }
+  }
+  assert.equal(canonicalJson(currentOperations), canonicalJson(withoutDigest(previousReceipt.operations, "implementationDigest")), "Validation operations changed beyond implementation digests and the named frontier type");
   assert.equal(canonicalJson(withoutDigest(currentReceipt.populations, "predicateImplementationDigest")), canonicalJson(withoutDigest(previousReceipt.populations, "predicateImplementationDigest")), "Validation population observations changed");
   // These evaluators and the opponent selector are unchanged at this checkpoint.
   for (const path of ["apps/server/src/guard.ts", "apps/server/src/guard-conditions.ts", "packages/runtime/src/objective.ts", ...(HEALTH_TABLEBASE ? [] : ["apps/server/src/opponent-selector.ts"])]) assert.equal(read(path), old(path), `Evaluator changed: ${path}`);
@@ -129,9 +145,9 @@ async function proof(editsOnly: boolean) {
     successors: appended.map(row => ({ subject: row.subjectId, version: row.id.version.value })),
     unchangedAuthoredDocuments: paths.length, requirementStampChanges: changedPacks,
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
-    retainedFactoryOutcomes: Object.keys(oldProfiles).length - successors.size, newFactoryProfiles: [...successors.values()].sort(),
+    retainedFactoryOutcomes: Object.keys(oldProfiles).length - successors.size, newFactoryProfiles: newProfiles,
     retainedSourceExecution: { projection: "live.syzygy.position_result@1", state: "registered", operation: "syzygy.position@1" },
-    scope: HEALTH_TABLEBASE ? "health-wrapped source authority and typed admission failure; authored content, guard/objective computations and successful selection code unchanged" : QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
+    scope: REPERTOIRE_FRONTIER ? "repertoire whole-source frontier admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : HEALTH_TABLEBASE ? "health-wrapped source authority and typed admission failure; authored content, guard/objective computations and successful selection code unchanged" : QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
   };
 }
 

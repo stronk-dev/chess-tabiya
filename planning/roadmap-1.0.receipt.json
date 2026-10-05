@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c67df7bba9c822d9e4a23f7f8475a39610a12d82187be1656733d79b6ba3a8e7",
+    "roadmap": "sha256:d82123f3d7589fe98855e8b2340298f2e400087335f99fbe65d92acead0b3bca",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:38855d766a1c159c74471d5c39328915846a78cf2e8b70cea6b80383567498ec",
-    "rfcRegister": "sha256:cf1998bd305ab11291d30ad53e432dd656c85b701986fbd484bb78da14f91e05",
+    "workState": "sha256:d64cb8da677f5ee7c36f3911916100cee17770eee2ab8a7b3f89e2e88bb9daf1",
+    "rfcRegister": "sha256:9ac537842cc9c8fe50973442fa618958a14d0e239cccb9a2c8f60c9b36c87026",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:9012d85008bc05c9971ab8722161b03cc918ccb03a0b8d0491d82e1d85a95137",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 627,
+      "todo": 628,
       "doing": 0,
       "blocked": 1051,
-      "done": 1290,
+      "done": 1291,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3376 requires registered shared opening schema/source authority before Review bindings; D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not invent a played move, substitute a PV move or conflate current and historical openings. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+      "nextAction": "Next executable integration: D3381, retain declared modern Explorer page capabilities through the authenticated Theory module route instead of requiring a concrete class; prove finalized demand/read/disclosure, cancellation and exact source admission. Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3376 requires registered shared opening schema/source authority before Review bindings; D3373 requires a durable terminating-selection/MultiPV Stockfish source contract; D3370 requires the distinct sampled Maia result; D3363 requires an Inspector candidate-page contract. Do not invent a played move, substitute a PV move or conflate current and historical openings. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3378 repairs application health wrapping so modern tablebase evidence, class receiver and cancellation/deadline survive composition; D3379 returns typed unavailable for invalid source admission rather than HTTP 500, without a fallback move or bare probe. Actual authenticated HTTP and cancellation controls pass the normal 143-test focused gate. Final exact-index software passes 2907 tests/325 files, seven isolated performance tests and downstream contracts at 86dc041939f0a2e43a84b60c2f7ee994d6855525. Successful selection, authored fields and predecessor meanings remain unchanged. Zero untriaged/1678 live items. Whole-source persistence, D3363/D3370/D3373/D3376 and full execution/resolution/availability remain open; no full RFC, capability or milestone promotion.",
+        "summary": "D3380 migrates actual repertoire gap scans through the declared whole-source Explorer frontier, matching exact position/population/window and retaining the consumer-owned 100-game floor and unlisted mass. Supplied page methods retain receiver, cancellation/deadline and typed source absence through application health wrapping. Crossed/copied/failed modern sources become unknown without bare fallback. Authenticated HTTP and negative controls pass 93 focused tests and clean types. Final exact-index software passes 2923 tests/325 files, seven isolated performance tests and downstream contracts at 00585fe1d6b19fa489a287f15723976f59a8af38. Content passes 223 tests/23 files with zero clearance errors and all 104 requirements. Authored fields and all 901 predecessor meanings remain unchanged; compatibility maintenance is not feature progress. Browser CI passes 111 journeys, one optional skip and zero retries; governance passes. Zero untriaged/1679 live items. D3381 owns the next executable Theory-route supplied-source repair. Whole-source persistence, D3363/D3370/D3373/D3376, legacy retirement and full execution/resolution/availability remain open; no capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -254,7 +254,10 @@
           "planning/provider-exchange-and-execution/queued-tablebase-software-negative-2026-10-05.json",
           "rfc/provider-health-degradation.md",
           "planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md",
-          "planning/provider-exchange-and-execution/health-source-authority-software-2026-10-05.json"
+          "planning/provider-exchange-and-execution/health-source-authority-software-2026-10-05.json",
+          "planning/provider-exchange-and-execution/repertoire-frontier-2026-10-05.md",
+          "planning/provider-exchange-and-execution/repertoire-frontier-software-2026-10-05.json",
+          "planning/provider-exchange-and-execution/repertoire-frontier-software-negative-2026-10-05.json"
         ],
         "anchors": [
           {
@@ -300,7 +303,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:5a0409c20f08a406e1a8a389c53dc49a16c8c6f6c6c543de135fcec738e4ee8b"
+            "digest": "sha256:b2b94d44f46e433c8fe7f6d9536ca6712c42f1ce44417cfa7572351f0c976c2e"
           },
           {
             "kind": "work_state",
@@ -471,6 +474,16 @@
             "kind": "work_state",
             "id": "D3379",
             "digest": "sha256:1b6e8c2bc62cfe445b5ecb2e597d36bc100531449f43363a8451352638894544"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3380",
+            "digest": "sha256:2f15fb686781b9a06c8c0fef62eb64362630cc49beae086d8abfc2f533516fee"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3381",
+            "digest": "sha256:21a5628d4c81b412cefd6e22a8fb173cfcc620f8d945b9ee83b01305bdc8e5a3"
           }
         ]
       },
@@ -980,7 +993,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:5a0409c20f08a406e1a8a389c53dc49a16c8c6f6c6c543de135fcec738e4ee8b"
+            "digest": "sha256:b2b94d44f46e433c8fe7f6d9536ca6712c42f1ce44417cfa7572351f0c976c2e"
           },
           {
             "kind": "work_state",

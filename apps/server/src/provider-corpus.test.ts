@@ -1,7 +1,7 @@
 import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
 import { compileAssistanceRequest, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
-import { corpusPopulation, corpusSamplePolicy } from "./corpus.js";
+import { corpusPopulation, corpusSamplePolicy, type CorpusQuery, type CorpusRequestOptions, type CorpusSource } from "./corpus.js";
 import { ExchangeCorpusSource, corpusPageRequest, healthAdmittedExplorerOperation } from "./provider-corpus.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { ControlledFetch, ManualClock, flush } from "./provider-exchange.test-support.js";
@@ -14,6 +14,7 @@ import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
+import { healthReportedCorpus } from "./provider-health-adapters.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const NEXT = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
@@ -41,6 +42,153 @@ async function harness() {
 }
 
 describe("learner Explorer shared exchange", () => {
+  it("preserves the modern method's receiver and sealed page through the health adapter", async () => {
+    const { source, remote } = await harness();
+    const health = await testRegistry({ "explorer-primary": "unverified" });
+    const wrapped = healthReportedCorpus(source, health);
+    const pending = wrapped.page!(query());
+    await flush(); remote.respond(0, body());
+    const acquired = await pending;
+    expect(acquired.kind).toBe("page");
+    if (acquired.kind !== "page") throw new Error("expected admitted page");
+    const retained = await source.page(query());
+    expect(retained.kind).toBe("page");
+    if (retained.kind !== "page") throw new Error("expected retained page");
+    expect(acquired.evidence.payload.payload).toBe(retained.evidence.payload.payload);
+    expect(health.operationAvailability("evidence.explorer_query").state).toBe("available");
+    expect(remote.calls).toHaveLength(1);
+  });
+
+  it("forwards caller cancellation and deadlines without poisoning source health", async () => {
+    const health = await testRegistry({ "explorer-primary": "unverified" });
+    let signal: AbortSignal | undefined;
+    let deadline: number | undefined;
+    const page = vi.fn(async (_query: CorpusQuery, options: CorpusRequestOptions = {}) => {
+      signal = options.signal; deadline = options.deadlineMonotonic;
+      return new Promise<{ kind: "caller_expired" }>(resolve => options.signal!.addEventListener("abort", () => resolve({ kind: "caller_expired" }), { once: true }));
+    });
+    const stats = vi.fn(async () => ({ kind: "abstention" as const, reason: "source_unavailable" as const, detail: "not used", population: corpusPopulation(1600) }));
+    const wrapped = healthReportedCorpus({ stats, page }, health);
+    const caller = new AbortController();
+    const pending = wrapped.page!(query(), { signal: caller.signal });
+    await flush(); caller.abort();
+    expect(await pending).toEqual({ kind: "caller_expired" });
+    expect(signal).not.toBe(caller.signal);
+    expect(signal!.aborted).toBe(true);
+    expect(deadline).toBeTypeOf("number");
+    expect(stats).not.toHaveBeenCalled();
+    expect(health.operationAvailability("evidence.explorer_query").state).toBe("requestable_unverified");
+    expect("page" in healthReportedCorpus({ stats }, health)).toBe(false);
+  });
+
+  it("preserves a real typed source failure rather than inventing a health receipt", async () => {
+    const { source, remote } = await harness();
+    const acquiring = source.page(query());
+    await flush(); remote.respond(0, { ...body(), white: "invalid" });
+    const absence = await acquiring;
+    expect(absence).toMatchObject({ kind: "source_failure", reason: "invalid_response" });
+    const health = await testRegistry({ "explorer-primary": "unverified" });
+    const stats = vi.fn(async () => ({ kind: "abstention" as const, reason: "source_unavailable" as const, detail: "not used", population: corpusPopulation(1600) }));
+    const wrapped = healthReportedCorpus({ stats, page: async () => absence }, health);
+    expect(await wrapped.page!(query())).toBe(absence);
+    expect(health.operationAvailability("evidence.explorer_query")).toMatchObject({ state: "unavailable", reason: "protocol" });
+    expect(stats).not.toHaveBeenCalled();
+  });
+
+  it.each(["success", "sparse", "zero", "population", "clone", "failure"])("retains modern source admission through authenticated repertoire import and scan (%s)", { timeout: 30_000 }, async arm => {
+    const { source, remote } = await harness();
+    const total = arm === "sparse" ? 37 : arm === "zero" ? 0 : 120;
+    const stats = vi.fn(async () => ({ kind: "stats" as const, total: 120, white: 120, draws: 0, black: 0,
+      moves: [{ san: "e4", uci: "e2e4", playedCount: 60, sharePct: 50, white: 60, draws: 0, black: 0 }],
+      recency: { kind: "absent" as const }, population: corpusPopulation(1600) }));
+    // Private fields make loss of the class receiver observable in the actual app adapter.
+    class SuppliedSource implements CorpusSource {
+      readonly #source = source;
+      readonly stats = stats;
+      calls = 0;
+      async page(asked: CorpusQuery, options: CorpusRequestOptions = {}) {
+        this.calls += 1;
+        expect(options.signal).toBeDefined();
+        expect(options.deadlineMonotonic).toBeTypeOf("number");
+        if (arm === "failure") throw new Error("source unavailable");
+        const pending = this.#source.page(arm === "population" ? { ...asked, ratings: [1400] } : asked, options);
+        await flush(); remote.respond(remote.calls.length - 1, body(total));
+        const acquired = await pending;
+        return arm === "clone" && acquired.kind === "page" ? { ...acquired, evidence: { ...acquired.evidence } } : acquired;
+      }
+    }
+    const supplied = new SuppliedSource();
+    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: supplied });
+    try {
+      await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "frontier_owner", password: "repertoire-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const headers = { "content-type": "application/json", cookie };
+      const created = await fetch(`${origin}/repertoires`, { method: "POST", headers, body: JSON.stringify({ name: "Black choices", side: "black", targetElo: 1600, coverageDenominator: 10, source: { kind: "pgn", pgn: "1. d4 d5 *" } }) });
+      expect(created.status, await created.clone().text()).toBe(201);
+      const { repertoire } = await created.json() as { repertoire: { id: string } };
+      const route = `${origin}/repertoires/${repertoire.id}`;
+      expect((await fetch(`${route}/scan`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })).status).toBe(401);
+      expect(supplied.calls).toBe(0);
+      expect((await fetch(`${route}/scan`, { method: "POST", headers, body: "{}" })).status).toBe(202);
+      let page: { status: string; scan: { gaps: unknown[]; unknown: unknown[]; sourceFailures: number; uncoveredMass: number } } | undefined;
+      for (let poll = 0; poll < 30; poll += 1) {
+        const response = await fetch(`${route}/gaps`, { headers });
+        expect(response.status).toBe(200);
+        page = await response.json() as NonNullable<typeof page>;
+        if (page.status === "ready") break;
+        await flush();
+      }
+      expect(page?.status).toBe("ready");
+      if (arm === "success") {
+        expect(page!.scan.gaps).toEqual([expect.objectContaining({ replySan: "e4", mass: 0.5 })]);
+        expect(page!.scan.uncoveredMass).toBe(0.5);
+        expect(page!.scan.unknown).toEqual([]);
+      } else {
+        expect(page!.scan.gaps).toEqual([]);
+        expect(page!.scan.unknown).toEqual([expect.objectContaining({ reason: total < 100 ? "no_data_at_band" : "source_unavailable" })]);
+      }
+      expect(page!.scan.sourceFailures).toBe(["population", "clone", "failure"].includes(arm) ? 1 : 0);
+      expect(stats).not.toHaveBeenCalled();
+      expect(supplied.calls).toBe(1);
+      if (["success", "sparse", "zero"].includes(arm)) expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("available");
+      expect((await fetch(`${route}/gaps`)).status).toBe(401);
+      expect(supplied.calls).toBe(1);
+    } finally { await application.close(); }
+  });
+
+  it.each(["success", "position", "ratings", "speeds", "dates", "clone", "failure"])("admits the modern repertoire frontier against its exact request (%s)", async arm => {
+    const { source, remote } = await harness();
+    const at = "2026-09-30T12:00:00.000Z";
+    const asked = query();
+    const crossed = arm === "position" ? query(NEXT) : arm === "ratings" ? { ...asked, ratings: [1400] as const }
+      : arm === "speeds" ? { ...asked, speeds: ["rapid"] as const } : arm === "dates" ? { ...asked, since: "2025-01" } : asked;
+    const acquiring = source.page(crossed);
+    await flush(); remote.respond(0, arm === "position" ? { ...body(), moves: [{ uci: "a7a6", san: "a6", white: 60, draws: 0, black: 0 }] } : body());
+    const acquired = await acquiring;
+    if (acquired.kind !== "page") throw new Error("fixture acquisition failed");
+    const stats = vi.fn(async () => ({ kind: "stats" as const, total: 120, white: 120, draws: 0, black: 0,
+      moves: [{ san: "e4", uci: "e2e4", playedCount: 60, sharePct: 50, white: 60, draws: 0, black: 0 }],
+      recency: { kind: "absent" as const }, population: corpusPopulation(1600, new Date(at)) }));
+    const page = vi.fn(async () => {
+      if (arm === "failure") throw new Error("source failed");
+      return arm === "clone" ? { ...acquired, evidence: { ...acquired.evidence } } : acquired;
+    });
+    const scan = await scanRepertoire({ id: "rep", ownerLearnerId: "learner", name: "Black choices", side: "black", rootFen: START, targetElo: 1600, coverageDenominator: 10, sourceKind: "pgn_paste", sourceUrl: null, originalPgn: "", licenceNote: "fixture", digest: repertoireDigest("black", START, []), createdAt: at, updatedAt: at }, [], { stats, page }, new Date(at));
+    if (arm === "success") {
+      expect(scan.gaps).toEqual([expect.objectContaining({ replySan: "e4", mass: 0.5 })]);
+      expect(scan.unknown).toEqual([]);
+    } else {
+      expect(scan.gaps).toEqual([]);
+      expect(scan.unknown).toEqual([expect.objectContaining({ reason: "source_unavailable" })]);
+      expect(scan.sourceFailures).toBe(1);
+    }
+    expect(page).toHaveBeenCalledTimes(1);
+    expect(stats).not.toHaveBeenCalled();
+  });
+
   it.each([0, 37, 100])("binds the real theory query to a move-free %i-game population without a sample floor", async (total) => {
     const { source, remote, clock } = await harness();
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });

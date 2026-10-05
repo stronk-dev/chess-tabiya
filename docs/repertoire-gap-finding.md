@@ -19,6 +19,16 @@ explicit partiality sentence before any gap. Every result retains the corpus gua
 
 > These counts say what this population played, not what is good.
 
+Modern scans consume the declared `derived.explorer.repertoire_frontier@1` projection over
+the complete sealed Explorer page. Before using counts they match the requested position,
+rating buckets, speeds and date window against both payload and acquisition identity.
+The scan owns its 100-game floor; valid empty/sparse pages do not imply provider failure.
+Listed replies divide by the whole population, never by listed mass. Invalid, crossed,
+copied or failed modern evidence makes the subtree unknown without retrying bare statistics.
+Supplied modern sources retain this path through application health wrapping, including
+receiver, cancellation and deadline. Explicit standalone sources without a page method
+retain their existing compatibility path.
+
 The learner chooses the rating band and `1 in N` coverage bound during import; they are
 not hidden defaults. The result states total uncovered mass, turns it into a lower bound
 when a scan is partial, names repertoire positions the walk did not reach, lists

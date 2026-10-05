@@ -1,5 +1,23 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 repertoire frontier checkpoint
+
+D3380 migrates actual gap scans through the declared whole-source Explorer frontier,
+preserving exact position/population, listed/unlisted mass and the consumer's 100-game
+floor. Supplied modern sources retain their page method through application health
+wrapping. Crossed/copied/failed pages produce unknown without bare fallback; standalone
+compatibility stays explicit. The focused source gate passes 93 tests and clean types.
+Receipt: `planning/provider-exchange-and-execution/repertoire-frontier-2026-10-05.md`.
+
+Continue executable provider migrations and literal consumer policies before complete
+execution/resolution/availability. D3363/D3370/D3373/D3376, durable whole-source persistence
+and zero-consumer legacy retirement retain their distinct contracts. Compatibility stamps
+are routine maintenance, not feature progress, consent questions or release completion.
+
+Next executable item: D3381, the Theory module route's concrete-class check discarding
+supplied modern Explorer page capabilities. Repair authenticated composition, retain finalized
+demand/read/disclosure and cancellation, and test exact admitted sources without bare fallback.
+
 ## 2026-10-05 application tablebase authority checkpoint
 
 D3378 repairs application composition: health wrapping retains modern evidence authority,

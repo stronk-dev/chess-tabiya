@@ -392,6 +392,7 @@ export {
   corpusPageEvidence,
   corpusPositionEvidence,
   deriveExplorerPopulationSummary,
+  deriveExplorerRepertoireFrontier,
   deriveMaiaRunMoveOccurrence,
   deriveMaiaExactFenMoveOccurrence,
   evidenceReferenceEvidence,
@@ -1086,6 +1087,7 @@ export {
 
 export { CORPUS_GUARD } from "./population-guard.js";
 export { explorerPopulationSummaryWire, renderedProviderItems, type ExplorerPopulationSummary, type ExplorerPopulationSummaryWire } from "./explorer-summary.js";
+export type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 
 export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",

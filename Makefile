@@ -1008,6 +1008,13 @@ evidence-seal-audit:
 .PHONY: branch-tablebase-check
 .PHONY: queued-tablebase-check
 .PHONY: health-tablebase-metadata-check health-tablebase-metadata-update
+.PHONY: repertoire-metadata-check repertoire-metadata-update
+repertoire-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/repertoire-metadata.js --log-level=warning
+	node apps/server/dist/repertoire-metadata.js --repertoire-frontier
+repertoire-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/repertoire-metadata.js --log-level=warning
+	node apps/server/dist/repertoire-metadata.js --repertoire-frontier --apply-metadata
 health-tablebase-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/health-tablebase-metadata.js --log-level=warning
 	node apps/server/dist/health-tablebase-metadata.js --health-tablebase
@@ -1094,6 +1101,10 @@ provider-exchange-check: run-subject-check maia-occurrence-check evidence-execut
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/explorer-summary-voice.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/provider-exchange.test.ts packages/runtime/src/provider-protocol.test.ts packages/runtime/src/explorer-summary.test.ts apps/server/src/provider-exchange.test.ts apps/server/src/provider-traversal.test.ts apps/server/src/provider-tablebase.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/engine-supervisor-exchange.test.ts
+
+.PHONY: repertoire-source-check
+repertoire-source-check: evidence-manifest-check
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/repertoire.test.ts apps/server/src/capability-operations.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
 
 # The process-local operator/research door: `make provider-traversal OP=<operation>` reads one JSON
 # request from stdin (operations: stockfish-legal-roots, stockfish-position-evaluation, stockfish-principal-variation,
