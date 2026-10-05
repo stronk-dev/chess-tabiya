@@ -14,6 +14,7 @@
 import {
   HINT_COMPILER_VERSION,
   PRIMARY_EVIDENCE_MANIFEST,
+  compileEvidenceConsumerExecution,
   compileGuidedHintPacket,
   compileHintDeliveryReceipt,
   compileHintDisclosure,
@@ -136,6 +137,14 @@ export class HintService {
   /** §7 step 1–2: join or create the exact operation; returns its current state. */
   request(access: HintAccess, rung: HintRung): HintResponse {
     const requestId = this.requestIdFor(access.decision.digest, rung);
+    // Compile the complete family/rung contract before identity, search, packet or
+    // voice acquisition, including requests that would reuse a retained horizon.
+    // A malformed contract is not source absence or an uninformative chess position.
+    try {
+      compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 1 });
+    } catch {
+      return Object.freeze({ state: "failed", requestId, rung, reason: "contract_violation" });
+    }
     if (this.#options.scheduler === null) return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "provider_unavailable" });
     const health = this.#options.availability?.();
     if (health !== undefined && (health.state === "unavailable" || health.state === "temporarily_blocked") && !this.#operations.has(requestId)) {

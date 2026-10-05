@@ -85,11 +85,21 @@ repeated POSTs join the same operation. `HintService` (`apps/server/src/hint-ser
 process-local and bounded. All rungs of one decision share one search, and every packet comes
 from the injected application-lifetime `CandidatePopulationService`.
 
+Every request first compiles all 35 exact Guided Hint bindings, including a request
+that would reuse a retained horizon. Missing search is a required-source failure;
+an available search with no selected occurrence is separately honest-empty. A bad
+binding contract returns `failed/contract_violation` before engine identity, search,
+packet or optional voice acquisition. It never weakens the learner's policy ceiling
+or disables independent theory/structure modules.
+
 An open rated game is refused at the common enqueue boundary and on the hint path before any work
 starts (`#refuseRatedAssistance`).
 
 ## Tests
 
+- `make guided-hint-execution-check` includes the complete family/rung source-policy
+  contract and authenticated invalid-policy/latency/extra-binding controls, both cold
+  and after a cached search, plus a successful request/poll shared-search control.
 - `packages/runtime/src/hint-distance.test.ts` covers registry equality, the D1397 drift
   tripwires, perspective and sign safety, D1640 forgeries, byte images, the F1 widening negatives,
   the voice check, receipts and ladder progression.

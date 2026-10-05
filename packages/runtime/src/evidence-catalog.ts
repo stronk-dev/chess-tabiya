@@ -1359,6 +1359,10 @@ function moduleConsumerSpec(id: EvidenceModuleId): ConsumerSpec {
     // Missing recorded claims or online population facts omit only their own binding;
     // local opening/shape theory remains available (module-registration provider_optional).
     ...(id === "theory_breadcrumb" ? { sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } as const } : {}),
+    // Every Hint family/rung requires the same bounded search. Source absence is
+    // operation-unavailable; a successful search with no admitted occurrence is
+    // separately honest-empty (hint-distance §7/§10), never a local fallback.
+    ...(id === "guided_hint" ? { sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } as const } : {}),
   };
 }
 

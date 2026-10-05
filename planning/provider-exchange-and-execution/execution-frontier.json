@@ -1,6 +1,6 @@
 {
   "purpose": "Disposable migration research. Compilation diagnostics do not prove runtime adoption or exact-subject availability. No filtered executable manifest is constructed.",
-  "manifestDigest": "d479d4298f3bb210e1733d9748e57f0f746b03640da920faafdf9cc2c910bdfe",
+  "manifestDigest": "45a35ab8ce048a8cc39466b890716b6c243e2dc84ee3da7171802c95b7b81646",
   "summary": {
     "projections": {
       "total": 285,
@@ -9,13 +9,13 @@
     },
     "isolatedBindings": {
       "total": 556,
-      "compiled": 460,
-      "refused": 96
+      "compiled": 495,
+      "refused": 61
     },
     "completeConsumers": {
       "total": 42,
-      "compiled": 20,
-      "refused": 22
+      "compiled": 21,
+      "refused": 21
     },
     "refusedProviderDeclarations": 14
   },
@@ -17165,11 +17165,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.1@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.1@1",
+          "admittedPathIds": [
+            "path:sha256:bdfc0ebdff3e477c7153c605e56b9c161755a05fb8d7b6b394f95801c8c31a53"
+          ]
+        }
       }
     },
     {
@@ -17180,11 +17187,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.10@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.10@1",
+          "admittedPathIds": [
+            "path:sha256:166fd64a65bd84e93fc93dbff6d0873c3a738ad59926a1c473754e71baade1f4"
+          ]
+        }
       }
     },
     {
@@ -17195,11 +17209,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.11@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.11@1",
+          "admittedPathIds": [
+            "path:sha256:953afd9193101833651d503aa9d13fa6eaf5a9902b9582ccb763c6409ba44e4b"
+          ]
+        }
       }
     },
     {
@@ -17210,11 +17231,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.12@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.12@1",
+          "admittedPathIds": [
+            "path:sha256:ffe4fb936ea09b43c903bbf62e41512a6ad264956c1836dff158e18bb4c1cb9c"
+          ]
+        }
       }
     },
     {
@@ -17225,11 +17253,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.13@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.13@1",
+          "admittedPathIds": [
+            "path:sha256:2d31c43deda43a767ddd253fc1fbedd995e72c064e19c2bd4c01d58a1e6307a6"
+          ]
+        }
       }
     },
     {
@@ -17240,11 +17275,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.14@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.14@1",
+          "admittedPathIds": [
+            "path:sha256:4edec33b29563aeb794ae1a33ee5e1c88e8f7bf86398d53c1de6073a7f7e50f4"
+          ]
+        }
       }
     },
     {
@@ -17255,11 +17297,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.15@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.15@1",
+          "admittedPathIds": [
+            "path:sha256:0e26ac47f82c4e7c11e2c6f5153821172edce0311ed96000f7fa8db1ed596c77"
+          ]
+        }
       }
     },
     {
@@ -17270,11 +17319,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.16@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.16@1",
+          "admittedPathIds": [
+            "path:sha256:ff214fbfacf8fd4a5dec56c5b8da665d3578a419194897f984c1f11ea18203b3"
+          ]
+        }
       }
     },
     {
@@ -17285,11 +17341,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.17@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.17@1",
+          "admittedPathIds": [
+            "path:sha256:1007844ddf841c0f538924ec554256ab21f3c33dbf181fb58163fab22da66577"
+          ]
+        }
       }
     },
     {
@@ -17300,11 +17363,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.18@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.18@1",
+          "admittedPathIds": [
+            "path:sha256:920a1d1c575e00d6f30f251a291ae7ecd0113c0fea6c82035c2bcc2103638285"
+          ]
+        }
       }
     },
     {
@@ -17315,11 +17385,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.19@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.19@1",
+          "admittedPathIds": [
+            "path:sha256:fb097593990bbb1ae3d56c804fba5fca4ce2adc237b9aa948e0cc74a62f04f7b"
+          ]
+        }
       }
     },
     {
@@ -17330,11 +17407,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.2@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.2@1",
+          "admittedPathIds": [
+            "path:sha256:2e526f4942a1bcb7a730466db33759bff4343a70c6662487a95b7b8be18b47c5"
+          ]
+        }
       }
     },
     {
@@ -17345,11 +17429,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.20@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.20@1",
+          "admittedPathIds": [
+            "path:sha256:8c97357c6a19704bf638d6c725d1ce5faf22cbc4b90c2f42d77569b4ce22c422"
+          ]
+        }
       }
     },
     {
@@ -17360,11 +17451,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.21@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.21@1",
+          "admittedPathIds": [
+            "path:sha256:965cea1ebbef7f7da3e723a42048d60143aedb2db23b6c41adcaf36f5f0c9c48"
+          ]
+        }
       }
     },
     {
@@ -17375,11 +17473,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.22@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.22@1",
+          "admittedPathIds": [
+            "path:sha256:c73b8fe0938a67b39851ccd5aab1d5f57cb66d3382573ac52eca8834a6f72eed"
+          ]
+        }
       }
     },
     {
@@ -17390,11 +17495,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.23@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.23@1",
+          "admittedPathIds": [
+            "path:sha256:fe7535610dbfb9787b24da843f0479886f3c2bbc6d77f57c7e09701c9ab89046"
+          ]
+        }
       }
     },
     {
@@ -17405,11 +17517,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.24@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.24@1",
+          "admittedPathIds": [
+            "path:sha256:eb25d7a81422c641915c2def8a7d82d2ef3cf48a3a2fe43a09b945040ec0235d"
+          ]
+        }
       }
     },
     {
@@ -17420,11 +17539,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.25@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.25@1",
+          "admittedPathIds": [
+            "path:sha256:4ddca5f55df53a3729529299827a5de00c8cdba7772a5f739ece7dedd5946c48"
+          ]
+        }
       }
     },
     {
@@ -17435,11 +17561,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.26@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.26@1",
+          "admittedPathIds": [
+            "path:sha256:57b0c55ca8df3202c01f33c59c420e201a2ffb03a335437a694c7ad444440b00"
+          ]
+        }
       }
     },
     {
@@ -17450,11 +17583,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.27@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.27@1",
+          "admittedPathIds": [
+            "path:sha256:6a5cabdd4ecfbb807446796b6dcb925bad133ed19f6b99db2e87d4f3a56c0ff2"
+          ]
+        }
       }
     },
     {
@@ -17465,11 +17605,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.28@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.28@1",
+          "admittedPathIds": [
+            "path:sha256:dca8a2eba7311bdd8dc300bf91cb2be45f31327484182d12f580f515aa3ff409"
+          ]
+        }
       }
     },
     {
@@ -17480,11 +17627,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.29@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.29@1",
+          "admittedPathIds": [
+            "path:sha256:75d32f382325e4e49e2eabac2a7a5112c7985c81dc6a8950113ead835485106f"
+          ]
+        }
       }
     },
     {
@@ -17495,11 +17649,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.3@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.3@1",
+          "admittedPathIds": [
+            "path:sha256:b86ff43e89e6392a1f5476f218c784a7cc5b290c59d9db9cba069e3ac29574c6"
+          ]
+        }
       }
     },
     {
@@ -17510,11 +17671,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.30@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.30@1",
+          "admittedPathIds": [
+            "path:sha256:c385b94bb254f978360308de8cf670b69f43fade661aa764c06b2b5813396d87"
+          ]
+        }
       }
     },
     {
@@ -17525,11 +17693,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.31@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.31@1",
+          "admittedPathIds": [
+            "path:sha256:b0a5b05f7f77f843b3424906ed99b412b03807550f39fb1bfa2fde7f60a75a3d"
+          ]
+        }
       }
     },
     {
@@ -17540,11 +17715,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.32@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.32@1",
+          "admittedPathIds": [
+            "path:sha256:8e6e1a3f44d71fc4b5f5203b5e3b84091e3f38d53b82649f572374006cb196c2"
+          ]
+        }
       }
     },
     {
@@ -17555,11 +17737,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.33@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.33@1",
+          "admittedPathIds": [
+            "path:sha256:3888193bc15da323a257b6ef342700039dd26784a488c79c4e97877ace83b32b"
+          ]
+        }
       }
     },
     {
@@ -17570,11 +17759,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.34@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.34@1",
+          "admittedPathIds": [
+            "path:sha256:a3af778fb9b610788887b4d7b07c161a7e9433ab5f11e7e14038f71a2b5739da"
+          ]
+        }
       }
     },
     {
@@ -17585,11 +17781,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.35@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.35@1",
+          "admittedPathIds": [
+            "path:sha256:6525369c68ec90a38f9c854488bc5024aa2ac7000acd69ffada64881ee45d412"
+          ]
+        }
       }
     },
     {
@@ -17600,11 +17803,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.4@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.4@1",
+          "admittedPathIds": [
+            "path:sha256:641d56d1a97a492ec6f32831098130beb46dbd452a99eb524b7836f637ccf0e5"
+          ]
+        }
       }
     },
     {
@@ -17615,11 +17825,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.5@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.5@1",
+          "admittedPathIds": [
+            "path:sha256:e075ed8ca982927291ec007238d53f87ccfe761e0a1fa5138c007b4ccc3b7386"
+          ]
+        }
       }
     },
     {
@@ -17630,11 +17847,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.6@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.6@1",
+          "admittedPathIds": [
+            "path:sha256:44b6df86fde55808c037615f455dd7c390bf46414d5e54fba87a5b58e58f1f6d"
+          ]
+        }
       }
     },
     {
@@ -17645,11 +17869,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.7@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.7@1",
+          "admittedPathIds": [
+            "path:sha256:918529bf863fc6c561a9c050553992b1d24e008694592d3449909c7b7035bfb6"
+          ]
+        }
       }
     },
     {
@@ -17660,11 +17891,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.8@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.8@1",
+          "admittedPathIds": [
+            "path:sha256:3a414dbe603cd6d12f89e89bd2aebae17e8211278e4e2e5111c776fc105e787b"
+          ]
+        }
       }
     },
     {
@@ -17675,11 +17913,18 @@
         "mode": "interactive",
         "maxMs": 4000
       },
-      "sourceAbsence": null,
+      "sourceAbsence": {
+        "necessity": "required",
+        "whenNoPath": "operation_unavailable"
+      },
       "isolatedDiagnostic": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.9@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "adapter": "adapter.module.guided_hint.9@1",
+          "admittedPathIds": [
+            "path:sha256:667d8a66f91ad04e0acae97f18ee49323c93981c9daca4263dea84ec962bb4b2"
+          ]
+        }
       }
     },
     {
@@ -24161,9 +24406,397 @@
       "implementation": "compileModulePacket",
       "bindingCount": 35,
       "completeContract": {
-        "kind": "refused",
-        "code": "BINDING_SOURCE_ABSENCE",
-        "message": "BINDING_SOURCE_ABSENCE: adapter.module.guided_hint.24@1 needs a literal closed source-absence declaration"
+        "kind": "compiled",
+        "value": {
+          "consumer": "module.guided_hint@1",
+          "bindings": [
+            {
+              "adapter": "adapter.module.guided_hint.1@1",
+              "projection": "derived.hint.disclosure.mate_in_one.pattern@1",
+              "admittedPathIds": [
+                "path:sha256:bdfc0ebdff3e477c7153c605e56b9c161755a05fb8d7b6b394f95801c8c31a53"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.10@1",
+              "projection": "derived.hint.disclosure.forced_mate.move@1",
+              "admittedPathIds": [
+                "path:sha256:166fd64a65bd84e93fc93dbff6d0873c3a738ad59926a1c473754e71baade1f4"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.11@1",
+              "projection": "derived.hint.disclosure.double_attack.pattern@1",
+              "admittedPathIds": [
+                "path:sha256:953afd9193101833651d503aa9d13fa6eaf5a9902b9582ccb763c6409ba44e4b"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.12@1",
+              "projection": "derived.hint.disclosure.double_attack.square@1",
+              "admittedPathIds": [
+                "path:sha256:ffe4fb936ea09b43c903bbf62e41512a6ad264956c1836dff158e18bb4c1cb9c"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.13@1",
+              "projection": "derived.hint.disclosure.double_attack.piece@1",
+              "admittedPathIds": [
+                "path:sha256:2d31c43deda43a767ddd253fc1fbedd995e72c064e19c2bd4c01d58a1e6307a6"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.14@1",
+              "projection": "derived.hint.disclosure.double_attack.distance@1",
+              "admittedPathIds": [
+                "path:sha256:4edec33b29563aeb794ae1a33ee5e1c88e8f7bf86398d53c1de6073a7f7e50f4"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.15@1",
+              "projection": "derived.hint.disclosure.double_attack.move@1",
+              "admittedPathIds": [
+                "path:sha256:0e26ac47f82c4e7c11e2c6f5153821172edce0311ed96000f7fa8db1ed596c77"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.16@1",
+              "projection": "derived.hint.disclosure.fork_survives_reply.pattern@1",
+              "admittedPathIds": [
+                "path:sha256:ff214fbfacf8fd4a5dec56c5b8da665d3578a419194897f984c1f11ea18203b3"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.17@1",
+              "projection": "derived.hint.disclosure.fork_survives_reply.square@1",
+              "admittedPathIds": [
+                "path:sha256:1007844ddf841c0f538924ec554256ab21f3c33dbf181fb58163fab22da66577"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.18@1",
+              "projection": "derived.hint.disclosure.fork_survives_reply.piece@1",
+              "admittedPathIds": [
+                "path:sha256:920a1d1c575e00d6f30f251a291ae7ecd0113c0fea6c82035c2bcc2103638285"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.19@1",
+              "projection": "derived.hint.disclosure.fork_survives_reply.distance@1",
+              "admittedPathIds": [
+                "path:sha256:fb097593990bbb1ae3d56c804fba5fca4ce2adc237b9aa948e0cc74a62f04f7b"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.2@1",
+              "projection": "derived.hint.disclosure.mate_in_one.square@1",
+              "admittedPathIds": [
+                "path:sha256:2e526f4942a1bcb7a730466db33759bff4343a70c6662487a95b7b8be18b47c5"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.20@1",
+              "projection": "derived.hint.disclosure.fork_survives_reply.move@1",
+              "admittedPathIds": [
+                "path:sha256:8c97357c6a19704bf638d6c725d1ce5faf22cbc4b90c2f42d77569b4ce22c422"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.21@1",
+              "projection": "derived.hint.disclosure.discovered_executed.pattern@1",
+              "admittedPathIds": [
+                "path:sha256:965cea1ebbef7f7da3e723a42048d60143aedb2db23b6c41adcaf36f5f0c9c48"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.22@1",
+              "projection": "derived.hint.disclosure.discovered_executed.square@1",
+              "admittedPathIds": [
+                "path:sha256:c73b8fe0938a67b39851ccd5aab1d5f57cb66d3382573ac52eca8834a6f72eed"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.23@1",
+              "projection": "derived.hint.disclosure.discovered_executed.piece@1",
+              "admittedPathIds": [
+                "path:sha256:fe7535610dbfb9787b24da843f0479886f3c2bbc6d77f57c7e09701c9ab89046"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.24@1",
+              "projection": "derived.hint.disclosure.discovered_executed.distance@1",
+              "admittedPathIds": [
+                "path:sha256:eb25d7a81422c641915c2def8a7d82d2ef3cf48a3a2fe43a09b945040ec0235d"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.25@1",
+              "projection": "derived.hint.disclosure.discovered_executed.move@1",
+              "admittedPathIds": [
+                "path:sha256:4ddca5f55df53a3729529299827a5de00c8cdba7772a5f739ece7dedd5946c48"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.26@1",
+              "projection": "derived.hint.disclosure.loose_piece.pattern@1",
+              "admittedPathIds": [
+                "path:sha256:57b0c55ca8df3202c01f33c59c420e201a2ffb03a335437a694c7ad444440b00"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.27@1",
+              "projection": "derived.hint.disclosure.loose_piece.square@1",
+              "admittedPathIds": [
+                "path:sha256:6a5cabdd4ecfbb807446796b6dcb925bad133ed19f6b99db2e87d4f3a56c0ff2"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.28@1",
+              "projection": "derived.hint.disclosure.loose_piece.piece@1",
+              "admittedPathIds": [
+                "path:sha256:dca8a2eba7311bdd8dc300bf91cb2be45f31327484182d12f580f515aa3ff409"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.29@1",
+              "projection": "derived.hint.disclosure.loose_piece.distance@1",
+              "admittedPathIds": [
+                "path:sha256:75d32f382325e4e49e2eabac2a7a5112c7985c81dc6a8950113ead835485106f"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.3@1",
+              "projection": "derived.hint.disclosure.mate_in_one.piece@1",
+              "admittedPathIds": [
+                "path:sha256:b86ff43e89e6392a1f5476f218c784a7cc5b290c59d9db9cba069e3ac29574c6"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.30@1",
+              "projection": "derived.hint.disclosure.loose_piece.move@1",
+              "admittedPathIds": [
+                "path:sha256:c385b94bb254f978360308de8cf670b69f43fade661aa764c06b2b5813396d87"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.31@1",
+              "projection": "derived.hint.disclosure.promotion_pressure.pattern@1",
+              "admittedPathIds": [
+                "path:sha256:b0a5b05f7f77f843b3424906ed99b412b03807550f39fb1bfa2fde7f60a75a3d"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.32@1",
+              "projection": "derived.hint.disclosure.promotion_pressure.square@1",
+              "admittedPathIds": [
+                "path:sha256:8e6e1a3f44d71fc4b5f5203b5e3b84091e3f38d53b82649f572374006cb196c2"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.33@1",
+              "projection": "derived.hint.disclosure.promotion_pressure.piece@1",
+              "admittedPathIds": [
+                "path:sha256:3888193bc15da323a257b6ef342700039dd26784a488c79c4e97877ace83b32b"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.34@1",
+              "projection": "derived.hint.disclosure.promotion_pressure.distance@1",
+              "admittedPathIds": [
+                "path:sha256:a3af778fb9b610788887b4d7b07c161a7e9433ab5f11e7e14038f71a2b5739da"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.35@1",
+              "projection": "derived.hint.disclosure.promotion_pressure.move@1",
+              "admittedPathIds": [
+                "path:sha256:6525369c68ec90a38f9c854488bc5024aa2ac7000acd69ffada64881ee45d412"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.4@1",
+              "projection": "derived.hint.disclosure.mate_in_one.distance@1",
+              "admittedPathIds": [
+                "path:sha256:641d56d1a97a492ec6f32831098130beb46dbd452a99eb524b7836f637ccf0e5"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.5@1",
+              "projection": "derived.hint.disclosure.mate_in_one.move@1",
+              "admittedPathIds": [
+                "path:sha256:e075ed8ca982927291ec007238d53f87ccfe761e0a1fa5138c007b4ccc3b7386"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.6@1",
+              "projection": "derived.hint.disclosure.forced_mate.pattern@1",
+              "admittedPathIds": [
+                "path:sha256:44b6df86fde55808c037615f455dd7c390bf46414d5e54fba87a5b58e58f1f6d"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.7@1",
+              "projection": "derived.hint.disclosure.forced_mate.square@1",
+              "admittedPathIds": [
+                "path:sha256:918529bf863fc6c561a9c050553992b1d24e008694592d3449909c7b7035bfb6"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.8@1",
+              "projection": "derived.hint.disclosure.forced_mate.piece@1",
+              "admittedPathIds": [
+                "path:sha256:3a414dbe603cd6d12f89e89bd2aebae17e8211278e4e2e5111c776fc105e787b"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            },
+            {
+              "adapter": "adapter.module.guided_hint.9@1",
+              "projection": "derived.hint.disclosure.forced_mate.distance@1",
+              "admittedPathIds": [
+                "path:sha256:667d8a66f91ad04e0acae97f18ee49323c93981c9daca4263dea84ec962bb4b2"
+              ],
+              "sourceAbsence": {
+                "necessity": "required",
+                "whenNoPath": "operation_unavailable"
+              }
+            }
+          ]
+        }
       },
       "runtimeAdoption": "not_measured"
     },

@@ -6,6 +6,12 @@ wave rather than treating the first whole-manifest refusal as a blocker on all w
 The instrument is disposable research under D3403 and RFC-0000's exploration allowance.
 It is not a production execution manifest, exact-subject availability service or release gate.
 
+Subsequent D3404 production repair is recorded separately in
+`guided-hint-preflight-2026-10-05.md`. The JSON is a living current snapshot, not a
+frozen copy of this baseline measurement: it now reads 495/556 isolated bindings
+and 21/42 complete consumers compiled, with 61 binding refusals. The baseline counts
+below explain the finding that prompted that repair and are retained as history.
+
 ## Measured compilation results
 
 The unchanged catalogue has 285 projections, 556 bindings and 42 exact consumer versions.

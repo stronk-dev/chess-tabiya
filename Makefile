@@ -2804,6 +2804,19 @@ provider-execution-census: provider-execution-census-build
 provider-execution-census-update: provider-execution-census-build
 	$(CI_NODE) tools/d3403-execution-frontier/dist/report.js --write
 
+.PHONY: guided-hint-execution-check
+guided-hint-execution-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/guided-hint-execution.test.ts apps/server/src/hint-execution-preflight.test.ts apps/server/src/hint-service.test.ts packages/runtime/src/hint-distance.test.ts packages/runtime/src/evidence-binding-execution.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/evidence-catalog.test.ts
+
+.PHONY: guided-hint-execution-metadata-update guided-hint-execution-metadata-check
+guided-hint-execution-metadata-update:
+	$(MAKE) semantic-validation-update capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/guided-hint-execution-metadata.js --log-level=warning
+	node apps/server/dist/guided-hint-execution-metadata.js --guided-hint-consumer --apply-metadata
+guided-hint-execution-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/guided-hint-execution-metadata.js --log-level=warning
+	node apps/server/dist/guided-hint-execution-metadata.js --guided-hint-consumer
+
 explorer-consumer-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations

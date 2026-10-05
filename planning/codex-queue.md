@@ -1,5 +1,30 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 complete Guided Hint execution checkpoint
+
+D3404 supplies all 35 required-search source-absence policies and preflights the
+complete exact module before acquisition, including retained-horizon requests.
+Six authenticated cold/cache negatives refuse before engine or packet work;
+successful request/poll retains the permitted ladder and one shared search.
+Source-unavailable and no-admitted-occurrence honest-empty remain separate.
+The focused gate passes 83 tests and clean types. Full verification and routine
+compatibility maintenance are recorded in
+`planning/provider-exchange-and-execution/guided-hint-preflight-2026-10-05.md`.
+
+The current living compiler inventory is 262/285 projections, 495/556 isolated
+bindings and 21/42 complete consumers compiled. The remaining 61 binding refusals
+split into 50 source-contract refusals and 11 absent policies. All 14 unsupported
+provider declarations, exact historical contracts and whole-manifest refusal remain.
+The census itself still measures no runtime adoption; the Hint HTTP controls do.
+
+Next: complete the source migrations and consumer contracts without filtering raw
+bindings, then full manifest execution/digest, exact source-occurrence resolution
+and authenticated availability. Keep D3363/D3370/D3373/D3376 and D3391/D3392 as
+explicit contract holds; those cannot be bypassed by inventing a sealed source.
+Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner
+joins remain open. Neither provider nor Hint RFC, capability nor milestone closes.
+Routine metadata/hash updates are automatic; no owner question is needed for them.
+
 ## 2026-10-05 complete execution inventory and Guided Hint handoff
 
 D3403 measures every current projection, isolated binding and exact consumer version.
@@ -11,7 +36,7 @@ repeated occurrences, exact versions, deterministic non-mutation and saved-snaps
 This is research, not an executable partial manifest, runtime adoption or availability.
 Receipt: `planning/provider-exchange-and-execution/execution-frontier-2026-10-05.md`.
 
-Next production wave: D3404, all 35 Guided Hint bindings. Declare the already-specified
+Historical next production wave, completed by the checkpoint above: D3404, all 35 Guided Hint bindings. Declare the already-specified
 missing-search consequence and preflight the complete consumer before provider acquisition;
 prove no-acquisition failures at the authenticated application plus real request/poll success.
 Keep every rung, redacted seal, current ceiling, decision reset, shared horizon, cancellation,

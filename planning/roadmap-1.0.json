@@ -797,12 +797,13 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement D3404's complete 35-binding Guided Hint source-absence contract and preflight before search, proving authenticated no-acquisition failures plus real request/poll success. Preserve all rungs, seals, current ceilings, decision reset, shared horizon/cancellation, source profile, voice fallback and independent local modules. D3403's total current census separates this executable work from 14 unsupported provider declarations and the other 11 missing policies. Then complete manifest execution/digest, exact source-occurrence resolution and authenticated availability. D3363/D3370/D3373/D3376 and D3391/D3392 remain separate holds; persistence, zero-consumer retirement and complete Support/Review/bot/learner joins remain open. Metadata/hash maintenance is automatic.",
+        "nextAction": "D3404 complete Guided Hint preflight is verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3403 completes a disposable diagnostic inventory of all 285 projections, 556 isolated bindings and 42 exact consumer versions: 262/460/20 compile and 23/96/22 refuse. Fourteen unsupported provider declarations retain literal ancestor/binding/consumer joins. Fifty isolated binding source refusals and 46 missing policies remain visible; no filtered execution manifest or runtime adoption is claimed. D3404 owns the next production wave: all 35 Guided Hint bindings have valid source paths but no absence policy, and HintService starts search without complete preflight. Eight inventory controls plus scaffold/packaging pass. Product runtime, authored content and source meanings are unchanged; D3402's prior full production proof remains in retained receipts, not claimed as a new test run. Only the inventory closes: zero untriaged/1683 live. Complete execution/resolution/availability, persistence, retirement and separate source-contract holds remain open; no RFC, capability or milestone promotion.",
+          "summary": "D3404 closes all 35 Guided Hint required-search policies and actual complete-consumer preflight before identity, search, packets or cached-horizon reuse. Six authenticated cold/cache faults refuse with zero acquisition; successful request/poll preserves the permitted ladder and one shared search. Source-unavailable stays distinct from no-admitted-occurrence honest-empty; local theory/structure and disclosure/policy behavior remain. Focused 83 tests and clean types pass; complete exact-index software passes 3104 tests/334 files and seven isolated performance tests; content passes 223 tests/all 104 requirements; rebuilt browser CI passes 119 journeys, one optional skip and zero retries. Preservation retains 963 predecessors and all 278 factory outcomes; only requirement stamps/hashes change. Diagnostic census: 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers compiled; whole manifest still refuses and census runtime adoption remains not-measured. Zero untriaged/1682 live. Full execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
+            "planning/provider-exchange-and-execution/guided-hint-preflight-2026-10-05.md",
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
             "rfc/semantic-validation-authority.md",
             "rfc/bounded-policy-targets.md",
@@ -948,7 +949,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:3956df6e213d8d5ed9ee4366eca69910f31a4ac3745af4c9a93481f1d0609b55"
+              "digest": "sha256:6fc5aa18639efa756cbb13f0ede16a2e5c3333b4e0458b4ac708ca31dca18d5f"
             },
             {
               "kind": "work_state",
@@ -1163,7 +1164,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:0c2e67e7788c3df5c9b53c256a0e5dd15226817ba1d4754c008cfde0e35252f8"
+              "digest": "sha256:56b3f75a01f19fe2027c51026da2adc320f55d0d0f9d2792225fc1e2bf8344be"
             },
             {
               "kind": "work_state",
@@ -1213,7 +1214,7 @@
             {
               "kind": "work_state",
               "id": "D3404",
-              "digest": "sha256:fbfa5075b22faf4537647f33f3ef0115cf51de97ef22862f6a22769163af7d36"
+              "digest": "sha256:f04107e71eeb7cbcdedada77427b37a0dfd47c67a53b128a0c111a56c048b0c1"
             }
           ]
         },
@@ -1265,7 +1266,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:0c2e67e7788c3df5c9b53c256a0e5dd15226817ba1d4754c008cfde0e35252f8"
+              "digest": "sha256:56b3f75a01f19fe2027c51026da2adc320f55d0d0f9d2792225fc1e2bf8344be"
             },
             {
               "kind": "rfc",
@@ -1756,7 +1757,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:3956df6e213d8d5ed9ee4366eca69910f31a4ac3745af4c9a93481f1d0609b55"
+              "digest": "sha256:6fc5aa18639efa756cbb13f0ede16a2e5c3333b4e0458b4ac708ca31dca18d5f"
             },
             {
               "kind": "work_state",

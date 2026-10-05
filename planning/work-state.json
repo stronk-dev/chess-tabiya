@@ -28029,11 +28029,12 @@
     },
     {
       "id": "D3404",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fbfa5075b22faf4537647f33f3ef0115cf51de97ef22862f6a22769163af7d36",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f04107e71eeb7cbcdedada77427b37a0dfd47c67a53b128a0c111a56c048b0c1",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/provider-exchange-and-execution/guided-hint-preflight-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

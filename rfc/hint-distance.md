@@ -1,5 +1,7 @@
 # RFC: Guided-hint disclosure distance
 
+- **2026-10-05 Guided Hint execution checkpoint:** D3404 declares required search absence on all 35 exact family/rung bindings and preflights the complete module consumer before acquisition, including retained-horizon requests. Authenticated policy/latency/added-raw-binding controls refuse with no engine or packet acquisition; successful request/poll retains shared search. Source-unavailable and selected-occurrence honest-empty remain distinct. Receipt: `planning/provider-exchange-and-execution/guided-hint-preflight-2026-10-05.md`. This repairs the execution contract, not the proposed ceiling table, Advanced codec, integrated latency or owner-use discharges; status remains implementing.
+
 - **Verification checkpoint 2026-10-05:** D3389 replaces a random request-ID substring scan with the exact closed honest-empty response. A deterministic parser control accepts move-like opaque hex IDs and rejects extra move/prose/PV/delivery fields. The focused gate passes 24 tests and full exact-index software passes 3012 tests/327 files. No disclosure, ceiling, source or timing behavior changes; all existing open obligations remain. Receipt: `planning/provider-exchange-and-execution/theory-bindings-2026-10-05.md`.
 
 - **Status:** implementing — Checkpoint A landed 2026-09-24 at the owner's direction (implement
