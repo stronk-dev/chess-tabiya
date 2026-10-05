@@ -28152,6 +28152,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/expression-census.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3418",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:10fd58c5cb51e147a72a6a12115b64bce646f76351e150baa40c3baae94c4e8a",
+      "uxItems": [],
+      "evidence": "apps/server/src/local-module-execution.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3eb1fb03c4f2ffca1be4b2f85a95def55210f720fca12214151f7b07aa1bce20",
+    "roadmap": "sha256:5dab172a5d16c7aba0833a261974a3c7ad6bf7e3b10a2b18f4a8e59cf870a8c5",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:d1da1db1793d7807906523cecea76671ddbad294feb96048260720b31fa66748",
-    "rfcRegister": "sha256:5da7254299ef321042fffcf69956b6abf3884821977cc265141cd3dd679664f0",
+    "workState": "sha256:e5dde62904144e2f0f4c60b9dbbc543b38333580b90d79ff09610cad84a743e3",
+    "rfcRegister": "sha256:e4a096010eac28d8415503350866d2a708ef4bdde17e751bf6d97c250d4572c5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 0,
       "blocked": 1056,
-      "done": 1323,
+      "done": 1324,
       "refused": 160
     },
     "workItems": {
@@ -228,7 +228,7 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3405 repairs the public compatibility fallback join by exact consumer id/version. Four genuine compiled contrasting-policy pairs, declaration-order reversal and missing exact successor reproduced the old join; 35 focused tests and clean types pass. All 556 bindings, current policies, wire shape, manifest digest and provider health authority remain unchanged. Complete exact-index software passes 3111 tests/334 files, seven isolated performance tests and downstream contracts; content passes 223 tests/all 104 requirements with no clearance errors. Rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries; governance and exact staged process checks are green. D3404 complete Guided Hint preflight remains implemented. The diagnostic census remains 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers compiled, never runtime-adoption proof; all 14 raw provider declarations and whole-manifest refusal remain. Zero untriaged/1682 live. Full execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376/D3391/D3392 contract holds remain open. No RFC, capability or milestone promotion.",
+        "summary": "D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/evidence-manifest.test.ts",
@@ -333,7 +333,12 @@
           "planning/provider-exchange-and-execution/opponent-tablebase-preflight-metadata-2026-10-05.json",
           "planning/provider-exchange-and-execution/opponent-tablebase-preflight-negatives-2026-10-05.json",
           "planning/provider-exchange-and-execution/execution-frontier-2026-10-05.md",
-          "planning/provider-exchange-and-execution/execution-frontier.json"
+          "planning/provider-exchange-and-execution/execution-frontier.json",
+          "packages/runtime/src/module-query.ts",
+          "apps/server/src/service.ts",
+          "apps/server/src/local-module-execution.test.ts",
+          "docs/learner-modules.md",
+          "planning/exploration/log.md"
         ],
         "anchors": [
           {
@@ -379,7 +384,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:6fc5aa18639efa756cbb13f0ede16a2e5c3333b4e0458b4ac708ca31dca18d5f"
+            "digest": "sha256:798bba2cc88bd199f025d5dac245ee52f59acbf2e28bdf904d13b7d564273fa9"
           },
           {
             "kind": "work_state",
@@ -650,6 +655,11 @@
             "kind": "work_state",
             "id": "D3405",
             "digest": "sha256:a4e0191c36c607f0d2937cbfdb36032af5702db8d860f97fabe8776941342b48"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3418",
+            "digest": "sha256:10fd58c5cb51e147a72a6a12115b64bce646f76351e150baa40c3baae94c4e8a"
           }
         ]
       },
@@ -1226,7 +1236,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:6fc5aa18639efa756cbb13f0ede16a2e5c3333b4e0458b4ac708ca31dca18d5f"
+            "digest": "sha256:798bba2cc88bd199f025d5dac245ee52f59acbf2e28bdf904d13b7d564273fa9"
           },
           {
             "kind": "work_state",

@@ -25,6 +25,7 @@ import { branchPath } from "./branch-path.js";
 import { compareBranches } from "./compare.js";
 import { ENDGAME_SETUP_CONVENTIONS } from "./endgame-setup.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
 import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
@@ -649,6 +650,7 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
   const packets: ModuleQueryPacket[] = [];
   const suppressions: ModuleQueryPage["suppressions"][number][] = [];
   const itemsByModule = new Map<ModuleId, readonly PresentedEvidenceItem[]>();
+  const selected: { readonly module: ModuleId; readonly declared: ReturnType<typeof moduleDeclaration>["timings"][number] }[] = [];
   for (const module of MODULE_IDS) {
     const declared = moduleDeclaration(module).timings.find((entry) => entry.timing === timing);
     if (declared === undefined) { if (requested.has(module)) suppressions.push({ module, reason: "timing_outside_module" }); continue; }
@@ -658,6 +660,17 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
     if (declared.initiative !== "proactive" && !requested.has(module)) continue;
     if (!effect) { suppressions.push({ module, reason: "not_effective" }); continue; }
     if (module === "sight_on_request" && subject.square === undefined) { suppressions.push({ module, reason: "no_square" }); continue; }
+    selected.push({ module, declared });
+  }
+  // Validate every effective local consumer before the first selected module reads sources.
+  // Other consumers retain their explicit source-migration obligations; a successful local
+  // preflight is not a filtered whole-manifest execution image or a provider satisfaction claim.
+  for (const { module } of selected) {
+    if (module === "sight_on_request" || module === "threat_radar" || module === "blunder_prevention" || module === "structure_nudge") {
+      compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 1 });
+    }
+  }
+  for (const { module, declared } of selected) {
     const results = sources(module, subject, run, input.sources ?? {});
     if (module === "compare_coach" && results.some((result) => result.kind === "unavailable" && result.reason === "no_second_attempt")) { suppressions.push({ module, reason: "no_second_attempt" }); continue; }
     const available = results.flatMap((result) => result.kind === "available" ? result.items : []);

@@ -48,6 +48,13 @@ sealed source **and** an exact pair-keyed presentation adapter presents it.
   budget over whole fact bundles (`fitModulePresentation`) and returns a `presentation.receipt@1`
   plus a `ModuleDisclosureReceipt` bound to the decision stamp and to the finalized digest.
   Post-commit output waits for `feedbackDeliveryOpen`. Empty is the module's declared state.
+  Sight, Threat Radar, Blunder Prevention and Structure Nudge now preflight their complete
+  execution bindings after finalized demand/timing/square/disclosure checks, before any selected
+  module collects. All effective local consumers pass before the first source read. Server pack
+  and shape inputs are prepared lazily, once per query; suppressed modules prepare nothing.
+  A broken execution contract returns generic `EVIDENCE_UNAVAILABLE` (503), not partial output
+  or source diagnostics. Every repeated request preflights again. This is local production
+  adoption, not complete manifest execution or request-specific provider satisfaction.
 - **Seats** (`apps/web/src/lib/ModuleSeats.svelte`, `module-seats.ts`): Sight on request (the square
   gesture), Threat radar, Theory pointer and Attempt comparison on request; Post-commit Nudge and
   the Named-structure nudge after a move; Staged-move risk check in the head slot while a staged move

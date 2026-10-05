@@ -178,10 +178,18 @@ the complete set of already-resolved binding/path results and generates compatib
 their item. Missing policies and raw sources refuse instead of being silently defaulted.
 
 These primitives do not resolve sources or prove per-subject availability. Actual binding-policy
-migration and production adoption, the complete manifest execution image/digest and authorized
+migration and remaining production adoption, the complete manifest execution image/digest and authorized
 availability operation remain unshipped. Maia's sampled `bestmove`/off-window contract cannot be
 replaced by a policy page's first candidate; D3370 records this source-contract gap. Receipt:
 `planning/provider-exchange-and-execution/binding-absence-2026-10-04.md`.
+
+Local module-query adoption now checks every effective Sight, Threat Radar, Blunder Prevention
+and Structure Nudge consumer before any selected module reads source inputs. Suppression precedes
+preflight; a broken contract is a generic HTTP 503, and preparation is lazy and query-local.
+Authenticated controls exercise the actual compiler over additional invalid bindings and observe
+no preparation/collection before refusal. See [learner modules](learner-modules.md) and
+`make local-module-execution-check`. The unchanged migration census still refuses the whole
+manifest and retains every unsupported source; this guard does not invent satisfaction for them.
 
 
 - Whole-manifest §1 execution integration and §2 actual binding-policy adoption, `/capabilities`

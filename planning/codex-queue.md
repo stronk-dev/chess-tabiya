@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3418]] now preflights complete effective local Support consumers (Sight, Threat Radar,
+Blunder Prevention, Structure Nudge) before any selected collection or lazy server preparation.
+Eighteen corrected predecessor controls fail; the expanded normal focused gate passes 79 tests
+and clean types. Authenticated HTTP controls cover actual invalid bindings, all-consumer-before-
+first-source ordering, repeat requests, sealed success and suppression. Broad closeout is logged
+before commit. Continue remaining source migrations and full execution/resolution/availability;
+no filtered manifest, provider satisfaction, whole RFC or 1.0 milestone is claimed.
+
 [[D3417]] repairs the content-gate assertion: declaration names are source data, not verdicts.
 Closed factual record/site checks and injected-verdict negatives replace the global word scan,
 without production-output or archive changes. Complete content verification passes 225 tests/23

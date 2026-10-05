@@ -1433,6 +1433,13 @@ Primary RFCs: `play-composition`, `pack-training-forms`. UX owners: ARR and CLP 
 
 <!-- roadmap-capability: support -->
 
+The 2026-10-05 [[D3418]] checkpoint wires four actual local consumer contracts into the live
+module-query path: Sight, Threat Radar, Blunder Prevention and Structure Nudge. Complete effective
+binding preflight precedes all selected collection and lazy server source preparation. Broken
+contracts return generic unavailable instead of partial facts; quiet, unopened, missing-square,
+timing and disclosure suppression remain ahead of work. This does not graduate raw provider
+bindings, complete Support UX/defaults or substitute contract compilation for source satisfaction.
+
 **State: presets, Guided Hint and module seats live; completion still partial.** The goal is not rated engine moves. Modules
 translate selected evidence at controlled disclosure distance: theory breadcrumb, pattern,
 relevant square/piece, threat/defence relation, prevention highlight, or an explicit move only when

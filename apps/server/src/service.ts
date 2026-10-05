@@ -46,6 +46,8 @@ import {
   queryModules,
   assertProviderDelivery,
   compileEvidenceConsumerExecution,
+  EvidenceBindingExecutionError,
+  EvidenceExecutionError,
   deriveExplorerPopulationSummary,
   deriveMaiaRunMoveOccurrence,
   ModuleQueryError,
@@ -2852,26 +2854,36 @@ export class RunService {
     this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
-    const pack = isPackSession(run) ? this.#requiredRegisteredPack(run) : undefined;
-    const shapes = this.#shapes?.list().map((summary) => {
-      const document = this.#shapes!.required(summary.id).document;
-      return { id: document.id, trigger: document.trigger };
-    }) ?? [];
-    const authored = pack === undefined ? [] : projectAuthoredFeedback(pack, run, this.#shapes).items;
-    const boundaryNodes = new Map<number, string>();
-    for (const event of run.events) {
-      if (event.type === "checkpoint.reached" || event.type === "outcome.reached") boundaryNodes.set(event.seq, event.data.nodeId);
-    }
+    // The runtime first derives finalized demand and checks every effective local contract.
+    // Prepare pack/shape evidence lazily, after that preflight, and at most once per query.
+    let prepared: ModuleSourceContext | undefined;
+    const prepare = (): ModuleSourceContext => {
+      if (prepared !== undefined) return prepared;
+      const pack = isPackSession(run) ? this.#requiredRegisteredPack(run) : undefined;
+      const shapes = this.#shapes?.list().map((summary) => {
+        const document = this.#shapes!.required(summary.id).document;
+        return { id: document.id, trigger: document.trigger };
+      }) ?? [];
+      const authored = pack === undefined ? [] : projectAuthoredFeedback(pack, run, this.#shapes).items;
+      const boundaryNodes = new Map<number, string>();
+      for (const event of run.events) {
+        if (event.type === "checkpoint.reached" || event.type === "outcome.reached") boundaryNodes.set(event.seq, event.data.nodeId);
+      }
+      prepared = {
+        ...explorer, shapes,
+        authoredAt: (nodeId: string) => authored.filter((item) => boundaryNodes.get(item.revealedBy.eventSeq) === nodeId) as never,
+      };
+      return prepared;
+    };
     try {
       return queryModules({
         run, assistance, request, ...this.#moduleViewer(runId, principal, run, role),
-        sources: {
-          ...explorer,
-          shapes,
-          authoredAt: (nodeId: string) => authored.filter((item) => boundaryNodes.get(item.revealedBy.eventSeq) === nodeId) as never,
-        },
+        get sources() { return prepare(); },
       }).page;
     } catch (error) {
+      if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) {
+        throw new ServerError("EVIDENCE_UNAVAILABLE", "Module execution contract is unavailable");
+      }
       if (error instanceof ModuleQueryError) {
         if (error.code === "MODULE_QUERY_WITHHELD") throw new ServerError("ASSISTANCE_WITHHELD", error.message);
         throw new ServerError("INVALID_REQUEST", error.message);

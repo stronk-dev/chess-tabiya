@@ -1098,6 +1098,11 @@ evidence-binding-execution-check:
 theory-binding-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts packages/runtime/src/module-query.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts
 
+.PHONY: local-module-execution-check
+local-module-execution-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
+	$(MAKE) typecheck
+
 .PHONY: hint-empty-response-check
 hint-empty-response-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/hint-distance.test.ts apps/server/src/hint-service.test.ts
