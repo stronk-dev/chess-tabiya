@@ -392,6 +392,7 @@ export {
   corpusPageEvidence,
   corpusPositionEvidence,
   deriveExplorerPopulationSummary,
+  deriveExplorerPositionFrequency,
   deriveExplorerRepertoireFrontier,
   deriveMaiaRunMoveOccurrence,
   deriveMaiaExactFenMoveOccurrence,
@@ -1086,7 +1087,7 @@ export {
 } from "./material-state.js";
 
 export { CORPUS_GUARD } from "./population-guard.js";
-export { explorerPopulationSummaryWire, renderedProviderItems, type ExplorerPopulationSummary, type ExplorerPopulationSummaryWire } from "./explorer-summary.js";
+export { explorerPopulationSummaryWire, renderedProviderItems, type ExplorerPopulationSummary, type ExplorerPopulationSummaryWire, type ExplorerPositionFrequency } from "./explorer-summary.js";
 export type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 
 export const runtimeBuildInfo = Object.freeze({

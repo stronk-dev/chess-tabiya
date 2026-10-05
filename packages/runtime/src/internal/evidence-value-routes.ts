@@ -21,6 +21,7 @@ import {
   admitInputValue,
   createAuthoredStructuralConditionInputV1Evidence,
   createDerivedExplorerRepertoireFrontierV1Evidence,
+  createDerivedExplorerPositionFrequencyV1Evidence,
   createDerivedActivityEventOpenFileOccupancyV1Evidence,
   createDerivedCompareEngineTrajectoryV1Evidence,
   createDerivedCompareEvalDeltaV1Evidence,
@@ -328,6 +329,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "human.explorer.position_page@1": createHumanExplorerPositionPageV1Evidence,
   "derived.explorer.population_summary@1": createDerivedExplorerPopulationSummaryV1Evidence,
   "derived.explorer.repertoire_frontier@1": createDerivedExplorerRepertoireFrontierV1Evidence,
+  "derived.explorer.position_frequency@1": createDerivedExplorerPositionFrequencyV1Evidence,
   "rules.endgame.tablebase_domain@1": createRulesEndgameTablebaseDomainV1Evidence,
   // rfc/hint-distance.md §1.1/§3: seven operator-only horizons and 35 learner disclosures.
   ...HINT_HORIZON_FACTORIES,

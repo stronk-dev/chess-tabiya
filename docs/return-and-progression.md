@@ -86,6 +86,18 @@ The HTTP surface is:
 `POST /runs` accepts optional intent metadata, but schedule ownership and due-at-start are
 resolved server-side. Foreign schedules are indistinguishable from missing ones.
 
+Modern return frequency uses `derived.explorer.position_frequency@1` through the registered
+`runtime.return_frequency@1` consumer. The queue compiles its Explorer operation path before
+acquisition, then admits the whole sealed page against the exact root, rating buckets, speeds
+and date window. Its existing 100-game floor belongs to the queue, not the source parser;
+valid sparse and empty pages remain successful source facts but provide no tie-break count.
+Copied, crossed or unavailable modern pages leave stored order intact without falling back
+to bare statistics. Standalone sources without a page capability retain their explicit
+compatibility path. At most 40 lookups are made in the intake's same-day groups. The HTTP
+request signal reaches source acquisition; disconnect aborts work without further lookups
+or changing provider health. Only the admitted count and requested population leave this
+backend view, never the retained page or its candidate move rows.
+
 ## Client surface
 
 `/learn` is a real surface and deployment capability. It lists due work and recorded

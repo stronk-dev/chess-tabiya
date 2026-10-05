@@ -512,6 +512,16 @@ Receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 
+**2026-10-05 return-frequency checkpoint ([[D3383]]):** the authenticated due queue
+admits the declared count-only Explorer projection against its exact root, rating buckets,
+speeds and date window. Copied/crossed/failed modern sources omit the optional tie-break
+without a bare-statistics fallback. The consumer's 100-game floor, same-day ordering,
+40 lookups and 20-item intake remain unchanged; disconnect cancels further lookups
+without poisoning health. The normal focused gate passes 135 tests and clean types.
+This advances one real scheduling consumer, not content, a capability or a milestone.
+Whole-source persistence, legacy retirement and complete execution/resolution/availability
+remain open. Receipt: `planning/provider-exchange-and-execution/return-frequency-2026-10-05.md`.
+
 **2026-10-05 Theory checkpoint ([[D3381]], [[D3382]]):** supplied modern Explorer
 pages now reach authenticated module composition through their declared capability.
 The service compiles the source path and admits exact position/population/window and

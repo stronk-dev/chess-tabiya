@@ -1521,7 +1521,7 @@ export function createRestHandler(
         })) });
       }
       if (request.method === "GET" && url.pathname === "/progress/due") {
-        const queue = await service.dueQueue(authenticate(), url.searchParams.get("at") ?? undefined, corpusSource);
+        const queue = await service.dueQueue(authenticate(), url.searchParams.get("at") ?? undefined, corpusSource, request.signal);
         return json(200, {
           schedules: queue.schedules.map((item) => Object.freeze({
             id: item.id, sessionKind: item.sessionKind, packId: item.packId, kind: item.kind,

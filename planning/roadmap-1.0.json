@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Next executable integration: D3383, admit exact whole-source Explorer frequency at the authenticated due queue, preserving same-day tie-breaks, stored-order fallback, consumer sample policy and lookup/intake bounds without modern-to-bare fallback. Finish actual raw/narrow source migrations and explicit consumer binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3376 requires registered shared opening schema/source authority; D3373 requires durable terminating-selection/MultiPV Stockfish; D3370 requires the distinct sampled Maia result; D3363 requires the Inspector candidate-page contract. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+        "nextAction": "Next executable integration: D3384, migrate Inspector Explorer through declared whole-source/narrow evidence and registered presentation, preserving population attribution, counts, canonical moves, unlisted mass, recency, committed-move membership and sample policy. Compile before I/O; admit exact requests and recheck read/disclosure/subject afterward. Prove authenticated HTTP/presentation/cancellation and no modern-to-bare fallback. Finish source migrations and explicit binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3363 retains the distinct Maia candidate-page contract; D3370 requires the distinct sampled Maia result; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3381 retains supplied modern Explorer page capabilities at authenticated Theory composition. D3382 compiles the registered source path and matches captured position/population/window with sealed payload/acquisition identities; crossed/copied/failed modern pages produce honest module absence without bare fallback. Sparse and empty pages retain factual counts. Fourteen new actual HTTP controls include changed decisions, grant revocation and transport cancellation. Normal focused gate passes 63 tests and clean types; all 909 capability declarations remain current without metadata refresh. Complete exact-index software passes 2937 tests/325 files, seven isolated performance tests and downstream contracts at 8aa5c81daf3aaceebe3776e3b408bafe2636ea56; content passes 223 tests/23 files with zero clearance errors and all 104 requirements. Browser CI passes 111 journeys, one optional Maia latency skip and zero retries; complete governance passes. Source/test/schema/content/tooling bytes remain unchanged through closeout. Zero untriaged/1679 live items; D3383 assigns the next return-frequency integration. Whole-source persistence, D3363/D3370/D3373/D3376, legacy retirement and full execution/resolution/availability remain open; no capability or milestone promotion.",
+          "summary": "D3383 implements exact whole-source return frequency at the authenticated due queue: declared count-only projection, optional omission, sealed payload/acquisition request admission and no modern-to-bare fallback. Existing 100-game floor, same-day tie-break, 40 lookups, 20-item intake and waiting-state preservation remain unchanged. Production HTTP and real cancellation controls pass the normal 135-test focused gate and warning-free types. Complete exact-index software passes 2956 tests/325 files, seven isolated performance tests/four files and downstream contracts at 1493a4306a94670a9aa7c2a6329aff25f0397871; content passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. Browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; complete governance passes. Source/test/schema/content/tooling index bytes remain unchanged through tracking closeout. Only D3383 closes, with zero untriaged/1679 live. D3384 assigns the next actual Inspector Explorer source/presentation migration. Whole-source persistence, D3363/D3370/D3373/D3376, legacy retirement and full execution/resolution/availability remain open; no capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -870,7 +870,9 @@
             "planning/provider-exchange-and-execution/repertoire-frontier-software-2026-10-05.json",
             "planning/provider-exchange-and-execution/repertoire-frontier-software-negative-2026-10-05.json",
             "planning/provider-exchange-and-execution/theory-source-admission-2026-10-05.md",
-            "planning/provider-exchange-and-execution/theory-source-software-2026-10-05.json"
+            "planning/provider-exchange-and-execution/theory-source-software-2026-10-05.json",
+            "planning/provider-exchange-and-execution/return-frequency-2026-10-05.md",
+            "planning/provider-exchange-and-execution/return-frequency-software-2026-10-05.json"
           ],
           "anchors": [
             {
@@ -916,7 +918,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:49074f43baa656dcb8cc4ed4afb20488b783836e0bb778b5e0a261e78274c299"
+              "digest": "sha256:3193398a738db5b2854c65a1802b2b9c6385c633a6342fefff84a8c7716d7db9"
             },
             {
               "kind": "work_state",
@@ -1106,7 +1108,12 @@
             {
               "kind": "work_state",
               "id": "D3383",
-              "digest": "sha256:31ab3ba30eaad17d451b63d4adc7141e4f13e12cb1ec53beac7815c5363d570a"
+              "digest": "sha256:53fb9a985e0f29e621b21a0b5bf7597a04273f82bac8bd43441270b3dafd8d03"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3384",
+              "digest": "sha256:493795964d83e333cad9fc75f2f155d99781b94d687c06bd5e73bd339c7192b9"
             }
           ]
         },
@@ -1616,7 +1623,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:49074f43baa656dcb8cc4ed4afb20488b783836e0bb778b5e0a261e78274c299"
+              "digest": "sha256:3193398a738db5b2854c65a1802b2b9c6385c633a6342fefff84a8c7716d7db9"
             },
             {
               "kind": "work_state",

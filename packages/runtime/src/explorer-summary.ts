@@ -1,7 +1,14 @@
 /** Provider-exchange §8: move-free population facts, never a suitability or quality verdict. */
 import { assertDeclaredEvidence, assertRenderedEvidenceView, type DeclaredEvidence, type RenderedEvidenceView } from "./evidence-contract.js";
 import { CORPUS_GUARD } from "./population-guard.js";
-import type { ExplorerPositionPage, ExplorerReportedHistory, ExplorerReportedOpening, ExplorerSpeed, ExplorerWdlCounts, ProviderEvidenceDelivery } from "./provider-types.js";
+import type { ExplorerPositionPage, ExplorerPositionPageRequest, ExplorerReportedHistory, ExplorerReportedOpening, ExplorerSpeed, ExplorerWdlCounts, ProviderEvidenceDelivery } from "./provider-types.js";
+
+/** Backend frequency fact; the consuming queue owns sample policy and transport. */
+export interface ExplorerPositionFrequency {
+  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>;
+  readonly request: ExplorerPositionPageRequest;
+  readonly total: number;
+}
 
 export interface ExplorerPopulationSummary {
   readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>;

@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import { commitMove, createRun, type OpponentSelection } from "@chess-tabiya/runtime";
+import { commitMove, corpusPositionEvidence, createRun, evidenceForConsumer, type OpponentSelection } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import type { CorpusQuery, CorpusResult, CorpusSource } from "./corpus.js";
@@ -30,6 +30,9 @@ import {
   type RetryVariantKinds,
 } from "./storage.js";
 import { withDerivedRequires } from "./capability/pack-capabilities.js";
+import { consumeReturnFrequency } from "./return-frequency.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
+import { corpusPopulation } from "./corpus.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-09-01T12:00:00.000Z";
@@ -93,6 +96,14 @@ function repeat(result: Result, count: number, origin?: AttemptOrigin): Step[] {
 }
 
 describe("return scheduling (rfc/return-scheduling.md)", () => {
+  it("requires the named sealed return-frequency view rather than a source-shaped payload", () => {
+    const result: CorpusResult = { kind: "stats", total: 120, white: 120, draws: 0, black: 0, moves: [], recency: { kind: "absent" }, population: corpusPopulation(1600) };
+    const evidence = corpusPositionEvidence(result);
+    const view = evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.return_frequency", version: 1 }, [evidence]);
+    expect(consumeReturnFrequency(view)).toBe(result);
+    for (const forged of [result, { ...view }, JSON.parse(JSON.stringify(view)), evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [evidence])]) expect(() => consumeReturnFrequency(forged as never)).toThrow();
+  });
+
   const stores: SQLiteRunStorage[] = [];
   const directories: string[] = [];
   const storage = (filename = ":memory:") => {

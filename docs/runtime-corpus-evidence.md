@@ -32,8 +32,11 @@ legal unique UCI, canonical/provider SAN, safe counts, listed/unlisted mass, rat
 requested history. Zero and sparse populations are source success. `stats()` is an explicitly
 temporary compatibility view; Inspector, repertoire frontier and return-frequency each own their
 existing 100-game sample policy. The source does not decide sample suitability. Full sealed pages
-remain in the shared exchange; the RFC's narrow summary and exact played-occurrence projections
-are still open. Supplied fixtures/custom sources and standalone authoring tools remain separate.
+remain in the shared exchange. Theory's move-free summary, the repertoire frontier and the
+count-only return-frequency projection now have actual consumers that admit exact requests.
+Inspector's whole-source/presentation migration and the remaining exact played-occurrence
+consumer joins remain open. Supplied fixtures/custom sources and standalone authoring tools
+remain separate.
 
 ## Delivery and API
 

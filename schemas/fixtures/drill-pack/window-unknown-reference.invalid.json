@@ -21,7 +21,7 @@
     { "id": "objective.state_machine", "version": { "kind": "integer", "value": 1 } },
     { "id": "objective.transition_legality", "version": { "kind": "integer", "value": 1 } },
     { "id": "objectiveType.play_until_checkpoint", "version": { "kind": "integer", "value": 1 } },
-    { "id": "opponent.selection", "version": { "kind": "integer", "value": 13 } },
+    { "id": "opponent.selection", "version": { "kind": "integer", "value": 14 } },
     { "id": "opponentPolicy.mode.strong_engine", "version": { "kind": "integer", "value": 1 } },
     { "id": "opponentPolicy.seedMode.per_run", "version": { "kind": "integer", "value": 1 } },
     { "id": "outcome.terminal", "version": { "kind": "integer", "value": 1 } },

@@ -154,7 +154,7 @@ import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFe
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
 import { providerProtocolRow, providerProtocolSourceBinding } from "./provider-protocol.js";
 import { CORPUS_GUARD } from "./population-guard.js";
-import type { ExplorerPopulationSummary } from "./explorer-summary.js";
+import type { ExplorerPopulationSummary, ExplorerPositionFrequency } from "./explorer-summary.js";
 import type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 import { maiaExactFenOccurrencePayload, maiaRunOccurrencePayload, type MaiaExactFenMoveOccurrence, type MaiaOccurrencePageEvidence, type MaiaRunMoveOccurrence } from "./maia-occurrence.js";
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
@@ -1384,6 +1384,16 @@ export const createDerivedExplorerPopulationSummaryV1Evidence = (() => {
       opening: result.opening, history: result.history,
       disclosure: Object.freeze({ guard: "CORPUS_GUARD", statement: CORPUS_GUARD }),
     }), { page }, [page]);
+  });
+})();
+
+export const createDerivedExplorerPositionFrequencyV1Evidence = (() => {
+  const route = "derived.explorer.position_frequency@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ page: sealed("human.explorer.position_page@1") }], result: "single", dependency: "provider-exchange-and-execution" }, ({ page }: { readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">> }): DeclaredEvidence<ExplorerPositionFrequency> => {
+    assertProviderDelivery("lichess_explorer.position_page@1", page.payload);
+    const { request, result } = page.payload.payload;
+    return mint(route, symbol, Object.freeze({ page, request, total: result.totals.total }), { page }, [page]);
   });
 })();
 

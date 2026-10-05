@@ -191,6 +191,13 @@
       "8e7fa92bce8fc31a1205ccba63c464ffc1fa6806f5c06aa1b0ffd0086a3aae0a"
     ]
   },
+  "derived.explorer.position_frequency@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "b2364115b095d1828a131d021163a83f5ee22e9064c80d9ef83e3882d37f2894"
+    ]
+  },
   "derived.explorer.repertoire_frontier@1": {
     "availability": "available",
     "cardinality": 1,

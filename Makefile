@@ -1009,6 +1009,14 @@ evidence-seal-audit:
 .PHONY: queued-tablebase-check
 .PHONY: health-tablebase-metadata-check health-tablebase-metadata-update
 .PHONY: repertoire-metadata-check repertoire-metadata-update
+.PHONY: return-frequency-metadata-check return-frequency-metadata-update
+return-frequency-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/return-frequency-metadata.js --log-level=warning
+	node apps/server/dist/return-frequency-metadata.js --return-frequency
+return-frequency-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/return-frequency-metadata.js --log-level=warning
+	node apps/server/dist/return-frequency-metadata.js --return-frequency --apply-metadata
+
 repertoire-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/repertoire-metadata.js --log-level=warning
 	node apps/server/dist/repertoire-metadata.js --repertoire-frontier
@@ -1102,7 +1110,10 @@ provider-exchange-check: run-subject-check maia-occurrence-check evidence-execut
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/module-registry.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/module-query.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/provider-exchange.test.ts packages/runtime/src/provider-protocol.test.ts packages/runtime/src/explorer-summary.test.ts apps/server/src/provider-exchange.test.ts apps/server/src/provider-traversal.test.ts apps/server/src/provider-tablebase.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/engine-supervisor-exchange.test.ts
 
-.PHONY: repertoire-source-check theory-source-check
+.PHONY: repertoire-source-check theory-source-check return-frequency-check
+return-frequency-check: evidence-manifest-check
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
+
 theory-source-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts packages/runtime/src/explorer-summary.test.ts
 

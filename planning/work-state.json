@@ -27840,9 +27840,18 @@
     },
     {
       "id": "D3383",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:53fb9a985e0f29e621b21a0b5bf7597a04273f82bac8bd43441270b3dafd8d03",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/return-frequency-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3384",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:31ab3ba30eaad17d451b63d4adc7141e4f13e12cb1ec53beac7815c5363d570a",
+      "sourceDigest": "sha256:493795964d83e333cad9fc75f2f155d99781b94d687c06bd5e73bd339c7192b9",
       "uxItems": [],
       "owner": "evidence-foundation"
     }

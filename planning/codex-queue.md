@@ -1,5 +1,31 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 return-frequency checkpoint
+
+D3383 admits exact whole-source Explorer frequency at the actual authenticated due queue
+through its declared count-only projection and optional consumer. Copied/crossed/failed
+modern sources omit counts without bare fallback, preserving the 100-game floor, same-day
+ordering, 40 lookups, 20-item intake and waiting state. Real disconnect cancels further
+lookups without poisoning health. The normal focused gate passes 135 tests and clean types;
+exact-index software passes 2956 tests/325 files and seven isolated performance tests.
+Content passes 223 tests and all 104 requirements; browser CI passes 111 journeys, one
+optional skip and zero retries; governance passes. Receipt:
+`planning/provider-exchange-and-execution/return-frequency-2026-10-05.md`.
+
+Next executable item: D3384, Inspector's Explorer bare-statistics/client-built-evidence
+path. Migrate the real consumer through declared whole-source/narrow evidence and registered
+presentation; preserve population attribution, counts, canonical moves, unlisted mass,
+recency, committed-move membership and consumer sample policy. Compile before I/O, admit
+exact requests and recheck read/disclosure/subject authority afterward. Crossed/copied/failed
+modern pages must not open bare fallback or leak source diagnostics; prove actual HTTP,
+presentation and transport cancellation. Keep explicit standalone compatibility. This is
+not D3363's separate Maia candidate-page-versus-observed-occurrence contract.
+
+Then continue literal binding policies and full execution/resolution/availability. Whole-source
+persistence, source-family contracts and zero-consumer retirement remain open. Metadata
+updates are routine maintenance, not a feature or consent question. No full RFC, capability,
+milestone or 1.0 completion follows from this checkpoint.
+
 ## 2026-10-05 Theory source checkpoint
 
 D3381 retains supplied modern Explorer page capabilities through authenticated module
@@ -10,11 +36,9 @@ and empty pages, demand/disclosure, receiver/deadline forwarding, changed decisi
 revoked grants and disconnect cancellation. The normal focused gate passes 63 tests and
 clean types. Receipt: `planning/provider-exchange-and-execution/theory-source-admission-2026-10-05.md`.
 
-Next executable item: D3383, the due queue's bare-statistics return-frequency tie-break.
-Admit the whole modern source and exact root/population/window through a declared compiled
-view; preserve same-day ordering, stored-order fallback, 100-game policy and intake/lookup
-limits. Prove actual authenticated scheduling and crossed/copied/failed controls, with no
-modern-to-bare fallback. Explicit standalone compatibility remains distinct.
+The subsequently shipped D3383 return-frequency checkpoint and next D3384 migration are
+recorded above. Its same-day ordering, 100-game policy, intake/lookup bounds and explicit
+standalone compatibility remain unchanged.
 
 Continue actual source migrations and explicit consumer policies, then whole-manifest
 execution/resolution/availability. D3363/D3370/D3373/D3376 retain separate source contracts;

@@ -162,7 +162,8 @@ import {
   type AttemptOriginInput,
   type ReturnStanding,
 } from "./progress.js";
-import { corpusPopulation, corpusSamplePolicy, type CorpusPopulation, type CorpusSource } from "./corpus.js";
+import { corpusPopulation, type CorpusPopulation, type CorpusSource } from "./corpus.js";
+import { returnFrequency } from "./return-frequency.js";
 import { corpusPageRequest, type ExplorerPageAcquisition } from "./provider-corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
@@ -2625,7 +2626,8 @@ export class RunService {
    * to the vacation-safe intake. Frequency orders; it never grades and never crosses a due date.
    * Each served return carries its root's coarse standing word (Discharge D2), never the rung.
    */
-  async dueQueue(principal: Principal, at = new Date().toISOString(), corpus?: CorpusSource): Promise<DueQueue> {
+  async dueQueue(principal: Principal, at = new Date().toISOString(), corpus?: CorpusSource, signal?: AbortSignal): Promise<DueQueue> {
+    signal?.throwIfAborted();
     const all = this.due(principal, at);
     const group = (schedule: ScheduleRow) => `${schedule.kind}|${schedule.dueAt.slice(0, 10)}`;
     const windowGroups = new Set(all.slice(0, DUE_INTAKE_LIMIT).map(group));
@@ -2637,10 +2639,10 @@ export class RunService {
         lookups += 1;
         const population = this.#duePopulation(schedule);
         try {
-          // Return-frequency tie-break's existing sample policy, independent of source parsing.
-          const result = corpusSamplePolicy(await corpus.stats({ ...population, fen: `${schedule.rootTransposeKey} 0 1` }), 100);
-          if (result.kind === "stats") frequencies.set(schedule.id, Object.freeze({ games: result.total, population: result.population }));
+          const frequency = await returnFrequency(corpus, { ...population, fen: `${schedule.rootTransposeKey} 0 1` }, signal === undefined ? {} : { signal });
+          if (frequency !== undefined) frequencies.set(schedule.id, frequency);
         } catch {
+          signal?.throwIfAborted();
           // Frequency is only a tie-break; an unavailable corpus leaves the stored order intact.
         }
       }

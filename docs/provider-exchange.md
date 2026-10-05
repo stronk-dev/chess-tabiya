@@ -70,6 +70,17 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
   `dependsOn` edges are not additional execution inputs. The registered digest constructor owns
   path identity, and each path retains its slowest selected latency and exact non-local leaves.
 
+## Return frequency
+
+The return queue also consumes a declared narrow Explorer projection:
+`derived.explorer.position_frequency@1` retains the whole sealed page internally and derives
+only its exact request and literal game count. `runtime.return_frequency@1` declares source
+absence as optional item omission. `RunService.dueQueue` checks the registered operation
+before acquisition and matches payload and acquisition identities afterward. Its 100-game
+floor, same-day tie-break, stored-order fallback and lookup/intake limits are unchanged;
+modern source failures never retry bare statistics. This backend-only projection has no
+Theory, voice or repertoire binding. See [return and progression](return-and-progression.md).
+
 ## Pinned Maia option admission
 
 The supported Maia3 model/source profile (`MAIA3_MODEL_ID` / `MAIA3_SOURCE_COMMIT`) advertises

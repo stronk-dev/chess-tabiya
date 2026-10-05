@@ -1,6 +1,6 @@
 import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
-import { compileAssistanceRequest, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
+import { compileAssistanceRequest, createRun, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import { corpusPopulation, corpusSamplePolicy, type CorpusQuery, type CorpusRequestOptions, type CorpusSource } from "./corpus.js";
 import { ExchangeCorpusSource, corpusPageRequest, healthAdmittedExplorerOperation } from "./provider-corpus.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
@@ -42,6 +42,147 @@ async function harness() {
 }
 
 describe("learner Explorer shared exchange", () => {
+  it("bounds modern return-frequency lookups, intake and same-day reordering", async () => {
+    const { source, remote } = await harness();
+    const store = new SQLiteRunStorage(":memory:");
+    try {
+      const service = new RunService(store, { progressStorage: store });
+      const dueAt = "2026-09-01T12:00:00.000Z";
+      store.create(createRun({ id: "return-bounds", packId: "fixture", packDigest: `sha256:${"b".repeat(64)}`, startFen: START, policyConfig: { seedMode: "per_branch", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 7, createdAt: dueAt }), "return-bounds-writer", "Return bounds");
+      for (let index = 0; index < 45; index += 1) store.createSchedule({
+        id: `return-${String(index).padStart(2, "0")}`, learnerId: "__legacy", rootKey: `position||return-${index}`,
+        sessionKind: "position", packId: null, rootTransposeKey: START.split(" ").slice(0, 4).join(" "),
+        kind: "varied", variant: null, origin: "learner", dueAt, createdAt: dueAt, sourceRunId: null, sourceNodeId: null,
+      });
+      const stats = vi.fn(async () => { throw new Error("bare statistics forbidden"); });
+      const page = vi.fn(async (asked: CorpusQuery, options?: CorpusRequestOptions) => {
+        const pending = source.page(asked, options);
+        await flush();
+        if (remote.calls.length === 1 && !remote.calls[0]!.signal.aborted && page.mock.calls.length === 1) remote.respond(0, body());
+        return pending;
+      });
+      const queue = await service.dueQueue({ learnerId: "__legacy", handle: "__legacy" }, dueAt, { stats, page });
+      expect(page).toHaveBeenCalledTimes(40);
+      expect(remote.calls).toHaveLength(1);
+      expect(stats).not.toHaveBeenCalled();
+      expect(queue.intakeLimit).toBe(20);
+      expect(queue.waiting).toBe(25);
+      expect(queue.schedules.map(row => row.id)).toEqual(Array.from({ length: 20 }, (_, index) => `return-${String(index).padStart(2, "0")}`));
+      expect(queue.schedules.every(row => row.frequency?.games === 120)).toBe(true);
+      expect(service.due({ learnerId: "__legacy", handle: "__legacy" }, dueAt)).toHaveLength(45);
+      const caller = new AbortController(); caller.abort();
+      await expect(service.dueQueue({ learnerId: "__legacy", handle: "__legacy" }, dueAt, { stats, page }, caller.signal)).rejects.toMatchObject({ name: "AbortError" });
+      expect(page).toHaveBeenCalledTimes(40);
+    } finally { store.close(); }
+  });
+
+  it("cancels the actual due-queue source on client disconnect without more lookups or health damage", { timeout: 30_000 }, async () => {
+    const { source, remote, health } = await harness();
+    let started!: () => void; let aborted!: () => void;
+    const didStart = new Promise<void>(resolve => { started = resolve; });
+    const didAbort = new Promise<void>(resolve => { aborted = resolve; });
+    const stats = vi.fn(async () => { throw new Error("bare statistics forbidden"); });
+    const page = vi.fn(async (asked: CorpusQuery, options: CorpusRequestOptions = {}) => {
+      const pending = source.page(asked, options);
+      await flush();
+      remote.calls.at(-1)!.signal.addEventListener("abort", aborted, { once: true });
+      started();
+      return pending;
+    });
+    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: { stats, page } });
+    const caller = new AbortController();
+    try {
+      await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "return_cancel", password: "return-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const headers = { "content-type": "application/json", cookie, "x-writer-id": "return-writer" };
+      for (const [index, fen] of [START, "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"].entries()) {
+        const created = await fetch(`${origin}/runs`, { method: "POST", headers, body: JSON.stringify({ id: `cancel-return-${index}`, session: { kind: "position", start: { fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1600 } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
+        expect(created.status).toBe(201);
+        expect((await fetch(`${origin}/runs/cancel-return-${index}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: index === 0 ? "e2e4" : "g1f3" }) })).status).toBe(200);
+      }
+      const cancelled = fetch(`${origin}/progress/due?at=9999-12-31T23:59:59.999Z`, { headers: { cookie }, signal: caller.signal });
+      await didStart;
+      caller.abort();
+      await expect(cancelled).rejects.toMatchObject({ name: "AbortError" });
+      await didAbort; await flush();
+      expect(page).toHaveBeenCalledTimes(1);
+      expect(stats).not.toHaveBeenCalled();
+      expect(remote.calls).toHaveLength(1);
+      expect(health.operationAvailability("evidence.explorer_query").state).toBe("requestable_unverified");
+      expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("requestable_unverified");
+    } finally { caller.abort(); await application.close(); }
+  });
+
+  it.each(["success", "floor", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy"])("admits return frequency at the authenticated due queue (%s)", { timeout: 30_000 }, async arm => {
+    const { source, remote } = await harness();
+    const stats = vi.fn(async (asked: CorpusQuery) => ({ kind: "stats" as const, total: 70000, white: 70000, draws: 0, black: 0,
+      moves: [{ san: "RAW_FALLBACK_DO_NOT_DISCLOSE", uci: "e2e4", playedCount: 60, sharePct: 50, white: 60, draws: 0, black: 0 }],
+      recency: { kind: "absent" as const }, population: { source: asked.source, ratings: asked.ratings, speeds: asked.speeds, since: asked.since, until: asked.until } }));
+    class SuppliedSource implements CorpusSource {
+      readonly #source = source;
+      readonly stats = stats;
+      calls = 0;
+      async page(asked: CorpusQuery, options: CorpusRequestOptions = {}) {
+        this.calls += 1;
+        expect(options.signal).toBeDefined();
+        expect(options.deadlineMonotonic).toBeTypeOf("number");
+        expect(Object.isFrozen(asked)).toBe(true);
+        expect(Object.isFrozen(asked.ratings)).toBe(true);
+        expect(Object.isFrozen(asked.speeds)).toBe(true);
+        if (arm === "failure") throw new Error("source unavailable");
+        const crossed = arm === "position" ? { ...asked, fen: NEXT }
+          : arm === "ratings" ? { ...asked, ratings: [1400] as const }
+          : arm === "speeds" ? { ...asked, speeds: ["rapid"] as const }
+          : arm === "dates" ? { ...asked, since: "2025-01" } : asked;
+        const acquiring = this.#source.page(crossed, options);
+        await flush();
+        const total = arm === "sparse" ? 99 : arm === "zero" ? 0 : arm === "floor" ? 100 : asked.fen.startsWith(START.split(" ")[0]!) ? 120 : 70000;
+        remote.respond(remote.calls.length - 1, { ...body(total), moves: [], ...(arm === "typed_failure" ? { white: "invalid" } : {}) });
+        const acquired = await acquiring;
+        return arm === "clone" && acquired.kind === "page" ? { ...acquired, evidence: { ...acquired.evidence } } : acquired;
+      }
+    }
+    const supplied = new SuppliedSource();
+    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
+    try {
+      await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "return_owner", password: "return-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const headers = { "content-type": "application/json", cookie, "x-writer-id": "return-writer" };
+      const roots = [START, "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"];
+      for (const [index, fen] of roots.entries()) {
+        const created = await fetch(`${origin}/runs`, { method: "POST", headers, body: JSON.stringify({ id: `return-root-${index}`, session: { kind: "position", start: { fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1600 } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
+        expect(created.status, await created.clone().text()).toBe(201);
+        const committed = await fetch(`${origin}/runs/return-root-${index}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: index === 0 ? "e2e4" : "g1f3" }) });
+        expect(committed.status, await committed.clone().text()).toBe(200);
+      }
+      const due = `${origin}/progress/due?at=9999-12-31T23:59:59.999Z`;
+      expect((await fetch(due)).status).toBe(401);
+      expect(supplied.calls).toBe(0);
+      expect(stats).not.toHaveBeenCalled();
+      const response = await fetch(due, { headers: { cookie } });
+      expect(response.status, await response.clone().text()).toBe(200);
+      const page = await response.json() as { schedules: { sourceRunId: string; frequency: { games: number; population: unknown } | null }[]; intakeLimit: number; waiting: number };
+      expect(page.schedules).toHaveLength(2);
+      expect(page.intakeLimit).toBe(20);
+      expect(page.waiting).toBe(0);
+      expect(page.schedules.map(row => row.sourceRunId)).toEqual(arm === "success" ? ["return-root-1", "return-root-0"] : ["return-root-0", "return-root-1"]);
+      const counts = arm === "success" ? [70000, 120] : arm === "legacy" ? [70000, 70000] : arm === "floor" ? [100, 100] : [null, null];
+      expect(page.schedules.map(row => row.frequency?.games ?? null)).toEqual(counts);
+      for (const row of page.schedules) if (row.frequency !== null) expect(row.frequency.population).toEqual(corpusPopulation(1600));
+      expect(JSON.stringify(page)).not.toMatch(/RAW_FALLBACK|canonicalUci|providerSan|normalizedRequestDigest|responseDigest|"moves"|"page"/u);
+      expect(supplied.calls).toBe(arm === "legacy" ? 0 : ["failure", "typed_failure"].includes(arm) ? 1 : 2);
+      if (arm === "failure") expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("temporarily_blocked");
+      if (arm === "typed_failure") expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("unavailable");
+      expect(stats).toHaveBeenCalledTimes(arm === "legacy" ? 2 : 0);
+    } finally { await application.close(); }
+  });
+
   it("preserves the modern method's receiver and sealed page through the health adapter", async () => {
     const { source, remote } = await harness();
     const health = await testRegistry({ "explorer-primary": "unverified" });

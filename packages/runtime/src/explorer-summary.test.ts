@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deriveExplorerPopulationSummary, providerSourceEvidence } from "./evidence-operations.js";
+import { deriveExplorerPopulationSummary, deriveExplorerPositionFrequency, providerSourceEvidence } from "./evidence-operations.js";
 import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { explorerPopulationSummaryWire, renderedProviderItems } from "./explorer-summary.js";
@@ -10,6 +10,7 @@ import { FIXTURE_AT, FIXTURE_LATER, explorerBody, explorerRequest, httpCapture }
 import { parsePresentationReceipt, presentEvidenceItems, presentedSentence, renderPresentedEvidenceView, serializePresentedEvidence } from "./presentation-contract.js";
 import { voiceCheck } from "./voice.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { compileProjectionExecution } from "./evidence-execution.js";
 
 const SENTINEL = "MOVE_ROW_SENTINEL_DO_NOT_DISCLOSE";
 function source(total: number, history: boolean, retained = false) {
@@ -24,6 +25,20 @@ function source(total: number, history: boolean, retained = false) {
 }
 
 describe("Explorer move-free population summary", () => {
+  it.each([0, 99, 100, 70000])("retains literal frequency %i without a source-owned floor or learner move rows", total => {
+    const page = source(total, true, true);
+    const frequency = deriveExplorerPositionFrequency(page);
+    assertDeclaredEvidence(frequency);
+    expect(frequency.payload).toEqual({ page, request: page.payload.payload.request, total });
+    expect(Object.keys(frequency.payload).sort()).toEqual(["page", "request", "total"]);
+    expect(evidenceValueReceipt(frequency).sourceDigests).toEqual([evidenceValueReceipt(page).payloadDigest]);
+    expect(compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, frequency.projection).paths.map(path => path.sourceRequirements.map(row => row.providerOperation))).toEqual([["lichess_explorer.position_page@1"]]);
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "runtime.return_frequency", version: 1 }, [frequency]).items).toEqual([frequency]);
+    for (const consumer of ["module.theory_breadcrumb", "guidance.voice", "runtime.repertoire_scan"]) expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, [frequency]).items).toEqual([]);
+    for (const candidate of [{ ...page }, page.payload, JSON.parse(JSON.stringify(page)), deriveExplorerPopulationSummary(page)]) expect(() => invokeEvidenceValueRoute("derived.explorer.position_frequency@1", { page: candidate } as never)).toThrow();
+    expect(() => invokeEvidenceValueRoute("derived.explorer.position_frequency@1", { page, total: 999999 } as never)).toThrow(/extra/u);
+  });
+
   it.each([0, 37, 100])("retains source population %i without inventing suitability", (total) => {
     const page = source(total, true);
     const summary = deriveExplorerPopulationSummary(page);
