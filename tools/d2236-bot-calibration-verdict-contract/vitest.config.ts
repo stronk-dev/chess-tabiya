@@ -5,5 +5,5 @@ export default defineConfig({
   resolve: {
     alias: [{ find: /^chessops\/(.+)$/u, replacement: `${fileURLToPath(new URL("../../apps/server/node_modules/chessops/dist/esm", import.meta.url))}/$1.js` }],
   },
-  test: { include: ["tools/d2236-bot-calibration-verdict-contract/population.test.ts"], maxWorkers: 1 },
+  test: { include: ["tools/d2236-bot-calibration-verdict-contract/population.test.ts", "tools/d2236-bot-calibration-verdict-contract/evaluation.test.ts"], maxWorkers: 1 },
 });

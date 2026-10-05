@@ -1337,8 +1337,8 @@ bot-calibration-verdict-contract:
 
 .PHONY: bot-calibration-population-check bot-calibration-population bot-calibration-population-report bot-calibration-population-report-update bot-calibration-population-report-check
 bot-calibration-population-check: bot-calibration-verdict-contract
-	./node_modules/.bin/tsc --project tools/d2236-bot-calibration-verdict-contract/tsconfig.json
-	./node_modules/.bin/vitest run --config tools/d2236-bot-calibration-verdict-contract/vitest.config.ts
+	$(CI_NODE) node_modules/typescript/bin/tsc --project tools/d2236-bot-calibration-verdict-contract/tsconfig.json
+	$(CI_NODE) node_modules/vitest/vitest.mjs run --config tools/d2236-bot-calibration-verdict-contract/vitest.config.ts
 
 # Explicit offline research acquisition; never download the corpus in CI or hint requests.
 bot-calibration-population:
@@ -1347,6 +1347,31 @@ bot-calibration-population:
 bot-calibration-population-report bot-calibration-population-report-update bot-calibration-population-report-check:
 	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/report.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/report.mjs --log-level=warning
 	node .cache/bot-calibration/report.mjs $(if $(filter bot-calibration-population-report-update,$@),--update,) $(if $(filter bot-calibration-population-report-check,$@),--check,)
+
+.PHONY: bot-calibration-engine bot-calibration-engine-check bot-calibration-verify bot-calibration-evaluate bot-calibration-evaluation-report bot-calibration-evaluation-report-update bot-calibration-evaluation-report-check
+ifndef BOT_CALIBRATION_SF_CMD
+BOT_CALIBRATION_SF_CMD := $(if $(wildcard .cache/bot-calibration/stockfish-18/stockfish/stockfish-macos-m1-apple-silicon),$(abspath .cache/bot-calibration/stockfish-18/stockfish/stockfish-macos-m1-apple-silicon),$(if $(wildcard .cache/bot-calibration/stockfish-18/bin/stockfish),$(abspath .cache/bot-calibration/stockfish-18/bin/stockfish),$(SF_CMD)))
+endif
+export BOT_CALIBRATION_SF_CMD
+bot-calibration-engine:
+	sh tools/d2236-bot-calibration-verdict-contract/prepare-engine.sh
+
+bot-calibration-engine-check:
+	$(CI_NODE) node_modules/vitest/vitest.mjs run --config tools/d2236-bot-calibration-verdict-contract/vitest.native.config.ts
+
+# The ordinary CI lanes, with the same verified version-18 binary used by this experiment.
+# Target-local selection leaves the operator's global engine and other Make targets alone.
+bot-calibration-verify: SF_CMD = $(BOT_CALIBRATION_SF_CMD)
+bot-calibration-verify: bot-calibration-engine-check bot-calibration-population-check verify-software verify-content verify-governance staged-process-contracts
+
+# Offline research pricing, deliberately outside required CI and live hint requests.
+bot-calibration-evaluate:
+	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/evaluate.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/evaluate.mjs --log-level=warning
+	$(CI_NODE) .cache/bot-calibration/evaluate.mjs
+
+bot-calibration-evaluation-report bot-calibration-evaluation-report-update bot-calibration-evaluation-report-check:
+	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/evaluation-report.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/evaluation-report.mjs --log-level=warning
+	$(CI_NODE) .cache/bot-calibration/evaluation-report.mjs $(if $(filter bot-calibration-evaluation-report-update,$@),--update,) $(if $(filter bot-calibration-evaluation-report-check,$@),--check,)
 
 .PHONY: opponent-experience-fresh-review
 opponent-experience-fresh-review:

@@ -1,0 +1,186 @@
+{
+  "schema": "tabiya.research.bot-human-reference-pricing.v1",
+  "manifestDigest": "sha256:8b17e0e9005e160c05bb8267989a1254904dc69e51d4f85ae9b419f481f31bb9",
+  "populationDigest": "sha256:02c35cbee9c0720ff33a858e469eb3fdef7ed2d66358cdfd4f7735e580bb27e2",
+  "instrumentDigest": "sha256:e765c35f28718c97f2093049dc0802b5d010271e70cc41acb5c843a4428968ee",
+  "analysisAuthority": {
+    "engine": "Stockfish 18",
+    "bound": {
+      "kind": "depth",
+      "value": 8
+    },
+    "threads": 1,
+    "hashMiB": 16,
+    "resetPerPosition": [
+      "ucinewgame",
+      "Clear Hash",
+      "isready"
+    ],
+    "candidateSet": "all exact legal moves",
+    "scoreDomains": [
+      "centipawn",
+      "mate"
+    ],
+    "mateCoercion": "forbidden"
+  },
+  "actualIdentity": {
+    "binaryDigest": "sha256:5659ee5e43954d5e7f3d3cd7e6c2b7618bf77d55ec4d1d4887885338d935de43",
+    "id": "stockfish-analysis",
+    "name": "Stockfish",
+    "uciOptionsDigest": "sha256:8fc2a9a4eedcfb77eb233cb3fb6fc7d6750c67e8bd8d5156ed579e1608376749",
+    "version": "18"
+  },
+  "optionImage": {
+    "advertisedUciOptionLines": [
+      "option name Debug Log File type string default <empty>",
+      "option name NumaPolicy type string default auto",
+      "option name Threads type spin default 1 min 1 max 1024",
+      "option name Hash type spin default 16 min 1 max 33554432",
+      "option name Clear Hash type button",
+      "option name Ponder type check default false",
+      "option name MultiPV type spin default 1 min 1 max 256",
+      "option name Skill Level type spin default 20 min 0 max 20",
+      "option name Move Overhead type spin default 10 min 0 max 5000",
+      "option name nodestime type spin default 0 min 0 max 10000",
+      "option name UCI_Chess960 type check default false",
+      "option name UCI_LimitStrength type check default false",
+      "option name UCI_Elo type spin default 1320 min 1320 max 3190",
+      "option name UCI_ShowWDL type check default false",
+      "option name SyzygyPath type string default <empty>",
+      "option name SyzygyProbeDepth type spin default 1 min 1 max 100",
+      "option name Syzygy50MoveRule type check default true",
+      "option name SyzygyProbeLimit type spin default 7 min 0 max 7",
+      "option name EvalFile type string default nn-c288c895ea92.nnue",
+      "option name EvalFileSmall type string default nn-37f18f62d772.nnue"
+    ],
+    "appliedSetoptionCommands": [
+      "setoption name Threads value 1",
+      "setoption name Hash value 16"
+    ]
+  },
+  "parserImplementationDigest": "sha256:eeac2344c81c2c3c9951eb0d326f7318c88606bd91cc8a945068d68d6e7aec43",
+  "state": "priced_not_calibrated",
+  "journalDigest": "sha256:10e71825593a9d3b54cfa74f51db34032bb48c9486439d7c24ae7c348b437edd",
+  "decisions": 24000,
+  "candidateRows": 756370,
+  "centipawnRows": 745853,
+  "mateRows": 10517,
+  "playedCentipawn": 23673,
+  "playedMate": 327,
+  "cells": [
+    {
+      "cell": "1000/opening-8-16",
+      "decisions": 2000,
+      "candidateRows": 66992,
+      "centipawnRows": 66717,
+      "mateRows": 275,
+      "playedCentipawn": 1997,
+      "playedMate": 3
+    },
+    {
+      "cell": "1000/middlegame-17-40",
+      "decisions": 2000,
+      "candidateRows": 67488,
+      "centipawnRows": 66629,
+      "mateRows": 859,
+      "playedCentipawn": 1981,
+      "playedMate": 19
+    },
+    {
+      "cell": "1000/late-41-plus",
+      "decisions": 2000,
+      "candidateRows": 48556,
+      "centipawnRows": 46600,
+      "mateRows": 1956,
+      "playedCentipawn": 1899,
+      "playedMate": 101
+    },
+    {
+      "cell": "1400/opening-8-16",
+      "decisions": 2000,
+      "candidateRows": 67735,
+      "centipawnRows": 67523,
+      "mateRows": 212,
+      "playedCentipawn": 2000,
+      "playedMate": 0
+    },
+    {
+      "cell": "1400/middlegame-17-40",
+      "decisions": 2000,
+      "candidateRows": 69932,
+      "centipawnRows": 69264,
+      "mateRows": 668,
+      "playedCentipawn": 1988,
+      "playedMate": 12
+    },
+    {
+      "cell": "1400/late-41-plus",
+      "decisions": 2000,
+      "candidateRows": 50785,
+      "centipawnRows": 48993,
+      "mateRows": 1792,
+      "playedCentipawn": 1924,
+      "playedMate": 76
+    },
+    {
+      "cell": "1800/opening-8-16",
+      "decisions": 2000,
+      "candidateRows": 68342,
+      "centipawnRows": 68241,
+      "mateRows": 101,
+      "playedCentipawn": 2000,
+      "playedMate": 0
+    },
+    {
+      "cell": "1800/middlegame-17-40",
+      "decisions": 2000,
+      "candidateRows": 72000,
+      "centipawnRows": 71442,
+      "mateRows": 558,
+      "playedCentipawn": 1996,
+      "playedMate": 4
+    },
+    {
+      "cell": "1800/late-41-plus",
+      "decisions": 2000,
+      "candidateRows": 52071,
+      "centipawnRows": 50423,
+      "mateRows": 1648,
+      "playedCentipawn": 1947,
+      "playedMate": 53
+    },
+    {
+      "cell": "2200/opening-8-16",
+      "decisions": 2000,
+      "candidateRows": 66982,
+      "centipawnRows": 66850,
+      "mateRows": 132,
+      "playedCentipawn": 2000,
+      "playedMate": 0
+    },
+    {
+      "cell": "2200/middlegame-17-40",
+      "decisions": 2000,
+      "candidateRows": 73292,
+      "centipawnRows": 72685,
+      "mateRows": 607,
+      "playedCentipawn": 1994,
+      "playedMate": 6
+    },
+    {
+      "cell": "2200/late-41-plus",
+      "decisions": 2000,
+      "candidateRows": 52195,
+      "centipawnRows": 50486,
+      "mateRows": 1709,
+      "playedCentipawn": 1947,
+      "playedMate": 53
+    }
+  ],
+  "claims": {
+    "strength": "not_measured",
+    "distribution": "not_measured",
+    "bandIdentity": "not_measured",
+    "humanLikeLabelAllowed": false
+  }
+}

@@ -744,3 +744,13 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   four metrics, opening identity and the 17-arm ladder remain unrun. Criteria 5/11/12 and all full
   roster/owner discharges remain open; production cards stay uncalibrated. No new policy,
   preregistration amendment, RFC acceptance or completion is implied.
+- 2026-10-05 — candidate-pricing research checkpoint, not a review round. D3407 prices all 24,000
+  frozen human decisions through the registered legal-root source at actual Stockfish 18/depth 8,
+  Threads 1/Hash 16 and a fresh reset per root: 756,370 complete legal candidate rows, including
+  10,517 mate rows and 327 mate-valued human choices. Whole sources reload independently from the
+  ordered, durable journal. Fifty-eight offline/native control groups pass without source,
+  selection or verdict changes. Receipt: `planning/bot-roster/calibration-human-reference-pricing.json`.
+  D3408 separately owns A2's full-width prose/actual bounded sampler identity correction before its
+  ladder runner. Four metrics, opening identity, 13,200-game ladder, full personality/phase/clock
+  breadth and every remaining criterion/owner discharge stay open. No profile becomes calibrated
+  and no acceptance, completion or policy change is implied.

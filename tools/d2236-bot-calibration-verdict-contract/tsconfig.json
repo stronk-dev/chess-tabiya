@@ -6,5 +6,5 @@
     "types": ["node"],
     "paths": { "chessops/*": ["../../apps/server/node_modules/chessops/dist/types/*"] }
   },
-  "include": ["population.ts", "receipt.ts", "extract-stream.ts", "report.ts", "contract.mjs"]
+  "include": ["population.ts", "receipt.ts", "extract-stream.ts", "report.ts", "evaluation.ts", "evaluate.ts", "evaluation-report.ts", "contract.mjs"]
 }

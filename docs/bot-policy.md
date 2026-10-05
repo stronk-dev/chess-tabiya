@@ -177,13 +177,19 @@ the compiler's `features` rows are empty until a Stage-B trait passes its own me
 
 ## What is not wired yet
 
-The offline calibration reference can now be prepared with `make bot-calibration-population` and
-validated with `make bot-calibration-population-report`. The pinned source filled all twelve
-band/window cells: 24,000 selected decisions from 22,908 games. The committed aggregate receipt is
-`planning/bot-roster/calibration-human-reference-population.json`; individual decisions stay in the
-ignored local cache. `make bot-calibration-population-check` runs the independent offline controls
-without downloading data. This is only population selection: no Stockfish pricing, distribution
-test or ladder has run, and production cards remain uncalibrated.
+The frozen human calibration reference is selected and priced: all twelve band/window cells,
+24,000 decisions from 22,908 games, with 756,370 complete legal candidate rows under the same
+Stockfish 18/depth-8/Threads-1/Hash-16 authority. Every root gets a fresh search reset. Centipawn and
+mate domains remain separate: 10,517 mate candidate rows and 327 mate-valued played decisions are
+retained, not dropped or converted into centipawns. Aggregate receipts are
+`planning/bot-roster/calibration-human-reference-population.json` and
+`planning/bot-roster/calibration-human-reference-pricing.json`; whole sources and individual
+decisions stay in ignored local cache. `make bot-calibration-population-check` runs offline controls,
+`make bot-calibration-engine-check` runs five explicit native controls, and
+`make bot-calibration-evaluate` resumes only a fully verified ordered source journal. The explicit
+report targets validate the complete population independently. This is preparation, not calibration:
+no distribution comparison, opening band-identity experiment or game ladder has run. Production
+cards remain uncalibrated; D3408 also owns binding A2 to the actual bounded production sampler.
 
 - No provider-health release receipt is issued yet (it needs the release-concurrency benchmark),
   so guarded families stay `conditional`. The A11 shared-route latency benchmark and calibration receipts do not exist, so every

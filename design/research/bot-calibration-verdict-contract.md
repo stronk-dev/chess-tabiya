@@ -3,7 +3,7 @@
 **Question:** [[D2236]], with [[D2234]], [[D2235]] and [[D2237]] as consumers
 **Date:** 2026-09-06
 **Instrument:** `tools/d2236-bot-calibration-verdict-contract/`
-**Status:** exploration gate answered; expensive game/evaluation runs not started
+**Status:** exploration gate answered; full frozen human-reference selection and Stockfish pricing executed 2026-10-05; metrics, opening-identity population and game ladder remain pending
 
 ## Verdict
 
@@ -274,8 +274,53 @@ change identity. The parser can overwrite a raw unfinished result header from th
 terminator; permanent negative controls therefore require the raw and parsed results to agree.
 `[V]` (`tools/d2236-bot-calibration-verdict-contract/population.ts` and `population.test.ts`)
 
-This is **selection, not calibration**. No candidate-loss evaluation, metric comparison, opening
-identity population or 13,200-game ladder ran. No production profile earns a strength, distribution,
+This was **selection, not calibration**. The selection checkpoint did not price candidates; the
+following D3407 checkpoint supplies those values. No metric comparison, opening identity population
+or 13,200-game ladder ran. No production profile earns a strength, distribution,
 band-identity or human-like claim. The existing representativeness, source-contract, native-sampler,
 guard/clock/phase and owner-use limits remain. `[V]` (receipt's explicit `claims` and unchanged
 `tools/d2236-bot-calibration-verdict-contract/manifest.json`)
+
+## 2026-10-05 — Complete candidate pricing (D3407) and A2 scope residue (D3408)
+
+All 24,000 frozen human decisions were priced through the production registered
+`stockfish.legal_root_table@1` scheduler, descriptor and sealed parser. The original manifest remains
+unchanged: actual Stockfish 18, depth 8, Threads 1, Hash 16, fresh `ucinewgame`/Clear Hash/ready barrier
+before every root, and set-equal exact legal candidates. The complete saved journal independently
+reloads each whole source through `parsePersistedProviderDelivery`, verifying population/selected-row
+order, manifest, executor closure, parser implementation, actual binary/options and same-generation
+reset witness. `[V]` (`tools/d2236-bot-calibration-verdict-contract/evaluation.ts`, `evaluate.ts`;
+`planning/bot-roster/calibration-human-reference-pricing.json`)
+
+The measured population contains **756,370 candidate rows: 745,853 centipawn and 10,517 mate**.
+Played human choices contain 23,673 centipawn and 327 mate scores. No missing domain was replaced
+with a zero, scalar mate surrogate or dropped decision. No candidate-loss metric or grading verdict
+is computed by this instrument. The raw journal stays ignored; the committed aggregate identifies
+the complete hash chain and original population. `[V]` (pricing receipt)
+
+The offline gate passes 44 cases plus nine unchanged preregistration groups and strict research-tool
+types. Five explicit native cases additionally prove real reset reproducibility across an unrelated
+search, both castling identities, all four promotions, positive/negative mate domains and whole
+delivery reload. Missing/duplicate/wrong-depth/bounded/illegal-PV tables, wrong engine/options,
+reset/generation failures, crossed roots and mutated/torn resumptions refuse. Outer-chain-recomputed
+corruption controls require the durable source parser itself to fail, not merely a journal checksum.
+`[V]` (`evaluation.test.ts`, `evaluation-native.test.ts` in the same instrument; its normal Make gates)
+
+The initial run refused the operator's actual Stockfish 19 rather than manufacturing an 18 label.
+An isolated official release-18 binary was checksum-verified and captured; no global installation
+or depth/band/selection authority changed. This does not license equivalence to other engine builds,
+depths, speeds or a broader human population. `[V]` (`prepare-engine.sh`; actual identity/option image
+in the pricing receipt; append-only `planning/exploration/log.md` entry)
+
+D3408 is independent of that pricing. Bot-roster §6 calls A2's reconstruction full-width, but the
+registered production sampler requests min(20, legal count) and the compiler admits exactly that
+bounded page. Above twenty legal moves these are different policies; complete Stockfish pricing
+cannot widen the Maia page. The eventual ladder must bind the actual catalogue behavior, not an
+unregistered full-width variant. The correction is owned and queued; no production policy or frozen
+manifest was altered here. `[V]` (`rfc/bot-roster.md` §6;
+`packages/runtime/src/bot-profile-catalog.ts` BOT_SAMPLER/botEffectiveRequestedWidth;
+`apps/server/src/bot-policy-compiler.ts` admitMaia; [[D3408]])
+
+**No calibration claim follows.** Four-metric comparisons, the exact-position opening population,
+the 17-arm/13,200-game ladder, strength/distribution/band-identity verdicts and full bot breadth remain
+open. All twelve cards remain uncalibrated. `[V]` (receipt's explicit claims; unchanged manifest)

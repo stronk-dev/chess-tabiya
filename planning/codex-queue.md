@@ -1,5 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 bot human-reference pricing checkpoint
+
+[[D3407]] completes candidate pricing under the unchanged bot-roster §6 analysisAuthority:
+all 24,000 exact complete legal-root deliveries at Stockfish 18/depth 8/Threads 1/Hash 16, with
+756,370 rows and distinct centipawn/mate domains. The whole journal reloads independently. All
+58 offline/native control groups pass, including five actual native controls. Complete software
+(3,111 tests/334 files), seven isolated performance tests and real-content tests (223/23) pass;
+final normal governance and exact-staged process checks also pass. Research code and its source
+identity/resume checks live in `tools/d2236-bot-calibration-verdict-contract/`; aggregate evidence is
+`planning/bot-roster/calibration-human-reference-pricing.json`. This is not a calibrated bot claim.
+
+[[D3408]] is **READY NOW: calibration source/policy contract correction**, bot-play. Bot-roster
+§6 calls A2 full-width, but the registered production sampler is min(20, legal count), admitted
+by the production compiler with that exact width. Correct the description and bind the eventual
+A2 runner to the actual catalogue reference/page, not an unregistered all-legal variant. Human
+Stockfish pricing remains independent. No policy, frozen manifest or verdict may be silently
+changed while making that repair. Metrics, opening-identity population and the full 17-arm ladder
+remain open; no bot, capability, RFC or milestone is promoted from candidate pricing.
+
 ## 2026-10-05 bot-calibration population checkpoint
 
 D3406 executes the frozen human-reference selection over the actual pinned source, not a reduced
@@ -10,8 +29,8 @@ controls. The normal research gate is `make bot-calibration-population-check`; e
 and read-only reporting stay separate from CI and ordinary application requests. Receipt:
 `planning/bot-roster/calibration-human-reference-population.json`.
 
-Next in this lane: build the preregistered complete-legal-root evaluator, reference metrics and
-17-arm/13,200-game runner without importing legacy verdicts or dropping controls. Confirm all
+The complete-legal-root evaluator now ships in D3407. Next: reference metrics, the exact-position
+opening population and 17-arm/13,200-game runner without importing legacy verdicts or dropping controls. Confirm all
 required native-sampler, seed, operation/source and durable identity contracts before the ladder.
 Selection is not evaluation or calibration: all twelve cards remain uncalibrated, no human-like
 label is earned, and roster criteria 5/11/12, phase/clock/endgame breadth and owner names/default

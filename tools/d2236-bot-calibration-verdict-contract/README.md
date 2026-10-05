@@ -47,3 +47,48 @@ Missing cells or source drift publish no population and cannot become an empty s
 This discharges **population selection only**. Stockfish pricing, four distribution metrics,
 opening-identity population, 13,200-game ladder, exact-behavior receipts and all calibration verdicts
 remain separate obligations. All twelve production bot cards remain uncalibrated.
+
+## Complete legal-root pricing (D3407)
+
+```sh
+make bot-calibration-engine
+make bot-calibration-engine-check
+make bot-calibration-evaluate
+make bot-calibration-evaluation-report
+```
+
+The first command verifies and caches an isolated official Stockfish 18 artifact (Apple Silicon or
+the existing pinned Linux installer). It never replaces a global/Homebrew installation. The explicit
+evaluation command uses the pinned Node toolchain and the isolated engine, or an operator-supplied
+`BOT_CALIBRATION_SF_CMD`. An actual version-19 handshake is refused, never stamped as version 18.
+The offline fixture/type gate remains `make bot-calibration-population-check`; it does not download
+an engine or run the expensive population.
+
+Five explicit native controls check real reset reproducibility, complete castling/promotion
+identities, positive/negative mate domains and whole delivery reload. They require Stockfish 18
+and do not skip silently. `make bot-calibration-verify` runs those controls, the offline fixtures and
+the ordinary software/content/governance CI lanes with this same version-18 binary through a
+target-local Make selection. It does not change the global engine or inject command-line shell
+prefixes; neither target evaluates the 24,000-row population.
+
+Each decision traverses the production registered `stockfish.legal_root_table@1` scheduler,
+descriptor and sealed parser. A dedicated engine executes `ucinewgame`, Clear Hash and a successful
+ready barrier before **every** depth-8 root, with Threads 1/Hash 16 and all exact legal moves. The
+standard descriptor's ordinary display-option reset alone is not a fresh-search proof. No retained
+root substitutes for a search. Centipawns, positive mate and negative mate stay separate typed
+domains; no scalar mate conversion or downstream grading occurs.
+
+`.cache/bot-calibration/human-reference-pricing.jsonl` is an ordered, fsynced, hash-chained journal.
+It carries exact selected-row identities, same-generation reset witnesses and **whole** provider
+deliveries saved through `serializeProviderDelivery`, not detached candidate arrays. Resume and
+report independently reparse every saved delivery through `parsePersistedProviderDelivery`, check
+the exact population/manifest/executor/parser/binary/options identity, and recheck legal-set
+completeness. A torn line, crossed root, changed executor or malformed source refuses without
+overwriting prior evidence. The exclusive writer lock prevents concurrent appenders; an unexpected
+stale lock requires checking the named process, not automatic deletion.
+
+Only a fully verified 24,000-decision journal can publish a complete aggregate receipt.
+`make bot-calibration-evaluation-report-update` explicitly saves that aggregate;
+`…-report-check` compares it without writing. Raw decisions, engine captures and journal remain
+ignored. Pricing supplies candidate values for later statistics, **not** a strength, distribution,
+band-identity or human-like verdict. The original manifest and all production policies stay fixed.

@@ -1,0 +1,7 @@
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vitest/config";
+export default defineConfig({
+  resolve: { alias: [{ find: /^chessops\/(.+)$/u,
+    replacement: `${fileURLToPath(new URL("../../apps/server/node_modules/chessops/dist/esm", import.meta.url))}/$1.js` }] },
+  test: { include: ["tools/d2236-bot-calibration-verdict-contract/evaluation-native.test.ts"], maxWorkers: 1 },
+});

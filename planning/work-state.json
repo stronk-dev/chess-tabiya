@@ -28053,6 +28053,23 @@
       "uxItems": [],
       "evidence": "planning/bot-roster/calibration-human-reference-population.json",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3407",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a2bf4064fea3fd516d2ef17ef0e70908bd497f12cf2db314e2feb35faaa1b6de",
+      "uxItems": [],
+      "evidence": "planning/bot-roster/calibration-human-reference-pricing.json",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3408",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bd7c6bf645bc0346566c8ce7c159231de91b4ed67f2d6d0c43cb7568cf652d80",
+      "uxItems": [],
+      "owner": "bot-play"
     }
   ]
 }
