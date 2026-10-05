@@ -31,6 +31,17 @@ missing expected families, unexpected operations and implementation-name drift r
 This permits coexisting versions without changing or retiring an existing consumer contract.
 It does not compile that consumer's source bindings or establish provider availability.
 
+Modern Explorer workflows use explicit `inspector.corpus@2`, `runtime.repertoire_scan@2`
+and `runtime.return_frequency@2` consumers. Each accepts only its narrow sealed-page
+projection and compiles every consumer binding before provider I/O. A missing absence
+policy, impossible latency or added unregistered binding refuses the whole modern
+operation: Inspector is honestly empty, repertoire records unknown coverage, and
+scheduling omits optional frequency. Inspector's successor has its own registered
+presentation adapter. Existing source matching, sample floors, grants and cancellation
+remain in force. All version-1 contracts and standalone paths are retained explicitly;
+modern failure never falls back to bare statistics. This does not establish full
+manifest execution, provider availability or source retirement.
+
 Derivation members retain literal input order and repeated occurrences: two readings of the same
 source type at different positions are two operands. Reversing input order is a different member;
 identical alternatives remain invalid. Semantic-event declarations must retain the same ordered
@@ -66,7 +77,7 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 47 producers, 285 projections, 38 consumers and 552 bindings,
+The current compiled closure is 47 producers, 285 projections, 41 versioned consumers and 555 bindings,
 plus 78 semantic-event declarations, 78 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 

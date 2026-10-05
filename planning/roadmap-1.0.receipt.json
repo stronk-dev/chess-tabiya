@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8da0d8546d05624e34b3f3e4f374f3a5d9d68b04d9a15d7268d0fd3380f61986",
+    "roadmap": "sha256:623f84522af808817776434ee23884c74a9f6f9e94a33a028e83a3897c51a08e",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:1d7462d263d96e929413d6ea5f4cb5e7fd12fbb042c07b7edfe19b9667aa4e91",
-    "rfcRegister": "sha256:4b5bb480baa1c1559b7813fb57956f5d97b400528b7a7159e9f5d7c0b353f798",
+    "workState": "sha256:050f9480344a8ebacfc4509077624c99446792bfe05fc6389ba7a7b7e49fe226",
+    "rfcRegister": "sha256:205ac9c5d80a18982cd6937bee6c6a3aea660539b4c2d14fd8bbbd409f84f716",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:c4da09abd8ce077a46e55e2069b3ab27f8e04de10045d7d05ed2188ff89992ef",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 0,
       "blocked": 1055,
-      "done": 1307,
+      "done": 1308,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Register exact modern Explorer successor consumer/adapter/renderer/operation tuples and migrate Inspector, repertoire and return-frequency to complete binding preflight before provider I/O, preserving standalone compatibility and every current contract. D3400 closes exact-version operation registration only. Do not skip invalid legacy bindings or infer availability from one projection. Then complete manifest execution/digest, exact occurrence resolution and authenticated availability. D3391/D3392 confidence representability and D3363/D3370/D3373/D3376 source contracts remain held; whole-source persistence, zero-consumer retirement, complete Support/Review/bot/longitudinal joins and independent semantic validation remain open.",
+      "nextAction": "Complete manifest execution/digest and exact source-occurrence resolution, then authenticated availability. D3401 closes all three modern Explorer consumers complete binding preflight before provider I/O with explicit v2 identities and registered Inspector presentation; every v1 contract and standalone path remains. Inventory the remaining modern consumers before migrating; do not skip raw historical bindings or fabricate source authority. D3391/D3392 confidence representability and D3363/D3370/D3373/D3376 source-result contracts remain held. Whole-source persistence, zero-consumer retirement, complete Support/Review/bot/learner joins and independent semantic validation remain open. Routine canonical metadata maintenance requires no owner ruling.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3400 closes exact declared id/version consumer operation registration. Version-1 defaults remain; every declared version requires its callable, and duplicate declarations, missing successors, malformed versions and non-callable forgeries refuse. Current consumer bindings remain unchanged. The focused gate passes 61 tests and clean types. Complete final exact-index software passes 3073 tests/329 files plus seven isolated performance tests and downstream contracts at 8d58a423c418016694a18d03af18072ba189d243. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries. Canonical maintenance retains 942 predecessors, all 278 factory outcomes and authored content; seven successors produce 949 declarations and only canonical stamps/hashes change. Only D3400 closes: zero untriaged/1682 live. Modern Explorer complete binding execution, full manifest execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
+        "summary": "D3401 closes complete binding preflight for actual Inspector, repertoire and return-frequency workflows, using exact v2 consumers/adapters/callables and Inspector presentation. All v1 contracts and standalone branches remain. Nine invalid-binding HTTP controls make zero provider calls; sample, scan, scheduling, grant, disclosure, cancellation and source policies stay intact. The focused gate passes 190 tests and clean types. Complete exact-index software passes 3085 tests/330 files, seven isolated performance tests and downstream contracts at b4edc92d1f857c3f121919c345582adda44d6c8a. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries. Canonical maintenance retains 949 predecessors, 278 factory outcomes and authored fields; seven source-stamp successors produce 956 declarations. Only D3401 closes: zero untriaged/1682 live. Full manifest execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -281,7 +281,11 @@
           "planning/provider-exchange-and-execution/consumer-operation-versions-2026-10-05.md",
           "planning/provider-exchange-and-execution/consumer-operation-versions-software-2026-10-05.json",
           "planning/provider-exchange-and-execution/consumer-operation-versions-metadata-2026-10-05.json",
-          "planning/provider-exchange-and-execution/consumer-operation-versions-negatives-2026-10-05.json"
+          "planning/provider-exchange-and-execution/consumer-operation-versions-negatives-2026-10-05.json",
+          "planning/provider-exchange-and-execution/explorer-consumer-preflight-2026-10-05.md",
+          "planning/provider-exchange-and-execution/explorer-consumer-preflight-software-2026-10-05.json",
+          "planning/provider-exchange-and-execution/explorer-consumer-preflight-metadata-2026-10-05.json",
+          "planning/provider-exchange-and-execution/explorer-consumer-preflight-negatives-2026-10-05.json"
         ],
         "anchors": [
           {
@@ -327,7 +331,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:c559ee2f304b9979ff32fda65dfcaf18a17222c444e2e8a713234d97db1c1efa"
+            "digest": "sha256:21454bfdcfb2003c89660378daacb7192e5d0a0601a0e0dd2c60cc8baab343f4"
           },
           {
             "kind": "work_state",
@@ -573,6 +577,11 @@
             "kind": "work_state",
             "id": "D3400",
             "digest": "sha256:cf3f1e690ebeb2006dd84d384372f50904819e26e8da327df894b826347f94ef"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3401",
+            "digest": "sha256:9a2be63c0fe3a150c56003bb9eac658275d4a2989de1d81350346e319eb7ff91"
           }
         ]
       },
@@ -1115,7 +1124,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:c559ee2f304b9979ff32fda65dfcaf18a17222c444e2e8a713234d97db1c1efa"
+            "digest": "sha256:21454bfdcfb2003c89660378daacb7192e5d0a0601a0e0dd2c60cc8baab343f4"
           },
           {
             "kind": "work_state",

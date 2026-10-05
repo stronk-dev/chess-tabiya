@@ -27999,6 +27999,15 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/consumer-operation-versions-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3401",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9a2be63c0fe3a150c56003bb9eac658275d4a2989de1d81350346e319eb7ff91",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/explorer-consumer-preflight-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

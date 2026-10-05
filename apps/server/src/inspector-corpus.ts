@@ -1,5 +1,5 @@
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { assertConsumerEvidenceView, assertProviderDelivery, compileProjectionExecution, corpusPageEvidence, deriveExplorerInspectorPopulation, evidenceForConsumer, presentEvidenceItems, serializePresentedEvidence, type ConsumerEvidenceView, type CorpusResult, type ExplorerInspectorPopulation, type CorpusInspectorPage } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, assertProviderDelivery, compileEvidenceConsumerExecution, corpusPageEvidence, deriveExplorerInspectorPopulation, evidenceForConsumer, presentEvidenceItems, serializePresentedEvidence, type ConsumerEvidenceView, type CorpusResult, type ExplorerInspectorPopulation, type CorpusInspectorPage } from "@chess-tabiya/runtime";
 import type { CorpusQuery, CorpusSource, CorpusRequestOptions, CorpusPopulation } from "./corpus.js";
 import { corpusPageRequest } from "./provider-corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
@@ -11,7 +11,8 @@ type InspectorCorpusStatus = InspectorCorpusPage["status"];
 /** The real server consumer, not a client constructor over arbitrary response bytes. */
 export function consumeCorpus<T extends LegacyPage | ExplorerInspectorPopulation>(view: ConsumerEvidenceView<T>): T {
   assertConsumerEvidenceView(view);
-  if (view.consumer.id !== "inspector.corpus" || view.consumer.version !== 1 || view.items.length !== 1) throw new TypeError("Expected one inspector.corpus@1 evidence item");
+  if (view.consumer.id !== "inspector.corpus" || ![1, 2].includes(view.consumer.version) || view.items.length !== 1) throw new TypeError("Expected one declared inspector.corpus evidence item");
+  if (view.consumer.version === 2 && (view.items[0]!.projection.id !== "derived.explorer.inspector_population" || view.items[0]!.projection.version !== 1)) throw new TypeError("Modern Inspector requires its canonical population projection");
   return view.items[0]!.payload;
 }
 
@@ -35,12 +36,13 @@ export async function inspectorCorpus(source: CorpusSource, query: CorpusQuery, 
       if (admitted.total < 100) return absence({ kind: "below_floor", total: admitted.total });
       return Object.freeze({ ...subject, population: Object.freeze(population), status: { kind: "shown" as const }, presentation: serializePresentedEvidence(presentEvidenceItems(view)), committedMoveListed: subject.committedMoveSan === null ? null : admitted.moves.some(row => row.san === subject.committedMoveSan) });
     }
-    const execution = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "derived.explorer.inspector_population", version: 1 });
-    if (execution.paths.length !== 1 || execution.paths[0]?.sourceRequirements.length !== 1 || execution.paths[0]?.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Inspector has another source operation");
+    const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, { id: "inspector.corpus", version: 2 });
+    const binding = execution.bindings[0];
+    if (execution.bindings.length !== 1 || binding?.binding.projection.id !== "derived.explorer.inspector_population" || binding.binding.projection.version !== 1 || binding.paths.length !== 1 || binding.paths[0]?.sourceRequirements.length !== 1 || binding.paths[0]?.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Inspector has another source operation");
     const acquired = await source.page(captured, options);
     options.signal?.throwIfAborted();
     if (acquired.kind !== "page") return absence({ kind: "source_unavailable" });
-    const view = evidenceForConsumer(EVIDENCE_MANIFEST, { id: "inspector.corpus", version: 1 }, [deriveExplorerInspectorPopulation(acquired.evidence)]);
+    const view = evidenceForConsumer(EVIDENCE_MANIFEST, { id: "inspector.corpus", version: 2 }, [deriveExplorerInspectorPopulation(acquired.evidence)]);
     const admitted = consumeCorpus(view);
     const delivery = admitted.page.payload;
     assertProviderDelivery("lichess_explorer.position_page@1", delivery);

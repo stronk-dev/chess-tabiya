@@ -1,5 +1,23 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 complete Explorer consumer preflight checkpoint
+
+D3401 closes all three actual modern consumers' complete binding preflight before provider
+I/O, using exact successor identities and registered Inspector presentation. All v1 contracts
+and standalone paths remain. Nine invalid policy/latency/added-binding HTTP controls make
+zero provider calls; request, disclosure, grant, cancellation, sample and scheduling/scan
+policies remain intact. The focused gate passes 190 tests; complete exact-index software
+passes 3085 tests/330 files and seven performance tests. Content passes 223 tests and all
+104 requirements; rebuilt browser CI passes 119 journeys, one existing optional skip and
+zero retries. Receipt: `planning/provider-exchange-and-execution/explorer-consumer-preflight-2026-10-05.md`.
+
+Next: complete manifest execution/digest and exact source-occurrence resolution, then the
+authenticated availability boundary. Inventory remaining modern consumers before applying
+complete preflight; do not drop raw historical bindings or turn a source-contract hold into
+invented evidence. D3391/D3392 and D3363/D3370/D3373/D3376 remain held separately.
+Whole-source persistence, zero-consumer retirement and complete Support/Review/bot/learner
+joins remain open. Routine canonical metadata updates require no owner ruling.
+
 ## 2026-10-05 consumer-version checkpoint and Explorer execution handoff
 
 D3400 closes exact declared id/version operation registration, retaining version-1 defaults
@@ -10,12 +28,9 @@ Content passes 223 tests and all 104 requirements; complete rebuilt browser CI p
 942 predecessors, all factory outcomes and authored fields while appending seven source-stamp
 successors. Receipt: `planning/provider-exchange-and-execution/consumer-operation-versions-2026-10-05.md`.
 
-Next: separate modern Explorer execution from explicitly retained standalone compatibility.
-Register exact successor consumer/adapter/renderer/operation tuples and migrate actual
-Inspector, repertoire and return-frequency to complete binding preflight before provider I/O.
-Retain every current version's contract; do not let a v1 callable witness an omitted v2.
-Do not skip invalid bindings, relabel bare results as sealed pages, or claim full availability
-or legacy retirement from a valid single projection.
+That checkpoint's Explorer handoff is completed by D3401 above. Its modern successors
+retain every version-1 contract and preflight every binding before I/O. Full manifest
+execution, availability and legacy retirement remain separate open obligations.
 
 ## 2026-10-05 application security and Rating reload checkpoint
 

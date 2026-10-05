@@ -1,5 +1,5 @@
 import type { AddressInfo } from "node:net";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { compileAssistanceRequest, createRun, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import * as runtime from "@chess-tabiya/runtime";
 import { corpusPopulation, corpusSamplePolicy, type CorpusQuery, type CorpusRequestOptions, type CorpusSource } from "./corpus.js";
@@ -42,9 +42,38 @@ async function harness() {
   return { source, scheduler, clock, health, remote };
 }
 
+const PREFLIGHT_FAULTS = ["missing_binding_policy", "non_executable_binding", "extra_unregistered_binding"] as const;
+// Restore even if application construction fails before a scenario's try/finally.
+afterEach(() => vi.restoreAllMocks());
+const compileConsumerExecution = runtime.compileEvidenceConsumerExecution;
+function preflightControl(id: string, arm: string) {
+  const trace: string[] = [];
+  const fault = PREFLIGHT_FAULTS.some(value => value === arm);
+  const compile = compileConsumerExecution;
+  const spy = vi.spyOn(runtime, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
+    if (consumer.id !== id) return compile(manifest, consumer);
+    trace.push("compile");
+    expect(consumer.version).toBe(2);
+    if (!fault) return compile(manifest, consumer);
+    const selected = manifest.bindings.filter(binding => binding.consumer.id === id && binding.consumer.version === 2);
+    expect(selected.length).toBeGreaterThan(0);
+    const bindings = manifest.bindings.map(binding => {
+      if (binding.consumer.id !== id || binding.consumer.version !== 2) return binding;
+      if (arm === "non_executable_binding") return { ...binding, latency: { mode: "sync" as const, maxMs: 50 } };
+      if (arm !== "missing_binding_policy") return binding;
+      const { sourceAbsence: _policy, ...missingPolicy } = binding;
+      return missingPolicy;
+    });
+    if (arm === "extra_unregistered_binding") bindings.push({ ...selected[0]!, adapter: { id: `adapter.${id}.invalid_extra`, version: 2 }, producer: { id: "human.explorer", version: 1 }, projection: { id: "human.explorer.position_stats", version: 1 } });
+    return compile({ ...manifest, bindings }, consumer);
+  });
+  return { trace, fault, spy };
+}
+
 describe("learner Explorer shared exchange", () => {
-  it.each(["success", "floor", "sparse", "zero", "all_unlisted", "position", "clocks", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "changed", "changed_open", "revoked", "legacy", "committed_listed", "committed_unlisted"])("admits Inspector's actual source and registered presentation (%s)", { timeout: 30_000 }, async arm => {
+  it.each(["success", "floor", "sparse", "zero", "all_unlisted", "position", "clocks", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "changed", "changed_open", "revoked", "legacy", "committed_listed", "committed_unlisted", ...PREFLIGHT_FAULTS])("admits Inspector's actual source and registered presentation (%s)", { timeout: 30_000 }, async arm => {
     const { source, remote } = await harness();
+    const control = preflightControl("inspector.corpus", arm);
     let mutateDuringFetch: (() => Promise<void>) | undefined;
     const stats = vi.fn(async (asked: CorpusQuery) => {
       if (arm !== "legacy") throw new Error("RAW_FALLBACK_DO_NOT_DISCLOSE");
@@ -57,6 +86,7 @@ describe("learner Explorer shared exchange", () => {
       readonly stats = stats;
       calls = 0;
       async page(asked: CorpusQuery, options: CorpusRequestOptions = {}) {
+        control.trace.push("page");
         this.calls += 1;
         expect(Object.isFrozen(asked)).toBe(true);
         expect(Object.isFrozen(asked.ratings)).toBe(true);
@@ -120,7 +150,10 @@ describe("learner Explorer shared exchange", () => {
         return;
       }
       expect(response.status, JSON.stringify(page)).toBe(200);
-      expect(supplied.calls).toBe(arm === "legacy" ? 0 : 1);
+      expect(supplied.calls).toBe(arm === "legacy" || control.fault ? 0 : 1);
+      if (arm === "success") expect(control.trace).toEqual(["compile", "page"]);
+      if (control.fault) expect(control.trace).toEqual(["compile"]);
+      if (arm === "legacy") expect(control.trace).toEqual([]);
       expect(stats).toHaveBeenCalledTimes(arm === "legacy" ? 1 : 0);
       expect(page.population).toMatchObject({ ratings: [1600], speeds: ["blitz", "rapid", "classical"] });
       // Explorer describes a position population, not a fifty-move-rule claim. Its sole
@@ -136,12 +169,12 @@ describe("learner Explorer shared exchange", () => {
         }
         expect(text).toContain("2026-09");
         expect(text).toContain(arm === "floor" ? "36" : arm === "all_unlisted" ? "240 games are outside" : "116");
-        expect(items.every(item => item.adapter.consumer.id === "inspector.corpus" && item.adapter.projection.id === (arm === "legacy" ? "human.explorer.population" : "derived.explorer.inspector_population"))).toBe(true);
+        expect(items.every(item => item.adapter.consumer.id === "inspector.corpus" && item.adapter.consumer.version === (arm === "legacy" ? 1 : 2) && item.adapter.projection.id === (arm === "legacy" ? "human.explorer.population" : "derived.explorer.inspector_population"))).toBe(true);
       } else expect(items).toHaveLength(0);
       expect(page.committedMoveSan).toBe(arm === "committed_listed" ? "e4" : arm === "committed_unlisted" ? "Nf3" : null);
       expect(page.committedMoveListed).toBe(arm === "committed_listed" ? true : arm === "committed_unlisted" ? false : null);
       expect(JSON.stringify(page)).not.toMatch(/PRIVATE_PROVIDER|RAW_FALLBACK|requestedIdentity|payloadReceipt|providerSan|responseBody/u);
-    } finally { await application.close(); }
+    } finally { control.spy.mockRestore(); await application.close(); }
   });
 
   it("bounds modern return-frequency lookups, intake and same-day reordering", async () => {
@@ -218,8 +251,9 @@ describe("learner Explorer shared exchange", () => {
     } finally { caller.abort(); await application.close(); }
   });
 
-  it.each(["success", "floor", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy"])("admits return frequency at the authenticated due queue (%s)", { timeout: 30_000 }, async arm => {
+  it.each(["success", "floor", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy", ...PREFLIGHT_FAULTS])("admits return frequency at the authenticated due queue (%s)", { timeout: 30_000 }, async arm => {
     const { source, remote } = await harness();
+    const control = preflightControl("runtime.return_frequency", arm);
     const stats = vi.fn(async (asked: CorpusQuery) => ({ kind: "stats" as const, total: 70000, white: 70000, draws: 0, black: 0,
       moves: [{ san: "RAW_FALLBACK_DO_NOT_DISCLOSE", uci: "e2e4", playedCount: 60, sharePct: 50, white: 60, draws: 0, black: 0 }],
       recency: { kind: "absent" as const }, population: { source: asked.source, ratings: asked.ratings, speeds: asked.speeds, since: asked.since, until: asked.until } }));
@@ -228,6 +262,7 @@ describe("learner Explorer shared exchange", () => {
       readonly stats = stats;
       calls = 0;
       async page(asked: CorpusQuery, options: CorpusRequestOptions = {}) {
+        control.trace.push("page");
         this.calls += 1;
         expect(options.signal).toBeDefined();
         expect(options.deadlineMonotonic).toBeTypeOf("number");
@@ -278,11 +313,14 @@ describe("learner Explorer shared exchange", () => {
       expect(page.schedules.map(row => row.frequency?.games ?? null)).toEqual(counts);
       for (const row of page.schedules) if (row.frequency !== null) expect(row.frequency.population).toEqual(corpusPopulation(1600));
       expect(JSON.stringify(page)).not.toMatch(/RAW_FALLBACK|canonicalUci|providerSan|normalizedRequestDigest|responseDigest|"moves"|"page"/u);
-      expect(supplied.calls).toBe(arm === "legacy" ? 0 : ["failure", "typed_failure"].includes(arm) ? 1 : 2);
+      expect(supplied.calls).toBe(arm === "legacy" || control.fault ? 0 : ["failure", "typed_failure"].includes(arm) ? 1 : 2);
+      if (arm === "success") expect(control.trace).toEqual(["compile", "page", "compile", "page"]);
+      if (control.fault) expect(control.trace).toEqual(["compile", "compile"]);
+      if (arm === "legacy") expect(control.trace).toEqual([]);
       if (arm === "failure") expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("temporarily_blocked");
       if (arm === "typed_failure") expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("unavailable");
       expect(stats).toHaveBeenCalledTimes(arm === "legacy" ? 2 : 0);
-    } finally { await application.close(); }
+    } finally { control.spy.mockRestore(); await application.close(); }
   });
 
   it("preserves the modern method's receiver and sealed page through the health adapter", async () => {
@@ -338,8 +376,9 @@ describe("learner Explorer shared exchange", () => {
     expect(stats).not.toHaveBeenCalled();
   });
 
-  it.each(["success", "sparse", "zero", "population", "clone", "failure"])("retains modern source admission through authenticated repertoire import and scan (%s)", { timeout: 30_000 }, async arm => {
+  it.each(["success", "sparse", "zero", "population", "clone", "failure", ...PREFLIGHT_FAULTS])("retains modern source admission through authenticated repertoire import and scan (%s)", { timeout: 30_000 }, async arm => {
     const { source, remote } = await harness();
+    const control = preflightControl("runtime.repertoire_scan", arm);
     const total = arm === "sparse" ? 37 : arm === "zero" ? 0 : 120;
     const stats = vi.fn(async () => ({ kind: "stats" as const, total: 120, white: 120, draws: 0, black: 0,
       moves: [{ san: "e4", uci: "e2e4", playedCount: 60, sharePct: 50, white: 60, draws: 0, black: 0 }],
@@ -350,6 +389,7 @@ describe("learner Explorer shared exchange", () => {
       readonly stats = stats;
       calls = 0;
       async page(asked: CorpusQuery, options: CorpusRequestOptions = {}) {
+        control.trace.push("page");
         this.calls += 1;
         expect(options.signal).toBeDefined();
         expect(options.deadlineMonotonic).toBeTypeOf("number");
@@ -393,13 +433,15 @@ describe("learner Explorer shared exchange", () => {
         expect(page!.scan.gaps).toEqual([]);
         expect(page!.scan.unknown).toEqual([expect.objectContaining({ reason: total < 100 ? "no_data_at_band" : "source_unavailable" })]);
       }
-      expect(page!.scan.sourceFailures).toBe(["population", "clone", "failure"].includes(arm) ? 1 : 0);
+      expect(page!.scan.sourceFailures).toBe(["population", "clone", "failure"].includes(arm) || control.fault ? 1 : 0);
       expect(stats).not.toHaveBeenCalled();
-      expect(supplied.calls).toBe(1);
+      expect(supplied.calls).toBe(control.fault ? 0 : 1);
+      if (arm === "success") expect(control.trace).toEqual(["compile", "page"]);
+      if (control.fault) expect(control.trace).toEqual(["compile"]);
       if (["success", "sparse", "zero"].includes(arm)) expect(application.providerHealth.operationAvailability("evidence.explorer_query").state).toBe("available");
       expect((await fetch(`${route}/gaps`)).status).toBe(401);
-      expect(supplied.calls).toBe(1);
-    } finally { await application.close(); }
+      expect(supplied.calls).toBe(control.fault ? 0 : 1);
+    } finally { control.spy.mockRestore(); await application.close(); }
   });
 
   it.each(["success", "position", "ratings", "speeds", "dates", "clone", "failure"])("admits the modern repertoire frontier against its exact request (%s)", async arm => {

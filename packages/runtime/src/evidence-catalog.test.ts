@@ -61,7 +61,7 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 285, 38, 552]); // Inspector adds its narrow canonical population projection and binding.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 285, 41, 555]); // Three modern Explorer consumer successors retain all v1 declarations.
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");
@@ -72,9 +72,10 @@ describe("primary evidence catalogue", () => {
     ]);
     expect(manifest.bindings.filter(binding => binding.projection.id === "derived.explorer.repertoire_frontier")).toEqual([
       expect.objectContaining({ projection: { id: "derived.explorer.repertoire_frontier", version: 1 }, consumer: { id: "runtime.repertoire_scan", version: 1 }, sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } }),
+      expect.objectContaining({ projection: { id: "derived.explorer.repertoire_frontier", version: 1 }, consumer: { id: "runtime.repertoire_scan", version: 2 }, sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } }),
     ]);
     expect(manifest.projections.find(projection => projection.id === "derived.explorer.repertoire_frontier")?.derivation).toEqual({ inputs: [ref("human.explorer.position_page")] });
-    expect(manifest.bindings.filter(binding => binding.consumer.id === "runtime.return_frequency")).toEqual([
+    expect(manifest.bindings.filter(binding => binding.consumer.id === "runtime.return_frequency" && binding.consumer.version === 1)).toEqual([
       expect.objectContaining({ projection: { id: "derived.explorer.position_frequency", version: 1 }, sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } }),
       expect.objectContaining({ projection: { id: "human.explorer.position_stats", version: 1 }, sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } }),
     ]);

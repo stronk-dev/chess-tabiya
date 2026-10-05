@@ -66,6 +66,7 @@ export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRo
   classRow("guidance.voice_compare@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
   classRow("guidance.voice_story@1", "ordinary_presented", "packages/runtime/src/story.ts", "storyDeclaredEvidence"),
   classRow("inspector.corpus@1", "inspector_presented", "apps/server/src/inspector-corpus.ts", "consumeCorpus"),
+  classRow("inspector.corpus@2", "inspector_presented", "apps/server/src/inspector-corpus.ts", "consumeCorpus"),
   classRow("inspector.human_split@1", "inspector_presented", "apps/web/src/lib/inspector-evidence.ts", "consumeHumanSplit"),
   classRow("inspector.move_transition@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumeMoveTransition"),
   classRow("inspector.position_structure@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumePositionStructure"),
@@ -436,8 +437,8 @@ const GUIDANCE_TEXT = Object.freeze(["guidance.deterministic", "guidance.voice",
 const PAWN_STRUCTURE_KINDS: ReadonlySet<StructuralKind> = new Set(["backward_pawn", "outpost", "pawn_safe_square"]);
 export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
   const specs: AdapterSpec[] = [];
-  const add = (consumer: string, projection: VersionedEvidenceId, component: AdapterSpec["component"], forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], construct: Construct, composition?: AdapterSpec["composition"]) =>
-    specs.push({ consumer: V1(consumer), projection, component, forms, sourceOperands, assertions, construct, ...(composition === undefined ? {} : { composition }) });
+  const add = (consumer: string | VersionedEvidenceId, projection: VersionedEvidenceId, component: AdapterSpec["component"], forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], construct: Construct, composition?: AdapterSpec["composition"]) =>
+    specs.push({ consumer: typeof consumer === "string" ? V1(consumer) : consumer, projection, component, forms, sourceOperands, assertions, construct, ...(composition === undefined ? {} : { composition }) });
   const statement = (rendererId: Parameters<PresentationKit["fact"]>[0], convention: Convention, operands: unknown, binding: Binding = "declared_convention"): ComponentValue =>
     ({ id: "fact_statement", operand: kit.fact(rendererId, binding, convention, operands as never) });
   const factAdapter = (consumer: string, projection: VersionedEvidenceId, forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], rendererId: Parameters<PresentationKit["fact"]>[0], convention: Convention | ((payload: unknown) => Convention), read: (payload: unknown) => unknown, binding: Binding = "declared_convention") =>
@@ -568,7 +569,7 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
   // --- Inspector: whole-source and explicit standalone population presentations.
   // Only canonical moves and literal counts cross the receipt door. Provider SAN, source
   // bodies, seals, headers and diagnostics remain internal; no client mints source evidence.
-  add("inspector.corpus", V1("derived.explorer.inspector_population"), "fact_statement", ["list", "panel"], ["request", "totals", "moves", "unlisted", "lastPlayedMonth"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => {
+  for (const version of [1, 2]) add({ id: "inspector.corpus", version }, V1("derived.explorer.inspector_population"), "fact_statement", ["list", "panel"], ["request", "totals", "moves", "unlisted", "lastPlayedMonth"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => {
     const { request, totals, moves, unlisted, lastPlayedMonth } = evidence.payload as ExplorerInspectorPopulation;
     return statement("consumer.explorer_population@1", "explorer-population@1", {
       ...totals, ratings: [...request.ratingBuckets], speeds: [...request.speeds], since: request.since, until: request.until,

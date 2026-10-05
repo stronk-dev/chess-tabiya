@@ -2774,6 +2774,20 @@ application-security-browser:
 consumer-operation-version-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-consumer-operations.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-catalog.test.ts apps/server/src/evidence-manifest.test.ts
 
+.PHONY: explorer-consumer-preflight-check
+explorer-consumer-preflight-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/explorer-consumer-contract.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/repertoire.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts apps/web/src/lib/corpus-sentences.test.ts
+
+.PHONY: explorer-consumer-metadata-update explorer-consumer-metadata-check
+explorer-consumer-metadata-update:
+	$(MAKE) semantic-validation-update
+	$(MAKE) capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-consumer-metadata.js --log-level=warning
+	node apps/server/dist/explorer-consumer-metadata.js --explorer-consumers --apply-metadata
+explorer-consumer-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-consumer-metadata.js --log-level=warning
+	node apps/server/dist/explorer-consumer-metadata.js --explorer-consumers
+
 .PHONY: consumer-operation-version-metadata-update consumer-operation-version-metadata-check
 consumer-operation-version-metadata-update:
 	$(MAKE) semantic-validation-update

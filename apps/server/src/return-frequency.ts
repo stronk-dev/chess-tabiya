@@ -1,12 +1,13 @@
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { assertConsumerEvidenceView, assertProviderDelivery, compileProjectionExecution, corpusPositionEvidence, deriveExplorerPositionFrequency, evidenceForConsumer, type ConsumerEvidenceView, type ExplorerPositionFrequency } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, assertProviderDelivery, compileEvidenceConsumerExecution, corpusPositionEvidence, deriveExplorerPositionFrequency, evidenceForConsumer, type ConsumerEvidenceView, type ExplorerPositionFrequency } from "@chess-tabiya/runtime";
 import { corpusSamplePolicy, type CorpusPopulation, type CorpusQuery, type CorpusRequestOptions, type CorpusResult, type CorpusSource } from "./corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { corpusPageRequest } from "./provider-corpus.js";
 
 export function consumeReturnFrequency<T extends CorpusResult | ExplorerPositionFrequency>(view: ConsumerEvidenceView<T>): T {
   assertConsumerEvidenceView(view);
-  if (view.consumer.id !== "runtime.return_frequency" || view.consumer.version !== 1 || view.items.length !== 1) throw new TypeError("Expected one runtime.return_frequency@1 evidence item");
+  if (view.consumer.id !== "runtime.return_frequency" || ![1, 2].includes(view.consumer.version) || view.items.length !== 1) throw new TypeError("Expected one declared runtime.return_frequency evidence item");
+  if (view.consumer.version === 2 && (view.items[0]!.projection.id !== "derived.explorer.position_frequency" || view.items[0]!.projection.version !== 1)) throw new TypeError("Modern return frequency requires its position frequency projection");
   return view.items[0]!.payload;
 }
 
@@ -22,12 +23,13 @@ export async function returnFrequency(source: CorpusSource, query: CorpusQuery, 
     return sampled.kind === "stats" ? Object.freeze({ games: sampled.total, population: sampled.population }) : undefined;
   }
   try {
-    const execution = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "derived.explorer.position_frequency", version: 1 });
-    if (execution.paths.length !== 1 || execution.paths[0]!.sourceRequirements.length !== 1 || execution.paths[0]!.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Return frequency has another source operation");
+    const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, { id: "runtime.return_frequency", version: 2 });
+    const binding = execution.bindings[0];
+    if (execution.bindings.length !== 1 || binding?.binding.projection.id !== "derived.explorer.position_frequency" || binding.binding.projection.version !== 1 || binding.paths.length !== 1 || binding.paths[0]?.sourceRequirements.length !== 1 || binding.paths[0]?.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Return frequency has another source operation");
     const acquired = await source.page(captured, options);
     options.signal?.throwIfAborted();
     if (acquired.kind !== "page") return undefined;
-    const frequency = consumeReturnFrequency(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.return_frequency", version: 1 }, [deriveExplorerPositionFrequency(acquired.evidence)]));
+    const frequency = consumeReturnFrequency(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.return_frequency", version: 2 }, [deriveExplorerPositionFrequency(acquired.evidence)]));
     const delivery = frequency.page.payload;
     assertProviderDelivery("lichess_explorer.position_page@1", delivery);
     const expected = corpusPageRequest(captured, frequency.request.timeoutMs);

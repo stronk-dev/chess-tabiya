@@ -6,7 +6,7 @@ import { makeSan } from "chessops/san";
 import { parseUci } from "chessops/util";
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { assertConsumerEvidenceView, assertProviderDelivery, canonicalFen, CORPUS_GUARD, compileProjectionExecution, corpusPositionEvidence, deriveExplorerRepertoireFrontier, evidenceForConsumer, transposeKey, type ConsumerEvidenceView, type ExplorerRepertoireFrontier } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, assertProviderDelivery, canonicalFen, CORPUS_GUARD, compileEvidenceConsumerExecution, corpusPositionEvidence, deriveExplorerRepertoireFrontier, evidenceForConsumer, transposeKey, type ConsumerEvidenceView, type ExplorerRepertoireFrontier } from "@chess-tabiya/runtime";
 
 import { corpusPopulation, corpusSamplePolicy, type CorpusAbstentionReason, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
@@ -39,7 +39,8 @@ interface Frontier {readonly fen:string;readonly key:string;readonly mass:number
 
 export function consumeRepertoireCorpus<T extends CorpusResult | ExplorerRepertoireFrontier>(view: ConsumerEvidenceView<T>): T {
   assertConsumerEvidenceView(view);
-  if (view.consumer.id !== "runtime.repertoire_scan" || view.consumer.version !== 1 || view.items.length !== 1) throw new TypeError("Expected one runtime.repertoire_scan@1 evidence item");
+  if (view.consumer.id !== "runtime.repertoire_scan" || ![1, 2].includes(view.consumer.version) || view.items.length !== 1) throw new TypeError("Expected one declared runtime.repertoire_scan evidence item");
+  if (view.consumer.version === 2 && (view.items[0]!.projection.id !== "derived.explorer.repertoire_frontier" || view.items[0]!.projection.version !== 1)) throw new TypeError("Modern repertoire requires its frontier projection");
   return view.items[0]!.payload;
 }
 
@@ -54,12 +55,13 @@ async function repertoireFrontier(source: CorpusSource, query: Parameters<Corpus
   const captured = Object.freeze({ ...query, ratings: Object.freeze([...query.ratings]), speeds: Object.freeze([...query.speeds]) });
   const { fen: _fen, ...population } = captured;
   try {
+    const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 2 });
+    const binding = execution.bindings[0];
+    if (execution.bindings.length !== 1 || binding?.binding.projection.id !== "derived.explorer.repertoire_frontier" || binding.binding.projection.version !== 1 || binding.paths.length !== 1 || binding.paths[0]?.sourceRequirements.length !== 1 || binding.paths[0]?.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Explorer frontier has another source operation");
     const acquired = await source.page(captured);
     if (acquired.kind !== "page") return Object.freeze({ kind: "abstention", reason: "source_unavailable", detail: "Explorer frontier source unavailable", population });
-    const execution = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "derived.explorer.repertoire_frontier", version: 1 });
-    if (execution.paths.length !== 1 || execution.paths[0]!.sourceRequirements.length !== 1 || execution.paths[0]!.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Explorer frontier has another source operation");
     const declared = deriveExplorerRepertoireFrontier(acquired.evidence);
-    const frontier = consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [declared]));
+    const frontier = consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 2 }, [declared]));
     const delivery = frontier.page.payload;
     assertProviderDelivery("lichess_explorer.position_page@1", delivery);
     const expected = corpusPageRequest(captured, frontier.request.timeoutMs);

@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-05",
+  "scope": ["D3401"],
+  "readings": [
+    {
+      "command": "make explorer-consumer-preflight-check",
+      "phase": "predecessor",
+      "tests": 172,
+      "passed": 152,
+      "failed": 20,
+      "files": 8,
+      "findings": [
+        "None of the three modern consumer successors exists.",
+        "Invalid policies, latency and an added raw binding do not prevent provider I/O at the actual HTTP boundary.",
+        "Positive traces contain acquisition without complete consumer compilation.",
+        "Modern Inspector receipts still identify consumer version 1."
+      ],
+      "targetCorrection": "The initial target named a nonexistent return-frequency.test.ts. It now names both actual return-scheduling suites; the complete target has ten files."
+    },
+    {
+      "command": "make explorer-consumer-preflight-check",
+      "phase": "first integration",
+      "tests": 190,
+      "passed": 189,
+      "failed": 1,
+      "finding": "The presentation classification census still expected 22 non-module versions; the real Inspector successor makes 23.",
+      "repair": "Retain exact version uniqueness and assert the new Inspector classification; do not weaken closure checks."
+    },
+    {
+      "command": "make typecheck",
+      "phase": "sandbox",
+      "result": "failed",
+      "finding": "The package manager cannot write its cache within the sandbox.",
+      "repair": "Run the same normal Make target with filesystem permission; the pinned-runtime workspace types pass."
+    },
+    {
+      "command": "make capability-check",
+      "phase": "source changed",
+      "result": "failed",
+      "finding": "Seven dependent capability digests no longer match the same-version source image.",
+      "repair": "Preserve all 949 committed declarations, append seven explicit successor versions, and automatically run canonical metadata generation plus preservation checks."
+    },
+    {
+      "command": "make explorer-consumer-preflight-check",
+      "phase": "incorrect concurrent verification during metadata update",
+      "tests": 190,
+      "passed": 110,
+      "failed": 80,
+      "finding": "Tests raced the incomplete requirement-stamp update. Failed application construction also left a compiler spy installed before scenario try/finally, causing cascading mock recursion.",
+      "repair": "Finish the canonical update before verification. Add unconditional afterEach restoration and capture the original compiler once; rerun against the frozen complete image."
+    }
+  ],
+  "finalFocused": {
+    "command": "make explorer-consumer-preflight-check",
+    "tests": 190,
+    "passed": 190,
+    "files": 10,
+    "invalidBindingControls": 9,
+    "providerCallsForInvalidBindings": 0,
+    "controls": [
+      "Preserved version-1 declarations and refused strict compilation of their raw source leaves.",
+      "Complete version-2 bindings compile with the original non-source contract and exact source operation.",
+      "Compilation precedes provider I/O in authenticated Inspector, due-queue and repertoire workflows.",
+      "Each workflow refuses missing policy, impossible latency and an additional unregistered binding without bare fallback.",
+      "Registered Inspector version-2 presentation and explicit version-1 standalone compatibility.",
+      "Existing sample floors, population/position checks, cancellation, grants, source seals, intake and scan bounds."
+    ]
+  },
+  "unchanged": [
+    "No performance threshold, timeout or retry count is relaxed.",
+    "No invalid binding is filtered out and no bare source gains a fabricated seal.",
+    "Full availability, whole-manifest execution and source retirement remain open."
+  ]
+}

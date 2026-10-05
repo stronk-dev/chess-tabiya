@@ -1,0 +1,47 @@
+{
+  "baseline": "363be01a",
+  "retainedDeclarations": 949,
+  "candidateDeclarations": 956,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 18
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 18
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 18
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 18
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 18
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 20
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 20
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 278,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "Complete Inspector, repertoire and return-frequency successor binding preflight before provider I/O; all predecessor declarations, factory outcomes, authored fields and guard/objective/opponent computations remain unchanged. Standalone compatibility remains explicit; whole-manifest execution, availability and source retirement stay open"
+}

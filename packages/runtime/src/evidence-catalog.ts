@@ -1364,6 +1364,7 @@ function moduleConsumerSpec(id: EvidenceModuleId): ConsumerSpec {
 
 interface ConsumerSpec {
   readonly id: string;
+  readonly version?: number;
   readonly implementation: string;
   readonly projections?: readonly (string | VersionedEvidenceId)[];
   readonly timing?: ConsumerDeclaration["timing"];
@@ -1418,6 +1419,10 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "review.story", implementation: "renderReviewStoryReceipt", projections: [...PIVOTAL_MARKER_IDS, "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "rules.endgame.classification", ref2("derived.review.eval_delta"), ref2("derived.review.mate_transition"), "derived.story.last_level", ref2("derived.story.rank"), ref2("derived.story.title")], timing: ["review"], roles: ["learner", "host", "participant", "spectator"], forms: ["sentence", "timeline_marker", "list", "panel", "machine_condition"], answerContent: ["fact", "pattern", "evaluation"] },
   { id: "runtime.repertoire_scan", implementation: "consumeRepertoireCorpus", projections: ["human.explorer.position_stats", "derived.explorer.repertoire_frontier"], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "candidate_moves"], budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty", sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } },
   { id: "runtime.return_frequency", implementation: "consumeReturnFrequency", projections: ["human.explorer.position_stats", "derived.explorer.position_frequency"], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact"], budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty", sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } },
+  // Modern execution images are successors, not filtered rewrites of standalone v1.
+  { id: "inspector.corpus", version: 2, implementation: "consumeCorpus", projections: ["derived.explorer.inspector_population"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["fact", "candidate_moves"], providerOff: "honest_empty", sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } },
+  { id: "runtime.repertoire_scan", version: 2, implementation: "consumeRepertoireCorpus", projections: ["derived.explorer.repertoire_frontier"], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "candidate_moves"], budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty", sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } },
+  { id: "runtime.return_frequency", version: 2, implementation: "consumeReturnFrequency", projections: ["derived.explorer.position_frequency"], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact"], budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty", sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } },
   { id: "authoring.claim_binding", implementation: "consumeClaimBindingRecords", projections: ["sourcing.ledger.engine_eval", "sourcing.ledger.tablebase_result", "sourcing.ledger.explorer_position_census", "sourcing.ledger.citable_text", "theory.opening_identity.record"], timing: ["analysis"], roles: ["author"], forms: ["list", "panel"], answerContent: ["fact", "theory", "principle", "plan", "evaluation"], latency: { mode: "offline", maxMs: null }, budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty" },
   { id: "guidance.voice_compare", implementation: "comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", ...PIVOTAL_MARKER_IDS, "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
   { id: "guidance.voice_story", implementation: "storyDeclaredEvidence", projections: [...POSITION_GUIDANCE_IDS, "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", ref2("derived.review.eval_delta"), ref2("derived.review.mate_transition"), "derived.story.last_level", ref2("derived.story.title")], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
@@ -1428,7 +1433,7 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
 
 export const EVIDENCE_CONSUMERS: readonly ConsumerDeclaration[] = Object.freeze(CONSUMER_SPECS.map((spec) => Object.freeze({
   id: spec.id,
-  version: 1,
+  version: spec.version ?? 1,
   implementation: spec.implementation,
   accepts: Object.freeze((spec.projections ?? []).map(exactRef)),
   timing: Object.freeze(spec.timing ?? DEFAULT_TIMING),
@@ -1461,11 +1466,11 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
   const answers = (spec.answerContent ?? DEFAULT_ANSWERS).filter((answer) => projectionValue.answerContent.includes(answer));
   return Object.freeze({
     id: `adapter.${spec.id}.${index + 1}`,
-    version: 1,
+    version: spec.version ?? 1,
     implementation: spec.implementation,
     producer: ref(source.id),
     projection: projectionRef,
-    consumer: ref(spec.id),
+    consumer: { id: spec.id, version: spec.version ?? 1 },
     timing: Object.freeze(spec.timing ?? DEFAULT_TIMING),
     roles: Object.freeze(spec.roles ?? DEFAULT_ROLES),
     sessions: Object.freeze(spec.sessions ?? DEFAULT_SESSIONS),
