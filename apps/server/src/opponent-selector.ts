@@ -608,7 +608,12 @@ export class OpponentSelector {
   readonly #tablebase: TablebaseSource | undefined;
   readonly #health: ProviderRegistry | undefined;
   readonly #settled: SettledSelectionCache;
-  readonly #inFlight = new Map<string, Promise<Omit<SettledSelection, "expiresAtMonotonic">>>();
+  readonly #inFlight = new Map<string, {
+    readonly controller: AbortController;
+    readonly promise: Promise<Omit<SettledSelection, "expiresAtMonotonic">>;
+    waiters: number;
+    settled: boolean;
+  }>();
   readonly #monotonic: () => number;
   readonly #wall: () => string;
 
@@ -643,8 +648,8 @@ export class OpponentSelector {
     }
   }
 
-  select(request: SelectMoveRequest): Promise<OpponentSelection> {
-    return this.selectWithReceipt(request).then((result) => result.selection);
+  select(request: SelectMoveRequest, options: { readonly signal?: AbortSignal } = {}): Promise<OpponentSelection> {
+    return this.selectWithReceipt(request, options).then((result) => result.selection);
   }
 
   /**
@@ -652,16 +657,17 @@ export class OpponentSelector {
    * provider generations is served as `cached_exact` whatever the provider's health; a miss needs a
    * live provider and fails with the typed, bounded unavailable outcome — never a different mode.
    */
-  selectWithReceipt(request: SelectMoveRequest): Promise<ReceiptedOpponentSelection> {
+  selectWithReceipt(request: SelectMoveRequest, options: { readonly signal?: AbortSignal } = {}): Promise<ReceiptedOpponentSelection> {
     // Request refusals (band, policy, terminal position) stay synchronous, before any provider.
     this.validatePolicy(request.policy);
     if (currentPosition(request).isEnd()) {
       throw invalid("Opponent selection requires a non-terminal position");
     }
-    return this.#selectWithReceipt(request);
+    return this.#selectWithReceipt(request, options.signal);
   }
 
-  async #selectWithReceipt(request: SelectMoveRequest): Promise<ReceiptedOpponentSelection> {
+  async #selectWithReceipt(request: SelectMoveRequest, signal?: AbortSignal): Promise<ReceiptedOpponentSelection> {
+    signal?.throwIfAborted();
     const generations = this.#generationImage(request.policy.mode);
     const key = `${selectionCacheKey(request)}\0${JSON.stringify(generations)}`;
     const hit = this.#settled.get(key, this.#monotonic());
@@ -670,7 +676,9 @@ export class OpponentSelector {
     }
     let pending = this.#inFlight.get(key);
     if (pending === undefined) {
-      const started = this.#selectLive(request, generations).then((settled) => {
+      const controller = new AbortController();
+      const started = this.#selectLive(request, generations, controller.signal).then((settled) => {
+        controller.signal.throwIfAborted();
         // A result produced under a generation that has since been replaced never reaches a
         // response and never populates the new generation's cache (§3, criterion 19).
         if (JSON.stringify(this.#generationImage(request.policy.mode)) !== JSON.stringify(generations)) {
@@ -679,18 +687,46 @@ export class OpponentSelector {
         this.#settled.put(key, this.#monotonic(), settled);
         return settled;
       });
-      pending = started.finally(() => {
-        this.#inFlight.delete(key);
-      });
+      const entry = { controller, waiters: 0, settled: false, promise: started.finally(() => {
+        entry.settled = true;
+        // An abandoned flight may finish after a replacement with the same key was admitted.
+        if (this.#inFlight.get(key) === entry) this.#inFlight.delete(key);
+      }) };
+      pending = entry;
       this.#inFlight.set(key, pending);
     }
-    const settled = await pending;
+    const flight = pending;
+    flight.waiters += 1;
+    const settled = await new Promise<Omit<SettledSelection, "expiresAtMonotonic">>((resolve, reject) => {
+      let detached = false;
+      const detach = (): boolean => {
+        if (detached) return false;
+        detached = true;
+        signal?.removeEventListener("abort", onAbort);
+        flight.waiters -= 1;
+        if (flight.waiters === 0 && !flight.settled) {
+          if (this.#inFlight.get(key) === flight) this.#inFlight.delete(key);
+          flight.controller.abort();
+        }
+        return true;
+      };
+      const onAbort = (): void => {
+        if (detach()) reject(signal!.reason);
+      };
+      signal?.addEventListener("abort", onAbort, { once: true });
+      // Always attach both handlers, including when the caller already left, so an abandoned
+      // provider rejection cannot become an unhandled background promise.
+      flight.promise.then(value => { if (detach()) resolve(value); }, error => { if (detach()) reject(error); });
+      if (signal?.aborted) onAbort();
+    });
+    signal?.throwIfAborted();
     return Object.freeze({ selection: settled.selection, receipt: Object.freeze({ source: "live", generations: settled.generations, producedAt: settled.producedAt, servedAt: this.#wall() }) });
   }
 
-  async #selectLive(request: SelectMoveRequest, generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>): Promise<Omit<SettledSelection, "expiresAtMonotonic">> {
+  async #selectLive(request: SelectMoveRequest, generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>, signal: AbortSignal): Promise<Omit<SettledSelection, "expiresAtMonotonic">> {
     const deadline = this.#monotonic() + applicationProviderExecution("opponent.maia_inference").consumerBudgetMs;
-    const selection = await this.#selectUncached(request, deadline);
+    const selection = await this.#selectUncached(request, deadline, signal);
+    signal.throwIfAborted();
     return Object.freeze({ selection, generations, producedAt: this.#wall() });
   }
 
@@ -706,24 +742,33 @@ export class OpponentSelector {
   }
 
   /** Runs one engine stage inside the shared deadline, admitted and settled by provider health. */
-  async #engine(operation: "opponent.maia_inference" | "opponent.stockfish_play", engineId: string, request: Omit<EngineRequest, "timeoutMs" | "signal">, deadline: number, searchFloorMs = 1): Promise<readonly string[]> {
+  async #engine(operation: "opponent.maia_inference" | "opponent.stockfish_play", engineId: string, request: Omit<EngineRequest, "timeoutMs" | "signal">, deadline: number, searchFloorMs = 1, signal?: AbortSignal): Promise<readonly string[]> {
+    signal?.throwIfAborted();
     const remaining = Math.floor(deadline - this.#monotonic());
     if (remaining < searchFloorMs) {
       const instanceId = applicationProviderExecution(operation).instanceId;
       throw new ProviderUnavailableError(operation, Object.freeze({ state: "unavailable", instanceIds: Object.freeze([instanceId]), reason: "timeout" }), null, "the opponent deadline cannot admit another provider request");
     }
-    if (this.#health === undefined) return this.#client.execute(engineId, { ...request, timeoutMs: remaining });
-    return this.#health.run(operation, ({ signal, remainingMs }) => this.#client.execute(engineId, { ...request, timeoutMs: Math.max(1, remainingMs), signal }), classifyEngineFailure, { deadlineMonotonic: deadline });
+    const lines = this.#health === undefined
+      ? await this.#client.execute(engineId, { ...request, timeoutMs: remaining, ...(signal === undefined ? {} : { signal }) })
+      : await this.#health.run(operation, ({ signal, remainingMs }) => this.#client.execute(engineId, { ...request, timeoutMs: Math.max(1, remainingMs), signal }), classifyEngineFailure, { deadlineMonotonic: deadline, ...(signal === undefined ? {} : { signal }) });
+    signal?.throwIfAborted();
+    return lines;
   }
 
-  async #probe(fen: string, deadline: number): Promise<TablebasePosition> {
+  async #probe(fen: string, deadline: number, signal?: AbortSignal): Promise<TablebasePosition> {
+    signal?.throwIfAborted();
     const source = this.#tablebase!;
+    const options = { deadlineMonotonic: deadline, ...(signal === undefined ? {} : { signal }) };
     if (source.probeEvidence === undefined) {
       // Explicit standalone/fixture compatibility, not a fallback after provider failure.
-      return opponentProviderEvidence("syzygy", await source.probe(fen, { deadlineMonotonic: deadline }));
+      const position = await source.probe(fen, options);
+      signal?.throwIfAborted();
+      return opponentProviderEvidence("syzygy", position);
     }
     try {
-      const evidence = await source.probeEvidence(fen, { deadlineMonotonic: deadline });
+      const evidence = await source.probeEvidence(fen, options);
+      signal?.throwIfAborted();
       if (evidence.projection.id !== "live.syzygy.position_result" || evidence.projection.version !== 2) {
         throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase source returned another evidence projection");
       }
@@ -807,18 +852,19 @@ export class OpponentSelector {
     );
   }
 
-  async #selectUncached(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
+  async #selectUncached(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
+    signal.throwIfAborted();
     switch (request.policy.mode) {
       case "human_common":
-        return this.#humanCommon(request, deadline);
+        return this.#humanCommon(request, deadline, signal);
       case "strong_engine":
-        return this.#strongEngine(request, deadline);
+        return this.#strongEngine(request, deadline, signal);
       case "theory_strict":
-        return this.#theoryStrict(request, deadline);
+        return this.#theoryStrict(request, deadline, signal);
       case "perfect_tablebase":
-        return this.#perfectTablebase(request, deadline);
+        return this.#perfectTablebase(request, deadline, signal);
       case "practical_resistance":
-        return this.#practicalResistance(request, deadline);
+        return this.#practicalResistance(request, deadline, signal);
       default:
         throw policyModeUnsupported(request.policy.mode);
     }
@@ -828,6 +874,7 @@ export class OpponentSelector {
     request: SelectMoveRequest,
     multiPv: number,
     deadline: number,
+    signal: AbortSignal,
   ): Promise<{ readonly lines: readonly string[]; readonly identity: EngineIdentity; readonly eloApplied?: number }> {
     const health = this.#client.health(this.#maiaEngineId);
     const identity = engineIdentity(this.#client, this.#maiaEngineId);
@@ -857,7 +904,7 @@ export class OpponentSelector {
     const lines = opponentProviderEvidence("maia", await this.#engine("opponent.maia_inference", this.#maiaEngineId, {
       commands,
       until: (line) => line.startsWith("bestmove "),
-    }, deadline));
+    }, deadline, 1, signal));
     return Object.freeze({
       lines,
       identity,
@@ -865,17 +912,17 @@ export class OpponentSelector {
     });
   }
 
-  async #humanCommon(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
+  async #humanCommon(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
     const health = this.#client.health(this.#maiaEngineId);
     const maximum = health.options?.find((item) => item.name === "MultiPV" && item.type === "spin")?.max;
     const requestedWidth = Math.max(8, legalMoveCount(currentPosition(request)));
     const width = maximum === undefined ? requestedWidth : Math.min(requestedWidth, maximum);
-    let result = await this.#maia(request, width, deadline);
+    let result = await this.#maia(request, width, deadline, signal);
     const fen = requestPositionFen(request);
     let candidates = candidateLines(result.lines, fen);
     let moveUci = bestMove(result.lines, fen);
     if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
-      result = await this.#maia(request, width, deadline);
+      result = await this.#maia(request, width, deadline, signal);
       candidates = candidateLines(result.lines, fen);
       moveUci = bestMove(result.lines, fen);
     }
@@ -896,7 +943,7 @@ export class OpponentSelector {
   }
 
   /** @instrument-fed Stockfish 51-position reproducibility corpus */
-  async #strongEngine(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
+  async #strongEngine(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
     const searchBound = this.#strongEngineNodes === null
       ? Object.freeze({ kind: "movetime" as const, value: this.#strongEngineMovetimeMs })
       : Object.freeze({ kind: "nodes" as const, value: this.#strongEngineNodes });
@@ -908,7 +955,7 @@ export class OpponentSelector {
       ],
       resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
-    }, deadline, searchBound.kind === "movetime" ? searchBound.value : 1));
+    }, deadline, searchBound.kind === "movetime" ? searchBound.value : 1, signal));
     return makeSelection(
       bestMove(lines, requestPositionFen(request)),
       candidateLines(lines, requestPositionFen(request)),
@@ -919,15 +966,15 @@ export class OpponentSelector {
     );
   }
 
-  async #theoryStrict(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
+  async #theoryStrict(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
     const children = spineChildren(request);
     if (children === undefined || children.length === 0) {
       console.warn(
         "DEGRADED_THEORY_SPINE: position is off the authored spine; falling back to human_common",
       );
-      return this.#humanCommon(request, deadline);
+      return this.#humanCommon(request, deadline, signal);
     }
-    const result = await this.#maia(request, Math.max(8, children.length), deadline);
+    const result = await this.#maia(request, Math.max(8, children.length), deadline, signal);
     const fen = requestPositionFen(request);
     const allowed = new Set(children.map((child) => normalizeInboundMove(fen, child.moveUci, "pack_move_uci").moveUci));
     const matching = candidateLines(result.lines, fen).filter((candidate) =>
@@ -955,13 +1002,13 @@ export class OpponentSelector {
     return makeSelection(moveUci, candidates, result.identity, "theory_strict", result.eloApplied);
   }
 
-  async #perfectTablebase(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
+  async #perfectTablebase(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
     if (this.#tablebase === undefined) {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Perfect tablebase resistance is unavailable", { details: { retryAfterMs: 0 } });
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const position = await this.#probe(fen, deadline);
+    const position = await this.#probe(fen, deadline, signal);
     if (position.category === "unknown") {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase category is unknown", { details: { retryAfterMs: 60_000 } });
     }
@@ -994,13 +1041,13 @@ export class OpponentSelector {
     });
   }
 
-  async #practicalResistance(request: SelectMoveRequest, deadline: number): Promise<OpponentSelection> {
+  async #practicalResistance(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
     if (this.#tablebase === undefined) {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Practical resistance requires a tablebase provider", { details: { retryAfterMs: 0 } });
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const root = await this.#probe(fen, deadline);
+    const root = await this.#probe(fen, deadline, signal);
     if (root.category === "unknown") {
       throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", "The root outcome class is unknown");
     }
@@ -1024,7 +1071,7 @@ export class OpponentSelector {
     for (const candidate of preserving) {
       const child = play(board, candidate.uci, `tablebase reply ${candidate.uci}`);
       const childFen = makeFen(child.toSetup());
-      const childTablebase = await this.#probe(childFen, deadline);
+      const childTablebase = await this.#probe(childFen, deadline, signal);
       if (childTablebase.category === "unknown") {
         throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", `Outcome class after ${candidate.uci} is unknown`);
       }
@@ -1032,7 +1079,7 @@ export class OpponentSelector {
         ...request,
         historyUci: Object.freeze([...request.historyUci, candidate.uci]),
       });
-      const maia = await this.#maia(childRequest, Math.max(8, legalMoveCount(child)), deadline);
+      const maia = await this.#maia(childRequest, Math.max(8, legalMoveCount(child)), deadline, signal);
       const policy = candidateLines(maia.lines, childFen);
       const conceding = new Set(
         childTablebase.moves

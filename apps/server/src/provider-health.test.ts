@@ -111,6 +111,55 @@ describe("state machine (criterion 2)", () => {
     expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
   });
 
+  it("cancellation across awaited admission never starts the provider or heals health", async () => {
+    const registry = await testRegistry({ "external-voice": "unverified" });
+    const caller = new AbortController();
+    let calls = 0;
+    const pending = registry.run("render.voice", async () => { calls += 1; return "late"; }, () => ({ kind: "failure", reason: "network" }), { signal: caller.signal });
+    caller.abort();
+    await expect(pending).rejects.toMatchObject({ name: "AbortError" });
+    expect(calls).toBe(0);
+    expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+    expect(await registry.run("render.voice", async () => "current", () => ({ kind: "failure", reason: "network" }))).toBe("current");
+  });
+
+  it("a provider ignoring cancellation cannot return success or heal an unverified instance", async () => {
+    const registry = await testRegistry({ "external-voice": "unverified" });
+    const caller = new AbortController();
+    let release!: () => void, started!: () => void;
+    const ready = new Promise<void>(resolve => { started = resolve; });
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    const pending = registry.run("render.voice", async ({ signal }) => { started(); await gate; expect(signal.aborted).toBe(true); return "abandoned"; }, () => ({ kind: "failure", reason: "network" }), { signal: caller.signal });
+    await ready; caller.abort(); release();
+    await expect(pending).rejects.toMatchObject({ name: "AbortError" });
+    expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+  });
+
+  it("releases a cancelled ticket even when execution ignores abort and its deadline passes", async () => {
+    const callbacks = new Map<number, () => void>();
+    let next = 0;
+    const registry = new ProviderRegistry({ configured: [{ instanceId: "external-voice", implementation: "external_http", endpoint: "voice", identity: "voice" }], timers: {
+      set(callback) { const id = ++next; callbacks.set(id, callback); return id; },
+      clear(handle) { callbacks.delete(handle as number); },
+    } });
+    const caller = new AbortController();
+    let release!: () => void, started!: () => void;
+    const ready = new Promise<void>(resolve => { started = resolve; });
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    const pending = registry.run("render.voice", async () => { started(); await gate; return "too late"; }, () => ({ kind: "failure", reason: "network" }), { signal: caller.signal });
+    const refusal = expect(pending).rejects.toMatchObject({ name: "AbortError" });
+    try {
+      await ready; caller.abort(); await refusal;
+      expect(callbacks.size).toBe(0);
+      for (const callback of callbacks.values()) callback();
+      expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+      const successor = await registry.admit("render.voice");
+      registry.settle(successor, { kind: "cancelled", by: "caller" });
+      release(); await new Promise<void>(resolve => setImmediate(resolve));
+      expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+    } finally { release(); }
+  });
+
   it("stockfish-play and stockfish-analysis fail and recover independently (criterion 1)", async () => {
     const registry = await testRegistry({ "stockfish-play": "available", "stockfish-analysis": "available" });
     const sink = registry.engineLifecycleSink({ "stockfish-play": "stockfish-play", "stockfish-analysis": "stockfish-analysis" });
@@ -300,6 +349,21 @@ describe("exchange availability (bot-policy D7)", () => {
 });
 
 describe("run(): one deadline, typed unavailable (criterion 3, 5)", () => {
+  it("a genuine deadline still fails health when the provider ignores abort", async () => {
+    let deadline!: () => void, started!: () => void, release!: () => void;
+    const ready = new Promise<void>(resolve => { started = resolve; });
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    const registry = new ProviderRegistry({ configured: [{ instanceId: "external-voice", implementation: "external_http", endpoint: "voice", identity: "voice" }], timers: { set(callback) { deadline = callback; }, clear() {} } });
+    const pending = registry.run("render.voice", async () => { started(); await gate; return "too late"; }, () => ({ kind: "failure", reason: "network" }));
+    const refusal = expect(pending).rejects.toMatchObject({ code: "PROVIDER_UNAVAILABLE", details: { availability: { state: "temporarily_blocked", reason: "upstream_backoff" } } });
+    try {
+      await ready; deadline(); await refusal;
+      expect(snapshotOf(registry, "external-voice")).toMatchObject({ state: "unavailable", reason: "timeout" });
+      release(); await new Promise<void>(resolve => setImmediate(resolve));
+      expect(snapshotOf(registry, "external-voice")).toMatchObject({ state: "unavailable", reason: "timeout" });
+    } finally { release(); }
+  });
+
   it("a refused admission returns the typed outcome without calling the provider", async () => {
     const registry = await testRegistry({ "maia-inference": { failed: "process_exit" } });
     let called = false;

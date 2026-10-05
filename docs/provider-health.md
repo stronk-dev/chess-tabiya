@@ -95,6 +95,14 @@ and a late result from a replaced generation is discarded. An exact hit is retur
 provider returns `PROVIDER_UNAVAILABLE` (503), which carries `{ operation, availability,
 retryAfterMs }`. The selector never substitutes another mode.
 
+Each coalesced selection caller has an independent abort lifetime. Leaving cancels only that
+waiter; the last waiter aborts every remaining engine/tablebase stage under the original deadline.
+An abandoned flight cannot fill the settled cache or remove a newer same-key flight. Cancellation
+does not alter sampler options or add a wire/cache-key field. Both HTTP selection routes forward
+request cancellation. The registry checks again after awaited admission and provider completion,
+so an ignored abort cannot heal provider health or publish success. Permanent controls run with
+`make opponent-cancellation-check` and in the ordinary software tier.
+
 ## `/capabilities`, `/healthz`
 
 `/capabilities` returns `providerHealth: { generatedAt, providers[7], operations[10],

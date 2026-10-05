@@ -27855,6 +27855,33 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/inspector-corpus-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3385",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d12afbf8f443c76f37fd172fdd8ae66c18aee3867a63ec913e390875fed37520",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3386",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7c88c4e7bea285a7b27cefb5cc4caa8d37cd5bedd4ecf096d4e373c888990649",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3387",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1d2ad7c43ba04a24e2ff41ee3643b08675b5f08f8493efbe252a806b6b60d48f",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

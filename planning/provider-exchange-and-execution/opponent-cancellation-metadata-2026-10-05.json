@@ -1,0 +1,27 @@
+{
+  "baseline": "2e02329a",
+  "retainedDeclarations": 925,
+  "candidateDeclarations": 927,
+  "successors": [
+    {
+      "subject": "opponent.practical_slice",
+      "version": 16
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 16
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 278,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "Caller cancellation and asynchronous Inspector access checks; historical declarations, factory outcomes, authored content and guard/objective computations unchanged. Selector cancellation behavior is verified by the separate permanent tests, not this metadata instrument"
+}

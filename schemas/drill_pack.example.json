@@ -180,7 +180,7 @@
     { "id": "objective.state_machine", "version": { "kind": "integer", "value": 1 } },
     { "id": "objective.transition_legality", "version": { "kind": "integer", "value": 1 } },
     { "id": "objectiveType.play_until_checkpoint", "version": { "kind": "integer", "value": 1 } },
-    { "id": "opponent.selection", "version": { "kind": "integer", "value": 15 } },
+    { "id": "opponent.selection", "version": { "kind": "integer", "value": 16 } },
     { "id": "opponentPolicy.mode.human_common", "version": { "kind": "integer", "value": 1 } },
     { "id": "opponentPolicy.seedMode.per_branch", "version": { "kind": "integer", "value": 1 } },
     { "id": "outcome.terminal", "version": { "kind": "integer", "value": 1 } },

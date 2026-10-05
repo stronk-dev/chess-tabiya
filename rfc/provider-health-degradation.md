@@ -1,5 +1,7 @@
 # RFC: Provider health and honest degradation
 
+- **Implementation checkpoint 2026-10-05, caller cancellation:** D3386/D3387 add independent coalesced selection waiter lifetimes, last-waiter upstream abort and abandoned cache isolation. Registry admission/completion checks and an abort-bounded execution race release cancelled tickets without changing health; genuine deadlines retain timeout/backoff. Explorer retains its typed caller-expiry operation arm. D3385 rechecks actual Inspector authority across waits. Permanent authenticated/source controls pass 222 focused tests; full exact-index software and browser gates pass. Remaining RFC obligations stay open. Receipt: `planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md`.
+
 - **Implementation checkpoint 2026-10-05:** D3378 preserves a supplied tablebase source's modern evidence method, receiver and sealed result at application composition. Both source methods receive the health operation's abort signal and deadline; cancellation leaves health unchanged. D3379 returns typed tablebase unavailable for failed source admission rather than HTTP 500. Real authenticated selection and cancellation controls pass in the normal 143-test focused gate. Remaining RFC obligations are not discharged by this adapter repair. Receipt: `planning/provider-exchange-and-execution/health-source-authority-2026-10-05.md`.
 
 - **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model

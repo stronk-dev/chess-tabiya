@@ -23,9 +23,10 @@ const HEALTH_TABLEBASE = process.argv.includes("--health-tablebase");
 const REPERTOIRE_FRONTIER = process.argv.includes("--repertoire-frontier");
 const RETURN_FREQUENCY = process.argv.includes("--return-frequency");
 const INSPECTOR_POPULATION = process.argv.includes("--inspector-population");
+const OPPONENT_CANCELLATION = process.argv.includes("--opponent-cancellation");
 const REVIEW_SUCCESSORS = ["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"];
-const BASELINE = INSPECTOR_POPULATION ? "c7b03e02" : RETURN_FREQUENCY ? "58fd826c" : REPERTOIRE_FRONTIER ? "dd5b5194" : HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
-const SUCCESSORS = HEALTH_TABLEBASE ? ["opponent.practical_slice", "opponent.selection"] : [
+const BASELINE = OPPONENT_CANCELLATION ? "2e02329a" : INSPECTOR_POPULATION ? "c7b03e02" : RETURN_FREQUENCY ? "58fd826c" : REPERTOIRE_FRONTIER ? "dd5b5194" : HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
+const SUCCESSORS = HEALTH_TABLEBASE || OPPONENT_CANCELLATION ? ["opponent.practical_slice", "opponent.selection"] : [
   "engineCondition.engine_eval_swing", "engineCondition.engine_mate_appears",
   "engineCondition.tablebase_category_regression", "engineCondition.tablebase_dtz_regression",
   "fenPredicate.structuralFeature", "opponent.practical_slice", "opponent.selection",
@@ -55,7 +56,7 @@ async function proof(editsOnly: boolean) {
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
     const precedingVersions = previous.filter(oldRow => oldRow.subjectId === row.subjectId).map(oldRow => Number(oldRow.id.version.value));
-    assert.equal(row.id.version.value, REPERTOIRE_FRONTIER || RETURN_FREQUENCY || INSPECTOR_POPULATION ? precedingVersions.length === 0 ? 1 : Math.max(...precedingVersions) + 1 : HEALTH_TABLEBASE ? 12 : QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
+    assert.equal(row.id.version.value, OPPONENT_CANCELLATION ? 16 : REPERTOIRE_FRONTIER || RETURN_FREQUENCY || INSPECTOR_POPULATION ? precedingVersions.length === 0 ? 1 : Math.max(...precedingVersions) + 1 : HEALTH_TABLEBASE ? 12 : QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
   }
   const oldProfiles = JSON.parse(old("packages/runtime/src/fixtures/evidence-value-profiles.json"));
   const profiles = JSON.parse(read("packages/runtime/src/fixtures/evidence-value-profiles.json"));
@@ -91,8 +92,8 @@ async function proof(editsOnly: boolean) {
   }
   assert.equal(canonicalJson(currentOperations), canonicalJson(withoutDigest(previousReceipt.operations, "implementationDigest")), "Validation operations changed beyond implementation digests and the named frontier type");
   assert.equal(canonicalJson(withoutDigest(currentReceipt.populations, "predicateImplementationDigest")), canonicalJson(withoutDigest(previousReceipt.populations, "predicateImplementationDigest")), "Validation population observations changed");
-  // These evaluators and the opponent selector are unchanged at this checkpoint.
-  for (const path of ["apps/server/src/guard.ts", "apps/server/src/guard-conditions.ts", "packages/runtime/src/objective.ts", ...(HEALTH_TABLEBASE ? [] : ["apps/server/src/opponent-selector.ts"])]) assert.equal(read(path), old(path), `Evaluator changed: ${path}`);
+  // Cancellation changes selector orchestration, not guard/objective computations or factories.
+  for (const path of ["apps/server/src/guard.ts", "apps/server/src/guard-conditions.ts", "packages/runtime/src/objective.ts", ...(HEALTH_TABLEBASE || OPPONENT_CANCELLATION ? [] : ["apps/server/src/opponent-selector.ts"])]) assert.equal(read(path), old(path), `Evaluator changed: ${path}`);
   if (HEALTH_TABLEBASE) {
     const path = "apps/server/src/opponent-selector.ts", current = read(path);
     const startMarker = "\n    try {\n      const evidence = await source.probeEvidence";
@@ -151,7 +152,7 @@ async function proof(editsOnly: boolean) {
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
     retainedFactoryOutcomes: Object.keys(oldProfiles).length - successors.size, newFactoryProfiles: newProfiles,
     retainedSourceExecution: { projection: "live.syzygy.position_result@1", state: "registered", operation: "syzygy.position@1" },
-    scope: INSPECTOR_POPULATION ? "Inspector whole-source admission and narrow registered presentation; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : RETURN_FREQUENCY ? "return-frequency whole-source admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : REPERTOIRE_FRONTIER ? "repertoire whole-source frontier admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : HEALTH_TABLEBASE ? "health-wrapped source authority and typed admission failure; authored content, guard/objective computations and successful selection code unchanged" : QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
+    scope: OPPONENT_CANCELLATION ? "Caller cancellation and asynchronous Inspector access checks; historical declarations, factory outcomes, authored content and guard/objective computations unchanged. Selector cancellation behavior is verified by the separate permanent tests, not this metadata instrument" : INSPECTOR_POPULATION ? "Inspector whole-source admission and narrow registered presentation; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : RETURN_FREQUENCY ? "return-frequency whole-source admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : REPERTOIRE_FRONTIER ? "repertoire whole-source frontier admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : HEALTH_TABLEBASE ? "health-wrapped source authority and typed admission failure; authored content, guard/objective computations and successful selection code unchanged" : QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
   };
 }
 

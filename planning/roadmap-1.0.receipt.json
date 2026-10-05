@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:db1348491f769e903b9a0273264722ace0e441b07f405468422ea0361e4ef335",
+    "roadmap": "sha256:93c7510290d0e91541012d383e01e7cb262e9627e24b11e8aa28cc4cbeebb071",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:834e458d5c7e1c54685de2c462ad940e7b5b83ece63d42b01013158cb0a2d018",
-    "rfcRegister": "sha256:04a6b731c2aa9e593b733cc1ad38f157668ca0cb647fb9632b5efeeadac20bfe",
+    "workState": "sha256:af2c446db4563169e27d362a5840fb409a708f36d4c2f279aee2c4cd00bca168",
+    "rfcRegister": "sha256:196eddcac5f47d556ff4c0eb0f8c5dca32381f78a204e6bb1c7fbed7458b86cf",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:9012d85008bc05c9971ab8722161b03cc918ccb03a0b8d0491d82e1d85a95137",
-    "rest": "sha256:637a360a261b9b1321a936b604c419af20d3bcbe8e27b548874628401130b8b5"
+    "rest": "sha256:73cca9e654f7a6d1851f0caac96b1ceebcb8648569948d0d2e31b5b0e94f5b71"
   },
   "summary": {
     "capabilities": 14,
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 0,
       "blocked": 1051,
-      "done": 1295,
+      "done": 1298,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Continue actual source migrations and literal binding-policy adoption, then whole-manifest execution/digest, exact occurrence resolution and authenticated availability. Inspector Explorer D3384 now consumes registered sealed source/presentation rather than bare client evidence. D3363 retains the distinct Maia candidate-page contract; D3370 requires the distinct sampled Maia result; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Whole-source persistence and zero-consumer retirement remain open. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+      "nextAction": "Continue actual source migrations and literal binding-policy adoption, then whole-manifest execution/digest, exact occurrence resolution and authenticated availability. D3385/D3386/D3387 now enforce async Inspector authority and independent caller cancellation without provider-health damage. D3363 retains the distinct Maia candidate-page contract; D3370 requires sampled Maia result authority; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Whole-source persistence and zero-consumer retirement remain open. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3384 closes the actual Inspector Explorer source/presentation bypass: declared narrow whole-source projection, registered server consumer/renderer and client receipt validation. Exact request and post-acquisition read/disclosure/subject checks refuse copied/crossed/failed modern sources without bare fallback or diagnostics. Counts, population/move floors, canonical moves, mass, recency, attribution and committed membership remain unchanged. Normal focused verification passes 299 tests/12 files and warning-free types; final exact-index verify-software passes at 53ba289a33ed067ce1b56ae68005f937b851ba6b. Content and complete browser CI pass. Routine metadata preserves 917 predecessors, all 277 existing factory profiles and all authored fields; 925 current declarations resolve. Only D3384 closes, with zero untriaged/1678 live. Full execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376 remain open; no capability or milestone promotion.",
+        "summary": "D3385/D3386/D3387 close asynchronous human-split read/disclosure/subject leaks, independently detachable opponent-selection waiters and abort-bounded provider-health execution. Revoked or moved subjects refuse; last-waiter abort stops stages/retries, abandoned completions cannot fill cache or erase newer work, and late success cannot heal health. Genuine timeout/backoff and Explorer typed caller expiry remain intact. Focused HTTP/source controls pass 222 tests; exact-index software passes 3004 tests/327 files, seven isolated performance tests and all downstream contracts at 311734f950cd53bb0ef0ea4d40445669e0c4c2f4. Final content passes 223 tests and all 104 requirements; rebuilt browser CI passes 111 journeys, one optional skip and zero retries. Canonical metadata preserves 925 predecessor declarations, 278 factory outcomes and authored content; 927 declarations resolve. Only these three defects close: zero untriaged/1678 live. Full provider execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376 remain open; no capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -263,7 +263,11 @@
           "planning/provider-exchange-and-execution/return-frequency-2026-10-05.md",
           "planning/provider-exchange-and-execution/return-frequency-software-2026-10-05.json",
           "planning/provider-exchange-and-execution/inspector-corpus-2026-10-05.md",
-          "planning/provider-exchange-and-execution/inspector-corpus-software-2026-10-05.json"
+          "planning/provider-exchange-and-execution/inspector-corpus-software-2026-10-05.json",
+          "planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md",
+          "planning/provider-exchange-and-execution/opponent-cancellation-software-2026-10-05.json",
+          "planning/provider-exchange-and-execution/opponent-cancellation-metadata-2026-10-05.json",
+          "planning/provider-exchange-and-execution/opponent-cancellation-negatives-2026-10-05.json"
         ],
         "anchors": [
           {
@@ -309,7 +313,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:951dbb518a694579528dda9ef0a376f4081db9a796c1f8f4e117eb3d4bfec0d1"
+            "digest": "sha256:d3d9956d499f70111f7ed66ee81b9fc6a0163ccf62963a3f4a5ae9fa8b3150f3"
           },
           {
             "kind": "work_state",
@@ -469,7 +473,7 @@
           {
             "kind": "rfc",
             "id": "provider-health-degradation.md",
-            "digest": "sha256:40ae62618ff3cc66c1c41eb79012356f377a308568194d3643e9a4e125a6bacf"
+            "digest": "sha256:b58d53094a34faa901f21a568c5409d78f56929b518a6387fe2eaece26878eed"
           },
           {
             "kind": "work_state",
@@ -505,6 +509,21 @@
             "kind": "work_state",
             "id": "D3384",
             "digest": "sha256:2d152257ff5f8d1a4729fa15ffa521bea06936ea20703c2b9969a34dc55be986"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3385",
+            "digest": "sha256:d12afbf8f443c76f37fd172fdd8ae66c18aee3867a63ec913e390875fed37520"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3386",
+            "digest": "sha256:7c88c4e7bea285a7b27cefb5cc4caa8d37cd5bedd4ecf096d4e373c888990649"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3387",
+            "digest": "sha256:1d2ad7c43ba04a24e2ff41ee3643b08675b5f08f8493efbe252a806b6b60d48f"
           }
         ]
       },
@@ -944,7 +963,7 @@
           {
             "kind": "rfc",
             "id": "provider-health-degradation.md",
-            "digest": "sha256:40ae62618ff3cc66c1c41eb79012356f377a308568194d3643e9a4e125a6bacf"
+            "digest": "sha256:b58d53094a34faa901f21a568c5409d78f56929b518a6387fe2eaece26878eed"
           },
           {
             "kind": "work_state",
@@ -1014,7 +1033,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:951dbb518a694579528dda9ef0a376f4081db9a796c1f8f4e117eb3d4bfec0d1"
+            "digest": "sha256:d3d9956d499f70111f7ed66ee81b9fc6a0163ccf62963a3f4a5ae9fa8b3150f3"
           },
           {
             "kind": "work_state",

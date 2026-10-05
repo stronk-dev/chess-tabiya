@@ -1582,7 +1582,8 @@ export function createRestHandler(
             ...parsed.policy,
             ...(pack?.document.spine === undefined ? {} : { spine: pack.document.spine }),
           },
-        });
+        }, { signal: request.signal });
+        request.signal.throwIfAborted();
         // rfc/provider-health-degradation.md §10: an exact cached reply continues only with its
         // `cached_exact` receipt retained. The receipt travels beside, not inside, the selection
         // (the persisted selection shape is run-schema; its durable half is opponent-recovery).
@@ -1733,7 +1734,18 @@ export function createRestHandler(
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
         const permission = permittedAssistance({ workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.humanSplit === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution is withheld in this context");
+        const subjectImage = JSON.stringify([access.node, access.run.events.length, access.run.activeCursor, access.role, access.workflowContext, access.seatedInContest, access.reviewing]);
+        const recheck = (): void => {
+          request.signal.throwIfAborted();
+          const current = service.guidanceAccess(route.runId, principal, access.node.id);
+          const ceiling = permittedAssistance({ workflowContext: current.workflowContext, deliveryOpen: feedbackDeliveryOpen(current.run), role: current.role, seatedInContest: current.seatedInContest, reviewing: current.reviewing });
+          if (ceiling.humanSplit === "locked_off" || subjectImage !== JSON.stringify([current.node, current.run.events.length, current.run.activeCursor, current.role, current.workflowContext, current.seatedInContest, current.reviewing])) {
+            throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution no longer matches the current disclosure and position");
+          }
+        };
+        request.signal.throwIfAborted();
         const available = await capabilities.get();
+        recheck();
         const maia = capabilityOperationAvailability(available.providerHealth, "opponent.maia_inference");
         if (maia.state === "unavailable" && maia.reason === "not_configured") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
         const authored = access.pack === undefined
@@ -1745,7 +1757,8 @@ export function createRestHandler(
           policy: { mode: "human_common", policyConfigDigest: access.run.sessionDigest, ...(authored.targetElo === undefined ? {} : { targetElo: authored.targetElo }), ...(authored.temperature === undefined ? {} : { temperature: authored.temperature }), ...(authored.topP === undefined ? {} : { topP: authored.topP }) },
           seed: access.branchSeed,
           ...(access.pack === undefined ? {} : { packId: access.pack.document.id }),
-        });
+        }, { signal: request.signal });
+        recheck();
         return json(200, { nodeId: access.node.id, engine: selection.engine, targetElo: authored.targetElo ?? null, candidates: selection.candidates ?? [] });
       }
       if (request.method === "GET" && route.action === "corpus") {

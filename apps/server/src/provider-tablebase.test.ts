@@ -394,11 +394,12 @@ describe("learner Syzygy shared exchange", () => {
       },
       health(id) { return { id, status: "ready", restartCount: 0, identity: { id, kind: "opponent", name: "Synthetic Maia", version: "fixture", seedHonored: false, eloHonored: true }, bandOption: "Elo", bandRange: { min: 1000, max: 2400 } }; },
     }, { tablebaseSource: source, monotonicNowMs: clock.now });
-    const selection = selector.select({ startFen: root, historyUci: [], policy: { mode: "practical_resistance", policyConfigDigest: `sha256:${"a".repeat(64)}`, targetElo: 1800 }, seed: 73 }).then(value => ({ value }), error => ({ error }));
+    const caller = new AbortController();
+    const selection = selector.select({ startFen: root, historyUci: [], policy: { mode: "practical_resistance", policyConfigDigest: `sha256:${"a".repeat(64)}`, targetElo: 1800 }, seed: 73 }, { signal: caller.signal }).then(value => ({ value }), error => ({ error }));
     try {
       for (const [index, fen] of [root, b3, c2].entries()) {
-        await flush();
-        expect(remote.calls, fen).toHaveLength(index + 1);
+        // Wait for the actual next acquisition, not an arbitrary count of promise turns.
+        await vi.waitFor(() => expect(remote.calls, fen).toHaveLength(index + 1), { interval: 1, timeout: 1_000 });
         expect(new URL(remote.calls[index]!.url).searchParams.get("fen")).toBe(fen);
         remote.respond(index, body(fen));
       }
@@ -406,6 +407,7 @@ describe("learner Syzygy shared exchange", () => {
       expect(bare).not.toHaveBeenCalled();
       expect(remote.calls).toHaveLength(3);
     } finally {
+      caller.abort();
       for (let index = 0; index < remote.calls.length; index += 1) remote.respond(index, body(new URL(remote.calls[index]!.url).searchParams.get("fen")!));
       await selection;
       bare.mockRestore();

@@ -1,5 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 cancellation and disclosure checkpoint
+
+D3385/D3386/D3387 close: human-split rechecks grant, disclosure and captured subject
+before acquisition and after completion; coalesced callers detach independently and only
+the final departure aborts engine/tablebase stages. Abandoned completions cannot fill cache
+or erase a newer flight. Health admission/completion checks and bounded ignored-abort execution
+release tickets without healing or damaging health; genuine deadlines retain timeout/backoff.
+Explorer retains its typed cancellation arm. Actual HTTP and source controls pass 222 focused
+tests; exact-index software passes 3004 tests/327 files and seven isolated performance tests;
+complete browser CI passes 111 journeys, one optional skip and zero retries. Receipt:
+`planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md`.
+
+Continue actual source migrations and literal binding-policy adoption, then whole-manifest
+execution/resolution/availability and whole-source persistence. D3363/D3370/D3373/D3376
+remain separate source-contract holds. This closes no full RFC, capability or milestone;
+the full 1.0 goal remains active. Routine metadata maintenance requires no owner decision.
+
 ## 2026-10-05 Inspector population checkpoint
 
 D3384 closes the real corpus route's bare-statistics/client-evidence bypass. A declared

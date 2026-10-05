@@ -61,6 +61,10 @@ export function healthReportedCorpus(source: CorpusSource, health: ProviderRegis
             return { kind: "failure", reason: result.reason === "deadline_exceeded" ? "timeout" : result.reason === "queue_full" ? "overloaded" : result.reason === "invalid_response" || result.reason === "identity_mismatch" ? "protocol" : "network" };
           }, options);
         } catch (error) {
+          // Caller expiry is an operation outcome, not a provider receipt. The registry may
+          // now detach before an abort-ignoring source settles; keep this source API's closed
+          // cancellation arm without fabricating page evidence or waiting for that source.
+          if (options.signal?.aborted === true) return Object.freeze({ kind: "caller_expired" });
           // Keep the actual source's failure unchanged; never mint a replacement receipt.
           if (absence !== undefined && (error instanceof CorpusPageUnavailable || error instanceof ProviderUnavailableError)) return absence;
           throw error;

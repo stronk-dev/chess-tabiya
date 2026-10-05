@@ -1094,6 +1094,18 @@ bot-source-authority-check:
 evidence-binding-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts
 
+.PHONY: opponent-cancellation-check
+opponent-cancellation-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/opponent-cancellation.test.ts apps/server/src/human-split-boundary.test.ts apps/server/src/opponent-selector.test.ts apps/server/src/provider-health.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/provider-tablebase.test.ts
+
+.PHONY: opponent-cancellation-metadata-update opponent-cancellation-metadata-check
+opponent-cancellation-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-cancellation-metadata.js --log-level=warning
+	node apps/server/dist/opponent-cancellation-metadata.js --opponent-cancellation --apply-metadata
+opponent-cancellation-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-cancellation-metadata.js --log-level=warning
+	node apps/server/dist/opponent-cancellation-metadata.js --opponent-cancellation
+
 .PHONY: binding-absence-metadata-check binding-absence-metadata-update
 .PHONY: review-transition-metadata-check review-transition-metadata-update
 review-transition-metadata-check:

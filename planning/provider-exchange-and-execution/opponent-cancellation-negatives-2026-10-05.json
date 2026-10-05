@@ -1,0 +1,27 @@
+{
+  "initial": {
+    "target": "verify-software",
+    "sources": {
+      "mode": "git-index",
+      "head": "2e02329af5a290d1add397be0fc8d9dfee1eb512",
+      "tree": "a97e585d778a6ee1b46223b4cca6e76fd4bd1eeb",
+      "includesUnstagedChanges": false
+    },
+    "result": "failed",
+    "exitCode": 2,
+    "error": null
+  },
+  "integration": {
+    "target": "verify-software",
+    "sources": {
+      "mode": "git-index",
+      "head": "2e02329af5a290d1add397be0fc8d9dfee1eb512",
+      "tree": "706c36907be8b01d20ef25305bb20fa6f234b760",
+      "includesUnstagedChanges": false
+    },
+    "result": "failed",
+    "exitCode": 2,
+    "error": null
+  },
+  "scope": "Negative full-suite receipts before the final staged source. Initial: omitted generated applicability. Integration: typed Explorer cancellation, event synchronization, timeout/backoff assertion. Not completion evidence."
+}

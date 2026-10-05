@@ -481,7 +481,7 @@ export const CAPABILITY_APPLICABILITY: readonly CapabilityApplicability[] = Obje
 {"selector":{"kind":"always"},"capability":{"id":"guard.immediate","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"always"},"capability":{"id":"reasoning.key_point_match","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"always"},"capability":{"id":"claim.earning","version":{"kind":"integer","value":1}}},
-{"selector":{"kind":"always"},"capability":{"id":"opponent.selection","version":{"kind":"integer","value":15}}},
+{"selector":{"kind":"always"},"capability":{"id":"opponent.selection","version":{"kind":"integer","value":16}}},
 {"selector":{"kind":"always"},"capability":{"id":"guard.defaults","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"resolved","pointer":"/shapes/*","registry":"shape","value":"shape-reference"}},
 {"selector":{"kind":"resolved","pointer":"/legs/*/shapes/*","registry":"shape","value":"shape-reference"}},

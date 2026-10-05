@@ -818,6 +818,12 @@ export class ProviderRegistry {
   ): Promise<T> {
     if (options.signal?.aborted === true) throw Object.assign(new Error("the caller cancelled before admission"), { name: "AbortError" });
     const ticket = await this.admit(operation, options.deadlineMonotonic === undefined ? {} : { deadlineMonotonic: options.deadlineMonotonic });
+    // Admission can await persistence/coordinator work. Cancellation in that gap must release
+    // the ticket without starting a provider or changing its health.
+    if (callerAborted(options.signal)) {
+      this.settle(ticket, { kind: "cancelled", by: "caller" });
+      throw Object.assign(new Error("the caller cancelled during admission"), { name: "AbortError" });
+    }
     const remaining = Math.floor(ticket.deadlineMonotonic - this.#now());
     if (remaining <= 0) {
       this.settle(ticket, { kind: "cancelled", by: "superseded" });
@@ -828,9 +834,21 @@ export class ProviderRegistry {
     const timer = this.#timers.set(() => { timedOut = true; controller.abort(); }, remaining);
     const onCallerAbort = (): void => controller.abort();
     options.signal?.addEventListener("abort", onCallerAbort, { once: true });
+    let rejectAborted!: () => void;
+    const aborted = new Promise<never>((_resolve, reject) => {
+      rejectAborted = () => reject(Object.assign(new Error("provider execution was aborted"), { name: "AbortError" }));
+    });
+    controller.signal.addEventListener("abort", rejectAborted, { once: true });
     try {
-      const value = await execute({ signal: controller.signal, remainingMs: remaining, ticket });
+      // Bound even providers that ignore AbortSignal. Both race branches retain rejection
+      // handlers, so an abandoned provider's eventual failure is consumed, not published.
+      const value = await Promise.race([Promise.resolve().then(() => {
+        controller.signal.throwIfAborted();
+        return execute({ signal: controller.signal, remainingMs: remaining, ticket });
+      }), aborted]);
       if (timedOut) throw Object.assign(new Error("provider deadline exceeded"), { name: "TimeoutError" });
+      // A provider may ignore abort; its late return is still cancellation, never success.
+      if (callerAborted(options.signal)) throw Object.assign(new Error("the caller cancelled during execution"), { name: "AbortError" });
       const settled = this.settle(ticket, { kind: "success" });
       if (!settled.current) throw new ProviderUnavailableError(operation, Object.freeze({ state: "unavailable", instanceIds: Object.freeze([ticket.instanceId]), reason: "process_exit" }), null, "a late result from a replaced provider generation was discarded");
       return value;
@@ -851,6 +869,7 @@ export class ProviderRegistry {
     } finally {
       this.#timers.clear(timer);
       options.signal?.removeEventListener("abort", onCallerAbort);
+      controller.signal.removeEventListener("abort", rejectAborted);
     }
   }
 
