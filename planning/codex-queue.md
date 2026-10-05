@@ -1,5 +1,23 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 bot-calibration population checkpoint
+
+D3406 executes the frozen human-reference selection over the actual pinned source, not a reduced
+sample: all twelve cells fill, with 24,000 decisions from 22,908 distinct games. Exact byte identity,
+fixed reference halves, one decision per whole game/window, complete legal replay, eligibility,
+chunk invariance, source drift, incomplete populations and saved-row mutations have offline
+controls. The normal research gate is `make bot-calibration-population-check`; explicit acquisition
+and read-only reporting stay separate from CI and ordinary application requests. Receipt:
+`planning/bot-roster/calibration-human-reference-population.json`.
+
+Next in this lane: build the preregistered complete-legal-root evaluator, reference metrics and
+17-arm/13,200-game runner without importing legacy verdicts or dropping controls. Confirm all
+required native-sampler, seed, operation/source and durable identity contracts before the ladder.
+Selection is not evaluation or calibration: all twelve cards remain uncalibrated, no human-like
+label is earned, and roster criteria 5/11/12, phase/clock/endgame breadth and owner names/default
+remain open. Source/execution foundation work below continues independently. Metadata maintenance
+requires no owner interruption.
+
 ## 2026-10-05 exact-version capability checkpoint
 
 D3405 repairs the actual public compatibility binding projection: consumers are joined by

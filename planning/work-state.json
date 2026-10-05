@@ -28044,6 +28044,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/evidence-manifest.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3406",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dd3df7e13bf3a7bab9a3d9768069c8c931ea1b65b32fa0d0b6c4213c82706b33",
+      "uxItems": [],
+      "evidence": "planning/bot-roster/calibration-human-reference-population.json",
+      "evidenceKind": "path"
     }
   ]
 }

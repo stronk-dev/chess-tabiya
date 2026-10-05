@@ -1,0 +1,114 @@
+{
+  "schema": "tabiya.research.bot-human-reference-receipt.v1",
+  "state": "selected_not_evaluated",
+  "manifestDigest": "sha256:8b17e0e9005e160c05bb8267989a1254904dc69e51d4f85ae9b419f481f31bb9",
+  "populationDigest": "sha256:02c35cbee9c0720ff33a858e469eb3fdef7ed2d66358cdfd4f7735e580bb27e2",
+  "source": {
+    "url": "https://database.lichess.org/standard/lichess_db_standard_rated_2026-06.pgn.zst",
+    "license": "CC0",
+    "compressedRange": "bytes=0-268435455",
+    "compressedSha256": "sha256:399d79b546e045fa3e6706efddd723202c6b00a4c335398e5526c73114abff4d",
+    "decompressedSha256": "sha256:89d444ea00e073ee17d6a02747a7c9da12fe49c949d5b407c9e0d0a60b7d81ea",
+    "decompressedBytes": 1921777664,
+    "completeBlocks": 827067,
+    "rejectedGames": 503619,
+    "duplicateGames": 0,
+    "trailingPartialBlocksDropped": 1
+  },
+  "selectedDecisions": 24000,
+  "distinctGames": 22908,
+  "distinctGameWindows": 24000,
+  "cells": [
+    {
+      "cell": "1000/opening-8-16",
+      "selected": 2000,
+      "half0": 1022,
+      "half1": 978,
+      "eligible": 83431
+    },
+    {
+      "cell": "1000/middlegame-17-40",
+      "selected": 2000,
+      "half0": 953,
+      "half1": 1047,
+      "eligible": 80969
+    },
+    {
+      "cell": "1000/late-41-plus",
+      "selected": 2000,
+      "half0": 1020,
+      "half1": 980,
+      "eligible": 62847
+    },
+    {
+      "cell": "1400/opening-8-16",
+      "selected": 2000,
+      "half0": 951,
+      "half1": 1049,
+      "eligible": 133425
+    },
+    {
+      "cell": "1400/middlegame-17-40",
+      "selected": 2000,
+      "half0": 989,
+      "half1": 1011,
+      "eligible": 131482
+    },
+    {
+      "cell": "1400/late-41-plus",
+      "selected": 2000,
+      "half0": 991,
+      "half1": 1009,
+      "eligible": 109382
+    },
+    {
+      "cell": "1800/opening-8-16",
+      "selected": 2000,
+      "half0": 1023,
+      "half1": 977,
+      "eligible": 91915
+    },
+    {
+      "cell": "1800/middlegame-17-40",
+      "selected": 2000,
+      "half0": 979,
+      "half1": 1021,
+      "eligible": 91093
+    },
+    {
+      "cell": "1800/late-41-plus",
+      "selected": 2000,
+      "half0": 989,
+      "half1": 1011,
+      "eligible": 79989
+    },
+    {
+      "cell": "2200/opening-8-16",
+      "selected": 2000,
+      "half0": 1052,
+      "half1": 948,
+      "eligible": 14677
+    },
+    {
+      "cell": "2200/middlegame-17-40",
+      "selected": 2000,
+      "half0": 1018,
+      "half1": 982,
+      "eligible": 14554
+    },
+    {
+      "cell": "2200/late-41-plus",
+      "selected": 2000,
+      "half0": 1017,
+      "half1": 983,
+      "eligible": 13143
+    }
+  ],
+  "claims": {
+    "engineAnalysis": "not_run",
+    "strength": "not_measured",
+    "distribution": "not_measured",
+    "bandIdentity": "not_measured",
+    "humanLikeLabelAllowed": false
+  }
+}

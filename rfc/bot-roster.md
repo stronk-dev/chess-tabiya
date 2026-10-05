@@ -736,3 +736,11 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   availability union derived from exchange outcomes (the three dependency blockers are retired).
   Criteria 5, 11, 12 and the owner inputs (D1610, D1611) remain open. Receipt addendum:
   `planning/bot-roster/implementation-receipt-2026-09-24.md`.
+- 2026-10-05 — D3406 executes only §6's frozen human-reference selection: all twelve cells fill
+  with 24,000 decisions from 22,908 distinct games after both original source checksums and full
+  legal replay. Exact raw-byte identity, fixed halves, one game/window, eligibility, source drift,
+  incomplete population and receipt-mutation controls are permanent offline research checks.
+  Receipt: `planning/bot-roster/calibration-human-reference-population.json`. Candidate pricing,
+  four metrics, opening identity and the 17-arm ladder remain unrun. Criteria 5/11/12 and all full
+  roster/owner discharges remain open; production cards stay uncalibrated. No new policy,
+  preregistration amendment, RFC acceptance or completion is implied.

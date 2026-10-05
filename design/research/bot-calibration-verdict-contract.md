@@ -252,3 +252,30 @@ behaviors are. `[M]`
 - Statistical equivalence does not establish that a bot is enjoyable, coherent over many games or
   perceptually human. The existing blind owner-use packet may reject those claims; participant
   studies remain outside the ruled 1.0 process.
+
+## 2026-10-05 — Human-reference population selection executed (D3406)
+
+The offline sampler streamed the complete checksum-pinned prefix, replaying every admitted game in
+full: 827,067 complete PGN blocks,
+1,921,777,664 decompressed bytes, both source checksums matching the original manifest. It selected
+24,000 decisions from 22,908 distinct games: exactly 2,000 distinct-game decisions in each of the
+twelve band/window cells. The smallest eligible cell has 13,143 game/window decisions; both fixed
+reference halves have observations in every selected cell. The aggregate receipt is
+`planning/bot-roster/calibration-human-reference-population.json`; raw source and selected decisions
+remain in ignored `.cache/bot-calibration/`. `[V]` (full source run and independent row/legality
+validation through `make bot-calibration-population` and `make bot-calibration-population-report`)
+
+The literal PGN block bytes, including line endings and separators, own game identity. One minimum
+decision hash is selected per whole game/window before cell sampling; differently rated seats do
+not manufacture two independent decisions from the same window. Invalid whole-game replay,
+unfinished/mismatched result headers, non-blitz/non-rated/non-standard/BOT records and the final
+partial source block contribute no rows. Streaming chunk boundaries, including split UTF-8, cannot
+change identity. The parser can overwrite a raw unfinished result header from the movetext
+terminator; permanent negative controls therefore require the raw and parsed results to agree.
+`[V]` (`tools/d2236-bot-calibration-verdict-contract/population.ts` and `population.test.ts`)
+
+This is **selection, not calibration**. No candidate-loss evaluation, metric comparison, opening
+identity population or 13,200-game ladder ran. No production profile earns a strength, distribution,
+band-identity or human-like claim. The existing representativeness, source-contract, native-sampler,
+guard/clock/phase and owner-use limits remain. `[V]` (receipt's explicit `claims` and unchanged
+`tools/d2236-bot-calibration-verdict-contract/manifest.json`)

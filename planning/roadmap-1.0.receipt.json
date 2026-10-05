@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:057483599ba5976311dc0a040cd5a2784cc27f04745c3103b58941574cc15215",
+    "roadmap": "sha256:c4be6841854caab0e070f25812874fafca027fbd6f818e60e03fef4cba13b734",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:9dfbf93351efd10e1dde4ceb20d780dd58522c5435b085f08417f71199b9e707",
+    "workState": "sha256:172bbb68c8271d9e82e0af872fd93c56f14f4d205f7fee9eb10a52619761da6c",
     "rfcRegister": "sha256:2314bc29eaccba9d49605802fe3fb5863877a884cd7f84cb0194cced3ac6ea3d",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 0,
       "blocked": 1055,
-      "done": 1312,
+      "done": 1313,
       "refused": 160
     },
     "workItems": {
@@ -129,17 +129,20 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
+      "nextAction": "Continue accepted evidence source/consumer contracts while the authored corpusEvidence population remains an explicit content discharge. D3406 has executed the full frozen bot human-reference selection; build its complete-legal-root evaluation and preregistered statistics/ladder under the existing source, seed and calibration contracts. Selection earns no calibrated bot claim and does not replace phase/clock/endgame/personality work.",
       "latestCheckpoint": {
-        "at": "2026-09-24",
-        "summary": "The shared-resource catalogue is implemented and archived with all three rebases (provider-protocol, semantic-conventions, assistance-config/workflow-preference) registered present-first. Semantic convention provenance landed 48 declarations with append-only history and a value-level ConventionReceipt on every mint, discharging evidence-value-authority D1; endgame setup conventions now live in the register. Provider exchange receipts (EVA D2) remain.",
+        "at": "2026-10-05",
+        "summary": "D3406 executed the checksum-pinned frozen bot human-reference selection twice with identical population identity: all twelve cells hold 2,000 distinct-game decisions, 24,000 total from 22,908 games. Independent receipt checks preserve raw-byte identity, fixed halves and exact legal moves; source drift and incomplete populations fail closed. This prepares calibration only: no engine pricing, four-metric comparison, opening population or 13,200-game ladder has run, and all bot cards remain uncalibrated. The prior catalogue/convention foundation remains; provider exchange and full product discharges remain open.",
         "impact": "advanced",
         "evidence": [
           "planning/semantic-convention-provenance/implementation-2026-09-24.md",
           "rfc/evidence-value-authority.md",
           "rfc/semantic-convention-register.md",
           "rfc/semantic-convention-provenance.md",
-          "rfc/assistance-config-register.md"
+          "rfc/assistance-config-register.md",
+          "rfc/bot-roster.md",
+          "tools/d2236-bot-calibration-verdict-contract/population.test.ts",
+          "planning/bot-roster/calibration-human-reference-population.json"
         ],
         "anchors": [
           {
@@ -166,6 +169,16 @@
             "kind": "work_state",
             "id": "D2363",
             "digest": "sha256:4189ba577880b0e4275efb8af2e515d325c9d9e8083a9d6e19ab8e768b5a8a33"
+          },
+          {
+            "kind": "rfc",
+            "id": "bot-roster.md",
+            "digest": "sha256:f3b6cc6e7fe35ebe6db3019278c630a3d98226933f5b78fb1530f3cfb4d95b83"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3406",
+            "digest": "sha256:dd3df7e13bf3a7bab9a3d9768069c8c931ea1b65b32fa0d0b6c4213c82706b33"
           }
         ]
       },

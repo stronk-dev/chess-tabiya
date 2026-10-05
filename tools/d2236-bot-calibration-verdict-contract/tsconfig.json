@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "types": ["node"],
+    "paths": { "chessops/*": ["../../apps/server/node_modules/chessops/dist/types/*"] }
+  },
+  "include": ["population.ts", "receipt.ts", "extract-stream.ts", "report.ts", "contract.mjs"]
+}

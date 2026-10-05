@@ -177,6 +177,14 @@ the compiler's `features` rows are empty until a Stage-B trait passes its own me
 
 ## What is not wired yet
 
+The offline calibration reference can now be prepared with `make bot-calibration-population` and
+validated with `make bot-calibration-population-report`. The pinned source filled all twelve
+band/window cells: 24,000 selected decisions from 22,908 games. The committed aggregate receipt is
+`planning/bot-roster/calibration-human-reference-population.json`; individual decisions stay in the
+ignored local cache. `make bot-calibration-population-check` runs the independent offline controls
+without downloading data. This is only population selection: no Stockfish pricing, distribution
+test or ladder has run, and production cards remain uncalibrated.
+
 - No provider-health release receipt is issued yet (it needs the release-concurrency benchmark),
   so guarded families stay `conditional`. The A11 shared-route latency benchmark and calibration receipts do not exist, so every
   card is `uncalibrated`.
