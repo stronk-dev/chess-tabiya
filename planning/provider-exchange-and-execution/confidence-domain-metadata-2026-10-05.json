@@ -1,0 +1,51 @@
+{
+  "baseline": "e9b5ab19",
+  "retainedDeclarations": 934,
+  "candidateDeclarations": 942,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 16
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 16
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 16
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 16
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 16
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 18
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 18
+    },
+    {
+      "subject": "selection.semantic_policy",
+      "version": 4
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 278,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "Closed declaration-confidence admission only; all projection meanings, payloads, factory outcomes, authored content and guard/objective/opponent computations remain unchanged. Per-member inheritance is held on D3391/D3392, not claimed implemented"
+}

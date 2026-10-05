@@ -1102,6 +1102,25 @@ theory-binding-execution-check:
 hint-empty-response-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/hint-distance.test.ts apps/server/src/hint-service.test.ts
 
+.PHONY: confidence-domain-check confidence-contract-census confidence-contract-census-check
+confidence-domain-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-catalog.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/application.test.ts
+confidence-contract-census-check:
+	./node_modules/.bin/vitest run --config tools/d3392-confidence-census/vitest.config.ts
+confidence-contract-census:
+	./node_modules/.bin/esbuild tools/d3392-confidence-census/report.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/confidence-contract-census.js --log-level=warning
+	node apps/server/dist/confidence-contract-census.js
+
+.PHONY: confidence-domain-metadata-update confidence-domain-metadata-check
+confidence-domain-metadata-update:
+	$(MAKE) semantic-validation-update
+	$(MAKE) capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/confidence-domain-metadata.js --log-level=warning
+	node apps/server/dist/confidence-domain-metadata.js --confidence-domain --apply-metadata
+confidence-domain-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/confidence-domain-metadata.js --log-level=warning
+	node apps/server/dist/confidence-domain-metadata.js --confidence-domain
+
 .PHONY: theory-binding-metadata-update theory-binding-metadata-check
 theory-binding-metadata-update:
 	$(MAKE) semantic-validation-update

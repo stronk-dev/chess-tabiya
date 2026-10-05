@@ -27900,6 +27900,33 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/theory-bindings-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3390",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2bcbf23adbcf5893f1f6a8f7fd7195f02c977f9b5ed546f468d9de11515e24a5",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/confidence-census-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3391",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:75016fd853968ffc2072fd2c7434aec0ccda45d815eabc450d4452db5a21ca73",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-exchange-and-execution.md"
+    },
+    {
+      "id": "D3392",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:11237f89eb8b3eba9d40281ef711d1cd39243914712aae0bb0a030dfff3cd58b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-exchange-and-execution.md"
     }
   ]
 }

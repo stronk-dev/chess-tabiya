@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "purpose": "D3391/D3392 contract diagnosis, not implemented inheritance",
+  "manifestDigest": "2d2764a8f934c8dfa80f05d7cd394904eab3f7643c74e7916298f38808157246",
+  "projections": 285,
+  "derivedProjections": 122,
+  "corrections": [
+    {
+      "projection": "derived.bounded_target.bounded_return@1",
+      "declared": "exact",
+      "required": "not_applicable"
+    },
+    {
+      "projection": "derived.bounded_target.immediate@1",
+      "declared": "exact",
+      "required": "not_applicable"
+    },
+    {
+      "projection": "derived.bounded_target.named_material_target@1",
+      "declared": "exact",
+      "required": "not_applicable"
+    }
+  ],
+  "conflicts": [
+    {
+      "projection": "derived.citation.attribution@1",
+      "declared": "reported",
+      "members": [
+        {
+          "member": 0,
+          "inputs": [
+            "run.record.evidence_ref_resolution@1",
+            "live.stockfish.eval@1"
+          ],
+          "inputConfidence": [
+            "not_applicable",
+            "reported"
+          ],
+          "required": "reported"
+        },
+        {
+          "member": 1,
+          "inputs": [
+            "run.record.evidence_ref_resolution@1",
+            "live.stockfish.wdl@1"
+          ],
+          "inputConfidence": [
+            "not_applicable",
+            "reported"
+          ],
+          "required": "reported"
+        },
+        {
+          "member": 2,
+          "inputs": [
+            "run.record.evidence_ref_resolution@1",
+            "live.stockfish.pv@1"
+          ],
+          "inputConfidence": [
+            "not_applicable",
+            "reported"
+          ],
+          "required": "reported"
+        },
+        {
+          "member": 3,
+          "inputs": [
+            "run.record.evidence_ref_resolution@1",
+            "live.syzygy.result@1"
+          ],
+          "inputConfidence": [
+            "not_applicable",
+            "not_applicable"
+          ],
+          "required": "not_applicable"
+        },
+        {
+          "member": 4,
+          "inputs": [
+            "run.record.evidence_ref_resolution@1",
+            "human.maia.event@1"
+          ],
+          "inputConfidence": [
+            "not_applicable",
+            "reported"
+          ],
+          "required": "reported"
+        }
+      ]
+    }
+  ]
+}

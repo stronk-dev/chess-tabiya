@@ -152,6 +152,35 @@ describe("evidence manifest compiler", () => {
     expect(code(cyclic)).toBe("EVIDENCE_DEPENDENCY_CYCLE");
   });
 
+  it.each([undefined, null, "certain", "EXACT", 0, {}, []].map(confidence => ({ confidence })))("refuses runtime confidence outside the closed domain: $confidence", ({ confidence }) => {
+    expect(code({ ...base(), producers: [producer({ ...projection(), confidence } as ProjectionDeclaration)] })).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
+  });
+
+  it("retains reported-confidence admission independently of alternative order", () => {
+    const p = projection();
+    const r = { ...projection("r.output", "r"), confidence: "reported" as const, disposition: { kind: "operator_only" as const, reason: "fixture" } };
+    const make = (inputs: readonly (readonly VersionedEvidenceId[])[], confidence: ProjectionDeclaration["confidence"]): EvidenceContractDeclarations => {
+      const q = { ...projection("q.output", "q"), plane: "derived" as const, confidence, derivation: { anyOf: inputs }, disposition: { kind: "operator_only" as const, reason: "fixture" } };
+      return { ...base(), producers: [producer(p), producer(r, "r"), producer(q, "q")] };
+    };
+    const a = { id: "p.output", version: 1 }, b = { id: "r.output", version: 1 };
+    // The per-member all-not_applicable rule remains blocked on D3392; it is not
+    // silently implemented by changing the meaning of these alternatives.
+    expect(code(make([[a], [b]], "exact"))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    expect(code(make([[b], [a]], "exact"))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    expect(code(make([[a], [b]], "reported"))).toBeUndefined();
+    expect(code(make([[b], [a]], "reported"))).toBeUndefined();
+    expect(code(make([[a, b]], "reported"))).toBeUndefined();
+    const exact = { ...r, confidence: "exact" as const };
+    for (const confidence of ["exact", "not_applicable"] as const) {
+      const mixed = make([[a, b]], confidence);
+      expect(code({ ...mixed, producers: mixed.producers.map(row => row.id === "r" ? producer(exact, "r") : row) })).toBeUndefined();
+    }
+    const valid = make([[b]], "reported");
+    const outer = { ...projection("s.output", "s"), plane: "derived" as const, confidence: "exact" as const, derivation: { inputs: [{ id: "q.output", version: 1 }] }, disposition: { kind: "operator_only" as const, reason: "fixture" } };
+    expect(code({ ...valid, producers: [...valid.producers, producer(outer, "s")] })).toBe("EVIDENCE_DERIVATION_WIDENS");
+  });
+
   it("compiles only closed, non-empty, independently valid disjunctive derivations", () => {
     const pRef = { id: "p.output", version: 1 } as const;
     const rRef = { id: "r.output", version: 1 } as const;

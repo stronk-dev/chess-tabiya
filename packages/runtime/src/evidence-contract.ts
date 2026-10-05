@@ -715,6 +715,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
       const prior = projectionMap.get(refKey(projection));
       if (prior !== undefined) fail("EVIDENCE_PROJECTION_DUPLICATE", "duplicate projection", [site("projection", projection, producer.implementation), site("projection", prior)]);
       const abstentionValid = typeof projection.abstention?.possible === "boolean" && Array.isArray(projection.abstention.reasons) && (!projection.abstention.possible || projection.abstention.reasons.length > 0) && nonEmptyStrings(projection.abstention.reasons);
+      const confidenceValid = projection.confidence === "not_applicable" || projection.confidence === "exact" || projection.confidence === "reported";
       const dispositionValid = projection.disposition === undefined || completeDisposition(projection.disposition);
       const members = derivationMembers(projection);
       const derivation = projection.derivation;
@@ -726,7 +727,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
         members.some((member) => member.length === 0) ||
         new Set(memberKeys).size !== memberKeys.length
       );
-      if (projection.payloadType.trim() === "" || projection.semantics.trim() === "" || projection.forms.length === 0 || projection.answerContent.length === 0 || !nonEmptyStrings(projection.operands) || !nonEmptyStrings(projection.limitations) || !abstentionValid || !dispositionValid || invalidDerivation) fail("EVIDENCE_PROJECTION_INCOMPLETE", "projection semantics are incomplete", [site("projection", projection, producer.implementation)]);
+      if (projection.payloadType.trim() === "" || projection.semantics.trim() === "" || projection.forms.length === 0 || projection.answerContent.length === 0 || !nonEmptyStrings(projection.operands) || !nonEmptyStrings(projection.limitations) || !abstentionValid || !confidenceValid || !dispositionValid || invalidDerivation) fail("EVIDENCE_PROJECTION_INCOMPLETE", "projection semantics are incomplete", [site("projection", projection, producer.implementation)]);
       projectionMap.set(refKey(projection), projection);
     }
   }

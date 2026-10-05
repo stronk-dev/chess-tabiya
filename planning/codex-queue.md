@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 confidence admission checkpoint and inheritance handoff
+
+D3390 closes: the shared manifest enforces the closed confidence domain, retaining
+reported inheritance and all existing projection meanings. Malformed actual catalogue
+and production composition controls pass the 58-test focused gate. Complete exact-index
+software passes 3027 tests/327 files plus seven isolated performance tests; content passes
+223 tests and all 104 requirements; rebuilt browser CI passes 111 journeys, one optional
+skip and zero retries. This is not complete confidence inheritance. Receipt:
+`planning/provider-exchange-and-execution/confidence-census-2026-10-05.md`.
+
+D3391/D3392 are contract-held, not implementing: enforcing the shared all-not_applicable
+rule exposes local target confidence and then citation's incompatible alternative arms.
+One scalar cannot satisfy both reported and not_applicable members. The real catalogue
+census and author handoff must settle representability before that guard/descriptor
+migration. Do not relabel raw Syzygy, conjoin alternatives or exempt citations for green.
+
 ## 2026-10-05 Theory binding execution checkpoint
 
 D3388 closes: all four actual module.theory_breadcrumb bindings compile before provider

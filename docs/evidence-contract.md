@@ -28,6 +28,15 @@ identical alternatives remain invalid. Semantic-event declarations must retain t
 members, including multiplicity. This compiler check does not replace a factory's exact-position
 join or establish that two provider deliveries have been admitted.
 
+Manifest admission validates confidence as the closed `not_applicable | exact | reported`
+domain; malformed runtime declarations are refused before factories or consumer views exist.
+Reported inputs retain reported confidence independently in every derivation member. This
+does not yet implement the full per-member inheritance rule: D3391/D3392 record the local
+bounded-target chain and citation's incompatible confidence alternatives. Their declarations
+are unchanged pending a representable compiler/value/presentation contract. The disposable
+`make confidence-contract-census` instrument diagnoses those obligations, not source truth
+or implemented confidence inheritance.
+
 Run-subject identity is a separate authority, exported through `@chess-tabiya/runtime/run-subject`.
 Its three digest constructors cover an exact historical event head, a complete attachment event at
 that head, and a resolved prefix/node/edge subject. Event validation reads the canonical run schema;

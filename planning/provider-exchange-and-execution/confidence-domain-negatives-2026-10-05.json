@@ -1,0 +1,23 @@
+{
+  "baseline": "e9b5ab19",
+  "closedDomainPredecessor": {
+    "command": "make evidence-binding-execution-check",
+    "failedControls": 9,
+    "passedControls": 52,
+    "note": "Seven malformed-domain controls failed; two additional control groups exposed the unimplemented inheritance rule. D3390 owns only the closed domain."
+  },
+  "inheritanceExperiment": {
+    "firstProductionRefusal": "derived.bounded_target.named_material_target@1",
+    "afterLocalChainCorrection": "derived.citation.attribution@1",
+    "reason": "EVIDENCE_DERIVATION_WIDENS",
+    "disposition": "The guard and all three local descriptor edits were removed from this implementation, not weakened or exempted. D3391/D3392 remain blocked on contract repair; the separate census reproduces their full operands."
+  },
+  "metadataPreflight": {
+    "reason": "selection.semantic_policy@i:3 source digest changed without an explicit successor",
+    "disposition": "Restore the uncommitted predecessor from HEAD and add v4; the subsequent preservation check retains all 934 predecessor declarations and all factory/authored outcomes."
+  },
+  "localHttpPreflight": {
+    "reason": "Sandbox denied loopback listen with EPERM",
+    "disposition": "Run the same ordinary Make target with approved loopback access; 58 tests pass. No timeout, expectation, worker-count or environment override."
+  }
+}

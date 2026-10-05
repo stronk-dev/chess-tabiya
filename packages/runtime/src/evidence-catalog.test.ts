@@ -109,6 +109,14 @@ describe("primary evidence catalogue", () => {
     }
   });
 
+  it.each([undefined, null, "certain", "EXACT", 0, {}, []].map(confidence => ({ confidence })))("rejects malformed confidence in the actual catalogue: $confidence", ({ confidence }) => {
+    const producers = EVIDENCE_CONTRACT_DECLARATIONS.producers.map((producer, index) => index === 0
+      ? { ...producer, outputs: producer.outputs.map((output, slot) => slot === 0 ? { ...output, confidence } : output) }
+      : producer);
+    expect(() => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, producers } as typeof EVIDENCE_CONTRACT_DECLARATIONS))
+      .toThrowError(expect.objectContaining({ code: "EVIDENCE_PROJECTION_INCOMPLETE" }));
+  });
+
   it("binds the three runtime opening facts to their module homes and keeps the recorded position internal", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const ids = ["theory.opening.current_endpoint", "theory.opening.catalogue_membership", "run.record.position", "derived.opening.deepest_reached"];
