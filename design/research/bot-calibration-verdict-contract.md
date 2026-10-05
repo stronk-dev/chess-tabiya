@@ -324,3 +324,43 @@ manifest was altered here. `[V]` (`rfc/bot-roster.md` §6;
 **No calibration claim follows.** Four-metric comparisons, the exact-position opening population,
 the 17-arm/13,200-game ladder, strength/distribution/band-identity verdicts and full bot breadth remain
 open. All twelve cards remain uncalibrated. `[V]` (receipt's explicit claims; unchanged manifest)
+
+## 2026-10-05 — Production profile binding and full-source opening capacity (D3408–D3410)
+
+D3408 corrects the prior checkpoint's source-policy mismatch without changing a production policy.
+The executable disposable bridge resolves every frozen profile arm and both layer-contrast sides
+to the whole production catalogue member and behavior digest. Requests use `botMaiaRequest`, with
+width min(20, exact legality), temperature .8 and top-p .92. Decisions use the sole production
+compiler, not copied sampling/guard/trait code. The bridge accepts existing service root authorities,
+consumes shared scheduler results and persists/reloads whole deliveries before reconstructing the
+complete saved decision. Valid sealed full-width, different-band/temperature/top-p and crossed-root
+pages refuse. Every registered profile, history/castling/low-width root, missing provider/guard,
+copied authority and mutated saved binding/source/decision is controlled. These fixtures exercise
+the production path through scripted providers, **not a native Maia calibration**. `[V]`
+(`tools/d2236-bot-calibration-verdict-contract/profile-arm.ts`, `profile-arm.test.ts`;
+`rfc/bot-roster.md` §6 correction)
+
+The selected reference contains only 8,000 opening decisions; the separate opening-band metric's
+minimum is 128 × 100 × four bands = 51,200 observations. D3409 therefore scans the complete pinned
+source, not those selected rows. The unchanged full-game admission function validates eligibility
+and replay before all nine potential opening-window observations are considered. Exact six-field
+FENs, moving-seat rating, raw-byte game identity and fixed reference halves are retained; duplicate
+games cannot enlarge a position/band count. Source drift refuses before publication, and no model
+outputs or statistical ranking select the inventory. `[V]` (`population.ts` gameDecisions;
+`opening-capacity.ts`, `opening-capacity-stream.ts`, `opening-capacity.test.ts`, unchanged manifest)
+
+The actual 827,067 complete source blocks contain 323,448 eligible opening games, contributing
+2,863,498 observations over 1,677,685 exact FENs. Of these, 8,938 occur in every band at least once,
+277 at least ten times, 72 at least 25, 19 at least 50, **six at least 100**, and one at least 200.
+These are descriptive capacity strata, not replacement acceptance thresholds. Only six qualify
+under the frozen 100-per-band rule; 128 are required. The capacity state is explicitly insufficient,
+with zero selected positions, zero model queries and no band-identity/human-like claim. `[V]`
+(`planning/bot-roster/calibration-opening-capacity.json`; full count inventory in ignored cache)
+
+**D3410 is a contract hold, not a detector or bot failure.** The specified opening-band experiment
+cannot run against this frozen prefix. A broader preregistered opening population needs author
+repair before model outputs; the already-priced 24,000-decision distribution reference stays frozen.
+No clock stripping, band merging, threshold reduction or six-position substitute is authorized.
+The native ladder, all distribution statistics, source/seed contracts and full phase/clock/personality
+breadth remain open. No capability, milestone, RFC or bot card graduates. `[V]` (manifest's literal
+population; measured capacity; [[D3410]]; `rfc/bot-roster.md` §6 and §6.1)

@@ -1,5 +1,27 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 calibration production binding and exact-opening capacity wave
+
+[[D3408]] is complete at the research-bridge boundary: A2's bounded policy description is corrected,
+and the disposable bridge uses the whole registered catalogue reference/behavior digest, production
+request/compiler and whole-delivery save/reload. All twelve profile arms and both G1/G2 sides resolve;
+C1/C2/N controls cannot become catalogue profiles. Valid but crossed full-width pages refuse.
+The eventual full ladder must consume this bridge; a standalone alternative sampler is not authorized.
+
+[[D3409]] completes the separate opening capacity census against the entire frozen PGN prefix:
+323,448 eligible games, 2,863,498 observations and 1,677,685 exact FENs. Only six positions qualify.
+Whole-game replay, fixed halves, distinct-game counts and exact six-field FENs survive. Nothing
+chooses positions or queries Maia. The measured insufficiency remains in the aggregate receipt;
+it does not license relaxed thresholds or human-like copy.
+
+[[D3410]] is **BLOCKED CONTRACT: exact-opening population author repair**, bot-play. The complete
+frozen source yields only six qualifying exact FENs, not 128. A broader opening source/population
+must be preregistered before model measurements; never widen the frozen 24,000-row distribution
+reference silently, strip clocks, lower the 100-observation floor, merge bands or issue a verdict
+on a six-position replacement. D2236 and full bot-roster calibration remain open. Independent
+relative ladder and distribution work may proceed only under their own complete source/statistic
+contracts; this shortfall must remain in every combined band-identity/calibration receipt.
+
 ## 2026-10-05 bot human-reference pricing checkpoint
 
 [[D3407]] completes candidate pricing under the unchanged bot-roster §6 analysisAuthority:
@@ -11,13 +33,10 @@ final normal governance and exact-staged process checks also pass. Research code
 identity/resume checks live in `tools/d2236-bot-calibration-verdict-contract/`; aggregate evidence is
 `planning/bot-roster/calibration-human-reference-pricing.json`. This is not a calibrated bot claim.
 
-[[D3408]] is **READY NOW: calibration source/policy contract correction**, bot-play. Bot-roster
-§6 calls A2 full-width, but the registered production sampler is min(20, legal count), admitted
-by the production compiler with that exact width. Correct the description and bind the eventual
-A2 runner to the actual catalogue reference/page, not an unregistered all-legal variant. Human
-Stockfish pricing remains independent. No policy, frozen manifest or verdict may be silently
-changed while making that repair. Metrics, opening-identity population and the full 17-arm ladder
-remain open; no bot, capability, RFC or milestone is promoted from candidate pricing.
+[[D3408]]'s source/policy correction has since completed in the checkpoint above: the protocol and
+executable bridge bind the actual min(20, legal count) sampler. Human Stockfish pricing remains
+independent. Metrics and the full 17-arm ladder remain open; D3410 now explicitly holds the
+insufficient exact-opening population. No bot, capability, RFC or milestone is promoted.
 
 ## 2026-10-05 bot-calibration population checkpoint
 

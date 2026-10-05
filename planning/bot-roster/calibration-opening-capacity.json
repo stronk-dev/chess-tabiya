@@ -1,0 +1,137 @@
+{
+  "schema": "tabiya.research.bot-opening-capacity.v1",
+  "manifestDigest": "sha256:8b17e0e9005e160c05bb8267989a1254904dc69e51d4f85ae9b419f481f31bb9",
+  "instrumentDigest": "sha256:9c3e67c94e35be1e4af853adba5f0c3db55097901265d281a5f12a17be95a7ec",
+  "source": {
+    "license": "CC0",
+    "sourceUrl": "https://database.lichess.org/standard/lichess_db_standard_rated_2026-06.pgn.zst",
+    "compressedRange": "bytes=0-268435455",
+    "compressedSha256": "sha256:399d79b546e045fa3e6706efddd723202c6b00a4c335398e5526c73114abff4d",
+    "decompressedSha256": "sha256:89d444ea00e073ee17d6a02747a7c9da12fe49c949d5b407c9e0d0a60b7d81ea",
+    "variant": "standard",
+    "speed": "blitz",
+    "ratedOnly": true,
+    "completedOnly": true,
+    "excludeBotAccounts": true,
+    "bands": [
+      {
+        "id": "1000",
+        "min": 1000,
+        "max": 1399
+      },
+      {
+        "id": "1400",
+        "min": 1400,
+        "max": 1799
+      },
+      {
+        "id": "1800",
+        "min": 1800,
+        "max": 2199
+      },
+      {
+        "id": "2200",
+        "min": 2200,
+        "max": 2599
+      }
+    ],
+    "windows": [
+      {
+        "id": "opening-8-16",
+        "minPly": 8,
+        "maxPly": 16
+      },
+      {
+        "id": "middlegame-17-40",
+        "minPly": 17,
+        "maxPly": 40
+      },
+      {
+        "id": "late-41-plus",
+        "minPly": 41,
+        "maxPly": null
+      }
+    ],
+    "decisionsPerBandWindow": 2000,
+    "selection": "one-decision-per-game-window/min-sha256(game-bytes,NUL,ply-index)",
+    "split": "sha256(game-bytes)[0] parity; fixed before engine analysis"
+  },
+  "countInventoryDigest": "sha256:afc9cf15448b09f4a802add0e4704f71cb4b724eed0b7c6b8c11393f04b01961",
+  "decompressedSha256": "sha256:89d444ea00e073ee17d6a02747a7c9da12fe49c949d5b407c9e0d0a60b7d81ea",
+  "decompressedBytes": 1921777664,
+  "completeBlocks": 827067,
+  "eligibleOpeningGames": 323448,
+  "rejectedOrNoOpeningGames": 503619,
+  "duplicateGames": 0,
+  "trailingPartialBlocksDropped": 1,
+  "exactFens": 1677685,
+  "observationsByBand": [
+    {
+      "band": "1000",
+      "observations": 715042,
+      "referenceHalves": [
+        357655,
+        357387
+      ]
+    },
+    {
+      "band": "1400",
+      "observations": 1194360,
+      "referenceHalves": [
+        597055,
+        597305
+      ]
+    },
+    {
+      "band": "1800",
+      "observations": 824449,
+      "referenceHalves": [
+        413498,
+        410951
+      ]
+    },
+    {
+      "band": "2200",
+      "observations": 129647,
+      "referenceHalves": [
+        66099,
+        63548
+      ]
+    }
+  ],
+  "capacityByThreshold": [
+    {
+      "minimumObservationsPerBand": 1,
+      "exactFens": 8938
+    },
+    {
+      "minimumObservationsPerBand": 10,
+      "exactFens": 277
+    },
+    {
+      "minimumObservationsPerBand": 25,
+      "exactFens": 72
+    },
+    {
+      "minimumObservationsPerBand": 50,
+      "exactFens": 19
+    },
+    {
+      "minimumObservationsPerBand": 100,
+      "exactFens": 6
+    },
+    {
+      "minimumObservationsPerBand": 200,
+      "exactFens": 1
+    }
+  ],
+  "qualifyingExactFens": 6,
+  "qualifyingInventoryDigest": "sha256:2dc774da33a588deb7cf995ec7785253b146d0f489cc1143b165855fbd028ee6",
+  "requiredPositions": 128,
+  "minimumObservationsPerBand": 100,
+  "state": "capacity_insufficient",
+  "positionsSelected": 0,
+  "modelQueries": 0,
+  "bandIdentity": "not_measured",
+  "humanLikeAllowed": false
+}

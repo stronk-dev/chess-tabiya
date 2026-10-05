@@ -39,6 +39,10 @@ A capability is not complete because one link exists. That makes the current sta
   states, owner-ruled ceilings and non-technical owner-use proof remain open.
 - Twelve registered bot profiles are playable; their strength/personality calibration, honest
   card promises, route behavior and complete event/Review loop remain open.
+  The frozen distribution reference is selected/priced and profile arms now bind the actual
+  production policy. The separate opening census qualifies only six exact positions against
+  128 required; [[D3410]] holds preregistered population repair. This is measured preparation,
+  not a calibrated bot or completed capability.
 - Content is **a large draft corpus, zero official product**: no graduated pack, and
   manifest/graduation truth remains release-blocking.
 - API breadth was **overstated by REST branch counts**: [[D1532]] found five implemented rating

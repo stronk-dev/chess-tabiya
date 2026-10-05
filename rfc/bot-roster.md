@@ -449,9 +449,15 @@ was calculated from the false population and is withdrawn; only an instrumented 
 replacement duration.
 
 **A2 is not redundant with C1** and is the arm nobody has run: the reference draws from Maia's
-internal unseeded RNG at MultiPV 1, while A2 draws from **our seeded sampler over the full-width
-reconstructed vector**. Agreement is 0.27 cp / 0.03 pp per move `[V]`, but compounded over 63 plies
-that is not obviously zero Elo. **A2 is the reconstruction-fidelity arm.**
+internal unseeded RNG at MultiPV 1, while A2 draws from **the registered seeded production sampler
+over its bounded Maia page: requested width min(20, exact legal count), temperature 0.8 and top-p
+0.92**. The complete Stockfish legal-root table never widens that Maia page. The historical
+0.27 cp / 0.03 pp per-move reconstruction agreement `[V]` is not proof of fidelity for every
+bounded production page or a game-level Elo result. **A2 is the registered-policy fidelity arm.**
+The disposable [[D3408]] bridge resolves the frozen arm to the whole production catalogue
+reference and behavior digest, uses `botMaiaRequest` and the sole production policy compiler,
+and reloads whole provider deliveries before independently reconstructing saved decisions.
+Native C1/C2/N controls require their own executor; none may masquerade as a catalogue profile.
 
 **Size, stated before the run rather than discovered after it.** 95% CI ≈ ±500–700/√n ⇒ n = 800
 gives ±17.7 to ±24.7 Elo ⊕. But D333's measured MDE from observed clustered dispersion was 13.8 Elo
@@ -483,6 +489,14 @@ engine analysis. Every decision uses the same complete-legal-move Stockfish 18 d
 centipawn and mate domains never coerce. Reference limits come from 999 deterministic game-clustered
 human-split replicates. Holm–Bonferroni controls every claimed profile × required metric at
 family-wise alpha .05. A missing metric, insufficient cell or post-result metric edit fails closed.
+
+**Measured opening-population hold ([[D3410]], 2026-10-05).** The separate full-source census
+in [[D3409]] yields only six exact FENs meeting the 100-observations-per-band floor, versus 128
+required (`planning/bot-roster/calibration-opening-capacity.json`). The 24,000-decision selected
+reference is not an opening-population substitute. Preregister a sufficient opening source/population
+before model measurements; retain the existing distribution reference, 128-position/100-per-band
+thresholds, exact FEN identity and all verdict requirements until an explicit author amendment.
+This measured hold does not alter criteria or authorize a human-like label.
 
 The receipt carries three separate verdicts:
 
@@ -754,3 +768,10 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   ladder runner. Four metrics, opening identity, 13,200-game ladder, full personality/phase/clock
   breadth and every remaining criterion/owner discharge stay open. No profile becomes calibrated
   and no acceptance, completion or policy change is implied.
+- 2026-10-05 — D3408 corrects A2's factual full-width description to the shipped bounded sampler;
+  the disposable bridge resolves every profile/contrast side to its whole catalogue reference and
+  behavior digest, executes the production request/compiler, and replays whole saved deliveries.
+  D3409 measures the separate exact-opening capacity over the full frozen prefix: six qualifying
+  positions against 128 required. D3410 owns preregistered opening-population author repair. No
+  source, threshold, frozen manifest, production policy, native control, verdict or acceptance
+  requirement changes. Capacity measurement and sampler binding are not full ladder/calibration.

@@ -28065,11 +28065,30 @@
     },
     {
       "id": "D3408",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bd7c6bf645bc0346566c8ce7c159231de91b4ed67f2d6d0c43cb7568cf652d80",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:04c4cc89e16ffa4c6449e2f52f527f524b0e6e0c327afb9c69c1e29b75fd30fe",
       "uxItems": [],
-      "owner": "bot-play"
+      "evidence": "design/research/bot-calibration-verdict-contract.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3409",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:430728fdc584869d1c635b75c73e28e9b9e44dc6e657a66f09596f9d6584613c",
+      "uxItems": [],
+      "evidence": "design/research/bot-calibration-verdict-contract.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3410",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1eb5e37a4a5a14b9806b0827d44a9bd7562f571d981d3152ff3dac644bfc696b",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-roster.md"
     }
   ]
 }

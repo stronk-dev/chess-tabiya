@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f2df375e54ce91a50782919f5b56ef618db024b3f8a66105643fd1977d4ca4aa",
+    "roadmap": "sha256:fe0dd4c9e92746ca6fc1310e1a8b4983ec8ab55f675982e3de580caf233afbaa",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:149bc47d66bd4cef187cf89a4814984beddd711f4eb5b02805e9362a5bd92338",
+    "workState": "sha256:e92947d383904d9962b16aa8783c0906e400223890c5c3eb85f9c09d02cc1229",
     "rfcRegister": "sha256:2314bc29eaccba9d49605802fe3fb5863877a884cd7f84cb0194cced3ac6ea3d",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 627,
       "doing": 0,
-      "blocked": 1055,
-      "done": 1314,
+      "blocked": 1056,
+      "done": 1316,
       "refused": 160
     },
     "workItems": {
@@ -129,10 +129,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Continue accepted evidence source/consumer contracts while authored corpusEvidence remains an explicit content discharge. D3407 has priced the complete frozen human reference; implement the preregistered statistics, opening-identity population and ladder under the existing source/seed contracts. Correct and bind D3408's A2 bounded-sampler identity before its runner. Candidate pricing earns no calibrated bot claim and does not replace phase/clock/endgame/personality work.",
+      "nextAction": "Continue accepted evidence source/consumer contracts and complete calibrated bot breadth. D3408 now binds the actual bounded production sampler; the eventual native ladder must consume that bridge and preserve all native controls/source/seed contracts. D3409 measured only six qualifying exact-opening positions, so D3410 requires preregistered opening-population author repair before band-identity model queries. The priced 24,000-row distribution reference stays frozen; distribution statistics and the 13,200-game ladder remain open. No candidate-pricing/capacity/bridge result substitutes for phase/clock/endgame/personality proof.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3407 priced all 24,000 frozen human decisions through the registered Stockfish-18/depth-8 legal-root source with a fresh Threads-1/Hash-16 reset per root: 756,370 complete candidate rows, including 10,517 mate rows and 327 mate-valued human choices. Whole sources independently reload from the exact ordered journal; 58 offline/native controls pass. D3408 owns the separate A2 full-width prose/actual bounded sampler correction. This prepares calibration only: metrics, opening identity, the 13,200-game ladder and all calibrated-card/full-bot claims remain open. Foundation advances; no RFC, capability or milestone is promoted.",
+        "summary": "D3408 corrects A2 and binds all twelve profile arms and both G1/G2 sides to the whole production catalogue/behavior digest, request/compiler and whole-source replay. D3409 twice measures the complete pinned PGN prefix: 323,448 eligible opening games, 2,863,498 observations and 1,677,685 exact FENs, with only six meeting the 100-per-band floor against 128 required. The complete count inventory and aggregate digest agree; no positions selected or model queried. D3410 holds preregistered opening-population repair. Research controls and tracker flow-back advance the foundation only; all calibrated-card, metric, native ladder, full-bot, RFC/capability/milestone completions remain open.",
         "impact": "advanced",
         "evidence": [
           "planning/semantic-convention-provenance/implementation-2026-09-24.md",
@@ -145,7 +145,10 @@
           "planning/bot-roster/calibration-human-reference-population.json",
           "tools/d2236-bot-calibration-verdict-contract/evaluation.test.ts",
           "tools/d2236-bot-calibration-verdict-contract/evaluation-native.test.ts",
-          "planning/bot-roster/calibration-human-reference-pricing.json"
+          "planning/bot-roster/calibration-human-reference-pricing.json",
+          "tools/d2236-bot-calibration-verdict-contract/profile-arm.test.ts",
+          "tools/d2236-bot-calibration-verdict-contract/opening-capacity.test.ts",
+          "planning/bot-roster/calibration-opening-capacity.json"
         ],
         "anchors": [
           {
@@ -191,7 +194,17 @@
           {
             "kind": "work_state",
             "id": "D3408",
-            "digest": "sha256:bd7c6bf645bc0346566c8ce7c159231de91b4ed67f2d6d0c43cb7568cf652d80"
+            "digest": "sha256:04c4cc89e16ffa4c6449e2f52f527f524b0e6e0c327afb9c69c1e29b75fd30fe"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3409",
+            "digest": "sha256:430728fdc584869d1c635b75c73e28e9b9e44dc6e657a66f09596f9d6584613c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3410",
+            "digest": "sha256:1eb5e37a4a5a14b9806b0827d44a9bd7562f571d981d3152ff3dac644bfc696b"
           }
         ]
       },

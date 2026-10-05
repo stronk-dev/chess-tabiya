@@ -1373,6 +1373,14 @@ bot-calibration-evaluation-report bot-calibration-evaluation-report-update bot-c
 	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/evaluation-report.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/evaluation-report.mjs --log-level=warning
 	$(CI_NODE) .cache/bot-calibration/evaluation-report.mjs $(if $(filter bot-calibration-evaluation-report-update,$@),--update,) $(if $(filter bot-calibration-evaluation-report-check,$@),--check,)
 
+.PHONY: bot-calibration-opening-capacity bot-calibration-opening-report bot-calibration-opening-report-update bot-calibration-opening-report-check
+bot-calibration-opening-capacity:
+	bash tools/d2236-bot-calibration-verdict-contract/capture-opening-capacity.sh
+
+bot-calibration-opening-report bot-calibration-opening-report-update bot-calibration-opening-report-check:
+	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/opening-capacity-report.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/opening-capacity-report.mjs --log-level=warning
+	$(CI_NODE) .cache/bot-calibration/opening-capacity-report.mjs $(if $(filter bot-calibration-opening-report-update,$@),--update,) $(if $(filter bot-calibration-opening-report-check,$@),--check,)
+
 .PHONY: opponent-experience-fresh-review
 opponent-experience-fresh-review:
 	node --test tools/d2238-opponent-experience-fresh-review/contract.test.mjs

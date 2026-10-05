@@ -189,7 +189,18 @@ decisions stay in ignored local cache. `make bot-calibration-population-check` r
 `make bot-calibration-evaluate` resumes only a fully verified ordered source journal. The explicit
 report targets validate the complete population independently. This is preparation, not calibration:
 no distribution comparison, opening band-identity experiment or game ladder has run. Production
-cards remain uncalibrated; D3408 also owns binding A2 to the actual bounded production sampler.
+cards remain uncalibrated. D3408's disposable profile bridge now binds all twelve manifest profiles
+and both G1/G2 sides to whole catalogue references/behavior digests, production requests and the
+sole compiler, with whole-source replay. It does not replace the remaining native controls or
+complete ladder runner. A2 requests min(20, legal count), not a widened all-legal Maia vector.
+
+The separate exact-opening census reads the complete pinned source rather than the selected
+distribution decisions. Its 323,448 eligible games supply 2,863,498 observations across 1,677,685
+full FENs; only six meet the 100-observations-in-every-band floor, against 128 required.
+`make bot-calibration-opening-capacity` repeats the census; the read-only opening-report targets
+recompute its aggregate from the full cached count inventory. D3410 owns preregistered opening
+population repair. No positions were chosen, no model queried, and no band-identity verdict earned.
+Receipt: `planning/bot-roster/calibration-opening-capacity.json`.
 
 - No provider-health release receipt is issued yet (it needs the release-concurrency benchmark),
   so guarded families stay `conditional`. The A11 shared-route latency benchmark and calibration receipts do not exist, so every
