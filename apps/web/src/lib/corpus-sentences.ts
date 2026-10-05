@@ -1,28 +1,17 @@
-import { CORPUS_GUARD } from "@chess-tabiya/runtime";
-
+import { CORPUS_GUARD, parsePresentationReceipt, presentedSentence } from "@chess-tabiya/runtime";
 import type { CorpusPage } from "./api.js";
 
 export { CORPUS_GUARD };
 export const CORPUS_MOVE_OUTCOME_FLOOR = 100;
-const pct = (value: number, total: number): string => (Math.round(value / total * 1000) / 10).toFixed(1);
 
+/** Prose comes from the registered receipt renderer, never client-minted provider evidence. */
 export function renderCorpusPage(page: CorpusPage): readonly string[] {
-  const { population } = page.result;
-  const lines = [`Lichess explorer — rating buckets ${population.ratings.join(",")}; speeds ${population.speeds.join(",")}; ${population.since} to ${population.until}.`, CORPUS_GUARD];
-  if (page.result.kind === "abstention") {
-    const match = /^total (\d+) < 100$/.exec(page.result.detail);
-    lines.push(page.result.reason === "no_data_at_band" && match !== null ? `${match[1]} games recorded here — below the 100-game abstention floor. No frequencies are shown.` : `The corpus source is unavailable (${page.result.detail}). No frequencies are shown.`);
-    return Object.freeze(lines);
-  }
-  const result = page.result;
-  lines.push(`From this position: ${result.total} games. White wins ${pct(result.white, result.total)}%, draw ${pct(result.draws, result.total)}%, Black wins ${pct(result.black, result.total)}%.`, "Most played:");
-  for (const move of result.moves) {
-    const outcome = move.playedCount < CORPUS_MOVE_OUTCOME_FLOOR
-      ? ` Outcome split withheld below the ${CORPUS_MOVE_OUTCOME_FLOOR}-game per-move floor.`
-      : ` White wins ${pct(move.white, move.playedCount)}%, draw ${pct(move.draws, move.playedCount)}%, Black wins ${pct(move.black, move.playedCount)}%.`;
-    lines.push(`${move.san} — ${move.playedCount} of ${result.total} games (${move.sharePct.toFixed(1)}%).${outcome}`);
-  }
-  if (page.committedMoveSan !== null) lines.push(result.moves.some((move) => move.san === page.committedMoveSan) ? `Your committed move here: ${page.committedMoveSan}.` : `Your committed move ${page.committedMoveSan} does not appear among this population's recorded moves.`);
-  lines.push(result.recency.kind === "month" ? `Last recorded game in this population: ${result.recency.lastPlayedMonth}.` : "No last-played month is available for this window.");
+  const lines: string[] = page.status.kind === "shown"
+    ? parsePresentationReceipt(page.presentation).flatMap(item => presentedSentence(item).split("\n"))
+    : [
+      `Lichess explorer — rating buckets ${page.population.ratings.join(",")}; speeds ${page.population.speeds.join(",")}; ${page.population.since} to ${page.population.until}.`, CORPUS_GUARD,
+      page.status.kind === "below_floor" ? `${page.status.total} games recorded here — below the 100-game abstention floor. No frequencies are shown.` : "The corpus source is unavailable. No frequencies are shown.",
+    ];
+  if (page.status.kind === "shown" && page.committedMoveSan !== null) lines.push(page.committedMoveListed ? `Your committed move here: ${page.committedMoveSan}.` : `Your committed move ${page.committedMoveSan} does not appear among this population's recorded moves.`);
   return Object.freeze(lines);
 }

@@ -19,6 +19,8 @@ import { RULES_EVIDENCE_FACTS, type RulesEvidenceFact } from "./evidence-ref.js"
 import type { AdapterSpec, ComponentValue, ConventionReceipt, DistributionOperand, PresentationKit } from "./presentation-contract.js";
 import { PresentationSchemaError, factRenderer, listPhrase, plural, s, side, type Parser } from "./presentation-schema.js";
 import type { ReviewEnginePoint, ReviewEvalDelta, ReviewMateTransition } from "./review-points.js";
+import { CORPUS_GUARD } from "./population-guard.js";
+import type { ExplorerInspectorPopulation } from "./explorer-summary.js";
 
 // ---------------------------------------------------------------------------------------------
 // §2.3 — the production consumer classification
@@ -63,7 +65,7 @@ export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRo
   classRow("guidance.voice@1", "ordinary_presented", "apps/server/src/guidance.ts", "voiceEvidenceView"),
   classRow("guidance.voice_compare@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
   classRow("guidance.voice_story@1", "ordinary_presented", "packages/runtime/src/story.ts", "storyDeclaredEvidence"),
-  classRow("inspector.corpus@1", "inspector_presented", "apps/web/src/lib/inspector-evidence.ts", "consumeCorpus"),
+  classRow("inspector.corpus@1", "inspector_presented", "apps/server/src/inspector-corpus.ts", "consumeCorpus"),
   classRow("inspector.human_split@1", "inspector_presented", "apps/web/src/lib/inspector-evidence.ts", "consumeHumanSplit"),
   classRow("inspector.move_transition@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumeMoveTransition"),
   classRow("inspector.position_structure@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumePositionStructure"),
@@ -274,6 +276,20 @@ const recordedMoveSchema = s.obj({ offset: s.nat, move: s.union("kind", {
 }) });
 
 export const CONSUMER_FACT_RENDERERS = Object.freeze({
+  "consumer.explorer_population@1": factRenderer(s.obj({ total: s.nat, white: s.nat, draws: s.nat, black: s.nat, ratings: s.arr(s.nat), speeds: s.arr(s.str), since: s.nullable(s.str), until: s.nullable(s.str), unlisted: s.nat, lastPlayedMonth: s.nullable(s.str), moves: s.arr(s.obj({ san: s.san, uci: s.uci, playedCount: s.nat, white: s.nat, draws: s.nat, black: s.nat })) }), (value) => {
+    if (value.total < 100 || value.white + value.draws + value.black !== value.total || value.unlisted + value.moves.reduce((sum, row) => sum + row.playedCount, 0) !== value.total || value.moves.some(row => row.white + row.draws + row.black !== row.playedCount)) throw new TypeError("Inspector population counts do not retain the admitted totals");
+    const month = /^\d{4}-(0[1-9]|1[0-2])$/u;
+    if ([value.since, value.until, value.lastPlayedMonth].some(date => date !== null && !month.test(date)) || (value.since !== null && value.until !== null && value.since > value.until)) throw new TypeError("Inspector population has a noncanonical date window or recency");
+    if (new Set(value.moves.map(row => row.uci)).size !== value.moves.length || value.moves.some((row, index) => index > 0 && (row.playedCount > value.moves[index - 1]!.playedCount || (row.playedCount === value.moves[index - 1]!.playedCount && row.san.localeCompare(value.moves[index - 1]!.san) < 0)))) throw new TypeError("Inspector population repeats a move or changes played-count order");
+    const pct = (count: number, total: number) => (Math.round(count / total * 1000) / 10).toFixed(1);
+    return [
+      `Lichess explorer — rating buckets ${value.ratings.join(",")}; speeds ${value.speeds.join(",")}; ${value.since ?? "all dates"} to ${value.until ?? "present"}.`, CORPUS_GUARD,
+      `From this position: ${value.total} games. White wins ${pct(value.white, value.total)}%, draw ${pct(value.draws, value.total)}%, Black wins ${pct(value.black, value.total)}%.`,
+      ...value.moves.map(row => `${row.san} — ${row.playedCount} of ${value.total} games (${pct(row.playedCount, value.total)}%).${row.playedCount < 100 ? " Outcome split withheld below the 100-game per-move floor." : ` White wins ${pct(row.white, row.playedCount)}%, draw ${pct(row.draws, row.playedCount)}%, Black wins ${pct(row.black, row.playedCount)}%.`}`),
+      `${value.unlisted} games are outside the listed move rows.`,
+      value.lastPlayedMonth === null ? "No last-played month is available for this window." : `Last recorded game in this population: ${value.lastPlayedMonth}.`,
+    ].join("\n");
+  }),
   "consumer.pivotal_marker@1": factRenderer(pivotalSchema, (value) => {
     switch (value.kind) {
       case "phase_change": return `The game moved from the ${value.from} into the ${value.to} under the declared game-phase convention.`;
@@ -418,9 +434,6 @@ const PIVOTAL_KINDS = Object.freeze(["irreversibility", "phase_change", "human_d
 const PIVOTAL_CONVENTIONS: Readonly<Record<(typeof PIVOTAL_KINDS)[number], Convention>> = Object.freeze({ irreversibility: "board-rules@1", phase_change: "phase-bands@1", human_divergence: "recorded-comparison@1", option_collapse: "board-rules@1" });
 const GUIDANCE_TEXT = Object.freeze(["guidance.deterministic", "guidance.voice", "guidance.voice_story"] as const);
 const PAWN_STRUCTURE_KINDS: ReadonlySet<StructuralKind> = new Set(["backward_pawn", "outpost", "pawn_safe_square"]);
-/** The Explorer outcome floor: below it the server returns an abstention, never a split. */
-const EXPLORER_OUTCOME_FLOOR = 100;
-
 export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
   const specs: AdapterSpec[] = [];
   const add = (consumer: string, projection: VersionedEvidenceId, component: AdapterSpec["component"], forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], construct: Construct, composition?: AdapterSpec["composition"]) =>
@@ -552,29 +565,28 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
     factAdapter("inspector.move_transition", V1(`rules.transition.reading.move_irreversibility.${subkind}`), ["list", "panel"], ["subkind"], ["copied_byte_equal"], "consumer.irreversibility@1", "board-rules@1", (payload) => ({ subkind: (payload as { readonly subkind: string }).subkind }));
   }
 
-  // --- Inspector: the Explorer population (criterion 8: shares recomputed from playedCount / total)
-  add("inspector.corpus", V1("human.explorer.population"), "distribution", ["list", "panel"], ["result", "committedMoveSan"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => {
-    const page = evidence.payload as { readonly result: { readonly kind: "stats" | "abstention"; readonly total?: number; readonly white?: number; readonly draws?: number; readonly black?: number; readonly moves?: readonly { readonly san: string; readonly uci: string; readonly playedCount: number }[]; readonly population: { readonly source: "lichess-explorer"; readonly ratings: readonly number[]; readonly speeds: readonly string[]; readonly since: string; readonly until: string } }; readonly committedMoveSan: string | null };
+  // --- Inspector: whole-source and explicit standalone population presentations.
+  // Only canonical moves and literal counts cross the receipt door. Provider SAN, source
+  // bodies, seals, headers and diagnostics remain internal; no client mints source evidence.
+  add("inspector.corpus", V1("derived.explorer.inspector_population"), "fact_statement", ["list", "panel"], ["request", "totals", "moves", "unlisted", "lastPlayedMonth"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => {
+    const { request, totals, moves, unlisted, lastPlayedMonth } = evidence.payload as ExplorerInspectorPopulation;
+    return statement("consumer.explorer_population@1", "explorer-population@1", {
+      ...totals, ratings: [...request.ratingBuckets], speeds: [...request.speeds], since: request.since, until: request.until,
+      unlisted, lastPlayedMonth, moves,
+    });
+  });
+  add("inspector.corpus", V1("human.explorer.population"), "fact_statement", ["list", "panel"], ["result"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => {
+    const page = evidence.payload as { readonly result: import("./corpus-result.js").CorpusResult };
     const result = page.result;
-    if (result.kind !== "stats" || result.moves === undefined || result.moves.length === 0) throw new TypeError("an Explorer page with no counted moves is stated through its abstention seat, never drawn");
-    const total = result.total!;
-    const population = { source: result.population.source, ratings: [...result.population.ratings], speeds: [...result.population.speeds], since: result.population.since, until: result.population.until };
-    const basis = { kind: "human_population" as const, population, sampleSize: total };
-    const listed = result.moves.reduce((sum, move) => sum + move.playedCount, 0);
-    const committed = page.committedMoveSan === null ? undefined : result.moves.find((move) => move.san === page.committedMoveSan);
-    const distribution: DistributionOperand = {
-      rows: result.moves.map((move) => ({ move: { san: move.san, uci: move.uci }, share: move.playedCount / total, count: move.playedCount })),
-      residual: listed < total ? { share: (total - listed) / total, label: "other_moves" } : null,
-      convention: kit.convention(evidence, basis, "not_applicable"),
-      highlight: committed === undefined ? null : { uci: committed.uci, why: "learner_committed" },
-    };
-    const numerator = page.committedMoveSan === null ? result.moves[0]!.playedCount : committed?.playedCount ?? 0;
-    return [
-      { id: "distribution", operand: distribution },
-      { id: "outcome_split", operand: { white: result.white!, draws: result.draws!, black: result.black!, total, perspective: "white", convention: kit.convention(evidence, basis, "white"), floor: { threshold: EXPLORER_OUTCOME_FLOOR, met: total >= EXPLORER_OUTCOME_FLOOR } } },
-      { id: "count_with_denominator", operand: { numerator, denominator: total, denominatorMeaning: "games_in_population" } },
-    ];
-  }, { id: "population_distribution", members: [{ component: "distribution", forms: ["list", "panel"] }, { component: "outcome_split", forms: ["list", "panel"] }, { component: "count_with_denominator", forms: ["list", "panel"] }] });
+    if (result.kind !== "stats") throw new TypeError("An unavailable standalone source cannot render population facts");
+    return statement("consumer.explorer_population@1", "explorer-population@1", {
+      total: result.total, white: result.white, draws: result.draws, black: result.black,
+      ratings: [...result.population.ratings], speeds: [...result.population.speeds], since: result.population.since, until: result.population.until,
+      unlisted: result.total - result.moves.reduce((sum, row) => sum + row.playedCount, 0),
+      lastPlayedMonth: result.recency.kind === "month" ? result.recency.lastPlayedMonth : null,
+      moves: result.moves.map(({ sharePct: _share, ...row }) => row),
+    });
+  });
 
   // --- Inspector: the human-move model's policy (a model output, never a grade)
   add("inspector.human_split", V1("human.maia.policy"), "distribution", ["list", "panel"], ["engine", "targetElo", "candidates"], ["copied_byte_equal", "retained_convention"], (evidence) => {

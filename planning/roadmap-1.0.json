@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Next executable integration: D3384, migrate Inspector Explorer through declared whole-source/narrow evidence and registered presentation, preserving population attribution, counts, canonical moves, unlisted mass, recency, committed-move membership and sample policy. Compile before I/O; admit exact requests and recheck read/disclosure/subject afterward. Prove authenticated HTTP/presentation/cancellation and no modern-to-bare fallback. Finish source migrations and explicit binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3363 retains the distinct Maia candidate-page contract; D3370 requires the distinct sampled Maia result; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+        "nextAction": "Continue actual source migrations and literal binding-policy adoption, then whole-manifest execution/digest, exact occurrence resolution and authenticated availability. Inspector Explorer D3384 now consumes registered sealed source/presentation rather than bare client evidence. D3363 retains the distinct Maia candidate-page contract; D3370 requires the distinct sampled Maia result; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Whole-source persistence and zero-consumer retirement remain open. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3383 implements exact whole-source return frequency at the authenticated due queue: declared count-only projection, optional omission, sealed payload/acquisition request admission and no modern-to-bare fallback. Existing 100-game floor, same-day tie-break, 40 lookups, 20-item intake and waiting-state preservation remain unchanged. Production HTTP and real cancellation controls pass the normal 135-test focused gate and warning-free types. Complete exact-index software passes 2956 tests/325 files, seven isolated performance tests/four files and downstream contracts at 1493a4306a94670a9aa7c2a6329aff25f0397871; content passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. Browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; complete governance passes. Source/test/schema/content/tooling index bytes remain unchanged through tracking closeout. Only D3383 closes, with zero untriaged/1679 live. D3384 assigns the next actual Inspector Explorer source/presentation migration. Whole-source persistence, D3363/D3370/D3373/D3376, legacy retirement and full execution/resolution/availability remain open; no capability or milestone promotion.",
+          "summary": "D3384 closes the actual Inspector Explorer source/presentation bypass: declared narrow whole-source projection, registered server consumer/renderer and client receipt validation. Exact request and post-acquisition read/disclosure/subject checks refuse copied/crossed/failed modern sources without bare fallback or diagnostics. Counts, population/move floors, canonical moves, mass, recency, attribution and committed membership remain unchanged. Normal focused verification passes 299 tests/12 files and warning-free types; final exact-index verify-software passes at 53ba289a33ed067ce1b56ae68005f937b851ba6b. Content and complete browser CI pass. Routine metadata preserves 917 predecessors, all 277 existing factory profiles and all authored fields; 925 current declarations resolve. Only D3384 closes, with zero untriaged/1678 live. Full execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376 remain open; no capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -872,7 +872,9 @@
             "planning/provider-exchange-and-execution/theory-source-admission-2026-10-05.md",
             "planning/provider-exchange-and-execution/theory-source-software-2026-10-05.json",
             "planning/provider-exchange-and-execution/return-frequency-2026-10-05.md",
-            "planning/provider-exchange-and-execution/return-frequency-software-2026-10-05.json"
+            "planning/provider-exchange-and-execution/return-frequency-software-2026-10-05.json",
+            "planning/provider-exchange-and-execution/inspector-corpus-2026-10-05.md",
+            "planning/provider-exchange-and-execution/inspector-corpus-software-2026-10-05.json"
           ],
           "anchors": [
             {
@@ -918,7 +920,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:3193398a738db5b2854c65a1802b2b9c6385c633a6342fefff84a8c7716d7db9"
+              "digest": "sha256:951dbb518a694579528dda9ef0a376f4081db9a796c1f8f4e117eb3d4bfec0d1"
             },
             {
               "kind": "work_state",
@@ -1113,7 +1115,7 @@
             {
               "kind": "work_state",
               "id": "D3384",
-              "digest": "sha256:493795964d83e333cad9fc75f2f155d99781b94d687c06bd5e73bd339c7192b9"
+              "digest": "sha256:2d152257ff5f8d1a4729fa15ffa521bea06936ea20703c2b9969a34dc55be986"
             }
           ]
         },
@@ -1623,7 +1625,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:3193398a738db5b2854c65a1802b2b9c6385c633a6342fefff84a8c7716d7db9"
+              "digest": "sha256:951dbb518a694579528dda9ef0a376f4081db9a796c1f8f4e117eb3d4bfec0d1"
             },
             {
               "kind": "work_state",

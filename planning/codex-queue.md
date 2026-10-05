@@ -1,5 +1,27 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 Inspector population checkpoint
+
+D3384 closes the real corpus route's bare-statistics/client-evidence bypass. A declared
+narrow Explorer projection, registered server consumer and sole registered renderer now
+carry exact population/count/move/recency facts to the client receipt. Exact request and
+post-acquisition read/disclosure/subject checks refuse crossed/copied/failed modern sources
+without fallback or diagnostic leakage. Original population/move floors, attribution,
+unlisted mass, committed membership, explicit legacy compatibility and cancellation remain.
+The normal focused gate passes 299 tests/12 files and clean types; final exact-index
+software, content and browser CI pass. Routine metadata retains all frozen predecessors
+and authored fields; no owner-consent question. Receipt:
+`planning/provider-exchange-and-execution/inspector-corpus-2026-10-05.md`.
+
+Continue the implementing provider RFC: finish actual source migrations and literal
+binding-policy adoption, then whole-manifest execution/digest, exact occurrence resolution
+and authenticated availability. Whole-source persistence and zero-consumer legacy retirement
+remain open. D3363/D3370/D3373/D3376 retain their separate source-contract holds; do not
+substitute an observed move for a candidate page, select the first Maia candidate, discard
+Stockfish's terminating selection or conflate opening identity. Full modules, Review, bots,
+campaign, learner history and release gates remain on the 1.0 roadmap; this source repair
+does not complete the RFC, a capability or milestone. The goal stays active.
+
 ## 2026-10-05 return-frequency checkpoint
 
 D3383 admits exact whole-source Explorer frequency at the actual authenticated due queue
@@ -12,14 +34,9 @@ Content passes 223 tests and all 104 requirements; browser CI passes 111 journey
 optional skip and zero retries; governance passes. Receipt:
 `planning/provider-exchange-and-execution/return-frequency-2026-10-05.md`.
 
-Next executable item: D3384, Inspector's Explorer bare-statistics/client-built-evidence
-path. Migrate the real consumer through declared whole-source/narrow evidence and registered
-presentation; preserve population attribution, counts, canonical moves, unlisted mass,
-recency, committed-move membership and consumer sample policy. Compile before I/O, admit
-exact requests and recheck read/disclosure/subject authority afterward. Crossed/copied/failed
-modern pages must not open bare fallback or leak source diagnostics; prove actual HTTP,
-presentation and transport cancellation. Keep explicit standalone compatibility. This is
-not D3363's separate Maia candidate-page-versus-observed-occurrence contract.
+D3384's subsequent Inspector migration is recorded above. Its source/presentation boundary
+now preserves this original population/move/recency contract without client-built evidence.
+This remains distinct from D3363's separate Maia candidate-page-versus-occurrence contract.
 
 Then continue literal binding policies and full execution/resolution/availability. Whole-source
 persistence, source-family contracts and zero-consumer retirement remain open. Metadata
@@ -36,7 +53,7 @@ and empty pages, demand/disclosure, receiver/deadline forwarding, changed decisi
 revoked grants and disconnect cancellation. The normal focused gate passes 63 tests and
 clean types. Receipt: `planning/provider-exchange-and-execution/theory-source-admission-2026-10-05.md`.
 
-The subsequently shipped D3383 return-frequency checkpoint and next D3384 migration are
+The subsequently shipped D3383 return-frequency and D3384 Inspector checkpoints are
 recorded above. Its same-day ordering, 100-game policy, intake/lookup bounds and explicit
 standalone compatibility remain unchanged.
 

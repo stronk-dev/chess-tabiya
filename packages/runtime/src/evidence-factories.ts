@@ -154,7 +154,7 @@ import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFe
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
 import { providerProtocolRow, providerProtocolSourceBinding } from "./provider-protocol.js";
 import { CORPUS_GUARD } from "./population-guard.js";
-import type { ExplorerPopulationSummary, ExplorerPositionFrequency } from "./explorer-summary.js";
+import type { ExplorerPopulationSummary, ExplorerPositionFrequency, ExplorerInspectorPopulation } from "./explorer-summary.js";
 import type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 import { maiaExactFenOccurrencePayload, maiaRunOccurrencePayload, type MaiaExactFenMoveOccurrence, type MaiaOccurrencePageEvidence, type MaiaRunMoveOccurrence } from "./maia-occurrence.js";
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
@@ -1394,6 +1394,18 @@ export const createDerivedExplorerPositionFrequencyV1Evidence = (() => {
     assertProviderDelivery("lichess_explorer.position_page@1", page.payload);
     const { request, result } = page.payload.payload;
     return mint(route, symbol, Object.freeze({ page, request, total: result.totals.total }), { page }, [page]);
+  });
+})();
+
+export const createDerivedExplorerInspectorPopulationV1Evidence = (() => {
+  const route = "derived.explorer.inspector_population@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ page: sealed("human.explorer.position_page@1") }], result: "single", dependency: "provider-exchange-and-execution" }, ({ page }: { readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">> }): DeclaredEvidence<ExplorerInspectorPopulation> => {
+    assertProviderDelivery("lichess_explorer.position_page@1", page.payload);
+    const { request, result } = page.payload.payload;
+    const lastPlayedMonth = result.history.kind === "reported" ? result.history.rows.filter(row => row.played > 0).map(row => row.period).sort().at(-1) ?? null : null;
+    const moves = Object.freeze([...result.moves].sort((a, b) => b.played - a.played || a.canonicalSan.localeCompare(b.canonicalSan)).map(row => Object.freeze({ san: row.canonicalSan, uci: row.canonicalUci, playedCount: row.played, ...row.counts })));
+    return mint(route, symbol, Object.freeze({ page, request, totals: result.totals, moves, unlisted: result.unlisted, lastPlayedMonth }), { page }, [page]);
   });
 })();
 

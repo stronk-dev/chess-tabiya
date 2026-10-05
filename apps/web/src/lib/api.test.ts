@@ -1,5 +1,6 @@
 import { createRun, type DrillRun, type OpponentSelection } from "@chess-tabiya/runtime";
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
+import { corpusPageFixture } from "./corpus-presentation.test-support.js";
 import { describe, expect, it } from "vitest";
 
 import { DrillApi, PLANNED_SURFACES } from "./api.js";
@@ -200,7 +201,7 @@ describe("DrillApi", () => {
       if (url.includes("/runs?")) return json({ runs: [], selection: { shown: 5, total: 12 } });
       if (url.endsWith("/select-move")) return json(selection);
       if (url.includes("/human-split")) return json({ nodeId: run.nodes[0]!.id, engine: selection.engine, targetElo: 1600, candidates: [] });
-      if (url.includes("/corpus")) return json({ nodeId: run.nodes[0]!.id, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } });
+      if (url.includes("/corpus")) return json(corpusPageFixture({ nodeId: run.nodes[0]!.id, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } }));
       if (url.includes("/voice")) {
         const body = JSON.parse(String(init?.body)) as { readonly scope: string };
         return json({ text: "fixture", source: "deterministic", scope: body.scope, recordedReadingsPresent: false });
@@ -271,7 +272,7 @@ describe("DrillApi", () => {
       providerHealth: { generatedAt: "2026-09-24T12:00:00.000Z" },
       surfaces: { play: "available", learn: "available" },
     });
-    expect((await api.corpus(run.id, run.nodes[0]!.id)).result.kind).toBe("abstention");
+    expect((await api.corpus(run.id, run.nodes[0]!.id)).status.kind).toBe("below_floor");
     expect(PLANNED_SURFACES).toEqual([]);
     await api.packs();
     await api.shapes();

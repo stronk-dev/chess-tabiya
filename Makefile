@@ -1017,6 +1017,14 @@ return-frequency-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/return-frequency-metadata.js --log-level=warning
 	node apps/server/dist/return-frequency-metadata.js --return-frequency --apply-metadata
 
+.PHONY: inspector-corpus-metadata-check inspector-corpus-metadata-update
+inspector-corpus-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/inspector-corpus-metadata.js --log-level=warning
+	node apps/server/dist/inspector-corpus-metadata.js --inspector-population
+inspector-corpus-metadata-update:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/inspector-corpus-metadata.js --log-level=warning
+	node apps/server/dist/inspector-corpus-metadata.js --inspector-population --apply-metadata
+
 repertoire-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/repertoire-metadata.js --log-level=warning
 	node apps/server/dist/repertoire-metadata.js --repertoire-frontier
@@ -1113,6 +1121,10 @@ provider-exchange-check: run-subject-check maia-occurrence-check evidence-execut
 .PHONY: repertoire-source-check theory-source-check return-frequency-check
 return-frequency-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
+
+.PHONY: inspector-corpus-check
+inspector-corpus-check: evidence-manifest-check
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/guidance.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/human-evidence-response.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
 
 theory-source-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts packages/runtime/src/explorer-summary.test.ts

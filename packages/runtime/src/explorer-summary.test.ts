@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deriveExplorerPopulationSummary, deriveExplorerPositionFrequency, providerSourceEvidence } from "./evidence-operations.js";
+import { deriveExplorerPopulationSummary, deriveExplorerPositionFrequency, deriveExplorerInspectorPopulation, providerSourceEvidence } from "./evidence-operations.js";
 import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { explorerPopulationSummaryWire, renderedProviderItems } from "./explorer-summary.js";
@@ -25,6 +25,26 @@ function source(total: number, history: boolean, retained = false) {
 }
 
 describe("Explorer move-free population summary", () => {
+  it.each([0, 99, 100, 70000])("keeps Inspector's canonical population %i separate from provider-only fields", total => {
+    const page = source(total, true, true);
+    const population = deriveExplorerInspectorPopulation(page);
+    expect(population.payload.page).toBe(page);
+    expect(population.payload.totals.total).toBe(total);
+    expect(population.payload.moves.reduce((sum, row) => sum + row.playedCount, population.payload.unlisted)).toBe(total);
+    expect(population.payload.lastPlayedMonth).toBe(total === 0 ? null : "2025-01");
+    expect(evidenceValueReceipt(population).sourceDigests).toEqual([evidenceValueReceipt(page).payloadDigest]);
+    expect(compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, population.projection).paths.map(path => path.sourceRequirements.map(row => row.providerOperation))).toEqual([["lichess_explorer.position_page@1"]]);
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.corpus", version: 1 }, [population]);
+    expect(view.items).toEqual([population]);
+    if (total >= 100) {
+      const wire = serializePresentedEvidence(presentEvidenceItems(view));
+      expect(JSON.stringify(wire)).not.toMatch(/MOVE_ROW_SENTINEL|providerSan|acquisition|payloadReceipt|requestedIdentity/u);
+      expect(parsePresentationReceipt(wire).map(presentedSentence).join(" ")).toContain("e4");
+    }
+    for (const consumer of ["module.theory_breadcrumb", "guidance.voice", "runtime.return_frequency", "runtime.repertoire_scan"]) expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, [population]).items).toEqual([]);
+    for (const candidate of [{ ...page }, page.payload, JSON.parse(JSON.stringify(page)), deriveExplorerPopulationSummary(page)]) expect(() => invokeEvidenceValueRoute("derived.explorer.inspector_population@1", { page: candidate } as never)).toThrow();
+    expect(() => invokeEvidenceValueRoute("derived.explorer.inspector_population@1", { page, moves: [] } as never)).toThrow(/extra/u);
+  });
   it.each([0, 99, 100, 70000])("retains literal frequency %i without a source-owned floor or learner move rows", total => {
     const page = source(total, true, true);
     const frequency = deriveExplorerPositionFrequency(page);

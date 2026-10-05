@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7fb7eecaa34c6c4ef67ff61787d19134a3ec3e841df962717c14a7873bf850c1",
+    "roadmap": "sha256:db1348491f769e903b9a0273264722ace0e441b07f405468422ea0361e4ef335",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:e67cbbf25d67f557dba637c768088adef7b81f119e673c9ef47d24908cb467ce",
-    "rfcRegister": "sha256:bc00e827d596eed821d072c688cac4cc1a81dca74d9b81a793c0f1afb497a15b",
+    "workState": "sha256:834e458d5c7e1c54685de2c462ad940e7b5b83ece63d42b01013158cb0a2d018",
+    "rfcRegister": "sha256:04a6b731c2aa9e593b733cc1ad38f157668ca0cb647fb9632b5efeeadac20bfe",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:9012d85008bc05c9971ab8722161b03cc918ccb03a0b8d0491d82e1d85a95137",
-    "rest": "sha256:19f6d791e8354d55d97ecf439ed112cb7ebfcf89d3fd134905fb4173c200a16d"
+    "rest": "sha256:637a360a261b9b1321a936b604c419af20d3bcbe8e27b548874628401130b8b5"
   },
   "summary": {
     "capabilities": 14,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 627,
       "doing": 0,
       "blocked": 1051,
-      "done": 1294,
+      "done": 1295,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Next executable integration: D3384, migrate Inspector Explorer through declared whole-source/narrow evidence and registered presentation, preserving population attribution, counts, canonical moves, unlisted mass, recency, committed-move membership and sample policy. Compile before I/O; admit exact requests and recheck read/disclosure/subject afterward. Prove authenticated HTTP/presentation/cancellation and no modern-to-bare fallback. Finish source migrations and explicit binding policies, then whole-manifest execution/digest, closed occurrence resolution and authenticated availability. D3363 retains the distinct Maia candidate-page contract; D3370 requires the distinct sampled Maia result; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+      "nextAction": "Continue actual source migrations and literal binding-policy adoption, then whole-manifest execution/digest, exact occurrence resolution and authenticated availability. Inspector Explorer D3384 now consumes registered sealed source/presentation rather than bare client evidence. D3363 retains the distinct Maia candidate-page contract; D3370 requires the distinct sampled Maia result; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Whole-source persistence and zero-consumer retirement remain open. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3383 implements exact whole-source return frequency at the authenticated due queue: declared count-only projection, optional omission, sealed payload/acquisition request admission and no modern-to-bare fallback. Existing 100-game floor, same-day tie-break, 40 lookups, 20-item intake and waiting-state preservation remain unchanged. Production HTTP and real cancellation controls pass the normal 135-test focused gate and warning-free types. Complete exact-index software passes 2956 tests/325 files, seven isolated performance tests/four files and downstream contracts at 1493a4306a94670a9aa7c2a6329aff25f0397871; content passes 223 tests/23 files, zero clearance errors and all 104 exact requirements. Browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries; complete governance passes. Source/test/schema/content/tooling index bytes remain unchanged through tracking closeout. Only D3383 closes, with zero untriaged/1679 live. D3384 assigns the next actual Inspector Explorer source/presentation migration. Whole-source persistence, D3363/D3370/D3373/D3376, legacy retirement and full execution/resolution/availability remain open; no capability or milestone promotion.",
+        "summary": "D3384 closes the actual Inspector Explorer source/presentation bypass: declared narrow whole-source projection, registered server consumer/renderer and client receipt validation. Exact request and post-acquisition read/disclosure/subject checks refuse copied/crossed/failed modern sources without bare fallback or diagnostics. Counts, population/move floors, canonical moves, mass, recency, attribution and committed membership remain unchanged. Normal focused verification passes 299 tests/12 files and warning-free types; final exact-index verify-software passes at 53ba289a33ed067ce1b56ae68005f937b851ba6b. Content and complete browser CI pass. Routine metadata preserves 917 predecessors, all 277 existing factory profiles and all authored fields; 925 current declarations resolve. Only D3384 closes, with zero untriaged/1678 live. Full execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376 remain open; no capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -261,7 +261,9 @@
           "planning/provider-exchange-and-execution/theory-source-admission-2026-10-05.md",
           "planning/provider-exchange-and-execution/theory-source-software-2026-10-05.json",
           "planning/provider-exchange-and-execution/return-frequency-2026-10-05.md",
-          "planning/provider-exchange-and-execution/return-frequency-software-2026-10-05.json"
+          "planning/provider-exchange-and-execution/return-frequency-software-2026-10-05.json",
+          "planning/provider-exchange-and-execution/inspector-corpus-2026-10-05.md",
+          "planning/provider-exchange-and-execution/inspector-corpus-software-2026-10-05.json"
         ],
         "anchors": [
           {
@@ -307,7 +309,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:3193398a738db5b2854c65a1802b2b9c6385c633a6342fefff84a8c7716d7db9"
+            "digest": "sha256:951dbb518a694579528dda9ef0a376f4081db9a796c1f8f4e117eb3d4bfec0d1"
           },
           {
             "kind": "work_state",
@@ -502,7 +504,7 @@
           {
             "kind": "work_state",
             "id": "D3384",
-            "digest": "sha256:493795964d83e333cad9fc75f2f155d99781b94d687c06bd5e73bd339c7192b9"
+            "digest": "sha256:2d152257ff5f8d1a4729fa15ffa521bea06936ea20703c2b9969a34dc55be986"
           }
         ]
       },
@@ -1012,7 +1014,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:3193398a738db5b2854c65a1802b2b9c6385c633a6342fefff84a8c7716d7db9"
+            "digest": "sha256:951dbb518a694579528dda9ef0a376f4081db9a796c1f8f4e117eb3d4bfec0d1"
           },
           {
             "kind": "work_state",

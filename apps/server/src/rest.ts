@@ -107,7 +107,8 @@ import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
 import { appendRecordedReadings, evidencePacket, renderedEvidenceItems, renderVoice, type VoiceProvider, type VoiceScope } from "./guidance.js";
 import type { ReasoningReviewProvider } from "./external-voice.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
-import { corpusPopulation, corpusSamplePolicy, type CorpusSource } from "./corpus.js";
+import { corpusPopulation, type CorpusSource } from "./corpus.js";
+import { inspectorCorpus } from "./inspector-corpus.js";
 import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
 import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
@@ -1759,9 +1760,14 @@ export function createRestHandler(
         const path = historyFrom(access.run, access.run.activeCursor.nodeId);
         const index = path.findIndex((node) => node.id === access.node.id);
         const child = index < 0 ? undefined : path[index + 1];
-        // Inspector's existing product floor; sparse counts remain successful source evidence.
-        const result = corpusSamplePolicy(await corpusSource.stats({ ...selectedPopulation, fen: access.node.fen }, { signal: request.signal }), 100);
-        return json(200, { nodeId: access.node.id, result, committedMoveSan: child?.actor === "user" ? child.moveSan : null });
+        const subjectImage = JSON.stringify([access.node, access.run.events.length, access.run.activeCursor, access.role, access.workflowContext, access.seatedInContest, access.reviewing]);
+        const page = await inspectorCorpus(corpusSource, { ...selectedPopulation, fen: access.node.fen }, { nodeId: access.node.id, committedMoveSan: child?.actor === "user" ? child.moveSan : null }, { signal: request.signal });
+        request.signal.throwIfAborted();
+        // Re-read both the grant and the disclosure/subject after asynchronous source acquisition.
+        const current = service.guidanceAccess(route.runId, principal, access.node.id);
+        const currentPermission = permittedAssistance({ workflowContext: current.workflowContext, deliveryOpen: feedbackDeliveryOpen(current.run), role: current.role, seatedInContest: current.seatedInContest, reviewing: current.reviewing });
+        if (currentPermission.corpus === "locked_off" || subjectImage !== JSON.stringify([current.node, current.run.events.length, current.run.activeCursor, current.role, current.workflowContext, current.seatedInContest, current.reviewing])) throw new ServerError("ASSISTANCE_WITHHELD", "Corpus evidence no longer matches the current disclosure and position");
+        return json(200, page);
       }
       if (request.method === "PUT" && route.action === "marks") {
         requireJson(request);

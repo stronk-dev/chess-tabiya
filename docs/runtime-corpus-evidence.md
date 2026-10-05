@@ -34,9 +34,12 @@ temporary compatibility view; Inspector, repertoire frontier and return-frequenc
 existing 100-game sample policy. The source does not decide sample suitability. Full sealed pages
 remain in the shared exchange. Theory's move-free summary, the repertoire frontier and the
 count-only return-frequency projection now have actual consumers that admit exact requests.
-Inspector's whole-source/presentation migration and the remaining exact played-occurrence
-consumer joins remain open. Supplied fixtures/custom sources and standalone authoring tools
-remain separate.
+Inspector also admits the sealed source through `derived.explorer.inspector_population@1`.
+Its narrow canonical moves/counts, unlisted mass and recency travel only as registered
+presentation operands; provider SAN, whole deliveries and diagnostics stay internal. The
+remaining exact played-occurrence joins and zero-consumer legacy retirement remain open.
+Standalone sources without a `page` capability remain explicit compatibility, never fallback
+after a failed modern source.
 
 ## Delivery and API
 
@@ -51,6 +54,16 @@ The response is ephemeral. Requests append no run event or evidence, do not alte
 graph or comparison payload, and leave the authoring-time explorer path unchanged.
 For a pre-move node on the active path, the response also identifies the
 learner-authored child move so the client can mark it among the population rows.
+Read access, disclosure, role, event head, active cursor and requested node are checked again
+after source I/O. A closed/changed decision is withheld; a revoked grant is hidden using the
+normal not-found response. Disconnect cancels the source waiter without poisoning health.
+
+The response is the shared `CorpusInspectorPage`: requested node and population, typed
+`shown`/`below_floor`/`source_unavailable` status, one `presentation.receipt@1`, and the
+server-derived committed move/membership. There is no parallel raw statistics object.
+Shown receipts use the registered Inspector population renderer; absent sources carry an
+empty receipt. The browser validates the exact consumer, projection, renderer, attribution
+and move membership before displaying it. It never creates Explorer source evidence.
 
 ## Client contract
 
@@ -74,6 +87,11 @@ capability/error honesty, disclosure re-closing, ephemerality, preference migrat
 the sentence fence, and the complete Just Play browser flow at zero retries. The focused provider
 gate additionally proves the authenticated real HTTP corpus route, legal-move/count/history
 refusals, independent cancellation, and timer-free transport-disconnect propagation.
+`make inspector-corpus-check` covers modern admission, the 99/100 floor, zero/all-unlisted
+populations, canonical moves despite arbitrary provider SAN, crossed positions/populations/
+dates, copied seals, failures without bare fallback, standalone compatibility, committed-move
+membership and permissions changing during I/O. Clock-equivalent Explorer requests are a
+positive control: population identity intentionally uses neutral counters, not a draw claim.
 
 Corpus data remains evidence only. Repertoire gap-finding now consumes the same
 population attribution and guard outside runs; see `docs/repertoire-gap-finding.md`.

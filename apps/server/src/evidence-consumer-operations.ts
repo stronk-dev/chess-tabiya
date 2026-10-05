@@ -11,6 +11,7 @@ import { renderRecordedReadingEvidence, renderedEvidenceItems, voiceEvidenceView
 import { consumeOpponentSelectionEvidence } from "./opponent-selector.js";
 import { consumeRepertoireCorpus } from "./repertoire.js";
 import { consumeReturnFrequency } from "./return-frequency.js";
+import { consumeCorpus } from "./inspector-corpus.js";
 import { consumeClaimBindingRecords } from "./sourcing/claim-binding.js";
 
 export const SERVER_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
@@ -23,6 +24,7 @@ export const SERVER_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
   evidenceConsumerOperation("opponent.selection", consumeOpponentSelectionEvidence),
   evidenceConsumerOperation("runtime.repertoire_scan", consumeRepertoireCorpus),
   evidenceConsumerOperation("runtime.return_frequency", consumeReturnFrequency),
+  evidenceConsumerOperation("inspector.corpus", consumeCorpus),
   evidenceConsumerOperation("authoring.claim_binding", consumeClaimBindingRecords),
   evidenceConsumerOperation("guidance.voice_compare", comparisonNarrative),
   evidenceConsumerOperation("guidance.voice_story", storyDeclaredEvidence),

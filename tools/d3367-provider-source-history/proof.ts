@@ -22,8 +22,9 @@ const QUEUED_TABLEBASE = process.argv.includes("--queued-tablebase");
 const HEALTH_TABLEBASE = process.argv.includes("--health-tablebase");
 const REPERTOIRE_FRONTIER = process.argv.includes("--repertoire-frontier");
 const RETURN_FREQUENCY = process.argv.includes("--return-frequency");
+const INSPECTOR_POPULATION = process.argv.includes("--inspector-population");
 const REVIEW_SUCCESSORS = ["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"];
-const BASELINE = RETURN_FREQUENCY ? "58fd826c" : REPERTOIRE_FRONTIER ? "dd5b5194" : HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
+const BASELINE = INSPECTOR_POPULATION ? "c7b03e02" : RETURN_FREQUENCY ? "58fd826c" : REPERTOIRE_FRONTIER ? "dd5b5194" : HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
 const SUCCESSORS = HEALTH_TABLEBASE ? ["opponent.practical_slice", "opponent.selection"] : [
   "engineCondition.engine_eval_swing", "engineCondition.engine_mate_appears",
   "engineCondition.tablebase_category_regression", "engineCondition.tablebase_dtz_regression",
@@ -32,6 +33,7 @@ const SUCCESSORS = HEALTH_TABLEBASE ? ["opponent.practical_slice", "opponent.sel
   ...(REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS : []),
   ...(REPERTOIRE_FRONTIER ? ["derived.explorer.repertoire_frontier"] : []),
   ...(RETURN_FREQUENCY ? ["derived.explorer.position_frequency"] : []),
+  ...(INSPECTOR_POPULATION ? ["derived.explorer.inspector_population"] : []),
 ].sort();
 const read = (path: string) => readFileSync(resolve(path), "utf8");
 const old = (path: string) => execFileSync("git", ["show", `${BASELINE}:${path}`], { encoding: "utf8", maxBuffer: 16_000_000 });
@@ -53,7 +55,7 @@ async function proof(editsOnly: boolean) {
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
     const precedingVersions = previous.filter(oldRow => oldRow.subjectId === row.subjectId).map(oldRow => Number(oldRow.id.version.value));
-    assert.equal(row.id.version.value, REPERTOIRE_FRONTIER || RETURN_FREQUENCY ? precedingVersions.length === 0 ? 1 : Math.max(...precedingVersions) + 1 : HEALTH_TABLEBASE ? 12 : QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
+    assert.equal(row.id.version.value, REPERTOIRE_FRONTIER || RETURN_FREQUENCY || INSPECTOR_POPULATION ? precedingVersions.length === 0 ? 1 : Math.max(...precedingVersions) + 1 : HEALTH_TABLEBASE ? 12 : QUEUED_TABLEBASE ? 11 : BRANCH_DECIDEDNESS ? 10 : REVIEW_TRANSITIONS ? REVIEW_SUCCESSORS.includes(row.subjectId) ? 2 : 9 : BINDING_ABSENCE ? row.subjectId === "selection.semantic_policy" ? 3 : 8 : 7);
   }
   const oldProfiles = JSON.parse(old("packages/runtime/src/fixtures/evidence-value-profiles.json"));
   const profiles = JSON.parse(read("packages/runtime/src/fixtures/evidence-value-profiles.json"));
@@ -69,7 +71,7 @@ async function proof(editsOnly: boolean) {
       if (key.startsWith("derived.story.")) assert.equal(canonicalJson(profiles[successor]), canonicalJson(value), `Story output changed: ${key}`);
     }
   }
-  const newProfiles = [...successors.values(), ...(REPERTOIRE_FRONTIER ? ["derived.explorer.repertoire_frontier@1"] : []), ...(RETURN_FREQUENCY ? ["derived.explorer.position_frequency@1"] : [])].sort();
+  const newProfiles = [...successors.values(), ...(REPERTOIRE_FRONTIER ? ["derived.explorer.repertoire_frontier@1"] : []), ...(RETURN_FREQUENCY ? ["derived.explorer.position_frequency@1"] : []), ...(INSPECTOR_POPULATION ? ["derived.explorer.inspector_population@1"] : [])].sort();
   assert.deepEqual(Object.keys(profiles).filter(key => !Object.hasOwn(oldProfiles, key)).sort(), newProfiles);
   const previousReceipt = JSON.parse(old("packages/runtime/src/semantic-validation-receipt.generated.json"));
   const currentReceipt = JSON.parse(read("packages/runtime/src/semantic-validation-receipt.generated.json"));
@@ -149,7 +151,7 @@ async function proof(editsOnly: boolean) {
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
     retainedFactoryOutcomes: Object.keys(oldProfiles).length - successors.size, newFactoryProfiles: newProfiles,
     retainedSourceExecution: { projection: "live.syzygy.position_result@1", state: "registered", operation: "syzygy.position@1" },
-    scope: RETURN_FREQUENCY ? "return-frequency whole-source admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : REPERTOIRE_FRONTIER ? "repertoire whole-source frontier admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : HEALTH_TABLEBASE ? "health-wrapped source authority and typed admission failure; authored content, guard/objective computations and successful selection code unchanged" : QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
+    scope: INSPECTOR_POPULATION ? "Inspector whole-source admission and narrow registered presentation; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : RETURN_FREQUENCY ? "return-frequency whole-source admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : REPERTOIRE_FRONTIER ? "repertoire whole-source frontier admission; authored content, existing factory outcomes, guard/objective computations and opponent selection unchanged" : HEALTH_TABLEBASE ? "health-wrapped source authority and typed admission failure; authored content, guard/objective computations and successful selection code unchanged" : QUEUED_TABLEBASE ? "queued tablebase whole-source admission before the existing durable packet; authored content, guard computations and opponent selection unchanged" : BRANCH_DECIDEDNESS ? "comparison decidedness whole-source admission and explicit absence policy; authored content, guard computations and opponent selection unchanged" : REVIEW_TRANSITIONS ? "Review two-endpoint declaration and exact consumer successor migration; chess computations and authored content unchanged" : BINDING_ABSENCE ? "binding source-absence compiler metadata; current consumer policies, acquisition and authored content unchanged" : "explicit retained whole-source execution; current acquisition and authored content unchanged",
   };
 }
 

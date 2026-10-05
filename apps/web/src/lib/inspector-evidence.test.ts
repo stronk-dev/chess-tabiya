@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import type { CorpusPage, HumanSplitPage } from "./api.js";
-import { consumeCorpus, consumeHumanSplit, corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
+import { consumeHumanSplit, corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
+import { serializePresentedEvidence } from "@chess-tabiya/runtime";
 
 const human = Object.freeze({ nodeId: "n1", engine: { id: "maia", version: "1" }, targetElo: 1500, candidates: [] }) as unknown as HumanSplitPage;
-const corpus = Object.freeze({ nodeId: "n1", committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "none", population: { source: "lichess-explorer", ratings: [], speeds: [], since: "2020-01", until: "2026-08" } } }) as CorpusPage;
+const corpus: CorpusPage = { nodeId: "n1", committedMoveSan: null, committedMoveListed: null, status: { kind: "source_unavailable" }, presentation: serializePresentedEvidence([]), population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2020-01", until: "2026-08" } };
 
 describe("on-request inspector evidence", () => {
   it("admits human-model and corpus pages before rendering", () => {
@@ -13,8 +14,10 @@ describe("on-request inspector evidence", () => {
     if (false) {
       // @ts-expect-error Human inspector rejects a bare provider page.
       consumeHumanSplit(human);
-      // @ts-expect-error Corpus inspector rejects a bare provider page.
-      consumeCorpus(corpus);
     }
+  });
+  it("does not turn raw response objects into Explorer evidence", () => {
+    expect(() => corpusEvidence({ ...corpus, presentation: {} } as never)).toThrow();
+    expect(() => corpusEvidence({ ...corpus, status: { kind: "shown" } })).toThrow();
   });
 });

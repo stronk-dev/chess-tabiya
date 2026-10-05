@@ -70,6 +70,17 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
   `dependsOn` edges are not additional execution inputs. The registered digest constructor owns
   path identity, and each path retains its slowest selected latency and exact non-local leaves.
 
+## Inspector population
+
+Inspector uses `derived.explorer.inspector_population@1`: canonical move rows, WDL counts,
+unlisted mass and reported recency derived only from one sealed whole source. The actual
+server consumer checks its compiled path and exact normalized position/population/window,
+then emits a registered presentation receipt, not a raw statistics object. The browser
+checks consumer/projection/renderer identity, population attribution and committed-move
+membership without minting provider evidence. Source failure never opens bare fallback;
+the route rechecks read access, disclosure and subject after I/O. See
+[runtime corpus evidence](runtime-corpus-evidence.md).
+
 ## Return frequency
 
 The return queue also consumes a declared narrow Explorer projection:
@@ -172,7 +183,9 @@ replaced by a policy page's first candidate; D3370 records this source-contract 
   manifest digest can claim a complete image; no row is silently excluded or assigned a fallback
   operation. Exact run-subject authority ships separately; it is not the availability endpoint.
 - Remaining legacy Stockfish/Maia callers. Built-in learner tablebase and Explorer acquisitions
-  have migrated (below). Explorer's compatibility consumers still await the narrow projections.
+  have migrated (below). Inspector, Theory, repertoire and return-frequency now admit modern
+  Explorer sources through their own narrow projections. Explicit standalone Explorer
+  compatibility remains until its zero-consumer/zero-operation retirement census.
   D3367's retained whole-source registration is implemented; strict whole-image completion
   still refuses the remaining raw legacy provider projections rather than guessing or excluding them.
   Supplied sources and standalone sourcing/research clients

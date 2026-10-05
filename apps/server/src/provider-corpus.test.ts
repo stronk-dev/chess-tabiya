@@ -42,6 +42,107 @@ async function harness() {
 }
 
 describe("learner Explorer shared exchange", () => {
+  it.each(["success", "floor", "sparse", "zero", "all_unlisted", "position", "clocks", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "changed", "changed_open", "revoked", "legacy", "committed_listed", "committed_unlisted"])("admits Inspector's actual source and registered presentation (%s)", { timeout: 30_000 }, async arm => {
+    const { source, remote } = await harness();
+    let mutateDuringFetch: (() => Promise<void>) | undefined;
+    const stats = vi.fn(async (asked: CorpusQuery) => {
+      if (arm !== "legacy") throw new Error("RAW_FALLBACK_DO_NOT_DISCLOSE");
+      const { fen: _fen, ...population } = asked;
+      return { kind: "stats" as const, total: 240, white: 240, draws: 0, black: 0, population,
+        moves: [{ san: "e4", uci: "e2e4", playedCount: 120, sharePct: 50, white: 120, draws: 0, black: 0 }, { san: "a3", uci: "a2a3", playedCount: 4, sharePct: 1.7, white: 4, draws: 0, black: 0 }], recency: { kind: "month" as const, lastPlayedMonth: "2026-09" } };
+    });
+    class SuppliedSource implements CorpusSource {
+      readonly #source = source;
+      readonly stats = stats;
+      calls = 0;
+      async page(asked: CorpusQuery, options: CorpusRequestOptions = {}) {
+        this.calls += 1;
+        expect(Object.isFrozen(asked)).toBe(true);
+        expect(Object.isFrozen(asked.ratings)).toBe(true);
+        expect(options.signal).toBeDefined();
+        expect(options.deadlineMonotonic).toBeTypeOf("number");
+        if (arm === "failure") throw new Error("PRIVATE_PROVIDER_DIAGNOSTIC");
+        const crossed = arm === "position" ? { ...asked, fen: NEXT }
+          : arm === "clocks" ? { ...asked, fen: START.replace("0 1", "9 23") }
+          : arm === "ratings" ? { ...asked, ratings: [1400] as const }
+          : arm === "speeds" ? { ...asked, speeds: ["rapid"] as const }
+          : arm === "dates" ? { ...asked, since: "2025-01" } : asked;
+        const pending = this.#source.page(crossed, options);
+        await flush();
+        await mutateDuringFetch?.();
+        const total = arm === "floor" ? 100 : arm === "sparse" ? 99 : arm === "zero" ? 0 : 240;
+        remote.respond(remote.calls.length - 1, { ...body(total), moves: total === 0 || arm === "all_unlisted" ? [] : [{ uci: arm === "position" ? "e7e5" : "e2e4", san: "PRIVATE_PROVIDER_SAN", white: 120 > total ? 60 : 120, draws: 0, black: 0 }, { uci: arm === "position" ? "a7a6" : "a2a3", san: "PRIVATE_PROVIDER_SAN", white: 4, draws: 0, black: 0 }], ...(arm === "typed_failure" ? { white: "invalid" } : {}) });
+        const acquired = await pending;
+        return arm === "clone" && acquired.kind === "page" ? { ...acquired, evidence: { ...acquired.evidence } } : acquired;
+      }
+    }
+    const supplied = new SuppliedSource();
+    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
+    try {
+      await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
+      const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "inspector_owner", password: "inspector-test-password" }) });
+      expect(registered.status).toBe(201);
+      const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+      const headers = { "content-type": "application/json", cookie, "x-writer-id": "inspector-writer" };
+      const created = await fetch(`${origin}/runs`, { method: "POST", headers, body: JSON.stringify({ id: "inspector-root", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1600 } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
+      expect(created.status).toBe(201);
+      const { run } = await created.json() as { run: { nodes: { id: string }[] } };
+      const endpoint = `${origin}/runs/inspector-root/corpus?nodeId=${run.nodes[0]!.id}`;
+      expect((await fetch(endpoint)).status).toBe(401);
+      expect((await fetch(endpoint, { headers })).status).toBe(409);
+      expect(supplied.calls).toBe(0);
+      expect((await fetch(`${origin}/runs/inspector-root/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+      if (arm.startsWith("committed_")) {
+        expect((await fetch(`${origin}/runs/inspector-root/moves`, { method: "POST", headers, body: JSON.stringify({ uci: arm === "committed_listed" ? "e2e4" : "g1f3" }) })).status).toBe(200);
+        expect((await fetch(`${origin}/runs/inspector-root/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+      }
+      let readerHeaders = headers;
+      if (arm === "revoked") {
+        const guest = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "inspector_guest", password: "inspector-test-password" }) });
+        expect(guest.status).toBe(201);
+        readerHeaders = { ...headers, cookie: guest.headers.get("set-cookie")!.split(";", 1)[0]! };
+        expect((await fetch(`${origin}/runs/inspector-root/grants`, { method: "POST", headers, body: JSON.stringify({ op: "grant", handle: "inspector_guest", role: "host" }) })).status).toBe(200);
+        mutateDuringFetch = async () => { expect((await fetch(`${origin}/runs/inspector-root/grants`, { method: "POST", headers, body: JSON.stringify({ op: "revoke", handle: "inspector_guest" }) })).status).toBe(200); };
+      } else if (arm === "changed" || arm === "changed_open") mutateDuringFetch = async () => {
+        expect((await fetch(`${origin}/runs/inspector-root/moves`, { method: "POST", headers, body: JSON.stringify({ uci: "e2e4" }) })).status).toBe(200);
+        if (arm === "changed_open") expect((await fetch(`${origin}/runs/inspector-root/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+      };
+      const response = await fetch(endpoint, { headers: readerHeaders });
+      const page = await response.json();
+      if (["changed", "changed_open", "revoked"].includes(arm)) {
+        expect(response.status, JSON.stringify(page)).toBe(arm === "revoked" ? 404 : 409);
+        expect(page.error.code).toBe(arm === "revoked" ? "RUN_NOT_FOUND" : "ASSISTANCE_WITHHELD");
+        expect(JSON.stringify(page)).not.toMatch(/PRIVATE_PROVIDER|presentation|canonicalSan|240/u);
+        expect(stats).not.toHaveBeenCalled();
+        expect(supplied.calls).toBe(1);
+        return;
+      }
+      expect(response.status, JSON.stringify(page)).toBe(200);
+      expect(supplied.calls).toBe(arm === "legacy" ? 0 : 1);
+      expect(stats).toHaveBeenCalledTimes(arm === "legacy" ? 1 : 0);
+      expect(page.population).toMatchObject({ ratings: [1600], speeds: ["blitz", "rapid", "classical"] });
+      // Explorer describes a position population, not a fifty-move-rule claim. Its sole
+      // normalizer deliberately neutralizes counters; a clock-equivalent page is positive.
+      const shown = ["success", "floor", "clocks", "legacy", "all_unlisted", "committed_listed", "committed_unlisted"].includes(arm);
+      expect(page.status).toEqual(shown ? { kind: "shown" } : arm === "sparse" || arm === "zero" ? { kind: "below_floor", total: arm === "zero" ? 0 : 99 } : { kind: "source_unavailable" });
+      const items = parsePresentationReceipt(page.presentation);
+      if (shown) {
+        const text = items.map(presentedSentence).join(" ");
+        if (arm !== "all_unlisted") {
+          expect(text).toContain("e4");
+          expect(text).toContain("below the 100-game per-move floor");
+        }
+        expect(text).toContain("2026-09");
+        expect(text).toContain(arm === "floor" ? "36" : arm === "all_unlisted" ? "240 games are outside" : "116");
+        expect(items.every(item => item.adapter.consumer.id === "inspector.corpus" && item.adapter.projection.id === (arm === "legacy" ? "human.explorer.population" : "derived.explorer.inspector_population"))).toBe(true);
+      } else expect(items).toHaveLength(0);
+      expect(page.committedMoveSan).toBe(arm === "committed_listed" ? "e4" : arm === "committed_unlisted" ? "Nf3" : null);
+      expect(page.committedMoveListed).toBe(arm === "committed_listed" ? true : arm === "committed_unlisted" ? false : null);
+      expect(JSON.stringify(page)).not.toMatch(/PRIVATE_PROVIDER|RAW_FALLBACK|requestedIdentity|payloadReceipt|providerSan|responseBody/u);
+    } finally { await application.close(); }
+  });
+
   it("bounds modern return-frequency lookups, intake and same-day reordering", async () => {
     const { source, remote } = await harness();
     const store = new SQLiteRunStorage(":memory:");
@@ -716,7 +817,7 @@ describe("learner Explorer shared exchange", () => {
       const selected = await realFetch(`${origin}/runs/${run.id}/corpus?nodeId=${run.nodes[0]!.id}`, { headers: { cookie } });
       const result = await selected.json();
       expect(selected.status, JSON.stringify(result)).toBe(200);
-      expect(result).toMatchObject({ result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100" } });
+      expect(result).toMatchObject({ status: { kind: "below_floor", total: 37 }, presentation: { protocol: "presentation.receipt@1", items: [] } });
       expect(requests).toHaveLength(1);
       const delivered = await application.providers.scheduler.get({ operation: "lichess_explorer.position_page@1", request: corpusPageRequest({ ...corpusPopulation(undefined), fen: START }) }, { id: "production-proof", budgetMs: 4_000 }, new AbortController().signal);
       expect(delivered).toMatchObject({ kind: "success", delivery: { kind: "retained_exact", payload: { result: { totals: { total: 37 } } } } });

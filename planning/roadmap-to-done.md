@@ -512,6 +512,18 @@ Receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 
+**2026-10-05 Inspector checkpoint ([[D3384]]):** the authenticated corpus route now
+admits sealed whole-source Explorer evidence through a declared narrow projection and
+registered server consumer/renderer. Exact request and post-acquisition read/disclosure/
+subject checks refuse crossed/copied/failed pages without bare fallback or diagnostics.
+Population and move floors, canonical counts, unlisted mass, recency, attribution and
+committed-move membership remain unchanged; the client no longer mints corpus evidence.
+The normal focused gate passes 299 tests and clean types; exact-index software and
+browser CI pass. This closes one production source/presentation bypass, not the provider
+RFC, full UX, content or a milestone. Whole-source persistence, source contracts and
+complete execution/resolution/availability remain open. Receipt:
+`planning/provider-exchange-and-execution/inspector-corpus-2026-10-05.md`.
+
 **2026-10-05 return-frequency checkpoint ([[D3383]]):** the authenticated due queue
 admits the declared count-only Explorer projection against its exact root, rating buckets,
 speeds and date window. Copied/crossed/failed modern sources omit the optional tie-break

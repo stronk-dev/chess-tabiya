@@ -10,6 +10,16 @@ export interface ExplorerPositionFrequency {
   readonly total: number;
 }
 
+/** Inspector's narrow canonical population image; the complete source stays internal. */
+export interface ExplorerInspectorPopulation {
+  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>;
+  readonly request: ExplorerPositionPageRequest;
+  readonly totals: ExplorerWdlCounts & { readonly total: number };
+  readonly moves: readonly { readonly san: string; readonly uci: string; readonly playedCount: number; readonly white: number; readonly draws: number; readonly black: number }[];
+  readonly unlisted: number;
+  readonly lastPlayedMonth: string | null;
+}
+
 export interface ExplorerPopulationSummary {
   readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>;
   readonly position: {

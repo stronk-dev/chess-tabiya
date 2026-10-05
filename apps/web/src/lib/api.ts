@@ -658,7 +658,7 @@ export interface HumanSplitPage {
 }
 
 export type { CorpusPopulation, CorpusResult } from "@chess-tabiya/runtime";
-export interface CorpusPage { readonly nodeId: string; readonly result: CorpusResult; readonly committedMoveSan: string | null; }
+export type CorpusPage = import("@chess-tabiya/runtime").CorpusInspectorPage;
 export interface RepertoireSummary {readonly id:string;readonly name:string;readonly side:"white"|"black";readonly targetElo:number;readonly coverageDenominator:number;readonly digest:string;readonly updatedAt:string;readonly scan:null|{readonly scannedAt:string;readonly stale:boolean;readonly truncated:boolean;readonly gapCount:number}}
 export interface RepertoireView extends RepertoireSummary {readonly rootFen:string;readonly sourceKind:"pgn_paste"|"lichess_study";readonly sourceUrl:string|null;readonly licenceNote:string;readonly moves:readonly {readonly positionKey:string;readonly moveUci:string;readonly moveSan:string;readonly representativeFen:string;readonly rank:number;readonly origin:"imported"|"chosen_from_attempt"}[]}
 export interface RepertoireGap {readonly key:string;readonly representativeFen:string;readonly replySan:string;readonly replyUci:string;readonly line:readonly string[];readonly mass?:number;readonly gamesUntilSeen?:number;readonly state:"open"|"addressed"|"answered";readonly runId:string|null;readonly firstMoves:readonly {readonly moveUci:string;readonly moveSan:string}[];readonly answer:{readonly moveUci:string;readonly moveSan:string}|null}

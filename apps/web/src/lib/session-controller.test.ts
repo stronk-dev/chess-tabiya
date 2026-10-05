@@ -1,6 +1,7 @@
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
+import { corpusPageFixture } from "./corpus-presentation.test-support.js";
 import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -206,7 +207,7 @@ class FakeApi implements DrillClientApi {
   async shapes(): Promise<readonly import("./api.js").ShapeSummary[]> { return []; }
   async shape(): Promise<import("./api.js").ShapeDocument> { throw new Error("no shapes in fake"); }
   async humanSplit(_runId: string, nodeId: string): Promise<import("./api.js").HumanSplitPage> { return { nodeId, engine: { id: "maia", name: "Maia", version: "3", seedHonored: true }, targetElo: 1800, candidates: [] }; }
-  async corpus(_runId: string, nodeId: string): Promise<import("./api.js").CorpusPage> { return { nodeId, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } }; }
+  async corpus(_runId: string, nodeId: string): Promise<import("./api.js").CorpusPage> { return corpusPageFixture({ nodeId, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } }); }
   async voice(_runId: string, _nodeId: string, scope: import("./api.js").VoicePage["scope"]): Promise<import("./api.js").VoicePage> { return { text: "fixture", source: "deterministic", scope, recordedReadingsPresent: false }; }
   async compareVoice(): Promise<import("./api.js").VoicePage> { return { text: "fixture", source: "deterministic", scope: "compare", recordedReadingsPresent: false }; }
   async speech(): Promise<Blob> { return new Blob([new Uint8Array([1])], { type: "audio/test" }); }

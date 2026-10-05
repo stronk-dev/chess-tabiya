@@ -143,21 +143,27 @@ describe("consumer adapters: the Inspector's transitions, Explorer and human-mov
     expect(sentences(items).some((sentence) => /geometric count under the declared piece-geometry convention/u.test(sentence))).toBe(true);
   });
 
-  it("draws the Explorer population from playedCount / total — 2 of 25, never a pre-computed sharePct (criterion 8)", () => {
+  it("renders Explorer counts from admitted totals, never a pre-computed sharePct (criterion 8)", () => {
     const population = { source: "lichess-explorer", ratings: [1600, 1800], speeds: ["blitz", "rapid"], since: "2023-10", until: "2026-09" };
     const page = {
       nodeId: "n1", committedMoveSan: "Nf3",
-      result: { kind: "stats", total: 25, white: 10, draws: 5, black: 10, recency: { kind: "absent" }, population, moves: [
-        { san: "e4", uci: "e2e4", playedCount: 15, sharePct: 99.9, white: 6, draws: 3, black: 6 },
-        { san: "d4", uci: "d2d4", playedCount: 6, sharePct: 99.9, white: 2, draws: 2, black: 2 },
-        { san: "Nf3", uci: "g1f3", playedCount: 2, sharePct: 99.9, white: 1, draws: 0, black: 1 },
+      result: { kind: "stats", total: 250, white: 100, draws: 50, black: 100, recency: { kind: "absent" }, population, moves: [
+        { san: "e4", uci: "e2e4", playedCount: 150, sharePct: 99.9, white: 60, draws: 30, black: 60 },
+        { san: "d4", uci: "d2d4", playedCount: 60, sharePct: 99.9, white: 20, draws: 20, black: 20 },
+        { san: "Nf3", uci: "g1f3", playedCount: 20, sharePct: 99.9, white: 10, draws: 0, black: 10 },
       ] },
     };
     const items = present("inspector.corpus", [corpusPageEvidence(page)]);
-    expect(items.map((item) => item.component.id)).toEqual(["distribution", "outcome_split", "count_with_denominator"]);
-    expect(sentences(items)[2]).toBe("2 of 25 games in this population (8%).");
-    expect(sentences(items)[0]).toMatch(/e4 60%, d4 24%, Nf3 8% and other moves 8%\. Nf3 is the move you played\.$/u);
-    expect(sentences(items)[1]).toBe("25 games recorded here — below the 100-game floor. No frequencies are shown.");
+    expect(items.map((item) => item.component.id)).toEqual(["fact_statement"]);
+    expect(sentences(items)[0]).toContain("Nf3 — 20 of 250 games (8.0%). Outcome split withheld below the 100-game per-move floor.");
+    expect(sentences(items)[0]).toContain("20 games are outside the listed move rows.");
+    expect(() => present("inspector.corpus", [corpusPageEvidence({ ...page, result: { ...page.result, total: 25 } })])).toThrow();
+    for (const result of [
+      { ...page.result, recency: { kind: "month", lastPlayedMonth: "2026-99" } },
+      { ...page.result, population: { ...population, since: "2026-10" } },
+      { ...page.result, moves: [...page.result.moves].reverse() },
+      { ...page.result, moves: page.result.moves.map((row, index) => index === 1 ? { ...row, uci: "e2e4" } : row) },
+    ]) expect(() => present("inspector.corpus", [corpusPageEvidence({ ...page, result })])).toThrow();
     expect(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("inspector.corpus"), [corpusPageEvidence(page)]))))).not.toMatch(/sharePct|99\.9/u);
     const source = readFileSync(new URL("./presentation-contract.ts", import.meta.url), "utf8");
     expect(source).not.toMatch(/\b\w*(?:Pct|Percent)\??\s*:\s*number/u);

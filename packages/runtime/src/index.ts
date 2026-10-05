@@ -271,6 +271,7 @@ export {
   type CorpusMoveRow,
   type CorpusPopulation,
   type CorpusResult,
+  type CorpusInspectorPage,
   type CorpusResultAbstentionReason,
   type CorpusStatsResult,
 } from "./corpus-result.js";
@@ -393,6 +394,7 @@ export {
   corpusPositionEvidence,
   deriveExplorerPopulationSummary,
   deriveExplorerPositionFrequency,
+  deriveExplorerInspectorPopulation,
   deriveExplorerRepertoireFrontier,
   deriveMaiaRunMoveOccurrence,
   deriveMaiaExactFenMoveOccurrence,
@@ -1087,7 +1089,7 @@ export {
 } from "./material-state.js";
 
 export { CORPUS_GUARD } from "./population-guard.js";
-export { explorerPopulationSummaryWire, renderedProviderItems, type ExplorerPopulationSummary, type ExplorerPopulationSummaryWire, type ExplorerPositionFrequency } from "./explorer-summary.js";
+export { explorerPopulationSummaryWire, renderedProviderItems, type ExplorerPopulationSummary, type ExplorerPopulationSummaryWire, type ExplorerPositionFrequency, type ExplorerInspectorPopulation } from "./explorer-summary.js";
 export type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 
 export const runtimeBuildInfo = Object.freeze({

@@ -26,7 +26,7 @@ import { STRUCTURAL_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 import type { DrillRun, EvidencePayload, Node, SelectionEngineIdentity } from "./types.js";
 import type { RecordedReading } from "./voice.js";
 import type { RecordedEdge } from "./recorded-edge.js";
-import type { ExplorerPopulationSummary, ExplorerPositionFrequency } from "./explorer-summary.js";
+import type { ExplorerPopulationSummary, ExplorerPositionFrequency, ExplorerInspectorPopulation } from "./explorer-summary.js";
 import type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 import type { MaiaExactFenMoveOccurrence, MaiaOccurrencePageEvidence, MaiaRunMoveOccurrence } from "./maia-occurrence.js";
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
@@ -223,6 +223,10 @@ export function deriveExplorerPopulationSummary(page: DeclaredEvidence<ProviderE
 /** Literal root frequency; scheduling rules and the sample floor remain consumer-owned. */
 export function deriveExplorerPositionFrequency(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerPositionFrequency> {
   return invokeEvidenceValueRoute("derived.explorer.position_frequency@1", { page });
+}
+
+export function deriveExplorerInspectorPopulation(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerInspectorPopulation> {
+  return invokeEvidenceValueRoute("derived.explorer.inspector_population@1", { page });
 }
 
 /** Whole source and unlisted mass remain available to the frontier's own sample policy. */

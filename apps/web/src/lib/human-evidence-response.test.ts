@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
+import { corpusPageFixture } from "./corpus-presentation.test-support.js";
 
 const engine = Object.freeze({ id: "maia", name: "Maia 1600", version: "3", modelId: "maia-1600", seedHonored: true, eloHonored: true, eloApplied: 1600 });
 const split = Object.freeze({
@@ -11,7 +12,7 @@ const split = Object.freeze({
   ],
 });
 const population = Object.freeze({ source: "lichess-explorer", ratings: [1400, 1600], speeds: ["blitz", "rapid"], since: "2023-09", until: "2026-08" });
-const corpus = Object.freeze({
+const rawCorpus = Object.freeze({
   nodeId: "node-1", committedMoveSan: "e5",
   result: {
     kind: "stats", total: 200, white: 90, draws: 50, black: 60,
@@ -22,6 +23,7 @@ const corpus = Object.freeze({
     recency: { kind: "month", lastPlayedMonth: "2026-07" }, population,
   },
 });
+const corpus = corpusPageFixture(rawCorpus as Parameters<typeof corpusPageFixture>[0]);
 
 describe("human evidence response authority", () => {
   it("accepts and deeply freezes a bound Maia candidate page", () => {
@@ -42,17 +44,20 @@ describe("human evidence response authority", () => {
 
   it("accepts and deeply freezes stats and abstention corpus pages", () => {
     const stats = parseCorpusPage(corpus, "node-1");
-    expect(stats).toEqual(corpus); expect(Object.isFrozen(stats.result)).toBe(true); expect(Object.isFrozen(stats.result.population.ratings)).toBe(true);
-    expect(parseCorpusPage({ nodeId: "node-1", committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population } }, "node-1").result.kind).toBe("abstention");
+    expect(stats).toEqual(corpus); expect(Object.isFrozen(stats.presentation)).toBe(true); expect(Object.isFrozen(stats.population.ratings)).toBe(true);
+    expect(parseCorpusPage(corpusPageFixture({ nodeId: "node-1", committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population } }), "node-1").status.kind).toBe("below_floor");
   });
 
   it.each([
     [{ ...corpus, nodeId: "node-2" }],
-    [{ ...corpus, result: { ...corpus.result, total: 201 } }],
-    [{ ...corpus, result: { ...corpus.result, moves: [{ ...corpus.result.moves[0], sharePct: 61 }] } }],
-    [{ ...corpus, result: { ...corpus.result, moves: [...corpus.result.moves].reverse() } }],
-    [{ ...corpus, result: { ...corpus.result, recency: { kind: "month", lastPlayedMonth: "2026-13" } } }],
-    [{ ...corpus, result: { ...corpus.result, population: { ...population, ratings: [1600, 1400] } } }],
+    [{ ...corpus, presentation: { ...corpus.presentation, digest: `sha256:${"0".repeat(64)}` } }],
+    [{ ...corpus, status: { kind: "below_floor", total: 100 } }],
+    [{ ...corpus, committedMoveListed: null }],
+    [{ ...corpus, presentation: { ...corpus.presentation, items: [] } }],
+    [{ ...corpus, population: { ...population, ratings: [1600, 1400] } }],
+    [{ ...corpus, population: { ...population, ratings: [1600] } }],
+    [{ ...corpus, committedMoveListed: false }],
+    [rawCorpus],
   ])("refuses crossed, inconsistent, unordered, or out-of-window corpus bytes", (value) => {
     expect(() => parseCorpusPage(value, "node-1")).toThrow(TypeError);
   });

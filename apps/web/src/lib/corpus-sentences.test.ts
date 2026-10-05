@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CORPUS_GUARD, renderCorpusPage } from "./corpus-sentences.js";
+import { corpusPageFixture } from "./corpus-presentation.test-support.js";
 
 const population = { source: "lichess-explorer" as const, ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" };
 describe("corpus sentence closure", () => {
@@ -9,7 +10,7 @@ describe("corpus sentence closure", () => {
       { nodeId: "n", committedMoveSan: "a3", result: { kind: "stats" as const, total: 120, white: 60, draws: 20, black: 40, moves: [], recency: { kind: "absent" as const }, population } },
       { nodeId: "n", committedMoveSan: null, result: { kind: "abstention" as const, reason: "no_data_at_band" as const, detail: "total 37 < 100", population } },
       { nodeId: "n", committedMoveSan: null, result: { kind: "abstention" as const, reason: "source_unavailable" as const, detail: "HTTP 429", population } },
-    ];
+    ].map(corpusPageFixture);
     for (const page of pages) { const rendered = renderCorpusPage(page); expect(rendered[1]).toBe(CORPUS_GUARD); expect(rendered.join(" ")).not.toMatch(/\b(best|strong|dubious|mistake|recommended)\b/i); }
     expect(renderCorpusPage(pages[2]!)).toContain("37 games recorded here — below the 100-game abstention floor. No frequencies are shown.");
     expect(renderCorpusPage(pages[0]!)).toContain("a3 — 4 of 240 games (1.7%). Outcome split withheld below the 100-game per-move floor.");

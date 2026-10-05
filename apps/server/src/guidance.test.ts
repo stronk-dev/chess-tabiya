@@ -617,7 +617,7 @@ describe("adaptive guidance server seams", () => {
     service.reveal("guide", "writer", at);
     const opened = await handler(request(path));
     expect(opened.status).toBe(200);
-    expect(await opened.json()).toMatchObject({ result: { kind: "stats", total: 120 }, committedMoveSan: null });
+    expect(await opened.json()).toMatchObject({ status: { kind: "shown" }, presentation: { protocol: "presentation.receipt@1" }, committedMoveSan: null });
     expect(service.events("guide", 0).events.filter((event) => event.type === "evidence.attached")).toEqual(before.events.filter((event) => event.type === "evidence.attached"));
     service.move("guide", "writer", "e2e4", { at });
     expect((await handler(request(`/runs/guide/corpus?nodeId=${encodeURIComponent(service.graph("guide").activeCursor.nodeId)}`))).status).toBe(409);

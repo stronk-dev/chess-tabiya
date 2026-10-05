@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
+import { corpusPageFixture } from "./corpus-presentation.test-support.js";
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -1522,7 +1523,7 @@ describe("Layer 3 screens", () => {
       targetElo: 1500,
       candidates: [{ moveUci: "e1e2", mass: .4, rank: 1 }],
     }));
-    const onCorpus = vi.fn(async () => ({
+    const onCorpus = vi.fn(async () => corpusPageFixture({
       nodeId: wrongNodeId,
       committedMoveSan: null,
       result: {

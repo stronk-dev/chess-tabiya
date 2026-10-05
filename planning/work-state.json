@@ -27849,11 +27849,12 @@
     },
     {
       "id": "D3384",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:493795964d83e333cad9fc75f2f155d99781b94d687c06bd5e73bd339c7192b9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2d152257ff5f8d1a4729fa15ffa521bea06936ea20703c2b9969a34dc55be986",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/provider-exchange-and-execution/inspector-corpus-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

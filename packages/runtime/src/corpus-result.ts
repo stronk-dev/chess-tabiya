@@ -52,6 +52,16 @@ export type CorpusResult<Population extends CorpusPopulation = CorpusPopulation>
   | CorpusStatsResult<Population>
   | CorpusAbstentionResult<Population>;
 
+/** Inspector transport has one registered presentation, not a second raw statistics authority. */
+export interface CorpusInspectorPage<Population extends CorpusPopulation = CorpusPopulation> {
+  readonly nodeId: string;
+  readonly population: Population;
+  readonly status: { readonly kind: "shown" } | { readonly kind: "below_floor"; readonly total: number } | { readonly kind: "source_unavailable" };
+  readonly presentation: import("./presentation-contract.js").PresentationReceipt;
+  readonly committedMoveSan: string | null;
+  readonly committedMoveListed: boolean | null;
+}
+
 const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/u;
 
 function plainRecord(value: unknown, label: string): Record<string, unknown> {
