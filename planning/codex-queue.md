@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 exact-version capability checkpoint
+
+D3405 repairs the actual public compatibility binding projection: consumers are joined by
+id/version, preserving predecessor and successor fallback policies independently. The six
+negative controls failed against the old id-only join and now pass; the normal focused gate
+passes 35 tests and clean types. All 556 bindings remain, with unchanged declarations, wire
+shape, manifest digest, health authority and current learner policy. Evidence is the permanent
+`apps/server/src/evidence-manifest.test.ts` suite and the append-only exploration log.
+
+This is a scoped version-identity repair, not provider satisfaction or full RFC completion.
+Continue the full execution/source-resolution work below; D3363/D3370/D3373/D3376 and
+D3391/D3392 remain explicit contract holds. Routine tracker/hash maintenance is automatic.
+
 ## 2026-10-05 complete Guided Hint execution checkpoint
 
 D3404 supplies all 35 required-search source-absence policies and preflights the

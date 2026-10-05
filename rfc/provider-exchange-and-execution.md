@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **2026-10-05 exact-version capability checkpoint:** D3405 makes the public compatibility binding summary join each consumer by id and version, never by family name alone. Four genuine compiled predecessor/successor pairs with differing valid policies, order reversal and a missing exact successor expose the old defect; all six negatives pass after repair. The normal focused gate passes 35 tests and clean types. Current declaration policies, wire shape, manifest digest, complete binding population and provider-health authority are unchanged. This does not establish request-specific satisfaction or close the remaining execution/source-contract obligations. Evidence: `apps/server/src/evidence-manifest.test.ts`; closeout in `planning/exploration/log.md`.
+
 - **2026-10-05 Guided Hint preflight checkpoint:** D3404 supplies all 35 required-search binding policies and compiles the complete exact consumer before source or retained-horizon use. Six authenticated cold/cache faults refuse before acquisition; request/poll preserves the currently permitted ladder and one shared search. The diagnostic inventory now has 495/556 isolated bindings and 21/42 complete consumers compiled, with all 14 unsupported provider declarations and remaining 61 binding refusals retained. Full manifest execution/digest, occurrence resolution and authenticated availability remain open. Receipt: `planning/provider-exchange-and-execution/guided-hint-preflight-2026-10-05.md`. This is not RFC or milestone completion.
 
 - **Research checkpoint 2026-10-05, complete execution frontier:** D3403 measures every current projection/binding/exact consumer: 262/285, 460/556 and 20/42 compile; all 23/96/22 refusals remain. Fourteen raw source declarations and 46 missing policies are separated. D3404 owns the next production wave: all 35 modern Guided Hint bindings lack absence policy, independently of source-contract holds. Eight diagnostic controls pass. This is disposable research, not an executable partial manifest, runtime adoption, availability or RFC completion. Receipt: `planning/provider-exchange-and-execution/execution-frontier-2026-10-05.md` and `execution-frontier.json`.
@@ -2140,6 +2142,10 @@ not product rulings. If cross-review finds an uncheckable source identity or ope
 returns to author instead of accepting a placeholder.
 
 ## Changelog
+
+- 2026-10-05: D3405 repairs the global compatibility summary's exact consumer-version join.
+  The source-absence algebra and all current policies remain unchanged; the compatibility
+  result is not authenticated exact-subject availability. No new resource claim or RFC completion.
 
 - 2026-10-04: D3369 implements strict binding execution and closed absence aggregation,
   preserving current consumer declarations and legacy refusal. Fifty focused checks include

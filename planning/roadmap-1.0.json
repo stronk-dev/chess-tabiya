@@ -797,12 +797,14 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "D3404 complete Guided Hint preflight is verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
+        "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3404 closes all 35 Guided Hint required-search policies and actual complete-consumer preflight before identity, search, packets or cached-horizon reuse. Six authenticated cold/cache faults refuse with zero acquisition; successful request/poll preserves the permitted ladder and one shared search. Source-unavailable stays distinct from no-admitted-occurrence honest-empty; local theory/structure and disclosure/policy behavior remain. Focused 83 tests and clean types pass; complete exact-index software passes 3104 tests/334 files and seven isolated performance tests; content passes 223 tests/all 104 requirements; rebuilt browser CI passes 119 journeys, one optional skip and zero retries. Preservation retains 963 predecessors and all 278 factory outcomes; only requirement stamps/hashes change. Diagnostic census: 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers compiled; whole manifest still refuses and census runtime adoption remains not-measured. Zero untriaged/1682 live. Full execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
+          "summary": "D3405 repairs the public compatibility fallback join by exact consumer id/version. Four genuine compiled contrasting-policy pairs, declaration-order reversal and missing exact successor reproduced the old join; 35 focused tests and clean types pass. All 556 bindings, current policies, wire shape, manifest digest and provider health authority remain unchanged. Complete exact-index software passes 3111 tests/334 files, seven isolated performance tests and downstream contracts; content passes 223 tests/all 104 requirements with no clearance errors. Rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries; governance and exact staged process checks are green. D3404 complete Guided Hint preflight remains implemented. The diagnostic census remains 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers compiled, never runtime-adoption proof; all 14 raw provider declarations and whole-manifest refusal remain. Zero untriaged/1682 live. Full execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376/D3391/D3392 contract holds remain open. No RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
+            "apps/server/src/evidence-manifest.test.ts",
+            "apps/server/src/evidence-manifest.ts",
             "planning/provider-exchange-and-execution/guided-hint-preflight-2026-10-05.md",
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
             "rfc/semantic-validation-authority.md",
@@ -1215,6 +1217,11 @@
               "kind": "work_state",
               "id": "D3404",
               "digest": "sha256:f04107e71eeb7cbcdedada77427b37a0dfd47c67a53b128a0c111a56c048b0c1"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3405",
+              "digest": "sha256:a4e0191c36c607f0d2937cbfdb36032af5702db8d860f97fabe8776941342b48"
             }
           ]
         },

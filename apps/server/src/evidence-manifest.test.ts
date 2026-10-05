@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { EVIDENCE_CONTRACT_DECLARATIONS } from "@chess-tabiya/runtime";
+import { EVIDENCE_CONTRACT_DECLARATIONS, compileEvidenceManifest } from "@chess-tabiya/runtime";
 
 import {
   EVIDENCE_MANIFEST,
@@ -10,6 +10,7 @@ import {
   SOURCING_PROJECTION_MAP,
   assertEvidenceManifest,
   evidenceManifestCapabilities,
+  evidenceConsumerBindingSummaries,
 } from "./evidence-manifest.js";
 import { testProviderHealth } from "./provider-health.test-support.js";
 import { RECORDED_READING_DISPOSITIONS } from "./position-evidence.js";
@@ -17,6 +18,60 @@ import { EVIDENCE_KINDS } from "./sourcing/types.js";
 import { CAPABILITY_DISPOSITIONS } from "./capabilities.js";
 
 describe("server evidence manifest aggregate", () => {
+  const successorFamilies = ["inspector.corpus", "runtime.repertoire_scan", "runtime.return_frequency", "opponent.selection"] as const;
+
+  function distinctPolicyManifest() {
+    // Compile real declarations, not hand-authored binding summaries. Existing policies happen
+    // to match across these versions, so a different valid successor policy is the falsifier.
+    const successor = (ref: { readonly id: string; readonly version: number }) => successorFamilies.some(id => id === ref.id) && ref.version === 2;
+    const policy = (id: string) => id === "opponent.selection" ? "honest_empty" as const : "unavailable" as const;
+    return compileEvidenceManifest({
+      ...EVIDENCE_CONTRACT_DECLARATIONS,
+      consumers: EVIDENCE_CONTRACT_DECLARATIONS.consumers.map(row => successor(row) ? { ...row, providerOff: policy(row.id) } : row),
+      adapters: EVIDENCE_CONTRACT_DECLARATIONS.adapters.map(row => successor(row.consumer) ? { ...row, providerOff: policy(row.consumer.id) } : row),
+    });
+  }
+
+  it.each(successorFamilies)("keeps %s predecessor and successor fallback policies separate", family => {
+    const manifest = distinctPolicyManifest();
+    const summaries = evidenceConsumerBindingSummaries(manifest);
+    for (const version of [1, 2]) {
+      const declared = manifest.consumers.find(row => row.id === family && row.version === version)!;
+      const rows = summaries.filter(row => row.consumerId === family && row.consumerVersion === version);
+      expect(rows.length).toBeGreaterThan(0);
+      expect(rows.every(row => row.providerOff === declared.providerOff)).toBe(true);
+    }
+    expect(manifest.consumers.find(row => row.id === family && row.version === 1)!.providerOff)
+      .not.toBe(manifest.consumers.find(row => row.id === family && row.version === 2)!.providerOff);
+  });
+
+  it("joins all exact versions independently of declaration order without mutating the manifest", () => {
+    const manifest = distinctPolicyManifest();
+    const before = JSON.stringify(manifest);
+    const expected = evidenceConsumerBindingSummaries(manifest);
+    expect(evidenceConsumerBindingSummaries({ ...manifest, consumers: [...manifest.consumers].reverse() })).toEqual(expected);
+    expect(expected).toHaveLength(manifest.bindings.length);
+    expect(Object.isFrozen(expected)).toBe(true);
+    expect(expected.every(row => Object.isFrozen(row))).toBe(true);
+    expect(JSON.stringify(manifest)).toBe(before);
+  });
+
+  it("refuses a missing exact version instead of borrowing the remaining predecessor", () => {
+    const manifest = distinctPolicyManifest();
+    expect(() => evidenceConsumerBindingSummaries({ ...manifest, consumers: manifest.consumers.filter(row => row.id !== "inspector.corpus" || row.version !== 2) }))
+      .toThrow(/inspector\.corpus@2/u);
+  });
+
+  it("publishes the complete canonical binding projection, not a subset or a new authority", async () => {
+    const value = evidenceManifestCapabilities(await testProviderHealth({}));
+    expect(value.bindings).toEqual(evidenceConsumerBindingSummaries(EVIDENCE_MANIFEST));
+    expect(value.bindings).toHaveLength(EVIDENCE_MANIFEST.bindings.length);
+    expect(value.digest).toBe(EVIDENCE_MANIFEST.digest);
+    for (const row of value.bindings) {
+      expect(row.providerOff).toBe(EVIDENCE_MANIFEST.consumers.find(consumer => consumer.id === row.consumerId && consumer.version === row.consumerVersion)!.providerOff);
+    }
+  });
+
   it("uses the shared catalogue and closes current runtime, sourcing, recorded and packet vocabularies", () => {
     expect(assertEvidenceManifest()).toBe(EVIDENCE_MANIFEST);
     expect(EVIDENCE_MANIFEST.producers).toHaveLength(EVIDENCE_CONTRACT_DECLARATIONS.producers.length);

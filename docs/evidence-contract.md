@@ -22,6 +22,11 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
+The public binding summary resolves fallback policy by the complete consumer id/version tuple.
+Coexisting predecessors and successors keep their own policy even when declaration order changes;
+a missing exact consumer refuses rather than borrowing another version. This compatibility summary
+does not claim that evidence exists for a subject or replace the source-absence algebra.
+
 Consumer operation registration uses exact id/version identities. `evidenceConsumerOperation`
 defaults to version 1 for existing callers and takes an explicit positive safe-integer version
 for a declared successor. `assertEvidenceConsumerOperations` requires a callable matching

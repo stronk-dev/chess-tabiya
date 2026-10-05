@@ -28035,6 +28035,15 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/guided-hint-preflight-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3405",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a4e0191c36c607f0d2937cbfdb36032af5702db8d860f97fabe8776941342b48",
+      "uxItems": [],
+      "evidence": "apps/server/src/evidence-manifest.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -2804,6 +2804,11 @@ provider-execution-census: provider-execution-census-build
 provider-execution-census-update: provider-execution-census-build
 	$(CI_NODE) tools/d3403-execution-frontier/dist/report.js --write
 
+.PHONY: capability-consumer-versions-check
+capability-consumer-versions-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/evidence-manifest.test.ts apps/server/src/capabilities.test.ts apps/server/src/capability-operations.test.ts
+	$(MAKE) typecheck
+
 .PHONY: guided-hint-execution-check
 guided-hint-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/guided-hint-execution.test.ts apps/server/src/hint-execution-preflight.test.ts apps/server/src/hint-service.test.ts packages/runtime/src/hint-distance.test.ts packages/runtime/src/evidence-binding-execution.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/evidence-catalog.test.ts

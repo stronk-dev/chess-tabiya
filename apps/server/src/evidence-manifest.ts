@@ -111,20 +111,30 @@ function providerState(producerId: string, health: ProviderHealthCapabilities, o
   return Object.freeze({ producerId, version: 1, state: result[0], reason: result[1] });
 }
 
-export function evidenceManifestCapabilities(health: ProviderHealthCapabilities, openingCatalogue?: OpeningCatalogueAvailability): EvidenceManifestCapabilities {
-  assertEvidenceManifest();
-  const consumerById = new Map(EVIDENCE_MANIFEST.consumers.map((consumer) => [consumer.id, consumer]));
-  return Object.freeze({
-    digest: EVIDENCE_MANIFEST.digest,
-    counts: Object.freeze({ producers: EVIDENCE_MANIFEST.producers.length, projections: EVIDENCE_MANIFEST.projections.length, consumers: EVIDENCE_MANIFEST.consumers.length, bindings: EVIDENCE_MANIFEST.bindings.length, semanticEvents: EVIDENCE_MANIFEST.semanticEvents.length, eligibility: EVIDENCE_MANIFEST.eligibility.length, reasons: EVIDENCE_MANIFEST.reasons.length, selectionPolicies: EVIDENCE_MANIFEST.selectionPolicies.length }),
-    availability: Object.freeze(EVIDENCE_MANIFEST.producers.map((producer) => providerState(producer.id, health, openingCatalogue))),
-    bindings: Object.freeze(EVIDENCE_MANIFEST.bindings.map((binding) => Object.freeze({
+/** The consumer-safe projection used by the public capability operation. */
+export function evidenceConsumerBindingSummaries(manifest: CompiledEvidenceManifest): readonly EvidenceConsumerBindingSummary[] {
+  const key = (ref: { readonly id: string; readonly version: number }): string => `${ref.id}@${ref.version}`;
+  const consumers = new Map(manifest.consumers.map(consumer => [key(consumer), consumer]));
+  return Object.freeze(manifest.bindings.map(binding => {
+    const consumer = consumers.get(key(binding.consumer));
+    if (consumer === undefined) throw new TypeError(`Capability binding consumer is undeclared: ${key(binding.consumer)}`);
+    return Object.freeze({
       consumerId: binding.consumer.id,
       consumerVersion: binding.consumer.version,
       projectionId: binding.projection.id,
       projectionVersion: binding.projection.version,
       forms: binding.forms,
-      providerOff: consumerById.get(binding.consumer.id)!.providerOff,
-    }))),
+      providerOff: consumer.providerOff,
+    });
+  }));
+}
+
+export function evidenceManifestCapabilities(health: ProviderHealthCapabilities, openingCatalogue?: OpeningCatalogueAvailability): EvidenceManifestCapabilities {
+  assertEvidenceManifest();
+  return Object.freeze({
+    digest: EVIDENCE_MANIFEST.digest,
+    counts: Object.freeze({ producers: EVIDENCE_MANIFEST.producers.length, projections: EVIDENCE_MANIFEST.projections.length, consumers: EVIDENCE_MANIFEST.consumers.length, bindings: EVIDENCE_MANIFEST.bindings.length, semanticEvents: EVIDENCE_MANIFEST.semanticEvents.length, eligibility: EVIDENCE_MANIFEST.eligibility.length, reasons: EVIDENCE_MANIFEST.reasons.length, selectionPolicies: EVIDENCE_MANIFEST.selectionPolicies.length }),
+    availability: Object.freeze(EVIDENCE_MANIFEST.producers.map((producer) => providerState(producer.id, health, openingCatalogue))),
+    bindings: evidenceConsumerBindingSummaries(EVIDENCE_MANIFEST),
   });
 }
