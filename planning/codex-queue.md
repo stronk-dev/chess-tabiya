@@ -1,5 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 complete opponent tablebase preflight checkpoint
+
+D3402 closes complete binding preflight before every modern root and practical-resistance
+reply probe. The exact v2 consumer/adapter/callable coexists with the full v1 Stockfish/Maia/
+standalone contract. Nine authenticated root/reply fault controls refuse before further
+source acquisition; no move/diagnostic leak or bare fallback remains. Selection, cancellation,
+source/clock identity and cache behavior stay intact. The focused gate passes 173 tests;
+complete exact-index software passes 3096 tests/332 files and seven isolated performance
+tests. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes
+119 journeys, one existing optional skip and zero retries. Receipt:
+`planning/provider-exchange-and-execution/opponent-tablebase-preflight-2026-10-05.md`.
+
+Next: inventory the remaining modern consumer execution paths, complete manifest execution/
+digest and exact source-occurrence resolution, then authenticated availability. Preserve
+explicit historical contracts; do not filter away raw bindings or invent source authority.
+D3391/D3392 and D3363/D3370/D3373/D3376 remain separate author holds. Whole-source persistence,
+zero-consumer retirement and full Support/Review/bot/learner joins remain open. Routine
+metadata/hash maintenance is automatic, not an owner decision or feature-progress claim.
+
 ## 2026-10-05 complete Explorer consumer preflight checkpoint
 
 D3401 closes all three actual modern consumers' complete binding preflight before provider

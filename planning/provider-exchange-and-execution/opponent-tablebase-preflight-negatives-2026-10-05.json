@@ -1,0 +1,37 @@
+{
+  "baseline": "9287ff1f",
+  "scope": "Production authenticated opponent selection, not a manufactured provider or compiler failure",
+  "predecessorGate": {
+    "command": "make opponent-tablebase-preflight-check",
+    "exitCode": 2,
+    "passedTests": 162,
+    "failedTests": 7,
+    "perfectTablebase": {
+      "controls": ["missing_policy", "impossible_latency", "extra_raw_binding"],
+      "observed": "HTTP 200 with a selected move; complete consumer compiler never called"
+    },
+    "practicalResistance": {
+      "controls": ["missing_policy", "impossible_latency", "extra_raw_binding"],
+      "observed": "Two modern source calls before a later crossed-position HTTP 503; absence of preflight proved by call count rather than status alone"
+    },
+    "positiveOrdering": "Only source in trace, not compile then source"
+  },
+  "metadataProofCorrection": {
+    "command": "make opponent-tablebase-preflight-metadata-update",
+    "initialExitCode": 2,
+    "cause": "Comparison image retained one extra newline when removing the new successor callable",
+    "effect": "Preservation check refused before authored-document metadata writes",
+    "repair": "Remove the excluded span without adding a newline; retain exact equality outside modern source admission",
+    "finalExitCode": 0
+  },
+  "fixedFocusedGate": {
+    "command": "make opponent-tablebase-preflight-check",
+    "exitCode": 0,
+    "passedTests": 173,
+    "files": 9,
+    "rootFaultConsumerSourceCalls": 0,
+    "replyFaultConsumerSourceCalls": 1,
+    "retriesAdded": 0,
+    "sourceFixtureAcquisition": "Each HTTP control prepares one genuine sealed scheduler delivery before instrumenting consumer I/O; zero-call assertions apply to the authenticated consumer, not fixture preparation"
+  }
+}

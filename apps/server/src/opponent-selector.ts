@@ -9,7 +9,7 @@ import {
   applicationProviderExecution,
   assertConsumerEvidenceView,
   assertProviderDelivery,
-  compileProjectionExecution,
+  compileEvidenceConsumerExecution,
   opponentProviderEvidence as declareOpponentProviderEvidence,
   evidenceForConsumer,
   PolicyMassError,
@@ -234,6 +234,21 @@ export function consumeOpponentSelectionEvidence(view: ConsumerEvidenceView<Oppo
   assertConsumerEvidenceView(view);
   if (view.consumer.id !== "opponent.selection" || view.consumer.version !== 1) throw new TypeError("Expected opponent.selection@1 consumer view");
   return Object.freeze(view.items.map((item) => item.payload));
+}
+
+const TABLEBASE_SELECTION_CONSUMER = Object.freeze({ id: "opponent.selection", version: 2 });
+type OpponentTablebaseDelivery = ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">;
+
+/** Exact successor admission; the multi-provider/standalone v1 callable is unchanged. */
+export function consumeOpponentTablebaseSelectionEvidence(view: ConsumerEvidenceView<OpponentTablebaseDelivery>): OpponentTablebaseDelivery {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== TABLEBASE_SELECTION_CONSUMER.id || view.consumer.version !== TABLEBASE_SELECTION_CONSUMER.version ||
+      view.items.length !== 1 || view.items[0]!.projection.id !== "live.syzygy.position_result" || view.items[0]!.projection.version !== 2) {
+    throw new TypeError("Expected one whole opponent.selection@2 tablebase source");
+  }
+  const delivery = view.items[0]!.payload;
+  assertProviderDelivery("syzygy.position@1", delivery);
+  return delivery;
 }
 
 function opponentProviderEvidence<T extends OpponentProviderPayload>(source: "maia" | "stockfish" | "syzygy", payload: T): T {
@@ -767,16 +782,19 @@ export class OpponentSelector {
       return opponentProviderEvidence("syzygy", position);
     }
     try {
+      // Compile ALL successor bindings before any acquisition, including each practical reply.
+      // Filtering v1's raw Stockfish/Maia contracts would manufacture an executable consumer.
+      const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, TABLEBASE_SELECTION_CONSUMER);
+      if (!execution.bindings.some(row => row.binding.projection.id === "live.syzygy.position_result" && row.binding.projection.version === 2 &&
+          row.paths.every(path => path.sourceRequirements.some(requirement => requirement.providerOperation === "syzygy.position@1")))) {
+        throw new TypeError("Tablebase selection has no admitted complete source execution");
+      }
       const evidence = await source.probeEvidence(fen, options);
       signal?.throwIfAborted();
       if (evidence.projection.id !== "live.syzygy.position_result" || evidence.projection.version !== 2) {
         throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase source returned another evidence projection");
       }
-      const execution = compileProjectionExecution(EVIDENCE_MANIFEST, evidence.projection);
-      if (execution.own.providerOperation !== "syzygy.position@1") throw new TypeError("Tablebase source has another execution operation");
-      const admitted = consumeOpponentSelectionEvidence(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "opponent.selection", version: 1 }, [evidence]));
-      const delivery = admitted[0] as ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">;
-      assertProviderDelivery("syzygy.position@1", delivery);
+      const delivery = consumeOpponentTablebaseSelectionEvidence(evidenceForConsumer(EVIDENCE_MANIFEST, TABLEBASE_SELECTION_CONSUMER, [evidence]));
       if (delivery.payload.fen !== fen || delivery.acquisition.requestedIdentity.request.fen !== fen) {
         throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase evidence does not match the requested position");
       }

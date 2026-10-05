@@ -207,13 +207,16 @@ replaced by a policy page's first candidate; D3370 records this source-contract 
 ## Learner tablebase probes
 
 The built-in opponent selector now consumes the whole source delivery through
-`probeEvidence` and `opponent.selection@1` before reading any position. It checks the
-registered execution operation, seal and exact requested/payload FEN (including clocks).
-Root and practical-resistance reply probes share this path; provider failure cannot
+`probeEvidence` and the exact `opponent.selection@2` consumer before reading any position.
+All successor bindings compile with their literal source-absence policy and latency before
+each acquisition; v1's complete multi-provider/standalone declaration remains unchanged.
+The sole registered v2 callable checks the whole delivery seal and exact requested/payload
+FEN (including clocks). Root and practical-resistance reply probes share this path; provider failure cannot
 fall back to the bare compatibility probe. The bound source is the v2 successor;
 the operator-only v1 declaration remains frozen. Standalone/fixture sources and the
 durable worker's old packet remain distinct pending their own migration. Receipt:
-`planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`.
+`planning/provider-exchange-and-execution/tablebase-selection-2026-10-04.md`; current preflight:
+`planning/provider-exchange-and-execution/opponent-tablebase-preflight-2026-10-05.md`.
 
 `createApplication` now supplies one `ExchangeTablebaseSource` to the opponent selector, run
 service and durable evidence queue when the built-in Lichess tablebase is configured. It calls the

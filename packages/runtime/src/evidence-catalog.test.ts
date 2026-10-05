@@ -61,12 +61,13 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 285, 41, 555]); // Three modern Explorer consumer successors retain all v1 declarations.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 285, 42, 556]); // Modern consumer successors retain all v1 declarations.
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");
     expect(manifest.bindings.filter(binding => binding.projection.id === "live.syzygy.position_result")).toEqual([
       expect.objectContaining({ projection: { id: "live.syzygy.position_result", version: 2 }, consumer: { id: "opponent.selection", version: 1 } }),
+      expect.objectContaining({ projection: { id: "live.syzygy.position_result", version: 2 }, consumer: { id: "opponent.selection", version: 2 }, sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } }),
       expect.objectContaining({ projection: { id: "live.syzygy.position_result", version: 2 }, consumer: { id: "runtime.branch_decidedness", version: 1 }, sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } }),
       expect.objectContaining({ projection: { id: "live.syzygy.position_result", version: 2 }, consumer: { id: "runtime.queued_tablebase", version: 1 }, sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } }),
     ]);

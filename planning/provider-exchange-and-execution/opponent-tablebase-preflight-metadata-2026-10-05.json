@@ -1,0 +1,47 @@
+{
+  "baseline": "9287ff1f",
+  "retainedDeclarations": 956,
+  "candidateDeclarations": 963,
+  "successors": [
+    {
+      "subject": "engineCondition.engine_eval_swing",
+      "version": 19
+    },
+    {
+      "subject": "engineCondition.engine_mate_appears",
+      "version": 19
+    },
+    {
+      "subject": "engineCondition.tablebase_category_regression",
+      "version": 19
+    },
+    {
+      "subject": "engineCondition.tablebase_dtz_regression",
+      "version": 19
+    },
+    {
+      "subject": "fenPredicate.structuralFeature",
+      "version": 19
+    },
+    {
+      "subject": "opponent.practical_slice",
+      "version": 21
+    },
+    {
+      "subject": "opponent.selection",
+      "version": 21
+    }
+  ],
+  "unchangedAuthoredDocuments": 104,
+  "requirementStampChanges": 104,
+  "ledgerDigestChanges": 68,
+  "unchangedOtherSourceDocuments": 192,
+  "retainedFactoryOutcomes": 278,
+  "newFactoryProfiles": [],
+  "retainedSourceExecution": {
+    "projection": "live.syzygy.position_result@1",
+    "state": "registered",
+    "operation": "syzygy.position@1"
+  },
+  "scope": "Complete modern opponent tablebase consumer preflight before each root/reply acquisition; all predecessor declarations, factory outcomes, authored fields and successful selection/guard/objective computations remain unchanged. Standalone and other-provider contracts remain explicit; whole-manifest execution, availability and source retirement stay open"
+}

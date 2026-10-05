@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Complete manifest execution/digest and exact source-occurrence resolution, then authenticated availability. D3401 closes all three modern Explorer consumers complete binding preflight before provider I/O with explicit v2 identities and registered Inspector presentation; every v1 contract and standalone path remains. Inventory the remaining modern consumers before migrating; do not skip raw historical bindings or fabricate source authority. D3391/D3392 confidence representability and D3363/D3370/D3373/D3376 source-result contracts remain held. Whole-source persistence, zero-consumer retirement, complete Support/Review/bot/learner joins and independent semantic validation remain open. Routine canonical metadata maintenance requires no owner ruling.",
+        "nextAction": "Inventory the remaining modern consumer execution paths, complete manifest execution/digest and exact source-occurrence resolution, then authenticated availability. D3401 closes all three modern Explorer preflights; D3402 closes modern root/practical-reply tablebase preflight with exact v2 consumer identities while every v1 contract and standalone path remains. Do not skip raw historical bindings or fabricate source authority. D3391/D3392 confidence representability and D3363/D3370/D3373/D3376 source-result contracts remain held. Whole-source persistence, zero-consumer retirement, complete Support/Review/bot/learner joins and independent semantic validation remain open. Routine canonical metadata/hash maintenance is automatic, not an owner decision.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3401 closes complete binding preflight for actual Inspector, repertoire and return-frequency workflows, using exact v2 consumers/adapters/callables and Inspector presentation. All v1 contracts and standalone branches remain. Nine invalid-binding HTTP controls make zero provider calls; sample, scan, scheduling, grant, disclosure, cancellation and source policies stay intact. The focused gate passes 190 tests and clean types. Complete exact-index software passes 3085 tests/330 files, seven isolated performance tests and downstream contracts at b4edc92d1f857c3f121919c345582adda44d6c8a. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries. Canonical maintenance retains 949 predecessors, 278 factory outcomes and authored fields; seven source-stamp successors produce 956 declarations. Only D3401 closes: zero untriaged/1682 live. Full manifest execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
+          "summary": "D3402 closes complete binding preflight before every modern root and practical-resistance reply tablebase acquisition, with an exact v2 consumer/adapter/callable beside all v1 Stockfish/Maia/standalone contracts. Nine authenticated root/reply fault controls prevent further source calls and preserve typed absence without diagnostic/move leakage or bare fallback. Selection, cancellation, clocks, source identities and cache behavior remain. The focused gate passes 173 tests and clean types. Complete exact-index software passes 3096 tests/332 files, seven isolated performance tests and downstream contracts at e173570464f436a15a14cface9b5dc616a756754. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries. Canonical maintenance retains 956 predecessors, 278 factory outcomes and authored fields; seven source-stamp successors produce 963 declarations. Only D3402 closes: zero untriaged/1682 live. D3401's Explorer preflight remains recorded in retained receipts. Full manifest execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -896,7 +896,11 @@
             "planning/provider-exchange-and-execution/explorer-consumer-preflight-2026-10-05.md",
             "planning/provider-exchange-and-execution/explorer-consumer-preflight-software-2026-10-05.json",
             "planning/provider-exchange-and-execution/explorer-consumer-preflight-metadata-2026-10-05.json",
-            "planning/provider-exchange-and-execution/explorer-consumer-preflight-negatives-2026-10-05.json"
+            "planning/provider-exchange-and-execution/explorer-consumer-preflight-negatives-2026-10-05.json",
+            "planning/provider-exchange-and-execution/opponent-tablebase-preflight-2026-10-05.md",
+            "planning/provider-exchange-and-execution/opponent-tablebase-preflight-software-2026-10-05.json",
+            "planning/provider-exchange-and-execution/opponent-tablebase-preflight-metadata-2026-10-05.json",
+            "planning/provider-exchange-and-execution/opponent-tablebase-preflight-negatives-2026-10-05.json"
           ],
           "anchors": [
             {
@@ -942,7 +946,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:21454bfdcfb2003c89660378daacb7192e5d0a0601a0e0dd2c60cc8baab343f4"
+              "digest": "sha256:8cdac951acc7f2966b8a0debe55ae250cf98a5b3afb55f87ed30360f40331e26"
             },
             {
               "kind": "work_state",
@@ -1193,6 +1197,11 @@
               "kind": "work_state",
               "id": "D3401",
               "digest": "sha256:9a2be63c0fe3a150c56003bb9eac658275d4a2989de1d81350346e319eb7ff91"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3402",
+              "digest": "sha256:034cea58d753278b390fe1a685e6337c3620ec6e1f05c485b8f40c9ddcaf1286"
             }
           ]
         },
@@ -1735,7 +1744,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:21454bfdcfb2003c89660378daacb7192e5d0a0601a0e0dd2c60cc8baab343f4"
+              "digest": "sha256:8cdac951acc7f2966b8a0debe55ae250cf98a5b3afb55f87ed30360f40331e26"
             },
             {
               "kind": "work_state",

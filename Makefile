@@ -2778,7 +2778,21 @@ consumer-operation-version-check:
 explorer-consumer-preflight-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/explorer-consumer-contract.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/repertoire.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts apps/web/src/lib/corpus-sentences.test.ts
 
+.PHONY: opponent-tablebase-preflight-check
+opponent-tablebase-preflight-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/opponent-tablebase-preflight.test.ts apps/server/src/provider-tablebase.test.ts apps/server/src/opponent-selector.test.ts apps/server/src/opponent-selector-health.test.ts packages/runtime/src/opponent-tablebase-contract.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-catalog.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/evidence-consumer-operations.test.ts
+
 .PHONY: explorer-consumer-metadata-update explorer-consumer-metadata-check
+.PHONY: opponent-tablebase-preflight-metadata-update opponent-tablebase-preflight-metadata-check
+opponent-tablebase-preflight-metadata-update:
+	$(MAKE) semantic-validation-update
+	$(MAKE) capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-tablebase-preflight-metadata.js --log-level=warning
+	node apps/server/dist/opponent-tablebase-preflight-metadata.js --opponent-tablebase-consumer --apply-metadata
+opponent-tablebase-preflight-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-tablebase-preflight-metadata.js --log-level=warning
+	node apps/server/dist/opponent-tablebase-preflight-metadata.js --opponent-tablebase-consumer
+
 explorer-consumer-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations

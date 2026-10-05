@@ -28008,6 +28008,15 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/explorer-consumer-preflight-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3402",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:034cea58d753278b390fe1a685e6337c3620ec6e1f05c485b8f40c9ddcaf1286",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/opponent-tablebase-preflight-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }
