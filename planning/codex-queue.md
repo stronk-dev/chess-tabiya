@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3419]] now enforces the shared scheduler's existing hard-deadline and cancellation contract:
+direct monotonic checks, early-timer rearming and exactly-once logical lease release prevent
+abort-ignoring late completion from retaining evidence or retiring same-key replacement work.
+Independent waiter deadlines preserve surviving subscribers; queues, identities and limits remain.
+Five predecessor controls fail; eight permanent controls pass, with 30 scheduler/runtime and 175
+authenticated provider integration tests plus clean types. Broad local closeout is logged before
+commit. Continue full execution/resolution/availability and held source-contract work below;
+physical provider cancellation remains descriptor-owned, and no whole RFC/milestone is promoted.
+
 [[D3418]] now preflights complete effective local Support consumers (Sight, Threat Radar,
 Blunder Prevention, Structure Nudge) before any selected collection or lazy server preparation.
 Eighteen corrected predecessor controls fail; the expanded normal focused gate passes 79 tests

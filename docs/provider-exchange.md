@@ -142,7 +142,12 @@ data; only the actual appliance journey proves real bot play. Amendment and reta
   pieces is the local `outside_domain` fact, not a failure. A zero explorer population is
   successful source truth.
 - **Scheduling.** Each waiter gets its own scheduler-minted deadline. Queue time consumes the first
-  arrival's execution timeout. Shared work is aborted only when its last waiter leaves. Retention
+  arrival's execution timeout. Monotonic deadlines are checked at dispatch and source settlement;
+  delayed timers cannot admit expired evidence, and early wake-ups rearm for the remaining budget.
+  A short waiter expires independently while its longer-lived sibling can still succeed.
+  Execution expiry or final-waiter cancellation releases the logical scheduler lease exactly once,
+  even if a transport ignores abort. Descriptors still own cancellation of actual provider I/O.
+  Abandoned late captures cannot retain evidence or retire a newer same-key job. Retention
   is bounded by entries and total weight. It uses LRU/ASCII eviction and an absolute,
   non-refreshing TTL. Failures are never retained. Retained engine results are refused after a
   generation change.
@@ -166,6 +171,8 @@ bounds are explicit operator values (`OPERATOR_PROVIDER_BOUNDS`) and are not pro
 `make provider-exchange-check` runs the focused contract. After a parser source change, regenerate
 the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
 `make evidence-execution-check` runs the literal-path/compiler and actual CLI regression suites.
+`make provider-scheduler-contract-check` runs deterministic deadline/cancellation controls;
+`make provider-scheduler-lifetime-check` also runs authenticated provider integration and workspace types.
 
 ## Not yet shipped
 

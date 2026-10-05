@@ -839,7 +839,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
+          "summary": "D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/evidence-manifest.test.ts",
@@ -949,6 +949,10 @@
             "apps/server/src/service.ts",
             "apps/server/src/local-module-execution.test.ts",
             "docs/learner-modules.md",
+            "apps/server/src/provider-exchange.ts",
+            "apps/server/src/provider-exchange.test.ts",
+            "apps/server/src/provider-exchange.test-support.ts",
+            "docs/provider-exchange.md",
             "planning/exploration/log.md"
           ],
           "anchors": [
@@ -995,7 +999,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:798bba2cc88bd199f025d5dac245ee52f59acbf2e28bdf904d13b7d564273fa9"
+              "digest": "sha256:76714e5c75bbcb7d8bd62b1141ce9282ed1e6aa74a8f4a01114c06da517a0a6e"
             },
             {
               "kind": "work_state",
@@ -1271,6 +1275,11 @@
               "kind": "work_state",
               "id": "D3418",
               "digest": "sha256:10fd58c5cb51e147a72a6a12115b64bce646f76351e150baa40c3baae94c4e8a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3419",
+              "digest": "sha256:e601fc9c0b84ba250a185d9c3d29c450a854c62e1432151cc46829b22988ebd7"
             }
           ]
         },
@@ -1847,7 +1856,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:798bba2cc88bd199f025d5dac245ee52f59acbf2e28bdf904d13b7d564273fa9"
+              "digest": "sha256:76714e5c75bbcb7d8bd62b1141ce9282ed1e6aa74a8f4a01114c06da517a0a6e"
             },
             {
               "kind": "work_state",

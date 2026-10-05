@@ -25,6 +25,12 @@ export class ManualClock implements ProviderTimers {
   clear(handle: unknown): void {
     this.#timers = this.#timers.filter((timer) => timer !== handle);
   }
+  fireNextEarly(): void {
+    const next = [...this.#timers].sort((left, right) => left.at - right.at || left.seq - right.seq)[0];
+    if (next === undefined) throw new Error("no timer is armed");
+    this.clear(next);
+    next.callback(); // Timer delivery does not advance the independently owned monotonic clock.
+  }
   async advance(ms: number): Promise<void> {
     const target = this.monotonic + ms;
     for (;;) {

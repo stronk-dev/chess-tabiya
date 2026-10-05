@@ -39,7 +39,119 @@ const syzygy = (fen: string, timeoutMs = 5_000) => ({ operation: "syzygy.positio
 const scope = (budgetMs = 10_000) => ({ id: "test", budgetMs });
 const signal = () => new AbortController().signal;
 
+/** Keep the real descriptor/parser/receipt path but model a transport that ignores cancellation. */
+const ignoreAbort = (base: ProviderOperationDescriptors): ProviderOperationDescriptors => ({
+  ...base,
+  "syzygy.position@1": {
+    ...base["syzygy.position@1"],
+    execute: (requested, context) => base["syzygy.position@1"].execute(requested, { ...context, signal: signal() }),
+  },
+});
+
 describe("§4 shared scheduler", () => {
+  it("rearms an early execution wake-up instead of fabricating a timeout", async () => {
+    const { scheduler, tablebase, clock } = harness();
+    const request = scheduler.get(syzygy(KQK, 100), scope(1_000), signal());
+    await flush(); clock.fireNextEarly(); await flush();
+    expect(tablebase.calls[0]!.signal.aborted).toBe(false);
+    expect(scheduler.stats()).toMatchObject({ active: 1, pending: 1 });
+    await clock.advance(99);
+    tablebase.respond(0, syzygyBody(KQK));
+    expect((await request).kind).toBe("success");
+    await clock.advance(1);
+    expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, retained: 1 });
+  });
+
+  it("settles the execution deadline and releases capacity even when transport ignores abort", async () => {
+    const { scheduler, tablebase, clock } = harness({ maxActive: 1, descriptors: ignoreAbort });
+    let observed: TypedProviderResult | undefined;
+    const expired = scheduler.get(syzygy(KQK, 100), scope(60_000), signal()).then(result => { observed = result; return result; });
+    const next = scheduler.get(syzygy(KRK, 1_000), scope(60_000), signal());
+    await flush();
+    await clock.advance(100);
+    expect(observed).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    expect(scheduler.stats()).toMatchObject({ active: 1, pending: 1, queued: 0, retained: 0 });
+    expect(tablebase.calls).toHaveLength(2);
+    // A valid late capture must not retain evidence, decrement the new lease or delete its job.
+    tablebase.respond(0, syzygyBody(KQK)); await flush();
+    expect(scheduler.stats()).toMatchObject({ active: 1, pending: 1, retained: 0 });
+    tablebase.respond(1, syzygyBody(KRK));
+    expect((await next).kind).toBe("success");
+    await expired; await flush();
+    expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, retained: 1 });
+  });
+
+  it("final cancellation releases its lease and a late capture cannot erase a same-key replacement", async () => {
+    const { scheduler, tablebase } = harness({ maxActive: 1, descriptors: ignoreAbort });
+    const cancel = new AbortController();
+    const old = scheduler.get(syzygy(KQK), scope(), cancel.signal);
+    await flush(); cancel.abort();
+    expect(await old).toMatchObject({ reason: "cancelled" });
+    expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0 });
+    const replacement = scheduler.get(syzygy(KQK), scope(), signal());
+    await flush(); expect(tablebase.calls).toHaveLength(2);
+    tablebase.respond(0, syzygyBody(KQK)); await flush();
+    expect(scheduler.stats()).toMatchObject({ active: 1, pending: 1, retained: 0 });
+    const joined = scheduler.get(syzygy(KQK), scope(), signal());
+    expect(tablebase.calls).toHaveLength(2);
+    tablebase.respond(1, syzygyBody(KQK));
+    const result = await replacement;
+    expect(result.kind).toBe("success"); expect(await joined).toBe(result);
+    await flush(); expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, retained: 1 });
+  });
+
+  it("rejects completion at the monotonic execution deadline before a delayed timer dispatch", async () => {
+    const { scheduler, tablebase, clock } = harness();
+    const request = scheduler.get(syzygy(KQK, 100), scope(1_000), signal());
+    await flush(); clock.monotonic = 100; // Simulate an event-loop delay without delivering timers.
+    tablebase.respond(0, syzygyBody(KQK));
+    expect(await request).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    await flush(); expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, retained: 0 });
+  });
+
+  it("keeps completion after a short waiter's deadline private while its longer sibling succeeds", async () => {
+    const { scheduler, tablebase, clock } = harness();
+    const short = scheduler.get(syzygy(KQK), scope(100), signal());
+    const long = scheduler.get(syzygy(KQK), scope(1_000), signal());
+    await flush(); clock.monotonic = 100;
+    tablebase.respond(0, syzygyBody(KQK));
+    expect(await short).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    expect((await long).kind).toBe("success");
+    await flush(); expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, retained: 1 });
+  });
+
+  it("drops a completion after every waiter deadline without retaining its source", async () => {
+    const { scheduler, tablebase, clock } = harness();
+    const request = scheduler.get(syzygy(KQK), scope(100), signal());
+    await flush(); clock.monotonic = 100;
+    tablebase.respond(0, syzygyBody(KQK));
+    expect(await request).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    await flush(); expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, retained: 0 });
+  });
+
+  it("does not dispatch queued work whose final waiter expired before timer delivery", async () => {
+    const { scheduler, tablebase, clock } = harness({ maxActive: 1 });
+    const blocker = scheduler.get(syzygy(KQK), scope(1_000), signal());
+    const queued = scheduler.get(syzygy(KRK), scope(100), signal());
+    await flush(); clock.monotonic = 100;
+    tablebase.respond(0, syzygyBody(KQK));
+    expect((await blocker).kind).toBe("success");
+    expect(await queued).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    await flush(); expect(tablebase.calls).toHaveLength(1);
+    expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, queued: 0, retained: 1 });
+  });
+
+  it("settles a short waiter by its deadline even when the later source result is failure", async () => {
+    const { scheduler, tablebase, clock } = harness();
+    const short = scheduler.get(syzygy(KQK), scope(100), signal());
+    const long = scheduler.get(syzygy(KQK), scope(1_000), signal());
+    await flush(); clock.monotonic = 100;
+    tablebase.respond(0, { error: "busy" }, { status: 429 });
+    expect(await short).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    expect(await long).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
+    await flush(); expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, retained: 0 });
+  });
+
   it("retains and expires with fractional monotonic samples, as performance.now uses in production", async () => {
     const { scheduler, clock, tablebase } = harness({ retentionTtlMs: 10 });
     clock.monotonic = 1_000.25;
@@ -266,10 +378,11 @@ describe("§4 shared scheduler", () => {
     if (result.kind === "success") expect(result.delivery.acquisition.retrievedAt < result.delivery.acquisition.requestedAt).toBe(true);
     const badWall = new ProviderExchangeScheduler({ descriptors: providerOperationDescriptors({ engines: null, tablebaseFetch: null, explorerFetch: null, explorerToken: null }), maxActive: 1, maxQueued: 1, maxRetainedEntries: 1, maxRetainedWeight: 1, retentionTtlMs: 1, monotonicNowMs: () => 0, wallNow: () => "2026-09-24 12:00" });
     await expect(badWall.get(syzygy(KQK), scope(), signal())).rejects.toThrow(/wall clock/u);
-    const samples = [10, 10, 10, 4];
-    const backwards = new ProviderExchangeScheduler({ descriptors: providerOperationDescriptors({ engines: null, tablebaseFetch: null, explorerFetch: null, explorerToken: null }), maxActive: 1, maxQueued: 1, maxRetainedEntries: 1, maxRetainedWeight: 1, retentionTtlMs: 1, monotonicNowMs: () => samples.shift() ?? 4, wallNow: h.clock.wall });
-    // Arrival samples 10; the unconfigured job's start samples 10 and fails honestly.
+    let monotonic = 10;
+    const backwards = new ProviderExchangeScheduler({ descriptors: providerOperationDescriptors({ engines: null, tablebaseFetch: null, explorerFetch: null, explorerToken: null }), maxActive: 1, maxQueued: 1, maxRetainedEntries: 1, maxRetainedWeight: 1, retentionTtlMs: 1, monotonicNowMs: () => monotonic, wallNow: h.clock.wall });
+    // Clock authority is explicit, not coupled to the implementation's number of samples.
     expect(await backwards.get(syzygy(KQK), scope(), signal())).toMatchObject({ reason: "provider_unavailable" });
+    monotonic = 4;
     await expect(backwards.get(syzygy(KQK), scope(), signal())).rejects.toThrow(/non-decreasing/u);
     for (const bad of [Number.NaN, Number.POSITIVE_INFINITY]) {
       const broken = new ProviderExchangeScheduler({ descriptors: providerOperationDescriptors({ engines: null, tablebaseFetch: null, explorerFetch: null, explorerToken: null }), maxActive: 1, maxQueued: 1, maxRetainedEntries: 1, maxRetainedWeight: 1, retentionTtlMs: 1, monotonicNowMs: () => bad, wallNow: h.clock.wall });

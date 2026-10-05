@@ -28161,6 +28161,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/local-module-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3419",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e601fc9c0b84ba250a185d9c3d29c450a854c62e1432151cc46829b22988ebd7",
+      "uxItems": [],
+      "evidence": "apps/server/src/provider-exchange.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

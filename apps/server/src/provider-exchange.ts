@@ -94,6 +94,7 @@ interface Waiter {
   readonly resolve: (result: TypedProviderResult) => void;
   readonly reject: (error: Error) => void;
   deadlineHandle: unknown;
+  readonly deadline: number;
   signal: AbortSignal;
   onAbort: () => void;
   settled: boolean;
@@ -109,8 +110,8 @@ interface Job {
   readonly controller: AbortController;
   readonly waiters: Set<Waiter>;
   state: "queued" | "active" | "done";
-  timedOut: boolean;
   executionHandle: unknown;
+  release: (() => void) | undefined;
 }
 
 interface RetainedEntry {
@@ -275,18 +276,18 @@ export class ProviderExchangeScheduler {
         controller: new AbortController(),
         waiters: new Set(),
         state: "queued",
-        timedOut: false,
         executionHandle: undefined,
+        release: undefined,
       };
       this.#pending.set(key, job);
       this.#queue.push(job);
     }
     const joined = job;
     const result = new Promise<TypedProviderResult>((resolve, reject) => {
-      const waiter: Waiter = { resolve, reject, deadlineHandle: undefined, signal, onAbort: () => undefined, settled: false };
+      const deadline = arrival + scope.budgetMs;
+      const waiter: Waiter = { resolve, reject, deadlineHandle: undefined, deadline, signal, onAbort: () => undefined, settled: false };
       waiter.onAbort = () => this.#settleWaiter(joined, waiter, this.#failure(operation, digest, "cancelled") as TypedProviderResult);
       signal.addEventListener("abort", waiter.onAbort, { once: true });
-      const deadline = arrival + scope.budgetMs;
       const arm = (delayMs: number): void => {
         waiter.deadlineHandle = this.#timers.set(() => {
           if (waiter.settled) return;
@@ -331,6 +332,9 @@ export class ProviderExchangeScheduler {
     job.controller.abort();
     this.#timers.clear(job.executionHandle);
     if (this.#pending.get(job.key) === job) this.#pending.delete(job.key);
+    // A logical scheduler lease ends at abandonment, not when an uncooperative transport
+    // eventually acknowledges abort. The descriptor still owns its actual I/O cancellation.
+    job.release?.();
   }
 
   #settleAll(job: Job, result: (waiter: Waiter) => TypedProviderResult): void {
@@ -357,13 +361,35 @@ export class ProviderExchangeScheduler {
     this.#active += 1;
     const remaining = job.executionDeadline - this.#now();
     const descriptor = this.#descriptor(job.operation);
+    let released = false;
     const finish = (): void => {
+      if (released) return;
+      released = true;
       this.#timers.clear(job.executionHandle);
-      if (job.state === "active") this.#active -= 1;
-      else if (job.state === "done" && job.controller.signal.aborted) this.#active -= 1;
+      this.#active -= 1;
       job.state = "done";
       if (this.#pending.get(job.key) === job) this.#pending.delete(job.key);
       this.#drain();
+    };
+    job.release = finish;
+    const expire = (): void => {
+      if (job.state !== "active") return;
+      job.controller.abort();
+      this.#settleAll(job, () => this.#failure(job.operation, job.digest, "deadline_exceeded"));
+      finish();
+    };
+    const liveAt = (): number | undefined => {
+      if (job.state !== "active" || job.waiters.size === 0) return undefined;
+      let now: number;
+      try { now = this.#now(); } catch { expire(); return undefined; }
+      // Timers are wake-ups, not time authority: a delayed event loop cannot admit a source
+      // after either deadline, and a short waiter cannot receive its sibling's later success.
+      for (const waiter of [...job.waiters]) {
+        if (now >= waiter.deadline) this.#settleWaiter(job, waiter, this.#failure(job.operation, job.digest, "deadline_exceeded"));
+      }
+      if (job.state !== "active") return undefined;
+      if (now >= job.executionDeadline) { expire(); return undefined; }
+      return now;
     };
     if (remaining <= 0) {
       // Queue time consumed the first arrival's execution timeout.
@@ -371,11 +397,17 @@ export class ProviderExchangeScheduler {
       finish();
       return;
     }
-    job.executionHandle = this.#timers.set(() => {
-      job.timedOut = true;
-      job.controller.abort();
-    }, remaining);
-    const context: ProviderExecutionContext = Object.freeze({ signal: job.controller.signal, remainingMs: remaining, requestedAt: job.requestedAt });
+    const armExecution = (delayMs: number): void => {
+      job.executionHandle = this.#timers.set(() => {
+        const now = liveAt();
+        if (now !== undefined) armExecution(job.executionDeadline - now);
+      }, delayMs);
+    };
+    const dispatchAt = liveAt();
+    if (dispatchAt === undefined) return;
+    const dispatchRemaining = job.executionDeadline - dispatchAt;
+    armExecution(dispatchRemaining);
+    const context: ProviderExecutionContext = Object.freeze({ signal: job.controller.signal, remainingMs: dispatchRemaining, requestedAt: job.requestedAt });
     let execution: Promise<ProviderExecutionCapture<ProviderOperationId>>;
     try {
       execution = descriptor.execute(job.requestedIdentity as never, context);
@@ -383,14 +415,10 @@ export class ProviderExchangeScheduler {
       execution = Promise.reject(error);
     }
     execution.then((capture) => {
-      if (job.state !== "active" || job.waiters.size === 0) return; // late result of abandoned work
-      if (job.timedOut) {
-        this.#settleAll(job, () => this.#failure(job.operation, job.digest, "deadline_exceeded"));
-        return;
-      }
-      this.#complete(job, descriptor, capture);
+      if (liveAt() === undefined) return; // abandoned/expired work cannot publish or retain a late result
+      this.#complete(job, descriptor, capture, () => liveAt() !== undefined);
     }, (error: unknown) => {
-      if (job.state !== "active" || job.waiters.size === 0) return;
+      if (liveAt() === undefined) return;
       if (error instanceof ProviderRequestInvalid) {
         // A bound only the live provider can check (advertised band/options) refuses the request
         // itself: every exact-key waiter submitted these same bytes, so each receives INVALID_REQUEST.
@@ -404,9 +432,7 @@ export class ProviderExchangeScheduler {
         job.waiters.clear();
         return;
       }
-      const [reason, detail] = job.timedOut
-        ? (["deadline_exceeded", undefined] as const)
-        : error instanceof ProviderSourceUnavailable
+      const [reason, detail] = error instanceof ProviderSourceUnavailable
           ? ([error.reason, error.providerDetail] as const)
           : error instanceof ProviderIdentityMismatch
             ? (["identity_mismatch", error.message] as const)
@@ -417,22 +443,25 @@ export class ProviderExchangeScheduler {
     }).finally(finish);
   }
 
-  #complete(job: Job, descriptor: ProviderOperationDescriptor<ProviderOperationId>, capture: ProviderExecutionCapture<ProviderOperationId>): void {
+  #complete(job: Job, descriptor: ProviderOperationDescriptor<ProviderOperationId>, capture: ProviderExecutionCapture<ProviderOperationId>, stillLive: () => boolean): void {
     const retrievedAt = this.#civil();
     let acquisition: ProviderAcquisitionReceipt;
     let parsed: { readonly payload: unknown; readonly payloadReceipt: unknown };
     try {
       acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt({ operation: job.operation, requestedIdentity: job.requestedIdentity as never, capture: capture as never, requestedAt: job.requestedAt, retrievedAt }) as ProviderAcquisitionReceipt;
     } catch (error) {
+      if (!stillLive()) return;
       this.#settleAll(job, () => this.#failure(job.operation, job.digest, "identity_mismatch", error instanceof Error ? error.message : String(error)));
       return;
     }
     try {
       parsed = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition as never);
     } catch (error) {
+      if (!stillLive()) return;
       this.#settleAll(job, () => this.#failure(job.operation, job.digest, error instanceof ProviderIdentityMismatch ? "identity_mismatch" : "invalid_response", error instanceof Error ? error.message : String(error)));
       return;
     }
+    if (!stillLive()) return; // Parser/admission work also consumes the caller's original budget.
     const delivery = PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition: acquisition as never, payload: parsed.payload as never, payloadReceipt: parsed.payloadReceipt as never, servedAt: retrievedAt });
     this.#retain(job.key, descriptor, acquisition, parsed.payload, parsed.payloadReceipt);
     const success = Object.freeze({ kind: "success", operation: job.operation, normalizedRequestDigest: job.digest, delivery }) as unknown as TypedProviderResult;

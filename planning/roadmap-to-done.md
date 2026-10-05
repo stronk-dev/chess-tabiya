@@ -1433,6 +1433,12 @@ Primary RFCs: `play-composition`, `pack-training-forms`. UX owners: ARR and CLP 
 
 <!-- roadmap-capability: support -->
 
+The 2026-10-05 [[D3419]] foundation checkpoint makes shared provider execution obey its original
+monotonic deadlines even when timers dispatch late or transport ignores abort. Each logical lease
+ends exactly once on expiry/final cancellation; late results cannot cache evidence or retire
+replacement work, and longer-lived subscribers remain independent. This repairs shared source
+lifetime, not source semantics, complete Support UX or physical remote-I/O termination.
+
 The 2026-10-05 [[D3418]] checkpoint wires four actual local consumer contracts into the live
 module-query path: Sight, Threat Radar, Blunder Prevention and Structure Nudge. Complete effective
 binding preflight precedes all selected collection and lazy server source preparation. Broken
