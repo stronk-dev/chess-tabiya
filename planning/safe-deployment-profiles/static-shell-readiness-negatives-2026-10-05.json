@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-05",
+  "baseline": "d546c3df",
+  "scope": "Application static-shell readiness and direct refusal coverage",
+  "readings": [
+    {
+      "command": "make application-readiness-check",
+      "stage": "new controls before production repair",
+      "result": "failed",
+      "passed": 30,
+      "failed": 2,
+      "observations": [
+        "Missing startup shell: learner root returns STATIC_NOT_BUILT/503 while readyz incorrectly returns 200.",
+        "Directory replacing a previously served shell: learner root returns 503 while readyz incorrectly retains 200."
+      ]
+    },
+    {
+      "command": "make application-readiness-check typecheck",
+      "stage": "production repair with incorrect test cleanup",
+      "result": "failed",
+      "passed": 31,
+      "failed": 1,
+      "observations": [
+        "The two readiness refusal assertions pass.",
+        "rmSync without recursive removal refuses an empty directory with EISDIR; the fixture uses rmdirSync afterward. No production expectation is weakened."
+      ]
+    },
+    {
+      "command": "make verify-content",
+      "stage": "sandbox execution and stale direct-refusal debt register",
+      "result": "failed",
+      "observations": [
+        "Local HTTP listeners are refused with EPERM; the normal approved Make target is used for the final run.",
+        "Direct STATIC_NOT_BUILT response coverage removes this code from the missing-test census, which refuses its stale current-debt entry. Only that entry is removed; the historical ceiling is retained."
+      ]
+    }
+  ],
+  "unchanged": [
+    "Successful canonical readiness storage body",
+    "Worker-exit health status and optional-provider behavior",
+    "Original deadlines, performance thresholds and resource limits",
+    "Authored content, capability histories, guard/objective and opponent-selection semantics"
+  ],
+  "held": "D3393 public/internal liveness, readiness privacy and profile contract reconciliation"
+}

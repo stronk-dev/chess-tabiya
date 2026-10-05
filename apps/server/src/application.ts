@@ -871,7 +871,7 @@ async function composeServices(
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
-  let readyProbe: () => Response = () => unready();
+  let readyProbe: (request: Request) => Response | Promise<Response> = () => unready();
   const deployment = options.deployment;
   const handler: RestHandler = async (request) => {
     const url = new URL(request.url);
@@ -883,7 +883,7 @@ async function composeServices(
       return healthProbe();
     }
     if (url.pathname === "/readyz") {
-      return readyProbe();
+      return readyProbe(request);
     }
     const aboutResponse = about.handle(request);
     if (aboutResponse !== undefined) return aboutResponse;
@@ -936,8 +936,14 @@ async function composeServices(
   };
   // rfc/storage-backup-recovery.md §6 / [[D2728]]: readiness is the live route observing the live
   // storage connection — its exact current version plus one representative read — and a live
-  // semantic executor. The canonical body is the only one a rehearsal or proxy accepts.
-  readyProbe = () => {
+  // semantic executor. Static-shell readiness uses the exact serving authority, not a
+  // cached file-existence flag. Recheck the live runtime/storage after that asynchronous read.
+  // The canonical body is the only one a rehearsal or proxy accepts.
+  readyProbe = async (request) => {
+    const initial = longitudinalHealth();
+    if (draining || (initial.status !== "ready" && initial.status !== "disabled_test")) return unready();
+    const shell = await staticResponse(new Request(new URL("/", request.url), { method: "HEAD" }), staticDirectory);
+    if (shell.status !== 200) return unready();
     const longitudinal = longitudinalHealth();
     if (draining || (longitudinal.status !== "ready" && longitudinal.status !== "disabled_test")) return unready();
     let probe: ReturnType<SQLiteRunStorage["readinessProbe"]>;

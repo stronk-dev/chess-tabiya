@@ -177,4 +177,7 @@ families stay conditional.
 - A structurally sealed displayed-text reference for speech. Today speech speaks the text this
   server last displayed for that run, node and scope, or the deterministic rendering, and it never
   calls voice again.
-- `/readyz` (F12-A) and the digest-pinned release-profile failure/recovery run (Discharge D1, F12-H).
+- Complete F12-A readiness privacy and image-attestation joins, and the digest-pinned
+  release-profile failure/recovery run (Discharge D1, F12-H). The live `/readyz` already checks
+  storage, the worker and the served web shell without failing on optional-provider absence.
+  D3393 retains the separate public/internal probe-contract reconciliation.

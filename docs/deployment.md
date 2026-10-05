@@ -94,6 +94,13 @@ wildcard or on-demand TLS. It sets `Strict-Transport-Security: max-age=31536000`
 includeSubDomains or preload), `nosniff` and `no-referrer`. It caps request bodies at 8 MiB,
 strips any client-supplied `Forwarded` header, and health-checks the app at `/readyz`.
 
+Readiness checks the live web shell through the same static-serving operation as the learner
+entry, then checks the worker and storage again. A missing or unreadable `index.html` returns
+503 `unready`, even when storage and the worker are healthy; restoring the shell recovers
+without restarting. This is not a cached build-exists flag. Optional providers do not make
+core readiness fail. `make application-readiness-check` exercises these states through the
+bundled server, alongside storage recovery and worker-exit checks.
+
 The rendered Compose files use three named networks and no `default` network:
 
 - `proxy_edge` (internal) contains exactly the server and Caddy. The server's alias there is

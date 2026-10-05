@@ -1,5 +1,23 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 application static-shell readiness checkpoint
+
+D3394 closes: /readyz reads the same live web-shell authority as GET /, then rechecks
+worker/storage readiness after I/O. Missing or unreadable builds refuse; restoration
+recovers without restart. The successful canonical storage proof, optional-provider
+behavior and probe wire fields are unchanged. The controlled worker-exit negative
+proves a readable shell cannot conceal a failed runtime. The normal focused gate
+passes 32 tests; final exact-index software passes 3029 tests/327 files plus seven
+isolated performance tests. Content passes 223 tests and all 104 requirements;
+rebuilt browser CI passes 111 journeys, one optional skip and zero retries. Receipt:
+`planning/safe-deployment-profiles/static-shell-readiness-2026-10-05.md`.
+
+D3393 is contract-held: longitudinal-store's explicit worker-dependent /healthz status
+conflicts with the process-liveness/public-probe contracts. No unilateral status or wire
+change is part of D3394. Release-engineering owns the author repair. Continue the
+implementing deployment/provider work without treating this checkpoint as full RFC,
+milestone or 1.0 completion. Routine metadata updates are not owner decisions.
+
 ## 2026-10-05 confidence admission checkpoint and inheritance handoff
 
 D3390 closes: the shared manifest enforces the closed confidence domain, retaining

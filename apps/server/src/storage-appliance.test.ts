@@ -4,7 +4,7 @@
 // database. Backup → loss → restore → boot proves stable identities through a restarted server,
 // the live server excludes maintenance, and a newer database never reaches an HTTP listener.
 import { spawn, spawnSync, type ChildProcess } from "node:child_process";
-import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readdirSync, renameSync, rmdirSync, rmSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { networkInterfaces, tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -106,14 +106,14 @@ function startServer(state: Appliance, extra: Record<string, string | undefined>
   return { child, output: () => output, exited };
 }
 
-async function ready(state: Appliance, server: Running): Promise<void> {
+async function ready(state: Appliance, server: Running, probe = "/readyz"): Promise<void> {
   const deadline = Date.now() + 90_000;
   let exited = false;
   void server.exited.then(() => { exited = true; });
   while (Date.now() < deadline) {
     if (exited) throw new Error(`server exited before readiness:\n${server.output()}`);
     try {
-      const response = await fetch(`${state.origin}/readyz`);
+      const response = await fetch(`${state.origin}${probe}`);
       if (response.status === 200) return;
     } catch { /* not listening yet */ }
     await new Promise((done) => setTimeout(done, 200));
@@ -138,6 +138,46 @@ function admin(state: Appliance, args: readonly string[]): { readonly status: nu
 const writeHeaders = (state: Appliance, cookie?: string) => ({ "content-type": "application/json", origin: state.origin, ...(cookie === undefined ? {} : { cookie }) });
 
 describe("appliance process boundary", { timeout: 240_000 }, () => {
+  it("refuses readiness while the actual web shell is missing and recovers on restoration", async () => {
+    const state = await appliance();
+    const index = join(state.directory, "static", "index.html");
+    const retained = join(state.directory, "retained-index.html");
+    renameSync(index, retained);
+    const server = startServer(state);
+    await ready(state, server, "/healthz");
+    expect(await (await fetch(`${state.origin}/healthz`)).json()).toMatchObject({ status: "ok", longitudinal: { status: "ready" } });
+    const missing = await fetch(`${state.origin}/`);
+    expect(missing.status).toBe(503);
+    expect(await missing.json()).toMatchObject({ error: { code: "STATIC_NOT_BUILT" } });
+    const refused = await fetch(`${state.origin}/readyz`);
+    expect(refused.status).toBe(503);
+    expect(refused.headers.get("cache-control")).toBe("no-store");
+    expect(await refused.json()).toEqual({ status: "unready" });
+    renameSync(retained, index);
+    expect((await fetch(`${state.origin}/`)).status).toBe(200);
+    await ready(state, server);
+    expect(await (await fetch(`${state.origin}/readyz`)).text()).toBe(`{"representativeData":"ok","status":"ready","storageVersion":${STORAGE_VERSION}}`);
+    await stop(server);
+  });
+
+  it("does not retain ready when the live shell becomes an unreadable directory", async () => {
+    const state = await appliance();
+    const server = startServer(state);
+    await ready(state, server);
+    const index = join(state.directory, "static", "index.html");
+    const retained = join(state.directory, "retained-index.html");
+    renameSync(index, retained);
+    mkdirSync(index);
+    expect((await fetch(`${state.origin}/`)).status).toBe(503);
+    expect((await fetch(`${state.origin}/readyz`)).status).toBe(503);
+    expect((await fetch(`${state.origin}/healthz`)).status).toBe(200);
+    rmdirSync(index);
+    renameSync(retained, index);
+    expect((await fetch(`${state.origin}/`)).status).toBe(200);
+    expect((await fetch(`${state.origin}/readyz`)).status).toBe(200);
+    await stop(server);
+  });
+
   it("backup → loss → fresh restore → boot with the worker running keeps every identity", async () => {
     const state = await appliance();
     const first = startServer(state);

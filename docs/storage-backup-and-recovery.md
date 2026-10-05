@@ -142,6 +142,11 @@ container. It starts the real application on that database, requires the canonic
 `{"representativeData":"ok","status":"ready","storageVersion":N}`, and then deletes the disposable
 state. It never touches the configured database.
 
+The live readiness route also reads the actual web shell through the static-serving authority.
+Missing or unreadable shell bytes make it unready; worker and storage are rechecked after that
+asynchronous read. The successful canonical storage body is unchanged. Shell restoration
+recovers readiness without a server restart.
+
 ## Verification
 
 - `make test-software` covers the unit tier, the process boundary (bundled `main.js` with its

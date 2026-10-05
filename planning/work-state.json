@@ -27927,6 +27927,24 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-exchange-and-execution.md"
+    },
+    {
+      "id": "D3393",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8f3ae8717e68d2dd7fe5ecc30546be463fc75f372c12627fd1a9c534e505314f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D3394",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f61c334a63b5ee44a6a388e5a649b0b3f3b2d6e967bb3709ce7fea5915e29267",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/static-shell-readiness-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

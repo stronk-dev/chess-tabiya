@@ -134,13 +134,21 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
 
   it("degrades /healthz to 503 on unexpected thread exit and never lets the main process renew", async () => {
     const directory = temp();
-    const entry = fakeThread(directory, `parentPort.postMessage({ type: "ready", databasePath: workerData.databasePath, workerId: workerData.workerId }); setTimeout(() => process.exit(3), 50);`);
-    application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath: join(directory, "exit.sqlite"), longitudinalWorkerEntry: entry });
+    const exitRequest = join(directory, "exit-requested");
+    writeFileSync(join(directory, "index.html"), "<!doctype html><title>Tabiya</title>");
+    const entry = fakeThread(directory, `import { existsSync } from "node:fs"; parentPort.postMessage({ type: "ready", databasePath: workerData.databasePath, workerId: workerData.workerId }); setInterval(() => { if (existsSync(${JSON.stringify(exitRequest)})) process.exit(3); }, 10);`);
+    application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath: join(directory, "exit.sqlite"), longitudinalWorkerEntry: entry, staticDirectory: directory });
     const origin = await listen(application);
+    expect((await fetch(`${origin}/readyz`)).status).toBe(200);
+    writeFileSync(exitRequest, "exit");
     await until(() => application!.longitudinal.health().status === "degraded" ? true : undefined, 10_000);
     const health = await fetch(`${origin}/healthz`);
     expect(health.status).toBe(503);
     expect(await health.json()).toEqual({ status: "degraded", engineMode: "mock", longitudinal: { status: "degraded", reason: "worker_exited" }, providers: expect.any(Array) });
+    expect((await fetch(`${origin}/`)).status).toBe(200);
+    const refused = await fetch(`${origin}/readyz`);
+    expect(refused.status).toBe(503);
+    expect(await refused.json()).toEqual({ status: "unready" });
   });
 
   it("fails before readiness on a missing artifact, a disagreeing database path or a :memory: identity", async () => {

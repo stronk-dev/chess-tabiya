@@ -2746,7 +2746,7 @@ verify-deployment:
 	node tools/verify-caddy.mjs
 
 # Release-tier drills over the built image; each uses its own Compose project and volumes.
-.PHONY: storage-drill appliance-drill appliance-drill-staged staged-software-contracts engine-memory-drill engine-sharing-check maia-option-contract-drill
+.PHONY: storage-drill appliance-drill appliance-drill-staged application-readiness-check staged-software-contracts engine-memory-drill engine-sharing-check maia-option-contract-drill
 storage-drill:
 	docker compose build server
 	node tools/appliance-drill.mjs storage --image $(LOCAL_SERVER_IMAGE)
@@ -2759,6 +2759,9 @@ appliance-drill:
 # pending unrelated source changes cannot silently enter the Docker build being verified.
 appliance-drill-staged:
 	node tools/staged-appliance-drill.mjs
+
+application-readiness-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/storage-appliance.test.ts apps/server/src/longitudinal-worker.test.ts apps/server/src/config.test.ts
 
 staged-software-contracts:
 	node tools/staged-appliance-drill.mjs --software
