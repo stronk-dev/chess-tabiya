@@ -1404,6 +1404,12 @@ bot-calibration-evaluation-report bot-calibration-evaluation-report-update bot-c
 	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/evaluation-report.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/evaluation-report.mjs --log-level=warning
 	$(CI_NODE) .cache/bot-calibration/evaluation-report.mjs $(if $(filter bot-calibration-evaluation-report-update,$@),--update,) $(if $(filter bot-calibration-evaluation-report-check,$@),--check,)
 
+.PHONY: bot-calibration-score-domain-report bot-calibration-score-domain-report-update bot-calibration-score-domain-report-check
+# Descriptive offline research only. Preserve the complete frozen pricing/reference closure.
+bot-calibration-score-domain-report bot-calibration-score-domain-report-update bot-calibration-score-domain-report-check:
+	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/score-domain-report.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/score-domain-report.mjs --log-level=warning
+	$(CI_NODE) .cache/bot-calibration/score-domain-report.mjs $(if $(filter bot-calibration-score-domain-report-update,$@),--update,) $(if $(filter bot-calibration-score-domain-report-check,$@),--check,)
+
 .PHONY: bot-calibration-opening-capacity bot-calibration-opening-report bot-calibration-opening-report-update bot-calibration-opening-report-check
 bot-calibration-opening-capacity:
 	bash tools/d2236-bot-calibration-verdict-contract/capture-opening-capacity.sh

@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 bot-reference checkpoint: [[D3430]] revalidates all historical priced roots and all
+24 fixed band/window/half cells, retaining mate domains and shared-game clusters. The complete
+reference has 1,640 mixed and 78 mate-only roots; 1,391 cp-played mixed roots and 1,056 multi-window
+games make the missing numerical semantics material. [[D3429]] holds metric author repair;
+[[D3410]] separately holds opening-source repair. No source is restamped, dropped or normalized
+into a convenient scalar. No bot, RFC, capability or milestone is promoted. Receipt:
+`planning/bot-roster/calibration-score-domains-2026-10-06.md`.
+
 2026-10-06 calculation retry checkpoint: [[D3427]] retains exact ordered request keys through
 transport or invalid-receipt failure. Real authenticated HTTP/SQLite and built-browser response
 loss replay the original batch/jobs; a later deliberate calculation gets a fresh identity.

@@ -3,12 +3,66 @@
 **Question:** [[D2236]], with [[D2234]], [[D2235]] and [[D2237]] as consumers
 **Date:** 2026-09-06
 **Instrument:** `tools/d2236-bot-calibration-verdict-contract/`
-**Status:** exploration gate answered; full frozen human-reference selection and Stockfish pricing executed 2026-10-05; metrics, opening-identity population and game ladder remain pending
+**Status:** verdict vocabulary and frozen reference/pricing established; 2026-10-06 audit finds the numerical metric contract incomplete (D3429); opening-identity population and game ladder remain pending
+
+### 2026-10-06 numerical-contract and complete-source audit
+
+[[D3429]] is author-held, not a lowered acceptance gate. The manifest fixes the metric names,
+999 replicates, severe-tail cutoffs, Holm family and verdict vocabulary; it does not define
+mixed-domain inclusion/normalization, the likelihood equation and numerical parameter bounds,
+singular covariance/zero-variance treatment, resampling seed/weights or adjusted-test construction.
+`validateManifest` checks textual descriptions and `classifyCalibration` consumes supplied metric
+states. No implementation elsewhere in the D2236 harness computes those statistics. `[V]`
+(`manifest.json`, `contract.mjs`, `contract.test.mjs` in the instrument; `rfc/bot-roster.md` §6).
+The original statement that those descriptions made calibration mechanically decidable is
+superseded; the independently defined verdict vocabulary is retained.
+
+[[D3430]] audits every saved root without selecting a metric procedure. The complete stream
+revalidates its original journal chain, ordered population, whole sealed provider delivery,
+same-generation reset and exact legal-move set. All 24 fixed band/window/half cells are retained.
+The small aggregate records: `[V]` (`planning/bot-roster/calibration-score-domains.json`;
+`score-domain-audit.ts`, `score-domain-report.ts` and independent controls in the D2236 instrument).
+
+| Literal source property | Count |
+|---|---:|
+| decisions / complete legal candidates | 24,000 / 756,370 |
+| cp-only / mixed cp+mate / mate-only roots | 22,282 / 1,640 / 78 |
+| root-mates / root-is-mated alternatives | 1,487 / 9,030 |
+| played cp / root-mates / root-is-mated rows | 23,673 / 145 / 182 |
+| cp-valued played moves in mixed roots | 1,391 |
+| flat cp-only tables | 162 |
+| distinct games / games in multiple windows | 22,908 / 1,056 |
+| games contributing decisions in multiple rating bands | 30 |
+
+There are 21,852 one-decision games, 1,020 two-decision games and 36 three-decision games. Both
+fixed reference halves retain their own per-cell counts. The 81 cp-played roots with a root-mates
+alternative and 1,317 with a root-is-mated alternative overlap; they must not be added as a unique
+population. These are literal recorded-score counts, not deeper chess outcomes, blunder labels,
+likelihood fits or calibrated-policy claims. `[V]` (same whole-source aggregate and counterexamples).
+
+The first current-executor audit refused: scheduler changes since pricing changed that executor's
+digest. Historical validation now verifies the seven original executor files and original receipt
+from immutable commit `bb53301fb0dd3f3a65b24754c9aafe9eedf212a8`; the final source chain and every
+original aggregate/cell count must match. Current source parsing must still reproduce the recorded
+parser identity. The audit has a separate instrument digest. No original pricing/reference bytes
+are restamped, and the existing current-executor reproduction guard is untouched. `[V]`
+(`score-domain-report.ts`; `planning/bot-roster/calibration-score-domains.json`).
+
+**Next author action:** pin the complete numerical procedure, including how every one of these
+domain/cluster cases enters or explicitly abstains, before computing bot-versus-human verdicts.
+Do not drop mate-bearing roots, pool correlated observations as independent, loosen a limit or
+choose a fitter after observing comparative results. Opening-source repair remains independently
+held by [[D3410]]. No game ladder, native Maia comparison or human-like card claim is discharged.
 
 ## Verdict
 
-The bot-roster calibration plan can now be mechanically decided, but not with its old single pass
-word. It was mixing three different claims:
+The bot-roster calibration verdict vocabulary separates three claims; the numerical procedure
+cannot yet mechanically decide them. **2026-10-06 correction:** the original claim of an executable
+metric contract was too strong. The manifest pins names and limits in prose, while `contract.mjs`
+validates strings and combines supplied metric states. Mixed score domains, fitting bounds,
+degenerate variance/covariance, deterministic resampling and adjusted-test construction remain
+unresolved under [[D3429]]. `[V]` (`tools/d2236-bot-calibration-verdict-contract/manifest.json`,
+`contract.mjs`; `rfc/bot-roster.md` §6). The three separate verdicts remain:
 
 1. **relative strength** — where an exact policy sits in the internal 1400-reference ladder;
 2. **human-distribution equivalence** — whether its error shape resembles rating-binned human

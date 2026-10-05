@@ -775,3 +775,12 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   positions against 128 required. D3410 owns preregistered opening-population author repair. No
   source, threshold, frozen manifest, production policy, native control, verdict or acceptance
   requirement changes. Capacity measurement and sampler binding are not full ladder/calibration.
+- 2026-10-06 — D3429 records that §6's named statistics do not yet pin an executable numerical
+  procedure (mixed score domains, fitter bounds, degeneracy, resampling and adjusted tests).
+  This checkpoint does not choose those semantics. D3430 revalidates all historical roots:
+  1,640 mixed and 78 mate-only positions, 1,391 cp-played mixed roots and 1,056 multi-window games.
+  Immutable original executor/receipt and whole delivery/chain checks retain all 24 fixed
+  band/window/half cells. Receipt: `planning/bot-roster/calibration-score-domains-2026-10-06.md`.
+  No original manifest/reference/pricing stamp, production policy, threshold, label or acceptance
+  changes. Numerical author repair, opening-source repair and the native ladder remain separate
+  obligations; no calibration, RFC, capability or milestone completion is claimed.

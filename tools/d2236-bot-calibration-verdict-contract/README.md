@@ -16,6 +16,11 @@ separate.
 
 This is research code, not a production bot-calibration implementation.
 
+**2026-10-06 correction (D3429):** named statistics and supplied pass/fail states are not an
+executable numerical contract. The strings do not pin mixed cp/mate membership, likelihood bounds,
+singular/zero-variance treatment, resampling seed/weights or adjusted-test construction. The
+statistics remain author-held; this contract alone cannot establish a calibrated profile.
+
 ## Frozen human-reference population (D3406)
 
 ```sh
@@ -136,3 +141,29 @@ The measured frozen source has **6 qualifying exact FENs**, against **128 requir
 the band-identity experiment is not. D3410 owns preregistered opening-population repair. Neither
 lowering the 100-observation floor, stripping clocks, merging bands nor calibrating on six
 positions is authorized. Distribution-reference selection and its priced journal remain unchanged.
+
+## Complete descriptive score-domain audit (D3430)
+
+```sh
+make bot-calibration-population-check
+make bot-calibration-score-domain-report
+make bot-calibration-score-domain-report-check
+```
+
+The offline report reads every selected root and whole saved delivery, checks the ordered journal,
+original search/reset authority, current sealed parser, fixed reference halves and all 24
+band/window/half cells. It reports cp-only, mixed and all-mate roots; positive/negative mate
+alternatives and played domains; flat cp-only tables; and exact shared-game cluster multiplicity.
+It makes no scalar mate conversion, loss-statistic choice, grade or calibration verdict. Missing,
+extra, partial, crossed and counterfeit evidence refuses before a receipt can be published.
+
+The original experiment's executor is verified from immutable commit
+`bb53301fb0dd3f3a65b24754c9aafe9eedf212a8`, including all seven original closure files and its
+committed receipt. The final journal digest, complete acquisition/parser identity and per-cell
+counts must match that original receipt. Later scheduler changes do not restamp historical
+measurements or make them appear freshly generated. The audit's own code digest is separate.
+Missing historical Git objects refuse; this command is local research, not a runtime/release gate.
+
+The default and `…-report-check` are read-only. `…-report-update` explicitly publishes the small
+aggregate receipt; raw decisions, game identifiers and the 1-GiB source journal stay ignored.
+The existing evaluation report's stricter current-executor reproduction check is unchanged.

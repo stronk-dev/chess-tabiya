@@ -28251,6 +28251,24 @@
       "uxItems": [],
       "evidence": "apps/server/src/concept-registry-closure.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3429",
+      "state": "blocked",
+      "owner": "bot-play",
+      "blocker": "rfc:bot-roster.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:38f9c231379de7a9337cc7325c005b374bc71d5abf299d09fb98864ce35baad5",
+      "uxItems": []
+    },
+    {
+      "id": "D3430",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f65b45b49abdd22e75074ec80a730949b0b08d5e8b334ca5b7797be5cf8046fe",
+      "uxItems": [],
+      "evidence": "planning/bot-roster/calibration-score-domains-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

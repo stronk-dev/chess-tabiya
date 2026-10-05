@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4c42e7ae99765f2c5a6556d29da80631cedc784292c7d2f6d959d0269d65a8ee",
+    "roadmap": "sha256:2aadaee67092ca502ec7d107817dfd7eb9fec2d98b2c0051eceac5c6c46bcf3e",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:62ba07c8db2e03464b0809e7fa79aa86284dd407b5a9fa5ad916494ff3e6d396",
-    "rfcRegister": "sha256:136b1dfb39b58e9097261a71f0d3521b05e89ada46426c8845db55595b6d0f31",
+    "workState": "sha256:4857eadb3eb0798b5ce053cf93eae2508f799a799c81e69c1fac4924f424cd28",
+    "rfcRegister": "sha256:41d576ce67892132f9e899d8408d53e5c883c3781612a38252879ca6a6a4164a",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 0,
-      "blocked": 1057,
-      "done": 1333,
+      "blocked": 1058,
+      "done": 1334,
       "refused": 160
     },
     "workItems": {
@@ -141,10 +141,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Continue accepted evidence source/consumer contracts and complete calibrated bot breadth. D3408 now binds the actual bounded production sampler; the eventual native ladder must consume that bridge and preserve all native controls/source/seed contracts. D3409 measured only six qualifying exact-opening positions, so D3410 requires preregistered opening-population author repair before band-identity model queries. The priced 24,000-row distribution reference stays frozen; distribution statistics and the 13,200-game ladder remain open. No candidate-pricing/capacity/bridge result substitutes for phase/clock/endgame/personality proof.",
+      "nextAction": "Complete the accepted evidence/source contracts without filtering remaining refusals. Bot statistics require D3429 numerical-author repair before comparative verdicts: pin mixed cp/mate, fitter bounds, degeneracy, clustered resampling and adjusted tests. D3430 now verifies all historical roots and original authority; D3410 independently holds opening-source repair. The frozen distribution reference, production sampler and complete native ladder remain unchanged/open.",
       "latestCheckpoint": {
-        "at": "2026-10-05",
-        "summary": "D3408 corrects A2 and binds all twelve profile arms and both G1/G2 sides to the whole production catalogue/behavior digest, request/compiler and whole-source replay. D3409 twice measures the complete pinned PGN prefix: 323,448 eligible opening games, 2,863,498 observations and 1,677,685 exact FENs, with only six meeting the 100-per-band floor against 128 required. The complete count inventory and aggregate digest agree; no positions selected or model queried. D3410 holds preregistered opening-population repair. Research controls and tracker flow-back advance the foundation only; all calibrated-card, metric, native ladder, full-bot, RFC/capability/milestone completions remain open.",
+        "at": "2026-10-06",
+        "summary": "D3430 revalidates all 24,000 historical roots and 24 band/window/half cells against immutable original executor/receipt and whole source/chain authority: 1,640 mixed, 78 mate-only roots, 1,391 cp-played mixed roots, 1,056 multi-window games and 30 multi-band games. D3429 records the numerical-contract gap; D3410 separately holds opening-source repair. No reference, threshold, production policy, calibrated label, RFC/capability/milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/semantic-convention-provenance/implementation-2026-09-24.md",
@@ -160,7 +160,11 @@
           "planning/bot-roster/calibration-human-reference-pricing.json",
           "tools/d2236-bot-calibration-verdict-contract/profile-arm.test.ts",
           "tools/d2236-bot-calibration-verdict-contract/opening-capacity.test.ts",
-          "planning/bot-roster/calibration-opening-capacity.json"
+          "planning/bot-roster/calibration-opening-capacity.json",
+          "planning/bot-roster/calibration-score-domains-2026-10-06.md",
+          "planning/bot-roster/calibration-score-domains.json",
+          "tools/d2236-bot-calibration-verdict-contract/score-domain-audit.test.ts",
+          "planning/bot-roster/calibration-score-domains-software-2026-10-06.json"
         ],
         "anchors": [
           {
@@ -191,7 +195,7 @@
           {
             "kind": "rfc",
             "id": "bot-roster.md",
-            "digest": "sha256:f3b6cc6e7fe35ebe6db3019278c630a3d98226933f5b78fb1530f3cfb4d95b83"
+            "digest": "sha256:f23d25f96d1664a2caa2b8bef7cfe7da2b471ce7f554bd1222be3ab485cd465a"
           },
           {
             "kind": "work_state",
@@ -217,6 +221,16 @@
             "kind": "work_state",
             "id": "D3410",
             "digest": "sha256:1eb5e37a4a5a14b9806b0827d44a9bd7562f571d981d3152ff3dac644bfc696b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3429",
+            "digest": "sha256:38f9c231379de7a9337cc7325c005b374bc71d5abf299d09fb98864ce35baad5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3430",
+            "digest": "sha256:f65b45b49abdd22e75074ec80a730949b0b08d5e8b334ca5b7797be5cf8046fe"
           }
         ]
       },

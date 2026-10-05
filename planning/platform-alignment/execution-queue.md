@@ -8,6 +8,14 @@ This is the queue the thematic roadmap was missing. A phase completes on evidenc
 not because its code was started. Within a phase, independent jobs may run in parallel; across a
 dependency edge, they may not.
 
+## Bot calibration checkpoint — 2026-10-06
+
+| Item | Owning lane / prerequisite | Required exit |
+|---|---|---|
+| [[D3430]] | **DONE: complete descriptive source audit**; bot-play | All 24,000 roots and 24 fixed band/window/half cells are revalidated against immutable historical pricing authority. Counts retain 1,640 mixed roots, 78 mate-only roots, 1,391 cp-played mixed roots and 1,056 multi-window games. Whole-source negatives and read-only repeat check pass. Receipt: `planning/bot-roster/calibration-score-domains-2026-10-06.md`. No calibration or full bot promotion. |
+| [[D3429]] | **BLOCKED: numerical-contract author repair**; bot-play; `rfc/bot-roster.md` §6 | Specify the complete likelihood/domain/cluster/degenerate-variance/adjusted-test procedure before calculating comparative verdicts. Current named statistics and hand-supplied statuses are not executable math. Preserve the frozen 24,000-row reference and all metric/threshold obligations. Do not invent post-result normalization or substitute a cp-only subset. |
+| [[D3410]] | **BLOCKED: opening-population author repair**; bot-play | Existing six qualifying exact positions cannot meet 128. Repair only the preregistered opening source; do not change distribution reference, strip clocks or lower the floor. The native 13,200-game ladder remains separate. |
+
 ## Streaming release checkpoint — 2026-09-30
 
 | Item | Owning lane / prerequisite | Required production exit |
