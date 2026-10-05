@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:fc43b1a26a39c3ae570aa4ba78ab85768413056141ff2b77a6e0508a1f16d93f",
+    "roadmap": "sha256:363bf1821b8680cee952acf4bbf0181be52b831ed3be942615af704033f91152",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:075dec2722a037e99efecad5cfb0ddfa73729abe603b9134f88c79d4cc4a938c",
-    "rfcRegister": "sha256:62386b1db8f32fac91056b0dba56e43315074f537ab97d8666420934e6e399b0",
+    "workState": "sha256:10f557386f350fa2d5328a989306cf3b98e9730bec34c465a9e30a3ff759ee8b",
+    "rfcRegister": "sha256:d250a76da1d23efb5e60034c3746e3a964128ced902ba21a888a31ea2e1ccb90",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:c4da09abd8ce077a46e55e2069b3ab27f8e04de10045d7d05ed2188ff89992ef",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 627,
+      "todo": 628,
       "doing": 0,
       "blocked": 1055,
-      "done": 1309,
+      "done": 1310,
       "refused": 160
     },
     "workItems": {
@@ -186,10 +186,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Inventory the remaining modern consumer execution paths, complete manifest execution/digest and exact source-occurrence resolution, then authenticated availability. D3401 closes all three modern Explorer preflights; D3402 closes modern root/practical-reply tablebase preflight with exact v2 consumer identities while every v1 contract and standalone path remains. Do not skip raw historical bindings or fabricate source authority. D3391/D3392 confidence representability and D3363/D3370/D3373/D3376 source-result contracts remain held. Whole-source persistence, zero-consumer retirement, complete Support/Review/bot/learner joins and independent semantic validation remain open. Routine canonical metadata/hash maintenance is automatic, not an owner decision.",
+      "nextAction": "Implement D3404's complete 35-binding Guided Hint source-absence contract and preflight before search, proving authenticated no-acquisition failures plus real request/poll success. Preserve all rungs, seals, current ceilings, decision reset, shared horizon/cancellation, source profile, voice fallback and independent local modules. D3403's total current census separates this executable work from 14 unsupported provider declarations and the other 11 missing policies. Then complete manifest execution/digest, exact source-occurrence resolution and authenticated availability. D3363/D3370/D3373/D3376 and D3391/D3392 remain separate holds; persistence, zero-consumer retirement and complete Support/Review/bot/learner joins remain open. Metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-05",
-        "summary": "D3402 closes complete binding preflight before every modern root and practical-resistance reply tablebase acquisition, with an exact v2 consumer/adapter/callable beside all v1 Stockfish/Maia/standalone contracts. Nine authenticated root/reply fault controls prevent further source calls and preserve typed absence without diagnostic/move leakage or bare fallback. Selection, cancellation, clocks, source identities and cache behavior remain. The focused gate passes 173 tests and clean types. Complete exact-index software passes 3096 tests/332 files, seven isolated performance tests and downstream contracts at e173570464f436a15a14cface9b5dc616a756754. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 119 journeys, one existing optional skip and zero retries. Canonical maintenance retains 956 predecessors, 278 factory outcomes and authored fields; seven source-stamp successors produce 963 declarations. Only D3402 closes: zero untriaged/1682 live. D3401's Explorer preflight remains recorded in retained receipts. Full manifest execution/resolution/availability, persistence, retirement and source-contract holds remain open; no RFC, capability or milestone promotion.",
+        "summary": "D3403 completes a disposable diagnostic inventory of all 285 projections, 556 isolated bindings and 42 exact consumer versions: 262/460/20 compile and 23/96/22 refuse. Fourteen unsupported provider declarations retain literal ancestor/binding/consumer joins. Fifty isolated binding source refusals and 46 missing policies remain visible; no filtered execution manifest or runtime adoption is claimed. D3404 owns the next production wave: all 35 Guided Hint bindings have valid source paths but no absence policy, and HintService starts search without complete preflight. Eight inventory controls plus scaffold/packaging pass. Product runtime, authored content and source meanings are unchanged; D3402's prior full production proof remains in retained receipts, not claimed as a new test run. Only the inventory closes: zero untriaged/1683 live. Complete execution/resolution/availability, persistence, retirement and separate source-contract holds remain open; no RFC, capability or milestone promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -289,7 +289,9 @@
           "planning/provider-exchange-and-execution/opponent-tablebase-preflight-2026-10-05.md",
           "planning/provider-exchange-and-execution/opponent-tablebase-preflight-software-2026-10-05.json",
           "planning/provider-exchange-and-execution/opponent-tablebase-preflight-metadata-2026-10-05.json",
-          "planning/provider-exchange-and-execution/opponent-tablebase-preflight-negatives-2026-10-05.json"
+          "planning/provider-exchange-and-execution/opponent-tablebase-preflight-negatives-2026-10-05.json",
+          "planning/provider-exchange-and-execution/execution-frontier-2026-10-05.md",
+          "planning/provider-exchange-and-execution/execution-frontier.json"
         ],
         "anchors": [
           {
@@ -335,7 +337,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:8cdac951acc7f2966b8a0debe55ae250cf98a5b3afb55f87ed30360f40331e26"
+            "digest": "sha256:3956df6e213d8d5ed9ee4366eca69910f31a4ac3745af4c9a93481f1d0609b55"
           },
           {
             "kind": "work_state",
@@ -591,6 +593,16 @@
             "kind": "work_state",
             "id": "D3402",
             "digest": "sha256:034cea58d753278b390fe1a685e6337c3620ec6e1f05c485b8f40c9ddcaf1286"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3403",
+            "digest": "sha256:1acfd88f2e5a10bc7ce58eae9b9aa1b2c30b7e29e9f4b546d01112d3e2b2795a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3404",
+            "digest": "sha256:fbfa5075b22faf4537647f33f3ef0115cf51de97ef22862f6a22769163af7d36"
           }
         ]
       },
@@ -1133,7 +1145,7 @@
           {
             "kind": "rfc",
             "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:8cdac951acc7f2966b8a0debe55ae250cf98a5b3afb55f87ed30360f40331e26"
+            "digest": "sha256:3956df6e213d8d5ed9ee4366eca69910f31a4ac3745af4c9a93481f1d0609b55"
           },
           {
             "kind": "work_state",

@@ -1,5 +1,29 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 complete execution inventory and Guided Hint handoff
+
+D3403 measures every current projection, isolated binding and exact consumer version.
+The compilation census is 262/285 projections, 460/556 isolated bindings and 20/42 complete
+consumers. All 23/96/22 refusals remain. Fourteen raw provider declarations account for
+50 binding refusals; missing absence policy accounts for 46 others. Eight controls prove
+population closure, full-consumer refusal despite valid isolated bindings, alternatives,
+repeated occurrences, exact versions, deterministic non-mutation and saved-snapshot fidelity.
+This is research, not an executable partial manifest, runtime adoption or availability.
+Receipt: `planning/provider-exchange-and-execution/execution-frontier-2026-10-05.md`.
+
+Next production wave: D3404, all 35 Guided Hint bindings. Declare the already-specified
+missing-search consequence and preflight the complete consumer before provider acquisition;
+prove no-acquisition failures at the authenticated application plus real request/poll success.
+Keep every rung, redacted seal, current ceiling, decision reset, shared horizon, cancellation,
+source profile, optional-voice fallback and independent theory/structure module. No default
+ceiling ruling is required for this contract repair. Eleven other missing policies sit in
+consumers that also have raw sources; policy-only edits cannot close those whole migrations.
+
+Then continue full execution/digest, exact occurrence resolution and authenticated availability.
+D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit separate holds. The arrows retirement
+obligation remains D1867; its zero bindings must not be misreported as a provider outage.
+Routine metadata/hash maintenance is automatic. No RFC or 1.0 milestone is complete here.
+
 ## 2026-10-05 complete opponent tablebase preflight checkpoint
 
 D3402 closes complete binding preflight before every modern root and practical-resistance

@@ -28017,6 +28017,23 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/opponent-tablebase-preflight-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3403",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1acfd88f2e5a10bc7ce58eae9b9aa1b2c30b7e29e9f4b546d01112d3e2b2795a",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/execution-frontier-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3404",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fbfa5075b22faf4537647f33f3ef0115cf51de97ef22862f6a22769163af7d36",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

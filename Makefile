@@ -2793,6 +2793,17 @@ opponent-tablebase-preflight-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-tablebase-preflight-metadata.js --log-level=warning
 	node apps/server/dist/opponent-tablebase-preflight-metadata.js --opponent-tablebase-consumer
 
+# Disposable D3403 research, not a release or availability gate.
+.PHONY: provider-execution-census-build provider-execution-census-check provider-execution-census provider-execution-census-update
+provider-execution-census-build:
+	./node_modules/.bin/esbuild tools/d3403-execution-frontier/audit.ts tools/d3403-execution-frontier/report.ts --bundle --platform=node --format=esm --outdir=tools/d3403-execution-frontier/dist --log-level=warning
+provider-execution-census-check: provider-execution-census-build
+	$(CI_NODE) --test tools/d3403-execution-frontier/audit.test.mjs
+provider-execution-census: provider-execution-census-build
+	$(CI_NODE) tools/d3403-execution-frontier/dist/report.js
+provider-execution-census-update: provider-execution-census-build
+	$(CI_NODE) tools/d3403-execution-frontier/dist/report.js --write
+
 explorer-consumer-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations

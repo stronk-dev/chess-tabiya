@@ -31,6 +31,13 @@ missing expected families, unexpected operations and implementation-name drift r
 This permits coexisting versions without changing or retiring an existing consumer contract.
 It does not compile that consumer's source bindings or establish provider availability.
 
+The opt-in `make provider-execution-census` research instrument diagnoses every current
+projection, isolated binding and complete exact-version consumer without constructing a
+partial executable manifest. `make provider-execution-census-update` refreshes the living inventory
+in `planning/provider-exchange-and-execution/execution-frontier.json`; the ordinary report
+is read-only. Refused rows and literal source ancestry remain visible. Compilation is not
+runtime adoption or exact-subject availability, and this instrument is not a release gate.
+
 Modern Explorer workflows use explicit `inspector.corpus@2`, `runtime.repertoire_scan@2`
 and `runtime.return_frequency@2` consumers. Each accepts only its narrow sealed-page
 projection and compiles every consumer binding before provider I/O. A missing absence
