@@ -27945,6 +27945,51 @@
       "uxItems": [],
       "evidence": "planning/safe-deployment-profiles/static-shell-readiness-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3395",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:22cd376a60a67a768a50ab3edf66a084e8430ebdf8b6212a586570bf9443a4f8",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/application-security-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3396",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5c984f5f2953fad1297c495d91cd9f8de8401becb5835b3f4acdd42c8d280a15",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/application-security-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3397",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a6515c0ec40acd7bbdc71462ba68dee840549f97ba6696ee063f1f601ccc680d",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D3398",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8cbe7fbc93a9d1bc747e6aad5affbfbcc9b302d68eab868e6b0f95776ec6376a",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/application-security-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3399",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:77f2314f320cf9bdfc6b5e0d13e69bbcfe3156d22f3f67260d89773307e94906",
+      "uxItems": [],
+      "evidence": "planning/safe-deployment-profiles/application-security-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

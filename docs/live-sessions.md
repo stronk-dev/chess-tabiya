@@ -240,6 +240,14 @@ default to one use and 14 days, cap at 90 days and 50 active links per session, 
 handle-bound, and are individually revocable. Unknown, wrong-scope, expired, exhausted,
 revoked, and wrong-handle tokens all return the same not-found response.
 
+Invitation sign-in and registration run in `/session-join.js`, a same-origin static
+module. The token is escaped form data rather than executable script interpolation.
+The form disables both submit buttons while authentication and redemption are pending,
+then releases them on account refusal, revoked invitation or connection failure. Errors
+use fixed learner copy; retry is explicit. Without JavaScript the native form uses POST,
+never a credential-bearing GET URL; it does not silently authenticate or accept a seat.
+The invitation remains private `no-store`, and the stable module revalidates on updates.
+
 Every session kind gives its host a distinct **Create watch link** control. It mints a spectator
 token with no match seat and states the one-use, 14-day and spectator-only limits beside the
 result. Native matches retain their separate open-seat participant link.

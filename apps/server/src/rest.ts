@@ -161,8 +161,7 @@ function escapeHtml(value: string): string {
 }
 
 function sessionJoinPage(token: string, join: { readonly title: string; readonly hostHandle: string }): Response {
-  const tokenLiteral = JSON.stringify(token);
-  return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(join.title)}</title></head><body><main><h1>${escapeHtml(join.title)}</h1><p>Hosted by @${escapeHtml(join.hostHandle)}</p><p>Sign in or create a learner account to take this seat. No position or evidence is disclosed by this page.</p><form id="join-form"><label>Handle <input name="handle" autocomplete="username" required></label><label>Password <input name="password" type="password" minlength="10" maxlength="256" required></label><button name="action" value="login" type="submit">Sign in and join</button><button name="action" value="register" type="submit">Register and join</button></form><p id="join-error" role="alert"></p></main><script>document.getElementById("join-form").addEventListener("submit",async(event)=>{event.preventDefault();const form=new FormData(event.currentTarget);const action=event.submitter.value;const credentials=await fetch("/auth/"+action,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:form.get("handle"),password:form.get("password")})});if(!credentials.ok){document.getElementById("join-error").textContent="Those account details were not accepted.";return;}const joined=await fetch("/api/shared/"+encodeURIComponent(${tokenLiteral})+"/join",{method:"POST"});if(!joined.ok){document.getElementById("join-error").textContent="This invitation is no longer available.";return;}const result=await joined.json();location.assign("/live/session/"+encodeURIComponent(result.session.id));});</script></body></html>`, {
+  return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(join.title)}</title></head><body><main><h1>${escapeHtml(join.title)}</h1><p>Hosted by @${escapeHtml(join.hostHandle)}</p><p>Sign in or create a learner account to take this seat. No position or evidence is disclosed by this page.</p><form id="join-form" method="post" action="/auth/login" data-invitation-token="${escapeHtml(token)}"><label>Handle <input name="handle" autocomplete="username" required></label><label>Password <input name="password" type="password" autocomplete="current-password" minlength="10" maxlength="256" required></label><button name="action" value="login" type="submit">Sign in and join</button><button name="action" value="register" type="submit">Register and join</button></form><p id="join-error" role="alert"></p><noscript>JavaScript is required to accept this invitation. Your password is never submitted in the URL.</noscript></main><script type="module" src="/session-join.js"></script></body></html>`, {
     status: 200,
     headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" },
   });
@@ -2335,6 +2334,11 @@ async function writeNodeResponse(
 ): Promise<void> {
   response.statusCode = result.status;
   for (const [name, value] of result.headers) response.setHeader(name, value);
+  // Application-owned policy also covers local, static, early refusal and adapter-error
+  // responses. Set it before streaming; neither a route nor a proxy is the sole authority.
+  response.setHeader("x-content-type-options", "nosniff");
+  response.setHeader("referrer-policy", "no-referrer");
+  response.setHeader("permissions-policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()");
   // Never reuse a connection with an unread upload after an early policy/size refusal. Finish the
   // response first, rather than destroying its socket from the request-stream cancellation path.
   const hasUpload = request.headers["transfer-encoding"] !== undefined ||

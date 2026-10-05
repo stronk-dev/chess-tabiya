@@ -1394,15 +1394,22 @@
         ],
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
-          "at": "2026-09-24",
-          "summary": "Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store.",
+          "at": "2026-10-05",
+          "summary": "Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
             "planning/style/implementation-2026-09-24.md",
             "rfc/player-style.md",
             "rfc/skills.md",
-            "rfc/longitudinal-store.md"
+            "rfc/longitudinal-store.md",
+            "planning/safe-deployment-profiles/application-security-2026-10-05.md",
+            "planning/safe-deployment-profiles/application-security-software-2026-10-05.json",
+            "planning/safe-deployment-profiles/application-security-negatives-2026-10-05.json",
+            "rfc/learner-rating.md",
+            "apps/server/src/application-security.test.ts",
+            "tests/browser/security.spec.ts",
+            "docs/app-shell.md"
           ],
           "anchors": [
             {
@@ -1424,6 +1431,16 @@
               "kind": "work_state",
               "id": "D1467",
               "digest": "sha256:da350aa968f6d7aa9bd3506c1fe5e83af8f163bf532bf89be787ed5b6f14d6dc"
+            },
+            {
+              "kind": "rfc",
+              "id": "learner-rating.md",
+              "digest": "sha256:3189387e5bb418f5da499f93a2e674aac1cff6ca253bf5a51e17926d9833424a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3399",
+              "digest": "sha256:77f2314f320cf9bdfc6b5e0d13e69bbcfe3156d22f3f67260d89773307e94906"
             }
           ]
         },
@@ -1507,10 +1524,10 @@
         "dependsOn": [
           "official-content"
         ],
-        "nextAction": "Reconcile D3393's public/internal probe contracts without weakening required-worker readiness; finish deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
+        "nextAction": "Resolve D3397's complete CSP and audience-preview contract and D3393's public/internal probe contract; complete deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3394 closes the actual shell false-ready states: readiness uses the learner route's static-serving authority and rechecks worker/storage after I/O; missing or unreadable shells refuse and restoration recovers without restart. A controlled required-worker exit still refuses readiness while the shell serves. Successful canonical storage proof, optional-provider behavior and existing probe status/wires are unchanged. The focused gate passes 32 tests; final exact-index software passes 3029 tests/327 files plus seven isolated performance tests/four files, clean types and downstream contracts at 0e41854b161ad8af8b7a3d5512330cf142dd324e. Content passes 223 tests/23 files, all 104 requirements and zero clearance errors; rebuilt browser CI passes 111 journeys, one optional real-Maia latency skip and zero retries. All 942 capability declarations retain their meanings; the complete 352-document migration plan requires zero writes or ledger restamps. D3393 separately holds contradictory public/internal liveness and privacy contracts. The October 1 native source appliance's 16-group proof remains historical, not rerun by this shell checkpoint. Endpoint budgets, deployment receipts and image/privacy joins, full release/rights/envelope and owner-device journeys, and zero graduated official content still block the whole milestone. Ledger/work-state and the queue flow back with zero untriaged/1681 live; no RFC, capability or milestone is promoted. The full 1.0 goal remains active.",
+          "summary": "D3395/D3396/D3398/D3399 close actual response and learner-entry defects: exact application-owned non-CSP headers cover local/static/auth/refusal/error responses; only build-hashed assets are immutable; invitation authentication uses a same-origin module with safe POST fallback and real refusal/recovery; Rating navigation/reload negotiates HTML without changing the authenticated JSON API. The focused gate passes 83 tests and clean types; eight built-browser controls pass. Final exact-index software passes 3067 tests/329 files plus seven isolated performance tests/four files and downstream build, packaging, release-policy, source/value, history, lifecycle and migration checks at 7650ee0c81f4c3b32e87fb6b95aa18e7f02187ac. Content passes 223 tests, all 104 requirements and zero clearance errors; rebuilt browser CI passes 119 journeys, one optional real-Maia skip and zero retries. All 942 committed capabilities retain their meanings and the canonical 352-document migration plan has zero writes or ledger restamps. D3394's static-shell readiness and October 1 native source-appliance proof remain recorded separately, not rerun as full release proof. D3397 holds full CSP because the blanket frame ban conflicts with the existing audience preview; D3393 separately holds probe contracts. Full deployment image/privacy/operator receipts, release/rights/envelope, owner-device use and official content still block the whole milestone. Tracking flows back with zero untriaged/1682 live; no RFC, capability or milestone is promoted.",
           "impact": "advanced",
           "evidence": [
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
@@ -1565,7 +1582,16 @@
             "apps/server/src/application.ts",
             "apps/server/src/storage-appliance.test.ts",
             "apps/server/src/longitudinal-worker.test.ts",
-            "rfc/longitudinal-store.md"
+            "rfc/longitudinal-store.md",
+            "planning/safe-deployment-profiles/application-security-2026-10-05.md",
+            "planning/safe-deployment-profiles/application-security-software-2026-10-05.json",
+            "planning/safe-deployment-profiles/application-security-negatives-2026-10-05.json",
+            "apps/server/src/application-security.test.ts",
+            "apps/server/src/http-representation.test.ts",
+            "apps/server/src/http-representation.ts",
+            "apps/web/public/session-join.js",
+            "tests/browser/security.spec.ts",
+            "rfc/learner-rating.md"
           ],
           "anchors": [
             {
@@ -1581,7 +1607,7 @@
             {
               "kind": "rfc",
               "id": "safe-deployment-profiles.md",
-              "digest": "sha256:6e3e6d3401d87d5a57e0e8fc12c88a2e713ce09e5da039a48843faddb29cc238"
+              "digest": "sha256:e192351a10df0fc81e5686f0a5b443d4f0018ad4f0b4e39ecd94e2ec312d189b"
             },
             {
               "kind": "work_state",
@@ -1722,6 +1748,36 @@
               "kind": "rfc",
               "id": "longitudinal-store.md",
               "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3395",
+              "digest": "sha256:22cd376a60a67a768a50ab3edf66a084e8430ebdf8b6212a586570bf9443a4f8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3396",
+              "digest": "sha256:5c984f5f2953fad1297c495d91cd9f8de8401becb5835b3f4acdd42c8d280a15"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3397",
+              "digest": "sha256:a6515c0ec40acd7bbdc71462ba68dee840549f97ba6696ee063f1f601ccc680d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3398",
+              "digest": "sha256:8cbe7fbc93a9d1bc747e6aad5affbfbcc9b302d68eab868e6b0f95776ec6376a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3399",
+              "digest": "sha256:77f2314f320cf9bdfc6b5e0d13e69bbcfe3156d22f3f67260d89773307e94906"
+            },
+            {
+              "kind": "rfc",
+              "id": "learner-rating.md",
+              "digest": "sha256:3189387e5bb418f5da499f93a2e674aac1cff6ca253bf5a51e17926d9833424a"
             }
           ]
         },

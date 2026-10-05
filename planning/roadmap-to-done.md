@@ -2091,6 +2091,18 @@ fresh review; receipt:
 
 ## Production surface inventory
 
+**2026-10-05 application response checkpoint ([[D3395]], [[D3396]], [[D3398]], [[D3399]]):**
+the actual application now owns its three non-CSP security headers, revalidates stable public
+assets and serves invitation authentication as a same-origin module with safe POST fallback.
+Actual login/register/join, refusal, revocation and connection recovery pass built-browser
+controls. Rating direct entry and reload now select HTML via Accept/Vary while retaining the
+authenticated JSON API. Complete exact-index software, content and rebuilt browser CI pass;
+ledger/work-state and both relevant milestones flow back without promoting whole capabilities.
+[[D3397]] holds complete CSP because the blanket frame ban conflicts with the existing audience
+preview; [[D3393]] retains the separate probe contract. Full image/privacy/operator, release,
+rights and owner-device proof remain required. Receipt:
+`planning/safe-deployment-profiles/application-security-2026-10-05.md`.
+
 ### Client routes
 
 | Surface | Reality | 1.0 owner |

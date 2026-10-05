@@ -88,6 +88,23 @@ and forwarding its headers is not supported.
 
 ## The Caddy edge
 
+The application itself adds `X-Content-Type-Options: nosniff`,
+`Referrer-Policy: no-referrer` and
+`Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()`.
+These cover local, static, authentication, policy-refusal and generic error responses,
+not only requests through Caddy. Bodies retain streaming and cancellation behavior.
+Only build-hashed files under `/assets/` receive immutable caching; HTML, stable public
+modules and installation metadata revalidate with `Cache-Control: no-cache`.
+API, account and invitation responses retain `no-store`.
+
+The invitation handler is a served same-origin module, not an inline script. Its native
+form fallback uses POST so unavailable JavaScript cannot place credentials in the URL.
+Full CSP remains held on D3397: the RFC's blanket frame ban conflicts with the existing
+spectator-safe audience preview. The base headers are not proof of complete CSP rollout.
+`make application-security-check` exercises actual HTTP responses and streaming/ingress
+regressions; `make application-security-browser` covers route families, invitation
+login/register/refusal/retry and Rating document reload against the built application.
+
 The Caddyfiles are `deploy/Caddyfile.appliance` and `deploy/Caddyfile.hosted`. Caddy is pinned
 by digest (`caddy:2.11.4-alpine@sha256:5f5c86…8648`). It serves one exact hostname with no
 wildcard or on-demand TLS. It sets `Strict-Transport-Security: max-age=31536000` (without

@@ -123,6 +123,12 @@ record and rating visibility remain independently revocable. The table preserves
 result order and prints no client-derived rank. At phone width that same ordered projection is a
 vertical list of complete learner cards rather than a 48-rem table requiring a sideways hunt.
 
+`/rating` also retains its existing authenticated JSON API. Browser document navigation
+and reload negotiate the HTML shell using `Accept`; absent `Accept` or equal quality
+and specificity preserve the JSON default and its authentication checks. Both representations
+include `Vary: Accept`, while nested Rating API paths remain JSON. The permanent HTTP
+and built-browser security tests cover direct entry, reload and signed-in API reads.
+
 The application boundary also exposes the official principle registry at `GET /principles` as an
 id-sorted summary catalogue. The browser client preserves each entry's id, version, digest, name,
 phases, and licence. This is the data path required by authoring pickers.

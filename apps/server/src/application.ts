@@ -1,5 +1,5 @@
 import { mkdir, readFile, stat } from "node:fs/promises";
-import { dirname, extname, join, normalize, resolve } from "node:path";
+import { basename, dirname, extname, join, normalize, resolve, sep } from "node:path";
 
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
@@ -50,6 +50,7 @@ import { HintService } from "./hint-service.js";
 import { PackStudio } from "./pack-studio.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
 import { deploymentRefusal, type DeploymentBoundary } from "./config.js";
+import { prefersHtmlToJson } from "./http-representation.js";
 import {
   LONGITUDINAL_WORKER_DEFAULTS,
   fileBackedDatabaseIdentity,
@@ -279,6 +280,7 @@ const CONTENT_TYPES: Readonly<Record<string, string>> = Object.freeze({
   ".map": "application/json; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
   ".woff2": "font/woff2",
 });
 
@@ -460,9 +462,11 @@ async function staticResponse(
     return new Response(request.method === "HEAD" ? null : body, {
       status: 200,
       headers: {
-        "cache-control": path.endsWith("index.html")
-          ? "no-cache"
-          : "public, max-age=31536000, immutable",
+        // Only Vite's build-hashed assets are immutable. Stable public module names,
+        // installation/update metadata and every shell fallback must revalidate.
+        "cache-control": path.startsWith(`${join(root, "assets")}${sep}`) && /-[A-Za-z0-9_-]{8}\.[A-Za-z0-9]+$/u.test(basename(path))
+          ? "public, max-age=31536000, immutable"
+          : "no-cache",
         "content-type": CONTENT_TYPES[extname(path)] ?? "application/octet-stream",
       },
     });
@@ -887,6 +891,16 @@ async function composeServices(
     }
     const aboutResponse = about.handle(request);
     if (aboutResponse !== undefined) return aboutResponse;
+    // /rating is both an existing JSON API and a deep-linkable client screen. Choose the
+    // document only for an admitted HTML preference; fetch/default JSON retains its access
+    // checks. Both representations vary on Accept, including anonymous API refusals.
+    if (/^\/rating\/*$/u.test(url.pathname) && (request.method === "GET" || request.method === "HEAD")) {
+      const result = prefersHtmlToJson(request.headers.get("accept"))
+        ? await staticResponse(request, staticDirectory)
+        : await api(request);
+      result.headers.append("vary", "Accept");
+      return result;
+    }
     return isApiPath(url.pathname)
       ? api(request)
       : staticResponse(request, staticDirectory);

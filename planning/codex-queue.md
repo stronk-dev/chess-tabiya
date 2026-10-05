@@ -1,5 +1,23 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 application security and Rating reload checkpoint
+
+D3395/D3396/D3398/D3399 close: the actual application owns its exact non-CSP response
+headers, stable assets revalidate, invitation auth/join runs in a same-origin module with
+POST fallback, and Rating document navigation/reload preserves the authenticated JSON API.
+The normal focused gate passes 83 tests and clean types; eight built-browser controls pass.
+Complete exact-index software passes 3067 tests/329 files plus seven isolated performance
+tests, content passes 223 tests and all 104 requirements, and rebuilt browser CI passes
+119 journeys, one optional skip and zero retries. Receipt:
+`planning/safe-deployment-profiles/application-security-2026-10-05.md`.
+
+D3397 still holds full CSP: the specified blanket frame ban blocks the current spectator-safe
+audience preview. An explicit narrowly scoped exception or a safe preview redesign must
+resolve that contract; do not quietly relax CSP or remove existing audience functionality.
+D3393's probe contract, complete deployment image/privacy and operator receipts, release/
+rights and owner-device discharges remain open. This is not full RFC or milestone completion.
+Continue in-scope provider/deployment implementation; routine metadata updates need no ruling.
+
 ## 2026-10-05 application static-shell readiness checkpoint
 
 D3394 closes: /readyz reads the same live web-shell authority as GET /, then rechecks

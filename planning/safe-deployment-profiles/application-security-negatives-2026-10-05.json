@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-05",
+  "scope": ["D3395", "D3396", "D3398", "D3399"],
+  "readings": [
+    {
+      "command": "make application-security-check",
+      "phase": "predecessor",
+      "tests": 61,
+      "passed": 49,
+      "failed": 12,
+      "findings": [
+        "Nine controls fail on missing application-owned nosniff headers.",
+        "Two controls fail because stable manifest/icon assets are immutable for a year.",
+        "The unserved invitation module receives the shell fallback and wrong MIME type."
+      ],
+      "limit": "The invitation HTML control stops at its header assertion; this reading does not independently prove that control reached the inline-script assertions."
+    },
+    {
+      "command": "make application-security-browser",
+      "phase": "first browser integration",
+      "tests": 7,
+      "passed": 4,
+      "failed": 3,
+      "findings": [
+        "The actual /rating document returns the JSON API's 401 instead of the app shell.",
+        "Two test setup calls omit the JSON body required by logout and receive 400."
+      ],
+      "repair": "Negotiate Rating HTML/JSON at application composition with Accept and Vary; send the existing empty JSON logout body in the browser setup."
+    },
+    {
+      "command": "make application-security-browser",
+      "phase": "Rating routing repaired",
+      "tests": 8,
+      "passed": 7,
+      "failed": 1,
+      "finding": "The new test expects a heading named Rating, but the actual screen heading is Your measured record.",
+      "repair": "Use the existing exact accessible heading for both direct entry and reload; do not alter product copy or replace the journey with a request-only assertion."
+    }
+  ],
+  "unchanged": [
+    "No performance thresholds, receive deadlines, body limits or security refusals were relaxed.",
+    "No retry count was increased and no new journey was skipped.",
+    "D3397 remains a separate CSP contract hold, not a green policy claim."
+  ]
+}
