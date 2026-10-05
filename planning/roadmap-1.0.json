@@ -839,7 +839,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3421 closes the exact modern Inspector corpus server-to-client join and routes admitted facts through the registered component. Authenticated HTTP controls exercise the real web parser; mounted screens preserve standalone v1, modern v2, loading, failure, retry and below-floor states. Population attribution, canonical counts, floors, recency, unlisted mass and committed membership remain intact; crossed tuples and contradictory availability refuse. This is one complete consumer join, not full Inspector or source/RFC completion. D3420 detaches cancelled durable worker flights and returns exact shutdown leases before close resolves, independent of provider/upgrader acknowledgement. Three clean predecessor controls fail; five new permanent SQLite cases pass within 54 focused tests and clean types. Same-owner database reopen at generation 2 fences late success/rejection; independent active/queued survivors remain live. Physical I/O stays source-owned; no source, schema or capacity changes. D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
+          "summary": "D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. D3421 closes the exact modern Inspector corpus server-to-client join and routes admitted facts through the registered component. Authenticated HTTP controls exercise the real web parser; mounted screens preserve standalone v1, modern v2, loading, failure, retry and below-floor states. Population attribution, canonical counts, floors, recency, unlisted mass and committed membership remain intact; crossed tuples and contradictory availability refuse. This is one complete consumer join, not full Inspector or source/RFC completion. D3420 detaches cancelled durable worker flights and returns exact shutdown leases before close resolves, independent of provider/upgrader acknowledgement. Three clean predecessor controls fail; five new permanent SQLite cases pass within 54 focused tests and clean types. Same-owner database reopen at generation 2 fences late success/rejection; independent active/queued survivors remain live. Physical I/O stays source-owned; no source, schema or capacity changes. D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/evidence-manifest.test.ts",
@@ -961,7 +961,10 @@
             "apps/web/src/lib/inspector-evidence.ts",
             "apps/web/src/lib/inspector-evidence.test.ts",
             "apps/web/src/lib/screens.test.ts",
-            "docs/evidence-presentation.md"
+            "docs/evidence-presentation.md",
+            "apps/server/src/review-map.test.ts",
+            "docs/review-evidence.md",
+            "planning/review/reservation-completion-2026-10-05.md"
           ],
           "anchors": [
             {
@@ -1117,7 +1120,7 @@
             {
               "kind": "rfc",
               "id": "review-evidence-compiler.md",
-              "digest": "sha256:b19fc900a8daf39599f9f97c679d669e72c81dc3dc8f54ac7a5276dc197c6eec"
+              "digest": "sha256:5efaf3f84ef03c1b984dae8c564227bf0f3ae7e0f3b855e135d47efad48cbe3d"
             },
             {
               "kind": "work_state",
@@ -1298,6 +1301,16 @@
               "kind": "work_state",
               "id": "D3421",
               "digest": "sha256:4e991bda7b744339db28bf854486fb5b863c4490aaf79b31413670822959e668"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3422",
+              "digest": "sha256:fb6da41611d5fdf5b20a080e6dc0bccb110570cc43b0399542ca09e8483c170c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3423",
+              "digest": "sha256:1fcf3693de92d6cca0fd6a6da0f1c9186487740738684eb91630a4c7de38533d"
             }
           ]
         },
@@ -1561,7 +1574,7 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
+          "summary": "D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
@@ -1575,7 +1588,13 @@
             "rfc/learner-rating.md",
             "apps/server/src/application-security.test.ts",
             "tests/browser/security.spec.ts",
-            "docs/app-shell.md"
+            "docs/app-shell.md",
+            "apps/server/src/review-evidence.ts",
+            "apps/server/src/review-evidence.test.ts",
+            "apps/server/src/review-map.test.ts",
+            "docs/review-evidence.md",
+            "rfc/review-evidence-compiler.md",
+            "planning/review/reservation-completion-2026-10-05.md"
           ],
           "anchors": [
             {
@@ -1607,6 +1626,21 @@
               "kind": "work_state",
               "id": "D3399",
               "digest": "sha256:77f2314f320cf9bdfc6b5e0d13e69bbcfe3156d22f3f67260d89773307e94906"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3422",
+              "digest": "sha256:fb6da41611d5fdf5b20a080e6dc0bccb110570cc43b0399542ca09e8483c170c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3423",
+              "digest": "sha256:1fcf3693de92d6cca0fd6a6da0f1c9186487740738684eb91630a4c7de38533d"
+            },
+            {
+              "kind": "rfc",
+              "id": "review-evidence-compiler.md",
+              "digest": "sha256:5efaf3f84ef03c1b984dae8c564227bf0f3ae7e0f3b855e135d47efad48cbe3d"
             }
           ]
         },

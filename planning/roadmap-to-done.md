@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-05 Review enrichment checkpoint: [[D3422]]/[[D3423]] repair the existing §4.1
+reservation/completion contract. Discovery holds exact slots before yielding, all branches share
+the per-run bound, evicted/invalidated work is fenced, and scalar shared completion wakes every
+requested branch without Story polling. Real scheduler/SQLite, exclusive-fork, surviving-run,
+failure-ceiling, late-result and authenticated HTTP controls close these two defects. Receipt:
+`planning/review/reservation-completion-2026-10-05.md`. Full local gates are logged before commit;
+complete Review/source coverage and RFC/capability/milestone discharges remain open.
+
 The engineering foundation is substantial. The product is not close to a full 1.0.
 
 The below-client foundation is substantial, and several full-stack slices now exist: Review Map,

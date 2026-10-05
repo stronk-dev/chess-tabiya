@@ -1,5 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3422]]/[[D3423]] implement the complete Review enrichment reservation/completion repair under
+review-evidence-compiler §4.1: exact slots reserve before discovery, all branches share the run
+bound, eviction/cancellation fence ownership and subscribers observe scalar completion. Only
+attempt owners execute through the shared scheduler; surviving runs and exclusive fork suffixes
+advance without page polling. Four predecessor failures become 47 passing focused tests with
+warning-free types, including real scheduler/SQLite and authenticated production HTTP controls.
+Receipt: `planning/review/reservation-completion-2026-10-05.md`. Full local closeout is logged
+before commit; complete Review source coverage and RFC/discharges remain open. Continue the
+remaining foundation contracts below; routine metadata/hash maintenance is automatic.
+
 [[D3421]] completes the modern Inspector corpus server→wire→client→registered-component join.
 Exact version-2 derived receipts and both registered version-1 tuples now load without browser
 evidence minting; population/floor/recency/membership, loading/error/retry, absence and subject

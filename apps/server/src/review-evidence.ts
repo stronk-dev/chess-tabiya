@@ -213,11 +213,19 @@ export interface ReviewEvidenceCoordinatorOptions {
   readonly onAttached?: (run: DrillRun, learnerId: string) => void;
 }
 
+interface NodeReservation {
+  readonly fen: string;
+  readonly controller: AbortController;
+  requestKey: string | undefined;
+}
+
 interface BranchTracker {
   readonly key: string;
-  readonly active: Map<string, { readonly controller: AbortController; readonly requestKey: string }>;
+  readonly runId: string;
+  readonly branchId: string;
+  readonly active: Map<string, NodeReservation>;
   /** Terminal per-node states from settled attempts (reconstructible from the bounded store). */
-  readonly terminal: Map<string, ReviewProviderNodeState>;
+  readonly terminal: Map<string, { readonly fen: string; readonly state: ReviewProviderNodeState }>;
   /** Failed configured-engine discovery; not a started/exhausted provider attempt. */
   identityUnavailable: boolean;
   lastUsed: number;
@@ -274,7 +282,7 @@ export class ReviewEvidenceCoordinator {
     const key = `${runId}\u0000${branchId}`;
     let tracker = this.#trackers.get(key);
     if (tracker === undefined) {
-      tracker = { key, active: new Map(), terminal: new Map(), identityUnavailable: false, lastUsed: 0 };
+      tracker = { key, runId, branchId, active: new Map(), terminal: new Map(), identityUnavailable: false, lastUsed: 0 };
       this.#trackers.set(key, tracker);
     }
     tracker.lastUsed = ++this.#clock;
@@ -325,7 +333,7 @@ export class ReviewEvidenceCoordinator {
       if (!searchable(node.fen)) { states.set(node.id, OUTSIDE_DOMAIN); continue; }
       if (this.#options.scheduler === null) { states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_off" as const })); continue; }
       const terminal = tracker?.terminal.get(node.id);
-      if (terminal !== undefined) { states.set(node.id, terminal); continue; }
+      if (terminal?.fen === node.fen) { states.set(node.id, terminal.state); continue; }
       if (tracker?.active.has(node.id) === true) { states.set(node.id, Object.freeze({ kind: "pending" as const, jobCount: 1, retrying: 0 })); continue; }
       if (tracker?.identityUnavailable === true) { states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const })); continue; }
       states.set(node.id, tracker === undefined ? Object.freeze({ kind: "not_requested" as const }) : Object.freeze({ kind: "not_yet_scheduled" as const }));
@@ -348,6 +356,13 @@ export class ReviewEvidenceCoordinator {
       return Object.freeze({ states, pump: Promise.resolve() });
     }
     const tracker = this.#tracker(runId, branchId);
+    // A reservation belongs to an exact occurrence on the current branch, not just a node id.
+    const current = new Map(path.map((node) => [node.id, node.fen]));
+    for (const [id, job] of tracker.active) if (current.get(id) !== job.fen || durable.get(id)?.kind === "delivered") {
+      job.controller.abort();
+      tracker.active.delete(id);
+    }
+    for (const [id, terminal] of tracker.terminal) if (current.get(id) !== terminal.fen) tracker.terminal.delete(id);
     for (const node of path) if (durable.get(node.id)?.kind !== "delivered" && !searchable(node.fen)) states.set(node.id, OUTSIDE_DOMAIN);
     const missing = path.filter((node) => durable.get(node.id)?.kind !== "delivered" && searchable(node.fen));
     for (const node of path) if (durable.get(node.id)?.kind === "delivered") states.set(node.id, durable.get(node.id)!);
@@ -355,88 +370,116 @@ export class ReviewEvidenceCoordinator {
     const toStart: typeof missing = [];
     for (const node of missing) {
       const terminal = tracker.terminal.get(node.id);
-      if (terminal !== undefined && terminal.kind === "unavailable") { states.set(node.id, terminal); continue; }
+      if (terminal !== undefined && terminal.state.kind === "unavailable") { states.set(node.id, terminal.state); continue; }
       const active = tracker.active.get(node.id);
       if (active !== undefined) {
-        const outcome = this.#options.attempts.outcome(active.requestKey);
+        const outcome = active.requestKey === undefined ? undefined : this.#options.attempts.outcome(active.requestKey);
         states.set(node.id, Object.freeze({ kind: "pending" as const, jobCount: 1, retrying: outcome?.kind === "retryable_failure" ? 1 : 0 }));
         admitted += 1;
         continue;
       }
-      if (admitted >= this.#options.windowNodes || tracker.active.size + toStart.length >= this.#options.maxOutstandingPerRun) {
+      const outstanding = [...this.#trackers.values()].filter((candidate) => candidate.runId === runId).reduce((total, candidate) => total + candidate.active.size, 0);
+      if (admitted >= this.#options.windowNodes || outstanding >= this.#options.maxOutstandingPerRun) {
         states.set(node.id, Object.freeze({ kind: "not_yet_scheduled" as const }));
         continue;
       }
       admitted += 1;
+      // Reserve synchronously, before identity discovery or any provider call can yield.
+      tracker.active.set(node.id, { fen: node.fen, controller: new AbortController(), requestKey: undefined });
       toStart.push(node);
       states.set(node.id, Object.freeze({ kind: "pending" as const, jobCount: 1, retrying: 0 }));
     }
-    const pump = this.#start(runId, branchId, tracker, toStart.map((node) => ({ id: node.id, fen: node.fen })), states).catch(() => undefined);
+    if (toStart.length === 0) return Object.freeze({ states, pump: Promise.resolve() });
+    const pump = Promise.all(toStart.map((node) => this.#start(tracker, node, tracker.active.get(node.id)!, states))).then(() => undefined).catch(() => undefined);
     this.#inflight.add(pump);
     void pump.finally(() => this.#inflight.delete(pump));
     return Object.freeze({ states, pump });
   }
 
-  async #start(runId: string, branchId: string, tracker: BranchTracker, nodes: readonly { readonly id: string; readonly fen: string }[], states: Map<string, ReviewProviderNodeState>): Promise<void> {
-    // Fully delivered/terminal branches and subscribers need no new engine discovery.
-    if (nodes.length === 0) return;
-    const engine = await this.#requestedEngine();
-    const scheduler = this.#options.scheduler!;
-    if (engine === null) {
-      tracker.identityUnavailable = true;
-      for (const node of nodes) states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const }));
-      return;
+  #owns(tracker: BranchTracker, nodeId: string, job: NodeReservation): boolean {
+    if (job.controller.signal.aborted || this.#trackers.get(tracker.key) !== tracker || tracker.active.get(nodeId) !== job) return false;
+    try {
+      const stored = this.#options.storage.read(tracker.runId);
+      return stored !== undefined && branchPath(stored.run, tracker.branchId).some((node) => node.id === nodeId && node.fen === job.fen);
     }
-    tracker.identityUnavailable = false;
-    const work: Promise<void>[] = [];
-    for (const node of nodes) {
-      const request = this.#request(node.fen, engine);
-      let requestKey: string;
-      try { requestKey = `${scheduler.normalizedRequestDigest(request)}\u0000${engine.id}\u0000${engine.version}\u0000movetime:${this.#options.movetimeMs}`; } catch { const state = Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const }); states.set(node.id, state); tracker.terminal.set(node.id, state); continue; }
-      const acquisition = this.#options.attempts.acquire(requestKey);
-      if (acquisition.kind === "attempt_history_capacity") { const state = Object.freeze({ kind: "unavailable" as const, reason: "attempt_history_capacity" as const }); states.set(node.id, state); tracker.terminal.set(node.id, state); continue; }
-      if (acquisition.kind === "retained") { const state = stateOf(acquisition.outcome); states.set(node.id, state); if (state.kind === "unavailable") tracker.terminal.set(node.id, state); continue; }
-      if (acquisition.kind === "subscriber") continue;
-      const controller = new AbortController();
-      tracker.active.set(node.id, { controller, requestKey });
-      work.push(this.#run(runId, branchId, tracker, node, request, requestKey, acquisition, controller));
-    }
-    await Promise.all(work);
+    catch { return false; }
   }
 
-  async #run(runId: string, branchId: string, tracker: BranchTracker, node: { readonly id: string; readonly fen: string }, request: ReviewPositionRequest, requestKey: string, owner: ReviewAttemptOwner, controller: AbortController): Promise<void> {
-    const scheduler = this.#options.scheduler!;
-    let outcome: ReviewAttemptOutcome | undefined;
+  #resumeRun(runId: string): void {
+    // Wake every previously requested branch: capacity is shared across the run, not per branch.
+    for (const tracker of [...this.#trackers.values()].filter((candidate) => candidate.runId === runId).sort((a, b) => a.lastUsed - b.lastUsed)) {
+      if (this.#trackers.get(tracker.key) !== tracker || tracker.identityUnavailable) continue;
+      // ensureBranch registers new work with whenIdle; do not retain one ancestor promise per ply.
+      try { this.ensureBranch(runId, tracker.branchId); } catch { /* the run or branch disappeared */ }
+    }
+  }
+
+  async #start(tracker: BranchTracker, node: { readonly id: string; readonly fen: string }, job: NodeReservation, states: Map<string, ReviewProviderNodeState>): Promise<void> {
+    let advance = false;
+    const terminal = (state: ReviewProviderNodeState) => {
+      states.set(node.id, state);
+      if (state.kind === "unavailable" && this.#owns(tracker, node.id, job)) tracker.terminal.set(node.id, { fen: node.fen, state });
+    };
     try {
-      if (controller.signal.aborted) { outcome = owner.cancel(); return; }
+      const discovery = await untilCancelled(this.#requestedEngine(), job.controller.signal);
+      if (discovery.kind === "cancelled" || !this.#owns(tracker, node.id, job)) return;
+      const engine = discovery.value;
+      if (engine === null) {
+        tracker.identityUnavailable = true;
+        states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const }));
+        return; // Discovery failure is retried by the next authorized ensure, never a hot loop.
+      }
+      tracker.identityUnavailable = false;
+      advance = true;
+      const scheduler = this.#options.scheduler!;
+      const request = this.#request(node.fen, engine);
+      let requestKey: string;
+      try { requestKey = `${scheduler.normalizedRequestDigest(request)}\u0000${engine.id}\u0000${engine.version}\u0000movetime:${this.#options.movetimeMs}`; } catch { terminal(Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const })); return; }
+      job.requestKey = requestKey;
+      const acquisition = this.#options.attempts.acquire(requestKey);
+      if (acquisition.kind === "attempt_history_capacity") { terminal(Object.freeze({ kind: "unavailable" as const, reason: "attempt_history_capacity" as const })); return; }
+      if (acquisition.kind === "retained") { terminal(stateOf(acquisition.outcome)); return; }
+      if (acquisition.kind === "subscriber") {
+        // Subscribe only to the scalar outcome. The owner alone executes and settles this attempt.
+        const completed = await untilCancelled(acquisition.completion, job.controller.signal);
+        if (completed.kind === "ready" && this.#owns(tracker, node.id, job)) terminal(stateOf(completed.value));
+        return;
+      }
+      const outcome = await this.#run(tracker, node, job, request, requestKey, acquisition);
+      terminal(stateOf(outcome));
+    } finally {
+      // Late completion must never retire a replacement reservation with the same node id.
+      if (tracker.active.get(node.id) === job) tracker.active.delete(node.id);
+      if (advance) this.#resumeRun(tracker.runId);
+    }
+  }
+
+  async #run(tracker: BranchTracker, node: { readonly id: string; readonly fen: string }, job: NodeReservation, request: ReviewPositionRequest, requestKey: string, owner: ReviewAttemptOwner): Promise<ReviewAttemptOutcome> {
+    const scheduler = this.#options.scheduler!;
+    const { controller } = job;
+    try {
+      if (!this.#owns(tracker, node.id, job)) return owner.cancel();
       owner.start();
-      const result = await scheduler.get(request, { id: `review:${runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, controller.signal);
-      if (controller.signal.aborted) { outcome = owner.cancel(); return; }
+      const result = await scheduler.get(request, { id: `review:${tracker.runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, controller.signal);
+      if (!this.#owns(tracker, node.id, job)) return owner.cancel();
       if (result.kind === "success") {
-        const line = await this.#line(runId, request, controller.signal);
-        if (controller.signal.aborted) { outcome = owner.cancel(); return; }
-        const digest = this.#attach(runId, node.id, result.delivery as StockfishPositionEvaluation, line);
-        outcome = digest === null
+        const line = await this.#line(tracker.runId, request, controller.signal);
+        if (!this.#owns(tracker, node.id, job)) return owner.cancel();
+        const digest = this.#attach(tracker.runId, node.id, result.delivery as StockfishPositionEvaluation, line);
+        const outcome = digest === null
           ? owner.settle({ kind: "non_retryable_failure", reason: "node_pruned", generation: result.delivery.acquisition.generation })
           : owner.settle({ kind: "success", deliveryDigest: digest, generation: result.delivery.acquisition.generation });
         if (digest !== null) this.#options.attempts.releaseSucceeded(requestKey, digest);
+        return outcome;
       } else if (result.kind === "source_failure") {
-        outcome = owner.settle(RETRYABLE.has(result.reason) || result.reason === "provider_unavailable"
+        return owner.settle(RETRYABLE.has(result.reason) || result.reason === "provider_unavailable"
           ? { kind: "retryable_failure", reason: result.reason, generation: null }
           : { kind: "non_retryable_failure", reason: result.reason, generation: null });
       } else {
-        outcome = owner.settle({ kind: "non_retryable_failure", reason: "local_domain_result", generation: null });
+        return owner.settle({ kind: "non_retryable_failure", reason: "local_domain_result", generation: null });
       }
     } catch (error) {
-      outcome = controller.signal.aborted ? owner.cancel() : owner.settle({ kind: "retryable_failure", reason: error instanceof Error ? error.message : String(error), generation: null });
-    } finally {
-      tracker.active.delete(node.id);
-    }
-    const state = stateOf(outcome!);
-    if (state.kind === "unavailable") tracker.terminal.set(node.id, state);
-    // Completion callbacks, not page reads, advance the bounded window.
-    if (this.#trackers.get(tracker.key) === tracker) {
-      try { await this.ensureBranch(runId, branchId).pump; } catch { /* the run or branch disappeared */ }
+      return controller.signal.aborted ? owner.cancel() : owner.settle({ kind: "retryable_failure", reason: error instanceof Error ? error.message : String(error), generation: null });
     }
   }
 
@@ -454,6 +497,16 @@ export class ReviewEvidenceCoordinator {
     this.#options.onAttached?.(attached.run, stored.activeWriterLearnerId);
     return digest;
   }
+}
+
+/** Detach a cancelled waiter without cancelling the shared lookup/attempt or leaking a listener. */
+function untilCancelled<T>(promise: Promise<T>, signal: AbortSignal): Promise<{ readonly kind: "ready"; readonly value: T } | { readonly kind: "cancelled" }> {
+  return new Promise((resolve, reject) => {
+    const cancelled = () => { signal.removeEventListener("abort", cancelled); resolve({ kind: "cancelled" }); };
+    if (signal.aborted) cancelled();
+    else signal.addEventListener("abort", cancelled, { once: true });
+    void promise.then((value) => { signal.removeEventListener("abort", cancelled); resolve({ kind: "ready", value }); }, (error: unknown) => { signal.removeEventListener("abort", cancelled); reject(error); });
+  });
 }
 
 function stateOf(outcome: ReviewAttemptOutcome): ReviewProviderNodeState {

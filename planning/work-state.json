@@ -28188,6 +28188,24 @@
       "uxItems": [],
       "evidence": "apps/server/src/provider-corpus.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3422",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fb6da41611d5fdf5b20a080e6dc0bccb110570cc43b0399542ca09e8483c170c",
+      "uxItems": [],
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3423",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1fcf3693de92d6cca0fd6a6da0f1c9186487740738684eb91630a4c7de38533d",
+      "uxItems": [],
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

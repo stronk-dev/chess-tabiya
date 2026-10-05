@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
@@ -74,6 +74,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     try {
       await closing?.close();
     } finally {
+      vi.restoreAllMocks();
       if (removing !== undefined) rmSync(removing, { recursive: true, force: true });
     }
   });
@@ -110,6 +111,52 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(ready).toBe(true);
     return runId;
   }
+
+  it("finishes concurrent imports from shared completion without story polling, through authenticated HTTP and durable SQLite (D3422/D3423)", async () => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "review_shared_owner");
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => { release = resolve; });
+    const scheduler = application!.providers.scheduler;
+    const original = scheduler.get.bind(scheduler);
+    const calls: string[] = [];
+    const held: typeof scheduler.get = async (request, scope, signal) => {
+      calls.push(request.operation);
+      if (request.operation === "stockfish.position_evaluation@1") await gate;
+      return original(request, scope, signal);
+    };
+    vi.spyOn(scheduler, "get").mockImplementation(held);
+    const pgn = `[Event "Concurrent Review"]\n[White "Alice"]\n[Black "Bob"]\n[Result "*"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 *`;
+    const runIds = ["review-http-owner", "review-http-subscriber"];
+    try {
+      for (const id of runIds) {
+        const response = await fetch(`${origin}/runs/import`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "writer-shared" }, body: JSON.stringify({ id, side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 7, source: { kind: "pgn", pgn } }) });
+        expect(response.status, await response.clone().text()).toBe(201);
+      }
+      // All initial owners are held, so the second import cannot rely on a completed cache hit.
+      await expect.poll(() => calls.length).toBe(2);
+      for (const id of runIds) expect(eventKinds(databasePath, id).filter((kind) => kind === "evidence.attached")).toHaveLength(0);
+    } finally {
+      release();
+    }
+    // Inspect durable storage only. No Story/Review request is permitted to drive the work forward.
+    for (const id of runIds) await expect.poll(() => eventKinds(databasePath, id).filter((kind) => kind === "evidence.attached").length, { timeout: 10_000 }).toBe(7);
+    expect(calls.filter((operation) => operation === "stockfish.position_evaluation@1")).toHaveLength(14);
+    expect(calls.filter((operation) => operation === "stockfish.principal_variation@1")).toHaveLength(14);
+    const settledCalls = calls.length;
+    for (const id of runIds) {
+      const reveal = await fetch(`${origin}/runs/${id}/reveal`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "writer-shared" }, body: "{}" });
+      expect(reveal.status).toBe(200);
+      const response = await fetch(`${origin}/runs/${id}/story`, { headers: { cookie } });
+      expect(response.status).toBe(200);
+      const receipt = await response.json() as { progress: { kind: string }; families: { engine_eval: { availableNodeCount: number } } };
+      expect(receipt.progress.kind).toBe("settled");
+      expect(receipt.families.engine_eval.availableNodeCount).toBe(7);
+      expect(JSON.stringify(receipt)).not.toMatch(/"payload"|"acquisition"|providerDelivery|providerLineDelivery/u);
+      expect((await fetch(`${origin}/runs/${id}/story`)).status).toBe(401);
+    }
+    expect(calls.length).toBe(settledCalls);
+  });
 
   it("serves every ply, glyph-free, with coverage-gated accuracy; writes nothing; one projection feeds share; retry forks before opening", async () => {
     const { origin, databasePath } = await start();

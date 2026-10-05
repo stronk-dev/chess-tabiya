@@ -3,7 +3,7 @@
 // closed story receipt on the production `story()` route.
 import { readFileSync } from "node:fs";
 
-import { parseReviewStoryReceipt, presentedSentence } from "@chess-tabiya/runtime";
+import { commitMove, parseReviewStoryReceipt, presentedSentence } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
@@ -24,6 +24,12 @@ const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server"
 const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
 const stores: SQLiteRunStorage[] = [];
 afterEach(() => { for (const store of stores.splice(0)) store.close(); });
+
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((done) => { resolve = done; });
+  return { promise, resolve };
+}
 
 /** Raw side-to-move scores that swing by ply, so the typed packet carries cp pivots. */
 const swinging = (fen: string) => {
@@ -109,6 +115,171 @@ describe("ReviewAttemptOutcomeStore (criterion 13)", () => {
 });
 
 describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)", () => {
+  it("reserves exact nodes before discovery and does not oversubscribe on repeated page reads (D3422)", async () => {
+    const identity = deferred<{ id: string; version: string } | null>();
+    const { service, coordinator, storage, gets } = harness({ windowNodes: 1, maxOutstandingPerRun: 1, requestedEngine: () => identity.promise });
+    const imported = await service.importGame({ id: "review-reservation", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    const branchId = imported.run.branches[0]!.id;
+    // Capture before resolution; still release the gate on a failing predecessor.
+    const reserved = coordinator.outstanding(imported.run.id, branchId);
+    const repeated = coordinator.ensureBranch(imported.run.id, branchId);
+    identity.resolve({ id: "stockfish-analysis", version: "mock-1" });
+    await coordinator.whenIdle();
+    expect(reserved).toBe(1);
+    expect([...repeated.states.values()].filter((state) => state.kind === "pending")).toHaveLength(1);
+    expect(gets()).toBe(imported.run.nodes.length);
+    expect(storage.read(imported.run.id)!.run.events.filter((event) => event.type === "evidence.attached")).toHaveLength(imported.run.nodes.length);
+  });
+
+  it("evicts pending discovery without starting or attaching obsolete work (D3422)", async () => {
+    const identity = deferred<{ id: string; version: string } | null>();
+    const { service, coordinator, storage } = harness({ maxTrackedRuns: 1, windowNodes: 1, maxOutstandingPerRun: 1, requestedEngine: () => identity.promise });
+    const first = await service.importGame({ id: "review-evicted-discovery", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    const priorEvents = storage.read(first.run.id)!.run.events;
+    const second = await service.importGame({ id: "review-surviving-discovery", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    identity.resolve({ id: "stockfish-analysis", version: "mock-1" });
+    await coordinator.whenIdle();
+    expect(coordinator.trackedBranches).toBe(1);
+    expect(storage.read(first.run.id)!.run.events).toEqual(priorEvents);
+    expect([...coordinator.observe(second.run.id, second.run.branches[0]!.id).states.values()].every((state) => state.kind === "delivered")).toBe(true);
+  });
+
+  it("fences a late evicted owner while replacement work completes through the real scheduler (D3422)", async () => {
+    const entered = deferred<void>();
+    const release = deferred<void>();
+    let exchanges = 0;
+    class LateSearch extends MockProviderEngineClient {
+      override async exchange(engineId: string, request: EngineExchangeRequest) {
+        exchanges += 1;
+        if (exchanges === 1) { entered.resolve(); await release.promise; }
+        // Native work ignores abort until it returns; scheduler and coordinator must both fence it.
+        return super.exchange(engineId, { commands: request.commands, resetCommands: request.resetCommands, until: request.until, timeoutMs: request.timeoutMs });
+      }
+    }
+    const { service, coordinator, storage } = harness({ engine: new LateSearch({ score: swinging }), maxTrackedRuns: 1, windowNodes: 1, maxOutstandingPerRun: 1 });
+    const first = await service.importGame({ id: "review-late-evicted-owner", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await entered.promise;
+    const priorEvents = storage.read(first.run.id)!.run.events;
+    const replacement = await service.importGame({ id: "review-replacement-owner", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    release.resolve();
+    await coordinator.whenIdle();
+    expect(storage.read(first.run.id)!.run.events).toEqual(priorEvents);
+    expect([...coordinator.observe(replacement.run.id, replacement.run.branches[0]!.id).states.values()].every((state) => state.kind === "delivered")).toBe(true);
+    expect(storage.read(replacement.run.id)!.run.events.filter((event) => event.type === "evidence.attached")).toHaveLength(replacement.run.nodes.length);
+  });
+
+  it("counts reserved subscribers across branches of a run and advances them without a page read (D3422)", async () => {
+    const identity = deferred<{ id: string; version: string } | null>();
+    const { service, coordinator, storage } = harness({ windowNodes: 1, maxOutstandingPerRun: 1, requestedEngine: () => identity.promise });
+    const imported = await service.importGame({ id: "review-cross-branch", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    const firstBranch = imported.run.branches[0]!.id;
+    const forked = service.fork(imported.run.id, "writer", imported.run.nodes[2]!.id, { label: "Other branch" });
+    // An exclusive suffix makes this a real completion-wakeup test, not just shared-prefix reuse.
+    storage.save(commitMove(forked.run, "f1c4").run, { writerId: "writer", learnerId: principal.learnerId });
+    const secondBranch = forked.run.activeCursor.branchId;
+    const waiting = coordinator.ensureBranch(imported.run.id, secondBranch);
+    const total = coordinator.outstanding(imported.run.id, firstBranch) + coordinator.outstanding(imported.run.id, secondBranch);
+    identity.resolve({ id: "stockfish-analysis", version: "mock-1" });
+    await coordinator.whenIdle();
+    expect(total).toBe(1);
+    expect([...waiting.states.values()].every((state) => state.kind === "not_yet_scheduled")).toBe(true);
+    for (const branch of [firstBranch, secondBranch]) expect([...coordinator.observe(imported.run.id, branch).states.values()].every((state) => state.kind === "delivered")).toBe(true);
+  });
+
+  it("observes shared completion and attaches for both runs without polling or a second physical search (D3423)", async () => {
+    const entered = deferred<void>();
+    const release = deferred<void>();
+    let exchanges = 0;
+    class HeldFirstSearch extends MockProviderEngineClient {
+      override async exchange(engineId: string, request: EngineExchangeRequest) {
+        exchanges += 1;
+        if (exchanges === 1) { entered.resolve(); await release.promise; }
+        return super.exchange(engineId, request);
+      }
+    }
+    const { service, coordinator, storage, gets, lineGets } = harness({ engine: new HeldFirstSearch({ score: swinging }), windowNodes: 1, maxOutstandingPerRun: 1 });
+    const first = await service.importGame({ id: "review-owner", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await entered.promise;
+    const second = await service.importGame({ id: "review-subscriber", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    const subscriber = coordinator.ensureBranch(second.run.id, second.run.branches[0]!.id);
+    const beforeRelease = gets();
+    release.resolve();
+    await subscriber.pump;
+    await coordinator.whenIdle();
+    expect(beforeRelease).toBe(1); // Only the attempt owner calls the scheduler while pending.
+    for (const imported of [first, second]) {
+      expect([...coordinator.observe(imported.run.id, imported.run.branches[0]!.id).states.values()].every((state) => state.kind === "delivered")).toBe(true);
+      expect(storage.read(imported.run.id)!.run.events.filter((event) => event.type === "evidence.attached")).toHaveLength(imported.run.nodes.length);
+    }
+    expect(exchanges).toBe(first.run.nodes.length * 2); // Eval + line, retained scheduler deliveries reused.
+    expect(gets()).toBe(first.run.nodes.length * 2);
+    expect(lineGets()).toBe(first.run.nodes.length * 2);
+  });
+
+  it("evicting a shared-attempt subscriber cannot cancel its owner or a surviving subscriber (D3423)", async () => {
+    const entered = deferred<void>();
+    const release = deferred<void>();
+    let exchanges = 0;
+    class HeldSearch extends MockProviderEngineClient {
+      override async exchange(engineId: string, request: EngineExchangeRequest) {
+        exchanges += 1;
+        if (exchanges === 1) { entered.resolve(); await release.promise; }
+        return super.exchange(engineId, request);
+      }
+    }
+    const { service, coordinator, storage, gets } = harness({ engine: new HeldSearch({ score: swinging }), windowNodes: 1, maxOutstandingPerRun: 1, maxTrackedRuns: 2 });
+    const imported = [];
+    for (const id of ["review-surviving-owner", "review-cancelled-subscriber"]) {
+      imported.push(await service.importGame({ id, side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer"));
+      if (imported.length === 1) await entered.promise;
+    }
+    const owner = imported[0]!;
+    const cancelled = imported[1]!;
+    const cancelledEvents = storage.read(cancelled.run.id)!.run.events;
+    // Touch the owner so LRU cancels the subscriber, not the physical search's owner.
+    coordinator.ensureBranch(owner.run.id, owner.run.branches[0]!.id);
+    const surviving = await service.importGame({ id: "review-surviving-subscriber", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    const beforeRelease = gets();
+    release.resolve();
+    await coordinator.whenIdle();
+    expect(beforeRelease).toBe(1);
+    expect(storage.read(cancelled.run.id)!.run.events).toEqual(cancelledEvents);
+    for (const run of [owner, surviving]) expect([...coordinator.observe(run.run.id, run.run.branches[0]!.id).states.values()].every((state) => state.kind === "delivered")).toBe(true);
+    expect(exchanges).toBe(owner.run.nodes.length * 2);
+  });
+
+  it("shared failures exhaust once per exact request, retain scalar history, and settle every subscriber (D3423)", async () => {
+    const entered = deferred<void>();
+    const release = deferred<void>();
+    let exchanges = 0;
+    class HeldFailure extends MockProviderEngineClient {
+      override async exchange(engineId: string, request: EngineExchangeRequest): Promise<never> {
+        exchanges += 1;
+        if (exchanges === 1) { entered.resolve(); await release.promise; }
+        throw new Error("private shared provider body");
+      }
+    }
+    const { service, coordinator, attempts, storage, gets } = harness({ engine: new HeldFailure(), windowNodes: 1, maxOutstandingPerRun: 1 });
+    const first = await service.importGame({ id: "review-shared-failure-owner", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await entered.promise;
+    const second = await service.importGame({ id: "review-shared-failure-subscriber", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    release.resolve();
+    await coordinator.whenIdle();
+    for (const imported of [first, second]) {
+      const observed = [...coordinator.observe(imported.run.id, imported.run.branches[0]!.id).states.values()];
+      expect(observed).toEqual(imported.run.nodes.map(() => ({ kind: "unavailable", reason: "retry_exhausted" })));
+      expect(JSON.stringify(observed)).not.toContain("private shared provider body");
+      expect(storage.read(imported.run.id)!.run.events.some((event) => event.type === "evidence.attached")).toBe(false);
+    }
+    expect(gets()).toBe(first.run.nodes.length * 2);
+    expect(exchanges).toBe(first.run.nodes.length * 2);
+    expect(attempts.size).toBe(first.run.nodes.length);
+    const calls = gets();
+    for (const imported of [first, second]) coordinator.ensureBranch(imported.run.id, imported.run.branches[0]!.id);
+    await coordinator.whenIdle();
+    expect(gets()).toBe(calls);
+  });
+
   it("shares only a pending identity lookup across branches, with no lookup or request from observation", async () => {
     let resolveIdentity!: (identity: { id: string; version: string } | null) => void;
     let identities = 0;

@@ -1809,7 +1809,7 @@ review-evidence-author-contract:
 
 .PHONY: review-evidence-runtime-check
 review-evidence-runtime-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/review-evidence.test.ts packages/runtime/src/review-evidence.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/review-evidence.test.ts apps/server/src/review-map.test.ts packages/runtime/src/review-evidence.test.ts
 
 .PHONY: review-evidence-fresh-review
 review-evidence-fresh-review: review-evidence-author-contract

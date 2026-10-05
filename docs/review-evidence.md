@@ -65,6 +65,21 @@ scheduler produces `provider_off`. The next `ensureBranch` may discover a recove
 discovery itself starts no provider attempt and never resets existing failure/exhaustion history.
 Fully delivered or terminal branches perform neither discovery nor new provider work.
 
+Reservations are synchronous, before discovery yields: each holds the exact node/FEN and one
+cancellable slot. `maxOutstandingPerRun` counts those slots across all tracked branches of the
+run, including shared-attempt subscribers. Repeated reads reuse a reservation; removed occurrences
+cancel it. Eviction detaches pending discovery/subscribers without cancelling shared lookup or a
+different run's owner. Tracker and reservation ownership are checked before provider execution
+and attachment, and late completion cannot retire a replacement reservation.
+
+Only the scalar attempt owner calls the scheduler. Other occurrences wait for that owner's
+completion, retaining the same failure ceiling. After successful durable attachment releases the
+scalar slot, a surviving occurrence acquires ownership and obtains the scheduler's exact retained
+delivery for its own durable attachment; the attempt store never holds provider payloads. Terminal
+callbacks wake all previously requested branches of that run, without a future Story read and
+without retaining an ancestor promise per position. The normal `make review-evidence-runtime-check`
+includes authenticated concurrent-import HTTP/SQLite proof as well as coordinator/runtime tests.
+
 Both transition derivations declare `[eval_point@1, eval_point@1]` in before/after order.
 Strict execution retains separate provider and recorded-position occurrences for each endpoint.
 Review packet adapters, Review Map, Story and presentation bindings use transition v2;

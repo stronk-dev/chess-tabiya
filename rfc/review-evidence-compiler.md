@@ -1,5 +1,7 @@
 # RFC: Review evidence compiler
 
+- **Implementation checkpoint 2026-10-05:** D3422/D3423 repair §4.1's synchronous exact-occurrence reservations, aggregate per-run capacity, ownership-fenced cancellation/eviction and scalar shared-attempt completion. Only owners call the existing provider scheduler; completion advances previously requested branches without polling. Permanent predecessor, real scheduler/SQLite and authenticated HTTP controls: `planning/review/reservation-completion-2026-10-05.md`. Full RFC, source coverage and discharges remain open; this is not new acceptance.
+
 - **Implementation checkpoint 2026-10-04:** D3371 closes §3's declaration-cardinality defect through v2 transitions and exact live consumer migration; Story rank/title v2 describe successor dependencies without changing calculations. Permanent execution, frozen-history and calculation-compatibility controls, full exact-index software (2,865 tests plus seven isolated performance tests), content, provider, browser CI and governance pass. Receipt: `planning/review/transition-operands-2026-10-04.md`. This is not full RFC completion or new acceptance.
 
 - **Prior implementation checkpoint 2026-10-04:** D3372 repairs engine discovery at the production coordinator: only pending lookups coalesce; configured startup failure remains provider_failed and a later authorized window can recover without resetting provider attempts or duplicating durable evidence. D3371 keeps the incorrect one-operand v1 transition declarations and versioned consumer repair open. Receipt: `planning/review/engine-identity-recovery-2026-10-04.md`. This is not full RFC completion or new acceptance.
@@ -1072,6 +1074,8 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-10-05: D3422/D3423 implement the existing reservation/completion contract with exact node/FEN and tracker ownership, bounded aggregate subscribers and completion-driven wakeups; provider/attempt/source semantics and remaining discharges are unchanged.
 
 - 2026-10-04: D3371 corrects transition declaration cardinality with v2 delta/mate and Story rank/title identities, migrates current factories/adapters/consumers together, preserves frozen v1 meanings and verifies unchanged calculations. Complete RFC discharges remain open.
 - 2026-10-04: D3372 repairs transient configured-engine discovery and read-only failure observation under §4.1/D1077; pending identity coalescing, recovered/version-changed identity and unchanged attempt/durable history have permanent controls. D3371 records the live delta/mate declaration cardinality mismatch for versioned author repair. Remaining discharges and full RFC status are unchanged.
