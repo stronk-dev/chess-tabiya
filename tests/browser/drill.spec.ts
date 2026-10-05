@@ -641,7 +641,8 @@ test("Guide me: a learner-requested hint climbs one rung per press to the propos
   await expect(seat).not.toContainText("finds a double attack");
 });
 
-test("Guided Hint retries a failed request explicitly without changing its decision or rung", async ({ page }) => {
+for (const failure of ["server_failed", "poll_transport"] as const) {
+test(`Guided Hint retries ${failure} explicitly without changing its decision or rung`, async ({ page }) => {
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1");
   await chooseRawRung(page);
@@ -654,8 +655,14 @@ test("Guided Hint retries a failed request explicitly without changing its decis
   const posts: unknown[] = [];
   const trace: string[] = [];
   let failedId: string | undefined;
+  let pollFailed = false;
   page.on("request", request => {
     if (request.method() === "DELETE" && /\/hints\/[a-f0-9]{32}$/u.test(request.url())) trace.push("DELETE");
+  });
+  if (failure === "poll_transport") await page.route("**/runs/*/hints/*", async route => {
+    if (route.request().method() !== "GET" || pollFailed) { await route.continue(); return; }
+    pollFailed = true;
+    await route.fulfill({ status: 500, json: { error: { code: "POLL_FAILED", message: "transport failure" } } });
   });
   await page.route("**/runs/*/hints", async route => {
     if (route.request().method() !== "POST") { await route.continue(); return; }
@@ -668,10 +675,12 @@ test("Guided Hint retries a failed request explicitly without changing its decis
     const body = await response.json() as { hint: { state: string; requestId?: string; delivery?: { requestId: string } } };
     failedId = body.hint.requestId ?? body.hint.delivery?.requestId;
     expect(failedId).toMatch(/^[a-f0-9]{32}$/u);
-    await route.fulfill({ response, json: { hint: { state: "failed", requestId: failedId, rung: "pattern", reason: "internal_error" } } });
+    await route.fulfill({ response, json: { hint: failure === "server_failed"
+      ? { state: "failed", requestId: failedId, rung: "pattern", reason: "internal_error" }
+      : { state: "pending", requestId: failedId, rung: "pattern" } } });
   });
   await seat.getByRole("button", { name: "Hint", exact: true }).click();
-  await expect(seat).toContainText("The hint could not be prepared. Try again.");
+  await expect(seat).toContainText(failure === "server_failed" ? "The hint could not be prepared. Try again." : "The hint request could not be completed. Try again.");
   expect(trace).toEqual(["POST"]);
   await expect(seat.locator(".hint-sentence")).toHaveCount(0);
   await seat.getByRole("button", { name: "Hint", exact: true }).click();
@@ -681,6 +690,7 @@ test("Guided Hint retries a failed request explicitly without changing its decis
   await expect(seat.getByRole("button", { name: "A little more" })).toBeVisible();
   await expect(seat).not.toContainText("Nb2");
 });
+}
 
 test("imports a repertoire, enters its biggest corpus gap, and records an addressed attempt",async({page})=>{
   await page.goto("/learn");

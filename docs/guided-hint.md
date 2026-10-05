@@ -100,6 +100,12 @@ the final subscriber aborts the search. Late results cannot publish into a repla
 or update provider health. The optional voice keeps its two-second deadline and byte-identical
 deterministic fallback; shutdown drains hint operations before closing provider health.
 
+Retention pressure discards unused cached horizons before live subscribed searches. The client
+stops after 200 polls with a local “taking longer than expected” message, keeping the actual
+operation identity for explicit retry, decision reset or teardown. Poll transport failures keep
+that identity too. These local errors are not fabricated server responses or chess evidence;
+retry cancels the known operation before re-posting the same decision and rung.
+
 Every request first compiles all 35 exact Guided Hint bindings, including a request
 that would reuse a retained horizon. Missing search is a required-source failure;
 an available search with no selected occurrence is separately honest-empty. A bad

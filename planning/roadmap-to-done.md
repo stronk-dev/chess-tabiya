@@ -1448,6 +1448,11 @@ HTTP and mounted controls plus a rebuilt browser retry journey prove this bounde
 (`docs/guided-hint.md`). It does not complete the proposed ceiling table, Advanced codec, integrated
 latency, all emitter-dependent support choices or owner-use obligations.
 
+The follow-on [[D3415]]/[[D3416]] controls now protect surviving search subscribers under cache
+pressure and retain real cleanup identity when bounded polling or transport fails. Local client
+errors are separate from server receipts; explicit retry cancels then repeats the same decision
+and rung. Four controls fail before repair; 64 focused cases and the rebuilt browser suite pass.
+
 **1.0 exit:** Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open with useful
 defaults and promises; module doors name learner questions; one unasked interrupter may claim
 attention; theory-only and honest-empty paths are first-class; touch/hover/focus highlights never

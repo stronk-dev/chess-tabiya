@@ -28128,19 +28128,30 @@
     },
     {
       "id": "D3415",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:227a30c395332fb8bd11436252ec936a6d17c3bc905ab5811561567def833ec9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:987ff0e2a00eebdf183f26a5dca94a7721c0c2dce789a3963dc4dd49c9f9da3c",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "apps/server/src/hint-lifetime.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3416",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:87d1937ddff2e37fdec93da4f1577f6870756011ad8cfb38e9a01b6e74c014b8",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:96daee03224df259c74ae4a56b191de7ac1e843222ea33b96e20885776853ee4",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "apps/web/src/lib/guided-hint.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3417",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ff602133d13f2892f49a3d94754bb88c58aeb1d1e049778c4cd7aa808d9fd90d",
+      "uxItems": [],
+      "evidence": "apps/server/src/expression-census.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

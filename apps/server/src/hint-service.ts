@@ -271,10 +271,13 @@ export class HintService {
         if ((outcome.kind === "source_unavailable" || outcome.kind === "failed") && this.#horizons.get(key) === created) this.#horizons.delete(key);
       }, () => { if (this.#horizons.get(key) === created) this.#horizons.delete(key); });
       while (this.#horizons.size > this.#options.maxOperations) {
-        const oldest = this.#horizons.keys().next().value!;
-        if (oldest === key) break;
-        this.#horizons.get(oldest)!.controller.abort();
-        this.#horizons.delete(oldest);
+        // Operation pressure already evicts settled records first. Match that lifetime:
+        // discard an unused retained horizon before touching any surviving subscriber.
+        const unused = [...this.#horizons].find(([id, cached]) => id !== key && cached.subscribers === 0);
+        const [victimKey, victim] = unused ?? [key, job];
+        // If no unused old slot exists, refuse this new acquisition rather than abort a peer.
+        victim.controller.abort();
+        this.#horizons.delete(victimKey);
       }
     }
     job.subscribers += 1;

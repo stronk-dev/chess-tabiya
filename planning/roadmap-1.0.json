@@ -1205,7 +1205,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:a3f7e0ae85d2f9112ea20e8cfae1f755b45e062d0347949ece65e3a3f94e1a4c"
+              "digest": "sha256:cf2a4807b0588bb561ce609b297c122ffbd41d868d465d57f8389caabe65a809"
             },
             {
               "kind": "work_state",
@@ -1281,7 +1281,7 @@
         "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open. D3411–D3414 repair operation-owned voice cancellation/deadline/shutdown through authenticated outbound HTTP, recover failed engine discovery without losing idempotency, make explicit learner retry delete the failed record before unchanged re-POST, and key retained sealed horizons by complete decision identity. Sixty focused tests and clean types pass; four predecessor mutations fail fourteen assertions, then restored fixed bytes pass. The rebuilt browser retry journey passes. This scoped reliability checkpoint does not discharge full evidence availability, integrated latency, Advanced hintDistance, proposed ceilings or owner use.",
+          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open. D3411–D3414 repair operation-owned voice cancellation/deadline/shutdown through authenticated outbound HTTP, recover failed engine discovery without losing idempotency, make explicit learner retry delete the failed record before unchanged re-POST, and key retained sealed horizons by complete decision identity. Sixty focused tests and clean types pass; four predecessor mutations fail fourteen assertions, then restored fixed bytes pass. The rebuilt browser retry journey passes. This scoped reliability checkpoint does not discharge full evidence availability, integrated latency, Advanced hintDistance, proposed ceilings or owner use. D3415–D3416 now retain live searches under cache pressure and real client cleanup identity at the 200-poll limit or transport failure, with local errors instead of invented server receipts. Four predecessor controls fail, then 64 focused tests and clean types pass; the rebuilt browser suite passes 121 journeys with one existing optional skip and zero retries. Zero untriaged/1683 live; full support/source/ceiling/codec/owner-use obligations remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/hint-distance.ts",
@@ -1316,7 +1316,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:a3f7e0ae85d2f9112ea20e8cfae1f755b45e062d0347949ece65e3a3f94e1a4c"
+              "digest": "sha256:cf2a4807b0588bb561ce609b297c122ffbd41d868d465d57f8389caabe65a809"
             },
             {
               "kind": "rfc",
@@ -1387,6 +1387,16 @@
               "kind": "work_state",
               "id": "D3414",
               "digest": "sha256:d643a844591be3efe536f8b96c857c96fea1fea5b000045dd4555e747930ac22"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3415",
+              "digest": "sha256:987ff0e2a00eebdf183f26a5dca94a7721c0c2dce789a3963dc4dd49c9f9da3c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3416",
+              "digest": "sha256:96daee03224df259c74ae4a56b191de7ac1e843222ea33b96e20885776853ee4"
             }
           ]
         },

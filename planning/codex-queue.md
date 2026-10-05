@@ -1,5 +1,10 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3417]] repairs the content-gate assertion: declaration names are source data, not verdicts.
+Closed factual record/site checks and injected-verdict negatives replace the global word scan,
+without production-output or archive changes. Complete content verification passes 225 tests/23
+files, corpus clearance and all 104 capability documents; final governance is logged below.
+
 ## 2026-10-05 Guided Hint lifetime and recovery checkpoint — implemented
 
 [[D3411]]–[[D3414]] now implement operation-owned cancellation through the application/health/
@@ -13,11 +18,13 @@ No provider/source hold, ceiling table, Advanced codec, integrated latency or ow
 is waived; no full RFC, capability or milestone is complete. Continue source/execution/availability
 foundation work below, rather than repeatedly re-verifying this closed bounded checkpoint.
 
-Next bounded Hint lifecycle items, recorded from the closeout code audit rather than hidden:
-[[D3415]] owns horizon-pressure eviction (prefer unsubscribed retained results over a surviving
-live search), and [[D3416]] owns the client's pending poll-cap/transport-error cleanup identity.
-Reproduce both with permanent controls, then repair under the existing §7 contract. They remain
-todo, not covered by the four closed defects above; no new source or product ruling is needed.
+The follow-on [[D3415]]/[[D3416]] repair now preserves live search subscribers under cache
+pressure, retains actual operation identity after the 200-poll cap or transport failure, and uses
+local client errors instead of fabricated server receipts. Four new permanent controls fail
+against the predecessor; all 64 focused cases and clean types pass after repair. Browser and full
+local verification close out in the exploration log before commit. These fix only the named
+lifecycle defects, not whole Hint/source/ceiling/default completion. Continue the full foundation
+source/execution work below; no new source or product ruling is needed for these repairs.
 
 ## 2026-10-05 calibration production binding and exact-opening capacity wave
 

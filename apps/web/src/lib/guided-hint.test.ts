@@ -74,6 +74,61 @@ describe("DrillApi Guided Hint wire", () => {
 });
 
 describe("GuidedHintSeat", () => {
+  it.each(["retry", "teardown"] as const)("poll exhaustion retains exact cleanup identity for %s", async action => {
+    const run = revealedRun(), requestId = "e".repeat(32);
+    const trace: string[] = [], bodies: HintRequestBody[] = [];
+    const poll = vi.fn<GuidedHintClient["poll"]>(async () => ({ state: "pending", requestId, rung: "pattern" }));
+    const client: GuidedHintClient = {
+      async request(body) { trace.push("POST"); bodies.push(body); return bodies.length === 1 ? { state: "pending", requestId, rung: body.rung } : { state: "available", delivery: receipt(run, body.rung) }; },
+      poll,
+      async cancel(id) { trace.push(`DELETE:${id}`); return { state: "cancelled", requestId: id, rung: "pattern" }; },
+    };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest, pollIntervalMs: 1 } });
+    await settle();
+    const button = () => document.querySelector<HTMLButtonElement>(".hint-actions button")!;
+    let removed = false;
+    vi.useFakeTimers();
+    try {
+      button().click();
+      await vi.advanceTimersByTimeAsync(201); await tick();
+      expect(poll).toHaveBeenCalledTimes(200);
+      expect(button().disabled).toBe(false);
+      expect(document.querySelector(".hint-message")?.textContent).toContain("taking longer than expected");
+      expect(trace).toEqual(["POST"]); // The cap must not autonomously cancel/retry or advance.
+      if (action === "retry") {
+        button().click(); await vi.advanceTimersByTimeAsync(0); await tick();
+        expect(trace).toEqual(["POST", `DELETE:${requestId}`, "POST"]);
+        expect(bodies[1]).toEqual(bodies[0]);
+        expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
+      }
+      await unmount(component);
+      removed = true;
+      if (action === "teardown") expect(trace).toEqual(["POST", `DELETE:${requestId}`]);
+    } finally { if (!removed) await unmount(component); vi.useRealTimers(); }
+  });
+
+  it("poll transport failure retains the known id for explicit cancellation before retry", async () => {
+    const run = revealedRun(), requestId = "e".repeat(32);
+    const trace: string[] = [], bodies: HintRequestBody[] = [];
+    const client: GuidedHintClient = {
+      async request(body) { trace.push("POST"); bodies.push(body); return bodies.length === 1 ? { state: "pending", requestId, rung: body.rung } : { state: "available", delivery: receipt(run, body.rung) }; },
+      async poll() { throw new ApiError(500, "POLL_FAILED", "transport failed"); },
+      async cancel(id) { trace.push(`DELETE:${id}`); return { state: "cancelled", requestId: id, rung: "pattern" }; },
+    };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest, pollIntervalMs: 1 } });
+    await settle();
+    const button = () => document.querySelector<HTMLButtonElement>(".hint-actions button")!;
+    try {
+      button().click(); await settle();
+      expect(trace).toEqual(["POST"]);
+      expect(document.querySelector(".hint-sentence")).toBeNull();
+      button().click(); await settle();
+      expect(trace).toEqual(["POST", `DELETE:${requestId}`, "POST"]);
+      expect(bodies[1]).toEqual(bodies[0]);
+      expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
+    } finally { await unmount(component); }
+  });
+
   function fakeClient(answer: (body: HintRequestBody) => HintResponse, pending = false): GuidedHintClient & { readonly bodies: HintRequestBody[]; readonly cancelled: string[] } {
     const bodies: HintRequestBody[] = [];
     const cancelled: string[] = [];

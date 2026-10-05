@@ -40,6 +40,7 @@
   let decisionDigest = $derived(hintDecisionStamp(run).digest);
   let progress: HintRequestState | undefined = $state();
   let response: HintResponse | undefined = $state();
+  let clientProblem: "poll_limit" | "transport_error" | undefined = $state();
   let busy = $state(false);
   let activeRequestId: string | undefined;
   let retryRequestId: string | undefined;
@@ -49,6 +50,8 @@
   let revealed = $derived(progress?.decisionDigest === decisionDigest ? progress.revealed : null);
   let sentence = $derived(response?.state === "available" ? (response.delivery.rendered.voice.state === "rendered" ? response.delivery.rendered.voice.sentence : response.delivery.rendered.sentence) : undefined);
   let message = $derived.by(() => {
+    if (clientProblem === "poll_limit") return "The hint is taking longer than expected. Try again.";
+    if (clientProblem === "transport_error") return "The hint request could not be completed. Try again.";
     if (response === undefined) return undefined;
     switch (response.state) {
       case "pending": return "Looking for a hint in a searched line…";
@@ -70,6 +73,7 @@
     if (pending !== undefined) void client.cancel(pending).catch(() => undefined);
     progress = undefined;
     response = undefined;
+    clientProblem = undefined;
     busy = false;
     onMarks?.(undefined);
   }
@@ -92,6 +96,7 @@
     const digest = decisionDigest;
     const body: HintRequestBody = { nodeId: run.activeCursor.nodeId, rung, decisionDigest: digest, assistance };
     busy = true;
+    clientProblem = undefined;
     try {
       // A failed operation is still an idempotently settled server record. Explicit retry
       // removes that exact record before re-POSTing the same decision/rung; polling never retries.
@@ -117,6 +122,15 @@
         }
       }
       if (mine !== generation) return;
+      if (current.state === "pending") {
+        // Polling is bounded, but the server operation still exists. Keep its actual
+        // identity for explicit retry/reset/teardown instead of fabricating a failure receipt.
+        retryRequestId = current.requestId;
+        activeRequestId = undefined;
+        response = undefined;
+        clientProblem = "poll_limit";
+        return;
+      }
       activeRequestId = undefined;
       // The client also compares the receipt stamp and never renders a late result (§7 step 3).
       if (current.state === "available" && (current.delivery.decision.digest !== decisionDigest || current.delivery.rung !== rung)) {
@@ -130,7 +144,12 @@
         onMarks?.(current.delivery.marks);
       }
     } catch {
-      if (mine === generation) response = { state: "failed", requestId: "0".repeat(32), rung, reason: "internal_error" };
+      if (mine === generation) {
+        retryRequestId = activeRequestId ?? retryRequestId;
+        activeRequestId = undefined;
+        response = undefined;
+        clientProblem = "transport_error";
+      }
     } finally {
       if (mine === generation) busy = false;
     }

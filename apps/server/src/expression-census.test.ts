@@ -54,6 +54,30 @@ function declarationFixtureRoot(): string {
   return root;
 }
 
+// Source identities may contain ordinary words such as "unused". Only the
+// closed factual record shape constrains what the census is allowed to infer.
+function expectFactualDeclaration(row: any): void {
+  expect(Object.keys(row).sort()).toEqual([
+    "consumers", "corpusFirings", "declaredAt", "dispositionRow", "namespace",
+    "producers", "refusalSites", "subject",
+  ]);
+  expect(["schema", "error", "assistance", "runtime"]).toContain(row.namespace);
+  expect(typeof row.subject).toBe("string");
+  expect(row.corpusFirings === null || (Number.isSafeInteger(row.corpusFirings) && row.corpusFirings >= 0)).toBe(true);
+  expect(row.dispositionRow === null || typeof row.dispositionRow === "string").toBe(true);
+  for (const site of [row.declaredAt, ...row.producers, ...row.consumers]) {
+    expect(Object.keys(site).sort()).toEqual(["module", "symbol"]);
+    expect(typeof site.module).toBe("string");
+    expect(typeof site.symbol).toBe("string");
+  }
+  for (const site of row.refusalSites) {
+    expect(Object.keys(site).sort()).toEqual(["code", "module", "symbol"]);
+    expect(typeof site.code).toBe("string");
+    expect(typeof site.module).toBe("string");
+    expect(typeof site.symbol).toBe("string");
+  }
+}
+
 describe("expression census", () => {
   it("walks every pack including root-only fixtures and reports the fixture split", () => {
     const report = fullReport;
@@ -273,7 +297,7 @@ describe("expression census", () => {
 
   it("keeps zeros factual and separates refusal sites from consumers", () => {
     const declarations = fullDeclarationReport.declarations;
-    expect(JSON.stringify(declarations)).not.toMatch(/"(?:dead|unreachable|unsatisfiable|unused)"/u);
+    for (const row of declarations) expectFactualDeclaration(row);
     const retry = declarations.find((row: any) => row.namespace === "schema" && row.subject === "/retryVariants");
     // rfc/return-scheduling.md §7 names the variation on varied returns; the census reports it.
     expect(retry).toMatchObject({
@@ -284,6 +308,32 @@ describe("expression census", () => {
       refusalSites: [{ module: "apps/server/src/pack-validation.ts", symbol: "runtimeIssues", code: "RETRY_VARIANTS_NOT_EXECUTABLE" }],
       dispositionRow: "/retryVariants",
     });
+  });
+
+  it("preserves legitimate declaration names without treating them as verdicts", () => {
+    const root = declarationFixtureRoot();
+    const schema = JSON.parse(readFileSync(resolve(root, "schemas/drill_pack.schema.json"), "utf8"));
+    schema.properties.mode.enum.push("dead", "unreachable", "unsatisfiable", "unused");
+    const report = runDeclarationCensus({ root, sourceOverrides: {
+      "schemas/drill_pack.schema.json": JSON.stringify(schema),
+    } });
+    for (const name of ["dead", "unreachable", "unsatisfiable", "unused"]) {
+      const row = report.declarations.find((item) => item.namespace === "schema" && item.subject === `/mode=${JSON.stringify(name)}`);
+      expect(row, name).toBeDefined();
+      expectFactualDeclaration(row);
+      expect(row).toMatchObject({ producers: [], consumers: [], corpusFirings: 0 });
+    }
+  });
+
+  it("rejects inferred verdict fields rather than arbitrary source words", () => {
+    const row = fullDeclarationReport.declarations[0];
+    expect(row).toBeDefined();
+    for (const verdict of ["dead", "unreachable", "unsatisfiable", "unused"]) {
+      expect(() => expectFactualDeclaration({ ...row, verdict })).toThrow();
+      expect(() => expectFactualDeclaration({ ...row, declaredAt: { ...row.declaredAt, verdict } })).toThrow();
+    }
+    expect(() => expectFactualDeclaration({ ...row, corpusFirings: -1 })).toThrow();
+    expect(() => expectFactualDeclaration({ ...row, corpusFirings: "unused" })).toThrow();
   });
 
   it("keeps declaration discovery opt-in, deterministic, and content-read-only", () => {

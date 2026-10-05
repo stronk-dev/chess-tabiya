@@ -38,6 +38,40 @@ function id(response: HintResponse): string {
 }
 
 describe("Guided Hint operation lifetimes", () => {
+  it("two-slot horizon pressure evicts an unused result, not an older surviving search", async () => {
+    const result = deferred<TypedProviderResult<"stockfish.principal_variation@1">>();
+    const scheduler = realScheduler();
+    let firstSignal!: AbortSignal;
+    let fulfill!: () => Promise<void>;
+    let calls = 0;
+    const get: HintProviderGateway["get"] = async (request, scope, signal) => {
+      if (++calls !== 1) return scheduler.get(request, scope, signal);
+      firstSignal = signal;
+      fulfill = async () => result.resolve(await scheduler.get(request, scope, signal));
+      return result.promise; // Ignore abort so losing this waiter cannot quietly pass.
+    };
+    const hints = service({ maxOperations: 2, scheduler: { get } });
+    const decision = (seq: number) => {
+      const current = { ...run, events: [{ ...run.events[0]!, seq }] } as DrillRun;
+      return { ...access(false), run: current, decision: hintDecisionStamp(current) };
+    };
+    const firstAccess = decision(1), secondAccess = decision(2), thirdAccess = decision(3);
+    const first = id(hints.request(firstAccess, "pattern"));
+    try {
+      await vi.waitFor(() => expect(firstSignal).toBeDefined());
+      const second = id(hints.request(secondAccess, "pattern"));
+      await vi.waitFor(() => expect(hints.poll(run.id, second, secondAccess.decision).state).toBe("available"));
+      const third = id(hints.request(thirdAccess, "pattern"));
+      await vi.waitFor(() => expect(hints.poll(run.id, third, thirdAccess.decision).state).toBe("available"));
+      expect(hints.operationCount).toBe(2);
+      expect(() => hints.poll(run.id, second, secondAccess.decision)).toThrow(/not known/u);
+      expect(firstSignal.aborted).toBe(false);
+      await fulfill();
+      await bounded(hints.whenIdle());
+      expect(hints.poll(run.id, first, firstAccess.decision).state).toBe("available");
+    } finally { result.reject(new Error("closed")); await hints.close(); }
+  });
+
   it.each(["cancel", "stale", "evict", "close"] as const)("%s aborts private voice, detaches ignored abort and cannot publish late output", async action => {
     const reply = deferred<string>();
     let signal: AbortSignal | undefined;
