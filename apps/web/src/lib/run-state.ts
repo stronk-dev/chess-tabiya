@@ -114,6 +114,8 @@ export class RunStateStore {
   #evidencePollInFlight: Promise<void> | undefined;
   #analysisInFlight = false;
   readonly #analysisJobs = new Map<string, PendingAnalysisJob>();
+  /** Per-store run/writer authority; exact ordered nodes name this API's fixed search request. */
+  readonly #analysisAdmissionKeys = new Map<string, string>();
   #started = false;
 
   constructor(
@@ -314,9 +316,18 @@ export class RunStateStore {
       throw new TypeError("Analysis position is not part of this run");
     }
     if (this.#analysisInFlight) throw new Error("An analysis admission is already pending");
+    const requestIdentity = JSON.stringify(requested);
+    let idempotencyKey = this.#analysisAdmissionKeys.get(requestIdentity);
+    if (idempotencyKey === undefined) {
+      idempotencyKey = globalThis.crypto.randomUUID();
+      this.#analysisAdmissionKeys.set(requestIdentity, idempotencyKey);
+    }
     this.#analysisInFlight = true;
     try {
-      const result = parseAnalysisAdmission(await this.#api.analysis(this.#session.runId, requested, this.#session.writerId), requested);
+      const result = parseAnalysisAdmission(await this.#api.analysis(this.#session.runId, requested, this.#session.writerId, idempotencyKey), requested);
+      // A failed transport/parse has unknown admission outcome. Only an exact checked receipt
+      // retires its key; the next deliberate calculation, not a failed retry, gets a new UUID.
+      this.#analysisAdmissionKeys.delete(requestIdentity);
       for (const job of result.jobs) this.#analysisJobs.set(job.id, Object.freeze({ ...job, batchId: result.batchId }));
       this.#setRun(this.#snapshot.run);
       return result;

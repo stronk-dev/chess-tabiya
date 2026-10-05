@@ -1797,14 +1797,16 @@ describe("Layer 3 screens", () => {
     const request = [...module.querySelectorAll<HTMLButtonElement>("button")]
       .find((button) => button.textContent === "Calculate this position")!;
     request.click();
-    await vi.waitFor(() => expect(module.querySelector("[role='alert']")?.textContent).toBe("The calculation is unavailable right now. Try again."));
+    await vi.waitFor(() => expect(module.querySelector("[role='alert']")?.textContent).toBe("Couldn't confirm the calculation. Try again."));
     expect(module.textContent).not.toContain("provider transport detail");
     expect(request.disabled).toBe(false);
 
     request.click();
-    await vi.waitFor(() => expect(module.querySelector("[role='alert']")?.textContent).toBe("The calculation did not start. Try again."));
-    expect(request.disabled).toBe(false);
-    expect(onAnalyzeMissing).toHaveBeenCalledTimes(2);
+    await vi.waitFor(() => {
+      expect(module.querySelector("[role='alert']")?.textContent).toBe("Couldn't confirm the calculation. Try again.");
+      expect(request.disabled).toBe(false);
+      expect(onAnalyzeMissing).toHaveBeenCalledTimes(2);
+    });
     await unmount(component);
   });
 

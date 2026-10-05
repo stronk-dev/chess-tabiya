@@ -1069,7 +1069,7 @@ export interface RunApi {
   recordReasoning(runId: string, input: { readonly nodeId: string; readonly checkpointEventSeq: number; readonly transcript?: ReasoningTranscript; readonly skipped?: true }, writerId: string): Promise<MutationResult & { readonly reasoning: ReasoningPage }>;
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult>;
   groupReply(runId: string, groupId: string, writerId: string, request: SelectMoveRequest): Promise<GroupReplyResult>;
-  analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<AnalysisAdmission>;
+  analysis(runId: string, nodeIds: readonly string[], writerId: string, idempotencyKey: string): Promise<AnalysisAdmission>;
   scheduleReturn?(runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }, writerId: string): Promise<ScheduledReturnResult>;
   simulate?(runId: string, writerId: string): Promise<SimulationResult>;
   enterSimulation?(runId: string, simulationId: string, branchIndex: number, writerId: string): Promise<MutationResult>;
@@ -1726,7 +1726,8 @@ export class DrillApi implements DrillClientApi {
 
   /**
    * Durable analysis admission (rfc/evidence-job-durability.md §2): one idempotency key per
-   * request, so a transport retry of the same call replays the stored batch instead of duplicating.
+   * request. RunStateStore retains that key across explicit retries until the receipt validates;
+   * a direct caller must likewise supply its retained key when retrying an uncertain admission.
    */
   async analysis(runId: string, nodeIds: readonly string[], writerId: string, idempotencyKey: string = globalThis.crypto.randomUUID()): Promise<AnalysisAdmission> {
     const requested = analysisRequestNodes(nodeIds);

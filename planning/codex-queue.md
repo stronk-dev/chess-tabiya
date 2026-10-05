@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3428]] repairs the actual full-suite cold concept-registry closure timeout: shared baseline
+project/receipt construction runs in bounded setup, all six consumer assertions and independently
+compiled counterfeit/type-error controls remain. `make concept-closure-check` passes 12 tests.
+The failed exact-index run and complete replacement gate are recorded in the exploration log;
+global timeouts are unchanged and the failed suite is never waived.
+
+[[D3427]] closes the existing evidence-job-durability §2 transport-retry identity repair:
+literal ordered requests retain their UUID through transport/receipt failure and rotate only
+after validated admission. Three permanent predecessor controls fail; 152 focused tests and
+warning-free types pass, with authenticated HTTP/SQLite and two built-browser journeys proving
+lost-response replay versus a later new calculation. Receipt:
+`planning/evidence-job-durability/calculation-retry-2026-10-06.md`. This does not specify or
+discharge D3426's missing terminal-status/reload contract; routine metadata is automatic.
+
 [[D3424]]/[[D3425]] close the existing explicit-calculation admission and successful-completion
 path: full 202 batch/job/node/kind parsing, literal request preservation, mutation-stable pending
 jobs and exact result consumption reach the Support control. Controlled predecessor behaviors

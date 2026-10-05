@@ -37,6 +37,13 @@ rewind's own commit and keeps terminal rows as audit history.
 
 ## Calculation client
 
+The run store retains one canonical UUID per literal ordered node request until a validated
+admission arrives. Transport or receipt failure retains the key for explicit retry; a later
+intentional calculation rotates it after acknowledgement. Actual authenticated HTTP/SQLite and
+built-browser response-loss controls prove that the same canonical admission replays one batch
+and its job ids. No automatic retry or browser persistence is introduced; changed canonical
+server request operands retain the existing `IDEMPOTENCY_CONFLICT` behavior.
+
 The ordinary calculation client validates the existing HTTP `202` receipt's complete ordered
 batch/job/position/kind join before tracking it. Explicit pending jobs survive unrelated mutations
 and automatic result application; only their own engine `bestline` attachment at the declared node

@@ -1,5 +1,7 @@
 # RFC: Concept registry — one cross-pack identity authority
 
+- **Verification checkpoint 2026-10-06 — D3428:** the exact-index software gate exposed cold whole-project construction inside the first consumer's five-second assertion (3217 other tests passed). Shared baseline compiler/receipt setup now has its own bounded hook; all six consumer predicates and independently compiled counterfeit/type-error controls remain. Normal `make concept-closure-check` passes 12 tests. No global timeout, compiler option, source contract or full RFC discharge changes; complete replacement gates are logged before commit in `planning/exploration/log.md`.
+
 - **Status:** implementing — **implementation landed 2026-09-24 at migration 28** under the owner's
   direct-implementation direction for this session; no review round preceded landing, and
   consolidation, review and the Active-row status transition belong to the register owner. The

@@ -631,6 +631,43 @@ test("Support calculation follows its admitted job through polling and becomes u
   }
 });
 
+test("Support calculation replays a lost admission response without creating another calculation", async ({ page }) => {
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  await showSupport(page);
+  const admissions: { batchId: string; jobs: { id: string; nodeId: string; kind: string }[] }[] = [];
+  const keys: string[] = [];
+  await page.route(/\/runs\/[^/]+\/analysis$/u, async route => {
+    const response = await route.fetch(); // The production server commits before response loss.
+    expect(response.status()).toBe(202);
+    admissions.push(await response.json());
+    keys.push(route.request().headers()["idempotency-key"]!);
+    if (admissions.length === 1) { await route.abort("failed"); return; }
+    await route.fulfill({ response });
+  });
+  const region = page.locator(".analysis-request");
+  await region.getByRole("button", { name: "Calculate this position", exact: true }).click();
+  await expect(region).toContainText("Couldn't confirm the calculation. Try again.");
+  await expect(region.getByRole("button", { name: "Calculate this position", exact: true })).toBeEnabled();
+  await region.getByRole("button", { name: "Calculate this position", exact: true }).click();
+  await expect(region).toContainText("A recorded calculation is available for this position.", { timeout: 10_000 });
+  await expect(region.getByRole("button", { name: "Calculate this position", exact: true })).toBeEnabled();
+  expect(admissions).toHaveLength(2);
+  expect(admissions[1]).toEqual(admissions[0]);
+  expect(keys[1]).toBe(keys[0]);
+  await region.getByRole("button", { name: "Calculate this position", exact: true }).click();
+  await expect.poll(() => admissions.length).toBe(3);
+  await expect(region.getByRole("button", { name: "Calculate this position", exact: true })).toBeEnabled({ timeout: 10_000 });
+  expect(keys[2]).not.toBe(keys[0]);
+  expect(admissions[2]!.batchId).not.toBe(admissions[0]!.batchId);
+  const runId = page.url().split("/").at(-1)!;
+  const history = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: { type: string; data: { nodeId?: string; evidenceRefs?: string[] } }[] };
+  for (const receipt of [admissions[0]!, admissions[2]!]) for (const job of receipt.jobs) {
+    expect(history.events.filter(event => event.type === "evidence.attached" && event.data.nodeId === job.nodeId && event.data.evidenceRefs?.includes(`engine:${job.id}`))).toHaveLength(1);
+  }
+});
+
 test("Guide me: a learner-requested hint climbs one rung per press to the proposed ceiling and resets on commit (rfc/hint-distance.md)", async ({ page }) => {
   // The labelled mock engine searches the alphabetically first legal move: Na4-b2 double-attacks both rooks.
   await page.getByRole("button", { name: "Start from a FEN" }).click();

@@ -500,12 +500,12 @@
       if (request !== analysisRequest || run.id !== runId) return;
       if (accepted === false) {
         if (analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
-        analysisRequestError = { nodeId, text: "The calculation did not start. Try again." };
+        analysisRequestError = { nodeId, text: "Couldn't confirm the calculation. Try again." };
       }
     } catch {
       if (request !== analysisRequest || run.id !== runId) return;
       if (analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
-      analysisRequestError = { nodeId, text: "The calculation is unavailable right now. Try again." };
+      analysisRequestError = { nodeId, text: "Couldn't confirm the calculation. Try again." };
     } finally {
       if (request === analysisRequest && analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
     }

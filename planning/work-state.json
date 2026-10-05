@@ -28233,6 +28233,24 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:evidence-job-durability.md"
+    },
+    {
+      "id": "D3427",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e3bc7d250350d1049fbcbd6d03673c8a56d516e1601e05f38ca84afaea677e04",
+      "uxItems": [],
+      "evidence": "apps/server/src/analysis-client.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3428",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f02e06a6ec875041107d8fd639df38f5b848714a9f0b4d1a49c3653b787ae151",
+      "uxItems": [],
+      "evidence": "apps/server/src/concept-registry-closure.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

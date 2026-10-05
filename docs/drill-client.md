@@ -170,6 +170,13 @@ updates; only a `bestline` attachment for the exact job and node removes it. The
 follows that pending identity instead of a sticky local flag, so an old evaluation cannot finish
 a new calculation and the control becomes usable again after its own result arrives.
 
+Each literal ordered calculation request keeps its UUID across transport failures and malformed
+admission receipts. Explicit retry reuses that key; only a validated acknowledgement retires it,
+so a later intentional calculation receives a fresh key. Support says it could not confirm the
+calculation rather than claiming a lost response means nothing started. This is in-memory retry
+identity, not reload recovery. Changed canonical server request operands still conflict rather
+than being silently reinterpreted as the old batch.
+
 The public evidence page still contains successful sequences only. Terminal provider absence,
 cancellation and reconstruction of root-only analysis after reload require the D3426 authenticated
 batch-status contract; empty pages and local timers never manufacture those outcomes. These remain

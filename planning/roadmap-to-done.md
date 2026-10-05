@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 calculation retry checkpoint: [[D3427]] retains exact ordered request keys through
+transport or invalid-receipt failure. Real authenticated HTTP/SQLite and built-browser response
+loss replay the original batch/jobs; a later deliberate calculation gets a fresh identity.
+Support reports uncertainty rather than falsely asserting nothing started. Three predecessor
+controls become 152 focused passes, clean types and two browser journeys. Server canonical
+request conflicts remain unchanged; [[D3426]] retains terminal status and reload recovery.
+Receipt: `planning/evidence-job-durability/calculation-retry-2026-10-06.md`.
+
 2026-10-06 calculation checkpoint: [[D3424]]/[[D3425]] connect exact 202 admission receipts and
 mutation-stable pending jobs to the Support control. Only the admitted job's own node/kind result
 completes it, so an old calculation cannot unblock a fresh request. Controlled predecessor,

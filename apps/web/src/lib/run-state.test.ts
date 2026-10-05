@@ -358,6 +358,51 @@ describe("RunStateStore", () => {
     expect(store.snapshot.pendingEvidence).toBe(0);
   });
 
+  it("keeps the exact ordered request's admission key through transport and receipt failures, then rotates for a fresh calculation", async () => {
+    const api = new FakeApi();
+    const store = new RunStateStore(api, session(), api.serverRun);
+    const root = store.snapshot.run.activeCursor.nodeId;
+    const calls: { nodes: readonly string[]; key: string | undefined }[] = [];
+    let attempt = 0;
+    vi.spyOn(api, "analysis").mockImplementation(async (...args: unknown[]) => {
+      const nodes = args[1] as readonly string[];
+      calls.push({ nodes: [...nodes], key: args[3] as string | undefined });
+      attempt += 1;
+      if (attempt === 1) throw new TypeError("lost response after admission");
+      if (attempt === 2) return { batchId: "batch", jobs: [{ id: "job", nodeId: "crossed", kind: "bestline" }] };
+      return { batchId: "batch", jobs: [{ id: "job", nodeId: root, kind: "bestline" }] };
+    });
+    await expect(store.analysis([root])).rejects.toThrow("lost response");
+    await expect(store.analysis([root])).rejects.toThrow();
+    expect(store.snapshot.analysisJobs ?? []).toEqual([]);
+    await store.analysis([root]);
+    await store.analysis([root]);
+    expect(calls[0]!.key).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u);
+    expect(calls[1]!.key).toBe(calls[0]!.key);
+    expect(calls[2]!.key).toBe(calls[0]!.key);
+    expect(calls[3]!.key).not.toBe(calls[0]!.key);
+    expect(calls.map(call => call.nodes)).toEqual(Array.from({ length: 4 }, () => [root]));
+  });
+
+  it("never aliases distinct or reversed position populations and retains each unresolved request independently", async () => {
+    const api = new FakeApi();
+    const store = new RunStateStore(api, session(), api.serverRun);
+    const root = store.snapshot.run.activeCursor.nodeId;
+    await store.move({ uci: "e2e4" });
+    const child = store.snapshot.run.activeCursor.nodeId;
+    const calls: { nodes: readonly string[]; key: string | undefined }[] = [];
+    vi.spyOn(api, "analysis").mockImplementation(async (...args: unknown[]) => {
+      calls.push({ nodes: [...args[1] as readonly string[]], key: args[3] as string | undefined });
+      throw new TypeError("unknown admission");
+    });
+    for (const nodes of [[root], [child], [root, child], [child, root], [root]]) {
+      await expect(store.analysis(nodes)).rejects.toThrow("unknown admission");
+    }
+    expect(new Set(calls.slice(0, 4).map(call => call.key)).size).toBe(4);
+    expect(calls[4]!.key).toBe(calls[0]!.key);
+    expect(store.snapshot.analysisJobs ?? []).toEqual([]);
+  });
+
   it("does not keep polling jobs that the server cancels on rewind", () => {
     const api = new FakeApi();
     const first = commitMove(api.serverRun, "e2e4", { at });

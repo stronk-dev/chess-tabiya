@@ -13,7 +13,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import ts from "typescript";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const REGISTRY_MODULE = join(ROOT, "packages/runtime/src/concept-registry.ts");
@@ -185,11 +185,22 @@ const compiled = (project: Project): CompiledProject => {
 };
 
 describe("criteria 4, 18, 23, 24, 29, 30 — six live consumers of the one compiled registry", () => {
+  const baselineReceipts = new Map<string, ConsumerReceipt>();
+  beforeAll(() => {
+    // Project compilation and cold semantic checking are shared fixture setup, not latency of
+    // any consumer. Keep a bounded setup budget; every original closure assertion below stays
+    // independent, and the counterfeit/type-error controls still build their own programs.
+    for (const consumer of CONSUMERS) {
+      baselineReceipts.set(consumer.path, consumerReceipt(compiled(consumer.project), consumer.path, consumer.operation));
+    }
+  }, 60_000);
+
   for (const consumer of CONSUMERS) {
     it(`${consumer.path} calls ${consumer.operation} live from the ${consumer.project} entry`, () => {
-      const receipt = consumerReceipt(compiled(consumer.project), consumer.path, consumer.operation);
+      const receipt = baselineReceipts.get(consumer.path);
+      expect(receipt).toBeDefined();
       expect(receipt).toMatchObject({ reachable: true, diagnostics: [], deadCalls: 0, discardedCalls: 0 });
-      expect(receipt.liveCalls).toBeGreaterThan(0);
+      expect(receipt!.liveCalls).toBeGreaterThan(0);
     });
   }
 

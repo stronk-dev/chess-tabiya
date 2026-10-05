@@ -1194,7 +1194,11 @@ analysis-client-check:
 	$(MAKE) typecheck
 
 analysis-browser-check:
-	./node_modules/.bin/playwright test --grep "Support calculation follows its admitted job"
+	./node_modules/.bin/playwright test --grep "Support calculation "
+
+.PHONY: concept-closure-check
+concept-closure-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/concept-registry-closure.test.ts
 
 inspector-corpus-client-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-protocol.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/screens.test.ts

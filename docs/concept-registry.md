@@ -8,6 +8,12 @@ It states only that an authored vocabulary entry exists. It carries no valence, 
 difficulty, evidence predicate, teaching prose or learner claim. A pack referencing a concept is not
 a sighting of it on the board, and a sighting is not a skill credit.
 
+`make concept-closure-check` verifies the six production entry-to-consumer joins under each
+project's committed compiler options. Shared cold project/receipt construction runs in a bounded
+setup hook, separate from the ordinary consumer assertion budgets. Counterfeit operations,
+uncalled wrappers, discarded results and type errors still build independent programs and refuse;
+no global test timeout or consumer predicate is relaxed.
+
 ## Files and grammar
 
 | Path | What it is |
