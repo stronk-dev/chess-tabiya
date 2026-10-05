@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3421]] completes the modern Inspector corpus server→wire→client→registered-component join.
+Exact version-2 derived receipts and both registered version-1 tuples now load without browser
+evidence minting; population/floor/recency/membership, loading/error/retry, absence and subject
+checks survive. Six authenticated HTTP and five corrected client/mounted predecessor controls
+fail before repair; the normal focused gate passes 333 tests/12 files. Broad closeout is logged
+before commit. Other source contracts and Inspector migrations remain open; no full RFC or
+milestone is promoted. Continue the open foundation joins below.
+
 [[D3420]] repairs durable worker cancellation/shutdown detachment under evidence-job-durability:
 ignored abort no longer holds logical capacity or delays the shutdown retry_wait transition.
 Real SQLite controls cover a stalled objective upgrader, independent surviving jobs, late success

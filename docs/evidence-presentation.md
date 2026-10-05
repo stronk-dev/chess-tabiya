@@ -30,6 +30,14 @@ dispatched by `PresentedEvidence.svelte`.
 - The Inspector's move-transition section now renders the exact `inspector.move_transition@1`
   admitted reading through `PresentedEvidence`, with an explicit empty state before a recorded
   edge or when no transition fact is emitted. Its collapse control remains a learner choice.
+- The corpus section validates the modern `inspector.corpus@2 × derived.explorer.inspector_population@1`
+  receipt and both registered standalone `@1` tuples before rendering through `PresentedEvidence`.
+  Source/population attribution, population and per-move floors, recency, unlisted counts and
+  committed-move membership survive the server-to-client join. Availability and the learner's
+  committed-move footer remain transport context, not browser-created source evidence. Loading,
+  failure, retry and below-floor states retain their existing controls; multiline registered facts
+  keep their line breaks and wrap without overflowing. D3421's authenticated HTTP tests call the
+  real client parser, and mounted screen tests cover both consumer versions and recovery.
 - The adjacent position-structure section still uses the older observation renderer: the existing
   typed adapter retains only kind and squares, losing side, piece count, role, file and shade from
   several real readings. [[D3309]] holds that migration until versioned `@2` successor readings

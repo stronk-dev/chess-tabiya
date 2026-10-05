@@ -12,5 +12,5 @@
 <p class="statement" data-component={component.id} data-binding={binding}>{sentence}</p>
 
 <style>
-  .statement{margin:0;color:var(--ink)}
+  .statement{margin:0;color:var(--ink);white-space:pre-line;overflow-wrap:anywhere}
 </style>

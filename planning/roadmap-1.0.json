@@ -839,7 +839,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3420 detaches cancelled durable worker flights and returns exact shutdown leases before close resolves, independent of provider/upgrader acknowledgement. Three clean predecessor controls fail; five new permanent SQLite cases pass within 54 focused tests and clean types. Same-owner database reopen at generation 2 fences late success/rejection; independent active/queued survivors remain live. Physical I/O stays source-owned; no source, schema or capacity changes. D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
+          "summary": "D3421 closes the exact modern Inspector corpus server-to-client join and routes admitted facts through the registered component. Authenticated HTTP controls exercise the real web parser; mounted screens preserve standalone v1, modern v2, loading, failure, retry and below-floor states. Population attribution, canonical counts, floors, recency, unlisted mass and committed membership remain intact; crossed tuples and contradictory availability refuse. This is one complete consumer join, not full Inspector or source/RFC completion. D3420 detaches cancelled durable worker flights and returns exact shutdown leases before close resolves, independent of provider/upgrader acknowledgement. Three clean predecessor controls fail; five new permanent SQLite cases pass within 54 focused tests and clean types. Same-owner database reopen at generation 2 fences late success/rejection; independent active/queued survivors remain live. Physical I/O stays source-owned; no source, schema or capacity changes. D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/evidence-manifest.test.ts",
@@ -956,7 +956,12 @@
             "planning/exploration/log.md",
             "apps/server/src/evidence-queue.ts",
             "apps/server/src/evidence-job-durability.test.ts",
-            "docs/evidence-jobs.md"
+            "docs/evidence-jobs.md",
+            "apps/server/src/provider-corpus.test.ts",
+            "apps/web/src/lib/inspector-evidence.ts",
+            "apps/web/src/lib/inspector-evidence.test.ts",
+            "apps/web/src/lib/screens.test.ts",
+            "docs/evidence-presentation.md"
           ],
           "anchors": [
             {
@@ -1002,7 +1007,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:76714e5c75bbcb7d8bd62b1141ce9282ed1e6aa74a8f4a01114c06da517a0a6e"
+              "digest": "sha256:ce70fd1e1862180bf025f5e58cbb4d5ced94d71a3a14dfcfa3e3097280f1b50d"
             },
             {
               "kind": "work_state",
@@ -1288,6 +1293,11 @@
               "kind": "work_state",
               "id": "D3420",
               "digest": "sha256:0614166443ef5f8cc4c806796f92e422ef58981705cce185a937f3c283e3c48b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3421",
+              "digest": "sha256:4e991bda7b744339db28bf854486fb5b863c4490aaf79b31413670822959e668"
             }
           ]
         },
@@ -1308,7 +1318,7 @@
         "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open. D3411–D3414 repair operation-owned voice cancellation/deadline/shutdown through authenticated outbound HTTP, recover failed engine discovery without losing idempotency, make explicit learner retry delete the failed record before unchanged re-POST, and key retained sealed horizons by complete decision identity. Sixty focused tests and clean types pass; four predecessor mutations fail fourteen assertions, then restored fixed bytes pass. The rebuilt browser retry journey passes. This scoped reliability checkpoint does not discharge full evidence availability, integrated latency, Advanced hintDistance, proposed ceilings or owner use. D3415–D3416 now retain live searches under cache pressure and real client cleanup identity at the 200-poll limit or transport failure, with local errors instead of invented server receipts. Four predecessor controls fail, then 64 focused tests and clean types pass; the rebuilt browser suite passes 121 journeys with one existing optional skip and zero retries. Zero untriaged/1683 live; full support/source/ceiling/codec/owner-use obligations remain open.",
+          "summary": "D3421 closes the exact modern Inspector corpus server-to-client join and routes admitted facts through the registered component. Authenticated HTTP controls exercise the real web parser; mounted screens preserve standalone v1, modern v2, loading, failure, retry and below-floor states. Population attribution, canonical counts, floors, recency, unlisted mass and committed membership remain intact; crossed tuples and contradictory availability refuse. This is one complete consumer join, not full Inspector or source/RFC completion. Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open. D3411–D3414 repair operation-owned voice cancellation/deadline/shutdown through authenticated outbound HTTP, recover failed engine discovery without losing idempotency, make explicit learner retry delete the failed record before unchanged re-POST, and key retained sealed horizons by complete decision identity. Sixty focused tests and clean types pass; four predecessor mutations fail fourteen assertions, then restored fixed bytes pass. The rebuilt browser retry journey passes. This scoped reliability checkpoint does not discharge full evidence availability, integrated latency, Advanced hintDistance, proposed ceilings or owner use. D3415–D3416 now retain live searches under cache pressure and real client cleanup identity at the 200-poll limit or transport failure, with local errors instead of invented server receipts. Four predecessor controls fail, then 64 focused tests and clean types pass; the rebuilt browser suite passes 121 journeys with one existing optional skip and zero retries. Zero untriaged/1683 live; full support/source/ceiling/codec/owner-use obligations remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/hint-distance.ts",
@@ -1337,7 +1347,11 @@
             "apps/server/src/hint-lifetime.test.ts",
             "apps/server/src/hint-service.ts",
             "apps/web/src/lib/guided-hint.test.ts",
-            "docs/guided-hint.md"
+            "docs/guided-hint.md",
+            "apps/server/src/provider-corpus.test.ts",
+            "apps/web/src/lib/inspector-evidence.ts",
+            "apps/web/src/lib/inspector-evidence.test.ts",
+            "apps/web/src/lib/screens.test.ts"
           ],
           "anchors": [
             {
@@ -1363,7 +1377,7 @@
             {
               "kind": "rfc",
               "id": "evidence-presentation.md",
-              "digest": "sha256:b81fcb675530439224ff14b71130130945d3395b18cedc3377010d3a9edaf39f"
+              "digest": "sha256:326bdd8adc5746846ed797bfe10eacffd66585aeba982eb11841ecefe75904fd"
             },
             {
               "kind": "work_state",
@@ -1424,6 +1438,11 @@
               "kind": "work_state",
               "id": "D3416",
               "digest": "sha256:96daee03224df259c74ae4a56b191de7ac1e843222ea33b96e20885776853ee4"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3421",
+              "digest": "sha256:4e991bda7b744339db28bf854486fb5b863c4490aaf79b31413670822959e668"
             }
           ]
         },
@@ -1864,7 +1883,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:76714e5c75bbcb7d8bd62b1141ce9282ed1e6aa74a8f4a01114c06da517a0a6e"
+              "digest": "sha256:ce70fd1e1862180bf025f5e58cbb4d5ced94d71a3a14dfcfa3e3097280f1b50d"
             },
             {
               "kind": "work_state",

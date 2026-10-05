@@ -16,6 +16,8 @@ import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { healthReportedCorpus } from "./provider-health-adapters.js";
+import { corpusEvidence } from "../../web/src/lib/inspector-evidence.js";
+import { renderCorpusPage } from "../../web/src/lib/corpus-sentences.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const NEXT = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
@@ -161,6 +163,8 @@ describe("learner Explorer shared exchange", () => {
       const shown = ["success", "floor", "clocks", "legacy", "all_unlisted", "committed_listed", "committed_unlisted"].includes(arm);
       expect(page.status).toEqual(shown ? { kind: "shown" } : arm === "sparse" || arm === "zero" ? { kind: "below_floor", total: arm === "zero" ? 0 : 99 } : { kind: "source_unavailable" });
       const items = parsePresentationReceipt(page.presentation);
+      expect(corpusEvidence(page)).toBe(page);
+      expect(renderCorpusPage(page).join(" ")).toContain("Lichess explorer");
       if (shown) {
         const text = items.map(presentedSentence).join(" ");
         if (arm !== "all_unlisted") {

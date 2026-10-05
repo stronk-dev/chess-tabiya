@@ -1,5 +1,14 @@
 # RFC: Provider exchange and projection execution
 
+- **2026-10-05 Inspector client checkpoint:** D3421 closes the modern corpus wire/client
+  mismatch: exact `inspector.corpus@2` receipts now survive the actual web parser and render
+  through the registered component. Standalone `@1` tuples, source/population attribution,
+  floors, recency, unlisted mass and committed membership remain checked; loading, absence,
+  failure and retry retain their existing controls. Authenticated HTTP tests use the real
+  client parser, while mounted screens cover both versions. Complete execution/resolution/
+  availability, source-contract holds and the other consumer migrations remain open.
+  Closeout: `planning/exploration/log.md`.
+
 - **2026-10-05 scheduler lifetime checkpoint:** D3419 enforces the existing monotonic execution and independent waiter deadlines at dispatch and settlement, with early-timer rearming. Execution expiry or final-waiter cancellation releases each logical lease exactly once even when transport ignores abort; late captures cannot retain evidence or disturb same-key replacement work. Descriptors still own physical I/O cancellation. Five clean predecessor controls fail; eight permanent controls cover ignored abort, delayed/early timers, independent subscribers, expired queued work and later provider failure. Source identities, parser authority, capacity limits, retention policy and sibling work remain unchanged. Complete manifest/source-resolution/availability and named author holds remain open; broad verification is recorded in the append-only log, not claimed as RFC completion.
 
 - **2026-10-05 local-module execution checkpoint:** D3418 binds effective Sight, Threat Radar, Blunder Prevention and Structure Nudge requests to the complete consumer compiler before any selected module reads sources. All local consumers preflight before collection; server source preparation is lazy and query-local. Authentication, finalized preset/timing/square/disclosure suppression precede work; broken contracts return generic EVIDENCE_UNAVAILABLE. Eighteen corrected predecessor controls fail, and the expanded normal target passes 79 tests with clean workspace types. New authenticated HTTP controls cover additional invalid bindings, all-consumer-before-first-source ordering, repeated decisions, suppression and valid sealed receipts. No source/declaration/preset/renderer, factory outcome or capacity policy changes. Remaining migration/whole-manifest/resolution/availability and named author holds remain open; broad closeout is recorded in the append-only log.

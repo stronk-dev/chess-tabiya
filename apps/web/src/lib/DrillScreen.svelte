@@ -25,8 +25,8 @@
   import GroupPanel from "./GroupPanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { renderStructuralExpressionSpec, renderStructuralObservation } from "./structural-sentences.js";
-  import { renderCorpusPage } from "./corpus-sentences.js";
-  import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
+  import { corpusContextSentences } from "./corpus-sentences.js";
+  import { corpusEvidence, corpusPresentation, humanSplitEvidence } from "./inspector-evidence.js";
   import ModuleSeats from "./ModuleSeats.svelte";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
@@ -2593,7 +2593,10 @@
           {#if assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<p class="honest provider-notice" data-provider-state="not_configured">{learnerProse(corpusNotice.reason)}</p>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading game counts…" : corpusNotice.requestable ? "Load corpus counts" : "Retry corpus counts"}</button>{#if !corpusNotice.requestable}<p class="honest provider-notice" data-provider-state={corpusNotice.tone} data-testid="corpus-provider-notice">{learnerProse(corpusNotice.reason)}</p>{/if}{/if}{/if}
           {#if corpusBusyNodeId === corpusQueryNodeId}<p role="status">Loading human game counts for this position…</p>{/if}
           {#if corpusError?.nodeId === corpusQueryNodeId}<p role="alert">{corpusError.text}</p>{/if}
-          {#if corpusPage?.nodeId === corpusQueryNodeId}{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{:else if corpusBusyNodeId !== corpusQueryNodeId && corpusError?.nodeId !== corpusQueryNodeId}<p class="honest">No corpus page loaded for this position.</p>{/if}
+          {#if corpusPage?.nodeId === corpusQueryNodeId}
+            <PresentedEvidence items={corpusPresentation(corpusPage)} />
+            {#each corpusContextSentences(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+          {:else if corpusBusyNodeId !== corpusQueryNodeId && corpusError?.nodeId !== corpusQueryNodeId}<p class="honest">No corpus page loaded for this position.</p>{/if}
         </section>
         <section aria-label="Recorded moment evidence" data-evidence-consumer="inspector.pivotal_marker">
           <h3>Recorded moment</h3>

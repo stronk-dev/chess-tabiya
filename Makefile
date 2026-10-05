@@ -1188,7 +1188,10 @@ provider-scheduler-lifetime-check: provider-scheduler-contract-check
 return-frequency-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
 
-.PHONY: inspector-corpus-check
+.PHONY: inspector-corpus-client-check inspector-corpus-check
+inspector-corpus-client-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-protocol.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/screens.test.ts
+
 inspector-corpus-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/guidance.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/human-evidence-response.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
 

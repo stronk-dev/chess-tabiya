@@ -1,7 +1,8 @@
 // @vitest-environment happy-dom
 
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
-import { corpusPageFixture } from "./corpus-presentation.test-support.js";
+import { corpusPageFixture, modernCorpusCapture, modernCorpusPageFixture } from "./corpus-presentation.test-support.js";
+import { PROVIDER_EXCHANGE_AUTHORITY } from "../../../../packages/runtime/src/provider-exchange.js";
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -23,6 +24,8 @@ import {
   parseModuleQueryRequest,
   queryModules,
   serverAvailabilityFromProviders,
+  serializePresentedEvidence,
+  providerSourceEvidence,
   type DrillRun,
   type FinalizedAssistanceV1,
   type OrdinaryWorkflowContextOrigin,
@@ -60,7 +63,7 @@ import DrillScreen from "./DrillScreen.svelte";
 import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
 import WhyBanner from "./WhyBanner.svelte";
-import type { Capabilities, PackSummary, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
+import type { Capabilities, CorpusPage, PackSummary, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
 import { OBJECTIVE_TYPE_LABELS } from "./labels/index.js";
 import type {
   RegionKeyboardHandler,
@@ -1500,6 +1503,62 @@ describe("Layer 3 screens", () => {
       expect(evidence).not.toContain("e1e2");
     });
     await unmount(component);
+  });
+
+  it.each([1, 2])("renders admitted corpus v%i through its registered component and recovers after failure", async version => {
+    const root = createRun({
+      id: `corpus-component-${version}`,
+      session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1600 } },
+      sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at,
+    });
+    const run = revealFeedback(commitMove(root, "g1f3", { at }).run, at).run;
+    const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt(modernCorpusCapture());
+    const parsed = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+    const source = providerSourceEvidence("lichess_explorer.position_page@1", PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, ...parsed, servedAt: acquisition.retrievedAt }));
+    const modern = modernCorpusPageFixture(source, root.activeCursor.nodeId, "Nf3");
+    const page = version === 2 ? modern : corpusPageFixture({
+      nodeId: modern.nodeId, committedMoveSan: "Nf3",
+      result: { kind: "stats", total: 240, white: 120, draws: 40, black: 80, population: modern.population,
+        moves: [{ san: "e4", uci: "e2e4", playedCount: 120, sharePct: 50, white: 60, draws: 20, black: 40 }, { san: "a3", uci: "a2a3", playedCount: 4, sharePct: 1.7, white: 4, draws: 0, black: 0 }], recency: { kind: "month", lastPlayedMonth: "2026-08" } },
+    });
+    const initial = deferred<CorpusPage>();
+    const onCorpus = vi.fn<() => Promise<CorpusPage>>()
+      .mockReturnValueOnce(initial.promise)
+      .mockRejectedValueOnce(new Error("PRIVATE_PROVIDER_FAILURE"))
+      .mockResolvedValueOnce(page)
+      .mockResolvedValueOnce({ ...page, status: { kind: "below_floor", total: 37 }, committedMoveListed: null, presentation: serializePresentedEvidence([]) });
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "on_request", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      capabilities: { providerHealth: fixtureProviderHealth({ "explorer-primary": "available" }, { "explorer-primary": "local_fixture" }) } as Capabilities,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onCorpus, registerKeyboardRegion,
+    } });
+    try {
+      await tick(); document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+      const section = document.querySelector<HTMLElement>("[aria-label='Corpus evidence']")!;
+      const load = section.querySelector<HTMLButtonElement>("button")!;
+      load.click(); await tick();
+      expect(onCorpus).toHaveBeenCalledWith(root.activeCursor.nodeId);
+      expect(load.disabled).toBe(true);
+      expect(section.textContent).toContain("Loading");
+      expect(section.querySelector("[data-presented]")).toBeNull();
+      initial.resolve(page);
+      await vi.waitFor(() => expect(section.querySelector("[data-presented='fact_statement']")).not.toBeNull());
+      for (const text of ["Lichess explorer", "1600,1800", "2026-08", "116", "e4", "below the 100-game per-move floor", "Your committed move Nf3 does not appear"]) expect(section.textContent).toContain(text);
+      expect(section.querySelector("[role='alert']")).toBeNull();
+      expect(section.textContent).not.toContain("PRIVATE_PROVIDER_SAN");
+      load.click();
+      await vi.waitFor(() => expect(section.querySelector("[role='alert']")).not.toBeNull());
+      expect(section.querySelector("[data-presented]")).toBeNull();
+      expect(section.textContent).not.toContain("PRIVATE_PROVIDER_FAILURE");
+      load.click();
+      await vi.waitFor(() => expect(section.querySelector("[data-presented='fact_statement']")).not.toBeNull());
+      expect(section.querySelector("[role='alert']")).toBeNull();
+      load.click();
+      await vi.waitFor(() => expect(section.textContent).toContain("37 games recorded here"));
+      expect(section.querySelector("[data-presented]")).toBeNull();
+      expect(section.textContent).not.toContain("Your committed move");
+    } finally { await unmount(component); }
   });
 
   it("refuses human-model and corpus pages returned for a different position", async () => {

@@ -520,6 +520,15 @@ Receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 
+**2026-10-05 Inspector client join ([[D3421]]):** the modern server receipt previously
+passed server tests but failed the client because only consumer version 1 was accepted.
+The exact version-2 derived tuple and both registered version-1 tuples now load through
+the shared validator and registered component. Counts, source/population attribution,
+floors, recency, unlisted mass and committed membership are preserved; loading, failure,
+retry and typed absence remain visible. Authenticated server controls exercise the real
+web parser, and mounted Inspector controls cover both versions and recovery. This is one
+complete source-to-UI join, not full Inspector, source retirement or milestone completion.
+
 **2026-10-05 Inspector checkpoint ([[D3384]]):** the authenticated corpus route now
 admits sealed whole-source Explorer evidence through a declared narrow projection and
 registered server consumer/renderer. Exact request and post-acquisition read/disclosure/

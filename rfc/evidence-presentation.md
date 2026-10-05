@@ -17,6 +17,13 @@
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
+- **Implementation checkpoint 2026-10-05, corpus Inspector:** D3421 repairs the modern
+  `inspector.corpus@2` wire/client mismatch and migrates shown corpus facts to the registered
+  component. Exact consumer/projection pairs, attribution, floors, recency, unlisted counts,
+  commitment, typed absence, loading and retry remain checked. Standalone `@1` tuples remain
+  explicit; the browser constructs no source evidence. Authenticated HTTP controls exercise the
+  real client parser; mounted screens cover both versions and recovery. Remaining Inspector
+  migrations, D3309 operand fidelity, D1 and D9 stay open. Closeout: `planning/exploration/log.md`.
 - **Design refs:** `design/05-in-run-experience.md:192-205` (the form inventory — nine forms,
   the layer this RFC sits *beneath*), `:41` (*"Absence is stated, never simulated"*),
   `:206-246` (the O4 amendment: *"Theory-only, honest-empty and source-unavailable are

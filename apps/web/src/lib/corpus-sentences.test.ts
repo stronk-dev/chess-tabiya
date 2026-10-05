@@ -1,9 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { CORPUS_GUARD, renderCorpusPage } from "./corpus-sentences.js";
-import { corpusPageFixture } from "./corpus-presentation.test-support.js";
+import { CORPUS_GUARD, corpusContextSentences, renderCorpusPage } from "./corpus-sentences.js";
+import { corpusPageFixture, modernCorpusCapture, modernCorpusPageFixture } from "./corpus-presentation.test-support.js";
+import { providerSourceEvidence } from "@chess-tabiya/runtime";
+import { PROVIDER_EXCHANGE_AUTHORITY } from "../../../../packages/runtime/src/provider-exchange.js";
 
 const population = { source: "lichess-explorer" as const, ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" };
 describe("corpus sentence closure", () => {
+  it("preserves modern facts and keeps only learner context outside the registered component", () => {
+    const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt(modernCorpusCapture());
+    const parsed = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+    const source = providerSourceEvidence("lichess_explorer.position_page@1", PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, ...parsed, servedAt: acquisition.retrievedAt }));
+    const page = modernCorpusPageFixture(source, "n", "e4");
+    const lines = renderCorpusPage(page);
+    expect(lines[1]).toBe(CORPUS_GUARD);
+    expect(lines.join(" ")).toContain("116 games are outside");
+    expect(lines.join(" ")).toContain("2026-08");
+    expect(lines.join(" ")).not.toContain("PRIVATE_PROVIDER_SAN");
+    expect(corpusContextSentences(page)).toEqual(["Your committed move here: e4."]);
+  });
   it("renders facts with the byte-pinned popularity guard in every result", () => {
     const pages = [
       { nodeId: "n", committedMoveSan: "e4", result: { kind: "stats" as const, total: 240, white: 120, draws: 40, black: 80, moves: [{ san: "e4", uci: "e2e4", playedCount: 120, sharePct: 50, white: 60, draws: 20, black: 40 }, { san: "a3", uci: "a2a3", playedCount: 4, sharePct: 1.7, white: 3, draws: 0, black: 1 }], recency: { kind: "month" as const, lastPlayedMonth: "2019-04" }, population } },
